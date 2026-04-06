@@ -2,20 +2,22 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import Editor from '@js/ui/editor/editor';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { Column } from '../columns_controller/types';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';
@@ -125,18 +127,21 @@ const getColumnSelectedFilterOperation = function (that, column) {
   }
 };
 
-const hasMultiselectEditor = function ($editorContainer): boolean {
+const hasMultiselectEditor = function ($editorContainer: dxElementWrapper): boolean {
   const editor = getEditorInstance($editorContainer);
-  // @ts-expect-error
-  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME);
+  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
 };
 
-const isValidFilterValue = function (filterValue, column, $editorContainer): boolean {
+const isValidFilterValue = function (
+  filterValue: any,
+  column: Column,
+  $editorContainer: dxElementWrapper,
+): boolean {
   if (Array.isArray(filterValue)) {
     if (hasMultiselectEditor($editorContainer)) {
       return true;
     }
-    if (BETWEEN_OPERATION_DATA_TYPES.includes(column?.dataType)) {
+    if (BETWEEN_OPERATION_DATA_TYPES.includes(column?.dataType ?? '')) {
       return false;
     }
   }
@@ -654,7 +659,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
         if (!selectedFilterOperation) {
           const editor = getEditorInstance($editorContainer);
-          // @ts-expect-error
           if (editor && editor.NAME === 'dxDateBox' && !editor.option('isValid')) {
             editor.clear();
             editor.option('isValid', true);
