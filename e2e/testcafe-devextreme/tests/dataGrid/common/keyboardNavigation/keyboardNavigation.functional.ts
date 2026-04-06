@@ -1,5 +1,6 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Button from 'devextreme-testcafe-models/button';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
@@ -6579,13 +6580,11 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
 test('Focus should be set to the grid to allow keyboard navigation when the focus method is called (T1308919)', async (t) => {
   // arrange
+  const button = new Button('#otherContainer');
   const dataGrid = new DataGrid('#container');
   const firstDataCell = dataGrid.getDataCell(0, 0);
   const firstRow = dataGrid.getDataRow(0);
   const secondRow = dataGrid.getDataRow(1);
-  const focusButton = ClientFunction(() => {
-    $('#otherContainer button')[0]?.focus();
-  });
 
   // assert
   await t.expect(dataGrid.isReady()).ok();
@@ -6594,39 +6593,50 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
   await dataGrid.apiFocus(firstDataCell.element);
 
   // assert
-  await t.expect(firstDataCell.isFocused).ok();
-  await t.expect(firstRow.isFocusedRow).ok();
+  await t
+    .expect(firstDataCell.isFocused).ok()
+    .expect(firstRow.isFocusedRow).ok();
 
   // act
-  await focusButton();
+  await button.focus();
 
   // assert
-  await t.expect(firstDataCell.isFocused).notOk();
-  await t.expect(firstRow.isFocusedRow).ok();
+  await t
+    .expect(button.isFocused)
+    .ok()
+    .expect(firstDataCell.isFocused)
+    .notOk('focus should be on the button')
+    .expect(firstRow.isFocusedRow)
+    .ok('row should still have the focused-row style');
 
   // act
   await t.pressKey('down');
 
   // assert
-  await t.expect(secondRow.isFocusedRow).notOk(); // focus is still on the button
+  await t
+    .expect(secondRow.isFocusedRow)
+    .notOk('grid kbn should not work');
 
   // act
-  await dataGrid.apiFocus();
-  await t.pressKey('down');
+  await t
+    .pressKey('enter') // trigger button click
+    .pressKey('down');
 
   // assert
-  await t.expect(secondRow.isFocusedRow).ok();
+  await t
+    .expect(secondRow.isFocusedRow)
+    .ok('grid is focused, so kbn should work');
 }).before(async () => {
-  await ClientFunction(() => {
-    $('<button>').appendTo('#otherContainer');
-  })();
   await createWidget('dxDataGrid', {
     dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],
     keyExpr: 'id',
     focusedRowEnabled: true,
   });
-}).after(async () => {
-  await ClientFunction(() => {
-    $('#otherContainer button').remove();
-  })();
+  await createWidget('dxButton', {
+    text: 'Focus Grid',
+    onClick() {
+      const grid = ($ as any)('#container').dxDataGrid('instance');
+      grid.focus();
+    },
+  }, '#otherContainer');
 });
