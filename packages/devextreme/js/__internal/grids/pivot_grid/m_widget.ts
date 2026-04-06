@@ -402,9 +402,6 @@ class PivotGrid extends Widget {
       case 'allowSortingBySummary':
       case 'scrolling':
       case 'stateStoring':
-        if (that._fieldChooserBase) {
-          that._fieldChooserBase._dispose();
-        }
         that._initDataController();
         that.getFieldChooserPopup().hide();
         that._renderFieldChooser();
@@ -1171,7 +1168,7 @@ class PivotGrid extends Widget {
 
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-    that._fieldChooserBase = that._createComponent(that.$element(), FieldChooserBase, {
+    const fieldChooserBaseConfig = {
       dataSource: that.getDataSource(),
       encodeHtml: that.option('encodeHtml'),
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
@@ -1179,7 +1176,17 @@ class PivotGrid extends Widget {
       visible: that.option('visible'),
       // @ts-expect-error ts-error
       remoteSort: that.option('scrolling.mode') === 'virtual',
-    });
+    };
+
+    if (that._fieldChooserBase) {
+      that._fieldChooserBase.option(fieldChooserBaseConfig);
+    } else {
+      that._fieldChooserBase = that._createComponent(
+        that.$element(),
+        FieldChooserBase,
+        fieldChooserBaseConfig,
+      );
+    }
 
     const dataArea = that._renderDataArea(dataAreaElement);
     const rowsArea = that._renderRowsArea(rowsAreaElement);
@@ -1263,10 +1270,6 @@ class PivotGrid extends Widget {
   _dispose() {
     const that = this;
     clearTimeout(that._hideLoadingTimeoutID);
-
-    if (that._fieldChooserBase) {
-      that._fieldChooserBase._dispose();
-    }
 
     if (that._dataController) {
       that._dataController.dispose();
