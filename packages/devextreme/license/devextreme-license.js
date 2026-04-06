@@ -164,26 +164,24 @@ function main() {
         const { warning, licenseId: id } = getLCPInfo(lcp);
         licenseId = id;
         if(warning) {
+            const parts = [];
             if(licenseId) {
-                process.stderr.write(`${CLI_PREFIX} ${TEMPLATES.licenseId(licenseId)}\n\n`);
+                parts.push(`${CLI_PREFIX} ${TEMPLATES.licenseId(licenseId)}`);
             }
-            process.stderr.write(`
-                ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n\n
-                ${TEMPLATES.keyWasFound(source.type, source.path)}\n
-            `);
+            parts.push(`${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}`);
+            parts.push(TEMPLATES.keyWasFound(source.type, source.path));
             if(warning.type !== 'trial') {
-                process.stderr.write(`
-                    ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion)}\n\n
-                    ${CLI_PREFIX} ${TEMPLATES.warningPrefix(TEMPLATES.warningCodeByType(warning.type))} ${TEMPLATES.installationInstructions}
-                `);  
-            }  
+                parts.push(TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion));
+                parts.push(`${CLI_PREFIX} ${TEMPLATES.warningPrefix(TEMPLATES.warningCodeByType(warning.type))} ${TEMPLATES.installationInstructions}`);
+            }
+            process.stderr.write(parts.join('\n') + '\n\n');
         }
     } else {
-        process.stderr.write(`
-            ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n\n
-            ${TEMPLATES.keyNotFound}\n\n
-            ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}
-        `);
+        process.stderr.write(
+            `${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n` +
+            `${TEMPLATES.keyNotFound}\n` +
+            `${CLI_PREFIX} ${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}\n\n`
+        );
     }
 
     if(!opts.outPath) {
