@@ -448,50 +448,70 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #region Key_Handlers
 
+  /**
+   * Executes tab key navigation logic.
+   * In editing mode — moves editing to the next/previous cell.
+   * In normal mode — moves focus to the next/previous cell.
+   * Falls back to browser's native tab behavior when focus should leave the grid.
+   */
   private executeTabKey(
     event: KeyDownEvent,
     options: {
-      editingOptions: any;
+      editingOptions: unknown;
       isLastValidCell: boolean;
       isOriginalHandlerRequired: boolean;
     },
-  ) {
-    const isEditing = this._editingController.isEditing();
-    const direction = event.shift ? 'previous' : 'next';
+  ): void {
+    const isEditing: boolean = this._editingController.isEditing();
+    const direction: NavigationDirection = event.shift ? 'previous' : 'next';
     const eventTarget = event.originalEvent.target as Element;
     const { editingOptions, isLastValidCell } = options;
     let originalHandlerRequired = options.isOriginalHandlerRequired;
 
+    // Try to handle tab navigation within the grid
     if (editingOptions && eventTarget && !originalHandlerRequired) {
       if (isEditing) {
+        // In editing mode: navigate to the next editable cell.
+        // If the handler returns false, navigation is fully handled — exit early.
         if (!this._editingCellTabHandler(event, direction)) {
           return;
         }
       } else if (this._targetCellTabHandler(event, direction)) {
+        // In normal mode: if handler signals that native tab is required,
+        // let the browser handle focus transition out of the grid.
         originalHandlerRequired = true;
       }
     }
 
+    // Let the browser handle tab natively — focus leaves the grid
     if (originalHandlerRequired) {
-      const $cell = this._getFocusedCell();
-      const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
-
-      if (isLastValidCell && !isCommandCell) {
-        this._toggleInertAttr(true);
-      }
-
-      this._editorFactory.loseFocus();
-
-      if (this._editingController.isEditing() && !this._isRowEditMode()) {
-        this._resetFocusedCell(true);
-        this._resetFocusedView();
-        this._closeEditCell();
-      }
-
+      this._handleNativeTabOut(isLastValidCell);
       return;
     }
 
+    // Tab was handled by grid navigation — suppress browser default
     event.originalEvent.preventDefault();
+  }
+
+  /**
+   * Handles the case when Tab should leave the grid to the next/previous focusable element.
+   * Cleans up editing state if the grid is in cell/batch editing mode.
+   */
+  private _handleNativeTabOut(isLastValidCell: boolean): void {
+    const $cell = this._getFocusedCell();
+    const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+
+    if (isLastValidCell && !isCommandCell) {
+      this._toggleInertAttr(true);
+    }
+
+    this._editorFactory.loseFocus();
+
+    if (this._editingController.isEditing() && !this._isRowEditMode()) {
+      this._resetFocusedCell(true);
+      this._resetFocusedView();
+      this._closeEditCell();
+    }
   }
 
   protected keyDownHandler(e) {
@@ -768,54 +788,63 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _toggleInertAttr(value: boolean): void {}
 
-  protected _tabKeyHandler(event: KeyDownEvent) {
-    const direction = event.shift ? 'previous' : 'next';
+  /**
+   * Handles Tab / Shift+Tab key press.
+   * Determines navigation direction, checks boundary conditions,
+   * and delegates to `executeTabKey` for the actual focus transition.
+   */
+  protected _tabKeyHandler(event: KeyDownEvent): void {
+    const direction: NavigationDirection = event.shift ? 'previous' : 'next';
     const eventTarget = event.originalEvent.target as Element;
-    const focusedViewElement = this._focusedView && this._focusedView.element();
-    const editingOptions = this.option('editing');
-    const hasFocusedCellPosition = isDefined(this._focusedCellPosition)
-      && !isEmptyObject(this._focusedCellPosition);
-    const isFirstValidCell = event.shift && hasFocusedCellPosition
-      ? this._isFirstValidCell(this._focusedCellPosition)
-      : false;
-    const isLastValidCell = !event.shift && hasFocusedCellPosition
-      ? this._isLastValidCell(this._focusedCellPosition)
-      : false;
-    const isRowsViewElement = $(eventTarget).hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS));
-    const isOriginalHandlerRequired = !hasFocusedCellPosition
-        || isFirstValidCell
-        || isLastValidCell;
-    const canHandleEditing = editingOptions
-      && eventTarget
-      && !isOriginalHandlerRequired;
-    const shouldResetFocusedCell = canHandleEditing && isRowsViewElement;
-    const shouldProcessVirtualPosition = canHandleEditing && this._isVirtualColumnRender();
-    const options = {
-      editingOptions,
-      isLastValidCell,
-      isOriginalHandlerRequired,
-    };
 
+    // Master-detail cells use their own tab navigation logic
     if (this._handleTabKeyOnMasterDetailCell(eventTarget, direction)) {
       return;
     }
 
+    const focusedViewElement = this._focusedView?.element();
     $(focusedViewElement).addClass(FOCUS_STATE_CLASS);
 
-    if (shouldResetFocusedCell) {
+    const { isLastValidCell, isOriginalHandlerRequired } = this._getTabBoundaryInfo(event);
+
+    const editingOptions = this.option('editing');
+    const canHandleNavigation: boolean = !!editingOptions
+      && !!eventTarget && !isOriginalHandlerRequired;
+
+    // Reset focused cell when the rows view container itself is focused (not a specific cell)
+    if (canHandleNavigation && $(eventTarget).hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
       this._resetFocusedCell();
     }
 
-    if (shouldProcessVirtualPosition) {
-      this._processVirtualHorizontalPosition(direction, event)
-        .done(() => {
-          this.executeTabKey(event, options);
-        });
+    const tabOptions = { editingOptions, isLastValidCell, isOriginalHandlerRequired };
 
+    // Virtual columns require horizontal scrolling before executing tab navigation
+    if (canHandleNavigation && this._isVirtualColumnRender()) {
+      this._processVirtualHorizontalPosition(direction, event)
+        .done(() => this.executeTabKey(event, tabOptions));
       return;
     }
 
-    this.executeTabKey(event, options);
+    this.executeTabKey(event, tabOptions);
+  }
+
+  /**
+   * Determines whether the focused cell is at the boundary of the grid.
+   * When at the boundary, Tab/Shift+Tab should let focus leave the grid.
+   */
+  private _getTabBoundaryInfo(event: KeyDownEvent): {
+    isLastValidCell: boolean;
+    isOriginalHandlerRequired: boolean;
+  } {
+    const hasFocusedCellPosition: boolean = isDefined(this._focusedCellPosition)
+      && !isEmptyObject(this._focusedCellPosition);
+    const isLastValidCell: boolean = !event.shift && hasFocusedCellPosition
+      && this._isLastValidCell(this._focusedCellPosition);
+    const isOriginalHandlerRequired: boolean = !hasFocusedCellPosition
+      || (event.shift && this._isFirstValidCell(this._focusedCellPosition))
+      || isLastValidCell;
+
+    return { isLastValidCell, isOriginalHandlerRequired };
   }
 
   private _getMaxVerticalOffset() {
@@ -936,86 +965,128 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return Deferred().resolve().promise();
   }
 
-  private _editingCellTabHandler(eventArgs, direction) {
-    const eventTarget = eventArgs.originalEvent.target;
-    const $targetCell = this._getCellElementFromTarget(eventTarget);
-    const isCommandCell = $targetCell.is(COMMAND_CELL_SELECTOR);
+  /**
+   * Handles Tab key when a cell is being edited.
+   * Moves focus and editing to the next/previous editable cell.
+   * Returns true if tab was handled and further processing may be needed,
+   * false if tab is fully handled or should fall through to native behavior.
+   */
+  private _editingCellTabHandler(eventArgs: KeyDownEvent, direction: NavigationDirection): boolean {
+    const eventTarget = eventArgs.originalEvent.target as Element;
+    const $targetCell: dxElementWrapper = this._getCellElementFromTarget(eventTarget);
 
+    // If focus is on an intermediate interactive element inside the cell,
+    // let the browser cycle through elements within the cell first
     if (this.isOriginalTabHandlerRequired($targetCell, eventArgs)) {
       return false;
     }
 
-    if (isCommandCell) {
+    // Command cells (e.g. edit/delete buttons) delegate to non-editing tab handler
+    if ($targetCell.is(COMMAND_CELL_SELECTOR)) {
       return !this._targetCellTabHandler(eventArgs, direction);
     }
 
     this._updateFocusedCellPosition($targetCell);
 
-    const elementType = this._getElementType(eventTarget);
+    const elementType: NavigationElementType = this._getElementType(eventTarget);
     const nextCellInfo = this._getNextCellByTabKey(
       eventArgs.originalEvent,
       direction,
       elementType,
     );
-    const $nextCell = nextCellInfo.$cell;
+    const $nextCell: dxElementWrapper | undefined = nextCellInfo.$cell;
 
     if (!$nextCell || this._handleTabKeyOnMasterDetailCell($nextCell, direction)) {
       return false;
     }
 
-    let isEditingAllowed = false;
-    const column = this._getColumnByCellElement($nextCell);
+    this._focusAndEditNextCell($nextCell, nextCellInfo.isHighlighted, eventArgs.shift);
 
-    if (column?.allowEditing) {
-      const $row = $nextCell.parent();
-      const rowIndex = this._getLocalRowIndex($row);
-      const row = this._dataController.items()[rowIndex] as any;
-      const isDataRow = !row || row.rowType === 'data';
+    return true;
+  }
 
-      isEditingAllowed = this._editingController.allowUpdating({ row })
-        ? isDataRow : row?.isNewRow;
-    }
+  /**
+   * Focuses the next cell and starts editing if allowed.
+   * Closes the current editor if the next cell is not editable.
+   */
+  private _focusAndEditNextCell(
+    $nextCell: dxElementWrapper,
+    isHighlighted: boolean | undefined,
+    isShift: boolean,
+  ): void {
+    const isEditingAllowed: boolean = this._canEditNextCell($nextCell);
 
     if (!isEditingAllowed) {
       this._closeEditCell();
     }
 
-    const nextCellFocused = this._focusCell($nextCell, !nextCellInfo.isHighlighted);
+    const nextCellFocused = this._focusCell($nextCell, !isHighlighted);
 
     if (nextCellFocused) {
-      const isRowMode = this._isRowEditMode();
-      if (!isRowMode && isEditingAllowed) {
+      if (!this._isRowEditMode() && isEditingAllowed) {
         this._editFocusedCell();
       } else {
-        this._focusInteractiveElement($nextCell, eventArgs.shift);
+        this._focusInteractiveElement($nextCell, isShift);
       }
     }
-
-    return true;
   }
 
-  private isOriginalTabHandlerRequired($cell: dxElementWrapper, event: KeyDownEvent): boolean {
-    const eventTarget = event.originalEvent.target;
-    const elementType = this._getElementType(eventTarget);
-    const $lastInteractiveElement = getInteractiveElement($cell, !event.shift);
+  /**
+   * Checks whether editing is allowed in the given cell
+   * based on the column's `allowEditing` flag and the row's editing permissions.
+   */
+  private _canEditNextCell($cell: dxElementWrapper): boolean {
+    const column = this._getColumnByCellElement($cell);
 
-    if (elementType !== 'cell' || $lastInteractiveElement.length === 0) {
+    if (!column?.allowEditing) {
       return false;
     }
 
-    return eventTarget !== $lastInteractiveElement.get(0);
+    const $row: dxElementWrapper = $cell.parent();
+    const rowIndex: number = this._getLocalRowIndex($row);
+    const row = this._dataController.items()[rowIndex];
+    const isRowData: boolean = !row || row.rowType === 'data';
+
+    return this._editingController.allowUpdating({ row })
+      ? isRowData : !!(row as any)?.isNewRow;
   }
 
-  private _targetCellTabHandler(eventArgs, direction) {
-    const $event = eventArgs.originalEvent;
-    let eventTarget = $event.target;
-    let elementType = this._getElementType(eventTarget);
-    let $cell = this._getCellElementFromTarget(eventTarget);
+  /**
+   * Checks whether native browser tab behavior should be used.
+   * Returns true when focus is on an interactive element inside a cell
+   * that is not the boundary (last for Tab, first for Shift+Tab) interactive element,
+   * meaning tab should cycle through elements within the cell first.
+   */
+  private isOriginalTabHandlerRequired($cell: dxElementWrapper, event: KeyDownEvent): boolean {
+    const eventTarget = event.originalEvent.target;
+    const elementType = this._getElementType(eventTarget);
+    const $boundaryInteractiveElement = getInteractiveElement($cell, !event.shift);
 
+    if (elementType !== 'cell' || $boundaryInteractiveElement.length === 0) {
+      return false;
+    }
+
+    return eventTarget !== $boundaryInteractiveElement.get(0);
+  }
+
+  /**
+   * Handles Tab key on a cell that is not being edited.
+   * Moves focus to the next/previous cell and focuses its interactive elements.
+   * Returns true if original (browser) tab behavior is required,
+   * false if navigation was handled within the grid.
+   */
+  private _targetCellTabHandler(eventArgs: KeyDownEvent, direction: NavigationDirection): boolean {
+    const $event: KeyboardEvent = eventArgs.originalEvent;
+    let eventTarget = $event.target as Element;
+    let elementType: NavigationElementType = this._getElementType(eventTarget);
+    let $cell: dxElementWrapper = this._getCellElementFromTarget(eventTarget);
+
+    // Non-editor cells with intermediate interactive elements use native tab
     if (!isEditorCell(this, $cell) && this.isOriginalTabHandlerRequired($cell, eventArgs)) {
       return true;
     }
 
+    // Initialize focused position when it hasn't been set yet
     if (
       this._focusedCellPosition.rowIndex === undefined
       && $(eventTarget).hasClass(ROW_CLASS)
@@ -1023,26 +1094,18 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       this._updateFocusedCellPosition($cell);
     }
 
-    if (this.isRowFocusType()) {
-      this.setCellFocusType();
-      if (elementType === 'row' && isDataRow($(eventTarget))) {
-        eventTarget = this.getFirstValidCellInRow($(eventTarget));
-        elementType = this._getElementType(eventTarget);
-      }
-    }
+    // Switch from row focus to cell focus for proper tab navigation
+    ({ target: eventTarget, elementType } = this._ensureCellFocusType(eventTarget, elementType));
 
-    const nextCellInfo = this._getNextCellByTabKey(
-      $event,
-      direction,
-      elementType,
-    );
-    $cell = nextCellInfo.$cell;
+    const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
+    $cell = nextCellInfo.$cell!;
 
     if (!$cell) {
       return false;
     }
 
-    $cell = this._checkNewLineTransition($event, $cell);
+    // Handle row transition — fires focusedRowChanging event
+    $cell = this._checkNewLineTransition($event, $cell)!;
     if (!$cell) {
       return false;
     }
@@ -1056,7 +1119,40 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return false;
   }
 
-  private _getNextCellByTabKey($event, direction, elementType) {
+  /**
+   * Switches from row focus mode to cell focus mode when needed.
+   * If the current target is a data row, resolves the first valid cell as the new target.
+   */
+  private _ensureCellFocusType(
+    target: Element,
+    elementType: NavigationElementType,
+  ): { target: Element; elementType: NavigationElementType } {
+    if (!this.isRowFocusType()) {
+      return { target, elementType };
+    }
+
+    this.setCellFocusType();
+
+    if (elementType === 'row' && isDataRow($(target))) {
+      const cellTarget = this.getFirstValidCellInRow($(target));
+      return {
+        target: cellTarget,
+        elementType: this._getElementType(cellTarget),
+      };
+    }
+
+    return { target, elementType };
+  }
+
+  /**
+   * Finds the next cell for tab navigation and fires the `onFocusedCellChanging` event.
+   * Returns `{ $cell, isHighlighted }` or an empty object if navigation was canceled.
+   */
+  private _getNextCellByTabKey(
+    $event: KeyboardEvent,
+    direction: NavigationDirection,
+    elementType: NavigationElementType,
+  ): { $cell?: dxElementWrapper; isHighlighted?: boolean } {
     let $cell = this._getNextCell(direction, elementType);
 
     const args = $cell && this._fireFocusedCellChanging($event, $cell, true);
@@ -1070,14 +1166,22 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     return {
-      $cell,
+      $cell: $cell ?? undefined,
       isHighlighted: args.isHighlighted,
     };
   }
 
-  private _checkNewLineTransition($event, $cell) {
-    const rowIndex = this.getVisibleRowIndex();
-    const $row = $cell.parent();
+  /**
+   * Handles the row transition during tab navigation.
+   * When the next cell belongs to a different row, fires the `onFocusedRowChanging` event.
+   * Returns the target cell element, or undefined if the transition was canceled.
+   */
+  private _checkNewLineTransition(
+    $event: KeyboardEvent,
+    $cell: dxElementWrapper,
+  ): dxElementWrapper | undefined {
+    const rowIndex: number = this.getVisibleRowIndex();
+    const $row: dxElementWrapper = $cell.parent();
 
     if (rowIndex !== this._getRowIndex($row)) {
       const cellPosition = this._getCellPosition($cell);
@@ -2679,7 +2783,14 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  private _handleTabKeyOnMasterDetailCell(target, direction) {
+  /**
+   * Handles tab navigation when focus is on or entering a master-detail cell.
+   * Returns true if the master-detail handling was applied.
+   */
+  private _handleTabKeyOnMasterDetailCell(
+    target: Element | dxElementWrapper,
+    direction: NavigationDirection,
+  ): boolean {
     if (this.getMasterDetailCell(target)) {
       this._updateFocusedCellPosition($(target), direction);
 
