@@ -46,12 +46,12 @@ export const TEMPLATES = Object.freeze({
 
   purchaseLicense: (version: string): string => `Purchase a license to continue use of DevExtreme (v${version}). Included in subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete. To purchase a license, visit https://js.devexpress.com/Buy/`,
 
-  installationInstructions: 'If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key and verify it with the devextreme-license tools. Setup instructions: https://js.devexpress.com/Documentation/Guide/Common/Licensing',
+  installationInstructions: 'If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key and verify it with the devextreme-license tool (https://devexpress.com/DX1001).',
 
   // eslint-disable-next-line spellcheck/spell-checker
-  lcxUsedInsteadOfLcp: 'The .NET license key (LCX) is used instead of the DevExpress license key (LCP).',
+  lcxUsedInsteadOfLcp: 'A DevExpress license key has been specified instead of a key generated using devextreme-license.',
 
-  oldDevExtremeKey: 'The invalid/old DevExtreme key is used instead of the DevExpress license key.',
+  oldDevExtremeKey: 'A DevExtreme key (v25.2 or earlier) has been detected in the GlobalConfig. Generate a key with devextreme-license instead.',
 
   licenseId: (id: string): string => `License ID: ${id}`,
 });
