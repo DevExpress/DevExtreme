@@ -10,7 +10,8 @@ import {
 } from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import {
-  BUY_NOW_LINK, FORMAT, KEY_SPLITTER, LICENSING_DOC_LINK, RTM_MIN_PATCH_VERSION, SUBSCRIPTION_NAMES,
+  BUY_NOW_LINK, FORMAT, KEY_SPLITTER, LICENSE_KEY_PLACEHOLDER,
+  LICENSING_DOC_LINK, RTM_MIN_PATCH_VERSION, SUBSCRIPTION_NAMES,
 } from './const';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { isProductOnlyLicense, parseDevExpressProductKey } from './lcp_key_validation/lcp_key_validator';
@@ -156,7 +157,7 @@ function getLicenseCheckParams({
 
     const { major, minor } = preview ? getPreviousMajorVersion(version) : version;
 
-    if (!licenseKey) {
+    if (!licenseKey || licenseKey === LICENSE_KEY_PLACEHOLDER) {
       return { preview, error: 'W0019', warningType: 'no-key' };
     }
 
@@ -226,12 +227,8 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
     displayTrialPanel();
   }
 
-  const preview = isPreview(version.patch);
-
   if (error) {
-    if (preview) {
-      errors.log('W0022');
-    } else if (warningType) {
+    if (warningType) {
       const versionInfo = warningType === 'version-mismatch' && maxVersionAllowed !== undefined
         ? {
           keyVersion: `${Math.floor(maxVersionAllowed / 10)}.${maxVersionAllowed % 10}`,
@@ -242,11 +239,6 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
     } else {
       errors.log(error);
     }
-    return;
-  }
-
-  if (preview && !internal) {
-    errors.log('W0022');
   }
 }
 

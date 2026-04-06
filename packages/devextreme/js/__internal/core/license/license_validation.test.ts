@@ -10,6 +10,7 @@ import {
   assertedVersionsCompatible,
   clearAssertedVersions,
 } from '../../utils/version';
+import { LICENSE_KEY_PLACEHOLDER } from './const';
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
@@ -311,6 +312,7 @@ describe('license check', () => {
     { token: '', version: '1.0.3' },
     { token: null, version: '1.0.4' },
     { token: undefined, version: '1.0.50' },
+    { token: LICENSE_KEY_PLACEHOLDER, version: '1.0.3' },
   ])('Warning should be logged with no-key message if license is empty', ({ token, version }) => {
     validateLicense(token as string, version);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
@@ -324,34 +326,11 @@ describe('license check', () => {
     { token: '', version: '1.0.0' },
     { token: null, version: '1.2.4-preview' },
     { token: undefined, version: '1.2' },
+    { token: LICENSE_KEY_PLACEHOLDER, version: '1.0.3' },
+    { token: LICENSE_KEY_PLACEHOLDER, version: '1.0.0' },
   ])('trial panel should be displayed if license is empty, preview or not', ({ token, version }) => {
     validateLicense(token as string, version);
     expect(trialPanelSpy).toHaveBeenCalledTimes(1);
-  });
-
-  test.each([
-    { token: '', version: '1.0' },
-    { token: null, version: '1.0.' },
-    { token: undefined, version: '1.0.0' },
-    { token: TOKEN_23_1, version: '23.1.0' },
-    { token: TOKEN_23_1, version: '12.3.1' },
-    { token: TOKEN_23_2, version: '23.1.2' },
-    { token: TOKEN_23_2, version: '23.2.3-preview' },
-    { token: TOKEN_23_1, version: '23.2.0' },
-    { token: TOKEN_23_2, version: '42.4.3-alfa' },
-    { token: TOKEN_UNVERIFIED, version: '1.2.0' },
-    { token: TOKEN_INVALID_JSON, version: '1.2.1' },
-    { token: TOKEN_INVALID_BASE64, version: '1.2.2' },
-    { token: TOKEN_MISSING_FIELD_1, version: '1.2' },
-    { token: TOKEN_MISSING_FIELD_2, version: '1.2.4-preview' },
-    { token: TOKEN_MISSING_FIELD_3, version: '1.2.' },
-    { token: TOKEN_UNSUPPORTED_VERSION, version: '1.2.abc' },
-    { token: 'Another', version: '1.2.0' },
-    { token: '3.2.1', version: '1.2.1' },
-    { token: TOKEN_23_1, version: '123' },
-  ])('W0022 error should be logged if version is preview [%#]', ({ token, version }) => {
-    validateLicense(token as string, version);
-    expect(errors.log).toHaveBeenCalledWith('W0022');
   });
 
   test.each([
@@ -506,13 +485,6 @@ describe('internal license check', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
     validateLicense(token, '1.2.3');
     expect(errors.log).toHaveBeenCalledWith('W0020');
-    expect(trialPanelSpy).not.toHaveBeenCalled();
-  });
-
-  test('internal usage token (incorrect, pre-release)', () => {
-    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
-    validateLicense(token, '1.2.1');
-    expect(errors.log).toHaveBeenCalledWith('W0022');
     expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 });
