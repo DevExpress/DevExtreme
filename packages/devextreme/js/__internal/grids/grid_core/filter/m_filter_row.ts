@@ -2,20 +2,22 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import Editor from '@js/ui/editor/editor';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { Column } from '../columns_controller/types';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';
@@ -76,6 +78,7 @@ const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
 const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
+const MULTISELECT_EDITOR_NAMES = ['dxTagBox', 'dxDateRangeBox', 'dxCalendar', 'dxRangeSlider'];
 
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
@@ -124,9 +127,23 @@ const getColumnSelectedFilterOperation = function (that, column) {
   }
 };
 
-const isValidFilterValue = function (filterValue, column) {
-  if (column && BETWEEN_OPERATION_DATA_TYPES.includes(column.dataType) && Array.isArray(filterValue)) {
-    return false;
+const hasMultiselectEditor = function ($editorContainer: dxElementWrapper): boolean {
+  const editor = getEditorInstance($editorContainer);
+  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+};
+
+const isValidFilterValue = function (
+  filterValue: any,
+  column: Column,
+  $editorContainer: dxElementWrapper,
+): boolean {
+  if (Array.isArray(filterValue)) {
+    if (hasMultiselectEditor($editorContainer)) {
+      return true;
+    }
+    if (BETWEEN_OPERATION_DATA_TYPES.includes(column?.dataType ?? '')) {
+      return false;
+    }
   }
 
   return filterValue !== undefined;
@@ -137,15 +154,20 @@ const getFilterValue = function (that, columnIndex, $editorContainer) {
   const filterValue = getColumnFilterValue(that, column);
   const isFilterRange = $editorContainer.closest(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).length;
   const isRangeStart = $editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS));
+  const isBetween = getColumnSelectedFilterOperation(that, column) === 'between';
 
-  if (filterValue && Array.isArray(filterValue) && getColumnSelectedFilterOperation(that, column) === 'between') {
+  if (filterValue && Array.isArray(filterValue) && isBetween) {
     if (isRangeStart) {
       return filterValue[0];
     }
     return filterValue[1];
   }
 
-  return !isFilterRange && isValidFilterValue(filterValue, column) ? filterValue : null;
+  if (isFilterRange || !isValidFilterValue(filterValue, column, $editorContainer)) {
+    return null;
+  }
+
+  return filterValue;
 };
 
 const normalizeFilterValue = function (that, filterValue, column, $editorContainer) {
@@ -637,7 +659,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
         if (!selectedFilterOperation) {
           const editor = getEditorInstance($editorContainer);
-          // @ts-expect-error
           if (editor && editor.NAME === 'dxDateBox' && !editor.option('isValid')) {
             editor.clear();
             editor.option('isValid', true);
