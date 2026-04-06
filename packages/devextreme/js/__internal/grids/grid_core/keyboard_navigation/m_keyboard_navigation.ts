@@ -312,7 +312,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if (needUpdateFocus) {
         const isScrollEvent = !!e?.event?.type;
         const skipFocusEvent = e?.virtualColumnsScrolling && isScrollEvent;
-        this._updateFocus(true, skipFocusEvent);
+        const preventScroll = !isFullUpdate;
+        this._updateFocus(true, skipFocusEvent, preventScroll);
       }
     }
   }
@@ -1743,7 +1744,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     gridCoreUtils.focusAndSelectElement(this, $focusedElement);
   }
 
-  public _focus($cell, disableFocus?, skipFocusEvent?) {
+  public _focus($cell, disableFocus?, skipFocusEvent?, preventScroll = false) {
     const $row = $cell && !$cell.hasClass(ROW_CLASS)
       ? $cell.closest(`.${ROW_CLASS}`)
       : $cell;
@@ -1795,8 +1796,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       });
       if (!skipFocusEvent) {
         this._applyTabIndexToElement($focusElement);
-        // @ts-expect-error
-        eventsEngine.trigger($focusElement, 'focus');
+        $focusElement.get(0)?.focus({ preventScroll });
       }
       if (disableFocus) {
         $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
@@ -1809,7 +1809,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  public _updateFocus(isRenderView?, skipFocusEvent = false) {
+  public _updateFocus(isRenderView?, skipFocusEvent = false, preventScroll = false) {
     this._updateFocusTimeout = setTimeout(() => {
       if (this._needFocusEditingCell()) {
         this._editingController._focusEditingCell();
@@ -1853,7 +1853,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
               !isFocusedElementDefined
               && (this._isNeedFocus || this._isHiddenFocus)
             ) {
-              this._focus($cell, this._isHiddenFocus, skipFocusEvent);
+              this._focus($cell, this._isHiddenFocus, skipFocusEvent, preventScroll);
             }
             if (isEditing && !column?.showEditorAlways) {
               this._focusInteractiveElement.bind(this)($cell);
