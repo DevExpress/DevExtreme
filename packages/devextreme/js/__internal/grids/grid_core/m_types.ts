@@ -205,6 +205,7 @@ export interface Controllers {
   toastViewController: import('./toast/m_toast_controller').ToastViewController;
   aiColumn: import('./ai_column/controllers/m_ai_column_controller').AIColumnController;
   aiPromptEditor: import('./ai_column/controllers/m_ai_prompt_editor_view_controller').AIPromptEditorViewController;
+  aiAssistant: import('./ai_assistant/m_ai_assistant_view_controller').AIAssistantViewController;
 }
 
 type ControllerTypes = {
@@ -229,6 +230,7 @@ export interface Views {
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
   toastView: import('./toast/m_toast_view').ToastView;
   aiPromptEditorView: import('./ai_column/views/m_ai_prompt_editor_view').AIPromptEditorView;
+  aiAssistantView: import('./ai_assistant/m_ai_assistant_view').AIAssistantView;
 }
 
 export interface EditingControllerRequired {

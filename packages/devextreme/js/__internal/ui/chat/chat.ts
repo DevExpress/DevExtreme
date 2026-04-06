@@ -18,6 +18,8 @@ import type {
   MessageUpdatedEvent,
   MessageUpdatingEvent,
   Properties as ChatProperties,
+  SendButtonClickEvent,
+  SendButtonProperties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
@@ -79,6 +81,8 @@ class Chat extends Widget<ChatProperties> {
 
   _inputFieldTextChangedAction?: (e: Partial<InputFieldTextChangedEvent>) => void;
 
+  _sendButtonAction?: (e: Partial<SendButtonClickEvent>) => void;
+
   _getDefaultOptions(): ChatProperties {
     return {
       ...super._getDefaultOptions(),
@@ -107,6 +111,11 @@ class Chat extends Widget<ChatProperties> {
       speechToTextOptions: undefined,
       typingUsers: [],
       user: { id: new Guid().toString() },
+      sendButtonOptions: {
+        icon: 'arrowright',
+        action: 'send',
+        onClick: undefined,
+      },
       onMessageDeleted: undefined,
       onMessageDeleting: undefined,
       onMessageEditCanceled: undefined,
@@ -138,6 +147,7 @@ class Chat extends Widget<ChatProperties> {
     this._createTypingEndAction();
     this._createAttachmentDownloadAction();
     this._createInputFieldTextChangedAction();
+    this._createSendButtonAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -473,6 +483,8 @@ class Chat extends Widget<ChatProperties> {
       speechToTextOptions,
     } = this.option();
 
+    const sendButtonOptions = this._getSendButtonOptionsWithAction();
+
     const $messageBox = $('<div>');
 
     this.$element().append($messageBox);
@@ -485,6 +497,7 @@ class Chat extends Widget<ChatProperties> {
       text: inputFieldText,
       speechToTextEnabled,
       speechToTextOptions,
+      sendButtonOptions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -603,6 +616,21 @@ class Chat extends Widget<ChatProperties> {
       'onInputFieldTextChanged',
       { excludeValidators: ['disabled'] },
     );
+  }
+
+  _createSendButtonAction(): void {
+    const { sendButtonOptions } = this.option();
+
+    this._sendButtonAction = this._createAction(sendButtonOptions?.onClick, { excludeValidators: ['disabled'] });
+  }
+
+  _getSendButtonOptionsWithAction(): SendButtonProperties | undefined {
+    const { sendButtonOptions } = this.option();
+
+    return {
+      ...sendButtonOptions,
+      onClick: this._sendButtonAction,
+    };
   }
 
   _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
@@ -742,6 +770,10 @@ class Chat extends Widget<ChatProperties> {
         this._messageList.option(name, this._getEmptyViewTemplate());
         break;
       case 'reloadOnChange':
+        break;
+      case 'sendButtonOptions':
+        this._createSendButtonAction();
+        this._messageBox.option(name, this._getSendButtonOptionsWithAction());
         break;
       default:
         super._optionChanged(args);

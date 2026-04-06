@@ -10,4 +10,10 @@ export class GroupRowModel extends BaseRowModel {
 
     return row.querySelector(`.${SELECTORS.expandCell}`) as HTMLElement;
   }
+
+  public getCells(): NodeListOf<HTMLElement> {
+    const row = this.getElement() as HTMLElement;
+
+    return row.querySelectorAll('td');
+  }
 }

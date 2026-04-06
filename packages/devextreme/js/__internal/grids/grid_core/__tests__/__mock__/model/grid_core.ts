@@ -24,6 +24,7 @@ const SELECTORS = {
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
   filterRowClass: 'filter-row',
+  scrollableContainer: 'dx-scrollable-container',
   aiDialog: 'dx-aidialog',
   aiPromptEditor: 'dx-ai-prompt-editor',
   toast: 'dx-toast',
@@ -51,12 +52,19 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
     return this.root.querySelector(`.${SELECTORS.aiPromptEditor}`) as HTMLElement;
   }
 
-  public getHeaderCells(): NodeListOf<HTMLElement> {
-    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
+  public getHeaderRows(): NodeListOf<HTMLElement> {
+    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass}`);
   }
 
-  public getHeaderCell(columnIndex: number): HeaderCellModel {
-    return new HeaderCellModel(this.getHeaderCells()[columnIndex], this.addWidgetPrefix.bind(this));
+  public getHeaderCells(rowIndex = 0): NodeListOf<HTMLElement> {
+    return this.getHeaderRows()[rowIndex].querySelectorAll('td');
+  }
+
+  public getHeaderCell(columnIndex: number, rowIndex = 0): HeaderCellModel {
+    return new HeaderCellModel(
+      this.getHeaderCells(rowIndex)[columnIndex],
+      this.addWidgetPrefix.bind(this),
+    );
   }
 
   public getAIHeaderCell(columnIndex: number): AIHeaderCellModel {
@@ -105,6 +113,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getGroupRow(rowIndex: number): GroupRowModel {
     return new GroupRowModel(this.getGroupRows()[rowIndex]);
+  }
+
+  public getScrollableContainer(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.scrollableContainer}`) as HTMLElement;
   }
 
   public getHeaderByText(text: string): dxElementWrapper {

@@ -445,13 +445,17 @@ class DropDownEditor<
     return promise.always(this._renderField.bind(this));
   }
 
-  _getButtonsContainer(): dxElementWrapper {
+  _getButtonsContainer(): dxElementWrapper | null | undefined {
     const fieldTemplate = this._getFieldTemplate();
+
     return fieldTemplate ? this._$container : this._$textEditorContainer;
   }
 
   _renderBeforeFieldAddon(): void {
-    if (!this._$beforeFieldAddon) {
+    if (
+      !this._$beforeFieldAddon
+      && this._$textEditorContainer
+    ) {
       this._$beforeFieldAddon = $('<div>')
         .addClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON)
         .insertBefore(this._$textEditorContainer);
@@ -459,7 +463,10 @@ class DropDownEditor<
   }
 
   _renderAfterFieldAddon(): void {
-    if (!this._$afterFieldAddon) {
+    if (
+      !this._$afterFieldAddon
+      && this._$textEditorContainer
+    ) {
       this._$afterFieldAddon = $('<div>')
         .addClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON)
         .insertAfter(this._$textEditorContainer);
@@ -479,6 +486,7 @@ class DropDownEditor<
 
   _renderTemplateWrapper(): void {
     const fieldTemplate = this._getFieldTemplate();
+
     if (!fieldTemplate) {
       return;
     }
@@ -495,10 +503,10 @@ class DropDownEditor<
     this._detachKeyboardEvents();
     this._detachFocusEvents();
 
-    this._$textEditorContainer.remove();
+    this._$textEditorContainer?.remove();
 
     const $newTemplateWrapper = createTemplateWrapperElement();
-    this._$templateWrapper!.replaceWith($newTemplateWrapper);
+    this._$templateWrapper?.replaceWith($newTemplateWrapper);
     this._$templateWrapper = $newTemplateWrapper;
 
     const currentRenderContext = Symbol('renderContext');

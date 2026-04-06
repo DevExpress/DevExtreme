@@ -13,6 +13,7 @@ test('Data should be filtered if True is selected via the filter method when cas
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await dataGrid.apiFilter(['text', '=', 'true']);

@@ -52,6 +52,7 @@ const VIEW_NAMES = [
   'filterBuilderView',
   'toastView',
   'aiPromptEditorView',
+  'aiAssistantView',
 ];
 
 const E2E_ATTRIBUTES = {
