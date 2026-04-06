@@ -1,11 +1,26 @@
 import type { LicenseWarningType } from './types';
 
-const SOURCE = '[devextreme-license]';
-
 export const TEMPLATES = Object.freeze({
-  warningPrefix: (code: string | number): string => `Warning number: ${code}. For evaluation purposes only. Redistribution prohibited.`,
+  warningPrefix: (code: string | number): string => {
+    let warningDescription = '';
+    switch (code) {
+      case 'W0019':
+        warningDescription = 'DevExtreme: You are using a trial (evaluation) version of DevExtreme.';
+        break;
+      case 'W0020':
+        warningDescription = 'DevExtreme: License Key Has Expired.';
+        break;
+      case 'W0021':
+        warningDescription = 'DevExtreme: License Key Verification Has Failed.';
+        break;
+      default:
+        warningDescription = 'DevExtreme: For evaluation purposes only. Redistribution prohibited.';
+        break;
+    }
+    return `${code} - ${warningDescription}`;
+  },
 
-  keyNotFound: 'No valid DevExpress license key was found on this machine.',
+  keyNotFound: 'A devextreme-license generated key has not been specified in the GlobalConfig.',
 
   keyWasFound: (type: string, path?: string): string => {
     switch (type) {
@@ -48,32 +63,32 @@ export function logLicenseWarning(
 ): void {
   const T = TEMPLATES;
 
-  const purchaseLine = `${SOURCE}  ${T.warningPrefix('W0019')} ${T.purchaseLicense(version)}`;
-  const installLine = `${SOURCE} ${T.warningPrefix('W0021')} ${T.installationInstructions}`;
+  const purchaseLine = `${T.warningPrefix('W0019')} ${T.purchaseLicense(version)}`;
+  const installLine = `${T.warningPrefix('W0021')} ${T.installationInstructions}`;
 
   const lines: string[] = [purchaseLine];
 
   switch (warningType) {
     case 'no-key':
-      lines.push('', T.keyNotFound, '', installLine);
+      lines.push(T.keyNotFound, installLine);
       break;
 
     case 'invalid-key':
-      lines.push('', T.keyVerificationFailed(), '', installLine);
+      lines.push(T.keyVerificationFailed(), installLine);
       break;
 
     case 'lcx-used':
       // eslint-disable-next-line spellcheck/spell-checker
-      lines.push('', T.keyVerificationFailed(), T.lcxUsedInsteadOfLcp, '', installLine);
+      lines.push(T.keyVerificationFailed(), T.lcxUsedInsteadOfLcp, installLine);
       break;
 
     case 'old-devextreme-key':
-      lines.push('', T.keyVerificationFailed(), T.oldDevExtremeKey, '', installLine);
+      lines.push(T.keyVerificationFailed(), T.oldDevExtremeKey, installLine);
       break;
 
     case 'version-mismatch': {
-      const incompatibleLine = `${SOURCE} ${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}`;
-      lines.push('', T.keyVerificationFailed(), '', incompatibleLine);
+      const incompatibleLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}`;
+      lines.push(T.keyVerificationFailed(), incompatibleLine);
       break;
     }
 

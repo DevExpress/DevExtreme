@@ -5,5 +5,7 @@ export const KEY_SPLITTER = '.';
 export const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
 export const LICENSING_DOC_LINK = 'https://go.devexpress.com/Licensing_Documentation_DevExtremeJQuery.aspx';
 
+export const LICENSE_KEY_PLACEHOLDER = '/* ___$$$$$___devextreme___lcp___placeholder____$$$$$ */';
+
 export const NBSP = '\u00A0';
 export const SUBSCRIPTION_NAMES = `Universal, DXperience, ASP.NET${NBSP}and${NBSP}Blazor, DevExtreme${NBSP}Complete`;
