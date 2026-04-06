@@ -724,17 +724,12 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-
-  apiFocus(): Promise<void> {
+  apiFocus(cellElement?: Selector): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => (getInstance() as any).focus(),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
+      () => (getInstance() as any).focus(cellElement?.()),
+      { dependencies: { getInstance, cellElement } },
     )();
   }
 
