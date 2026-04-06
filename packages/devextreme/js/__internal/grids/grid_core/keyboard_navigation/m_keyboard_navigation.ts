@@ -1674,6 +1674,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           $focusElement
             .removeClass(CELL_FOCUS_DISABLED_CLASS)
             .removeClass(FOCUSED_CLASS);
+
+          const isTargetInGrid = gridCoreUtils.isElementInCurrentGrid(this, $(e.relatedTarget));
+          if (!isTargetInGrid) {
+            this._resetFocusedCell(true);
+            this._resetFocusedView();
+          }
         }
       });
       if (!skipFocusEvent) {
