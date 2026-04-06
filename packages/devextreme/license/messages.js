@@ -19,7 +19,7 @@ const MESSAGES = Object.freeze({
 
 const TEMPLATES = Object.freeze({
     warningPrefix: (number) => `Warning number: DX${number}. For evaluation purposes only. Redistribution prohibited.`,
-    keyNotFound: 'No valid DevExpress license key was found on this machine.',
+    keyNotFound: 'A valid DevExpress license key was not found on this machine.',
     keyWasFound: (type, path) => {
         switch(type) {
             case 'envVariable':
@@ -52,8 +52,8 @@ const TEMPLATES = Object.freeze({
     },
     purchaseLicense: (version) => 
         `Purchase a license to continue use of DevExtreme (v${version}). Included in subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete. To purchase a license, visit https://js.devexpress.com/Buy/`,
-    installationInstructions: 'If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key and verify it with the devextreme-license tools. Setup instructions: https://js.devexpress.com/Documentation/Guide/Common/Licensing',
-    oldDevExtremeKey: 'The invalid/old DevExtreme key is used instead of the DevExpress license key.',
+    installationInstructions: 'If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key and verify it with the devextreme-license tool (https://devexpress.com/DX1001).',
+    oldDevExtremeKey: (version) => `A DevExtreme key (v25_1 or earlier) has been detected. Use DevExpress license key (v${version}+) instead.`,
     licenseId: (id) => `License ID: ${id}`,
 });
 
