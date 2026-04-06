@@ -296,6 +296,8 @@ class DropDownBox<
       position: extend(this.option('popupPosition'), {
         of: this.$element(),
       }),
+      // The overlay calls maxHeight every time it calculates the content dimensions,
+      // this._popupPosition?.v.location, which is updated after each repositioning
       _ignoreFunctionValueDeprecation: true,
       // @ts-expect-error ts-error
       maxHeight: function () {

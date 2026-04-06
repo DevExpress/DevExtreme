@@ -874,19 +874,24 @@ class FilterBuilder extends Widget<any> {
   _createPopupWithTreeView(options, $container) {
     const that = this;
     const $popup = $('<div>')
-      .addClass(options.menu.cssClass)
-      .appendTo($container);
-
-    const maxHeight = getElementMaxHeightByWindow(options?.menu?.position?.of);
-
+      .addClass(options.menu.cssClass).appendTo($container);
     // @ts-expect-error
     this._createComponent($popup, Popup, {
-      maxHeight,
       onHiding: options.menu.onHiding,
       onHidden: options.menu.onHidden,
       rtlEnabled: options.menu.rtlEnabled,
       position: options.menu.position,
       animation: options.menu.animation,
+      contentTemplate(contentElement) {
+        const $menuContainer = $('<div>').appendTo(contentElement);
+        // @ts-expect-error
+        that._createComponent($menuContainer, TreeView, options.menu);
+
+        $menuContainer.attr('id', `${options.menu.id}`);
+        // T852701
+        this.repaint();
+      },
+      maxHeight: getElementMaxHeightByWindow(options.menu.position.of),
       visible: true,
       focusStateEnabled: false,
       preventScrollEvents: false,
@@ -900,15 +905,6 @@ class FilterBuilder extends Widget<any> {
       showTitle: false,
       _wrapperClassExternal: options.menu.cssClass,
       _ignorePreventScrollEventsDeprecation: true,
-      contentTemplate(contentElement) {
-        const $menuContainer = $('<div>').appendTo(contentElement);
-        // @ts-expect-error
-        that._createComponent($menuContainer, TreeView, options.menu);
-
-        $menuContainer.attr('id', `${options.menu.id}`);
-        // T852701
-        this.repaint();
-      },
     });
   }
 

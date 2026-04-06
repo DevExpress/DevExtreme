@@ -409,8 +409,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
           type: 'fade', duration: 400, from: 1, to: 0,
         },
       },
-      _ignoreFunctionValueDeprecation: true,
-      width: () => getElementWidth(this.$element()),
+      width: getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
       position: {
@@ -532,7 +531,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
 
     if (popupWidth === undefined) {
-      this._setPopupOption('width', () => getElementWidth(this.$element()));
+      this._setPopupOption('width', getElementWidth(this.$element()));
     }
   }
 

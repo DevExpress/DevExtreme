@@ -130,14 +130,10 @@ class Lookup extends DropDownList<LookupProperties> {
       focusStateEnabled: false,
       dropDownOptions: {
         showTitle: true,
-        // @ts-expect-error ts-error
-        width() {
-          return getSize('width');
-        },
-        // @ts-expect-error ts-error
-        height() {
-          return getSize('height');
-        },
+        // @ts-expect-error Category 3 — There is no built-in mechanism for mandatory updates
+        width: () => getSize('width'),
+        // @ts-expect-error Category 3 — There is no built-in mechanism for mandatory updates
+        height: () => getSize('height'),
         shading: true,
         hideOnOutsideClick: true,
         animation: {},
@@ -218,7 +214,7 @@ class Lookup extends DropDownList<LookupProperties> {
           dropDownOptions: {
             _ignoreFunctionValueDeprecation: true,
 
-            width: () => getElementWidth(this.$element()),
+            width: getElementWidth(this.$element()),
             height: function () { return this._getPopupHeight(); }.bind(this),
             showTitle: false,
 
@@ -830,6 +826,7 @@ class Lookup extends DropDownList<LookupProperties> {
       this.option('dropDownOptions.width', getWidth(this.$element()));
     }
 
+    this._updatePopupWidth();
     this._updateListDimensions();
   }
 

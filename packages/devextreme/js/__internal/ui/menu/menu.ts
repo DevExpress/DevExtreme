@@ -144,13 +144,10 @@ class Menu extends MenuBase<MenuProperties> {
 
   _hoveredRootItem?: dxElementWrapper | null;
 
-  // eslint-disable-next-line no-restricted-globals
   _showSubmenuTimer?: ReturnType<typeof setTimeout> | number;
 
-  // eslint-disable-next-line no-restricted-globals
   _hideSubmenuTimer?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _resizeEventTimer?: ReturnType<typeof setTimeout>;
 
   // @ts-expect-error ts-error
@@ -343,7 +340,9 @@ class Menu extends MenuBase<MenuProperties> {
     }
 
     const containerWidth: number = getOuterWidth(this.$element());
+
     this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
+    this._overlay?.option('maxHeight', getElementMaxHeightByWindow(this.$element()));
   }
 
   _init(): void {
@@ -473,9 +472,7 @@ class Menu extends MenuBase<MenuProperties> {
     const position = rtlEnabled ? 'right' : 'left';
 
     return {
-      _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error ts-error
-      maxHeight: () => getElementMaxHeightByWindow(this.$element()),
+      maxHeight: getElementMaxHeightByWindow(this.$element()),
       deferRendering: false,
       shading: false,
       // @ts-expect-error ts-error
