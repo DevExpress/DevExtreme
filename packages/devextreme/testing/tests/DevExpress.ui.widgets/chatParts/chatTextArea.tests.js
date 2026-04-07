@@ -2,6 +2,7 @@ import $ from 'jquery';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import messageLocalization from 'common/core/localization/message';
 
 import ChatTextArea, { CHAT_TEXT_AREA_ATTACH_BUTTON, DEFAULT_ALLOWED_FILE_EXTENSIONS } from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
@@ -813,6 +814,50 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 $cancelButton.trigger('dxclick');
 
                 assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled after file removal');
+            });
+
+            QUnit.module('Localization', {
+                beforeEach: function() {
+                    this.defaultMessage = messageLocalization.format('dxChat-fileLimitReachedWarning');
+                    this.customMessage = 'Custom file limit message';
+                },
+                afterEach: function() {
+                    messageLocalization.load({ en: { 'dxChat-fileLimitReachedWarning': this.defaultMessage } });
+                }
+            }, () => {
+                QUnit.test('informer should show custom localization message loaded before component initialization', function(assert) {
+                    messageLocalization.load({ en: { 'dxChat-fileLimitReachedWarning': this.customMessage } });
+
+                    this.reinit({
+                        fileUploaderOptions: {
+                            uploadFile: () => {},
+                        }
+                    });
+
+                    const fileUploader = this.getFileUploader();
+                    fileUploader.option('onFileLimitReached')();
+
+                    const $informerText = this.$element.find(`.${INFORMER_TEXT_CLASS}`);
+
+                    assert.strictEqual($informerText.text(), this.customMessage, 'custom localization message is shown');
+                });
+
+                QUnit.test('informer should show custom localization message loaded after component initialization', function(assert) {
+                    this.reinit({
+                        fileUploaderOptions: {
+                            uploadFile: () => {},
+                        }
+                    });
+
+                    messageLocalization.load({ en: { 'dxChat-fileLimitReachedWarning': this.customMessage } });
+
+                    const fileUploader = this.getFileUploader();
+                    fileUploader.option('onFileLimitReached')();
+
+                    const $informerText = this.$element.find(`.${INFORMER_TEXT_CLASS}`);
+
+                    assert.strictEqual($informerText.text(), this.customMessage, 'custom localization message is shown after runtime load');
+                });
             });
         });
 

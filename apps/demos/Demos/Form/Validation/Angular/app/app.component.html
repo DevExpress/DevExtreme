@@ -14,12 +14,11 @@
         </dxi-form-validation-rule>
         <dxi-form-validation-rule type="email" message="Email is invalid">
         </dxi-form-validation-rule>
-        <dxi-form-validation-rule
-          type="async"
+        <dxi-form-async-rule
           message="Email is already registered"
           [validationCallback]="asyncValidation"
         >
-        </dxi-form-validation-rule>
+        </dxi-form-async-rule>
       </dxi-form-item>
       <dxi-form-item
         dataField="Password"

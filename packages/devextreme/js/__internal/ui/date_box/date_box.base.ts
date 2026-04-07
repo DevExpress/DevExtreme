@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
@@ -23,8 +22,8 @@ import type {
 import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 
-import type { ValueChangedEvent } from '../editor/editor';
 import type { PopupProperties } from '../popup/m_popup';
 import uiDateUtils from './date_utils';
 import Calendar from './m_date_box.strategy.calendar';
@@ -208,7 +207,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const strategyName = this._getStrategyName(this._getFormatType());
     const strategy = STRATEGY_CLASSES[strategyName];
 
-    if (!(this._strategy && this._strategy.NAME === strategyName)) {
+    if (!(this._strategy?.NAME === strategyName)) {
       // eslint-disable-next-line new-cap
       this._strategy = new strategy(this);
     }
@@ -465,7 +464,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     }
   }
 
-  _clearValueHandler(e: DxEvent): void {
+  _clearValueHandler(e: ValueChangedEvent & DxEvent): void {
     this.option('text', '');
     super._clearValueHandler(e);
   }
@@ -549,7 +548,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     if (this._applyInternalValidation(date).isValid) {
       const displayedText = this._getDisplayedText(newValue);
 
-      if (value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
+      if (value && value.getTime() === newValue?.getTime() && displayedText !== text) {
         this._renderValue();
       } else {
         this.dateValue(newValue, e);

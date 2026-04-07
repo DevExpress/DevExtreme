@@ -6,34 +6,34 @@ import CurrentTimeShader from './current_time_shader';
 
 class HorizontalCurrentTimeShader extends CurrentTimeShader {
   renderShader(): void {
-    const groupCount = this._workSpace._isHorizontalGroupedWorkSpace()
-      ? this._workSpace._getGroupCount()
+    const groupCount = this.workSpace._isHorizontalGroupedWorkSpace()
+      ? this.workSpace._getGroupCount()
       : 1;
 
     for (let i = 0; i < groupCount; i += 1) {
       const isFirstShader = i === 0;
-      const $shader = isFirstShader ? this._$shader : this.createShader();
+      const $shader = isFirstShader ? this.$shader : this.createShader();
 
-      if (this._workSpace.isGroupedByDate()) {
+      if (this.workSpace.isGroupedByDate()) {
         this.customizeGroupedByDateShader($shader, i);
       } else {
         this.customizeShader($shader, i);
       }
 
       if (!isFirstShader) {
-        this._shader.push($shader);
+        this.shader.push($shader);
       }
     }
   }
 
   private customizeShader($shader: dxElementWrapper, groupIndex: number): void {
     // @ts-expect-error
-    const shaderWidth = this._workSpace.getIndicationWidth() as number;
+    const shaderWidth = this.workSpace.getIndicationWidth() as number;
 
     this.applyShaderWidth($shader, shaderWidth);
 
     if (groupIndex >= 1) {
-      const workSpace = this._workSpace;
+      const { workSpace } = this;
       const indicationWidth = workSpace._getCellCount() * workSpace.getCellWidth();
       $shader.css('left', indicationWidth);
     } else {
@@ -42,7 +42,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
   }
 
   private applyShaderWidth($shader: dxElementWrapper, width: number): void {
-    const maxWidth = getBoundingRect(this._$container.get(0)).width;
+    const maxWidth = getBoundingRect(this.$container.get(0)).width;
     if (width > 0) {
       setWidth($shader, Math.min(width, maxWidth));
     }
@@ -50,11 +50,11 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
   private customizeGroupedByDateShader($shader: dxElementWrapper, groupIndex: number): void {
     // @ts-expect-error
-    const cellCount = this._workSpace.getIndicationCellCount() as number;
+    const cellCount = this.workSpace.getIndicationCellCount() as number;
     const integerPart = Math.floor(cellCount);
     const fractionPart = cellCount - integerPart;
     const isFirstShaderPart = groupIndex === 0;
-    const workSpace = this._workSpace;
+    const { workSpace } = this;
     const shaderWidth = isFirstShaderPart
       // @ts-expect-error
       ? workSpace.getIndicationWidth() as number

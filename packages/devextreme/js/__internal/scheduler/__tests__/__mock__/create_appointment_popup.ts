@@ -6,9 +6,9 @@ import { Deferred } from '@js/core/utils/deferred';
 import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
 import { AppointmentForm } from '../../appointment_popup/m_form';
 import {
-  ACTION_TO_APPOINTMENT,
   APPOINTMENT_POPUP_CLASS,
   AppointmentPopup,
+  type AppointmentPopupConfig,
 } from '../../appointment_popup/m_popup';
 import {
   AppointmentDataAccessor,
@@ -39,7 +39,6 @@ const DEFAULT_EDITING = {
   allowDeleting: true,
   allowResizing: true,
   allowDragging: true,
-  legacyForm: false,
 };
 
 const DEFAULT_APPOINTMENT = {
@@ -59,11 +58,13 @@ const resolvedDeferred = (): any => {
 
 interface CreateAppointmentPopupOptions {
   appointmentData?: Record<string, unknown>;
-  action?: number;
   editing?: Record<string, unknown>;
   firstDayOfWeek?: number;
   startDayHour?: number;
   onAppointmentFormOpening?: (...args: unknown[]) => void;
+  onSave?: jest.Mock;
+  title?: string;
+  readOnly?: boolean;
   addAppointment?: jest.Mock;
   updateAppointment?: jest.Mock;
 }
@@ -78,6 +79,7 @@ interface CreateAppointmentPopupResult {
     updateAppointment: jest.Mock;
     focus: jest.Mock;
     updateScrollPosition: jest.Mock;
+    onSave: jest.Mock;
   };
   dispose: () => void;
 }
@@ -112,6 +114,7 @@ export const createAppointmentPopup = async (
     ?? jest.fn(resolvedDeferred);
   const focus = jest.fn();
   const updateScrollPosition = jest.fn();
+  const onSave = options.onSave ?? jest.fn(resolvedDeferred);
 
   const formSchedulerProxy = {
     getResourceById: (): Record<string, unknown> => resourceManager.resourceById,
@@ -161,9 +164,14 @@ export const createAppointmentPopup = async (
 
   const appointmentData = options.appointmentData
     ?? { ...DEFAULT_APPOINTMENT };
-  const action = options.action ?? ACTION_TO_APPOINTMENT.CREATE;
+  const title = options.title ?? 'New Appointment';
+  const readOnly = options.readOnly ?? false;
 
-  popup.show(appointmentData, { action, allowSaving: true });
+  popup.show(appointmentData, {
+    onSave: onSave as unknown as AppointmentPopupConfig['onSave'],
+    title,
+    readOnly,
+  });
   await new Promise(process.nextTick);
 
   const selector = `.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}`;
@@ -196,6 +204,7 @@ export const createAppointmentPopup = async (
       updateAppointment,
       focus,
       updateScrollPosition,
+      onSave,
     },
     dispose,
   };

@@ -130,6 +130,10 @@ class ListStrategy extends DateBoxStrategy {
     clearTimeout(this._asyncScrollTimeout);
   }
 
+  renderValue(): void {
+    this._updateValue();
+  }
+
   _updateValue(): void {
     if (!this._widget) {
       return;
@@ -137,8 +141,12 @@ class ListStrategy extends DateBoxStrategy {
 
     this._refreshItems();
 
-    this._setSelectedItemsByValue();
-    this._scrollToSelectedItem();
+    const { opened } = this.dateBox.option();
+
+    if (opened) {
+      this._setSelectedItemsByValue();
+      this._scrollToSelectedItem();
+    }
   }
 
   _setSelectedItemsByValue(): void {
