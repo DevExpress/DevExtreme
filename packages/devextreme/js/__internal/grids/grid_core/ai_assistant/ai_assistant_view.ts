@@ -5,10 +5,15 @@ import { View } from '../m_modules';
 export class AIAssistantView extends View {
   private aiChatInstance!: AIChat;
 
+  public onVisibilityChanged?: (visible: boolean) => void;
+
   private getAIChatConfig(): AIChatOptions {
     return {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
+      onVisibilityChanged: (visible: boolean): void => {
+        this.onVisibilityChanged?.(visible);
+      },
     };
   }
 
@@ -24,12 +29,8 @@ export class AIAssistantView extends View {
     return !!this.option('aiAssistant.enabled');
   }
 
-  public show(): Promise<boolean> {
-    return this.aiChatInstance?.show() ?? Promise.resolve(false);
-  }
-
-  public hide(): Promise<boolean> {
-    return this.aiChatInstance?.hide() ?? Promise.resolve(false);
+  public isShown(): boolean {
+    return this.aiChatInstance?.isShown() ?? false;
   }
 
   public toggle(): Promise<boolean> {

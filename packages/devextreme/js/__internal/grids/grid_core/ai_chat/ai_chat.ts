@@ -29,6 +29,12 @@ export class AIChat {
     return {
       ...DEFAULT_POPUP_OPTIONS,
       wrapperAttr: { class: `${CLASSES.aiChat} ${CLASSES.aiDialog}` },
+      onShowing: (): void => {
+        this.options.onVisibilityChanged?.(true);
+      },
+      onHidden: (): void => {
+        this.options.onVisibilityChanged?.(false);
+      },
       contentTemplate: ($container): void => {
         const $editorContainer = $('<div>')
           .addClass(CLASSES.aiChatContent)
@@ -43,15 +49,11 @@ export class AIChat {
     };
   }
 
-  public show(): Promise<boolean> {
-    return this.popupInstance.show();
-  }
-
-  public hide(): Promise<boolean> {
-    return this.popupInstance.hide();
-  }
-
   public toggle(): Promise<boolean> {
     return this.popupInstance.toggle();
+  }
+
+  public isShown(): boolean {
+    return !!this.popupInstance.option('visible');
   }
 }

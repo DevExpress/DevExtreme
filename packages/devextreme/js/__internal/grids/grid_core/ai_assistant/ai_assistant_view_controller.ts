@@ -1,5 +1,7 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { InitializedEvent as ButtonInitializedEvent } from '@js/ui/button';
+import { ACTIVE_STATE_CLASS } from '@ts/core/widget/widget';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
@@ -16,14 +18,20 @@ export class AIAssistantViewController extends ViewController {
 
   private headerPanel?: HeaderPanel;
 
+  private $aiAssistantButton?: dxElementWrapper;
+
   public init(): void {
     this.aiAssistantView = this.getView('aiAssistantView');
     this.headerPanel = this.getView('headerPanel');
 
+    this.aiAssistantView.onVisibilityChanged = (visible: boolean): void => {
+      this.$aiAssistantButton?.toggleClass(ACTIVE_STATE_CLASS, visible);
+    };
+
     const isAiAssistantEnabled = this.option('aiAssistant.enabled'); // TODO clarify option name
 
     if (isAiAssistantEnabled) {
-      const aiAssistantToolbarItem = this.getAiAssistantToolbarItem();
+      const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
 
       this.headerPanel?.registerToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
     }
@@ -31,22 +39,11 @@ export class AIAssistantViewController extends ViewController {
 
   public optionChanged(args: OptionChanged): void {
     if (args.name === 'aiAssistant') {
-      if (args.fullName === 'aiAssistant.enabled') { // TODO clarify option name
-        this.syncAiAssistantItem();
-      }
-
+      this.syncAiAssistantItem();
       args.handled = true;
     } else {
       super.optionChanged(args);
     }
-  }
-
-  public show(): Promise<boolean> {
-    return this.aiAssistantView.show();
-  }
-
-  public hide(): Promise<boolean> {
-    return this.aiAssistantView.hide();
   }
 
   public toggle(): Promise<boolean> {
@@ -57,7 +54,7 @@ export class AIAssistantViewController extends ViewController {
     const isAiAssistantEnabled = this.option('aiAssistant.enabled'); // TODO clarify option name
 
     if (isAiAssistantEnabled) {
-      const aiAssistantToolbarItem = this.getAiAssistantToolbarItem();
+      const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
 
       this.headerPanel?.applyToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
     } else {
@@ -65,20 +62,24 @@ export class AIAssistantViewController extends ViewController {
     }
   }
 
-  private getAiAssistantToolbarItem(): ToolbarItem {
+  private createAiAssistantToolbarItem(): ToolbarItem {
     const onClickHandler = (): Promise<boolean> => this.toggle();
 
     const onInitialized = (e: ButtonInitializedEvent): void => {
+      this.$aiAssistantButton = $(e.element);
+
       if (this.headerPanel) {
-        const asAssistantClass = this.addWidgetPrefix(AI_ASSISTANT_BUTTON_CLASS);
-        $(e.element).addClass(this.headerPanel._getToolbarButtonClass(asAssistantClass));
+        const aiAssistantClass = this.addWidgetPrefix(AI_ASSISTANT_BUTTON_CLASS);
+        this.$aiAssistantButton.addClass(this.headerPanel._getToolbarButtonClass(aiAssistantClass));
       }
     };
     const hintText = this.option('aiAssistant.title'); // TODO clarify option name
+
     return {
       widget: 'dxButton',
       options: {
         icon: AI_ASSISTANT_ICON_NAME,
+        activeStateEnabled: false,
         onClick: onClickHandler,
         hint: hintText,
         text: hintText,
