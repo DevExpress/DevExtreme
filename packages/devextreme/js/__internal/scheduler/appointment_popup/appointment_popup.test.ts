@@ -116,12 +116,14 @@ describe('Isolated AppointmentPopup environment', () => {
 
   it('should support composite onSave for exclude-from-series scenario', async () => {
     const updateAppointment = jest.fn();
-    const addAppointment = jest.fn(() => Promise.resolve());
+    const addAppointment = jest.fn<(appointment: Record<string, unknown>) => Promise<void>>(
+      () => Promise.resolve(),
+    );
 
     const sourceAppointment = { text: 'Series', recurrenceRule: 'FREQ=DAILY' };
     const updatedAppointment = { text: 'Series', recurrenceException: '20210426' };
 
-    const onSave = jest.fn((newAppointment) => {
+    const onSave = jest.fn((newAppointment: Record<string, unknown>) => {
       updateAppointment(sourceAppointment, updatedAppointment);
       // @ts-expect-error
       return addAppointment(newAppointment);

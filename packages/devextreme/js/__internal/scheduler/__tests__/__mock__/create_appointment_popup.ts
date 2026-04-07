@@ -61,7 +61,7 @@ interface CreateAppointmentPopupOptions {
   firstDayOfWeek?: number;
   startDayHour?: number;
   onAppointmentFormOpening?: (...args: unknown[]) => void;
-  onSave?: jest.Mock;
+  onSave?: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   title?: string;
   readOnly?: boolean;
   addAppointment?: jest.Mock;
@@ -78,7 +78,7 @@ interface CreateAppointmentPopupResult {
     updateAppointment: jest.Mock;
     focus: jest.Mock;
     updateScrollPosition: jest.Mock;
-    onSave: jest.Mock;
+    onSave: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   };
   dispose: () => void;
 }
@@ -113,7 +113,8 @@ export const createAppointmentPopup = async (
     ?? jest.fn(resolvedDeferred);
   const focus = jest.fn();
   const updateScrollPosition = jest.fn();
-  const onSave = options.onSave ?? jest.fn(resolvedDeferred);
+  const onSave = options.onSave
+    ?? jest.fn<(appointment: Record<string, unknown>) => PromiseLike<unknown>>(resolvedDeferred);
 
   const formSchedulerProxy = {
     getResourceById: (): Record<string, unknown> => resourceManager.resourceById,
