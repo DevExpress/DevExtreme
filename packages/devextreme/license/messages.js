@@ -39,7 +39,7 @@ const WARNING_CODES = Object.freeze({
 
 const TEMPLATES = Object.freeze({
     warningPrefix: (number) =>
-        `Warning number: DX${number}. For evaluation purposes only. Redistribution prohibited.`,
+        `Warning DX${number}: For evaluation purposes only. Redistribution prohibited.`,
 
     keyNotFound: 'A valid DevExpress license key was not found on this machine.',
 
