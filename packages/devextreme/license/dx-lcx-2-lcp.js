@@ -122,6 +122,16 @@ function tryConvertLCXtoLCP(licenseString) {
 
 const DEVEXTREME_HTMLJS_BIT = 1n << 54n; // ProductKind.DevExtremeHtmlJs from types.ts
 
+const DOTNET_TICKS_EPOCH_OFFSET = 621355968000000000n;
+const DOTNET_TICKS_PER_MS = 10000n;
+const DOTNET_MAX_VALUE_TICKS = 3155378975999999999n;
+
+function dotnetTicksToMs(ticksStr) {
+    const ticks = BigInt(ticksStr);
+    if(ticks >= DOTNET_MAX_VALUE_TICKS) return Infinity;
+    return Number((ticks - DOTNET_TICKS_EPOCH_OFFSET) / DOTNET_TICKS_PER_MS);
+}
+
 const TokenKind = Object.freeze({
     corrupted: 'corrupted',
     verified: 'verified',
@@ -131,6 +141,7 @@ const TokenKind = Object.freeze({
 const GENERAL_ERROR = { kind: TokenKind.corrupted, error: 'general' };
 const DESERIALIZATION_ERROR = { kind: TokenKind.corrupted, error: 'deserialization' };
 const PRODUCT_KIND_ERROR = { kind: TokenKind.corrupted, error: 'product-kind' };
+const TRIAL_EXPIRED_ERROR = { kind: TokenKind.corrupted, error: 'trial-expired' };
 
 function readDevExtremeVersion() {
     try {
@@ -163,12 +174,21 @@ function productsFromString(encodedString) {
             const parts = tuple.split(',');
             const version = Number.parseInt(parts[0], 10);
             const products = BigInt(parts[1]);
-            return { version, products };
+            const expiration = parts.length > 3 ? dotnetTicksToMs(parts[3]) : Infinity;
+            return { version, products, expiration };
         });
         return { products, licenseId };
     } catch{
         return { products: [], errorToken: DESERIALIZATION_ERROR };
     }
+}
+
+function getMaxExpiration(products) {
+    const expirations = products
+        .map(p => p.expiration)
+        .filter(e => e > 0 && e !== Infinity);
+    if(expirations.length === 0) return Infinity;
+    return Math.max(...expirations);
 }
 
 function findLatestDevExtremeVersion(products) {
@@ -195,12 +215,17 @@ function parseLCP(lcpString) {
         const decodedPayload = mapString(productsPayload, DECODE_MAP);
         const { products, errorToken, licenseId } = productsFromString(decodedPayload);
         if(errorToken) {
-            return errorToken;
+            return { ...errorToken, licenseId };
+        }
+
+        const maxExpiration = getMaxExpiration(products);
+        if(maxExpiration !== Infinity && maxExpiration < Date.now()) {
+            return { ...TRIAL_EXPIRED_ERROR, licenseId };
         }
 
         const maxVersionAllowed = findLatestDevExtremeVersion(products);
         if(!maxVersionAllowed) { 
-            return PRODUCT_KIND_ERROR; 
+            return { ...PRODUCT_KIND_ERROR, licenseId }; 
         }
 
         return {
@@ -223,6 +248,7 @@ function getLCPInfo(lcpString) {
     let currentVersion = '';
 
     if(token.kind === TokenKind.corrupted) {
+        licenseId = token.licenseId || null;
         switch(token.error) {
             case 'general':
                 warning = { type: 'general' };
@@ -232,6 +258,9 @@ function getLCPInfo(lcpString) {
                 break;
             case 'product-kind':
                 warning = { type: 'trial' };
+                break;
+            case 'trial-expired':
+                warning = { type: 'trialExpired' };
                 break;
         }
     } else {
