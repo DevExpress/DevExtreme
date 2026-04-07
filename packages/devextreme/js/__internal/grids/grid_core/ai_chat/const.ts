@@ -2,6 +2,7 @@ export const DEFAULT_POPUP_OPTIONS = {
   width: 360,
   height: 'auto',
   visible: false,
+  shading: false,
 };
 
 export const CLASSES = {

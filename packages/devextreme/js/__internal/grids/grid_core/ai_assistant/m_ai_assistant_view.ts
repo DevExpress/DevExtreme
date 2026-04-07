@@ -21,7 +21,7 @@ export class AIAssistantView extends View {
   }
 
   public isVisible(): boolean {
-    return this.option('aiAssistant.enabled');
+    return !!this.option('aiAssistant.enabled');
   }
 
   public show(): Promise<boolean> {
@@ -30,5 +30,9 @@ export class AIAssistantView extends View {
 
   public hide(): Promise<boolean> {
     return this.aiChatInstance?.hide() ?? Promise.resolve(false);
+  }
+
+  public toggle(): Promise<boolean> {
+    return this.aiChatInstance?.toggle() ?? Promise.resolve(false);
   }
 }

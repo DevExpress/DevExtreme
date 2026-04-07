@@ -127,6 +127,12 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
   selection?: InternalSelection;
+
+  // TODO move to public d.ts
+  aiAssistant?: {
+    enabled?: boolean;
+    title?: string;
+  };
 }
 
 // todo: move to upper .d.ts files
