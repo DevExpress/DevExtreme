@@ -1,0 +1,41 @@
+<div class="demo-container">
+    <dx-chat
+    [dataSource]="dataSource"
+    [reloadOnChange]="false"
+    [showAvatar]="false"
+    [showDayHeaders]="false"
+    [user]="user"
+    height="710"
+    [typingUsers]="typingUsers$ | async"
+    [alerts]="alerts$ | async"
+    [sendButtonOptions]="sendButtonOptions$ | async"
+    [speechToTextEnabled]="true"
+    (onMessageEntered)="onMessageEntered($event)"
+    messageTemplate="messageTemplate"
+    emptyViewTemplate="emptyViewTemplate"
+    >
+    <div *dxTemplate="let data of 'messageTemplate'">
+        <div
+        class="chat-messagebubble-text"
+        [innerHTML]="convertToHtml(data.message)"
+        ></div>
+    </div>
+
+    <div *dxTemplate="let data of 'emptyViewTemplate'">
+        <div class="dx-chat-messagelist-empty-message">{{ data.texts.message }}</div>
+        <div class="dx-chat-messagelist-empty-prompt">{{ data.texts.prompt }}</div>
+        <div class="dx-chat-suggestion-cards">
+        @for (card of suggestionCards; track card.title) {
+            <button
+            type="button"
+            class="dx-chat-suggestion-card"
+            (click)="onSuggestionClick(card.prompt)"
+            >
+            <div class="dx-chat-suggestion-card-title">{{ card.title }}</div>
+            <div class="dx-chat-suggestion-card-prompt">{{ card.description }}</div>
+            </button>
+        }
+        </div>
+    </div>
+    </dx-chat>
+</div>

@@ -1,0 +1,90 @@
+.demo-container {
+  display: flex;
+  justify-content: center;
+}
+
+::ng-deep .dx-chat {
+  max-width: 900px;
+}
+
+::ng-deep .dx-chat-messagelist-empty-image {
+  display: none;
+}
+
+::ng-deep .dx-chat-messagelist-empty-message {
+  font-size: var(--dx-font-size-heading-5);
+}
+
+::ng-deep .dx-chat-messagebubble-content,
+::ng-deep .chat-messagebubble-text {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .dx-template-wrapper > div > p:first-child {
+  margin-top: 0;
+}
+
+::ng-deep .dx-template-wrapper > div > p:last-child {
+  margin-bottom: 0;
+}
+
+::ng-deep .dx-chat-messagebubble-content h1,
+::ng-deep .dx-chat-messagebubble-content h2,
+::ng-deep .dx-chat-messagebubble-content h3,
+::ng-deep .dx-chat-messagebubble-content h4,
+::ng-deep .dx-chat-messagebubble-content h5,
+::ng-deep .dx-chat-messagebubble-content h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
+::ng-deep .dx-chat-suggestion-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  width: 100%;
+}
+
+::ng-deep .dx-chat-suggestion-card {
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #EBEBEB;
+  background: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 0 1 230px;
+  max-width: 230px;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s ease;
+  width: 230px;
+}
+
+::ng-deep .dx-chat-suggestion-card:hover {
+  border: 1px solid #E0E0E0;
+  background: #F5F5F5;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02);
+}
+
+::ng-deep .dx-chat-suggestion-card-title {
+  color: #242424;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+::ng-deep .dx-chat-suggestion-card-prompt {
+  color: #616161;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+::ng-deep .dx-chat-messagelist-empty-prompt {
+  margin-top: 4px;
+}
