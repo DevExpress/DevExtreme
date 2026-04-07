@@ -315,7 +315,7 @@ describe('license check', () => {
     { token: LICENSE_KEY_PLACEHOLDER, version: '1.0.3' },
   ])('Warning should be logged with no-key message if license is empty', ({ token, version }) => {
     validateLicense(token as string, version);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('devextreme-license generated key has not been specified'));
   });
 
@@ -369,7 +369,7 @@ describe('license check', () => {
     validateLicense('', '1.0');
     validateLicense('', '1.0');
 
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
   });
 
   test('Base z-index should match the corresponding setting in DevExtreme', () => {
@@ -388,7 +388,7 @@ describe('license check', () => {
     { token: TOKEN_23_2, version: '42.4.5' },
   ])('Old format license should trigger version-mismatch warning when outdated', ({ token, version }) => {
     validateLicense(token, version);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('Incompatible DevExpress license key version'));
   });
 
@@ -424,7 +424,7 @@ describe('license check', () => {
     { token: '3.2.1', version: '1.2.3' },
   ])('License verification warning should be logged if license is corrupted/invalid [%#]', ({ token, version }) => {
     validateLicense(token, version);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('License key verification has failed'));
   });
 
@@ -506,7 +506,7 @@ describe('DevExpress license check', () => {
   test('DevExpress License Key copied from Download Manager (incorrect)', () => {
     const token = 'LCXv1therestofthekey';
     validateLicense(token, '25.1.3');
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('DevExpress license key has been specified instead of a key generated using devextreme-license'));
     expect(trialPanelSpy).toHaveBeenCalled();
   });
@@ -514,7 +514,7 @@ describe('DevExpress license check', () => {
   test('DevExpress License Key generated from LCX key (incorrect)', () => {
     const token = 'LCPtherestofthekey';
     validateLicense(token, '25.1.3');
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('License key verification has failed'));
     expect(trialPanelSpy).toHaveBeenCalled();
   });
