@@ -255,7 +255,7 @@ $(() => {
     paginate: false,
   });
 
-  function sendSuggestion(prompt, event) {
+  function sendSuggestion(prompt) {
     const message = {
       id: Date.now(),
       timestamp: new Date(),
@@ -266,7 +266,7 @@ $(() => {
     dataSource.store().push([{ type: 'insert', data: message }]);
 
     if (!instance.option('alerts').length) {
-      processMessageSending(message, event);
+      processMessageSending(message);
     }
   }
 
