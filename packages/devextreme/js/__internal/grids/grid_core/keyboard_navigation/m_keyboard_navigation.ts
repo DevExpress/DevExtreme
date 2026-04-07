@@ -1813,7 +1813,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  public _updateFocus(isRenderView?, skipFocusEvent = false, preventScroll = false) {
+  public _updateFocus(isRenderView?: boolean, skipFocusEvent = false, preventScroll = false) {
     this._updateFocusTimeout = setTimeout(() => {
       if (this._needFocusEditingCell()) {
         this._editingController._focusEditingCell();
