@@ -165,12 +165,14 @@ function getLicenseCheckParams({
       return { preview, error: 'W0021', warningType: 'lcx-used' };
     }
 
-    const isProductKey = isProductOnlyLicense(licenseKey);
     const license = parseLicenseKey(licenseKey);
 
     if (license.kind === TokenKind.corrupted) {
       if (license.error === 'product-kind') {
         return { preview, error: 'W0021', warningType: 'no-devextreme-license' };
+      }
+      if (license.error === 'trial-expired') {
+        return { preview, error: 'W0020', warningType: 'trial-expired' };
       }
       return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
@@ -181,10 +183,6 @@ function getLicenseCheckParams({
 
     if (!(major && minor)) {
       return { preview, error: 'W0021', warningType: 'invalid-key' };
-    }
-
-    if (!isProductKey) {
-      return { preview, error: 'W0021', warningType: 'old-devextreme-key' };
     }
 
     if (major * 10 + minor > license.payload.maxVersionAllowed) {

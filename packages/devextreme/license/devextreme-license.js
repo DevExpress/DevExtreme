@@ -12,6 +12,14 @@ const EXPORT_NAME = 'licenseKey';
 const TRIAL_VALUE = 'TRIAL';
 const CLI_PREFIX = '[devextreme-license]';
 
+function logStderr(...lines) {
+    process.stderr.write(lines.join('\n') + '\n\n');
+}
+
+function prefixed(msg) {
+    return `${CLI_PREFIX} ${msg}`;
+}
+
 function fail(msg) {
     process.stderr.write(msg.endsWith('\n') ? msg : msg + '\n');
     process.exit(0);
@@ -57,7 +65,7 @@ function parseArgs(argv) {
         else if(a === '--out') {
             const next = args[i + 1];
             if(!next || next.startsWith('-')) {
-                process.stderr.write('[devextreme-license] Warning: --out requires a path argument but none was provided. Ignoring --out.\n');
+                logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = args[++i];
             }
@@ -65,7 +73,7 @@ function parseArgs(argv) {
         else if(a.startsWith('--out=')) {
             const val = a.slice('--out='.length);
             if(!val) {
-                process.stderr.write('[devextreme-license] Warning: --out requires a path argument but none was provided. Ignoring --out.\n');
+                logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = val;
             }
@@ -163,24 +171,43 @@ function main() {
         lcp = tryConvertLCXtoLCP(lcx) || TRIAL_VALUE;
         const { warning, licenseId: id } = getLCPInfo(lcp);
         licenseId = id;
+
         if(warning) {
-            const parts = [];
+            const lines = [];
+
+            lines.push(
+                prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
+            );
+
             if(licenseId) {
-                parts.push(`${CLI_PREFIX} ${TEMPLATES.licenseId(licenseId)}`);
+                lines.push(TEMPLATES.licenseId(licenseId));
             }
-            parts.push(`${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}`);
-            parts.push(TEMPLATES.keyWasFound(source.type, source.path));
+
+            lines.push(
+                TEMPLATES.keyWasFound(source.type, source.path),
+            );
+
             if(warning.type !== 'trial') {
-                parts.push(TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion));
-                parts.push(`${CLI_PREFIX} ${TEMPLATES.warningPrefix(TEMPLATES.warningCodeByType(warning.type))} ${TEMPLATES.installationInstructions}`);
+                const code = TEMPLATES.warningCodeByType(warning.type);
+
+                lines.push(
+                    TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion),
+                );
+
+                if(warning.type === 'trialExpired') {
+                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.purchaseLicense}`));
+                } else {
+                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
+                }
             }
-            process.stderr.write(parts.join('\n') + '\n\n');
+
+            logStderr(...lines);
         }
     } else {
-        process.stderr.write(
-            `${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n` +
-            `${TEMPLATES.keyNotFound}\n` +
-            `${CLI_PREFIX} ${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}\n\n`
+        logStderr(
+            prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
+            TEMPLATES.keyNotFound,
+            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}`),
         );
     }
 

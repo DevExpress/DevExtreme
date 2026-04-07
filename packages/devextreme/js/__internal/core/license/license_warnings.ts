@@ -25,9 +25,9 @@ export const TEMPLATES = Object.freeze({
   keyWasFound: (type: string, path?: string): string => {
     switch (type) {
       case 'envVariable':
-        return 'The DevExpress license key was retrieved from the "DevExpress_License" environment variable.';
+        return 'The DevExpress license key was retrieved from the \'DevExpress_License\' environment variable.';
       case 'envPath':
-        return 'The DevExpress license key was retrieved from the "DevExpress_LicensePath" environment variable.';
+        return 'The DevExpress license key was retrieved from the \'DevExpress_LicensePath\' environment variable.';
       case 'file':
         return `The DevExpress license key was retrieved from file: "${path}".`;
       default:
@@ -38,13 +38,15 @@ export const TEMPLATES = Object.freeze({
   keyVerificationFailed: (type?: string, keyVersion?: string, requiredVersion?: string): string => {
     switch (type) {
       case 'incompatibleVersion':
-        return `Incompatible DevExpress license key version (${keyVersion}). Download and register an updated DevExpress license key (${requiredVersion}+). Clear npm/IDE/NuGet cache and rebuild your project.`;
+        return `Incompatible DevExpress license key version (v${keyVersion}). Download and register an updated DevExpress license key (v${requiredVersion}+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).`;
+      case 'trialExpired':
+        return 'Your DevExpress trial period has expired. Purchase a license to continue using DevExpress product libraries.';
       default:
         return 'License key verification has failed.';
     }
   },
 
-  purchaseLicense: (version: string): string => `Purchase a license to continue use of DevExtreme (v${version}). Included in subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete. To purchase a license, visit https://js.devexpress.com/Buy/`,
+  purchaseLicense: 'Please register an existing license (https://devexpress.com/DX1000) or purchase a new license (https://devexpress.com/Buy/) to continue use of the following DevExpress product libraries: DevExtreme - Included in Subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete.',
 
   installationInstructions: 'If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key and verify it with the devextreme-license tool (https://devexpress.com/DX1001).',
 
@@ -63,7 +65,7 @@ export function logLicenseWarning(
 ): void {
   const T = TEMPLATES;
 
-  const purchaseLine = `${T.warningPrefix('W0019')} ${T.purchaseLicense(version)}`;
+  const purchaseLine = `${T.warningPrefix('W0019')} ${T.purchaseLicense}`;
   const installLine = `${T.warningPrefix('W0021')} ${T.installationInstructions}`;
 
   const lines: string[] = [purchaseLine];
@@ -89,6 +91,12 @@ export function logLicenseWarning(
     case 'version-mismatch': {
       const incompatibleLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}`;
       lines.push(T.keyVerificationFailed(), incompatibleLine);
+      break;
+    }
+
+    case 'trial-expired': {
+      const expiredLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('trialExpired')}`;
+      lines.push(expiredLine);
       break;
     }
 

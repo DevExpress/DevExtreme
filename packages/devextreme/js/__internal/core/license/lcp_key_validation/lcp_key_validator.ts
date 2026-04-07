@@ -6,6 +6,7 @@ import {
   PRODUCT_KIND_ERROR,
   type Token,
   TokenKind,
+  TRIAL_EXPIRED_ERROR,
   VERIFICATION_ERROR,
 } from '../types';
 import {
@@ -13,9 +14,14 @@ import {
   RSA_PUBLIC_KEY_XML,
   SIGN_LENGTH,
 } from './const';
-import { findLatestDevExtremeVersion } from './license_info';
+import { findLatestDevExtremeVersion, getMaxExpiration } from './license_info';
 import { createProductInfo, type ProductInfo } from './product_info';
-import { encodeString, shiftDecodeText, verifyHash } from './utils';
+import {
+  dotNetTicksToMs,
+  encodeString,
+  shiftDecodeText,
+  verifyHash,
+} from './utils';
 
 interface ParsedProducts {
   products: ProductInfo[];
@@ -41,9 +47,11 @@ function productsFromString(encodedString: string): ParsedProducts {
       const parts = tuple.split(',');
       const version = Number.parseInt(parts[0], 10);
       const productsValue = BigInt(parts[1]);
+      const expiration = parts.length > 3 ? dotNetTicksToMs(parts[3]) : Infinity;
       return createProductInfo(
         version,
         productsValue,
+        expiration,
       );
     });
 
@@ -84,6 +92,11 @@ export function parseDevExpressProductKey(productsLicenseSource: string): Token 
 
     if (errorToken) {
       return errorToken;
+    }
+
+    const maxExpiration = getMaxExpiration({ products });
+    if (maxExpiration !== Infinity && maxExpiration < Date.now()) {
+      return TRIAL_EXPIRED_ERROR;
     }
 
     const maxVersionAllowed = findLatestDevExtremeVersion({ products });

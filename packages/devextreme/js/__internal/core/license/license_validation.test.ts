@@ -316,7 +316,7 @@ describe('license check', () => {
   ])('Warning should be logged with no-key message if license is empty', ({ token, version }) => {
     validateLicense(token as string, version);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('No valid DevExpress license key was found'));
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('devextreme-license generated key has not been specified'));
   });
 
   test.each([
@@ -338,10 +338,9 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '12.3.4' },
     { token: TOKEN_23_2, version: '23.1.5' },
     { token: TOKEN_23_2, version: '23.2.6' },
-  ])('Old format license should trigger old-key warning', ({ token, version }) => {
+  ])('Old format license within version range should not trigger warnings', ({ token, version }) => {
     validateLicense(token, version);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('invalid/old DevExtreme key'));
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test.each([
@@ -349,9 +348,9 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '12.3.4' },
     { token: TOKEN_23_2, version: '23.1.5' },
     { token: TOKEN_23_2, version: '23.2.6' },
-  ])('Trial panel should be displayed for old format license keys', ({ token, version }) => {
+  ])('Trial panel should not be displayed for valid old format license keys', ({ token, version }) => {
     validateLicense(token, version);
-    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
   test('Trial panel "Buy Now" link must use the jQuery link if no config has been set', () => {
@@ -370,7 +369,7 @@ describe('license check', () => {
     validateLicense('', '1.0');
     validateLicense('', '1.0');
 
-    expect(errors.log).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   });
 
   test('Base z-index should match the corresponding setting in DevExtreme', () => {
@@ -387,10 +386,10 @@ describe('license check', () => {
   test.each([
     { token: TOKEN_23_1, version: '23.2.3' },
     { token: TOKEN_23_2, version: '42.4.5' },
-  ])('Old format license should trigger old-key warning when outdated', ({ token, version }) => {
+  ])('Old format license should trigger version-mismatch warning when outdated', ({ token, version }) => {
     validateLicense(token, version);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('invalid/old DevExtreme key'));
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('Incompatible DevExpress license key version'));
   });
 
   test.each([
@@ -408,9 +407,9 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '23.2.3-alpha' },
     { token: TOKEN_23_2, version: '24.1.0' },
     { token: TOKEN_23_2, version: '24.1.abc' },
-  ])('Trial panel should be displayed in previews for old format license keys', ({ token, version }) => {
+  ])('Trial panel should not be displayed in previews for valid old format license keys', ({ token, version }) => {
     validateLicense(token, version);
-    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
   test.each([
@@ -508,7 +507,7 @@ describe('DevExpress license check', () => {
     const token = 'LCXv1therestofthekey';
     validateLicense(token, '25.1.3');
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('.NET license key (LCX)'));
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('DevExpress license key has been specified instead of a key generated using devextreme-license'));
     expect(trialPanelSpy).toHaveBeenCalled();
   });
 

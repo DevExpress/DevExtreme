@@ -9,6 +9,14 @@ export function isLicenseValid(info: LicenseInfo): boolean {
   return Array.isArray(info.products) && info.products.length > 0;
 }
 
+export function getMaxExpiration(info: LicenseInfo): number {
+  const expirationDates = info.products
+    .map((p) => p.expiration)
+    .filter((e) => e > 0 && e !== Infinity);
+  if (expirationDates.length === 0) return Infinity;
+  return Math.max(...expirationDates);
+}
+
 export function findLatestDevExtremeVersion(info: LicenseInfo): number | undefined {
   if (!isLicenseValid(info)) {
     return undefined;
