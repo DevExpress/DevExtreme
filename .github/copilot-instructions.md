@@ -35,7 +35,7 @@ pnpm install --frozen-lockfile
 
 2. **For development builds of devextreme package:**
    ```bash
-   pnpx nx build:dev devextreme
+   pnpm exec nx build:dev devextreme
    ```
    OR from monorepo root:
    ```bash
@@ -120,17 +120,17 @@ pnpm run all:build
 
 **Build specific package:**
 ```bash
-pnpx nx build devextreme
-pnpx nx build devextreme-angular
-pnpx nx build devextreme-react
-pnpx nx build devextreme-vue
-pnpx nx build devextreme-scss
-pnpx nx build devextreme-themebuilder
+pnpm exec nx build devextreme
+pnpm exec nx build devextreme-angular
+pnpm exec nx build devextreme-react
+pnpm exec nx build devextreme-vue
+pnpm exec nx build devextreme-scss
+pnpm exec nx build devextreme-themebuilder
 ```
 
 **Build with Nx cache skip:**
 ```bash
-pnpx nx build devextreme --skipNxCache
+pnpm exec nx build devextreme --skipNxCache
 ```
 
 ### DevExtreme Package Build Details
@@ -162,16 +162,16 @@ pnpm run clean
 
 **Granular Nx build targets (can be run individually):**
 ```bash
-pnpx nx build:localization devextreme  # Generate localization files
-pnpx nx build:transpile devextreme     # Transpile source code
-pnpx nx bundle:debug devextreme        # Create debug bundle
-pnpx nx bundle:prod devextreme         # Create production bundle
-pnpx nx build:npm devextreme           # Prepare NPM packages
+pnpm exec nx build:localization devextreme  # Generate localization files
+pnpm exec nx build:transpile devextreme     # Transpile source code
+pnpm exec nx bundle:debug devextreme        # Create debug bundle
+pnpm exec nx bundle:prod devextreme         # Create production bundle
+pnpm exec nx build:npm devextreme           # Prepare NPM packages
 ```
 
 **Build with testing configuration (for CI):**
 ```bash
-pnpx nx build devextreme -c=testing
+pnpm exec nx build devextreme -c=testing
 ```
 
 **Important environment variables:**
@@ -223,7 +223,7 @@ The `packages/nx-infra-plugin` provides custom Nx executors for build automation
 **1. Lint (ALWAYS run before committing):**
 ```bash
 # From root - runs lint on all packages
-pnpx nx run-many -t lint,test --exclude devextreme devextreme-themebuilder devextreme-angular devextreme-react devextreme-vue devextreme-react-storybook devextreme-angular-playground devextreme-testcafe-tests devextreme-demos devextreme-react-playground devextreme-vue-playground
+pnpm exec nx run-many -t lint,test --exclude devextreme devextreme-themebuilder devextreme-angular devextreme-react devextreme-vue devextreme-react-storybook devextreme-angular-playground devextreme-testcafe-tests devextreme-demos devextreme-react-playground devextreme-vue-playground
 
 # From packages/devextreme
 pnpm run lint              # All linting
@@ -244,7 +244,7 @@ pnpm run test-jest:all     # Both JSDOM and Node tests
 **3. QUnit Tests (Legacy unit tests):**
 ```bash
 # Requires build first
-pnpx nx build:dev devextreme
+pnpm exec nx build:dev devextreme
 
 # Run from packages/devextreme
 pnpm run test-env          # Launches test runner
@@ -253,14 +253,14 @@ pnpm run test-env          # Launches test runner
 **4. TestCafe Tests (E2E):**
 ```bash
 # From e2e/testcafe-devextreme
-pnpx nx run testcafe-devextreme:test
+pnpm exec nx run testcafe-devextreme:test
 ```
 
 **5. Wrapper Tests:**
 ```bash
-pnpx nx test devextreme-angular
-pnpx nx test devextreme-react
-pnpx nx test devextreme-vue
+pnpm exec nx test devextreme-angular
+pnpm exec nx test devextreme-react
+pnpm exec nx test devextreme-vue
 ```
 
 ### Pre-commit Checks
@@ -279,7 +279,7 @@ npm run lint-staged
 ### What Gets Checked on PRs
 
 **1. Default Workflow (`.github/workflows/default_workflow.yml`):**
-- Runs `pnpx nx run-many -t lint,test` on most packages
+- Runs `pnpm exec nx run-many -t lint,test` on most packages
 - Timeout: 30 minutes
 - Node: 20.x
 
@@ -352,7 +352,7 @@ pnpm run lint-ts -- --fix
 
 3. **Build the affected package:**
    ```bash
-   pnpx nx build:dev devextreme  # For core changes
+   pnpm exec nx build:dev devextreme  # For core changes
    ```
 
 4. **Run tests:**
@@ -388,9 +388,9 @@ pnpm run lint-ts -- --fix
 
 **✅ DO:**
 - Always use `pnpm install --frozen-lockfile`
-- Build before testing: `pnpx nx build:dev devextreme`
+- Build before testing: `pnpm exec nx build:dev devextreme`
 - Run `pnpm run regenerate-all` after modifying wrapper generators, TypeScript declarations, or devextreme-internal-tools (may affect code generators and/or metadata generators)
-- Use Nx commands for better caching: `pnpx nx build devextreme`
+- Use Nx commands for better caching: `pnpm exec nx build devextreme`
 - Check CI workflows to understand what will be validated
 
 ### File Modification Guidelines
@@ -418,7 +418,7 @@ pnpm run lint-ts -- --fix
 - Clean and rebuild: `pnpm run clean && pnpm run build:dev`
 
 **Test failures:**
-- Ensure build is up-to-date: `pnpx nx build:dev devextreme`
+- Ensure build is up-to-date: `pnpm exec nx build:dev devextreme`
 - Check if test requires specific environment variables
 - Review test logs in `packages/devextreme/testing/` directory
 
@@ -429,7 +429,7 @@ pnpm run lint-ts -- --fix
 
 ## Key Facts
 
-- **Nx is used for task orchestration** - prefer `pnpx nx` commands over direct npm scripts
+- **Nx is used for task orchestration** - prefer `pnpm exec nx` commands over direct npm scripts
 - **Custom Nx executors** - `devextreme-nx-infra-plugin` provides specialized executors for localization, file operations, and build tasks
 - **Frozen lockfile is mandatory** - CI will fail without it
 - **Build artifacts are in gitignore** - never commit `artifacts/` directories
@@ -453,19 +453,19 @@ pnpm run all:build-dev
 pnpm run all:build
 
 # Build with testing configuration (for CI)
-pnpx nx build devextreme -c=testing
+pnpm exec nx build devextreme -c=testing
 
 # Build specific targets
-pnpx nx build:localization devextreme
-pnpx nx build:transpile devextreme
-pnpx nx bundle:debug devextreme
+pnpm exec nx build:localization devextreme
+pnpm exec nx build:transpile devextreme
+pnpm exec nx bundle:debug devextreme
 
 # Test
-pnpx nx run-many -t test
+pnpm exec nx run-many -t test
 pnpm run test-jest          # From devextreme package
 
 # Lint
-pnpx nx run-many -t lint
+pnpm exec nx run-many -t lint
 pnpm run lint               # From devextreme package
 
 # Regenerate wrappers
@@ -473,7 +473,7 @@ pnpm run regenerate-all
 
 # Clean
 pnpm run clean              # From devextreme package
-pnpx nx clean:artifacts devextreme  # Clean build artifacts only
+pnpm exec nx clean:artifacts devextreme  # Clean build artifacts only
 
 # Run demos
 pnpm run webserver          # From root, then visit localhost:8080
