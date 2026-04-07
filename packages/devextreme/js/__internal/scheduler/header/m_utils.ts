@@ -48,12 +48,22 @@ const nextMonth = (date: Date): Date => {
 
 const isWeekend = (date: Date): boolean => [SATURDAY_INDEX, SUNDAY_INDEX].includes(date.getDay());
 
+const isSkippedDay = (date: Date, skippedDays: number[]): boolean => skippedDays.includes(date.getDay());
+
 const getWorkWeekStart = (firstDayOfWeek: Date): Date => {
   let date = new Date(firstDayOfWeek);
   while (isWeekend(date)) {
     date = nextDay(date);
   }
 
+  return date;
+};
+
+const getFirstVisibleDay = (start: Date, skippedDays: number[]): Date => {
+  let date = new Date(start);
+  while (isSkippedDay(date, skippedDays)) {
+    date = nextDay(date);
+  }
   return date;
 };
 
@@ -72,19 +82,43 @@ const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
   return date;
 };
 
+const getDateAfterVisibleWeek = (start: Date, skippedDays: number[]): Date => {
+  const visibleCount = 7 - skippedDays.length;
+  if (visibleCount <= 0) {
+    return new Date(start);
+  }
+  let date = new Date(start);
+  let visited = 0;
+  while (visited < visibleCount) {
+    if (!isSkippedDay(date, skippedDays)) {
+      visited += 1;
+    }
+    date = nextDay(date);
+  }
+  return date;
+};
+
 const nextAgendaStart = (
   date: Date,
   agendaDuration: number,
 ): Date => addDateInterval(date, { days: agendaDuration }, 1);
 
 const getIntervalStartDate = (options: IntervalOptions): Date => {
-  const { date, step, firstDayOfWeek } = options;
+  const {
+    date, step, firstDayOfWeek, skippedDays,
+  } = options;
 
   switch (step) {
     case 'day':
-    case 'week':
     case 'month':
       return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
+    case 'week': {
+      const weekStart = getPeriodStart(date, step, false, firstDayOfWeek) as Date;
+      if (skippedDays && skippedDays.length > 0) {
+        return getFirstVisibleDay(weekStart, skippedDays);
+      }
+      return weekStart;
+    }
     case 'workWeek':
       return getWorkWeekStart(getWeekStart(date, firstDayOfWeek));
     case 'agenda':
@@ -98,10 +132,13 @@ const getPeriodEndDate = (
   currentPeriodStartDate: Date,
   step: Step,
   agendaDuration: number,
+  skippedDays?: number[],
 ): Date => {
   const calculators: Record<Step, () => Date> = {
     day: () => nextDay(currentPeriodStartDate),
-    week: () => nextWeek(currentPeriodStartDate),
+    week: () => (skippedDays && skippedDays.length > 0
+      ? getDateAfterVisibleWeek(currentPeriodStartDate, skippedDays)
+      : nextWeek(currentPeriodStartDate)),
     month: () => nextMonth(currentPeriodStartDate),
     workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate),
     agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration),
@@ -110,11 +147,19 @@ const getPeriodEndDate = (
   return subMS(calculators[step]());
 };
 
-const getNextPeriodStartDate = (currentPeriodEndDate: Date, step: Step): Date => {
+const getNextPeriodStartDate = (
+  currentPeriodEndDate: Date,
+  step: Step,
+  skippedDays?: number[],
+): Date => {
   let date = addMS(currentPeriodEndDate);
 
   if (step === 'workWeek') {
     while (isWeekend(date)) {
+      date = nextDay(date);
+    }
+  } else if (step === 'week' && skippedDays && skippedDays.length > 0) {
+    while (isSkippedDay(date, skippedDays)) {
       date = nextDay(date);
     }
   }
@@ -123,7 +168,9 @@ const getNextPeriodStartDate = (currentPeriodEndDate: Date, step: Step): Date =>
 };
 
 const getIntervalEndDate = (startDate: Date, options: IntervalOptions): Date => {
-  const { intervalCount, step, agendaDuration } = options;
+  const {
+    intervalCount, step, agendaDuration, skippedDays,
+  } = options;
 
   let periodStartDate = new Date(startDate);
   let periodEndDate = new Date(startDate);
@@ -132,9 +179,9 @@ const getIntervalEndDate = (startDate: Date, options: IntervalOptions): Date => 
   for (let i = 0; i < intervalCount; i += 1) {
     periodStartDate = nextPeriodStartDate;
 
-    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration ?? 0);
+    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration ?? 0, skippedDays);
 
-    nextPeriodStartDate = getNextPeriodStartDate(periodEndDate, step);
+    nextPeriodStartDate = getNextPeriodStartDate(periodEndDate, step, skippedDays);
   }
 
   return periodEndDate;

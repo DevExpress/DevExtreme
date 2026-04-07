@@ -54,6 +54,8 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   maxAppointmentsPerCell: 'auto',
   selectedCellData: [],
   groupByDate: false,
+  // @ts-expect-error
+  hiddenDays: undefined,
   onAppointmentRendered: undefined,
   onAppointmentClick: undefined,
   onAppointmentDblClick: undefined,

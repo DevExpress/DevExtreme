@@ -397,4 +397,8 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1028
      */
     W1028: 'Nested/banded columns do not support the following properties: {0}.',
+    /**
+     * @name ErrorsUIWidgets.W1029
+     */
+    W1029: 'The "hiddenDays" option cannot hide all days of the week. At least one day must remain visible. The option is ignored.',
 });

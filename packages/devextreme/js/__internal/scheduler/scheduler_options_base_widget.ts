@@ -50,10 +50,13 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
 
   protected updateViews(): void {
     const views = this.option('views') ?? [];
-    this.views = getViews(views);
+    const hiddenDays = this.option('hiddenDays' as keyof SafeSchedulerOptions) as
+      number[] | undefined;
+    this.views = getViews(views, hiddenDays);
     this.currentView = getCurrentView(
       this.option('currentView') ?? '',
       views,
+      hiddenDays,
     );
   }
 
@@ -71,6 +74,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     switch (args.name) {
       case 'currentView':
       case 'views':
+      case 'hiddenDays' as K:
         this.updateViews();
         break;
       default:

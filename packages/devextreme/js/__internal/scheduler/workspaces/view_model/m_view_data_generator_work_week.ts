@@ -1,12 +1,8 @@
-import { isDataOnWeekend, workWeekUtils } from '../../r1/utils/index';
+import { workWeekUtils } from '../../r1/utils/index';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
 
 export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
-  readonly daysInInterval = 5;
-
-  isSkippedDate(date) {
-    return isDataOnWeekend(date);
-  }
+  protected baseDaysInInterval = 5;
 
   protected calculateStartViewDate(options) {
     return workWeekUtils.calculateStartViewDate(

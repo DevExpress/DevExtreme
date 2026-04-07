@@ -28,13 +28,26 @@ import type {
 const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGenerator {
-  readonly daysInInterval: number = 1;
+  protected baseDaysInInterval = 1;
 
   protected tableAllDay = false;
 
   public hiddenInterval = 0;
 
+  public skippedDays: number[] = [];
+
   constructor(public readonly viewType: ViewType) {}
+
+  get daysInInterval(): number {
+    if (this.skippedDays.length === 0) {
+      return this.baseDaysInInterval;
+    }
+    const visibleDayCount = 7 - this.skippedDays.length;
+    if (this.baseDaysInInterval >= 7) {
+      return visibleDayCount;
+    }
+    return this.baseDaysInInterval;
+  }
 
   public isWorkWeekView(): boolean {
     return [
@@ -43,9 +56,52 @@ export class ViewDataGenerator {
     ].includes(this.viewType);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isSkippedDate(date: any) {
+  protected usesWeeklyDayLayout(): boolean {
+    return this.baseDaysInInterval >= 7;
+  }
+
+  protected usesMonthDayLayout(): boolean {
     return false;
+  }
+
+  public getVisibleDaysOfWeek(firstDayOfWeek: number): number[] {
+    const rotated: number[] = [];
+    for (let count = 0; count < 7; count += 1) {
+      const dayOfWeek = (firstDayOfWeek + count) % 7;
+      if (!this.skippedDays.includes(dayOfWeek)) {
+        rotated.push(dayOfWeek);
+      }
+    }
+    return rotated;
+  }
+
+  protected getVisibleDayOffset(
+    rowIndex: number,
+    columnIndex: number,
+    firstDayOfWeek: number,
+  ): number {
+    const rotated = this.getVisibleDaysOfWeek(firstDayOfWeek);
+    const visibleCount = rotated.length;
+    if (visibleCount === 0) {
+      return 0;
+    }
+    if (this.usesMonthDayLayout()) {
+      const targetDayOfWeek = rotated[columnIndex];
+      const naiveDayOffset = rowIndex * visibleCount + columnIndex;
+      const actualDayOffset = rowIndex * 7
+        + ((targetDayOfWeek - firstDayOfWeek + 7) % 7);
+      return actualDayOffset - naiveDayOffset;
+    }
+    const week = Math.floor(columnIndex / visibleCount);
+    const idxInWeek = columnIndex % visibleCount;
+    const targetDayOfWeek = rotated[idxInWeek];
+    const naiveDayOffset = columnIndex;
+    const actualDayOffset = week * 7 + ((targetDayOfWeek - firstDayOfWeek + 7) % 7);
+    return actualDayOffset - naiveDayOffset;
+  }
+
+  public isSkippedDate(date: Date): boolean {
+    return this.skippedDays.includes(date.getDay());
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,6 +130,7 @@ export class ViewDataGenerator {
       hoursInterval,
     } = options;
 
+    this.skippedDays = ((options as any)?.skippedDays as number[] | undefined) ?? [];
     this.setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
 
@@ -512,13 +569,26 @@ export class ViewDataGenerator {
     const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
-    const offsetByCount = this.isWorkWeekView()
-      ? this.getTimeOffsetByColumnIndex(
+    let offsetByCount: number;
+    if (this.isWorkWeekView()) {
+      offsetByCount = this.getTimeOffsetByColumnIndex(
         columnIndex,
         this.getFirstDayOfWeek(firstDayOfWeek),
         columnCountBase,
         intervalCount,
-      ) : 0;
+      );
+    } else if (
+      this.skippedDays.length > 0
+      && (this.usesWeeklyDayLayout() || this.usesMonthDayLayout())
+    ) {
+      offsetByCount = this.getVisibleDayOffset(
+        rowIndex,
+        columnIndex,
+        this.getFirstDayOfWeek(firstDayOfWeek) ?? 0,
+      ) * toMs('day');
+    } else {
+      offsetByCount = 0;
+    }
 
     const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
     let startViewDateTime = startViewDate.getTime();

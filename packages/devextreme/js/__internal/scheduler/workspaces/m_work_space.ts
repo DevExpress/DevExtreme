@@ -908,6 +908,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startDate: this.option('startDate'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
       showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
+      skippedDays: (this.option('skippedDays' as any) as number[] | undefined) ?? [],
 
       ...this.virtualScrollingDispatcher.getRenderState(),
     };
