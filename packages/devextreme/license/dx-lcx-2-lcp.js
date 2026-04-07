@@ -266,7 +266,6 @@ function getLCPInfo(lcpString) {
                 break;
         }
     } else {
-        // token.kind === TokenKind.verified — check version compatibility
         licenseId = token.payload.licenseId || null;
         const devExtremeVersion = readDevExtremeVersion();
         if(devExtremeVersion) {
