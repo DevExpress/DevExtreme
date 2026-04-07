@@ -3498,21 +3498,22 @@ QUnit.module('Keyboard keys', {
 
         QUnit.testInActiveWindow(`${keyName} + F`, function(assert) {
             // arrange
-            setupModules(this);
-
-            // act
-            this.options.searchPanel = {
-                visible: true
+            this.options = {
+                searchPanel: {
+                    visible: true
+                }
             };
 
+            setupModules(this);
             this.gridView.render($('#container'));
 
+            // act
             $(this.rowsView.element()).click();
-
             const isPreventDefaultCalled = this.triggerKeyDown('F', keyConfig).preventDefault;
-            const $searchPanelElement = $('.dx-datagrid-search-panel');
 
             // assert
+            const $searchPanelElement = $('.dx-datagrid-search-panel');
+
             assert.ok($searchPanelElement.hasClass('dx-state-focused'), 'search panel has focus class');
             assert.ok($searchPanelElement.find(':focus').hasClass('dx-texteditor-input'), 'search panel\'s editor is focused');
             assert.ok(isPreventDefaultCalled, 'preventDefault is called');

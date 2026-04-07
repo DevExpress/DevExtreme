@@ -46,10 +46,10 @@ QUnit.module('Header panel', {
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: true,
             width: 160
-        };
+        });
         // act
 
         headerPanel.render(testElement);
@@ -74,10 +74,10 @@ QUnit.module('Header panel', {
         const testElement = $('#container');
         let input;
 
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: true,
             width: 160
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -295,9 +295,9 @@ QUnit.module('Header panel', {
         this.options.groupPanel = {
             visible: true
         };
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: true
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -329,9 +329,9 @@ QUnit.module('Header panel', {
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: true
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -348,10 +348,10 @@ QUnit.module('Header panel', {
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: true,
             width: 213
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -370,9 +370,9 @@ QUnit.module('Header panel', {
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: true
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -387,9 +387,9 @@ QUnit.module('Header panel', {
         const headerPanel = this.headerPanel;
         const container = $('#container');
 
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: true
-        };
+        });
 
         headerPanel.render(container);
 
@@ -397,9 +397,9 @@ QUnit.module('Header panel', {
         assert.strictEqual($headerPanel.css('display'), 'block', 'header panel visible');
 
         // act
-        this.options.searchPanel = {
+        this.option('searchPanel', {
             visible: false
-        };
+        });
 
         headerPanel.render();
 
@@ -412,9 +412,9 @@ QUnit.module('Header panel', {
         const headerPanel = that.headerPanel;
         const container = $('#container');
 
-        that.options.searchPanel = {
+        that.option('searchPanel', {
             visible: true
-        };
+        });
 
         headerPanel.render(container);
 
