@@ -3,7 +3,9 @@ import { isDefined, isString } from '@js/core/utils/type';
 import type { Item as BaseToolbarItem } from '@js/ui/toolbar';
 
 import { DEFAULT_TOOLBAR_ITEMS } from './const';
-import type { DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItems } from './types';
+import type {
+  DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItems,
+} from './types';
 
 export function isVisible(
   visibleConfig: boolean | undefined,

@@ -133,8 +133,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   protected _editingController!: Controllers['editing'];
 
-  private _headerPanel!: Views['headerPanel'];
-
   protected _rowsView!: Views['rowsView'];
 
   private _editorFactory!: Controllers['editorFactory'];
@@ -145,6 +143,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _columnResizerController!: Controllers['columnsResizer'];
 
+  private searchPanel!: Controllers['searchPanel'];
+
   private _needNavigationToCell = false;
 
   // #region Initialization
@@ -152,12 +152,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this._dataController = this.getController('data');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing');
-    this._headerPanel = this.getView('headerPanel');
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._columnResizerController = this.getController('columnsResizer');
     this._rowsView = this.getView('rowsView');
+    this.searchPanel = this.getController('searchPanel');
 
     super.init();
 
@@ -1225,10 +1225,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return false;
   }
 
-  private _ctrlFKeyHandler(eventArgs) {
+  private _ctrlFKeyHandler(eventArgs): void {
     if (this.option('searchPanel.visible')) {
-      // @ts-expect-error
-      const searchTextEditor = this._headerPanel.getSearchTextEditor();
+      const searchTextEditor = this.searchPanel.getSearchTextEditor();
       if (searchTextEditor) {
         searchTextEditor.focus();
         eventArgs.originalEvent.preventDefault();
