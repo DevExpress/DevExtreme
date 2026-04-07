@@ -29,13 +29,7 @@ $(() => {
   }).dxScheduler('instance');
 
   $('#snap-to-cells-mode').dxSelectBox({
-    items: [
-      { value: 'auto', text: 'Auto' },
-      { value: 'always', text: 'Always' },
-      { value: 'never', text: 'Never' },
-    ],
-    valueExpr: 'value',
-    displayExpr: 'text',
+    items: ['auto', 'always', 'never'],
     value: scheduler.option('snapToCellsMode'),
     onValueChanged(e) {
       scheduler.option('snapToCellsMode', e.value);

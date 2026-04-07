@@ -38,11 +38,7 @@ export class AppComponent {
 
   snapToCellsMode: DxSchedulerTypes.SnapToCellsMode = 'always';
 
-  snapToCellsModeItems = [
-    { value: 'auto', text: 'Auto' },
-    { value: 'always', text: 'Always' },
-    { value: 'never', text: 'Never' },
-  ];
+  snapToCellsModeItems: DxSchedulerTypes.SnapToCellsMode[] = ['auto', 'always', 'never'];
 
   constructor(service: Service) {
     this.appointmentsData = service.getAppointments();

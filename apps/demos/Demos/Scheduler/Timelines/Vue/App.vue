@@ -30,12 +30,11 @@
     />
   </DxScheduler>
   <div class="options">
+    <div class="caption">Options</div>
     <div class="option">
-      <span>Snap to Cells Mode:</span>
+      <span>Snap to Grid:</span>
       <DxSelectBox
         :items="snapToCellsModeItems"
-        value-expr="value"
-        display-expr="text"
         :value="snapToCellsMode"
         @value-changed="onSnapToCellsModeChanged"
       />
@@ -57,11 +56,7 @@ const groups = ['priority'];
 const currentDate = new Date(2021, 1, 2);
 const dataSource = data;
 
-const snapToCellsModeItems: { value: DxSchedulerTypes.SnapToCellsMode; text: string }[] = [
-  { value: 'auto', text: 'Auto' },
-  { value: 'always', text: 'Always' },
-  { value: 'never', text: 'Never' },
-];
+const snapToCellsModeItems: DxSchedulerTypes.SnapToCellsMode[] = ['auto', 'always', 'never'];
 
 const snapToCellsMode = ref<DxSchedulerTypes.SnapToCellsMode>('always');
 
@@ -77,10 +72,19 @@ function onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
     width: 100px;
 }
 
+.dx-scheduler-appointment-content {
+  color: white;
+}
+
 .options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
