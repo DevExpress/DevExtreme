@@ -57,8 +57,11 @@ export class AIAssistantViewController extends ViewController {
       const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
 
       this.headerPanel?.applyToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
+      this.aiAssistantView._invalidate();
     } else {
       this.headerPanel?.removeToolbarItem(AI_ASSISTANT_BUTTON_NAME);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.aiAssistantView.hide();
     }
   }
 
@@ -70,7 +73,7 @@ export class AIAssistantViewController extends ViewController {
 
       if (this.headerPanel) {
         const aiAssistantClass = this.addWidgetPrefix(AI_ASSISTANT_BUTTON_CLASS);
-        this.$aiAssistantButton.addClass(this.headerPanel._getToolbarButtonClass(aiAssistantClass));
+        this.$aiAssistantButton.addClass(this.headerPanel.getToolbarButtonClass(aiAssistantClass));
       }
     };
     const hintText = this.option('aiAssistant.title'); // TODO clarify option name

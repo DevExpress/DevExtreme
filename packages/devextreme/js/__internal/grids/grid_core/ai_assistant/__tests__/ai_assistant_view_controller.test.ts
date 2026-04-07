@@ -11,7 +11,8 @@ import { AIAssistantViewController } from '../ai_assistant_view_controller';
 
 interface MockAIAssistantView {
   toggle: jest.Mock<() => Promise<boolean>>;
-  isShown: jest.Mock<() => boolean>;
+  hide: jest.Mock<() => Promise<boolean>>;
+  _invalidate: jest.Mock;
   onVisibilityChanged?: (visible: boolean) => void;
 }
 
@@ -23,7 +24,8 @@ interface MockHeaderPanel {
 
 const createMockAIAssistantView = (): MockAIAssistantView => ({
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
-  isShown: jest.fn<() => boolean>().mockReturnValue(false),
+  hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
+  _invalidate: jest.fn(),
 });
 
 const createMockHeaderPanel = (): MockHeaderPanel => ({
@@ -115,6 +117,57 @@ describe('AIAssistantViewController', () => {
       controller.optionChanged(args);
 
       expect(args.handled).toBe(true);
+    });
+
+    it('should hide aiAssistantView when aiAssistant.enabled changes to false', () => {
+      const options: Record<string, unknown> = { 'aiAssistant.enabled': true };
+      const { controller, mockView } = createAIAssistantViewController(options);
+
+      options['aiAssistant.enabled'] = false;
+
+      controller.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.enabled' as const,
+        value: false,
+        previousValue: true,
+        handled: false,
+      });
+
+      expect(mockView.hide).toHaveBeenCalledTimes(1);
+    });
+
+    it('should invalidate aiAssistantView when enabling', () => {
+      const options: Record<string, unknown> = { 'aiAssistant.enabled': false };
+      const { controller, mockView } = createAIAssistantViewController(options);
+
+      options['aiAssistant.enabled'] = true;
+
+      controller.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.enabled' as const,
+        value: true,
+        previousValue: false,
+        handled: false,
+      });
+
+      expect(mockView._invalidate).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not invalidate aiAssistantView when disabling', () => {
+      const options: Record<string, unknown> = { 'aiAssistant.enabled': true };
+      const { controller, mockView } = createAIAssistantViewController(options);
+
+      options['aiAssistant.enabled'] = false;
+
+      controller.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.enabled' as const,
+        value: false,
+        previousValue: true,
+        handled: false,
+      });
+
+      expect(mockView._invalidate).not.toHaveBeenCalled();
     });
   });
 });

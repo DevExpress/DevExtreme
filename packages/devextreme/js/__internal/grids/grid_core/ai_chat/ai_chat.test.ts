@@ -17,6 +17,7 @@ import type { AIChatOptions } from './types';
 
 const mockPopupInstance = {
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
+  hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   option: jest.fn<(name: string) => unknown>().mockReturnValue(false),
 };
 
@@ -98,6 +99,17 @@ describe('AIChat', () => {
     });
   });
 
+  describe('hide', () => {
+    it('should call popup hide method', async () => {
+      const { aiChat } = createAIChat();
+
+      const result = await aiChat.hide();
+
+      expect(mockPopupInstance.hide).toHaveBeenCalledTimes(1);
+      expect(result).toBe(true);
+    });
+  });
+
   describe('isShown', () => {
     it('should return true when popup is visible', () => {
       const { aiChat } = createAIChat();
@@ -112,6 +124,49 @@ describe('AIChat', () => {
       mockPopupInstance.option.mockReturnValue(false);
 
       expect(aiChat.isShown()).toBe(false);
+    });
+  });
+
+  describe('onVisibilityChanged', () => {
+    const getPopupConfig = (): any => {
+      const call = createComponentMock.mock.calls.find(
+        ([, Widget]) => Widget === Popup,
+      );
+
+      expect(call).toBeDefined();
+
+      return (call as any)[2];
+    };
+
+    it('should call onVisibilityChanged with true on showing', () => {
+      const onVisibilityChanged = jest.fn();
+      createAIChat({ onVisibilityChanged });
+
+      const popupConfig = getPopupConfig();
+      popupConfig.onShowing();
+
+      expect(onVisibilityChanged).toHaveBeenCalledTimes(1);
+      expect(onVisibilityChanged).toHaveBeenCalledWith(true);
+    });
+
+    it('should call onVisibilityChanged with false on hidden', () => {
+      const onVisibilityChanged = jest.fn();
+      createAIChat({ onVisibilityChanged });
+
+      const popupConfig = getPopupConfig();
+      popupConfig.onHidden();
+
+      expect(onVisibilityChanged).toHaveBeenCalledTimes(1);
+      expect(onVisibilityChanged).toHaveBeenCalledWith(false);
+    });
+
+    it('should not throw when onVisibilityChanged is not provided', () => {
+      createAIChat();
+
+      const popupConfig = getPopupConfig();
+
+      expect(() => { popupConfig.onShowing(); }).not.toThrow();
+      expect(() => { popupConfig.onHidden(); }).not.toThrow();
     });
   });
 });

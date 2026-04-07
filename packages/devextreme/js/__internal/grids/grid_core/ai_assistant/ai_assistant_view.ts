@@ -33,6 +33,10 @@ export class AIAssistantView extends View {
     return this.aiChatInstance?.isShown() ?? false;
   }
 
+  public hide(): Promise<boolean> {
+    return this.aiChatInstance?.hide() ?? Promise.resolve(false);
+  }
+
   public toggle(): Promise<boolean> {
     return this.aiChatInstance?.toggle() ?? Promise.resolve(false);
   }

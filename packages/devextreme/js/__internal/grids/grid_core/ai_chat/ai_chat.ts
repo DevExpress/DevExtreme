@@ -53,6 +53,10 @@ export class AIChat {
     return this.popupInstance.toggle();
   }
 
+  public hide(): Promise<boolean> {
+    return this.popupInstance.hide();
+  }
+
   public isShown(): boolean {
     return !!this.popupInstance.option('visible');
   }

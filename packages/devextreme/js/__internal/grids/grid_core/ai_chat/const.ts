@@ -3,6 +3,7 @@ export const DEFAULT_POPUP_OPTIONS = {
   height: 'auto',
   visible: false,
   shading: false,
+  showCloseButton: true,
 };
 
 export const CLASSES = {

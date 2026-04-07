@@ -120,7 +120,7 @@ export class HeaderPanel extends ColumnsView {
     return $('<div>').addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
   }
 
-  public _getToolbarButtonClass(specificClass?: string): string {
+  public getToolbarButtonClass(specificClass?: string): string {
     const secondClass = specificClass ? ` ${specificClass}` : '';
 
     return this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS) + secondClass;

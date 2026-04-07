@@ -172,6 +172,25 @@ describe('AIAssistantView', () => {
     });
   });
 
+  describe('hide', () => {
+    it('should delegate to AIChat hide method', async () => {
+      const { aiAssistantView } = createAIAssistantView();
+
+      await aiAssistantView.hide();
+
+      const aiChatInstance = (AIChat as jest.Mock)
+        .mock.results[0].value as { hide: jest.Mock };
+
+      expect(aiChatInstance.hide).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return resolved false promise when aiChatInstance is not created', () => {
+      const { aiAssistantView } = createAIAssistantView({ render: false });
+
+      return expect(aiAssistantView.hide()).resolves.toBe(false);
+    });
+  });
+
   describe('isShown', () => {
     it('should delegate to AIChat isShown method', () => {
       const { aiAssistantView } = createAIAssistantView();
