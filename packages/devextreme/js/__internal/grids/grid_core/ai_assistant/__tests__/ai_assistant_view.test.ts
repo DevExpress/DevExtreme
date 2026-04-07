@@ -12,11 +12,11 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helpers/wrapInstance';
 
-import { AIChat } from '../ai_chat/ai_chat';
-import { AIAssistantView } from './m_ai_assistant_view';
+import { AIChat } from '../../ai_chat/ai_chat';
+import { AIAssistantView } from '../ai_assistant_view';
 
-jest.mock('../ai_chat/ai_chat', (): any => {
-  const original = jest.requireActual<any>('../ai_chat/ai_chat');
+jest.mock('../../ai_chat/ai_chat', (): any => {
+  const original = jest.requireActual<any>('../../ai_chat/ai_chat');
 
   return {
     ...original,

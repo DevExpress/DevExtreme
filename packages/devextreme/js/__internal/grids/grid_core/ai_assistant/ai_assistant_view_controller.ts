@@ -5,7 +5,7 @@ import type { OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import { ViewController } from '../m_modules';
-import type { AIAssistantView } from './m_ai_assistant_view';
+import type { AIAssistantView } from './ai_assistant_view';
 
 const AI_ASSISTANT_BUTTON_NAME = 'aiAssistantButton';
 const AI_ASSISTANT_BUTTON_CLASS = 'ai-assistant-button';
