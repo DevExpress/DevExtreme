@@ -68,35 +68,40 @@ export function logLicenseWarning(
   const purchaseLine = `${T.warningPrefix('W0019')} ${T.purchaseLicense}`;
   const installLine = `${T.warningPrefix('W0021')} ${T.installationInstructions}`;
 
-  const lines: string[] = [purchaseLine];
+  const warnings: string[][] = [[purchaseLine]];
 
   switch (warningType) {
     case 'no-key':
-      lines.push(T.keyNotFound, installLine);
+      warnings[warnings.length - 1].push(T.keyNotFound);
+      warnings.push([installLine]);
       break;
 
     case 'invalid-key':
-      lines.push(T.keyVerificationFailed(), installLine);
+      warnings[warnings.length - 1].push(T.keyVerificationFailed());
+      warnings.push([installLine]);
       break;
 
     case 'lcx-used':
       // eslint-disable-next-line spellcheck/spell-checker
-      lines.push(T.keyVerificationFailed(), T.lcxUsedInsteadOfLcp, installLine);
+      warnings[warnings.length - 1].push(T.keyVerificationFailed(), T.lcxUsedInsteadOfLcp);
+      warnings.push([installLine]);
       break;
 
     case 'old-devextreme-key':
-      lines.push(T.keyVerificationFailed(), T.oldDevExtremeKey, installLine);
+      warnings[warnings.length - 1].push(T.keyVerificationFailed(), T.oldDevExtremeKey);
+      warnings.push([installLine]);
       break;
 
     case 'version-mismatch': {
       const incompatibleLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}`;
-      lines.push(T.keyVerificationFailed(), incompatibleLine);
+      warnings[warnings.length - 1].push(T.keyVerificationFailed());
+      warnings.push([incompatibleLine]);
       break;
     }
 
     case 'trial-expired': {
       const expiredLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('trialExpired')}`;
-      lines.push(expiredLine);
+      warnings.push([expiredLine]);
       break;
     }
 
@@ -107,5 +112,7 @@ export function logLicenseWarning(
       break;
   }
 
-  console.warn(lines.join('\n'));
+  warnings.forEach((group) => {
+    console.warn(group.join('\n'));
+  });
 }
