@@ -20,7 +20,41 @@ $(() => {
     apiKey,
   });
 
-  async function getAIResponseStream(messages, { onDelta, onError, signal }) {
+  function createDelayedRenderer({ delay = 20, onRender }) {
+    const queue = [];
+    let rendering = false;
+
+    function processQueue() {
+      if (!queue.length) {
+        rendering = false;
+
+        return;
+      }
+
+      rendering = true;
+      const chunk = queue.shift();
+      onRender(chunk);
+
+      setTimeout(processQueue, delay);
+    }
+
+    function pushChunk(chunk) {
+      queue.push(chunk);
+
+      if (!rendering) {
+        processQueue();
+      }
+    }
+
+    function stop() {
+      queue.length = 0;
+      rendering = false;
+    }
+
+    return { pushChunk, stop };
+  }
+
+  async function getAIResponseStream(messages, { onAborted, onDelta, onError, signal }) {
     const params = {
       messages,
       model: deployment,
@@ -40,6 +74,10 @@ $(() => {
         if (delta) {
           onDelta(delta);
         }
+      }
+
+      if (signal.aborted) {
+        onAborted();
       }
     } catch (e) {
       onError?.(e);
@@ -98,7 +136,7 @@ $(() => {
     let buffer = '';
     let typingCleared = false;
 
-    const onDelta = (chunk) => {
+    const delayedRenderer = createDelayedRenderer({ onRender: (chunk) => {
       if (!typingCleared) {
         instance.option({ typingUsers: [] });
         typingCleared = true;
@@ -111,11 +149,16 @@ $(() => {
       buffer += chunk;
 
       updateMessageText(assistantId, buffer);
+    } });
+
+    const onAborted = () => {
+      delayedRenderer.stop();
     };
 
     try {
       await getAIResponseStream(messages, {
-        onDelta,
+        onAborted,
+        onDelta: delayedRenderer.pushChunk,
         signal: abortController.signal,
       });
 
@@ -235,7 +278,7 @@ $(() => {
       .addClass('dx-chat-suggestion-card')
       .append(
         $('<div>').addClass('dx-chat-suggestion-card-title').text(card.title),
-        $('<div>').addClass('dx-chat-suggestion-card-prompt').text(card.prompt),
+        $('<div>').addClass('dx-chat-suggestion-card-prompt').text(card.description),
       )
       .on('click', (e) => {
         sendSuggestion(card.prompt, e);
