@@ -1,5 +1,4 @@
 
-
 const { MESSAGES } = require('./messages');
 const LCX_SIGNATURE = 'LCXv1';
 const LCP_SIGNATURE = 'LCPv1';
@@ -123,6 +122,16 @@ function tryConvertLCXtoLCP(licenseString) {
 
 const DEVEXTREME_HTMLJS_BIT = 1n << 54n; // ProductKind.DevExtremeHtmlJs from types.ts
 
+const DOTNET_TICKS_EPOCH_OFFSET = 621355968000000000n;
+const DOTNET_TICKS_PER_MS = 10000n;
+const DOTNET_MAX_VALUE_TICKS = 3155378975999999999n;
+
+function dotnetTicksToMs(ticksStr) {
+    const ticks = BigInt(ticksStr);
+    if(ticks >= DOTNET_MAX_VALUE_TICKS) return Infinity;
+    return Number((ticks - DOTNET_TICKS_EPOCH_OFFSET) / DOTNET_TICKS_PER_MS);
+}
+
 const TokenKind = Object.freeze({
     corrupted: 'corrupted',
     verified: 'verified',
@@ -132,24 +141,54 @@ const TokenKind = Object.freeze({
 const GENERAL_ERROR = { kind: TokenKind.corrupted, error: 'general' };
 const DESERIALIZATION_ERROR = { kind: TokenKind.corrupted, error: 'deserialization' };
 const PRODUCT_KIND_ERROR = { kind: TokenKind.corrupted, error: 'product-kind' };
+const TRIAL_EXPIRED_ERROR = { kind: TokenKind.corrupted, error: 'trial-expired' };
+
+function readDevExtremeVersion() {
+    try {
+        const pkgPath = require('path').join(__dirname, '..', 'package.json');
+        const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf8'));
+        const parts = String(pkg.version || '').split('.');
+        const major = parseInt(parts[0], 10);
+        const minor = parseInt(parts[1], 10);
+        if(!isNaN(major) && !isNaN(minor)) {
+            return { major, minor, code: major * 10 + minor };
+        }
+    } catch{}
+    return null;
+}
+
+function buildVersionString(devExtremeVersion){
+    const { major, minor, code: currentCode } = devExtremeVersion;
+    return `${major}.${minor}`;
+}
 
 function productsFromString(encodedString) {
     if(!encodedString) {
         return { products: [], errorToken: GENERAL_ERROR };
     }
     try {
-        const productTuples = encodedString.split(';').slice(1).filter(e => e.length > 0);
+        const splitInfo = encodedString.split(';');
+        const licenseId = splitInfo[0];
+        const productTuples = splitInfo.slice(1).filter((entry) => entry.length > 0);
         const products = productTuples.map(tuple => {
             const parts = tuple.split(',');
-            return {
-                version: Number.parseInt(parts[0], 10),
-                products: BigInt(parts[1]),
-            };
+            const version = Number.parseInt(parts[0], 10);
+            const products = BigInt(parts[1]);
+            const expiration = parts.length > 3 ? dotnetTicksToMs(parts[3]) : Infinity;
+            return { version, products, expiration };
         });
-        return { products };
+        return { products, licenseId };
     } catch{
         return { products: [], errorToken: DESERIALIZATION_ERROR };
     }
+}
+
+function getMaxExpiration(products) {
+    const expirations = products
+        .map(p => p.expiration)
+        .filter(e => e > 0 && e !== Infinity);
+    if(expirations.length === 0) return Infinity;
+    return Math.max(...expirations);
 }
 
 function findLatestDevExtremeVersion(products) {
@@ -174,19 +213,26 @@ function parseLCP(lcpString) {
 
         const productsPayload = decoded.slice(SIGN_LENGTH);
         const decodedPayload = mapString(productsPayload, DECODE_MAP);
-        const { products, errorToken } = productsFromString(decodedPayload);
+        const { products, errorToken, licenseId } = productsFromString(decodedPayload);
         if(errorToken) {
-            return errorToken;
+            return { ...errorToken, licenseId };
         }
 
         const maxVersionAllowed = findLatestDevExtremeVersion(products);
+        if(!maxVersionAllowed) {
+            const maxExpiration = getMaxExpiration(products);
+            if(maxExpiration !== Infinity && maxExpiration < Date.now()) {
+                return { ...TRIAL_EXPIRED_ERROR, licenseId };
+            }
+        }
+
         if(!maxVersionAllowed) { 
-            return PRODUCT_KIND_ERROR; 
+            return { ...PRODUCT_KIND_ERROR, licenseId }; 
         }
 
         return {
             kind: TokenKind.verified,
-            payload: { customerId: '', maxVersionAllowed },
+            payload: { customerId: '', maxVersionAllowed, licenseId },
         };
     } catch{
         return GENERAL_ERROR;
@@ -197,50 +243,56 @@ function formatVersionCode(versionCode) {
     return `v${Math.floor(versionCode / 10)}.${versionCode % 10}`;
 }
 
-function readDevExtremeVersion() {
-    try {
-        const pkgPath = require('path').join(__dirname, '..', 'package.json');
-        const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf8'));
-        const parts = String(pkg.version || '').split('.');
-        const major = parseInt(parts[0], 10);
-        const minor = parseInt(parts[1], 10);
-        if(!isNaN(major) && !isNaN(minor)) {
-            return { major, minor, code: major * 10 + minor };
+function getLCPInfo(lcpString) {
+    const token = parseLCP(lcpString);
+    let warning = null;
+    let licenseId = null;
+    let currentVersion = '';
+
+    if(token.kind === TokenKind.corrupted) {
+        licenseId = token.licenseId || null;
+        switch(token.error) {
+            case 'general':
+                warning = { type: 'general' };
+                break;
+            case 'deserialization':
+                warning = { type: 'corrupted' };
+                break;
+            case 'product-kind':
+                warning = { type: 'trial' };
+                break;
+            case 'trial-expired':
+                warning = { type: 'trialExpired' };
+                break;
         }
-    } catch{}
-    return null;
+    } else {
+        licenseId = token.payload.licenseId || null;
+        const devExtremeVersion = readDevExtremeVersion();
+        if(devExtremeVersion) {
+            currentVersion = buildVersionString(devExtremeVersion);
+            const { maxVersionAllowed } = token.payload;
+            if(maxVersionAllowed < devExtremeVersion.code) {
+                warning = {
+                    type:'incompatibleVersion', 
+                    keyVersion: formatVersionCode(maxVersionAllowed), 
+                    currentVersion 
+                };
+            }
+        }
+    }
+
+    return { warning, licenseId, currentVersion };
 }
 
 function getLCPWarning(lcpString) {
-    const token = parseLCP(lcpString);
-
-    if(token.kind === TokenKind.corrupted) {
-        if(token.error === 'product-kind') {
-            return MESSAGES.trial;
-        }
-        return null;
-    }
-
-    // token.kind === TokenKind.verified — check version compatibility
-    const devExtremeVersion = readDevExtremeVersion();
-    if(devExtremeVersion) {
-        const { major, minor, code: currentCode } = devExtremeVersion;
-        const { maxVersionAllowed } = token.payload;
-        if(maxVersionAllowed < currentCode) {
-            return MESSAGES.versionIncompatible(
-                formatVersionCode(maxVersionAllowed),
-                `v${major}.${minor}`,
-            );
-        }
-    }
-
-    return null;
+    return getLCPInfo(lcpString).warning;
 }
 
 module.exports = {
     convertLCXtoLCP,
     tryConvertLCXtoLCP,
     parseLCP,
+    getLCPInfo,
     getLCPWarning,
     TokenKind,
     LCX_SIGNATURE,

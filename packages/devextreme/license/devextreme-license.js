@@ -5,11 +5,20 @@ const fs = require('fs');
 const path = require('path');
 
 const { getDevExpressLCXKey } = require('./dx-get-lcx');
-const { convertLCXtoLCP, getLCPWarning } = require('./dx-lcx-2-lcp');
-const { MESSAGES } = require('./messages');
+const { tryConvertLCXtoLCP, getLCPInfo } = require('./dx-lcx-2-lcp');
+const { TEMPLATES } = require('./messages');
 
 const EXPORT_NAME = 'licenseKey';
 const TRIAL_VALUE = 'TRIAL';
+const CLI_PREFIX = '[devextreme-license]';
+
+function logStderr(...lines) {
+    process.stderr.write(lines.join('\n') + '\n\n');
+}
+
+function prefixed(msg) {
+    return `${CLI_PREFIX} ${msg}`;
+}
 
 function fail(msg) {
     process.stderr.write(msg.endsWith('\n') ? msg : msg + '\n');
@@ -56,7 +65,7 @@ function parseArgs(argv) {
         else if(a === '--out') {
             const next = args[i + 1];
             if(!next || next.startsWith('-')) {
-                process.stderr.write('[devextreme-license] Warning: --out requires a path argument but none was provided. Ignoring --out.\n');
+                logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = args[++i];
             }
@@ -64,7 +73,7 @@ function parseArgs(argv) {
         else if(a.startsWith('--out=')) {
             const val = a.slice('--out='.length);
             if(!val) {
-                process.stderr.write('[devextreme-license] Warning: --out requires a path argument but none was provided. Ignoring --out.\n');
+                logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = val;
             }
@@ -153,24 +162,53 @@ function main() {
         process.exit(0);
     }
 
-    const { key: lcx, source } = getDevExpressLCXKey() || {};
+    const { key: lcx, source, currentVersion } = getDevExpressLCXKey() || {};
 
     let lcp = TRIAL_VALUE;
+    let licenseId = null;
 
     if(lcx) {
-        try {
-            lcp = convertLCXtoLCP(lcx);
-            const warning = getLCPWarning(lcp);
-            if(warning) {
-                process.stderr.write(`DevExpress license key (LCX) retrieved from: ${source}\n`);
-                process.stderr.write(`[devextreme-license] Warning: ${warning}\n`);
+        lcp = tryConvertLCXtoLCP(lcx) || TRIAL_VALUE;
+        const { warning, licenseId: id } = getLCPInfo(lcp);
+        licenseId = id;
+
+        if(warning) {
+            const lines = [];
+
+            lines.push(
+                prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
+            );
+
+            if(licenseId) {
+                lines.push(TEMPLATES.licenseId(licenseId));
             }
-        } catch{
-            process.stderr.write(`DevExpress license key (LCX) retrieved from: ${source}\n`);
-            process.stderr.write(`[devextreme-license] Warning: ${MESSAGES.keyNotFound}\n`);
+
+            lines.push(
+                TEMPLATES.keyWasFound(source.type, source.path),
+            );
+
+            if(warning.type !== 'trial') {
+                const code = TEMPLATES.warningCodeByType(warning.type);
+
+                lines.push(
+                    TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion),
+                );
+
+                if(warning.type === 'trialExpired') {
+                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.purchaseLicense}`));
+                } else {
+                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
+                }
+            }
+
+            logStderr(...lines);
         }
     } else {
-        process.stderr.write(`[devextreme-license] Warning: ${MESSAGES.keyNotFound}\n`);
+        logStderr(
+            prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
+            TEMPLATES.keyNotFound,
+            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}`),
+        );
     }
 
     if(!opts.outPath) {

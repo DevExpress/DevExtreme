@@ -1,6 +1,6 @@
 const { createUnplugin } = require('unplugin');
 const { getDevExpressLCXKey } = require('./dx-get-lcx');
-const { tryConvertLCXtoLCP, getLCPWarning } = require('./dx-lcx-2-lcp');
+const { tryConvertLCXtoLCP, getLCPInfo } = require('./dx-lcx-2-lcp');
 const { MESSAGES } = require('./messages');
 
 const PLUGIN_NAME = 'devextreme-bundler-plugin';
@@ -28,10 +28,13 @@ const DevExtremeLicensePlugin = createUnplugin(() => {
         warn(ctx, msg);
     }
 
-    function warnLicenseIssue(ctx, source, warning) {
+    function warnLicenseIssue(ctx, source, licenseId, warning) {
         try {
             if(ctx && typeof ctx.warn === 'function') {
                 ctx.warn(`${PLUGIN_PREFIX} DevExpress license key (LCX) retrieved from: ${source}`);
+                if(licenseId) {
+                    ctx.warn(`${PLUGIN_PREFIX} License ID: ${licenseId}`);
+                }
                 ctx.warn(`${PLUGIN_PREFIX} Warning: ${warning}`);
             }
         } catch{}
@@ -51,13 +54,13 @@ const DevExtremeLicensePlugin = createUnplugin(() => {
 
             const lcp = tryConvertLCXtoLCP(lcx);
             if(!lcp) {
-                warnLicenseIssue(ctx, source, MESSAGES.keyNotFound);
+                warnLicenseIssue(ctx, source, null, MESSAGES.keyNotFound);
                 return (lcpCache = null);
             }
 
-            const warning = getLCPWarning(lcp);
+            const { warning, licenseId } = getLCPInfo(lcp);
             if(warning) {
-                warnLicenseIssue(ctx, source, warning);
+                warnLicenseIssue(ctx, source, licenseId, warning);
             }
 
             return (lcpCache = lcp);

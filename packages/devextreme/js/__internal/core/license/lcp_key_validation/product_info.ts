@@ -2,10 +2,15 @@
 export interface ProductInfo {
   readonly version: number;
   readonly products: bigint;
+  readonly expiration: number;
 }
 
-export function createProductInfo(version: number, products: bigint): ProductInfo {
-  return { version, products: BigInt(products) };
+export function createProductInfo(
+  version: number,
+  products: bigint,
+  expiration = Infinity,
+): ProductInfo {
+  return { version, products: BigInt(products), expiration };
 }
 
 export function isProduct(info: ProductInfo, ...productIds: bigint[]): boolean {

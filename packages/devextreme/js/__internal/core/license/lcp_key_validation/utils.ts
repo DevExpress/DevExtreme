@@ -51,6 +51,16 @@ export const shiftText = (text: string, map: string): string => {
 
 export const shiftDecodeText = (text: string): string => shiftText(text, DECODE_MAP);
 
+const DOT_NET_TICKS_EPOCH_OFFSET = 621355968000000000n;
+const DOT_NET_TICKS_PER_MS = 10000n;
+const DOT_NET_MAX_VALUE_TICKS = 3155378975999999999n;
+
+export function dotNetTicksToMs(ticksStr: string): number {
+  const ticks = BigInt(ticksStr);
+  if (ticks >= DOT_NET_MAX_VALUE_TICKS) return Infinity;
+  return Number((ticks - DOT_NET_TICKS_EPOCH_OFFSET) / DOT_NET_TICKS_PER_MS);
+}
+
 export const verifyHash = (xmlKey: string, data: string, signature: string): boolean => {
   const { modulus, exponent } = parseRsaXml(xmlKey);
 

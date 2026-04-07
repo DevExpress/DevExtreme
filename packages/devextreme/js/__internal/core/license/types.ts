@@ -12,7 +12,7 @@ export enum TokenKind {
 
 export interface ErrorToken {
   readonly kind: TokenKind.corrupted;
-  readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version' | 'product-kind';
+  readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version' | 'product-kind' | 'trial-expired';
 }
 
 export interface VerifiedToken {
@@ -36,9 +36,20 @@ export const DESERIALIZATION_ERROR: ErrorToken = { kind: TokenKind.corrupted, er
 export const PAYLOAD_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'payload' };
 export const VERSION_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'version' };
 export const PRODUCT_KIND_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'product-kind' };
+export const TRIAL_EXPIRED_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'trial-expired' };
+
+export type LicenseWarningType = 'no-key'
+  | 'invalid-key'
+  | 'lcx-used'
+  | 'old-devextreme-key'
+  | 'version-mismatch'
+  | 'no-devextreme-license'
+  | 'trial-expired';
 
 export interface LicenseCheckParams {
   preview: boolean;
   internal?: true;
   error: LicenseVerifyResult | undefined;
+  warningType?: LicenseWarningType;
+  maxVersionAllowed?: number;
 }
