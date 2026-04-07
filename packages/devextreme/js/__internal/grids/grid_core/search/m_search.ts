@@ -147,7 +147,13 @@ export class SearchPanelViewController extends modules.ViewController {
     this.headerPanel = this.getView('headerPanel');
     this.dataController = this.getController('data') as SearchDataControllerExtender;
 
-    this.syncSearchPanelItem();
+    const isSearchPanelVisible = this.option('searchPanel.visible');
+
+    if (isSearchPanelVisible) {
+      const searchPanelToolbarItem = this.getSearchPanelToolbarItem();
+
+      this.headerPanel?.registerToolbarItem(SEARCH_PANEL_ITEM_NAME, searchPanelToolbarItem);
+    }
   }
 
   public optionChanged(args: OptionChanged): void {
@@ -168,20 +174,14 @@ export class SearchPanelViewController extends modules.ViewController {
   }
 
   private syncSearchPanelItem(): void {
-    if (!this.headerPanel) {
-      return;
-    }
+    const isSearchPanelVisible = this.option('searchPanel.visible');
 
-    const searchPanelOptions = this.option('searchPanel');
-
-    if (searchPanelOptions && searchPanelOptions.visible) {
+    if (isSearchPanelVisible) {
       const searchPanelToolbarItem = this.getSearchPanelToolbarItem();
 
-      if (searchPanelToolbarItem) {
-        this.headerPanel.setToolbarItem(SEARCH_PANEL_ITEM_NAME, searchPanelToolbarItem);
-      }
+      this.headerPanel?.applyToolbarItem(SEARCH_PANEL_ITEM_NAME, searchPanelToolbarItem);
     } else {
-      this.headerPanel.removeToolbarItem(SEARCH_PANEL_ITEM_NAME);
+      this.headerPanel?.removeToolbarItem(SEARCH_PANEL_ITEM_NAME);
     }
   }
 

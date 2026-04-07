@@ -41,15 +41,24 @@ export class HeaderPanel extends ColumnsView {
     this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
-  public setToolbarItem(name: string, item: ToolbarItem): void {
-    const isExisting = this.registeredToolbarItems.has(name);
+  /**
+   * Registers a toolbar item without triggering a render.
+   * Use during initialization (before the first render).
+   */
+  public registerToolbarItem(name: string, item: ToolbarItem): void {
     this.registeredToolbarItems.set(name, { ...item, name });
+  }
 
-    if (!this._$element) {
-      return;
-    }
-
+  /**
+   * Registers a toolbar item and immediately renders the change:
+   * updates the existing item in-place, or invalidates the entire header panel to add a new one.
+   * Use after the initial render (not during init).
+   */
+  public applyToolbarItem(name: string, item: ToolbarItem): void {
+    const isExisting = this.registeredToolbarItems.has(name);
     const itemIndex = isExisting ? this.findToolbarItemIndex(name) : -1;
+
+    this.registeredToolbarItems.set(name, { ...item, name });
 
     if (itemIndex >= 0) {
       const normalizedItem = this.getNormalizedRegisteredItem(name);
@@ -85,13 +94,13 @@ export class HeaderPanel extends ColumnsView {
     )[0];
   }
 
+  /**
+   * Unregisters a toolbar item and invalidates the header panel to re-render without it.
+   */
   public removeToolbarItem(name: string): void {
     if (this.registeredToolbarItems.has(name)) {
       this.registeredToolbarItems.delete(name);
-
-      if (this._$element) {
-        this._invalidate();
-      }
+      this._invalidate();
     }
   }
 
