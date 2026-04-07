@@ -4214,7 +4214,7 @@
           },
           {
             "Name": "Message Streaming",
-            "Equivalents": "Response Streaming, Streaming Responses, Streaming AI Responses, Streaming Output, Stop Request, Stop Request Execution, Cancel Request, Stop Response Generation, Cancel AI Request, Stop Streaming, Abort AI Request", 
+            "Equivalents": "Response Streaming, Streaming Responses, Streaming AI Responses, Streaming Output, Stop Request, Stop Request Execution, Cancel Request, Stop Response Generation, Cancel AI Request, Stop Streaming, Abort AI Request",
             "Demos": [
               {
                 "Title": "Message Streaming",

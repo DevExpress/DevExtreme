@@ -104,6 +104,7 @@ $(() => {
       sendButtonOptions: {
         action: 'send',
         icon: 'arrowright',
+        onClick: null,
       },
     });
   }
@@ -127,7 +128,7 @@ $(() => {
 
   async function processMessageSending(message) {
     abortController = new AbortController();
-    setMainButtonToStop();
+    setTimeout(setMainButtonToStop, 0);
 
     messages.push({ role: 'user', content: message.text });
     instance.option({ typingUsers: [assistant] });
@@ -164,7 +165,7 @@ $(() => {
 
       instance.option({ typingUsers: [] });
       messages.push({ role: 'assistant', content: buffer });
-    } catch {
+    } catch (e) {
       instance.option({ typingUsers: [] });
 
       messages.pop();
@@ -298,14 +299,14 @@ $(() => {
         action: 'send',
       },
       onMessageEntered: (e) => {
-        const { message, event } = e;
+        const { message } = e;
 
         dataSource
           .store()
           .push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
         if (!instance.option('alerts').length) {
-          processMessageSending(message, event);
+          processMessageSending(message);
         }
       },
       messageTemplate: (data, element) => {
