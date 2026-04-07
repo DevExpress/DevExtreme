@@ -312,8 +312,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if (needUpdateFocus) {
         const isScrollEvent = !!e?.event?.type;
         const skipFocusEvent = e?.virtualColumnsScrolling && isScrollEvent;
-        const preventScroll = !isFullUpdate;
-        this._updateFocus(true, skipFocusEvent, preventScroll);
+        this._updateFocus(true, skipFocusEvent, true);
       }
     }
   }
@@ -1744,7 +1743,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     gridCoreUtils.focusAndSelectElement(this, $focusedElement);
   }
 
-  public _focus($cell, disableFocus?, skipFocusEvent?, preventScroll = false) {
+  public _focus($cell: dxElementWrapper, disableFocus?: boolean, skipFocusEvent?: boolean, preventScroll?: boolean) {
     const $row = $cell && !$cell.hasClass(ROW_CLASS)
       ? $cell.closest(`.${ROW_CLASS}`)
       : $cell;
@@ -1796,7 +1795,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       });
       if (!skipFocusEvent) {
         this._applyTabIndexToElement($focusElement);
-        $focusElement.get(0)?.focus({ preventScroll });
+        if (preventScroll) {
+          $focusElement.get(0)?.focus({ preventScroll });
+        } else {
+          // @ts-expect-error
+          eventsEngine.trigger($focusElement, 'focus');
+        }
       }
       if (disableFocus) {
         $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
@@ -1848,7 +1852,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
                 );
                 return;
               }
-              !isFocusedElementDefined && this._focus($cell, false, skipFocusEvent);
+              !isFocusedElementDefined && this._focus($cell, false, skipFocusEvent, preventScroll);
             } else if (
               !isFocusedElementDefined
               && (this._isNeedFocus || this._isHiddenFocus)
