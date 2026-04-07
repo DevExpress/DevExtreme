@@ -218,12 +218,14 @@ function parseLCP(lcpString) {
             return { ...errorToken, licenseId };
         }
 
-        const maxExpiration = getMaxExpiration(products);
-        if(maxExpiration !== Infinity && maxExpiration < Date.now()) {
-            return { ...TRIAL_EXPIRED_ERROR, licenseId };
+        const maxVersionAllowed = findLatestDevExtremeVersion(products);
+        if(!maxVersionAllowed) {
+            const maxExpiration = getMaxExpiration(products);
+            if(maxExpiration !== Infinity && maxExpiration < Date.now()) {
+                return { ...TRIAL_EXPIRED_ERROR, licenseId };
+            }
         }
 
-        const maxVersionAllowed = findLatestDevExtremeVersion(products);
         if(!maxVersionAllowed) { 
             return { ...PRODUCT_KIND_ERROR, licenseId }; 
         }

@@ -94,12 +94,14 @@ export function parseDevExpressProductKey(productsLicenseSource: string): Token 
       return errorToken;
     }
 
-    const maxExpiration = getMaxExpiration({ products });
-    if (maxExpiration !== Infinity && maxExpiration < Date.now()) {
-      return TRIAL_EXPIRED_ERROR;
-    }
-
     const maxVersionAllowed = findLatestDevExtremeVersion({ products });
+
+    if (!maxVersionAllowed) {
+      const maxExpiration = getMaxExpiration({ products });
+      if (maxExpiration !== Infinity && maxExpiration < Date.now()) {
+        return TRIAL_EXPIRED_ERROR;
+      }
+    }
 
     if (!maxVersionAllowed) {
       return PRODUCT_KIND_ERROR;
