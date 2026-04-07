@@ -21,7 +21,7 @@ $(() => {
   });
 
   function createDelayedRenderer({ delay = 20, onRender }) {
-    const queue = [];
+    let queue = [];
     let rendering = false;
 
     function processQueue() {
@@ -47,7 +47,7 @@ $(() => {
     }
 
     function stop() {
-      queue.length = 0;
+      queue = [];
       rendering = false;
     }
 
