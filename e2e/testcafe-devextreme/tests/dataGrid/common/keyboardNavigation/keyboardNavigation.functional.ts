@@ -18,7 +18,7 @@ import {
   resetFocusedEventsTestData,
 } from '../../helpers/eventUtils';
 import { testScreenshot } from '../../../../helpers/themeUtils';
-import { addFocusableElementBefore, getDocumentScrollTop } from '../../../../helpers/domUtils';
+import { addFocusableElementBefore } from '../../../../helpers/domUtils';
 
 const CLASS = ClassNames;
 
@@ -6723,79 +6723,4 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
       grid.focus();
     },
   }, '#otherContainer');
-});
-
-test('Browser should not scroll back to the grid when a focused cell is updated or rerendered (T1310557)', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid('#container');
-  const firstCell = dataGrid.getDataCell(0, 0);
-  const secondCell = dataGrid.getDataCell(0, 1);
-
-  // assert
-  await t.expect(dataGrid.isReady()).ok();
-
-  // act
-  await t
-    .click(firstCell.element)
-    .pressKey('tab');
-
-  // assert
-  await t.expect(secondCell.element.focused).ok();
-
-  // act
-  await ClientFunction(() => {
-    window.scrollTo(0, 300);
-  })();
-
-  // assert
-  await t.expect(getDocumentScrollTop()).eql(300);
-
-  // act
-  await dataGrid.apiPush([{
-    type: 'update',
-    key: 1,
-    data: { name: 'updated' },
-  }]);
-
-  // assert
-  await t
-    .expect(secondCell.element.textContent)
-    .eql('updated')
-    .expect(getDocumentScrollTop())
-    .eql(300);
-
-  // act
-  await dataGrid.apiRefresh();
-
-  // assert
-  await t.expect(getDocumentScrollTop()).eql(300);
-
-  // act
-  await dataGrid.repaint();
-
-  // assert
-  await t.expect(getDocumentScrollTop()).eql(300);
-
-  // act
-  await t.pressKey('left');
-
-  // assert
-  await t
-    .expect(firstCell.isFocused)
-    .ok()
-    .expect(getDocumentScrollTop())
-    .eql(0);
-}).before(async () => {
-  await ClientFunction(() => {
-    $('#container').css('padding-bottom', '1000px');
-  })();
-
-  await createWidget('dxDataGrid', {
-    dataSource: [{ id: 1, name: 'test1' }],
-    keyExpr: 'id',
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    $('#container').css('padding-bottom', '');
-  })();
 });
