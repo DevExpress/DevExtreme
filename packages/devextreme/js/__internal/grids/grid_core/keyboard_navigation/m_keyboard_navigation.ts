@@ -99,6 +99,7 @@ import {
 } from './m_keyboard_navigation_utils';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
 import type { NavigationDirection, NavigationElementType, NavigationKeyCode } from './types';
+import { getNextColumnIndex } from './utils';
 
 export class KeyboardNavigationController extends KeyboardNavigationControllerCore {
   private _updateFocusTimeout: any;
@@ -914,7 +915,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     event: KeyDownEvent,
   ): DeferredObj<void> {
     const columnIndex = this.getColumnIndex();
-    const nextColumnIndex = this.getNextColumnIndex(direction, columnIndex);
+    const nextColumnIndex = getNextColumnIndex(direction, columnIndex);
 
     // Strategy 1: scroll to the grid's edge (beginning or end)
     if (this.needScrollToEdge(direction, columnIndex, nextColumnIndex)) {
@@ -926,7 +927,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     // Strategy 2: scroll to reveal the next virtual column
-    if (isDefined(nextColumnIndex) && this._isColumnVirtual(nextColumnIndex)) {
+    if (this._isColumnVirtual(nextColumnIndex)) {
       event.originalEvent.preventDefault();
 
       return this.scrollToNextCell(null, direction);
@@ -934,15 +935,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     // @ts-expect-error
     return Deferred().resolve().promise();
-  }
-
-  private getNextColumnIndex(
-    direction: NavigationDirection,
-    columnIndex: number,
-  ): number {
-    return direction === 'next' || direction === 'nextInRow'
-      ? columnIndex + 1
-      : columnIndex - 1;
   }
 
   private getEdgeScrollPosition(direction: NavigationDirection): number {
