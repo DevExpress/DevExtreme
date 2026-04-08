@@ -13,6 +13,7 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
@@ -972,16 +973,16 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
     }
   }
 
-  protected _getToolbarItems() {
+  protected _getToolbarItems(): ToolbarItem[] {
     const items = super._getToolbarItems();
     const filterItem = this._prepareFilterItem();
 
     return filterItem.concat(items);
   }
 
-  private _prepareFilterItem() {
+  private _prepareFilterItem(): ToolbarItem[] {
     const that = this;
-    const filterItem: object[] = [];
+    const filterItem: ToolbarItem[] = [];
 
     if (that._isShowApplyFilterButton()) {
       const hintText = that.option('filterRow.applyFilterText');
@@ -993,7 +994,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
       const onClickHandler = function () {
         that._applyFilterViewController.applyFilter();
       };
-      const toolbarItem = {
+      const toolbarItem: ToolbarItem = {
         widget: 'dxButton',
         options: {
           icon: 'apply-filter',

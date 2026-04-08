@@ -65,4 +65,4 @@ jobs:
 
       - name: Run unit tests
         working-directory: apps/demos
-        run: pnpx nx test
+        run: pnpm exec nx test
