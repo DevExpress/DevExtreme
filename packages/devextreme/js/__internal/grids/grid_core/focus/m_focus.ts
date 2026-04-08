@@ -478,7 +478,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
     }
     if (this.isCellFocusType()) {
       this.setRowFocusType();
-      this._focus(this._getCellElementFromTarget(eventArgs.originalEvent.target), true);
+      this._focus(this.getCellElementFromTarget(eventArgs.originalEvent.target), true);
 
       return true;
     }
