@@ -209,11 +209,11 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   private _updateCalendarValueAndCurrentDate(date: Date): void {
-    this._updateCurrentDate(date);
+    this.updateCurrentDate(date);
     this.calendar?.option('value', date);
   }
 
-  public _updateCurrentDate(date: Date): void {
+  public updateCurrentDate(date: Date): void {
     const { onCurrentDateChange } = this.option();
     onCurrentDateChange(date);
     this._callEvent('currentDate', date);
@@ -231,7 +231,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       focusStateEnabled,
       tabIndex,
       onValueChanged: async (e) => {
-        this._updateCurrentDate(e.value);
+        this.updateCurrentDate(e.value);
         await this.calendar?.hide();
       },
     });

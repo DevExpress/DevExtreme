@@ -81,7 +81,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
 
   private _createOverlayContent(): dxElementWrapper {
     const result = $('<div>').addClass(CALENDAR_CLASS);
-    this.calendar = this._createComponent(result, Calendar, this._getCalendarOptions());
+    this.calendar = this._createComponent(result, Calendar, this.getCalendarOptions());
 
     if (SchedulerCalendar._isMobileLayout()) {
       const scrollable = this._createScrollable(result);
@@ -115,7 +115,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     }
   }
 
-  private _getCalendarOptions(): CalendarProperties {
+  private getCalendarOptions(): CalendarProperties {
     const {
       value, min, max, firstDayOfWeek, focusStateEnabled, tabIndex, onValueChanged,
     } = this.option();
