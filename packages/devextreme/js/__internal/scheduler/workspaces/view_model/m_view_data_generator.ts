@@ -76,6 +76,7 @@ export class ViewDataGenerator {
     rowIndex: number,
     columnIndex: number,
     firstDayOfWeek: number,
+    cellCountInDay: number,
   ): number {
     const rotated = this.getVisibleDaysOfWeek(firstDayOfWeek);
     const visibleCount = rotated.length;
@@ -89,10 +90,11 @@ export class ViewDataGenerator {
         + ((targetDayOfWeek - firstDayOfWeek + 7) % 7);
       return actualDayOffset - naiveDayOffset;
     }
-    const week = Math.floor(columnIndex / visibleCount);
-    const idxInWeek = columnIndex % visibleCount;
+    const dayIndex = Math.floor(columnIndex / cellCountInDay);
+    const week = Math.floor(dayIndex / visibleCount);
+    const idxInWeek = dayIndex % visibleCount;
     const targetDayOfWeek = rotated[idxInWeek];
-    const naiveDayOffset = columnIndex;
+    const naiveDayOffset = dayIndex;
     const actualDayOffset = week * 7 + ((targetDayOfWeek - firstDayOfWeek + 7) % 7);
     return actualDayOffset - naiveDayOffset;
   }
@@ -582,6 +584,7 @@ export class ViewDataGenerator {
         rowIndex,
         columnIndex,
         this.getFirstDayOfWeek(firstDayOfWeek) ?? 0,
+        cellCountInDay,
       ) * toMs('day');
     } else {
       offsetByCount = 0;

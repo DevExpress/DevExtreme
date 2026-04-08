@@ -93,43 +93,56 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       rowIndex: number,
       columnIndex: number,
       firstDayOfWeek: number,
+      cellCountInDay: number,
     ): number => (g as unknown as {
-      getVisibleDayOffset: (r: number, c: number, firstDay: number) => number;
-    }).getVisibleDayOffset(rowIndex, columnIndex, firstDayOfWeek);
+      getVisibleDayOffset: (r: number, c: number, firstDay: number, cellCount: number) => number;
+    }).getVisibleDayOffset(rowIndex, columnIndex, firstDayOfWeek, cellCountInDay);
 
     it('zero offset for empty skippedDays', () => {
       gen.skippedDays = [];
-      expect(callGetVisibleDayOffset(gen, 0, 0, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 5, 0)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 0, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 5, 0, 1)).toBe(0);
     });
 
     it('week with [0,6], firstDayOfWeek=1 (Mon): col 0..4 → 0 offset, col 5 → +2', () => {
       gen.skippedDays = [0, 6];
       [0, 1, 2, 3, 4].forEach((col) => {
-        expect(callGetVisibleDayOffset(gen, 0, col, 1)).toBe(0);
+        expect(callGetVisibleDayOffset(gen, 0, col, 1, 1)).toBe(0);
       });
-      expect(callGetVisibleDayOffset(gen, 0, 5, 1)).toBe(2);
-      expect(callGetVisibleDayOffset(gen, 0, 9, 1)).toBe(2);
-      expect(callGetVisibleDayOffset(gen, 0, 10, 1)).toBe(4);
+      expect(callGetVisibleDayOffset(gen, 0, 5, 1, 1)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 0, 9, 1, 1)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 0, 10, 1, 1)).toBe(4);
     });
 
     it('week with [3] (skip Wed), firstDayOfWeek=0 (Sun): col 3 → +1 to skip Wed', () => {
       gen.skippedDays = [3];
-      expect(callGetVisibleDayOffset(gen, 0, 0, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 1, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 2, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 3, 0)).toBe(1);
-      expect(callGetVisibleDayOffset(gen, 0, 4, 0)).toBe(1);
-      expect(callGetVisibleDayOffset(gen, 0, 5, 0)).toBe(1);
+      expect(callGetVisibleDayOffset(gen, 0, 0, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 1, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 2, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 3, 0, 1)).toBe(1);
+      expect(callGetVisibleDayOffset(gen, 0, 4, 0, 1)).toBe(1);
+      expect(callGetVisibleDayOffset(gen, 0, 5, 0, 1)).toBe(1);
     });
 
     it('week with [1,3,5] (skip Mon, Wed, Fri), firstDayOfWeek=0', () => {
       gen.skippedDays = [1, 3, 5];
-      expect(callGetVisibleDayOffset(gen, 0, 0, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 1, 0)).toBe(1);
-      expect(callGetVisibleDayOffset(gen, 0, 2, 0)).toBe(2);
-      expect(callGetVisibleDayOffset(gen, 0, 3, 0)).toBe(3);
-      expect(callGetVisibleDayOffset(gen, 0, 4, 0)).toBe(3);
+      expect(callGetVisibleDayOffset(gen, 0, 0, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 1, 0, 1)).toBe(1);
+      expect(callGetVisibleDayOffset(gen, 0, 2, 0, 1)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 0, 3, 0, 1)).toBe(3);
+      expect(callGetVisibleDayOffset(gen, 0, 4, 0, 1)).toBe(3);
+    });
+
+    it('timeline-like layout with multiple cells in day uses day index', () => {
+      gen.skippedDays = [0, 6];
+      // 2 cells per day, first visible week day is Monday (firstDayOfWeek=1)
+      // Both cells of the first day must have the same offset.
+      expect(callGetVisibleDayOffset(gen, 0, 0, 1, 2)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 1, 1, 2)).toBe(0);
+      // The first cell of next visible day still has zero offset.
+      expect(callGetVisibleDayOffset(gen, 0, 2, 1, 2)).toBe(0);
+      // After 5 visible days (10 cells), the next day jumps over weekend (+2 days).
+      expect(callGetVisibleDayOffset(gen, 0, 10, 1, 2)).toBe(2);
     });
   });
 
@@ -141,35 +154,36 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       rowIndex: number,
       columnIndex: number,
       firstDayOfWeek: number,
+      cellCountInDay: number,
     ): number => (g as unknown as {
-      getVisibleDayOffset: (r: number, c: number, firstDay: number) => number;
-    }).getVisibleDayOffset(rowIndex, columnIndex, firstDayOfWeek);
+      getVisibleDayOffset: (r: number, c: number, firstDay: number, cellCount: number) => number;
+    }).getVisibleDayOffset(rowIndex, columnIndex, firstDayOfWeek, cellCountInDay);
 
     it('returns 0 for empty skippedDays', () => {
       gen.skippedDays = [];
-      expect(callGetVisibleDayOffset(gen, 0, 0, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 3, 5, 0)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 0, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 3, 5, 0, 1)).toBe(0);
     });
 
     it('month with [0,6], firstDayOfWeek=1: row=1 col=0 → +2 (jumps over Sat+Sun)', () => {
       gen.skippedDays = [0, 6];
-      expect(callGetVisibleDayOffset(gen, 0, 0, 1)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 4, 1)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 1, 0, 1)).toBe(2);
-      expect(callGetVisibleDayOffset(gen, 1, 4, 1)).toBe(2);
-      expect(callGetVisibleDayOffset(gen, 2, 0, 1)).toBe(4);
+      expect(callGetVisibleDayOffset(gen, 0, 0, 1, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 4, 1, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 1, 0, 1, 1)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 1, 4, 1, 1)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 2, 0, 1, 1)).toBe(4);
     });
 
     it('month with [3] (skip Wed), firstDayOfWeek=0: visible days = Sun,Mon,Tue,Thu,Fri,Sat', () => {
       gen.skippedDays = [3];
-      expect(callGetVisibleDayOffset(gen, 0, 0, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 2, 0)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 3, 0)).toBe(1);
-      expect(callGetVisibleDayOffset(gen, 0, 5, 0)).toBe(1);
-      expect(callGetVisibleDayOffset(gen, 1, 0, 0)).toBe(1);
-      expect(callGetVisibleDayOffset(gen, 1, 3, 0)).toBe(2);
-      expect(callGetVisibleDayOffset(gen, 1, 5, 0)).toBe(2);
-      expect(callGetVisibleDayOffset(gen, 2, 0, 0)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 0, 0, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 2, 0, 1)).toBe(0);
+      expect(callGetVisibleDayOffset(gen, 0, 3, 0, 1)).toBe(1);
+      expect(callGetVisibleDayOffset(gen, 0, 5, 0, 1)).toBe(1);
+      expect(callGetVisibleDayOffset(gen, 1, 0, 0, 1)).toBe(1);
+      expect(callGetVisibleDayOffset(gen, 1, 3, 0, 1)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 1, 5, 0, 1)).toBe(2);
+      expect(callGetVisibleDayOffset(gen, 2, 0, 0, 1)).toBe(2);
     });
   });
 
