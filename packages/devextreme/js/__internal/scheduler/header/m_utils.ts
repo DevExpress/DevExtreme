@@ -92,7 +92,7 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
       return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
     case 'week': {
       const weekStart = getPeriodStart(date, step, false, firstDayOfWeek) as Date;
-      if (skippedDays && skippedDays.length > 0) {
+      if (skippedDays.length > 0) {
         return getFirstVisibleDate(weekStart, skippedDays, nextDay);
       }
       return weekStart;
@@ -110,11 +110,11 @@ const getPeriodEndDate = (
   currentPeriodStartDate: Date,
   step: Step,
   agendaDuration: number,
-  skippedDays?: number[],
+  skippedDays: number[],
 ): Date => {
   const calculators: Record<Step, () => Date> = {
     day: () => nextDay(currentPeriodStartDate),
-    week: () => (skippedDays && skippedDays.length > 0
+    week: () => (skippedDays.length > 0
       ? getDateAfterVisibleWeek(currentPeriodStartDate, skippedDays, nextDay)
       : nextWeek(currentPeriodStartDate)),
     month: () => nextMonth(currentPeriodStartDate),
@@ -128,7 +128,7 @@ const getPeriodEndDate = (
 const getNextPeriodStartDate = (
   currentPeriodEndDate: Date,
   step: Step,
-  skippedDays?: number[],
+  skippedDays: number[],
 ): Date => {
   let date = addMS(currentPeriodEndDate);
 
@@ -136,7 +136,7 @@ const getNextPeriodStartDate = (
     while (isWeekend(date)) {
       date = nextDay(date);
     }
-  } else if (step === 'week' && skippedDays && skippedDays.length > 0) {
+  } else if (step === 'week' && skippedDays.length > 0) {
     date = getFirstVisibleDate(date, skippedDays, nextDay);
   }
 

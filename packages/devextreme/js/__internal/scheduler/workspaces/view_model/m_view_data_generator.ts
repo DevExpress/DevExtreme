@@ -30,6 +30,7 @@ import type {
 } from './m_types';
 
 const toMs = dateUtils.dateToMilliseconds;
+type SkippedDaysAnchorKind = 'firstDayOfWeek' | 'startViewDate';
 
 export class ViewDataGenerator {
   protected baseDaysInInterval = 1;
@@ -72,21 +73,28 @@ export class ViewDataGenerator {
     return getVisibleDaysOfWeek(firstDayOfWeek, this.skippedDays);
   }
 
-  protected getSkippedDaysAnchorDay(
+  protected getSkippedDaysAnchorKind(): SkippedDaysAnchorKind {
+    return 'firstDayOfWeek';
+  }
+
+  private getSkippedDaysAnchorDay(
     firstDayOfWeekOption: number | undefined,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     startViewDate: Date,
   ): number {
+    if (this.getSkippedDaysAnchorKind() === 'startViewDate') {
+      return startViewDate.getDay();
+    }
+
     return this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
   }
 
   protected getVisibleDayOffset(
     rowIndex: number,
     columnIndex: number,
-    firstDayOfWeek: number,
+    anchorDay: number,
     cellCountInDay: number,
   ): number {
-    const rotated = this.getVisibleDaysOfWeek(firstDayOfWeek);
+    const rotated = this.getVisibleDaysOfWeek(anchorDay);
     const visibleCount = rotated.length;
     if (visibleCount === 0) {
       return 0;
@@ -95,7 +103,7 @@ export class ViewDataGenerator {
       const targetDayOfWeek = rotated[columnIndex];
       const naiveDayOffset = rowIndex * visibleCount + columnIndex;
       const actualDayOffset = rowIndex * 7
-        + ((targetDayOfWeek - firstDayOfWeek + 7) % 7);
+        + ((targetDayOfWeek - anchorDay + 7) % 7);
       return actualDayOffset - naiveDayOffset;
     }
     const dayIndex = Math.floor(columnIndex / cellCountInDay);
@@ -103,7 +111,7 @@ export class ViewDataGenerator {
     const idxInWeek = dayIndex % visibleCount;
     const targetDayOfWeek = rotated[idxInWeek];
     const naiveDayOffset = dayIndex;
-    const actualDayOffset = week * 7 + ((targetDayOfWeek - firstDayOfWeek + 7) % 7);
+    const actualDayOffset = week * 7 + ((targetDayOfWeek - anchorDay + 7) % 7);
     return actualDayOffset - naiveDayOffset;
   }
 

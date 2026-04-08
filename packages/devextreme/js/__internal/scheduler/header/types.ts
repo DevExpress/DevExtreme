@@ -30,7 +30,7 @@ export interface IntervalOptions {
   firstDayOfWeek?: number;
   intervalCount: number;
   agendaDuration?: number;
-  skippedDays?: number[];
+  skippedDays: number[];
 }
 
 export interface HeaderCalendarOptions {
