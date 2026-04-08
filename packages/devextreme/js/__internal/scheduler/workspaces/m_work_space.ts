@@ -204,7 +204,7 @@ type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
-  skippedDays?: number[];
+  skippedDays: number[];
 };
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;
@@ -2293,6 +2293,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       groupOrientation: 'horizontal',
       selectedCellData: [],
       groupByDate: false,
+      skippedDays: [],
       scrolling: {
         mode: 'standard',
       },
