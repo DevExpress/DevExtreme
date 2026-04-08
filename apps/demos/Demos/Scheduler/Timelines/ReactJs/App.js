@@ -7,7 +7,6 @@ const currentDate = new Date(2021, 1, 2);
 const views = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 const groups = ['priority'];
 const snapToCellsModeItems = ['auto', 'always', 'never'];
-
 const App = () => {
   const [snapToCellsMode, setSnapToCellsMode] = useState('always');
   const onSnapToCellsModeChanged = useCallback((e) => {
