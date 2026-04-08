@@ -4980,4 +4980,86 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 10, 'scroll top is not changed');
     });
+
+    // T1310557
+    QUnit.testInActiveWindow('Browser should not scroll back to the grid when a focused cell is updated or rerendered', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: new ArrayStore({
+                    key: 'id',
+                    data: [{ id: 1, name: 'test1' }],
+                }),
+                pushAggregationTimeout: 0,
+            },
+        });
+        $('body').css('height', 2000);
+        window.scrollTo(0, 0);
+        this.clock.tick(10);
+
+        const keyboardController = dataGrid.getController('keyboardNavigation');
+        const $firstCell = $(dataGrid.getCellElement(0, 0));
+        const scrollPosition = 300;
+
+        // assert
+        assert.strictEqual(window.pageYOffset, 0, 'document scroll is at the top');
+
+        // act
+        $firstCell.trigger(CLICK_EVENT);
+        this.clock.tick(10);
+
+        keyboardController.keyDownHandler({
+            key: 'Tab',
+            keyName: 'tab',
+            originalEvent: $.Event('keydown', { target: $firstCell.get(0) }),
+        });
+        this.clock.tick(10);
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'second cell is focused');
+
+        // act
+        window.scrollTo(0, scrollPosition);
+
+        // assert
+        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is changed');
+
+        // act
+        dataGrid.getDataSource().store().push([{ type: 'update', key: 1, data: { name: 'updated' } }]);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'updated', 'second cell text is updated');
+        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after push update');
+
+        // act
+        dataGrid.refresh();
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after refresh');
+
+        // act
+        dataGrid.repaint();
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after repaint');
+
+        // act
+        keyboardController.keyDownHandler({
+            key: 'ArrowLeft',
+            keyName: 'leftArrow',
+            originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 1)).get(0) }),
+        });
+        this.clock.tick(10);
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'first cell is focused');
+        assert.strictEqual(window.pageYOffset, 0, 'document scroll is changed after keyboard navigation');
+
+        // cleanup
+        $('body').css('height', '');
+        window.scrollTo(0, 0);
+    });
 });
