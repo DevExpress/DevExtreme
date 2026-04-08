@@ -26591,9 +26591,9 @@ declare module DevExpress.ui {
      */
     groups?: Array<string>;
     /**
-     * [descr:dxSchedulerOptions.hiddenWeekDays]
+     * [descr:dxSchedulerOptions.hiddenDays]
      */
-    hiddenWeekDays?: Array<number>;
+    hiddenDays?: Array<number>;
     /**
      * [descr:dxSchedulerOptions.indicatorUpdateInterval]
      */
@@ -26926,9 +26926,9 @@ declare module DevExpress.ui {
            */
           groups?: Array<string>;
           /**
-           * [descr:dxSchedulerOptions.views.hiddenWeekDays]
+           * [descr:dxSchedulerOptions.views.hiddenDays]
            */
-          hiddenWeekDays?: Array<number>;
+          hiddenDays?: Array<number>;
           /**
            * [descr:dxSchedulerOptions.views.intervalCount]
            */
