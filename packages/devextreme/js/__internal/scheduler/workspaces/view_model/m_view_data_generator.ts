@@ -72,6 +72,14 @@ export class ViewDataGenerator {
     return getVisibleDaysOfWeek(firstDayOfWeek, this.skippedDays);
   }
 
+  protected getSkippedDaysAnchorDay(
+    firstDayOfWeekOption: number | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    startViewDate: Date,
+  ): number {
+    return this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
+  }
+
   protected getVisibleDayOffset(
     rowIndex: number,
     columnIndex: number,
@@ -583,7 +591,7 @@ export class ViewDataGenerator {
       offsetByCount = this.getVisibleDayOffset(
         rowIndex,
         columnIndex,
-        this.getFirstDayOfWeek(firstDayOfWeek) ?? 0,
+        this.getSkippedDaysAnchorDay(firstDayOfWeek, startViewDate),
         cellCountInDay,
       ) * toMs('day');
     } else {

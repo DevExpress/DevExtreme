@@ -3,6 +3,7 @@ import { describe, expect, it } from '@jest/globals';
 import type { ViewType } from '../../types';
 import { ViewDataGenerator } from './m_view_data_generator';
 import { ViewDataGeneratorMonth } from './m_view_data_generator_month';
+import { ViewDataGeneratorTimelineMonth } from './m_view_data_generator_timeline_month';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
 import { ViewDataGeneratorWorkWeek } from './m_view_data_generator_work_week';
 
@@ -204,6 +205,31 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       const gen = new ViewDataGeneratorMonth('month' as ViewType);
       gen.skippedDays = [3];
       expect(gen.getCellCount()).toBe(6);
+    });
+  });
+
+  describe('TimelineMonth hiddenWeekDays support', () => {
+    it('maps next visible column to Monday when start is Friday and weekends are skipped', () => {
+      const gen = new ViewDataGeneratorTimelineMonth('timelineMonth' as ViewType);
+      gen.skippedDays = [0, 6];
+
+      const startViewDate = new Date(2026, 4, 1, 0, 0); // Friday
+      const options = {
+        startViewDate,
+        startDayHour: 0,
+        endDayHour: 24,
+        hoursInterval: 1,
+        interval: 24 * 60 * 60 * 1000,
+        firstDayOfWeek: 1, // Monday
+        intervalCount: 1,
+        viewOffset: 0,
+        currentDate: new Date(2026, 4, 15),
+        viewType: 'timelineMonth' as ViewType,
+      };
+
+      const date = gen.getDateByCellIndices(options, 0, 1);
+      expect(date.getDay()).toBe(1);
+      expect(date.getDate()).toBe(4);
     });
   });
 });
