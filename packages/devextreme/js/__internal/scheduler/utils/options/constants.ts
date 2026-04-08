@@ -55,7 +55,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   selectedCellData: [],
   groupByDate: false,
   // @ts-expect-error
-  hiddenDays: undefined,
+  hiddenWeekDays: undefined,
   onAppointmentRendered: undefined,
   onAppointmentClick: undefined,
   onAppointmentDblClick: undefined,

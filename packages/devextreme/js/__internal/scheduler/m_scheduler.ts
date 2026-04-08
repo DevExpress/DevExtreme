@@ -314,7 +314,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.updateOption('header', 'views', this.views);
         }
         break;
-      case 'hiddenDays':
+      case 'hiddenWeekDays':
         this.repaint();
         break;
       case 'useDropDownViewSwitcher':

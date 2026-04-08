@@ -69,7 +69,7 @@ const normalizeView = (
     const merged = extend({}, viewDefault, view) as NormalizedView;
     merged.skippedDays = resolveSkippedDays(
       viewType,
-      (view as { hiddenDays?: unknown }).hiddenDays,
+      (view as { hiddenWeekDays?: unknown }).hiddenWeekDays,
       globalHiddenDays,
       viewDefault.skippedDays,
     );
