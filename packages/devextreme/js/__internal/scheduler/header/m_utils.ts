@@ -7,6 +7,10 @@ import type { BaseFormat } from '@ts/core/localization/date';
 import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
 import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
+import {
+  getDateAfterVisibleWeek,
+  getFirstVisibleDate,
+} from '@ts/scheduler/utils/skipped_days';
 
 import type { Direction } from './constants';
 
@@ -48,22 +52,12 @@ const nextMonth = (date: Date): Date => {
 
 const isWeekend = (date: Date): boolean => [SATURDAY_INDEX, SUNDAY_INDEX].includes(date.getDay());
 
-const isSkippedDay = (date: Date, skippedDays: number[]): boolean => skippedDays.includes(date.getDay());
-
 const getWorkWeekStart = (firstDayOfWeek: Date): Date => {
   let date = new Date(firstDayOfWeek);
   while (isWeekend(date)) {
     date = nextDay(date);
   }
 
-  return date;
-};
-
-const getFirstVisibleDay = (start: Date, skippedDays: number[]): Date => {
-  let date = new Date(start);
-  while (isSkippedDay(date, skippedDays)) {
-    date = nextDay(date);
-  }
   return date;
 };
 
@@ -79,22 +73,6 @@ const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
     date = nextDay(date);
   }
 
-  return date;
-};
-
-const getDateAfterVisibleWeek = (start: Date, skippedDays: number[]): Date => {
-  const visibleCount = 7 - skippedDays.length;
-  if (visibleCount <= 0) {
-    return new Date(start);
-  }
-  let date = new Date(start);
-  let visited = 0;
-  while (visited < visibleCount) {
-    if (!isSkippedDay(date, skippedDays)) {
-      visited += 1;
-    }
-    date = nextDay(date);
-  }
   return date;
 };
 
@@ -115,7 +93,7 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
     case 'week': {
       const weekStart = getPeriodStart(date, step, false, firstDayOfWeek) as Date;
       if (skippedDays && skippedDays.length > 0) {
-        return getFirstVisibleDay(weekStart, skippedDays);
+        return getFirstVisibleDate(weekStart, skippedDays, nextDay);
       }
       return weekStart;
     }
@@ -137,7 +115,7 @@ const getPeriodEndDate = (
   const calculators: Record<Step, () => Date> = {
     day: () => nextDay(currentPeriodStartDate),
     week: () => (skippedDays && skippedDays.length > 0
-      ? getDateAfterVisibleWeek(currentPeriodStartDate, skippedDays)
+      ? getDateAfterVisibleWeek(currentPeriodStartDate, skippedDays, nextDay)
       : nextWeek(currentPeriodStartDate)),
     month: () => nextMonth(currentPeriodStartDate),
     workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate),
@@ -159,9 +137,7 @@ const getNextPeriodStartDate = (
       date = nextDay(date);
     }
   } else if (step === 'week' && skippedDays && skippedDays.length > 0) {
-    while (isSkippedDay(date, skippedDays)) {
-      date = nextDay(date);
-    }
+    date = getFirstVisibleDate(date, skippedDays, nextDay);
   }
 
   return date;

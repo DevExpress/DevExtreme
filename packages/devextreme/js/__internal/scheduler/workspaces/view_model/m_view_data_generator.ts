@@ -18,6 +18,10 @@ import {
 import type { ViewDataMap, ViewType } from '../../types';
 import { VIEWS } from '../../utils/options/constants_view';
 import { getAllGroupValues } from '../../utils/resource_manager/group_utils';
+import {
+  getVisibleDaysOfWeek,
+  isDateSkipped,
+} from '../../utils/skipped_days';
 import type {
   ViewCellDataSimple,
   ViewCellGeneratedData,
@@ -65,14 +69,7 @@ export class ViewDataGenerator {
   }
 
   public getVisibleDaysOfWeek(firstDayOfWeek: number): number[] {
-    const rotated: number[] = [];
-    for (let count = 0; count < 7; count += 1) {
-      const dayOfWeek = (firstDayOfWeek + count) % 7;
-      if (!this.skippedDays.includes(dayOfWeek)) {
-        rotated.push(dayOfWeek);
-      }
-    }
-    return rotated;
+    return getVisibleDaysOfWeek(firstDayOfWeek, this.skippedDays);
   }
 
   protected getVisibleDayOffset(
@@ -101,7 +98,7 @@ export class ViewDataGenerator {
   }
 
   public isSkippedDate(date: Date): boolean {
-    return this.skippedDays.includes(date.getDay());
+    return isDateSkipped(date, this.skippedDays);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
