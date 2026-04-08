@@ -18,7 +18,7 @@ const VIEWS_WITH_BUILTIN_SKIPPED: ReadonlySet<ViewType> = new Set<ViewType>([
 ]);
 
 const normalizeHiddenWeekDays = (
-  days: readonly unknown[] | undefined,
+  days: unknown,
 ): number[] | undefined => {
   if (!Array.isArray(days)) {
     return undefined;
@@ -39,7 +39,7 @@ const resolveSkippedDays = (
   globalHiddenWeekDays: number[] | undefined,
   viewDefault: number[],
 ): number[] => {
-  const perView = normalizeHiddenWeekDays(perViewHiddenWeekDays as readonly unknown[] | undefined);
+  const perView = normalizeHiddenWeekDays(perViewHiddenWeekDays);
   if (perView !== undefined) {
     return perView;
   }
@@ -88,7 +88,7 @@ const normalizeView = (
   if (skippedDays === defaultView.skippedDays) {
     return defaultView;
   }
-  return { ...defaultView, skippedDays } as NormalizedView;
+  return { ...defaultView, skippedDays };
 };
 
 export const getViews = (

@@ -130,7 +130,7 @@ export class ViewDataGenerator {
       hoursInterval,
     } = options;
 
-    this.skippedDays = ((options as any)?.skippedDays as number[] | undefined) ?? [];
+    this.skippedDays = options.skippedDays ?? [];
     this.setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
 

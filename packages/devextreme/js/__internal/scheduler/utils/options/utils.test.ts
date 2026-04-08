@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import errors from '@js/ui/widget/ui.errors';
 
+import type { RawViewType, ViewType } from './types';
 import {
   getCurrentView,
   getViewOption,
@@ -14,11 +15,13 @@ import {
 describe('views utils', () => {
   describe('getViews', () => {
     it('should filter view with incorrect name', () => {
-      expect(getViews(['unknown'] as any)).toEqual([]);
+      // @ts-expect-error intentionally pass an unsupported view name
+      expect(getViews(['unknown'])).toEqual([]);
     });
 
     it('should filter view with incorrect type', () => {
-      expect(getViews([{ type: 'unknown' }] as any)).toEqual([]);
+      // @ts-expect-error intentionally pass an unsupported view type
+      expect(getViews([{ type: 'unknown' }])).toEqual([]);
     });
 
     it('should not override view options by default options', () => {
@@ -29,7 +32,7 @@ describe('views utils', () => {
         name: 'MyDay',
         groups: ['a', 'b'],
       };
-      expect(getViews([input] as any)).toEqual([{ ...input, skippedDays: [] }]);
+      expect(getViews([input as RawViewType])).toEqual([{ ...input, skippedDays: [] }]);
     });
 
     it.each([
@@ -111,7 +114,7 @@ describe('views utils', () => {
         type: 'agenda',
       },
     }])('should return normalized $input.type view', ({ input, output }) => {
-      expect(getViews([input] as any)).toEqual([{ ...output, skippedDays: [] }]);
+      expect(getViews([input as RawViewType])).toEqual([{ ...output, skippedDays: [] }]);
     });
 
     it.each([
@@ -131,18 +134,18 @@ describe('views utils', () => {
         },
       },
     ])('should return normalized $input.type view', ({ input, output }) => {
-      expect(getViews([input] as any)).toEqual([{ ...output, skippedDays: [0, 6] }]);
+      expect(getViews([input as RawViewType])).toEqual([{ ...output, skippedDays: [0, 6] }]);
     });
 
     describe('hiddenWeekDays', () => {
       const getSkipped = (
-        views: any[],
-        viewType: string,
+        views: RawViewType[],
+        viewType: ViewType,
         globalHiddenWeekDays?: number[],
       ): number[] => {
         const result = getViews(views, globalHiddenWeekDays);
         const view = result.find((v) => v.type === viewType);
-        return (view as any).skippedDays;
+        return view?.skippedDays ?? [];
       };
 
       it('per-view hiddenWeekDays on week → uses per-view value', () => {
@@ -195,7 +198,10 @@ describe('views utils', () => {
 
       it('per-view hiddenWeekDays filters out invalid values', () => {
         expect(
-          getSkipped([{ type: 'week', hiddenWeekDays: [7, -1, 1.5, 'x', null, 3] as any }], 'week'),
+          getSkipped([
+            // @ts-expect-error intentionally pass invalid values to verify runtime filtering
+            { type: 'week', hiddenWeekDays: [7, -1, 1.5, 'x', null, 3] },
+          ], 'week'),
         ).toEqual([3]);
       });
 
@@ -273,11 +279,16 @@ describe('views utils', () => {
     });
 
     it('should return first known view if wrong current view requested', () => {
-      expect(getCurrentView('blabla', [{
-        type: 'blabla',
-        name: 'blabla',
-        unknown: 'incorrect view',
-      } as any])).toEqual({
+      expect(getCurrentView(
+        'blabla',
+        [
+          {
+            type: 'blabla',
+            name: 'blabla',
+            unknown: 'incorrect view',
+          } as unknown as RawViewType,
+        ],
+      )).toEqual({
         groupOrientation: 'horizontal',
         intervalCount: 1,
         type: 'day',

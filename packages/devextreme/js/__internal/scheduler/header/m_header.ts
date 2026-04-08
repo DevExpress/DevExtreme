@@ -66,7 +66,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       firstDayOfWeek,
       intervalCount: currentView.intervalCount,
       agendaDuration: currentView.agendaDuration,
-      skippedDays: (currentView as { skippedDays?: number[] }).skippedDays,
+      skippedDays: currentView.skippedDays,
     };
   }
 

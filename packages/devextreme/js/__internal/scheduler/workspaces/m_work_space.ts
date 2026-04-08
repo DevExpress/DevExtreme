@@ -204,6 +204,7 @@ type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
+  skippedDays?: number[];
 };
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;
@@ -908,7 +909,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startDate: this.option('startDate'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
       showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
-      skippedDays: (this.option('skippedDays' as any) as number[] | undefined) ?? [],
+      skippedDays: this.option('skippedDays'),
 
       ...this.virtualScrollingDispatcher.getRenderState(),
     };
