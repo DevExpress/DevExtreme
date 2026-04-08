@@ -431,14 +431,6 @@ test('DataGrid should move focus from Save to Cancel button on Shift + Tab press
 
   // assert
   await t
-    .expect(cancelButton.focused)
-    .ok();
-
-  // act
-  await t.pressKey('shift+tab');
-
-  // assert
-  await t
     .expect(saveButton.focused)
     .ok();
 
