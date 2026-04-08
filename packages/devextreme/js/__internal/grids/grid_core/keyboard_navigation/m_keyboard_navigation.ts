@@ -472,7 +472,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (hasEditingOptions && eventTarget && !originalHandlerRequired) {
       if (isEditing) {
         // In editing mode: navigate to the next editable cell.
-        // If the handler returns false, navigation is fully handled — exit early.
+        // If the handler returns false, stop grid handling and fall back to native Tab behavior.
         if (!this.editingCellTabHandler(event, direction)) {
           return;
         }
@@ -1078,7 +1078,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $event: KeyboardEvent = eventArgs.originalEvent;
     let eventTarget = $event.target as Element;
     let elementType: NavigationElementType = this._getElementType(eventTarget);
-    let $cell: dxElementWrapper | undefined = this.getCellElementFromTarget(eventTarget);
+    const $cell: dxElementWrapper = this.getCellElementFromTarget(eventTarget);
 
     // Non-editor cells with intermediate interactive elements use native tab
     if (!isEditorCell(this, $cell) && this.isOriginalTabHandlerRequired($cell, eventArgs)) {
@@ -1105,16 +1105,19 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     // Handle row transition — fires focusedRowChanging event
-    $cell = this.checkNewLineTransition($event, nextCellInfo.$cell);
+    const $newFocusedCell: dxElementWrapper | undefined = this.checkNewLineTransition(
+      $event,
+      nextCellInfo.$cell,
+    );
 
-    if (!$cell) {
+    if (!$newFocusedCell) {
       return false;
     }
 
-    this._focusCell($cell, !nextCellInfo.isHighlighted);
+    this._focusCell($newFocusedCell, !nextCellInfo.isHighlighted);
 
-    if (!isEditorCell(this, $cell)) {
-      this._focusInteractiveElement($cell, eventArgs.shift);
+    if (!isEditorCell(this, $newFocusedCell)) {
+      this._focusInteractiveElement($newFocusedCell, eventArgs.shift);
     }
 
     return false;
