@@ -899,62 +899,19 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     event: KeyDownEvent,
   ): DeferredObj<void> {
     const columnIndex = this.getColumnIndex();
-    let nextColumnIndex;
-    let horizontalScrollPosition = 0;
-    let needToScroll = false;
+    const nextColumnIndex = this.getNextColumnIndex(direction, columnIndex);
 
-    // eslint-disable-next-line default-case
-    switch (direction) {
-      case 'next':
-      case 'nextInRow': {
-        const columnsCount = this._getVisibleColumnCount();
-        nextColumnIndex = columnIndex + 1;
-        horizontalScrollPosition = this.option('rtlEnabled')
-          ? this._getMaxHorizontalOffset()
-          : 0;
-        if (direction === 'next') {
-          needToScroll = columnsCount === nextColumnIndex
-            || (this._isFixedColumn(columnIndex)
-              && !this._isColumnRendered(nextColumnIndex));
-        } else {
-          needToScroll = columnsCount > nextColumnIndex
-            && this._isFixedColumn(columnIndex)
-            && !this._isColumnRendered(nextColumnIndex);
-        }
-        break;
-      }
-      case 'previous':
-      case 'previousInRow': {
-        nextColumnIndex = columnIndex - 1;
-        horizontalScrollPosition = this.option('rtlEnabled')
-          ? 0
-          : this._getMaxHorizontalOffset();
-        if (direction === 'previous') {
-          const columnIndexOffset = this._columnsController.getColumnIndexOffset();
-          const leftEdgePosition = nextColumnIndex < 0 && columnIndexOffset === 0;
-          needToScroll = leftEdgePosition
-            || (this._isFixedColumn(columnIndex)
-              && !this._isColumnRendered(nextColumnIndex));
-        } else {
-          needToScroll = nextColumnIndex >= 0
-            && this._isFixedColumn(columnIndex)
-            && !this._isColumnRendered(nextColumnIndex);
-        }
-        break;
-      }
-    }
+    // Strategy 1: scroll to the grid's edge (beginning or end)
+    if (this.needScrollToEdge(direction, columnIndex, nextColumnIndex)) {
+      const scrollPosition = this.getEdgeScrollPosition(direction);
 
-    if (needToScroll) {
       event.originalEvent.preventDefault();
 
-      return this.scrollLeft(horizontalScrollPosition);
+      return this.scrollLeft(scrollPosition);
     }
 
-    if (
-      isDefined(nextColumnIndex)
-      && isDefined(direction)
-      && this._isColumnVirtual(nextColumnIndex)
-    ) {
+    // Strategy 2: scroll to reveal the next virtual column
+    if (isDefined(nextColumnIndex) && this._isColumnVirtual(nextColumnIndex)) {
       event.originalEvent.preventDefault();
 
       return this.scrollToNextCell(null, direction);
@@ -962,6 +919,54 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     // @ts-expect-error
     return Deferred().resolve().promise();
+  }
+
+  private getNextColumnIndex(
+    direction: NavigationDirection,
+    columnIndex: number,
+  ): number {
+    return direction === 'next' || direction === 'nextInRow'
+      ? columnIndex + 1
+      : columnIndex - 1;
+  }
+
+  private getEdgeScrollPosition(direction: NavigationDirection): number {
+    const isForward = direction === 'next' || direction === 'nextInRow';
+
+    if (this.option('rtlEnabled')) {
+      return isForward ? this._getMaxHorizontalOffset() : 0;
+    }
+
+    return isForward ? 0 : this._getMaxHorizontalOffset();
+  }
+
+  private needScrollToEdge(
+    direction: NavigationDirection,
+    columnIndex: number,
+    nextColumnIndex: number,
+  ): boolean {
+    const isFixedColumn = this._isFixedColumn(columnIndex);
+    const isNextColumnRendered = this._isColumnRendered(nextColumnIndex);
+    const needScrollPastFixed = isFixedColumn && !isNextColumnRendered;
+
+    switch (direction) {
+      case 'next': {
+        const isLastColumn = this._getVisibleColumnCount() === nextColumnIndex;
+        return isLastColumn || needScrollPastFixed;
+      }
+      case 'nextInRow':
+        return this._getVisibleColumnCount() > nextColumnIndex
+          && needScrollPastFixed;
+      case 'previous': {
+        const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+        const isAtLeftEdge = nextColumnIndex < 0 && columnIndexOffset === 0;
+        return isAtLeftEdge || needScrollPastFixed;
+      }
+      case 'previousInRow':
+        return nextColumnIndex >= 0 && needScrollPastFixed;
+      default:
+        return false;
+    }
   }
 
   /**
