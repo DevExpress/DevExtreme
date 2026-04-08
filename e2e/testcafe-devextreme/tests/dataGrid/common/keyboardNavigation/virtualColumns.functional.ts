@@ -321,3 +321,145 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
     }));
   });
 });
+
+test('DataGrid should move focus from Save to Cancel button on Tab press in row editing mode with virtual columns (T1326106)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const commandCell = dataGrid.getDataRow(0).getCommandCell(5);
+
+  // act - click Edit button on first row
+  await t.click(commandCell.getButton(0));
+
+  const saveButton = commandCell.getButton(0);
+  const cancelButton = commandCell.getButton(1);
+
+  // assert
+  await t
+    .expect(saveButton.exists)
+    .ok()
+    .expect(cancelButton.exists)
+    .ok();
+
+  const lastDataCell = dataGrid.getDataCell(0, 4);
+
+  // act
+  await t.click(lastDataCell.element);
+
+  // assert
+  await t
+    .expect(lastDataCell.isFocused)
+    .ok();
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  await t
+    .expect(saveButton.focused)
+    .ok();
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  await t
+    .expect(cancelButton.focused)
+    .ok();
+
+  // act
+  await t.pressKey('tab');
+
+  // assert - First cell of the second row should be focused
+  await t
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  width: 800,
+  dataSource: generateData(10, 5),
+  columnWidth: 100,
+  keyExpr: 'field1',
+  editing: {
+    mode: 'row',
+    allowUpdating: true,
+    allowDeleting: true,
+  },
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+}));
+
+test('DataGrid should move focus from Save to Cancel button on Shift + Tab press in row editing mode with virtual columns (T1326106)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const commandCell = dataGrid.getDataRow(1).getCommandCell(5);
+
+  // act - click Edit button on second row
+  await t.click(commandCell.getButton(0));
+
+  const saveButton = commandCell.getButton(0);
+  const cancelButton = commandCell.getButton(1);
+
+  // assert
+  await t
+    .expect(saveButton.exists)
+    .ok()
+    .expect(cancelButton.exists)
+    .ok();
+
+  const firstDataCell = dataGrid.getDataCell(1, 0);
+
+  // act
+  await t.click(firstDataCell.element);
+
+  // assert
+  await t
+    .expect(firstDataCell.isFocused)
+    .ok();
+
+  // act
+  await t.pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(cancelButton.focused)
+    .ok();
+
+  // act
+  await t.pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(saveButton.focused)
+    .ok();
+
+  // act
+  await t.pressKey('shift+tab');
+
+  // assert - Last cell of the first row should be focused
+  await t
+    .expect(dataGrid.getDataCell(0, 4).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  width: 800,
+  dataSource: generateData(10, 5),
+  columnWidth: 100,
+  keyExpr: 'field1',
+  editing: {
+    mode: 'row',
+    allowUpdating: true,
+    allowDeleting: true,
+  },
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+}));

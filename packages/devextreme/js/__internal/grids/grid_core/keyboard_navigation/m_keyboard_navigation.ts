@@ -817,14 +817,29 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     const tabOptions = { hasEditingOptions, isLastValidCell, isOriginalHandlerRequired };
 
-    // Virtual columns require horizontal scrolling before executing tab navigation
-    if (canHandleNavigation && this._isVirtualColumnRender()) {
+    // For virtual columns, scroll to reveal the next column before navigating.
+    // Skip scrolling when focus should cycle through interactive elements within the current cell.
+    if (canHandleNavigation && this.needVirtualColumnScroll(eventTarget, event)) {
       this._processVirtualHorizontalPosition(direction, event)
         .done(() => this.executeTabKey(event, tabOptions));
       return;
     }
 
     this.executeTabKey(event, tabOptions);
+  }
+
+  /**
+   * Determines whether horizontal scrolling is needed for virtual column tab navigation.
+   * Returns false when focus should cycle through interactive elements within the current cell.
+   */
+  private needVirtualColumnScroll(eventTarget: Element, event: KeyDownEvent): boolean {
+    if (!this._isVirtualColumnRender()) {
+      return false;
+    }
+
+    const $cell = this.getCellElementFromTarget(eventTarget);
+
+    return !this.isOriginalTabHandlerRequired($cell, event);
   }
 
   /**
