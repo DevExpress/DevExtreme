@@ -30,16 +30,14 @@
       }}</div>
       <div class="chat-suggestion-cards">
         @for (card of suggestionCards; track card.title) {
-          <button
-            type="button"
-            class="chat-suggestion-card"
-            (click)="onSuggestionClick(card.prompt)"
-          >
-            <div class="chat-suggestion-card-title">{{ card.title }}</div>
-            <div class="chat-suggestion-card-prompt">{{
-              card.description
-            }}</div>
-          </button>
+        <button
+          type="button"
+          class="chat-suggestion-card"
+          (click)="onSuggestionClick(card.prompt)"
+        >
+          <div class="chat-suggestion-card-title">{{ card.title }}</div>
+          <div class="chat-suggestion-card-prompt">{{ card.description }}</div>
+        </button>
         }
       </div>
     </div>
