@@ -705,12 +705,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     groups?: Array<string>;
     /**
      * @docid
-     * @default undefined
-     * @public
-     */
-    hiddenWeekDays?: Array<number>;
-    /**
-     * @docid
      * @default 300000
      * @public
      */
@@ -1107,11 +1101,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default []
        */
       groups?: Array<string>;
-      /**
-       * @docid
-       * @default undefined
-       */
-      hiddenWeekDays?: Array<number>;
       /**
        * @docid
        * @default 1
