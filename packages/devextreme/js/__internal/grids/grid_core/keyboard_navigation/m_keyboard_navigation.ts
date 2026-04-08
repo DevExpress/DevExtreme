@@ -1095,10 +1095,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     if (this.isRowFocusType()) {
       this.setCellFocusType();
+      ({ target: eventTarget, elementType } = this.getCellFocusInfo(eventTarget, elementType));
     }
-
-    // Switch from row focus to cell focus for proper tab navigation
-    ({ target: eventTarget, elementType } = this.getCellFocusInfo(eventTarget, elementType));
 
     const nextCellInfo = this.getNextCellByTabKey($event, direction, elementType);
 
@@ -1130,10 +1128,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     target: Element,
     elementType: NavigationElementType,
   ): { target: Element; elementType: NavigationElementType } {
-    if (!this.isRowFocusType()) {
-      return { target, elementType };
-    }
-
     if (elementType === 'row' && isDataRow($(target))) {
       const cellTarget = this.getFirstValidCellInRow($(target));
 
