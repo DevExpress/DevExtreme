@@ -29,12 +29,11 @@
   ></dxi-scheduler-resource>
 </dx-scheduler>
 <div class="options">
+  <div class="caption">Options</div>
   <div class="option">
-    <span>Snap to Cells Mode:</span>
+    <span>Snap to Grid:</span>
     <dx-select-box
       [items]="snapToCellsModeItems"
-      valueExpr="value"
-      displayExpr="text"
       [value]="snapToCellsMode"
       (onValueChanged)="onSnapToCellsModeChanged($event)"
     ></dx-select-box>

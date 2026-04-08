@@ -6,11 +6,7 @@ import { data, resourcesData, priorityData } from './data.js';
 const currentDate = new Date(2021, 1, 2);
 const views = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 const groups = ['priority'];
-const snapToCellsModeItems = [
-  { value: 'auto', text: 'Auto' },
-  { value: 'always', text: 'Always' },
-  { value: 'never', text: 'Never' },
-];
+const snapToCellsModeItems = ['auto', 'always', 'never'];
 const App = () => {
   const [snapToCellsMode, setSnapToCellsMode] = useState('always');
   const onSnapToCellsModeChanged = useCallback((e) => {
@@ -49,12 +45,11 @@ const App = () => {
         />
       </Scheduler>
       <div className="options">
+        <div className="caption">Options</div>
         <div className="option">
-          <span>Snap to Cells Mode:</span>
+          <span>Snap to Grid:</span>
           <SelectBox
             items={snapToCellsModeItems}
-            valueExpr="value"
-            displayExpr="text"
             value={snapToCellsMode}
             onValueChanged={onSnapToCellsModeChanged}
           />
