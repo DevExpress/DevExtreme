@@ -9,11 +9,12 @@ import { scrollToDate } from '../../helpers/utils';
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../../container.html'));
 
-test.skip('Appointment should not repaint after scrolling if present on viewport', async (t) => {
+test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('', 0);
 
   await setStyleAttribute(element, 'background-color: red;');
+
   await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
 
   await scrollToDate(new Date(2020, 8, 17, 4));
