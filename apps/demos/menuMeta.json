@@ -3614,6 +3614,7 @@
           {
             "Name": "Appointments",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Recurring Appointments",
