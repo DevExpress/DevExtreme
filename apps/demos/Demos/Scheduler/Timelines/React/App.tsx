@@ -13,11 +13,7 @@ const currentDate = new Date(2021, 1, 2);
 const views: SchedulerTypes.ViewType[] = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 const groups = ['priority'];
 
-const snapToCellsModeItems: { value: SchedulerTypes.SnapToCellsMode; text: string }[] = [
-  { value: 'auto', text: 'Auto' },
-  { value: 'always', text: 'Always' },
-  { value: 'never', text: 'Never' },
-];
+const snapToCellsModeItems: SchedulerTypes.SnapToCellsMode[] = ['auto', 'always', 'never'];
 
 const App = () => {
   const [snapToCellsMode, setSnapToCellsMode] = useState<SchedulerTypes.SnapToCellsMode>('always');
@@ -59,12 +55,11 @@ const App = () => {
         />
       </Scheduler>
       <div className="options">
+        <div className="caption">Options</div>
         <div className="option">
-          <span>Snap to Cells Mode:</span>
+          <span>Snap to Grid:</span>
           <SelectBox
             items={snapToCellsModeItems}
-            valueExpr="value"
-            displayExpr="text"
             value={snapToCellsMode}
             onValueChanged={onSnapToCellsModeChanged}
           />
