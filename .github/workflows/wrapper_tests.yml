@@ -50,7 +50,7 @@ jobs:
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
         working-directory: ./packages/devextreme
-        run: pnpx nx build
+        run: pnpm exec nx build
 
   check-regenerate:
     runs-on: devextreme-shr2
@@ -146,7 +146,7 @@ jobs:
       - name: Test ${{ matrix.framework }}
         env:
           NODE_OPTIONS: --max-old-space-size=8192
-        run: pnpx nx test devextreme-${{ matrix.framework }}
+        run: pnpm exec nx test devextreme-${{ matrix.framework }}
 
       - name: Pack ${{ matrix.framework }}
-        run: pnpx nx pack devextreme-${{ matrix.framework }}
+        run: pnpm exec nx pack devextreme-${{ matrix.framework }}

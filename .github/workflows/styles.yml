@@ -49,7 +49,7 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Run tests
-      run: pnpx nx test devextreme-scss
+      run: pnpm exec nx test devextreme-scss
 
   notify:
     runs-on: devextreme-shr2
