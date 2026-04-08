@@ -58,11 +58,11 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Run themebuilder tests (full set, node)
       working-directory: ./packages/devextreme-themebuilder
-      run: pnpx nx test
+      run: pnpm exec nx test
 
     - name: Check styles for duplicate rules (generic)
       working-directory: ./packages/devextreme-scss

@@ -53,7 +53,7 @@ jobs:
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
         working-directory: ./packages/devextreme
-        run: pnpx nx build
+        run: pnpm exec nx build
 
   check-regenerate:
     runs-on: devextreme-shr2
@@ -151,7 +151,7 @@ jobs:
         run: pnpx puppeteer browsers install chrome@130.0.6723.69
 
       - name: Test ${{ matrix.framework }}
-        run: pnpx nx test devextreme-${{ matrix.framework }}
+        run: pnpm exec nx test devextreme-${{ matrix.framework }}
 
       - name: Pack ${{ matrix.framework }}
-        run: pnpx nx pack devextreme-${{ matrix.framework }}
+        run: pnpm exec nx pack devextreme-${{ matrix.framework }}
