@@ -39,7 +39,7 @@
   font-weight: revert;
 }
 
-::ng-deep .dx-chat-suggestion-cards {
+::ng-deep .chat-suggestion-cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -48,7 +48,7 @@
   width: 100%;
 }
 
-::ng-deep .dx-chat-suggestion-card {
+::ng-deep .chat-suggestion-card {
   border-radius: 12px;
   padding: 16px;
   border: 1px solid #EBEBEB;
@@ -65,20 +65,20 @@
   width: 230px;
 }
 
-::ng-deep .dx-chat-suggestion-card:hover {
+::ng-deep .chat-suggestion-card:hover {
   border: 1px solid #E0E0E0;
   background: #F5F5F5;
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02);
 }
 
-::ng-deep .dx-chat-suggestion-card-title {
+::ng-deep .chat-suggestion-card-title {
   color: #242424;
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
 }
 
-::ng-deep .dx-chat-suggestion-card-prompt {
+::ng-deep .chat-suggestion-card-prompt {
   color: #616161;
   font-size: 12px;
   font-weight: 400;

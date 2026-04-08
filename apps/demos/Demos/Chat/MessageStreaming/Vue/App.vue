@@ -25,16 +25,16 @@
       <template #emptyView="{ data }">
         <div class="dx-chat-messagelist-empty-message">{{ data.texts.message }}</div>
         <div class="dx-chat-messagelist-empty-prompt">{{ data.texts.prompt }}</div>
-        <div class="dx-chat-suggestion-cards">
+        <div class="chat-suggestion-cards">
           <button
             v-for="card in suggestionCards"
             :key="card.title"
             type="button"
-            class="dx-chat-suggestion-card"
+            class="chat-suggestion-card"
             @click="sendSuggestion(card.prompt)"
           >
-            <div class="dx-chat-suggestion-card-title">{{ card.title }}</div>
-            <div class="dx-chat-suggestion-card-prompt">{{ card.description }}</div>
+            <div class="chat-suggestion-card-title">{{ card.title }}</div>
+            <div class="chat-suggestion-card-prompt">{{ card.description }}</div>
           </button>
         </div>
       </template>
@@ -235,7 +235,7 @@ function sendSuggestion(prompt: string): void {
   font-weight: revert;
 }
 
-.dx-chat-suggestion-cards {
+.chat-suggestion-cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -244,7 +244,7 @@ function sendSuggestion(prompt: string): void {
   width: 100%;
 }
 
-.dx-chat-suggestion-card {
+.chat-suggestion-card {
   border-radius: 12px;
   padding: 16px;
   border: 1px solid #EBEBEB;
@@ -261,20 +261,20 @@ function sendSuggestion(prompt: string): void {
   width: 230px;
 }
 
-.dx-chat-suggestion-card:hover {
+.chat-suggestion-card:hover {
   border: 1px solid #E0E0E0;
   background: #F5F5F5;
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02);
 }
 
-.dx-chat-suggestion-card-title {
+.chat-suggestion-card-title {
   color: #242424;
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
 }
 
-.dx-chat-suggestion-card-prompt {
+.chat-suggestion-card-prompt {
   color: #616161;
   font-size: 12px;
   font-weight: 400;

@@ -276,10 +276,10 @@ $(() => {
         type: 'button',
         tabindex: 0,
       })
-      .addClass('dx-chat-suggestion-card')
+      .addClass('chat-suggestion-card')
       .append(
-        $('<div>').addClass('dx-chat-suggestion-card-title').text(card.title),
-        $('<div>').addClass('dx-chat-suggestion-card-prompt').text(card.description),
+        $('<div>').addClass('chat-suggestion-card-title').text(card.title),
+        $('<div>').addClass('chat-suggestion-card-prompt').text(card.description),
       )
       .on('click', (e) => {
         sendSuggestion(card.prompt, e);
@@ -315,7 +315,7 @@ $(() => {
         renderMessageContent(message, element);
       },
       emptyViewTemplate(data) {
-        const $suggestionCards = $('<div>').addClass('dx-chat-suggestion-cards');
+        const $suggestionCards = $('<div>').addClass('chat-suggestion-cards');
 
         suggestionCards.forEach((card) => {
           $suggestionCards.append(createSuggestionCard(card));

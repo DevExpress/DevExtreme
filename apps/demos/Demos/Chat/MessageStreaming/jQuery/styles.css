@@ -21,19 +21,9 @@
   flex-direction: column;
 }
 
-.bubble-button-container {
-  display: none;
-}
-
 .dx-button {
   display: inline-block;
   color: var(--dx-color-icon);
-}
-
-.dx-chat-messagegroup-alignment-start:last-child .dx-chat-messagebubble:last-child .bubble-button-container {
-  display: flex;
-  gap: 4px;
-  margin-top: 8px;
 }
 
 .dx-chat-messagebubble-content > div > p:first-child {
@@ -54,12 +44,7 @@
   font-weight: revert;
 }
 
-.chat-disabled .dx-chat-messagebox {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.dx-chat-suggestion-cards {
+.chat-suggestion-cards {
   display: flex;
   flex-wrap: wrap; 
   justify-content: center;
@@ -68,7 +53,7 @@
   width: 100%;
 }
 
-.dx-chat-suggestion-card {
+.chat-suggestion-card {
   border-radius: 12px;
   padding: 16px;
   border: 1px solid #EBEBEB;
@@ -85,20 +70,20 @@
   width: 230px;
 }
 
-.dx-chat-suggestion-card:hover {
+.chat-suggestion-card:hover {
   border: 1px solid #E0E0E0;
   background: #F5F5F5;
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02);
 }
 
-.dx-chat-suggestion-card-title {
+.chat-suggestion-card-title {
   color: #242424;
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
 }
 
-.dx-chat-suggestion-card-prompt {
+.chat-suggestion-card-prompt {
   color: #616161;
   font-size: 12px;
   font-weight: 400;

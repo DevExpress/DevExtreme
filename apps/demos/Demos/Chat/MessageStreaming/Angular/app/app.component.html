@@ -24,15 +24,15 @@
     <div *dxTemplate="let data of 'emptyViewTemplate'">
         <div class="dx-chat-messagelist-empty-message">{{ data.texts.message }}</div>
         <div class="dx-chat-messagelist-empty-prompt">{{ data.texts.prompt }}</div>
-        <div class="dx-chat-suggestion-cards">
+        <div class="chat-suggestion-cards">
         @for (card of suggestionCards; track card.title) {
             <button
             type="button"
-            class="dx-chat-suggestion-card"
+            class="chat-suggestion-card"
             (click)="onSuggestionClick(card.prompt)"
             >
-            <div class="dx-chat-suggestion-card-title">{{ card.title }}</div>
-            <div class="dx-chat-suggestion-card-prompt">{{ card.description }}</div>
+            <div class="chat-suggestion-card-title">{{ card.title }}</div>
+            <div class="chat-suggestion-card-prompt">{{ card.description }}</div>
             </button>
         }
         </div>
