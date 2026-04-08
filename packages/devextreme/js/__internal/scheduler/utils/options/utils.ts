@@ -17,7 +17,7 @@ const VIEWS_WITH_BUILTIN_SKIPPED: ReadonlySet<ViewType> = new Set<ViewType>([
   'workWeek', 'timelineWorkWeek',
 ]);
 
-const normalizeHiddenDays = (
+const normalizeHiddenWeekDays = (
   days: readonly unknown[] | undefined,
 ): number[] | undefined => {
   if (!Array.isArray(days)) {
@@ -35,19 +35,19 @@ const normalizeHiddenDays = (
 
 const resolveSkippedDays = (
   viewType: ViewType,
-  perViewHiddenDays: unknown,
-  globalHiddenDays: number[] | undefined,
+  perViewHiddenWeekDays: unknown,
+  globalHiddenWeekDays: number[] | undefined,
   viewDefault: number[],
 ): number[] => {
-  const perView = normalizeHiddenDays(perViewHiddenDays as readonly unknown[] | undefined);
+  const perView = normalizeHiddenWeekDays(perViewHiddenWeekDays as readonly unknown[] | undefined);
   if (perView !== undefined) {
     return perView;
   }
   if (VIEWS_WITH_BUILTIN_SKIPPED.has(viewType)) {
     return viewDefault;
   }
-  if (globalHiddenDays !== undefined && VIEWS_SUPPORTING_HIDDEN_DAYS.has(viewType)) {
-    return normalizeHiddenDays(globalHiddenDays) ?? [];
+  if (globalHiddenWeekDays !== undefined && VIEWS_SUPPORTING_HIDDEN_DAYS.has(viewType)) {
+    return normalizeHiddenWeekDays(globalHiddenWeekDays) ?? [];
   }
   return viewDefault;
 };
@@ -58,7 +58,7 @@ const isExistedView = (view: NormalizedView | undefined): view is NormalizedView
 
 const normalizeView = (
   view: RawViewType,
-  globalHiddenDays?: number[],
+  globalHiddenWeekDays?: number[],
 ): NormalizedView | undefined => {
   if (isObject(view)) {
     const viewType = view.type as ViewType;
@@ -69,8 +69,8 @@ const normalizeView = (
     const merged = extend({}, viewDefault, view) as NormalizedView;
     merged.skippedDays = resolveSkippedDays(
       viewType,
-      (view as { hiddenDays?: unknown }).hiddenDays,
-      globalHiddenDays,
+      view.hiddenWeekDays,
+      globalHiddenWeekDays,
       viewDefault.skippedDays,
     );
     return merged;
@@ -82,7 +82,7 @@ const normalizeView = (
   const skippedDays = resolveSkippedDays(
     view as ViewType,
     undefined,
-    globalHiddenDays,
+    globalHiddenWeekDays,
     defaultView.skippedDays,
   );
   if (skippedDays === defaultView.skippedDays) {
@@ -93,18 +93,18 @@ const normalizeView = (
 
 export const getViews = (
   views: RawViewType[],
-  globalHiddenDays?: number[],
+  globalHiddenWeekDays?: number[],
 ): NormalizedView[] => views
   .filter(isKnownView)
-  .map((v) => normalizeView(v, globalHiddenDays))
+  .map((v) => normalizeView(v, globalHiddenWeekDays))
   .filter(isExistedView);
 
 export function getCurrentView(
   currentView: string | ViewType,
   views: RawViewType[],
-  globalHiddenDays?: number[],
+  globalHiddenWeekDays?: number[],
 ): NormalizedView {
-  const viewsProps = getViews(views, globalHiddenDays);
+  const viewsProps = getViews(views, globalHiddenWeekDays);
   const currentViewProps = viewsProps.find(
     (view) => [view.name, view.type].includes(currentView),
   );

@@ -65,6 +65,7 @@ Ng.makeMetadata({
     removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.popup/),
     removeMembers(/\/scheduler:dxSchedulerOptions\.resources\.icon/),
     removeMembers(/\/scheduler:.*\.snapToCellsMode/),
+    removeMembers(/\/scheduler:.*\.hiddenWeekDays/),
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
     removeMembers(/\/tree_list:dxTreeListColumnButton.onClick/),

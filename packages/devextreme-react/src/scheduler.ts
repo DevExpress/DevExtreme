@@ -1454,6 +1454,7 @@ type IViewProps = React.PropsWithChildren<{
   groupByDate?: boolean;
   groupOrientation?: Orientation;
   groups?: Array<string>;
+  hiddenWeekDays?: Array<number>;
   intervalCount?: number;
   maxAppointmentsPerCell?: CellAppointmentsLimit | number;
   name?: string | undefined;

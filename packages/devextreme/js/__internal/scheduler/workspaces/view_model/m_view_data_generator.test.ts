@@ -6,7 +6,7 @@ import { ViewDataGeneratorMonth } from './m_view_data_generator_month';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
 import { ViewDataGeneratorWorkWeek } from './m_view_data_generator_work_week';
 
-describe('ViewDataGenerator hiddenDays support', () => {
+describe('ViewDataGenerator hiddenWeekDays support', () => {
   describe('isSkippedDate', () => {
     it('returns false when skippedDays is empty', () => {
       const gen = new ViewDataGenerator('week' as ViewType);

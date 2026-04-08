@@ -26579,6 +26579,10 @@ declare module DevExpress.ui {
      */
     firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
     /**
+     * [descr:dxSchedulerOptions.hiddenWeekDays]
+     */
+    hiddenWeekDays?: Array<number>;
+    /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;
@@ -26590,10 +26594,6 @@ declare module DevExpress.ui {
      * [descr:dxSchedulerOptions.groups]
      */
     groups?: Array<string>;
-    /**
-     * [descr:dxSchedulerOptions.hiddenDays]
-     */
-    hiddenDays?: Array<number>;
     /**
      * [descr:dxSchedulerOptions.indicatorUpdateInterval]
      */
@@ -26914,6 +26914,10 @@ declare module DevExpress.ui {
            */
           firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
           /**
+           * [descr:dxSchedulerOptions.views.hiddenWeekDays]
+           */
+          hiddenWeekDays?: Array<number>;
+          /**
            * [descr:dxSchedulerOptions.views.groupByDate]
            */
           groupByDate?: boolean;
@@ -26925,10 +26929,6 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.views.groups]
            */
           groups?: Array<string>;
-          /**
-           * [descr:dxSchedulerOptions.views.hiddenDays]
-           */
-          hiddenDays?: Array<number>;
           /**
            * [descr:dxSchedulerOptions.views.intervalCount]
            */

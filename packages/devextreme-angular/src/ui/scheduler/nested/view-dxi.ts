@@ -143,6 +143,14 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get hiddenWeekDays(): Array<number> {
+        return this._getOption('hiddenWeekDays');
+    }
+    set hiddenWeekDays(value: Array<number>) {
+        this._setOption('hiddenWeekDays', value);
+    }
+
+    @Input()
     get intervalCount(): number {
         return this._getOption('intervalCount');
     }

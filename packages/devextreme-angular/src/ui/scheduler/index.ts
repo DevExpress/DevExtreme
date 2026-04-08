@@ -515,6 +515,16 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     }
 
 
+    
+    @Input()
+    get hiddenWeekDays(): Array<number> {
+        return this._getOption('hiddenWeekDays');
+    }
+    set hiddenWeekDays(value: Array<number>) {
+        this._setOption('hiddenWeekDays', value);
+    }
+
+
     /**
      * [descr:WidgetOptions.hint]
     
@@ -894,10 +904,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
+    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<number>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
         return this._getOption('views');
     }
-    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
+    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<number>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
         this._setOption('views', value);
     }
 
@@ -1279,6 +1289,13 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() hiddenWeekDaysChange: EventEmitter<Array<number>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
@@ -1482,7 +1499,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
+    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<number>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
 
     /**
     
@@ -1558,6 +1575,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
             { emit: 'groupByDateChange' },
             { emit: 'groupsChange' },
             { emit: 'heightChange' },
+            { emit: 'hiddenWeekDaysChange' },
             { emit: 'hintChange' },
             { emit: 'indicatorUpdateIntervalChange' },
             { emit: 'maxChange' },
@@ -1610,6 +1628,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         super.ngOnChanges(changes);
         this.setupChanges('dataSource', changes);
         this.setupChanges('groups', changes);
+        this.setupChanges('hiddenWeekDays', changes);
         this.setupChanges('resources', changes);
         this.setupChanges('selectedCellData', changes);
         this.setupChanges('views', changes);
@@ -1624,6 +1643,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     ngDoCheck() {
         this._idh.doCheck('dataSource');
         this._idh.doCheck('groups');
+        this._idh.doCheck('hiddenWeekDays');
         this._idh.doCheck('resources');
         this._idh.doCheck('selectedCellData');
         this._idh.doCheck('views');

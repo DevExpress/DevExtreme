@@ -687,6 +687,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     firstDayOfWeek?: FirstDayOfWeek | undefined;
     /**
      * @docid
+     * @default undefined
+     * @public
+     */
+    hiddenWeekDays?: Array<number>;
+    /**
+     * @docid
      * @default true &for(desktop)
      * @public
      */
@@ -1087,6 +1093,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default undefined
        */
       firstDayOfWeek?: FirstDayOfWeek | undefined;
+      /**
+       * @docid
+       * @default undefined
+       */
+      hiddenWeekDays?: Array<number>;
       /**
        * @docid
        * @default false
