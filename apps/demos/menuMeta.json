@@ -4220,7 +4220,7 @@
                 "Title": "Message Streaming",
                 "Name": "MessageStreaming",
                 "Widget": "Chat",
-                "Badge": "AI",
+                "Badge": "New",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }
