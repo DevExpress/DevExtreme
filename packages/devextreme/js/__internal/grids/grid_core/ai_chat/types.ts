@@ -11,6 +11,7 @@ export interface AIChatOptions {
   onMessageEntered?: () => void;
   onChatCleared?: () => void;
   onRegenerate?: () => void;
+  onVisibilityChanged?: (visible: boolean) => void;
   popupOptions?: PopupProperties;
   chatOptions?: ChatProperties;
 }

@@ -107,6 +107,13 @@
         "dxNumberBox-noDataText": "Nincs adat",
 
 
+        "dxDataGrid-aiAssistantTitle": "AI Assistant",
+        "dxDataGrid-aiAssistantProcessingMessage": "Processing...",
+        "dxDataGrid-aiAssistantSuccessMessage": "Success",
+        "dxDataGrid-aiAssistantClearButtonText": "Clear",
+        "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
+        "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
+        "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
         "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
         "dxDataGrid-aiPromptEditorPlaceholder": "Kérje az AI-t az oszlopértékek generálásához...",
         "dxDataGrid-aiPromptEditorApplyButton": "Alkalmazás",

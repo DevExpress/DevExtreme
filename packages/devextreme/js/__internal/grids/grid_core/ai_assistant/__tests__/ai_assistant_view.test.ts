@@ -12,11 +12,12 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helpers/wrapInstance';
 
-import { AIChat } from '../ai_chat/ai_chat';
-import { AIAssistantView } from './m_ai_assistant_view';
+import { AIChat } from '../../ai_chat/ai_chat';
+import type { AIChatOptions } from '../../ai_chat/types';
+import { AIAssistantView } from '../ai_assistant_view';
 
-jest.mock('../ai_chat/ai_chat', (): any => {
-  const original = jest.requireActual<any>('../ai_chat/ai_chat');
+jest.mock('../../ai_chat/ai_chat', (): any => {
+  const original = jest.requireActual<any>('../../ai_chat/ai_chat');
 
   return {
     ...original,
@@ -152,16 +153,22 @@ describe('AIAssistantView', () => {
     });
   });
 
-  describe('show', () => {
-    it('should delegate to AIChat show method', async () => {
+  describe('toggle', () => {
+    it('should delegate to AIChat toggle method', async () => {
       const { aiAssistantView } = createAIAssistantView();
 
-      await aiAssistantView.show();
+      await aiAssistantView.toggle();
 
       const aiChatInstance = (AIChat as jest.Mock)
-        .mock.results[0].value as { show: jest.Mock; hide: jest.Mock };
+        .mock.results[0].value as { toggle: jest.Mock };
 
-      expect(aiChatInstance.show).toHaveBeenCalledTimes(1);
+      expect(aiChatInstance.toggle).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return resolved false promise when aiChatInstance is not created', () => {
+      const { aiAssistantView } = createAIAssistantView({ render: false });
+
+      return expect(aiAssistantView.toggle()).resolves.toBe(false);
     });
   });
 
@@ -172,25 +179,54 @@ describe('AIAssistantView', () => {
       await aiAssistantView.hide();
 
       const aiChatInstance = (AIChat as jest.Mock)
-        .mock.results[0].value as { show: jest.Mock; hide: jest.Mock };
+        .mock.results[0].value as { hide: jest.Mock };
 
       expect(aiChatInstance.hide).toHaveBeenCalledTimes(1);
     });
-  });
 
-  describe('show when not initialized', () => {
-    it('should return resolved false promise when aiChatInstance is not created', () => {
-      const { aiAssistantView } = createAIAssistantView({ render: false });
-
-      return expect(aiAssistantView.show()).resolves.toBe(false);
-    });
-  });
-
-  describe('hide when not initialized', () => {
     it('should return resolved false promise when aiChatInstance is not created', () => {
       const { aiAssistantView } = createAIAssistantView({ render: false });
 
       return expect(aiAssistantView.hide()).resolves.toBe(false);
+    });
+  });
+
+  describe('isShown', () => {
+    it('should delegate to AIChat isShown method', () => {
+      const { aiAssistantView } = createAIAssistantView();
+
+      const aiChatInstance = (AIChat as jest.Mock)
+        .mock.results[0].value as { isShown: jest.Mock };
+
+      aiChatInstance.isShown.mockReturnValue(true);
+      expect(aiAssistantView.isShown()).toBe(true);
+
+      aiChatInstance.isShown.mockReturnValue(false);
+      expect(aiAssistantView.isShown()).toBe(false);
+    });
+
+    it('should return false when aiChatInstance is not created', () => {
+      const { aiAssistantView } = createAIAssistantView({ render: false });
+
+      expect(aiAssistantView.isShown()).toBe(false);
+    });
+  });
+
+  describe('visibilityChanged', () => {
+    it('should fire visibilityChanged callback when popup visibility changes', () => {
+      const { aiAssistantView } = createAIAssistantView();
+      const callback = jest.fn();
+
+      aiAssistantView.visibilityChanged?.add(callback);
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      aiChatConfig.onVisibilityChanged?.(true);
+
+      expect(callback).toHaveBeenCalledWith(true);
+
+      aiChatConfig.onVisibilityChanged?.(false);
+
+      expect(callback).toHaveBeenCalledWith(false);
     });
   });
 });
