@@ -1,6 +1,6 @@
 import sh from 'shelljs';
 import yargs from 'yargs';
-import { changePackageScope, type ChangePackageScopeOptions } from 'devextreme-monorepo-tools';
+import { changePackageScope, type ChangePackageScopeOptions } from './common/monorepo-tools';
 
 export function parseChangePackageScopeArgs(argv: string[]): ChangePackageScopeOptions {
   return yargs(argv).strict().version(false).help(false)

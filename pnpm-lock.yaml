@@ -245,9 +245,6 @@ importers:
       devextreme-metadata:
         specifier: workspace:*
         version: link:packages/devextreme-metadata
-      devextreme-monorepo-tools:
-        specifier: workspace:*
-        version: link:packages/devextreme-monorepo-tools/npm
       http-server:
         specifier: 14.1.1
         version: 14.1.1
