@@ -107,6 +107,13 @@
         "dxNumberBox-noDataText": "Veri yok",
 
 
+        "dxDataGrid-aiAssistantTitle": "AI Assistant",
+        "dxDataGrid-aiAssistantProcessingMessage": "Processing...",
+        "dxDataGrid-aiAssistantSuccessMessage": "Success",
+        "dxDataGrid-aiAssistantClearButtonText": "Clear",
+        "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
+        "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
+        "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
         "dxDataGrid-aiPromptEditorTitle": "Yapay Zeka İstek Düzenleyicisi",
         "dxDataGrid-aiPromptEditorPlaceholder": "Sütun değerlerini oluşturmak için yapay zekaya istek gönderin...",
         "dxDataGrid-aiPromptEditorApplyButton": "Uygula",

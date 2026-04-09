@@ -107,6 +107,13 @@
         "dxNumberBox-noDataText": "Sin datos",
 
 
+        "dxDataGrid-aiAssistantTitle": "AI Assistant",
+        "dxDataGrid-aiAssistantProcessingMessage": "Processing...",
+        "dxDataGrid-aiAssistantSuccessMessage": "Success",
+        "dxDataGrid-aiAssistantClearButtonText": "Clear",
+        "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
+        "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
+        "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
         "dxDataGrid-aiPromptEditorTitle": "Editor de indicaciones de IA",
         "dxDataGrid-aiPromptEditorPlaceholder": "Solicitar a la IA que genere valores de columna...",
         "dxDataGrid-aiPromptEditorApplyButton": "Aplicar",

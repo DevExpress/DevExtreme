@@ -989,7 +989,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
       const columns = that._columnsController.getColumns();
       const disabled = !columns.filter((column) => column.bufferedFilterValue !== undefined).length;
       const onInitialized = function (e) {
-        $(e.element).addClass(that._getToolbarButtonClass(APPLY_BUTTON_CLASS));
+        $(e.element).addClass(that.getToolbarButtonClass(APPLY_BUTTON_CLASS));
       };
       const onClickHandler = function () {
         that._applyFilterViewController.applyFilter();

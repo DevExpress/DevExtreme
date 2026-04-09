@@ -9,15 +9,16 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import Chat from '@js/ui/chat';
-import Popup from '@js/ui/popup';
+import Popup from '@ts/ui/popup/m_popup';
 
 import { AIChat } from './ai_chat';
 import { CLASSES, DEFAULT_POPUP_OPTIONS } from './const';
 import type { AIChatOptions } from './types';
 
 const mockPopupInstance = {
-  show: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
+  toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
+  option: jest.fn<(name: string) => unknown>().mockReturnValue(false),
 };
 
 const mockChatInstance = {};
@@ -87,13 +88,13 @@ describe('AIChat', () => {
     });
   });
 
-  describe('show', () => {
-    it('should call popup show method', async () => {
+  describe('toggle', () => {
+    it('should call popup toggle method', async () => {
       const { aiChat } = createAIChat();
 
-      const result = await aiChat.show();
+      const result = await aiChat.toggle();
 
-      expect(mockPopupInstance.show).toHaveBeenCalledTimes(1);
+      expect(mockPopupInstance.toggle).toHaveBeenCalledTimes(1);
       expect(result).toBe(true);
     });
   });
@@ -106,6 +107,66 @@ describe('AIChat', () => {
 
       expect(mockPopupInstance.hide).toHaveBeenCalledTimes(1);
       expect(result).toBe(true);
+    });
+  });
+
+  describe('isShown', () => {
+    it('should return true when popup is visible', () => {
+      const { aiChat } = createAIChat();
+      mockPopupInstance.option.mockReturnValue(true);
+
+      expect(aiChat.isShown()).toBe(true);
+      expect(mockPopupInstance.option).toHaveBeenCalledWith('visible');
+    });
+
+    it('should return false when popup is not visible', () => {
+      const { aiChat } = createAIChat();
+      mockPopupInstance.option.mockReturnValue(false);
+
+      expect(aiChat.isShown()).toBe(false);
+    });
+  });
+
+  describe('onVisibilityChanged', () => {
+    const getPopupConfig = (): any => {
+      const call = createComponentMock.mock.calls.find(
+        ([, Widget]) => Widget === Popup,
+      );
+
+      expect(call).toBeDefined();
+
+      return (call as any)[2];
+    };
+
+    it('should call onVisibilityChanged with true on showing', () => {
+      const onVisibilityChanged = jest.fn();
+      createAIChat({ onVisibilityChanged });
+
+      const popupConfig = getPopupConfig();
+      popupConfig.onShowing();
+
+      expect(onVisibilityChanged).toHaveBeenCalledTimes(1);
+      expect(onVisibilityChanged).toHaveBeenCalledWith(true);
+    });
+
+    it('should call onVisibilityChanged with false on hidden', () => {
+      const onVisibilityChanged = jest.fn();
+      createAIChat({ onVisibilityChanged });
+
+      const popupConfig = getPopupConfig();
+      popupConfig.onHidden();
+
+      expect(onVisibilityChanged).toHaveBeenCalledTimes(1);
+      expect(onVisibilityChanged).toHaveBeenCalledWith(false);
+    });
+
+    it('should not throw when onVisibilityChanged is not provided', () => {
+      createAIChat();
+
+      const popupConfig = getPopupConfig();
+
+      expect(() => { popupConfig.onShowing(); }).not.toThrow();
+      expect(() => { popupConfig.onHidden(); }).not.toThrow();
     });
   });
 });
