@@ -2,7 +2,6 @@ import sh from 'shelljs';
 import fs from 'fs';
 import path from 'path';
 import tar from 'tar-fs';
-import yargs from 'yargs';
 import { createUnzip } from 'zlib';
 import { npm } from './npm-utils';
 import { ensureEmptyDir } from './fs-utils';
@@ -11,15 +10,6 @@ export interface ChangePackageScopeOptions {
   tgz: string;
   scope?: string;
   removeScope?: boolean;
-}
-
-export function parseChangePackageScopeArgs(argv: string[]): ChangePackageScopeOptions {
-  return yargs(argv).strict().version(false).help(false)
-    .option('tgz', { type: 'string', demandOption: true, nargs: 1 })
-    .option('scope', { type: 'string', nargs: 1, default: undefined, coerce(s: string) { return s?.toLowerCase(); } })
-    .option('removeScope', { type: 'boolean', default: undefined })
-    .conflicts('scope', 'removeScope')
-    .parseSync();
 }
 
 export function changePackageScope(args: ChangePackageScopeOptions): Promise<string> {
@@ -69,14 +59,8 @@ export function changePackageScope(args: ChangePackageScopeOptions): Promise<str
 
       resolve(newDirName ?? dirName);
     }).on('error', () => {
-      reject(new Error(`Unexpected error occured during extracting from archive: ${args.tgz}`));
+      reject(new Error(`Unexpected error occurred during extracting from archive: ${args.tgz}`));
     });
   });
 }
 
-export async function runChangePackageScopeCli(argv: string[] = process.argv.slice(2)): Promise<string> {
-  const args = parseChangePackageScopeArgs(argv);
-  const result = await changePackageScope(args);
-  console.log(result); // return value, used in GA
-  return result;
-}
