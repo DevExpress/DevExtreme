@@ -72,8 +72,8 @@ jobs:
       env:
         NODE_OPTIONS: --max-old-space-size=8192
       run: |
-        pnpx nx build devextreme-scss
-        pnpx nx build devextreme
+        pnpm exec nx build devextreme-scss
+        pnpm exec nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme

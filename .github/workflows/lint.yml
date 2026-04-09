@@ -53,25 +53,25 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint-ts
+      run: pnpm exec nx lint-ts
 
     - name: Lint .d.ts
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint-dts
+      run: pnpm exec nx lint-dts
 
     - name: Lint Testcafe tests
       working-directory: ./e2e/testcafe-devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint
+      run: pnpm exec nx lint
 
   JS:
     runs-on: devextreme-shr2
@@ -110,13 +110,13 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Lint JS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint-js
+      run: pnpm exec nx lint-js
 
   texts:
     runs-on: devextreme-shr2
@@ -155,7 +155,7 @@ jobs:
 
     - name: Check texts
       working-directory: ./packages/devextreme
-      run: pnpx nx lint-texts
+      run: pnpm exec nx lint-texts
 
   pnpm_lock:
     runs-on: devextreme-shr2
@@ -291,7 +291,7 @@ jobs:
       run: pnpm install
 
     - name: Lint wrappers
-      run: pnpx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
+      run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
     runs-on: devextreme-shr2

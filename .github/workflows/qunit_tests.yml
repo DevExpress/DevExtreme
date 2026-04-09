@@ -70,7 +70,7 @@ jobs:
       env:
         DEVEXTREME_TEST_CI: "true"
         BUILD_INPROGRESS_RENOVATION: "true"
-      run: pnpx nx build:systemjs
+      run: pnpm exec nx build:systemjs
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
