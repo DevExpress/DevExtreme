@@ -102,8 +102,6 @@ function focusCellHandler(e) {
 }
 
 export class AdaptiveColumnsController extends modules.ViewController {
-  private _keyboardNavigationController!: KeyboardNavigationController;
-
   private _columnsController!: ColumnsController;
 
   private _dataController!: DataController;
@@ -119,6 +117,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
   private _form?: Form;
 
   private _hidingColumnsQueue: any;
+
+  protected _keyboardNavigationController!: KeyboardNavigationController;
 
   public init() {
     this._columnsController = this.getController('columns');
