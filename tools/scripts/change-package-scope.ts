@@ -1,3 +1,4 @@
+import sh from 'shelljs';
 import yargs from 'yargs';
 import { changePackageScope, type ChangePackageScopeOptions } from 'devextreme-monorepo-tools';
 
@@ -16,5 +17,8 @@ export async function runChangePackageScopeCli(argv: string[] = process.argv.sli
   console.log(result); // return value, used in GA
   return result;
 }
+
+sh.set('-e');
+sh.config.silent = true;
 
 void runChangePackageScopeCli();

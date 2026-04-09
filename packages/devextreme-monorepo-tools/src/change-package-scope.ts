@@ -13,9 +13,6 @@ export interface ChangePackageScopeOptions {
 }
 
 export function changePackageScope(args: ChangePackageScopeOptions): Promise<string> {
-  sh.set('-e');
-  sh.config.silent = true;
-
   const dirName = path.basename(args.tgz).replace(/\.tgz$/, '');
   ensureEmptyDir(dirName);
 
