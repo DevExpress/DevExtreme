@@ -60,7 +60,7 @@ export class AppComponent {
         dataField: 'date',
         dataType: 'date',
         area: 'column',
-        filterValues: [[2013], [2014], [2015]],
+        filterValues: [[2023], [2024], [2025]],
         expanded: false,
       }, {
         caption: 'Sales',
