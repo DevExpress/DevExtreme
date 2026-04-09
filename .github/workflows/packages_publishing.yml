@@ -162,7 +162,7 @@ jobs:
           PACKAGE: ${{ matrix.package }}
         run: |
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          PACKAGE_DIR=$(pnpm run change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
+          PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
           pnpm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
