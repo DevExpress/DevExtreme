@@ -7,6 +7,7 @@ import type { BaseFormat } from '@ts/core/localization/date';
 import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
 import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
+import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
 import {
   getDateAfterVisibleWeek,
   getFirstVisibleDate,
@@ -110,7 +111,7 @@ const getPeriodEndDate = (
   currentPeriodStartDate: Date,
   step: Step,
   agendaDuration: number,
-  skippedDays: number[],
+  skippedDays: WeekdayIndex[],
 ): Date => {
   const calculators: Record<Step, () => Date> = {
     day: () => nextDay(currentPeriodStartDate),
@@ -128,7 +129,7 @@ const getPeriodEndDate = (
 const getNextPeriodStartDate = (
   currentPeriodEndDate: Date,
   step: Step,
-  skippedDays: number[],
+  skippedDays: WeekdayIndex[],
 ): Date => {
   let date = addMS(currentPeriodEndDate);
 

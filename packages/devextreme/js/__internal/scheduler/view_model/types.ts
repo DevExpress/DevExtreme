@@ -4,6 +4,7 @@ import type { AllDayPanelModeType, SafeAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../utils/resource_manager/types';
+import type { WeekdayIndex } from '../utils/skipped_days';
 import type {
   Empty,
   Geometry,
@@ -29,7 +30,7 @@ export interface CompareOptions {
   endDayHour: number;
   min: number;
   max: number;
-  skippedDays: number[];
+  skippedDays: WeekdayIndex[];
 }
 
 export interface LayoutIntervals {

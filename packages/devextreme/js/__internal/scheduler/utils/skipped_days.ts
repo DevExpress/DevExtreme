@@ -1,14 +1,24 @@
-export const isDateSkipped = (date: Date, skippedDays: number[]): boolean => (
-  skippedDays.includes(date.getDay())
+export type WeekdayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+export const isWeekdayIndex = (value: unknown): value is WeekdayIndex => (
+  typeof value === 'number'
+  && Number.isInteger(value)
+  && value >= 0
+  && value <= 6
+);
+
+export const isDateSkipped = (date: Date, skippedDays: WeekdayIndex[]): boolean => (
+  skippedDays.includes(date.getDay() as WeekdayIndex)
 );
 
 export const getVisibleDaysOfWeek = (
   firstDayOfWeek: number,
-  skippedDays: number[],
-): number[] => {
-  const result: number[] = [];
+  skippedDays: WeekdayIndex[],
+): WeekdayIndex[] => {
+  const result: WeekdayIndex[] = [];
   for (let count = 0; count < 7; count += 1) {
-    const dayOfWeek = (firstDayOfWeek + count) % 7;
+    const raw = firstDayOfWeek + count;
+    const dayOfWeek = ((raw % 7) + 7) % 7 as WeekdayIndex;
     if (!skippedDays.includes(dayOfWeek)) {
       result.push(dayOfWeek);
     }
@@ -19,7 +29,7 @@ export const getVisibleDaysOfWeek = (
 
 export const getFirstVisibleDate = (
   start: Date,
-  skippedDays: number[],
+  skippedDays: WeekdayIndex[],
   nextDate: (date: Date) => Date,
 ): Date => {
   let date = new Date(start);
@@ -31,7 +41,7 @@ export const getFirstVisibleDate = (
 
 export const getDateAfterVisibleWeek = (
   start: Date,
-  skippedDays: number[],
+  skippedDays: WeekdayIndex[],
   nextDate: (date: Date) => Date,
 ): Date => {
   const visibleCount = 7 - skippedDays.length;

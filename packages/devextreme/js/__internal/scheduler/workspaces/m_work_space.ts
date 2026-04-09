@@ -50,6 +50,7 @@ import {
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
 import type { ViewType } from '@ts/scheduler/types';
+import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/m_widget_notify_scheduler';
@@ -204,7 +205,7 @@ type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
-  skippedDays: number[];
+  skippedDays: WeekdayIndex[];
 };
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;

@@ -1,3 +1,5 @@
+import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
+
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 
@@ -5,7 +7,7 @@ interface Options {
   intervals: DateInterval[];
   startDayHour: number;
   endDayHour: number;
-  skippedDays: number[];
+  skippedDays: WeekdayIndex[];
 }
 
 export const getOneDayCellIntervals = ({

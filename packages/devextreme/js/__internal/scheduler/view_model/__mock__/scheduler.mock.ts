@@ -1,3 +1,5 @@
+import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
+
 import { mockAppointmentDataAccessor } from '../../__mock__/appointment_data_accessor.mock';
 import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
 import type Scheduler from '../../m_scheduler';
@@ -18,7 +20,7 @@ export const getSchedulerMock = ({
   endDayHour: number;
   offsetMinutes: number;
   resourceManager?: ResourceManager;
-  skippedDays?: number[];
+  skippedDays?: WeekdayIndex[];
   dateRange?: Date[];
   isVirtualScrolling?: boolean;
 }): Scheduler => ({
