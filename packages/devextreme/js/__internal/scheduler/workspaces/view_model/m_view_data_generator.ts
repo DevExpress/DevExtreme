@@ -585,16 +585,9 @@ export class ViewDataGenerator {
     const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
     let offsetByCount: number;
-    if (this.isWorkWeekView()) {
-      offsetByCount = this.getTimeOffsetByColumnIndex(
-        columnIndex,
-        this.getFirstDayOfWeek(firstDayOfWeek),
-        columnCountBase,
-        intervalCount,
-      );
-    } else if (
+    if (
       this.skippedDays.length > 0
-      && (this.usesWeeklyDayLayout() || this.usesMonthDayLayout())
+      && (this.usesWeeklyDayLayout() || this.usesMonthDayLayout() || this.isWorkWeekView())
     ) {
       offsetByCount = this.getVisibleDayOffset(
         rowIndex,
@@ -602,6 +595,13 @@ export class ViewDataGenerator {
         this.getSkippedDaysAnchorDay(firstDayOfWeek, startViewDate),
         cellCountInDay,
       ) * toMs('day');
+    } else if (this.isWorkWeekView()) {
+      offsetByCount = this.getTimeOffsetByColumnIndex(
+        columnIndex,
+        this.getFirstDayOfWeek(firstDayOfWeek),
+        columnCountBase,
+        intervalCount,
+      );
     } else {
       offsetByCount = 0;
     }
