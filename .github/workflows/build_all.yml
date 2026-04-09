@@ -81,5 +81,5 @@ jobs:
 
       - name: Build bundle
         run: |
-          npx devextreme-bundler-init custom-bundle
-          npx devextreme-bundler custom-bundle
+          npx --no-install devextreme-bundler-init custom-bundle
+          npx --no-install devextreme-bundler custom-bundle
