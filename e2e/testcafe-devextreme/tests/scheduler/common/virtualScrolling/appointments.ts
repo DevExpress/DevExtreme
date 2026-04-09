@@ -17,6 +17,7 @@ test('Appointment should not repaint after scrolling if present on viewport', as
   const initialStyle = await getStyleAttribute(element);
 
   await scrollToDate(new Date(2020, 8, 17, 4));
+  await t.wait(300);
 
   await t.expect(await getStyleAttribute(element)).eql(initialStyle);
 }).before(async () => {
