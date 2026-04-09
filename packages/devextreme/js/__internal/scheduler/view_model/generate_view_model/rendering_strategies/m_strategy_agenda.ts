@@ -8,7 +8,7 @@ import { groupAppointmentsByGroupLeafs } from '../../../utils/resource_manager/a
 import BaseRenderingStrategy from './m_strategy_base';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
-  _rows: any;
+  protected rows: any;
 
   get instance() { return this.options.instance; }
 
@@ -90,7 +90,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         height,
         width: '100%',
         sortedIndex: sortedIndex++,
-        groupIndex: this._calculateGroupIndex(index, appointmentsByResources),
+        groupIndex: this.calculateGroupIndex(index, appointmentsByResources),
         agendaSettings: appt.settings,
       }]);
 
@@ -100,7 +100,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     return result;
   }
 
-  _calculateGroupIndex(apptIndex, appointmentsByResources): number | undefined {
+  protected calculateGroupIndex(apptIndex, appointmentsByResources): number | undefined {
     let counter = 0;
 
     // eslint-disable-next-line
@@ -117,19 +117,19 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     return undefined;
   }
 
-  _getAppointmentMaxWidth() {
+  protected getAppointmentMaxWidth() {
     return this.cellWidth;
   }
 
-  _needVerifyItemSize() {
+  protected needVerifyItemSize() {
     return false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getAppointmentParts(geometry, settings) {
+  protected getAppointmentParts(geometry, settings) {
   }
 
-  _reduceMultiWeekAppointment() {
+  protected reduceMultiWeekAppointment() {
   }
 
   calculateAppointmentHeight() {
@@ -148,22 +148,22 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     return false;
   }
 
-  _sortCondition() {
+  protected sortCondition() {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _rowCondition(a, b) {
+  protected rowCondition(a, b) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _columnCondition(a, b) {
+  protected columnCondition(a, b) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _findIndexByKey(arr, iKey, jKey, iValue, jValue) {
+  protected findIndexByKey(arr, iKey, jKey, iValue, jValue) {
   }
 
-  _markAppointmentAsVirtual() {
+  protected markAppointmentAsVirtual() {
   }
 
   getDropDownAppointmentWidth() {
@@ -176,7 +176,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
   }
 
   calculateRows(appointments, agendaDuration, currentDate) {
-    this._rows = [];
+    this.rows = [];
     currentDate = dateUtils.trimTime(new Date(currentDate));
 
     const groupedAppointments = this.groupAppointmentByResources(appointments);
@@ -189,7 +189,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
       };
 
       if (!currentAppointments.length) {
-        this._rows.push([]);
+        this.rows.push([]);
         return true;
       }
 
@@ -225,13 +225,13 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         }
       }
 
-      this._rows.push(groupResult);
+      this.rows.push(groupResult);
     });
 
-    return this._rows;
+    return this.rows;
   }
 
-  _iterateRow(row, obj, index) {
+  protected iterateRow(row, obj, index) {
     for (let i = 0; i < row.length; i++) {
       obj.counter += row[i];
       if (obj.counter >= index) {
@@ -246,7 +246,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     index++;
 
     for (let i = 0; i < rows.length; i++) {
-      this._iterateRow(rows[i], obj, index);
+      this.iterateRow(rows[i], obj, index);
       if (obj.indexInRow) break;
     }
 
@@ -257,7 +257,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     return ($appointment, originalStartDate) => {
       const apptIndex = $appointment.index();
       const startViewDate = this.instance.getStartViewDate();
-      const calculatedStartDate = this.getDateByIndex(apptIndex, this._rows, startViewDate);
+      const calculatedStartDate = this.getDateByIndex(apptIndex, this.rows, startViewDate);
       const wrappedOriginalStartDate = new Date(originalStartDate);
 
       return {

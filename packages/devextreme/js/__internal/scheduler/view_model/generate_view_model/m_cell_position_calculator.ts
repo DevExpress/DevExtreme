@@ -54,7 +54,7 @@ class BaseStrategy {
 
       coordinates.forEach((item) => {
         Boolean(item) && result.push(
-          this._prepareObject(item, index),
+          this.prepareObject(item, index),
         );
       });
     });
@@ -84,7 +84,7 @@ class BaseStrategy {
     );
   }
 
-  _prepareObject(position, dateSettingIndex) {
+  protected prepareObject(position, dateSettingIndex) {
     position.dateSettingIndex = dateSettingIndex;
     return {
       coordinates: position,
@@ -241,7 +241,7 @@ class VirtualStrategy extends BaseStrategy {
 
       if (coordinate) {
         result.push(
-          this._prepareObject(coordinate, index),
+          this.prepareObject(coordinate, index),
         );
       }
     });

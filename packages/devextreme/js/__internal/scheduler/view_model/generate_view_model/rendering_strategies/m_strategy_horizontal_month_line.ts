@@ -15,7 +15,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     } = position.info.appointment;
     const startDate = dateUtils.trimTime(startDateWithTime);
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
-    const duration = Math.ceil(this._getDurationInDays(startDate, normalizedEndDate));
+    const duration = Math.ceil(this.getDurationInDays(startDate, normalizedEndDate));
 
     let width = this.cropAppointmentWidth(duration * cellWidth, cellWidth);
 
@@ -33,13 +33,13 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return width;
   }
 
-  _columnCondition(a, b) {
-    const conditions = this._getConditions(a, b);
+  protected columnCondition(a, b) {
+    const conditions = this.getConditions(a, b);
     return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
   }
 
-  _getDurationInDays(startDate, endDate) {
-    const adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
+  protected getDurationInDays(startDate, endDate) {
+    const adjustedDuration = this.adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
     return (adjustedDuration / dateUtils.dateToMilliseconds('day')) || ZERO_APPOINTMENT_DURATION_IN_DAYS;
   }
 
@@ -55,8 +55,8 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return super.createTaskPositionMap(items);
   }
 
-  _getSortedPositions(map, skipSorting) {
-    let result = super._getSortedPositions(map);
+  protected getSortedPositions(map, skipSorting) {
+    let result = super.getSortedPositions(map);
 
     if (!skipSorting) {
       // @ts-expect-error
