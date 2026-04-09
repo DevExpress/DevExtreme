@@ -6,10 +6,6 @@ export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
 
   public skippedDays: number[] = [0, 6];
 
-  protected getSkippedDaysAnchorKind(): 'startViewDate' {
-    return 'startViewDate';
-  }
-
   protected calculateStartViewDate(options) {
     return workWeekUtils.calculateStartViewDate(
       options.currentDate,
