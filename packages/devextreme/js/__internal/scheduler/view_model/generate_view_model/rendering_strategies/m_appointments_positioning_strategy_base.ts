@@ -35,7 +35,7 @@ class AppointmentPositioningStrategy {
   }
 
   getAppointmentDefaultOffset() {
-    if (this.renderingStrategy._isCompactTheme()) {
+    if (this.renderingStrategy.isCompactTheme()) {
       return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
     }
 
@@ -46,7 +46,7 @@ class AppointmentPositioningStrategy {
     const { renderingStrategy } = this;
 
     const { cellHeight } = renderingStrategy;
-    const allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || this.getAppointmentMinCount();
+    const allDayCount = Math.floor((cellHeight - renderingStrategy.getAppointmentDefaultOffset()) / renderingStrategy.getAppointmentDefaultHeight()) || this.getAppointmentMinCount();
 
     // NOTE: Simplify using only object
     if (renderingStrategy.allDaySupported()) {
@@ -67,7 +67,7 @@ class AppointmentPositioningStrategy {
   }
 
   protected calculateDynamicAppointmentCountPerCell() {
-    return Math.floor(this.renderingStrategy._getAppointmentMaxWidth() / APPOINTMENT_INCREASED_WIDTH);
+    return Math.floor(this.renderingStrategy.getAppointmentMaxWidth() / APPOINTMENT_INCREASED_WIDTH);
   }
 
   protected getAppointmentDefaultWidth() {

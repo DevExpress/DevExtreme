@@ -581,7 +581,7 @@ class BaseRenderingStrategy {
       compactCount = this.getCompactAppointmentParts(item.width);
       for (let k = 1; k < compactCount; k++) {
         const compactPart = extend(true, {}, item);
-        compactPart.left = (this as any)._getCompactLeftCoordinate(item.left, k);
+        compactPart.left = (this as any).getCompactLeftCoordinate(item.left, k);
         compactPart.columnIndex += k;
         compactPart.sortedIndex = null;
         result.push(compactPart);
@@ -835,7 +835,7 @@ class BaseRenderingStrategy {
   }
 
   protected getAppointmentDefaultWidth() {
-    return this.getPositioningStrategy()._getAppointmentDefaultWidth();
+    return this.getPositioningStrategy().getAppointmentDefaultWidth();
   }
 
   protected getAppointmentMinWidth() {

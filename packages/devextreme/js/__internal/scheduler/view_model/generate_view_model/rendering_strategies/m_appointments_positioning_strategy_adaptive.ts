@@ -66,7 +66,7 @@ class AdaptivePositioningStrategy extends AppointmentPositioningStrategy {
   }
 
   protected calculateDynamicAppointmentCountPerCell() {
-    return Math.floor(this.renderingStrategy._getAppointmentMaxWidth() / this.renderingStrategy._getAppointmentDefaultWidth());
+    return Math.floor(this.renderingStrategy.getAppointmentMaxWidth() / this.renderingStrategy.getAppointmentDefaultWidth());
   }
 }
 
