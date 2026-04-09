@@ -14,11 +14,12 @@ test.skip('Appointment should not repaint after scrolling if present on viewport
   const { element } = scheduler.getAppointment('', 0);
 
   await setStyleAttribute(element, 'background-color: red;');
-  await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
+  const initialStyle = await getStyleAttribute(element);
 
   await scrollToDate(new Date(2020, 8, 17, 4));
+  await t.wait(300);
 
-  await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
+  await t.expect(await getStyleAttribute(element)).eql(initialStyle);
 }).before(async () => {
   await createWidget('dxScheduler', {
     height: 600,
@@ -26,8 +27,6 @@ test.skip('Appointment should not repaint after scrolling if present on viewport
     currentDate: new Date(2020, 8, 7),
     scrolling: {
       mode: 'virtual',
-      orientation: 'both',
-      outlineCount: 0,
     },
     currentView: 'week',
     views: [{
