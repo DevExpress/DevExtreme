@@ -28,18 +28,11 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
     return 1;
   }
 
-  protected calculateStartViewDate(
-    options: {
-      currentDate: Date;
-      startDayHour: number;
-      intervalCount: number;
-      startDate?: Date;
-    },
-  ): Date {
+  protected calculateStartViewDate(options: any): Date {
     return timelineMonthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
-      options.startDate ?? options.currentDate,
+      options.startDate,
       options.intervalCount,
     );
   }
@@ -67,10 +60,7 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
     this.hiddenInterval = 0;
   }
 
-  protected getCellEndDate(
-    cellStartDate: Date,
-    options: { startDayHour: number; endDayHour: number },
-  ): Date {
+  protected getCellEndDate(cellStartDate: Date, options: any): Date {
     const { startDayHour, endDayHour } = options;
     const durationMs = (endDayHour - startDayHour) * toMs('hour');
     return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);
