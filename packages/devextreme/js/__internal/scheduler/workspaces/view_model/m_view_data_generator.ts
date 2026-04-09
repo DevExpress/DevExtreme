@@ -49,12 +49,12 @@ export class ViewDataGenerator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _calculateStartViewDate(options: any): Date {
+  protected calculateStartViewDate(options: any): Date {
     return new Date();
   }
 
   public getStartViewDate(options): Date {
-    return this._calculateStartViewDate(options);
+    return this.calculateStartViewDate(options);
   }
 
   // entry point
@@ -74,7 +74,7 @@ export class ViewDataGenerator {
       hoursInterval,
     } = options;
 
-    this._setVisibilityDates(options);
+    this.setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
 
     const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
@@ -509,7 +509,7 @@ export class ViewDataGenerator {
 
     const columnCountBase = this.getCellCount(options);
     const rowCountBase = this.getRowCount(options);
-    const cellIndex = this._calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
+    const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
     const offsetByCount = this.isWorkWeekView()
@@ -573,7 +573,7 @@ export class ViewDataGenerator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCountBase) {
+  protected calculateCellIndex(rowIndex, columnIndex, rowCount, columnCountBase) {
     return (calculateCellIndex as any)(rowIndex, columnIndex, rowCount);
   }
 
@@ -746,7 +746,7 @@ export class ViewDataGenerator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _setVisibilityDates(options: any) {}
+  protected setVisibilityDates(options: any) {}
 
   public getCellCountInDay(startDayHour, endDayHour, hoursInterval) {
     const result = calculateDayDuration(startDayHour, endDayHour) / hoursInterval;

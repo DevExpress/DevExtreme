@@ -22,7 +22,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
   private calendar?: Calendar;
 
   public async show(target: HTMLElement): Promise<void> {
-    if (!SchedulerCalendar._isMobileLayout()) {
+    if (!SchedulerCalendar.isMobileLayout()) {
       this.overlay?.option('target', target);
     }
 
@@ -44,16 +44,16 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
 
   public _render(): void {
     super._render();
-    this._renderOverlay();
+    this.renderOverlay();
   }
 
-  private _renderOverlay(): void {
+  private renderOverlay(): void {
     this.$element().addClass(CALENDAR_POPOVER_CLASS);
 
-    const isMobileLayout = SchedulerCalendar._isMobileLayout();
+    const isMobileLayout = SchedulerCalendar.isMobileLayout();
 
     const overlayConfig = {
-      contentTemplate: (): dxElementWrapper => this._createOverlayContent(),
+      contentTemplate: (): dxElementWrapper => this.createOverlayContent(),
       onShown: (): void => {
         this.calendar?.focus();
       },
@@ -79,19 +79,19 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     }
   }
 
-  private _createOverlayContent(): dxElementWrapper {
+  private createOverlayContent(): dxElementWrapper {
     const result = $('<div>').addClass(CALENDAR_CLASS);
     this.calendar = this._createComponent(result, Calendar, this.getCalendarOptions());
 
-    if (SchedulerCalendar._isMobileLayout()) {
-      const scrollable = this._createScrollable(result);
+    if (SchedulerCalendar.isMobileLayout()) {
+      const scrollable = this.createScrollable(result);
       return scrollable.$element();
     }
 
     return result;
   }
 
-  private _createScrollable(content: dxElementWrapper): Scrollable {
+  private createScrollable(content: dxElementWrapper): Scrollable {
     const result = this._createComponent('<div>', Scrollable, {
       height: 'auto',
       direction: 'both',
@@ -132,7 +132,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     };
   }
 
-  private static _isMobileLayout(): boolean {
+  private static isMobileLayout(): boolean {
     return !devices.current().generic;
   }
 }
