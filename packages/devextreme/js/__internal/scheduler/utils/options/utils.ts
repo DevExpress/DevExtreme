@@ -10,7 +10,7 @@ import type {
 } from './types';
 
 const VIEWS_SUPPORTING_HIDDEN_DAYS: ReadonlySet<ViewType> = new Set<ViewType>([
-  'week', 'month', 'timelineWeek', 'timelineMonth',
+  'week', 'month', 'timelineWeek', 'timelineMonth', 'agenda',
 ]);
 
 const VIEWS_WITH_BUILTIN_SKIPPED: ReadonlySet<ViewType> = new Set<ViewType>([

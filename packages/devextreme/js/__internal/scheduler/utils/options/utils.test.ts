@@ -184,8 +184,8 @@ describe('views utils', () => {
         expect(getSkipped(['day'], 'day', [3])).toEqual([]);
       });
 
-      it('global hiddenWeekDays on agenda → ignored (unsupported view)', () => {
-        expect(getSkipped(['agenda'], 'agenda', [3])).toEqual([]);
+      it('global hiddenWeekDays on agenda → applied', () => {
+        expect(getSkipped(['agenda'], 'agenda', [3])).toEqual([3]);
       });
 
       it('per-view hiddenWeekDays dedupes duplicates', () => {
