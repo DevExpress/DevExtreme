@@ -8,51 +8,23 @@ import {
   getPreviousMajorVersion,
   parseVersion,
 } from '../../utils/version';
-import { base64ToBytes } from './byte_utils';
 import {
-  BUY_NOW_LINK, FORMAT, KEY_SPLITTER, LICENSE_KEY_PLACEHOLDER,
+  BUY_NOW_LINK, LICENSE_KEY_PLACEHOLDER,
   LICENSING_DOC_LINK, RTM_MIN_PATCH_VERSION, SUBSCRIPTION_NAMES,
 } from './const';
-import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { isProductOnlyLicense, parseDevExpressProductKey } from './lcp_key_validation/lcp_key_validator';
 import { logLicenseWarning } from './license_warnings';
-import { pad } from './pkcs1';
-import { compareSignatures } from './rsa_bigint';
-import { sha1 } from './sha1';
 import { showTrialPanel } from './trial_panel';
 import type {
-  License,
   LicenseCheckParams,
   Token,
 } from './types';
 import {
-  DECODING_ERROR,
-  DESERIALIZATION_ERROR,
   GENERAL_ERROR,
-  PAYLOAD_ERROR,
   TokenKind,
-  VERIFICATION_ERROR,
-  VERSION_ERROR,
 } from './types';
 
-interface Payload extends Partial<License> {
-  readonly format?: number;
-  readonly internalUsageId?: string;
-}
-
 let validationPerformed = false;
-
-// verifies RSASSA-PKCS1-v1.5 signature
-function verifySignature({ text, signature: encodedSignature }: {
-  text: string;
-  signature: string;
-}): boolean {
-  return compareSignatures({
-    key: PUBLIC_KEY,
-    signature: base64ToBytes(encodedSignature),
-    actual: pad(sha1(text)),
-  });
-}
 
 export function parseLicenseKey(encodedKey: string | undefined): Token {
   if (encodedKey === undefined) {
@@ -63,57 +35,7 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
     return parseDevExpressProductKey(encodedKey);
   }
 
-  const parts = encodedKey.split(KEY_SPLITTER);
-
-  if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
-    return GENERAL_ERROR;
-  }
-
-  if (!verifySignature({ text: parts[0], signature: parts[1] })) {
-    return VERIFICATION_ERROR;
-  }
-
-  let decodedPayload = '';
-  try {
-    decodedPayload = atob(parts[0]);
-  } catch {
-    return DECODING_ERROR;
-  }
-
-  let payload: Payload = {};
-  try {
-    payload = JSON.parse(decodedPayload);
-  } catch {
-    return DESERIALIZATION_ERROR;
-  }
-
-  const {
-    customerId, maxVersionAllowed, format, internalUsageId, ...rest
-  } = payload;
-
-  if (internalUsageId !== undefined) {
-    return {
-      kind: TokenKind.internal,
-      internalUsageId,
-    };
-  }
-
-  if (customerId === undefined || maxVersionAllowed === undefined || format === undefined) {
-    return PAYLOAD_ERROR;
-  }
-
-  if (format !== FORMAT) {
-    return VERSION_ERROR;
-  }
-
-  return {
-    kind: TokenKind.verified,
-    payload: {
-      customerId,
-      maxVersionAllowed,
-      ...rest,
-    },
-  };
+  return GENERAL_ERROR;
 }
 
 function isPreview(patch: number): boolean {
@@ -122,19 +44,6 @@ function isPreview(patch: number): boolean {
 
 function hasLicensePrefix(licenseKey: string, prefix: string): boolean {
   return licenseKey.trim().startsWith(prefix);
-}
-
-export function isUnsupportedKeyFormat(licenseKey: string | undefined): boolean {
-  if (!licenseKey) {
-    return false;
-  }
-
-  if (hasLicensePrefix(licenseKey, 'LCXv1')) {
-    errors.log('W0000', 'config', 'licenseKey', 'LCXv1 is specified in the license key');
-    return true;
-  }
-
-  return false;
 }
 
 function displayTrialPanel(): void {
@@ -165,6 +74,10 @@ function getLicenseCheckParams({
       return { preview, error: 'W0021', warningType: 'lcx-used' };
     }
 
+    if (hasLicensePrefix(licenseKey, 'ewog')) {
+      return { preview, error: 'W0021', warningType: 'old-devextreme-key' };
+    }
+
     const license = parseLicenseKey(licenseKey);
 
     if (license.kind === TokenKind.corrupted) {
@@ -177,8 +90,8 @@ function getLicenseCheckParams({
       return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
 
-    if (license.kind === TokenKind.internal) {
-      return { preview, internal: true, error: license.internalUsageId === INTERNAL_USAGE_ID ? undefined : 'W0020' };
+    if (license.kind !== TokenKind.verified) {
+      return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
 
     if (!(major && minor)) {

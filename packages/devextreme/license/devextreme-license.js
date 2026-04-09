@@ -167,7 +167,15 @@ function main() {
     let lcp = TRIAL_VALUE;
     let licenseId = null;
 
-    if(lcx) {
+    if(lcx && lcx.trimStart().startsWith('ewog')) {
+        logStderr(
+            prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
+            TEMPLATES.keyVerificationFailed(),
+            TEMPLATES.oldDevExtremeKey(currentVersion),
+            TEMPLATES.keyWasFound(source.type, source.path),
+            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}`),
+        );
+    } else if(lcx) {
         lcp = tryConvertLCXtoLCP(lcx) || TRIAL_VALUE;
         const { warning, licenseId: id } = getLCPInfo(lcp);
         licenseId = id;
