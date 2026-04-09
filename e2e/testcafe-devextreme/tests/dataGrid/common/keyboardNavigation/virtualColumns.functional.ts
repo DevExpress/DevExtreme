@@ -393,7 +393,7 @@ test('DataGrid should move focus from Save to Cancel button on Tab press in row 
   },
 }));
 
-test('DataGrid should move focus from Save to Cancel button on Shift + Tab press in row editing mode with virtual columns (T1326106)', async (t) => {
+test('DataGrid should move focus from Save button to the last data cell on Shift + Tab press in row editing mode(T1326106)', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
