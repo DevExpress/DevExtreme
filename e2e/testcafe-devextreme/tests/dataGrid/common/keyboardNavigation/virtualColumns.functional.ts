@@ -401,9 +401,9 @@ test('DataGrid should move focus from Save to Cancel button on Shift + Tab press
     .expect(dataGrid.isReady())
     .ok();
 
-  const commandCell = dataGrid.getDataRow(1).getCommandCell(5);
+  const commandCell = dataGrid.getDataRow(0).getCommandCell(5);
 
-  // act - click Edit button on second row
+  // act - click Edit button on first row
   await t.click(commandCell.getButton(0));
 
   const saveButton = commandCell.getButton(0);
@@ -423,7 +423,7 @@ test('DataGrid should move focus from Save to Cancel button on Shift + Tab press
 
   // assert
   await t
-    .expect(firstDataCell.isFocused)
+    .expect(firstDataCell.element.focused)
     .ok();
 
   // act
