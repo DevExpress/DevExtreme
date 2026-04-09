@@ -50,7 +50,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: { class: APPOINTMENT_TOOLTIP_WRAPPER_CLASS },
-      _loopFocus: this.extraOptions._loopFocus,
+      _loopFocus: this.extraOptions.tabFocusLoopEnabled,
     });
 
     tooltip.setAria({

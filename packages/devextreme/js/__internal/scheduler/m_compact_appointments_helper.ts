@@ -60,7 +60,7 @@ export class CompactAppointmentsHelper {
       dragBehavior: options.allowDrag && this.createTooltipDragBehavior($appointmentCollector).bind(this),
       dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // TODO deprecated option
       isButtonClick: true,
-      _loopFocus: true,
+      tabFocusLoopEnabled: true,
     };
   }
 

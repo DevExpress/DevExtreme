@@ -159,7 +159,7 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
-  _timeZoneCalculator!: any;
+  private timeZoneCalculatorInstance!: any;
 
   postponedOperations: any;
 
@@ -213,7 +213,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private mainContainer: any;
 
-  _all: any;
+  private readonly all: any;
 
   _options: any;
 
@@ -222,11 +222,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private timeZonesPromise!: Promise<TimezoneLabel[]>;
 
   get timeZoneCalculator() {
-    if (!this._timeZoneCalculator) {
-      this._timeZoneCalculator = createTimeZoneCalculator(this.option('timeZone'));
+    if (!this.timeZoneCalculatorInstance) {
+      this.timeZoneCalculatorInstance = createTimeZoneCalculator(this.option('timeZone'));
     }
 
-    return this._timeZoneCalculator;
+    return this.timeZoneCalculatorInstance;
   }
 
   private postponeDataSourceLoading(promise?: any) {
@@ -412,7 +412,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option('items', []);
           this.refreshWorkSpace();
           if (this.readyToRenderAppointments) {
-            this._appointments.option('items', this._getAppointmentsToRepaint());
+            this._appointments.option('items', this.getAppointmentsToRepaint());
           }
         });
         break;
@@ -421,7 +421,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         if (this.readyToRenderAppointments) {
           this.updateOption('workSpace', 'hoursInterval', value / 60);
-          this._appointments.option('items', this._getAppointmentsToRepaint());
+          this._appointments.option('items', this.getAppointmentsToRepaint());
         }
         break;
       case 'tabIndex':
@@ -777,7 +777,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   updateAppointmentDataSource() {
-    this._timeZoneCalculator = null;
+    this.timeZoneCalculatorInstance = null;
 
     if (this.getWorkSpace()) {
       this.createAppointmentDataSource();
@@ -879,14 +879,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
-      ? this._getAppointmentsToRepaint()
+      ? this.getAppointmentsToRepaint()
       : [];
 
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
   }
 
-  _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
+  getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
     const appointmentsMap = this._layoutManager.createAppointmentsMap();
     return appointmentsMap;
   }
@@ -1296,7 +1296,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
-    this.allowDragging() && this._workSpace.initDragBehavior(this, this._all);
+    this.allowDragging() && this._workSpace.initDragBehavior(this, this.all);
     this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
 

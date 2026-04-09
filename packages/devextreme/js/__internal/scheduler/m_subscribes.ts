@@ -144,7 +144,7 @@ const subscribes = {
     };
   },
 
-  _createAppointmentTitle(data) {
+  createAppointmentTitle(data) {
     if (isPlainObject(data)) {
       return data.text;
     }
