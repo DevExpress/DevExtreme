@@ -21,4 +21,7 @@ export async function runChangePackageScopeCli(argv: string[] = process.argv.sli
 sh.set('-e');
 sh.config.silent = true;
 
-void runChangePackageScopeCli();
+runChangePackageScopeCli().catch((e: unknown) => {
+  console.error(e instanceof Error ? e.message : e);
+  process.exit(1);
+});
