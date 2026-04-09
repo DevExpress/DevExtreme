@@ -1,6 +1,11 @@
 A Timeline view displays an appointment sequence on a horizontal scale. The DevExtreme [Scheduler](/Documentation/Guide/UI_Components/Scheduler/Overview/) ships with four [timeline views](/Documentation/Guide/UI_Components/Scheduler/Views/View_Types/#Timeline_Views):
 
 - Timeline Day
+- Timeline Week
+- Timeline Work Week
+- Timeline Month
+<!--split-->
+
 This demo allows you to try/review the following Scheduler capabilities: 
 
 - Switch between Timeline view types using the [View Switcher](/Documentation/Guide/UI_Components/Scheduler/View_Switcher/) toolbar item.
