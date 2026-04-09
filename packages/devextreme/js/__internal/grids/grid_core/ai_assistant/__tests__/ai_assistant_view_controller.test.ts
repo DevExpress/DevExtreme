@@ -9,29 +9,42 @@ import {
 
 import { AIAssistantViewController } from '../ai_assistant_view_controller';
 
+interface MockVisibilityChangedCallback {
+  add: jest.Mock;
+  fire: jest.Mock;
+}
+
 interface MockAIAssistantView {
   toggle: jest.Mock<() => Promise<boolean>>;
   hide: jest.Mock<() => Promise<boolean>>;
   _invalidate: jest.Mock;
-  onVisibilityChanged?: (visible: boolean) => void;
+  visibilityChanged: MockVisibilityChangedCallback;
 }
 
 interface MockHeaderPanel {
   registerToolbarItem: jest.Mock;
   applyToolbarItem: jest.Mock;
   removeToolbarItem: jest.Mock;
+  getToolbarButtonClass: jest.Mock<(specificClass?: string) => string>;
 }
 
 const createMockAIAssistantView = (): MockAIAssistantView => ({
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   _invalidate: jest.fn(),
+  visibilityChanged: {
+    add: jest.fn(),
+    fire: jest.fn(),
+  },
 });
 
 const createMockHeaderPanel = (): MockHeaderPanel => ({
   registerToolbarItem: jest.fn(),
   applyToolbarItem: jest.fn(),
   removeToolbarItem: jest.fn(),
+  getToolbarButtonClass: jest.fn(
+    (specificClass?: string) => `dx-datagrid-toolbar-button${specificClass ? ` ${specificClass}` : ''}`,
+  ),
 });
 
 const createAIAssistantViewController = (
@@ -93,12 +106,12 @@ describe('AIAssistantViewController', () => {
     });
   });
 
-  describe('onVisibilityChanged subscription', () => {
-    it('should subscribe to aiAssistantView.onVisibilityChanged on init', () => {
+  describe('visibilityChanged subscription', () => {
+    it('should subscribe to aiAssistantView.visibilityChanged on init', () => {
       const { mockView } = createAIAssistantViewController();
 
-      expect(mockView.onVisibilityChanged).toBeDefined();
-      expect(typeof mockView.onVisibilityChanged).toBe('function');
+      expect(mockView.visibilityChanged.add).toHaveBeenCalledTimes(1);
+      expect(mockView.visibilityChanged.add).toHaveBeenCalledWith(expect.any(Function));
     });
   });
 

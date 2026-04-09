@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import { AIAssistantView } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view';
 import { AIAssistantViewController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view_controller';
 
@@ -8,7 +9,7 @@ gridCore.registerModule('aiAssistant', {
     return {
       aiAssistant: {
         enabled: false,
-        title: 'AI Assistant', // TODO add localization message
+        title: messageLocalization.format('dxDataGrid-aiAssistantTitle'),
       },
     };
   },

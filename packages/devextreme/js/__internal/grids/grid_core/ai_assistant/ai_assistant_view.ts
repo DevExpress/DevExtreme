@@ -1,3 +1,5 @@
+import type { Callback } from '@js/core/utils/callbacks';
+
 import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
 import { View } from '../m_modules';
@@ -5,14 +7,14 @@ import { View } from '../m_modules';
 export class AIAssistantView extends View {
   private aiChatInstance!: AIChat;
 
-  public onVisibilityChanged?: (visible: boolean) => void;
+  public visibilityChanged?: Callback;
 
   private getAIChatConfig(): AIChatOptions {
     return {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onVisibilityChanged: (visible: boolean): void => {
-        this.onVisibilityChanged?.(visible);
+        this.visibilityChanged?.fire(visible);
       },
     };
   }
@@ -23,6 +25,10 @@ export class AIAssistantView extends View {
     if (!this.aiChatInstance) {
       this.aiChatInstance = new AIChat(config);
     }
+  }
+
+  protected callbackNames(): string[] {
+    return ['visibilityChanged'];
   }
 
   public isVisible(): boolean {

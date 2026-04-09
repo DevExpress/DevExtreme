@@ -212,12 +212,12 @@ describe('AIAssistantView', () => {
     });
   });
 
-  describe('onVisibilityChanged', () => {
-    it('should fire onVisibilityChanged callback when popup visibility changes', () => {
+  describe('visibilityChanged', () => {
+    it('should fire visibilityChanged callback when popup visibility changes', () => {
       const { aiAssistantView } = createAIAssistantView();
       const callback = jest.fn();
 
-      aiAssistantView.onVisibilityChanged = callback;
+      aiAssistantView.visibilityChanged?.add(callback);
 
       const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
       aiChatConfig.onVisibilityChanged?.(true);
