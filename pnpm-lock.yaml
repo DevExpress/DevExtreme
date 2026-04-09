@@ -162,7 +162,7 @@ catalogs:
 
 overrides:
   '@devexpress/callsite-record@^4.1.6': 4.1.7
-  basic-ftp@<5.2.0: ~5.2.0
+  basic-ftp@<5.2.1: ~5.2.1
   '@isaacs/brace-expansion@<=5.0.0': ^5.0.1
   '@modelcontextprotocol/sdk@>=1.10.0 <=1.25.3': ^1.26.0
   form-data@<2.5.4: 2.5.5
@@ -8239,8 +8239,8 @@ packages:
     resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
     engines: {node: '>= 0.8'}
 
-  basic-ftp@5.2.0:
-    resolution: {integrity: sha512-VoMINM2rqJwJgfdHq6RiUudKt2BV+FY5ZFezP/ypmwayk68+NzzAQy4XXLlqsGD4MCzq3DrmNFD/uUmBJuGoXw==}
+  basic-ftp@5.2.1:
+    resolution: {integrity: sha512-0yaL8JdxTknKDILitVpfYfV2Ob6yb3udX/hK97M7I3jOeznBNxQPtVvTUtnhUkyHlxFWyr5Lvknmgzoc7jf+1Q==}
     engines: {node: '>=10.0.0'}
 
   batch@0.6.1:
@@ -28104,7 +28104,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.1.2
 
-  basic-ftp@5.2.0: {}
+  basic-ftp@5.2.1: {}
 
   batch@0.6.1: {}
 
@@ -32162,7 +32162,7 @@ snapshots:
 
   get-uri@6.0.3:
     dependencies:
-      basic-ftp: 5.2.0
+      basic-ftp: 5.2.1
       data-uri-to-buffer: 6.0.2
       debug: 4.4.3
       fs-extra: 11.2.0

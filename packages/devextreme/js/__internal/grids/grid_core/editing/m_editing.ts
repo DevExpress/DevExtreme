@@ -2387,7 +2387,7 @@ class EditingControllerImpl extends modules.ViewController {
 
     const className = classNameButtonByNames[name];
     const onInitialized = (e) => {
-      $(e.element).addClass(headerPanel._getToolbarButtonClass(`${EDIT_BUTTON_CLASS} ${this.addWidgetPrefix(className)}-button`));
+      $(e.element).addClass(headerPanel.getToolbarButtonClass(`${EDIT_BUTTON_CLASS} ${this.addWidgetPrefix(className)}-button`));
     };
     const hintText = titleButtonTextByClassNames[name];
     const isButtonDisabled = (className === 'save' || className === 'cancel') && this._isEditButtonDisabled();

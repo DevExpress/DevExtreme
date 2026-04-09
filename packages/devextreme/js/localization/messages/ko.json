@@ -107,6 +107,13 @@
         "dxNumberBox-noDataText": "데이터 없음",
 
 
+        "dxDataGrid-aiAssistantTitle": "AI Assistant",
+        "dxDataGrid-aiAssistantProcessingMessage": "Processing...",
+        "dxDataGrid-aiAssistantSuccessMessage": "Success",
+        "dxDataGrid-aiAssistantClearButtonText": "Clear",
+        "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
+        "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
+        "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
         "dxDataGrid-aiPromptEditorTitle": "AI 프롬프트 편집기",
         "dxDataGrid-aiPromptEditorPlaceholder": "AI에게 열 값 생성을 요청하세요...",
         "dxDataGrid-aiPromptEditorApplyButton": "적용",

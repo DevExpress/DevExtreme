@@ -2,7 +2,7 @@ import $ from '@js/core/renderer';
 import type { Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
-import Popup from '@js/ui/popup';
+import Popup from '@ts/ui/popup/m_popup';
 
 import { CLASSES, DEFAULT_POPUP_OPTIONS } from './const';
 import type { AIChatOptions } from './types';
@@ -29,6 +29,12 @@ export class AIChat {
     return {
       ...DEFAULT_POPUP_OPTIONS,
       wrapperAttr: { class: `${CLASSES.aiChat} ${CLASSES.aiDialog}` },
+      onShowing: (): void => {
+        this.options.onVisibilityChanged?.(true);
+      },
+      onHidden: (): void => {
+        this.options.onVisibilityChanged?.(false);
+      },
       contentTemplate: ($container): void => {
         const $editorContainer = $('<div>')
           .addClass(CLASSES.aiChatContent)
@@ -43,11 +49,15 @@ export class AIChat {
     };
   }
 
-  public show(): Promise<boolean> {
-    return this.popupInstance.show();
+  public toggle(): Promise<boolean> {
+    return this.popupInstance.toggle();
   }
 
   public hide(): Promise<boolean> {
     return this.popupInstance.hide();
+  }
+
+  public isShown(): boolean {
+    return !!this.popupInstance.option('visible');
   }
 }
