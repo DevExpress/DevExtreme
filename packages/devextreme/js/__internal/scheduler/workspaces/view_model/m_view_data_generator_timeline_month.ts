@@ -8,10 +8,6 @@ import { ViewDataGenerator } from './m_view_data_generator';
 const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
-  protected usesWeeklyDayLayout(): boolean {
-    return true;
-  }
-
   protected override getSkippedDaysAnchorDay(
     firstDayOfWeekOption: number | undefined,
     startViewDate: Date,

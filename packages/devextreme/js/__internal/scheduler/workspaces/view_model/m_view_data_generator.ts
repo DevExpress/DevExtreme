@@ -60,10 +60,6 @@ export class ViewDataGenerator {
     ].includes(this.viewType);
   }
 
-  protected usesWeeklyDayLayout(): boolean {
-    return this.baseDaysInInterval >= 7;
-  }
-
   protected usesMonthDayLayout(): boolean {
     return false;
   }
@@ -576,10 +572,7 @@ export class ViewDataGenerator {
     const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
     let offsetByCount: number;
-    if (
-      this.skippedDays.length > 0
-      && (this.usesWeeklyDayLayout() || this.usesMonthDayLayout() || this.isWorkWeekView())
-    ) {
+    if (this.skippedDays.length > 0) {
       offsetByCount = this.getVisibleDayOffset(
         rowIndex,
         columnIndex,
