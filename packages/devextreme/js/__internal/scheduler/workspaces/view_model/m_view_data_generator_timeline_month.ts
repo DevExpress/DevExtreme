@@ -12,8 +12,11 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
     return true;
   }
 
-  protected getSkippedDaysAnchorKind(): 'startViewDate' {
-    return 'startViewDate';
+  protected override getSkippedDaysAnchorDay(
+    firstDayOfWeekOption: number | undefined,
+    startViewDate: Date,
+  ): number {
+    return startViewDate.getDay();
   }
 
   calculateEndDate(startDate: Date, interval: number, endDayHour: number): Date {

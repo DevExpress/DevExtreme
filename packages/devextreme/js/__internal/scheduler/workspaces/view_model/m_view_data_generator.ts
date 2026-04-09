@@ -30,7 +30,6 @@ import type {
 } from './m_types';
 
 const toMs = dateUtils.dateToMilliseconds;
-type SkippedDaysAnchorKind = 'firstDayOfWeek' | 'startViewDate';
 
 export class ViewDataGenerator {
   protected baseDaysInInterval = 1;
@@ -73,18 +72,10 @@ export class ViewDataGenerator {
     return getVisibleDaysOfWeek(firstDayOfWeek, this.skippedDays);
   }
 
-  protected getSkippedDaysAnchorKind(): SkippedDaysAnchorKind {
-    return 'firstDayOfWeek';
-  }
-
-  private getSkippedDaysAnchorDay(
+  protected getSkippedDaysAnchorDay(
     firstDayOfWeekOption: number | undefined,
-    startViewDate: Date,
+    startViewDate: Date, // eslint-disable-line @typescript-eslint/no-unused-vars
   ): number {
-    if (this.getSkippedDaysAnchorKind() === 'startViewDate') {
-      return startViewDate.getDay();
-    }
-
     return this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
   }
 
