@@ -20,7 +20,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
   public static readonly strategyName = 'virtual';
 
   protected getBasePanelFilterOptions(): FilterOptions[] {
-    const viewOffset = this._resolveOption('viewOffset');
+    const viewOffset = this.resolveOption('viewOffset');
     const hourMs = toMs('hour');
     const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
     const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
@@ -68,7 +68,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         allDayPanelFilter: false,
         allDayPanelMode: this.allDayPanelMode,
         supportAllDayRow: this.supportAllDayRow,
-        viewOffset: this._resolveOption('viewOffset'),
+        viewOffset: this.resolveOption('viewOffset'),
       });
     });
 
