@@ -19,7 +19,7 @@ import {
   isAdaptiveItem,
   isGroupFooterRow,
   isGroupRow as isGroupRowElement,
-} from '../keyboard_navigation/m_keyboard_navigation_utils';
+} from '../keyboard_navigation/utils';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
