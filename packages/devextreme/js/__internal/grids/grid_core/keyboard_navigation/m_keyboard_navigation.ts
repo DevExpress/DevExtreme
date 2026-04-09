@@ -82,9 +82,11 @@ import {
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
+import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
+import type { NavigationDirection, NavigationElementType, NavigationKeyCode } from './types';
 import {
   getInteractiveElement,
-  isCellInHeaderRow,
+  getNextColumnIndex, isCellInHeaderRow,
   isDataRow,
   isDetailRow,
   isEditForm,
@@ -96,10 +98,7 @@ import {
   isMobile,
   isNotFocusedRow,
   shouldPreventScroll,
-} from './m_keyboard_navigation_utils';
-import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
-import type { NavigationDirection, NavigationElementType, NavigationKeyCode } from './types';
-import { getNextColumnIndex } from './utils';
+} from './utils';
 
 export class KeyboardNavigationController extends KeyboardNavigationControllerCore {
   private _updateFocusTimeout: any;
@@ -508,7 +507,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     this._editorFactory.loseFocus();
 
-    if (this._editingController.isEditing() && !this._isRowEditMode()) {
+    if (this._editingController.isEditing() && !this.isRowEditMode()) {
       this._resetFocusedCell(true);
       this._resetFocusedView();
       this._closeEditCell();
@@ -1034,7 +1033,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const nextCellFocused = this._focusCell($nextCell, !isHighlighted);
 
     if (nextCellFocused) {
-      if (!this._isRowEditMode() && isEditingAllowed) {
+      if (!this.isRowEditMode() && isEditingAllowed) {
         this._editFocusedCell();
       } else {
         this._focusInteractiveElement($nextCell, isShift);
@@ -1280,7 +1279,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const d = Deferred();
     const { target } = event;
     const $cell = this.getCellElementFromTarget(target);
-    const isRowEditMode = this._isRowEditMode();
+    const isRowEditMode = this.isRowEditMode();
 
     this._updateFocusedCellPosition($cell);
 
@@ -1310,7 +1309,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     if (isEditing) {
       this._updateFocusedCellPosition($cell);
-      if (!this._isRowEditMode()) {
+      if (!this.isRowEditMode()) {
         if (this._editingController.getEditMode() === 'cell') {
           this._editingController.cancelEditData();
         } else {
@@ -1820,7 +1819,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       let $cell: dxElementWrapper | null = this._getFocusedCell();
       const isEditing = this._editingController.isEditing();
 
-      if (!this.getMasterDetailCell($cell) || this._isRowEditMode()) {
+      if (!this.getMasterDetailCell($cell) || this.isRowEditMode()) {
         if (this._hasSkipRow($cell.parent())) {
           const direction = this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0
             ? 'upArrow'
@@ -2016,10 +2015,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     return { columnIndex, rowIndex };
-  }
-
-  private getRowIndex() {
-    return this._focusedCellPosition ? this._focusedCellPosition.rowIndex : -1;
   }
 
   public getColumnIndex() {
@@ -2329,7 +2324,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
 
     if (this._isAllowEditing(row, column)) {
-      if (this._isRowEditMode()) {
+      if (this.isRowEditMode()) {
         this._editingController.editRow(visibleRowIndex);
       } else if (focusedCellPosition) {
         this._startEditCell(eventArgs, fastEditingKey);
@@ -2632,11 +2627,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return gridCoreUtils.isElementInCurrentGrid(this, $(event.target));
   }
 
-  private _isRowEditMode() {
-    const editMode = this._editingController.getEditMode();
-    return editMode === EDIT_MODE_ROW || editMode === EDIT_MODE_FORM;
-  }
-
   private _isCellEditMode() {
     const editMode = this._editingController.getEditMode();
     return editMode === EDIT_MODE_CELL || editMode === EDIT_MODE_BATCH;
@@ -2886,6 +2876,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   public navigationToCellInProgress(): boolean {
     return this.needToRestoreFocus || this.needNavigationToCell();
   }
+
+  public isRowEditMode(): boolean {
+    const editMode = this._editingController.getEditMode();
+    return editMode === EDIT_MODE_ROW || editMode === EDIT_MODE_FORM;
+  }
+
+  public getRowIndex(): number {
+    return this._focusedCellPosition ? this._focusedCellPosition.rowIndex : -1;
+  }
 }
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender extends Base {
@@ -3007,7 +3006,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     const { fullReload, pageSize } = operationTypes ?? {};
 
     if (!change || !repaintChangesOnly || fullReload || pageSize) {
-      const preventScroll = shouldPreventScroll(this);
+      const preventScroll = shouldPreventScroll(this._keyboardNavigationController);
       this.renderFocusState({
         preventScroll,
         pageSizeChanged: pageSize,
@@ -3228,7 +3227,7 @@ const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class A
     super._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
     if (view.name === ROWS_VIEW) {
       this._rowsView.renderFocusState({
-        preventScroll: shouldPreventScroll(this),
+        preventScroll: shouldPreventScroll(this._keyboardNavigationController),
       });
     }
   }
