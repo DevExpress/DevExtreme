@@ -49,7 +49,7 @@ jobs:
 
     - name: Build localization
       working-directory: ./packages/devextreme
-      run: pnpx gulp localization
+      run: pnpm exec gulp localization
 
     - name: Jest tests
       run: pnpm exec nx test-jest devextreme
