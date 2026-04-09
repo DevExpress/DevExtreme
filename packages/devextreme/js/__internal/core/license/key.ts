@@ -13,5 +13,3 @@ export const PUBLIC_KEY: PublicKey = {
     230, 44, 247, 200, 253, 170, 192, 246, 30, 12, 96, 205, 100, 249, 181, 93, 0, 231,
   ]),
 };
-
-export const INTERNAL_USAGE_ID = 'GbnwUNpOUPaHhM47HM4Sxw';
