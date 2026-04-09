@@ -492,7 +492,7 @@ module('Integration: Appointments in Month view', {
                     height: 600
                 });
 
-                const appointments = scheduler.instance._getAppointmentsToRepaint();
+                const appointments = scheduler.instance.getAppointmentsToRepaint();
                 const parts = appointments.map((item) => ({
                     level: item.level,
                     maxLevel: item.maxLevel,

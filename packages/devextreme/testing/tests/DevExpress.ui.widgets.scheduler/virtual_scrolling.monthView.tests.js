@@ -547,7 +547,7 @@ module('Virtual scrolling Month View', () => {
                             promise,
                             () => {
                                 const layoutManager = instance.getLayoutManager();
-                                const settings = layoutManager._positionMap[0][0];
+                                const settings = layoutManager.positionMap[0][0];
 
                                 assert.equal(
                                     settings.groupIndex,
@@ -645,7 +645,7 @@ module('Virtual scrolling Month View', () => {
                             promise,
                             () => {
                                 const layoutManager = instance.getLayoutManager();
-                                const settings = layoutManager._positionMap[0][0];
+                                const settings = layoutManager.positionMap[0][0];
 
                                 assert.ok(true, `scrollX: ${scrollX}`);
 

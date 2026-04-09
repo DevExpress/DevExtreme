@@ -1685,7 +1685,7 @@ QUnit.test('Full-size appointment should not have empty class in "auto" mode', a
         }
     );
 
-    const getHeightStub = sinon.stub(this.instance.getLayoutManager().getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
+    const getHeightStub = sinon.stub(this.instance.getLayoutManager().getRenderingStrategyInstance(), 'getAppointmentDefaultHeight').callsFake(function() {
         return 18;
     });
 
@@ -2356,7 +2356,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal($dropDownMenu.length, 0, 'ddAppointment isn\'t rendered');
 });
 
-QUnit.test('_isAppointmentEmpty should work correctly in different strategies', async function(assert) {
+QUnit.test('isAppointmentEmpty should work correctly in different strategies', async function(assert) {
     await this.createInstance({
         views: ['timelineDay', 'week'],
         currentView: 'timelineDay'
@@ -2364,18 +2364,18 @@ QUnit.test('_isAppointmentEmpty should work correctly in different strategies', 
 
     const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
 
-    assert.ok(renderingStrategy._isAppointmentEmpty(34, 41), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
+    assert.ok(renderingStrategy.isAppointmentEmpty(34, 41), 'Appointment is empty');
+    assert.notOk(renderingStrategy.isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
 
     this.instance.option('currentView', 'week');
     await waitAsync(0);
 
-    assert.ok(renderingStrategy._isAppointmentEmpty(34, 39), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
+    assert.ok(renderingStrategy.isAppointmentEmpty(34, 39), 'Appointment is empty');
+    assert.notOk(renderingStrategy.isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
 
     this.instance.option('currentView', 'month');
     await waitAsync(0);
 
-    assert.ok(renderingStrategy._isAppointmentEmpty(19, 50), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
+    assert.ok(renderingStrategy.isAppointmentEmpty(19, 50), 'Appointment is empty');
+    assert.notOk(renderingStrategy.isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
 });

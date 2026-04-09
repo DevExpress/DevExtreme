@@ -658,7 +658,7 @@ module('Virtual scrolling integration', () => {
                         const { instance } = this.scheduler;
 
                         const layoutManager = instance.getLayoutManager();
-                        const settings = layoutManager._positionMap[0][0];
+                        const settings = layoutManager.positionMap[0][0];
 
                         assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                     });
@@ -1195,7 +1195,7 @@ module('Virtual scrolling integration', () => {
                                 () => {
 
                                     const layoutManager = instance.getLayoutManager();
-                                    const settings = layoutManager._positionMap[0][0];
+                                    const settings = layoutManager.positionMap[0][0];
 
                                     assert.equal(
                                         settings.groupIndex,
@@ -1256,7 +1256,7 @@ module('Virtual scrolling integration', () => {
                     const { instance } = this.scheduler;
 
                     const layoutManager = instance.getLayoutManager();
-                    const settings = layoutManager._positionMap[0][0];
+                    const settings = layoutManager.positionMap[0][0];
 
                     assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                 });
@@ -1292,7 +1292,7 @@ module('Virtual scrolling integration', () => {
                     const { instance } = this.scheduler;
 
                     const layoutManager = instance.getLayoutManager();
-                    const settings = layoutManager._positionMap[0][0];
+                    const settings = layoutManager.positionMap[0][0];
 
                     assert.equal(settings.groupIndex, 1, 'groupIndex is correct');
                 });
@@ -1325,7 +1325,7 @@ module('Virtual scrolling integration', () => {
                     const { instance } = this.scheduler;
 
                     const layoutManager = instance.getLayoutManager();
-                    const settings = layoutManager._positionMap[0][0];
+                    const settings = layoutManager.positionMap[0][0];
 
                     assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                 });
