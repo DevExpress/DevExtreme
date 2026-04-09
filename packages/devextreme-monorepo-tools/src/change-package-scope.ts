@@ -20,32 +20,34 @@ export function changePackageScope(args: ChangePackageScopeOptions): Promise<str
     fs.createReadStream(args.tgz).pipe(createUnzip()).pipe(tar.extract(dirName, { strip: 1 })).on('finish', () => {
       sh.pushd(dirName);
 
-      const name = npm.pkg.get('name')?.match(/^(@(.*)\/)?(.*)$/)?.[3];
-      const version = npm.pkg.get('version');
-
-      if (!name) {
-        reject(new Error('Unable to get package name'));
-        return;
-      }
-
-      if (!version) {
-        reject(new Error('Unable to get package version'));
-        return;
-      }
-
       let newDirName: string | undefined;
 
-      if (args.scope) {
-        npm.pkg.set({ name: `@${args.scope}/${name}` });
-        newDirName = `${args.scope}-${name}-${version}`;
-      }
+      try {
+        const name = npm.pkg.get('name')?.match(/^(@(.*)\/)?(.*)$/)?.[3];
+        const version = npm.pkg.get('version');
 
-      if (args.removeScope) {
-        npm.pkg.set({ name });
-        newDirName = `${name}-${version}`;
-      }
+        if (!name) {
+          reject(new Error('Unable to get package name'));
+          return;
+        }
 
-      sh.popd();
+        if (!version) {
+          reject(new Error('Unable to get package version'));
+          return;
+        }
+
+        if (args.scope) {
+          npm.pkg.set({ name: `@${args.scope}/${name}` });
+          newDirName = `${args.scope}-${name}-${version}`;
+        }
+
+        if (args.removeScope) {
+          npm.pkg.set({ name });
+          newDirName = `${name}-${version}`;
+        }
+      } finally {
+        sh.popd();
+      }
 
       if (newDirName) {
         if (fs.existsSync(newDirName)) {

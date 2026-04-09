@@ -119,6 +119,7 @@ describe('changePackageScope', () => {
     finishHandler();
 
     await expect(promise).rejects.toThrow('Unable to get package name');
+    expect(sh.popd).toHaveBeenCalled();
   });
 
   test('rejects when package version cannot be retrieved', async () => {
@@ -130,6 +131,7 @@ describe('changePackageScope', () => {
     finishHandler();
 
     await expect(promise).rejects.toThrow('Unable to get package version');
+    expect(sh.popd).toHaveBeenCalled();
   });
 
   test('rejects on extraction error', async () => {
