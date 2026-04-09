@@ -16,7 +16,7 @@ interface CommonOptions extends CountGenerationConfig {
   viewOffset: number;
   hoursInterval: number;
   viewType: ViewType;
-  skippedDays: number[];
+  skippedDays?: number[];
   cellCount: number;
   isProvideVirtualCellsWidth: boolean;
   isGenerateTimePanelData?: boolean;
