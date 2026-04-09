@@ -92,7 +92,7 @@ jobs:
           pnpm nx build sbom;
 
       - name: Build artifacts package
-        run: npx ts-node tools/scripts/make-artifacts-package
+        run: pnpm run make-artifacts-package
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
@@ -162,7 +162,7 @@ jobs:
           PACKAGE: ${{ matrix.package }}
         run: |
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          PACKAGE_DIR=$(npx ts-node tools/scripts/change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
+          PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
           pnpm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
