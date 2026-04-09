@@ -46,7 +46,7 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
       const daysInMonth = monthDate.getDate();
       for (let day = 1; day <= daysInMonth; day += 1) {
         const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
-        if (!this.skippedDays.includes(date.getDay())) {
+        if (!this.isSkippedDate(date)) {
           cellCount += 1;
         }
       }
