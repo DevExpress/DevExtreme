@@ -245,6 +245,9 @@ importers:
       devextreme-metadata:
         specifier: workspace:*
         version: link:packages/devextreme-metadata
+      devextreme-monorepo-tools:
+        specifier: workspace:*
+        version: link:packages/devextreme-monorepo-tools/npm
       http-server:
         specifier: 14.1.1
         version: 14.1.1
@@ -1992,9 +1995,6 @@ importers:
       tar-fs:
         specifier: 3.1.2
         version: 3.1.2
-      yargs:
-        specifier: 17.7.2
-        version: 17.7.2
     devDependencies:
       '@types/jest':
         specifier: 29.5.14
@@ -2005,15 +2005,13 @@ importers:
       '@types/tar-fs':
         specifier: 2.0.4
         version: 2.0.4
-      '@types/yargs':
-        specifier: 17.0.35
-        version: 17.0.35
       ts-jest:
         specifier: 29.1.3
         version: 29.1.3(@babel/core@7.29.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.29.0))(jest@30.2.0(@types/node@25.5.0)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.15.3)(@types/node@25.5.0)(typescript@5.9.3)))(typescript@5.9.3)
       ts-node:
         specifier: catalog:tools
         version: 10.9.2(@swc/core@1.15.3)(@types/node@25.5.0)(typescript@5.9.3)
+    publishDirectory: npm
 
   packages/devextreme-react:
     dependencies:
