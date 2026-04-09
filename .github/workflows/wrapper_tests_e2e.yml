@@ -60,7 +60,7 @@ jobs:
           mkdir -p builds-artifacts
           7z a -tzip -mx3 -mmt2 builds-artifacts/react19-build.zip ./builders/react19/dist/*
           7z a -tzip -mx3 -mmt2 builds-artifacts/vue3-build.zip ./builders/vue3/dist/*
-          7z a -tzip -mx3 -mmt2 builds-artifacts/angular19-build.zip ./builders/angular19/dist/*
+          7z a -tzip -mx3 -mmt2 builds-artifacts/angular-build.zip ./builders/angular/dist/*
 
       - name: Upload wrappers builds
         uses: actions/upload-artifact@v4
@@ -77,7 +77,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        framework: [react19, vue3, angular19]
+        framework: [react19, vue3, angular]
 
     steps:
       - name: Get sources
@@ -137,6 +137,6 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-fails-${{matrix.framework}} 
+          name: test-fails-${{matrix.framework}}
           path: e2e/wrappers/screenshots
-          if-no-files-found: ignore 
+          if-no-files-found: ignore
