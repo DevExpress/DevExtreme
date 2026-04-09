@@ -355,7 +355,7 @@ export class DateGeneratorBaseStrategy {
     ];
   }
 
-  private createRecurrenceOptions(appointment: AppointmentAdapter, groupIndex?) {
+  protected createRecurrenceOptions(appointment: AppointmentAdapter, groupIndex?) {
     const { viewOffset } = this.options;
     // NOTE: For creating a recurrent appointments,
     // we should use original appointment's dates (without view offset).
