@@ -42,7 +42,7 @@
     "Responsive-ui",
     "Javascript",
     "Typescript",
-    "shadowdom"  
+    "shadowdom"
   ],
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
@@ -50,5 +50,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git"
+  },
+  "publishConfig": {
+    "directory": "../devextreme/artifacts/npm/devextreme-dist",
+    "linkDirectory": true
   }
 }

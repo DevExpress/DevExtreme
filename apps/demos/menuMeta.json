@@ -4213,6 +4213,20 @@
             ]
           },
           {
+            "Name": "Message Streaming",
+            "Equivalents": "Response Streaming, Streaming Responses, Streaming AI Responses, Streaming Output, Stop Request, Stop Request Execution, Cancel Request, Stop Response Generation, Cancel AI Request, Stop Streaming, Abort AI Request",
+            "Demos": [
+              {
+                "Title": "Message Streaming",
+                "Name": "MessageStreaming",
+                "Widget": "Chat",
+                "Badge": "New",
+                "Modules": "html-react-parser,openai,unified",
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
             "Name": "Tool Call Visualization",
             "Equivalents": "",
             "Demos": [

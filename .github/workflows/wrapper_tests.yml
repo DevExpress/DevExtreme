@@ -134,7 +134,7 @@ jobs:
 
       - name: Download Browser
         if: matrix.framework == 'angular'
-        run: pnpx puppeteer browsers install chrome@130.0.6723.69
+        run: pnpm --filter devextreme-angular exec puppeteer browsers install chrome@130.0.6723.69
 
       - name: Test ${{ matrix.framework }}
         env:

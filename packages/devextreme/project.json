@@ -13,8 +13,7 @@
         "targetDirectory": "./artifacts",
         "excludePatterns": [
           "./artifacts/css",
-          "./artifacts/npm/devextreme/package.json",
-          "./artifacts/npm/devextreme-dist/package.json"
+          "./artifacts/npm/devextreme/package.json"
         ]
       }
     },
@@ -761,6 +760,7 @@
         {
           "env": "BUILD_TEST_INTERNAL_PACKAGE"
         },
+        "{workspaceRoot}/packages/devextreme-dist/package.json",
         "{projectRoot}/artifacts/transpiled/**/*",
         "{projectRoot}/artifacts/transpiled-esm-npm/**/*"
       ],

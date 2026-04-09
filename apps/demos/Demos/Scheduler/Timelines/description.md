@@ -1,11 +1,13 @@
-Timeline views display appointments as a sequence of events on a horizontal timeline, as opposed to basic views that display appointments in a calendar format. You can use the View Switcher above the timetable to switch between the views.
+A Timeline view displays an appointment sequence on a horizontal scale. The DevExtreme [Scheduler](/Documentation/Guide/UI_Components/Scheduler/Overview/) ships with four [timeline views](/Documentation/Guide/UI_Components/Scheduler/Views/View_Types/#Timeline_Views):
 
-List timeline views in the [views](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/) array to add them to your Scheduler. To activate a specific view at application startup, use the [currentView](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#currentView) property.
-
-For information about all supported view types, refer to the following help topic: [View Types](/Documentation/Guide/UI_Components/Scheduler/Views/View_Types/).
+- Timeline Day
+- Timeline Week
+- Timeline Work Week
+- Timeline Month
 <!--split-->
 
-This demo shows multiple calendars side-by-side (with data grouped by resources). For information on how to configure such a display, see the following demos:
+This demo allows you to try/review the following Scheduler capabilities: 
 
-- [Resources](/Demos/WidgetsGallery/Demo/Scheduler/Resources/)
-- [Group Orientation](/Demos/WidgetsGallery/Demo/Scheduler/GroupOrientation/)
+- Switch between Timeline view types using the [View Switcher](/Documentation/Guide/UI_Components/Scheduler/View_Switcher/) toolbar item.
+- Enable "Snap to Grid" capability for all appointments or short appointments only (shorter than two cells in duration). For additional information, see [snapToCellsMode](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#snapToCellsMode).
+- Note how the Scheduler groups appointments by resource to separate low and high priority tasks. For additional information, refer to the following technical demo: [Scheduler - Grouping by Resources](/Demos/WidgetsGallery/Demo/Scheduler/GroupingByResources/).
