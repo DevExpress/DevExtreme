@@ -29,6 +29,22 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(gen.isSkippedDate(new Date(2026, 3, 12))).toBe(true);
       expect(gen.isSkippedDate(new Date(2026, 3, 13))).toBe(false);
     });
+
+    it('workWeek view skips weekends by default', () => {
+      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      expect(gen.isSkippedDate(new Date(2026, 3, 11))).toBe(true);
+      expect(gen.isSkippedDate(new Date(2026, 3, 12))).toBe(true);
+      expect(gen.isSkippedDate(new Date(2026, 3, 13))).toBe(false);
+    });
+
+    it('workWeek view respects custom skippedDays override', () => {
+      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      gen.skippedDays = [1, 2];
+      expect(gen.isSkippedDate(new Date(2026, 3, 11))).toBe(false);
+      expect(gen.isSkippedDate(new Date(2026, 3, 12))).toBe(false);
+      expect(gen.isSkippedDate(new Date(2026, 3, 13))).toBe(true);
+      expect(gen.isSkippedDate(new Date(2026, 3, 14))).toBe(true);
+    });
   });
 
   describe('daysInInterval getter', () => {

@@ -4,6 +4,8 @@ import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
 export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
   protected baseDaysInInterval = 5;
 
+  public skippedDays: number[] = [0, 6];
+
   protected calculateStartViewDate(options) {
     return workWeekUtils.calculateStartViewDate(
       options.currentDate,
