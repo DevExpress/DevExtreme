@@ -342,22 +342,22 @@ function _convertToEditorOptions({
       if (editorType === 'dxRangeSlider') {
         // eslint-disable-next-line max-depth
         if (!result.startName) {
-          result.startName = `${defaultEditorName}Start`;
+          result.startName = `${defaultEditorName}[0]`;
         }
         // eslint-disable-next-line max-depth
         if (!result.endName) {
-          result.endName = `${defaultEditorName}End`;
+          result.endName = `${defaultEditorName}[1]`;
         }
       }
 
       if (editorType === 'dxDateRangeBox') {
         // eslint-disable-next-line max-depth
         if (!result.startDateName) {
-          result.startDateName = `${defaultEditorName}Start`;
+          result.startDateName = `${defaultEditorName}[0]`;
         }
         // eslint-disable-next-line max-depth
         if (!result.endDateName) {
-          result.endDateName = `${defaultEditorName}End`;
+          result.endDateName = `${defaultEditorName}[1]`;
         }
       }
 

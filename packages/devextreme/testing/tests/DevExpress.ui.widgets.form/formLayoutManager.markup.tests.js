@@ -3169,7 +3169,7 @@ QUnit.module('Supported editors', () => {
         assert.deepEqual(layoutManager.getEditor('CustomRange').option('endName'), 'RangeEnd', 'endName specified correctly');
     });
 
-    test('RangeSlider inputs should be rendered with predefined name attributes if startName and endName are not specified (T1256743)', function(assert) {
+    test('RangeSlider inputs should be rendered with predefined name attributes if startName and endName are not specified (T1256743, T1256453)', function(assert) {
         const layoutManager = $('#container').dxLayoutManager({
             layoutData: {
                 range: [10, 20]
@@ -3180,8 +3180,8 @@ QUnit.module('Supported editors', () => {
             }]
         }).dxLayoutManager('instance');
 
-        assert.deepEqual(layoutManager.getEditor('CustomRange').option('startName'), 'CustomRangeStart', 'startName specified correctly');
-        assert.deepEqual(layoutManager.getEditor('CustomRange').option('endName'), 'CustomRangeEnd', 'endName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('CustomRange').option('startName'), 'CustomRange[0]', 'startName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('CustomRange').option('endName'), 'CustomRange[1]', 'endName specified correctly');
     });
 
     test('Render DateRangeBox', function(assert) {
@@ -3225,19 +3225,19 @@ QUnit.module('Supported editors', () => {
         assert.deepEqual(layoutManager.getEditor('DateRange').option('endDateName'), 'RangeEnd', 'endDateName specified correctly');
     });
 
-    test('DateRangeBox inputs should be rendered with predefined name attributes if startDateName and endDateName are not specified (T1256743)', function(assert) {
+    test('DateRangeBox inputs should be rendered with predefined name attributes if startDateName and endDateName are not specified (T1256743, T1256453)', function(assert) {
         const layoutManager = $('#container').dxLayoutManager({
             layoutData: {
                 range: [new Date(2021, 9, 17), new Date(2021, 9, 25)]
             },
             items: [{
-                dataField: 'DateRange',
+                dataField: 'VacationDates',
                 editorType: 'dxDateRangeBox'
             }]
         }).dxLayoutManager('instance');
 
-        assert.deepEqual(layoutManager.getEditor('DateRange').option('startDateName'), 'DateRangeStart', 'startDateName specified correctly');
-        assert.deepEqual(layoutManager.getEditor('DateRange').option('endDateName'), 'DateRangeEnd', 'endDateName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('VacationDates').option('startDateName'), 'VacationDates[0]', 'startDateName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('VacationDates').option('endDateName'), 'VacationDates[1]', 'endDateName specified correctly');
     });
 
     test('Form with dxRadioGroup that items are defined via \'dataSource\' option renders without error', function(assert) {
