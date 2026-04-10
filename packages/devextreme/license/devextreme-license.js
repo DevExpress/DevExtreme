@@ -81,8 +81,22 @@ function parseArgs(argv) {
         else if(a === '--non-modular') out.nonModular = true;
         else if(a === '--no-gitignore') out.gitignore = false;
         else if(a === '--force') out.force = true;
-        else if(a === '--cwd') out.cwd = args[++i] || process.cwd();
-        else if(a.startsWith('--cwd=')) out.cwd = a.slice('--cwd='.length);
+        else if(a === '--cwd') {
+            const next = args[i + 1];
+            if(!next || next.startsWith('-')) {
+                logStderr(prefixed('Warning: --cwd requires a path argument but none was provided. Ignoring --cwd.'));
+            } else {
+                out.cwd = args[++i];
+            }
+        }
+        else if(a.startsWith('--cwd=')) {
+            const val = a.slice('--cwd='.length);
+            if(!val) {
+                logStderr(prefixed('Warning: --cwd requires a path argument but none was provided. Ignoring --cwd.'));
+            } else {
+                out.cwd = val;
+            }
+        }
         else fail(`Unknown argument: ${a}\nRun devextreme-license --help`);
     }
 
