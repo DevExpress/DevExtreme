@@ -352,11 +352,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'appointmentTemplate':
         if (this.option('_newAppointments')) {
-          const appointmentTemplateValue = this.getViewOption('appointmentTemplate') === 'item'
-            ? 'appointment'
-            : this.getViewOption('appointmentTemplate');
-
-          this._appointments.option('appointmentTemplate', appointmentTemplateValue);
+          this._appointments.option('appointmentTemplate', this.getViewOption('appointmentTemplate'));
         } else {
           this._appointments.option('itemTemplate', value);
         }
@@ -1054,14 +1050,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._layoutManager = new AppointmentLayoutManager(this);
 
     if (this.option('_newAppointments')) {
-      // TODO<Appointments>: convert 'item' to 'appointment' for compatibility
-      const appointmentTemplateValue = this.getViewOption('appointmentTemplate') === 'item'
-        ? 'appointment'
-        : this.getViewOption('appointmentTemplate');
-
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         currentView: this.option('currentView') as ViewType,
-        appointmentTemplate: appointmentTemplateValue,
+        appointmentTemplate: this.getViewOption('appointmentTemplate'),
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
         onAppointmentRendered: (e) => {
           // @ts-expect-error 'component' property is set by action

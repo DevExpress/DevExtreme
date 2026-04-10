@@ -105,6 +105,12 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       }
       case 'appointmentCollectorTemplate':
       case 'appointmentTemplate': {
+        // TODO: legacy compatibility
+        if (args.name === 'appointmentTemplate' && args.value === 'item') {
+          this.option('appointmentTemplate', 'appointment');
+          break;
+        }
+
         this.renderAppointments(this.option().viewModel);
         break;
       }
