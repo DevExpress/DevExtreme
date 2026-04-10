@@ -14,7 +14,6 @@ import type { AppointmentResource } from '../utils/resource_manager/appointment_
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
 import type {
-  AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
@@ -93,15 +92,20 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       }
       case 'viewModel': {
         if (this.option().currentView === 'agenda') {
-          this.renderAgendaAppointments(args.value as AppointmentAgendaViewModel[]);
+          this.renderAppointments(args.value);
           break;
         }
 
         const diff = this.getViewModelDiff(
-          (args.value ?? []) as AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
           args.previousValue ?? [],
+          (args.value ?? []) as AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
         );
         this.renderViewModelDiff(diff);
+        break;
+      }
+      case 'appointmentCollectorTemplate':
+      case 'appointmentTemplate': {
+        this.renderAppointments(this.option().viewModel);
         break;
       }
       default:
@@ -122,8 +126,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 
   private getViewModelDiff(
-    newViewModel: AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
     oldViewModel: AppointmentViewModelPlain[],
+    newViewModel: AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
   ): DiffItem[] {
     const isPreviousAgenda = oldViewModel.length && isAgendaAppointmentViewModel(oldViewModel[0]);
 
@@ -138,19 +142,26 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     );
   }
 
-  private renderAgendaAppointments(appointments: AppointmentViewModelPlain[]): void {
-    this.$allDayContainer?.empty();
-
+  private renderAppointments(appointments: AppointmentViewModelPlain[] = []): void {
+    const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
     this.appointmentBySortIndex = {};
+    this.$allDayContainer?.empty();
     this.$commonContainer.empty();
 
     appointments.forEach((appointmentViewModel, index) => {
-      const appointment = this.renderAppointment(commonFragment, appointmentViewModel, index);
+      const container = this.option().currentView === 'agenda' || !appointmentViewModel.allDay
+        ? commonFragment
+        : allDayFragment;
+
+      const appointment = this.renderAppointment(container, appointmentViewModel, index);
       this.appointmentBySortIndex[appointmentViewModel.sortedIndex] = appointment;
     });
 
+    if (this.$allDayContainer) {
+      this.$allDayContainer.get(0).appendChild(allDayFragment);
+    }
     this.$commonContainer.get(0).appendChild(commonFragment);
   }
 
@@ -169,6 +180,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       this.$commonContainer.empty();
     }
 
+    // TODO: remove passing index to appointmentTemplate, need only to avoid BC
     viewModelDiff.forEach((diffItem, index) => {
       const { allDay, sortedIndex } = diffItem.item;
 
