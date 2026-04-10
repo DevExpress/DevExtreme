@@ -290,8 +290,10 @@ describe('AIAssistantView', () => {
     });
 
     it('should call hide when aiAssistant.enabled changes to false', () => {
-      const { aiAssistantView } = createAIAssistantView();
+      const { aiAssistantView, setEnabled } = createAIAssistantView();
       const hideSpy = jest.spyOn(aiAssistantView, 'hide');
+
+      setEnabled(false);
 
       aiAssistantView.optionChanged({
         name: 'aiAssistant' as const,
@@ -304,7 +306,7 @@ describe('AIAssistantView', () => {
       expect(hideSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should call updateOptions on aiChatInstance for non-enabled sub-options', () => {
+    it('should call updateOptions on aiChatInstance for title change', () => {
       const { aiAssistantView } = createAIAssistantView();
 
       const aiChatInstance = (AIChat as jest.Mock)
@@ -319,6 +321,55 @@ describe('AIAssistantView', () => {
       });
 
       expect(aiChatInstance.updateOptions).toHaveBeenCalledTimes(1);
+      expect(aiChatInstance.updateOptions).toHaveBeenCalledWith(
+        expect.any(Object),
+        true,
+        false,
+      );
+    });
+
+    it('should call updateOptions on aiChatInstance for chat options change', () => {
+      const { aiAssistantView } = createAIAssistantView();
+
+      const aiChatInstance = (AIChat as jest.Mock)
+        .mock.results[0].value as { updateOptions: jest.Mock };
+
+      aiAssistantView.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.chat' as const,
+        value: { speechToTextEnabled: false },
+        previousValue: {},
+        handled: false,
+      });
+
+      expect(aiChatInstance.updateOptions).toHaveBeenCalledTimes(1);
+      expect(aiChatInstance.updateOptions).toHaveBeenCalledWith(
+        expect.any(Object),
+        false,
+        true,
+      );
+    });
+
+    it('should call updateOptions with both flags when object value contains title and chat', () => {
+      const { aiAssistantView } = createAIAssistantView();
+
+      const aiChatInstance = (AIChat as jest.Mock)
+        .mock.results[0].value as { updateOptions: jest.Mock };
+
+      aiAssistantView.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant' as const,
+        value: { title: 'New title', chat: { speechToTextEnabled: false } },
+        previousValue: { title: 'Old title' },
+        handled: false,
+      });
+
+      expect(aiChatInstance.updateOptions).toHaveBeenCalledTimes(1);
+      expect(aiChatInstance.updateOptions).toHaveBeenCalledWith(
+        expect.any(Object),
+        true,
+        true,
+      );
     });
 
     it('should not throw when aiChatInstance is not created for non-enabled sub-options', () => {

@@ -6,6 +6,12 @@ import { isString } from '@js/core/utils/type';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
+import {
+  isChatOptions,
+  isEnabledOption,
+  isPopupOptions,
+  isTitleOption,
+} from '@ts/grids/grid_core/ai_assistant/utils';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -110,19 +116,29 @@ export class AIAssistantView extends View {
 
   public optionChanged(args: OptionChanged): void {
     if (args.name === 'aiAssistant') {
-      const [, secondLevel] = args.fullName.split('.');
-      switch (secondLevel) {
-        case 'enabled':
-          if (args.value) {
-            this?._invalidate();
-          } else {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this?.hide();
-          }
-          break;
-        default:
-          this.aiChatInstance?.updateOptions(this.getAIChatConfig());
+      const enabledChanged = isEnabledOption(args.fullName, args.value);
+
+      if (enabledChanged) {
+        if (this.isVisible()) {
+          this._invalidate();
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this.hide();
+        }
       }
+
+      const popupOptionsChanged = isTitleOption(args.fullName, args.value)
+        || isPopupOptions(args.fullName, args.value);
+      const chatOptionsChanged = isChatOptions(args.fullName, args.value);
+
+      if (popupOptionsChanged || chatOptionsChanged) {
+        this.aiChatInstance?.updateOptions(
+          this.getAIChatConfig(),
+          popupOptionsChanged,
+          chatOptionsChanged,
+        );
+      }
+
       args.handled = true;
     } else {
       super.optionChanged(args);

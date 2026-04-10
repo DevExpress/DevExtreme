@@ -126,6 +126,15 @@ describe('AIAssistantViewController', () => {
       expect(mockView.visibilityChanged.remove).toHaveBeenCalledWith(expect.any(Function));
       expect(removeOrder).toBeLessThan(addOrder);
     });
+
+    it('should use the same handler reference for remove and add', () => {
+      const { mockView } = createAIAssistantViewController();
+
+      const removedHandler = mockView.visibilityChanged.remove.mock.calls[0][0];
+      const addedHandler = mockView.visibilityChanged.add.mock.calls[0][0];
+
+      expect(removedHandler).toBe(addedHandler);
+    });
   });
 
   describe('optionChanged', () => {
@@ -209,6 +218,60 @@ describe('AIAssistantViewController', () => {
       });
 
       expect(mockHeaderPanel.applyToolbarItem).toHaveBeenCalledTimes(1);
+    });
+
+    it('should set handled to true when object value contains enabled', () => {
+      const options: Record<string, unknown> = { 'aiAssistant.enabled': false };
+      const { controller, mockHeaderPanel } = createAIAssistantViewController(options);
+
+      options['aiAssistant.enabled'] = true;
+
+      const args = {
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant' as const,
+        value: { enabled: true },
+        previousValue: { enabled: false },
+        handled: false,
+      };
+
+      controller.optionChanged(args);
+
+      expect(args.handled).toBe(true);
+      expect(mockHeaderPanel.applyToolbarItem).toHaveBeenCalledTimes(1);
+    });
+
+    it('should set handled to true when object value contains title', () => {
+      const options: Record<string, unknown> = { 'aiAssistant.enabled': true };
+      const { controller, mockHeaderPanel } = createAIAssistantViewController(options);
+
+      const args = {
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant' as const,
+        value: { title: 'New title', chat: { speechToTextEnabled: false } },
+        previousValue: { title: 'Old title' },
+        handled: false,
+      };
+
+      controller.optionChanged(args);
+
+      expect(args.handled).toBe(true);
+      expect(mockHeaderPanel.applyToolbarItem).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not set handled when object value contains only chat/popup options', () => {
+      const { controller } = createAIAssistantViewController();
+
+      const args = {
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant' as const,
+        value: { chat: { speechToTextEnabled: false, showMessageTimestamp: true } },
+        previousValue: {},
+        handled: false,
+      };
+
+      controller.optionChanged(args);
+
+      expect(args.handled).toBe(false);
     });
   });
 });

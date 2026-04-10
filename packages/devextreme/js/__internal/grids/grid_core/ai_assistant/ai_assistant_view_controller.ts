@@ -11,17 +11,19 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import { ViewController } from '../m_modules';
 import type { AIAssistantView } from './ai_assistant_view';
+import { isEnabledOption, isTitleOption } from './utils';
 
 export class AIAssistantViewController extends ViewController {
   private aiAssistantView?: AIAssistantView;
 
   private headerPanel?: HeaderPanel;
 
-  private getAiAssistantButton(): dxElementWrapper | undefined {
+  private readonly visibilityChangedHandler = (visible: boolean): void => {
     const className = this.addWidgetPrefix(CLASSES.aiAssistantButton);
+    const aiAssistantButton: dxElementWrapper | undefined = this.headerPanel?.element()?.find(`.${className}`);
 
-    return this.headerPanel?.element()?.find(`.${className}`) as dxElementWrapper | undefined;
-  }
+    aiAssistantButton?.toggleClass(ACTIVE_STATE_CLASS, visible);
+  };
 
   public init(): void {
     this.aiAssistantView = this.getView('aiAssistantView');
@@ -35,17 +37,16 @@ export class AIAssistantViewController extends ViewController {
       this.headerPanel?.registerToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
     }
 
-    const visibilityChangedHandler = (visible: boolean): void => {
-      this.getAiAssistantButton()?.toggleClass(ACTIVE_STATE_CLASS, visible);
-    };
-
-    this.aiAssistantView?.visibilityChanged?.remove(visibilityChangedHandler);
-    this.aiAssistantView.visibilityChanged?.add(visibilityChangedHandler);
+    this.aiAssistantView?.visibilityChanged?.remove(this.visibilityChangedHandler);
+    this.aiAssistantView?.visibilityChanged?.add(this.visibilityChangedHandler);
   }
 
   public optionChanged(args: OptionChanged): void {
     if (args.name === 'aiAssistant') {
-      if (args.fullName === 'aiAssistant.enabled' || args.fullName === 'aiAssistant.title') {
+      const enabledChanged = isEnabledOption(args.fullName, args.value);
+      const titleChanged = isTitleOption(args.fullName, args.value);
+
+      if (enabledChanged || titleChanged) {
         this.syncAiAssistantItem();
         args.handled = true;
       }
@@ -79,7 +80,7 @@ export class AIAssistantViewController extends ViewController {
 
     const aiAssistantToolbarItemClass = this.headerPanel?.getToolbarButtonClass(
       this.addWidgetPrefix(CLASSES.aiAssistantButton),
-    );
+    ) ?? '';
     const aiAssistantToolbarItemStateClass = isActive ? ACTIVE_STATE_CLASS : '';
 
     return {

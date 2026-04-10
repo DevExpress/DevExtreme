@@ -10,7 +10,7 @@ export const DEFAULT_POPUP_OPTIONS = {
 export const DEFAULT_CHAT_OPTIONS = {
   showAvatar: false,
   showDayHeaders: false,
-  showMessageText: false,
+  showMessageTimestamp: false,
   showUserAvatar: false,
   speechToTextEnabled: true,
 };

@@ -178,7 +178,7 @@ describe('AIChat', () => {
       popupConfig.contentTemplate($('<div>'));
     };
 
-    it('should call popupInstance.option with new popupOptions', () => {
+    it('should call popupInstance.option with new popupOptions when updatePopup is true', () => {
       const { aiChat, $container } = createAIChat();
       const newPopupOptions = { title: 'Updated' };
 
@@ -186,12 +186,24 @@ describe('AIChat', () => {
         container: $container,
         createComponent: createComponentMock as any,
         popupOptions: newPopupOptions,
-      });
+      }, true, false);
 
       expect(mockPopupInstance.option).toHaveBeenCalledWith(newPopupOptions);
     });
 
-    it('should call chatInstance.option with new chatOptions', () => {
+    it('should not call popupInstance.option when updatePopup is false', () => {
+      const { aiChat, $container } = createAIChat();
+
+      aiChat.updateOptions({
+        container: $container,
+        createComponent: createComponentMock as any,
+        popupOptions: { title: 'Updated' },
+      }, false, false);
+
+      expect(mockPopupInstance.option).not.toHaveBeenCalledWith({ title: 'Updated' });
+    });
+
+    it('should call chatInstance.option with new chatOptions when updateChat is true', () => {
       const { aiChat, $container } = createAIChat();
       triggerContentTemplate();
 
@@ -201,12 +213,25 @@ describe('AIChat', () => {
         container: $container,
         createComponent: createComponentMock as any,
         chatOptions: newChatOptions,
-      });
+      }, false, true);
 
       expect(mockChatInstance.option).toHaveBeenCalledWith(newChatOptions);
     });
 
-    it('should not throw when chatInstance is not created', () => {
+    it('should not call chatInstance.option when updateChat is false', () => {
+      const { aiChat, $container } = createAIChat();
+      triggerContentTemplate();
+
+      aiChat.updateOptions({
+        container: $container,
+        createComponent: createComponentMock as any,
+        chatOptions: { showAvatar: true },
+      }, false, false);
+
+      expect(mockChatInstance.option).not.toHaveBeenCalled();
+    });
+
+    it('should not throw when chatInstance is not created and updateChat is true', () => {
       const { aiChat, $container } = createAIChat();
 
       expect(() => {
@@ -214,7 +239,7 @@ describe('AIChat', () => {
           container: $container,
           createComponent: createComponentMock as any,
           chatOptions: { showAvatar: true },
-        });
+        }, false, true);
       }).not.toThrow();
     });
   });

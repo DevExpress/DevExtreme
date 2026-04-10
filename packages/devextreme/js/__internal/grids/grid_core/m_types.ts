@@ -134,8 +134,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   aiAssistant?: {
     enabled?: boolean;
     title?: string;
-    popup?: PopupOptions,
-    chat?: ChatOptions,
+    popup?: PopupOptions;
+    chat?: ChatOptions;
   };
 }
 

@@ -94,11 +94,16 @@ export class AIChat {
     };
   }
 
-  public updateOptions(options: AIChatOptions): void {
+  public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
     this.options = options;
 
-    this.popupInstance.option(this.options.popupOptions);
-    this.chatInstance?.option(this.options.chatOptions ?? {});
+    if (updatePopup) {
+      this.popupInstance.option(this.options.popupOptions);
+    }
+
+    if (updateChat && this.options.chatOptions) {
+      this.chatInstance?.option(this.options.chatOptions);
+    }
   }
 
   public toggle(): Promise<boolean> {
