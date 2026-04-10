@@ -4,7 +4,7 @@ import { dateUtils } from '@ts/core/utils/m_date';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import { extend } from '@ts/core/utils/m_extend';
 
-import { isWeekdayIndex, type WeekdayIndex } from '../skipped_days';
+import { isValidWeekday } from '../skipped_days';
 import { DEFAULT_VIEW_OPTIONS, VIEW_TYPES } from './constants_view';
 import type {
   DateOption, NormalizedView, RawViewType, SafeSchedulerOptions, ViewType,
@@ -20,12 +20,12 @@ const VIEWS_WITH_BUILTIN_SKIPPED: ReadonlySet<ViewType> = new Set<ViewType>([
 
 const normalizeHiddenWeekDays = (
   days: unknown,
-): WeekdayIndex[] | undefined => {
+): number[] | undefined => {
   if (!Array.isArray(days)) {
     return undefined;
   }
   const valid = [...new Set(days)]
-    .filter(isWeekdayIndex)
+    .filter(isValidWeekday)
     .sort((a, b) => a - b);
   if (valid.length >= 7) {
     errors.log('W1029');
@@ -37,9 +37,9 @@ const normalizeHiddenWeekDays = (
 const resolveSkippedDays = (
   viewType: ViewType,
   perViewHiddenWeekDays: unknown,
-  globalHiddenWeekDays: WeekdayIndex[] | undefined,
-  viewDefault: WeekdayIndex[],
-): WeekdayIndex[] => {
+  globalHiddenWeekDays: number[] | undefined,
+  viewDefault: number[],
+): number[] => {
   const perView = normalizeHiddenWeekDays(perViewHiddenWeekDays);
   if (perView !== undefined) {
     return perView;
@@ -59,7 +59,7 @@ const isExistedView = (view: NormalizedView | undefined): view is NormalizedView
 
 const normalizeView = (
   view: RawViewType,
-  globalHiddenWeekDays?: WeekdayIndex[],
+  globalHiddenWeekDays?: number[],
 ): NormalizedView | undefined => {
   if (isObject(view)) {
     const viewType = view.type as ViewType;
@@ -94,7 +94,7 @@ const normalizeView = (
 
 export const getViews = (
   views: RawViewType[],
-  globalHiddenWeekDays?: WeekdayIndex[],
+  globalHiddenWeekDays?: number[],
 ): NormalizedView[] => views
   .filter(isKnownView)
   .map((v) => normalizeView(v, globalHiddenWeekDays))
@@ -103,7 +103,7 @@ export const getViews = (
 export function getCurrentView(
   currentView: string | ViewType,
   views: RawViewType[],
-  globalHiddenWeekDays?: WeekdayIndex[],
+  globalHiddenWeekDays?: number[],
 ): NormalizedView {
   const viewsProps = getViews(views, globalHiddenWeekDays);
   const currentViewProps = viewsProps.find(

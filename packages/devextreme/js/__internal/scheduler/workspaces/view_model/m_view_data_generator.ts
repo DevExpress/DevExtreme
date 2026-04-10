@@ -1,7 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
-import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
 import timezoneUtils from '../../m_utils_time_zone';
@@ -39,7 +38,7 @@ export class ViewDataGenerator {
 
   public hiddenInterval = 0;
 
-  public skippedDays: WeekdayIndex[] = [];
+  public skippedDays: number[] = [];
 
   constructor(public readonly viewType: ViewType) {}
 
@@ -65,7 +64,7 @@ export class ViewDataGenerator {
     return false;
   }
 
-  public getVisibleDaysOfWeek(firstDayOfWeek: number): WeekdayIndex[] {
+  public getVisibleDaysOfWeek(firstDayOfWeek: number): number[] {
     return getVisibleDaysOfWeek(firstDayOfWeek, this.skippedDays);
   }
 

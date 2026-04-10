@@ -1,4 +1,3 @@
-import type { WeekdayIndex } from '../skipped_days';
 import type { AgendaView, View, ViewType } from './types';
 
 export const VIEWS: Record<string, ViewType> = {
@@ -14,11 +13,11 @@ export const VIEWS: Record<string, ViewType> = {
 };
 export const VIEW_TYPES: ViewType[] = Object.values(VIEWS);
 
-const WEEKENDS: WeekdayIndex[] = [0, 6];
+const WEEKENDS: number[] = [0, 6];
 const getView = (
   type: ViewType,
   groupOrientation: View['groupOrientation'],
-  skippedDays: WeekdayIndex[] = [],
+  skippedDays: number[] = [],
 ): View => ({
   groupOrientation,
   intervalCount: 1,

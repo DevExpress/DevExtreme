@@ -13,7 +13,6 @@ import type {
 } from './utils/options/types';
 import { getCurrentView, getViewOption, getViews } from './utils/options/utils';
 import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './utils/options_validator/index';
-import type { WeekdayIndex } from './utils/skipped_days';
 
 export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
   protected views: NormalizedView[] = [];
@@ -51,12 +50,11 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
 
   protected updateViews(): void {
     const views = this.option('views') ?? [];
-    const hiddenWeekDays = this.option('hiddenWeekDays') as WeekdayIndex[] | undefined;
-    this.views = getViews(views, hiddenWeekDays);
+    this.views = getViews(views, this.option('hiddenWeekDays'));
     this.currentView = getCurrentView(
       this.option('currentView') ?? '',
       views,
-      hiddenWeekDays,
+      this.option('hiddenWeekDays'),
     );
   }
 

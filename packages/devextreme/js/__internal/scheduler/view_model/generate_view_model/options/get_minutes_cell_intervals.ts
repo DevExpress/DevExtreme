@@ -1,5 +1,3 @@
-import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
-
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 
@@ -8,14 +6,14 @@ interface Options {
   startDayHour: number;
   endDayHour: number;
   durationMinutes: number;
-  skippedDays: WeekdayIndex[];
+  skippedDays: number[];
 }
 
 const filterBySkippedDays = <T extends DateInterval>(
   intervals: T[],
-  skippedDays: WeekdayIndex[],
+  skippedDays: number[],
 ): T[] => intervals.filter((item) => {
-  const weekday = new Date(item.min).getUTCDay() as WeekdayIndex;
+  const weekday = new Date(item.min).getUTCDay();
   return !skippedDays.includes(weekday);
 });
 

@@ -1,10 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
-import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
 
 import { getCaptionInterval, getNextIntervalDate } from './m_utils';
 
 describe('agenda hiddenWeekDays support in header utils', () => {
-  const skippedDays: WeekdayIndex[] = [0, 6];
+  const skippedDays: number[] = [0, 6];
   const options = {
     date: new Date(2026, 3, 11),
     step: 'agenda' as const,

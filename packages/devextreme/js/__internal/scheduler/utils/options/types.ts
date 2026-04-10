@@ -1,8 +1,6 @@
 import type { template } from '@js/common';
 import type { Properties } from '@js/ui/scheduler';
 
-import type { WeekdayIndex } from '../skipped_days';
-
 export type RawViewType = Required<Properties>['views'][number];
 export type ViewType = Extract<RawViewType, string>;
 export type ViewObject = Extract<RawViewType, object>;
@@ -11,14 +9,14 @@ export type View = ViewObject & Required<Pick<ViewObject,
   | 'intervalCount'
   | 'type'
 >> & {
-  skippedDays: WeekdayIndex[];
+  skippedDays: number[];
 };
 export type AgendaView = ViewObject & Required<Pick<ViewObject,
   'agendaDuration'
   | 'intervalCount'
   | 'type'
 >> & {
-  skippedDays: WeekdayIndex[];
+  skippedDays: number[];
 };
 export type NormalizedView = View | AgendaView;
 

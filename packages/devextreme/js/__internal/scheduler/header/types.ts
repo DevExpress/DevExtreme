@@ -2,7 +2,6 @@ import type { FirstDayOfWeek } from '@js/common';
 import type { ValueChangedEvent } from '@js/ui/calendar';
 
 import type { NormalizedView, SafeSchedulerOptions } from '../utils/options/types';
-import type { WeekdayIndex } from '../utils/skipped_days';
 
 export interface HeaderOptions {
   currentView: NormalizedView;
@@ -31,7 +30,7 @@ export interface IntervalOptions {
   firstDayOfWeek?: number;
   intervalCount: number;
   agendaDuration?: number;
-  skippedDays: WeekdayIndex[];
+  skippedDays: number[];
 }
 
 export interface HeaderCalendarOptions {

@@ -1,22 +1,12 @@
-import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
-
 import { workWeekUtils } from '../../r1/utils/index';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
-
-interface WorkWeekStartViewDateOptions {
-  currentDate: Date;
-  startDayHour: number;
-  startDate: Date;
-  intervalCount: number;
-  firstDayOfWeek: number;
-}
 
 export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
   protected baseDaysInInterval = 5;
 
-  public skippedDays: WeekdayIndex[] = [0, 6];
+  public skippedDays: number[] = [0, 6];
 
-  protected override calculateStartViewDate(options: WorkWeekStartViewDateOptions): Date {
+  protected override calculateStartViewDate(options: any): Date {
     return workWeekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

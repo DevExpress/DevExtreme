@@ -3,7 +3,6 @@ import {
 } from '@jest/globals';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { WeekdayIndex } from '../skipped_days';
 import type { RawViewType, ViewType } from './types';
 import {
   getCurrentView,
@@ -142,8 +141,8 @@ describe('views utils', () => {
       const getSkipped = (
         views: RawViewType[],
         viewType: ViewType,
-        globalHiddenWeekDays?: WeekdayIndex[],
-      ): WeekdayIndex[] => {
+        globalHiddenWeekDays?: number[],
+      ): number[] => {
         const result = getViews(views, globalHiddenWeekDays);
         const view = result.find((v) => v.type === viewType);
         return view?.skippedDays ?? [];

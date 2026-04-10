@@ -8,7 +8,6 @@ import type {
 } from '../../types';
 import type { ResourceManager } from '../../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../../utils/resource_manager/types';
-import type { WeekdayIndex } from '../../utils/skipped_days';
 
 interface CommonOptions extends CountGenerationConfig {
   getResourceManager: () => ResourceManager;
@@ -17,7 +16,7 @@ interface CommonOptions extends CountGenerationConfig {
   viewOffset: number;
   hoursInterval: number;
   viewType: ViewType;
-  skippedDays?: WeekdayIndex[];
+  skippedDays?: number[];
   cellCount: number;
   isProvideVirtualCellsWidth: boolean;
   isGenerateTimePanelData?: boolean;

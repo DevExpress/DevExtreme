@@ -1,5 +1,4 @@
 import { dateUtils } from '@ts/core/utils/m_date';
-import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
 
 import type { CompareOptions, DateInterval } from '../types';
 
@@ -27,7 +26,7 @@ export const splitIntervalByDay = ({
   const result: DateInterval[] = [];
 
   while (time < maxTime) {
-    if (!skippedDays.includes(time.getUTCDay() as WeekdayIndex)) {
+    if (!skippedDays.includes(time.getUTCDay())) {
       const intervalMax = new Date(time);
       intervalMax.setUTCHours(endTime.hours, endTime.minutes, 0, 0);
 
