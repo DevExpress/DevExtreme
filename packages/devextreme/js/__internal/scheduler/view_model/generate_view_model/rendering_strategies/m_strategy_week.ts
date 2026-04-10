@@ -2,7 +2,7 @@ import VerticalRenderingStrategy from './m_strategy_vertical';
 
 class WeekAppointmentRenderingStrategy extends VerticalRenderingStrategy {
   isApplyCompactAppointmentOffset() {
-    if (this.isAdaptive && this._getMaxAppointmentCountPerCellByType() === 0) {
+    if (this.isAdaptive && this.getMaxAppointmentCountPerCellByType() === 0) {
       return false;
     }
 

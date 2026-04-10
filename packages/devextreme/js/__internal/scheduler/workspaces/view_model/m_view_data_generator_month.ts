@@ -14,9 +14,9 @@ const toMs = dateUtils.dateToMilliseconds;
 const DAYS_IN_WEEK = 7;
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
-  _minVisibleDate: any;
+  private minVisibleDate: any;
 
-  _maxVisibleDate: any;
+  private maxVisibleDate: any;
 
   tableAllDay: any = undefined;
 
@@ -36,7 +36,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     const startDate = timezoneUtils.addOffsetsWithoutDST(data.startDate, -viewOffset);
 
     data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
-    data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
+    data.otherMonth = this.isOtherMonth(startDate, this.minVisibleDate, this.maxVisibleDate);
     data.isFirstDayMonthHighlighting = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
     data.text = monthUtils.getCellText(startDate, intervalCount);
 
@@ -51,7 +51,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
   }
 
-  _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+  protected calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
     return monthUtils.calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
   }
 
@@ -63,7 +63,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return toMs('day');
   }
 
-  _calculateStartViewDate(options) {
+  protected calculateStartViewDate(options) {
     return monthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
@@ -73,7 +73,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     );
   }
 
-  _setVisibilityDates(options) {
+  protected setVisibilityDates(options) {
     const {
       intervalCount,
       startDate,
@@ -83,10 +83,10 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     const firstMonthDate: any = dateUtils.getFirstMonthDate(startDate);
     const viewStart = monthUtils.getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
 
-    this._minVisibleDate = new Date(viewStart.setDate(1));
+    this.minVisibleDate = new Date(viewStart.setDate(1));
 
     const nextMonthDate = new Date(viewStart.setMonth(viewStart.getMonth() + intervalCount));
-    this._maxVisibleDate = new Date(nextMonthDate.setDate(0));
+    this.maxVisibleDate = new Date(nextMonthDate.setDate(0));
   }
 
   getCellCount() {

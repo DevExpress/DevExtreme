@@ -10,7 +10,7 @@ const DROP_DOWN_BUTTON_OFFSET = 2;
 const toMs = dateUtils.dateToMilliseconds;
 
 class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
-  _needVerifyItemSize() {
+  protected needVerifyItemSize() {
     return true;
   }
 
@@ -25,7 +25,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
     let duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
 
-    duration = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate);
+    duration = this.adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate);
 
     const cellDuration = this.cellDurationInMinutes * toMs('minute');
     const skippedHours = getSkippedHoursInRange(
@@ -40,57 +40,57 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     return width;
   }
 
-  _needAdjustDuration(diff) {
+  protected needAdjustDuration(diff) {
     return diff < 0;
   }
 
   getAppointmentGeometry(coordinates) {
-    const result = this._customizeAppointmentGeometry(coordinates);
+    const result = this.customizeAppointmentGeometry(coordinates);
 
     return super.getAppointmentGeometry(result);
   }
 
-  _customizeAppointmentGeometry(coordinates) {
-    const config = this._calculateGeometryConfig(coordinates);
+  protected customizeAppointmentGeometry(coordinates) {
+    const config = this.calculateGeometryConfig(coordinates);
 
-    return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
+    return this.customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
   }
 
-  _getOffsets() {
+  protected getOffsets() {
     return {
       unlimited: 0,
       auto: 0,
     };
   }
 
-  _getCompactLeftCoordinate(itemLeft, index) {
+  protected getCompactLeftCoordinate(itemLeft, index) {
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
     return itemLeft + cellWidth * index;
   }
 
-  _getMaxHeight() {
+  protected getMaxHeight() {
     return this.cellHeight || this.getAppointmentMinSize();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getAppointmentCount(overlappingMode, coordinates) {
-    return this._getMaxAppointmentCountPerCellByType(false);
+  protected getAppointmentCount(overlappingMode, coordinates) {
+    return this.getMaxAppointmentCountPerCellByType(false);
   }
 
-  _getAppointmentDefaultHeight() {
+  protected getAppointmentDefaultHeight() {
     return DEFAULT_APPOINTMENT_HEIGHT;
   }
 
-  _getAppointmentMinHeight() {
+  protected getAppointmentMinHeight() {
     return MIN_APPOINTMENT_HEIGHT;
   }
 
-  _sortCondition(a, b) {
-    return this._columnCondition(a, b);
+  protected sortCondition(a, b) {
+    return this.columnCondition(a, b);
   }
 
-  _getOrientation() {
+  protected getOrientation() {
     return ['left', 'right', 'top'];
   }
 
@@ -103,10 +103,10 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     return this.dataAccessors.get('allDay', appointmentData);
   }
 
-  _isItemsCross(firstItem, secondItem) {
-    const orientation = this._getOrientation();
+  protected isItemsCross(firstItem, secondItem) {
+    const orientation = this.getOrientation();
 
-    return this._checkItemsCrossing(firstItem, secondItem, orientation);
+    return this.checkItemsCrossing(firstItem, secondItem, orientation);
   }
 
   getPositionShift(timeShift) {

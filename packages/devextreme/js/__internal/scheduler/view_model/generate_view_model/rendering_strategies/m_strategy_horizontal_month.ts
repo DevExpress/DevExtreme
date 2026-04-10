@@ -19,13 +19,13 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
 
   get DOMMetaData() { return this.options.DOMMetaData; }
 
-  _getLeftPosition(settings) {
+  protected getLeftPosition(settings) {
     const fullWeekAppointmentWidth = this.getGroupWidth(settings.groupIndex);
 
-    return this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
+    return this.calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
   }
 
-  _getChunkCount(
+  protected getChunkCount(
     fullChunksWidth,
     firstChunkWidth,
     weekWidth,
@@ -35,7 +35,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     const rawFullChunksWidth = fullChunksWidth - firstChunkWidth + weekWidth;
     const allChunksCount = Math.ceil(rawFullChunksWidth / weekWidth);
 
-    const viewRowIndex = this._tryGetRowIndexInView(startDate);
+    const viewRowIndex = this.tryGetRowIndexInView(startDate);
 
     if (viewRowIndex !== undefined) {
       const viewChunksCount = this.viewDataProvider.getRowCountInGroup(groupIndex);
@@ -48,7 +48,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
 
   // NOTE: This method tries to get real row index inside appointment's group view.
   // We cannot use settings.rowIndex, because this row index for all date table and not for special group.
-  _tryGetRowIndexInView(positionStartDate) {
+  protected tryGetRowIndexInView(positionStartDate) {
     const columnsCount = this.viewDataProvider.getColumnsCount();
 
     if (this.options.dataRange?.length < 1 || !columnsCount) {
@@ -65,7 +65,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getChunkWidths(geometry, settings, weekWidth) {
+  protected getChunkWidths(geometry, settings, weekWidth) {
     const firstChunkWidth = geometry.reducedWidth;
     const fullChunksWidth = Math.floor(geometry.sourceAppointmentWidth);
     const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
@@ -73,7 +73,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     return [firstChunkWidth, fullChunksWidth, widthWithoutFirstChunk];
   }
 
-  _getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {
+  protected getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {
     const tailChunkWidth = withoutFirstChunkWidth % weekWidth || weekWidth;
     const rtlPosition = leftPosition + (weekWidth - tailChunkWidth);
     const tailChunkLeftPosition = this.rtlEnabled ? rtlPosition : leftPosition;
@@ -81,18 +81,18 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     return [tailChunkWidth, tailChunkLeftPosition];
   }
 
-  _getAppointmentParts(geometry, settings) {
+  protected getAppointmentParts(geometry, settings) {
     const result: any = [];
 
     const weekWidth = Math.round(this.getGroupWidth(settings.groupIndex));
-    const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
-    const leftPosition = this._getLeftPosition(settings);
+    const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this.getChunkWidths(geometry, settings, weekWidth);
+    const leftPosition = this.getLeftPosition(settings);
 
     const { endDate } = settings.info.appointment;
     const hasTailChunk = this.endViewDate > endDate;
-    const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth, settings);
+    const chunkCount = this.getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth, settings);
 
-    const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
+    const [tailChunkWidth, tailChunkLeftPosition] = this.getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
 
     for (let chunkIndex = 1; chunkIndex < chunkCount; chunkIndex++) {
       const topPosition = settings.top + this.cellHeight * chunkIndex;
@@ -115,7 +115,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     return result;
   }
 
-  _calculateMultiWeekAppointmentLeftOffset(max, width) {
+  protected calculateMultiWeekAppointmentLeftOffset(max, width) {
     return this.rtlEnabled
       ? max
       : max - width;
@@ -139,27 +139,27 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     );
   }
 
-  _getAppointmentDefaultHeight() {
-    return this._getAppointmentHeightByTheme();
+  protected getAppointmentDefaultHeight() {
+    return this.getAppointmentHeightByTheme();
   }
 
-  _getAppointmentMinHeight() {
-    return this._getAppointmentDefaultHeight();
+  protected getAppointmentMinHeight() {
+    return this.getAppointmentDefaultHeight();
   }
 
   createTaskPositionMap(items: SafeAppointment[]) {
     return super.createTaskPositionMap(items, true);
   }
 
-  _getSortedPositions(map) {
-    return super._getSortedPositions(map, true);
+  protected getSortedPositions(map) {
+    return super.getSortedPositions(map, true);
   }
 
-  _getDefaultRatio() {
+  protected getDefaultRatio() {
     return MONTH_APPOINTMENT_HEIGHT_RATIO;
   }
 
-  _getOffsets() {
+  protected getOffsets() {
     return {
       unlimited: MONTH_APPOINTMENT_MIN_OFFSET,
       auto: MONTH_APPOINTMENT_MAX_OFFSET,

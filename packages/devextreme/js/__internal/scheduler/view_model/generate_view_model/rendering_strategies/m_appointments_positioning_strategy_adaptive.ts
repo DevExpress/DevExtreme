@@ -17,18 +17,18 @@ class AdaptivePositioningStrategy extends AppointmentPositioningStrategy {
   }
 
   getCollectorTopOffset(allDay) {
-    const renderingStrategy = this._renderingStrategy;
+    const { renderingStrategy } = this;
 
     if (renderingStrategy.allDaySupported() && allDay) {
       return (renderingStrategy.allDayHeight - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
     }
-    return this._renderingStrategy.cellHeight - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
+    return this.renderingStrategy.cellHeight - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
   }
 
   getCollectorLeftOffset() {
-    const collectorWidth = this._renderingStrategy.getDropDownAppointmentWidth();
+    const collectorWidth = this.renderingStrategy.getDropDownAppointmentWidth();
 
-    return (this._renderingStrategy.cellWidth - collectorWidth) / 2;
+    return (this.renderingStrategy.cellWidth - collectorWidth) / 2;
   }
 
   getAppointmentDefaultOffset() {
@@ -36,12 +36,12 @@ class AdaptivePositioningStrategy extends AppointmentPositioningStrategy {
   }
 
   getDynamicAppointmentCountPerCell() {
-    const renderingStrategy = this._renderingStrategy;
+    const { renderingStrategy } = this;
 
     if (renderingStrategy.allDaySupported()) {
       return {
         allDay: 0,
-        simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount(),
+        simple: this.calculateDynamicAppointmentCountPerCell() || this.getAppointmentMinCount(),
       };
     }
     return 0;
@@ -51,22 +51,22 @@ class AdaptivePositioningStrategy extends AppointmentPositioningStrategy {
     return COLLECTOR_ADAPTIVE_SIZE;
   }
 
-  _getAppointmentMinCount() {
+  protected getAppointmentMinCount() {
     return 0;
   }
 
-  _getAppointmentDefaultWidth() {
-    const renderingStrategy = this._renderingStrategy;
+  protected getAppointmentDefaultWidth() {
+    const { renderingStrategy } = this;
 
     if (renderingStrategy.allDaySupported()) {
       return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
     }
 
-    return super._getAppointmentDefaultWidth();
+    return super.getAppointmentDefaultWidth();
   }
 
-  _calculateDynamicAppointmentCountPerCell() {
-    return Math.floor(this._renderingStrategy._getAppointmentMaxWidth() / this._renderingStrategy._getAppointmentDefaultWidth());
+  protected calculateDynamicAppointmentCountPerCell() {
+    return Math.floor(this.renderingStrategy.getAppointmentMaxWidth() / this.renderingStrategy.getAppointmentDefaultWidth());
   }
 }
 

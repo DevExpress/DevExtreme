@@ -49,7 +49,7 @@ class TimeZoneCache {
 const tzCache = new TimeZoneCache();
 
 const timeZoneDataUtils = {
-  _tzCache: tzCache,
+  tzCache,
 
   getTimeZonesOld(): any {
     return GlobalConfig().timezones ?? [];

@@ -103,7 +103,7 @@ export class AppointmentForm {
     const colSpan = isRecurrence ? 1 : 2;
 
     const mainItems = [
-      ...this._createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing),
+      ...this.createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing),
       ...this.scheduler.createResourceEditorModel(),
     ];
 
@@ -124,7 +124,7 @@ export class AppointmentForm {
         name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
         visible: isRecurrence,
         colSpan,
-        items: this._createRecurrenceEditor(expr),
+        items: this.createRecurrenceEditor(expr),
       },
     ];
 
@@ -152,7 +152,7 @@ export class AppointmentForm {
     });
   }
 
-  _dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
+  private dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
     validateAppointmentFormDate(args.component, args.value, args.previousValue);
 
     const value = dateSerialization.deserializeDate(args.value);
@@ -166,7 +166,7 @@ export class AppointmentForm {
     }
   }
 
-  _createTimezoneEditor(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, cssClass, visible = false) {
+  private createTimezoneEditor(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, cssClass, visible = false) {
     const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
 
     return {
@@ -197,7 +197,7 @@ export class AppointmentForm {
     };
   }
 
-  _createDateBoxItems(dataExprs, allowTimeZoneEditing) {
+  private createDateBoxItems(dataExprs, allowTimeZoneEditing) {
     const colSpan = allowTimeZoneEditing ? 2 : 1;
     const firstDayOfWeek = this.scheduler.getFirstDayOfWeek();
 
@@ -209,11 +209,11 @@ export class AppointmentForm {
         'dxScheduler-editorLabelStartDate',
         E2E_TEST_CLASSES.startDateEditor,
         (args) => {
-          this._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => endValue < startValue);
+          this.dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => endValue < startValue);
         },
       ),
 
-      this._createTimezoneEditor(
+      this.createTimezoneEditor(
         dataExprs.startDateTimeZoneExpr,
         dataExprs.endDateTimeZoneExpr,
         1,
@@ -230,11 +230,11 @@ export class AppointmentForm {
         'dxScheduler-editorLabelEndDate',
         E2E_TEST_CLASSES.endDateEditor,
         (args) => {
-          this._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => endValue < startValue);
+          this.dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => endValue < startValue);
         },
       ),
 
-      this._createTimezoneEditor(
+      this.createTimezoneEditor(
         dataExprs.endDateTimeZoneExpr,
         dataExprs.startDateTimeZoneExpr,
         3,
@@ -246,7 +246,7 @@ export class AppointmentForm {
     ];
   }
 
-  _changeFormItemDateType(name: string, groupName: string, isAllDay: boolean): void {
+  private changeFormItemDateType(name: string, groupName: string, isAllDay: boolean): void {
     const editorPath = this.getEditorPath(name, groupName);
     const itemEditorOptions = this.form.itemOption(editorPath).editorOptions;
 
@@ -257,7 +257,7 @@ export class AppointmentForm {
     this.form.itemOption(editorPath, 'editorOptions', newEditorOption);
   }
 
-  _createMainItems(dataExprs, triggerResize, changeSize, allowTimeZoneEditing) {
+  private createMainItems(dataExprs, triggerResize, changeSize, allowTimeZoneEditing) {
     return [
       {
         name: this.normalizeEditorName(dataExprs.textExpr),
@@ -279,7 +279,7 @@ export class AppointmentForm {
           lg: 2,
           xs: 1,
         },
-        items: this._createDateBoxItems(dataExprs, allowTimeZoneEditing),
+        items: this.createDateBoxItems(dataExprs, allowTimeZoneEditing),
       },
       {
         itemType: 'group',
@@ -317,8 +317,8 @@ export class AppointmentForm {
                 }
               }
 
-              this._changeFormItemDateType(dataExprs.startDateExpr, 'Main', value);
-              this._changeFormItemDateType(dataExprs.endDateExpr, 'Main', value);
+              this.changeFormItemDateType(dataExprs.startDateExpr, 'Main', value);
+              this.changeFormItemDateType(dataExprs.endDateExpr, 'Main', value);
             },
           },
         }, {
@@ -370,7 +370,7 @@ export class AppointmentForm {
     ];
   }
 
-  _createRecurrenceEditor(dataExprs) {
+  private createRecurrenceEditor(dataExprs) {
     return [{
       name: this.normalizeEditorName(dataExprs.recurrenceRuleExpr),
       dataField: dataExprs.recurrenceRuleExpr,

@@ -32,29 +32,29 @@ export class AppointmentFilterBaseStrategy {
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
-  get viewStartDayHour() { return this._resolveOption('startDayHour'); }
+  get viewStartDayHour() { return this.resolveOption('startDayHour'); }
 
-  get viewEndDayHour() { return this._resolveOption('endDayHour'); }
+  get viewEndDayHour() { return this.resolveOption('endDayHour'); }
 
-  get firstDayOfWeek() { return this._resolveOption('firstDayOfWeek'); }
+  get firstDayOfWeek() { return this.resolveOption('firstDayOfWeek'); }
 
-  get showAllDayPanel() { return this._resolveOption('showAllDayPanel'); }
+  get showAllDayPanel() { return this.resolveOption('showAllDayPanel'); }
 
-  get supportAllDayRow() { return this._resolveOption('supportAllDayRow'); }
+  get supportAllDayRow() { return this.resolveOption('supportAllDayRow'); }
 
-  get viewType() { return this._resolveOption('viewType'); }
+  get viewType() { return this.resolveOption('viewType'); }
 
-  get viewDirection() { return this._resolveOption('viewDirection'); }
+  get viewDirection() { return this.resolveOption('viewDirection'); }
 
-  get dateRange() { return this._resolveOption('dateRange'); }
+  get dateRange() { return this.resolveOption('dateRange'); }
 
-  get groupCount() { return this._resolveOption('groupCount'); }
+  get groupCount() { return this.resolveOption('groupCount'); }
 
-  get viewDataProvider(): ViewDataProvider { return this._resolveOption('viewDataProvider'); }
+  get viewDataProvider(): ViewDataProvider { return this.resolveOption('viewDataProvider'); }
 
-  get allDayPanelMode() { return this._resolveOption('allDayPanelMode'); }
+  get allDayPanelMode() { return this.resolveOption('allDayPanelMode'); }
 
-  _resolveOption(name) {
+  protected resolveOption(name) {
     const result = this.options[name];
     return typeof result === 'function'
       ? result()
@@ -65,7 +65,7 @@ export class AppointmentFilterBaseStrategy {
     visibleDateIntervals: DateInterval[];
     visibleTimeIntervals: DateInterval[];
   } {
-    const viewOffset = this._resolveOption('viewOffset');
+    const viewOffset = this.resolveOption('viewOffset');
     const intervals = {
       visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
       visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
@@ -95,7 +95,7 @@ export class AppointmentFilterBaseStrategy {
       allDayPanelFilter,
       allDayPanelMode: this.allDayPanelMode,
       supportAllDayRow: this.supportAllDayRow,
-      viewOffset: this._resolveOption('viewOffset'),
+      viewOffset: this.resolveOption('viewOffset'),
     };
   }
 

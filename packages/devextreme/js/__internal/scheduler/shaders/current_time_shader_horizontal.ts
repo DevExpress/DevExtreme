@@ -12,7 +12,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
     for (let i = 0; i < groupCount; i += 1) {
       const isFirstShader = i === 0;
-      const $shader = isFirstShader ? this._$shader : this.createShader();
+      const $shader = isFirstShader ? this.$shader : this.createShader();
 
       if (this._workSpace.isGroupedByDate()) {
         this.customizeGroupedByDateShader($shader, i);
@@ -42,7 +42,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
   }
 
   private applyShaderWidth($shader: dxElementWrapper, width: number): void {
-    const maxWidth = getBoundingRect(this._$container.get(0)).width;
+    const maxWidth = getBoundingRect(this.$container.get(0)).width;
     if (width > 0) {
       setWidth($shader, Math.min(width, maxWidth));
     }

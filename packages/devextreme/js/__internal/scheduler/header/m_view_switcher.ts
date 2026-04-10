@@ -51,12 +51,12 @@ export const getTabViewSwitcher = (
       selectedItemKeys: [selectedView],
       stylingMode,
       onItemClick: (e) => {
-        header._updateCurrentView(e.itemData);
+        header.updateCurrentView(e.itemData);
       },
       onContentReady: (e) => {
         const viewSwitcher = e.component;
 
-        header._addEvent('currentView', (view) => {
+        header.addEvent('currentView', (view) => {
           viewSwitcher.option('selectedItemKeys', [getViewName(view as NormalizedView)]);
         });
       },
@@ -89,12 +89,12 @@ export const getDropDownViewSwitcher = (
         class: ClASS.dropDownButton,
       },
       onItemClick: (e) => {
-        header._updateCurrentView(e.itemData);
+        header.updateCurrentView(e.itemData);
       },
       onContentReady: (e) => {
         const viewSwitcher = e.component;
 
-        header._addEvent('currentView', (view) => {
+        header.addEvent('currentView', (view) => {
           const { views: currentViews } = header.option();
 
           viewSwitcher.option('showArrowIcon', !isOneView(currentViews, (view as NormalizedView).name));

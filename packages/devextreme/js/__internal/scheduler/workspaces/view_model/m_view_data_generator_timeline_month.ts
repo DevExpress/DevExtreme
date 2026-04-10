@@ -15,7 +15,7 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
     return toMs('day');
   }
 
-  _calculateStartViewDate(options: any) {
+  protected calculateStartViewDate(options: any) {
     return timelineMonthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

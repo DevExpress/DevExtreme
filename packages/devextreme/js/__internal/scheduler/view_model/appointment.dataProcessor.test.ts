@@ -438,7 +438,7 @@ describe('data processor', () => {
           text: 'Appointment 1',
           startDate: new Date(2015, 1, 9, 1, 0),
           endDate: new Date(2015, 1, 9, 2, 0),
-          _recurrenceRule: 'FREQ=DAILY',
+          customRecurrenceRule: 'FREQ=DAILY',
         },
         {
           text: 'Appointment 2',
@@ -454,7 +454,7 @@ describe('data processor', () => {
         dataSource,
         currentView: 'week',
         currentDate,
-        recurrenceRuleExpr: '_recurrenceRule',
+        recurrenceRuleExpr: 'customRecurrenceRule',
       });
 
       scheduler.setRemoteFilter(
@@ -508,7 +508,7 @@ describe('data processor', () => {
           text: 'Appointment 1',
           startDate: new Date(2015, 1, 9, 1, 0),
           endDate: new Date(2015, 1, 9, 2, 0),
-          _recurrenceRule: 'FREQ=DAILY',
+          customRecurrenceRule: 'FREQ=DAILY',
         },
         {
           text: 'Appointment 2',

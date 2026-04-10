@@ -173,9 +173,9 @@ module('Subscribes', {
         await waitAsync(0);
 
         const layoutManager = this.instance.getLayoutManager();
-        const { _positionMap } = layoutManager;
+        const { positionMap } = layoutManager;
 
-        assert.equal(_positionMap[0].length, 7, 'count is OK');
+        assert.equal(positionMap[0].length, 7, 'count is OK');
     });
 
     test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment, allDay = true', async function(assert) {
@@ -196,9 +196,9 @@ module('Subscribes', {
         await waitAsync(0);
 
         const layoutManager = this.instance.getLayoutManager();
-        const { _positionMap } = layoutManager;
+        const { positionMap } = layoutManager;
 
-        assert.equal(_positionMap[0].length, 7, 'count is OK');
+        assert.equal(positionMap[0].length, 7, 'count is OK');
     });
 
     test('"createAppointmentSettings" should not change dateRange', async function(assert) {
@@ -244,12 +244,12 @@ module('Subscribes', {
         });
 
         const layoutManager = this.instance.getLayoutManager();
-        const { _positionMap } = layoutManager;
+        const { positionMap } = layoutManager;
 
         const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1);
         const expectedLeftCoordinate = $expectedCell.position().left;
 
-        assert.equal(_positionMap[0][0].left, expectedLeftCoordinate, 'left coordinate is OK');
+        assert.equal(positionMap[0][0].left, expectedLeftCoordinate, 'left coordinate is OK');
     });
 
     test('"mapAppointmentFields" should call getTargetedAppointment', async function(assert) {
@@ -948,9 +948,9 @@ module('Subscribes', {
             });
 
             const layoutManager = this.instance.getLayoutManager();
-            const { _positionMap } = layoutManager;
+            const { positionMap } = layoutManager;
 
-            assert.notOk(_positionMap[0][0].groupIndex, 'no groupIndex');
+            assert.notOk(positionMap[0][0].groupIndex, 'no groupIndex');
         });
     });
 });
@@ -1053,7 +1053,7 @@ module('Grouping By Date', {
             });
 
             const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = layoutManager.positionMap[0];
 
             assert.equal(results.length, 3, 'Result length is OK');
             this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 96, 1.1);
@@ -1104,7 +1104,7 @@ module('Grouping By Date', {
             const cellHeight = $cell.getBoundingClientRect().height;
 
             const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = layoutManager.positionMap[0];
 
             assert.equal(results.length, 2, 'Coordinates count is ok');
             this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
@@ -1155,7 +1155,7 @@ module('Grouping By Date', {
             const cellHeight = $cell.getBoundingClientRect().height;
 
             const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = layoutManager.positionMap[0];
 
             assert.equal(results.length, 6, 'Coordinates count is ok');
             this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
@@ -1211,7 +1211,7 @@ module('Grouping By Date', {
             const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
 
             const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = layoutManager.positionMap[0];
 
             this.checkNeedCoordinatesResult(assert, results[0], 5, 0, 0, cellWidth * 5, 1.5);
             this.checkNeedCoordinatesResult(assert, results[1], 7, 0, 0, cellWidth * 7, 1.5);

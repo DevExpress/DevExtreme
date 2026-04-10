@@ -36,7 +36,7 @@ class AppointmentLayoutManager {
 
   appointmentViewModel = new AppointmentViewModelGenerator();
 
-  _positionMap: any;
+  private positionMap: any;
 
   constructor(public instance: Scheduler) {}
 
@@ -63,7 +63,7 @@ class AppointmentLayoutManager {
     return strategy.hasAllDayAppointments(this.filteredItems, this.preparedItems);
   }
 
-  protected _getRenderingStrategyOptions() {
+  protected getRenderingStrategyOptions() {
     const workspace = this.instance.getWorkSpace();
     const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
     const {
@@ -153,14 +153,14 @@ class AppointmentLayoutManager {
   }
 
   public createAppointmentsMap(): AppointmentViewModelPlain[] {
-    const renderingStrategyOptions = this._getRenderingStrategyOptions();
+    const renderingStrategyOptions = this.getRenderingStrategyOptions();
 
     const {
       viewModel,
       positionMap,
     } = this.appointmentViewModel.generate(this.filteredItems, renderingStrategyOptions) as any;
 
-    this._positionMap = positionMap;
+    this.positionMap = positionMap;
 
     return viewModel;
   }
@@ -169,7 +169,7 @@ class AppointmentLayoutManager {
     const renderingStrategy = this.appointmentViewModel.getRenderingStrategy();
 
     if (!renderingStrategy) {
-      const options = this._getRenderingStrategyOptions();
+      const options = this.getRenderingStrategyOptions();
       this.appointmentViewModel.initRenderingStrategy(options);
     }
 

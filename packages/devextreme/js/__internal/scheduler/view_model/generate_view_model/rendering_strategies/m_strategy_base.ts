@@ -28,13 +28,13 @@ const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 class BaseRenderingStrategy {
   options: any;
 
-  _positioningStrategy: any;
+  protected positioningStrategy: any;
 
-  _maxAppointmentCountPerCell: any;
+  protected maxAppointmentCountPerCell: any;
 
   constructor(options) {
     this.options = options;
-    this._initPositioningStrategy();
+    this.initPositioningStrategy();
   }
 
   get isAdaptive() { return this.options.adaptivityEnabled; }
@@ -105,19 +105,19 @@ class BaseRenderingStrategy {
 
   get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
-  _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
+  protected correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
     coordinates.top += this.getCollectorTopOffset(isAllDay);
     coordinates.left += this.getCollectorLeftOffset();
   }
 
-  _initPositioningStrategy() {
-    this._positioningStrategy = this.isAdaptive
+  protected initPositioningStrategy() {
+    this.positioningStrategy = this.isAdaptive
       ? new AdaptivePositioningStrategy(this)
       : new AppointmentPositioningStrategy(this);
   }
 
   getPositioningStrategy() {
-    return this._positioningStrategy;
+    return this.positioningStrategy;
   }
 
   getAppointmentMinSize(): any {
@@ -138,17 +138,17 @@ class BaseRenderingStrategy {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   createTaskPositionMap(items: SafeAppointment[], skipSorting?) {
-    delete this._maxAppointmentCountPerCell;
+    delete this.maxAppointmentCountPerCell;
 
     const length = items?.length;
     if (!length) return;
 
     const map: any = [];
     for (let i = 0; i < length; i++) {
-      let coordinates = this._getItemPosition(items[i]);
+      let coordinates = this.getItemPosition(items[i]);
 
       if (coordinates.length && this.rtlEnabled) {
-        coordinates = this._correctRtlCoordinates(coordinates);
+        coordinates = this.correctRtlCoordinates(coordinates);
       }
 
       coordinates.forEach((item: any) => {
@@ -161,14 +161,14 @@ class BaseRenderingStrategy {
       map.push(coordinates);
     }
 
-    const positionArray = this._getSortedPositions(map);
-    const resultPositions = this._getResultPositions(positionArray);
+    const positionArray = this.getSortedPositions(map);
+    const resultPositions = this.getResultPositions(positionArray);
 
-    return this._getExtendedPositionMap(map, resultPositions);
+    return this.getExtendedPositionMap(map, resultPositions);
   }
 
-  _correctRtlCoordinates(coordinates) {
-    const width = coordinates[0].width || this._getAppointmentMaxWidth();
+  protected correctRtlCoordinates(coordinates) {
+    const width = coordinates[0].width || this.getAppointmentMaxWidth();
 
     coordinates.forEach((coordinate) => {
       if (!coordinate.appointmentReduced) {
@@ -179,11 +179,11 @@ class BaseRenderingStrategy {
     return coordinates;
   }
 
-  _getAppointmentMaxWidth() {
+  protected getAppointmentMaxWidth() {
     return this.cellWidth;
   }
 
-  _getItemPosition(initialAppointment) {
+  protected getItemPosition(initialAppointment) {
     const appointment = this.shiftAppointmentByViewOffset(initialAppointment);
     const position = this.generateAppointmentSettings(appointment);
     const allDay = this.isAllDay(appointment);
@@ -200,7 +200,7 @@ class BaseRenderingStrategy {
       let initialRowIndex = position[j].rowIndex;
       let initialColumnIndex = position[j].columnIndex;
 
-      if (this._needVerifyItemSize() || allDay) {
+      if (this.needVerifyItemSize() || allDay) {
         const currentMaxAllowedPosition = position[j].hMax;
 
         if (this.isAppointmentGreaterThan(currentMaxAllowedPosition, {
@@ -212,7 +212,7 @@ class BaseRenderingStrategy {
           initialRowIndex = position[j].rowIndex;
           initialColumnIndex = position[j].columnIndex;
 
-          resultWidth = this._reduceMultiWeekAppointment(
+          resultWidth = this.reduceMultiWeekAppointment(
             width,
             {
               left: position[j].left,
@@ -220,7 +220,7 @@ class BaseRenderingStrategy {
             },
           );
 
-          multiWeekAppointmentParts = this._getAppointmentParts({
+          multiWeekAppointmentParts = this.getAppointmentParts({
             sourceAppointmentWidth: width,
             reducedWidth: resultWidth,
             height,
@@ -240,13 +240,13 @@ class BaseRenderingStrategy {
         columnIndex: initialColumnIndex,
         appointmentReduced,
       });
-      result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
+      result = this.getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
     }
 
     return result;
   }
 
-  _getAppointmentPartsPosition(appointmentParts, position, result) {
+  protected getAppointmentPartsPosition(appointmentParts, position, result) {
     if (appointmentParts.length) {
       appointmentParts.unshift(position);
       appointmentParts.forEach((part, index) => {
@@ -282,17 +282,17 @@ class BaseRenderingStrategy {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getAppointmentParts(geometry, settings): any {
+  protected getAppointmentParts(geometry, settings): any {
     return [];
   }
 
-  _getCompactAppointmentParts(appointmentWidth) {
+  protected getCompactAppointmentParts(appointmentWidth) {
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
     return Math.round(appointmentWidth / cellWidth);
   }
 
-  _reduceMultiWeekAppointment(sourceAppointmentWidth, bound) {
+  protected reduceMultiWeekAppointment(sourceAppointmentWidth, bound) {
     if (this.rtlEnabled) {
       sourceAppointmentWidth = Math.floor(bound.left - bound.right);
     } else {
@@ -333,7 +333,7 @@ class BaseRenderingStrategy {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getSortedPositions(positionList, skipSorting?) {
+  protected getSortedPositions(positionList, skipSorting?) {
     const result: any = [];
 
     const round = (value) => Math.round(value * 100) / 100;
@@ -358,56 +358,56 @@ class BaseRenderingStrategy {
       }
     }
 
-    return result.sort((a, b) => this._sortCondition(a, b));
+    return result.sort((a, b) => this.sortCondition(a, b));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _sortCondition(a, b) {
+  protected sortCondition(a, b) {
   }
 
-  _getConditions(a, b) {
-    const isSomeEdge = this._isSomeEdge(a, b);
+  protected getConditions(a, b) {
+    const isSomeEdge = this.isSomeEdge(a, b);
 
     return {
-      columnCondition: isSomeEdge || this._normalizeCondition(a.left, b.left),
-      rowCondition: isSomeEdge || this._normalizeCondition(a.top, b.top),
-      cellPositionCondition: isSomeEdge || this._normalizeCondition(a.cellPosition, b.cellPosition),
+      columnCondition: isSomeEdge || this.normalizeCondition(a.left, b.left),
+      rowCondition: isSomeEdge || this.normalizeCondition(a.top, b.top),
+      cellPositionCondition: isSomeEdge || this.normalizeCondition(a.cellPosition, b.cellPosition),
     };
   }
 
-  _rowCondition(a, b): any {
-    const conditions = this._getConditions(a, b);
+  protected rowCondition(a, b): any {
+    const conditions = this.getConditions(a, b);
     return conditions.columnCondition || conditions.rowCondition;
   }
 
-  _columnCondition(a, b): any {
-    const conditions = this._getConditions(a, b);
+  protected columnCondition(a, b): any {
+    const conditions = this.getConditions(a, b);
     return conditions.rowCondition || conditions.columnCondition;
   }
 
-  _isSomeEdge(a, b) {
+  protected isSomeEdge(a, b) {
     return a.i === b.i && a.j === b.j;
   }
 
-  _normalizeCondition(first, second) {
+  protected normalizeCondition(first, second) {
     // NOTE: ie & ff pixels
     const result = first - second;
     return Math.abs(result) > 1 ? result : 0;
   }
 
-  _isItemsCross(firstItem, secondItem) {
+  protected isItemsCross(firstItem, secondItem) {
     const areItemsInTheSameTable = Boolean(firstItem.allDay) === Boolean(secondItem.allDay);
     const areItemsAllDay = firstItem.allDay && secondItem.allDay;
 
     if (areItemsInTheSameTable) {
-      const orientation = this._getOrientation(areItemsAllDay);
+      const orientation = this.getOrientation(areItemsAllDay);
 
-      return this._checkItemsCrossing(firstItem, secondItem, orientation);
+      return this.checkItemsCrossing(firstItem, secondItem, orientation);
     }
     return false;
   }
 
-  _checkItemsCrossing(firstItem, secondItem, orientation) {
+  protected checkItemsCrossing(firstItem, secondItem, orientation) {
     const firstItemSide1 = Math.floor(firstItem[orientation[0]]);
     const firstItemSide2 = Math.floor(firstItem[orientation[1]]);
 
@@ -423,11 +423,11 @@ class BaseRenderingStrategy {
     );
   }
 
-  _getOrientation(isAllDay) {
+  protected getOrientation(isAllDay) {
     return isAllDay ? ['left', 'right', 'top'] : ['top', 'bottom', 'left'];
   }
 
-  _getResultPositions(sortedArray) {
+  protected getResultPositions(sortedArray) {
     const result: any = [];
     let i;
     let sortedIndex = 0;
@@ -447,7 +447,7 @@ class BaseRenderingStrategy {
 
     const createItem = (currentItem, index?) => {
       const currentIndex = index || 0;
-      const skipSortIndex = this._skipSortedIndex(currentIndex);
+      const skipSortIndex = this.skipSortedIndex(currentIndex);
 
       if (skipSortIndex) {
         stack.shouldShiftAfterSkip = true;
@@ -482,7 +482,7 @@ class BaseRenderingStrategy {
           count: maxIndexInStack + 1,
           i: item.i,
           j: item.j,
-          sortedIndex: stack.shouldShiftAfterSkip && !this._skipSortedIndex(item.index)
+          sortedIndex: stack.shouldShiftAfterSkip && !this.skipSortedIndex(item.index)
             ? item.sortedIndex + 1
             : item.sortedIndex,
         });
@@ -499,10 +499,10 @@ class BaseRenderingStrategy {
 
       if (!stack.items) {
         startNewStack(currentItem);
-      } else if (this._isItemsCross(stack, currentItem)) {
+      } else if (this.isItemsCross(stack, currentItem)) {
         // eslint-disable-next-line @typescript-eslint/no-loop-func
         stack.items.forEach((item) => {
-          if (this._isItemsCross(item, currentItem)) {
+          if (this.isItemsCross(item, currentItem)) {
             indexes.push(item.index);
           }
         });
@@ -532,11 +532,11 @@ class BaseRenderingStrategy {
     });
   }
 
-  _skipSortedIndex(index) {
-    return index > this._getMaxAppointmentCountPerCell() - 1;
+  protected skipSortedIndex(index) {
+    return index > this.getMaxAppointmentCountPerCell() - 1;
   }
 
-  _findIndexByKey(arr, iKey, jKey, iValue, jValue): any {
+  protected findIndexByKey(arr, iKey, jKey, iValue, jValue): any {
     let result = 0;
     for (let i = 0, len = arr.length; i < len; i++) {
       if (arr[i][iKey] === iValue && arr[i][jKey] === jValue) {
@@ -547,7 +547,7 @@ class BaseRenderingStrategy {
     return result;
   }
 
-  _getExtendedPositionMap(map, positions) {
+  protected getExtendedPositionMap(map, positions) {
     let positionCounter = 0;
     const result: any = [];
 
@@ -558,7 +558,7 @@ class BaseRenderingStrategy {
         map[i][j].sortedIndex = positions[positionCounter].sortedIndex;
         map[i][j].count = positions[positionCounter++].count;
         resultString.push(map[i][j]);
-        this._checkLongCompactAppointment(map[i][j], resultString);
+        this.checkLongCompactAppointment(map[i][j], resultString);
       }
       result.push(resultString);
     }
@@ -566,22 +566,22 @@ class BaseRenderingStrategy {
     return result;
   }
 
-  _checkLongCompactAppointment(item, result) {
-    this._splitLongCompactAppointment(item, result);
+  protected checkLongCompactAppointment(item, result) {
+    this.splitLongCompactAppointment(item, result);
 
     return result;
   }
 
-  _splitLongCompactAppointment(item, result) {
-    const appointmentCountPerCell = this._getMaxAppointmentCountPerCellByType(item.allDay);
+  protected splitLongCompactAppointment(item, result) {
+    const appointmentCountPerCell = this.getMaxAppointmentCountPerCellByType(item.allDay);
     let compactCount = 0;
 
     if (appointmentCountPerCell !== undefined && item.index > appointmentCountPerCell - 1) {
       item.isCompact = true;
-      compactCount = this._getCompactAppointmentParts(item.width);
+      compactCount = this.getCompactAppointmentParts(item.width);
       for (let k = 1; k < compactCount; k++) {
         const compactPart = extend(true, {}, item);
-        compactPart.left = (this as any)._getCompactLeftCoordinate(item.left, k);
+        compactPart.left = (this as any).getCompactLeftCoordinate(item.left, k);
         compactPart.columnIndex += k;
         compactPart.sortedIndex = null;
         result.push(compactPart);
@@ -590,7 +590,7 @@ class BaseRenderingStrategy {
     return result;
   }
 
-  protected _adjustDurationByDaylightDiff(
+  protected adjustDurationByDaylightDiff(
     duration: number,
     startDate: Date,
     endDate: Date,
@@ -599,36 +599,36 @@ class BaseRenderingStrategy {
     const originalStartDate = dateUtilsTs.addOffsets(startDate, [viewOffset]);
     const originalEndDate = dateUtilsTs.addOffsets(endDate, [viewOffset]);
     const daylightDiff = timeZoneUtils.getDaylightOffset(originalStartDate, originalEndDate);
-    const correctedDuration: number = this._needAdjustDuration(daylightDiff)
-      ? this._calculateDurationByDaylightDiff(duration, daylightDiff)
+    const correctedDuration: number = this.needAdjustDuration(daylightDiff)
+      ? this.calculateDurationByDaylightDiff(duration, daylightDiff)
       : duration;
 
     return correctedDuration <= Math.abs(daylightDiff) ? duration : correctedDuration;
   }
 
-  _needAdjustDuration(diff) {
+  protected needAdjustDuration(diff) {
     return diff !== 0;
   }
 
-  _calculateDurationByDaylightDiff(duration, diff) {
+  protected calculateDurationByDaylightDiff(duration, diff) {
     return duration + diff * toMs('minute');
   }
 
-  _getCollectorLeftOffset(isAllDay) {
+  protected calculateCollectorLeftOffset(isAllDay) {
     if (isAllDay || !this.isApplyCompactAppointmentOffset()) {
       return 0;
     }
 
     const dropDownButtonWidth = this.getDropDownAppointmentWidth(this.intervalCount, isAllDay);
-    const rightOffset = this._isCompactTheme()
+    const rightOffset = this.isCompactTheme()
       ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
       : WEEK_VIEW_COLLECTOR_OFFSET;
 
     return this.cellWidth - dropDownButtonWidth - rightOffset;
   }
 
-  _markAppointmentAsVirtual(coordinates, isAllDay = false) {
-    const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
+  protected markAppointmentAsVirtual(coordinates, isAllDay = false) {
+    const countFullWidthAppointmentInCell = this.getMaxAppointmentCountPerCellByType(isAllDay);
     if ((coordinates.count - countFullWidthAppointmentInCell) > 0) {
       const { top, left } = coordinates;
       const compactRender = this.isAdaptive || !isAllDay && this.supportCompactDropDownAppointments();
@@ -636,11 +636,11 @@ class BaseRenderingStrategy {
       const height = this.getDropDownAppointmentHeight();
       const rtlOffset = this.rtlEnabled ? width : 0;
       coordinates.virtual = {
-        left: left + this._getCollectorLeftOffset(isAllDay) + rtlOffset,
+        left: left + this.calculateCollectorLeftOffset(isAllDay) + rtlOffset,
         top,
         width,
         height,
-        index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
+        index: this.generateAppointmentCollectorIndex(coordinates, isAllDay),
         isAllDay,
         groupIndex: coordinates.groupIndex,
         isCompact: compactRender,
@@ -656,14 +656,14 @@ class BaseRenderingStrategy {
     return true;
   }
 
-  _generateAppointmentCollectorIndex({
+  protected generateAppointmentCollectorIndex({
     groupIndex, rowIndex, columnIndex,
   }, isAllDay) {
     return `${groupIndex}-${rowIndex}-${columnIndex}-${isAllDay}`;
   }
 
-  _getMaxAppointmentCountPerCellByType(isAllDay?) {
-    const appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
+  protected getMaxAppointmentCountPerCellByType(isAllDay?) {
+    const appointmentCountPerCell = this.getMaxAppointmentCountPerCell();
 
     if (isObject(appointmentCountPerCell)) {
       return isAllDay
@@ -700,7 +700,7 @@ class BaseRenderingStrategy {
     let resultMaxAppointmentsPerCell = maxAppointmentsPerCell;
 
     if (isNumeric(this.maxAppointmentsPerCell)) {
-      const dynamicAppointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
+      const dynamicAppointmentCountPerCell = this.getDynamicAppointmentCountPerCell();
       const maxAppointmentCountDisplayedInCell = dynamicAppointmentCountPerCell.allDay || dynamicAppointmentCountPerCell;
 
       const maxAppointmentsCount = Math.max(currentAppointmentCountInCell, maxAppointmentCountDisplayedInCell);
@@ -709,7 +709,7 @@ class BaseRenderingStrategy {
     return cellHeight / resultMaxAppointmentsPerCell;
   }
 
-  _customizeCoordinates(coordinates, cellHeight, appointmentCountPerCell, topOffset, isAllDay?) {
+  protected customizeCoordinates(coordinates, cellHeight, appointmentCountPerCell, topOffset, isAllDay?) {
     const { index, count } = coordinates;
 
     const appointmentHeight = this.getVerticalAppointmentHeight(cellHeight, count, appointmentCountPerCell);
@@ -720,31 +720,31 @@ class BaseRenderingStrategy {
     const { left } = coordinates;
 
     if (coordinates.isCompact) {
-      this.isAdaptive && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
+      this.isAdaptive && this.correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
 
-      this._markAppointmentAsVirtual(coordinates, isAllDay);
+      this.markAppointmentAsVirtual(coordinates, isAllDay);
     }
     return {
       height: appointmentHeight,
       width,
       top,
       left,
-      empty: this._isAppointmentEmpty(cellHeight, width),
+      empty: this.isAppointmentEmpty(cellHeight, width),
     };
   }
 
-  _isAppointmentEmpty(height, width) {
-    return height < this._getAppointmentMinHeight() || width < this._getAppointmentMinWidth();
+  protected isAppointmentEmpty(height, width) {
+    return height < this.getAppointmentMinHeight() || width < this.getAppointmentMinWidth();
   }
 
-  _calculateGeometryConfig(coordinates) {
+  protected calculateGeometryConfig(coordinates) {
     const overlappingMode = this.maxAppointmentsPerCell;
-    const offsets: any = this._getOffsets();
-    const appointmentDefaultOffset = this._getAppointmentDefaultOffset();
+    const offsets: any = this.getOffsets();
+    const appointmentDefaultOffset = this.getAppointmentDefaultOffset();
 
-    let appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
-    let ratio: any = this._getDefaultRatio(coordinates, appointmentCountPerCell);
-    let maxHeight: any = this._getMaxHeight();
+    let appointmentCountPerCell = this.getAppointmentCount(overlappingMode, coordinates);
+    let ratio: any = this.getDefaultRatio(coordinates, appointmentCountPerCell);
+    let maxHeight: any = this.getMaxHeight();
 
     if (!isNumeric(appointmentCountPerCell)) {
       appointmentCountPerCell = coordinates.count;
@@ -766,25 +766,25 @@ class BaseRenderingStrategy {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getAppointmentCount(overlappingMode, coordinates) {
+  protected getAppointmentCount(overlappingMode, coordinates) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getDefaultRatio(coordinates, appointmentCountPerCell) {
+  protected getDefaultRatio(coordinates, appointmentCountPerCell) {
   }
 
-  _getOffsets() {
+  protected getOffsets() {
   }
 
-  _getMaxHeight() {
+  protected getMaxHeight() {
   }
 
-  _needVerifyItemSize() {
+  protected needVerifyItemSize() {
     return false;
   }
 
-  _getMaxAppointmentCountPerCell() {
-    if (!this._maxAppointmentCountPerCell) {
+  protected getMaxAppointmentCountPerCell() {
+    if (!this.maxAppointmentCountPerCell) {
       const overlappingMode = this.maxAppointmentsPerCell;
       let appointmentCountPerCell;
 
@@ -792,19 +792,19 @@ class BaseRenderingStrategy {
         appointmentCountPerCell = overlappingMode;
       }
       if (overlappingMode === 'auto') {
-        appointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
+        appointmentCountPerCell = this.getDynamicAppointmentCountPerCell();
       }
       if (overlappingMode === 'unlimited') {
         appointmentCountPerCell = undefined;
       }
 
-      this._maxAppointmentCountPerCell = appointmentCountPerCell;
+      this.maxAppointmentCountPerCell = appointmentCountPerCell;
     }
 
-    return this._maxAppointmentCountPerCell;
+    return this.maxAppointmentCountPerCell;
   }
 
-  _getDynamicAppointmentCountPerCell() {
+  protected getDynamicAppointmentCountPerCell() {
     return this.getPositioningStrategy().getDynamicAppointmentCountPerCell();
   }
 
@@ -812,34 +812,34 @@ class BaseRenderingStrategy {
     return false;
   }
 
-  _isCompactTheme() {
+  protected isCompactTheme() {
     return (currentTheme() || '').split('.').pop() === 'compact';
   }
 
-  _getAppointmentDefaultOffset() {
+  protected getAppointmentDefaultOffset() {
     return this.getPositioningStrategy().getAppointmentDefaultOffset();
   }
 
-  _getAppointmentDefaultHeight() {
-    return this._getAppointmentHeightByTheme();
+  protected getAppointmentDefaultHeight() {
+    return this.getAppointmentHeightByTheme();
   }
 
-  _getAppointmentMinHeight() {
-    return this._getAppointmentDefaultHeight();
+  protected getAppointmentMinHeight() {
+    return this.getAppointmentDefaultHeight();
   }
 
-  _getAppointmentHeightByTheme(): number { // TODO get rid of depending from themes
-    return this._isCompactTheme()
+  protected getAppointmentHeightByTheme(): number { // TODO get rid of depending from themes
+    return this.isCompactTheme()
       ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT
       : APPOINTMENT_DEFAULT_HEIGHT;
   }
 
-  _getAppointmentDefaultWidth() {
-    return this.getPositioningStrategy()._getAppointmentDefaultWidth();
+  protected getAppointmentDefaultWidth() {
+    return this.getPositioningStrategy().getAppointmentDefaultWidth();
   }
 
-  _getAppointmentMinWidth() {
-    return this._getAppointmentDefaultWidth();
+  protected getAppointmentMinWidth() {
+    return this.getAppointmentDefaultWidth();
   }
 
   getAppointmentDurationInMs(apptStartDate, apptEndDate, allDay) {

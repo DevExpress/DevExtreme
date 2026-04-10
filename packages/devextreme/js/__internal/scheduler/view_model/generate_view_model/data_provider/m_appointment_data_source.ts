@@ -26,7 +26,7 @@ export class AppointmentDataSource {
     return Boolean(this.dataSource);
   }
 
-  _getStoreKey(target) {
+  private getStoreKey(target) {
     const store = this.dataSource.store();
 
     return store.keyOf(target);
@@ -36,10 +36,10 @@ export class AppointmentDataSource {
     this.dataSource = dataSource;
 
     this.cleanState();
-    this._initStoreChangeHandlers();
+    this.initStoreChangeHandlers();
   }
 
-  _initStoreChangeHandlers() {
+  private initStoreChangeHandlers() {
     const { dataSource } = this;
     const store = dataSource?.store();
 
@@ -97,7 +97,7 @@ export class AppointmentDataSource {
   }
 
   update(target, data) {
-    const key = this._getStoreKey(target);
+    const key = this.getStoreKey(target);
     // @ts-expect-error
     const d = new Deferred();
 
@@ -111,7 +111,7 @@ export class AppointmentDataSource {
   }
 
   remove(rawAppointment) {
-    const key = this._getStoreKey(rawAppointment);
+    const key = this.getStoreKey(rawAppointment);
     return this.dataSource.store().remove(key).done(() => this.dataSource.load());
   }
 
