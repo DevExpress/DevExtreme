@@ -55,14 +55,30 @@ const createAIAssistantView = ({
 
     return undefined;
   });
+  const $columnHeadersElement = $('<div>').appendTo($container);
+  const $rowsViewElement = $('<div>').css('height', '400px').appendTo($container);
+
+  const mockColumnHeadersView = {
+    getHeight: jest.fn().mockReturnValue(50),
+    element: jest.fn().mockReturnValue($columnHeadersElement),
+  };
+  const mockRowsView = {
+    element: jest.fn().mockReturnValue($rowsViewElement),
+  };
+
   const mockComponent = {
     element: (): any => $container.get(0),
     _createComponent: createComponentMock,
     _controllers: {},
+    _views: {
+      columnHeadersView: mockColumnHeadersView,
+      rowsView: mockRowsView,
+    },
     option: optionMock,
   };
 
   const aiAssistantView = new AIAssistantView(mockComponent);
+  aiAssistantView.init();
   if (render) {
     aiAssistantView.render($container);
   }
@@ -114,13 +130,16 @@ describe('AIAssistantView', () => {
       expect(AIChat).toHaveBeenCalledTimes(1);
     });
 
-    it('should pass container and createComponent to AIChat', () => {
+    it('should pass container, createComponent, popupOptions, chatOptions, and onChatCleared to AIChat', () => {
       const { aiAssistantView } = createAIAssistantView();
 
       expect(AIChat).toHaveBeenCalledWith(
         expect.objectContaining({
           container: aiAssistantView.element(),
           createComponent: expect.any(Function),
+          popupOptions: expect.any(Object),
+          chatOptions: expect.any(Object),
+          onChatCleared: expect.any(Function),
         }),
       );
     });
@@ -213,20 +232,107 @@ describe('AIAssistantView', () => {
   });
 
   describe('visibilityChanged', () => {
-    it('should fire visibilityChanged callback when popup visibility changes', () => {
+    it('should fire visibilityChanged callback with true when popup onShowing is triggered', () => {
       const { aiAssistantView } = createAIAssistantView();
       const callback = jest.fn();
 
       aiAssistantView.visibilityChanged?.add(callback);
 
       const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
-      aiChatConfig.onVisibilityChanged?.(true);
+      aiChatConfig.popupOptions?.onShowing?.({} as any);
 
       expect(callback).toHaveBeenCalledWith(true);
+    });
 
-      aiChatConfig.onVisibilityChanged?.(false);
+    it('should fire visibilityChanged callback with false when popup onHidden is triggered', () => {
+      const { aiAssistantView } = createAIAssistantView();
+      const callback = jest.fn();
+
+      aiAssistantView.visibilityChanged?.add(callback);
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      aiChatConfig.popupOptions?.onHidden?.({} as any);
 
       expect(callback).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe('optionChanged', () => {
+    it('should set handled to true for aiAssistant options', () => {
+      const { aiAssistantView } = createAIAssistantView();
+
+      const args = {
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.title' as const,
+        value: 'New Title',
+        previousValue: 'Old Title',
+        handled: false,
+      };
+
+      aiAssistantView.optionChanged(args);
+
+      expect(args.handled).toBe(true);
+    });
+
+    it('should call _invalidate when aiAssistant.enabled changes to true', () => {
+      const { aiAssistantView } = createAIAssistantView();
+      const invalidateSpy = jest.spyOn(aiAssistantView, '_invalidate' as any);
+
+      aiAssistantView.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.enabled' as const,
+        value: true,
+        previousValue: false,
+        handled: false,
+      });
+
+      expect(invalidateSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call hide when aiAssistant.enabled changes to false', () => {
+      const { aiAssistantView } = createAIAssistantView();
+      const hideSpy = jest.spyOn(aiAssistantView, 'hide');
+
+      aiAssistantView.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.enabled' as const,
+        value: false,
+        previousValue: true,
+        handled: false,
+      });
+
+      expect(hideSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call updateOptions on aiChatInstance for non-enabled sub-options', () => {
+      const { aiAssistantView } = createAIAssistantView();
+
+      const aiChatInstance = (AIChat as jest.Mock)
+        .mock.results[0].value as { updateOptions: jest.Mock };
+
+      aiAssistantView.optionChanged({
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.title' as const,
+        value: 'New Title',
+        previousValue: 'Old Title',
+        handled: false,
+      });
+
+      expect(aiChatInstance.updateOptions).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw when aiChatInstance is not created for non-enabled sub-options', () => {
+      const { aiAssistantView } = createAIAssistantView({ render: false });
+
+      expect(() => {
+        aiAssistantView.optionChanged({
+          name: 'aiAssistant' as const,
+          fullName: 'aiAssistant.title' as const,
+          value: 'New Title',
+          previousValue: 'Old Title',
+          handled: false,
+        });
+      }).not.toThrow();
     });
   });
 });

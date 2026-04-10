@@ -27,18 +27,20 @@ export class AIAssistantViewController extends ViewController {
     this.aiAssistantView = this.getView('aiAssistantView');
     this.headerPanel = this.getView('headerPanel');
 
-    // todo add remove before add
-    this.aiAssistantView.visibilityChanged?.add((visible: boolean): void => {
-      this.getAiAssistantButton()?.toggleClass(ACTIVE_STATE_CLASS, visible);
-    });
-
-    const isAiAssistantEnabled = this.option('aiAssistant.enabled'); // TODO clarify option name
+    const isAiAssistantEnabled = this.option('aiAssistant.enabled');
 
     if (isAiAssistantEnabled) {
       const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
 
       this.headerPanel?.registerToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
     }
+
+    const visibilityChangedHandler = (visible: boolean): void => {
+      this.getAiAssistantButton()?.toggleClass(ACTIVE_STATE_CLASS, visible);
+    };
+
+    this.aiAssistantView?.visibilityChanged?.remove(visibilityChangedHandler);
+    this.aiAssistantView.visibilityChanged?.add(visibilityChangedHandler);
   }
 
   public optionChanged(args: OptionChanged): void {
@@ -57,7 +59,7 @@ export class AIAssistantViewController extends ViewController {
   }
 
   private syncAiAssistantItem(): void {
-    const isAiAssistantEnabled = this.option('aiAssistant.enabled'); // TODO clarify option name
+    const isAiAssistantEnabled = this.option('aiAssistant.enabled');
 
     if (isAiAssistantEnabled) {
       const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
@@ -71,14 +73,14 @@ export class AIAssistantViewController extends ViewController {
   private createAiAssistantToolbarItem(): ToolbarItem {
     const onClickHandler = (): Promise<boolean> => this.toggle();
 
-    const hintText = this.option('aiAssistant.title'); // TODO clarify option name
+    const hintText = this.option('aiAssistant.title');
 
-    const isShown = this.aiAssistantView?.isShown();
+    const isActive = this.aiAssistantView?.isShown();
 
     const aiAssistantToolbarItemClass = this.headerPanel?.getToolbarButtonClass(
       this.addWidgetPrefix(CLASSES.aiAssistantButton),
     );
-    const aiAssistantToolbarItemStateClass = isShown ? ACTIVE_STATE_CLASS : '';
+    const aiAssistantToolbarItemStateClass = isActive ? ACTIVE_STATE_CLASS : '';
 
     return {
       widget: 'dxButton',

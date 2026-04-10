@@ -11,13 +11,14 @@ import { AIAssistantViewController } from '../ai_assistant_view_controller';
 
 interface MockVisibilityChangedCallback {
   add: jest.Mock;
+  remove: jest.Mock;
   fire: jest.Mock;
 }
 
 interface MockAIAssistantView {
   toggle: jest.Mock<() => Promise<boolean>>;
   hide: jest.Mock<() => Promise<boolean>>;
-  _invalidate: jest.Mock;
+  isShown: jest.Mock<() => boolean>;
   visibilityChanged: MockVisibilityChangedCallback;
 }
 
@@ -31,9 +32,10 @@ interface MockHeaderPanel {
 const createMockAIAssistantView = (): MockAIAssistantView => ({
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
-  _invalidate: jest.fn(),
+  isShown: jest.fn<() => boolean>().mockReturnValue(false),
   visibilityChanged: {
     add: jest.fn(),
+    remove: jest.fn(),
     fire: jest.fn(),
   },
 });
@@ -113,10 +115,21 @@ describe('AIAssistantViewController', () => {
       expect(mockView.visibilityChanged.add).toHaveBeenCalledTimes(1);
       expect(mockView.visibilityChanged.add).toHaveBeenCalledWith(expect.any(Function));
     });
+
+    it('should call remove before add to prevent duplicate subscriptions', () => {
+      const { mockView } = createAIAssistantViewController();
+
+      const removeOrder = mockView.visibilityChanged.remove.mock.invocationCallOrder[0];
+      const addOrder = mockView.visibilityChanged.add.mock.invocationCallOrder[0];
+
+      expect(mockView.visibilityChanged.remove).toHaveBeenCalledTimes(1);
+      expect(mockView.visibilityChanged.remove).toHaveBeenCalledWith(expect.any(Function));
+      expect(removeOrder).toBeLessThan(addOrder);
+    });
   });
 
   describe('optionChanged', () => {
-    it('should set handled to true for aiAssistant options', () => {
+    it('should set handled to true for aiAssistant.enabled option', () => {
       const { controller } = createAIAssistantViewController();
 
       const args = {
@@ -132,9 +145,41 @@ describe('AIAssistantViewController', () => {
       expect(args.handled).toBe(true);
     });
 
-    it('should hide aiAssistantView when aiAssistant.enabled changes to false', () => {
+    it('should set handled to true for aiAssistant.title option', () => {
+      const { controller } = createAIAssistantViewController();
+
+      const args = {
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.title' as const,
+        value: 'New Title',
+        previousValue: 'Old Title',
+        handled: false,
+      };
+
+      controller.optionChanged(args);
+
+      expect(args.handled).toBe(true);
+    });
+
+    it('should not set handled for other aiAssistant sub-options', () => {
+      const { controller } = createAIAssistantViewController();
+
+      const args = {
+        name: 'aiAssistant' as const,
+        fullName: 'aiAssistant.popup' as const,
+        value: {},
+        previousValue: undefined,
+        handled: false,
+      };
+
+      controller.optionChanged(args);
+
+      expect(args.handled).toBe(false);
+    });
+
+    it('should sync toolbar item when aiAssistant.enabled changes to false', () => {
       const options: Record<string, unknown> = { 'aiAssistant.enabled': true };
-      const { controller, mockView } = createAIAssistantViewController(options);
+      const { controller, mockHeaderPanel } = createAIAssistantViewController(options);
 
       options['aiAssistant.enabled'] = false;
 
@@ -146,12 +191,12 @@ describe('AIAssistantViewController', () => {
         handled: false,
       });
 
-      expect(mockView.hide).toHaveBeenCalledTimes(1);
+      expect(mockHeaderPanel.removeToolbarItem).toHaveBeenCalledTimes(1);
     });
 
-    it('should invalidate aiAssistantView when enabling', () => {
+    it('should sync toolbar item when aiAssistant.enabled changes to true', () => {
       const options: Record<string, unknown> = { 'aiAssistant.enabled': false };
-      const { controller, mockView } = createAIAssistantViewController(options);
+      const { controller, mockHeaderPanel } = createAIAssistantViewController(options);
 
       options['aiAssistant.enabled'] = true;
 
@@ -163,24 +208,7 @@ describe('AIAssistantViewController', () => {
         handled: false,
       });
 
-      expect(mockView._invalidate).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not invalidate aiAssistantView when disabling', () => {
-      const options: Record<string, unknown> = { 'aiAssistant.enabled': true };
-      const { controller, mockView } = createAIAssistantViewController(options);
-
-      options['aiAssistant.enabled'] = false;
-
-      controller.optionChanged({
-        name: 'aiAssistant' as const,
-        fullName: 'aiAssistant.enabled' as const,
-        value: false,
-        previousValue: true,
-        handled: false,
-      });
-
-      expect(mockView._invalidate).not.toHaveBeenCalled();
+      expect(mockHeaderPanel.applyToolbarItem).toHaveBeenCalledTimes(1);
     });
   });
 });
