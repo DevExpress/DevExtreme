@@ -31,7 +31,6 @@ jest.mock('./key', () => ({
       72, 62, 186, 243, 199, 73,
     ]),
   },
-  INTERNAL_USAGE_ID: 'aYC7EHibp0yxtXTihJERkA',
 }));
 
 describe('license token', () => {

@@ -7,7 +7,6 @@ export interface License {
 export enum TokenKind {
   corrupted = 'corrupted',
   verified = 'verified',
-  internal = 'internal',
 }
 
 export interface ErrorToken {
@@ -20,12 +19,7 @@ export interface VerifiedToken {
   readonly payload: License;
 }
 
-export interface InternalToken {
-  readonly kind: TokenKind.internal;
-  readonly internalUsageId: string;
-}
-
-export type Token = ErrorToken | VerifiedToken | InternalToken;
+export type Token = ErrorToken | VerifiedToken;
 
 type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022' | 'W0023' | 'W0024';
 
@@ -48,7 +42,6 @@ export type LicenseWarningType = 'no-key'
 
 export interface LicenseCheckParams {
   preview: boolean;
-  internal?: true;
   error: LicenseVerifyResult | undefined;
   warningType?: LicenseWarningType;
   maxVersionAllowed?: number;

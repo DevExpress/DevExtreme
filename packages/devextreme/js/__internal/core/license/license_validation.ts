@@ -121,20 +121,16 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
 
   const version = parseVersion(versionStr);
 
-  const versionsCompatible = assertedVersionsCompatible(version);
+  assertedVersionsCompatible(version);
 
   const {
-    internal, error, warningType, maxVersionAllowed,
+    error, warningType, maxVersionAllowed,
   } = getLicenseCheckParams({
     licenseKey,
     version,
   });
 
-  if (!versionsCompatible && internal) {
-    return;
-  }
-
-  if (error && !internal) {
+  if (error) {
     displayTrialPanel();
   }
 
