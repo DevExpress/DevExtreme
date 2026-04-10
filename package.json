@@ -24,7 +24,7 @@
     "all:build-dev": "nx all:build-dev workflows",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
     "demos:prepare": "nx run devextreme-demos:prepare-js",
-    "demos:start": "http-server ./apps/demos --port 8080 -c-1"
+    "demos:start": "node apps/demos/utils/shell/server.js"
   },
   "nx": {},
   "private": true,

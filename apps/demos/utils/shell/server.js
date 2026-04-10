@@ -8,15 +8,18 @@ const open = require('open');
 const { join, normalize } = require('path');
 const { readFileSync, readdirSync } = require('fs');
 
-const root = join(__dirname, '..', '..', '..', '..');
+const root = join(__dirname, '..', '..');
 const indexFileName = 'index.html';
-const cssDirectory = join(root, 'node_modules', 'devextreme', 'dist', 'css');
+const cssDirectory = join(root, 'node_modules', 'devextreme-dist', 'css');
 const getAvailableThemes = readdirSync(cssDirectory).filter((f) => /^dx\.(?!common).*\.css$/i.test(f));
 const baseTheme = 'dx.light.css';
-const port = process.argv[2] ?? 3000;
+const portArgument = process.argv.slice(2).findLast((argument) => argument !== '--');
+const port = Number(portArgument) || 8080;
+
+const getDemoPath = (requestPath) => requestPath.replace(/^\/apps\/demos(?=\/|$)/, '');
 
 const demoIndexHandler = (request, response) => {
-  const parts = request.path.split('/');
+  const parts = getDemoPath(request.path).split('/');
 
   parts.unshift(root);
 
@@ -39,8 +42,12 @@ const demoIndexHandler = (request, response) => {
 const app = express();
 app.use(cookieParser());
 
+app.get('/apps/demos', (request, response) => response.redirect('/'));
+app.get(`/apps/demos/${indexFileName}`, (request, response) => response.redirect('/'));
 app.get('/Demos/:widget/:name/:approach', demoIndexHandler);
 app.get(`/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
 app.get('/themes', (request, response) => response.send(getAvailableThemes));
 app.use(
   serveStatic(root, { index: [indexFileName] }),
@@ -49,4 +56,4 @@ app.use(
 
 app.listen(port);
 
-open(`http://localhost:${port}/apps/demos`);
+open(`http://localhost:${port}/`);
