@@ -50,7 +50,7 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
 
   private renderMarker($container: dxElementWrapper): void {
     const $leftContainer = $('<div>')
-      .addClass('dx-scheduler-agenda-appointment-left-layout')
+      .addClass(AGENDA_APPOINTMENT_CLASSES.LEFT_LAYOUT)
       .appendTo($container);
 
     const $marker = $('<div>')
@@ -74,7 +74,7 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
 
   private renderInfo($container: dxElementWrapper): void {
     const $rightContainer = $('<div>')
-      .addClass('dx-scheduler-agenda-appointment-right-layout')
+      .addClass(AGENDA_APPOINTMENT_CLASSES.RIGHT_LAYOUT)
       .appendTo($container);
 
     $('<div>')
