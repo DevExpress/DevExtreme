@@ -27,6 +27,7 @@ export class AIAssistantViewController extends ViewController {
     this.aiAssistantView = this.getView('aiAssistantView');
     this.headerPanel = this.getView('headerPanel');
 
+    // todo add remove before add
     this.aiAssistantView.visibilityChanged?.add((visible: boolean): void => {
       this.getAiAssistantButton()?.toggleClass(ACTIVE_STATE_CLASS, visible);
     });
@@ -42,8 +43,10 @@ export class AIAssistantViewController extends ViewController {
 
   public optionChanged(args: OptionChanged): void {
     if (args.name === 'aiAssistant') {
-      this.syncAiAssistantItem();
-      args.handled = true;
+      if (args.fullName === 'aiAssistant.enabled' || args.fullName === 'aiAssistant.title') {
+        this.syncAiAssistantItem();
+        args.handled = true;
+      }
     } else {
       super.optionChanged(args);
     }
@@ -60,11 +63,8 @@ export class AIAssistantViewController extends ViewController {
       const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
 
       this.headerPanel?.applyToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
-      this.aiAssistantView?._invalidate();
     } else {
       this.headerPanel?.removeToolbarItem(AI_ASSISTANT_BUTTON_NAME);
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.aiAssistantView?.hide();
     }
   }
 
@@ -73,9 +73,12 @@ export class AIAssistantViewController extends ViewController {
 
     const hintText = this.option('aiAssistant.title'); // TODO clarify option name
 
+    const isShown = this.aiAssistantView?.isShown();
+
     const aiAssistantToolbarItemClass = this.headerPanel?.getToolbarButtonClass(
       this.addWidgetPrefix(CLASSES.aiAssistantButton),
     );
+    const aiAssistantToolbarItemStateClass = isShown ? ACTIVE_STATE_CLASS : '';
 
     return {
       widget: 'dxButton',
@@ -87,7 +90,7 @@ export class AIAssistantViewController extends ViewController {
         text: hintText,
         elementAttr: {
           'aria-haspopup': 'dialog',
-          class: aiAssistantToolbarItemClass,
+          class: `${aiAssistantToolbarItemClass} ${aiAssistantToolbarItemStateClass}`,
         },
       },
       showText: 'inMenu',
