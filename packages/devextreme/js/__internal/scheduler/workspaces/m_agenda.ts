@@ -152,7 +152,11 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override renderView() {
-    this.startViewDate = agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
+    this.startViewDate = agendaUtils.calculateStartViewDate(
+      this.option('currentDate'),
+      this.option('startDayHour'),
+      this.option('skippedDays'),
+    );
     this.rows = [];
   }
 
@@ -441,10 +445,11 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   private getTimePanelStartDate(rowIndex) {
-    const current = new Date(this.option('currentDate') as any);
-    const cellDate = new Date(current.setDate(current.getDate() + rowIndex));
-
-    return cellDate;
+    return agendaUtils.getDateByIndex(
+      this.getStartViewDate(),
+      rowIndex,
+      this.option('skippedDays'),
+    );
   }
 
   private getRowHeight(rowSize) {
@@ -476,6 +481,7 @@ class SchedulerAgenda extends WorkSpace {
       this.option('agendaDuration') as number,
       this.getStartViewDate(),
       this.resourceManager.groupCount(),
+      this.option('skippedDays'),
     );
     this.recalculateAgenda(rows);
   }
@@ -485,14 +491,12 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   getEndViewDate() {
-    const currentDate = new Date(this.option('currentDate') as any);
-    const agendaDuration: any = this.option('agendaDuration');
-
-    currentDate.setHours(this.option('endDayHour') as any);
-
-    const result = currentDate.setDate(currentDate.getDate() + agendaDuration - 1) - 60000;
-
-    return new Date(result);
+    return agendaUtils.calculateEndViewDate(
+      this.getStartViewDate(),
+      this.option('endDayHour') as any,
+      this.option('agendaDuration') as any,
+      this.option('skippedDays'),
+    );
   }
 
   getEndViewDateByEndDayHour() {

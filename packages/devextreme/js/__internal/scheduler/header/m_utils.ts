@@ -9,7 +9,7 @@ import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
 import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 import type { WeekdayIndex } from '@ts/scheduler/utils/skipped_days';
 import {
-  getDateAfterVisibleWeek,
+  getDateAfterVisibleDays,
   getFirstVisibleDate,
 } from '@ts/scheduler/utils/skipped_days';
 
@@ -42,6 +42,8 @@ const subMS = (date: Date): Date => addDateInterval(date, MS_DURATION, -1);
 const addMS = (date: Date): Date => addDateInterval(date, MS_DURATION, 1);
 
 const nextDay = (date: Date): Date => addDateInterval(date, DAY_DURATION, 1);
+
+const prevDay = (date: Date): Date => addDateInterval(date, DAY_DURATION, -1);
 
 export const nextWeek = (date: Date): Date => addDateInterval(date, WEEK_DURATION, 1);
 
@@ -80,7 +82,10 @@ const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
 const nextAgendaStart = (
   date: Date,
   agendaDuration: number,
-): Date => addDateInterval(date, { days: agendaDuration }, 1);
+  skippedDays: WeekdayIndex[],
+): Date => (skippedDays.length > 0
+  ? getDateAfterVisibleDays(date, agendaDuration, skippedDays, nextDay)
+  : addDateInterval(date, { days: agendaDuration }, 1));
 
 const getIntervalStartDate = (options: IntervalOptions): Date => {
   const {
@@ -101,7 +106,9 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
     case 'workWeek':
       return getWorkWeekStart(getWeekStart(date, firstDayOfWeek));
     case 'agenda':
-      return new Date(date);
+      return skippedDays.length > 0
+        ? getFirstVisibleDate(date, skippedDays, nextDay)
+        : new Date(date);
     default:
       return new Date(date);
   }
@@ -116,11 +123,16 @@ const getPeriodEndDate = (
   const calculators: Record<Step, () => Date> = {
     day: () => nextDay(currentPeriodStartDate),
     week: () => (skippedDays.length > 0
-      ? getDateAfterVisibleWeek(currentPeriodStartDate, skippedDays, nextDay)
+      ? getDateAfterVisibleDays(
+        currentPeriodStartDate,
+        7 - skippedDays.length,
+        skippedDays,
+        nextDay,
+      )
       : nextWeek(currentPeriodStartDate)),
     month: () => nextMonth(currentPeriodStartDate),
     workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate),
-    agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration),
+    agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration, skippedDays),
   };
 
   return subMS(calculators[step]());
@@ -187,7 +199,7 @@ const getNextMonthDate = (date: Date, intervalCount: number, direction: Directio
 
 export const getNextIntervalDate = (options: IntervalOptions, direction: Direction): Date => {
   const {
-    date, step, intervalCount, agendaDuration,
+    date, step, intervalCount, agendaDuration, skippedDays,
   } = options;
 
   let dayDuration = 0;
@@ -201,8 +213,14 @@ export const getNextIntervalDate = (options: IntervalOptions, direction: Directi
       dayDuration = 7 * intervalCount;
       break;
     case 'agenda':
-      dayDuration = agendaDuration ?? 0;
-      break;
+      return skippedDays.length > 0
+        ? getDateAfterVisibleDays(
+          getIntervalStartDate(options),
+          agendaDuration ?? 0,
+          skippedDays,
+          direction > 0 ? nextDay : prevDay,
+        )
+        : addDateInterval(date, { days: agendaDuration ?? 0 }, direction);
     case 'month':
       return getNextMonthDate(date, intervalCount, direction);
   }
