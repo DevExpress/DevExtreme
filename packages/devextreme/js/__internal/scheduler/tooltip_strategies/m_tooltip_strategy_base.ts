@@ -62,13 +62,6 @@ export class TooltipStrategyBase {
 
   }
 
-  private isDeletingAllowed(appointment) {
-    const { editing } = this.extraOptions;
-    const disabled = this._options.getAppointmentDisabled(appointment);
-    const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
-    return !disabled && isDeletingAllowed;
-  }
-
   protected getContentTemplate(dataList) {
     return (container) => {
       const listElement = $('<div>');
@@ -77,22 +70,6 @@ export class TooltipStrategyBase {
       this.list.registerKeyHandler?.('escape', () => {
         this.hide();
         this.tooltip.option('target').focus();
-      });
-      this.list.registerKeyHandler?.('del', () => {
-        const { focusedElement } = this.list.option();
-        if (!focusedElement) {
-          return;
-        }
-
-        const { appointment, targetedAppointment } = this.list._getItemData(focusedElement);
-        if (!appointment) {
-          return;
-        }
-
-        if (this.isDeletingAllowed(appointment)) {
-          this.hide();
-          this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
-        }
       });
     };
   }
