@@ -36,44 +36,24 @@ jest.mock('./key', () => ({
 
 describe('license token', () => {
   it.each([
-    {
-      token: 'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxCn0=.DiDceRbil4IzXl5av7pNkKieyqHHhRf+CM477zDu4N9fyrhkQsjRourYvgVfkbSm+EQplkXhlMBc3s8Vm9n+VtPaMbeWXis92cdW/6HiT+Dm54xw5vZ5POGunKRrNYUzd9zTbYcz0bYA/dc/mHFeUdXA0UlKcx1uMaXmtJrkK74=',
-      payload: {
-        customerId: 'b1140b46-fde1-41bd-a280-4db9f8e7d9bd',
-        maxVersionAllowed: 231,
-      },
-    }, {
-      token: 'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogIjYxMjFmMDIyLTFjMTItNDNjZC04YWE0LTkwNzJkNDU4YjYxNCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMyCn0=.RENyZ3Ga5rCB7/XNKYbk2Ffv1n9bUexYNhyOlqcAD02YVnPw6XyQcN+ZORScKDU9gOInJ4o7vPxkgh10KvMZNn+FuBK8UcUR7kchk7z0CHGuOcIn2jD5X2hG6SYJ0UCBG/JDG35AL09T7Uv/pGj4PolRsANxtuMpoqmvX2D2vkU=',
-      payload: {
-        customerId: '6121f022-1c12-43cd-8aa4-9072d458b614',
-        maxVersionAllowed: 232,
-      },
-    }, {
-      token: 'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogIjM3Yjg4ZjBmLWQ0MmMtNDJiZS05YjhkLTU1ZGMwYzUzYzAxZiIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjIxCn0=.NVsilC5uWlD5QGS6bocLMlsVVK0VpZXYwU2DstUiLRpEI79/onuR8dGWasCLBo4PORDHPkNA/Ej8XeCHzJ0EkXRRZ7E2LrP/xlEfHRXTruvW4IEbZt3LiwJBt6/isLz+wzXtYtjV7tpE07/Y0TFoy+mWpHoU11GVtwKh6weRxkg=',
-      payload: {
-        customerId: '37b88f0f-d42c-42be-9b8d-55dc0c53c01f',
-        maxVersionAllowed: 221,
-      },
-    },
-  ])('verifies and decodes payload [%#]', ({ token, payload: expected }) => {
+    'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxCn0=.DiDceRbil4IzXl5av7pNkKieyqHHhRf+CM477zDu4N9fyrhkQsjRourYvgVfkbSm+EQplkXhlMBc3s8Vm9n+VtPaMbeWXis92cdW/6HiT+Dm54xw5vZ5POGunKRrNYUzd9zTbYcz0bYA/dc/mHFeUdXA0UlKcx1uMaXmtJrkK74=',
+    'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogIjYxMjFmMDIyLTFjMTItNDNjZC04YWE0LTkwNzJkNDU4YjYxNCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMyCn0=.RENyZ3Ga5rCB7/XNKYbk2Ffv1n9bUexYNhyOlqcAD02YVnPw6XyQcN+ZORScKDU9gOInJ4o7vPxkgh10KvMZNn+FuBK8UcUR7kchk7z0CHGuOcIn2jD5X2hG6SYJ0UCBG/JDG35AL09T7Uv/pGj4PolRsANxtuMpoqmvX2D2vkU=',
+    'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogIjM3Yjg4ZjBmLWQ0MmMtNDJiZS05YjhkLTU1ZGMwYzUzYzAxZiIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjIxCn0=.NVsilC5uWlD5QGS6bocLMlsVVK0VpZXYwU2DstUiLRpEI79/onuR8dGWasCLBo4PORDHPkNA/Ej8XeCHzJ0EkXRRZ7E2LrP/xlEfHRXTruvW4IEbZt3LiwJBt6/isLz+wzXtYtjV7tpE07/Y0TFoy+mWpHoU11GVtwKh6weRxkg=',
+  ])('old format token is not parsed [%#]', (token) => {
     const license = parseLicenseKey(token);
 
-    expect(license.kind).toBe('verified');
-    if (license.kind === 'verified') {
-      expect(license.payload).toEqual(expected);
+    expect(license.kind).toBe('corrupted');
+    if (license.kind === 'corrupted') {
+      expect(license.error).toBe('general');
     }
   });
 
-  it('verifies and decodes payload with extra fields', () => {
+  it('old format token with extra fields is not parsed', () => {
     const license = parseLicenseKey('ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxLAogICJleHRyYUZpZWxkIjogIkE5OTk5OTkiCn0=.fqm8mVhQ9+x/R7E7MVwUP3nJaYL3KldhYffVXdDqPVyHIQi66Z2XZ2RdygH4J0jvUpjhZ6yzmGPV0J0WoPbKyhtnY4ELhove/IAwpn8WGfRw3wLSxfR+RWuaKcw2yvlUA1JqrQUrIrN23UwNQodbJ/hGm30s0h1bf8zCvQ/d31k=');
 
-    expect(license.kind).toBe('verified');
-    if (license.kind === 'verified') {
-      expect(license.payload).toEqual({
-        customerId: 'b1140b46-fde1-41bd-a280-4db9f8e7d9bd',
-        maxVersionAllowed: 231,
-        extraField: 'A999999',
-      });
+    expect(license.kind).toBe('corrupted');
+    if (license.kind === 'corrupted') {
+      expect(license.error).toBe('general');
     }
   });
 
@@ -83,27 +63,27 @@ describe('license token', () => {
     expect(license.kind).toBe('corrupted');
 
     if (license.kind === 'corrupted') {
-      expect(license.error).toBe('verification');
+      expect(license.error).toBe('general');
     }
   });
 
-  it('fails if payload is invalid JSON', () => {
+  it('old format token with invalid JSON is not parsed', () => {
     const license = parseLicenseKey('YWJj.vjx6wAI9jVkHJAnKcsuYNZ5UvCq3UhypQ+0f+kZ37/Qc1uj4BM6//Kfi4SVsXGOaOTFYWgzesROnHCp3jZRqphJwal4yXHD1sGFi6FEdB4MgdgNZvsZSnxNWLs/7s07CzuHLTpJrAG7sTdHVkQWZNnSCKjzV7909c/Stl9+hkLo=');
 
     expect(license.kind).toBe('corrupted');
 
     if (license.kind === 'corrupted') {
-      expect(license.error).toBe('deserialization');
+      expect(license.error).toBe('general');
     }
   });
 
-  it('fails if payload is invalid Base64', () => {
+  it('old format token with invalid Base64 is not parsed', () => {
     const license = parseLicenseKey('ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogIjM3Yjg4ZjBmLWQ0MmMtNDJiZS05YjhkLTU1ZGMwYzUzYzAxZiIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjIxCn0-.EnP/RDKg0eSyaPU1eDUFll1lqOdYbhN3u73LhN1op8vjNwA0P1vKiT1DfQRmXudlleGWgDkLA2OmJYUER8j7I3LSFf3hLkBAoWoBErgveTb2zkbz8P1i9lE+XmzIXeYHyZBYUt0IPkNfajF9zzbSDDin1CvW7pnADi0vIeZ5ICQ=');
 
     expect(license.kind).toBe('corrupted');
 
     if (license.kind === 'corrupted') {
-      expect(license.error).toBe('decoding');
+      expect(license.error).toBe('general');
     }
   });
 
@@ -111,23 +91,23 @@ describe('license token', () => {
     'ewogICJmb3JtYXQiOiAxLAogICJtYXhWZXJzaW9uQWxsb3dlZCI6IDIzMQp9.WH30cajUFcKqw/fwt4jITM/5tzVwPpbdbezhhdBi5oeOvU06zKY0J4M8gQy8GQ++RPYVCAo2md6vI9D80FD2CC4w+hpQLJNJJgNUHYPrgG6CX1yAB3M+NKHsPP9S71bXAgwvignb5uPo0R5emQzr4RKDhWQMKtgqEcRe+yme2mU=',
     'ewogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxCn0=.ok32DBaAgf3ijLmNQb+A0kUV2AiSivqvZJADdF607qqlAaduAVnotJtgdwm/Ib3MErfaGrDohCYoFMnKQevkRxFkA7tK3kOBnTZPUnZY0r3wyulMQmr4Qo+Sjf/fyXs4IYpGsC7/uJjgrCos8uzBegfmgfM93XSt6pKl9+c5xvc=',
     'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIKfQ==.resgTqmazrorRNw7mmtV31XQnmTSw0uLEArsmpzCjWMQJLocBfAjpFvKBf+SAG9q+1iOSFySj64Uv2xBVqHnyeNVBRbouOKOnAB8RpkKvN4sc5SDc8JAG5TkwPVSzK/VLBpQxpqbxlcrRfHwz9gXqQoPt4/ZVATn285iw3DW0CU=',
-  ])('fails if payload misses required fields [%#]', (token) => {
+  ])('old format token with missing fields is not parsed [%#]', (token) => {
     const license = parseLicenseKey(token);
 
     expect(license.kind).toBe('corrupted');
 
     if (license.kind === 'corrupted') {
-      expect(license.error).toBe('payload');
+      expect(license.error).toBe('general');
     }
   });
 
-  it('fails if payload has unsupported version', () => {
+  it('old format token with unsupported version is not parsed', () => {
     const license = parseLicenseKey('ewogICJmb3JtYXQiOiAyLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxCn0=.tTBymZMROsYyMiP6ldXFqGurbzqjhSQIu/pjyEUJA3v/57VgToomYl7FVzBj1asgHpadvysyTUiX3nFvPxbp166L3+LB3Jybw9ueMnwePu5vQOO0krqKLBqRq+TqHKn7k76uYRbkCIo5UajNfzetHhlkin3dJf3x2K/fcwbPW5A=');
 
     expect(license.kind).toBe('corrupted');
 
     if (license.kind === 'corrupted') {
-      expect(license.error).toBe('version');
+      expect(license.error).toBe('general');
     }
   });
 
@@ -158,13 +138,14 @@ describe('version mismatch', () => {
     clearAssertedVersions();
   });
 
-  test('Perform license check if versions match', () => {
+  test('Old format token triggers old-devextreme-key warning even when versions match', () => {
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
     assertDevExtremeVersion('DevExpress.Product.A', CORRECT_VERSION);
     assertDevExtremeVersion('DevExpress.Product.A', CORRECT_VERSION);
     assertDevExtremeVersion('DevExpress.Product.B', CORRECT_VERSION);
     validateLicense(token, CORRECT_VERSION);
-    expect(errors.log).toHaveBeenCalledWith('W0020');
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('A DevExtreme key (v25.2 or earlier)'));
   });
 
   test('Perform version comparison if the license is okay', () => {
@@ -338,9 +319,10 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '12.3.4' },
     { token: TOKEN_23_2, version: '23.1.5' },
     { token: TOKEN_23_2, version: '23.2.6' },
-  ])('Old format license within version range should not trigger warnings', ({ token, version }) => {
+  ])('Old format license should trigger old-devextreme-key warning', ({ token, version }) => {
     validateLicense(token, version);
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('A DevExtreme key (v25.2 or earlier)'));
   });
 
   test.each([
@@ -348,9 +330,9 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '12.3.4' },
     { token: TOKEN_23_2, version: '23.1.5' },
     { token: TOKEN_23_2, version: '23.2.6' },
-  ])('Trial panel should not be displayed for valid old format license keys', ({ token, version }) => {
+  ])('Trial panel should be displayed for old format license keys', ({ token, version }) => {
     validateLicense(token, version);
-    expect(trialPanelSpy).not.toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
   test('Trial panel "Buy Now" link must use the jQuery link if no config has been set', () => {
@@ -386,10 +368,10 @@ describe('license check', () => {
   test.each([
     { token: TOKEN_23_1, version: '23.2.3' },
     { token: TOKEN_23_2, version: '42.4.5' },
-  ])('Old format license should trigger version-mismatch warning when outdated', ({ token, version }) => {
+  ])('Old format license should trigger old-devextreme-key warning even when outdated', ({ token, version }) => {
     validateLicense(token, version);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('Incompatible DevExpress license key version'));
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('A DevExtreme key (v25.2 or earlier)'));
   });
 
   test.each([
@@ -407,9 +389,9 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '23.2.3-alpha' },
     { token: TOKEN_23_2, version: '24.1.0' },
     { token: TOKEN_23_2, version: '24.1.abc' },
-  ])('Trial panel should not be displayed in previews for valid old format license keys', ({ token, version }) => {
+  ])('Trial panel should be displayed for old format license keys even in previews', ({ token, version }) => {
     validateLicense(token, version);
-    expect(trialPanelSpy).not.toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
   test.each([
@@ -458,6 +440,7 @@ describe('internal license check', () => {
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
     trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
@@ -466,25 +449,25 @@ describe('internal license check', () => {
     jest.restoreAllMocks();
   });
 
-  test('valid internal usage token (correct)', () => {
+  test('old format internal usage token triggers old-devextreme-key warning', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiYVlDN0VIaWJwMHl4dFhUaWhKRVJrQSIsCiAgImZvcm1hdCI6IDEKfQ==.emWMjFDkBI2bvqc6R/hwh//2wE9YqS7yyTPSglqLBP7oPFMthW9tHNHsh1lG8MEuSKoi8TYOY+4R9GgvFi190f62iOy4iz8FenPXZodiv9hgDaovb2eIkwK4pilthOEAS9/JYhgTAentJ1f2+PlbjkTIqvYogk01GrRrd+WOtIA=';
     validateLicense(token, '1.2.3');
     expect(errors.log).not.toHaveBeenCalled();
-    expect(trialPanelSpy).not.toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
-  test('valid internal usage token (correct, pre-release)', () => {
+  test('old format internal usage token triggers old-devextreme-key warning (pre-release)', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiYVlDN0VIaWJwMHl4dFhUaWhKRVJrQSIsCiAgImZvcm1hdCI6IDEKfQ==.emWMjFDkBI2bvqc6R/hwh//2wE9YqS7yyTPSglqLBP7oPFMthW9tHNHsh1lG8MEuSKoi8TYOY+4R9GgvFi190f62iOy4iz8FenPXZodiv9hgDaovb2eIkwK4pilthOEAS9/JYhgTAentJ1f2+PlbjkTIqvYogk01GrRrd+WOtIA=';
     validateLicense(token, '1.2.1');
     expect(errors.log).not.toHaveBeenCalled();
-    expect(trialPanelSpy).not.toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
-  test('internal usage token (incorrect)', () => {
+  test('old format internal usage token (incorrect) triggers old-devextreme-key warning', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
     validateLicense(token, '1.2.3');
-    expect(errors.log).toHaveBeenCalledWith('W0020');
-    expect(trialPanelSpy).not.toHaveBeenCalled();
+    expect(errors.log).not.toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 });
 
