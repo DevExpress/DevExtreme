@@ -33,30 +33,37 @@ describe('calculateRows', () => {
     ]);
   });
 
-  it('should count only visible agenda days when skippedDays are set', () => {
-    expect(calculateRows(items, 3, new Date(2020, 0, 10), 2, [0, 6])).toEqual([
-      [2, 0, 0],
-      [0, 0, 2],
+  it('should keep calendar offsets inside agenda duration window', () => {
+    expect(calculateRows(items.slice(1, 2), 3, new Date(2020, 0, 10), 1)).toEqual([
+      [0, 1, 0],
+    ]);
+  });
+
+  it('should map Monday to the third calendar day of Sat-Mon window', () => {
+    expect(calculateRows([
+      { groupIndex: 0, startDateUTC: Date.UTC(2020, 0, 13, 5) },
+    ] as any[], 3, new Date(2020, 0, 11), 1)).toEqual([
+      [0, 0, 1],
     ]);
   });
 });
 
-describe('visible agenda days', () => {
-  it('should shift startViewDate to the first visible date', () => {
-    expect(calculateStartViewDate(new Date(2020, 0, 11, 9), 9, [0, 6])).toEqual(
-      new Date(2020, 0, 13, 9),
+describe('agenda calendar range', () => {
+  it('should keep startViewDate on current date', () => {
+    expect(calculateStartViewDate(new Date(2020, 0, 11, 9), 9)).toEqual(
+      new Date(2020, 0, 11, 9),
     );
   });
 
-  it('should return visible day by row index', () => {
-    expect(getDateByIndex(new Date(2020, 0, 10, 9), 2, [0, 6])).toEqual(
-      new Date(2020, 0, 14, 9),
+  it('should return calendar day by row index', () => {
+    expect(getDateByIndex(new Date(2020, 0, 10, 9), 2)).toEqual(
+      new Date(2020, 0, 12, 9),
     );
   });
 
-  it('should calculate endViewDate by visible days', () => {
-    expect(calculateEndViewDate(new Date(2020, 0, 10, 9), 18, 3, [0, 6])).toEqual(
-      new Date(2020, 0, 14, 17, 59),
+  it('should calculate endViewDate by calendar days', () => {
+    expect(calculateEndViewDate(new Date(2020, 0, 10, 9), 18, 3)).toEqual(
+      new Date(2020, 0, 12, 17, 59),
     );
   });
 });

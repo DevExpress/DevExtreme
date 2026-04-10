@@ -155,7 +155,6 @@ class SchedulerAgenda extends WorkSpace {
     this.startViewDate = agendaUtils.calculateStartViewDate(
       this.option('currentDate'),
       this.option('startDayHour'),
-      this.option('skippedDays'),
     );
     this.rows = [];
   }
@@ -448,7 +447,6 @@ class SchedulerAgenda extends WorkSpace {
     return agendaUtils.getDateByIndex(
       this.getStartViewDate(),
       rowIndex,
-      this.option('skippedDays'),
     );
   }
 
@@ -481,7 +479,6 @@ class SchedulerAgenda extends WorkSpace {
       this.option('agendaDuration') as number,
       this.getStartViewDate(),
       this.resourceManager.groupCount(),
-      this.option('skippedDays'),
     );
     this.recalculateAgenda(rows);
   }
@@ -495,7 +492,6 @@ class SchedulerAgenda extends WorkSpace {
       this.getStartViewDate(),
       this.option('endDayHour') as any,
       this.option('agendaDuration') as any,
-      this.option('skippedDays'),
     );
   }
 

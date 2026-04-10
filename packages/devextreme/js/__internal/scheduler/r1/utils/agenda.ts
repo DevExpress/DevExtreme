@@ -1,29 +1,13 @@
 import timeZoneUtils from '../../m_utils_time_zone';
-import type { WeekdayIndex } from '../../utils/skipped_days';
-import {
-  getDateAfterVisibleDays,
-  getFirstVisibleDate,
-} from '../../utils/skipped_days';
 import type { ListEntity } from '../../view_model/types';
 import { setOptionHour } from './base';
-
-const nextDay = (date: Date): Date => {
-  const nextDate = new Date(date);
-  nextDate.setDate(nextDate.getDate() + 1);
-  return nextDate;
-};
 
 export const calculateStartViewDate = (
   currentDate: Date,
   startDayHour: number,
-  skippedDays: WeekdayIndex[] = [],
 ): Date => {
   const validCurrentDate = new Date(currentDate);
-  const startViewDate = setOptionHour(validCurrentDate, startDayHour);
-
-  return skippedDays.length > 0
-    ? getFirstVisibleDate(startViewDate, skippedDays, nextDay)
-    : startViewDate;
+  return setOptionHour(validCurrentDate, startDayHour);
 };
 
 const getDayStart = (date: Date | number): number => new Date(date).setUTCHours(0, 0, 0, 0);
@@ -31,21 +15,20 @@ const getDayStart = (date: Date | number): number => new Date(date).setUTCHours(
 export const getDateByIndex = (
   startViewDate: Date,
   index: number,
-  skippedDays: WeekdayIndex[] = [],
-): Date => (index <= 0
-  ? new Date(startViewDate)
-  : getDateAfterVisibleDays(startViewDate, index, skippedDays, nextDay));
+): Date => {
+  const date = new Date(startViewDate);
+  date.setDate(date.getDate() + index);
+  return date;
+};
 
 export const calculateEndViewDate = (
   startViewDate: Date,
   endDayHour: number,
   agendaDuration: number,
-  skippedDays: WeekdayIndex[] = [],
 ): Date => {
   const lastVisibleDate = getDateByIndex(
     startViewDate,
     Math.max(agendaDuration - 1, 0),
-    skippedDays,
   );
   const endViewDate = setOptionHour(lastVisibleDate, endDayHour);
 
@@ -57,7 +40,6 @@ export const calculateRows = (
   agendaDuration: number,
   startViewDate: Date,
   groupCount: number,
-  skippedDays: WeekdayIndex[] = [],
 ): number[][] => {
   const intervalsStartMap = new Map<number, number>();
   const result = Array.from(
@@ -66,7 +48,7 @@ export const calculateRows = (
   );
 
   for (let i = 0; i < agendaDuration; i += 1) {
-    const date = getDateByIndex(startViewDate, i, skippedDays);
+    const date = getDateByIndex(startViewDate, i);
     const dayStart = getDayStart(timeZoneUtils.createUTCDateWithLocalOffset(date));
     intervalsStartMap.set(dayStart, i);
   }
