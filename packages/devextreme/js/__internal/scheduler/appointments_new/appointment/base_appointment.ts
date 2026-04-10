@@ -120,16 +120,13 @@ export class BaseAppointmentView<
       ? this.defaultAppointmentTemplate
       : this.option().appointmentTemplate;
 
-    const contentElement = getPublicElement($content);
-    const { index } = this.option();
-
     template.render({
-      container: contentElement,
+      container: getPublicElement($content),
       model: {
         appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       },
-      index,
+      index: this.option().index,
       onRendered: () => {
         this.option().onAppointmentRendered({
           element: getPublicElement(this.$element()),
