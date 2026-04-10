@@ -323,7 +323,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option({
             currentView: value,
             viewModel: [],
-            // TODO<Appointments>: update appointmentTemplate and appointmentCollectorTemplate
+            appointmentTemplate: this.getViewOption('appointmentTemplate'),
+            appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
           });
         } else {
           this._appointments.option({
@@ -350,7 +351,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.postponedOperations.callPostponedOperations();
         break;
       case 'appointmentTemplate':
-        this._appointments.option('itemTemplate', value);
+        if (this.option('_newAppointments')) {
+          this._appointments.option('appointmentTemplate', this.getViewOption('appointmentTemplate'));
+        } else {
+          this._appointments.option('itemTemplate', value);
+        }
         break;
       case 'dateCellTemplate':
       case 'resourceCellTemplate':
@@ -520,6 +525,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.repaint();
         break;
       case 'appointmentCollectorTemplate':
+        if (this.option('_newAppointments')) {
+          this._appointments.option('appointmentCollectorTemplate', this.getViewOption('appointmentCollectorTemplate'));
+        } else {
+          this.repaint();
+        }
+        break;
       case '_appointmentTooltipOffset':
         this.repaint();
         break;
@@ -1039,15 +1050,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._layoutManager = new AppointmentLayoutManager(this);
 
     if (this.option('_newAppointments')) {
-      // TODO<Appointments>: convert 'item' to 'appointment' for compatibility
-      const appointmentTemplateValue = this.getViewOption('appointmentTemplate') === 'item'
-        ? 'appointment'
-        : this.getViewOption('appointmentTemplate');
-
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         currentView: this.option('currentView') as ViewType,
-        // TODO<Appointments>: set custom templates
-        appointmentTemplate: appointmentTemplateValue,
+        appointmentTemplate: this.getViewOption('appointmentTemplate'),
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
         onAppointmentRendered: (e) => {
           // @ts-expect-error 'component' property is set by action
