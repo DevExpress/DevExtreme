@@ -62,6 +62,12 @@ export class TooltipStrategyBase {
 
   }
 
+  private isDeletingAllowed(appointment) {
+    const { editing } = this.extraOptions;
+    const disabled = this._options.getAppointmentDisabled(appointment);
+    return !disabled && (editing === true || editing?.allowDeleting === true);
+  }
+
   protected getContentTemplate(dataList) {
     return (container) => {
       const listElement = $('<div>');
