@@ -150,16 +150,20 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(callGetVisibleDayOffset(gen, 0, 4, 0, 1)).toBe(3);
     });
 
-    it('timeline-like layout with multiple cells in day uses day index', () => {
-      gen.skippedDays = [0, 6];
+    it('timelineWorkWeek with multiple cells in day uses day index', () => {
+      const timelineWorkWeekGen = new ViewDataGeneratorWorkWeek('timelineWorkWeek' as ViewType);
+      timelineWorkWeekGen.skippedDays = [0, 6];
+
+      const timelineWorkWeek = timelineWorkWeekGen as unknown as ViewDataGeneratorWeek;
+
       // 2 cells per day, first visible week day is Monday (firstDayOfWeek=1)
       // Both cells of the first day must have the same offset.
-      expect(callGetVisibleDayOffset(gen, 0, 0, 1, 2)).toBe(0);
-      expect(callGetVisibleDayOffset(gen, 0, 1, 1, 2)).toBe(0);
+      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 0, 1, 2)).toBe(0);
+      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 1, 1, 2)).toBe(0);
       // The first cell of next visible day still has zero offset.
-      expect(callGetVisibleDayOffset(gen, 0, 2, 1, 2)).toBe(0);
+      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 2, 1, 2)).toBe(0);
       // After 5 visible days (10 cells), the next day jumps over weekend (+2 days).
-      expect(callGetVisibleDayOffset(gen, 0, 10, 1, 2)).toBe(2);
+      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 10, 1, 2)).toBe(2);
     });
 
     it('vertical workWeek layout uses column index as day index', () => {
