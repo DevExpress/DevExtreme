@@ -84,6 +84,43 @@ describe('New Appointments', () => {
         expect(isTemplateApplied(POM)).toBe(true);
       });
 
+      it('should apply default template if current view does not have it', async () => {
+        const defaultTemplate = jest.fn();
+
+        const { POM } = await createScheduler({
+          ...config,
+          views: [{ type: 'day' }],
+          [templateName]: defaultTemplate,
+        });
+
+        expect(defaultTemplate).toHaveBeenCalled();
+        expect(isTemplateApplied(POM)).toBe(false);
+      });
+
+      it('should apply default template after .option() change with default value', async () => {
+        const defaultValue = templateName === 'appointmentCollectorTemplate'
+          ? 'appointmentCollector'
+          : 'appointment';
+
+        const { POM, scheduler } = await createScheduler({
+          ...config,
+          [templateName]: templateFunction,
+        });
+
+        scheduler.option(templateName, defaultValue);
+        await new Promise(process.nextTick);
+
+        expect(isTemplateApplied(POM)).toBe(false);
+
+        if (templateName === 'appointmentTemplate') {
+          const appointment = POM.getAppointments()[0];
+          expect(appointment.getText()).toBe('Appointment 1');
+        } else {
+          const collectorButton = POM.getCollectorButton();
+          expect(collectorButton.textContent).toBe('1');
+        }
+      });
+
       it('should apply current view\'s template', async () => {
         const defaultTemplate = jest.fn();
 
