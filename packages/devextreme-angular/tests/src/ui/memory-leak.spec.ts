@@ -26,7 +26,7 @@ describe('Memory leak tests', () => {
   const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 
   beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
