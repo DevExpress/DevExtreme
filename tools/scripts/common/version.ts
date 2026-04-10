@@ -10,7 +10,7 @@ export function updateVersion(version: string | undefined): void {
     process.exit(1);
   }
 
-  const workspacesFolders = ['packages', 'apps', 'e2e', 'packages/devextreme/artifacts/npm'];
+  const workspacesFolders = ['packages', 'apps', 'e2e'];
 
   const rootWorkspacePath = path.join(ROOT_DIR, 'package.json')
   const workspacesPaths = workspacesFolders
