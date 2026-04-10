@@ -4331,74 +4331,76 @@ QUnit.module('View\'s focus', {
                 pushAggregationTimeout: 0,
             },
         });
-        $('body').css('height', 2000);
-        window.scrollTo(0, 0);
         this.clock.tick(10);
 
-        const keyboardController = dataGrid.getController('keyboardNavigation');
-        const $firstCell = $(dataGrid.getCellElement(0, 0));
-        const scrollPosition = 300;
+        try {
+            $('body').css('height', 2000);
+            window.scrollTo(0, 0);
 
-        // assert
-        assert.strictEqual(window.pageYOffset, 0, 'document scroll is at the top');
+            const keyboardController = dataGrid.getController('keyboardNavigation');
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+            const scrollPosition = 300;
 
-        // act
-        $firstCell.trigger(CLICK_EVENT);
-        this.clock.tick(10);
+            // assert
+            assert.strictEqual(window.pageYOffset, 0, 'document scroll is at the top');
 
-        keyboardController.keyDownHandler({
-            key: 'Tab',
-            keyName: 'tab',
-            originalEvent: $.Event('keydown', { target: $firstCell.get(0) }),
-        });
-        this.clock.tick(10);
+            // act
+            $firstCell.trigger(CLICK_EVENT);
+            this.clock.tick(10);
 
-        // assert
-        assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'second cell is focused');
+            keyboardController.keyDownHandler({
+                key: 'Tab',
+                keyName: 'tab',
+                originalEvent: $.Event('keydown', { target: $firstCell.get(0) }),
+            });
+            this.clock.tick(10);
 
-        // act
-        window.scrollTo(0, scrollPosition);
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'second cell is focused');
 
-        // assert
-        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is changed');
+            // act
+            window.scrollTo(0, scrollPosition);
 
-        // act
-        dataGrid.getDataSource().store().push([{ type: 'update', key: 1, data: { name: 'updated' } }]);
-        this.clock.tick(10);
+            // assert
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is changed');
 
-        // assert
-        assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'updated', 'second cell text is updated');
-        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after push update');
+            // act
+            dataGrid.getDataSource().store().push([{ type: 'update', key: 1, data: { name: 'updated' } }]);
+            this.clock.tick(10);
 
-        // act
-        dataGrid.refresh();
-        this.clock.tick(10);
+            // assert
+            assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'updated', 'second cell text is updated');
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after push update');
 
-        // assert
-        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after refresh');
+            // act
+            dataGrid.refresh();
+            this.clock.tick(10);
 
-        // act
-        dataGrid.repaint();
-        this.clock.tick(10);
+            // assert
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after refresh');
 
-        // assert
-        assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after repaint');
+            // act
+            dataGrid.repaint();
+            this.clock.tick(10);
 
-        // act
-        keyboardController.keyDownHandler({
-            key: 'ArrowLeft',
-            keyName: 'leftArrow',
-            originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 1)).get(0) }),
-        });
-        this.clock.tick(10);
+            // assert
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after repaint');
 
-        // assert
-        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'first cell is focused');
-        assert.strictEqual(window.pageYOffset, 0, 'document scroll is changed after keyboard navigation');
+            // act
+            keyboardController.keyDownHandler({
+                key: 'ArrowLeft',
+                keyName: 'leftArrow',
+                originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 1)).get(0) }),
+            });
+            this.clock.tick(10);
 
-        // cleanup
-        $('body').css('height', '');
-        window.scrollTo(0, 0);
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'first cell is focused');
+            assert.strictEqual(window.pageYOffset, 0, 'document scroll is changed after keyboard navigation');
+        } finally {
+            $('body').css('height', '');
+            window.scrollTo(0, 0);
+        }
     });
 });
 
