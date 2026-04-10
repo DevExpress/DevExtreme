@@ -529,6 +529,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.repaint();
         break;
       case 'appointmentCollectorTemplate':
+        if (this.option('_newAppointments')) {
+          this._appointments.option('appointmentCollectorTemplate', this.getViewOption('appointmentCollectorTemplate'));
+        } else {
+          this.repaint();
+        }
+        break;
       case '_appointmentTooltipOffset':
         this.repaint();
         break;
