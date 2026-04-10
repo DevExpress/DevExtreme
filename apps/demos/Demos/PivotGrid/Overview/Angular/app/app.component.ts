@@ -80,7 +80,7 @@ export class AppComponent implements AfterViewInit {
     setTimeout(() => {
       const dataSource = this.pivotGrid.instance.getDataSource();
       dataSource.expandHeaderItem('row', ['North America']);
-      dataSource.expandHeaderItem('column', [2013]);
+      dataSource.expandHeaderItem('column', [2023]);
     }, 0);
   }
 
