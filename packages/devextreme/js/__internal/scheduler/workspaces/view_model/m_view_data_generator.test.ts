@@ -248,4 +248,28 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(date.getDate()).toBe(4);
     });
   });
+
+  describe('WorkWeek hiddenWeekDays support', () => {
+    it('keeps first visible column on Monday when startViewDate is already Monday', () => {
+      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      gen.skippedDays = [0, 6];
+
+      const options = {
+        startViewDate: new Date(2026, 2, 30, 0, 0), // Monday
+        startDayHour: 0,
+        endDayHour: 24,
+        hoursInterval: 1,
+        interval: 24 * 60 * 60 * 1000,
+        firstDayOfWeek: 0, // Sunday
+        intervalCount: 1,
+        viewOffset: 0,
+        currentDate: new Date(2026, 3, 1),
+        viewType: 'workWeek' as ViewType,
+      };
+
+      const date = gen.getDateByCellIndices(options, 0, 0);
+      expect(date.getDay()).toBe(1);
+      expect(date.getDate()).toBe(30);
+    });
+  });
 });
