@@ -3,7 +3,6 @@ import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { when } from '@js/core/utils/deferred';
 import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
@@ -121,21 +120,23 @@ export class BaseAppointmentView<
       ? this.defaultAppointmentTemplate
       : this.option().appointmentTemplate;
 
-    const $renderPromise = template.render({
-      container: getPublicElement($content),
+    const contentElement = getPublicElement($content);
+    const { index } = this.option();
+
+    template.render({
+      container: contentElement,
       model: {
         appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       },
-      index: this.option().index,
-    });
-
-    when($renderPromise).done(() => {
-      this.option().onAppointmentRendered({
-        element: getPublicElement(this.$element()),
-        appointmentData: this.appointmentData,
-        targetedAppointmentData: this.targetedAppointmentData,
-      });
+      index,
+      onRendered: () => {
+        this.option().onAppointmentRendered({
+          element: getPublicElement(this.$element()),
+          appointmentData: this.appointmentData,
+          targetedAppointmentData: this.targetedAppointmentData,
+        });
+      },
     });
   }
 

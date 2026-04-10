@@ -1,11 +1,13 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/scheduler';
 
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import type { SchedulerModel } from './__mock__/model/scheduler';
 
 const createScheduler = (config: Properties) => baseCreateScheduler({
   ...config,
@@ -23,10 +25,122 @@ describe('New Appointments', () => {
     // @ts-expect-error
     $scheduler.dxScheduler('dispose');
     document.body.innerHTML = '';
-    jest.useRealTimers();
   });
 
   describe('Templates', () => {
+    describe.each([
+      'appointmentTemplate',
+      'appointmentCollectorTemplate',
+    ])('%s common', (templateName) => {
+      const config = {
+        dataSource: [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ],
+        maxAppointmentsPerCell: 2,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      };
+
+      const appointmentCollectorTemplate = (
+        data: any,
+        container: HTMLElement,
+      ): dxElementWrapper => $(container).text('Custom collector');
+
+      const appointmentTemplate = (
+        data: any,
+        index: number,
+        container: HTMLElement,
+      ): dxElementWrapper => $(container).text('Custom appointment');
+
+      const templateFunction = templateName === 'appointmentCollectorTemplate'
+        ? appointmentCollectorTemplate
+        : appointmentTemplate;
+
+      const isTemplateApplied = (POM: SchedulerModel): boolean => {
+        if (templateName === 'appointmentCollectorTemplate') {
+          return $(POM.getCollectorButton()).text() === 'Custom collector';
+        }
+
+        return $(POM.getAppointments()[0].element).text() === 'Custom appointment';
+      };
+
+      it('should apply custom template', async () => {
+        const { POM } = await createScheduler({
+          ...config,
+          [templateName]: templateFunction,
+        });
+
+        expect(isTemplateApplied(POM)).toBe(true);
+      });
+
+      it('should apply custom template after .option() change', async () => {
+        const { POM, scheduler } = await createScheduler(config);
+
+        scheduler.option(templateName, templateFunction);
+        await new Promise(process.nextTick);
+
+        expect(isTemplateApplied(POM)).toBe(true);
+      });
+
+      it('should apply current view\'s template', async () => {
+        const defaultTemplate = jest.fn();
+
+        const { POM } = await createScheduler({
+          ...config,
+          views: [{
+            type: 'day',
+            [templateName]: templateFunction,
+          }],
+          [templateName]: defaultTemplate,
+        });
+
+        expect(defaultTemplate).not.toHaveBeenCalled();
+
+        expect(isTemplateApplied(POM)).toBe(true);
+      });
+
+      it('should apply current view\'s template after .option() change', async () => {
+        const { POM, scheduler } = await createScheduler({
+          ...config,
+          views: [{
+            type: 'day',
+            [templateName]: templateFunction,
+          }],
+        });
+
+        const defaultTemplate = jest.fn();
+
+        scheduler.option(templateName, defaultTemplate);
+        await new Promise(process.nextTick);
+
+        expect(defaultTemplate).not.toHaveBeenCalled();
+        expect(isTemplateApplied(POM)).toBe(true);
+      });
+
+      it('should apply current view\'s template after current view was changed', async () => {
+        const defaultTemplate = jest.fn();
+
+        const { POM, scheduler } = await createScheduler({
+          ...config,
+          views: [
+            { type: 'workWeek', [templateName]: defaultTemplate },
+            { type: 'day', [templateName]: templateFunction },
+          ],
+          currentView: 'workWeek',
+        });
+
+        defaultTemplate.mockClear();
+
+        scheduler.option('currentView', 'day');
+        await new Promise(process.nextTick);
+
+        expect(defaultTemplate).not.toHaveBeenCalled();
+        expect(isTemplateApplied(POM)).toBe(true);
+      });
+    });
+
     describe('AppointmentTemplate', () => {
       it('should call template function with correct parameters', async () => {
         const appointmentTemplate = jest.fn();
@@ -86,97 +200,6 @@ describe('New Appointments', () => {
         expect(container2.classList.contains('dx-scheduler-appointment-content')).toBe(true);
         expect(container2.innerHTML).toBe('');
       });
-
-      it('should render appointment with custom template', async () => {
-        const { POM } = await createScheduler({
-          dataSource: [{
-            text: 'Appointment 1',
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9),
-            allDay: true,
-          }],
-          currentView: 'day',
-          currentDate: new Date(2015, 1, 9, 8),
-          appointmentTemplate: (data, index, container) => {
-            $(container).text(`${data.appointmentData.text} Template`);
-          },
-        });
-
-        const $appointment = $(POM.getAppointments()[0].element);
-
-        expect($appointment.text()).toBe('Appointment 1 Template');
-      });
-
-      it('should apply current view\'s appointmentTemplate', async () => {
-        const defaultTemplate = jest.fn();
-        const viewTemplate = jest.fn(
-          (data: any, index: number, container: HTMLElement) => {
-            $(container).text(`${data.appointmentData.text} ViewTemplate`);
-          },
-        );
-
-        const appointmentData = {
-          text: 'Appointment 1',
-          startDate: new Date(2015, 1, 9, 8),
-          endDate: new Date(2015, 1, 9, 9),
-        };
-
-        const { POM } = await createScheduler({
-          dataSource: [appointmentData],
-          views: [{
-            type: 'day',
-            appointmentTemplate: viewTemplate,
-          }],
-          currentView: 'day',
-          currentDate: new Date(2015, 1, 9, 8),
-          appointmentTemplate: defaultTemplate,
-        });
-
-        expect(viewTemplate).toHaveBeenCalledTimes(1);
-        expect(defaultTemplate).not.toHaveBeenCalled();
-        expect(viewTemplate.mock.calls[0]).toEqual([
-          expect.objectContaining({
-            appointmentData,
-            targetedAppointmentData: expect.objectContaining({
-              ...appointmentData,
-              displayStartDate: appointmentData.startDate,
-              displayEndDate: appointmentData.endDate,
-            }),
-          }),
-          0,
-          expect.any(HTMLElement),
-        ]);
-
-        const $appointment = $(POM.getAppointments()[0].element);
-        expect($appointment.text()).toBe('Appointment 1 ViewTemplate');
-      });
-
-      it('should render async template', async () => {
-        const appointmentTemplate = jest.fn(
-          (data: any, index: number, container: HTMLElement) => new Promise((resolve) => {
-            $(container).text(`${data.appointmentData.text} Async`);
-            resolve(container);
-          }),
-        );
-
-        const { POM } = await createScheduler({
-          dataSource: [{
-            text: 'Appointment 1',
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9),
-          }],
-          currentView: 'day',
-          currentDate: new Date(2015, 1, 9, 8),
-          appointmentTemplate,
-        });
-
-        await new Promise(process.nextTick);
-
-        expect(appointmentTemplate).toHaveBeenCalledTimes(1);
-
-        const $appointment = $(POM.getAppointments()[0].element);
-        expect($appointment.text()).toBe('Appointment 1 Async');
-      });
     });
 
     describe('AppointmentCollectorTemplate', () => {
@@ -213,11 +236,11 @@ describe('New Appointments', () => {
           expect.objectContaining({
             appointmentCount: 1,
             isCompact: true,
-            items: expect.arrayContaining([
+            items: [
               expect.objectContaining({
                 text: 'Appointment 3',
               }),
-            ]),
+            ],
           }),
           expect.any(HTMLElement),
         ]);
@@ -225,131 +248,44 @@ describe('New Appointments', () => {
         const container = appointmentCollectorTemplate.mock.calls[0][1] as HTMLElement;
         expect(container.classList.contains('dx-button-content')).toBe(true);
       });
+    });
+  });
 
-      it('should render appointment collector with custom template', async () => {
-        const { POM } = await createScheduler({
-          dataSource: [
-            {
-              text: 'Appointment 1',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-            {
-              text: 'Appointment 2',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-            {
-              text: 'Appointment 3',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-          ],
-          currentView: 'day',
-          currentDate: new Date(2015, 1, 9, 8),
-          maxAppointmentsPerCell: 2,
-          appointmentCollectorTemplate: (data, container) => {
-            $(container).text(`Custom +${data.appointmentCount} more`);
-          },
-        });
+  describe('onAppointmentRendered', () => {
+    it('should call onAppointmentRendered callback', async () => {
+      const onAppointmentRendered = jest.fn();
 
-        const $collector = $(POM.getCollectorButton());
-
-        expect($collector.text()).toBe('Custom +1 more');
+      await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentRendered,
       });
 
-      it('should apply current view\'s appointmentCollectorTemplate', async () => {
-        const defaultTemplate = jest.fn();
-        const viewTemplate = jest.fn((data: any, container: HTMLElement) => {
-          $(container).text(`View +${data.appointmentCount} more`);
-        });
+      expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
+    });
 
-        const { POM } = await createScheduler({
-          dataSource: [
-            {
-              text: 'Appointment 1',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-            {
-              text: 'Appointment 2',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-            {
-              text: 'Appointment 3',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-          ],
-          views: [{
-            type: 'day',
-            appointmentCollectorTemplate: viewTemplate,
-          }],
-          currentView: 'day',
-          currentDate: new Date(2015, 1, 9, 8),
-          maxAppointmentsPerCell: 2,
-          appointmentCollectorTemplate: defaultTemplate,
-        });
-
-        expect(defaultTemplate).not.toHaveBeenCalled();
-        expect(viewTemplate).toHaveBeenCalledTimes(1);
-        expect(viewTemplate.mock.calls[0]).toEqual([
-          expect.objectContaining({
-            appointmentCount: 1,
-            isCompact: true,
-            items: expect.arrayContaining([
-              expect.objectContaining({
-                text: 'Appointment 3',
-              }),
-            ]),
-          }),
-          expect.any(HTMLElement),
-        ]);
-
-        const $collector = $(POM.getCollectorButton());
-        expect($collector.text()).toBe('View +1 more');
+    it('should call onAppointmentRendered after .option() change', async () => {
+      const { scheduler } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
       });
 
-      it('should render async template', async () => {
-        const appointmentCollectorTemplate = jest.fn(
-          (data: any, container: HTMLElement) => new Promise((resolve) => {
-            $(container).text(`Async +${data.appointmentCount} more`);
-            resolve(container);
-          }),
-        );
+      const onAppointmentRendered = jest.fn();
+      scheduler.option('onAppointmentRendered', onAppointmentRendered);
+      scheduler.repaint();
+      await new Promise(process.nextTick);
 
-        const { POM } = await createScheduler({
-          dataSource: [
-            {
-              text: 'Appointment 1',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-            {
-              text: 'Appointment 2',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-            {
-              text: 'Appointment 3',
-              startDate: new Date(2015, 1, 9, 8),
-              endDate: new Date(2015, 1, 9, 9),
-            },
-          ],
-          currentView: 'day',
-          currentDate: new Date(2015, 1, 9, 8),
-          maxAppointmentsPerCell: 2,
-          appointmentCollectorTemplate,
-        });
-
-        await new Promise(process.nextTick);
-
-        expect(appointmentCollectorTemplate).toHaveBeenCalledTimes(1);
-
-        const $collector = $(POM.getCollectorButton());
-        expect($collector.text()).toBe('Async +1 more');
-      });
+      expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -172,7 +172,7 @@ describe('AppointmentCollector', () => {
     it.each([
       { isCompact: true, expectedText: '1' },
       { isCompact: false, expectedText: '1 more' },
-    ])('should have correct text for appointmentsCount = 1 and isCompact = %o', ({ isCompact, expectedText }) => {
+    ])('should have correct text for single appointment and isCompact = %o', ({ isCompact, expectedText }) => {
       const instance = createAppointmentCollector({
         ...getProperties([defaultAppointmentData]),
         isCompact,
@@ -182,7 +182,7 @@ describe('AppointmentCollector', () => {
       expect($buttonContent.text()).toBe(expectedText);
     });
 
-    it('should have correct text for appointmentsCount == 2', () => {
+    it('should have correct text for two appointments and isCompact = true', () => {
       const instance = createAppointmentCollector({
         ...getProperties([
           { ...defaultAppointmentData }, { ...defaultAppointmentData },

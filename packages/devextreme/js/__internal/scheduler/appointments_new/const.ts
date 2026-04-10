@@ -30,6 +30,8 @@ export const APPOINTMENT_CLASSES = {
 };
 
 export const AGENDA_APPOINTMENT_CLASSES = {
+  LEFT_LAYOUT: 'dx-scheduler-agenda-appointment-left-layout',
+  RIGHT_LAYOUT: 'dx-scheduler-agenda-appointment-right-layout',
   LAST_IN_DATE: 'dx-scheduler-last-in-date-agenda-appointment',
   MARKER: 'dx-scheduler-agenda-appointment-marker',
   RESOURCE_LIST: 'dx-scheduler-appointment-resource-list',

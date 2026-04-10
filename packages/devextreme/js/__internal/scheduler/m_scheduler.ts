@@ -326,7 +326,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option({
             currentView: value,
             viewModel: [],
-            // TODO<Appointments>: update appointmentTemplate and appointmentCollectorTemplate
+            appointmentTemplate: this.getViewOption('appointmentTemplate'),
+            appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
           });
         } else {
           this._appointments.option({
@@ -353,7 +354,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.postponedOperations.callPostponedOperations();
         break;
       case 'appointmentTemplate':
-        this._appointments.option('itemTemplate', value);
+        if (this.option('_newAppointments')) {
+          const appointmentTemplateValue = this.getViewOption('appointmentTemplate') === 'item'
+            ? 'appointment'
+            : this.getViewOption('appointmentTemplate');
+
+          this._appointments.option('appointmentTemplate', appointmentTemplateValue);
+        } else {
+          this._appointments.option('itemTemplate', value);
+        }
         break;
       case 'dateCellTemplate':
       case 'resourceCellTemplate':
@@ -1057,7 +1066,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         currentView: this.option('currentView') as ViewType,
-        // TODO<Appointments>: set custom templates
         appointmentTemplate: appointmentTemplateValue,
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
         onAppointmentRendered: (e) => {
