@@ -1304,9 +1304,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
+      hoursInterval: this.option('hoursInterval'),
       interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
+      intervalCount: this.option('intervalCount'),
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this.firstDayOfWeek(),
+      skippedDays: this.option('skippedDays'),
+      viewOffset: 0,
+      viewType: this.type,
     };
   }
 

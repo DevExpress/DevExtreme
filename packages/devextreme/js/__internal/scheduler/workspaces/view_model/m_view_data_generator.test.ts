@@ -161,6 +161,19 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       // After 5 visible days (10 cells), the next day jumps over weekend (+2 days).
       expect(callGetVisibleDayOffset(gen, 0, 10, 1, 2)).toBe(2);
     });
+
+    it('vertical workWeek layout uses column index as day index', () => {
+      const workWeekGen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      workWeekGen.skippedDays = [0, 6];
+
+      const verticalWorkWeek = workWeekGen as unknown as ViewDataGeneratorWeek;
+
+      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 0, 3, 24)).toBe(0);
+      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 1, 3, 24)).toBe(0);
+      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 2, 3, 24)).toBe(0);
+      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 3, 3, 24)).toBe(2);
+      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 4, 3, 24)).toBe(2);
+    });
   });
 
   describe('getVisibleDayOffset for month-style layout', () => {

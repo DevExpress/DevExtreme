@@ -93,7 +93,9 @@ export class ViewDataGenerator {
         + ((targetDayOfWeek - anchorDay + 7) % 7);
       return actualDayOffset - naiveDayOffset;
     }
-    const dayIndex = Math.floor(columnIndex / cellCountInDay);
+    const dayIndex = isHorizontalView(this.viewType)
+      ? Math.floor(columnIndex / cellCountInDay)
+      : columnIndex;
     const week = Math.floor(dayIndex / visibleCount);
     const idxInWeek = dayIndex % visibleCount;
     const targetDayOfWeek = rotated[idxInWeek];
