@@ -312,7 +312,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if (needUpdateFocus) {
         const isScrollEvent = !!e?.event?.type;
         const skipFocusEvent = e?.virtualColumnsScrolling && isScrollEvent;
-        this._updateFocus(true, skipFocusEvent, true);
+        this._updateFocus(true, skipFocusEvent);
       }
     }
   }
@@ -1813,7 +1813,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  public _updateFocus(isRenderView?: boolean, skipFocusEvent = false, preventScroll = false) {
+  public _updateFocus(isRenderView?: boolean, skipFocusEvent = false) {
     this._updateFocusTimeout = setTimeout(() => {
       if (this._needFocusEditingCell()) {
         this._editingController._focusEditingCell();
@@ -1852,12 +1852,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
                 );
                 return;
               }
-              !isFocusedElementDefined && this._focus($cell, false, skipFocusEvent, preventScroll);
+              !isFocusedElementDefined && this._focus($cell, false, skipFocusEvent, !!isRenderView);
             } else if (
               !isFocusedElementDefined
               && (this._isNeedFocus || this._isHiddenFocus)
             ) {
-              this._focus($cell, this._isHiddenFocus, skipFocusEvent, preventScroll);
+              this._focus($cell, this._isHiddenFocus, skipFocusEvent, !!isRenderView);
             }
             if (isEditing && !column?.showEditorAlways) {
               this._focusInteractiveElement.bind(this)($cell);
