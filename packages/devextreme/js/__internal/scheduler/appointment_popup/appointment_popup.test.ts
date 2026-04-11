@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import $ from '@js/core/renderer';
 
 import fx from '../../../common/core/animation/fx';
 import { createScheduler } from '../__tests__/__mock__/create_scheduler';
@@ -756,6 +757,33 @@ describe('Appointment popup form', () => {
     it.todo('Popup should not contain recurrence editor, if recurrenceRuleExpr is null');
     it.todo('Popup should not contain recurrence editor, if recurrenceRuleExpr is \'\'');
     it.todo('Multiple showing appointment popup for recurrence appointments and after update options should work correct');
+  });
+
+  it('recurrence editors with hidden outer label must have editorOptions.labelMode set to hidden (T1318550)', () => {
+    const flattenBy = <T>(
+      items: T[],
+      getChildren: (item: T) => T[] | undefined,
+    ): T[] => items.flatMap((item) => {
+        const children = getChildren(item);
+        return children?.length ? flattenBy(children, getChildren) : [item];
+      });
+
+    const $container = $('<div>').appendTo(document.body);
+    const editor = ($container as any).dxRecurrenceEditor({
+      value: 'FREQ=DAILY;COUNT=5',
+    }).dxRecurrenceEditor('instance');
+
+    const recurrenceForm = editor.getRecurrenceForm();
+    const allItems = flattenBy(
+      recurrenceForm.option('items') as any[],
+      (i: any) => i.items,
+    );
+
+    const missingLabelMode = allItems
+      .filter((i: any) => i.label?.visible === false && i.editorOptions)
+      .filter((i: any) => i.editorOptions.labelMode !== 'hidden');
+
+    expect(missingLabelMode.length).toEqual(0);
   });
 });
 
