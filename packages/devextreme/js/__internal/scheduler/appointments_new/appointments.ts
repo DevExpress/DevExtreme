@@ -1,14 +1,18 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
 import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { domAdapter } from '@ts/core/m_dom_adapter';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 
-import type { SafeAppointment, TargetedAppointment, ViewType } from '../types';
+import type {
+  SafeAppointment, ScrollToOptions, TargetedAppointment, ViewType,
+} from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentResource } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
@@ -18,12 +22,15 @@ import type {
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
   BaseAppointmentViewModel,
+  SortedEntity,
 } from '../view_model/types';
 import { AgendaAppointmentView } from './appointment/agenda_appointment';
 import type { BaseAppointmentViewProperties } from './appointment/base_appointment';
 import { GridAppointmentView } from './appointment/grid_appointment';
 import { AppointmentCollector } from './appointment_collector';
+import { AppointmentsFocusController } from './appointments.focus_controller';
 import { APPOINTMENTS_CONTAINER_CLASS } from './const';
+import type { ViewItem } from './types';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
 import type { DiffItem } from './utils/get_view_model_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
@@ -31,6 +38,7 @@ import { isAgendaAppointmentViewModel, isCollectorViewModel as isAppointmentColl
 
 export interface AppointmentsProperties extends DOMComponentProperties<Appointments> {
   currentView: ViewType;
+  tabIndex: number;
   viewModel: AppointmentViewModelPlain[];
   items: AppointmentViewModelPlain[]; // TODO: legacy compatibility
   $allDayContainer: dxElementWrapper | null;
@@ -38,33 +46,52 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
 
-  onAppointmentRendered: BaseAppointmentViewProperties['onAppointmentRendered'];
+  onAppointmentRendered: BaseAppointmentViewProperties['onRendered'];
+
+  getStartViewDate: () => Date;
+  getSortedAppointments: () => SortedEntity[];
+  isVirtualScrolling: () => boolean;
+  scrollTo: (
+    date: Date,
+    options?: ScrollToOptions,
+  ) => void;
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
 }
 
-type AppointmentComponent = GridAppointmentView | AgendaAppointmentView | AppointmentCollector;
-
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
-  private appointmentBySortIndex: Record<number, AppointmentComponent> = {};
+  private focusController!: AppointmentsFocusController;
 
-  private get $allDayContainer(): dxElementWrapper | null {
+  private viewItemBySortedIndex: Record<number, ViewItem> = {};
+
+  public getViewItem(sortedIndex: number): ViewItem | undefined {
+    return this.viewItemBySortedIndex[sortedIndex];
+  }
+
+  public get $allDayContainer(): dxElementWrapper | null {
     return this.option().$allDayContainer;
   }
 
-  private get $commonContainer(): dxElementWrapper {
+  public get $commonContainer(): dxElementWrapper {
     return this.$element();
   }
 
   override _init(): void {
     super._init();
 
+    this.focusController = new AppointmentsFocusController(this);
+
     this._templateManager.addDefaultTemplates({
       appointment: new EmptyTemplate(),
       appointmentCollector: new EmptyTemplate(),
     });
+
+    // TODO: legacy compatibility
+    if (this.option().appointmentTemplate === 'item') {
+      this.option('appointmentTemplate', 'appointment');
+    }
   }
 
   override _initMarkup(): void {
@@ -76,6 +103,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   override _getDefaultOptions(): AppointmentsProperties {
     return {
       ...super._getDefaultOptions(),
+      tabIndex: 0,
       viewModel: [],
       $allDayContainer: null,
       appointmentTemplate: 'appointment',
@@ -123,13 +151,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
   public moveAppointmentBack(): void { /* TODO: legacy compatibility */ }
 
-  public focus(): void { /* TODO: legacy compatibility */ }
+  public focus(): void {
+    // used in scheduler to focus appointment that was being edited
+  }
 
   public _renderAppointmentTemplate(): void { /* TODO: legacy compatibility */ }
-
-  private getAppointmentElement(sortedIndex: number): dxElementWrapper {
-    return this.appointmentBySortIndex[sortedIndex].$element();
-  }
 
   private getViewModelDiff(
     oldViewModel: AppointmentViewModelPlain[],
@@ -149,10 +175,12 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 
   private renderAppointments(appointments: AppointmentViewModelPlain[] = []): void {
+    this.focusController.beforeRender();
+
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
-    this.appointmentBySortIndex = {};
+    this.viewItemBySortedIndex = {};
     this.$allDayContainer?.empty();
     this.$commonContainer.empty();
 
@@ -161,21 +189,25 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         ? commonFragment
         : allDayFragment;
 
-      const appointment = this.renderAppointment(container, appointmentViewModel, index);
-      this.appointmentBySortIndex[appointmentViewModel.sortedIndex] = appointment;
+      const appointment = this.renderAppointmentView(container, appointmentViewModel, index);
+      this.viewItemBySortedIndex[appointmentViewModel.sortedIndex] = appointment;
     });
 
     if (this.$allDayContainer) {
       this.$allDayContainer.get(0).appendChild(allDayFragment);
     }
     this.$commonContainer.get(0).appendChild(commonFragment);
+
+    this.focusController.resetTabIndex();
   }
 
   private renderViewModelDiff(viewModelDiff: DiffItem[]): void {
+    this.focusController.beforeRender();
+
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
-    const newAppointmentBySortedIndex: Record<number, AppointmentComponent> = {};
+    const newViewItemBySortedIndex: Record<number, ViewItem> = {};
 
     const isRepaintAll = viewModelDiff.every(
       (item) => Boolean(item.needToAdd ?? item.needToRemove),
@@ -196,55 +228,71 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
             break;
           }
 
-          this.getAppointmentElement(sortedIndex).remove();
+          this.viewItemBySortedIndex[sortedIndex].$element().remove();
           break;
         }
         case diffItem.needToAdd: {
           const fragment = allDay ? allDayFragment : commonFragment;
-          const appointment = this.renderAppointment(fragment, diffItem.item, index);
+          const appointment = this.renderAppointmentView(fragment, diffItem.item, index);
 
-          newAppointmentBySortedIndex[sortedIndex] = appointment;
+          newViewItemBySortedIndex[sortedIndex] = appointment;
           break;
         }
         case diffItem.needToResize: {
-          const appointment = this.appointmentBySortIndex[sortedIndex];
-          appointment.option('geometry', {
+          const appointment = this.viewItemBySortedIndex[sortedIndex];
+          appointment.resize({
             height: diffItem.item.height,
             width: diffItem.item.width,
             top: diffItem.item.top,
             left: diffItem.item.left,
           });
-          appointment.resize();
 
-          newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+          newViewItemBySortedIndex[sortedIndex] = this.viewItemBySortedIndex[sortedIndex];
           break;
         }
         default:
-          newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+          newViewItemBySortedIndex[sortedIndex] = this.viewItemBySortedIndex[sortedIndex];
       }
     });
 
-    this.appointmentBySortIndex = newAppointmentBySortedIndex;
+    this.viewItemBySortedIndex = newViewItemBySortedIndex;
 
     if (this.$allDayContainer) {
       this.$allDayContainer.get(0).appendChild(allDayFragment);
     }
     this.$commonContainer.get(0).appendChild(commonFragment);
+
+    this.focusController.resetTabIndex();
   }
 
-  private renderAppointment(
+  private renderAppointmentView(
     fragment: DocumentFragment,
     appointmentViewModel: AppointmentViewModelPlain,
     index: number,
-  ): AppointmentComponent {
+  ): ViewItem {
     const $element = $('<div>');
 
     fragment.appendChild($element.get(0));
 
     const targetedAppointmentData = this.getTargetedAppointmentData(appointmentViewModel);
+    const { sortedIndex } = appointmentViewModel;
+
+    const focusControllerHandlers = {
+      onFocusIn: (): void => {
+        this.focusController.onAppointmentFocusIn(sortedIndex);
+      },
+      onFocusOut: (e: DxEvent): void => {
+        this.focusController.onAppointmentFocusOut(e, sortedIndex);
+      },
+      onKeyDown: (e: KeyboardKeyDownEvent): void => {
+        this.focusController.onAppointmentKeyDown(e, sortedIndex);
+      },
+    };
 
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
+        ...focusControllerHandlers,
+        tabIndex: this.option().tabIndex,
         appointmentsData: appointmentViewModel.items.map((item) => item.itemData),
         isCompact: appointmentViewModel.isCompact,
         geometry: {
@@ -259,12 +307,14 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     }
 
     const baseConfig: BaseAppointmentViewProperties = {
+      ...focusControllerHandlers,
       index,
+      tabIndex: this.option().tabIndex,
       appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
-      getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
-      onAppointmentRendered: this.option().onAppointmentRendered,
+      onRendered: this.option().onAppointmentRendered,
+      getResourceColor: () => this.getResourceColor(appointmentViewModel),
       getDataAccessor: this.option().getDataAccessor,
     };
 

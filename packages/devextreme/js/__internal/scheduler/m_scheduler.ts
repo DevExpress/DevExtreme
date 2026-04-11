@@ -904,7 +904,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  isVirtualScrolling() {
+  isVirtualScrolling(): boolean {
     const workspace = this.getWorkSpace();
 
     if (workspace) {
@@ -1058,9 +1058,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (this.option('_newAppointments')) {
       const appointmentsConfig: Partial<AppointmentsProperties> = {
+        tabIndex: this.option('tabIndex'),
         currentView: this.option('currentView') as ViewType,
         appointmentTemplate: this.getViewOption('appointmentTemplate'),
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
+
         onAppointmentRendered: (e) => {
           // @ts-expect-error 'component' property is set by action
           this.appointmentRenderedAction({
@@ -1069,6 +1071,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
             targetedAppointmentData: e.targetedAppointmentData,
           });
         },
+
+        getStartViewDate: () => this.getStartViewDate(),
+        getSortedAppointments: () => this._layoutManager.sortedItems,
+        isVirtualScrolling: () => this.isVirtualScrolling(),
+        scrollTo: this.scrollTo.bind(this),
+
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
         getDataAccessor: () => this._dataAccessors,

@@ -27,14 +27,16 @@ export class GridAppointmentView extends BaseAppointmentView<GridAppointmentView
     void this.applyElementColor();
   }
 
-  public override resize(): void {
-    const { geometry } = this.option();
+  public override resize(
+    geometry?: { height: number, width: number, top: number, left: number },
+  ): void {
+    const newGeometry = geometry ?? this.option().geometry;
+    const {
+      top, left, width, height,
+    } = newGeometry;
 
     this.$element().css({
-      height: geometry.height,
-      width: geometry.width,
-      top: geometry.top,
-      left: geometry.left,
+      height, width, top, left,
     });
   }
 
@@ -84,6 +86,7 @@ export class GridAppointmentView extends BaseAppointmentView<GridAppointmentView
     const color = await this.option().getResourceColor();
 
     if (color) {
+      this.$element().addClass(APPOINTMENT_TYPE_CLASSES.HAS_RESOURCE);
       this.$element().css('backgroundColor', color);
     }
   }

@@ -4,7 +4,7 @@ import {
 import $ from '@js/core/renderer';
 
 import fx from '../../../common/core/animation/fx';
-import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
+import { getBaseAppointmentViewProperties } from '../__mock__/appointment_properties';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import type { BaseAppointmentViewProperties } from './base_appointment';
 import { BaseAppointmentView } from './base_appointment';
@@ -51,7 +51,7 @@ describe('BaseAppointment', () => {
   describe('Classes', () => {
     it('should have container class', async () => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties(defaultAppointmentData),
+        getBaseAppointmentViewProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().hasClass(APPOINTMENT_CLASSES.CONTAINER)).toBe(true);
@@ -61,7 +61,7 @@ describe('BaseAppointment', () => {
       true, false,
     ])('should have correct class for isRecurring = %o', async (isRecurring) => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties({
+        getBaseAppointmentViewProperties({
           ...defaultAppointmentData,
           recurrenceRule: isRecurring ? 'FREQ=DAILY;COUNT=5' : undefined,
         }),
@@ -76,7 +76,7 @@ describe('BaseAppointment', () => {
       true, false,
     ])('should have correct class for allDay = %o', async (allDay) => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties({
+        getBaseAppointmentViewProperties({
           ...defaultAppointmentData,
           allDay,
         }),
@@ -91,7 +91,7 @@ describe('BaseAppointment', () => {
   describe('Aria', () => {
     it('should have role button', async () => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties(defaultAppointmentData),
+        getBaseAppointmentViewProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().attr('role')).toBe('button');

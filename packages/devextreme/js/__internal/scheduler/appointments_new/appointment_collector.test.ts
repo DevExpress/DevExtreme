@@ -19,7 +19,8 @@ const getProperties = (
     displayEndDate: appointmentsData[0].endDate as Date,
   };
 
-  return {
+  const config: AppointmentCollectorProperties = {
+    tabIndex: 0,
     appointmentsData,
     isCompact: false,
     geometry: {
@@ -30,7 +31,12 @@ const getProperties = (
     },
     targetedAppointmentData,
     appointmentCollectorTemplate: new EmptyTemplate(),
+    onFocusIn: () => {},
+    onFocusOut: () => {},
+    onKeyDown: () => {},
   };
+
+  return config;
 };
 
 const createAppointmentCollector = (

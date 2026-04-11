@@ -6,7 +6,7 @@ import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 
 import fx from '../../../common/core/animation/fx';
-import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
+import { getBaseAppointmentViewProperties } from '../__mock__/appointment_properties';
 import { AGENDA_APPOINTMENT_CLASSES, APPOINTMENT_CLASSES } from '../const';
 import type { AgendaAppointmentViewProperties } from './agenda_appointment';
 import { AgendaAppointmentView } from './agenda_appointment';
@@ -15,7 +15,7 @@ const getProperties = (
   appointmentData: SafeAppointment,
   targetedAppointmentData?: TargetedAppointment,
 ): AgendaAppointmentViewProperties => {
-  const baseProperties = getBaseAppointmentProperties(
+  const baseProperties = getBaseAppointmentViewProperties(
     appointmentData,
     targetedAppointmentData,
   );

@@ -5,7 +5,7 @@ import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/
 
 import type { BaseAppointmentViewProperties } from '../appointment/base_appointment';
 
-export const getBaseAppointmentProperties = (
+export const getBaseAppointmentViewProperties = (
   appointmentData: SafeAppointment,
   targetedAppointmentData?: TargetedAppointment,
 ): BaseAppointmentViewProperties => {
@@ -17,10 +17,14 @@ export const getBaseAppointmentProperties = (
 
   const config: BaseAppointmentViewProperties = {
     index: 0,
+    tabIndex: 0,
     appointmentData,
     targetedAppointmentData: normalizedTargetedAppointmentData,
     appointmentTemplate: new EmptyTemplate(),
-    onAppointmentRendered: () => {},
+    onRendered: () => {},
+    onFocusIn: () => {},
+    onFocusOut: () => {},
+    onKeyDown: () => {},
     getDataAccessor: (): AppointmentDataAccessor => mockAppointmentDataAccessor,
     getResourceColor: (): Promise<string | undefined> => Promise.resolve(undefined),
   };
