@@ -1619,9 +1619,9 @@ describe('Appointment Form', () => {
       items: T[],
       getChildren: (item: T) => T[] | undefined,
     ): T[] => items.flatMap((item) => {
-      const children = getChildren(item);
-      return children?.length ? flattenBy(children, getChildren) : [item];
-    });
+        const children = getChildren(item);
+        return children?.length ? flattenBy(children, getChildren) : [item];
+      });
 
     const { scheduler, POM } = await createScheduler({
       ...getDefaultConfig(),
@@ -1630,9 +1630,10 @@ describe('Appointment Form', () => {
 
     scheduler.showAppointmentPopup(commonAppointment);
 
-    const recurrenceGroup = POM.popup.dxForm.option('items')[1] as GroupItem;
+    const items = POM.popup.dxForm.option('items') ?? [];
+    const recurrenceGroup = items[1] as GroupItem;
     const allItems = flattenBy<SimpleItem>(
-      recurrenceGroup.items as SimpleItem[],
+      (recurrenceGroup.items ?? []) as SimpleItem[],
       (i) => (i as unknown as GroupItem).items as SimpleItem[] | undefined,
     );
 
