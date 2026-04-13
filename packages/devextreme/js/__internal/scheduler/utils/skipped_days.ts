@@ -62,9 +62,9 @@ export const getDateAfterVisibleDays = (
 export const getSkippedDaysCount = (
   start: Date,
   dayCount: number,
-  skippedDays: number[],
+  skippedDays?: number[],
 ): number => {
-  if (dayCount <= 0 || skippedDays.length === 0) {
+  if (dayCount <= 0 || !skippedDays || skippedDays.length === 0) {
     return 0;
   }
 
