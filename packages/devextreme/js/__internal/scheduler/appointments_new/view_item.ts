@@ -29,6 +29,13 @@ export class ViewItem<
     return super._getSynchronizableOptionsForCreateComponent();
   }
 
+  override _dispose(): void {
+    super._dispose();
+
+    focus.off(this.$element(), EVENTS_NAMESPACE);
+    keyboard.off(this.keyboardListenerId);
+  }
+
   public resize(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     geometry?: { height: number; width: number | string; top: number; left: number },
@@ -52,13 +59,12 @@ export class ViewItem<
   }
 
   protected attachFocusEvents(): void {
-    const eventsNamespace = EVENTS_NAMESPACE;
-    focus.off(this.$element(), eventsNamespace);
+    focus.off(this.$element(), EVENTS_NAMESPACE);
     focus.on(
       this.$element(),
       this.onFocusIn.bind(this),
       this.onFocusOut.bind(this),
-      eventsNamespace,
+      EVENTS_NAMESPACE,
     );
   }
 

@@ -67,6 +67,12 @@ export class BaseAppointmentView<
     this.renderContentTemplate();
   }
 
+  override _dispose(): void {
+    super._dispose();
+
+    click.off(this.$element(), EVENTS_NAMESPACE);
+  }
+
   protected applyElementClasses(): void {
     this.$element()
       .addClass(APPOINTMENT_CLASSES.CONTAINER)

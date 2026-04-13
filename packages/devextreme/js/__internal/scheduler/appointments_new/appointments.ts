@@ -59,6 +59,16 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   getDataAccessor: () => AppointmentDataAccessor;
 }
 
+/*
+Check rtlEnabled works correctly
+Check that 'disabled' works correctly
+Restore focus on the edited appointment - move to another task
+
+Rendering:
+- Render strip
+- Render allDay appointmentCollectors
+- In virtual scrolling sometimes appointments are empty on scrolling
+*/
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
   private focusController!: AppointmentsFocusController;
 
