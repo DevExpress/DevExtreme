@@ -82,10 +82,10 @@
     "webpack": "5.105.4"
   },
   "scripts": {
-    "postinstall": "npx ts-node --project scripts/tsconfig.json scripts/build.ts --force && npx nx reset",
+    "postinstall": "pnpm exec ts-node --project scripts/tsconfig.json scripts/build.ts --force && pnpm exec nx reset",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "build": "npx ts-node --project scripts/tsconfig.json scripts/build.ts --force",
+    "build": "pnpm exec ts-node --project scripts/tsconfig.json scripts/build.ts --force",
     "test": "pnpm --workspace-root nx test devextreme-nx-infra-plugin",
     "lint": "pnpm run format:check"
   }
