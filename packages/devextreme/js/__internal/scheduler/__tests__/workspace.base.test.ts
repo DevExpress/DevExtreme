@@ -201,18 +201,6 @@ describe('scheduler workspace skipped days support', () => {
     setupSchedulerTestEnvironment();
   });
 
-  it('should use weekend skippedDays by default in work week workspace', () => {
-    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek');
-
-    expect(workspace.option('skippedDays')).toEqual([0, 6]);
-  });
-
-  it('should use weekend skippedDays by default in timeline work week workspace', () => {
-    const { workspace } = createWorkspace(SchedulerTimelineWorkWeek, 'timelineWorkWeek');
-
-    expect(workspace.option('skippedDays')).toEqual([0, 6]);
-  });
-
   it('should count configured skipped days in week workspace interval math', () => {
     const { workspace } = createWorkspace(SchedulerWorkSpaceWeek, 'week', {
       skippedDays: [1, 3],

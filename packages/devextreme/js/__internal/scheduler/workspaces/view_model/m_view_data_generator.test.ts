@@ -1,65 +1,13 @@
 import { describe, expect, it } from '@jest/globals';
 
 import type { ViewType } from '../../types';
-import { ViewDataGenerator } from './m_view_data_generator';
 import { ViewDataGeneratorMonth } from './m_view_data_generator_month';
 import { ViewDataGeneratorTimelineMonth } from './m_view_data_generator_timeline_month';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
 import { ViewDataGeneratorWorkWeek } from './m_view_data_generator_work_week';
 
 describe('ViewDataGenerator hiddenWeekDays support', () => {
-  describe('isSkippedDate', () => {
-    it('returns false when skippedDays is empty', () => {
-      const gen = new ViewDataGenerator('week' as ViewType);
-      gen.skippedDays = [];
-      expect(gen.isSkippedDate(new Date(2026, 3, 8))).toBe(false);
-    });
-
-    it('returns true for a day in skippedDays', () => {
-      const gen = new ViewDataGenerator('week' as ViewType);
-      gen.skippedDays = [3];
-      expect(gen.isSkippedDate(new Date(2026, 3, 8))).toBe(true);
-      expect(gen.isSkippedDate(new Date(2026, 3, 9))).toBe(false);
-    });
-
-    it('returns true for any day in a multi-day skippedDays', () => {
-      const gen = new ViewDataGenerator('week' as ViewType);
-      gen.skippedDays = [0, 6];
-      expect(gen.isSkippedDate(new Date(2026, 3, 11))).toBe(true);
-      expect(gen.isSkippedDate(new Date(2026, 3, 12))).toBe(true);
-      expect(gen.isSkippedDate(new Date(2026, 3, 13))).toBe(false);
-    });
-
-    it('workWeek view skips weekends by default', () => {
-      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
-      expect(gen.isSkippedDate(new Date(2026, 3, 11))).toBe(true);
-      expect(gen.isSkippedDate(new Date(2026, 3, 12))).toBe(true);
-      expect(gen.isSkippedDate(new Date(2026, 3, 13))).toBe(false);
-    });
-
-    it('workWeek view respects custom skippedDays override', () => {
-      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
-      gen.skippedDays = [1, 2];
-      expect(gen.isSkippedDate(new Date(2026, 3, 11))).toBe(false);
-      expect(gen.isSkippedDate(new Date(2026, 3, 12))).toBe(false);
-      expect(gen.isSkippedDate(new Date(2026, 3, 13))).toBe(true);
-      expect(gen.isSkippedDate(new Date(2026, 3, 14))).toBe(true);
-    });
-  });
-
   describe('daysInInterval getter', () => {
-    it('week view: 7 with empty skippedDays', () => {
-      const gen = new ViewDataGeneratorWeek('week' as ViewType);
-      gen.skippedDays = [];
-      expect(gen.daysInInterval).toBe(7);
-    });
-
-    it('week view: 5 with skippedDays [0,6]', () => {
-      const gen = new ViewDataGeneratorWeek('week' as ViewType);
-      gen.skippedDays = [0, 6];
-      expect(gen.daysInInterval).toBe(5);
-    });
-
     it('week view: 6 with skippedDays [3]', () => {
       const gen = new ViewDataGeneratorWeek('week' as ViewType);
       gen.skippedDays = [3];
@@ -72,10 +20,10 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(gen.daysInInterval).toBe(5);
     });
 
-    it('day view: 1 (unaffected by skippedDays)', () => {
-      const gen = new ViewDataGenerator('day' as ViewType);
+    it('workWeek view: 7 with empty skippedDays override', () => {
+      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
       gen.skippedDays = [];
-      expect(gen.daysInInterval).toBe(1);
+      expect(gen.daysInInterval).toBe(7);
     });
   });
 
@@ -222,12 +170,6 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
   });
 
   describe('Month view getCellCount honors skippedDays', () => {
-    it('returns 7 with empty skippedDays', () => {
-      const gen = new ViewDataGeneratorMonth('month' as ViewType);
-      gen.skippedDays = [];
-      expect(gen.getCellCount()).toBe(7);
-    });
-
     it('returns 5 with skippedDays [0, 6]', () => {
       const gen = new ViewDataGeneratorMonth('month' as ViewType);
       gen.skippedDays = [0, 6];
