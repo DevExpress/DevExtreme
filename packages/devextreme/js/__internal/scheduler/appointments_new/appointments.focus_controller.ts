@@ -7,8 +7,6 @@ import type { SortedEntity } from '../view_model/types';
 import type { Appointments } from './appointments';
 
 export class AppointmentsFocusController {
-  private focusedIndex = -1;
-
   private needRestoreFocusIndex = -1;
 
   private get sortedAppointments(): SortedEntity[] {
@@ -21,10 +19,10 @@ export class AppointmentsFocusController {
 
   constructor(private readonly appointments: Appointments) { }
 
-  public onAppointmentFocusIn(sortedIndex: number): void {
-    this.focusedIndex = sortedIndex;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public onAppointmentFocusIn(sortedIndex: number): void { }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public onAppointmentFocusOut(e: DxEvent, sortedIndex: number): void {
     const focusEvent = e.originalEvent as FocusEvent;
 
@@ -37,7 +35,6 @@ export class AppointmentsFocusController {
     );
 
     if (isFocusOutside) {
-      this.focusedIndex = -1;
       this.resetTabIndex();
     }
   }
@@ -46,14 +43,6 @@ export class AppointmentsFocusController {
     if (e.key === 'Tab') {
       this.handleTabKeyDown(e, sortedIndex);
     }
-  }
-
-  public beforeRender(): void {
-    // TODO: support case when appointment is deleted or updated
-
-    // if (this.needRestoreFocusIndex === -1) {
-    //   this.needRestoreFocusIndex = this.focusedIndex;
-    // }
   }
 
   public resetTabIndex(): void {
@@ -84,7 +73,7 @@ export class AppointmentsFocusController {
 
   private focusByItemData(itemData: SortedEntity): void {
     if (this.isVirtualScrolling) {
-      this.scrollToByItemData(itemData);
+      this.scrollToItem(itemData);
     }
 
     const appointmentView = this.appointments.getViewItemBySortedIndex(itemData.sortedIndex);
@@ -96,7 +85,7 @@ export class AppointmentsFocusController {
     }
   }
 
-  private scrollToByItemData(itemData: SortedEntity): void {
+  private scrollToItem(itemData: SortedEntity): void {
     const { getStartViewDate, getResourceManager, scrollTo } = this.appointments.option();
 
     const date = new Date(Math.max(

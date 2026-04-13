@@ -150,7 +150,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         this.viewItems.forEach((item) => {
           item.setTabIndex(args.value);
         });
-        this.renderAppointments(this.option().viewModel);
         break;
       }
       default:
@@ -162,9 +161,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
   public moveAppointmentBack(): void { /* TODO: legacy compatibility */ }
 
-  public focus(): void {
-    // used in scheduler to focus appointment that was being edited
-  }
+  public focus(): void { /* TODO: legacy compatibility */ }
 
   public _renderAppointmentTemplate(): void { /* TODO: legacy compatibility */ }
 
@@ -186,8 +183,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 
   private renderAppointments(appointments: AppointmentViewModelPlain[] = []): void {
-    this.focusController.beforeRender();
-
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
@@ -213,8 +208,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 
   private renderViewModelDiff(viewModelDiff: DiffItem[]): void {
-    this.focusController.beforeRender();
-
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 

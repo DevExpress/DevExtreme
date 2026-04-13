@@ -153,6 +153,15 @@ describe.each([
       expect(element.classList.contains('dx-state-focused')).toBe(true);
       expect(document.activeElement).toBe(element);
     });
+
+    it('should have correct tabindex after setTabIndex(-1) when being focused', async () => {
+      const instance = await createViewItem({ tabIndex: 1 });
+
+      instance.focus();
+      instance.setTabIndex(-1);
+
+      expect(instance.$element().attr('tabindex')).toBe('-1');
+    });
   });
 
   describe('Key down', () => {
@@ -164,7 +173,7 @@ describe.each([
       instance.focus();
       instance.$element().get(0)?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: 'Enter' }));
+      expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: 'Enter' }), 0);
     });
   });
 });
