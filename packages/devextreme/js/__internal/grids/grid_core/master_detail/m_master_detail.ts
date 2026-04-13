@@ -118,6 +118,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
         changeType: 'update',
         rowIndices: that._getRowIndicesForExpand(key),
       });
+      that.resetCachedProcessedItems();
 
       // @ts-expect-error
       result = new Deferred().resolve();
