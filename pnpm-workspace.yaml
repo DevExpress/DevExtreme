@@ -11,8 +11,8 @@ catalog:
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.25
-  devexpress-gantt: 4.1.67
+  devexpress-diagram: 2.2.29
+  devexpress-gantt: 4.1.68
   devextreme-quill: 1.7.8
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
