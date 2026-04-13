@@ -903,5 +903,5 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
   @include ai-chat-messagelist-empty(
     $button-default-bg,
     $button-default-outlined-bg-hover,
-  )
+  );
 }

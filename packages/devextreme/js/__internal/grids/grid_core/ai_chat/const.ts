@@ -22,4 +22,4 @@ export const CLASSES = {
   aiChatEmptyImage: 'dx-ai-chat-messagelist-empty-image',
 };
 
-export const CLEAR_CHAT_ICON = 'chatdismiss';
+export const CLEAR_CHAT_ICON = 'clearhistory';

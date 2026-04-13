@@ -1060,5 +1060,5 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   @include ai-chat-messagelist-empty(
     $button-default-bg,
     $button-default-outlined-hover-bg,
-  )
+  );
 }

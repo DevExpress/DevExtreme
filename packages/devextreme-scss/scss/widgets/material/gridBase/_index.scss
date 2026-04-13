@@ -1037,5 +1037,5 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   @include ai-chat-messagelist-empty(
     $button-default-bg,
     $button-default-outlined-hover-bg,
-  )
+  );
 }
