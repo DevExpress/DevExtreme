@@ -80,6 +80,7 @@ import {
 import { getLeafGroupValues } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
+import { getSkippedDaysCount as countSkippedDays } from '../utils/skipped_days';
 import {
   getAllDayHeight,
   getCellHeight,
@@ -1319,26 +1320,29 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getIntervalBetween(currentDate, allDay) {
     const firstViewDate = this.getStartViewDate();
 
-    const startDayTime = (this.option('startDayHour') as any) * HOUR_MS;
+    const startDayTime = this.option('startDayHour') * HOUR_MS;
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
     const fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset;
     const days = this.getDaysOfInterval(fullInterval, startDayTime);
-    const weekendsCount = this.getWeekendsCount(days);
-    let result = (days - weekendsCount) * DAY_MS;
+    const skippedDaysCount = this.getSkippedDaysCount(days, firstViewDate);
+    let result = (days - skippedDaysCount) * DAY_MS;
 
     if (!allDay) {
       const { hiddenInterval } = this.viewDataProvider;
       const visibleDayDuration = this.getVisibleDayDuration();
 
-      result = fullInterval - days * hiddenInterval - weekendsCount * visibleDayDuration;
+      result = fullInterval - days * hiddenInterval - skippedDaysCount * visibleDayDuration;
     }
 
     return result;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getWeekendsCount(argument?: any) {
-    return 0;
+  protected getSkippedDaysCount(days: number, startDate: Date = this.getStartViewDate()) {
+    return countSkippedDays(
+      startDate,
+      days,
+      this.option('skippedDays'),
+    );
   }
 
   private getDaysOfInterval(fullInterval, startDayTime) {

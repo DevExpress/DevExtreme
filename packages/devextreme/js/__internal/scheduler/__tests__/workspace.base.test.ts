@@ -44,6 +44,7 @@ type WorkspaceConstructor<T> = new (container: Element, options?: any) => T;
 const createWorkspace = <T extends SchedulerWorkSpace>(
   WorkSpace: WorkspaceConstructor<T>,
   currentView: string,
+  options?: any,
 ): { workspace: T; container: Element } => {
   const container = document.createElement('div');
   const workspace = new WorkSpace(container, {
@@ -52,6 +53,7 @@ const createWorkspace = <T extends SchedulerWorkSpace>(
     currentDate: new Date(2017, 4, 25),
     firstDayOfWeek: 0,
     getResourceManager: () => getResourceManagerMock([]),
+    ...options,
   });
   (workspace as any)._isVisible = () => true;
   expect(container.classList).toContain('dx-scheduler-work-space');
@@ -191,5 +193,41 @@ describe('scheduler workspace scrollTo', () => {
     workspace.scrollTo(new Date(2017, 4, 25, 22, 0));
 
     expect(scrollableContainer.scrollLeft).toBeCloseTo(-11125);
+  });
+});
+
+describe('scheduler workspace skipped days support', () => {
+  beforeEach(() => {
+    setupSchedulerTestEnvironment();
+  });
+
+  it('should count configured skipped days in week workspace interval math', () => {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWeek, 'week', {
+      skippedDays: [1, 3],
+    });
+
+    expect((workspace as any).getSkippedDaysCount(7, new Date(2026, 3, 5))).toBe(2);
+  });
+
+  it('should skip configured hidden days when incrementing timeline header dates', () => {
+    const { workspace } = createWorkspace(SchedulerTimelineWeek, 'timelineWeek', {
+      skippedDays: [3],
+    });
+    const date = new Date(2026, 3, 7); // Tuesday
+
+    (workspace as any).incrementDate(date);
+
+    expect(date).toEqual(new Date(2026, 3, 9)); // Thursday
+  });
+
+  it('should respect empty skippedDays override in timeline work week', () => {
+    const { workspace } = createWorkspace(SchedulerTimelineWorkWeek, 'timelineWorkWeek', {
+      skippedDays: [],
+    });
+    const date = new Date(2026, 3, 10); // Friday
+
+    (workspace as any).incrementDate(date);
+
+    expect(date).toEqual(new Date(2026, 3, 11)); // Saturday
   });
 });

@@ -13,11 +13,12 @@ import {
   getKeyByGroup,
   getSkippedHoursInRange,
   isAppointmentTakesAllDay,
-  isDataOnWeekend,
   isGroupingByDate,
   isHorizontalGroupingApplied,
   isVerticalGroupingApplied,
 } from '../index';
+
+const isWeekend = (date: Date): boolean => [0, 6].includes(date.getDay());
 
 describe('base utils', () => {
   describe('getDatesWithoutTime', () => {
@@ -221,7 +222,7 @@ describe('base utils', () => {
 
       it('should skip 2 weekend days if startDate and endDate inside weekend', () => {
         const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => isDataOnWeekend(date),
+          isSkippedDate: (date: Date) => isWeekend(date),
           getViewOptions: () => ({
             startDayHour: 0,
             endDayHour: 24,
@@ -243,7 +244,7 @@ describe('base utils', () => {
 
     describe('border conditions', () => {
       const mockViewDataProvider = {
-        isSkippedDate: (date: Date) => isDataOnWeekend(date),
+        isSkippedDate: (date: Date) => isWeekend(date),
         getViewOptions: () => ({
           startDayHour: 0,
           endDayHour: 24,
@@ -374,7 +375,7 @@ describe('base utils', () => {
         endDayHour,
       }) => {
         const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => isDataOnWeekend(date),
+          isSkippedDate: (date: Date) => isWeekend(date),
           getViewOptions: () => ({
             startDayHour,
             endDayHour,
@@ -413,7 +414,7 @@ describe('base utils', () => {
         expectedHours,
       }) => {
         const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => isDataOnWeekend(date),
+          isSkippedDate: (date: Date) => isWeekend(date),
           getViewOptions: () => ({
             startDayHour: 11,
             endDayHour: 19,

@@ -58,3 +58,25 @@ export const getDateAfterVisibleDays = (
 
   return date;
 };
+
+export const getSkippedDaysCount = (
+  start: Date,
+  dayCount: number,
+  skippedDays: number[],
+): number => {
+  if (dayCount <= 0 || skippedDays.length === 0) {
+    return 0;
+  }
+
+  const date = new Date(start);
+  let skippedCount = 0;
+
+  for (let i = 0; i < dayCount; i += 1) {
+    if (isDateSkipped(date, skippedDays)) {
+      skippedCount += 1;
+    }
+    date.setDate(date.getDate() + 1);
+  }
+
+  return skippedCount;
+};

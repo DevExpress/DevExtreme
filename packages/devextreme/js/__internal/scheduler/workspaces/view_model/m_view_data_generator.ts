@@ -563,7 +563,6 @@ export class ViewDataGenerator {
       hoursInterval,
       interval,
       firstDayOfWeek,
-      intervalCount,
       viewOffset,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
@@ -581,13 +580,6 @@ export class ViewDataGenerator {
         this.getSkippedDaysAnchorDay(firstDayOfWeek, startViewDate),
         cellCountInDay,
       ) * toMs('day');
-    } else if (this.isWorkWeekView()) {
-      offsetByCount = this.getTimeOffsetByColumnIndex(
-        columnIndex,
-        this.getFirstDayOfWeek(firstDayOfWeek),
-        columnCountBase,
-        intervalCount,
-      );
     } else {
       offsetByCount = 0;
     }
@@ -629,14 +621,6 @@ export class ViewDataGenerator {
     const realHiddenInterval = dayIndex * this.hiddenInterval;
 
     return interval * cellIndex + realHiddenInterval;
-  }
-
-  getTimeOffsetByColumnIndex(columnIndex, firstDayOfWeek, columnCount, intervalCount) {
-    const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
-    const columnsInWeek = columnCount / intervalCount;
-    const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / columnsInWeek);
-
-    return weekendCount * 2 * toMs('day');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

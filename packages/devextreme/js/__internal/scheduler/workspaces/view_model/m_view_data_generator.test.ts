@@ -267,6 +267,38 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
   });
 
   describe('WorkWeek hiddenWeekDays support', () => {
+    it('uses week start when skippedDays override is empty', () => {
+      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      gen.skippedDays = [];
+
+      const startViewDate = gen.getStartViewDate({
+        currentDate: new Date(2026, 3, 1), // Wednesday
+        startDayHour: 0,
+        startDate: undefined,
+        intervalCount: 1,
+        firstDayOfWeek: 0, // Sunday
+      });
+
+      expect(startViewDate.getDay()).toBe(0);
+      expect(startViewDate.getDate()).toBe(29);
+    });
+
+    it('uses first visible day of week for custom skippedDays', () => {
+      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      gen.skippedDays = [1, 2];
+
+      const startViewDate = gen.getStartViewDate({
+        currentDate: new Date(2026, 3, 1), // Wednesday
+        startDayHour: 0,
+        startDate: undefined,
+        intervalCount: 1,
+        firstDayOfWeek: 0, // Sunday
+      });
+
+      expect(startViewDate.getDay()).toBe(0);
+      expect(startViewDate.getDate()).toBe(29);
+    });
+
     it('keeps first visible column on Monday when startViewDate is already Monday', () => {
       const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
       gen.skippedDays = [0, 6];

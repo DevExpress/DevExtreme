@@ -1,7 +1,4 @@
 import registerComponent from '@js/core/component_registrator';
-import {
-  getWeekendsCount,
-} from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpaceWeek from './m_work_space_week';
@@ -9,13 +6,6 @@ import SchedulerWorkSpaceWeek from './m_work_space_week';
 const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
   get type() { return VIEWS.WORK_WEEK; }
-
-  constructor(...args: any[]) {
-    // @ts-expect-error
-    super(...args);
-
-    this.getWeekendsCount = getWeekendsCount;
-  }
 
   protected override getElementClass() {
     return WORK_WEEK_CLASS;

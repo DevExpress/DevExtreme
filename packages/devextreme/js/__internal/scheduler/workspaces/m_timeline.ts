@@ -109,6 +109,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected incrementDate(date) {
     date.setDate(date.getDate() + 1);
+    while (this.option('skippedDays').includes(date.getDay())) {
+      date.setDate(date.getDate() + 1);
+    }
   }
 
   getIndicationCellCount() {
@@ -133,6 +136,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected calculateDurationInCells(timeDiff) {
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
+    const skippedDaysCount = this.getSkippedDaysCount(
+      differenceInDays,
+      this.getIndicationFirstViewDate(),
+    );
     let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
 
     if (today.getHours() > (this.option('endDayHour') as any)) {
@@ -142,7 +149,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     if (duration < 0) {
       duration = 0;
     }
-    return differenceInDays * this.getCellCountInDay() + duration;
+    return (differenceInDays - skippedDaysCount) * this.getCellCountInDay() + duration;
   }
 
   getIndicationWidth() {
@@ -223,7 +230,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const fullDays = Math.floor(fullInterval / toMs('day'));
     const tailDuration = fullInterval - (fullDays * toMs('day'));
     let tailDelta = 0;
-    const cellCount = this.getCellCountInDay() * (fullDays - this.getWeekendsCount(fullDays));
+    const skippedDaysCount = this.getSkippedDaysCount(fullDays, firstViewDate);
+    const cellCount = this.getCellCountInDay() * (fullDays - skippedDaysCount);
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
     let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
 
@@ -251,11 +259,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     return result;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected override getWeekendsCount(argument?: any) {
-    return 0;
   }
 
   getAllDayContainer() {

@@ -15,10 +15,6 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
   protected override needRenderWeekHeader() {
     return true;
   }
-
-  protected override incrementDate(date) {
-    date.setDate(date.getDate() + 1);
-  }
 }
 
 registerComponent('dxSchedulerTimelineWeek', SchedulerTimelineWeek as any);
