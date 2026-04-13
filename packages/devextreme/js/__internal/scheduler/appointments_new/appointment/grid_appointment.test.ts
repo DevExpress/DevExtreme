@@ -5,7 +5,7 @@ import $ from '@js/core/renderer';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
 import fx from '../../../common/core/animation/fx';
-import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
+import { getBaseAppointmentViewProperties } from '../__mock__/appointment_properties';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import type { GridAppointmentViewProperties } from './grid_appointment';
 import { GridAppointmentView } from './grid_appointment';
@@ -13,7 +13,7 @@ import { GridAppointmentView } from './grid_appointment';
 const getProperties = (
   appointmentData: SafeAppointment,
 ): GridAppointmentViewProperties => {
-  const baseProperties = getBaseAppointmentProperties(appointmentData);
+  const baseProperties = getBaseAppointmentViewProperties(appointmentData);
 
   return {
     ...baseProperties,

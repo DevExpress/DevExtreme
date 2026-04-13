@@ -4,24 +4,8 @@ import {
 import $ from '@js/core/renderer';
 
 import fx from '../../../common/core/animation/fx';
-import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
+import { createBaseAppointment, getBaseAppointmentViewProperties as getProperties } from '../__mock__/appointment_properties';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
-import type { BaseAppointmentViewProperties } from './base_appointment';
-import { BaseAppointmentView } from './base_appointment';
-
-const createBaseAppointment = async (
-  properties: BaseAppointmentViewProperties,
-): Promise<BaseAppointmentView> => {
-  const $element = $('.root');
-
-  // @ts-expect-error
-  const instance = new BaseAppointmentView($element, properties);
-
-  // Await for resources
-  await new Promise(process.nextTick);
-
-  return instance;
-};
 
 const defaultAppointmentData = {
   title: 'Test appointment',
@@ -51,7 +35,7 @@ describe('BaseAppointment', () => {
   describe('Classes', () => {
     it('should have container class', async () => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties(defaultAppointmentData),
+        getProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().hasClass(APPOINTMENT_CLASSES.CONTAINER)).toBe(true);
@@ -61,7 +45,7 @@ describe('BaseAppointment', () => {
       true, false,
     ])('should have correct class for isRecurring = %o', async (isRecurring) => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData,
           recurrenceRule: isRecurring ? 'FREQ=DAILY;COUNT=5' : undefined,
         }),
@@ -76,7 +60,7 @@ describe('BaseAppointment', () => {
       true, false,
     ])('should have correct class for allDay = %o', async (allDay) => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData,
           allDay,
         }),
@@ -91,7 +75,7 @@ describe('BaseAppointment', () => {
   describe('Aria', () => {
     it('should have role button', async () => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties(defaultAppointmentData),
+        getProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().attr('role')).toBe('button');
