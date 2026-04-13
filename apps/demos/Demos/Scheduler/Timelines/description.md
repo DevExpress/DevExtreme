@@ -6,7 +6,7 @@ Our Timeline view displays appointment sequences across a horizontal scale. The 
 - Timeline Month
 <!--split-->
 
-This demo allows you to explore the capabilities of our Timeline view: 
+This demo allows you to explore the capabilities of our Timeline view:
 
 - You can switch between Timeline view types using the [View Switcher](/Documentation/Guide/UI_Components/Scheduler/View_Switcher/) toolbar item.
 - You can enable our "Snap to Grid" option for all appointments or short appointments only (shorter than two cells in duration). For additional information, see [snapToCellsMode](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#snapToCellsMode).
