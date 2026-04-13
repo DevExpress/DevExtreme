@@ -148,55 +148,59 @@ describe('views utils', () => {
         return view?.skippedDays ?? [];
       };
 
-      it('per-view hiddenWeekDays on week → uses per-view value', () => {
+      it('uses per-view hiddenWeekDays for week', () => {
         expect(getSkipped([{ type: 'week', hiddenWeekDays: [3] }], 'week')).toEqual([3]);
       });
 
-      it('per-view hiddenWeekDays: [] on workWeek → overrides built-in default', () => {
+      it('lets workWeek override the default weekends with an empty list', () => {
         expect(getSkipped([{ type: 'workWeek', hiddenWeekDays: [] }], 'workWeek')).toEqual([]);
       });
 
-      it('per-view hiddenWeekDays on workWeek → overrides built-in default', () => {
+      it('lets workWeek override the default weekends with custom days', () => {
         expect(getSkipped([{ type: 'workWeek', hiddenWeekDays: [3] }], 'workWeek')).toEqual([3]);
       });
 
-      it('global hiddenWeekDays on workWeek → ignored, built-in default wins', () => {
-        expect(getSkipped(['workWeek'], 'workWeek', [3])).toEqual([0, 6]);
+      it('applies global hiddenWeekDays to workWeek', () => {
+        expect(getSkipped(['workWeek'], 'workWeek', [3])).toEqual([3]);
       });
 
-      it('global hiddenWeekDays on week → applied', () => {
+      it('applies global hiddenWeekDays to timelineWorkWeek', () => {
+        expect(getSkipped(['timelineWorkWeek'], 'timelineWorkWeek', [3])).toEqual([3]);
+      });
+
+      it('applies global hiddenWeekDays to week', () => {
         expect(getSkipped(['week'], 'week', [3])).toEqual([3]);
       });
 
-      it('global hiddenWeekDays on month → applied', () => {
+      it('applies global hiddenWeekDays to month', () => {
         expect(getSkipped(['month'], 'month', [0, 6])).toEqual([0, 6]);
       });
 
-      it('global hiddenWeekDays on timelineWeek → applied', () => {
+      it('applies global hiddenWeekDays to timelineWeek', () => {
         expect(getSkipped(['timelineWeek'], 'timelineWeek', [3])).toEqual([3]);
       });
 
-      it('global hiddenWeekDays on timelineMonth → applied', () => {
+      it('applies global hiddenWeekDays to timelineMonth', () => {
         expect(getSkipped(['timelineMonth'], 'timelineMonth', [3])).toEqual([3]);
       });
 
-      it('global hiddenWeekDays on day → ignored (unsupported view)', () => {
+      it('ignores global hiddenWeekDays for day', () => {
         expect(getSkipped(['day'], 'day', [3])).toEqual([]);
       });
 
-      it('global hiddenWeekDays on agenda → applied', () => {
+      it('applies global hiddenWeekDays to agenda', () => {
         expect(getSkipped(['agenda'], 'agenda', [3])).toEqual([3]);
       });
 
-      it('per-view hiddenWeekDays dedupes duplicates', () => {
+      it('removes duplicates from per-view hiddenWeekDays', () => {
         expect(getSkipped([{ type: 'week', hiddenWeekDays: [0, 0, 1, 1] }], 'week')).toEqual([0, 1]);
       });
 
-      it('per-view hiddenWeekDays sorts ascending', () => {
+      it('sorts per-view hiddenWeekDays', () => {
         expect(getSkipped([{ type: 'week', hiddenWeekDays: [6, 0, 3] }], 'week')).toEqual([0, 3, 6]);
       });
 
-      it('per-view hiddenWeekDays filters out invalid values', () => {
+      it('filters out invalid per-view hiddenWeekDays values', () => {
         expect(
           getSkipped([
             // @ts-expect-error intentionally pass invalid values to verify runtime filtering
@@ -205,7 +209,7 @@ describe('views utils', () => {
         ).toEqual([3]);
       });
 
-      it('hiddenWeekDays covering all 7 days → falls back to [] and logs W1029', () => {
+      it('falls back to an empty list and logs error when all days are hidden', () => {
         const logSpy = jest.spyOn(errors, 'log').mockImplementation(() => undefined);
         try {
           expect(
@@ -217,15 +221,19 @@ describe('views utils', () => {
         }
       });
 
-      it('global hiddenWeekDays + per-view undefined on week → uses global', () => {
+      it('uses global hiddenWeekDays when week does not define its own value', () => {
         expect(getSkipped([{ type: 'week' }], 'week', [3])).toEqual([3]);
       });
 
-      it('global hiddenWeekDays + per-view [3] on week → per-view wins', () => {
+      it('keeps the per-view value for week when both global and per-view hiddenWeekDays are set', () => {
         expect(getSkipped([{ type: 'week', hiddenWeekDays: [3] }], 'week', [0, 6])).toEqual([3]);
       });
 
-      it('no hiddenWeekDays anywhere on week → []', () => {
+      it('keeps the per-view value for workWeek when both global and per-view hiddenWeekDays are set', () => {
+        expect(getSkipped([{ type: 'workWeek', hiddenWeekDays: [3] }], 'workWeek', [0, 6])).toEqual([3]);
+      });
+
+      it('returns an empty list for week when hiddenWeekDays is not set anywhere', () => {
         expect(getSkipped(['week'], 'week')).toEqual([]);
       });
     });

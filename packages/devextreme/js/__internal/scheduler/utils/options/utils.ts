@@ -11,11 +11,7 @@ import type {
 } from './types';
 
 const VIEWS_SUPPORTING_HIDDEN_DAYS: ReadonlySet<ViewType> = new Set<ViewType>([
-  'week', 'month', 'timelineWeek', 'timelineMonth', 'agenda',
-]);
-
-const VIEWS_WITH_BUILTIN_SKIPPED: ReadonlySet<ViewType> = new Set<ViewType>([
-  'workWeek', 'timelineWorkWeek',
+  'week', 'workWeek', 'month', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda',
 ]);
 
 const normalizeHiddenWeekDays = (
@@ -43,9 +39,6 @@ const resolveSkippedDays = (
   const perView = normalizeHiddenWeekDays(perViewHiddenWeekDays);
   if (perView !== undefined) {
     return perView;
-  }
-  if (VIEWS_WITH_BUILTIN_SKIPPED.has(viewType)) {
-    return viewDefault;
   }
   if (globalHiddenWeekDays !== undefined && VIEWS_SUPPORTING_HIDDEN_DAYS.has(viewType)) {
     return normalizeHiddenWeekDays(globalHiddenWeekDays) ?? [];
