@@ -198,7 +198,8 @@
 .dx-icon-copyfilled,
 .dx-icon-gridkanban,
 .dx-icon-chatdismiss,
-.dx-icon-listbartreeoffset {
+.dx-icon-listbartreeoffset,
+.dx-icon-clearhistory {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -611,6 +612,7 @@ $icons: (
     "chatdismiss": "\f239",
     "gridkanban": "\f240",
     "listbartreeoffset": "\f241",
+    "clearhistory": "\f242",
 );
 
 // stylelint-enable
