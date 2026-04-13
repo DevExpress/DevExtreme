@@ -1,12 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Master detail`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Master detail.Visual`
+  .page(url(__dirname, '../../../container.html'));
 
 // visual: material.blue.light
 // visual: generic.light
