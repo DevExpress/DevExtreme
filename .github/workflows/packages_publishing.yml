@@ -118,12 +118,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            /tools
-            /packages/devextreme-monorepo-tools
-            package.json
-          sparse-checkout-cone-mode: false
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
