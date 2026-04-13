@@ -1791,6 +1791,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   public isViewportChanging(): boolean {
     return false;
   }
+
+  public resetCachedProcessedItems(): void {
+    this._cachedProcessedItems = null;
+  }
 }
 export const dataControllerModule: Module = {
   defaultOptions() {
