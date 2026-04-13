@@ -173,6 +173,14 @@ gulp.task('npm-sources', gulp.series(
         )
         .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, overwriteInternalPackageName()))
         .pipe(gulp.dest(distPath)),
+    () => merge(
+        gulp
+            .src('../devextreme-dist/README.md')
+            .pipe(gulp.dest(distPath)),
+        gulp
+            .src('../devextreme-dist/LICENSE.md')
+            .pipe(gulp.dest(distPath)),
+    ),
     sources(srcGlobs, packagePath, distGlobs))
 );
 
