@@ -1,3 +1,4 @@
+# DevExtreme Bundles
 ## About
 
 Contains ready-to-use bundles designed to integrate DevExtreme JavaScript components into jQuery applications (can also be used with frameworks that DevExtreme does not support out of the box).
@@ -17,4 +18,4 @@ See [DevExtreme Licensing](https://js.devexpress.com/Licensing/).
 
 ## Support
 
-For technical support, visit the [DevExpress Support Center](https://www.devexpress.com/Support/Center). 
+For technical support, visit the [DevExpress Support Center](https://www.devexpress.com/sc).
