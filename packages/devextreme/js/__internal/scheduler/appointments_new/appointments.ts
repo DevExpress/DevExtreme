@@ -30,11 +30,11 @@ import { GridAppointmentView } from './appointment/grid_appointment';
 import { AppointmentCollector } from './appointment_collector';
 import { AppointmentsFocusController } from './appointments.focus_controller';
 import { APPOINTMENTS_CONTAINER_CLASS } from './const';
-import type { ViewItem } from './types';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
 import type { DiffItem } from './utils/get_view_model_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
 import { isAgendaAppointmentViewModel, isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils/type_helpers';
+import type { ViewItem } from './view_item';
 
 export interface AppointmentsProperties extends DOMComponentProperties<Appointments> {
   currentView: ViewType;
@@ -66,7 +66,13 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
   private viewItemBySortedIndex: Record<number, ViewItem> = {};
 
-  public getViewItem(sortedIndex: number): ViewItem | undefined {
+  private viewItems: ViewItem[] = [];
+
+  public getViewItemByIndex(index: number): ViewItem | undefined {
+    return this.viewItems[index];
+  }
+
+  public getViewItemBySortedIndex(sortedIndex: number): ViewItem | undefined {
     return this.viewItemBySortedIndex[sortedIndex];
   }
 
@@ -142,6 +148,13 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         this.renderAppointments(this.option().viewModel);
         break;
       }
+      case 'tabIndex': {
+        this.viewItems.forEach((item) => {
+          item.setTabIndex(args.value);
+        });
+        this.renderAppointments(this.option().viewModel);
+        break;
+      }
       default:
         break;
     }
@@ -193,6 +206,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       this.viewItemBySortedIndex[appointmentViewModel.sortedIndex] = appointment;
     });
 
+    this.viewItems = Object.values(this.viewItemBySortedIndex);
     if (this.$allDayContainer) {
       this.$allDayContainer.get(0).appendChild(allDayFragment);
     }
@@ -256,6 +270,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     });
 
     this.viewItemBySortedIndex = newViewItemBySortedIndex;
+    this.viewItems = Object.values(this.viewItemBySortedIndex);
 
     if (this.$allDayContainer) {
       this.$allDayContainer.get(0).appendChild(allDayFragment);

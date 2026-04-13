@@ -44,7 +44,7 @@ export class AppointmentsFocusController {
 
   public onAppointmentKeyDown(e: KeyboardKeyDownEvent, sortedIndex: number): void {
     if (e.key === 'Tab') {
-      this.handleTabPress(e, sortedIndex);
+      this.handleTabKeyDown(e, sortedIndex);
     }
   }
 
@@ -58,17 +58,19 @@ export class AppointmentsFocusController {
 
   public resetTabIndex(): void {
     if (this.needRestoreFocusIndex >= 0) {
-      const appointmentView = this.appointments.getViewItem(this.needRestoreFocusIndex);
+      const appointmentView = this.appointments.getViewItemBySortedIndex(
+        this.needRestoreFocusIndex,
+      );
       appointmentView?.focus();
       this.needRestoreFocusIndex = -1;
       return;
     }
 
-    // TODO: in virtual scrolling first appointment may not be rendered
-    this.appointments.getViewItem(0)?.makeFocusable();
+    // TODO: in virtual scrolling no appointment may be rendered in the initial viewport
+    this.appointments.getViewItemByIndex(0)?.makeFocusable();
   }
 
-  private handleTabPress(e: KeyboardKeyDownEvent, sortedIndex: number): void {
+  private handleTabKeyDown(e: KeyboardKeyDownEvent, sortedIndex: number): void {
     const nextIndex = sortedIndex + (e.shift ? -1 : 1);
     const nextItemData = this.sortedAppointments[nextIndex];
 
@@ -85,7 +87,7 @@ export class AppointmentsFocusController {
       this.scrollToByItemData(itemData);
     }
 
-    const appointmentView = this.appointments.getViewItem(itemData.sortedIndex);
+    const appointmentView = this.appointments.getViewItemBySortedIndex(itemData.sortedIndex);
 
     if (appointmentView) {
       appointmentView.focus();

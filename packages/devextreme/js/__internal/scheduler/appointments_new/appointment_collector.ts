@@ -8,18 +8,14 @@ import type { DxEvent } from '@js/events';
 import Button from '@js/ui/button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
-import DOMComponent from '@ts/core/widget/dom_component';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
-import { focus, keyboard } from '@ts/events/m_short';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
-import type { ViewItem } from './types';
+import type { ViewItemProperties } from './view_item';
+import { ViewItem } from './view_item';
 
 export interface AppointmentCollectorProperties
-  extends DOMComponentProperties<AppointmentCollector> {
-  tabIndex: number;
+  extends ViewItemProperties {
   appointmentsData: SafeAppointment[];
   isCompact: boolean;
   geometry: {
@@ -30,17 +26,10 @@ export interface AppointmentCollectorProperties
   };
   targetedAppointmentData: TargetedAppointment;
   appointmentCollectorTemplate: TemplateBase;
-
-  onFocusIn: () => void;
-  onFocusOut: (e: DxEvent) => void;
-  onKeyDown: (e: KeyboardKeyDownEvent) => void;
 }
 
-const EVENTS_NAMESPACE = { namespace: 'dxSchedulerAppointmentCollector' };
-
 export class AppointmentCollector
-  extends DOMComponent<AppointmentCollector, AppointmentCollectorProperties>
-  implements ViewItem {
+  extends ViewItem<AppointmentCollectorProperties> {
   private defaultAppointmentCollectorTemplate!: FunctionTemplate;
 
   private buttonInstance?: Button;
@@ -48,8 +37,6 @@ export class AppointmentCollector
   private get appointmentsCount(): number {
     return this.option().appointmentsData.length;
   }
-
-  private keyboardListenerId?: string;
 
   override _init(): void {
     super._init();
@@ -70,7 +57,7 @@ export class AppointmentCollector
     this.renderContentTemplate();
   }
 
-  public resize(
+  public override resize(
     geometry?: { height: number, width: number, top: number, left: number },
   ): void {
     const newGeometry = geometry ?? this.option().geometry;
@@ -83,13 +70,14 @@ export class AppointmentCollector
     this.buttonInstance?.option({ width, height });
   }
 
-  public focus(): void {
-    this.makeFocusable();
-    focus.trigger(this.$element());
+  public override makeFocusable(): void {
+    this.buttonInstance?.option('tabIndex', this.option().tabIndex);
   }
 
-  public makeFocusable(): void {
-    this.buttonInstance?.option('tabIndex', this.option().tabIndex);
+  protected override onFocusOut(e: DxEvent): void {
+    this.buttonInstance?.option('tabIndex', -1);
+
+    super.onFocusOut(e);
   }
 
   private applyElementClasses(): void {
@@ -114,43 +102,6 @@ export class AppointmentCollector
 
     this.$element()
       .attr('aria-roledescription', dateText);
-  }
-
-  private attachFocusEvents(): void {
-    focus.off(this.$element(), EVENTS_NAMESPACE);
-    focus.on(
-      this.$element(),
-      this.onFocusIn.bind(this),
-      this.onFocusOut.bind(this),
-      EVENTS_NAMESPACE,
-    );
-  }
-
-  private attachKeydownEvents(): void {
-    keyboard.off(this.keyboardListenerId);
-    this.keyboardListenerId = keyboard.on(
-      this.$element(),
-      this.$element(),
-      this.onKeyDown.bind(this),
-    );
-  }
-
-  private onFocusIn(): void {
-    this.option().onFocusIn();
-  }
-
-  private onFocusOut(e: DxEvent): void {
-    this.buttonInstance?.option('tabIndex', -1);
-
-    this.option().onFocusOut(e);
-  }
-
-  private onKeyDown(e: KeyboardKeyDownEvent): void {
-    this.option().onKeyDown(e);
-  }
-
-  private onClick(): void {
-    this.makeFocusable();
   }
 
   private renderContentTemplate(): void {

@@ -29,11 +29,25 @@ const mockAppointmentDataSource = (): AppointmentDataSource => ({
 const getProperties = (options: {
   resources?: ResourceConfig[];
 } = {}): AppointmentsProperties => ({
+  currentView: 'week',
+  tabIndex: 0,
+  viewModel: [],
+  items: [],
+  $allDayContainer: $('<div>'),
+  appointmentTemplate: 'appointment',
+  appointmentCollectorTemplate: 'appointmentCollector',
+
+  onAppointmentRendered: (): void => {},
+
+  getStartViewDate: () => new Date(2024, 0, 1),
+  getSortedAppointments: () => [],
+  isVirtualScrolling: () => false,
+  scrollTo: (): void => {},
+
   getAppointmentDataSource: mockAppointmentDataSource,
   getResourceManager: () => getResourceManagerMock(options.resources ?? []),
   getDataAccessor: () => mockAppointmentDataAccessor,
-  currentView: 'week',
-} as AppointmentsProperties);
+});
 
 const createAppointments = (
   properties?: AppointmentsProperties,
@@ -139,26 +153,18 @@ describe('Appointments', () => {
     });
 
     it('should render allDay appointment to the allDay container', () => {
-      const $allDayContainer = $('.allday-container');
-
-      const instance = createAppointments({
-        ...getProperties(),
-        $allDayContainer,
-      });
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [
         mockGridViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
       ]);
 
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
     });
 
     it('should not render allDay agenda appointment to the allDay container', () => {
-      const $allDayContainer = $('.allday-container');
-
       const instance = createAppointments({
         ...getProperties(),
-        $allDayContainer,
         currentView: 'agenda',
       });
       instance.option('viewModel', [
@@ -166,29 +172,26 @@ describe('Appointments', () => {
       ]);
 
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
     });
 
     it('should clean all day container when switching from grid view to agenda view', () => {
-      const $allDayContainer = $('.allday-container');
-
       const instance = createAppointments({
         ...getProperties(),
         currentView: 'week',
-        $allDayContainer,
       });
       instance.option('viewModel', [
         mockGridViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
       ]);
 
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
 
       instance.option('currentView', 'agenda');
       instance.option('viewModel', [
         mockAgendaViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
       ]);
 
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
     });
 

@@ -8,25 +8,18 @@ import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
-import DOMComponent from '@ts/core/widget/dom_component';
-import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
-import { click, focus, keyboard } from '@ts/events/m_short';
+import { click } from '@ts/events/m_short';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, FOCUSED_STATE_CLASS } from '../const';
-import type { ViewItem } from '../types';
 import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
-
-const EVENTS_NAMESPACE = { namespace: 'dxSchedulerAppointment' };
+import type { ViewItemProperties } from '../view_item';
+import { EVENTS_NAMESPACE, ViewItem } from '../view_item';
 
 export interface BaseAppointmentViewProperties
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  extends DOMComponentProperties<BaseAppointmentView<any>> {
+  extends ViewItemProperties {
   index: number;
-  tabIndex: number;
   appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
@@ -36,9 +29,6 @@ export interface BaseAppointmentViewProperties
     appointmentData: SafeAppointment;
     targetedAppointmentData: TargetedAppointment;
   }) => void;
-  onFocusIn: () => void;
-  onFocusOut: (e: DxEvent) => void;
-  onKeyDown: (e: KeyboardKeyDownEvent) => void;
 
   getDataAccessor: () => AppointmentDataAccessor;
   getResourceColor: () => Promise<string | undefined>;
@@ -46,8 +36,7 @@ export interface BaseAppointmentViewProperties
 
 export class BaseAppointmentView<
   TProperties extends BaseAppointmentViewProperties = BaseAppointmentViewProperties,
-> extends DOMComponent<BaseAppointmentView<TProperties>, TProperties>
-  implements ViewItem {
+> extends ViewItem<TProperties> {
   protected get targetedAppointmentData(): TargetedAppointment {
     return this.option().targetedAppointmentData;
   }
@@ -57,8 +46,6 @@ export class BaseAppointmentView<
   }
 
   private defaultAppointmentTemplate!: FunctionTemplate;
-
-  private keyboardListenerId?: string;
 
   override _init(): void {
     super._init();
@@ -80,30 +67,6 @@ export class BaseAppointmentView<
     this.renderContentTemplate();
   }
 
-  override _optionChanged(args: OptionChanged<TProperties>): void {
-    switch (args.name) {
-      case 'tabIndex': {
-        if (this.$element().attr('tabindex') !== '-1') {
-          this.makeFocusable();
-        }
-        break;
-      }
-      default:
-        break;
-    }
-  }
-
-  public resize(): void { }
-
-  public focus(): void {
-    this.makeFocusable();
-    focus.trigger(this.$element());
-  }
-
-  public makeFocusable(): void {
-    this.$element().attr('tabindex', this.option().tabIndex);
-  }
-
   protected applyElementClasses(): void {
     this.$element()
       .addClass(APPOINTMENT_CLASSES.CONTAINER)
@@ -117,16 +80,6 @@ export class BaseAppointmentView<
       .attr('tabindex', -1);
   }
 
-  private attachFocusEvents(): void {
-    focus.off(this.$element(), EVENTS_NAMESPACE);
-    focus.on(
-      this.$element(),
-      this.onFocusIn.bind(this),
-      this.onFocusOut.bind(this),
-      EVENTS_NAMESPACE,
-    );
-  }
-
   private attachClickEvent(): void {
     click.off(this.$element(), EVENTS_NAMESPACE);
     click.on(
@@ -136,35 +89,18 @@ export class BaseAppointmentView<
     );
   }
 
-  private attachKeydownEvents(): void {
-    keyboard.off(this.keyboardListenerId);
-    this.keyboardListenerId = keyboard.on(
-      this.$element(),
-      this.$element(),
-      this.onKeyDown.bind(this),
-    );
-  }
-
-  private onFocusIn(): void {
+  protected override onFocusIn(): void {
     this.$element().addClass(FOCUSED_STATE_CLASS);
 
-    this.option().onFocusIn();
+    super.onFocusIn();
   }
 
-  private onFocusOut(e: DxEvent): void {
+  protected override onFocusOut(e: DxEvent): void {
     this.$element()
       .removeClass(FOCUSED_STATE_CLASS)
       .attr('tabindex', -1);
 
-    this.option().onFocusOut(e);
-  }
-
-  private onClick(): void {
-    this.makeFocusable();
-  }
-
-  private onKeyDown(e: KeyboardKeyDownEvent): void {
-    this.option().onKeyDown(e);
+    super.onFocusOut(e);
   }
 
   protected getTitleText(): string {
