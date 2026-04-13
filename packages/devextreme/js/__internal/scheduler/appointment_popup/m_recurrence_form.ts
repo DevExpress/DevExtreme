@@ -155,7 +155,7 @@ export class RecurrenceForm {
         ? { text: messageLocalization.format('dxScheduler-recurrenceRepeatOn') }
         : { visible: false },
       editorOptions: {
-        labelMode: 'hidden',
+        ...labelVisible ? {} : { labelMode: 'hidden' },
         min: 1,
         max: 31,
         format: '#',
