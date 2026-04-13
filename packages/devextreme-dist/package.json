@@ -46,6 +46,7 @@
   ],
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
+  "license": "SEE LICENSE IN LICENSE.md",
   "author": "Developer Express Inc.",
   "repository": {
     "type": "git",
