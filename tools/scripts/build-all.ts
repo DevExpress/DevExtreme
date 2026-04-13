@@ -8,7 +8,7 @@ const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/np
 const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
 
-    const DOCUMENTATION_TEMP_DIR = path.join(ARTIFACTS_DIR, 'doc_tmp');
+    const DOCUMENTATION_TEMP_DIR = path.join(ROOT_DIR, '..', 'doc_tmp');
     sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
 
     sh.pushd(DOCUMENTATION_TEMP_DIR);
