@@ -13,7 +13,7 @@ export const VIEWS: Record<string, ViewType> = {
 };
 export const VIEW_TYPES: ViewType[] = Object.values(VIEWS);
 
-const WEEKENDS: number[] = [0, 6];
+const WEEKENDS = [0, 6];
 const getView = (
   type: ViewType,
   groupOrientation: View['groupOrientation'],
