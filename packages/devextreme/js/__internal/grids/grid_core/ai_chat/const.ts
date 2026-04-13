@@ -19,6 +19,7 @@ export const CLASSES = {
   aiChat: 'dx-ai-chat',
   aiDialog: 'dx-aidialog',
   aiChatContent: 'dx-ai-chat__content',
+  aiChatEmptyImage: 'dx-ai-chat-messagelist-empty-image',
 };
 
 export const CLEAR_CHAT_ICON = 'chatdismiss';

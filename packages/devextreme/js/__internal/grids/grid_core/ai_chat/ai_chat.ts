@@ -36,7 +36,8 @@ export class AIChat {
       ...DEFAULT_CHAT_OPTIONS,
       emptyViewTemplate: (_data, container): void => {
         const $image = $('<div>')
-          .addClass(CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS);
+          .addClass(CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS)
+          .addClass(CLASSES.aiChatEmptyImage);
         const $message = $('<div>')
           .addClass(CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS)
           .text(messageLocalization.format('dxDataGrid-aiAChatEmptyViewMessage'));
