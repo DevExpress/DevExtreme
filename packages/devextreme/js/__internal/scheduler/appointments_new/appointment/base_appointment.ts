@@ -23,7 +23,7 @@ export interface BaseAppointmentViewProperties
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
 
-  onAppointmentRendered: (e: {
+  onRendered: (e: {
     element: DxElement;
     appointmentData: SafeAppointment;
     targetedAppointmentData: TargetedAppointment;
@@ -128,7 +128,7 @@ export class BaseAppointmentView<
       },
       index: this.option().index,
       onRendered: () => {
-        this.option().onAppointmentRendered({
+        this.option().onRendered({
           element: getPublicElement(this.$element()),
           appointmentData: this.appointmentData,
           targetedAppointmentData: this.targetedAppointmentData,
