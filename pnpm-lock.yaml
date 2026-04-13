@@ -738,15 +738,6 @@ importers:
       gulp:
         specifier: 4.0.2
         version: 4.0.2
-      gulp-clean:
-        specifier: 0.4.0
-        version: 0.4.0
-      gulp-minify:
-        specifier: 3.1.0
-        version: 3.1.0
-      gulp-replace:
-        specifier: 1.1.4
-        version: 1.1.4
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@20.19.37)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.15.3)(@types/node@20.19.37)(typescript@5.9.3))
@@ -8265,10 +8256,6 @@ packages:
   binaryextensions@1.0.1:
     resolution: {integrity: sha512-xnG0l4K3ghM62rFzDi2jcNEuICl6uQ4NgvGpqQsY7HgW8gPDeAWGOxHI/k+qZfXfMANytzrArGNPXidaCwtbmA==}
 
-  binaryextensions@2.3.0:
-    resolution: {integrity: sha512-nAihlQsYGyc5Bwq6+EsubvANYGExeJKHDO3RjnvwU042fawQTQfM3Kxn7IHUXQOz4bzfwsGYYHGSvXyW4zOGLg==}
-    engines: {node: '>=0.8'}
-
   bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
 
@@ -11156,10 +11143,6 @@ packages:
     resolution: {integrity: sha512-OEGsICR6Vmx0VK3nhpy5MGPzAjeDYC3+NKxNtJAu4DW8L15oy8tCe2WuD6HDEj9BsbSopnOBiXPK95YHvO0DpA==}
     engines: {node: '>= 0.9.0'}
 
-  gulp-clean@0.4.0:
-    resolution: {integrity: sha512-DARK8rNMo4lHOFLGTiHEJdf19GuoBDHqGUaypz+fOhrvOs3iFO7ntdYtdpNxv+AzSJBx/JfypF0yEj9ks1IStQ==}
-    engines: {node: '>=0.9'}
-
   gulp-cli@2.3.0:
     resolution: {integrity: sha512-zzGBl5fHo0EKSXsHzjspp3y5CONegCm8ErO5Qh0UzFzk2y4tMvzLWhoDokADbarfZRL2pGpRp7yt6gfJX4ph7A==}
     engines: {node: '>= 0.10'}
@@ -11214,9 +11197,6 @@ packages:
   gulp-match@1.1.0:
     resolution: {integrity: sha512-DlyVxa1Gj24DitY2OjEsS+X6tDpretuxD6wTfhXE/Rw2hweqc1f6D/XtsJmoiCwLWfXgR87W9ozEityPCVzGtQ==}
 
-  gulp-minify@3.1.0:
-    resolution: {integrity: sha512-ixF41aYg+NQikI8hpoHdEclYcQkbGdXQu1CBdHaU7Epg8H6e8d2jWXw1+rBPgYwl/XpKgjHj7NI6gkhoSNSSAg==}
-
   gulp-multi-process@1.4.0:
     resolution: {integrity: sha512-t6vq367MOGUOKeHtzoklVYSXlWoRwIr7/FPVNVfzVhO82mktUTdHMA+rxdnnImtnEZ8qfjmAWNDyogNiE40lww==}
 
@@ -11242,10 +11222,6 @@ packages:
   gulp-replace@0.6.1:
     resolution: {integrity: sha512-njH1QkwIsipEmLRh+LBBYJNa41PZRFjRx1zgkMkU+MR4Ftv/4ZtPvbS4PZA7XU6DB/G47JJD0ub/zA7FSfWNMw==}
     engines: {node: '>=0.10'}
-
-  gulp-replace@1.1.4:
-    resolution: {integrity: sha512-SVSF7ikuWKhpAW4l4wapAqPPSToJoiNKsbDoUnRrSgwZHH7lH8pbPeQj1aOVYQrbZKhfSVBxVW+Py7vtulRktw==}
-    engines: {node: '>=10'}
 
   gulp-sass@6.0.1:
     resolution: {integrity: sha512-4wonidxB8lGPHvahelpGavUBJAuERSl+OIVxPCyQthK4lSJhZ/u3/qjFcyAtnMIXDl6fXTn34H4BXsN7gt54kQ==}
@@ -12306,10 +12282,6 @@ packages:
   istextorbinary@1.0.2:
     resolution: {integrity: sha512-qZ5ptUDuni2pdCngFTraYa5kalQ0mX47Mhn08tT0DZZv/7yhX1eMb9lFtXVbWhFtgRtpLG/UdqVAjh9teO5x+w==}
     engines: {node: '>=0.4'}
-
-  istextorbinary@3.3.0:
-    resolution: {integrity: sha512-Tvq1W6NAcZeJ8op+Hq7tdZ434rqnMx4CCZ7H0ff83uEloDvVbqAwaMTZcafKGJT0VHkYzuXUiCY4hlXQg6WfoQ==}
-    engines: {node: '>=8'}
 
   iterator.prototype@1.1.5:
     resolution: {integrity: sha512-H0dkQoCa3b2VEeKQBOxFph+JAbcrQdE7KC0UkqwpLmv2EC4P41QXP+rqo9wYodACiG5/WM5s9oDApTU8utwj9g==}
@@ -16710,10 +16682,6 @@ packages:
 
   textextensions@1.0.2:
     resolution: {integrity: sha512-jm9KjEWiDmtGLBrTqXEduGzlYTTlPaoDKdq5YRQhD0rYjo61ZNTYKZ/x5J4ajPSBH9wIYY5qm9GNG5otIKjtOA==}
-
-  textextensions@3.3.0:
-    resolution: {integrity: sha512-mk82dS8eRABNbeVJrEiN5/UMSCliINAuz8mkUwH4SwslkNP//gbEzlWNS5au0z5Dpx40SQxzqZevZkn+WYJ9Dw==}
-    engines: {node: '>=8'}
 
   thingies@2.5.0:
     resolution: {integrity: sha512-s+2Bwztg6PhWUD7XMfeYm5qliDdSiZm7M7n8KjTkIsm3l/2lgVRc2/Gx/v+ZX8lT4FMA+i8aQvhcWylldc+ZNw==}
@@ -27684,8 +27652,6 @@ snapshots:
 
   binaryextensions@1.0.1: {}
 
-  binaryextensions@2.3.0: {}
-
   bindings@1.5.0:
     dependencies:
       file-uri-to-path: 1.0.0
@@ -31794,14 +31760,6 @@ snapshots:
       lodash.defaults: 4.2.0
       through2: 2.0.5
 
-  gulp-clean@0.4.0:
-    dependencies:
-      fancy-log: 1.3.3
-      plugin-error: 0.1.2
-      rimraf: 2.7.1
-      through2: 2.0.5
-      vinyl: 2.2.1
-
   gulp-cli@2.3.0:
     dependencies:
       ansi-colors: 1.1.0
@@ -31912,15 +31870,6 @@ snapshots:
     dependencies:
       minimatch: 3.1.5
 
-  gulp-minify@3.1.0:
-    dependencies:
-      ansi-colors: 1.1.0
-      minimatch: 3.1.5
-      plugin-error: 0.1.2
-      terser: 4.8.1
-      through2: 2.0.5
-      vinyl: 2.2.1
-
   gulp-multi-process@1.4.0:
     dependencies:
       async: 3.2.6
@@ -31963,14 +31912,6 @@ snapshots:
       istextorbinary: 1.0.2
       readable-stream: 2.3.8
       replacestream: 4.0.3
-
-  gulp-replace@1.1.4:
-    dependencies:
-      '@types/node': 20.12.8
-      '@types/vinyl': 2.0.12
-      istextorbinary: 3.3.0
-      replacestream: 4.0.3
-      yargs-parser: 21.1.1
 
   gulp-sass@6.0.1:
     dependencies:
@@ -33139,11 +33080,6 @@ snapshots:
     dependencies:
       binaryextensions: 1.0.1
       textextensions: 1.0.2
-
-  istextorbinary@3.3.0:
-    dependencies:
-      binaryextensions: 2.3.0
-      textextensions: 3.3.0
 
   iterator.prototype@1.1.5:
     dependencies:
@@ -40104,8 +40040,6 @@ snapshots:
   text-table@0.2.0: {}
 
   textextensions@1.0.2: {}
-
-  textextensions@3.3.0: {}
 
   thingies@2.5.0(tslib@2.8.1):
     dependencies:
