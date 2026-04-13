@@ -62,11 +62,10 @@ const getDateAfterWorkWeek = (
   skippedDays: number[],
 ): Date => {
   const weekStart = getWeekStart(workWeekStart, firstDayOfWeek);
-  let lastVisibleDate = addDateInterval(weekStart, WEEK_DURATION, 1);
-
-  do {
+  let lastVisibleDate = addDateInterval(weekStart, { days: 6 }, 1);
+  while (isDateSkipped(lastVisibleDate, skippedDays)) {
     lastVisibleDate = addDateInterval(lastVisibleDate, DAY_DURATION, -1);
-  } while (isDateSkipped(lastVisibleDate, skippedDays));
+  }
 
   return nextDay(lastVisibleDate);
 };
