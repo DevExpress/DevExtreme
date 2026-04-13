@@ -68,3 +68,18 @@ describe('workWeek hiddenWeekDays support in header utils', () => {
     });
   });
 });
+
+describe('week hiddenWeekDays support in header utils', () => {
+  it('should use first and last visible day for week caption', () => {
+    expect(getCaptionInterval({
+      date: new Date(2026, 3, 8), // Wednesday
+      step: 'week',
+      intervalCount: 1,
+      skippedDays: [0, 1],
+      firstDayOfWeek: 1, // Monday
+    })).toEqual({
+      startDate: new Date(2026, 3, 7),
+      endDate: new Date(2026, 3, 11, 23, 59, 59, 999),
+    });
+  });
+});

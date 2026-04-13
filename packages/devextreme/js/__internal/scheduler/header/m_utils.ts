@@ -8,7 +8,6 @@ import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
 import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 import {
-  getDateAfterVisibleDays,
   getFirstVisibleDate,
   isDateSkipped,
 } from '@ts/scheduler/utils/skipped_days';
@@ -70,6 +69,18 @@ const getDateAfterWorkWeek = (
   return nextDay(lastVisibleDate);
 };
 
+const getDateAfterWeek = (
+  weekStartDate: Date,
+  firstDayOfWeek: number | undefined,
+  skippedDays: number[],
+): Date => {
+  if (skippedDays.length === 0) {
+    return nextWeek(weekStartDate);
+  }
+
+  return getDateAfterWorkWeek(weekStartDate, firstDayOfWeek, skippedDays);
+};
+
 const nextAgendaStart = (
   date: Date,
   agendaDuration: number,
@@ -109,14 +120,7 @@ const getPeriodEndDate = (
 ): Date => {
   const calculators: Record<Step, () => Date> = {
     day: () => nextDay(currentPeriodStartDate),
-    week: () => (skippedDays.length > 0
-      ? getDateAfterVisibleDays(
-        currentPeriodStartDate,
-        7 - skippedDays.length,
-        skippedDays,
-        nextDay,
-      )
-      : nextWeek(currentPeriodStartDate)),
+    week: () => getDateAfterWeek(currentPeriodStartDate, firstDayOfWeek, skippedDays),
     month: () => nextMonth(currentPeriodStartDate),
     workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate, firstDayOfWeek, skippedDays),
     agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration),

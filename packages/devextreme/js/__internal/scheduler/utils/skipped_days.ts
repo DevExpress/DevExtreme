@@ -37,28 +37,6 @@ export const getFirstVisibleDate = (
   return date;
 };
 
-export const getDateAfterVisibleDays = (
-  start: Date,
-  visibleDayCount: number,
-  skippedDays: number[],
-  nextDate: (date: Date) => Date,
-): Date => {
-  if (visibleDayCount <= 0) {
-    return new Date(start);
-  }
-
-  let date = new Date(start);
-  let visited = 0;
-  while (visited < visibleDayCount) {
-    date = nextDate(date);
-    if (!isDateSkipped(date, skippedDays)) {
-      visited += 1;
-    }
-  }
-
-  return date;
-};
-
 export const getSkippedDaysCount = (
   start: Date,
   dayCount: number,
