@@ -4,7 +4,7 @@ import {
 import $ from '@js/core/renderer';
 
 import fx from '../../../common/core/animation/fx';
-import { createBaseAppointment, getBaseAppointmentViewProperties as getProperties } from '../__mock__/appointment_properties';
+import { createBaseAppointment, getBaseAppointmentViewProperties as getProperties } from '../__mock__/base_appointment_view';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 
 const defaultAppointmentData = {
