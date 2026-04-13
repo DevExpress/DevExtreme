@@ -16,4 +16,4 @@ Displays current page number and total record count. To display page information
 
 The DevExtreme DataGrid’s built-in pager supports full, compact, and adaptive (default) [display modes](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/pager/#displayMode). In compact mode, the pager uses less screen space. In adaptive mode, the DataGrid automatically selectes between full and compact modes based on the component width.
 
-You can navigate between pages using the on-screen pager controls. Jump to the first/last row of each page by focusing on the data area and using **Ctrl+Home** or **Ctrl+End**. These shortcuts focus the first cell of the first row/last cell of the last row.
+The DevExtreme DataGrid also supports external pagers. You can hide the built-in pager and configure a standalone [Pagination](/Documentation/Guide/UI_Components/Pagination/Overview/) component to navigate the DataGrid. For additional information, refer to the following example: [DevExtreme DataGrid - Display a Pager Above the Grid](https://github.com/DevExpress-Examples/devextreme-datagrid-pager-on-top).
