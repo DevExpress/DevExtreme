@@ -209,6 +209,28 @@ describe('scheduler workspace skipped days support', () => {
     expect((workspace as any).getSkippedDaysCount(7, new Date(2026, 3, 5))).toBe(2);
   });
 
+  it('should use full week layout for work week when skippedDays override is empty', () => {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+      currentDate: new Date(2026, 3, 1), // Wednesday
+      firstDayOfWeek: 0, // Sunday
+      skippedDays: [],
+    });
+
+    expect(workspace.getStartViewDate()).toEqual(new Date(2026, 2, 29));
+    expect((workspace as any)._getCellCount()).toBe(7);
+  });
+
+  it('should use custom skippedDays in work week runtime layout', () => {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+      currentDate: new Date(2026, 3, 1), // Wednesday
+      firstDayOfWeek: 0, // Sunday
+      skippedDays: [3], // Wednesday
+    });
+
+    expect(workspace.getStartViewDate()).toEqual(new Date(2026, 2, 29));
+    expect((workspace as any)._getCellCount()).toBe(6);
+  });
+
   it('should skip configured hidden days when incrementing timeline header dates', () => {
     const { workspace } = createWorkspace(SchedulerTimelineWeek, 'timelineWeek', {
       skippedDays: [3],
