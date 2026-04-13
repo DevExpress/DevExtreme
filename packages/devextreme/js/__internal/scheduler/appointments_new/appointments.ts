@@ -1,14 +1,12 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { DxEvent } from '@js/events';
 import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { domAdapter } from '@ts/core/m_dom_adapter';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 
 import type {
   SafeAppointment, ScrollToOptions, TargetedAppointment, ViewType,
@@ -207,9 +205,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     });
 
     this.viewItems = Object.values(this.viewItemBySortedIndex);
-    if (this.$allDayContainer) {
-      this.$allDayContainer.get(0).appendChild(allDayFragment);
-    }
+
+    this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
 
     this.focusController.resetTabIndex();
@@ -235,6 +232,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     // TODO: remove passing index to appointmentTemplate, need only to avoid BC
     viewModelDiff.forEach((diffItem, index) => {
       const { allDay, sortedIndex } = diffItem.item;
+      const lookupIndex = diffItem.oldSortedIndex ?? sortedIndex;
+      const viewItem = this.viewItemBySortedIndex[lookupIndex];
 
       switch (true) {
         case diffItem.needToRemove: {
@@ -242,39 +241,39 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
             break;
           }
 
-          this.viewItemBySortedIndex[sortedIndex].$element().remove();
+          viewItem.$element().remove();
           break;
         }
         case diffItem.needToAdd: {
           const fragment = allDay ? allDayFragment : commonFragment;
-          const appointment = this.renderAppointmentView(fragment, diffItem.item, index);
+          const newViewItem = this.renderAppointmentView(fragment, diffItem.item, index);
 
-          newViewItemBySortedIndex[sortedIndex] = appointment;
+          newViewItemBySortedIndex[sortedIndex] = newViewItem;
           break;
         }
         case diffItem.needToResize: {
-          const appointment = this.viewItemBySortedIndex[sortedIndex];
-          appointment.resize({
+          viewItem.resize({
             height: diffItem.item.height,
             width: diffItem.item.width,
             top: diffItem.item.top,
             left: diffItem.item.left,
           });
+          viewItem.option('sortedIndex', sortedIndex);
 
-          newViewItemBySortedIndex[sortedIndex] = this.viewItemBySortedIndex[sortedIndex];
+          newViewItemBySortedIndex[sortedIndex] = viewItem;
           break;
         }
         default:
-          newViewItemBySortedIndex[sortedIndex] = this.viewItemBySortedIndex[sortedIndex];
+          viewItem.option('sortedIndex', sortedIndex);
+
+          newViewItemBySortedIndex[sortedIndex] = viewItem;
       }
     });
 
     this.viewItemBySortedIndex = newViewItemBySortedIndex;
     this.viewItems = Object.values(this.viewItemBySortedIndex);
 
-    if (this.$allDayContainer) {
-      this.$allDayContainer.get(0).appendChild(allDayFragment);
-    }
+    this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
 
     this.focusController.resetTabIndex();
@@ -290,24 +289,18 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     fragment.appendChild($element.get(0));
 
     const targetedAppointmentData = this.getTargetedAppointmentData(appointmentViewModel);
-    const { sortedIndex } = appointmentViewModel;
 
-    const focusControllerHandlers = {
-      onFocusIn: (): void => {
-        this.focusController.onAppointmentFocusIn(sortedIndex);
-      },
-      onFocusOut: (e: DxEvent): void => {
-        this.focusController.onAppointmentFocusOut(e, sortedIndex);
-      },
-      onKeyDown: (e: KeyboardKeyDownEvent): void => {
-        this.focusController.onAppointmentKeyDown(e, sortedIndex);
-      },
+    const baseViewItemConfig = {
+      tabIndex: this.option().tabIndex,
+      sortedIndex: appointmentViewModel.sortedIndex,
+      onFocusIn: this.focusController.onAppointmentFocusIn.bind(this.focusController),
+      onFocusOut: this.focusController.onAppointmentFocusOut.bind(this.focusController),
+      onKeyDown: this.focusController.onAppointmentKeyDown.bind(this.focusController),
     };
 
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
-        ...focusControllerHandlers,
-        tabIndex: this.option().tabIndex,
+        ...baseViewItemConfig,
         appointmentsData: appointmentViewModel.items.map((item) => item.itemData),
         isCompact: appointmentViewModel.isCompact,
         geometry: {
@@ -321,10 +314,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       });
     }
 
-    const baseConfig: BaseAppointmentViewProperties = {
-      ...focusControllerHandlers,
+    const baseAppointmentViewConfig: BaseAppointmentViewProperties = {
+      ...baseViewItemConfig,
       index,
-      tabIndex: this.option().tabIndex,
       appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
@@ -338,7 +330,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         $element,
         GridAppointmentView,
         {
-          ...baseConfig,
+          ...baseAppointmentViewConfig,
           geometry: {
             height: appointmentViewModel.height,
             width: appointmentViewModel.width,
@@ -356,7 +348,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       $element,
       AgendaAppointmentView,
       {
-        ...baseConfig,
+        ...baseAppointmentViewConfig,
         modifiers: {
           isLastInGroup: appointmentViewModel.isLastInGroup,
         },

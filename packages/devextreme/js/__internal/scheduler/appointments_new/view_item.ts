@@ -10,9 +10,10 @@ export interface ViewItemProperties
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extends DOMComponentProperties<ViewItem<any>> {
   tabIndex: number;
-  onFocusIn: () => void;
-  onFocusOut: (e: DxEvent) => void;
-  onKeyDown: (e: KeyboardKeyDownEvent) => void;
+  sortedIndex: number;
+  onFocusIn: (sortedIndex: number) => void;
+  onFocusOut: (e: DxEvent, sortedIndex: number) => void;
+  onKeyDown: (e: KeyboardKeyDownEvent, sortedIndex: number) => void;
 }
 
 export class ViewItem<
@@ -43,7 +44,6 @@ export class ViewItem<
   }
 
   public setTabIndex(tabIndex: number | undefined): void {
-    // this.option().tabIndex;
     this.option('tabIndex', tabIndex);
 
     if (this.$element().attr('tabindex') !== '-1') {
@@ -72,11 +72,11 @@ export class ViewItem<
   }
 
   protected onFocusIn(): void {
-    this.option().onFocusIn();
+    this.option().onFocusIn(this.option().sortedIndex);
   }
 
   protected onFocusOut(e: DxEvent): void {
-    this.option().onFocusOut(e);
+    this.option().onFocusOut(e, this.option().sortedIndex);
   }
 
   protected onClick(): void {
@@ -84,6 +84,6 @@ export class ViewItem<
   }
 
   private onKeyDown(e: KeyboardKeyDownEvent): void {
-    this.option().onKeyDown(e);
+    this.option().onKeyDown(e, this.option().sortedIndex);
   }
 }

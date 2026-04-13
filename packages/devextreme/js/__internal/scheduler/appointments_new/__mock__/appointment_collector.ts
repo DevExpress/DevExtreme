@@ -16,6 +16,7 @@ export const getAppointmentCollectorProperties = (
 
   const config: AppointmentCollectorProperties = {
     tabIndex: 0,
+    sortedIndex: 0,
     appointmentsData,
     isCompact: false,
     geometry: {

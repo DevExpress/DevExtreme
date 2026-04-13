@@ -43,6 +43,7 @@ describe.each([
   ): Promise<BaseAppointmentView | AppointmentCollector> => {
     const baseProperties: ViewItemProperties = {
       tabIndex: 0,
+      sortedIndex: 0,
       onFocusIn: () => {},
       onFocusOut: () => {},
       onKeyDown: () => {},
