@@ -340,6 +340,7 @@ const iconSet = {
   chatdismiss: '\f239',
   gridkanban: '\f240',
   listbartreeoffset: '\f241',
+  clearhistory: '\f242',
 };
 
 fixture.disablePageReloads`Icons`
