@@ -400,5 +400,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.W1029
      */
-    W1029: 'The "hiddenWeekDays" option cannot hide all days of the week. At least one day must remain visible. The option is ignored.',
+    W1029: '"hiddenWeekDays" must leave at least one weekday visible.',
 });
