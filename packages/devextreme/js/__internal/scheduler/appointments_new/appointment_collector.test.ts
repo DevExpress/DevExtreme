@@ -2,45 +2,10 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 
 import fx from '../../../common/core/animation/fx';
-import type { SafeAppointment, TargetedAppointment } from '../types';
-import type { AppointmentCollectorProperties } from './appointment_collector';
-import { AppointmentCollector } from './appointment_collector';
+import { createAppointmentCollector, getAppointmentCollectorProperties as getProperties } from './__mock__/appointment_collector';
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
-
-const getProperties = (
-  appointmentsData: SafeAppointment[],
-): AppointmentCollectorProperties => {
-  const targetedAppointmentData: TargetedAppointment = {
-    ...appointmentsData[0],
-    displayStartDate: appointmentsData[0].startDate as Date,
-    displayEndDate: appointmentsData[0].endDate as Date,
-  };
-
-  return {
-    appointmentsData,
-    isCompact: false,
-    geometry: {
-      height: 30,
-      width: 30,
-      top: 0,
-      left: 0,
-    },
-    targetedAppointmentData,
-    appointmentCollectorTemplate: new EmptyTemplate(),
-  };
-};
-
-const createAppointmentCollector = (
-  properties: AppointmentCollectorProperties,
-): AppointmentCollector => {
-  const $element = $('.root');
-
-  // @ts-expect-error
-  return new AppointmentCollector($element, properties);
-};
 
 const defaultAppointmentData = {
   title: 'Test appointment',
