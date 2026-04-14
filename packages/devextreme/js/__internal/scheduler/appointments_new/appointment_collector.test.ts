@@ -118,13 +118,12 @@ describe('AppointmentCollector', () => {
         },
       });
 
-      instance.option('geometry', {
+      instance.resize({
         height: 30,
         width: 40,
         top: 150,
         left: 250,
       });
-      instance.resize();
 
       expect(instance.$element().css('top')).toBe('150px');
       expect(instance.$element().css('left')).toBe('250px');
