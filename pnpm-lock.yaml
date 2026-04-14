@@ -272,7 +272,7 @@ importers:
         version: 29.7.0(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.15.3)(@types/node@20.12.8)(typescript@5.9.3))
       jspdf-autotable:
         specifier: 3.8.3
-        version: 3.8.3(jspdf@4.0.0)
+        version: 3.8.3(jspdf@4.2.1)
       lint-staged:
         specifier: 14.0.1
         version: 14.0.1(enquirer@2.4.1)
@@ -1709,11 +1709,11 @@ importers:
         specifier: 0.0.2
         version: 0.0.2
       jspdf:
-        specifier: 4.0.0
-        version: 4.0.0
+        specifier: 4.2.1
+        version: 4.2.1
       jspdf-autotable:
         specifier: 3.8.4
-        version: 3.8.4(jspdf@4.0.0)
+        version: 3.8.4(jspdf@4.2.1)
       knockout:
         specifier: 3.5.2
         version: 3.5.2
@@ -3720,6 +3720,10 @@ packages:
 
   '@babel/runtime@7.28.4':
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.29.2':
+    resolution: {integrity: sha512-JiDShH45zKHWyGe4ZNVRrCjBz8Nh9TMmZG1kh4QTK8hCBTWBi8Da+i7s1fJw7/lYpM4ccepSNfqzZ/QvABBi5g==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
@@ -13128,6 +13132,9 @@ packages:
 
   jspdf@4.0.0:
     resolution: {integrity: sha512-w12U97Z6edKd2tXDn3LzTLg7C7QLJlx0BPfM3ecjK2BckUl9/81vZ+r5gK4/3KQdhAcEZhENUxRhtgYBj75MqQ==}
+
+  jspdf@4.2.1:
+    resolution: {integrity: sha512-YyAXyvnmjTbR4bHQRLzex3CuINCDlQnBqoSYyjJwTP2x9jDLuKDzy7aKUl0hgx3uhcl7xzg32agn5vlie6HIlQ==}
 
   jsprim@1.4.2:
     resolution: {integrity: sha512-P2bSOMAc/ciLz6DzgjVlGJP9+BrJWu5UDGK70C2iweC5QBIeFf0ZXRvGjEj2uYgrY2MkAAhsSWHDWlFtEroZWw==}
@@ -22726,6 +22733,8 @@ snapshots:
       regenerator-runtime: 0.14.1
 
   '@babel/runtime@7.28.4': {}
+
+  '@babel/runtime@7.29.2': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -36055,13 +36064,13 @@ snapshots:
 
   jsonparse@1.3.1: {}
 
-  jspdf-autotable@3.8.3(jspdf@4.0.0):
+  jspdf-autotable@3.8.3(jspdf@4.2.1):
     dependencies:
-      jspdf: 4.0.0
+      jspdf: 4.2.1
 
-  jspdf-autotable@3.8.4(jspdf@4.0.0):
+  jspdf-autotable@3.8.4(jspdf@4.2.1):
     dependencies:
-      jspdf: 4.0.0
+      jspdf: 4.2.1
 
   jspdf-autotable@5.0.2(jspdf@4.0.0):
     dependencies:
@@ -36070,6 +36079,17 @@ snapshots:
   jspdf@4.0.0:
     dependencies:
       '@babel/runtime': 7.28.4
+      fast-png: 6.4.0
+      fflate: 0.8.2
+    optionalDependencies:
+      canvg: 3.0.11
+      core-js: 3.39.0
+      dompurify: 3.4.0
+      html2canvas: 1.4.1
+
+  jspdf@4.2.1:
+    dependencies:
+      '@babel/runtime': 7.29.2
       fast-png: 6.4.0
       fflate: 0.8.2
     optionalDependencies:
