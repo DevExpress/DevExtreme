@@ -1773,6 +1773,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     return Object.keys(operationTypes).some((type) => operationTypes[type]);
   }
+
+  public resetCachedProcessedItems(): void {
+    this._cachedProcessedItems = null;
+  }
 }
 export const dataControllerModule: Module = {
   defaultOptions() {

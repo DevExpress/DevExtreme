@@ -5,7 +5,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { each } from '@js/core/utils/iterator';
-import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import {
@@ -48,7 +47,7 @@ export interface ToolbarBaseProperties<
 > extends Properties<TItem, TKey>,
   Omit<
     CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
-  keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
+    keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
   > {
   grouped: boolean;
   renderAs: 'topToolbar';
@@ -68,7 +67,6 @@ class ToolbarBase<
 
   _$afterSection!: dxElementWrapper;
 
-  // eslint-disable-next-line no-restricted-globals
   _waitParentAnimationTimeout?: ReturnType<typeof setTimeout>;
 
   _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
@@ -230,10 +228,10 @@ class ToolbarBase<
       float: 'none',
     });
 
-    const beforeRect = getBoundingRect(this._$beforeSection?.get(0));
-    const afterRect = getBoundingRect(this._$afterSection?.get(0));
+    const beforeWidth = getOuterWidth(this._$beforeSection?.get(0)) ?? 0;
+    const afterWidth = getOuterWidth(this._$afterSection?.get(0)) ?? 0;
 
-    this._alignCenterSection(beforeRect, afterRect, elementWidth);
+    this._alignCenterSection(beforeWidth, afterWidth, elementWidth);
 
     const $label = this._$toolbarItemsContainer.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
     const $section: dxElementWrapper = $label.parent();
@@ -242,9 +240,9 @@ class ToolbarBase<
       return;
     }
 
-    const labelOffset = beforeRect.width ? beforeRect.width : $label.position()?.left;
+    const labelOffset = beforeWidth ?? $label.position()?.left;
     const widthBeforeSection = $section.hasClass(TOOLBAR_BEFORE_CLASS) ? 0 : labelOffset;
-    const widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width;
+    const widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterWidth;
     let elemsAtSectionWidth = 0;
 
     // @ts-expect-error ts error
@@ -265,27 +263,35 @@ class ToolbarBase<
     }
   }
 
-  _alignCenterSection(
-    beforeRect: DOMRect,
-    afterRect: DOMRect,
-    elementWidth: number,
-  ): void {
+  _alignCenterSection(beforeWidth: number, afterWidth: number, elementWidth: number): void {
     if (!this._$centerSection) {
       return;
     }
 
-    this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
+    this._alignSection(this._$centerSection, elementWidth - beforeWidth - afterWidth);
 
     const isRTL = this.option('rtlEnabled');
-    const leftRect = isRTL ? afterRect : beforeRect;
-    const rightRect = isRTL ? beforeRect : afterRect;
-    const centerRect = getBoundingRect(this._$centerSection.get(0));
+    const leftWidth = isRTL ? afterWidth : beforeWidth;
+    const rightWidth = isRTL ? beforeWidth : afterWidth;
 
-    if (leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
+    const centerEl = this._$centerSection.get(0) as HTMLElement;
+    const centerLeft = centerEl.offsetLeft;
+    const centerRight = centerLeft + centerEl.offsetWidth;
+
+    const beforeEl = this._$beforeSection?.get(0) as HTMLElement | undefined;
+    const afterEl = this._$afterSection?.get(0) as HTMLElement | undefined;
+    const leftSectionRight = afterEl ? afterEl.offsetLeft + afterEl.offsetWidth : 0;
+    const leftSectionRightLTR = beforeEl ? beforeEl.offsetLeft + beforeEl.offsetWidth : 0;
+    const leftRight = isRTL ? leftSectionRight : leftSectionRightLTR;
+    const rightLeft = isRTL
+      ? beforeEl?.offsetLeft ?? elementWidth
+      : afterEl?.offsetLeft ?? elementWidth;
+
+    if (leftRight > centerLeft || centerRight > rightLeft) {
       this._$centerSection.css({
-        marginLeft: leftRect.width,
-        marginRight: rightRect.width,
-        float: leftRect.width > rightRect.width ? 'none' : 'right',
+        marginLeft: leftWidth,
+        marginRight: rightWidth,
+        float: leftWidth > rightWidth ? 'none' : 'right',
       });
     }
   }
@@ -312,7 +318,8 @@ class ToolbarBase<
     difference: number,
     expanding: boolean,
   ): void {
-    const getRealLabelWidth = (label: Element): number => (getBoundingRect(label) as DOMRect).width;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    const getRealLabelWidth = (label: Element): number => getOuterWidth(label) ?? 0;
 
     // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus
     for (let i = 0; i < labels.length; i++) {
