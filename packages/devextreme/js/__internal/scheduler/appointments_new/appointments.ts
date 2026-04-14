@@ -38,7 +38,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
 
-  onAppointmentRendered: BaseAppointmentViewProperties['onAppointmentRendered'];
+  onAppointmentRendered: BaseAppointmentViewProperties['onRendered'];
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
@@ -65,6 +65,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       appointment: new EmptyTemplate(),
       appointmentCollector: new EmptyTemplate(),
     });
+
+    // TODO: legacy compatibility
+    if (this.option().appointmentTemplate === 'item') {
+      this.option('appointmentTemplate', 'appointment');
+    }
   }
 
   override _initMarkup(): void {
@@ -264,7 +269,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
       getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
-      onAppointmentRendered: this.option().onAppointmentRendered,
+      onRendered: this.option().onAppointmentRendered,
       getDataAccessor: this.option().getDataAccessor,
     };
 
