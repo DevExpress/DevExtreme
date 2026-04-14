@@ -5,7 +5,7 @@ import $ from '@js/core/renderer';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
 import fx from '../../../common/core/animation/fx';
-import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
+import { getBaseAppointmentViewProperties } from '../__mock__/base_appointment_view';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import type { GridAppointmentViewProperties } from './grid_appointment';
 import { GridAppointmentView } from './grid_appointment';
@@ -13,7 +13,7 @@ import { GridAppointmentView } from './grid_appointment';
 const getProperties = (
   appointmentData: SafeAppointment,
 ): GridAppointmentViewProperties => {
-  const baseProperties = getBaseAppointmentProperties(appointmentData);
+  const baseProperties = getBaseAppointmentViewProperties(appointmentData);
 
   return {
     ...baseProperties,
@@ -85,6 +85,15 @@ describe('GridAppointment', () => {
 
       expect(instance.$element().hasClass(APPOINTMENT_TYPE_CLASSES.EMPTY)).toBe(empty);
     });
+
+    it('should have has-resource class when resource color is applied', async () => {
+      const instance = await createGridAppointment({
+        ...getProperties(defaultAppointmentData),
+        getResourceColor: () => Promise.resolve('red'),
+      });
+
+      expect(instance.$element().hasClass(APPOINTMENT_TYPE_CLASSES.HAS_RESOURCE)).toBe(true);
+    });
   });
 
   describe('Title', () => {
@@ -147,14 +156,12 @@ describe('GridAppointment', () => {
         },
       });
 
-      instance.option('geometry', {
+      instance.resize({
         top: 20,
         left: 25,
         width: 150,
         height: 70,
       });
-
-      instance.resize();
 
       const $element = instance.$element();
 

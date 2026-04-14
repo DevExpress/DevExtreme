@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
-import type { GroupItem, Item as FormItem } from '@js/ui/form';
+import type { GroupItem, Item as FormItem, SimpleItem } from '@js/ui/form';
 import type { ToolbarItem } from '@js/ui/popup';
 import { toMilliseconds } from '@ts/utils/toMilliseconds';
 
@@ -1612,6 +1612,36 @@ describe('Appointment Form', () => {
       const animationTop = POM.popup.dxForm.$element()[0].style.getPropertyValue('--dx-scheduler-animation-top');
       expect(animationTop).toBe('50px');
     });
+  });
+
+  it('recurrence editors with hidden outer label must have editorOptions.labelMode set to hidden (T1318550)', async () => {
+    const flattenBy = <T>(
+      items: T[],
+      getChildren: (item: T) => T[] | undefined,
+    ): T[] => items.flatMap((item) => {
+      const children = getChildren(item);
+      return children?.length ? flattenBy(children, getChildren) : [item];
+    });
+
+    const { scheduler, POM } = await createScheduler({
+      ...getDefaultConfig(),
+      dataSource: [{ ...recurringAppointment }],
+    });
+
+    scheduler.showAppointmentPopup(commonAppointment);
+
+    const items = POM.popup.dxForm.option('items') ?? [];
+    const recurrenceGroup = items[1] as GroupItem;
+    const allItems = flattenBy<SimpleItem>(
+      (recurrenceGroup.items ?? []) as SimpleItem[],
+      (i) => (i as unknown as GroupItem).items as SimpleItem[] | undefined,
+    );
+
+    const missingLabelMode = allItems
+      .filter((i) => i.label?.visible === false && i.editorOptions)
+      .filter((i) => (i.editorOptions as Record<string, unknown>).labelMode !== 'hidden');
+
+    expect(missingLabelMode.length).toEqual(0);
   });
 
   describe('firstDayOfWeek', () => {

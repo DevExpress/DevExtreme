@@ -48,22 +48,23 @@ export class AppointmentCollector
   override _initMarkup(): void {
     super._initMarkup();
 
+    this.resize();
     this.applyElementClasses();
     this.applyElementAria();
-    this.resize();
     this.renderContentTemplate();
   }
 
-  public resize(): void {
-    this.$element().css({
-      top: this.option().geometry.top,
-      left: this.option().geometry.left,
-    });
+  public resize(
+    geometry?: { height: number; width: number; top: number; left: number },
+  ): void {
+    const newGeometry = geometry ?? this.option().geometry;
+    const {
+      top, left, width, height,
+    } = newGeometry;
 
-    this.buttonInstance?.option({
-      width: this.option().geometry.width,
-      height: this.option().geometry.height,
-    });
+    this.$element().css({ top, left });
+
+    this.buttonInstance?.option({ width, height });
   }
 
   private applyElementClasses(): void {

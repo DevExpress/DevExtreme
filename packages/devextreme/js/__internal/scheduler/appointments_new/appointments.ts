@@ -38,17 +38,27 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
 
-  onAppointmentRendered: BaseAppointmentViewProperties['onAppointmentRendered'];
+  onAppointmentRendered: BaseAppointmentViewProperties['onRendered'];
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
 }
 
-type AppointmentComponent = GridAppointmentView | AgendaAppointmentView | AppointmentCollector;
+type ViewItem = GridAppointmentView | AgendaAppointmentView | AppointmentCollector;
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
-  private appointmentBySortIndex: Record<number, AppointmentComponent> = {};
+  private viewItemBySortedIndex: Record<number, ViewItem> = {};
+
+  private viewItems: ViewItem[] = [];
+
+  public getViewItemByIndex(index: number): ViewItem | undefined {
+    return this.viewItems[index];
+  }
+
+  public getViewItemBySortedIndex(sortedIndex: number): ViewItem | undefined {
+    return this.viewItemBySortedIndex[sortedIndex];
+  }
 
   private get $allDayContainer(): dxElementWrapper | null {
     return this.option().$allDayContainer;
@@ -65,6 +75,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       appointment: new EmptyTemplate(),
       appointmentCollector: new EmptyTemplate(),
     });
+
+    // TODO: legacy compatibility
+    if (this.option().appointmentTemplate === 'item') {
+      this.option('appointmentTemplate', 'appointment');
+    }
   }
 
   override _initMarkup(): void {
@@ -92,7 +107,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       }
       case 'viewModel': {
         if (this.option().currentView === 'agenda') {
-          this.renderAppointments(args.value);
+          this.renderViewModel(args.value);
           break;
         }
 
@@ -111,7 +126,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
           break;
         }
 
-        this.renderAppointments(this.option().viewModel);
+        this.renderViewModel(this.option().viewModel);
         break;
       }
       default:
@@ -126,10 +141,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   public focus(): void { /* TODO: legacy compatibility */ }
 
   public _renderAppointmentTemplate(): void { /* TODO: legacy compatibility */ }
-
-  private getAppointmentElement(sortedIndex: number): dxElementWrapper {
-    return this.appointmentBySortIndex[sortedIndex].$element();
-  }
 
   private getViewModelDiff(
     oldViewModel: AppointmentViewModelPlain[],
@@ -148,26 +159,26 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     );
   }
 
-  private renderAppointments(appointments: AppointmentViewModelPlain[] = []): void {
+  private renderViewModel(viewModel: AppointmentViewModelPlain[] = []): void {
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
-    this.appointmentBySortIndex = {};
+    this.viewItemBySortedIndex = {};
     this.$allDayContainer?.empty();
     this.$commonContainer.empty();
 
-    appointments.forEach((appointmentViewModel, index) => {
-      const container = this.option().currentView === 'agenda' || !appointmentViewModel.allDay
+    viewModel.forEach((viewModelItem, index) => {
+      const container = this.option().currentView === 'agenda' || !viewModelItem.allDay
         ? commonFragment
         : allDayFragment;
 
-      const appointment = this.renderAppointment(container, appointmentViewModel, index);
-      this.appointmentBySortIndex[appointmentViewModel.sortedIndex] = appointment;
+      const viewItem = this.renderViewItem(container, viewModelItem, index);
+      this.viewItemBySortedIndex[viewModelItem.sortedIndex] = viewItem;
     });
 
-    if (this.$allDayContainer) {
-      this.$allDayContainer.get(0).appendChild(allDayFragment);
-    }
+    this.viewItems = Object.values(this.viewItemBySortedIndex);
+
+    this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
   }
 
@@ -175,7 +186,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
-    const newAppointmentBySortedIndex: Record<number, AppointmentComponent> = {};
+    const newViewItemBySortedIndex: Record<number, ViewItem> = {};
 
     const isRepaintAll = viewModelDiff.every(
       (item) => Boolean(item.needToAdd ?? item.needToRemove),
@@ -189,6 +200,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     // TODO: remove passing index to appointmentTemplate, need only to avoid BC
     viewModelDiff.forEach((diffItem, index) => {
       const { allDay, sortedIndex } = diffItem.item;
+      const lookupIndex = diffItem.oldSortedIndex ?? sortedIndex;
+      const viewItem = this.viewItemBySortedIndex[lookupIndex];
 
       switch (true) {
         case diffItem.needToRemove: {
@@ -196,47 +209,44 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
             break;
           }
 
-          this.getAppointmentElement(sortedIndex).remove();
+          viewItem.$element().remove();
           break;
         }
         case diffItem.needToAdd: {
           const fragment = allDay ? allDayFragment : commonFragment;
-          const appointment = this.renderAppointment(fragment, diffItem.item, index);
+          const newViewItem = this.renderViewItem(fragment, diffItem.item, index);
 
-          newAppointmentBySortedIndex[sortedIndex] = appointment;
+          newViewItemBySortedIndex[sortedIndex] = newViewItem;
           break;
         }
         case diffItem.needToResize: {
-          const appointment = this.appointmentBySortIndex[sortedIndex];
-          appointment.option('geometry', {
+          viewItem.resize({
             height: diffItem.item.height,
             width: diffItem.item.width,
             top: diffItem.item.top,
             left: diffItem.item.left,
           });
-          appointment.resize();
 
-          newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+          newViewItemBySortedIndex[sortedIndex] = viewItem;
           break;
         }
         default:
-          newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+          newViewItemBySortedIndex[sortedIndex] = viewItem;
       }
     });
 
-    this.appointmentBySortIndex = newAppointmentBySortedIndex;
+    this.viewItemBySortedIndex = newViewItemBySortedIndex;
+    this.viewItems = Object.values(this.viewItemBySortedIndex);
 
-    if (this.$allDayContainer) {
-      this.$allDayContainer.get(0).appendChild(allDayFragment);
-    }
+    this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
   }
 
-  private renderAppointment(
+  private renderViewItem(
     fragment: DocumentFragment,
     appointmentViewModel: AppointmentViewModelPlain,
     index: number,
-  ): AppointmentComponent {
+  ): ViewItem {
     const $element = $('<div>');
 
     fragment.appendChild($element.get(0));
@@ -264,7 +274,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
       getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
-      onAppointmentRendered: this.option().onAppointmentRendered,
+      onRendered: this.option().onAppointmentRendered,
       getDataAccessor: this.option().getDataAccessor,
     };
 

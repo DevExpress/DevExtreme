@@ -23,7 +23,7 @@ export interface BaseAppointmentViewProperties
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
 
-  onAppointmentRendered: (e: {
+  onRendered: (e: {
     element: DxElement;
     appointmentData: SafeAppointment;
     targetedAppointmentData: TargetedAppointment;
@@ -63,7 +63,10 @@ export class BaseAppointmentView<
     this.renderContentTemplate();
   }
 
-  public resize(): void { }
+  public resize(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    geometry?: { height: number; width: number | string; top: number; left: number },
+  ): void { }
 
   protected applyElementClasses(): void {
     this.$element()
@@ -128,7 +131,7 @@ export class BaseAppointmentView<
       },
       index: this.option().index,
       onRendered: () => {
-        this.option().onAppointmentRendered({
+        this.option().onRendered({
           element: getPublicElement(this.$element()),
           appointmentData: this.appointmentData,
           targetedAppointmentData: this.targetedAppointmentData,
