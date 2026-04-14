@@ -68,8 +68,8 @@ catalogs:
       specifier: 5.10.0
       version: 5.10.0
     '@types/jquery':
-      specifier: 3.5.34
-      version: 3.5.34
+      specifier: 4.0.0
+      version: 4.0.0
     '@typescript-eslint/eslint-plugin':
       specifier: 8.52.0
       version: 8.52.0
@@ -1054,7 +1054,7 @@ importers:
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.34
+        version: 4.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.8.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.8.3)
@@ -1117,7 +1117,7 @@ importers:
         version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.4)
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.34
+        version: 4.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
@@ -1449,7 +1449,7 @@ importers:
         version: 3.10.19
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.34
+        version: 4.0.0
       '@types/react':
         specifier: 16.14.69
         version: 16.14.69
@@ -6580,8 +6580,8 @@ packages:
   '@types/jest@29.5.14':
     resolution: {integrity: sha512-ZN+4sdnLUbo8EVvVc2ao0GFW6oVrQRPn4K2lglySj7APvSrgzxHiNNK99us4WDMi57xxA2yggblIAMNhXOotLQ==}
 
-  '@types/jquery@3.5.34':
-    resolution: {integrity: sha512-3m3939S3erqmTLJANS/uy0B6V7BorKx7RorcGZVjZ62dF5PAGbKEDZK1CuLtKombJkFA2T1jl8LAIIs7IV6gBQ==}
+  '@types/jquery@4.0.0':
+    resolution: {integrity: sha512-Z+to+A2VkaHq1DfI2oSwsoCdhCHMpTSgjWzNcbNlRGYzksDBpPUgEcAL+RQjOBJRaLoEAOHXxqDGBVP+BblBwg==}
 
   '@types/jsdom@20.0.1':
     resolution: {integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==}
@@ -6729,9 +6729,6 @@ packages:
 
   '@types/shelljs@0.8.15':
     resolution: {integrity: sha512-vzmnCHl6hViPu9GNLQJ+DZFd6BQI2DBTUeOvYHqkWQLMfKAAQYMb/xAmZkTogZI/vqXHCWkqDRymDI5p0QTi5Q==}
-
-  '@types/sizzle@2.3.9':
-    resolution: {integrity: sha512-xzLEyKB50yqCUPUJkIsrVvoWNfFUbIZI+RspLWt8u+tIW/BetMBZtgV2LY/2o+tYH8dRvQ+eoPf3NdhQCcLE2w==}
 
   '@types/sockjs@0.3.36':
     resolution: {integrity: sha512-MK9V6NzAS1+Ud7JV9lJLFqW85VbC9dq3LmwZCuBe4wBDgKC0Kj/jd8Xl+nSviU+Qc3+m7umHHyHg//2KSa0a0Q==}
@@ -25327,9 +25324,7 @@ snapshots:
       expect: 29.7.0
       pretty-format: 29.7.0
 
-  '@types/jquery@3.5.34':
-    dependencies:
-      '@types/sizzle': 2.3.9
+  '@types/jquery@4.0.0': {}
 
   '@types/jsdom@20.0.1':
     dependencies:
@@ -25484,8 +25479,6 @@ snapshots:
     dependencies:
       '@types/glob': 7.2.0
       '@types/node': 20.19.37
-
-  '@types/sizzle@2.3.9': {}
 
   '@types/sockjs@0.3.36':
     dependencies:
