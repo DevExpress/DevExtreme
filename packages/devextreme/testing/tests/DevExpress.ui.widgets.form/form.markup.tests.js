@@ -28,6 +28,8 @@ import 'ui/radio_group';
 import 'ui/switch';
 import 'ui/tag_box';
 
+import 'fluent_blue_light.css!';
+
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const FORM_GROUP_CUSTOM_CAPTION_CLASS = 'dx-form-group-custom-caption';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
@@ -36,8 +38,6 @@ const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 const VALIDATOR_CLASS = 'dx-validator';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const TEXTEDITOR_CLASS = 'dx-texteditor';
-
-import 'fluent_blue_light.css!';
 
 const { test } = QUnit;
 
