@@ -8,6 +8,9 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat as FlatCompatibility } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import testcafeConfig from 'eslint-config-devextreme/testcafe';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -24,8 +27,8 @@ export default [
       'node_modules/**',
     ],
   },
-  ...compatibility.extends('devextreme/spell-check'),
-  ...compatibility.extends('devextreme/testcafe'),
+  ...spellCheckConfig,
+  ...testcafeConfig,
   {
     plugins: {
       'no-only-tests': noOnlyTests,
@@ -128,7 +131,6 @@ export default [
       'space-before-function-paren': ['error', 'never'],
       'space-in-parens': 'error',
       'space-infix-ops': 'error',
-      'space-unary-ops': 'error',
       '@stylistic/space-infix-ops': 'error',
       'space-unary-ops': 'error',
       'spaced-comment': ['error', 'always', {
@@ -155,7 +157,7 @@ export default [
       'import/no-duplicates': 2,
     }
   },
-  ...compatibility.extends('devextreme/typescript').map(config => {
+  ...typescriptConfig.map(config => {
     const newConfig = {
       ...config,
       files: ['**/*.ts?(x)'],
@@ -216,10 +218,14 @@ export default [
       'no-await-in-loop': 'off',
       '@stylistic/no-extra-parens': 'off',
       '@typescript-eslint/require-await': 'off',
-      '@typescript-eslint/no-base-to-string': 'off'
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+      '@typescript-eslint/prefer-optional-chain': 'warn',
+      '@typescript-eslint/only-throw-error': 'warn',
+      'require-await': 'off',
     },
   },
-  ...compatibility.extends('devextreme/typescript').map(config => {
+  ...typescriptConfig.map(config => {
     const newConfig = {
       ...config,
       files: ['**/*.d.ts'],

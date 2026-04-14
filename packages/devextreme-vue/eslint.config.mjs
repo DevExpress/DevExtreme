@@ -8,6 +8,8 @@ import i18N from "eslint-plugin-i18n";
 import noOnlyTests from "eslint-plugin-no-only-tests";
 import { rules as stylisticRules } from '@eslint-stylistic/metadata';
 import stylistic from '@stylistic/eslint-plugin';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -34,7 +36,7 @@ const processDevExtremeRules = devExtremeRules => (
 );
 
 export default [
-    ...compat.extends('devextreme/spell-check'),
+    ...spellCheckConfig,
     {
         ignores: ['metadata/*'],
         plugins: {
@@ -126,7 +128,7 @@ export default [
             "import/no-duplicates": "error",
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
       const newConfig = {
         ...config,
         files: ['**/*.ts?(x)'],
@@ -179,7 +181,7 @@ export default [
             "@typescript-eslint/no-unused-vars": "warn",
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ["**/*.d.ts"],

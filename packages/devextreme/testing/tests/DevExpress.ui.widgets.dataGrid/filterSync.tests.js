@@ -9,7 +9,7 @@ const HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + '-empty';
 
 QUnit.testStart(function() {
     const markup =
-    `<div>
+        `<div>
         <div class="dx-datagrid">
             <div id="container"></div>
         </div>

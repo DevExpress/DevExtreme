@@ -78,7 +78,7 @@
     "eslint": "catalog:",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "catalog:",
-    "eslint-config-devextreme": "1.1.6",
+    "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:",
     "jest-environment-jsdom": "29.7.0",
     "react": "18.0.0",

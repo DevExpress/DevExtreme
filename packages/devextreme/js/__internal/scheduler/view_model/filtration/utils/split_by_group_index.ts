@@ -8,24 +8,24 @@ export const splitByGroupIndex = <T extends MinimalAppointmentEntity>(
   appointments: T[],
   { resourceManager }: Pick<FilterOptions, 'resourceManager'>,
 ): (T & GroupIndex)[] => appointments
-    .reduce<(T & GroupIndex)[]>((result, appointment) => {
-      if (resourceManager.groupsLeafs.length === 0) {
-        result.push({ ...appointment, groupIndex: 0 });
-        return result;
-      }
-
-      const groupValues = getAppointmentGroupValues(
-        appointment.itemData,
-        resourceManager.resources,
-      );
-      const groupIndexes = getAppointmentGroupIndex(
-        groupValues,
-        resourceManager.groupsLeafs,
-      );
-
-      groupIndexes.forEach((groupIndex) => {
-        result.push({ ...appointment, groupIndex });
-      });
-
+  .reduce<(T & GroupIndex)[]>((result, appointment) => {
+    if (resourceManager.groupsLeafs.length === 0) {
+      result.push({ ...appointment, groupIndex: 0 });
       return result;
-    }, []);
+    }
+
+    const groupValues = getAppointmentGroupValues(
+      appointment.itemData,
+      resourceManager.resources,
+    );
+    const groupIndexes = getAppointmentGroupIndex(
+      groupValues,
+      resourceManager.groupsLeafs,
+    );
+
+    groupIndexes.forEach((groupIndex) => {
+      result.push({ ...appointment, groupIndex });
+    });
+
+    return result;
+  }, []);

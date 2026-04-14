@@ -20,9 +20,9 @@ export const TEXTAREA_CLASS = 'dx-textarea';
 export const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
 export interface TextAreaProperties extends Omit<Properties,
-'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' |
-'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing' |
-'onOptionChanged' | 'onInitialized'
+'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput'
+| 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing'
+| 'onOptionChanged' | 'onInitialized'
 > {
   _shouldAttachKeyboardEvents?: boolean;
 }

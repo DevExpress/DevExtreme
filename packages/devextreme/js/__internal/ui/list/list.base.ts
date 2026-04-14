@@ -105,7 +105,7 @@ export function setScrollView(value: ScrollViewConstructor): void {
 export interface ListBaseProperties extends Properties<Item>, Omit<
   CollectionWidgetLiveUpdateProperties<ListBase, Item, CollectionItemKey>,
   keyof Properties<Item>
-  > {
+> {
   validationGroup?: string;
 
   _onItemsRendered?: () => void;

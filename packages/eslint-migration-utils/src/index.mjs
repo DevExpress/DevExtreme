@@ -5,6 +5,10 @@ const REMOVED_TYPESCRIPT_RULES = [
     '@typescript-eslint/ban-types',
 ];
 
+const RULE_NAME_ALIASES = {
+    'func-call-spacing': 'function-call-spacing',
+};
+
 // TODO Salimov: We need to remove this function after updating eslint-config-devextreme
 export const changeRulesToStylistic = (devExtremeRules) => (
     {
@@ -16,7 +20,9 @@ export const changeRulesToStylistic = (devExtremeRules) => (
                 const isTsRule = key.startsWith(tsRulePrefix);
                 const normalizedKey = isTsRule ? key.replace(tsRulePrefix, '') : key;
 
-                const rule = stylisticRules.find((r) => normalizedKey === r.name);
+                const aliasedKey = RULE_NAME_ALIASES[normalizedKey] || normalizedKey;
+
+                const rule = stylisticRules.find((r) => aliasedKey === r.name);
                 const newKey = rule ? `@stylistic/${rule.name}` : key;
                 
                 return [newKey, value];

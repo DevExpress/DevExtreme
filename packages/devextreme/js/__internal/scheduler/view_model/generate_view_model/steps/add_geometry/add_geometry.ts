@@ -38,13 +38,13 @@ export const addGeometry = <T extends GeometryMinimalEntity>(
   entities: T[],
   options: GeometryOptions,
 ): (T & Geometry & AppointmentCollectorWithGeometry)[] => entities.map((rawEntity) => {
-    const { isAdaptivityEnabled, maxAppointmentsPerCell } = options;
-    const entity = isAdaptivityEnabled && maxAppointmentsPerCell === 0
-      ? addAdaptivityGeometryInsideInterval(rawEntity, options)
-      : addGeometryInsideInterval(rawEntity, options);
-    addPanelOffset(entity, options);
-    addGroupingOffset(entity, options);
-    RTLSwap(entity, options);
+  const { isAdaptivityEnabled, maxAppointmentsPerCell } = options;
+  const entity = isAdaptivityEnabled && maxAppointmentsPerCell === 0
+    ? addAdaptivityGeometryInsideInterval(rawEntity, options)
+    : addGeometryInsideInterval(rawEntity, options);
+  addPanelOffset(entity, options);
+  addGroupingOffset(entity, options);
+  RTLSwap(entity, options);
 
-    return entity;
-  });
+  return entity;
+});

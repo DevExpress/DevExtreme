@@ -8,8 +8,7 @@ import type { ComponentType } from 'inferno';
 import type { DataObject, Key } from '../data_controller/types';
 import type { HighlightedTextItem } from '../search/types';
 
-type InheritedColumnProps =
-  | 'alignment'
+type InheritedColumnProps = | 'alignment'
   | 'dataType'
   | 'visible'
   | 'visibleIndex'

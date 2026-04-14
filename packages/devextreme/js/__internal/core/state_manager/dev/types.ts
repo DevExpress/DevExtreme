@@ -95,8 +95,10 @@ export interface Logger {
 
 export type DevToolsActions = 'DISPATCH' | 'JUMP_TO_STATE' | 'JUMP_TO_ACTION' | 'COMMIT' | 'RESET';
 
-export type DevToolsExternalActionCallback =
-(action: DevToolsActions, payload: ComponentState | null) => void;
+export type DevToolsExternalActionCallback = (
+  action: DevToolsActions,
+  payload: ComponentState | null,
+) => void;
 
 export interface DevToolsConnector {
   connect: (options?: Record<string, unknown>) => void;

@@ -495,9 +495,9 @@ function getTablePropertiesFormConfig(
     tableBlot,
   },
 ): {
-    formOptions: unknown;
-    applyHandler: (formInstance: Form) => void;
-  } {
+  formOptions: unknown;
+  applyHandler: (formInstance: Form) => void;
+} {
   let alignmentEditorInstance;
   let borderColorEditorInstance;
   let backgroundColorEditorInstance;
@@ -702,9 +702,9 @@ function getCellPropertiesFormConfig(
     rowBlot,
   },
 ): {
-    formOptions: unknown;
-    applyHandler: (formInstance: Form) => void;
-  } {
+  formOptions: unknown;
+  applyHandler: (formInstance: Form) => void;
+} {
   let alignmentEditorInstance;
   let verticalAlignmentEditorInstance;
   let borderColorEditorInstance;

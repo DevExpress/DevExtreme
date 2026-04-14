@@ -16,10 +16,14 @@ catalog:
   devextreme-quill: 1.7.9
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
+  eslint-config-devextreme: 1.1.9
   eslint-plugin-i18n: 2.4.0
-  eslint-plugin-import: 2.31.0
+  eslint-plugin-import: 2.32.0
+  eslint-plugin-jsx-a11y: 6.10.2
   eslint-plugin-no-only-tests: 3.3.0
-  eslint-plugin-qunit: 8.1.2
+  eslint-plugin-qunit: 8.2.5
+  eslint-plugin-vue: 10.4.0
+  vue-eslint-parser: 10.0.0
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
   jquery: 3.7.1
@@ -27,10 +31,10 @@ catalog:
   "@babel/eslint-parser": 7.26.5
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.2.0
-  "@stylistic/eslint-plugin": 2.13.0
+  "@stylistic/eslint-plugin": 5.4.0
   "@types/jquery": "3.5.29"
-  "@typescript-eslint/eslint-plugin": 8.23.0
-  "@typescript-eslint/parser": 8.23.0
+  "@typescript-eslint/eslint-plugin": 8.52.0
+  "@typescript-eslint/parser": 8.52.0
 
 catalogs:
   angular:
