@@ -45,7 +45,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Check dx.all.d.ts is up-to-date
       working-directory: ./packages/devextreme
@@ -97,7 +97,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Validate declarations
       working-directory: ./packages/devextreme

@@ -49,7 +49,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -106,7 +106,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -151,7 +151,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Check texts
       working-directory: ./packages/devextreme
@@ -238,7 +238,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Check generated component reexports
       working-directory: ./packages/devextreme
@@ -288,7 +288,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Lint wrappers
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
