@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-break',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

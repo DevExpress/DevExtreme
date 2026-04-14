@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-tab-panel-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

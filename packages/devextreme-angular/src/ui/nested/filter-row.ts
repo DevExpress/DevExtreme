@@ -24,7 +24,6 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
 
 @Component({
     selector: 'dxo-filter-row',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

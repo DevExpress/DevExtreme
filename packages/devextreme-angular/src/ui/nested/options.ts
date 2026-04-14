@@ -24,7 +24,6 @@ import { DxoButtonOptions } from './base/button-options';
 
 @Component({
     selector: 'dxo-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

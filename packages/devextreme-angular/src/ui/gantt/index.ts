@@ -100,7 +100,6 @@ import {
  */
 @Component({
     selector: 'dx-gantt',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

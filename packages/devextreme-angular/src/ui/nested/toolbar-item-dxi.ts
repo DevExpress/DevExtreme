@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-toolbar-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

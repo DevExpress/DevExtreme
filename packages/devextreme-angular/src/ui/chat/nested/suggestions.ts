@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-chat-suggestions',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

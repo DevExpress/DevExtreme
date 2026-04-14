@@ -28,7 +28,6 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-field',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -24,7 +24,6 @@ import { DxoAnimationState } from './base/animation-state';
 
 @Component({
     selector: 'dxo-from',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

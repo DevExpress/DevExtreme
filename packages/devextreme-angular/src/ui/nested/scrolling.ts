@@ -24,7 +24,6 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
 
 @Component({
     selector: 'dxo-scrolling',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

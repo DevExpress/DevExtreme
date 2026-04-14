@@ -57,7 +57,6 @@ import {
  */
 @Component({
     selector: 'dx-splitter',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

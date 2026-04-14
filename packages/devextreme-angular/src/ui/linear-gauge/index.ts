@@ -104,7 +104,6 @@ import {
  */
 @Component({
     selector: 'dx-linear-gauge',
-    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },

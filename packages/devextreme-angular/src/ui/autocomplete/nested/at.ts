@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-autocomplete-at',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

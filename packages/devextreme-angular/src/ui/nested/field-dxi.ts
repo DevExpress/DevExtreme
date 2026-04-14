@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-field',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

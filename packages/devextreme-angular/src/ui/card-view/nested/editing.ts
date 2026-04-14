@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-editing',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

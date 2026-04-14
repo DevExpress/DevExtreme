@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-range',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

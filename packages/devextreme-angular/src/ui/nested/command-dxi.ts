@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-command',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

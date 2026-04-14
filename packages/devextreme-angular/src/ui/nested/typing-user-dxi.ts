@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-typing-user',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
