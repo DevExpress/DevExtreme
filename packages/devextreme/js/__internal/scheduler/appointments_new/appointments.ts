@@ -176,6 +176,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       this.viewItemBySortedIndex[viewModelItem.sortedIndex] = viewItem;
     });
 
+    this.viewItems = Object.values(this.viewItemBySortedIndex);
+
     this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
   }
