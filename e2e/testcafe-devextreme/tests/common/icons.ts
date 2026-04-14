@@ -337,6 +337,10 @@ const iconSet = {
   botoutline: '\f236',
   botfilled: '\f237',
   copyfilled: '\f238',
+  chatdismiss: '\f239',
+  gridkanban: '\f240',
+  listbartreeoffset: '\f241',
+  clearhistory: '\f242',
 };
 
 fixture.disablePageReloads`Icons`
