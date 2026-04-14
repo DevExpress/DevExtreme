@@ -809,6 +809,7 @@ class Chat extends Widget<ChatProperties> {
   _clean(): void {
     this._suggestions?.dispose();
     this._suggestions = undefined;
+    super._clean();
   }
 
   _dispose(): void {

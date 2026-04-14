@@ -20,8 +20,8 @@ class Suggestions {
     this._initButtonGroup(options);
   }
 
-  private _getConfiguration(options: SuggestionsOptions): ButtonGroupProperties {
-    const items = options.items?.map((item) => ({
+  private _getConfiguration(options: SuggestionsOptions | undefined): ButtonGroupProperties {
+    const items = options?.items?.map((item) => ({
       type: 'default',
       ...item,
     })) ?? [];
@@ -47,7 +47,7 @@ class Suggestions {
     }
   }
 
-  updateOptions(options: SuggestionsOptions): void {
+  updateOptions(options: SuggestionsOptions | undefined): void {
     if (!this._buttonGroup) {
       this._initButtonGroup(options);
       return;
