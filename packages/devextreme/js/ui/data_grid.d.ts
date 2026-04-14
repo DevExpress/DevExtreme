@@ -41,46 +41,47 @@ import {
 } from '../localization';
 
 import {
-    AdaptiveDetailRowPreparingInfo,
-    ColumnBase as ComponentColumnBase,
-    ColumnButtonBase as ComponentColumnButtonBase,
-    GridsContextMenuTarget,
-    EditingBase as ComponentEditingBase,
-    EditingTextsBase as ComponentEditingTextsBase,
-    DataChangeInfo,
-    DataErrorOccurredInfo,
-    DragDropInfo,
-    DragReorderInfo,
-    DragStartEventInfo,
-    FilterPanel as ComponentFilterPanel,
-    FilterPanelCustomizeTextArg as ComponentFilterPanelCustomizeTextArg,
-    GridBase,
-    GridBaseOptions,
-    GroupExpandMode,
-    KeyDownInfo,
-    NewRowInfo,
-    NewRowPosition,
-    PagingBase as ComponentPaging,
-    ReducedNativeEventInfo,
-    RowDragging as ComponentRowDragging,
-    RowDraggingEventInfo,
-    RowDraggingTemplateData,
-    RowInsertedInfo,
-    RowInsertingInfo,
-    RowKeyInfo,
-    RowRemovedInfo,
-    RowRemovingInfo,
-    RowUpdatedInfo,
-    RowUpdatingInfo,
-    RowValidatingInfo,
-    SavingInfo,
-    ScrollingBase as ComponentScrollingBase,
-    SelectionBase as ComponentSelectionBase,
-    SelectionChangedInfo,
-    SelectionColumnDisplayMode,
-    SummaryType,
-    ToolbarPreparingInfo,
-    AIColumnRequestCreatingInfo,
+  AdaptiveDetailRowPreparingInfo,
+  ColumnBase as ComponentColumnBase,
+  ColumnButtonBase as ComponentColumnButtonBase,
+  GridsContextMenuTarget,
+  EditingBase as ComponentEditingBase,
+  EditingTextsBase as ComponentEditingTextsBase,
+  DataChangeInfo,
+  DataErrorOccurredInfo,
+  DragDropInfo,
+  DragReorderInfo,
+  DragStartEventInfo,
+  FilterPanel as ComponentFilterPanel,
+  FilterPanelCustomizeTextArg as ComponentFilterPanelCustomizeTextArg,
+  GridBase,
+  GridBaseOptions,
+  GroupExpandMode,
+  KeyDownInfo,
+  NewRowInfo,
+  NewRowPosition,
+  PagingBase as ComponentPaging,
+  ReducedNativeEventInfo,
+  RowDragging as ComponentRowDragging,
+  RowDraggingEventInfo,
+  RowDraggingTemplateData,
+  RowInsertedInfo,
+  RowInsertingInfo,
+  RowKeyInfo,
+  RowRemovedInfo,
+  RowRemovingInfo,
+  RowUpdatedInfo,
+  RowUpdatingInfo,
+  RowValidatingInfo,
+  SavingInfo,
+  ScrollingBase as ComponentScrollingBase,
+  SelectionBase as ComponentSelectionBase,
+  SelectionChangedInfo,
+  SelectionColumnDisplayMode,
+  SummaryType,
+  ToolbarPreparingInfo,
+  AIColumnRequestCreatingInfo,
+  AIAssistantRequestCreatingInfo,
 } from '../common/grids';
 
 export {
@@ -257,6 +258,14 @@ export type GridBaseColumn<TRowData = any> = ColumnBase<TRowData>;
  * @deprecated Use ColumnButton instead
  */
 export type GridBaseColumnButton = ColumnButtonBase;
+
+/**
+ * @docid _ui_data_grid_AIAssistantRequestCreatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,Cancelable,AIAssistantRequestCreatingInfo
+ */
+export type AIAssistantRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & Cancelable & AIAssistantRequestCreatingInfo;
 
 /**
  * @docid _ui_data_grid_AdaptiveDetailRowPreparingEvent
@@ -2446,6 +2455,7 @@ export type Row<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ExplicitTypes<TRowData, TKey> = {
+  AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<TRowData, TKey>;
   AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
   CellClickEvent: CellClickEvent<TRowData, TKey>;
   CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
@@ -2546,6 +2556,11 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 * @hidden
 */
 type Events = {
+/**
+ * @docid dxDataGridOptions.onAIAssistantRequestCreating
+ * @type_function_param1 e:{ui/data_grid:AIAssistantRequestCreatingEvent}
+ */
+onAIAssistantRequestCreating?: ((e: AIAssistantRequestCreatingEvent) => void);
 /**
  * @docid dxDataGridOptions.onAdaptiveDetailRowPreparing
  * @type_function_param1 e:{ui/data_grid:AdaptiveDetailRowPreparingEvent}

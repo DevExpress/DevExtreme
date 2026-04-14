@@ -112,6 +112,7 @@ export {
   RowDraggingReorderEvent,
   ColumnButtonClickEvent,
   AIColumnRequestCreatingEvent,
+  AIAssistantRequestCreatingEvent,
   ColumnButtonTemplateData,
   ColumnCellTemplateData,
   ColumnEditCellTemplateData,

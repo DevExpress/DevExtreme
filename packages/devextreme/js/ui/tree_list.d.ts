@@ -62,6 +62,7 @@ import {
     SelectionChangedInfo,
     ToolbarPreparingInfo,
     AIColumnRequestCreatingInfo,
+    AIAssistantRequestCreatingInfo,
 } from '../common/grids';
 
 import { dxToolbarItem } from './toolbar';
@@ -180,6 +181,14 @@ export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
 /** @public */
 export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
+
+/**
+* @docid _ui_tree_list_AIAssistantRequestCreatingEvent
+* @public
+* @type object
+* @inherits EventInfo,Cancelable,AIAssistantRequestCreatingInfo
+*/
+export type AIAssistantRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & Cancelable & AIAssistantRequestCreatingInfo;
 
 /**
  * @docid _ui_tree_list_AdaptiveDetailRowPreparingEvent
@@ -1799,6 +1808,7 @@ export type Row<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ExplicitTypes<TRowData, TKey> = {
+  AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<TRowData, TKey>;
   AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
   CellClickEvent: CellClickEvent<TRowData, TKey>;
   CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
@@ -1876,6 +1886,11 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
+ * @docid dxTreeListOptions.onAIAssistantRequestCreating
+ * @type_function_param1 e:{ui/tree_list:AIAssistantRequestCreatingEvent}
+ */
+onAIAssistantRequestCreating?: ((e: AIAssistantRequestCreatingEvent) => void);
+ /**
  * @docid dxTreeListOptions.onAdaptiveDetailRowPreparing
  * @type_function_param1 e:{ui/tree_list:AdaptiveDetailRowPreparingEvent}
  */
