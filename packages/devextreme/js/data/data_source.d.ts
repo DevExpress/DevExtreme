@@ -26,12 +26,11 @@ export type Options<
  * @hidden
  * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
  */
-export type DataSourceLike<TItem, TKey = any> =
-    string |
-    Array<TItem> |
-    Store<TItem, TKey> |
-    DataSourceOptionsStub<any, any, TItem> |
-    DataSource<TItem, TKey>;
+export type DataSourceLike<TItem, TKey = any> = string
+    | Array<TItem>
+    | Store<TItem, TKey>
+    | DataSourceOptionsStub<any, any, TItem>
+    | DataSource<TItem, TKey>;
 
 export interface DataSourceOptionsStub<
     TStoreItem = any,

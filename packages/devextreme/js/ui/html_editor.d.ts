@@ -53,8 +53,7 @@ export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 
 export type AICommandName = 'summarize' | 'proofread' | 'expand' | 'shorten' | 'changeStyle' | 'changeTone' | 'translate' | 'askAI';
 
 /** @public */
-export type AIChangeStyleOption =
-    | 'formal'
+export type AIChangeStyleOption = | 'formal'
     | 'informal'
     | 'technical'
     | 'business'
@@ -68,16 +67,14 @@ export type AIChangeStyleOption =
     | 'conversational';
 
 /** @public */
-export type AIChangeToneOption =
-    | 'professional'
+export type AIChangeToneOption = | 'professional'
     | 'casual'
     | 'straightforward'
     | 'confident'
     | 'friendly';
 
 /** @public */
-export type AITranslateOption =
-    | 'arabic'
+export type AITranslateOption = | 'arabic'
     | 'chinese'
     | 'english'
     | 'french'
@@ -164,8 +161,7 @@ export interface AICustomCommand extends AICommandBase<'custom', string[]> {
  * @namespace DevExpress.ui.dxHtmlEditor
  * @inherits AIChangeStyleCommand,AIChangeToneCommand,AITranslateCommand,AICustomCommand
  */
-export type AICommand =
-    | AICommandBase<'summarize', any>
+export type AICommand = | AICommandBase<'summarize', any>
     | AICommandBase<'proofread', any>
     | AICommandBase<'expand', any>
     | AICommandBase<'shorten', any>
