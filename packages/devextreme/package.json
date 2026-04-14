@@ -173,7 +173,7 @@
     "jest-environment-node": "29.7.0",
     "jquery": "3.7.1",
     "jquery.tmpl": "0.0.2",
-    "jspdf": "4.0.0",
+    "jspdf": "4.2.1",
     "jspdf-autotable": "3.8.4",
     "knockout": "3.5.2",
     "lazypipe": "1.0.2",
