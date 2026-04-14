@@ -72,7 +72,7 @@ jobs:
         shell: bash
         run: |
           node ./tools/scripts/performance_log.js &
-          pnpx nx build devextreme
+          pnpm exec nx build devextreme
 
   testcafe:
     needs: [check-should-run, build]
@@ -128,7 +128,7 @@ jobs:
       run: pnpm install
 
     - name: DevExtreme - Build
-      run: pnpx nx build devextreme
+      run: pnpm exec nx build devextreme
 
     - name: Run Web Server
       run: |
@@ -155,7 +155,7 @@ jobs:
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: |
         node ../../tools/scripts/performance_log.js &
-        pnpx nx test-testcafe
+        pnpm exec nx test-testcafe
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'

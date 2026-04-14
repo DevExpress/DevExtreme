@@ -63,7 +63,7 @@ jobs:
         BUILD_INPROGRESS_RENOVATION: "true"
       run: |
         node ../../tools/scripts/performance_log.js &
-        pnpx nx build:dev
+        pnpm exec nx build:dev
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
