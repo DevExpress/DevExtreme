@@ -165,8 +165,8 @@ AspNet.makeMetadata({
     [
       ['ui/box:dxBoxOptions', 'ui/box:dxBoxItem.box'],
       ['ui/button:dxButtonOptions', 'common:TextEditorButton.options'],
-      ['ui/button:dxButtonOptions', 'ui/form:dxFormButtonItem.buttonOptions'],
       ['ui/button:dxButtonOptions', 'ui/chat:dxChatOptions.suggestions'],
+      ['ui/button:dxButtonOptions', 'ui/form:dxFormButtonItem.buttonOptions'],
       ['ui/calendar:dxCalendarOptions', 'ui/date_box:DateBoxBaseOptions.calendarOptions'],
       [
         'ui/file_uploader:dxFileUploaderOptions',
