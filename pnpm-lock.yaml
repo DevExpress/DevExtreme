@@ -1722,8 +1722,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0(webpack@5.103.0(@swc/core@1.15.21(@swc/helpers@0.5.21)))
       yaml:
-        specifier: 2.5.0
-        version: 2.5.0
+        specifier: 2.8.3
+        version: 2.8.3
       yargs:
         specifier: 17.7.2
         version: 17.7.2
@@ -17869,11 +17869,6 @@ packages:
   yaml@2.3.1:
     resolution: {integrity: sha512-2eHWfjaoXgTBC2jNM1LRef62VQa0umtvRiDSk6HSzW7RvS5YtkabJrwYLLEKWBc8a5U2PTSCs+dJjUTJdlHsWQ==}
     engines: {node: '>= 14'}
-
-  yaml@2.5.0:
-    resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
-    engines: {node: '>= 14'}
-    hasBin: true
 
   yaml@2.8.3:
     resolution: {integrity: sha512-AvbaCLOO2Otw/lW5bmh9d/WEdcDFdQp2Z2ZUH3pX9U2ihyUY0nvLv7J6TrWowklRGPYbB/IuIMfYgxaCPg5Bpg==}
@@ -40726,10 +40721,7 @@ snapshots:
 
   yaml@2.3.1: {}
 
-  yaml@2.5.0: {}
-
-  yaml@2.8.3:
-    optional: true
+  yaml@2.8.3: {}
 
   yargs-parser@20.2.9: {}
 
