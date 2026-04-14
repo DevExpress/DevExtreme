@@ -3404,6 +3404,7 @@ QUnit.module('dataSource integration', {
             'NFD and NFC forms are different strings');
 
         $($input.val(searchValueNFD)).trigger('input');
+        this.clock.tick(0);
 
         const $listItems = $(`.${LIST_ITEM_CLASS}`);
         assert.equal($listItems.length, 2, 'items containing the NFC character should be found when searching with its NFD equivalent');
