@@ -113,6 +113,11 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/bin`)),
 
     gulp
+        .src(['license/**'])
+        .pipe(eol('\n'))
+        .pipe(gulp.dest(`${dist}/license`)),
+
+    gulp
         .src('webpack.config.js')
         .pipe(gulp.dest(`${dist}/bin`)),
 
