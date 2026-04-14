@@ -35,30 +35,43 @@ class Suggestions {
   }
 
   private _renderMarkup(): void {
-    this._$element = $('<div>').addClass(CHAT_SUGGESTIONS_CLASS);
+    this._$element = $('<div>');
     this._$container?.append(this._$element);
   }
 
   private _initButtonGroup(options: SuggestionsOptions = {}): void {
-    const shouldRender = Object.keys(options).length;
-
-    if (shouldRender && this._$element) {
+    if (this._hasOptions(options) && this._$element) {
+      this._$element.addClass(CHAT_SUGGESTIONS_CLASS);
       this._buttonGroup = new ButtonGroup(this._$element.get(0), this._getConfiguration(options));
     }
   }
 
+  private _hasOptions(options: SuggestionsOptions | undefined): boolean {
+    return Boolean(Object.keys(options ?? {}).length);
+  }
+
   updateOptions(options: SuggestionsOptions | undefined): void {
+    if (!this._hasOptions(options)) {
+      this.clean();
+      return;
+    }
+
     if (!this._buttonGroup) {
       this._initButtonGroup(options);
       return;
     }
 
-    this._buttonGroup?.option(this._getConfiguration(options));
+    this._buttonGroup.option(this._getConfiguration(options));
+  }
+
+  clean(): void {
+    this._buttonGroup?.dispose();
+    this._buttonGroup = undefined;
+    this._$element?.empty();
   }
 
   dispose(): void {
-    this._buttonGroup?.dispose();
-    this._buttonGroup = undefined;
+    this._$element?.remove();
     this._$element = undefined;
   }
 }

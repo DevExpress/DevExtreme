@@ -7,8 +7,10 @@
   $box-shadow,
 ) {
   .dx-chat-suggestions {
+    padding: $padding;
+
     &:empty {
-      padding: $padding;
+      padding: 0;
     }
 
     .dx-button {

@@ -2,23 +2,22 @@ import $ from 'jquery';
 
 import Suggestions from '__internal/ui/chat/suggestions';
 
-const CHAT_SUGGESTIONS_CLASS = 'dx-chat-suggestions';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_ITEM_CLASS = 'dx-buttongroup-item';
 
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}) => {
-            this.$element = $('#component');
-            this.instance = new Suggestions(this.$element, options);
+            this.$container = $('#component');
+            this.instance = new Suggestions(this.$container, options);
         };
 
-        this.getSuggestions = () => this.$element.find(`.${CHAT_SUGGESTIONS_CLASS}`);
-        this.getItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        this.getSuggestions = () => this.$container.children().eq(0);
+        this.getItems = () => this.$container.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         this.reinit = (options) => {
             this.instance.dispose();
-            this.$element.empty();
+            this.$container.empty();
             init(options);
         };
 
@@ -61,6 +60,26 @@ QUnit.module('Suggestions', moduleConfig, () => {
 
             assert.strictEqual($items.length, 0, 'all items removed');
         });
+
+        QUnit.test('should clean ButtonGroup when called with undefined', function(assert) {
+            assert.strictEqual(this.getSuggestions().hasClass(BUTTON_GROUP_CLASS), true, 'ButtonGroup rendered initially');
+
+            this.instance.updateOptions(undefined);
+
+            const $element = this.$container.children().eq(0);
+
+            assert.strictEqual($element.hasClass(BUTTON_GROUP_CLASS), false, 'ButtonGroup cleaned after updateOptions(undefined)');
+            assert.strictEqual($element.length, 1, 'container element remains in DOM');
+        });
+
+        QUnit.test('should clean ButtonGroup when called with empty object', function(assert) {
+            assert.strictEqual(this.getSuggestions().hasClass(BUTTON_GROUP_CLASS), true, 'ButtonGroup rendered initially');
+
+            this.instance.updateOptions({});
+
+            assert.strictEqual(this.getSuggestions().hasClass(BUTTON_GROUP_CLASS), false, 'ButtonGroup cleaned after updateOptions({})');
+            assert.strictEqual(this.getSuggestions().length, 1, 'container element remains in DOM');
+        });
     });
 
     QUnit.module('dispose', () => {
@@ -82,6 +101,12 @@ QUnit.module('Suggestions', moduleConfig, () => {
             } catch(e) {
                 assert.ok(false, `dispose threw an error: ${e.message}`);
             }
+        });
+
+        QUnit.test('should remove element from DOM after dispose', function(assert) {
+            this.instance.dispose();
+
+            assert.strictEqual(this.getSuggestions().length, 0, 'element is removed from DOM after dispose');
         });
     });
 

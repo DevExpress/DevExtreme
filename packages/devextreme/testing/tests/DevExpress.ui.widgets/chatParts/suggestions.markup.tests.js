@@ -53,10 +53,10 @@ QUnit.module('Suggestions', moduleConfig, () => {
             assert.strictEqual($items.eq(1).text(), 'Second', 'second item text is correct');
         });
 
-        QUnit.test('should not render ButtonGroup if no options provided', function(assert) {
+        QUnit.test('should not add suggestions class if no options provided', function(assert) {
             this.reinit();
 
-            assert.strictEqual(this.$suggestions.hasClass(BUTTON_GROUP_CLASS), false, 'ButtonGroup is not rendered');
+            assert.strictEqual(this.$suggestions.length, 0, 'suggestions element with class is not rendered');
         });
 
         QUnit.test('should use outlined stylingMode by default', function(assert) {

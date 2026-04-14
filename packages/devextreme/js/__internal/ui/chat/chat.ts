@@ -805,13 +805,8 @@ class Chat extends Widget<ChatProperties> {
     this._insertNewItem(message);
   }
 
-  _clean(): void {
-    this._suggestions?.dispose();
-    this._suggestions = undefined;
-    super._clean();
-  }
-
   _dispose(): void {
+    this._suggestions?.dispose();
     this._deleteConfirmationPopup?.dispose();
     super._dispose();
   }
