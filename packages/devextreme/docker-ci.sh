@@ -90,7 +90,7 @@ function run_test_impl {
         [ "$GITHUBACTION" == "true" ] && max_attempts=45
         
         for i in $(seq $max_attempts -1 0); do
-            if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
+            if [ -n "$runner_pid" ] && ! kill -0 $runner_pid 2>/dev/null; then
                 echo "❌ Runner exited unexpectedly"
                 return 1
             fi
@@ -170,21 +170,25 @@ function run_test_impl {
     fi
     eval "$chrome_command --version"
     eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
+    local chrome_pid=$!
+    echo "Chrome PID: $chrome_pid"
 
-    start_runner_watchdog $runner_pid
+    start_runner_watchdog $runner_pid $chrome_pid
     wait $runner_pid || runner_result=1
     return $runner_result
 }
 
 function start_runner_watchdog {
     local runner_pid=$1
+    local chrome_pid=$2
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local raw_log_file="$PWD/testing/RawLog.txt"
+    local chrome_log_file="$PWD/chrome.log"
     local last_suite_time=""
     local stall_count=0
     local check_count=0
 
-    echo "Watchdog started: monitoring PID $runner_pid, checking every 300s, max 6 failures = 30min timeout"
+    echo "Watchdog started: monitoring runner PID $runner_pid, chrome PID $chrome_pid, checking every 180s, max 6 failures = 18min timeout"
 
     (
         while true; do
@@ -200,7 +204,7 @@ function start_runner_watchdog {
                 echo "Watchdog [check #$check_count]: LastSuiteTime.txt does not exist yet (waiting for first test...)"
                 if [ $check_count -gt 2 ]; then
                     stall_count=$((stall_count + 1))
-                    echo "Watchdog WARNING: No LastSuiteTime.txt after $((check_count * 5)) minutes"
+                    echo "Watchdog WARNING: No LastSuiteTime.txt after $((check_count * 3)) minutes"
                 fi
             else
                 local current_time=$(cat $last_suite_time_file)
@@ -214,7 +218,7 @@ function start_runner_watchdog {
                     
                     if [ $stall_count -ge 6 ]; then
                         echo "========================================="
-                        echo "WATCHDOG TIMEOUT: Runner stalled for 30 minutes (6 checks × 5 min)"
+                        echo "WATCHDOG TIMEOUT: Runner stalled for 18 minutes (6 checks × 3 min)"
                         echo "Last suite time: $last_suite_time"
                         echo "========================================="
                         echo "===== Last 100 lines of RawLog.txt ====="
@@ -227,6 +231,11 @@ function start_runner_watchdog {
                             echo "(MiscErrors.log not found)"
                         fi
                         echo ""
+                        echo "===== Last 50 lines of chrome.log ====="
+                        tail -n 50 $chrome_log_file 2>/dev/null || echo "(chrome.log not found)"
+                        echo ""
+                        echo "Killing chrome process $chrome_pid..."
+                        kill -9 $chrome_pid 2>/dev/null
                         echo "Killing runner process $runner_pid..."
                         kill -9 $runner_pid 2>/dev/null
                         exit 1
