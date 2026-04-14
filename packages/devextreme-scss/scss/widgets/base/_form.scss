@@ -79,6 +79,7 @@
 
     .dx-field-item-content {
       vertical-align: top;
+      min-width: 0;
 
       // TODO: form layout manager should not contains settings with checkbox/switch classes
       .dx-checkbox,
