@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-list-tree-list-editing',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

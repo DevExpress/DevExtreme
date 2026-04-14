@@ -24,6 +24,7 @@ import type { Store } from 'devextreme/data/store';
 import type { Format } from 'devextreme/common/core/localization';
 import type { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
 import type { dxSpeechToTextOptions } from 'devextreme/ui/speech_to_text';
+import type { dxButtonGroupOptions } from 'devextreme/ui/button_group';
 
 import {
     DxIntegrationModule,
@@ -40,7 +41,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-list-chat',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
@@ -388,6 +388,14 @@ export class DxoTreeListChatComponent extends NestedOption implements OnDestroy,
     }
     set speechToTextOptions(value: dxSpeechToTextOptions) {
         this._setOption('speechToTextOptions', value);
+    }
+
+    @Input()
+    get suggestions(): dxButtonGroupOptions {
+        return this._getOption('suggestions');
+    }
+    set suggestions(value: dxButtonGroupOptions) {
+        this._setOption('suggestions', value);
     }
 
     @Input()

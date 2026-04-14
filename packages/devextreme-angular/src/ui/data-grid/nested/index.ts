@@ -104,6 +104,8 @@ export * from './speech-recognition-config';
 export * from './speech-to-text-options';
 export * from './state-storing';
 export * from './string-length-rule-dxi';
+export * from './suggestions-item-dxi';
+export * from './suggestions';
 export * from './summary-texts';
 export * from './summary';
 export * from './tab-dxi';

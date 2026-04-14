@@ -293,6 +293,16 @@ import {
  SpeechRecognitionConfig,
 } from "devextreme/ui/speech_to_text";
 import {
+ dxButtonGroupOptions,
+ dxButtonGroupItem,
+ ContentReadyEvent as ButtonGroupContentReadyEvent,
+ DisposingEvent as ButtonGroupDisposingEvent,
+ InitializedEvent as ButtonGroupInitializedEvent,
+ ItemClickEvent,
+ OptionChangedEvent as ButtonGroupOptionChangedEvent,
+ SelectionChangedEvent as ButtonGroupSelectionChangedEvent,
+} from "devextreme/ui/button_group";
+import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
@@ -314,7 +324,7 @@ import {
  ContentReadyEvent as TabPanelContentReadyEvent,
  DisposingEvent as TabPanelDisposingEvent,
  InitializedEvent as TabPanelInitializedEvent,
- ItemClickEvent,
+ ItemClickEvent as TabPanelItemClickEvent,
  ItemContextMenuEvent,
  ItemHoldEvent,
  ItemRenderedEvent,
@@ -1202,6 +1212,7 @@ const DxChatConfig = {
     "update:showUserName": null,
     "update:speechToTextEnabled": null,
     "update:speechToTextOptions": null,
+    "update:suggestions": null,
     "update:typingUsers": null,
     "update:user": null,
     "update:visible": null,
@@ -1249,6 +1260,7 @@ const DxChatConfig = {
     showUserName: Boolean,
     speechToTextEnabled: Boolean,
     speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any>>,
+    suggestions: Object as PropType<dxButtonGroupOptions | Record<string, any>>,
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
@@ -1272,6 +1284,7 @@ const DxChat = defineComponent(DxChatConfig);
   messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
   sendButtonOptions: { isCollectionItem: false, optionName: "sendButtonOptions" },
   speechToTextOptions: { isCollectionItem: false, optionName: "speechToTextOptions" },
+  suggestions: { isCollectionItem: false, optionName: "suggestions" },
   typingUser: { isCollectionItem: true, optionName: "typingUsers" },
   user: { isCollectionItem: false, optionName: "user" }
 };
@@ -3599,7 +3612,9 @@ const DxItemConfig = {
     "update:disabled": null,
     "update:editorOptions": null,
     "update:editorType": null,
+    "update:elementAttr": null,
     "update:helpText": null,
+    "update:hint": null,
     "update:horizontalAlignment": null,
     "update:html": null,
     "update:icon": null,
@@ -3649,7 +3664,9 @@ const DxItemConfig = {
     disabled: Boolean,
     editorOptions: {},
     editorType: String as PropType<FormItemComponent>,
+    elementAttr: Object as PropType<Record<string, any>>,
     helpText: String,
+    hint: String,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
     html: String,
     icon: String,
@@ -3674,7 +3691,7 @@ const DxItemConfig = {
     text: String,
     timestamp: [Date, Number, String],
     title: String,
-    type: String,
+    type: String as PropType<string | ButtonType>,
     validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
     verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
@@ -4862,6 +4879,107 @@ const DxStringLengthRule = defineComponent(DxStringLengthRuleConfig);
   type: "stringLength"
 };
 
+const DxSuggestionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:buttonTemplate": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:items": null,
+    "update:keyExpr": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onInitialized": null,
+    "update:onItemClick": null,
+    "update:onOptionChanged": null,
+    "update:onSelectionChanged": null,
+    "update:rtlEnabled": null,
+    "update:selectedItemKeys": null,
+    "update:selectedItems": null,
+    "update:selectionMode": null,
+    "update:stylingMode": null,
+    "update:tabIndex": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    buttonTemplate: {},
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    items: Array as PropType<Array<dxButtonGroupItem>>,
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    onContentReady: Function as PropType<((e: ButtonGroupContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: ButtonGroupDisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: ButtonGroupInitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonGroupOptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: ButtonGroupSelectionChangedEvent) => void)>,
+    rtlEnabled: Boolean,
+    selectedItemKeys: Array as PropType<Array<any>>,
+    selectedItems: Array as PropType<Array<any>>,
+    selectionMode: String as PropType<SingleMultipleOrNone>,
+    stylingMode: String as PropType<ButtonStyle>,
+    tabIndex: Number,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxSuggestionsConfig);
+
+const DxSuggestions = defineComponent(DxSuggestionsConfig);
+
+(DxSuggestions as any).$_optionName = "suggestions";
+(DxSuggestions as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" },
+  suggestionsItem: { isCollectionItem: true, optionName: "items" }
+};
+
+const DxSuggestionsItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:hint": null,
+    "update:icon": null,
+    "update:template": null,
+    "update:text": null,
+    "update:type": null,
+    "update:visible": null,
+  },
+  props: {
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    hint: String,
+    icon: String,
+    template: {},
+    text: String,
+    type: String as PropType<ButtonType | string>,
+    visible: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxSuggestionsItemConfig);
+
+const DxSuggestionsItem = defineComponent(DxSuggestionsItemConfig);
+
+(DxSuggestionsItem as any).$_optionName = "items";
+(DxSuggestionsItem as any).$_isCollectionItem = true;
+
 const DxSummaryConfig = {
   emits: {
     "update:isActive": null,
@@ -5079,7 +5197,7 @@ const DxTabPanelOptionsConfig = {
     onContentReady: Function as PropType<((e: TabPanelContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: TabPanelDisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: TabPanelInitializedEvent) => void)>,
-    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemClick: Function as PropType<((e: TabPanelItemClickEvent) => void)>,
     onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
     onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
     onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
@@ -5600,6 +5718,8 @@ export {
   DxSpeechToTextOptions,
   DxStateStoring,
   DxStringLengthRule,
+  DxSuggestions,
+  DxSuggestionsItem,
   DxSummary,
   DxSummaryTexts,
   DxTab,

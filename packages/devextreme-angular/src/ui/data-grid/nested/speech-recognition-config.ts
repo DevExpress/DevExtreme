@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-speech-recognition-config',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

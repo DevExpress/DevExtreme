@@ -223,6 +223,8 @@ import { DxoDataGridSpeechRecognitionConfigModule } from 'devextreme-angular/ui/
 import { DxoDataGridSpeechToTextOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridStateStoringModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridStringLengthRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSuggestionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridSuggestionsItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSummaryModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSummaryTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridTabModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -2596,6 +2598,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridSpeechToTextOptionsModule,
     DxoDataGridStateStoringModule,
     DxiDataGridStringLengthRuleModule,
+    DxoDataGridSuggestionsModule,
+    DxiDataGridSuggestionsItemModule,
     DxoDataGridSummaryModule,
     DxoDataGridSummaryTextsModule,
     DxiDataGridTabModule,
@@ -2786,6 +2790,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridSpeechToTextOptionsModule,
     DxoDataGridStateStoringModule,
     DxiDataGridStringLengthRuleModule,
+    DxoDataGridSuggestionsModule,
+    DxiDataGridSuggestionsItemModule,
     DxoDataGridSummaryModule,
     DxoDataGridSummaryTextsModule,
     DxiDataGridTabModule,

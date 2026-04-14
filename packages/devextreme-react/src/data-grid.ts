@@ -18,7 +18,8 @@ import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, ValueChangedEvent as FilterBuilderValueChangedEvent, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, FormItemType, FormPredefinedButtonItem, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as SpeechToTextContentReadyEvent, DisposingEvent as SpeechToTextDisposingEvent, InitializedEvent as SpeechToTextInitializedEvent, OptionChangedEvent as SpeechToTextOptionChangedEvent, dxSpeechToTextOptions, CustomSpeechRecognizer as SpeechToTextCustomSpeechRecognizer, EndEvent, ErrorEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig as SpeechToTextSpeechRecognitionConfig } from "devextreme/ui/speech_to_text";
-import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
+import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupOptions, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
+import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, ItemClickEvent as TabPanelItemClickEvent, SelectionChangedEvent as TabPanelSelectionChangedEvent, dxTabPanelItem, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { DisposingEvent as ChatDisposingEvent, InitializedEvent as ChatInitializedEvent, dxChatOptions, OptionChangedEvent as ChatOptionChangedEvent, Alert as ChatAlert, Message, AttachmentDownloadClickEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, User as ChatUser, Attachment as ChatAttachment, SendButtonAction, SendButtonClickEvent } from "devextreme/ui/chat";
 import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
@@ -136,7 +137,7 @@ const DataGrid = memo(
         }
       ), []);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter","aIAssistant.chat.items","chat.editing.changes","chat.editing.editColumnName","chat.editing.editRowKey","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","dataGridEditing.form.formData","dataGridEditing.popup.height","aIAssistant.popup.height","dataGridEditing.popup.position","aIAssistant.popup.position","dataGridEditing.popup.visible","aIAssistant.popup.visible","dataGridEditing.popup.width","aIAssistant.popup.width","searchPanel.text"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter","aIAssistant.chat.items","chat.editing.changes","chat.editing.editColumnName","chat.editing.editRowKey","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","dataGridEditing.form.formData","dataGridEditing.popup.height","aIAssistant.popup.height","dataGridEditing.popup.position","aIAssistant.popup.position","dataGridEditing.popup.visible","aIAssistant.popup.visible","dataGridEditing.popup.width","aIAssistant.popup.width","searchPanel.text","chat.suggestions.selectedItemKeys","chat.suggestions.selectedItems"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onAIAssistantRequestCreating","onAIColumnRequestCreating","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
@@ -633,6 +634,7 @@ type IChatProps = React.PropsWithChildren<{
   showUserName?: boolean;
   speechToTextEnabled?: boolean;
   speechToTextOptions?: dxSpeechToTextOptions;
+  suggestions?: dxButtonGroupOptions;
   typingUsers?: Array<ChatUser>;
   user?: ChatUser;
   visible?: boolean;
@@ -663,6 +665,7 @@ const _componentChat = (props: IChatProps) => {
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
         sendButtonOptions: { optionName: "sendButtonOptions", isCollectionItem: false },
         speechToTextOptions: { optionName: "speechToTextOptions", isCollectionItem: false },
+        suggestions: { optionName: "suggestions", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       },
@@ -2771,6 +2774,7 @@ const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, Nested
 // Form
 // Toolbar
 // Chat
+// Suggestions
 type IItemProps = React.PropsWithChildren<{
   badge?: string;
   disabled?: boolean;
@@ -2850,7 +2854,9 @@ type IItemProps = React.PropsWithChildren<{
   isEdited?: boolean;
   src?: string;
   timestamp?: Date | number | string;
-  type?: string | undefined;
+  type?: string | undefined | ButtonType;
+  elementAttr?: Record<string, any>;
+  hint?: string;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -3960,6 +3966,100 @@ const StringLengthRule = Object.assign<typeof _componentStringLengthRule, Nested
 });
 
 // owners:
+// Chat
+type ISuggestionsProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  buttonTemplate?: ((buttonData: any, buttonContent: any) => string | any) | template;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  height?: number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  items?: Array<dxButtonGroupItem>;
+  keyExpr?: (() => void) | string;
+  onContentReady?: ((e: ButtonGroupContentReadyEvent) => void);
+  onDisposing?: ((e: ButtonGroupDisposingEvent) => void);
+  onInitialized?: ((e: ButtonGroupInitializedEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void);
+  onOptionChanged?: ((e: ButtonGroupOptionChangedEvent) => void);
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+  rtlEnabled?: boolean;
+  selectedItemKeys?: Array<any>;
+  selectedItems?: Array<any>;
+  selectionMode?: SingleMultipleOrNone;
+  stylingMode?: ButtonStyle;
+  tabIndex?: number;
+  visible?: boolean;
+  width?: number | string | undefined;
+  defaultSelectedItemKeys?: Array<any>;
+  onSelectedItemKeysChange?: (value: Array<any>) => void;
+  defaultSelectedItems?: Array<any>;
+  onSelectedItemsChange?: (value: Array<any>) => void;
+  buttonRender?: (...params: any) => React.ReactNode;
+  buttonComponent?: React.ComponentType<any>;
+}>
+const _componentSuggestions = (props: ISuggestionsProps) => {
+  return React.createElement(NestedOption<ISuggestionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "suggestions",
+      DefaultsProps: {
+        defaultSelectedItemKeys: "selectedItemKeys",
+        defaultSelectedItems: "selectedItems"
+      },
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        suggestionsItem: { optionName: "items", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "buttonTemplate",
+        render: "buttonRender",
+        component: "buttonComponent"
+      }],
+    },
+  });
+};
+
+const Suggestions = Object.assign<typeof _componentSuggestions, NestedComponentMeta>(_componentSuggestions, {
+  componentType: "option",
+});
+
+// owners:
+// Suggestions
+type ISuggestionsItemProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  hint?: string;
+  icon?: string;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  type?: ButtonType | string;
+  visible?: boolean;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentSuggestionsItem = (props: ISuggestionsItemProps) => {
+  return React.createElement(NestedOption<ISuggestionsItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const SuggestionsItem = Object.assign<typeof _componentSuggestionsItem, NestedComponentMeta>(_componentSuggestionsItem, {
+  componentType: "option",
+});
+
+// owners:
 // DataGrid
 type ISummaryProps = React.PropsWithChildren<{
   calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void);
@@ -4169,12 +4269,12 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onContentReady?: ((e: TabPanelContentReadyEvent) => void);
   onDisposing?: ((e: TabPanelDisposingEvent) => void);
   onInitialized?: ((e: TabPanelInitializedEvent) => void);
-  onItemClick?: ((e: ItemClickEvent) => void);
+  onItemClick?: ((e: TabPanelItemClickEvent) => void);
   onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
   onItemHold?: ((e: ItemHoldEvent) => void);
   onItemRendered?: ((e: ItemRenderedEvent) => void);
   onOptionChanged?: ((e: TabPanelOptionChangedEvent) => void);
-  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+  onSelectionChanged?: ((e: TabPanelSelectionChangedEvent) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
   onTitleHold?: ((e: TitleHoldEvent) => void);
@@ -4780,6 +4880,10 @@ export {
   IStateStoringProps,
   StringLengthRule,
   IStringLengthRuleProps,
+  Suggestions,
+  ISuggestionsProps,
+  SuggestionsItem,
+  ISuggestionsItemProps,
   Summary,
   ISummaryProps,
   SummaryTexts,

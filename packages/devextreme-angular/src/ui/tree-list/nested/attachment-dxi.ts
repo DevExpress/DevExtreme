@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_attachments } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-attachment',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

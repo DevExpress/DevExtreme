@@ -20,7 +20,7 @@ import { DOCUMENT } from '@angular/common';
 
 import type * as CommonTypes from 'devextreme/common';
 import type { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
-import type { HorizontalAlignment, VerticalAlignment, ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import type { HorizontalAlignment, VerticalAlignment, ToolbarItemLocation, ToolbarItemComponent, ButtonType } from 'devextreme/common';
 import type { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
 import type { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import type { dxButtonOptions } from 'devextreme/ui/button';
@@ -457,11 +457,27 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get type(): string | undefined {
+    get type(): string | undefined | ButtonType {
         return this._getOption('type');
     }
-    set type(value: string | undefined) {
+    set type(value: string | undefined | ButtonType) {
         this._setOption('type', value);
+    }
+
+    @Input()
+    get elementAttr(): Record<string, any> {
+        return this._getOption('elementAttr');
+    }
+    set elementAttr(value: Record<string, any>) {
+        this._setOption('elementAttr', value);
+    }
+
+    @Input()
+    get hint(): string {
+        return this._getOption('hint');
+    }
+    set hint(value: string) {
+        this._setOption('hint', value);
     }
 
 

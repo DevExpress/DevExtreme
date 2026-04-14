@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-alert',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

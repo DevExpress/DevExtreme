@@ -198,6 +198,8 @@ import { DxoTreeListSpeechRecognitionConfigModule } from 'devextreme-angular/ui/
 import { DxoTreeListSpeechToTextOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListStateStoringModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListStringLengthRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListSuggestionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListSuggestionsItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListTabModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListTabbedItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTabPanelOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -2526,6 +2528,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSpeechToTextOptionsModule,
     DxoTreeListStateStoringModule,
     DxiTreeListStringLengthRuleModule,
+    DxoTreeListSuggestionsModule,
+    DxiTreeListSuggestionsItemModule,
     DxiTreeListTabModule,
     DxiTreeListTabbedItemModule,
     DxoTreeListTabPanelOptionsModule,
@@ -2695,6 +2699,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSpeechToTextOptionsModule,
     DxoTreeListStateStoringModule,
     DxiTreeListStringLengthRuleModule,
+    DxoTreeListSuggestionsModule,
+    DxiTreeListSuggestionsItemModule,
     DxiTreeListTabModule,
     DxiTreeListTabbedItemModule,
     DxoTreeListTabPanelOptionsModule,

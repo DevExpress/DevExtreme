@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-data-grid-chat-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

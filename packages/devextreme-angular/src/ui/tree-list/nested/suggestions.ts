@@ -8,30 +8,43 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    Output,
+    EventEmitter,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 
 
 
-import type { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
-import type { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import type { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
-    selector: 'dxo-tree-list-speech-to-text-options',
+    selector: 'dxo-tree-list-suggestions',
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListSuggestionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -49,11 +62,11 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get customSpeechRecognizer(): CustomSpeechRecognizer {
-        return this._getOption('customSpeechRecognizer');
+    get buttonTemplate(): any {
+        return this._getOption('buttonTemplate');
     }
-    set customSpeechRecognizer(value: CustomSpeechRecognizer) {
-        this._setOption('customSpeechRecognizer', value);
+    set buttonTemplate(value: any) {
+        this._setOption('buttonTemplate', value);
     }
 
     @Input()
@@ -105,6 +118,22 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
     }
 
     @Input()
+    get items(): Array<dxButtonGroupItem> {
+        return this._getOption('items');
+    }
+    set items(value: Array<dxButtonGroupItem>) {
+        this._setOption('items', value);
+    }
+
+    @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
+    }
+
+    @Input()
     get onContentReady(): ((e: ContentReadyEvent) => void) {
         return this._getOption('onContentReady');
     }
@@ -121,27 +150,19 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get onEnd(): ((e: EndEvent) => void) | undefined {
-        return this._getOption('onEnd');
-    }
-    set onEnd(value: ((e: EndEvent) => void) | undefined) {
-        this._setOption('onEnd', value);
-    }
-
-    @Input()
-    get onError(): ((e: ErrorEvent) => void) | undefined {
-        return this._getOption('onError');
-    }
-    set onError(value: ((e: ErrorEvent) => void) | undefined) {
-        this._setOption('onError', value);
-    }
-
-    @Input()
     get onInitialized(): ((e: InitializedEvent) => void) {
         return this._getOption('onInitialized');
     }
     set onInitialized(value: ((e: InitializedEvent) => void)) {
         this._setOption('onInitialized', value);
+    }
+
+    @Input()
+    get onItemClick(): ((e: ItemClickEvent) => void) {
+        return this._getOption('onItemClick');
+    }
+    set onItemClick(value: ((e: ItemClickEvent) => void)) {
+        this._setOption('onItemClick', value);
     }
 
     @Input()
@@ -153,27 +174,11 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get onResult(): ((e: ResultEvent) => void) | undefined {
-        return this._getOption('onResult');
+    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) {
+        return this._getOption('onSelectionChanged');
     }
-    set onResult(value: ((e: ResultEvent) => void) | undefined) {
-        this._setOption('onResult', value);
-    }
-
-    @Input()
-    get onStartClick(): ((e: StartClickEvent) => void) | undefined {
-        return this._getOption('onStartClick');
-    }
-    set onStartClick(value: ((e: StartClickEvent) => void) | undefined) {
-        this._setOption('onStartClick', value);
-    }
-
-    @Input()
-    get onStopClick(): ((e: StopClickEvent) => void) | undefined {
-        return this._getOption('onStopClick');
-    }
-    set onStopClick(value: ((e: StopClickEvent) => void) | undefined) {
-        this._setOption('onStopClick', value);
+    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void)) {
+        this._setOption('onSelectionChanged', value);
     }
 
     @Input()
@@ -185,43 +190,27 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get speechRecognitionConfig(): Record<string, any> | SpeechRecognitionConfig {
-        return this._getOption('speechRecognitionConfig');
+    get selectedItemKeys(): Array<any> {
+        return this._getOption('selectedItemKeys');
     }
-    set speechRecognitionConfig(value: Record<string, any> | SpeechRecognitionConfig) {
-        this._setOption('speechRecognitionConfig', value);
-    }
-
-    @Input()
-    get startIcon(): string {
-        return this._getOption('startIcon');
-    }
-    set startIcon(value: string) {
-        this._setOption('startIcon', value);
+    set selectedItemKeys(value: Array<any>) {
+        this._setOption('selectedItemKeys', value);
     }
 
     @Input()
-    get startText(): string {
-        return this._getOption('startText');
+    get selectedItems(): Array<any> {
+        return this._getOption('selectedItems');
     }
-    set startText(value: string) {
-        this._setOption('startText', value);
-    }
-
-    @Input()
-    get stopIcon(): string {
-        return this._getOption('stopIcon');
-    }
-    set stopIcon(value: string) {
-        this._setOption('stopIcon', value);
+    set selectedItems(value: Array<any>) {
+        this._setOption('selectedItems', value);
     }
 
     @Input()
-    get stopText(): string {
-        return this._getOption('stopText');
+    get selectionMode(): SingleMultipleOrNone {
+        return this._getOption('selectionMode');
     }
-    set stopText(value: string) {
-        this._setOption('stopText', value);
+    set selectionMode(value: SingleMultipleOrNone) {
+        this._setOption('selectionMode', value);
     }
 
     @Input()
@@ -241,14 +230,6 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get type(): ButtonType | string {
-        return this._getOption('type');
-    }
-    set type(value: ButtonType | string) {
-        this._setOption('type', value);
-    }
-
-    @Input()
     get visible(): boolean {
         return this._getOption('visible');
     }
@@ -265,14 +246,32 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedItemKeysChange: EventEmitter<Array<any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedItemsChange: EventEmitter<Array<any>>;
     protected get _optionPath() {
-        return 'speechToTextOptions';
+        return 'suggestions';
     }
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+        this._createEventEmitters([
+            { emit: 'selectedItemKeysChange' },
+            { emit: 'selectedItemsChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }
@@ -291,10 +290,10 @@ export class DxoTreeListSpeechToTextOptionsComponent extends NestedOption implem
 
 @NgModule({
   imports: [
-    DxoTreeListSpeechToTextOptionsComponent
+    DxoTreeListSuggestionsComponent
   ],
   exports: [
-    DxoTreeListSpeechToTextOptionsComponent
+    DxoTreeListSuggestionsComponent
   ],
 })
-export class DxoTreeListSpeechToTextOptionsModule { }
+export class DxoTreeListSuggestionsModule { }

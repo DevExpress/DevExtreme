@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-tree-list-chat-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
