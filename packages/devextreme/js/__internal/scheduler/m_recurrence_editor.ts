@@ -365,6 +365,7 @@ class RecurrenceEditor extends Editor {
       dataField: 'bymonth',
       editorType: 'dxSelectBox',
       editorOptions: {
+        labelMode: 'hidden',
         stylingMode: getStylingModeFunc(),
         field: 'bymonth',
         items: months,
@@ -389,6 +390,7 @@ class RecurrenceEditor extends Editor {
       dataField: 'bymonthday',
       editorType: 'dxNumberBox',
       editorOptions: {
+        labelMode: 'hidden',
         stylingMode: getStylingModeFunc(),
         min: 1,
         max: 31,
@@ -422,6 +424,7 @@ class RecurrenceEditor extends Editor {
       dataField: 'repeatEnd',
       editorType: 'dxRadioGroup',
       editorOptions: {
+        labelMode: 'hidden',
         items: repeatEndTypes,
         value: repeatType,
         valueExpr: 'type',
@@ -565,6 +568,7 @@ class RecurrenceEditor extends Editor {
       label: { visible: false },
       editorType: 'dxNumberBox',
       editorOptions: {
+        labelMode: 'hidden',
         stylingMode: getStylingModeFunc(),
         field: 'count',
         format: `# ${messageLocalization.format('dxScheduler-recurrenceRepeatCount')}`,
@@ -613,6 +617,7 @@ class RecurrenceEditor extends Editor {
       cssClass: REPEAT_UNTIL_DATE_EDITOR,
       editorType: 'dxDateBox',
       editorOptions: {
+        labelMode: 'hidden',
         stylingMode: getStylingModeFunc(),
         field: 'until',
         value: until,
