@@ -230,7 +230,7 @@ describe('getViewModelDiff', () => {
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
     expect(getOperations(diff)).toBe('+-=+=-');
-    expect(diff[2]).toEqual({ item: bItem1, oldSortedIndex: 5 });
+    expect(diff[2]).toEqual({ item: bItem1, oldSortedIndex: 1 });
   });
 
   describe('needToResize', () => {
