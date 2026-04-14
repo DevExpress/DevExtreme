@@ -797,7 +797,7 @@ QUnit.module('Form', () => {
         assert.equal(templateStub.getCall(0).args[0].name, undefined, 'name argument');
     });
 
-    test('TagBox should not exceed group column width when many items are selected', function(assert) {
+    test('TagBox should not exceed group column width when many items are selected (T1326645)', function(assert) {
         const $form = $('#form').width(600);
 
         $form.dxForm({
