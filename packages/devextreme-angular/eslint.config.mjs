@@ -7,6 +7,9 @@ import tsParser from '@typescript-eslint/parser';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import javascriptConfig from 'eslint-config-devextreme/javascript';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -42,15 +45,15 @@ export default [
       },
     },
   },
-  ...compat.extends('devextreme/spell-check'),
-  ...compat.extends('devextreme/javascript').map((config) => ({
+  ...spellCheckConfig,
+  ...javascriptConfig.map((config) => ({
     ...config,
     files: ['**/*.js', '**/*.mjs'],
     languageOptions: {
       parser: babelParser,
     },
   })),
-  ...compat.extends('devextreme/typescript').map((config) => ({
+  ...typescriptConfig.map((config) => ({
     ...config,
     rules: config.rules
       ? changeRulesToStylistic(config.rules)
