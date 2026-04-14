@@ -7,7 +7,7 @@ import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/a
 
 import fx from '../../../common/core/animation/fx';
 import { getBaseAppointmentViewProperties } from '../__mock__/base_appointment_view';
-import { AGENDA_APPOINTMENT_CLASSES, APPOINTMENT_CLASSES } from '../const';
+import { AGENDA_APPOINTMENT_CLASSES, APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import type { AgendaAppointmentViewProperties } from './agenda_appointment';
 import { AgendaAppointmentView } from './agenda_appointment';
 
@@ -84,6 +84,31 @@ describe('AgendaAppointment', () => {
       expect(
         instance.$element().hasClass(AGENDA_APPOINTMENT_CLASSES.LAST_IN_DATE),
       ).toBe(isLastInGroup);
+    });
+
+    it('should have has-resource class when resource color is applied', async () => {
+      const instance = await createAgendaAppointment({
+        ...getProperties(defaultAppointmentData),
+        getResourceColor: () => Promise.resolve('red'),
+      });
+
+      expect(instance.$element().hasClass(APPOINTMENT_TYPE_CLASSES.HAS_RESOURCE)).toBe(true);
+    });
+  });
+
+  describe('Geometry', () => {
+    it('should apply geometry on init', async () => {
+      const instance = await createAgendaAppointment({
+        ...getProperties(defaultAppointmentData),
+        geometry: {
+          width: '100%', height: 50,
+        },
+      });
+
+      const $element = instance.$element();
+
+      expect($element.css('width')).toBe('100%');
+      expect($element.css('height')).toBe('50px');
     });
   });
 

@@ -15,6 +15,7 @@ export const APPOINTMENT_TYPE_CLASSES = {
   EMPTY: 'dx-scheduler-appointment-empty',
   ALL_DAY: 'dx-scheduler-all-day-appointment',
   RECURRING: 'dx-scheduler-appointment-recurrence',
+  HAS_RESOURCE: 'dx-scheduler-appointment-has-resource-color',
 };
 
 export const APPOINTMENT_CLASSES = {
