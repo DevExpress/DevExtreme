@@ -1,3 +1,7 @@
+import { ArrayStore } from '@js/common/data';
+import { isString } from '@js/core/utils/type';
+import type { Message } from '@js/ui/chat';
+
 import { Controller } from '../m_modules';
 import { GridCommands } from './grid_commands';
 import type {
@@ -10,6 +14,8 @@ interface MockAIIntegration {
 
 export class AIAssistantController extends Controller {
   private gridCommands!: GridCommands;
+
+  private messageStore!: ArrayStore<Message, string>;
 
   // TODO: need to specify type AIIntegration | null after creating AIIntegration command
   private getAIIntegration(): MockAIIntegration | null {
@@ -24,6 +30,42 @@ export class AIAssistantController extends Controller {
 
   public init(): void {
     this.gridCommands = new GridCommands(this.component);
+    this.messageStore = new ArrayStore<Message, string>({
+      key: 'id',
+    });
+  }
+
+  public getMessageStore(): ArrayStore<Message, string> {
+    return this.messageStore;
+  }
+
+  public processUserMessage(message: Message): void {
+    const parsedTimestamp = isString(message.timestamp)
+      ? Date.parse(message.timestamp)
+      : message.timestamp?.toString() ?? '';
+
+    this.messageStore.push([
+      {
+        type: 'insert',
+        data: {
+          ...message,
+          id: `${message.author?.id}-${parsedTimestamp}`,
+        },
+      },
+      {
+        type: 'insert',
+        data: {
+          id: Date.now(),
+          timestamp: parsedTimestamp,
+          // TODO: need to localize author name and move it to constants or options
+          author: { id: 'assistant', name: 'AI Assistant' },
+          text: message.text,
+        },
+      },
+    ]);
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.sendRequestToAI();
   }
 
   public sendRequestToAI(): Promise<ProcessedCommands> {
