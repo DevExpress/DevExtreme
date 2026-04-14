@@ -36,11 +36,11 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
       .toggleClass(AGENDA_APPOINTMENT_CLASSES.LAST_IN_DATE, this.option().modifiers.isLastInGroup);
   }
 
-  public override resize(geometry?: { height: number, width: string | number }): void {
-    const newGeometry = geometry ?? this.option().geometry;
-    const { height, width } = newGeometry;
-
-    this.$element().css({ height, width });
+  public override resize(): void {
+    this.$element().css({
+      height: this.option().geometry.height,
+      width: this.option().geometry.width,
+    });
   }
 
   protected override defaultAppointmentContent(
