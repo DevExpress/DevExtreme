@@ -67,7 +67,7 @@
     "del": "3.0.0",
     "devextreme-metadata": "workspace:*",
     "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-devextreme": "1.1.5",
+    "eslint-config-devextreme": "catalog:",
     "eslint-plugin-spellcheck": "0.0.20",
     "gulp": "4.0.2",
     "gulp-header": "2.0.9",
@@ -84,9 +84,11 @@
     "eslint-plugin-i18n": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-no-only-tests": "catalog:",
+    "eslint-plugin-vue": "catalog:",
     "@babel/eslint-parser": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:"
+    "@typescript-eslint/parser": "catalog:",
+    "vue-eslint-parser": "catalog:"
   },
   "publishConfig": {
     "directory": "npm",

@@ -48,8 +48,7 @@ const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
-type ItemClickEvent<TComponent, TItem> =
-  NativeEventInfo<TComponent, PointerInteractionEvent>
+type ItemClickEvent<TComponent, TItem> = NativeEventInfo<TComponent, PointerInteractionEvent>
   & ItemInfo<TItem>;
 export type HoverEvent = DxEvent<MouseEvent | PointerEvent>;
 export type ClickEvent = DxEvent<PointerInteractionEvent>;

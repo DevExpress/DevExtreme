@@ -79,8 +79,8 @@ describe('ColumnChooser', () => {
       );
 
       it.each<
-      { mode: ColumnChooserMode; sortOrder?: SortOrder; result: string[] }
-    >([
+        { mode: ColumnChooserMode; sortOrder?: SortOrder; result: string[] }
+      >([
         { mode: 'dragAndDrop', sortOrder: 'asc', result: ['A', 'B', 'C'] },
         { mode: 'dragAndDrop', sortOrder: 'desc', result: ['C', 'B', 'A'] },
         { mode: 'dragAndDrop', sortOrder: undefined, result: ['C', 'A', 'B'] },
@@ -110,8 +110,8 @@ describe('ColumnChooser', () => {
       );
 
       it.each<
-      { mode: ColumnChooserMode; sortOrder?: SortOrder; result: string[] }
-    >([
+        { mode: ColumnChooserMode; sortOrder?: SortOrder; result: string[] }
+      >([
         { mode: 'dragAndDrop', sortOrder: 'asc', result: ['A', 'C'] },
         { mode: 'dragAndDrop', sortOrder: 'desc', result: ['C', 'A'] },
         { mode: 'dragAndDrop', sortOrder: undefined, result: ['C', 'A'] },

@@ -26,8 +26,7 @@ export function Icon(props: Properties): JSX.Element {
   );
 }
 
-export type IconName =
-| 'add'
+export type IconName = | 'add'
 | 'airplane'
 | 'bookmark'
 | 'chat'

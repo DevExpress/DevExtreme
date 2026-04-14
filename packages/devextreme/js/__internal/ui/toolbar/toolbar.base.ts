@@ -47,7 +47,7 @@ export interface ToolbarBaseProperties<
   TKey extends CollectionItemKey = CollectionItemKey,
 > extends Properties<TItem, TKey>,
   Omit<
-  CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
+    CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
   keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
   > {
   grouped: boolean;

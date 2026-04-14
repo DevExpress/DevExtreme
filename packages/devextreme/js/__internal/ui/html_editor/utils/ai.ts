@@ -31,8 +31,7 @@ import { capitalize } from '@ts/core/utils/capitalize';
 export const AI_DIALOG_ASKAI_COMMAND_NAME = 'askAI';
 export const AI_DIALOG_CUSTOM_COMMAND_NAME = 'custom';
 
-type CommandOption =
-  | AIChangeStyleOption
+type CommandOption = | AIChangeStyleOption
   | AIChangeToneOption
   | AITranslateOption;
 

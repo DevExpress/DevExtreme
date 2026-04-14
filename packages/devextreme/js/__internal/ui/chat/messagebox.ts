@@ -21,9 +21,8 @@ export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
 
-export type MessageEnteredEvent =
-  NativeEventInfo<MessageBox, InteractionEvent> &
-  { text?: string };
+export type MessageEnteredEvent = NativeEventInfo<MessageBox, InteractionEvent>
+  & { text?: string };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
 

@@ -77,7 +77,7 @@
     "eslint": "catalog:eslint8",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "catalog:eslint8",
-    "eslint-config-devextreme": "1.1.5",
+    "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:eslint8",
     "gulp": "4.0.2",
     "gulp-header": "2.0.9",

@@ -120,7 +120,8 @@
         "eslint-plugin-import": "catalog:eslint8",
         "eslint-plugin-no-only-tests": "catalog:eslint8",
         "eslint-plugin-react": "7.33.2",
-        "eslint-plugin-react-perf": "3.3.2",
+        "eslint-plugin-react-perf": "3.3.3",
+        "eslint-plugin-vue": "catalog:",
         "express": "4.21.2",
         "glob": "10.4.5",
         "gulp": "4.0.2",
@@ -147,6 +148,7 @@
         "testcafe-reporter-spec-time": "4.0.0",
         "ts-node": "10.9.2",
         "@types/file-saver-es": "^2.0.3",
+        "vue-eslint-parser": "catalog:",
         "vue-tsc": "^3.0.6"
     },
     "scripts": {

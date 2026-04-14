@@ -612,53 +612,53 @@ describe('Options', () => {
       filterType?: HeaderFilterType;
       filterValues?: string[];
     }>([
-          {
-            caseName: 'custom dataSource',
-            dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
-            filterType: undefined,
-            filterValues: undefined,
-          },
-          {
-            caseName: 'custom dataSource with exclude filter',
-            dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
-            filterType: 'exclude',
-            filterValues: undefined,
-          },
-          {
-            caseName: 'custom dataSource with filter values',
-            dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
-            filterValues: ['B'],
-          },
-          {
-            caseName: 'custom dataSource with exclude filter and values',
-            dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
-            filterType: 'exclude',
-            filterValues: ['B'],
-          },
-        ])('dataSource: $caseName', ({ dataSource, filterType, filterValues }) => {
-          const cardView = setup({
-            dataSource: [
-              { A: 'A_0', B: 'B_0' },
-              { A: 'A_1', B: 'B_1' },
-              { A: 'A_2', B: 'B_2' },
-              { A: 'A_3', B: 'B_3' },
-              { A: 'A_4', B: 'B_4' },
-            ],
-            columns: [{
-              dataField: 'A',
-              headerFilter: { dataSource },
-              filterValues,
-              filterType,
-            }],
-            headerFilter: {
-              visible: true,
-            },
-          });
+      {
+        caseName: 'custom dataSource',
+        dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
+        filterType: undefined,
+        filterValues: undefined,
+      },
+      {
+        caseName: 'custom dataSource with exclude filter',
+        dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
+        filterType: 'exclude',
+        filterValues: undefined,
+      },
+      {
+        caseName: 'custom dataSource with filter values',
+        dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
+        filterValues: ['B'],
+      },
+      {
+        caseName: 'custom dataSource with exclude filter and values',
+        dataSource: [{ text: 'A', value: 'A' }, { text: 'B', value: 'B' }],
+        filterType: 'exclude',
+        filterValues: ['B'],
+      },
+    ])('dataSource: $caseName', ({ dataSource, filterType, filterValues }) => {
+      const cardView = setup({
+        dataSource: [
+          { A: 'A_0', B: 'B_0' },
+          { A: 'A_1', B: 'B_1' },
+          { A: 'A_2', B: 'B_2' },
+          { A: 'A_3', B: 'B_3' },
+          { A: 'A_4', B: 'B_4' },
+        ],
+        columns: [{
+          dataField: 'A',
+          headerFilter: { dataSource },
+          filterValues,
+          filterType,
+        }],
+        headerFilter: {
+          visible: true,
+        },
+      });
 
-          openHeaderFilterPopup(cardView);
-          const { element: popupContentElement } = getPopup();
+      openHeaderFilterPopup(cardView);
+      const { element: popupContentElement } = getPopup();
 
-          expect(popupContentElement).toMatchSnapshot();
-        });
+      expect(popupContentElement).toMatchSnapshot();
+    });
   });
 });

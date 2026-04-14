@@ -43,9 +43,9 @@ export function renderButtonItem({
   validationGroup,
   createComponentCallback,
 }: ButtonItemRenderInfo): {
-    $rootElement: dxElementWrapper;
-    buttonInstance: Button;
-  } {
+  $rootElement: dxElementWrapper;
+  buttonInstance: Button;
+} {
   const $rootElement = $('<div>')
     .appendTo($parent)
     .addClass(rootElementCssClassList.join(' '))

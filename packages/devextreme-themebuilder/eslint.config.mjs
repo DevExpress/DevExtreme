@@ -3,6 +3,8 @@ import { fileURLToPath } from 'node:url';
 import { FlatCompat } from '@eslint/eslintrc';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import stylistic from '@stylistic/eslint-plugin';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import jestConfig from 'eslint-config-devextreme/jest';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,7 +21,7 @@ export default [
             "jest.config.js",
         ],
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ["src/**/*.ts"],
@@ -57,7 +59,7 @@ export default [
             "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
         },
     },
-    ...compat.extends("devextreme/jest").map((config) => ({
+    ...jestConfig.map((config) => ({
         ...config,
         files: ["tests/**/*.ts"],
     })),

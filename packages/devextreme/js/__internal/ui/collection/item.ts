@@ -53,10 +53,10 @@ export interface ItemExtraOption<TProperties> {
   ) => () => void;
 }
 
-export type ItemClickEvent<TProperties> =
+export type ItemClickEvent<
+  TProperties,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  NativeEventInfo<any, KeyboardEvent | MouseEvent | PointerEvent>
-  & ItemInfo<TProperties>;
+> = NativeEventInfo<any, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TProperties>;
 
 export type ClickableCollectionWidgetItem<
   TProperties extends CollectionWidgetItem = CollectionWidgetItem,

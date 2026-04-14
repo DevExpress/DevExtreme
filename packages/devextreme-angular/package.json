@@ -54,7 +54,7 @@
     "del": "2.2.2",
     "devextreme-metadata": "workspace:*",
     "eslint": "catalog:",
-    "eslint-config-devextreme": "1.1.5",
+    "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-migration-utils": "workspace:*",
     "gulp": "4.0.2",
