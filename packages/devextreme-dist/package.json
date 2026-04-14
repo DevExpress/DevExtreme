@@ -42,13 +42,18 @@
     "Responsive-ui",
     "Javascript",
     "Typescript",
-    "shadowdom"  
+    "shadowdom"
   ],
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
+  "license": "SEE LICENSE IN LICENSE.md",
   "author": "Developer Express Inc.",
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git"
+  },
+  "publishConfig": {
+    "directory": "../devextreme/artifacts/npm/devextreme-dist",
+    "linkDirectory": true
   }
 }

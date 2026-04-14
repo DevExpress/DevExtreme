@@ -2,7 +2,6 @@ packages:
   - 'apps/*'
   - 'e2e/*'
   - 'packages/*'
-  - 'packages/devextreme/artifacts/npm/devextreme-dist'
   - '!packages/sbom'
 
 catalog:
