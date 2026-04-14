@@ -95,7 +95,7 @@ const HORIZONTAL_VIEW_CROSS_SCROLLING_CASES = {
   HORIZONTAL_VIEW_CROSS_SCROLLING_CASES,
 ].forEach(({ views, expect, crossScrollingEnabled }) => {
   views.forEach((view) => {
-    test.skip(
+    test(
       `Cells should have correct sizes and css classes (view:${view}, crossScrolling:${crossScrollingEnabled})`,
       async (t) => {
         const scheduler = new Scheduler(SELECTOR);

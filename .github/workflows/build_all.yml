@@ -109,5 +109,5 @@ jobs:
       - name: Build bundle
         working-directory: ./e2e/devextreme-bundler
         run: |
-          npx devextreme-bundler-init custom-bundle
-          npx devextreme-bundler custom-bundle
+          pnpm exec devextreme-bundler-init custom-bundle
+          pnpm exec devextreme-bundler custom-bundle

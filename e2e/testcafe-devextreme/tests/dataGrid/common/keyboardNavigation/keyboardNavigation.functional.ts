@@ -1,5 +1,6 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Button from 'devextreme-testcafe-models/button';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
@@ -1336,6 +1337,90 @@ test('Tab key on the focused group row should be handled by default behavior (T8
     grouping: {
       autoExpandAll: false,
     },
+  });
+});
+
+test('DataGrid - Focus should move back to headers on Shift+Tab when multiple grouping is applied (T1325775)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+  const headerCell = headerRow.getHeaderCell(2);
+  const stateGroupRow = dataGrid.getGroupRow(0);
+  const cityGroupRow = dataGrid.getGroupRow(1);
+  const firstDataCell = dataGrid.getDataCell(2, 2);
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await addFocusableElementBefore('#container');
+
+  await t
+    .click(Selector('#focusable-start'))
+    .pressKey('tab')
+    .expect(headerCell.isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(stateGroupRow.isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(cityGroupRow.isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(firstDataCell.isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(cityGroupRow.isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(stateGroupRow.isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headerCell.isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    showBorders: true,
+    keyExpr: 'id',
+    dataSource: [
+      {
+        id: 1,
+        state: 'Arkansas',
+        city: 'Bentonville',
+        company: 'Super Mart of the West',
+      },
+      {
+        id: 2,
+        state: 'Arkansas',
+        city: 'Bentonville',
+        company: 'Electronics Depot',
+      },
+      {
+        id: 3,
+        state: 'California',
+        city: 'Cupertino',
+        company: 'Braeburn',
+      },
+    ],
+    grouping: {
+      autoExpandAll: true,
+    },
+    columns: [
+      {
+        dataField: 'state',
+        groupIndex: 0,
+      },
+      {
+        dataField: 'city',
+        groupIndex: 1,
+      },
+      'company',
+    ],
   });
 });
 
@@ -6575,4 +6660,67 @@ test('The last cell should be focused after changing the page size (T1063530)', 
       delete (window as any).focusedEventsTestData;
     })();
   });
+});
+
+test('Focus should be set to the grid to allow keyboard navigation when the focus method is called (T1308919)', async (t) => {
+  // arrange
+  const button = new Button('#otherContainer');
+  const dataGrid = new DataGrid('#container');
+  const firstDataCell = dataGrid.getDataCell(0, 0);
+  const firstRow = dataGrid.getDataRow(0);
+  const secondRow = dataGrid.getDataRow(1);
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await dataGrid.apiFocus(firstDataCell.element);
+
+  // assert
+  await t
+    .expect(firstDataCell.isFocused).ok()
+    .expect(firstRow.isFocusedRow).ok();
+
+  // act
+  await button.focus();
+
+  // assert
+  await t
+    .expect(button.isFocused)
+    .ok()
+    .expect(firstDataCell.isFocused)
+    .notOk('focus should be on the button')
+    .expect(firstRow.isFocusedRow)
+    .ok('row should still have the focused-row style');
+
+  // act
+  await t.pressKey('down');
+
+  // assert
+  await t
+    .expect(secondRow.isFocusedRow)
+    .notOk('grid kbn should not work');
+
+  // act
+  await t
+    .pressKey('enter') // trigger button click
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(secondRow.isFocusedRow)
+    .ok('grid is focused, so kbn should work');
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+  });
+  await createWidget('dxButton', {
+    text: 'Focus Grid',
+    onClick() {
+      const grid = ($ as any)('#container').dxDataGrid('instance');
+      grid.focus();
+    },
+  }, '#otherContainer');
 });

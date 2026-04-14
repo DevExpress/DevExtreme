@@ -1,5 +1,5 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
 import fx from '../../../common/core/animation/fx';
@@ -7,7 +7,6 @@ import {
   createAppointmentPopup,
   disposeAppointmentPopups,
 } from '../__tests__/__mock__/create_appointment_popup';
-import { ACTION_TO_APPOINTMENT } from './m_popup';
 
 describe('Isolated AppointmentPopup environment', () => {
   beforeEach(() => {
@@ -45,20 +44,19 @@ describe('Isolated AppointmentPopup environment', () => {
     expect(POM.cancelButton).toBeTruthy();
   });
 
-  it('should call addAppointment on Save click for CREATE action', async () => {
+  it('should call onSave callback on Save click', async () => {
     const { POM, callbacks } = await createAppointmentPopup({
       appointmentData: {
         text: 'New Appointment',
         startDate: new Date(2021, 3, 26, 9, 30),
         endDate: new Date(2021, 3, 26, 11, 0),
       },
-      action: ACTION_TO_APPOINTMENT.CREATE,
     });
 
     POM.saveButton.click();
 
-    expect(callbacks.addAppointment).toHaveBeenCalledTimes(1);
-    expect(callbacks.addAppointment).toHaveBeenCalledWith(
+    expect(callbacks.onSave).toHaveBeenCalledTimes(1);
+    expect(callbacks.onSave).toHaveBeenCalledWith(
       expect.objectContaining({
         text: 'New Appointment',
         startDate: new Date(2021, 3, 26, 9, 30),
@@ -67,19 +65,45 @@ describe('Isolated AppointmentPopup environment', () => {
     );
   });
 
-  it('should call updateAppointment on Save click for UPDATE action', async () => {
+  it('should not call addAppointment or updateAppointment directly', async () => {
     const { POM, callbacks } = await createAppointmentPopup({
       appointmentData: {
-        text: 'Existing Appointment',
+        text: 'Test',
         startDate: new Date(2021, 3, 26, 9, 30),
         endDate: new Date(2021, 3, 26, 11, 0),
       },
-      action: ACTION_TO_APPOINTMENT.UPDATE,
     });
 
     POM.saveButton.click();
 
-    expect(callbacks.updateAppointment).toHaveBeenCalledTimes(1);
+    expect(callbacks.addAppointment).not.toHaveBeenCalled();
+    expect(callbacks.updateAppointment).not.toHaveBeenCalled();
+  });
+
+  it('should display title from config', async () => {
+    const { POM } = await createAppointmentPopup({
+      title: 'Edit Appointment',
+    });
+
+    const titleElement = POM.element.querySelector('.dx-toolbar-label');
+    expect(titleElement?.textContent).toBe('Edit Appointment');
+  });
+
+  it('should hide Save button when readOnly is true', async () => {
+    const { POM } = await createAppointmentPopup({
+      readOnly: true,
+    });
+
+    const saveButtons = POM.element.querySelectorAll('.dx-popup-done');
+    expect(saveButtons.length).toBe(0);
+  });
+
+  it('should show Save button when readOnly is false', async () => {
+    const { POM } = await createAppointmentPopup({
+      readOnly: false,
+    });
+
+    expect(POM.saveButton).toBeTruthy();
   });
 
   it('should hide popup on Cancel click', async () => {
@@ -88,5 +112,38 @@ describe('Isolated AppointmentPopup environment', () => {
     expect(popup.visible).toBe(true);
     POM.cancelButton.click();
     expect(popup.visible).toBe(false);
+  });
+
+  it('should support composite onSave for exclude-from-series scenario', async () => {
+    const updateAppointment = jest.fn();
+    const addAppointment = jest.fn<(appointment: Record<string, unknown>) => Promise<void>>(
+      () => Promise.resolve(),
+    );
+
+    const sourceAppointment = { text: 'Series', recurrenceRule: 'FREQ=DAILY' };
+    const updatedAppointment = { text: 'Series', recurrenceException: '20210426' };
+
+    const onSave = jest.fn((newAppointment: Record<string, unknown>) => {
+      updateAppointment(sourceAppointment, updatedAppointment);
+      return addAppointment(newAppointment);
+    });
+
+    const { POM } = await createAppointmentPopup({
+      appointmentData: {
+        text: 'Single occurrence',
+        startDate: new Date(2021, 3, 26, 9, 30),
+        endDate: new Date(2021, 3, 26, 11, 0),
+      },
+      title: 'Edit Appointment',
+      onSave,
+    });
+
+    POM.saveButton.click();
+
+    expect(onSave).toHaveBeenCalledTimes(1);
+    expect(updateAppointment).toHaveBeenCalledWith(sourceAppointment, updatedAppointment);
+    expect(addAppointment).toHaveBeenCalledWith(
+      expect.objectContaining({ text: 'Single occurrence' }),
+    );
   });
 });

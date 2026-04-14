@@ -17,6 +17,7 @@ import customRules from './eslint_plugins/index.js';
 import spellCheckConfig from 'eslint-config-devextreme/spell-check';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
 import qunitConfig from 'eslint-config-devextreme/qunit';
+import { schedulerMemberAllowlistRegex } from './eslint-scheduler-allowlist.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,6 +34,7 @@ export default [
             'js/viz/docs/*',
             'node_modules/*',
             'build/*',
+            'license/*',
             '**/*.j.tsx',
             'playground/*',
             'themebuilder/data/metadata/*',
@@ -556,7 +558,35 @@ export default [
                     selector: ['variable', 'function', 'parameter'],
                     format: null,
                     leadingUnderscore: 'forbid',
-                    // allow only a single underscore identifier `_` to bypass this rule
+                    filter: {
+                        regex: '^_$',
+                        match: false,
+                    },
+                },
+                {
+                    selector: 'memberLike',
+                    format: null,
+                    leadingUnderscore: 'forbid',
+                    filter: {
+                        regex: schedulerMemberAllowlistRegex,
+                        match: false,
+                    },
+                },
+            ],
+            'devextreme-custom/no-deferred': 'error',
+            'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
+        },
+    },
+    // Temporarily allow underscore members in appointments/ (pending refactoring)
+    {
+        files: ['js/__internal/scheduler/appointments/**/*.ts?(x)'],
+        rules: {
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    selector: ['variable', 'function', 'parameter'],
+                    format: null,
+                    leadingUnderscore: 'forbid',
                     filter: {
                         regex: '^_$',
                         match: false,
@@ -568,8 +598,6 @@ export default [
                     leadingUnderscore: 'allow',
                 },
             ],
-            'devextreme-custom/no-deferred': 'error',
-            'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
         },
     },
     // Allow Deferred in m_* scheduler files only

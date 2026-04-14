@@ -107,6 +107,13 @@
         "dxNumberBox-noDataText": "Ei tietoja",
 
 
+        "dxDataGrid-aiAssistantTitle": "AI Assistant",
+        "dxDataGrid-aiAssistantProcessingMessage": "Processing...",
+        "dxDataGrid-aiAssistantSuccessMessage": "Success",
+        "dxDataGrid-aiAssistantClearButtonText": "Clear",
+        "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
+        "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
+        "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
         "dxDataGrid-aiPromptEditorTitle": "AI-kehotemuokkain",
         "dxDataGrid-aiPromptEditorPlaceholder": "Pyydä AI:ta luomaan sarakkeen arvot...",
         "dxDataGrid-aiPromptEditorApplyButton": "Käytä",

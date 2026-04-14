@@ -8,119 +8,48 @@ import {
   getPreviousMajorVersion,
   parseVersion,
 } from '../../utils/version';
-import { base64ToBytes } from './byte_utils';
-import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
-import { pad } from './pkcs1';
-import { compareSignatures } from './rsa_bigint';
-import { sha1 } from './sha1';
+import {
+  BUY_NOW_LINK, LICENSE_KEY_PLACEHOLDER,
+  LICENSING_DOC_LINK, RTM_MIN_PATCH_VERSION, SUBSCRIPTION_NAMES,
+} from './const';
+import { isProductOnlyLicense, parseDevExpressProductKey } from './lcp_key_validation/lcp_key_validator';
+import { logLicenseWarning } from './license_warnings';
 import { showTrialPanel } from './trial_panel';
 import type {
-  License,
   LicenseCheckParams,
   Token,
 } from './types';
-import { TokenKind } from './types';
-
-interface Payload extends Partial<License> {
-  readonly format?: number;
-  readonly internalUsageId?: string;
-}
-
-const FORMAT = 1;
-const RTM_MIN_PATCH_VERSION = 3;
-const KEY_SPLITTER = '.';
-
-const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
-const LICENSING_DOC_LINK = 'https://go.devexpress.com/Licensing_Documentation_DevExtremeJQuery.aspx';
-
-const NBSP = '\u00A0';
-const SUBSCRIPTION_NAMES = `Universal, DXperience, ASP.NET${NBSP}and${NBSP}Blazor, DevExtreme${NBSP}Complete`;
-
-const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
-const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
-const DECODING_ERROR: Token = { kind: TokenKind.corrupted, error: 'decoding' };
-const DESERIALIZATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'deserialization' };
-const PAYLOAD_ERROR: Token = { kind: TokenKind.corrupted, error: 'payload' };
-const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
+import {
+  GENERAL_ERROR,
+  TokenKind,
+} from './types';
 
 let validationPerformed = false;
-
-// verifies RSASSA-PKCS1-v1.5 signature
-function verifySignature({ text, signature: encodedSignature }: {
-  text: string;
-  signature: string;
-}): boolean {
-  return compareSignatures({
-    key: PUBLIC_KEY,
-    signature: base64ToBytes(encodedSignature),
-    actual: pad(sha1(text)),
-  });
-}
 
 export function parseLicenseKey(encodedKey: string | undefined): Token {
   if (encodedKey === undefined) {
     return GENERAL_ERROR;
   }
 
-  const parts = encodedKey.split(KEY_SPLITTER);
-
-  if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
-    return GENERAL_ERROR;
+  if (isProductOnlyLicense(encodedKey)) {
+    return parseDevExpressProductKey(encodedKey);
   }
 
-  if (!verifySignature({ text: parts[0], signature: parts[1] })) {
-    return VERIFICATION_ERROR;
-  }
-
-  let decodedPayload = '';
-  try {
-    decodedPayload = atob(parts[0]);
-  } catch {
-    return DECODING_ERROR;
-  }
-
-  let payload: Payload = {};
-  try {
-    payload = JSON.parse(decodedPayload);
-  } catch {
-    return DESERIALIZATION_ERROR;
-  }
-
-  const {
-    customerId, maxVersionAllowed, format, internalUsageId, ...rest
-  } = payload;
-
-  if (internalUsageId !== undefined) {
-    return {
-      kind: TokenKind.internal,
-      internalUsageId,
-    };
-  }
-
-  if (customerId === undefined || maxVersionAllowed === undefined || format === undefined) {
-    return PAYLOAD_ERROR;
-  }
-
-  if (format !== FORMAT) {
-    return VERSION_ERROR;
-  }
-
-  return {
-    kind: TokenKind.verified,
-    payload: {
-      customerId,
-      maxVersionAllowed,
-      ...rest,
-    },
-  };
+  return GENERAL_ERROR;
 }
 
 function isPreview(patch: number): boolean {
   return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 }
 
-function isDevExpressLicenseKey(licenseKey: string): boolean {
-  return licenseKey.startsWith('LCX') || licenseKey.startsWith('LCP');
+function hasLicensePrefix(licenseKey: string, prefix: string): boolean {
+  return licenseKey.trim().startsWith(prefix);
+}
+
+function displayTrialPanel(): void {
+  const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
+  const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
+  showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
 }
 
 function getLicenseCheckParams({
@@ -137,35 +66,50 @@ function getLicenseCheckParams({
 
     const { major, minor } = preview ? getPreviousMajorVersion(version) : version;
 
-    if (!licenseKey) {
-      return { preview, error: 'W0019' };
+    if (!licenseKey || licenseKey === LICENSE_KEY_PLACEHOLDER) {
+      return { preview, error: 'W0019', warningType: 'no-key' };
     }
 
-    if (isDevExpressLicenseKey(licenseKey)) {
-      return { preview, error: 'W0024' };
+    if (hasLicensePrefix(licenseKey, 'LCX')) {
+      return { preview, error: 'W0021', warningType: 'lcx-used' };
+    }
+
+    if (hasLicensePrefix(licenseKey, 'ewog')) {
+      return { preview, error: 'W0021', warningType: 'old-devextreme-key' };
     }
 
     const license = parseLicenseKey(licenseKey);
 
     if (license.kind === TokenKind.corrupted) {
-      return { preview, error: 'W0021' };
+      if (license.error === 'product-kind') {
+        return { preview, error: 'W0021', warningType: 'no-devextreme-license' };
+      }
+      if (license.error === 'trial-expired') {
+        return { preview, error: 'W0020', warningType: 'trial-expired' };
+      }
+      return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
 
-    if (license.kind === TokenKind.internal) {
-      return { preview, internal: true, error: license.internalUsageId === INTERNAL_USAGE_ID ? undefined : 'W0020' };
+    if (license.kind !== TokenKind.verified) {
+      return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
 
     if (!(major && minor)) {
-      return { preview, error: 'W0021' };
+      return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
 
     if (major * 10 + minor > license.payload.maxVersionAllowed) {
-      return { preview, error: 'W0020' };
+      return {
+        preview,
+        error: 'W0020',
+        warningType: 'version-mismatch',
+        maxVersionAllowed: license.payload.maxVersionAllowed,
+      };
     }
 
     return { preview, error: undefined };
   } catch {
-    return { preview, error: 'W0021' };
+    return { preview, error: 'W0021', warningType: 'invalid-key' };
   }
 }
 
@@ -177,32 +121,31 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
 
   const version = parseVersion(versionStr);
 
-  const versionsCompatible = assertedVersionsCompatible(version);
+  assertedVersionsCompatible(version);
 
-  const { internal, error } = getLicenseCheckParams({
+  const {
+    error, warningType, maxVersionAllowed,
+  } = getLicenseCheckParams({
     licenseKey,
     version,
   });
 
-  if (!versionsCompatible && internal) {
-    return;
+  if (error) {
+    displayTrialPanel();
   }
-
-  if (error && !internal) {
-    const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
-    const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
-    showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
-  }
-
-  const preview = isPreview(version.patch);
 
   if (error) {
-    errors.log(preview ? 'W0022' : error);
-    return;
-  }
-
-  if (preview && !internal) {
-    errors.log('W0022');
+    if (warningType) {
+      const versionInfo = warningType === 'version-mismatch' && maxVersionAllowed !== undefined
+        ? {
+          keyVersion: `${Math.floor(maxVersionAllowed / 10)}.${maxVersionAllowed % 10}`,
+          requiredVersion: `${version.major}.${version.minor}`,
+        }
+        : undefined;
+      logLicenseWarning(warningType, versionStr, versionInfo);
+    } else {
+      errors.log(error);
+    }
   }
 }
 

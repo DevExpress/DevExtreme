@@ -10,6 +10,7 @@
     :end-day-hour="20"
     :groups="groups"
     :first-day-of-week="0"
+    :snap-to-cells-mode="snapToCellsMode"
     current-view="timelineMonth"
   >
     <DxResource
@@ -28,19 +29,40 @@
       icon="tags"
     />
   </DxScheduler>
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <span>Snap to Grid:</span>
+      <DxSelectBox
+        :items="snapToCellsModeItems"
+        :value="snapToCellsMode"
+        @value-changed="onSnapToCellsModeChanged"
+      />
+    </div>
+  </div>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxScheduler,
   DxResource,
   type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { data, priorityData, resourcesData } from './data.ts';
 
 const views: DxSchedulerTypes.ViewType[] = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 const groups = ['priority'];
 const currentDate = new Date(2021, 1, 2);
 const dataSource = data;
+
+const snapToCellsModeItems: DxSchedulerTypes.SnapToCellsMode[] = ['auto', 'always', 'never'];
+
+const snapToCellsMode = ref<DxSchedulerTypes.SnapToCellsMode>('always');
+
+function onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  snapToCellsMode.value = e.value;
+}
 </script>
 
 <style scoped>
@@ -48,5 +70,27 @@ const dataSource = data;
 .dx-scheduler-timeline-week .dx-scheduler-cell-sizes-horizontal,
 .dx-scheduler-timeline-work-week .dx-scheduler-cell-sizes-horizontal {
     width: 100px;
+}
+
+.dx-scheduler-appointment-content {
+  color: white;
+}
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 </style>

@@ -10,7 +10,7 @@ export function updateVersion(version: string | undefined): void {
     process.exit(1);
   }
 
-  const workspacesFolders = ['packages', 'apps', 'e2e', 'packages/devextreme/artifacts/npm'];
+  const workspacesFolders = ['packages', 'apps', 'e2e'];
 
   const rootWorkspacePath = path.join(ROOT_DIR, 'package.json')
   const workspacesPaths = workspacesFolders
@@ -18,8 +18,6 @@ export function updateVersion(version: string | undefined): void {
       .concat([rootWorkspacePath]);
 
   sh.sed('-i', /"version": ".*"/, `"version": "${version}"`, workspacesPaths);
-
-  sh.exec('pnpm install --no-frozen-lockfile');
 }
 
 export function updateVersionJs(version: string | undefined, build?: string | undefined): void {

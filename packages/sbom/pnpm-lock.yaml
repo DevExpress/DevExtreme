@@ -9,6 +9,8 @@ overrides:
   body-parser@>=2.2.0 <2.2.1: '>=2.2.1'
   jws@=4.0.0: '>=4.0.1'
   minimatch@>=10.0.0 <10.2.3: ^10.2.4
+  picomatch@>=2.0.0 <2.3.2: 2.3.2
+  picomatch@>=4.0.0 <4.0.4: 4.0.4
   qs: '>=6.14.1'
   tar@<=7.5.9: ^7.5.10
   undici@<7.24.0: ^7.24.0
@@ -898,8 +900,8 @@ packages:
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
-  picomatch@4.0.3:
-    resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
+  picomatch@4.0.4:
+    resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
 
   prebuild-install@7.1.3:
@@ -1833,9 +1835,9 @@ snapshots:
 
   fast-uri@3.1.0: {}
 
-  fdir@6.5.0(picomatch@4.0.3):
+  fdir@6.5.0(picomatch@4.0.4):
     optionalDependencies:
-      picomatch: 4.0.3
+      picomatch: 4.0.4
     optional: true
 
   finalhandler@1.1.2:
@@ -2274,7 +2276,7 @@ snapshots:
 
   picocolors@1.1.1: {}
 
-  picomatch@4.0.3:
+  picomatch@4.0.4:
     optional: true
 
   prebuild-install@7.1.3:
@@ -2526,8 +2528,8 @@ snapshots:
 
   tinyglobby@0.2.15:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
     optional: true
 
   toidentifier@1.0.1:

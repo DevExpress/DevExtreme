@@ -660,63 +660,14 @@ supportedScrollingModes.forEach(scrollingMode => {
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
         });
 
-        test('Recurrent Task editing, single mode', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const updatedItem = {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 11, 3),
-                endDate: new Date(2015, 1, 11, 4),
-            };
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1,
-                editing: { legacyForm: true }
-            });
-
-            const clock = sinon.useFakeTimers();
-            await scheduler.appointments.click(2, clock);
-            scheduler.tooltip.clickOnItem();
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            const $title = $('.dx-textbox').eq(0);
-            const title = $title.dxTextBox('instance');
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
-
-            title.option('value', 'Task 2');
-            startDate.option('value', new Date(2015, 1, 11, 3, 0));
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const updatedSingleItem = scheduler.instance.option('dataSource').items()[1];
-            const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
-            const exceptionDate = new Date(2015, 1, 11, 1, 0, 0, 0);
-
-            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
-
-            assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
-        });
-
         test('Recurrent Task editing, single mode, should not reference copy recurrent data (T1228488)', async function(assert) {
             const updatedItem = {
                 text: 'Task 2',
                 customData: { texts: ['123', '456'] },
                 startDate: new Date(2015, 1, 11, 3),
                 endDate: new Date(2015, 1, 11, 4),
+                allDay: false,
+                recurrenceRule: '',
             };
 
             const scheduler = await this.createInstance({
@@ -732,7 +683,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 onAppointmentAdding: (e) => {
                     e.appointmentData.customData.texts.push('456');
                 },
-                editing: { legacyForm: true },
+
                 firstDayOfWeek: 1
             });
 
@@ -743,11 +694,11 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             const $title = $('.dx-textbox').eq(0);
             const title = $title.dxTextBox('instance');
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
+            const $startTime = $('.dx-datebox').eq(1);
+            const startTime = $startTime.dxDateBox('instance');
 
             title.option('value', 'Task 2');
-            startDate.option('value', new Date(2015, 1, 11, 3, 0));
+            startTime.option('value', new Date(2015, 1, 11, 3, 0));
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
             await clock.tickAsync(300);
             clock.restore();
@@ -757,78 +708,6 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
             assert.deepEqual(updatedRecurringItem.customData.texts, ['123'], 'Recurrence data is correct');
-        });
-
-        test('Recurrent Task edition canceling, single mode', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1
-            });
-
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await clock.tickAsync(300);
-            $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-button.dx-popup-cancel').eq(0).trigger('dxclick');
-
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await clock.tickAsync(300);
-            $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            clock.restore();
-
-            const items = scheduler.instance.option('dataSource').items();
-
-            assert.equal(items.length, 1, 'Items are correct');
-        });
-
-        test('Recurrent Task editing, single mode - canceling', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1
-            });
-
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await clock.tickAsync(300);
-            $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            $('.dx-button.dx-popup-cancel').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const recurrentItem = scheduler.instance.option('dataSource').items()[0];
-
-            assert.equal(recurrentItem.recurrenceException, undefined, 'Exception for recurrence appointment is correct');
         });
 
         test('Recurrent Task editing, confirmation tooltip should be shown after double click on recurrent appointment', async function(assert) {
@@ -857,56 +736,6 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             assert.ok($('.dx-dialog').length, 'Dialog was shown');
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-        });
-
-        test('Recurrent Task editing, single mode - double click', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const updatedItem = {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 11, 3),
-                endDate: new Date(2015, 1, 11, 4)
-            };
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1,
-                editing: { legacyForm: true }
-            });
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger(dblclickEvent.name);
-            await clock.tickAsync(300);
-
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            const $title = $('.dx-textbox').eq(0);
-            const title = $title.dxTextBox('instance');
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
-
-            title.option('value', 'Task 2');
-            startDate.option('value', new Date(2015, 1, 11, 3, 0));
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const updatedSingleItem = scheduler.instance.option('dataSource').items()[1];
-            const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
-            const exceptionDate = new Date(2015, 1, 11, 1, 0, 0, 0);
-
-            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
-            assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
         test('Recurrent allDay task dragging on month view, single mode', async function(assert) {
@@ -1317,47 +1146,6 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal($appointments.length, 11, 'correct number of the appointments');
         });
 
-        test('Single changed appointment should be rendered correctly in specified timeZone', async function(assert) {
-            if(!isDesktopEnvironment()) {
-                assert.ok(true, 'This test is for desktop only');
-                return;
-            }
-
-            const scheduler = await this.createInstance({
-                dataSource: [{
-                    text: 'Recurrence',
-                    startDate: '2018-05-23T10:00:00Z',
-                    endDate: '2018-05-23T10:30:00Z',
-                    recurrenceRule: 'FREQ=DAILY'
-                }],
-                editing: { legacyForm: true },
-                views: ['week'],
-                currentView: 'week',
-                currentDate: new Date(2018, 4, 23),
-                timeZone: 'Etc/UTC',
-                height: 2000,
-                width: 800
-            });
-
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger('dxclick').trigger('dxclick');
-
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
-            const expectedStartDate = new Date(2018, 4, 23, 9, 0);
-
-            startDate.option('value', expectedStartDate);
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const actualStartDate = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(3).dxSchedulerAppointment('instance').option('startDate');
-
-            assert.deepEqual(actualStartDate, expectedStartDate, 'appointment starts in 9AM');
-        });
-
         test('Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)', async function(assert) {
             const scheduler = await this.createInstance({
                 dataSource: [{
@@ -1678,7 +1466,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     endDate: apptEndDate,
                     recurrenceRule: 'FREQ=MINUTELY;COUNT=3'
                 }],
-                editing: { legacyForm: true },
+
                 currentDate: apptStartDate,
             });
 
@@ -1688,8 +1476,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             scheduler.appointments.dblclick(2);
             scheduler.appointmentForm.clickFormDialogButton(1);
 
-            const formStartDate = scheduler.appointmentForm.getEditor('startDate');
-            const formEndDate = scheduler.appointmentForm.getEditor('endDate');
+            const formStartDate = scheduler.appointmentForm.getEditor('startDateEditor');
+            const formEndDate = scheduler.appointmentForm.getEditor('endDateEditor');
 
             assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 2, 2), 'Appointment third occurrence sets right startDate in appointmentForm');
             assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 3, 2), 'Appointment third occurrence sets right endDate in appointmentForm');
@@ -1706,7 +1494,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     endDate: apptEndDate,
                     recurrenceRule: 'FREQ=HOURLY;COUNT=3'
                 }],
-                editing: { legacyForm: true },
+
                 currentDate: apptStartDate,
             });
 
@@ -1716,8 +1504,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             scheduler.appointments.dblclick(2);
             scheduler.appointmentForm.clickFormDialogButton(1);
 
-            const formStartDate = scheduler.appointmentForm.getEditor('startDate');
-            const formEndDate = scheduler.appointmentForm.getEditor('endDate');
+            const formStartDate = scheduler.appointmentForm.getEditor('startDateEditor');
+            const formEndDate = scheduler.appointmentForm.getEditor('endDateEditor');
 
             assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 4, 0), 'Appointment third occurrence sets right startDate in appointmentForm');
             assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 5, 0), 'Appointment third occurrence sets right endDate in appointmentForm');

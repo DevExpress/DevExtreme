@@ -3,7 +3,6 @@ import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { when } from '@js/core/utils/deferred';
 import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
@@ -19,11 +18,12 @@ import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_d
 export interface BaseAppointmentViewProperties
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extends DOMComponentProperties<BaseAppointmentView<any>> {
+  index: number;
   appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
 
-  onAppointmentRendered: (e: {
+  onRendered: (e: {
     element: DxElement;
     appointmentData: SafeAppointment;
     targetedAppointmentData: TargetedAppointment;
@@ -120,20 +120,20 @@ export class BaseAppointmentView<
       ? this.defaultAppointmentTemplate
       : this.option().appointmentTemplate;
 
-    const $renderPromise = template.render({
+    template.render({
       container: getPublicElement($content),
       model: {
         appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       },
-    });
-
-    when($renderPromise).done(() => {
-      this.option().onAppointmentRendered({
-        element: getPublicElement(this.$element()),
-        appointmentData: this.appointmentData,
-        targetedAppointmentData: this.targetedAppointmentData,
-      });
+      index: this.option().index,
+      onRendered: () => {
+        this.option().onRendered({
+          element: getPublicElement(this.$element()),
+          appointmentData: this.appointmentData,
+          targetedAppointmentData: this.targetedAppointmentData,
+        });
+      },
     });
   }
 

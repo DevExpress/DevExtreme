@@ -54,7 +54,7 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -127,11 +127,11 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}
-      run: pnpx nx pack
+      run: pnpm exec nx pack
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: pnpx nx build
+      run: pnpm exec nx build
 
 #    - name: Run test
 #      if: ${{ matrix.ARGS.platform != 'angular' }}

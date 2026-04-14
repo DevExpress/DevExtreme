@@ -191,6 +191,25 @@ describe('Appointments', () => {
       expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
     });
+
+    it.each([
+      'appointmentTemplate',
+      'appointmentCollectorTemplate',
+    ])('should rerender appointments if %s is changed', (optionName) => {
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const elementsBefore = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).toArray();
+      expect(elementsBefore.length).toBe(1);
+
+      instance.option(optionName, () => {});
+
+      const elementsAfter = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).toArray();
+      expect(elementsAfter.length).toBe(1);
+      expect(elementsAfter[0]).not.toBe(elementsBefore[0]);
+    });
   });
 
   describe('Partial rendering', () => {
