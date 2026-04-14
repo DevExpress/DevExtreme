@@ -41,6 +41,8 @@ import type {
   Properties as MessageListProperties,
 } from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
+import type { SuggestionsOptions } from '@ts/ui/chat/suggestions';
+import Suggestions from '@ts/ui/chat/suggestions';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
@@ -52,6 +54,8 @@ class Chat extends Widget<ChatProperties> {
   _messageList!: MessageList;
 
   _alertList!: AlertList;
+
+  _suggestions?: Suggestions;
 
   _messageToEdit?: Message;
 
@@ -116,6 +120,7 @@ class Chat extends Widget<ChatProperties> {
         action: 'send',
         onClick: undefined,
       },
+      suggestions: undefined,
       onMessageDeleted: undefined,
       onMessageDeleting: undefined,
       onMessageEditCanceled: undefined,
@@ -185,6 +190,7 @@ class Chat extends Widget<ChatProperties> {
 
     this._renderMessageList();
     this._renderAlertList();
+    this._renderSuggestions();
     this._renderMessageBox();
 
     this._updateRootAria();
@@ -470,6 +476,12 @@ class Chat extends Widget<ChatProperties> {
     this._alertList = this._createComponent($errors, AlertList, {
       items: alerts,
     });
+  }
+
+  _renderSuggestions(): void {
+    const { suggestions } = this.option();
+
+    this._suggestions = new Suggestions(this.$element(), suggestions);
   }
 
   _renderMessageBox(): void {
@@ -775,6 +787,9 @@ class Chat extends Widget<ChatProperties> {
         this._createSendButtonAction();
         this._messageBox.option(name, this._getSendButtonOptionsWithAction());
         break;
+      case 'suggestions':
+        this._suggestions?.updateOptions(value as SuggestionsOptions);
+        break;
       default:
         super._optionChanged(args);
     }
@@ -789,6 +804,11 @@ class Chat extends Widget<ChatProperties> {
 
   renderMessage(message: Message = {}): void {
     this._insertNewItem(message);
+  }
+
+  _clean(): void {
+    this._suggestions?.dispose();
+    this._suggestions = undefined;
   }
 
   _dispose(): void {

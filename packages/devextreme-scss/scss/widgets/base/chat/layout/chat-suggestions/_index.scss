@@ -1,0 +1,8 @@
+@use "../../../mixins" as *;
+@use "./mixins" as *;
+
+.dx-chat-suggestions {
+  .dx-buttongroup-wrapper {
+    flex-wrap: wrap;
+  }
+}

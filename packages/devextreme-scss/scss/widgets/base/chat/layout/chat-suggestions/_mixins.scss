@@ -1,0 +1,32 @@
+@mixin chat-suggestions(
+  $padding,
+  $border-radius,
+  $border-width,
+  $max-width,
+  $gap,
+  $box-shadow,
+) {
+  .dx-chat-suggestions {
+    padding: $padding;
+
+    .dx-button {
+      max-width: $max-width;
+      box-shadow: $box-shadow;
+    }
+
+    .dx-buttongroup-wrapper {
+      gap: $gap;
+    }
+
+    .dx-buttongroup-item {
+      &.dx-button-mode-outlined,
+      &.dx-button-mode-contained {
+        border-inline-start-width: $border-width;
+
+        &.dx-button {
+          border-radius: $border-radius;
+        }
+      }
+    }
+  }
+}
