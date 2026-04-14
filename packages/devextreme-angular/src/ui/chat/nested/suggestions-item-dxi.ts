@@ -10,15 +10,12 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import type { Attachment, User } from 'devextreme/ui/chat';
 import type { ButtonType } from 'devextreme/common';
 
 import {
@@ -32,12 +29,9 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
-import {
-    PROPERTY_TOKEN_attachments,
-} from 'devextreme-angular/core/tokens';
 
 @Component({
-    selector: 'dxi-chat-item',
+    selector: 'dxi-chat-suggestions-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
@@ -47,97 +41,12 @@ import {
         DxTemplateHost,
         {
            provide: PROPERTY_TOKEN_items,
-           useExisting: DxiChatItemComponent,
+           useExisting: DxiChatSuggestionsItemComponent,
         }
     ]
 })
-export class DxiChatItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiChatSuggestionsItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    @ContentChildren(PROPERTY_TOKEN_attachments)
-    set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('attachments', value);
-    }
-    
-    @Input()
-    get alt(): string {
-        return this._getOption('alt');
-    }
-    set alt(value: string) {
-        this._setOption('alt', value);
-    }
-
-    @Input()
-    get attachments(): Array<Attachment> {
-        return this._getOption('attachments');
-    }
-    set attachments(value: Array<Attachment>) {
-        this._setOption('attachments', value);
-    }
-
-    @Input()
-    get author(): User {
-        return this._getOption('author');
-    }
-    set author(value: User) {
-        this._setOption('author', value);
-    }
-
-    @Input()
-    get id(): number | string {
-        return this._getOption('id');
-    }
-    set id(value: number | string) {
-        this._setOption('id', value);
-    }
-
-    @Input()
-    get isDeleted(): boolean {
-        return this._getOption('isDeleted');
-    }
-    set isDeleted(value: boolean) {
-        this._setOption('isDeleted', value);
-    }
-
-    @Input()
-    get isEdited(): boolean {
-        return this._getOption('isEdited');
-    }
-    set isEdited(value: boolean) {
-        this._setOption('isEdited', value);
-    }
-
-    @Input()
-    get src(): string {
-        return this._getOption('src');
-    }
-    set src(value: string) {
-        this._setOption('src', value);
-    }
-
-    @Input()
-    get text(): string {
-        return this._getOption('text');
-    }
-    set text(value: string) {
-        this._setOption('text', value);
-    }
-
-    @Input()
-    get timestamp(): Date | number | string {
-        return this._getOption('timestamp');
-    }
-    set timestamp(value: Date | number | string) {
-        this._setOption('timestamp', value);
-    }
-
-    @Input()
-    get type(): string | undefined | ButtonType {
-        return this._getOption('type');
-    }
-    set type(value: string | undefined | ButtonType) {
-        this._setOption('type', value);
-    }
-
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -176,6 +85,22 @@ export class DxiChatItemComponent extends CollectionNestedOption implements Afte
     }
     set template(value: any) {
         this._setOption('template', value);
+    }
+
+    @Input()
+    get text(): string {
+        return this._getOption('text');
+    }
+    set text(value: string) {
+        this._setOption('text', value);
+    }
+
+    @Input()
+    get type(): ButtonType | string {
+        return this._getOption('type');
+    }
+    set type(value: ButtonType | string) {
+        this._setOption('type', value);
     }
 
     @Input()
@@ -221,10 +146,10 @@ export class DxiChatItemComponent extends CollectionNestedOption implements Afte
 
 @NgModule({
   imports: [
-    DxiChatItemComponent
+    DxiChatSuggestionsItemComponent
   ],
   exports: [
-    DxiChatItemComponent
+    DxiChatSuggestionsItemComponent
   ],
 })
-export class DxiChatItemModule { }
+export class DxiChatSuggestionsItemModule { }

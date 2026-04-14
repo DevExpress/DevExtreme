@@ -11485,6 +11485,10 @@ declare module DevExpress.ui {
       'stylingMode' | 'type'
     >;
     /**
+     * [descr:dxChatOptions.suggestions]
+     */
+    suggestions?: Omit<DevExpress.ui.dxButtonGroup.Properties, 'selectionMode'>;
+    /**
      * [descr:dxChatOptions.typingUsers]
      */
     typingUsers?: Array<DevExpress.ui.dxChat.User>;
