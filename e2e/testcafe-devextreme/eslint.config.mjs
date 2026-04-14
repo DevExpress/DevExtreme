@@ -264,6 +264,8 @@ export default [
     files: [
       'tests/dataGrid/**/*.ts',
       'tests/cardView/**/*.ts',
+      'tests/common/treeList/**/*.ts',
+      'tests/common/filterBuilder/**/*.ts',
     ],
     plugins: {
       'local': {
