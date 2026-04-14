@@ -1,29 +1,147 @@
+import type { PositionConfig } from '@js/common/core/animation';
+import { ArrayStore } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
+import { getHeight } from '@js/core/utils/size';
+import { isString } from '@js/core/utils/type';
+import type { Message, Properties as ChatProperties } from '@js/ui/chat';
+import type { Properties as PopupProperties } from '@js/ui/popup';
+import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
+import {
+  isChatOptions,
+  isEnabledOption,
+  isPopupOptions,
+  isTitleOption,
+} from '@ts/grids/grid_core/ai_assistant/utils';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
 import { View } from '../m_modules';
 
 export class AIAssistantView extends View {
-  private aiChatInstance!: AIChat;
+  private aiChatInstance?: AIChat;
+
+  private columnHeadersView!: ColumnHeadersView;
+
+  private rowsView!: RowsView;
 
   public visibilityChanged?: Callback;
 
+  private messageStore?: ArrayStore<Message, string>;
+
+  public init(): void {
+    this.columnHeadersView = this.getView('columnHeadersView');
+    this.rowsView = this.getView('rowsView');
+
+    this.messageStore = new ArrayStore<Message, string>({
+      key: 'id',
+    });
+  }
+
   private getAIChatConfig(): AIChatOptions {
+    const popupOptions = this.getAIChatPopupOptions();
+    const chatOptions = this.getAIChatOptions();
+
     return {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
-      onVisibilityChanged: (visible: boolean): void => {
-        this.visibilityChanged?.fire(visible);
+      onChatCleared: (): void => {},
+      popupOptions,
+      chatOptions,
+    };
+  }
+
+  private getPopupHeight(): number {
+    const headersHeight = this.columnHeadersView.getHeight();
+    const rowsViewHeight = getHeight(this.rowsView.element());
+
+    return headersHeight + rowsViewHeight - AI_ASSISTANT_POPUP_OFFSET * 2;
+  }
+
+  private getAIChatPopupOptions(): PopupProperties {
+    const position: PositionConfig = {
+      my: 'right top',
+      at: 'right top',
+      of: this.columnHeadersView.element(),
+      collision: 'fit',
+      offset: `${-AI_ASSISTANT_POPUP_OFFSET} ${AI_ASSISTANT_POPUP_OFFSET}`,
+      boundaryOffset: `${AI_ASSISTANT_POPUP_OFFSET} ${AI_ASSISTANT_POPUP_OFFSET}`,
+    };
+
+    // @ts-ignore
+    return {
+      title: this.option('aiAssistant.title') ?? '',
+      position,
+      // NOTE: DevExtreme Popup supports function-valued height at runtime
+      // (re-evaluated automatically on show and window resize).
+      // @ts-expect-error type declaration
+      height: () => this.getPopupHeight(),
+      onShowing: (): void => {
+        this.visibilityChanged?.fire(true);
       },
+      onHidden: (): void => {
+        this.visibilityChanged?.fire(false);
+      },
+      ...this.option('aiAssistant.popup'),
+    };
+  }
+
+  private getAIChatOptions(): ChatProperties {
+    return {
+      dataSource: this.messageStore,
+      onMessageEntered: (e): void => {
+        const parsedTimestamp = isString(e.message.timestamp)
+          ? Date.parse(e.message.timestamp)
+          : e.message.timestamp?.toString() ?? '';
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.messageStore?.insert({
+          ...e.message,
+          id: `${e.message.author?.id}-${parsedTimestamp}`,
+        });
+      },
+      ...this.option('aiAssistant.chat'),
     };
   }
 
   protected _renderCore(): void {
-    const config = this.getAIChatConfig();
-
     if (!this.aiChatInstance) {
+      const config = this.getAIChatConfig();
+
       this.aiChatInstance = new AIChat(config);
+    }
+  }
+
+  public optionChanged(args: OptionChanged): void {
+    if (args.name === 'aiAssistant') {
+      const enabledChanged = isEnabledOption(args.fullName, args.value);
+
+      if (enabledChanged) {
+        if (this.isVisible()) {
+          this._invalidate();
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this.hide();
+        }
+      }
+
+      const popupOptionsChanged = isTitleOption(args.fullName, args.value)
+        || isPopupOptions(args.fullName, args.value);
+      const chatOptionsChanged = isChatOptions(args.fullName, args.value);
+
+      if (popupOptionsChanged || chatOptionsChanged) {
+        this.aiChatInstance?.updateOptions(
+          this.getAIChatConfig(),
+          popupOptionsChanged,
+          chatOptionsChanged,
+        );
+      }
+
+      args.handled = true;
+    } else {
+      super.optionChanged(args);
     }
   }
 

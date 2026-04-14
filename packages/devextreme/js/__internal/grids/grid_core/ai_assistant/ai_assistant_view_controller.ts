@@ -11,39 +11,45 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import { ViewController } from '../m_modules';
 import type { AIAssistantView } from './ai_assistant_view';
+import { isEnabledOption, isTitleOption } from './utils';
 
 export class AIAssistantViewController extends ViewController {
   private aiAssistantView?: AIAssistantView;
 
   private headerPanel?: HeaderPanel;
 
-  private getAiAssistantButton(): dxElementWrapper | undefined {
+  private readonly visibilityChangedHandler = (visible: boolean): void => {
     const className = this.addWidgetPrefix(CLASSES.aiAssistantButton);
+    const aiAssistantButton: dxElementWrapper | undefined = this.headerPanel?.element()?.find(`.${className}`);
 
-    return this.headerPanel?.element()?.find(`.${className}`) as dxElementWrapper | undefined;
-  }
+    aiAssistantButton?.toggleClass(ACTIVE_STATE_CLASS, visible);
+  };
 
   public init(): void {
     this.aiAssistantView = this.getView('aiAssistantView');
     this.headerPanel = this.getView('headerPanel');
 
-    this.aiAssistantView.visibilityChanged?.add((visible: boolean): void => {
-      this.getAiAssistantButton()?.toggleClass(ACTIVE_STATE_CLASS, visible);
-    });
-
-    const isAiAssistantEnabled = this.option('aiAssistant.enabled'); // TODO clarify option name
+    const isAiAssistantEnabled = this.option('aiAssistant.enabled');
 
     if (isAiAssistantEnabled) {
       const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
 
       this.headerPanel?.registerToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
     }
+
+    this.aiAssistantView?.visibilityChanged?.remove(this.visibilityChangedHandler);
+    this.aiAssistantView?.visibilityChanged?.add(this.visibilityChangedHandler);
   }
 
   public optionChanged(args: OptionChanged): void {
     if (args.name === 'aiAssistant') {
-      this.syncAiAssistantItem();
-      args.handled = true;
+      const enabledChanged = isEnabledOption(args.fullName, args.value);
+      const titleChanged = isTitleOption(args.fullName, args.value);
+
+      if (enabledChanged || titleChanged) {
+        this.syncAiAssistantItem();
+        args.handled = true;
+      }
     } else {
       super.optionChanged(args);
     }
@@ -54,28 +60,28 @@ export class AIAssistantViewController extends ViewController {
   }
 
   private syncAiAssistantItem(): void {
-    const isAiAssistantEnabled = this.option('aiAssistant.enabled'); // TODO clarify option name
+    const isAiAssistantEnabled = this.option('aiAssistant.enabled');
 
     if (isAiAssistantEnabled) {
       const aiAssistantToolbarItem = this.createAiAssistantToolbarItem();
 
       this.headerPanel?.applyToolbarItem(AI_ASSISTANT_BUTTON_NAME, aiAssistantToolbarItem);
-      this.aiAssistantView?._invalidate();
     } else {
       this.headerPanel?.removeToolbarItem(AI_ASSISTANT_BUTTON_NAME);
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.aiAssistantView?.hide();
     }
   }
 
   private createAiAssistantToolbarItem(): ToolbarItem {
     const onClickHandler = (): Promise<boolean> => this.toggle();
 
-    const hintText = this.option('aiAssistant.title'); // TODO clarify option name
+    const hintText = this.option('aiAssistant.title');
+
+    const isActive = this.aiAssistantView?.isShown();
 
     const aiAssistantToolbarItemClass = this.headerPanel?.getToolbarButtonClass(
       this.addWidgetPrefix(CLASSES.aiAssistantButton),
-    );
+    ) ?? '';
+    const aiAssistantToolbarItemStateClass = isActive ? ACTIVE_STATE_CLASS : '';
 
     return {
       widget: 'dxButton',
@@ -87,7 +93,7 @@ export class AIAssistantViewController extends ViewController {
         text: hintText,
         elementAttr: {
           'aria-haspopup': 'dialog',
-          class: aiAssistantToolbarItemClass,
+          class: `${aiAssistantToolbarItemClass} ${aiAssistantToolbarItemStateClass}`,
         },
       },
       showText: 'inMenu',
