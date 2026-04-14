@@ -11,7 +11,9 @@ import NestedOption from "./core/nested-option";
 import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser, SendButtonAction, SendButtonClickEvent } from "devextreme/ui/chat";
 import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
 import type { DisposingEvent as SpeechToTextDisposingEvent, InitializedEvent as SpeechToTextInitializedEvent, ContentReadyEvent as SpeechToTextContentReadyEvent, OptionChangedEvent as SpeechToTextOptionChangedEvent, CustomSpeechRecognizer as SpeechToTextCustomSpeechRecognizer, EndEvent, ErrorEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig as SpeechToTextSpeechRecognitionConfig } from "devextreme/ui/speech_to_text";
-import type { Format, ValidationStatus, ButtonStyle, ButtonType } from "devextreme/common";
+import type { DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, ContentReadyEvent as ButtonGroupContentReadyEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
+import type { Format, ValidationStatus, ButtonType, template, ButtonStyle, SingleMultipleOrNone } from "devextreme/common";
+import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
 import type UploadInfo from "devextreme/file_management/upload_info";
 
@@ -60,7 +62,7 @@ const Chat = memo(
         }
       ), []);
 
-      const subscribableOptions = useMemo(() => (["items"]), []);
+      const subscribableOptions = useMemo(() => (["items","suggestions.selectedItemKeys","suggestions.selectedItems"]), []);
       const independentEvents = useMemo(() => (["onAttachmentDownloadClick","onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onTypingEnd","onTypingStart"]), []);
 
       const defaults = useMemo(() => ({
@@ -69,6 +71,7 @@ const Chat = memo(
 
       const expectedChildren = useMemo(() => ({
         alert: { optionName: "alerts", isCollectionItem: true },
+        chatItem: { optionName: "items", isCollectionItem: true },
         dayHeaderFormat: { optionName: "dayHeaderFormat", isCollectionItem: false },
         editing: { optionName: "editing", isCollectionItem: false },
         fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
@@ -76,6 +79,7 @@ const Chat = memo(
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
         sendButtonOptions: { optionName: "sendButtonOptions", isCollectionItem: false },
         speechToTextOptions: { optionName: "speechToTextOptions", isCollectionItem: false },
+        suggestions: { optionName: "suggestions", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
@@ -131,7 +135,7 @@ const Alert = Object.assign<typeof _componentAlert, NestedComponentMeta>(_compon
 });
 
 // owners:
-// Item
+// ChatItem
 type IAttachmentProps = React.PropsWithChildren<{
   name?: string;
   size?: number;
@@ -151,7 +155,7 @@ const Attachment = Object.assign<typeof _componentAttachment, NestedComponentMet
 });
 
 // owners:
-// Item
+// ChatItem
 type IAuthorProps = React.PropsWithChildren<{
   avatarAlt?: string;
   avatarUrl?: string;
@@ -168,6 +172,38 @@ const _componentAuthor = (props: IAuthorProps) => {
 };
 
 const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_componentAuthor, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
+type IChatItemProps = React.PropsWithChildren<{
+  alt?: string;
+  attachments?: Array<ChatAttachment>;
+  author?: ChatUser;
+  id?: number | string;
+  isDeleted?: boolean;
+  isEdited?: boolean;
+  src?: string;
+  text?: string;
+  timestamp?: Date | number | string;
+  type?: string | undefined;
+}>
+const _componentChatItem = (props: IChatItemProps) => {
+  return React.createElement(NestedOption<IChatItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        attachment: { optionName: "attachments", isCollectionItem: true },
+        author: { optionName: "author", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const ChatItem = Object.assign<typeof _componentChatItem, NestedComponentMeta>(_componentChatItem, {
   componentType: "option",
 });
 
@@ -320,6 +356,7 @@ const FileUploaderOptions = Object.assign<typeof _componentFileUploaderOptions, 
 
 // owners:
 // Chat
+// Suggestions
 type IItemProps = React.PropsWithChildren<{
   alt?: string;
   attachments?: Array<ChatAttachment>;
@@ -330,7 +367,15 @@ type IItemProps = React.PropsWithChildren<{
   src?: string;
   text?: string;
   timestamp?: Date | number | string;
-  type?: string | undefined;
+  type?: string | undefined | ButtonType;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  hint?: string;
+  icon?: string;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  visible?: boolean;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {
@@ -342,6 +387,11 @@ const _componentItem = (props: IItemProps) => {
         attachment: { optionName: "attachments", isCollectionItem: true },
         author: { optionName: "author", isCollectionItem: false }
       },
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
     },
   });
 };
@@ -467,6 +517,100 @@ const SpeechToTextOptions = Object.assign<typeof _componentSpeechToTextOptions, 
 
 // owners:
 // Chat
+type ISuggestionsProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  buttonTemplate?: ((buttonData: any, buttonContent: any) => string | any) | template;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  height?: number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  items?: Array<dxButtonGroupItem>;
+  keyExpr?: (() => void) | string;
+  onContentReady?: ((e: ButtonGroupContentReadyEvent) => void);
+  onDisposing?: ((e: ButtonGroupDisposingEvent) => void);
+  onInitialized?: ((e: ButtonGroupInitializedEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void);
+  onOptionChanged?: ((e: ButtonGroupOptionChangedEvent) => void);
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+  rtlEnabled?: boolean;
+  selectedItemKeys?: Array<any>;
+  selectedItems?: Array<any>;
+  selectionMode?: SingleMultipleOrNone;
+  stylingMode?: ButtonStyle;
+  tabIndex?: number;
+  visible?: boolean;
+  width?: number | string | undefined;
+  defaultSelectedItemKeys?: Array<any>;
+  onSelectedItemKeysChange?: (value: Array<any>) => void;
+  defaultSelectedItems?: Array<any>;
+  onSelectedItemsChange?: (value: Array<any>) => void;
+  buttonRender?: (...params: any) => React.ReactNode;
+  buttonComponent?: React.ComponentType<any>;
+}>
+const _componentSuggestions = (props: ISuggestionsProps) => {
+  return React.createElement(NestedOption<ISuggestionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "suggestions",
+      DefaultsProps: {
+        defaultSelectedItemKeys: "selectedItemKeys",
+        defaultSelectedItems: "selectedItems"
+      },
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        suggestionsItem: { optionName: "items", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "buttonTemplate",
+        render: "buttonRender",
+        component: "buttonComponent"
+      }],
+    },
+  });
+};
+
+const Suggestions = Object.assign<typeof _componentSuggestions, NestedComponentMeta>(_componentSuggestions, {
+  componentType: "option",
+});
+
+// owners:
+// Suggestions
+type ISuggestionsItemProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  hint?: string;
+  icon?: string;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  type?: ButtonType | string;
+  visible?: boolean;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentSuggestionsItem = (props: ISuggestionsItemProps) => {
+  return React.createElement(NestedOption<ISuggestionsItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const SuggestionsItem = Object.assign<typeof _componentSuggestionsItem, NestedComponentMeta>(_componentSuggestionsItem, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
 type ITypingUserProps = React.PropsWithChildren<{
   avatarAlt?: string;
   avatarUrl?: string;
@@ -519,6 +663,8 @@ export {
   IAttachmentProps,
   Author,
   IAuthorProps,
+  ChatItem,
+  IChatItemProps,
   CustomSpeechRecognizer,
   ICustomSpeechRecognizerProps,
   DayHeaderFormat,
@@ -537,6 +683,10 @@ export {
   ISpeechRecognitionConfigProps,
   SpeechToTextOptions,
   ISpeechToTextOptionsProps,
+  Suggestions,
+  ISuggestionsProps,
+  SuggestionsItem,
+  ISuggestionsItemProps,
   TypingUser,
   ITypingUserProps,
   User,
