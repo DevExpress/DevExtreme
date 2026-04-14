@@ -4,7 +4,11 @@ import type { SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 
 import {
-  AGENDA_APPOINTMENT_CLASSES, ALL_DAY_TEXT, APPOINTMENT_CLASSES, RECURRING_LABEL,
+  AGENDA_APPOINTMENT_CLASSES,
+  ALL_DAY_TEXT,
+  APPOINTMENT_CLASSES,
+  APPOINTMENT_TYPE_CLASSES,
+  RECURRING_LABEL,
 } from '../const';
 import type { BaseAppointmentViewProperties } from './base_appointment';
 import { BaseAppointmentView } from './base_appointment';
@@ -32,11 +36,11 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
       .toggleClass(AGENDA_APPOINTMENT_CLASSES.LAST_IN_DATE, this.option().modifiers.isLastInGroup);
   }
 
-  public override resize(): void {
-    this.$element().css({
-      height: this.option().geometry.height,
-      width: this.option().geometry.width,
-    });
+  public override resize(geometry?: { height: number, width: string | number }): void {
+    const newGeometry = geometry ?? this.option().geometry;
+    const { height, width } = newGeometry;
+
+    this.$element().css({ height, width });
   }
 
   protected override defaultAppointmentContent(
@@ -60,6 +64,7 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
     // eslint-disable-next-line no-void
     void this.option().getResourceColor().then((color) => {
       if (color) {
+        this.$element().addClass(APPOINTMENT_TYPE_CLASSES.HAS_RESOURCE);
         $marker.css('backgroundColor', color);
       }
     });

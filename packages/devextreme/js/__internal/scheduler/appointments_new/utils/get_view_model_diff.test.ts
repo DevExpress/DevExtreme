@@ -66,13 +66,21 @@ describe('getViewModelDiff', () => {
     const data1: ItemData = {};
     const data2: ItemData = {};
     const data3: ItemData = {};
-    const a = [makeItem(data1), makeItem(data2), makeItem(data3)];
+    const a = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+      makeItem(data3, { sortedIndex: 2 }),
+    ];
     const b = [makeItem(data1), makeItem(data2), makeItem(data3)];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
     expect(getOperations(diff)).toBe('===');
-    expect(diff).toEqual([{ item: b[0] }, { item: b[1] }, { item: b[2] }]);
+    expect(diff).toEqual([
+      { item: b[0], oldSortedIndex: 0 },
+      { item: b[1], oldSortedIndex: 1 },
+      { item: b[2], oldSortedIndex: 2 },
+    ]);
   });
 
   it('should mark all as needToAdd when old list is empty', () => {
@@ -108,17 +116,21 @@ describe('getViewModelDiff', () => {
     const data2: ItemData = {};
     const data3: ItemData = {};
     const data4: ItemData = {};
-    const a = [makeItem(data1), makeItem(data2), makeItem(data4)];
+    const a = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+      makeItem(data4, { sortedIndex: 2 }),
+    ];
     const b = [makeItem(data1), makeItem(data3), makeItem(data4)];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
     expect(getOperations(diff)).toBe('=+-=');
     expect(diff).toEqual([
-      { item: b[0] },
+      { item: b[0], oldSortedIndex: 0 },
       { item: b[1], needToAdd: true },
       { item: a[1], needToRemove: true },
-      { item: b[2] },
+      { item: b[2], oldSortedIndex: 2 },
     ]);
   });
 
@@ -126,17 +138,21 @@ describe('getViewModelDiff', () => {
     const data1: ItemData = {};
     const data2: ItemData = {};
     const data4: ItemData = {};
-    const a = [makeItem(data1), makeItem(data2), makeItem(data4)];
+    const a = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+      makeItem(data4, { sortedIndex: 2 }),
+    ];
     const b = [makeItem(data1), makeItem(data2, { rowIndex: 1 }), makeItem(data4)];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
     expect(getOperations(diff)).toBe('=+-=');
     expect(diff).toEqual([
-      { item: b[0] },
+      { item: b[0], oldSortedIndex: 0 },
       { item: b[1], needToAdd: true },
       { item: a[1], needToRemove: true },
-      { item: b[2] },
+      { item: b[2], oldSortedIndex: 2 },
     ]);
   });
 
@@ -145,7 +161,12 @@ describe('getViewModelDiff', () => {
     const data2: ItemData = {};
     const data3: ItemData = {};
     const data4: ItemData = {};
-    const a = [makeItem(data1), makeItem(data2), makeItem(data3), makeItem(data4)];
+    const a = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+      makeItem(data3, { sortedIndex: 2 }),
+      makeItem(data4, { sortedIndex: 3 }),
+    ];
     const b = [makeItem(data4), makeItem(data1), makeItem(data2), makeItem(data3)];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
@@ -153,9 +174,9 @@ describe('getViewModelDiff', () => {
     expect(getOperations(diff)).toBe('+===-');
     expect(diff).toEqual([
       { item: b[0], needToAdd: true },
-      { item: b[1] },
-      { item: b[2] },
-      { item: b[3] },
+      { item: b[1], oldSortedIndex: 0 },
+      { item: b[2], oldSortedIndex: 1 },
+      { item: b[3], oldSortedIndex: 2 },
       { item: a[3], needToRemove: true },
     ]);
   });
@@ -166,7 +187,12 @@ describe('getViewModelDiff', () => {
     const data3: ItemData = {};
     const data4: ItemData = {};
     const data5: ItemData = {};
-    const a = [makeItem(data1), makeItem(data2), makeItem(data3), makeItem(data4)];
+    const a = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+      makeItem(data3, { sortedIndex: 2 }),
+      makeItem(data4, { sortedIndex: 3 }),
+    ];
     const b = [makeItem(data4), makeItem(data1), makeItem(data5), makeItem(data3)];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
@@ -174,10 +200,10 @@ describe('getViewModelDiff', () => {
     expect(getOperations(diff)).toBe('+=+-=-');
     expect(diff).toEqual([
       { item: b[0], needToAdd: true },
-      { item: b[1] },
+      { item: b[1], oldSortedIndex: 0 },
       { item: b[2], needToAdd: true },
       { item: a[1], needToRemove: true },
-      { item: b[3] },
+      { item: b[3], oldSortedIndex: 2 },
       { item: a[3], needToRemove: true },
     ]);
   });
@@ -188,7 +214,12 @@ describe('getViewModelDiff', () => {
     const data3: ItemData = { myId: 2 };
     const data4: ItemData = { myId: 3 };
     const data5: ItemData = { myId: 4 };
-    const a = [makeItem(data1), makeItem(data2), makeItem(data3), makeItem(data4)];
+    const a = [
+      makeItem(data1),
+      makeItem(data2, { sortedIndex: 5 }),
+      makeItem(data3),
+      makeItem(data4),
+    ];
     // bItem1 uses the same data2 ref as a[1] but with a different sortedIndex,
     // which is not part of the comparison object — items are still considered equal.
     const bItem1 = makeItem(data2, { sortedIndex: 99 });
@@ -197,14 +228,14 @@ describe('getViewModelDiff', () => {
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
     expect(getOperations(diff)).toBe('+-=+=-');
-    expect(diff[2]).toEqual({ item: bItem1 });
+    expect(diff[2]).toEqual({ item: bItem1, oldSortedIndex: 5 });
   });
 
   describe('needToResize', () => {
     it('should mark needToResize when only dimensions change for the same item', () => {
       const data1: ItemData = {};
       const a = [makeItem(data1, {
-        left: 0, top: 0, height: 100, width: 200,
+        sortedIndex: 3, left: 0, top: 0, height: 100, width: 200,
       })];
       const b = [makeItem(data1, {
         left: 10, top: 20, height: 50, width: 150,
@@ -213,14 +244,18 @@ describe('getViewModelDiff', () => {
       const diff = getViewModelDiff(a, b, defaultDataSource);
 
       expect(getOperations(diff)).toBe('r');
-      expect(diff).toEqual([{ item: b[0], needToResize: true }]);
+      expect(diff).toEqual([{ item: b[0], needToResize: true, oldSortedIndex: 3 }]);
     });
 
     it('should mix needToResize with other operations', () => {
       const data1: ItemData = {};
       const data2: ItemData = {};
       const data3: ItemData = {};
-      const a = [makeItem(data1), makeItem(data2), makeItem(data3)];
+      const a = [
+        makeItem(data1, { sortedIndex: 0 }),
+        makeItem(data2, { sortedIndex: 1 }),
+        makeItem(data3, { sortedIndex: 2 }),
+      ];
       const b = [
         makeItem(data1),
         makeItem(data2, { left: 50, top: 50 }),
@@ -231,9 +266,9 @@ describe('getViewModelDiff', () => {
 
       expect(getOperations(diff)).toBe('=r=');
       expect(diff).toEqual([
-        { item: b[0] },
-        { item: b[1], needToResize: true },
-        { item: b[2] },
+        { item: b[0], oldSortedIndex: 0 },
+        { item: b[1], needToResize: true, oldSortedIndex: 1 },
+        { item: b[2], oldSortedIndex: 2 },
       ]);
     });
   });

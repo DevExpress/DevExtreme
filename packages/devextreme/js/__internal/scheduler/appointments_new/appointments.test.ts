@@ -325,6 +325,61 @@ describe('Appointments', () => {
       expect($(elementAfter).css('top')).toBe('20px');
       expect($(elementAfter).css('left')).toBe('20px');
     });
+
+    it('should not re-create appointments whose sortedIndex shifted after a new appointment is inserted in the middle', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockGridViewModel(dataB, { sortedIndex: 1 }),
+        mockGridViewModel(dataC, { sortedIndex: 2 }),
+      ]);
+
+      const viewItemA = instance.getViewItemBySortedIndex(0);
+      const viewItemB = instance.getViewItemBySortedIndex(1);
+      const viewItemC = instance.getViewItemBySortedIndex(2);
+
+      const dataNEW = { ...defaultAppointmentData, text: 'Appointment NEW' };
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockGridViewModel(dataNEW, { sortedIndex: 1 }),
+        mockGridViewModel(dataB, { sortedIndex: 2 }),
+        mockGridViewModel(dataC, { sortedIndex: 3 }),
+      ]);
+
+      expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(4);
+      expect(instance.getViewItemBySortedIndex(0)).toBe(viewItemA);
+      expect(instance.getViewItemBySortedIndex(2)).toBe(viewItemB);
+      expect(instance.getViewItemBySortedIndex(3)).toBe(viewItemC);
+    });
+
+    it('should not re-create appointments whose sortedIndex shifted after an appointment is removed from the middle', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockGridViewModel(dataB, { sortedIndex: 1 }),
+        mockGridViewModel(dataC, { sortedIndex: 2 }),
+      ]);
+
+      const viewItemA = instance.getViewItemBySortedIndex(0);
+      const viewItemC = instance.getViewItemBySortedIndex(2);
+
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockGridViewModel(dataC, { sortedIndex: 1 }),
+      ]);
+
+      expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(2);
+      expect(instance.getViewItemBySortedIndex(0)).toBe(viewItemA);
+      expect(instance.getViewItemBySortedIndex(1)).toBe(viewItemC);
+    });
   });
 
   describe('Resources', () => {
