@@ -264,6 +264,7 @@ export default [
             '@typescript-eslint/no-unsafe-function-type': 'off',
             '@typescript-eslint/no-wrapper-object-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
+            '@typescript-eslint/no-unused-vars': 'off',
             'i18n/no-russian-character': ['error', {
                 includeIdentifier: true,
             }],
