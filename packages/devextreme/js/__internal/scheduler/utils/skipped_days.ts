@@ -30,6 +30,10 @@ export const getFirstVisibleDate = (
   skippedDays: number[],
   nextDate: (date: Date) => Date,
 ): Date => {
+  if (skippedDays.length >= 7) {
+    return new Date(start);
+  }
+
   let date = new Date(start);
   while (isDateSkipped(date, skippedDays)) {
     date = nextDate(date);

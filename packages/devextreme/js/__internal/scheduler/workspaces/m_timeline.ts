@@ -108,8 +108,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected incrementDate(date) {
+    const skippedDays = this.option('skippedDays') ?? [];
+
+    if (skippedDays.length >= 7) {
+      return;
+    }
+
     date.setDate(date.getDate() + 1);
-    while ((this.option('skippedDays') ?? []).includes(date.getDay())) {
+    while (skippedDays.includes(date.getDay())) {
       date.setDate(date.getDate() + 1);
     }
   }
