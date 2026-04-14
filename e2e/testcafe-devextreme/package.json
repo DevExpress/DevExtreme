@@ -13,6 +13,7 @@
     "@types/jquery": "3.5.29",
     "@typescript-eslint/eslint-plugin": "catalog:eslint8",
     "@typescript-eslint/parser": "catalog:eslint8",
+    "eslint-config-devextreme": "1.1.6",
     "axe-core": "catalog:",
     "devextreme": "workspace:*",
     "devextreme-screenshot-comparer": "2.0.17",
