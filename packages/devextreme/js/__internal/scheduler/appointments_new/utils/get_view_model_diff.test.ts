@@ -1,10 +1,9 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import type { SafeAppointment } from '@ts/scheduler/types';
 
 import type { AppointmentDataSource } from '../../view_model/m_appointment_data_source';
-import type { AppointmentItemViewModel } from '../../view_model/types';
+import { mockGridViewModel } from '../__mock__/appointment_view_model';
 import { getViewModelDiff } from './get_view_model_diff';
 
 type ItemData = Record<string, unknown>;
@@ -19,34 +18,7 @@ const createMockDataSource = (
 
 const defaultDataSource = createMockDataSource();
 
-const makeItem = (
-  itemData: SafeAppointment,
-  overrides: Partial<AppointmentItemViewModel> = {},
-): AppointmentItemViewModel => ({
-  itemData,
-  allDay: false,
-  groupIndex: 0,
-  sortedIndex: 0,
-  direction: 'vertical',
-  skipResizing: false,
-  level: 0,
-  maxLevel: 0,
-  empty: false,
-  left: 0,
-  top: 0,
-  height: 100,
-  width: 200,
-  reduced: undefined,
-  partIndex: 0,
-  partTotalCount: 1,
-  rowIndex: 0,
-  columnIndex: 0,
-  info: {
-    sourceAppointment: { startDate: new Date(), endDate: new Date() },
-    appointment: { startDate: new Date(), endDate: new Date() },
-  },
-  ...overrides,
-} as AppointmentItemViewModel);
+const makeItem = mockGridViewModel;
 
 const getOperations = (items: ReturnType<typeof getViewModelDiff>): string => items
   .map((item) => {
@@ -71,7 +43,11 @@ describe('getViewModelDiff', () => {
       makeItem(data2, { sortedIndex: 1 }),
       makeItem(data3, { sortedIndex: 2 }),
     ];
-    const b = [makeItem(data1), makeItem(data2), makeItem(data3)];
+    const b = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+      makeItem(data3, { sortedIndex: 2 }),
+    ];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
@@ -86,7 +62,10 @@ describe('getViewModelDiff', () => {
   it('should mark all as needToAdd when old list is empty', () => {
     const data1: ItemData = {};
     const data2: ItemData = {};
-    const b = [makeItem(data1), makeItem(data2)];
+    const b = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+    ];
 
     const diff = getViewModelDiff([], b, defaultDataSource);
 
@@ -121,7 +100,11 @@ describe('getViewModelDiff', () => {
       makeItem(data2, { sortedIndex: 1 }),
       makeItem(data4, { sortedIndex: 2 }),
     ];
-    const b = [makeItem(data1), makeItem(data3), makeItem(data4)];
+    const b = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data3, { sortedIndex: 1 }),
+      makeItem(data4, { sortedIndex: 2 }),
+    ];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
@@ -143,7 +126,11 @@ describe('getViewModelDiff', () => {
       makeItem(data2, { sortedIndex: 1 }),
       makeItem(data4, { sortedIndex: 2 }),
     ];
-    const b = [makeItem(data1), makeItem(data2, { rowIndex: 1 }), makeItem(data4)];
+    const b = [
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1, rowIndex: 1 }),
+      makeItem(data4, { sortedIndex: 2 }),
+    ];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
@@ -167,7 +154,12 @@ describe('getViewModelDiff', () => {
       makeItem(data3, { sortedIndex: 2 }),
       makeItem(data4, { sortedIndex: 3 }),
     ];
-    const b = [makeItem(data4), makeItem(data1), makeItem(data2), makeItem(data3)];
+    const b = [
+      makeItem(data4, { sortedIndex: 0 }),
+      makeItem(data1, { sortedIndex: 1 }),
+      makeItem(data2, { sortedIndex: 2 }),
+      makeItem(data3, { sortedIndex: 3 }),
+    ];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
@@ -193,7 +185,12 @@ describe('getViewModelDiff', () => {
       makeItem(data3, { sortedIndex: 2 }),
       makeItem(data4, { sortedIndex: 3 }),
     ];
-    const b = [makeItem(data4), makeItem(data1), makeItem(data5), makeItem(data3)];
+    const b = [
+      makeItem(data4, { sortedIndex: 0 }),
+      makeItem(data1, { sortedIndex: 1 }),
+      makeItem(data5, { sortedIndex: 2 }),
+      makeItem(data3, { sortedIndex: 3 }),
+    ];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
@@ -215,20 +212,25 @@ describe('getViewModelDiff', () => {
     const data4: ItemData = { myId: 3 };
     const data5: ItemData = { myId: 4 };
     const a = [
-      makeItem(data1),
-      makeItem(data2, { sortedIndex: 5 }),
-      makeItem(data3),
-      makeItem(data4),
+      makeItem(data1, { sortedIndex: 0 }),
+      makeItem(data2, { sortedIndex: 1 }),
+      makeItem(data3, { sortedIndex: 2 }),
+      makeItem(data4, { sortedIndex: 3 }),
     ];
     // bItem1 uses the same data2 ref as a[1] but with a different sortedIndex,
     // which is not part of the comparison object — items are still considered equal.
-    const bItem1 = makeItem(data2, { sortedIndex: 99 });
-    const b = [makeItem(data4), bItem1, makeItem(data5), makeItem(data3)];
+    const bItem1 = makeItem(data2, { sortedIndex: 1 });
+    const b = [
+      makeItem(data4, { sortedIndex: 0 }),
+      bItem1,
+      makeItem(data5, { sortedIndex: 2 }),
+      makeItem(data3, { sortedIndex: 3 }),
+    ];
 
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
     expect(getOperations(diff)).toBe('+-=+=-');
-    expect(diff[2]).toEqual({ item: bItem1, oldSortedIndex: 5 });
+    expect(diff[2]).toEqual({ item: bItem1, oldSortedIndex: 1 });
   });
 
   describe('needToResize', () => {
@@ -238,7 +240,7 @@ describe('getViewModelDiff', () => {
         sortedIndex: 3, left: 0, top: 0, height: 100, width: 200,
       })];
       const b = [makeItem(data1, {
-        left: 10, top: 20, height: 50, width: 150,
+        sortedIndex: 0, left: 10, top: 20, height: 50, width: 150,
       })];
 
       const diff = getViewModelDiff(a, b, defaultDataSource);
@@ -257,9 +259,9 @@ describe('getViewModelDiff', () => {
         makeItem(data3, { sortedIndex: 2 }),
       ];
       const b = [
-        makeItem(data1),
-        makeItem(data2, { left: 50, top: 50 }),
-        makeItem(data3),
+        makeItem(data1, { sortedIndex: 0 }),
+        makeItem(data2, { sortedIndex: 1, left: 50, top: 50 }),
+        makeItem(data3, { sortedIndex: 2 }),
       ];
 
       const diff = getViewModelDiff(a, b, defaultDataSource);
@@ -276,8 +278,8 @@ describe('getViewModelDiff', () => {
   describe('updatedAppointment', () => {
     it('should treat item as changed when itemData matches getUpdatedAppointment reference', () => {
       const data1: ItemData = {};
-      const a = [makeItem(data1)];
-      const b = [makeItem(data1)];
+      const a = [makeItem(data1, { sortedIndex: 0 })];
+      const b = [makeItem(data1, { sortedIndex: 0 })];
       const dataSource = createMockDataSource(data1);
 
       const diff = getViewModelDiff(a, b, dataSource);
@@ -291,8 +293,8 @@ describe('getViewModelDiff', () => {
 
     it('should treat item as changed when its data matches an updatedAppointmentKey', () => {
       const data1: ItemData = { id: 1 };
-      const a = [makeItem(data1)];
-      const b = [makeItem(data1)];
+      const a = [makeItem(data1, { sortedIndex: 0 })];
+      const b = [makeItem(data1, { sortedIndex: 0 })];
       const dataSource = createMockDataSource(null, [{ key: 'id', value: 1 }]);
 
       const diff = getViewModelDiff(a, b, dataSource);
@@ -304,8 +306,13 @@ describe('getViewModelDiff', () => {
       const data1: ItemData = { id: 1 };
       const data2: ItemData = { id: 2 };
       const updatedData: ItemData = { id: 3 };
-      const a = [makeItem(data1), makeItem(data2)];
-      const b = [makeItem(data1), makeItem(data2)];
+      const a = [
+        makeItem(data1, { sortedIndex: 0 }),
+        makeItem(data2, { sortedIndex: 1 })];
+      const b = [
+        makeItem(data1, { sortedIndex: 0 }),
+        makeItem(data2, { sortedIndex: 1 }),
+      ];
       const dataSource = createMockDataSource(updatedData);
 
       const diff = getViewModelDiff(a, b, dataSource);
