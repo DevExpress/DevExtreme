@@ -223,6 +223,8 @@ export default [
       '@typescript-eslint/prefer-optional-chain': 'warn',
       '@typescript-eslint/only-throw-error': 'warn',
       'require-await': 'off',
+      '@stylistic/max-len': 'warn',
+      '@typescript-eslint/init-declarations': 'warn',
     },
   },
   ...typescriptConfig.map(config => {

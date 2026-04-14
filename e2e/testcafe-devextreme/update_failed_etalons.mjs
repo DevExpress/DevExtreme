@@ -37,10 +37,10 @@ function processEtalonFolder(etalonFolderPath, allEtalons) {
     const hasFile = allEtalons.has(currentFileName);
 
     if (hasFile) {
-      const dstFileName = join(etalonFolderPath, currentFileName);
+      const destFileName = join(etalonFolderPath, currentFileName);
       const srcFileName = join(PATH_TO_CURRENT_ETALONS, currentFileName);
 
-      copyFileSync(srcFileName, dstFileName);
+      copyFileSync(srcFileName, destFileName);
       allEtalons.delete(currentFileName);
 
       if (allEtalons.size === 0) {
@@ -53,9 +53,9 @@ function processEtalonFolder(etalonFolderPath, allEtalons) {
 }
 
 function processFolder(currentDir, allEtalons) {
-  const currentDirrectoryFolders = getAllDirs(currentDir);
+  const currentDirectoryFolders = getAllDirs(currentDir);
 
-  for (let dir of currentDirrectoryFolders) {
+  for (let dir of currentDirectoryFolders) {
     const folderName = basename(dir);
     const continueProcessFolders = folderName === ETALONS_FOLDER_NAME
       ? processEtalonFolder(dir, allEtalons)

@@ -113,8 +113,7 @@ test('Popup should be centered regarding the window after position.boundary is s
   const initialRect: { bottom: number;
     top: number;
     left: number;
-    right: number;
-  } = {
+    right: number; } = {
     bottom: 0,
     top: 0,
     left: 0,
