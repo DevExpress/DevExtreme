@@ -173,9 +173,36 @@ function run_test_impl {
     local chrome_pid=$!
     echo "Chrome PID: $chrome_pid"
 
+    start_chrome_health_monitor $chrome_pid $runner_pid
     start_runner_watchdog $runner_pid $chrome_pid
     wait $runner_pid || runner_result=1
     return $runner_result
+}
+
+function start_chrome_health_monitor {
+    local chrome_pid=$1
+    local runner_pid=$2
+    local chrome_log_file="$PWD/chrome.log"
+
+    (
+        sleep 30
+        while kill -0 $chrome_pid 2>/dev/null; do
+            sleep 10
+        done
+
+        if kill -0 $runner_pid 2>/dev/null; then
+            echo "========================================="
+            echo "CHROME CRASH DETECTED: Chrome process $chrome_pid no longer exists"
+            echo "========================================="
+            echo "===== Last 50 lines of chrome.log ====="
+            tail -n 50 $chrome_log_file 2>/dev/null || echo "(chrome.log not found)"
+            echo ""
+            echo "Killing runner process $runner_pid to trigger retry..."
+            kill -9 $runner_pid 2>/dev/null
+        fi
+    ) &
+
+    echo "Chrome health monitor running in background (PID: $!)"
 }
 
 function start_runner_watchdog {
@@ -188,7 +215,7 @@ function start_runner_watchdog {
     local stall_count=0
     local check_count=0
 
-    echo "Watchdog started: monitoring runner PID $runner_pid, chrome PID $chrome_pid, checking every 180s, max 6 failures = 18min timeout"
+    echo "Watchdog started: monitoring runner PID $runner_pid, chrome PID $chrome_pid, checking every 180s, max 3 failures = 9min timeout"
 
     (
         while true; do
@@ -214,13 +241,13 @@ function start_runner_watchdog {
                     stall_count=0
                 elif [ "$current_time" == "$last_suite_time" ]; then
                     stall_count=$((stall_count + 1))
-                    echo "Watchdog [check #$check_count]: STALL DETECTED (attempt $stall_count/6) - LastSuiteTime unchanged: $last_suite_time"
+                    echo "Watchdog [check #$check_count]: STALL DETECTED (attempt $stall_count/3) - LastSuiteTime unchanged: $last_suite_time"
                     
-                    if [ $stall_count -ge 6 ]; then
+                    if [ $stall_count -ge 3 ]; then
                         echo "========================================="
-                        echo "WATCHDOG TIMEOUT: Runner stalled for 18 minutes (6 checks × 3 min)"
+                        echo "WATCHDOG TIMEOUT: Runner stalled for 9 minutes (3 checks × 3 min)"
                         echo "Last suite time: $last_suite_time"
-                        echo "========================================="
+                        echo "=========================================" 
                         echo "===== Last 100 lines of RawLog.txt ====="
                         tail -n 100 $raw_log_file 2>/dev/null || echo "(RawLog.txt not found)"
                         echo ""
