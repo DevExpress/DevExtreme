@@ -13,6 +13,8 @@ import spellCheckConfig from 'eslint-config-devextreme/spell-check';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
 import testcafeConfig from 'eslint-config-devextreme/testcafe';
 
+import noIsReadyWithoutExpect from './eslint-rules/no-is-ready-without-expect.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compatibility = new FlatCompatibility({
@@ -257,5 +259,21 @@ export default [
       '@typescript-eslint/no-wrapper-object-types': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
     }
+  },
+  {
+    files: [
+      'tests/dataGrid/**/*.ts',
+      'tests/cardView/**/*.ts',
+    ],
+    plugins: {
+      'local': {
+        rules: {
+          'no-is-ready-without-expect': noIsReadyWithoutExpect,
+        },
+      },
+    },
+    rules: {
+      'local/no-is-ready-without-expect': 'error',
+    },
   },
 ];
