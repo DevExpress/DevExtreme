@@ -63,7 +63,10 @@ export class BaseAppointmentView<
     this.renderContentTemplate();
   }
 
-  public resize(): void { }
+  public resize(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    geometry?: { height: number; width: number | string; top: number; left: number },
+  ): void { }
 
   protected applyElementClasses(): void {
     this.$element()
