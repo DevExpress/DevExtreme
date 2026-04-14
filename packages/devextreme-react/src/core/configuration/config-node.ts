@@ -38,7 +38,7 @@ function buildNodeFullName(node: IConfigNode): string {
   let currentNode: IConfigNode | undefined = node;
   let fullName = '';
 
-  while (currentNode && currentNode.name) {
+  while (currentNode?.name) {
     fullName = currentNode.name.concat(
       typeof currentNode.index === 'number' ? `[${currentNode.index}]` : '',
       fullName ? `.${fullName}` : '',
