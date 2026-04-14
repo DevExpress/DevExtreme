@@ -12,7 +12,8 @@ export async function generateAngularComponents(
     internalTools = require('devextreme-internal-tools');
   } catch (error: any) {
     throw new Error(
-      'devextreme-internal-tools not found. Run: pnpm install\n'
+      'devextreme-internal-tools not found.\n'
+        + 'Run "pnpm install --frozen-lockfile" from the repository root to install dependencies.\n'
         + `Original error: ${error.message}`,
     );
   }
