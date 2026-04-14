@@ -114,7 +114,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   private _form?: Form;
 
-  private _hidingColumnsQueue: any;
+  private _hidingColumnsQueue?: Column[];
 
   protected _keyboardNavigationController!: KeyboardNavigationController;
 
@@ -605,39 +605,41 @@ export class AdaptiveColumnsController extends modules.ViewController {
     return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
   }
 
-  public hideRedundantColumns(resultWidths, visibleColumns, hiddenQueue) {
-    const that = this;
-
+  public hideRedundantColumns(
+    resultWidths: (number | string | undefined)[],
+    visibleColumns: Column[],
+    hiddenQueue: Column[],
+  ): void {
     this._hiddenColumns = [];
 
-    if (that._isVisibleColumnsValid(visibleColumns) && hiddenQueue.length) {
+    if (this._isVisibleColumnsValid(visibleColumns) && hiddenQueue.length) {
       let totalWidth = 0;
-      const $rootElement = that.component.$element();
-      let rootElementWidth = getWidth($rootElement) - that._getCommandColumnsWidth();
+      const $rootElement = this.component.$element();
+      const availableWidth = getWidth($rootElement) - this._rowsView.getScrollbarWidth();
+      let rootElementWidth = availableWidth - this._getCommandColumnsWidth();
       const getVisibleContentColumns = function () {
         return visibleColumns.filter((item) => !item.command && this._hiddenColumns.filter((i) => i.index === item.index).length === 0);
       }.bind(this);
       let visibleContentColumns = getVisibleContentColumns();
       const contentColumnsCount = visibleContentColumns.length;
-      let i;
-      let hasHiddenColumns;
-      let needHideColumn;
+      let hasHiddenColumns = false;
+      let needHideColumn = false;
 
       do {
         needHideColumn = false;
         totalWidth = 0;
 
-        const percentWidths = that._calculatePercentWidths(resultWidths, visibleColumns);
+        const percentWidths = this._calculatePercentWidths(resultWidths, visibleColumns);
 
         const columnsCanFit = percentWidths < 100 && percentWidths !== 0;
-        for (i = 0; i < visibleColumns.length; i++) {
+        for (let i = 0; i < visibleColumns.length; i += 1) {
           const visibleColumn = visibleColumns[i];
 
-          let columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit);
-          const columnId = getColumnId(that, visibleColumn);
-          const widthOption = that._columnsController.columnOption(columnId, 'width');
-          const minWidth = that._columnsController.columnOption(columnId, 'minWidth');
-          const columnBestFitWidth = that._columnsController.columnOption(columnId, 'bestFitWidth');
+          let columnWidth = this._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit);
+          const columnId = getColumnId(this, visibleColumn);
+          const widthOption = this._columnsController.columnOption(columnId, 'width');
+          const minWidth = this._columnsController.columnOption(columnId, 'minWidth');
+          const columnBestFitWidth = this._columnsController.columnOption(columnId, 'bestFitWidth');
 
           if (resultWidths[i] === HIDDEN_COLUMNS_WIDTH) {
             hasHiddenColumns = true;
@@ -657,15 +659,15 @@ export class AdaptiveColumnsController extends modules.ViewController {
           }
         }
 
-        needHideColumn = needHideColumn || totalWidth > getWidth($rootElement);
+        needHideColumn = needHideColumn || totalWidth > availableWidth;
 
         if (needHideColumn) {
-          const column = hiddenQueue.pop();
-          const visibleIndex = that._columnsController.getVisibleIndex(column.index);
+          const column = hiddenQueue.pop() as Column;
+          const visibleIndex = this._columnsController.getVisibleIndex(column.index);
 
-          rootElementWidth += that._calculateColumnWidth(column, rootElementWidth, visibleContentColumns, columnsCanFit);
+          rootElementWidth += this._calculateColumnWidth(column, rootElementWidth, visibleContentColumns, columnsCanFit);
 
-          that._hideVisibleColumn({ visibleIndex });
+          this._hideVisibleColumn({ visibleIndex });
           resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
           this._hiddenColumns.push(column);
           visibleContentColumns = getVisibleContentColumns();
@@ -674,10 +676,10 @@ export class AdaptiveColumnsController extends modules.ViewController {
       while (needHideColumn && visibleContentColumns.length > 1 && hiddenQueue.length);
 
       if (contentColumnsCount === visibleContentColumns.length) {
-        that._hideAdaptiveColumn(resultWidths, visibleColumns);
+        this._hideAdaptiveColumn(resultWidths, visibleColumns);
       }
     } else {
-      that._hideAdaptiveColumn(resultWidths, visibleColumns);
+      this._hideAdaptiveColumn(resultWidths, visibleColumns);
     }
   }
 
@@ -793,8 +795,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
     return this._hiddenColumns.length > 0;
   }
 
-  public getHidingColumnsQueue() {
-    return this._hidingColumnsQueue;
+  public getHidingColumnsQueue(): Column[] {
+    return this._hidingColumnsQueue ?? [];
   }
 
   public isAdaptiveDetailRowExpanded(key) {
