@@ -24,7 +24,6 @@ import { DxoSortableOptions } from './base/sortable-options';
 
 @Component({
     selector: 'dxo-item-dragging',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

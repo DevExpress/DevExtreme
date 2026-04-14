@@ -218,7 +218,6 @@ import {
  */
 @Component({
     selector: 'dx-tree-list',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

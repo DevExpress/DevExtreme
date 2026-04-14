@@ -37,7 +37,6 @@ import {
 
 @Component({
     selector: 'dxo-lookup-drop-down-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

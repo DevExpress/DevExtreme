@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-search-editor-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

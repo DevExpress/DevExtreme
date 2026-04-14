@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-html-editor-image-upload',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

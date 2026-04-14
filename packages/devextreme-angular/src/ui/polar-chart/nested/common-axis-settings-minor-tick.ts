@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-axis-settings-minor-tick',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxo-image-upload',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

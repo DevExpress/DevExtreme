@@ -40,7 +40,6 @@ import {
  */
 @Component({
     selector: 'dx-load-indicator',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

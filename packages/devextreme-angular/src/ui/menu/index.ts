@@ -85,7 +85,6 @@ import {
  */
 @Component({
     selector: 'dx-menu',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

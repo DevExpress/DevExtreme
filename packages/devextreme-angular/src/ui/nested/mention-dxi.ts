@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-mention',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

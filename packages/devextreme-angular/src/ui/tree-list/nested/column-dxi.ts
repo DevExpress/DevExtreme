@@ -39,7 +39,6 @@ import {
 
 @Component({
     selector: 'dxi-tree-list-column',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

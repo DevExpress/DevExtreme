@@ -28,7 +28,6 @@ import {
 
 @Component({
     selector: 'dxi-marker',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

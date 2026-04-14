@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-form-col-count-by-screen',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

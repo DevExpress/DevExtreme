@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-drop-down-box-boundary-offset',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

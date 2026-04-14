@@ -84,7 +84,6 @@ import {
  */
 @Component({
     selector: 'dx-chat',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

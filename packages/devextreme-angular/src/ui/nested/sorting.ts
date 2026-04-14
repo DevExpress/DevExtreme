@@ -24,7 +24,6 @@ import { DxoSorting } from './base/sorting';
 
 @Component({
     selector: 'dxo-sorting',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

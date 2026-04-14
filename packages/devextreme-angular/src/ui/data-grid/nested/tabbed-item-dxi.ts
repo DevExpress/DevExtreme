@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-data-grid-tabbed-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

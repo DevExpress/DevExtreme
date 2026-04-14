@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-tab-panel-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

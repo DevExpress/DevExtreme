@@ -40,7 +40,6 @@ import {
  */
 @Component({
     selector: 'dx-validation-group',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

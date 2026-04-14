@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-field-chooser',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
