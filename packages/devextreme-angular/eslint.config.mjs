@@ -151,6 +151,7 @@ export default [
       '@typescript-eslint/no-useless-constructor': 'warn',
       '@typescript-eslint/no-empty-function': 'warn',
       '@typescript-eslint/require-await': 'warn',
+      'require-await': 'warn',
       '@typescript-eslint/no-floating-promises': 'warn',
       'import/order': 'warn',
       'no-restricted-globals': 'warn',
