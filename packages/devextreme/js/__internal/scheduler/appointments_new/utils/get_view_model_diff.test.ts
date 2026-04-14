@@ -219,7 +219,7 @@ describe('getViewModelDiff', () => {
     ];
     // bItem1 uses the same data2 ref as a[1] but with a different sortedIndex,
     // which is not part of the comparison object — items are still considered equal.
-    const bItem1 = makeItem(data2, { sortedIndex: 1 });
+    const bItem1 = makeItem(data2, { sortedIndex: 5 });
     const b = [
       makeItem(data4, { sortedIndex: 0 }),
       bItem1,
@@ -230,7 +230,7 @@ describe('getViewModelDiff', () => {
     const diff = getViewModelDiff(a, b, defaultDataSource);
 
     expect(getOperations(diff)).toBe('+-=+=-');
-    expect(diff[2]).toEqual({ item: bItem1, oldSortedIndex: 1 });
+    expect(diff[2]).toEqual({ item: bItem1, oldSortedIndex: 5 });
   });
 
   describe('needToResize', () => {
