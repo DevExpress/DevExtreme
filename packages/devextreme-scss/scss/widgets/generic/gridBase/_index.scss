@@ -24,6 +24,7 @@
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
+@use "../../base/gridBase/mixins" as *;
 
 $generic-grid-base-border-hidden: 1px solid transparent;
 $generic-grid-base-row-border: 1px solid transparent;
@@ -898,4 +899,9 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
     border: none;
     border-radius: 0;
   }
+
+  @include ai-chat-messagelist-empty(
+    $button-default-bg,
+    $button-default-outlined-bg-hover,
+  );
 }
