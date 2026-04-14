@@ -3406,7 +3406,7 @@ QUnit.module('dataSource integration', {
         $($input.val(searchValueNFD)).trigger('input');
         this.clock.tick(0);
 
-        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+        const $listItems = $content.find(`.${LIST_ITEM_CLASS}`);
         assert.equal($listItems.length, 2, 'items containing the NFC character should be found when searching with its NFD equivalent');
     });
 });
