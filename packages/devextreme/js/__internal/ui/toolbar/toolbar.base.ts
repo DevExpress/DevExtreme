@@ -46,8 +46,8 @@ export interface ToolbarBaseProperties<
   TKey extends CollectionItemKey = CollectionItemKey,
 > extends Properties<TItem, TKey>,
   Omit<
-  CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
-  keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
+    CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
+    keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
   > {
   grouped: boolean;
   renderAs: 'topToolbar';
@@ -284,8 +284,8 @@ class ToolbarBase<
     const leftSectionRightLTR = beforeEl ? beforeEl.offsetLeft + beforeEl.offsetWidth : 0;
     const leftRight = isRTL ? leftSectionRight : leftSectionRightLTR;
     const rightLeft = isRTL
-      ? (beforeEl?.offsetLeft ?? elementWidth)
-      : (afterEl?.offsetLeft ?? elementWidth);
+      ? beforeEl?.offsetLeft ?? elementWidth
+      : afterEl?.offsetLeft ?? elementWidth;
 
     if (leftRight > centerLeft || centerRight > rightLeft) {
       this._$centerSection.css({
