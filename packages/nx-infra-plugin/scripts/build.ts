@@ -69,7 +69,7 @@ const writeTsConfig = (configPath: string, config: TsConfig): void => {
 
 const compileTypeScript = (pluginDir: string, configPath: string): CompilationResult => {
   try {
-    execSync(`npx tsc -p ${configPath}`, {
+    execSync(`pnpm exec tsc -p ${configPath}`, {
       cwd: pluginDir,
       stdio: 'inherit',
       env: { ...process.env, NODE_ENV: 'production' },
