@@ -173,9 +173,11 @@ function run_test_impl {
     local chrome_pid=$!
     echo "Chrome PID: $chrome_pid"
 
-    start_chrome_health_monitor $chrome_pid $runner_pid
-    start_runner_watchdog $runner_pid $chrome_pid
-    wait $runner_pid || runner_result=1
+    if [ -n "$runner_pid" ]; then
+        start_chrome_health_monitor $chrome_pid $runner_pid
+        start_runner_watchdog $runner_pid $chrome_pid
+        wait $runner_pid || runner_result=1
+    fi
     return $runner_result
 }
 
@@ -198,7 +200,7 @@ function start_chrome_health_monitor {
             tail -n 50 $chrome_log_file 2>/dev/null || echo "(chrome.log not found)"
             echo ""
             echo "Killing runner process $runner_pid to trigger retry..."
-            kill -9 $runner_pid 2>/dev/null
+            kill -9 $runner_pid 2>/dev/null || true
         fi
     ) &
 
@@ -262,9 +264,9 @@ function start_runner_watchdog {
                         tail -n 50 $chrome_log_file 2>/dev/null || echo "(chrome.log not found)"
                         echo ""
                         echo "Killing chrome process $chrome_pid..."
-                        kill -9 $chrome_pid 2>/dev/null
+                        kill -9 $chrome_pid 2>/dev/null || true
                         echo "Killing runner process $runner_pid..."
-                        kill -9 $runner_pid 2>/dev/null
+                        kill -9 $runner_pid 2>/dev/null || true
                         exit 1
                     fi
                 else

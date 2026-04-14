@@ -330,7 +330,7 @@
 
             function launchStopWatch() {
                 return setTimeout(function() {
-                    if(testSuite.finalized) return;
+                    if(!testSuite || testSuite.finalized) return;
                     testCase.finalize(false, 0);
                     testCase.name = getTestCaseName(testSuite, qunitData);
                     testCase.url = getTestCaseUrl(testSuite, qunitData);
@@ -338,7 +338,9 @@
                     testCase.failure.message = "Test timed out after " + TEST_TIMEOUT_SECONDS + " seconds!";
                     var suiteName = testSuite.name;
                     testSuite.finalize(false, 0);
-                    notifySuiteFinalized(suiteName, false, 0, function() { });
+                    notifySuiteFinalized(suiteName, false, 0, function() {
+                        nextUrl(i);
+                    });
                 }, TEST_TIMEOUT);
             }
 
