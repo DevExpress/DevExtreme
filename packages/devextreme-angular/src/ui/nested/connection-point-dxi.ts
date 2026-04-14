@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/core/tokens'
 
 @Component({
     selector: 'dxi-connection-point',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

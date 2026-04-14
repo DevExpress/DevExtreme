@@ -8,10 +8,8 @@ export interface AIChatOptions {
   container: dxElementWrapper;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createComponent: CreateComponent<any>;
-  onMessageEntered?: () => void;
-  onChatCleared?: () => void;
-  onRegenerate?: () => void;
-  onVisibilityChanged?: (visible: boolean) => void;
   popupOptions?: PopupProperties;
   chatOptions?: ChatProperties;
+  onChatCleared?: () => void;
+  onRegenerate?: () => void;
 }

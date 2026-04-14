@@ -41,7 +41,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-form-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

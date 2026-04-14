@@ -85,6 +85,15 @@ describe('GridAppointment', () => {
 
       expect(instance.$element().hasClass(APPOINTMENT_TYPE_CLASSES.EMPTY)).toBe(empty);
     });
+
+    it('should have has-resource class when resource color is applied', async () => {
+      const instance = await createGridAppointment({
+        ...getProperties(defaultAppointmentData),
+        getResourceColor: () => Promise.resolve('red'),
+      });
+
+      expect(instance.$element().hasClass(APPOINTMENT_TYPE_CLASSES.HAS_RESOURCE)).toBe(true);
+    });
   });
 
   describe('Title', () => {
@@ -147,14 +156,12 @@ describe('GridAppointment', () => {
         },
       });
 
-      instance.option('geometry', {
+      instance.resize({
         top: 20,
         left: 25,
         width: 150,
         height: 70,
       });
-
-      instance.resize();
 
       const $element = instance.$element();
 

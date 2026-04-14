@@ -24,7 +24,6 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
 
 @Component({
     selector: 'dxo-subvalue-indicator',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

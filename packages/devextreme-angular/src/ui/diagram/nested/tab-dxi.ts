@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-diagram-tab',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

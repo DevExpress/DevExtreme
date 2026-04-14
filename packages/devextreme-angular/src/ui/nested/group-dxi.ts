@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-group',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

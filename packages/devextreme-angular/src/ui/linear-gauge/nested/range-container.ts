@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-linear-gauge-range-container',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

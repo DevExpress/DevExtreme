@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-tab-panel-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

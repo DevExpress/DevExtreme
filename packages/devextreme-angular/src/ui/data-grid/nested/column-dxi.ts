@@ -39,7 +39,6 @@ import {
 
 @Component({
     selector: 'dxi-data-grid-column',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

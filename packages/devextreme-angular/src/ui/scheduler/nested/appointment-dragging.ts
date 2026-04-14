@@ -28,7 +28,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-scheduler-appointment-dragging',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

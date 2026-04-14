@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-scale-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

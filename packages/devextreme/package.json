@@ -63,7 +63,8 @@
     "inferno-create-element": "catalog:",
     "inferno-hydrate": "catalog:",
     "jszip": "^3.10.1",
-    "rrule": "^2.7.1"
+    "rrule": "^2.7.1",
+    "unplugin": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.29.0",
@@ -254,7 +255,8 @@
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
-    "devextreme-bundler": "bin/bundler.js"
+    "devextreme-bundler": "bin/bundler.js",
+    "devextreme-license": "bin/devextreme-license.js"
   },
   "browserslist": [
     "last 2 Chrome versions",

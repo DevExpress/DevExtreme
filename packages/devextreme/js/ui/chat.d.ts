@@ -13,6 +13,7 @@ import {
 
 import { Properties as FileUploaderProperties } from './file_uploader';
 import { Properties as SpeechToTextProperties } from './speech_to_text';
+import { Properties as ButtonGroupProperties } from './button_group';
 import { Properties as TextAreaProperties } from './text_area';
 import { ValueChangedInfo } from './editor/editor';
 import Widget, { WidgetOptions } from './widget/ui.widget';
@@ -532,6 +533,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     speechToTextOptions?: Omit<SpeechToTextProperties, 'stylingMode' | 'type'>;
+    /**
+     * @docid
+     * @type dxButtonGroupOptions
+     * @public
+     */
+    suggestions?: Omit<ButtonGroupProperties, 'selectionMode'>;
     /**
      * @docid
      * @default []

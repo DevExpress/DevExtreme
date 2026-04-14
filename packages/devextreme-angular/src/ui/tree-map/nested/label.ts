@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-map-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

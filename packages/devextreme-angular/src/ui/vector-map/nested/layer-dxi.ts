@@ -28,7 +28,6 @@ import { PROPERTY_TOKEN_layers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-layer',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

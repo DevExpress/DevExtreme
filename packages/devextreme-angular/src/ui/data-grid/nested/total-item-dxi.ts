@@ -26,7 +26,6 @@ import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-total-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
