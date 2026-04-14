@@ -1,15 +1,15 @@
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
+import { GridCommands } from './grid_commands';
+import type {
+  CommandResponse, InternalRequestCallbacks, ProcessedCommands,
+} from './types';
 
 interface MockAIIntegration {
-  sendRequest: () => Promise<unknown>,
+  sendRequest: ({ callbacks }: { callbacks: InternalRequestCallbacks }) => void,
 }
 
 export class AIAssistantController extends Controller {
-  private readonly dataController!: DataController;
-
-  private readonly columnsController!: ColumnsController;
+  private gridCommands!: GridCommands;
 
   // TODO: need to specify type AIIntegration | null after creating AIIntegration command
   private getAIIntegration(): MockAIIntegration | null {
@@ -22,7 +22,11 @@ export class AIAssistantController extends Controller {
     return null;
   }
 
-  public sendRequestToAI(): Promise<unknown> {
+  public init(): void {
+    this.gridCommands = new GridCommands(this.component);
+  }
+
+  public sendRequestToAI(): Promise<ProcessedCommands> {
     const aiIntegration = this.getAIIntegration();
 
     if (!aiIntegration) {
@@ -30,6 +34,31 @@ export class AIAssistantController extends Controller {
     }
 
     // TODO: need to create new aiIntegration command
-    return aiIntegration.sendRequest();
+    return new Promise((resolve, reject) => {
+      aiIntegration.sendRequest({
+        callbacks: {
+          onComplete: (response: CommandResponse): void => {
+            this.processResponse(response).then(resolve, reject);
+          },
+          onError: (error: Error): void => {
+            reject(error);
+          },
+        },
+      });
+    });
+  }
+
+  private processResponse(response: CommandResponse): Promise<ProcessedCommands> {
+    if (!response?.commands || response?.explanation) {
+      // TODO: need to localize default error message when there are no commands
+      return Promise.reject(new Error(response.explanation || 'Default error message'));
+    }
+
+    if (!this.gridCommands.validate(response.commands)) {
+      // TODO: need to localize error message on validation fail
+      return Promise.reject(new Error('Received invalid commands'));
+    }
+
+    return this.gridCommands.executeCommands(response.commands);
   }
 }
