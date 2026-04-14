@@ -101,6 +101,7 @@ export {
 } from '../common';
 
 export {
+    AIAssistant,
     ApplyFilterMode,
     ColumnChooser,
     ColumnChooserMode,

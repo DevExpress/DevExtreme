@@ -23,13 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tree-list-editing-texts',
+    selector: 'dxo-tree-list-tree-list-editing-texts',
+    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoTreeListEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListTreeListEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get addRow(): string {
         return this._getOption('addRow');
@@ -153,10 +154,10 @@ export class DxoTreeListEditingTextsComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoTreeListEditingTextsComponent
+    DxoTreeListTreeListEditingTextsComponent
   ],
   exports: [
-    DxoTreeListEditingTextsComponent
+    DxoTreeListTreeListEditingTextsComponent
   ],
 })
-export class DxoTreeListEditingTextsModule { }
+export class DxoTreeListTreeListEditingTextsModule { }

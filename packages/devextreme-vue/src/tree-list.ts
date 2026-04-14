@@ -5,15 +5,15 @@ import { prepareComponentConfig } from "./core/index";
 import TreeList, { Properties } from "devextreme/ui/tree_list";
 import  DataSource from "devextreme/data/data_source";
 import  dxTreeList from "devextreme/ui/tree_list";
+import  dxChat from "devextreme/ui/chat";
+import  UploadInfo from "devextreme/file_management/upload_info";
 import  dxOverlay from "devextreme/ui/overlay";
 import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
- AIIntegration,
-} from "devextreme/common/ai-integration";
-import {
+ AIAssistant,
  ColumnChooser,
  ColumnResizeMode,
  FilterPanel,
@@ -50,9 +50,13 @@ import {
  StateStoreType,
 } from "devextreme/common/grids";
 import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
+import {
  dxTreeListColumn,
  TreeListFilterMode,
  AdaptiveDetailRowPreparingEvent,
+ AIAssistantRequestCreatingEvent,
  AIColumnRequestCreatingEvent,
  CellClickEvent,
  CellDblClickEvent,
@@ -112,8 +116,8 @@ import {
  TextEditorButtonLocation,
  ButtonStyle,
  ButtonType,
- DataType,
  Format as CommonFormat,
+ DataType,
  SortOrder,
  SearchMode,
  ComparisonOperator,
@@ -187,6 +191,30 @@ import {
  ValueChangedEvent,
 } from "devextreme/ui/text_box";
 import {
+ dxChatOptions,
+ Alert,
+ Message,
+ AttachmentDownloadClickEvent,
+ DisposingEvent as ChatDisposingEvent,
+ InitializedEvent as ChatInitializedEvent,
+ InputFieldTextChangedEvent,
+ MessageDeletedEvent,
+ MessageDeletingEvent,
+ MessageEditCanceledEvent,
+ MessageEditingStartEvent,
+ MessageEnteredEvent,
+ MessageUpdatedEvent,
+ MessageUpdatingEvent,
+ OptionChangedEvent as ChatOptionChangedEvent,
+ TypingEndEvent,
+ TypingStartEvent,
+ SendButtonProperties,
+ User,
+ Attachment,
+ SendButtonAction,
+ SendButtonClickEvent,
+} from "devextreme/ui/chat";
+import {
  AnimationConfig,
  CollisionResolution,
  PositionConfig,
@@ -226,6 +254,39 @@ import {
 import {
  Format,
 } from "devextreme/common/core/localization";
+import {
+ dxFileUploaderOptions,
+ BeforeSendEvent,
+ ContentReadyEvent as FileUploaderContentReadyEvent,
+ DisposingEvent as FileUploaderDisposingEvent,
+ DropZoneEnterEvent,
+ DropZoneLeaveEvent,
+ FilesUploadedEvent,
+ InitializedEvent as FileUploaderInitializedEvent,
+ OptionChangedEvent as FileUploaderOptionChangedEvent,
+ ProgressEvent,
+ UploadAbortedEvent,
+ UploadedEvent,
+ UploadErrorEvent,
+ UploadStartedEvent,
+ ValueChangedEvent as FileUploaderValueChangedEvent,
+ UploadHttpMethod,
+ FileUploadMode,
+} from "devextreme/ui/file_uploader";
+import {
+ dxSpeechToTextOptions,
+ CustomSpeechRecognizer,
+ ContentReadyEvent as SpeechToTextContentReadyEvent,
+ DisposingEvent as SpeechToTextDisposingEvent,
+ EndEvent,
+ ErrorEvent,
+ InitializedEvent as SpeechToTextInitializedEvent,
+ OptionChangedEvent as SpeechToTextOptionChangedEvent,
+ ResultEvent,
+ StartClickEvent,
+ StopClickEvent,
+ SpeechRecognitionConfig,
+} from "devextreme/ui/speech_to_text";
 import {
  event,
 } from "devextreme/events/events.types";
@@ -268,6 +329,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "aiAssistant" |
   "aiIntegration" |
   "allowColumnReordering" |
   "allowColumnResizing" |
@@ -316,6 +378,7 @@ type AccessibleOptions = Pick<Properties,
   "loadPanel" |
   "noDataText" |
   "onAdaptiveDetailRowPreparing" |
+  "onAIAssistantRequestCreating" |
   "onAIColumnRequestCreating" |
   "onCellClick" |
   "onCellDblClick" |
@@ -394,6 +457,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiAssistant: Object as PropType<AIAssistant | Record<string, any>>,
     aiIntegration: Object as PropType<AIIntegration>,
     allowColumnReordering: Boolean,
     allowColumnResizing: Boolean,
@@ -442,6 +506,7 @@ const componentConfig = {
     loadPanel: Object as PropType<Record<string, any>>,
     noDataText: String,
     onAdaptiveDetailRowPreparing: Function as PropType<((e: AdaptiveDetailRowPreparingEvent) => void)>,
+    onAIAssistantRequestCreating: Function as PropType<((e: AIAssistantRequestCreatingEvent) => void)>,
     onAIColumnRequestCreating: Function as PropType<((e: AIColumnRequestCreatingEvent) => void)>,
     onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
     onCellDblClick: Function as PropType<((e: CellDblClickEvent) => void)>,
@@ -516,6 +581,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiAssistant": null,
     "update:aiIntegration": null,
     "update:allowColumnReordering": null,
     "update:allowColumnResizing": null,
@@ -564,6 +630,7 @@ const componentConfig = {
     "update:loadPanel": null,
     "update:noDataText": null,
     "update:onAdaptiveDetailRowPreparing": null,
+    "update:onAIAssistantRequestCreating": null,
     "update:onAIColumnRequestCreating": null,
     "update:onCellClick": null,
     "update:onCellDblClick": null,
@@ -642,6 +709,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = TreeList;
     (this as any).$_hasAsyncTemplate = false;
     (this as any).$_expectedChildren = {
+      aiAssistant: { isCollectionItem: false, optionName: "aiAssistant" },
       column: { isCollectionItem: true, optionName: "columns" },
       columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       columnFixing: { isCollectionItem: false, optionName: "columnFixing" },
@@ -663,6 +731,7 @@ const componentConfig = {
       sorting: { isCollectionItem: false, optionName: "sorting" },
       stateStoring: { isCollectionItem: false, optionName: "stateStoring" },
       toolbar: { isCollectionItem: false, optionName: "toolbar" },
+      treeListEditing: { isCollectionItem: false, optionName: "editing" },
       treeListHeaderFilter: { isCollectionItem: false, optionName: "headerFilter" },
       treeListSelection: { isCollectionItem: false, optionName: "selection" }
     };
@@ -708,6 +777,35 @@ const DxAI = defineComponent(DxAIConfig);
   editorOptions: { isCollectionItem: false, optionName: "editorOptions" }
 };
 
+const DxAIAssistantConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:aiIntegration": null,
+    "update:chat": null,
+    "update:enabled": null,
+    "update:popup": null,
+    "update:title": null,
+  },
+  props: {
+    aiIntegration: Object as PropType<AIIntegration>,
+    chat: Object as PropType<dxChatOptions | Record<string, any>>,
+    enabled: Boolean,
+    popup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
+    title: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAIAssistantConfig);
+
+const DxAIAssistant = defineComponent(DxAIAssistantConfig);
+
+(DxAIAssistant as any).$_optionName = "aiAssistant";
+(DxAIAssistant as any).$_expectedChildren = {
+  chat: { isCollectionItem: false, optionName: "chat" },
+  popup: { isCollectionItem: false, optionName: "popup" }
+};
+
 const DxAIOptionsConfig = {
   emits: {
     "update:isActive": null,
@@ -726,6 +824,26 @@ prepareConfigurationComponentConfig(DxAIOptionsConfig);
 const DxAIOptions = defineComponent(DxAIOptionsConfig);
 
 (DxAIOptions as any).$_optionName = "aiOptions";
+
+const DxAlertConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:id": null,
+    "update:message": null,
+  },
+  props: {
+    id: [Number, String],
+    message: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAlertConfig);
+
+const DxAlert = defineComponent(DxAlertConfig);
+
+(DxAlert as any).$_optionName = "alerts";
+(DxAlert as any).$_isCollectionItem = true;
 
 const DxAnimationConfig = {
   emits: {
@@ -797,6 +915,49 @@ prepareConfigurationComponentConfig(DxAtConfig);
 const DxAt = defineComponent(DxAtConfig);
 
 (DxAt as any).$_optionName = "at";
+
+const DxAttachmentConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:name": null,
+    "update:size": null,
+  },
+  props: {
+    name: String,
+    size: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxAttachmentConfig);
+
+const DxAttachment = defineComponent(DxAttachmentConfig);
+
+(DxAttachment as any).$_optionName = "attachments";
+(DxAttachment as any).$_isCollectionItem = true;
+
+const DxAuthorConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:avatarAlt": null,
+    "update:avatarUrl": null,
+    "update:id": null,
+    "update:name": null,
+  },
+  props: {
+    avatarAlt: String,
+    avatarUrl: String,
+    id: [Number, String],
+    name: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAuthorConfig);
+
+const DxAuthor = defineComponent(DxAuthorConfig);
+
+(DxAuthor as any).$_optionName = "author";
 
 const DxBoundaryOffsetConfig = {
   emits: {
@@ -984,6 +1145,184 @@ const DxChange = defineComponent(DxChangeConfig);
 
 (DxChange as any).$_optionName = "changes";
 (DxChange as any).$_isCollectionItem = true;
+
+const DxChatConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:alerts": null,
+    "update:dataSource": null,
+    "update:dayHeaderFormat": null,
+    "update:disabled": null,
+    "update:editing": null,
+    "update:elementAttr": null,
+    "update:emptyViewTemplate": null,
+    "update:fileUploaderOptions": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:inputFieldText": null,
+    "update:items": null,
+    "update:messageTemplate": null,
+    "update:messageTimestampFormat": null,
+    "update:onAttachmentDownloadClick": null,
+    "update:onDisposing": null,
+    "update:onInitialized": null,
+    "update:onInputFieldTextChanged": null,
+    "update:onMessageDeleted": null,
+    "update:onMessageDeleting": null,
+    "update:onMessageEditCanceled": null,
+    "update:onMessageEditingStart": null,
+    "update:onMessageEntered": null,
+    "update:onMessageUpdated": null,
+    "update:onMessageUpdating": null,
+    "update:onOptionChanged": null,
+    "update:onTypingEnd": null,
+    "update:onTypingStart": null,
+    "update:reloadOnChange": null,
+    "update:rtlEnabled": null,
+    "update:sendButtonOptions": null,
+    "update:showAvatar": null,
+    "update:showDayHeaders": null,
+    "update:showMessageTimestamp": null,
+    "update:showUserName": null,
+    "update:speechToTextEnabled": null,
+    "update:speechToTextOptions": null,
+    "update:typingUsers": null,
+    "update:user": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    alerts: Array as PropType<Array<Alert>>,
+    dataSource: [Array, Object, String] as PropType<Array<Message> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
+    dayHeaderFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    disabled: Boolean,
+    editing: Object as PropType<Record<string, any>>,
+    elementAttr: Object as PropType<Record<string, any>>,
+    emptyViewTemplate: {},
+    fileUploaderOptions: Object as PropType<dxFileUploaderOptions | Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    inputFieldText: String,
+    items: Array as PropType<Array<Message>>,
+    messageTemplate: {},
+    messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    onAttachmentDownloadClick: Function as PropType<((e: AttachmentDownloadClickEvent) => void)>,
+    onDisposing: Function as PropType<((e: ChatDisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: ChatInitializedEvent) => void)>,
+    onInputFieldTextChanged: Function as PropType<((e: InputFieldTextChangedEvent) => void)>,
+    onMessageDeleted: Function as PropType<((e: MessageDeletedEvent) => void)>,
+    onMessageDeleting: Function as PropType<((e: MessageDeletingEvent) => void)>,
+    onMessageEditCanceled: Function as PropType<((e: MessageEditCanceledEvent) => void)>,
+    onMessageEditingStart: Function as PropType<((e: MessageEditingStartEvent) => void)>,
+    onMessageEntered: Function as PropType<((e: MessageEnteredEvent) => void)>,
+    onMessageUpdated: Function as PropType<((e: MessageUpdatedEvent) => void)>,
+    onMessageUpdating: Function as PropType<((e: MessageUpdatingEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ChatOptionChangedEvent) => void)>,
+    onTypingEnd: Function as PropType<((e: TypingEndEvent) => void)>,
+    onTypingStart: Function as PropType<((e: TypingStartEvent) => void)>,
+    reloadOnChange: Boolean,
+    rtlEnabled: Boolean,
+    sendButtonOptions: Object as PropType<SendButtonProperties | Record<string, any>>,
+    showAvatar: Boolean,
+    showDayHeaders: Boolean,
+    showMessageTimestamp: Boolean,
+    showUserName: Boolean,
+    speechToTextEnabled: Boolean,
+    speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any>>,
+    typingUsers: Array as PropType<Array<User>>,
+    user: Object as PropType<User | Record<string, any>>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxChatConfig);
+
+const DxChat = defineComponent(DxChatConfig);
+
+(DxChat as any).$_optionName = "chat";
+(DxChat as any).$_expectedChildren = {
+  alert: { isCollectionItem: true, optionName: "alerts" },
+  chatEditing: { isCollectionItem: false, optionName: "editing" },
+  chatItem: { isCollectionItem: true, optionName: "items" },
+  dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
+  editing: { isCollectionItem: false, optionName: "editing" },
+  fileUploaderOptions: { isCollectionItem: false, optionName: "fileUploaderOptions" },
+  item: { isCollectionItem: true, optionName: "items" },
+  messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
+  sendButtonOptions: { isCollectionItem: false, optionName: "sendButtonOptions" },
+  speechToTextOptions: { isCollectionItem: false, optionName: "speechToTextOptions" },
+  typingUser: { isCollectionItem: true, optionName: "typingUsers" },
+  user: { isCollectionItem: false, optionName: "user" }
+};
+
+const DxChatEditingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowDeleting": null,
+    "update:allowUpdating": null,
+  },
+  props: {
+    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>,
+    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>
+  }
+};
+
+prepareConfigurationComponentConfig(DxChatEditingConfig);
+
+const DxChatEditing = defineComponent(DxChatEditingConfig);
+
+(DxChatEditing as any).$_optionName = "editing";
+
+const DxChatItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:alt": null,
+    "update:attachments": null,
+    "update:author": null,
+    "update:id": null,
+    "update:isDeleted": null,
+    "update:isEdited": null,
+    "update:src": null,
+    "update:text": null,
+    "update:timestamp": null,
+    "update:type": null,
+  },
+  props: {
+    alt: String,
+    attachments: Array as PropType<Array<Attachment>>,
+    author: Object as PropType<User | Record<string, any>>,
+    id: [Number, String],
+    isDeleted: Boolean,
+    isEdited: Boolean,
+    src: String,
+    text: String,
+    timestamp: [Date, Number, String],
+    type: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxChatItemConfig);
+
+const DxChatItem = defineComponent(DxChatItemConfig);
+
+(DxChatItem as any).$_optionName = "items";
+(DxChatItem as any).$_isCollectionItem = true;
+(DxChatItem as any).$_expectedChildren = {
+  attachment: { isCollectionItem: true, optionName: "attachments" },
+  author: { isCollectionItem: false, optionName: "author" }
+};
 
 const DxColCountByScreenConfig = {
   emits: {
@@ -1547,6 +1886,52 @@ const DxCustomRule = defineComponent(DxCustomRuleConfig);
   type: "custom"
 };
 
+const DxCustomSpeechRecognizerConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:enabled": null,
+    "update:isListening": null,
+  },
+  props: {
+    enabled: Boolean,
+    isListening: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxCustomSpeechRecognizerConfig);
+
+const DxCustomSpeechRecognizer = defineComponent(DxCustomSpeechRecognizerConfig);
+
+(DxCustomSpeechRecognizer as any).$_optionName = "customSpeechRecognizer";
+
+const DxDayHeaderFormatConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:currency": null,
+    "update:formatter": null,
+    "update:parser": null,
+    "update:precision": null,
+    "update:type": null,
+    "update:useCurrencyAccountingStyle": null,
+  },
+  props: {
+    currency: String,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
+    precision: Number,
+    type: String as PropType<CommonFormat | string>,
+    useCurrencyAccountingStyle: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxDayHeaderFormatConfig);
+
+const DxDayHeaderFormat = defineComponent(DxDayHeaderFormatConfig);
+
+(DxDayHeaderFormat as any).$_optionName = "dayHeaderFormat";
+
 const DxEditingConfig = {
   emits: {
     "update:isActive": null,
@@ -1593,50 +1978,10 @@ const DxEditing = defineComponent(DxEditingConfig);
 (DxEditing as any).$_optionName = "editing";
 (DxEditing as any).$_expectedChildren = {
   change: { isCollectionItem: true, optionName: "changes" },
-  editingTexts: { isCollectionItem: false, optionName: "texts" },
   form: { isCollectionItem: false, optionName: "form" },
   popup: { isCollectionItem: false, optionName: "popup" },
-  texts: { isCollectionItem: false, optionName: "texts" }
+  treeListEditingTexts: { isCollectionItem: false, optionName: "texts" }
 };
-
-const DxEditingTextsConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:addRow": null,
-    "update:addRowToNode": null,
-    "update:cancelAllChanges": null,
-    "update:cancelRowChanges": null,
-    "update:confirmDeleteMessage": null,
-    "update:confirmDeleteTitle": null,
-    "update:deleteRow": null,
-    "update:editRow": null,
-    "update:saveAllChanges": null,
-    "update:saveRowChanges": null,
-    "update:undeleteRow": null,
-    "update:validationCancelChanges": null,
-  },
-  props: {
-    addRow: String,
-    addRowToNode: String,
-    cancelAllChanges: String,
-    cancelRowChanges: String,
-    confirmDeleteMessage: String,
-    confirmDeleteTitle: String,
-    deleteRow: String,
-    editRow: String,
-    saveAllChanges: String,
-    saveRowChanges: String,
-    undeleteRow: String,
-    validationCancelChanges: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxEditingTextsConfig);
-
-const DxEditingTexts = defineComponent(DxEditingTextsConfig);
-
-(DxEditingTexts as any).$_optionName = "texts";
 
 const DxEditorOptionsConfig = {
   emits: {
@@ -1917,6 +2262,149 @@ prepareConfigurationComponentConfig(DxFieldLookupConfig);
 const DxFieldLookup = defineComponent(DxFieldLookupConfig);
 
 (DxFieldLookup as any).$_optionName = "lookup";
+
+const DxFileUploaderOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:abortUpload": null,
+    "update:accept": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:allowCanceling": null,
+    "update:allowedFileExtensions": null,
+    "update:chunkSize": null,
+    "update:dialogTrigger": null,
+    "update:disabled": null,
+    "update:dropZone": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:inputAttr": null,
+    "update:invalidFileExtensionMessage": null,
+    "update:invalidMaxFileSizeMessage": null,
+    "update:invalidMinFileSizeMessage": null,
+    "update:isDirty": null,
+    "update:isValid": null,
+    "update:labelText": null,
+    "update:maxFileSize": null,
+    "update:minFileSize": null,
+    "update:multiple": null,
+    "update:name": null,
+    "update:onBeforeSend": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onDropZoneEnter": null,
+    "update:onDropZoneLeave": null,
+    "update:onFilesUploaded": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onProgress": null,
+    "update:onUploadAborted": null,
+    "update:onUploaded": null,
+    "update:onUploadError": null,
+    "update:onUploadStarted": null,
+    "update:onValueChanged": null,
+    "update:progress": null,
+    "update:readOnly": null,
+    "update:readyToUploadMessage": null,
+    "update:rtlEnabled": null,
+    "update:selectButtonText": null,
+    "update:showFileList": null,
+    "update:tabIndex": null,
+    "update:uploadAbortedMessage": null,
+    "update:uploadButtonText": null,
+    "update:uploadChunk": null,
+    "update:uploadCustomData": null,
+    "update:uploadedMessage": null,
+    "update:uploadFailedMessage": null,
+    "update:uploadFile": null,
+    "update:uploadHeaders": null,
+    "update:uploadMethod": null,
+    "update:uploadMode": null,
+    "update:uploadUrl": null,
+    "update:validationError": null,
+    "update:validationErrors": null,
+    "update:validationStatus": null,
+    "update:value": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    abortUpload: Function as PropType<((file: any, uploadInfo?: UploadInfo) => any)>,
+    accept: String,
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    allowCanceling: Boolean,
+    allowedFileExtensions: Array as PropType<Array<string>>,
+    chunkSize: Number,
+    dialogTrigger: {},
+    disabled: Boolean,
+    dropZone: {},
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    inputAttr: {},
+    invalidFileExtensionMessage: String,
+    invalidMaxFileSizeMessage: String,
+    invalidMinFileSizeMessage: String,
+    isDirty: Boolean,
+    isValid: Boolean,
+    labelText: String,
+    maxFileSize: Number,
+    minFileSize: Number,
+    multiple: Boolean,
+    name: String,
+    onBeforeSend: Function as PropType<((e: BeforeSendEvent) => void)>,
+    onContentReady: Function as PropType<((e: FileUploaderContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: FileUploaderDisposingEvent) => void)>,
+    onDropZoneEnter: Function as PropType<((e: DropZoneEnterEvent) => void)>,
+    onDropZoneLeave: Function as PropType<((e: DropZoneLeaveEvent) => void)>,
+    onFilesUploaded: Function as PropType<((e: FilesUploadedEvent) => void)>,
+    onInitialized: Function as PropType<((e: FileUploaderInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: FileUploaderOptionChangedEvent) => void)>,
+    onProgress: Function as PropType<((e: ProgressEvent) => void)>,
+    onUploadAborted: Function as PropType<((e: UploadAbortedEvent) => void)>,
+    onUploaded: Function as PropType<((e: UploadedEvent) => void)>,
+    onUploadError: Function as PropType<((e: UploadErrorEvent) => void)>,
+    onUploadStarted: Function as PropType<((e: UploadStartedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: FileUploaderValueChangedEvent) => void)>,
+    progress: Number,
+    readOnly: Boolean,
+    readyToUploadMessage: String,
+    rtlEnabled: Boolean,
+    selectButtonText: String,
+    showFileList: Boolean,
+    tabIndex: Number,
+    uploadAbortedMessage: String,
+    uploadButtonText: String,
+    uploadChunk: Function as PropType<((file: any, uploadInfo: UploadInfo) => any)>,
+    uploadCustomData: {},
+    uploadedMessage: String,
+    uploadFailedMessage: String,
+    uploadFile: Function as PropType<((file: any, progressCallback: (() => void)) => any)>,
+    uploadHeaders: {},
+    uploadMethod: String as PropType<UploadHttpMethod>,
+    uploadMode: String as PropType<FileUploadMode>,
+    uploadUrl: String,
+    validationError: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationStatus: String as PropType<ValidationStatus>,
+    value: Array as PropType<Array<any>>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxFileUploaderOptionsConfig);
+
+const DxFileUploaderOptions = defineComponent(DxFileUploaderOptionsConfig);
+
+(DxFileUploaderOptions as any).$_optionName = "fileUploaderOptions";
 
 const DxFilterBuilderConfig = {
   emits: {
@@ -2666,6 +3154,9 @@ const DxItemConfig = {
     "update:hoveredElement": null,
     "update:aiOptions": null,
     "update:alignItemLabels": null,
+    "update:alt": null,
+    "update:attachments": null,
+    "update:author": null,
     "update:badge": null,
     "update:buttonOptions": null,
     "update:caption": null,
@@ -2682,6 +3173,9 @@ const DxItemConfig = {
     "update:horizontalAlignment": null,
     "update:html": null,
     "update:icon": null,
+    "update:id": null,
+    "update:isDeleted": null,
+    "update:isEdited": null,
     "update:isRequired": null,
     "update:items": null,
     "update:itemType": null,
@@ -2692,12 +3186,15 @@ const DxItemConfig = {
     "update:name": null,
     "update:options": null,
     "update:showText": null,
+    "update:src": null,
     "update:tabPanelOptions": null,
     "update:tabs": null,
     "update:tabTemplate": null,
     "update:template": null,
     "update:text": null,
+    "update:timestamp": null,
     "update:title": null,
+    "update:type": null,
     "update:validationRules": null,
     "update:verticalAlignment": null,
     "update:visible": null,
@@ -2707,6 +3204,9 @@ const DxItemConfig = {
   props: {
     aiOptions: Object as PropType<Record<string, any>>,
     alignItemLabels: Boolean,
+    alt: String,
+    attachments: Array as PropType<Array<Attachment>>,
+    author: Object as PropType<User | Record<string, any>>,
     badge: String,
     buttonOptions: Object as PropType<dxButtonOptions | Record<string, any>>,
     caption: String,
@@ -2723,6 +3223,9 @@ const DxItemConfig = {
     horizontalAlignment: String as PropType<HorizontalAlignment>,
     html: String,
     icon: String,
+    id: [Number, String],
+    isDeleted: Boolean,
+    isEdited: Boolean,
     isRequired: Boolean,
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
     itemType: String as PropType<FormItemType>,
@@ -2733,12 +3236,15 @@ const DxItemConfig = {
     name: String as PropType<string | FormPredefinedButtonItem | TreeListPredefinedToolbarItem>,
     options: {},
     showText: String as PropType<ShowTextMode>,
+    src: String,
     tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,
     tabs: Array as PropType<Array<Record<string, any>>>,
     tabTemplate: {},
     template: {},
     text: String,
+    timestamp: [Date, Number, String],
     title: String,
+    type: String,
     validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
     verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
@@ -2756,6 +3262,8 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_expectedChildren = {
   aiOptions: { isCollectionItem: false, optionName: "aiOptions" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
+  attachment: { isCollectionItem: true, optionName: "attachments" },
+  author: { isCollectionItem: false, optionName: "author" },
   buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" },
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -2884,6 +3392,33 @@ prepareConfigurationComponentConfig(DxLookupConfig);
 const DxLookup = defineComponent(DxLookupConfig);
 
 (DxLookup as any).$_optionName = "lookup";
+
+const DxMessageTimestampFormatConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:currency": null,
+    "update:formatter": null,
+    "update:parser": null,
+    "update:precision": null,
+    "update:type": null,
+    "update:useCurrencyAccountingStyle": null,
+  },
+  props: {
+    currency: String,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
+    precision: Number,
+    type: String as PropType<CommonFormat | string>,
+    useCurrencyAccountingStyle: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxMessageTimestampFormatConfig);
+
+const DxMessageTimestampFormat = defineComponent(DxMessageTimestampFormatConfig);
+
+(DxMessageTimestampFormat as any).$_optionName = "messageTimestampFormat";
 
 const DxMyConfig = {
   emits: {
@@ -3532,6 +4067,27 @@ const DxSelection = defineComponent(DxSelectionConfig);
 
 (DxSelection as any).$_optionName = "selection";
 
+const DxSendButtonOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:action": null,
+    "update:icon": null,
+    "update:onClick": null,
+  },
+  props: {
+    action: String as PropType<SendButtonAction>,
+    icon: String,
+    onClick: Function as PropType<((e: SendButtonClickEvent) => void)>
+  }
+};
+
+prepareConfigurationComponentConfig(DxSendButtonOptionsConfig);
+
+const DxSendButtonOptions = defineComponent(DxSendButtonOptionsConfig);
+
+(DxSendButtonOptions as any).$_optionName = "sendButtonOptions";
+
 const DxShowConfig = {
   emits: {
     "update:isActive": null,
@@ -3658,6 +4214,108 @@ prepareConfigurationComponentConfig(DxSortingConfig);
 const DxSorting = defineComponent(DxSortingConfig);
 
 (DxSorting as any).$_optionName = "sorting";
+
+const DxSpeechRecognitionConfigConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:continuous": null,
+    "update:grammars": null,
+    "update:interimResults": null,
+    "update:lang": null,
+    "update:maxAlternatives": null,
+  },
+  props: {
+    continuous: Boolean,
+    grammars: Array as PropType<Array<string>>,
+    interimResults: Boolean,
+    lang: String,
+    maxAlternatives: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxSpeechRecognitionConfigConfig);
+
+const DxSpeechRecognitionConfig = defineComponent(DxSpeechRecognitionConfigConfig);
+
+(DxSpeechRecognitionConfig as any).$_optionName = "speechRecognitionConfig";
+
+const DxSpeechToTextOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:customSpeechRecognizer": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onEnd": null,
+    "update:onError": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onResult": null,
+    "update:onStartClick": null,
+    "update:onStopClick": null,
+    "update:rtlEnabled": null,
+    "update:speechRecognitionConfig": null,
+    "update:startIcon": null,
+    "update:startText": null,
+    "update:stopIcon": null,
+    "update:stopText": null,
+    "update:stylingMode": null,
+    "update:tabIndex": null,
+    "update:type": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    customSpeechRecognizer: Object as PropType<CustomSpeechRecognizer | Record<string, any>>,
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    onContentReady: Function as PropType<((e: SpeechToTextContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: SpeechToTextDisposingEvent) => void)>,
+    onEnd: Function as PropType<((e: EndEvent) => void)>,
+    onError: Function as PropType<((e: ErrorEvent) => void)>,
+    onInitialized: Function as PropType<((e: SpeechToTextInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: SpeechToTextOptionChangedEvent) => void)>,
+    onResult: Function as PropType<((e: ResultEvent) => void)>,
+    onStartClick: Function as PropType<((e: StartClickEvent) => void)>,
+    onStopClick: Function as PropType<((e: StopClickEvent) => void)>,
+    rtlEnabled: Boolean,
+    speechRecognitionConfig: Object as PropType<Record<string, any> | SpeechRecognitionConfig>,
+    startIcon: String,
+    startText: String,
+    stopIcon: String,
+    stopText: String,
+    stylingMode: String as PropType<ButtonStyle>,
+    tabIndex: Number,
+    type: String as PropType<ButtonType | string>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxSpeechToTextOptionsConfig);
+
+const DxSpeechToTextOptions = defineComponent(DxSpeechToTextOptionsConfig);
+
+(DxSpeechToTextOptions as any).$_optionName = "speechToTextOptions";
+(DxSpeechToTextOptions as any).$_expectedChildren = {
+  customSpeechRecognizer: { isCollectionItem: false, optionName: "customSpeechRecognizer" },
+  speechRecognitionConfig: { isCollectionItem: false, optionName: "speechRecognitionConfig" }
+};
 
 const DxStateStoringConfig = {
   emits: {
@@ -4094,6 +4752,97 @@ const DxToolbarItem = defineComponent(DxToolbarItemConfig);
 (DxToolbarItem as any).$_optionName = "toolbarItems";
 (DxToolbarItem as any).$_isCollectionItem = true;
 
+const DxTreeListEditingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowAdding": null,
+    "update:allowDeleting": null,
+    "update:allowUpdating": null,
+    "update:changes": null,
+    "update:confirmDelete": null,
+    "update:editColumnName": null,
+    "update:editRowKey": null,
+    "update:form": null,
+    "update:mode": null,
+    "update:popup": null,
+    "update:refreshMode": null,
+    "update:selectTextOnEditStart": null,
+    "update:startEditAction": null,
+    "update:texts": null,
+    "update:useIcons": null,
+  },
+  props: {
+    allowAdding: [Boolean, Function] as PropType<boolean | (((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean))>,
+    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean))>,
+    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean))>,
+    changes: Array as PropType<Array<DataChange>>,
+    confirmDelete: Boolean,
+    editColumnName: String,
+    editRowKey: {},
+    form: Object as PropType<dxFormOptions | Record<string, any>>,
+    mode: String as PropType<GridsEditMode>,
+    popup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
+    refreshMode: String as PropType<GridsEditRefreshMode>,
+    selectTextOnEditStart: Boolean,
+    startEditAction: String as PropType<StartEditAction>,
+    texts: Object as PropType<Record<string, any>>,
+    useIcons: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxTreeListEditingConfig);
+
+const DxTreeListEditing = defineComponent(DxTreeListEditingConfig);
+
+(DxTreeListEditing as any).$_optionName = "editing";
+(DxTreeListEditing as any).$_expectedChildren = {
+  change: { isCollectionItem: true, optionName: "changes" },
+  form: { isCollectionItem: false, optionName: "form" },
+  popup: { isCollectionItem: false, optionName: "popup" },
+  texts: { isCollectionItem: false, optionName: "texts" },
+  treeListEditingTexts: { isCollectionItem: false, optionName: "texts" }
+};
+
+const DxTreeListEditingTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:addRow": null,
+    "update:addRowToNode": null,
+    "update:cancelAllChanges": null,
+    "update:cancelRowChanges": null,
+    "update:confirmDeleteMessage": null,
+    "update:confirmDeleteTitle": null,
+    "update:deleteRow": null,
+    "update:editRow": null,
+    "update:saveAllChanges": null,
+    "update:saveRowChanges": null,
+    "update:undeleteRow": null,
+    "update:validationCancelChanges": null,
+  },
+  props: {
+    addRow: String,
+    addRowToNode: String,
+    cancelAllChanges: String,
+    cancelRowChanges: String,
+    confirmDeleteMessage: String,
+    confirmDeleteTitle: String,
+    deleteRow: String,
+    editRow: String,
+    saveAllChanges: String,
+    saveRowChanges: String,
+    undeleteRow: String,
+    validationCancelChanges: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxTreeListEditingTextsConfig);
+
+const DxTreeListEditingTexts = defineComponent(DxTreeListEditingTextsConfig);
+
+(DxTreeListEditingTexts as any).$_optionName = "texts";
+
 const DxTreeListHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
@@ -4238,6 +4987,53 @@ const DxTreeListToolbarItem = defineComponent(DxTreeListToolbarItemConfig);
 (DxTreeListToolbarItem as any).$_optionName = "items";
 (DxTreeListToolbarItem as any).$_isCollectionItem = true;
 
+const DxTypingUserConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:avatarAlt": null,
+    "update:avatarUrl": null,
+    "update:id": null,
+    "update:name": null,
+  },
+  props: {
+    avatarAlt: String,
+    avatarUrl: String,
+    id: [Number, String],
+    name: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxTypingUserConfig);
+
+const DxTypingUser = defineComponent(DxTypingUserConfig);
+
+(DxTypingUser as any).$_optionName = "typingUsers";
+(DxTypingUser as any).$_isCollectionItem = true;
+
+const DxUserConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:avatarAlt": null,
+    "update:avatarUrl": null,
+    "update:id": null,
+    "update:name": null,
+  },
+  props: {
+    avatarAlt: String,
+    avatarUrl: String,
+    id: [Number, String],
+    name: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxUserConfig);
+
+const DxUser = defineComponent(DxUserConfig);
+
+(DxUser as any).$_optionName = "user";
+
 const DxValidationRuleConfig = {
   emits: {
     "update:isActive": null,
@@ -4283,15 +5079,22 @@ export default DxTreeList;
 export {
   DxTreeList,
   DxAI,
+  DxAIAssistant,
   DxAIOptions,
+  DxAlert,
   DxAnimation,
   DxAsyncRule,
   DxAt,
+  DxAttachment,
+  DxAuthor,
   DxBoundaryOffset,
   DxButton,
   DxButtonItem,
   DxButtonOptions,
   DxChange,
+  DxChat,
+  DxChatEditing,
+  DxChatItem,
   DxColCountByScreen,
   DxCollision,
   DxColumn,
@@ -4308,14 +5111,16 @@ export {
   DxCursorOffset,
   DxCustomOperation,
   DxCustomRule,
+  DxCustomSpeechRecognizer,
+  DxDayHeaderFormat,
   DxEditing,
-  DxEditingTexts,
   DxEditorOptions,
   DxEditorOptionsButton,
   DxEmailRule,
   DxEmptyItem,
   DxField,
   DxFieldLookup,
+  DxFileUploaderOptions,
   DxFilterBuilder,
   DxFilterBuilderPopup,
   DxFilterOperationDescriptions,
@@ -4337,6 +5142,7 @@ export {
   DxLabel,
   DxLoadPanel,
   DxLookup,
+  DxMessageTimestampFormat,
   DxMy,
   DxNumericRule,
   DxOffset,
@@ -4355,9 +5161,12 @@ export {
   DxSearch,
   DxSearchPanel,
   DxSelection,
+  DxSendButtonOptions,
   DxShow,
   DxSimpleItem,
   DxSorting,
+  DxSpeechRecognitionConfig,
+  DxSpeechToTextOptions,
   DxStateStoring,
   DxStringLengthRule,
   DxTab,
@@ -4368,11 +5177,15 @@ export {
   DxTo,
   DxToolbar,
   DxToolbarItem,
+  DxTreeListEditing,
+  DxTreeListEditingTexts,
   DxTreeListHeaderFilter,
   DxTreeListHeaderFilterSearch,
   DxTreeListHeaderFilterTexts,
   DxTreeListSelection,
   DxTreeListToolbarItem,
+  DxTypingUser,
+  DxUser,
   DxValidationRule
 };
 import type * as DxTreeListTypes from "devextreme/ui/tree_list_types";

@@ -25,6 +25,7 @@ import type { TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
 import type { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import type { dxButtonOptions } from 'devextreme/ui/button';
 import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { Attachment, User } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,
@@ -38,6 +39,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import {
     PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_attachments,
     PROPERTY_TOKEN_tabs,
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -61,6 +63,11 @@ export class DxiTreeListItemComponent extends CollectionNestedOption implements 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('validationRules', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_attachments)
+    set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('attachments', value);
     }
     
     @ContentChildren(PROPERTY_TOKEN_tabs)
@@ -383,6 +390,78 @@ export class DxiTreeListItemComponent extends CollectionNestedOption implements 
     }
     set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
+    }
+
+    @Input()
+    get alt(): string {
+        return this._getOption('alt');
+    }
+    set alt(value: string) {
+        this._setOption('alt', value);
+    }
+
+    @Input()
+    get attachments(): Array<Attachment> {
+        return this._getOption('attachments');
+    }
+    set attachments(value: Array<Attachment>) {
+        this._setOption('attachments', value);
+    }
+
+    @Input()
+    get author(): User {
+        return this._getOption('author');
+    }
+    set author(value: User) {
+        this._setOption('author', value);
+    }
+
+    @Input()
+    get id(): number | string {
+        return this._getOption('id');
+    }
+    set id(value: number | string) {
+        this._setOption('id', value);
+    }
+
+    @Input()
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    @Input()
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
+    }
+
+    @Input()
+    get src(): string {
+        return this._getOption('src');
+    }
+    set src(value: string) {
+        this._setOption('src', value);
+    }
+
+    @Input()
+    get timestamp(): Date | number | string {
+        return this._getOption('timestamp');
+    }
+    set timestamp(value: Date | number | string) {
+        this._setOption('timestamp', value);
+    }
+
+    @Input()
+    get type(): string | undefined {
+        return this._getOption('type');
+    }
+    set type(value: string | undefined) {
+        this._setOption('type', value);
     }
 
 

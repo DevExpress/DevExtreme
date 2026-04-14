@@ -4547,6 +4547,45 @@ declare module DevExpress.common.grids {
      */
     readonly formOptions: any;
   };
+  /**
+   * [descr:AIAssistant]
+   */
+  export type AIAssistant = {
+    /**
+     * [descr:AIAssistant.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration;
+    /**
+     * [descr:AIAssistant.chat]
+     */
+    chat?: DevExpress.ui.dxChat.Properties;
+    /**
+     * [descr:AIAssistant.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:AIAssistant.popup]
+     */
+    popup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:AIAssistant.title]
+     */
+    title?: string;
+  };
+  /**
+   * [descr:AIAssistantRequestCreatingInfo]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type AIAssistantRequestCreatingInfo = {
+    /**
+     * [descr:AIAssistantRequestCreatingInfo.context]
+     */
+    context: Record<string, any>;
+    /**
+     * [descr:AIAssistantRequestCreatingInfo.responseSchema]
+     */
+    responseSchema: Record<string, any>;
+  };
   export type AIColumnMode = 'auto' | 'manual';
   /**
    * [descr:AIColumnRequestCreatingInfo]
@@ -5763,6 +5802,10 @@ declare module DevExpress.common.grids {
     'focusStateEnabled'
   > & {
     /**
+     * [descr:GridBaseOptions.aiAssistant]
+     */
+    aiAssistant?: AIAssistant;
+    /**
      * [descr:GridBaseOptions.aiIntegration]
      */
     aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
@@ -5894,6 +5937,14 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.noDataText]
      */
     noDataText?: string;
+    /**
+     * [descr:GridBaseOptions.onAIAssistantRequestCreating]
+     */
+    onAIAssistantRequestCreating?: (
+      e: DevExpress.common.core.events.EventInfo<TComponent> &
+        DevExpress.common.core.events.Cancelable &
+        AIAssistantRequestCreatingInfo
+    ) => void;
     /**
      * [descr:GridBaseOptions.onAdaptiveDetailRowPreparing]
      */
@@ -12250,6 +12301,15 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:_ui_data_grid_AIAssistantRequestCreatingEvent]
+     */
+    export type AIAssistantRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.core.events.Cancelable &
+      DevExpress.common.grids.AIAssistantRequestCreatingInfo;
+    /**
      * [descr:_ui_data_grid_AIColumnRequestCreatingEvent]
      */
     export type AIColumnRequestCreatingEvent<
@@ -12901,6 +12961,10 @@ declare module DevExpress.ui {
       readonly row?: Row<TRowData, TKey>;
     };
     export type ExplicitTypes<TRowData, TKey> = {
+      AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<
+        TRowData,
+        TKey
+      >;
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
         TKey
@@ -30674,6 +30738,15 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:_ui_tree_list_AIAssistantRequestCreatingEvent]
+     */
+    export type AIAssistantRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.core.events.Cancelable &
+      DevExpress.common.grids.AIAssistantRequestCreatingInfo;
+    /**
      * [descr:_ui_tree_list_AIColumnRequestCreatingEvent]
      */
     export type AIColumnRequestCreatingEvent<
@@ -31132,6 +31205,10 @@ declare module DevExpress.ui {
         readonly row?: Row<TRowData, TKey>;
       };
     export type ExplicitTypes<TRowData, TKey> = {
+      AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<
+        TRowData,
+        TKey
+      >;
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
         TKey

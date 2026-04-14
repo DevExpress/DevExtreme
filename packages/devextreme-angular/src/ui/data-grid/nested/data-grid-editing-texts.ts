@@ -23,13 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-data-grid-editing-texts',
+    selector: 'dxo-data-grid-data-grid-editing-texts',
+    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDataGridEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridDataGridEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get addRow(): string {
         return this._getOption('addRow');
@@ -145,10 +146,10 @@ export class DxoDataGridEditingTextsComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoDataGridEditingTextsComponent
+    DxoDataGridDataGridEditingTextsComponent
   ],
   exports: [
-    DxoDataGridEditingTextsComponent
+    DxoDataGridDataGridEditingTextsComponent
   ],
 })
-export class DxoDataGridEditingTextsModule { }
+export class DxoDataGridDataGridEditingTextsModule { }
