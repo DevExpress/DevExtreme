@@ -41,7 +41,6 @@ import type {
   Properties as MessageListProperties,
 } from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
-import type { SuggestionsOptions } from '@ts/ui/chat/suggestions';
 import Suggestions from '@ts/ui/chat/suggestions';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
@@ -788,7 +787,7 @@ class Chat extends Widget<ChatProperties> {
         this._messageBox.option(name, this._getSendButtonOptionsWithAction());
         break;
       case 'suggestions':
-        this._suggestions?.updateOptions(value as SuggestionsOptions);
+        this._suggestions?.updateOptions(value as ChatProperties['suggestions']);
         break;
       default:
         super._optionChanged(args);

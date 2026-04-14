@@ -60,6 +60,10 @@ const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
 const CHAT_MESSAGE_EDITED_HIDING_CLASS = 'dx-chat-message-edited-hiding';
 
+const CHAT_SUGGESTIONS_CLASS = 'dx-chat-suggestions';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
+const BUTTON_GROUP_ITEM_CLASS = 'dx-buttongroup-item';
+
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
@@ -2755,6 +2759,58 @@ QUnit.module('Chat', () => {
             this.instance.option('speechToTextOptions', newOptions);
 
             assert.deepEqual(messageBox.option('speechToTextOptions'), newOptions, 'speechToTextOptions is updated in messageBox');
+        });
+    });
+
+    QUnit.module('Suggestions integration', {
+        beforeEach: function() {
+            moduleConfig.beforeEach.apply(this, arguments);
+
+            this.getSuggestionsElement = () => this.$element.find(`.${CHAT_SUGGESTIONS_CLASS}`);
+            this.getItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        }
+    }, () => {
+        QUnit.test('should always render suggestions container element', function(assert) {
+            assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions container is always rendered');
+        });
+
+        QUnit.test('suggestions should be rendered before messageBox', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }] },
+            });
+
+            const $suggestions = this.getSuggestionsElement();
+            const $messageBox = this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`);
+
+            assert.strictEqual($suggestions.next().is($messageBox), true, 'suggestions is rendered before messageBox');
+        });
+
+        QUnit.test('suggestions should be updated at runtime', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }, { text: 'Item 2' }] },
+            });
+
+            this.instance.option('suggestions', { items: [{ text: 'New 1' }, { text: 'New 2' }, { text: 'New 3' }] });
+
+            assert.strictEqual(this.getItems().length, 3, 'items count updated');
+            assert.strictEqual(this.getItems().eq(0).text(), 'New 1', 'first item text updated');
+        });
+
+        QUnit.test('onItemClick callback should be called when suggestion item is clicked', function(assert) {
+            assert.expect(1);
+
+            const clickedText = 'Item 1';
+
+            this.reinit({
+                suggestions: {
+                    items: [{ text: clickedText }, { text: 'Item 2' }],
+                    onItemClick: (e) => {
+                        assert.strictEqual(e.itemData.text, clickedText, 'correct item passed to callback');
+                    },
+                },
+            });
+
+            this.getItems().first().trigger('dxclick');
         });
     });
 
