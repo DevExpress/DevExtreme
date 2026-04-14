@@ -134,7 +134,7 @@ function compareCollections(
   Object.keys(current.configCollections).forEach((key) => {
     const currentCollection = current.configCollections[key];
     const prevCollection = prev.configCollections[key] || [];
-    if (!currentCollection || currentCollection.length !== prevCollection.length) {
+    if (currentCollection?.length !== prevCollection.length) {
       const updatedCollection: Record<string, any>[] = [];
       currentCollection.forEach(
         (item) => {

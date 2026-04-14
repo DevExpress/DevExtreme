@@ -1,7 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
 import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import stylistic from '@stylistic/eslint-plugin';
@@ -13,9 +12,6 @@ import typescriptConfig from 'eslint-config-devextreme/typescript';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
-const compat = new FlatCompat({
-  baseDirectory: dirname,
-});
 
 export default [
   {
@@ -155,6 +151,7 @@ export default [
       '@typescript-eslint/no-useless-constructor': 'warn',
       '@typescript-eslint/no-empty-function': 'warn',
       '@typescript-eslint/require-await': 'warn',
+      'require-await': 'warn',
       '@typescript-eslint/no-floating-promises': 'warn',
       'import/order': 'warn',
       'no-restricted-globals': 'warn',

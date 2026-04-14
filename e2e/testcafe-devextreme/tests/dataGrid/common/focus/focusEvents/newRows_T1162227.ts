@@ -9,8 +9,10 @@ import { CallbackTestHelper, WindowCallbackExtended } from '../../../../../helpe
 fixture`Focused row - new rows T1162227`
   .page(url(__dirname, '../../../../container.html'));
 
-type FocusCellChangingData =
-  [[prevRowIdx: number, prevColumnIdx: number], [rowIdx: number, columnIdx: number]];
+type FocusCellChangingData = [
+  [prevRowIdx: number, prevColumnIdx: number],
+  [rowIdx: number, columnIdx: number],
+];
 type FocusCellChangedData = [rowIdx: number, columnIdx: number];
 type FocusRowChangingData = [prevRowIdx: number, rowIdx: number];
 type FocusRowChangedData = [rowIdx: number];

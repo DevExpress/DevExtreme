@@ -1,7 +1,6 @@
 import { ClientFunction } from 'testcafe';
 
-type WindowCallbackExtended =
-  Window
+type WindowCallbackExtended = Window
   & typeof globalThis
   & {
     clientTesting?: {
