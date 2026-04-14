@@ -7,7 +7,9 @@ fixture.disablePageReloads`Adaptivity.Functional`
 
 test.meta({ browserSize: [400, 400] })('Should be shown and hidden when the window is resized', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   const adaptiveButton = dataGrid.getAdaptiveButton();
   await t.expect(adaptiveButton.exists).ok();
