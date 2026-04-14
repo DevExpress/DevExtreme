@@ -61,7 +61,6 @@ const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
 const CHAT_MESSAGE_EDITED_HIDING_CLASS = 'dx-chat-message-edited-hiding';
 
 const CHAT_SUGGESTIONS_CLASS = 'dx-chat-suggestions';
-const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_ITEM_CLASS = 'dx-buttongroup-item';
 
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
