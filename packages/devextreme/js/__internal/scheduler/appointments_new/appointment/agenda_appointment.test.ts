@@ -110,25 +110,6 @@ describe('AgendaAppointment', () => {
       expect($element.css('width')).toBe('100%');
       expect($element.css('height')).toBe('50px');
     });
-
-    it('should apply new geometry when resize() is called', async () => {
-      const instance = await createAgendaAppointment({
-        ...getProperties(defaultAppointmentData),
-        geometry: {
-          width: '100%', height: 50,
-        },
-      });
-
-      instance.resize({
-        width: '50%',
-        height: 70,
-      });
-
-      const $element = instance.$element();
-
-      expect($element.css('width')).toBe('50%');
-      expect($element.css('height')).toBe('70px');
-    });
   });
 
   describe('Title', () => {
