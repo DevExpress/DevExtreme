@@ -155,6 +155,7 @@ export class RecurrenceForm {
         ? { text: messageLocalization.format('dxScheduler-recurrenceRepeatOn') }
         : { visible: false },
       editorOptions: {
+        ...labelVisible ? {} : { labelMode: 'hidden' },
         min: 1,
         max: 31,
         format: '#',
@@ -307,6 +308,7 @@ export class RecurrenceForm {
             visible: false,
           },
           editorOptions: {
+            labelMode: 'hidden',
             items: frequenciesValues,
             valueExpr: 'value',
             displayExpr: 'text',
@@ -472,6 +474,7 @@ export class RecurrenceForm {
         visible: false,
       },
       editorOptions: {
+        labelMode: 'hidden',
         valueExpr: 'type',
         items: [
           { text: messageLocalization.format('dxScheduler-recurrenceNever'), type: 'never' },
@@ -509,6 +512,7 @@ export class RecurrenceForm {
           },
           editorType: 'dxDateBox',
           editorOptions: {
+            labelMode: 'hidden',
             type: 'date',
             useMaskBehavior: true,
             calendarOptions: {
@@ -536,6 +540,7 @@ export class RecurrenceForm {
           },
           editorType: 'dxNumberBox',
           editorOptions: {
+            labelMode: 'hidden',
             format: `# ${messageLocalization.format('dxScheduler-recurrenceRepeatCount')}`,
             min: 1,
             showSpinButtons: true,
