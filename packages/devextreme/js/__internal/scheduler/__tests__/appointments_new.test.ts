@@ -66,6 +66,18 @@ describe('New Appointments', () => {
         return $(POM.getAppointments()[0].element).text() === 'Custom appointment';
       };
 
+      it('should render default template', async () => {
+        const { POM } = await createScheduler(config);
+
+        if (templateName === 'appointmentCollectorTemplate') {
+          const collectorButton = POM.getCollectorButton();
+          expect(collectorButton.textContent).toBe('1');
+        } else {
+          const appointment = POM.getAppointments()[0];
+          expect(appointment.getText()).toBe('Appointment 1');
+        }
+      });
+
       it('should apply custom template', async () => {
         const { POM } = await createScheduler({
           ...config,

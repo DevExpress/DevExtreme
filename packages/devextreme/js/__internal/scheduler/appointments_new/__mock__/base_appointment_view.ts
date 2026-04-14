@@ -1,11 +1,12 @@
+import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
-import type { BaseAppointmentViewProperties } from '../appointment/base_appointment';
+import { BaseAppointmentView, type BaseAppointmentViewProperties } from '../appointment/base_appointment';
 
-export const getBaseAppointmentProperties = (
+export const getBaseAppointmentViewProperties = (
   appointmentData: SafeAppointment,
   targetedAppointmentData?: TargetedAppointment,
 ): BaseAppointmentViewProperties => {
@@ -20,10 +21,24 @@ export const getBaseAppointmentProperties = (
     appointmentData,
     targetedAppointmentData: normalizedTargetedAppointmentData,
     appointmentTemplate: new EmptyTemplate(),
-    onAppointmentRendered: () => {},
+    onRendered: () => {},
     getDataAccessor: (): AppointmentDataAccessor => mockAppointmentDataAccessor,
     getResourceColor: (): Promise<string | undefined> => Promise.resolve(undefined),
   };
 
   return config;
+};
+
+export const createBaseAppointment = async (
+  properties: BaseAppointmentViewProperties,
+): Promise<BaseAppointmentView> => {
+  const $element = $('.root');
+
+  // @ts-expect-error
+  const instance = new BaseAppointmentView($element, properties);
+
+  // Await for resources
+  await new Promise(process.nextTick);
+
+  return instance;
 };
