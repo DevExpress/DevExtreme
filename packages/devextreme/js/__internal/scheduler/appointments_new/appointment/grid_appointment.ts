@@ -28,7 +28,7 @@ export class GridAppointmentView extends BaseAppointmentView<GridAppointmentView
   }
 
   public override resize(
-    geometry?: { height: number, width: number, top: number, left: number },
+    geometry?: { height: number; width: number; top: number; left: number },
   ): void {
     const newGeometry = geometry ?? this.option().geometry;
     const {
