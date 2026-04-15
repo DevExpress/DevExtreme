@@ -30,10 +30,14 @@ const config = {
 
 test('should show default values in popup fields after onInitNewCard', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
-  await cardView.isReady();
+  await t
+    .expect(cardView.isReady())
+    .ok();
 
   await t.click(cardView.getToolbar().getAddButton().element);
-  await cardView.isReady();
+  await t
+    .expect(cardView.isReady())
+    .ok();
 
   const popup = cardView.getEditingPopup();
 
