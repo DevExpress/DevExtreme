@@ -18,8 +18,15 @@
       box-shadow: $box-shadow;
     }
 
-    .dx-buttongroup-wrapper {
-      gap: $gap;
+    &.dx-buttongroup {
+      &.dx-buttongroup-mode-contained {
+        border-radius: 0;
+        box-shadow: unset;
+      }
+
+      .dx-buttongroup-wrapper {
+        gap: $gap;
+      }
     }
 
     .dx-buttongroup-item {
