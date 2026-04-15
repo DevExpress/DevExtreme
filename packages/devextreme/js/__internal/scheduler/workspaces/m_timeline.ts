@@ -110,8 +110,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected incrementDate(date) {
     const skippedDays = this.option('skippedDays') ?? [];
+    const nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1);
+
     const nextVisibleDate = getFirstVisibleDate(
-      new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+      nextDate,
       skippedDays,
       (currentDate) => {
         const result = new Date(currentDate);

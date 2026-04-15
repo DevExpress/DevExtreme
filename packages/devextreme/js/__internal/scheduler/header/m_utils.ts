@@ -84,7 +84,7 @@ const getDateAfterVisibleDays = (
   direction: Direction,
 ): Date => {
   const dateStep = direction === 1 ? nextDay : prevDay;
-  let date = new Date(startDate);
+  let date = getFirstVisibleDate(new Date(startDate), skippedDays, dateStep);
 
   for (let i = 0; i < dayCount; i += 1) {
     date = getFirstVisibleDate(dateStep(date), skippedDays, dateStep);
@@ -212,7 +212,7 @@ export const getNextIntervalDate = (options: IntervalOptions, direction: Directi
   switch (step) {
     case 'day':
       return getDateAfterVisibleDays(
-        getIntervalStartDate(options),
+        date,
         intervalCount,
         skippedDays,
         direction,
