@@ -55,30 +55,19 @@ const getWorkWeekStart = (
   nextDay,
 );
 
-const getDateAfterWorkWeek = (
-  workWeekStart: Date,
+const getDateAfterWeek = (
+  startDate: Date,
   firstDayOfWeek: number | undefined,
   skippedDays: number[],
 ): Date => {
-  const weekStart = getWeekStart(workWeekStart, firstDayOfWeek);
+  const weekStart = getWeekStart(startDate, firstDayOfWeek);
   let lastVisibleDate = addDateInterval(weekStart, { days: 6 }, 1);
+
   while (isDateSkipped(lastVisibleDate, skippedDays)) {
     lastVisibleDate = addDateInterval(lastVisibleDate, DAY_DURATION, -1);
   }
 
   return nextDay(lastVisibleDate);
-};
-
-const getDateAfterWeek = (
-  weekStartDate: Date,
-  firstDayOfWeek: number | undefined,
-  skippedDays: number[],
-): Date => {
-  if (skippedDays.length === 0) {
-    return nextWeek(weekStartDate);
-  }
-
-  return getDateAfterWorkWeek(weekStartDate, firstDayOfWeek, skippedDays);
 };
 
 const nextAgendaStart = (
@@ -122,7 +111,7 @@ const getPeriodEndDate = (
     day: () => nextDay(currentPeriodStartDate),
     week: () => getDateAfterWeek(currentPeriodStartDate, firstDayOfWeek, skippedDays),
     month: () => nextMonth(currentPeriodStartDate),
-    workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate, firstDayOfWeek, skippedDays),
+    workWeek: () => getDateAfterWeek(currentPeriodStartDate, firstDayOfWeek, skippedDays),
     agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration),
   };
 
