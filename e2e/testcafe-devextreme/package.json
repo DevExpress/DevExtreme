@@ -24,7 +24,7 @@
     "eslint-plugin-import": "catalog:eslint8",
     "eslint-plugin-no-only-tests": "catalog:eslint8",
     "eslint-plugin-qunit": "catalog:eslint8",
-    "glob": "10.4.5",
+    "glob": "11.1.0",
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",

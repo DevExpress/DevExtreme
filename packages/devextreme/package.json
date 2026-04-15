@@ -133,7 +133,7 @@
     "eslint-plugin-unicorn": "60.0.0",
     "fancy-log": "2.0.0",
     "file-saver": "2.0.5",
-    "glob": "10.4.5",
+    "glob": "11.1.0",
     "globalize": "1.7.1",
     "globals": "catalog:",
     "gulp": "4.0.2",
