@@ -19,6 +19,7 @@ import {
 } from '../events';
 
 import {
+    CollectionWidgetOptions,
     CollectionWidgetItem,
     SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
@@ -118,7 +119,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'text'
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: CollectionWidgetOptions<any, Item, any>['keyExpr']
     /**
      * @docid
      * @default null

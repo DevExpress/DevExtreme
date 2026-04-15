@@ -8771,7 +8771,7 @@ declare module DevExpress.ui {
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
@@ -9939,7 +9939,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: CollectionWidgetOptions<
+      any,
+      DevExpress.ui.dxButtonGroup.Item,
+      any
+    >['keyExpr'];
     /**
      * [descr:dxButtonGroupOptions.onItemClick]
      */
@@ -28966,7 +28970,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabPanelOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:dxTabPanelOptions.onTitleClick]
      */
@@ -33289,7 +33293,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
      */

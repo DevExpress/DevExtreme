@@ -825,7 +825,7 @@ const DxSuggestionsConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxButtonGroupItem>>,
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: {},
     onContentReady: Function as PropType<((e: ButtonGroupContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: ButtonGroupDisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: ButtonGroupInitializedEvent) => void)>,

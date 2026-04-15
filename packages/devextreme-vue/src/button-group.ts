@@ -62,7 +62,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxButtonGroupItem>>,
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: {},
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,

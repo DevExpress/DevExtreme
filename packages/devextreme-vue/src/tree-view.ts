@@ -173,7 +173,7 @@ const componentConfig = {
     items: Array as PropType<Array<any | dxTreeViewItem>>,
     itemsExpr: [Function, String] as PropType<((() => void)) | string>,
     itemTemplate: {},
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     noDataText: String,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,

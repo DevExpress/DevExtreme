@@ -528,7 +528,7 @@ type ISuggestionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   items?: Array<dxButtonGroupItem>;
-  keyExpr?: (() => void) | string;
+  keyExpr?: any;
   onContentReady?: ((e: ButtonGroupContentReadyEvent) => void);
   onDisposing?: ((e: ButtonGroupDisposingEvent) => void);
   onInitialized?: ((e: ButtonGroupInitializedEvent) => void);

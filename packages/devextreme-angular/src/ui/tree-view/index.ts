@@ -64,6 +64,7 @@ import {
  */
 @Component({
     selector: 'dx-tree-view',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -431,10 +432,10 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((item: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((item: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -1015,7 +1016,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
     

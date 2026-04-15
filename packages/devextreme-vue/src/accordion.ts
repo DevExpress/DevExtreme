@@ -88,7 +88,7 @@ const componentConfig = {
     items: Array as PropType<Array<any | dxAccordionItem | string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     multiple: Boolean,
     noDataText: String,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,

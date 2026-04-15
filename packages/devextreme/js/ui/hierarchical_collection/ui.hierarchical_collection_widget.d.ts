@@ -50,7 +50,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'id'
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * @docid
      * @default 'selected'
