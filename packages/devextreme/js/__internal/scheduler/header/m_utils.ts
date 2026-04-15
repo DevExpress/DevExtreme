@@ -47,16 +47,6 @@ const nextMonth = (date: Date): Date => {
   return addDateInterval(date, { days }, 1);
 };
 
-const getWorkWeekStart = (
-  date: Date,
-  firstDayOfWeek: number | undefined,
-  skippedDays: number[],
-): Date => getFirstVisibleDate(
-  getWeekStart(date, firstDayOfWeek),
-  skippedDays,
-  nextDay,
-);
-
 const getDateAfterWeek = (
   startDate: Date,
   firstDayOfWeek: number | undefined,
@@ -107,15 +97,11 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
       );
     case 'month':
       return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
-    case 'week': {
-      const weekStart = getPeriodStart(date, step, false, firstDayOfWeek) as Date;
-      if (skippedDays.length > 0) {
-        return getFirstVisibleDate(weekStart, skippedDays, nextDay);
-      }
-      return weekStart;
+    case 'week':
+    case 'workWeek': {
+      const weekStart = getPeriodStart(date, 'week', false, firstDayOfWeek) as Date;
+      return getFirstVisibleDate(weekStart, skippedDays, nextDay);
     }
-    case 'workWeek':
-      return getWorkWeekStart(date, firstDayOfWeek, skippedDays);
     case 'agenda':
       return new Date(date);
     default:
