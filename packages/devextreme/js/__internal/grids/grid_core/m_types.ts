@@ -33,12 +33,12 @@ type OptionsMethod<TOptions> = (() => TOptions)
   & ((options: TOptions) => void)
   & (
     <TPropertyName extends string>(
-      optionName: TPropertyName
+      optionName: TPropertyName,
     ) => GridPropertyType<TOptions, TPropertyName>
   ) & (
     <TPropertyName extends string>(
       optionName: TPropertyName,
-      optionValue: GridPropertyType<TOptions, TPropertyName>
+      optionValue: GridPropertyType<TOptions, TPropertyName>,
     ) => void
   );
 
@@ -76,7 +76,7 @@ export interface InternalGrid extends GridBaseType {
   _createComponent: <TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options?: TComponent extends Component<infer TOptions> ? TOptions : never
+    options?: TComponent extends Component<infer TOptions> ? TOptions : never,
   ) => TComponent;
 
   _createAction: any;
