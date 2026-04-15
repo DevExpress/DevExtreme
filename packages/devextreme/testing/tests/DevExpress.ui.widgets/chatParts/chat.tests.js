@@ -131,7 +131,6 @@ const moduleConfig = {
         this.getMessageListEmptyView = () => this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
         this.getFileUploader = () => FileUploader.getInstance(this.$element.find(`.${FILEUPLOADER_CLASS}`));
         this.getAttachButton = () => Button.getInstance(this.$element.find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`));
-        // this.getSuggestionsElement = () => $();
         this.getSuggestionsElement = () => this.instance._suggestions._$element;
         this.getSuggestionItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
