@@ -94,6 +94,7 @@ $reduced-icon-offset: null !default;
   background-clip: padding-box;
   position: absolute;
   cursor: default;
+  outline: none;
 
   @include user-select(none);
 

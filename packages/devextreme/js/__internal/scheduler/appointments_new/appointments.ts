@@ -8,7 +8,9 @@ import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
-import type { SafeAppointment, TargetedAppointment, ViewType } from '../types';
+import type {
+  SafeAppointment, ScrollToOptions, TargetedAppointment, ViewType,
+} from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentResource } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
@@ -18,19 +20,23 @@ import type {
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
   BaseAppointmentViewModel,
+  SortedEntity,
 } from '../view_model/types';
 import { AgendaAppointmentView } from './appointment/agenda_appointment';
 import type { BaseAppointmentViewProperties } from './appointment/base_appointment';
 import { GridAppointmentView } from './appointment/grid_appointment';
 import { AppointmentCollector } from './appointment_collector';
+import { AppointmentsFocusController } from './appointments.focus_controller';
 import { APPOINTMENTS_CONTAINER_CLASS } from './const';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
 import type { DiffItem } from './utils/get_view_model_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
 import { isAgendaAppointmentViewModel, isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils/type_helpers';
+import type { ViewItem } from './view_item';
 
 export interface AppointmentsProperties extends DOMComponentProperties<Appointments> {
   currentView: ViewType;
+  tabIndex: number;
   viewModel: AppointmentViewModelPlain[];
   items: AppointmentViewModelPlain[]; // TODO: legacy compatibility
   $allDayContainer: dxElementWrapper | null;
@@ -43,11 +49,15 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
+  getStartViewDate: () => Date;
+  getSortedAppointments: () => SortedEntity[];
+  isVirtualScrolling: () => boolean;
+  scrollTo: (date: Date, options?: ScrollToOptions) => void;
 }
 
-type ViewItem = GridAppointmentView | AgendaAppointmentView | AppointmentCollector;
-
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
+  private focusController!: AppointmentsFocusController;
+
   private viewItemBySortedIndex: Record<number, ViewItem> = {};
 
   private viewItems: ViewItem[] = [];
@@ -60,16 +70,18 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     return this.viewItemBySortedIndex[sortedIndex];
   }
 
-  private get $allDayContainer(): dxElementWrapper | null {
+  public get $allDayContainer(): dxElementWrapper | null {
     return this.option().$allDayContainer;
   }
 
-  private get $commonContainer(): dxElementWrapper {
+  public get $commonContainer(): dxElementWrapper {
     return this.$element();
   }
 
   override _init(): void {
     super._init();
+
+    this.focusController = new AppointmentsFocusController(this);
 
     this._templateManager.addDefaultTemplates({
       appointment: new EmptyTemplate(),
@@ -91,6 +103,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   override _getDefaultOptions(): AppointmentsProperties {
     return {
       ...super._getDefaultOptions(),
+      tabIndex: 0,
       viewModel: [],
       $allDayContainer: null,
       appointmentTemplate: 'appointment',
@@ -127,6 +140,12 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         }
 
         this.renderViewModel(this.option().viewModel);
+        break;
+      }
+      case 'tabIndex': {
+        this.viewItems.forEach((item) => {
+          item.setTabIndex(args.value);
+        });
         break;
       }
       default:
@@ -180,6 +199,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
+
+    this.focusController.resetTabIndex();
   }
 
   private renderViewModelDiff(viewModelDiff: DiffItem[]): void {
@@ -219,18 +240,18 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
           newViewItemBySortedIndex[sortedIndex] = newViewItem;
           break;
         }
-        case diffItem.needToResize: {
-          viewItem.resize({
-            height: diffItem.item.height,
-            width: diffItem.item.width,
-            top: diffItem.item.top,
-            left: diffItem.item.left,
-          });
-
-          newViewItemBySortedIndex[sortedIndex] = viewItem;
-          break;
-        }
         default:
+          if (diffItem.needToResize) {
+            viewItem.resize({
+              height: diffItem.item.height,
+              width: diffItem.item.width,
+              top: diffItem.item.top,
+              left: diffItem.item.left,
+            });
+          }
+
+          viewItem.option('sortedIndex', sortedIndex);
+
           newViewItemBySortedIndex[sortedIndex] = viewItem;
       }
     });
@@ -240,6 +261,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
+
+    this.focusController.resetTabIndex();
   }
 
   private renderViewItem(
@@ -253,8 +276,17 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     const targetedAppointmentData = this.getTargetedAppointmentData(appointmentViewModel);
 
+    const baseViewItemConfig = {
+      tabIndex: this.option().tabIndex,
+      sortedIndex: appointmentViewModel.sortedIndex,
+      onFocusIn: this.focusController.onAppointmentFocusIn.bind(this.focusController),
+      onFocusOut: this.focusController.onAppointmentFocusOut.bind(this.focusController),
+      onKeyDown: this.focusController.onAppointmentKeyDown.bind(this.focusController),
+    };
+
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
+        ...baseViewItemConfig,
         appointmentsData: appointmentViewModel.items.map((item) => item.itemData),
         isCompact: appointmentViewModel.isCompact,
         geometry: {
@@ -268,13 +300,14 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       });
     }
 
-    const baseConfig: BaseAppointmentViewProperties = {
+    const baseAppointmentViewConfig: BaseAppointmentViewProperties = {
+      ...baseViewItemConfig,
       index,
       appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
-      getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
       onRendered: this.option().onAppointmentRendered,
+      getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
       getDataAccessor: this.option().getDataAccessor,
     };
 
@@ -283,7 +316,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         $element,
         GridAppointmentView,
         {
-          ...baseConfig,
+          ...baseAppointmentViewConfig,
           geometry: {
             height: appointmentViewModel.height,
             width: appointmentViewModel.width,
@@ -301,7 +334,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       $element,
       AgendaAppointmentView,
       {
-        ...baseConfig,
+        ...baseAppointmentViewConfig,
         modifiers: {
           isLastInGroup: appointmentViewModel.isLastInGroup,
         },

@@ -15,6 +15,8 @@ export const getAppointmentCollectorProperties = (
   };
 
   const config: AppointmentCollectorProperties = {
+    tabIndex: 0,
+    sortedIndex: 0,
     appointmentsData,
     isCompact: false,
     geometry: {
@@ -25,6 +27,9 @@ export const getAppointmentCollectorProperties = (
     },
     targetedAppointmentData,
     appointmentCollectorTemplate: new EmptyTemplate(),
+    onFocusIn: () => {},
+    onFocusOut: () => {},
+    onKeyDown: () => {},
   };
 
   return config;

@@ -3,21 +3,21 @@ import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
 import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
-import DOMComponent from '@ts/core/widget/dom_component';
+import { click } from '@ts/events/m_short';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
-import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
+import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, FOCUSED_STATE_CLASS } from '../const';
 import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
+import { EVENTS_NAMESPACE, ViewItem, type ViewItemProperties } from '../view_item';
 
 export interface BaseAppointmentViewProperties
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  extends DOMComponentProperties<BaseAppointmentView<any>> {
+  extends ViewItemProperties {
   index: number;
   appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
@@ -35,7 +35,7 @@ export interface BaseAppointmentViewProperties
 
 export class BaseAppointmentView<
   TProperties extends BaseAppointmentViewProperties = BaseAppointmentViewProperties,
-> extends DOMComponent<BaseAppointmentView<TProperties>, TProperties> {
+> extends ViewItem<TProperties> {
   protected get targetedAppointmentData(): TargetedAppointment {
     return this.option().targetedAppointmentData;
   }
@@ -60,13 +60,17 @@ export class BaseAppointmentView<
     this.resize();
     this.applyElementClasses();
     this.applyAria();
+    this.attachFocusEvents();
+    this.attachClickEvent();
+    this.attachKeydownEvents();
     this.renderContentTemplate();
   }
 
-  public resize(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    geometry?: { height: number; width: number | string; top: number; left: number },
-  ): void { }
+  override _dispose(): void {
+    super._dispose();
+
+    click.off(this.$element(), EVENTS_NAMESPACE);
+  }
 
   protected applyElementClasses(): void {
     this.$element()
@@ -77,7 +81,31 @@ export class BaseAppointmentView<
 
   protected applyAria(): void {
     this.$element()
-      .attr('role', 'button');
+      .attr('role', 'button')
+      .attr('tabindex', -1);
+  }
+
+  private attachClickEvent(): void {
+    click.off(this.$element(), EVENTS_NAMESPACE);
+    click.on(
+      this.$element(),
+      this.onClick.bind(this),
+      EVENTS_NAMESPACE,
+    );
+  }
+
+  protected override onFocusIn(): void {
+    this.$element().addClass(FOCUSED_STATE_CLASS);
+
+    super.onFocusIn();
+  }
+
+  protected override onFocusOut(e: DxEvent): void {
+    this.$element()
+      .removeClass(FOCUSED_STATE_CLASS)
+      .attr('tabindex', -1);
+
+    super.onFocusOut(e);
   }
 
   protected getTitleText(): string {
