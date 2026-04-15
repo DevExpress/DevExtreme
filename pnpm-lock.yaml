@@ -1564,8 +1564,8 @@ importers:
         specifier: 0.6.1
         version: 0.6.1
       gulp-sass:
-        specifier: 5.1.0
-        version: 5.1.0
+        specifier: 6.0.1
+        version: 6.0.1
       gulp-shell:
         specifier: 0.8.0
         version: 0.8.0
@@ -11306,6 +11306,10 @@ packages:
 
   gulp-sass@5.1.0:
     resolution: {integrity: sha512-7VT0uaF+VZCmkNBglfe1b34bxn/AfcssquLKVDYnCDJ3xNBaW7cUuI3p3BQmoKcoKFrs9jdzUxyb+u+NGfL4OQ==}
+    engines: {node: '>=12'}
+
+  gulp-sass@6.0.1:
+    resolution: {integrity: sha512-4wonidxB8lGPHvahelpGavUBJAuERSl+OIVxPCyQthK4lSJhZ/u3/qjFcyAtnMIXDl6fXTn34H4BXsN7gt54kQ==}
     engines: {node: '>=12'}
 
   gulp-shell@0.6.5:
@@ -32134,6 +32138,15 @@ snapshots:
       yargs-parser: 22.0.0
 
   gulp-sass@5.1.0:
+    dependencies:
+      lodash.clonedeep: 4.5.0
+      picocolors: 1.1.1
+      plugin-error: 1.0.1
+      replace-ext: 2.0.0
+      strip-ansi: 6.0.1
+      vinyl-sourcemaps-apply: 0.2.1
+
+  gulp-sass@6.0.1:
     dependencies:
       lodash.clonedeep: 4.5.0
       picocolors: 1.1.1

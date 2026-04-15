@@ -159,7 +159,7 @@
     "gulp-remote-src": "0.4.4",
     "gulp-rename": "1.4.0",
     "gulp-replace": "0.6.1",
-    "gulp-sass": "5.1.0",
+    "gulp-sass": "6.0.1",
     "gulp-shell": "0.8.0",
     "gulp-tap": "1.0.1",
     "gulp-template": "5.0.0",
