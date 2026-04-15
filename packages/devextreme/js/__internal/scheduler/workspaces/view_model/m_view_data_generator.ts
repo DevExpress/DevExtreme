@@ -43,14 +43,11 @@ export class ViewDataGenerator {
   constructor(public readonly viewType: ViewType) {}
 
   get daysInInterval(): number {
-    if (this.skippedDays.length === 0) {
-      return this.baseDaysInInterval;
-    }
-    const visibleDayCount = 7 - this.skippedDays.length;
-    if (this.baseDaysInInterval >= 7) {
-      return visibleDayCount;
-    }
-    return this.baseDaysInInterval;
+    const isWeekLikeView = this.baseDaysInInterval >= 7;
+
+    return isWeekLikeView
+      ? 7 - this.skippedDays.length
+      : this.baseDaysInInterval;
   }
 
   public isWorkWeekView(): boolean {
