@@ -8,7 +8,7 @@ fixture.disablePageReloads`Toasts in DataGrid`.page(
   url(__dirname, '../../container.html'),
 );
 
-test.meta({ unstable: true })('Toast should be visible after calling and should be not visible after default display time', async (t) => {
+test('Toast should be visible after calling and should be not visible after default display time', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
