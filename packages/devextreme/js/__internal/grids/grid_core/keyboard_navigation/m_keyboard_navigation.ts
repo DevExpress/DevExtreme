@@ -1743,7 +1743,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     gridCoreUtils.focusAndSelectElement(this, $focusedElement);
   }
 
-  public _focus($cell, disableFocus?, skipFocusEvent?) {
+  public _focus($cell: dxElementWrapper, disableFocus?: boolean, skipFocusEvent?: boolean, preventScroll?: boolean) {
     const $row = $cell && !$cell.hasClass(ROW_CLASS)
       ? $cell.closest(`.${ROW_CLASS}`)
       : $cell;
@@ -1795,8 +1795,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       });
       if (!skipFocusEvent) {
         this._applyTabIndexToElement($focusElement);
-        // @ts-expect-error
-        eventsEngine.trigger($focusElement, 'focus');
+        if (preventScroll) {
+          $focusElement.get(0)?.focus({ preventScroll });
+        } else {
+          // @ts-expect-error
+          eventsEngine.trigger($focusElement, 'focus');
+        }
       }
       if (disableFocus) {
         $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
@@ -1809,7 +1813,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  public _updateFocus(isRenderView?, skipFocusEvent = false) {
+  public _updateFocus(isRenderView: boolean, skipFocusEvent = false) {
     this._updateFocusTimeout = setTimeout(() => {
       if (this._needFocusEditingCell()) {
         this._editingController._focusEditingCell();
@@ -1848,12 +1852,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
                 );
                 return;
               }
-              !isFocusedElementDefined && this._focus($cell, false, skipFocusEvent);
+              !isFocusedElementDefined && this._focus($cell, false, skipFocusEvent, isRenderView);
             } else if (
               !isFocusedElementDefined
               && (this._isNeedFocus || this._isHiddenFocus)
             ) {
-              this._focus($cell, this._isHiddenFocus, skipFocusEvent);
+              this._focus($cell, this._isHiddenFocus, skipFocusEvent, isRenderView);
             }
             if (isEditing && !column?.showEditorAlways) {
               this._focusInteractiveElement.bind(this)($cell);
@@ -1953,7 +1957,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       that.setFocusedCellPosition(rowIndex, columnIndex);
     }
 
-    isUpArrow && that._updateFocus();
+    isUpArrow && that._updateFocus(false);
   }
 
   // #endregion Focusing
@@ -3128,7 +3132,7 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 
   protected _processCanceledEditingCell() {
     this.closeEditCell().done(() => {
-      this._keyboardNavigationController._updateFocus();
+      this._keyboardNavigationController._updateFocus(false);
     });
   }
 
@@ -3145,7 +3149,7 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
     const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
 
     if (!isFilterCell) {
-      keyboardNavigation._updateFocus();
+      keyboardNavigation._updateFocus(false);
     }
 
     return result;
