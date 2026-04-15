@@ -289,7 +289,7 @@ describe('component rendering', () => {
   });
 
   it('correctly sets the help link', () => {
-    expect(config().licensingDocLink).toBe('https://go.devexpress.com/Licensing_Documentation_DevExtremeVue.aspx');
+    expect(config().licensingDocLink).toBe('https://www.devexpress.com/go/Licensing_Documentation_DevExpress_Vue.aspx');
   });
 
   describe('options', () => {
