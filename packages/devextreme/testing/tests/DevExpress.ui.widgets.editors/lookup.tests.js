@@ -3379,6 +3379,36 @@ QUnit.module('dataSource integration', {
         this.clock.tick(loadDelay / 2);
         assert.ok($loadPanel.is(':hidden'), 'load panel is not visible if value length less than minSearchLength)');
     });
+
+    QUnit.test('search should find items when search value is in NFD Unicode form and items are in NFC form (T1326069)', function(assert) {
+        const NFC_CHAR = '\u1EC7'; // precomposed form (NFC)
+        const itemsNFC = [
+            `test item 1 h${NFC_CHAR}`,
+            `test item 2 H${NFC_CHAR}`,
+            'test item 3',
+        ];
+
+        const instance = this.$element.dxLookup({
+            dataSource: itemsNFC,
+            searchEnabled: true,
+            searchTimeout: 0,
+            opened: true
+        }).dxLookup('instance');
+
+        const $content = $(instance.content());
+        const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+        const searchValueNFD = 'h\u0065\u0323\u0302';
+
+        assert.notStrictEqual(searchValueNFD, searchValueNFD.normalize('NFC'),
+            'NFD and NFC forms are different strings');
+
+        $($input.val(searchValueNFD)).trigger('input');
+        this.clock.tick(0);
+
+        const $listItems = $content.find(`.${LIST_ITEM_CLASS}`);
+        assert.equal($listItems.length, 2, 'items containing the NFC character should be found when searching with its NFD equivalent');
+    });
 });
 
 

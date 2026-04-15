@@ -215,6 +215,7 @@ export const toComparable = function (value, caseSensitive?, options: any = {}) 
   const isCaseSensitive = caseSensitive || collatorSensitivity === 'case' || collatorSensitivity === 'variant';
 
   if (typeof value === 'string' && !isCaseSensitive) {
+    value = value.normalize('NFC');
     const locale = options?.locale?.toLowerCase();
     const useUpperCase = locale && !!['hy', 'el'].find((code) => locale === code || locale.startsWith(`${code}-`));
 
