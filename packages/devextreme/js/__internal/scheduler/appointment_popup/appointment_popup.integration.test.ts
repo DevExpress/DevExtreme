@@ -1630,8 +1630,8 @@ describe('Appointment Form', () => {
 
     scheduler.showAppointmentPopup(commonAppointment);
 
-    // @ts-expect-error POM.popup.dxForm.option('items')[1]
-    const recurrenceGroup = POM.popup.dxForm.option('items')[1] as GroupItem;
+    const formItems = POM.popup.dxForm.option('items') ?? [];
+    const recurrenceGroup = formItems[1] as GroupItem;
     const allItems = flattenBy<SimpleItem>(
       recurrenceGroup.items as SimpleItem[],
       (i) => (i as unknown as GroupItem).items as SimpleItem[] | undefined,
