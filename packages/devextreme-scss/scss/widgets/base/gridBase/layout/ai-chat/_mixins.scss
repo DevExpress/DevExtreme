@@ -1,0 +1,9 @@
+@mixin ai-chat-messagelist-empty(
+  $messagelist-empty-icon-color,
+  $messagelist-empty-icon-background-color,
+) {
+  .dx-ai-chat-messagelist-empty-image {
+    color: $messagelist-empty-icon-color;
+    background-color: $messagelist-empty-icon-background-color;
+  }
+}

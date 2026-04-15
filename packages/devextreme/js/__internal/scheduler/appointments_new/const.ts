@@ -15,6 +15,7 @@ export const APPOINTMENT_TYPE_CLASSES = {
   EMPTY: 'dx-scheduler-appointment-empty',
   ALL_DAY: 'dx-scheduler-all-day-appointment',
   RECURRING: 'dx-scheduler-appointment-recurrence',
+  HAS_RESOURCE: 'dx-scheduler-appointment-has-resource-color',
 };
 
 export const APPOINTMENT_CLASSES = {
@@ -30,6 +31,8 @@ export const APPOINTMENT_CLASSES = {
 };
 
 export const AGENDA_APPOINTMENT_CLASSES = {
+  LEFT_LAYOUT: 'dx-scheduler-agenda-appointment-left-layout',
+  RIGHT_LAYOUT: 'dx-scheduler-agenda-appointment-right-layout',
   LAST_IN_DATE: 'dx-scheduler-last-in-date-agenda-appointment',
   MARKER: 'dx-scheduler-agenda-appointment-marker',
   RESOURCE_LIST: 'dx-scheduler-appointment-resource-list',

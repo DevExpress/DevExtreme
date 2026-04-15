@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-file-manager-item-view',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

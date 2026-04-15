@@ -81,7 +81,6 @@ import {
  */
 @Component({
     selector: 'dx-popover',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

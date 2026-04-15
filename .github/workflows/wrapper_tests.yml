@@ -45,7 +45,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build devextreme package
-        run: pnpx nx build devextreme -c testing
+        run: pnpm exec nx build devextreme -c testing
 
   check-regenerate:
     runs-on: devextreme-shr2
@@ -134,12 +134,12 @@ jobs:
 
       - name: Download Browser
         if: matrix.framework == 'angular'
-        run: pnpx puppeteer browsers install chrome@130.0.6723.69
+        run: pnpm --filter devextreme-angular exec puppeteer browsers install chrome@130.0.6723.69
 
       - name: Test ${{ matrix.framework }}
         env:
           NODE_OPTIONS: --max-old-space-size=8192
-        run: pnpx nx test devextreme-${{ matrix.framework }}
+        run: pnpm exec nx test devextreme-${{ matrix.framework }}
 
       - name: Pack ${{ matrix.framework }}
-        run: pnpx nx pack devextreme-${{ matrix.framework }}
+        run: pnpm exec nx pack devextreme-${{ matrix.framework }}

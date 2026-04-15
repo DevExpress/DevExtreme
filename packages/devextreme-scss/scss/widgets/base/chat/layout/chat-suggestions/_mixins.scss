@@ -1,0 +1,43 @@
+@mixin chat-suggestions(
+  $padding,
+  $border-radius,
+  $border-width,
+  $max-width,
+  $gap,
+  $box-shadow,
+) {
+  .dx-chat-suggestions {
+    padding: $padding;
+
+    &:empty {
+      padding: 0;
+    }
+
+    .dx-button {
+      max-width: $max-width;
+      box-shadow: $box-shadow;
+    }
+
+    &.dx-buttongroup {
+      &.dx-buttongroup-mode-contained {
+        border-radius: 0;
+        box-shadow: unset;
+      }
+
+      .dx-buttongroup-wrapper {
+        gap: $gap;
+      }
+    }
+
+    .dx-buttongroup-item {
+      &.dx-button-mode-outlined,
+      &.dx-button-mode-contained {
+        border-inline-start-width: $border-width;
+
+        &.dx-button {
+          border-radius: $border-radius;
+        }
+      }
+    }
+  }
+}

@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-drop-down-box-button',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-view-search-editor-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

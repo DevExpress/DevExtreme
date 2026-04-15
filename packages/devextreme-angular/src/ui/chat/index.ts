@@ -28,6 +28,7 @@ import type { Store } from 'devextreme/data/store';
 import type { Format } from 'devextreme/common/core/localization';
 import type { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
 import type { dxSpeechToTextOptions } from 'devextreme/ui/speech_to_text';
+import type { dxButtonGroupOptions } from 'devextreme/ui/button_group';
 
 import DxChat from 'devextreme/ui/chat';
 
@@ -55,6 +56,7 @@ import { DxoUserModule } from 'devextreme-angular/ui/nested';
 import { DxiChatAlertModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatAttachmentModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatAuthorModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatChatItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatCustomSpeechRecognizerModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatDayHeaderFormatModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatEditingModule } from 'devextreme-angular/ui/chat/nested';
@@ -64,6 +66,8 @@ import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/
 import { DxoChatSendButtonOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatSpeechRecognitionConfigModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatSpeechToTextOptionsModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatSuggestionsModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatSuggestionsItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
@@ -80,7 +84,6 @@ import {
  */
 @Component({
     selector: 'dx-chat',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -454,6 +457,16 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    
+    @Input()
+    get suggestions(): dxButtonGroupOptions {
+        return this._getOption('suggestions');
+    }
+    set suggestions(value: dxButtonGroupOptions) {
+        this._setOption('suggestions', value);
+    }
+
+
     /**
      * [descr:dxChatOptions.typingUsers]
     
@@ -811,6 +824,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() suggestionsChange: EventEmitter<dxButtonGroupOptions>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() typingUsersChange: EventEmitter<Array<User>>;
 
     /**
@@ -888,6 +908,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'showUserNameChange' },
             { emit: 'speechToTextEnabledChange' },
             { emit: 'speechToTextOptionsChange' },
+            { emit: 'suggestionsChange' },
             { emit: 'typingUsersChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
@@ -956,6 +977,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiChatAlertModule,
     DxiChatAttachmentModule,
     DxoChatAuthorModule,
+    DxiChatChatItemModule,
     DxoChatCustomSpeechRecognizerModule,
     DxoChatDayHeaderFormatModule,
     DxoChatEditingModule,
@@ -965,6 +987,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSendButtonOptionsModule,
     DxoChatSpeechRecognitionConfigModule,
     DxoChatSpeechToTextOptionsModule,
+    DxoChatSuggestionsModule,
+    DxiChatSuggestionsItemModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxIntegrationModule,
@@ -983,6 +1007,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiChatAlertModule,
     DxiChatAttachmentModule,
     DxoChatAuthorModule,
+    DxiChatChatItemModule,
     DxoChatCustomSpeechRecognizerModule,
     DxoChatDayHeaderFormatModule,
     DxoChatEditingModule,
@@ -992,6 +1017,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSendButtonOptionsModule,
     DxoChatSpeechRecognitionConfigModule,
     DxoChatSpeechToTextOptionsModule,
+    DxoChatSuggestionsModule,
+    DxiChatSuggestionsItemModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxTemplateModule

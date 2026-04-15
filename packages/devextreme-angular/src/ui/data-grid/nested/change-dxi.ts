@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-change',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

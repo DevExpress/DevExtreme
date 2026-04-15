@@ -1,0 +1,7 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+<title>gridkanban</title>
+<path d="M7 13h-2v-8h2v8z"></path>
+<path d="M13 11h-2v-6h2v6z"></path>
+<path d="M10 9h-2v-4h2v4z"></path>
+<path d="M16 1c0.552 0 1 0.448 1 1v14c0 0.552-0.448 1-1 1h-14c-0.552 0-1-0.448-1-1v-14c0-0.552 0.448-1 1-1h14zM3 15h12v-12h-12v12z"></path>
+</svg>

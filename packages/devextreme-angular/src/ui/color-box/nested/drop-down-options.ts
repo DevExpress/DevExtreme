@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-color-box-drop-down-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

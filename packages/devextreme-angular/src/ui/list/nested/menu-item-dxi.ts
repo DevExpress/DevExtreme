@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_menuItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-list-menu-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

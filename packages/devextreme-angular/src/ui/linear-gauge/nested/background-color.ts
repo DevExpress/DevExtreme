@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-background-color',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

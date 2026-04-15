@@ -277,7 +277,10 @@ test(
 
 test('ColumnChooser should receive and render custom texts', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   const columnChooserBtn = dataGrid.getColumnChooserButton();
   await t.click(columnChooserBtn);
   const columnChooser = dataGrid.getColumnChooser();

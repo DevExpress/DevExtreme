@@ -11,7 +11,9 @@ fixture.disablePageReloads`Filter Builder Scrolling Test`
 test('FilterBuilder - The field drop-down closes with the page scroll', async (t) => {
   const filterBuilder = new FilterBuilder('#container');
 
-  await filterBuilder.isReady();
+  await t
+    .expect(filterBuilder.isReady())
+    .ok();
 
   await t
     .click(filterBuilder.getItem('operation'))

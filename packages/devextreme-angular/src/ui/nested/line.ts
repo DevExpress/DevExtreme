@@ -24,7 +24,6 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-line',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

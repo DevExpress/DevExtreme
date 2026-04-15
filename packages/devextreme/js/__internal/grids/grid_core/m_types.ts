@@ -4,7 +4,9 @@ import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids'
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { Properties as ChatOptions } from '@js/ui/chat';
 import type { Properties as DataGridOptions } from '@js/ui/data_grid';
+import type { Properties as PopupOptions } from '@js/ui/popup';
 import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
@@ -127,6 +129,14 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
   selection?: InternalSelection;
+
+  // TODO move to public d.ts
+  aiAssistant?: {
+    enabled?: boolean;
+    title?: string;
+    popup?: PopupOptions;
+    chat?: ChatOptions;
+  };
 }
 
 // todo: move to upper .d.ts files
@@ -199,13 +209,14 @@ export interface Controllers {
   resizing: import('./views/m_grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
+  searchPanel: import('./search/m_search').SearchPanelViewController;
   stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/m_toast_controller').ToastViewController;
   aiColumn: import('./ai_column/controllers/m_ai_column_controller').AIColumnController;
   aiPromptEditor: import('./ai_column/controllers/m_ai_prompt_editor_view_controller').AIPromptEditorViewController;
-  aiAssistant: import('./ai_assistant/m_ai_assistant_view_controller').AIAssistantViewController;
+  aiAssistant: import('./ai_assistant/ai_assistant_view_controller').AIAssistantViewController;
 }
 
 type ControllerTypes = {
@@ -230,7 +241,7 @@ export interface Views {
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
   toastView: import('./toast/m_toast_view').ToastView;
   aiPromptEditorView: import('./ai_column/views/m_ai_prompt_editor_view').AIPromptEditorView;
-  aiAssistantView: import('./ai_assistant/m_ai_assistant_view').AIAssistantView;
+  aiAssistantView: import('./ai_assistant/ai_assistant_view').AIAssistantView;
 }
 
 export interface EditingControllerRequired {

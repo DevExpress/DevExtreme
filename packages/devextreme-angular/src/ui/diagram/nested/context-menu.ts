@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-diagram-context-menu',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

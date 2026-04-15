@@ -33,7 +33,6 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-annotation',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

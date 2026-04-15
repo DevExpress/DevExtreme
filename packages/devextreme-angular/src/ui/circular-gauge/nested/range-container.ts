@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-circular-gauge-range-container',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

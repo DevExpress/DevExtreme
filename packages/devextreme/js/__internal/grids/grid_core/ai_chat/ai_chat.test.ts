@@ -9,18 +9,21 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import Chat from '@js/ui/chat';
-import Popup from '@js/ui/popup';
+import Popup from '@ts/ui/popup/m_popup';
 
 import { AIChat } from './ai_chat';
-import { CLASSES, DEFAULT_POPUP_OPTIONS } from './const';
+import { CLASSES, CLEAR_CHAT_ICON, DEFAULT_POPUP_OPTIONS } from './const';
 import type { AIChatOptions } from './types';
 
 const mockPopupInstance = {
-  show: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
+  toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
+  option: jest.fn<(name: string) => unknown>().mockReturnValue(false),
 };
 
-const mockChatInstance = {};
+const mockChatInstance = {
+  option: jest.fn(),
+};
 
 const createComponentMock = jest.fn((
   _el: any,
@@ -87,13 +90,13 @@ describe('AIChat', () => {
     });
   });
 
-  describe('show', () => {
-    it('should call popup show method', async () => {
+  describe('toggle', () => {
+    it('should call popup toggle method', async () => {
       const { aiChat } = createAIChat();
 
-      const result = await aiChat.show();
+      const result = await aiChat.toggle();
 
-      expect(mockPopupInstance.show).toHaveBeenCalledTimes(1);
+      expect(mockPopupInstance.toggle).toHaveBeenCalledTimes(1);
       expect(result).toBe(true);
     });
   });
@@ -106,6 +109,138 @@ describe('AIChat', () => {
 
       expect(mockPopupInstance.hide).toHaveBeenCalledTimes(1);
       expect(result).toBe(true);
+    });
+  });
+
+  describe('isShown', () => {
+    it('should return true when popup is visible', () => {
+      const { aiChat } = createAIChat();
+      mockPopupInstance.option.mockReturnValue(true);
+
+      expect(aiChat.isShown()).toBe(true);
+      expect(mockPopupInstance.option).toHaveBeenCalledWith('visible');
+    });
+
+    it('should return false when popup is not visible', () => {
+      const { aiChat } = createAIChat();
+      mockPopupInstance.option.mockReturnValue(false);
+
+      expect(aiChat.isShown()).toBe(false);
+    });
+  });
+
+  describe('clearChatButton', () => {
+    const getPopupConfig = (): any => {
+      const call = createComponentMock.mock.calls.find(
+        ([, Widget]) => Widget === Popup,
+      );
+
+      expect(call).toBeDefined();
+
+      return (call as any)[2];
+    };
+
+    it('should include toolbarItems with clear chat button when onChatCleared is provided', () => {
+      const onChatCleared = jest.fn();
+      createAIChat({ onChatCleared });
+
+      const popupConfig = getPopupConfig();
+
+      expect(popupConfig.toolbarItems).toEqual([
+        expect.objectContaining({
+          widget: 'dxButton',
+          toolbar: 'top',
+          location: 'after',
+          options: expect.objectContaining({
+            icon: CLEAR_CHAT_ICON,
+            onClick: onChatCleared,
+          }),
+        }),
+      ]);
+    });
+
+    it('should not include toolbarItems when onChatCleared is not provided', () => {
+      createAIChat();
+
+      const popupConfig = getPopupConfig();
+
+      expect(popupConfig.toolbarItems).toBeUndefined();
+    });
+  });
+
+  describe('updateOptions', () => {
+    const triggerContentTemplate = (): void => {
+      const call = createComponentMock.mock.calls.find(
+        ([, Widget]) => Widget === Popup,
+      );
+      const popupConfig = (call as any)[2];
+
+      popupConfig.contentTemplate($('<div>'));
+    };
+
+    it('should call popupInstance.option with new popupOptions when updatePopup is true', () => {
+      const { aiChat, $container } = createAIChat();
+      const newPopupOptions = { title: 'Updated' };
+
+      aiChat.updateOptions({
+        container: $container,
+        createComponent: createComponentMock as any,
+        popupOptions: newPopupOptions,
+      }, true, false);
+
+      expect(mockPopupInstance.option).toHaveBeenCalledWith(newPopupOptions);
+    });
+
+    it('should not call popupInstance.option when updatePopup is false', () => {
+      const { aiChat, $container } = createAIChat();
+
+      aiChat.updateOptions({
+        container: $container,
+        createComponent: createComponentMock as any,
+        popupOptions: { title: 'Updated' },
+      }, false, false);
+
+      expect(mockPopupInstance.option).not.toHaveBeenCalledWith({ title: 'Updated' });
+    });
+
+    it('should call chatInstance.option with new chatOptions when updateChat is true', () => {
+      const { aiChat, $container } = createAIChat();
+      triggerContentTemplate();
+
+      const newChatOptions = { showAvatar: true };
+
+      aiChat.updateOptions({
+        container: $container,
+        createComponent: createComponentMock as any,
+        chatOptions: newChatOptions,
+      }, false, true);
+
+      expect(mockChatInstance.option).toHaveBeenCalledWith(newChatOptions);
+    });
+
+    it('should not call chatInstance.option when updateChat is false', () => {
+      const { aiChat, $container } = createAIChat();
+      triggerContentTemplate();
+
+      aiChat.updateOptions({
+        container: $container,
+        createComponent: createComponentMock as any,
+        chatOptions: { showAvatar: true },
+      }, false, false);
+
+      expect(mockChatInstance.option).not.toHaveBeenCalled();
+    });
+
+    it('should not throw when chatInstance is not created and updateChat is true', () => {
+      const { aiChat, $container } = createAIChat();
+
+      expect(() => {
+        aiChat.updateOptions({
+          container: $container,
+          createComponent: createComponentMock as any,
+          chatOptions: { showAvatar: true },
+        }, false, true);
+      }).not.toThrow();
     });
   });
 });

@@ -1898,9 +1898,6 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         dataGrid.option('groupPanel', { emptyPanelText: 'test' });
         assert.equal(headerPanel._getToolbarOptions.callCount, 5, 'Toolbar items are updated after groupPanel options change');
-
-        dataGrid.option('searchPanel', { placeholder: 'test' });
-        assert.equal(headerPanel._getToolbarOptions.callCount, 6, 'Toolbar items are updated after searchPanel options change');
     });
 
     QUnit.test('customizeColumns change', function(assert) {

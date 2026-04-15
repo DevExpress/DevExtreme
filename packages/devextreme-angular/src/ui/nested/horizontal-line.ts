@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-horizontal-line',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

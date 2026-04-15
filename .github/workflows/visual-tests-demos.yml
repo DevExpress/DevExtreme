@@ -142,8 +142,8 @@ jobs:
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
         shell: bash
         run: |
-          pnpx nx build devextreme-scss
-          pnpx nx build devextreme -c testing
+          pnpm exec nx build devextreme-scss
+          pnpm exec nx build devextreme -c testing
 
       - name: DevExtreme - Build-all
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
@@ -243,7 +243,7 @@ jobs:
 
       - name: Prepare bundles
         working-directory: apps/demos
-        run: pnpx nx prepare-bundles
+        run: pnpm exec nx prepare-bundles
 
       - name: Demos - Run tsc
         working-directory: apps/demos
@@ -382,7 +382,7 @@ jobs:
       env:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
         NODE_OPTIONS: --max-old-space-size=8192
-      run: pnpx nx lint
+      run: pnpm exec nx lint
 
     - name: Run lint on changed demos
       if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed'
@@ -390,7 +390,7 @@ jobs:
       env:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
       run: |
-        pnpx nx lint-non-demos
+        pnpm exec nx lint-non-demos
 
         if [ -f "changed-files.json" ]; then
           echo "Running lint-demos on changed files"
@@ -708,7 +708,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: pnpx nx test-testcafe
+      run: pnpm exec nx test-testcafe
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
@@ -827,7 +827,7 @@ jobs:
 
     - name: Update bundles config
       working-directory: apps/demos
-      run: pnpx gulp update-config
+      run: pnpm exec gulp update-config
 
     - name: Create bundles dir
       run: mkdir -p apps/demos/bundles
@@ -874,7 +874,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: pnpx nx test-testcafe
+      run: pnpm exec nx test-testcafe
 
     - name: Sanitize job name
       if: ${{ failure() }}
@@ -962,7 +962,7 @@ jobs:
 
       - name: Update bundles config
         working-directory: apps/demos
-        run: pnpx gulp update-config
+        run: pnpm exec gulp update-config
 
       - name: Create bundles dir
         run: mkdir -p apps/demos/bundles
@@ -1001,7 +1001,7 @@ jobs:
           # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
           # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
           CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-        run: pnpx nx test-testcafe
+        run: pnpm exec nx test-testcafe
 
       - name: Sanitize job name
         if: ${{ failure() }}

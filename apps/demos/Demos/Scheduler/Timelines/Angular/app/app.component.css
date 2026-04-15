@@ -4,10 +4,19 @@
     width: 100px;
 }
 
+::ng-deep .dx-scheduler-appointment-content {
+  color: white;
+}
+
 .options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {

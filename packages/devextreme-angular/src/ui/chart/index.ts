@@ -239,7 +239,6 @@ import {
  */
 @Component({
     selector: 'dx-chart',
-    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },

@@ -43,7 +43,6 @@ import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/ne
  */
 @Component({
     selector: 'dx-sortable',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

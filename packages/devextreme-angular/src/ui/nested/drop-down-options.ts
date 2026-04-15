@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-drop-down-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

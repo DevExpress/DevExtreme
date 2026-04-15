@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-format',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

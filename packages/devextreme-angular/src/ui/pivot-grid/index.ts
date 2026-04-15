@@ -69,7 +69,6 @@ import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested
  */
 @Component({
     selector: 'dx-pivot-grid',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

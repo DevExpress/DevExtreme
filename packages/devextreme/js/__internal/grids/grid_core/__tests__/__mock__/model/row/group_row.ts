@@ -1,15 +1,10 @@
+import { BaseRowModel } from './base_row';
+
 const SELECTORS = {
   expandCell: 'dx-command-expand',
 };
 
-export class GroupRowModel {
-  constructor(protected readonly root: HTMLElement | null) {
-  }
-
-  public getElement(): HTMLElement | null {
-    return this.root;
-  }
-
+export class GroupRowModel extends BaseRowModel {
   public getExpandCell(): HTMLElement {
     const row = this.getElement() as HTMLElement;
 

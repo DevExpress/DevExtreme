@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tag-box-hide',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

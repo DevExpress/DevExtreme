@@ -24,6 +24,7 @@ const config = {
   dateTimeFormat: undefined,
   numberFormat: undefined,
   dateTimeFormatPresets: undefined,
+  licenseKey: '/* ___$$$$$___devextreme___lcp___placeholder____$$$$$ */',
 
   floatingActionButtonConfig: {
     icon: 'add',
