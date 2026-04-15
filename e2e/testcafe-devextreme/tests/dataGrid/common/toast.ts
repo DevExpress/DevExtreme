@@ -11,7 +11,10 @@ fixture.disablePageReloads`Toasts in DataGrid`.page(
 test.meta({ unstable: true })('Toast should be visible after calling and should be not visible after default display time', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   await dataGrid.apiShowErrorToast();
   await t.expect(dataGrid.getToast().exists).ok();
   await testScreenshot(t, takeScreenshot, 'ai-column__toast__at-the-right-position.png', { element: dataGrid.element });
@@ -20,5 +23,5 @@ test.meta({ unstable: true })('Toast should be visible after calling and should 
     .ok(compareResults.errorMessages());
   await t.expect(dataGrid.getToast().exists).notOk();
 }).before(async () => {
-  createWidget('dxDataGrid', {});
+  await createWidget('dxDataGrid', {});
 });
