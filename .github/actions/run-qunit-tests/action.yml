@@ -115,7 +115,7 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build dotnet
       working-directory: ./packages/devextreme

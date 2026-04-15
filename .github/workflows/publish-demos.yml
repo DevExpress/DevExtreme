@@ -36,7 +36,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        pnpm install
+        pnpm install --frozen-lockfile
 
     - name: DevExtreme - Build-all
       env:
@@ -103,7 +103,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        pnpm install
+        pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
@@ -205,7 +205,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        pnpm install
+        pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
