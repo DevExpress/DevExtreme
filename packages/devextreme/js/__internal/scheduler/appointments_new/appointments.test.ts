@@ -8,6 +8,7 @@ import { mockAppointmentDataAccessor } from '../__mock__/appointment_data_access
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import type { ResourceConfig } from '../utils/loader/types';
 import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
+import type { AppointmentCollectorViewModel, AppointmentItemViewModel, SortedEntity } from '../view_model/types';
 import {
   mockAgendaViewModel,
   mockAppointmentCollectorViewModel,
@@ -29,11 +30,25 @@ const mockAppointmentDataSource = (): AppointmentDataSource => ({
 const getProperties = (options: {
   resources?: ResourceConfig[];
 } = {}): AppointmentsProperties => ({
+  currentView: 'week',
+  tabIndex: 0,
+  viewModel: [],
+  items: [],
+  $allDayContainer: $('<div>'),
+  appointmentTemplate: 'appointment',
+  appointmentCollectorTemplate: 'appointmentCollector',
+
+  onAppointmentRendered: (): void => {},
+
+  getStartViewDate: () => new Date(2024, 0, 1),
+  getSortedAppointments: () => [],
+  isVirtualScrolling: () => false,
+  scrollTo: (): void => {},
+
   getAppointmentDataSource: mockAppointmentDataSource,
   getResourceManager: () => getResourceManagerMock(options.resources ?? []),
   getDataAccessor: () => mockAppointmentDataAccessor,
-  currentView: 'week',
-} as AppointmentsProperties);
+});
 
 const createAppointments = (
   properties?: AppointmentsProperties,
@@ -139,26 +154,18 @@ describe('Appointments', () => {
     });
 
     it('should render allDay appointment to the allDay container', () => {
-      const $allDayContainer = $('.allday-container');
-
-      const instance = createAppointments({
-        ...getProperties(),
-        $allDayContainer,
-      });
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [
         mockGridViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
       ]);
 
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
     });
 
     it('should not render allDay agenda appointment to the allDay container', () => {
-      const $allDayContainer = $('.allday-container');
-
       const instance = createAppointments({
         ...getProperties(),
-        $allDayContainer,
         currentView: 'agenda',
       });
       instance.option('viewModel', [
@@ -166,29 +173,26 @@ describe('Appointments', () => {
       ]);
 
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
     });
 
     it('should clean all day container when switching from grid view to agenda view', () => {
-      const $allDayContainer = $('.allday-container');
-
       const instance = createAppointments({
         ...getProperties(),
         currentView: 'week',
-        $allDayContainer,
       });
       instance.option('viewModel', [
         mockGridViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
       ]);
 
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
 
       instance.option('currentView', 'agenda');
       instance.option('viewModel', [
         mockAgendaViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
       ]);
 
-      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
+      expect(instance.option().$allDayContainer?.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
     });
 
@@ -412,6 +416,433 @@ describe('Appointments', () => {
 
       const $appointment = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).first();
       expect($appointment.css('backgroundColor')).toBe('red');
+    });
+  });
+
+  describe('Options', () => {
+    it('should pass tabIndex change to view items', () => {
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+      ]);
+
+      instance.getViewItemByIndex(0)?.focus();
+
+      instance.option('tabIndex', 2);
+
+      expect(instance.getViewItemByIndex(0)?.option('tabIndex')).toBe(2);
+      expect(instance.getViewItemByIndex(1)?.option('tabIndex')).toBe(2);
+      expect(instance.getViewItemByIndex(2)?.option('tabIndex')).toBe(2);
+    });
+
+    it('should not rerender view items on tabIndex change', () => {
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+      ]);
+
+      const viewItem0 = instance.getViewItemByIndex(0)?.$element().get(0);
+      const viewItem2 = instance.getViewItemByIndex(1)?.$element().get(0);
+
+      instance.option('tabIndex', 2);
+
+      expect(instance.getViewItemByIndex(0)?.$element().get(0)).toBe(viewItem0);
+      expect(instance.getViewItemByIndex(1)?.$element().get(0)).toBe(viewItem2);
+    });
+  });
+
+  describe('Focus and keyboard navigation', () => {
+    describe('Basic navigation', () => {
+      it('should set tabindex=0 on first appointment and tabindex=-1 on others after render', () => {
+        const instance = createAppointments(getProperties());
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ]);
+
+        expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('0');
+        expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('-1');
+        expect(instance.getViewItemByIndex(2)?.$element().attr('tabindex')).toBe('-1');
+      });
+
+      it('should restore tabindex=0 on first appointment and tabindex=-1 on others after rerender', () => {
+        const instance = createAppointments(getProperties());
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ]);
+
+        instance.option('appointmentTemplate', () => {});
+
+        expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('0');
+        expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('-1');
+        expect(instance.getViewItemByIndex(2)?.$element().attr('tabindex')).toBe('-1');
+      });
+    });
+
+    describe.each([
+      'appointment',
+      'appointmentCollector',
+    ])('Basic navigation for %s', (type) => {
+      const createItem = (
+        data: typeof defaultAppointmentData,
+        overrides: { sortedIndex: number },
+      ): AppointmentItemViewModel | AppointmentCollectorViewModel => (
+        type === 'appointmentCollector'
+          ? mockAppointmentCollectorViewModel(data, overrides)
+          : mockGridViewModel(data, overrides)
+      );
+
+      it('should move focus to next view item on Tab', () => {
+        const viewModel = [
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        const viewItem1 = instance.getViewItemBySortedIndex(1);
+
+        viewItem0?.focus();
+        viewItem0?.$element().get(0).dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+        );
+
+        expect(viewItem0?.$element().attr('tabindex')).toBe('-1');
+        expect(viewItem1?.$element().attr('tabindex')).toBe('0');
+        expect(document.activeElement).toBe(viewItem1?.$element().get(0) as HTMLElement);
+      });
+
+      it('should move focus to previous view item on Shift+Tab', () => {
+        const viewModel = [
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        const viewItem1 = instance.getViewItemBySortedIndex(1);
+
+        viewItem1?.focus();
+        viewItem1?.$element().get(0).dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }),
+        );
+
+        expect(viewItem0?.$element().attr('tabindex')).toBe('0');
+        expect(viewItem1?.$element().attr('tabindex')).toBe('-1');
+        expect(document.activeElement).toBe(viewItem0?.$element().get(0) as HTMLElement);
+      });
+
+      it('should focus view item on click', () => {
+        const instance = createAppointments(getProperties());
+        instance.option('viewModel', [
+          createItem(defaultAppointmentData, { sortedIndex: 0 }),
+        ]);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        const element = viewItem?.$element().get(0) as HTMLElement;
+        element.click();
+
+        expect(element.getAttribute('tabindex')).toBe('0');
+        expect(document.activeElement).toBe(element);
+      });
+
+      it('should reset focused state when focus moves outside the container', () => {
+        const externalButton = $('<button>').prependTo($('.container')).get(0) as HTMLElement;
+
+        const instance = createAppointments(getProperties());
+        instance.option('viewModel', [
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          createItem({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ]);
+
+        instance.getViewItemBySortedIndex(1)?.focus();
+
+        externalButton.focus();
+
+        expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('0');
+        expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('-1');
+      });
+    });
+
+    describe('Virtual scrolling navigation', () => {
+      const makeSortedEntity = (
+        sortedIndex: number,
+        startDate: Date = new Date(2024, 0, 1, 9, 0),
+      ): SortedEntity => ({
+        sortedIndex,
+        allDay: false,
+        itemData: {},
+        source: {
+          startDate: startDate.getTime(),
+          endDate: startDate.getTime() + 3600000,
+        },
+      } as unknown as SortedEntity);
+
+      it('should call scrollTo on Tab when virtual scrolling is enabled', () => {
+        const scrollTo = jest.fn();
+
+        const instance = createAppointments({
+          ...getProperties(),
+          isVirtualScrolling: () => true,
+          scrollTo,
+          getSortedAppointments: () => [
+            makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(1),
+          ],
+        });
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ]);
+
+        const viewItem1 = instance.getViewItemBySortedIndex(0);
+        viewItem1?.focus();
+        viewItem1?.$element().get(0).dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+        );
+
+        expect(scrollTo).toHaveBeenCalled();
+      });
+
+      it('should focus next appointment directly if it is already rendered', () => {
+        const instance = createAppointments({
+          ...getProperties(),
+          isVirtualScrolling: () => true,
+          getSortedAppointments: () => [
+            makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(2),
+          ],
+        });
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ]);
+
+        const viewItem1 = instance.getViewItemBySortedIndex(1);
+        const viewItem2 = instance.getViewItemBySortedIndex(2);
+
+        viewItem1?.focus();
+        viewItem1?.$element().get(0).dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+        );
+
+        expect(document.activeElement).toBe(viewItem2?.$element().get(0));
+      });
+
+      it('should restore focus to target appointment after it scrolls into view', () => {
+        const item0 = mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 });
+        const item1 = mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 });
+        const item2 = mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 });
+
+        const instance = createAppointments({
+          ...getProperties(),
+          isVirtualScrolling: () => true,
+          getSortedAppointments: () => [
+            makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(2),
+          ],
+        });
+
+        // item2 is outside the viewport — not in the initial viewModel
+        instance.option('viewModel', [item0, item1]);
+
+        const viewItem1 = instance.getViewItemBySortedIndex(1);
+        viewItem1?.focus();
+        viewItem1?.$element().get(0).dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+        );
+
+        // item2 is not rendered yet, so focus cannot move yet
+        expect(instance.getViewItemBySortedIndex(2)).toBeUndefined();
+
+        // viewModel updates as item2 scrolls into view
+        instance.option('viewModel', [item0, item1, item2]);
+
+        const $viewItem2 = instance.getViewItemBySortedIndex(2)?.$element();
+
+        expect(document.activeElement).toBe($viewItem2?.get(0));
+        expect($viewItem2?.attr('tabindex')).toBe('0');
+      });
+
+      it('should pass appointment start date to scrollTo when it is after the start view date', () => {
+        const scrollTo = jest.fn();
+        const startViewDate = new Date(2024, 0, 1);
+        const appointmentStartDate = new Date(2024, 0, 5, 9, 0);
+
+        const instance = createAppointments({
+          ...getProperties(),
+          isVirtualScrolling: () => true,
+          scrollTo,
+          getStartViewDate: () => startViewDate,
+          getSortedAppointments: () => [
+            makeSortedEntity(0), makeSortedEntity(1, appointmentStartDate),
+          ],
+        });
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ]);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        viewItem0?.focus();
+        viewItem0?.$element().get(0).dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+        );
+
+        expect(scrollTo).toHaveBeenCalledWith(appointmentStartDate, expect.anything());
+      });
+
+      it('should clamp scrollTo date to start view date when appointment starts before it', () => {
+        const scrollTo = jest.fn();
+        const startViewDate = new Date(2024, 0, 1);
+        const appointmentStartDate = new Date(2023, 11, 31, 9, 0);
+
+        const viewModel = [mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 })];
+        const sortedEntities = [makeSortedEntity(0), makeSortedEntity(1, appointmentStartDate)];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          isVirtualScrolling: () => true,
+          scrollTo,
+          getStartViewDate: () => startViewDate,
+          getSortedAppointments: () => sortedEntities,
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        viewItem0?.focus();
+        viewItem0?.$element().get(0).dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+        );
+
+        expect(scrollTo).toHaveBeenCalledWith(startViewDate, expect.anything());
+      });
+    });
+
+    describe('Navigation after partial render', () => {
+      const pressTab = (): void => {
+        const activeElement = document.activeElement as HTMLElement;
+        activeElement.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+        );
+      };
+
+      it('should navigate to the last appointment correctly after an appointment is added', () => {
+        const dataA = { ...defaultAppointmentData };
+        const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+        const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+
+        let viewModel = [
+          mockGridViewModel(dataA, { sortedIndex: 0 }),
+          mockGridViewModel(dataB, { sortedIndex: 1 }),
+          mockGridViewModel(dataC, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const dataNEW = { ...defaultAppointmentData, text: 'Appointment NEW' };
+        viewModel = [
+          mockGridViewModel(dataA, { sortedIndex: 0 }),
+          mockGridViewModel(dataB, { sortedIndex: 1 }),
+          mockGridViewModel(dataNEW, { sortedIndex: 2 }),
+          mockGridViewModel(dataC, { sortedIndex: 3 }),
+        ];
+        instance.option('viewModel', viewModel);
+
+        instance.getViewItemBySortedIndex(0)?.focus();
+        pressTab();
+        pressTab();
+        pressTab();
+
+        const lastViewItem = instance.getViewItemBySortedIndex(3);
+        expect(document.activeElement).toBe(lastViewItem?.$element().get(0));
+        expect(lastViewItem?.$element().attr('tabindex')).toBe('0');
+      });
+
+      it('should navigate to the last appointment correctly after an appointment is removed', () => {
+        const dataA = { ...defaultAppointmentData };
+        const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+        const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+
+        let viewModel = [
+          mockGridViewModel(dataA, { sortedIndex: 0 }),
+          mockGridViewModel(dataB, { sortedIndex: 1 }),
+          mockGridViewModel(dataC, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        viewModel = [
+          mockGridViewModel(dataA, { sortedIndex: 0 }),
+          mockGridViewModel(dataC, { sortedIndex: 1 }),
+        ];
+
+        instance.option('viewModel', viewModel);
+
+        instance.getViewItemBySortedIndex(0)?.focus();
+        pressTab();
+
+        const lastViewItem = instance.getViewItemBySortedIndex(1);
+        expect(document.activeElement).toBe(lastViewItem?.$element().get(0));
+        expect(lastViewItem?.$element().attr('tabindex')).toBe('0');
+      });
+
+      it('should navigate to the last appointment correctly after an appointment is updated', () => {
+        const dataA = { ...defaultAppointmentData };
+        const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+        const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+
+        let viewModel = [
+          mockGridViewModel(dataA, { sortedIndex: 0 }),
+          mockGridViewModel(dataB, { sortedIndex: 1 }),
+          mockGridViewModel(dataC, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        viewModel = [
+          mockGridViewModel(dataA, { sortedIndex: 0 }),
+          mockGridViewModel(dataB, { sortedIndex: 1, groupIndex: 1 }),
+          mockGridViewModel(dataC, { sortedIndex: 2 }),
+        ];
+
+        instance.option('viewModel', viewModel);
+
+        instance.getViewItemBySortedIndex(0)?.focus();
+        pressTab();
+        pressTab();
+
+        const lastViewItem = instance.getViewItemBySortedIndex(2);
+        expect(document.activeElement).toBe(lastViewItem?.$element().get(0));
+        expect(lastViewItem?.$element().attr('tabindex')).toBe('0');
+      });
     });
   });
 

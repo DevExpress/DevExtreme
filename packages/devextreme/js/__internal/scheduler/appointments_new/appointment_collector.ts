@@ -4,17 +4,18 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
+import type { DxEvent } from '@js/events';
 import Button from '@js/ui/button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
-import DOMComponent from '@ts/core/widget/dom_component';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
+import type { ViewItemProperties } from './view_item';
+import { ViewItem } from './view_item';
 
 export interface AppointmentCollectorProperties
-  extends DOMComponentProperties<AppointmentCollector> {
+  extends ViewItemProperties {
   appointmentsData: SafeAppointment[];
   isCompact: boolean;
   geometry: {
@@ -28,7 +29,7 @@ export interface AppointmentCollectorProperties
 }
 
 export class AppointmentCollector
-  extends DOMComponent<AppointmentCollector, AppointmentCollectorProperties> {
+  extends ViewItem<AppointmentCollectorProperties> {
   private defaultAppointmentCollectorTemplate!: FunctionTemplate;
 
   private buttonInstance?: Button;
@@ -51,11 +52,13 @@ export class AppointmentCollector
     this.resize();
     this.applyElementClasses();
     this.applyElementAria();
+    this.attachFocusEvents();
+    this.attachKeydownEvents();
     this.renderContentTemplate();
   }
 
-  public resize(
-    geometry?: { height: number; width: number; top: number; left: number },
+  public override resize(
+    geometry?: { height: number, width: number, top: number, left: number },
   ): void {
     const newGeometry = geometry ?? this.option().geometry;
     const {
@@ -65,6 +68,16 @@ export class AppointmentCollector
     this.$element().css({ top, left });
 
     this.buttonInstance?.option({ width, height });
+  }
+
+  public override makeFocusable(): void {
+    this.buttonInstance?.option('tabIndex', this.option().tabIndex);
+  }
+
+  protected override onFocusOut(e: DxEvent): void {
+    this.buttonInstance?.option('tabIndex', -1);
+
+    super.onFocusOut(e);
   }
 
   private applyElementClasses(): void {
@@ -98,6 +111,7 @@ export class AppointmentCollector
 
     this.buttonInstance = this._createComponent(this.$element(), Button, {
       type: 'default',
+      tabIndex: -1,
       width: this.option().geometry.width,
       height: this.option().geometry.height,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -109,6 +123,7 @@ export class AppointmentCollector
           items: this.option().appointmentsData,
         },
       })),
+      onClick: this.onClick.bind(this),
     });
   }
 
