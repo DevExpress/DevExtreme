@@ -1630,7 +1630,7 @@ describe('Appointment Form', () => {
 
     scheduler.showAppointmentPopup(commonAppointment);
 
-    const recurrenceGroup = POM.popup.dxForm.option('items')[1] as GroupItem;
+    const recurrenceGroup = POM.popup.dxForm.option('items')?.[1] as GroupItem;
     const allItems = flattenBy<SimpleItem>(
       recurrenceGroup.items as SimpleItem[],
       (i) => (i as unknown as GroupItem).items as SimpleItem[] | undefined,

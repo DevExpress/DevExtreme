@@ -146,6 +146,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         this.viewItems.forEach((item) => {
           item.setTabIndex(args.value);
         });
+        this.focusController.resetTabIndex();
         break;
       }
       default:

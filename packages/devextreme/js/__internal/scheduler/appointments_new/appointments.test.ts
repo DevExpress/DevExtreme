@@ -420,37 +420,62 @@ describe('Appointments', () => {
   });
 
   describe('Options', () => {
-    it('should pass tabIndex change to view items', () => {
-      const instance = createAppointments(getProperties());
-      instance.option('viewModel', [
-        mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
-        mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
-        mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
-      ]);
+    describe('tabIndex', () => {
+      it('should pass tabIndex change to view items', () => {
+        const instance = createAppointments(getProperties());
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ]);
 
-      instance.getViewItemByIndex(0)?.focus();
+        instance.getViewItemByIndex(0)?.focus();
 
-      instance.option('tabIndex', 2);
+        instance.option('tabIndex', 2);
 
-      expect(instance.getViewItemByIndex(0)?.option('tabIndex')).toBe(2);
-      expect(instance.getViewItemByIndex(1)?.option('tabIndex')).toBe(2);
-      expect(instance.getViewItemByIndex(2)?.option('tabIndex')).toBe(2);
-    });
+        expect(instance.getViewItemByIndex(0)?.option('tabIndex')).toBe(2);
+        expect(instance.getViewItemByIndex(1)?.option('tabIndex')).toBe(2);
+        expect(instance.getViewItemByIndex(2)?.option('tabIndex')).toBe(2);
 
-    it('should not rerender view items on tabIndex change', () => {
-      const instance = createAppointments(getProperties());
-      instance.option('viewModel', [
-        mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
-        mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
-      ]);
+        expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('2');
+        expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('-1');
+        expect(instance.getViewItemByIndex(2)?.$element().attr('tabindex')).toBe('-1');
+      });
 
-      const viewItem0 = instance.getViewItemByIndex(0)?.$element().get(0);
-      const viewItem2 = instance.getViewItemByIndex(1)?.$element().get(0);
+      it('should not rerender view items on tabIndex change', () => {
+        const instance = createAppointments(getProperties());
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ]);
 
-      instance.option('tabIndex', 2);
+        const element0 = instance.getViewItemByIndex(0)?.$element().get(0);
+        const element1 = instance.getViewItemByIndex(1)?.$element().get(0);
 
-      expect(instance.getViewItemByIndex(0)?.$element().get(0)).toBe(viewItem0);
-      expect(instance.getViewItemByIndex(1)?.$element().get(0)).toBe(viewItem2);
+        instance.option('tabIndex', 2);
+
+        expect(instance.getViewItemByIndex(0)?.$element().get(0)).toBe(element0);
+        expect(instance.getViewItemByIndex(1)?.$element().get(0)).toBe(element1);
+      });
+
+      it('should have first appointment have correct index after tabIndex changed from -1 to 0', () => {
+        const instance = createAppointments({
+          ...getProperties(),
+          tabIndex: -1,
+        });
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ]);
+
+        instance.option('tabIndex', 0);
+
+        expect(instance.getViewItemByIndex(0)?.option('tabIndex')).toBe(0);
+        expect(instance.getViewItemByIndex(1)?.option('tabIndex')).toBe(0);
+
+        expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('0');
+        expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('-1');
+      });
     });
   });
 
