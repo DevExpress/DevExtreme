@@ -242,6 +242,17 @@ describe('scheduler workspace skipped days support', () => {
     expect(date).toEqual(new Date(2026, 3, 9)); // Thursday
   });
 
+  it('should skip hidden days when incrementing timeline day dates', () => {
+    const { workspace } = createWorkspace(SchedulerTimelineDay, 'timelineDay', {
+      skippedDays: [0, 6],
+    });
+    const date = new Date(2026, 3, 10); // Friday
+
+    (workspace as any).incrementDate(date);
+
+    expect(date).toEqual(new Date(2026, 3, 13)); // Monday
+  });
+
   it('should respect empty skippedDays override in timeline work week', () => {
     const { workspace } = createWorkspace(SchedulerTimelineWorkWeek, 'timelineWorkWeek', {
       skippedDays: [],

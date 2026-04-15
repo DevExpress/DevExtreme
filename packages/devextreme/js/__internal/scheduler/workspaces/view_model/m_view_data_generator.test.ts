@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import type { ViewType } from '../../types';
+import { ViewDataGeneratorDay } from './m_view_data_generator_day';
 import { ViewDataGeneratorMonth } from './m_view_data_generator_month';
 import { ViewDataGeneratorTimelineMonth } from './m_view_data_generator_timeline_month';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
@@ -261,6 +262,49 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       const date = gen.getDateByCellIndices(options, 0, 0);
       expect(date.getDay()).toBe(1);
       expect(date.getDate()).toBe(30);
+    });
+  });
+
+  describe('Day hiddenWeekDays support', () => {
+    it('shifts startViewDate to the next visible day', () => {
+      const gen = new ViewDataGeneratorDay('day' as ViewType);
+      gen.skippedDays = [0, 6];
+
+      const startViewDate = gen.getStartViewDate({
+        currentDate: new Date(2026, 3, 11), // Saturday
+        startDayHour: 0,
+        startDate: undefined,
+        intervalCount: 1,
+      });
+
+      expect(startViewDate.getDay()).toBe(1);
+      expect(startViewDate.getDate()).toBe(13);
+    });
+
+    it('maps multi-day timeline columns to visible days only', () => {
+      const gen = new ViewDataGeneratorDay('timelineDay' as ViewType);
+      gen.skippedDays = [0, 6];
+
+      const options = {
+        startViewDate: new Date(2026, 3, 10, 0, 0), // Friday
+        startDayHour: 0,
+        endDayHour: 24,
+        hoursInterval: 24,
+        interval: 24 * 60 * 60 * 1000,
+        firstDayOfWeek: 0,
+        intervalCount: 3,
+        viewOffset: 0,
+        currentDate: new Date(2026, 3, 10),
+        viewType: 'timelineDay' as ViewType,
+      };
+
+      const Monday = gen.getDateByCellIndices(options, 0, 1);
+      const Tuesday = gen.getDateByCellIndices(options, 0, 2);
+
+      expect(Monday.getDay()).toBe(1);
+      expect(Monday.getDate()).toBe(13);
+      expect(Tuesday.getDay()).toBe(2);
+      expect(Tuesday.getDate()).toBe(14);
     });
   });
 });

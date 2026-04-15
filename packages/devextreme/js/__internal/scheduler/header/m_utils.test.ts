@@ -28,6 +28,38 @@ describe('agenda hiddenWeekDays support in header utils', () => {
   });
 });
 
+describe('day hiddenWeekDays support in header utils', () => {
+  it('should shift day caption to the next visible day', () => {
+    expect(getCaptionInterval({
+      date: new Date(2026, 3, 11), // Saturday
+      step: 'day',
+      intervalCount: 1,
+      skippedDays: [0, 6],
+    })).toEqual({
+      startDate: new Date(2026, 3, 13),
+      endDate: new Date(2026, 3, 13, 23, 59, 59, 999),
+    });
+  });
+
+  it('should navigate to the next visible day interval', () => {
+    expect(getNextIntervalDate({
+      date: new Date(2026, 3, 10), // Friday
+      step: 'day',
+      intervalCount: 3,
+      skippedDays: [0, 6],
+    }, 1)).toEqual(new Date(2026, 3, 15));
+  });
+
+  it('should navigate from a hidden day based on the visible interval', () => {
+    expect(getNextIntervalDate({
+      date: new Date(2026, 3, 11), // Saturday
+      step: 'day',
+      intervalCount: 1,
+      skippedDays: [0, 6],
+    }, 1)).toEqual(new Date(2026, 3, 14));
+  });
+});
+
 describe('workWeek hiddenWeekDays support in header utils', () => {
   it('should keep Mon-Fri caption for default skippedDays', () => {
     expect(getCaptionInterval({

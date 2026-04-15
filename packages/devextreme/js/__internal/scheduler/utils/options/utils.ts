@@ -10,10 +10,6 @@ import type {
   DateOption, NormalizedView, RawViewType, SafeSchedulerOptions, ViewType,
 } from './types';
 
-const VIEWS_SUPPORTING_HIDDEN_DAYS: ReadonlySet<ViewType> = new Set<ViewType>([
-  'week', 'workWeek', 'month', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda',
-]);
-
 const normalizeHiddenWeekDays = (
   days: unknown,
 ): number[] | undefined => {
@@ -40,7 +36,7 @@ const resolveSkippedDays = (
   if (perView !== undefined) {
     return perView;
   }
-  if (globalHiddenWeekDays !== undefined && VIEWS_SUPPORTING_HIDDEN_DAYS.has(viewType)) {
+  if (globalHiddenWeekDays !== undefined) {
     return normalizeHiddenWeekDays(globalHiddenWeekDays) ?? [];
   }
   return viewDefault;

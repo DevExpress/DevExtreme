@@ -184,8 +184,12 @@ describe('views utils', () => {
         expect(getSkipped(['timelineMonth'], 'timelineMonth', [3])).toEqual([3]);
       });
 
-      it('ignores global hiddenWeekDays for day', () => {
-        expect(getSkipped(['day'], 'day', [3])).toEqual([]);
+      it('applies global hiddenWeekDays to day', () => {
+        expect(getSkipped(['day'], 'day', [3])).toEqual([3]);
+      });
+
+      it('applies global hiddenWeekDays to timelineDay', () => {
+        expect(getSkipped(['timelineDay'], 'timelineDay', [3])).toEqual([3]);
       });
 
       it('applies global hiddenWeekDays to agenda', () => {

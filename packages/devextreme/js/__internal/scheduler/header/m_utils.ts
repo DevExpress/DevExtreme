@@ -37,6 +37,8 @@ const addMS = (date: Date): Date => addDateInterval(date, MS_DURATION, 1);
 
 const nextDay = (date: Date): Date => addDateInterval(date, DAY_DURATION, 1);
 
+const prevDay = (date: Date): Date => addDateInterval(date, DAY_DURATION, -1);
+
 export const nextWeek = (date: Date): Date => addDateInterval(date, WEEK_DURATION, 1);
 
 const nextMonth = (date: Date): Date => {
@@ -75,6 +77,22 @@ const nextAgendaStart = (
   agendaDuration: number,
 ): Date => addDateInterval(date, { days: agendaDuration }, 1);
 
+const getDateAfterVisibleDays = (
+  startDate: Date,
+  dayCount: number,
+  skippedDays: number[],
+  direction: Direction,
+): Date => {
+  const dateStep = direction === 1 ? nextDay : prevDay;
+  let date = new Date(startDate);
+
+  for (let i = 0; i < dayCount; i += 1) {
+    date = getFirstVisibleDate(dateStep(date), skippedDays, dateStep);
+  }
+
+  return date;
+};
+
 const getIntervalStartDate = (options: IntervalOptions): Date => {
   const {
     date, step, firstDayOfWeek, skippedDays,
@@ -82,6 +100,11 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
 
   switch (step) {
     case 'day':
+      return getFirstVisibleDate(
+        getPeriodStart(date, step, false, firstDayOfWeek) as Date,
+        skippedDays,
+        nextDay,
+      );
     case 'month':
       return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
     case 'week': {
@@ -125,7 +148,7 @@ const getNextPeriodStartDate = (
 ): Date => {
   let date = addMS(currentPeriodEndDate);
 
-  if (step === 'week' || step === 'workWeek') {
+  if (step === 'day' || step === 'week' || step === 'workWeek') {
     date = getFirstVisibleDate(date, skippedDays, nextDay);
   }
 
@@ -181,15 +204,19 @@ const getNextMonthDate = (date: Date, intervalCount: number, direction: Directio
 
 export const getNextIntervalDate = (options: IntervalOptions, direction: Direction): Date => {
   const {
-    date, step, intervalCount, agendaDuration,
+    date, step, intervalCount, agendaDuration, skippedDays,
   } = options;
 
   let dayDuration = 0;
   // eslint-disable-next-line default-case
   switch (step) {
     case 'day':
-      dayDuration = Number(intervalCount);
-      break;
+      return getDateAfterVisibleDays(
+        getIntervalStartDate(options),
+        intervalCount,
+        skippedDays,
+        direction,
+      );
     case 'week':
     case 'workWeek':
       dayDuration = 7 * intervalCount;
