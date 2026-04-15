@@ -40,7 +40,7 @@ export interface DateViewRollerProperties extends ScrollableProperties {
   onEnd?: ((e: ScrollEventInfo<DateViewRoller>) => void) | null;
 
   onSelectedIndexChanged?: ((
-    e: { component: DateViewRoller; previousValue: number; value: number }
+    e: { component: DateViewRoller; previousValue: number; value: number },
   ) => void) | null;
 }
 

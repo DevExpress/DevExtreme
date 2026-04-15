@@ -32,7 +32,7 @@ export interface ValueContainerManagerConstructor {
   create: (
     logger: Logger,
     stateSourceSign: RegExp,
-    valueContainer: MaybeValueContainer
+    valueContainer: MaybeValueContainer,
   ) => ValueContainerManager;
 }
 
@@ -40,7 +40,7 @@ export type ValueContainerChangeCallback = (change: ValueContainerChange) => voi
 
 export interface ValueContainerManager {
   trackChanges: (
-    onChange: ValueContainerChangeCallback
+    onChange: ValueContainerChangeCallback,
   ) => void;
   getValue: () => unknown;
 }
@@ -104,7 +104,7 @@ export interface DevToolsConnector {
   connect: (options?: Record<string, unknown>) => void;
   disconnect: () => void;
   sendAction: (
-    action: StateChangeActionType, payload: StateChangePayload, state?: ComponentState
+    action: StateChangeActionType, payload: StateChangePayload, state?: ComponentState,
   ) => void;
   onExternalAction: (callback: DevToolsExternalActionCallback) => void;
   isConnected: boolean;
@@ -118,7 +118,7 @@ export type ReduxDevToolsInstance = {
   subscribe:
   (callback: (
     // eslint-disable-next-line spellcheck/spell-checker
-    message: { type: ReduxDevToolsActions; payload: { type: string }; state?: string }
+    message: { type: ReduxDevToolsActions; payload: { type: string }; state?: string },
   ) => void) => void;
   send: (action: { type: string; payload: unknown }, state: unknown) => void;
   unsubscribe: () => void;
