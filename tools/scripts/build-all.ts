@@ -17,12 +17,12 @@ const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/np
 const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
 
-    const DOCUMENTATION_TEMP_DIR = path.join(ARTIFACTS_DIR, 'doc_tmp');
+    const DOCUMENTATION_TEMP_DIR = path.join(ROOT_DIR, '..', 'doc_tmp');
     sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
 
     sh.pushd(DOCUMENTATION_TEMP_DIR);
-    sh.exec('npm i');
-    sh.exec(`npm run update-topics -- --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
+    sh.exec('pnpm i --frozen-lockfile');
+    sh.exec(`pnpm run update-topics --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
     sh.popd();
 
     sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
