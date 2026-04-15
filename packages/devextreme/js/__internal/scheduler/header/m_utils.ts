@@ -136,9 +136,7 @@ const getNextPeriodStartDate = (
 ): Date => {
   let date = addMS(currentPeriodEndDate);
 
-  if (step === 'workWeek') {
-    date = getFirstVisibleDate(date, skippedDays, nextDay);
-  } else if (step === 'week' && skippedDays.length > 0) {
+  if (step === 'week' || step === 'workWeek') {
     date = getFirstVisibleDate(date, skippedDays, nextDay);
   }
 
