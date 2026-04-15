@@ -400,5 +400,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.W1029
      */
-    W1029: '"hiddenWeekDays" must leave at least one weekday visible.',
+    W1029: '\'hiddenWeekDays'\ must leave at least one weekday visible.',
 });
