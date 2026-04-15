@@ -22,9 +22,8 @@ export class ViewItem<
   private keyboardListenerId?: string;
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  override _getSynchronizableOptionsForCreateComponent(): (
-    keyof DOMComponentProperties<DOMComponent<ViewItem<TProperties>, TProperties>>
-  )[] {
+  override _getSynchronizableOptionsForCreateComponent():
+  (keyof DOMComponentProperties<DOMComponent<ViewItem<TProperties>, TProperties>>)[] {
     // @ts-expect-error
     return super._getSynchronizableOptionsForCreateComponent();
   }
