@@ -21,7 +21,7 @@ export interface VerifiedToken {
 
 export type Token = ErrorToken | VerifiedToken;
 
-type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022' | 'W0023' | 'W0024';
+type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0023';
 
 export const GENERAL_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'general' };
 export const VERIFICATION_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'verification' };

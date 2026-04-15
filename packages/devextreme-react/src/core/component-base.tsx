@@ -39,7 +39,7 @@ const DX_REMOVE_EVENT = 'dxremove';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx',
-  licensingDocLink: 'https://go.devexpress.com/Licensing_Documentation_DevExtremeReact.aspx',
+  licensingDocLink: 'https://www.devexpress.com/go/Licensing_Documentation_DevExpress_React.aspx',
 });
 
 type ComponentBaseProps = ComponentProps & {
