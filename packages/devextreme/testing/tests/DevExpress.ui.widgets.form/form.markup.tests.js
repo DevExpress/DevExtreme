@@ -832,7 +832,7 @@ QUnit.module('Form', () => {
         const groupWidth = $group.outerWidth();
         const totalItemWidth = $label.outerWidth() + $content.outerWidth();
 
-        assert.strictEqual(totalItemWidth <= groupWidth, true, `field item content width (${totalItemWidth}) should not exceed group width (${groupWidth})`);
+        assert.strictEqual(totalItemWidth === groupWidth, true, `field item content width (${totalItemWidth}) should not exceed group width (${groupWidth})`);
     });
 });
 
@@ -1406,7 +1406,7 @@ QUnit.module('Grouping', () => {
 
         assert.strictEqual($groups.length, 2, '2 groups rendered');
         assert.strictEqual($groups.eq(0).find(`.${labelClass}`).length, 1, 'label template content');
-        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).text(), 'First Name: ?', 'Labels content has correct data');
+        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).text(), 'First Name: ?', 'Label content has correct data');
     });
 
     QUnit.module('Caption template', () => {
