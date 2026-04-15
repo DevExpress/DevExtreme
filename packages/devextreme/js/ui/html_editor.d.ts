@@ -93,7 +93,7 @@ export type AICommandNameExtended = AICommandName | 'custom';
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export interface AICommandBase<
-    CommandName extends AICommandNameExtended, // eslint-disable-line @typescript-eslint/no-unused-vars
+    CommandName extends AICommandNameExtended,
     CommandOptions = undefined> {
     /**
      * @docid
