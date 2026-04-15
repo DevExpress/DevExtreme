@@ -16,7 +16,6 @@ export declare function isDefined<T>(object: T): object is NonNullable<T>;
 
 export declare function isEvent(object: unknown): object is Event;
 
- // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export declare function isObject<T = {}>(object: unknown): object is object;
 
 export declare function isEmptyObject(object: any): boolean;
