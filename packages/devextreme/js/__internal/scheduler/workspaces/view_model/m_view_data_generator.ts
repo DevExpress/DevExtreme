@@ -75,7 +75,7 @@ export class ViewDataGenerator {
     return this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
   }
 
-  protected getVisibleDayOffset(
+  private getVisibleDayOffset(
     rowIndex: number,
     columnIndex: number,
     anchorDay: number,
