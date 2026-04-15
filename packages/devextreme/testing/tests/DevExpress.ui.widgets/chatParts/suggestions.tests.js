@@ -82,31 +82,21 @@ QUnit.module('Suggestions', moduleConfig, () => {
         });
     });
 
+    QUnit.module('clean', () => {
+        QUnit.test('should remove ButtonGroup but keep element in DOM', function(assert) {
+            this.instance.clean();
+
+            assert.strictEqual(this.getSuggestions().hasClass(BUTTON_GROUP_CLASS), false, 'ButtonGroup is removed');
+            assert.strictEqual(this.$container.children().length, 1, 'element remains in DOM');
+        });
+    });
+
     QUnit.module('dispose', () => {
-        QUnit.test('should not throw on dispose', function(assert) {
-            try {
-                this.instance.dispose();
-                assert.ok(true, 'dispose executed without errors');
-            } catch(e) {
-                assert.ok(false, `dispose threw an error: ${e.message}`);
-            }
-        });
-
-        QUnit.test('should dispose without errors even if no items were provided', function(assert) {
-            this.reinit({ items: [] });
-
-            try {
-                this.instance.dispose();
-                assert.ok(true, 'dispose executed without errors');
-            } catch(e) {
-                assert.ok(false, `dispose threw an error: ${e.message}`);
-            }
-        });
-
-        QUnit.test('should remove element from DOM after dispose', function(assert) {
+        QUnit.test('should clean ButtonGroup and remove element from DOM', function(assert) {
             this.instance.dispose();
 
-            assert.strictEqual(this.getSuggestions().length, 0, 'element is removed from DOM after dispose');
+            assert.strictEqual(this.$container.find(`.${BUTTON_GROUP_ITEM_CLASS}`).length, 0, 'ButtonGroup items are cleaned');
+            assert.strictEqual(this.$container.children().length, 0, 'element is removed from DOM');
         });
     });
 

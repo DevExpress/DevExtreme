@@ -71,6 +71,7 @@ class Suggestions {
   }
 
   dispose(): void {
+    this.clean();
     this._$element?.remove();
     this._$element = undefined;
   }
