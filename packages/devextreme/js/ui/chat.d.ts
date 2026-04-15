@@ -538,7 +538,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type dxButtonGroupOptions
      * @public
      */
-    suggestions?: Omit<ButtonGroupProperties, 'selectionMode'>;
+    suggestions?: Omit<ButtonGroupProperties, 'selectionMode' | 'selectedItemKeys' | 'selectedItems'>;
     /**
      * @docid
      * @default []

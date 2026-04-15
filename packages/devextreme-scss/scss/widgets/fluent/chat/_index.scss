@@ -136,6 +136,14 @@
   $chat-confirmation-popup-toolbar-padding-inline,
   $chat-confirmation-popup-toolbar-gap,
 );
+@include chat-suggestions(
+  $chat-suggestions-padding,
+  $chat-suggestions-button-border-radius,
+  $chat-suggestions-border-width,
+  $chat-suggestions-button-max-width,
+  $chat-suggestions-gap,
+  $chat-suggestions-box-shadow,
+);
 
 .dx-chat-file {
   @include dx-base-typography();

@@ -60,6 +60,8 @@ const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
 const CHAT_MESSAGE_EDITED_HIDING_CLASS = 'dx-chat-message-edited-hiding';
 
+const BUTTON_GROUP_ITEM_CLASS = 'dx-buttongroup-item';
+
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
@@ -116,10 +118,7 @@ const moduleConfig = {
             init(options);
         };
 
-        this.getEmptyView = () => {
-            return this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
-        };
-
+        this.getEmptyView = () => this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
         this.getMessageList = () => MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
         this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
         this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
@@ -132,6 +131,8 @@ const moduleConfig = {
         this.getMessageListEmptyView = () => this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
         this.getFileUploader = () => FileUploader.getInstance(this.$element.find(`.${FILEUPLOADER_CLASS}`));
         this.getAttachButton = () => Button.getInstance(this.$element.find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`));
+        this.getSuggestionsElement = () => this.instance._suggestions._$element;
+        this.getSuggestionItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         init();
     },
@@ -2755,6 +2756,70 @@ QUnit.module('Chat', () => {
             this.instance.option('speechToTextOptions', newOptions);
 
             assert.deepEqual(messageBox.option('speechToTextOptions'), newOptions, 'speechToTextOptions is updated in messageBox');
+        });
+    });
+
+    QUnit.module('Suggestions integration', moduleConfig, () => {
+        QUnit.test('should render suggestions element if option is not passed', function(assert) {
+            assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions element is rendered without options');
+        });
+
+        QUnit.test('should render suggestions element when items are passed', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }] },
+            });
+
+            assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions element is rendered with items');
+        });
+
+        QUnit.test('suggestions should be rendered before messageBox', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }] },
+            });
+
+            const $suggestions = this.getSuggestionsElement();
+            const $messageBox = this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`);
+
+            assert.strictEqual($suggestions.next().is($messageBox), true, 'suggestions is rendered before messageBox');
+        });
+
+        QUnit.test('suggestions should be updated at runtime', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }, { text: 'Item 2' }] },
+            });
+
+            this.instance.option('suggestions', { items: [{ text: 'New 1' }, { text: 'New 2' }, { text: 'New 3' }] });
+
+            assert.strictEqual(this.getSuggestionItems().length, 3, 'items count updated');
+            assert.strictEqual(this.getSuggestionItems().eq(0).text(), 'New 1', 'first item text updated');
+        });
+
+        QUnit.test('onItemClick callback should be called when suggestion item is clicked', function(assert) {
+            assert.expect(1);
+
+            const clickedText = 'Item 1';
+
+            this.reinit({
+                suggestions: {
+                    items: [{ text: clickedText }, { text: 'Item 2' }],
+                    onItemClick: (e) => {
+                        assert.strictEqual(e.itemData.text, clickedText, 'correct item passed to callback');
+                    },
+                },
+            });
+
+            this.getSuggestionItems().first().trigger('dxclick');
+        });
+
+        QUnit.test('should keep suggestions container when setting suggestions option to undefined at runtime', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }, { text: 'Item 2' }] },
+            });
+
+            this.instance.option('suggestions', undefined);
+
+            assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions container remains in DOM');
+            assert.strictEqual(this.getSuggestionItems().length, 0, 'items are removed');
         });
     });
 
