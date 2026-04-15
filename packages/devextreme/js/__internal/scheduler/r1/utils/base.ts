@@ -384,7 +384,7 @@ export const getSkippedHoursInRange = (
   const dayHours = isAllDay ? DAY_HOURS : endDayHour - startDayHour;
 
   while (currentDate < endDateWithStartHour) {
-    if (viewDataProvider.isSkippedDate(currentDate)) {
+    if (viewDataProvider.isDateSkipped(currentDate)) {
       result += dayHours;
     }
 
@@ -394,7 +394,7 @@ export const getSkippedHoursInRange = (
   const startDateHours = startDate.getHours();
   const endDateHours = endDate.getHours() + (endDate.getTime() % HOUR_IN_MS) / HOUR_IN_MS;
 
-  if (viewDataProvider.isSkippedDate(startDate)) {
+  if (viewDataProvider.isDateSkipped(startDate)) {
     switch (true) {
       case isAllDay:
         result += DAY_HOURS;
@@ -410,7 +410,7 @@ export const getSkippedHoursInRange = (
     }
   }
 
-  if (viewDataProvider.isSkippedDate(endDate)) {
+  if (viewDataProvider.isDateSkipped(endDate)) {
     switch (true) {
       case isAllDay:
         result += DAY_HOURS;

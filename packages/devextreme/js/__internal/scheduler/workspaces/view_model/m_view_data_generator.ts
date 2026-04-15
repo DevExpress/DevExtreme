@@ -104,7 +104,7 @@ export class ViewDataGenerator {
     return actualDayOffset - naiveDayOffset;
   }
 
-  public isSkippedDate(date: Date): boolean {
+  public isDateSkipped(date: Date): boolean {
     return isDateSkipped(date, this.skippedDays);
   }
 

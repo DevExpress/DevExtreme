@@ -201,7 +201,7 @@ describe('base utils', () => {
     describe('default', () => {
       it('should skip large interval', () => {
         const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => date.getDay() >= 6,
+          isDateSkipped: (date: Date) => date.getDay() >= 6,
           getViewOptions: () => ({
             startDayHour: 0,
             endDayHour: 24,
@@ -222,7 +222,7 @@ describe('base utils', () => {
 
       it('should skip 2 weekend days if startDate and endDate inside weekend', () => {
         const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => isWeekend(date),
+          isDateSkipped: (date: Date) => isWeekend(date),
           getViewOptions: () => ({
             startDayHour: 0,
             endDayHour: 24,
@@ -244,7 +244,7 @@ describe('base utils', () => {
 
     describe('border conditions', () => {
       const mockViewDataProvider = {
-        isSkippedDate: (date: Date) => isWeekend(date),
+        isDateSkipped: (date: Date) => isWeekend(date),
         getViewOptions: () => ({
           startDayHour: 0,
           endDayHour: 24,
@@ -375,7 +375,7 @@ describe('base utils', () => {
         endDayHour,
       }) => {
         const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => isWeekend(date),
+          isDateSkipped: (date: Date) => isWeekend(date),
           getViewOptions: () => ({
             startDayHour,
             endDayHour,
@@ -414,7 +414,7 @@ describe('base utils', () => {
         expectedHours,
       }) => {
         const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => isWeekend(date),
+          isDateSkipped: (date: Date) => isWeekend(date),
           getViewOptions: () => ({
             startDayHour: 11,
             endDayHour: 19,
