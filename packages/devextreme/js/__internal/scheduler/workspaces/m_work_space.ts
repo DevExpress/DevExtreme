@@ -1324,7 +1324,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
     const fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset;
     const days = this.getDaysOfInterval(fullInterval, startDayTime);
-    const skippedDaysCount = this.getSkippedDaysCount(days, firstViewDate);
+    const skippedDaysCount = this.getSkippedDaysCount(firstViewDate, days);
     let result = (days - skippedDaysCount) * DAY_MS;
 
     if (!allDay) {
@@ -1337,7 +1337,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return result;
   }
 
-  protected getSkippedDaysCount(days: number, startDate: Date = this.getStartViewDate()) {
+  protected getSkippedDaysCount(startDate: Date, days: number) {
     return countSkippedDays(
       startDate,
       days,

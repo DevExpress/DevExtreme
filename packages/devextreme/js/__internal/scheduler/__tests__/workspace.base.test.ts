@@ -206,7 +206,7 @@ describe('scheduler workspace skipped days support', () => {
       skippedDays: [1, 3],
     });
 
-    expect((workspace as any).getSkippedDaysCount(7, new Date(2026, 3, 5))).toBe(2);
+    expect((workspace as any).getSkippedDaysCount(new Date(2026, 3, 5), 7)).toBe(2);
   });
 
   it('should use full week layout for work week when skippedDays override is empty', () => {

@@ -128,7 +128,10 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     let timeDiff = today.getTime() - viewStartTime;
 
     if (((this.option('skippedDays')) ?? []).length > 0) {
-      const skippedDaysDuration = this.getSkippedDaysCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      const skippedDaysDuration = this.getSkippedDaysCount(
+        this.getStartViewDate(),
+        Math.round(timeDiff / toMs('day')),
+      ) * toMs('day');
       timeDiff -= skippedDaysDuration;
     }
 

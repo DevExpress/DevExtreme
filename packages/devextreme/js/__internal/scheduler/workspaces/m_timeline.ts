@@ -146,8 +146,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
     const skippedDaysCount = this.getSkippedDaysCount(
-      differenceInDays,
       this.getIndicationFirstViewDate(),
+      differenceInDays,
     );
     let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
 
@@ -239,7 +239,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const fullDays = Math.floor(fullInterval / toMs('day'));
     const tailDuration = fullInterval - (fullDays * toMs('day'));
     let tailDelta = 0;
-    const skippedDaysCount = this.getSkippedDaysCount(fullDays, firstViewDate);
+    const skippedDaysCount = this.getSkippedDaysCount(firstViewDate, fullDays);
     const cellCount = this.getCellCountInDay() * (fullDays - skippedDaysCount);
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
     let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
