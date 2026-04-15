@@ -75,7 +75,7 @@ jobs:
               working-directory: devextreme
               run: |
                 corepack enable
-                pnpm install
+                pnpm install --frozen-lockfile
             
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos
