@@ -1,4 +1,3 @@
-import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -10,9 +9,14 @@ import type dxForm from '@js/ui/form';
 import type { Properties as NumberBoxProperties } from '@js/ui/number_box';
 import type { Properties as RadioGroupProperties } from '@js/ui/radio_group';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
-import { capitalize } from '@ts/core/utils/capitalize';
 
 import type Scheduler from '../m_scheduler';
+import {
+  getRecurrenceFrequencyItems,
+  getRecurrenceMonthItems,
+  getRecurrenceWeekDayItems,
+  ICAL_WEEK_DAYS,
+} from './localized_items';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 const CLASSES = {
@@ -35,34 +39,6 @@ const CLASSES = {
   recurrenceEndEditors: 'dx-scheduler-form-recurrence-end-editors',
   recurrenceSettingsGroup: 'dx-scheduler-form-recurrence-settings-group',
 };
-
-const frequenciesValues = [
-  {
-    recurrence: 'dxScheduler-recurrenceRepeatHourly',
-    value: 'hourly',
-  }, {
-    recurrence: 'dxScheduler-recurrenceRepeatDaily',
-    value: 'daily',
-  }, {
-    recurrence: 'dxScheduler-recurrenceRepeatWeekly',
-    value: 'weekly',
-  }, {
-    recurrence: 'dxScheduler-recurrenceRepeatMonthly',
-    value: 'monthly',
-  }, {
-    recurrence: 'dxScheduler-recurrenceRepeatYearly',
-    value: 'yearly',
-  },
-].map((item) => ({
-  // todo: check if it works with runtime localization change
-  text: capitalize(messageLocalization.format(item.recurrence)),
-  value: item.value,
-}));
-
-const monthsValues = dateLocalization.getMonthNames().map((monthName, index) => ({
-  value: index + 1,
-  text: monthName,
-}));
 
 const FREQ = {
   HOURLY: 'hourly',
@@ -103,8 +79,6 @@ const ICON_NAMES = {
   recurrenceEndIcon: 'recurrenceEndIcon',
 };
 
-const weekDays = dateLocalization.getDayNames('abbreviated').map((dayName) => dayName.slice(0, 2).toUpperCase());
-
 const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 
 export class RecurrenceForm {
@@ -114,31 +88,12 @@ export class RecurrenceForm {
 
   private dxFormInstance?: dxForm;
 
-  private readonly weekDayItems: { text: string; key: string }[] = [];
-
   private weekDayButtons: Record<string, dxButton> = {};
 
   private readOnly = false;
 
   constructor(scheduler: Scheduler) {
     this.scheduler = scheduler;
-    this.weekDayItems = this.createWeekDayItems();
-  }
-
-  private createWeekDayItems(): { text: string; key: string }[] {
-    const weekDayItems = weekDays.map((day) => ({
-      text: day[0],
-      key: day,
-    }));
-
-    const firstDayOfWeek = this.scheduler.getFirstDayOfWeek()
-      ?? dateLocalization.firstDayOfWeekIndex();
-
-    const arrangeWeekDayItems = weekDayItems
-      .slice(firstDayOfWeek)
-      .concat(weekDayItems.slice(0, firstDayOfWeek));
-
-    return arrangeWeekDayItems;
   }
 
   private createByMonthDayNumberBoxItem(
@@ -307,7 +262,8 @@ export class RecurrenceForm {
             visible: false,
           },
           editorOptions: {
-            items: frequenciesValues,
+            labelMode: 'hidden',
+            items: getRecurrenceFrequencyItems(),
             valueExpr: 'value',
             displayExpr: 'text',
             onContentReady: (e): void => {
@@ -350,8 +306,9 @@ export class RecurrenceForm {
       },
       template: (): dxElementWrapper => {
         const $container = $('<div>').addClass(CLASSES.daysOfWeekButtons);
+        const weekDayItems = getRecurrenceWeekDayItems(this.scheduler.getFirstDayOfWeek());
 
-        this.weekDayItems.forEach((item) => {
+        weekDayItems.forEach((item) => {
           const buttonContainer = $('<div>').appendTo($container);
 
           this.weekDayButtons[item.key]?.dispose();
@@ -416,7 +373,7 @@ export class RecurrenceForm {
             text: messageLocalization.format('dxScheduler-recurrenceRepeatEvery'),
           },
           editorOptions: {
-            items: monthsValues,
+            items: getRecurrenceMonthItems(),
             displayExpr: 'text',
             valueExpr: 'value',
             onContentReady: (e): void => {
@@ -585,7 +542,7 @@ export class RecurrenceForm {
 
     if (recurrenceRule.byDay.length === 0) {
       const defaultByDay = [
-        weekDays[startDate?.getDay() ?? this.scheduler.getFirstDayOfWeek()],
+        ICAL_WEEK_DAYS[startDate?.getDay() ?? this.scheduler.getFirstDayOfWeek()],
       ];
 
       recurrenceRule.byDay = defaultByDay;
