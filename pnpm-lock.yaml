@@ -934,6 +934,9 @@ importers:
 
   e2e/bundlers:
     devDependencies:
+      '@parcel/watcher-linux-x64-glibc':
+        specifier: 2.5.0
+        version: 2.5.0
       '@rollup/plugin-alias':
         specifier: 3.1.9
         version: 3.1.9(rollup@4.60.1)
@@ -24340,8 +24343,7 @@ snapshots:
   '@parcel/watcher-linux-arm64-musl@2.5.0':
     optional: true
 
-  '@parcel/watcher-linux-x64-glibc@2.5.0':
-    optional: true
+  '@parcel/watcher-linux-x64-glibc@2.5.0': {}
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
     optional: true
