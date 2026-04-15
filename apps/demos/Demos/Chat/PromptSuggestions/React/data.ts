@@ -1,22 +1,24 @@
-const deployment = 'gpt-4o-mini';
-const apiVersion = '2024-02-01';
-const endpoint = 'https://public-api.devexpress.com/demo-openai';
-const apiKey = 'DEMO';
-const CHAT_DISABLED_CLASS = 'chat-disabled';
-const ALERT_TIMEOUT = 1000 * 60;
-const user = {
+import type { ChatTypes } from 'devextreme-react/chat';
+
+export const CHAT_DISABLED_CLASS = 'chat-disabled';
+export const ALERT_TIMEOUT = 1000 * 60;
+
+export const user: ChatTypes.User = {
   id: 'user',
 };
-const assistant = {
+
+export const assistant: ChatTypes.User = {
   id: 'assistant',
   name: 'AI Assistant',
 };
-const suggestionItems = [
+
+export const suggestionItems = [
   { text: '📦 Track my orders', prompt: 'Track my orders' },
   { text: '⭐ Check in-stock favorites', prompt: 'Check in-stock favorites' },
   { text: '🔄 Start a return', prompt: 'Start a return' },
 ];
-const SYSTEM_PROMPT = `
+
+export const SYSTEM_PROMPT = `
 You are a logistics support assistant for an online marketplace.
 The user is logged into their account.
 If asked about orders, generate realistic but consistent mock data.
