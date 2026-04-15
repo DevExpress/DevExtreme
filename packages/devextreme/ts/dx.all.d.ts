@@ -26243,6 +26243,7 @@ declare module DevExpress.ui {
       readonly endDate: Date;
       readonly text: string;
     };
+    export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * [descr:_ui_scheduler_DisposingEvent]
      */
@@ -26581,7 +26582,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.hiddenWeekDays]
      */
-    hiddenWeekDays?: Array<number>;
+    hiddenWeekDays?: Array<DevExpress.ui.dxScheduler.DayOfWeek>;
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
@@ -26916,7 +26917,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.hiddenWeekDays]
            */
-          hiddenWeekDays?: Array<number>;
+          hiddenWeekDays?: Array<DevExpress.ui.dxScheduler.DayOfWeek>;
           /**
            * [descr:dxSchedulerOptions.views.groupByDate]
            */
