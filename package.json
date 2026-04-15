@@ -66,6 +66,7 @@
   ],
   "pnpm": {
     "overrides": {
+      "@parcel/watcher": "2.5.0",
       "@angular/common@>=19.0.0 <19.2.16": "^19.2.20",
       "@angular/compiler@>=19.0.0-next.0 <19.2.20": "^19.2.20",
       "@angular/core@>=19.0.0-next.0 <19.2.20": "^19.2.20",
