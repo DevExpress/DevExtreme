@@ -12,7 +12,9 @@ test(
   async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-    await dataGrid.isReady();
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
     await dataGrid.apiColumnOption('group', 'calculateGroupValue', () => 'ALL');
 
     await t
@@ -57,7 +59,9 @@ test(
   async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-    await dataGrid.isReady();
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
     await dataGrid.apiColumnOption('group', 'calculateGroupValue', () => 'ALL');
 
     await t
@@ -100,7 +104,9 @@ test(
   async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-    await dataGrid.isReady();
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
     await dataGrid.apiColumnOption('group', 'calculateGroupValue', () => 'ALL');
 
     await t
@@ -154,7 +160,9 @@ test(
   async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-    await dataGrid.isReady();
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
     await dataGrid.apiColumnOption('group', 'calculateGroupValue', () => 'ALL');
 
     await t
@@ -204,7 +212,9 @@ test(
 test('Should not reset sorting parameters after calculateGroupValue update [T1298901]', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await t
     .expect(await dataGrid.apiColumnOption('A', 'sortOrder'))
@@ -237,7 +247,9 @@ test('Should not reset sorting parameters after calculateGroupValue update [T129
 test('Should not reset multiple sorting parameters after calculateGroupValue update [T1298901]', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await t
     .expect(await dataGrid.apiColumnOption('A', 'sortOrder'))
