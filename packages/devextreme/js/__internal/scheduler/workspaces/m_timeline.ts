@@ -18,6 +18,7 @@ import {
 import tableCreatorModule from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
+import { getFirstVisibleDate } from '../utils/skipped_days';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
@@ -109,15 +110,17 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected incrementDate(date) {
     const skippedDays = this.option('skippedDays') ?? [];
+    const nextVisibleDate = getFirstVisibleDate(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+      skippedDays,
+      (currentDate) => {
+        const result = new Date(currentDate);
+        result.setDate(result.getDate() + 1);
+        return result;
+      },
+    );
 
-    if (skippedDays.length >= 7) {
-      return;
-    }
-
-    date.setDate(date.getDate() + 1);
-    while (skippedDays.includes(date.getDay())) {
-      date.setDate(date.getDate() + 1);
-    }
+    date.setTime(nextVisibleDate.getTime());
   }
 
   getIndicationCellCount() {
