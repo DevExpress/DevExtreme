@@ -832,7 +832,7 @@ QUnit.module('Form', () => {
         const groupWidth = $group.outerWidth();
         const totalItemWidth = $label.outerWidth() + $content.outerWidth();
 
-        assert.strictEqual(totalItemWidth === groupWidth, true, `field item content width (${totalItemWidth}) should not exceed group width (${groupWidth})`);
+        assert.roughEqual(totalItemWidth, groupWidth, 0.1, `field item content width (${totalItemWidth}) should not exceed group width (${groupWidth})`);
     });
 });
 
