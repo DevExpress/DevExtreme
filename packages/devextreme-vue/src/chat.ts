@@ -42,6 +42,7 @@ import {
  ValidationStatus,
  ButtonType,
  ButtonStyle,
+ template,
  SingleMultipleOrNone,
 } from "devextreme/common";
 import {
@@ -825,7 +826,7 @@ const DxSuggestionsConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxButtonGroupItem>>,
-    keyExpr: {},
+    keyExpr: [Function, String] as PropType<(((item: any | { disabled: boolean, elementAttr: Record<string, any>, hint: string, html: string, icon: string, template: template | (() => void), text: string, type: any | string, visible: boolean }) => any)) | string>,
     onContentReady: Function as PropType<((e: ButtonGroupContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: ButtonGroupDisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: ButtonGroupInitializedEvent) => void)>,

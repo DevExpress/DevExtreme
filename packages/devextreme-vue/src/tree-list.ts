@@ -3862,7 +3862,7 @@ const DxTabPanelOptionsConfig = {
     items: Array as PropType<Array<any | dxTabPanelItem | string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     loop: Boolean,
     noDataText: String,
     onContentReady: Function as PropType<((e: TabPanelContentReadyEvent) => void)>,
