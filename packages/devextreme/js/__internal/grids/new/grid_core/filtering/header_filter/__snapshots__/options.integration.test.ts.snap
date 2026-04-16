@@ -132,6 +132,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -169,6 +170,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -500,6 +502,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -537,6 +540,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -868,6 +872,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -905,6 +910,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -1236,6 +1242,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with filter v
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -1273,6 +1280,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with filter v
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -1604,6 +1612,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter 1`] = `
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -1641,6 +1650,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter 1`] = `
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -1678,6 +1688,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter 1`] = `
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -1715,6 +1726,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter 1`] = `
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -1752,6 +1764,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter 1`] = `
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2083,6 +2096,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter with va
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2120,6 +2134,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter with va
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2157,6 +2172,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter with va
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2194,6 +2210,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter with va
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2231,6 +2248,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter with va
                     aria-selected="true"
                     class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2562,6 +2580,7 @@ exports[`Options Column.HeaderFilter filterType + values: filter values 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2599,6 +2618,7 @@ exports[`Options Column.HeaderFilter filterType + values: filter values 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2636,6 +2656,7 @@ exports[`Options Column.HeaderFilter filterType + values: filter values 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2673,6 +2694,7 @@ exports[`Options Column.HeaderFilter filterType + values: filter values 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -2710,6 +2732,7 @@ exports[`Options Column.HeaderFilter filterType + values: filter values 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -3041,6 +3064,7 @@ exports[`Options HeaderFilter texts: custom translations 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
@@ -3372,6 +3396,7 @@ exports[`Options HeaderFilter texts: default translation 1`] = `
                     aria-selected="false"
                     class="dx-item dx-list-item"
                     role="option"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
