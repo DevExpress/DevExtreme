@@ -3,6 +3,7 @@ import { isString } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 
 import { Controller } from '../m_modules';
+import { AI_ASSISTANT_AUTHOR, AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
 import { GridCommands } from './grid_commands';
 import type {
   CommandResponse, InternalRequestCallbacks, ProcessedCommands,
@@ -28,6 +29,20 @@ export class AIAssistantController extends Controller {
     return null;
   }
 
+  private processResponse(response: CommandResponse): Promise<ProcessedCommands> {
+    if (!response?.commands || response?.explanation) {
+      // TODO: need to localize default error message when there are no commands
+      return Promise.reject(new Error(response.explanation || 'Default error message'));
+    }
+
+    if (!this.gridCommands.validate(response.commands)) {
+      // TODO: need to localize error message on validation fail
+      return Promise.reject(new Error('Received invalid commands'));
+    }
+
+    return this.gridCommands.executeCommands(response.commands);
+  }
+
   public init(): void {
     this.gridCommands = new GridCommands(this.component);
     this.messageStore = new ArrayStore<Message, string>({
@@ -39,33 +54,27 @@ export class AIAssistantController extends Controller {
     return this.messageStore;
   }
 
-  public processUserMessage(message: Message): void {
+  public createPendingAIMessage(message: Message): string {
     const parsedTimestamp = isString(message.timestamp)
       ? Date.parse(message.timestamp)
       : message.timestamp?.toString() ?? '';
+    const aiMessageId = `${AI_ASSISTANT_AUTHOR_ID}-${parsedTimestamp}`;
 
     this.messageStore.push([
       {
         type: 'insert',
         data: {
-          ...message,
-          id: `${message.author?.id}-${parsedTimestamp}`,
-        },
-      },
-      {
-        type: 'insert',
-        data: {
-          id: Date.now(),
+          id: aiMessageId,
           timestamp: parsedTimestamp,
           // TODO: need to localize author name and move it to constants or options
-          author: { id: 'assistant', name: 'AI Assistant' },
+          author: AI_ASSISTANT_AUTHOR,
           text: message.text,
+          status: MessageStatus.Pending,
         },
       },
     ]);
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.sendRequestToAI();
+    return aiMessageId;
   }
 
   public sendRequestToAI(): Promise<ProcessedCommands> {
@@ -88,19 +97,5 @@ export class AIAssistantController extends Controller {
         },
       });
     });
-  }
-
-  private processResponse(response: CommandResponse): Promise<ProcessedCommands> {
-    if (!response?.commands || response?.explanation) {
-      // TODO: need to localize default error message when there are no commands
-      return Promise.reject(new Error(response.explanation || 'Default error message'));
-    }
-
-    if (!this.gridCommands.validate(response.commands)) {
-      // TODO: need to localize error message on validation fail
-      return Promise.reject(new Error('Received invalid commands'));
-    }
-
-    return this.gridCommands.executeCommands(response.commands);
   }
 }

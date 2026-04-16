@@ -1,0 +1,40 @@
+@use "../../../icon_fonts" as *;
+
+.dx-ai-chat .dx-popup-content {
+  padding: 0;
+}
+
+.dx-ai-chat__content {
+  border: none;
+  min-height: auto;
+}
+
+.dx-ai-chat__empty-image {
+  @include dx-icon(sparkle);
+
+  border-radius: 999em;
+}
+
+.dx-ai-chat__content .dx-chat-messagebubble {
+  position: relative;
+  overflow: hidden;
+}
+
+.dx-ai-chat__message {
+  display: flex;
+  gap: 8px;
+}
+
+.dx-ai-chat__message-content {
+  display: flex;
+  flex-flow: column;
+  gap: 4px;
+}
+
+.dx-ai-chat__message-progressbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 0;
+}

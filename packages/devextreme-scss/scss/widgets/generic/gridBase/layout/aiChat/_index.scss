@@ -1,0 +1,7 @@
+@use '../../../../base/gridBase/layout/aiChat/mixins' as *;
+@use "../../../button/colors" as *;
+@include ai-chat-messagelist-empty(
+  $button-default-bg,
+  $button-default-outlined-bg-hover,
+);
+@include ai-chat-message-pending($button-default-bg);

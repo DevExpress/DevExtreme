@@ -9,6 +9,8 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import Chat from '@js/ui/chat';
+import { AI_ASSISTANT_AUTHOR_ID } from '@ts/grids/grid_core/ai_assistant/const';
+import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/m_popup';
 
 import { AIChat } from './ai_chat';
@@ -53,6 +55,32 @@ const createAIChat = (optionsOverride: Partial<AIChatOptions> = {}): {
   const aiChat = new AIChat(options);
 
   return { $container, aiChat };
+};
+
+const getPopupConfig = (): any => {
+  const call = createComponentMock.mock.calls.find(
+    ([, Widget]) => Widget === Popup,
+  );
+
+  expect(call).toBeDefined();
+
+  return (call as any)[2];
+};
+
+const triggerContentTemplate = (): void => {
+  const popupConfig = getPopupConfig();
+
+  popupConfig.contentTemplate($('<div>'));
+};
+
+const getChatConfig = (): any => {
+  const call = createComponentMock.mock.calls.find(
+    ([, Widget]) => Widget === Chat,
+  );
+
+  expect(call).toBeDefined();
+
+  return (call as any)[2];
 };
 
 const beforeTest = (): void => {
@@ -130,16 +158,6 @@ describe('AIChat', () => {
   });
 
   describe('clearChatButton', () => {
-    const getPopupConfig = (): any => {
-      const call = createComponentMock.mock.calls.find(
-        ([, Widget]) => Widget === Popup,
-      );
-
-      expect(call).toBeDefined();
-
-      return (call as any)[2];
-    };
-
     it('should include toolbarItems with clear chat button when onChatCleared is provided', () => {
       const onChatCleared = jest.fn();
       createAIChat({ onChatCleared });
@@ -168,16 +186,66 @@ describe('AIChat', () => {
     });
   });
 
-  describe('updateOptions', () => {
-    const triggerContentTemplate = (): void => {
-      const call = createComponentMock.mock.calls.find(
-        ([, Widget]) => Widget === Popup,
+  describe('messageTemplate', () => {
+    it('should render assistant pending message with custom markup and progress bar', () => {
+      createAIChat();
+      triggerContentTemplate();
+
+      const chatConfig = getChatConfig();
+      const container = document.createElement('div');
+
+      chatConfig.messageTemplate({
+        message: {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Build summary',
+          status: 'pending',
+        },
+      }, container);
+
+      expect(container.querySelector(`.${CLASSES.message}`)).not.toBeNull();
+      expect(container.querySelector(`.${CLASSES.message}`)?.classList.contains(CLASSES.messagePending)).toBe(true);
+      expect(container.querySelector(`.${CLASSES.messageIcon}`)).not.toBeNull();
+      expect(container.querySelector(`.${CLASSES.messageHeader}`)?.textContent).toBe('Build summary');
+      expect(container.querySelector(`.${CLASSES.messageGroupOperations}`)?.textContent).toBe('Processing...');
+      expect(container.querySelector(`.${CLASSES.messageProgressBar}`)).not.toBeNull();
+      expect(createComponentMock).toHaveBeenCalledWith(
+        expect.any(Object),
+        ProgressBar,
+        {
+          value: false,
+          visible: true,
+          showStatus: false,
+          width: '100%',
+        },
       );
-      const popupConfig = (call as any)[2];
+    });
 
-      popupConfig.contentTemplate($('<div>'));
-    };
+    it('should render plain text for non-assistant message', () => {
+      createAIChat();
+      triggerContentTemplate();
 
+      const chatConfig = getChatConfig();
+      const container = document.createElement('div');
+
+      chatConfig.messageTemplate({
+        message: {
+          author: { id: 'user', name: 'User' },
+          text: 'User message',
+        },
+      }, container);
+
+      expect(container.textContent).toBe('User message');
+      expect(container.querySelector(`.${CLASSES.message}`)).toBeNull();
+      const hasProgressBarCreation = createComponentMock
+        .mock
+        .calls
+        .some(([, Widget]) => Widget === ProgressBar);
+
+      expect(hasProgressBarCreation).toBe(false);
+    });
+  });
+
+  describe('updateOptions', () => {
     it('should call popupInstance.option with new popupOptions when updatePopup is true', () => {
       const { aiChat, $container } = createAIChat();
       const newPopupOptions = { title: 'Updated' };

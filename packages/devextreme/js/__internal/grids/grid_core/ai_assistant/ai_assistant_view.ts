@@ -3,6 +3,7 @@ import type { Callback } from '@js/core/utils/callbacks';
 import { getHeight } from '@js/core/utils/size';
 import type { Properties as ChatProperties } from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
+import { fromPromise } from '@ts/core/utils/m_deferred';
 import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
 import {
   isChatOptions,
@@ -22,7 +23,7 @@ import type { AIAssistantController } from './ai_assistant_controller';
 export class AIAssistantView extends View {
   private aiChatInstance!: AIChat;
 
-  private aiAssistantController?: AIAssistantController;
+  private aiAssistantController!: AIAssistantController;
 
   private columnHeadersView!: ColumnHeadersView;
 
@@ -86,12 +87,21 @@ export class AIAssistantView extends View {
 
   private getAIChatOptions(): ChatProperties {
     return {
-      dataSource: {
-        store: this.aiAssistantController?.getMessageStore(),
-        reshapeOnPush: true,
-      },
+      dataSource: this.aiAssistantController.getMessageStore(),
+      reloadOnChange: true,
       onMessageEntered: (e): void => {
-        this.aiAssistantController?.processUserMessage(e.message);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const aiMessageId = this.aiAssistantController.createPendingAIMessage(e.message);
+
+        fromPromise(this.aiAssistantController.sendRequestToAI())
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .done((response) => {
+
+          })
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .fail((error) => {
+
+          });
       },
       ...this.option('aiAssistant.chat'),
     };

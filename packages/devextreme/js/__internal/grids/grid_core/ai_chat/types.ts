@@ -13,3 +13,5 @@ export interface AIChatOptions {
   onChatCleared?: () => void;
   onRegenerate?: () => void;
 }
+
+export type MessageStatus = 'pending' | 'success' | 'error';

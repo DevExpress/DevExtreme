@@ -15,6 +15,7 @@ import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helper
 import { AIChat } from '../../ai_chat/ai_chat';
 import type { AIChatOptions } from '../../ai_chat/types';
 import { AIAssistantView } from '../ai_assistant_view';
+import type { ProcessedCommands } from '../types';
 
 jest.mock('../../ai_chat/ai_chat', (): any => {
   const original = jest.requireActual<any>('../../ai_chat/ai_chat');
@@ -33,6 +34,15 @@ const createComponentMock = jest.fn((
   Widget: any,
   options: any,
 ): any => new Widget(el, options));
+
+const mockMessageStore = {};
+const mockProcessedCommands: ProcessedCommands = [];
+const mockAIAssistantController = {
+  getMessageStore: jest.fn().mockReturnValue(mockMessageStore),
+  createPendingAIMessage: jest.fn().mockReturnValue('assistant-1'),
+  sendRequestToAI: jest.fn<() => Promise<ProcessedCommands>>()
+    .mockResolvedValue(mockProcessedCommands),
+};
 
 const createAIAssistantView = ({
   initialEnabled = true,
@@ -69,7 +79,9 @@ const createAIAssistantView = ({
   const mockComponent = {
     element: (): any => $container.get(0),
     _createComponent: createComponentMock,
-    _controllers: {},
+    _controllers: {
+      aiAssistant: mockAIAssistantController,
+    },
     _views: {
       columnHeadersView: mockColumnHeadersView,
       rowsView: mockRowsView,
@@ -142,6 +154,19 @@ describe('AIAssistantView', () => {
           onChatCleared: expect.any(Function),
         }),
       );
+    });
+
+    it('should configure chatOptions with controller message store and reloadOnChange', () => {
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+
+      expect(mockAIAssistantController.getMessageStore).toHaveBeenCalledTimes(1);
+      expect(aiChatConfig.chatOptions).toEqual(expect.objectContaining({
+        dataSource: mockMessageStore,
+        reloadOnChange: true,
+        onMessageEntered: expect.any(Function),
+      }));
     });
 
     it('should not create a new AIChat instance on subsequent renders', () => {
@@ -254,6 +279,26 @@ describe('AIAssistantView', () => {
       aiChatConfig.popupOptions?.onHidden?.({} as any);
 
       expect(callback).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe('chat event handlers', () => {
+    describe('onMessageEntered', () => {
+      it('should create pending message and send request to AI', () => {
+        createAIAssistantView();
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+
+        expect(mockAIAssistantController.createPendingAIMessage).toHaveBeenCalledTimes(1);
+        expect(mockAIAssistantController.createPendingAIMessage).toHaveBeenCalledWith(message);
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledTimes(1);
+      });
     });
   });
 

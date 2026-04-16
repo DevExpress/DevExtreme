@@ -6,3 +6,13 @@ export const CLASSES = {
 };
 
 export const AI_ASSISTANT_POPUP_OFFSET = 12;
+
+export const AI_ASSISTANT_AUTHOR_ID = 'assistant';
+export const AI_ASSISTANT_AUTHOR_NAME = 'AI Assistant';
+export const AI_ASSISTANT_AUTHOR = { id: AI_ASSISTANT_AUTHOR_ID, name: AI_ASSISTANT_AUTHOR_NAME };
+
+export enum MessageStatus {
+  Pending = 'pending',
+  Success = 'success',
+  Error = 'error',
+}
