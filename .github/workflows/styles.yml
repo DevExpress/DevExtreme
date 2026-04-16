@@ -33,11 +33,11 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Run tests
-      run: npx nx test devextreme-scss
+      run: npx --no-install nx test devextreme-scss
 
   notify:
     runs-on: devextreme-shr2

@@ -49,8 +49,8 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-modules
 
-      - name: Run npm install
-        run: npm install --no-audit --no-fund
+      - name: Run npm ci
+        run: npm ci --no-audit --no-fund
 
       - name: Build
         env:
@@ -60,8 +60,8 @@ jobs:
         working-directory: ./packages/devextreme
         run: |
           node ../../tools/scripts/performance_log.js &
-          npx nx build:dev
-          npx nx build:systemjs
+          npx --no-install nx build:dev
+          npx --no-install nx build:systemjs
 
       - name: Zip artifacts
         working-directory: ./packages/devextreme

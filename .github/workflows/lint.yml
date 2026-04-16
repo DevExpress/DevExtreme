@@ -33,18 +33,18 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Compile renovation
       working-directory: ./packages/devextreme
       run: |
-        npx nx compile:r
+        npx --no-install nx compile:r
 # Remove package install after upgrade to TypeScript >= 4.6
 
     - name: Lint renovation
       working-directory: ./packages/devextreme
-      run: npx nx lint-renovation
+      run: npx --no-install nx lint-renovation
 
   TS:
     runs-on: devextreme-shr2
@@ -65,30 +65,30 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npx nx build
+      run: npx --no-install nx build
 
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint-ts
+      run: npx --no-install nx lint-ts
 
     - name: Lint .d.ts
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint-dts
+      run: npx --no-install nx lint-dts
 
     - name: Lint Testcafe tests
       working-directory: ./e2e/testcafe-devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint
+      run: npx --no-install nx lint
 
   JS:
     runs-on: devextreme-shr2
@@ -109,18 +109,18 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npx nx build
+      run: npx --no-install nx build
 
     - name: Lint JS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint-js
+      run: npx --no-install nx lint-js
 
   texts:
     runs-on: devextreme-shr2
@@ -141,12 +141,12 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Check texts
       working-directory: ./packages/devextreme
-      run: npx nx lint-texts
+      run: npx --no-install nx lint-texts
 
   CSS:
     runs-on: devextreme-shr2
@@ -167,12 +167,12 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Lint CSS
       working-directory: ./packages/devextreme-scss
-      run: npx nx lint
+      run: npx --no-install nx lint
 
   package_lock:
     runs-on: devextreme-shr2
@@ -190,7 +190,7 @@ jobs:
       run: |
         node -v
         npm -v
-        npm install --no-audit --no-fund --ignore-scripts
+        npm ci --no-audit --no-fund --ignore-scripts
 
     - name: Upload package-lock
       uses: actions/upload-artifact@v4
@@ -225,7 +225,7 @@ jobs:
       run: |
         node -v
         npm -v
-        npm install --no-audit --no-fund --ignore-scripts
+        npm ci --no-audit --no-fund --ignore-scripts
 
     - name: Check generated component reexports
       working-directory: ./packages/devextreme
@@ -262,10 +262,10 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install dependencies
-      run: npm install --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
     - name: Lint wrappers
-      run: npx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
+      run: npx --no-install nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
     runs-on: devextreme-shr2

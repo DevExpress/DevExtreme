@@ -29,8 +29,8 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Check dx.all.d.ts is up-to-date
       working-directory: ./packages/devextreme
@@ -73,8 +73,8 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Validate declarations
       working-directory: ./packages/devextreme

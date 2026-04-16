@@ -30,12 +30,12 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
+    - name: Run npm ci
       run: npm ci --no-audit --no-fund
     
     - name: Run targets
       run: >
-        npx nx run-many
+        npx --no-install nx run-many
         -t test
         --exclude
         devextreme

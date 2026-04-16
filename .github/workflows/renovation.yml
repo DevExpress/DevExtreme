@@ -33,15 +33,15 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Build localization
       working-directory: ./packages/devextreme
       run: npx gulp localization
 
     - name: Jest tests
-      run: npx nx test-jest devextreme-main
+      run: npx --no-install nx test-jest devextreme-main
 
   notify:
     runs-on: devextreme-shr2

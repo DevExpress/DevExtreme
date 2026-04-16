@@ -48,9 +48,9 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-modules
 
-      - name: Run npm install
-        run: npm install --no-audit --no-fund
+      - name: Run npm ci
+        run: npm ci --no-audit --no-fund
 
       - name: Run unit tests
         working-directory: apps/demos
-        run: npx nx test
+        run: npx --no-install nx test
