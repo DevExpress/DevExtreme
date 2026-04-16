@@ -30,6 +30,7 @@ export const getAppointmentCollectorProperties = (
     onFocusIn: () => {},
     onFocusOut: () => {},
     onKeyDown: () => {},
+    onClick: () => {},
   };
 
   return config;
