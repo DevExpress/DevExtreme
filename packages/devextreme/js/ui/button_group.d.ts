@@ -119,7 +119,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'text'
      * @public
      */
-    keyExpr?: string | ((item: Item) => any);
+    keyExpr?: string | ((item: any) => any);
     /**
      * @docid
      * @default null

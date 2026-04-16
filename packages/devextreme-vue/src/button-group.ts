@@ -12,7 +12,6 @@ import {
  SelectionChangedEvent,
 } from "devextreme/ui/button_group";
 import {
- template,
  SingleMultipleOrNone,
  ButtonStyle,
  ButtonType,
@@ -63,7 +62,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxButtonGroupItem>>,
-    keyExpr: [Function, String] as PropType<(((item: any | { disabled: boolean, elementAttr: Record<string, any>, hint: string, html: string, icon: string, template: template | (() => void), text: string, type: any | string, visible: boolean }) => any)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,

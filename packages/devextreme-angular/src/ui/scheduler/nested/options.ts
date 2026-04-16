@@ -20,7 +20,7 @@ import {
 
 import type { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
 import type { SchedulerPredefinedDateNavigatorItem } from 'devextreme/ui/scheduler';
-import type { template, SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
+import type { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -127,10 +127,10 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get keyExpr(): ((item: any | { disabled: boolean, elementAttr: Record<string, any>, hint: string, html: string, icon: string, template: template | Function, text: string, type: any | string, visible: boolean }) => any) | string {
+    get keyExpr(): ((item: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: ((item: any | { disabled: boolean, elementAttr: Record<string, any>, hint: string, html: string, icon: string, template: template | Function, text: string, type: any | string, visible: boolean }) => any) | string) {
+    set keyExpr(value: ((item: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 

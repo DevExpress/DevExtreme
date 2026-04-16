@@ -9939,7 +9939,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.keyExpr]
      */
-    keyExpr?: string | ((item: DevExpress.ui.dxButtonGroup.Item) => any);
+    keyExpr?: string | ((item: any) => any);
     /**
      * [descr:dxButtonGroupOptions.onItemClick]
      */

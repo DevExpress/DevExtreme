@@ -23,7 +23,7 @@ import {
 
 
 import type { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
-import type { template, SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
+import type { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
 import DxButtonGroup from 'devextreme/ui/button_group';
 
@@ -207,10 +207,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get keyExpr(): ((item: any | { disabled: boolean, elementAttr: Record<string, any>, hint: string, html: string, icon: string, template: template | Function, text: string, type: any | string, visible: boolean }) => any) | string {
+    get keyExpr(): ((item: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: ((item: any | { disabled: boolean, elementAttr: Record<string, any>, hint: string, html: string, icon: string, template: template | Function, text: string, type: any | string, visible: boolean }) => any) | string) {
+    set keyExpr(value: ((item: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -441,7 +441,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<((item: any | { disabled: boolean, elementAttr: Record<string, any>, hint: string, html: string, icon: string, template: template | Function, text: string, type: any | string, visible: boolean }) => any) | string>;
+    @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
     
