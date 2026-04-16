@@ -20,9 +20,9 @@ import {
 } from 'devextreme-angular';
 
 @Component({
-  standalone: false,
   selector: 'test-container-component',
   template: '',
+  imports: [DxDataGridModule],
 })
 class TestContainerComponent {
   renderedOnServer = false;
@@ -35,8 +35,8 @@ class TestContainerComponent {
 describe('Universal', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestContainerComponent],
       imports: [
+        TestContainerComponent,
         DxServerModule,
         DxDataGridModule,
       ],

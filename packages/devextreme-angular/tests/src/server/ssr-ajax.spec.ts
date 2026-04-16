@@ -31,7 +31,6 @@ const mockSendRequest = {
 };
 
 @Component({
-  standalone: false,
   selector: 'test-container-component',
   template: '',
 })
@@ -47,8 +46,8 @@ describe('Universal', () => {
     };
     TestBed.configureTestingModule(
       {
-        declarations: [TestContainerComponent],
         imports: [
+          TestContainerComponent,
           DxServerModule,
           ServerModule,
           DxServerTransferStateModule,

@@ -20,9 +20,9 @@ import {
 } from './component-names';
 
 @Component({
-  standalone: false,
   selector: 'test-container-component',
   template: '',
+  imports: [DevExtremeModule],
 })
 class TestContainerComponent {
 }
@@ -30,8 +30,8 @@ class TestContainerComponent {
 describe('Universal', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestContainerComponent],
       imports: [
+        TestContainerComponent,
         DxServerModule,
         DevExtremeModule,
       ],
