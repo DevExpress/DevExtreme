@@ -24,7 +24,7 @@ export const user = {
 
 export const assistant = {
   id: 'assistant',
-  name: 'Virtual Assistant',
+  name: 'AI Assistant',
 };
 
 export const suggestionItems = [
