@@ -292,7 +292,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       groupTemplate: 'group',
       indicateLoading: true,
       activeStateEnabled: true,
-      _itemAttributes: { role: 'option' },
+      _itemAttributes: { role: 'option', tabindex: '-1' },
       useInkRipple: false,
       wrapItemText: false,
       showChevronExpr(data: Item): boolean | undefined {
@@ -1027,6 +1027,26 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _focusTarget(): dxElementWrapper {
     return this._itemContainer();
+  }
+
+  _handleItemFocus(e: DxEvent): void {
+    if (e.isDefaultPrevented()) {
+      return;
+    }
+
+    const $target = $(e.target);
+    const $closestItem = $target.closest(this._itemElements());
+
+    if ($closestItem.length) {
+      this._shouldSkipSelectOnFocus = true;
+      this.option('focusedElement', getPublicElement($closestItem));
+      this._shouldSkipSelectOnFocus = false;
+
+      const focusTarget = this._focusTarget().get(0) as HTMLElement | undefined;
+      if (focusTarget && focusTarget !== e.target) {
+        focusTarget.focus({ preventScroll: true });
+      }
+    }
   }
 
   _renderInkRipple(): void {

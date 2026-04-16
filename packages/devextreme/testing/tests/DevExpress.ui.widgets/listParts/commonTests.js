@@ -4607,6 +4607,85 @@ QUnit.module('keyboard navigation', {
 
         assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
     });
+
+    QUnit.test('items should have tabindex=-1 attribute', function(assert) {
+        const $element = $('#list').dxList({
+            focusStateEnabled: true,
+            items: [1, 2, 3]
+        });
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        $items.each(function() {
+            assert.strictEqual($(this).attr('tabindex'), '-1', 'item has tabindex="-1"');
+        });
+    });
+
+    QUnit.test('items should have role=option attribute', function(assert) {
+        const $element = $('#list').dxList({
+            focusStateEnabled: true,
+            items: [1, 2, 3]
+        });
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        $items.each(function() {
+            assert.strictEqual($(this).attr('role'), 'option', 'item has role="option"');
+        });
+    });
+
+    QUnit.test('click on item should set focusedElement', function(assert) {
+        const $element = $('#list').dxList({
+            focusStateEnabled: true,
+            items: [1, 2, 3]
+        });
+
+        const instance = $element.dxList('instance');
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`).eq(1);
+
+        $item.trigger('dxpointerdown');
+        this.clock.tick(10);
+
+        assert.strictEqual($item.hasClass(FOCUSED_STATE_CLASS), true, 'item has focused state');
+        assert.strictEqual(instance.option('focusedElement'), $item.get(0), 'focusedElement is set to clicked item');
+    });
+
+    QUnit.test('keyboard navigation should work after clicking on item with tabindex=-1', function(assert) {
+        const $element = $('#list').dxList({
+            focusStateEnabled: true,
+            items: [1, 2, 3]
+        });
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+        const $firstItem = $items.eq(0);
+
+        $firstItem.trigger('dxpointerdown');
+        this.clock.tick(10);
+
+        assert.strictEqual($firstItem.hasClass(FOCUSED_STATE_CLASS), true, 'first item is focused after click');
+
+        const keyboard = getListKeyboard($element);
+        keyboard.keyDown('down');
+
+        assert.strictEqual($firstItem.hasClass(FOCUSED_STATE_CLASS), false, 'first item lost focus');
+        assert.strictEqual($items.eq(1).hasClass(FOCUSED_STATE_CLASS), true, 'second item is focused after arrow down');
+    });
+
+    QUnit.test('DOM focus should be on focusTarget (container) after clicking on item', function(assert) {
+        const $element = $('#list').dxList({
+            focusStateEnabled: true,
+            items: [1, 2, 3]
+        });
+
+        const instance = $element.dxList('instance');
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const focusTarget = instance._focusTarget().get(0);
+
+        $item.trigger('dxpointerdown');
+        this.clock.tick(10);
+
+        assert.strictEqual(document.activeElement, focusTarget, 'DOM focus is on focusTarget after click on item');
+    });
 });
 
 QUnit.module('Search', () => {
@@ -4896,11 +4975,11 @@ if(devices.real().deviceType === 'desktop') {
                 $(helper.$itemContainer).trigger('focusin');
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
-                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
+                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option', tabindex: '-1' });
 
                 helper.$widget.focusout();
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
-                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
+                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option', tabindex: '-1' });
             });
 
 
@@ -4916,12 +4995,12 @@ if(devices.real().deviceType === 'desktop') {
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
-                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
+                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option', tabindex: '-1' });
 
                 helper.widget.option('focusedElement', null);
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
-                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], role: 'option' });
+                helper.checkItemsAttributes([2], { attributes: ['aria-selected'], role: 'option', tabindex: '-1' });
             });
 
             QUnit.test('Selected: ["Item_1", "Item_3"] -> select "Item_2" by click', function() {
@@ -4929,7 +5008,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
-                helper.checkItemsAttributes([0, 2], { attributes: ['aria-selected'], role: 'option' });
+                helper.checkItemsAttributes([0, 2], { attributes: ['aria-selected'], role: 'option', tabindex: '-1' });
 
                 const $item_1 = $(helper.getItems().eq(1));
                 eventsEngine.trigger($item_1, 'dxclick');
@@ -4938,7 +5017,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
-                helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
+                helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option', tabindex: '-1' });
             });
         });
     });

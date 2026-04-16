@@ -307,7 +307,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
-                helper.checkItemsAttributes([], { role: 'option' });
+                helper.checkItemsAttributes([], { role: 'option', tabindex: '-1' });
             });
 
             QUnit.test('Selected: ["Item_2"], change searchEnabled after initialize', function() {
@@ -322,7 +322,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
-                helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
+                helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option', tabindex: '-1' });
             });
 
             QUnit.test('Selected: ["Item_2"], selectionMode: "single"', function() {
@@ -336,7 +336,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
-                helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
+                helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option', tabindex: '-1' });
             });
 
             QUnit.test('Selected: ["Item_2", "Item_3"], selectionMode: "multiple"', function() {
@@ -350,7 +350,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
-                helper.checkItemsAttributes([1, 2], { attributes: ['aria-selected'], role: 'option' });
+                helper.checkItemsAttributes([1, 2], { attributes: ['aria-selected'], role: 'option', tabindex: '-1' });
             });
 
             QUnit.test('Selected: ["Item_1"] -> set focusedElement -> clean focusedElement', function() {
@@ -364,12 +364,12 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('focusedElement', helper.getItems().eq(0));
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
-                helper.checkItemsAttributes([0], { attributes: ['aria-selected'], focusedItemIndex: 0, role: 'option' });
+                helper.checkItemsAttributes([0], { attributes: ['aria-selected'], focusedItemIndex: 0, role: 'option', tabindex: '-1' });
 
                 helper.widget.option('focusedElement', null);
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
-                helper.checkItemsAttributes([0], { attributes: ['aria-selected'], role: 'option' });
+                helper.checkItemsAttributes([0], { attributes: ['aria-selected'], role: 'option', tabindex: '-1' });
             });
         });
 
