@@ -4,7 +4,7 @@ import {
 import errors from '@js/ui/widget/ui.errors';
 
 import { DEFAULT_VIEW_OPTIONS } from './constants_view';
-import { resolveSkippedDays } from './normalize_skipped_days';
+import { resolveSkippedDays } from './normalize_hidden_days';
 import type { RawViewType, ViewType } from './types';
 import {
   getCurrentView,

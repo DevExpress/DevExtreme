@@ -9,7 +9,7 @@ import {
   DEFAULT_SCHEDULER_OPTIONS_RULES,
 } from './utils/options/constants';
 import { DEFAULT_VIEW_OPTIONS } from './utils/options/constants_view';
-import { resolveSkippedDays } from './utils/options/normalize_skipped_days';
+import { resolveSkippedDays } from './utils/options/normalize_hidden_days';
 import type {
   NormalizedView, SafeSchedulerOptions, SchedulerOptionsRule, View,
 } from './utils/options/types';
