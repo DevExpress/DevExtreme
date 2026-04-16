@@ -6737,7 +6737,7 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
     // assert
     await t.expect(dataGrid.isReady()).ok();
 
-    //act
+    // act
     await t
       .click(searchPanel.input)
       .pressKey('tab tab tab tab tab');
