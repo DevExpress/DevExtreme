@@ -23,7 +23,7 @@ const dataSource = [
 
 window.addEventListener('load', () =>
     setupThemeSelector('theme-selector').then(() => {
-        ($('#container') as any).dxScheduler({
+        $('#container').dxScheduler({
             dataSource,
             views: ['day', 'week', 'workWeek', 'month'],
             currentView: 'week',
