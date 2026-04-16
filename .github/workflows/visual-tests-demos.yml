@@ -658,6 +658,25 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    - name: Cache Roboto font
+      if: contains(matrix.THEME, 'material')
+      id: cache-roboto
+      uses: actions/cache@v4
+      with:
+        path: /usr/share/fonts/truetype/roboto
+        key: roboto-font-v2-${{ runner.os }}
+
+    - name: Install Roboto font for Material theme
+      if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
+      run: |
+        echo "Installing Roboto font from Google Fonts..."
+        sudo mkdir -p /usr/share/fonts/truetype/roboto
+        curl -fsSL "https://fonts.google.com/download?family=Roboto" -o /tmp/roboto.zip
+        sudo unzip -o /tmp/roboto.zip -d /usr/share/fonts/truetype/roboto
+        rm /tmp/roboto.zip
+        sudo fc-cache -f -v > /dev/null 2>&1 || true
+        echo "Roboto font installed"
+
     - name: Run Web Server
       run: python -m http.server 8080 &
 
