@@ -73,7 +73,6 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     switch (args.name) {
       case 'currentView':
       case 'views':
-      case 'hiddenWeekDays':
         this.updateViews();
         break;
       default:
