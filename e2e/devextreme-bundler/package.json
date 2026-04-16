@@ -1,0 +1,10 @@
+{
+  "name": "devextreme-bundler-test",
+  "version": "25.1.10",
+  "description": "Project for testing the \"devextreme-bundler\" commands from \"devextreme\" package. See build_all.yml for details",
+  "scripts": {},
+  "dependencies": {
+    "terser-webpack-plugin": "5.3.10",
+    "webpack": "5.104.1"
+  }
+}
