@@ -143,9 +143,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         break;
       }
       case 'tabIndex': {
-        this.viewItems.forEach((item) => {
-          item.setTabIndex(args.value);
-        });
         this.focusController.resetTabIndex();
         break;
       }
@@ -278,11 +275,12 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     const targetedAppointmentData = this.getTargetedAppointmentData(appointmentViewModel);
 
     const baseViewItemConfig = {
-      tabIndex: this.option().tabIndex,
+      tabIndex: -1,
       sortedIndex: appointmentViewModel.sortedIndex,
-      onFocusIn: this.focusController.onAppointmentFocusIn.bind(this.focusController),
-      onFocusOut: this.focusController.onAppointmentFocusOut.bind(this.focusController),
-      onKeyDown: this.focusController.onAppointmentKeyDown.bind(this.focusController),
+      onFocusIn: this.focusController.onViewItemFocusIn.bind(this.focusController),
+      onFocusOut: this.focusController.onViewItemFocusOut.bind(this.focusController),
+      onClick: this.focusController.onViewItemClick.bind(this.focusController),
+      onKeyDown: this.focusController.onViewItemKeyDown.bind(this.focusController),
     };
 
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
