@@ -262,7 +262,6 @@ export class RecurrenceForm {
             visible: false,
           },
           editorOptions: {
-            labelMode: 'hidden',
             items: getRecurrenceFrequencyItems(),
             valueExpr: 'value',
             displayExpr: 'text',
