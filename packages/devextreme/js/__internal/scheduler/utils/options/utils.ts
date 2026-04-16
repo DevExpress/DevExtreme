@@ -27,7 +27,6 @@ const normalizeHiddenWeekDays = (
 };
 
 const resolveSkippedDays = (
-  viewType: ViewType,
   perViewHiddenWeekDays: unknown,
   globalHiddenWeekDays: number[] | undefined,
   viewDefault: number[],
@@ -46,55 +45,22 @@ const isKnownView = (view: RawViewType): boolean => VIEW_TYPES
   .includes((isObject(view) ? view.type : view) as ViewType);
 const isExistedView = (view: NormalizedView | undefined): view is NormalizedView => Boolean(view);
 
-const normalizeView = (
-  view: RawViewType,
-  globalHiddenWeekDays?: number[],
-): NormalizedView | undefined => {
-  if (isObject(view)) {
-    const viewType = view.type as ViewType;
-    const viewDefault = DEFAULT_VIEW_OPTIONS[viewType];
-    if (!viewDefault) {
-      return undefined;
-    }
-    const merged = extend({}, viewDefault, view) as NormalizedView;
-    merged.skippedDays = resolveSkippedDays(
-      viewType,
-      view.hiddenWeekDays,
-      globalHiddenWeekDays,
-      viewDefault.skippedDays,
-    );
-    return merged;
-  }
-  const defaultView = DEFAULT_VIEW_OPTIONS[view];
-  if (!defaultView) {
-    return undefined;
-  }
-  const skippedDays = resolveSkippedDays(
-    view as ViewType,
-    undefined,
-    globalHiddenWeekDays,
-    defaultView.skippedDays,
-  );
-  if (skippedDays === defaultView.skippedDays) {
-    return defaultView;
-  }
-  return { ...defaultView, skippedDays };
-};
+const normalizeView = (view: RawViewType): NormalizedView | undefined => (isObject(view)
+  ? extend({}, DEFAULT_VIEW_OPTIONS[view.type as string], view) as NormalizedView
+  : DEFAULT_VIEW_OPTIONS[view]);
 
 export const getViews = (
   views: RawViewType[],
-  globalHiddenWeekDays?: number[],
 ): NormalizedView[] => views
   .filter(isKnownView)
-  .map((v) => normalizeView(v, globalHiddenWeekDays))
+  .map((v) => normalizeView(v))
   .filter(isExistedView);
 
 export function getCurrentView(
   currentView: string | ViewType,
   views: RawViewType[],
-  globalHiddenWeekDays?: number[],
 ): NormalizedView {
-  const viewsProps = getViews(views, globalHiddenWeekDays);
+  const viewsProps = getViews(views);
   const currentViewProps = viewsProps.find(
     (view) => [view.name, view.type].includes(currentView),
   );
@@ -121,7 +87,21 @@ const isDateOption = (
 export const getViewOption = <K extends keyof SafeSchedulerOptions>(
   optionName: K,
   currentOptionValue: SafeSchedulerOptions[K],
+  currentView?: NormalizedView,
+  globalHiddenWeekDays?: number[],
 ): SafeSchedulerOptions[K] => {
+  if (optionName === 'skippedDays') {
+    if (!currentView) {
+      return currentOptionValue;
+    }
+
+    return resolveSkippedDays(
+      currentView.hiddenWeekDays,
+      globalHiddenWeekDays,
+      DEFAULT_VIEW_OPTIONS[currentView.type].skippedDays,
+    ) as SafeSchedulerOptions[K];
+  }
+
   if (!isDateOption(optionName)) {
     return currentOptionValue;
   }

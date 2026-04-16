@@ -143,9 +143,14 @@ describe('views utils', () => {
         viewType: ViewType,
         globalHiddenWeekDays?: number[],
       ): number[] => {
-        const result = getViews(views, globalHiddenWeekDays);
-        const view = result.find((v) => v.type === viewType);
-        return view?.skippedDays ?? [];
+        const currentView = getCurrentView(viewType, views);
+
+        return getViewOption(
+          'skippedDays',
+          currentView.skippedDays,
+          currentView,
+          globalHiddenWeekDays,
+        );
       };
 
       it('uses per-view hiddenWeekDays for week', () => {
