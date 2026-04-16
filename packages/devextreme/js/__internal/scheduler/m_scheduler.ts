@@ -514,6 +514,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateOption('workSpace', name, value);
         this.repaint();
         break;
+      case 'skippedDays':
+        break;
       case 'indicatorTime':
         this.updateOption('workSpace', name, value);
         this.updateOption('header', name, value);

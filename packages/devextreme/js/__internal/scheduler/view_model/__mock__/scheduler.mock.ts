@@ -34,6 +34,7 @@ export const getSchedulerMock = ({
   getViewOption: (name: string) => ({
     startDayHour,
     endDayHour,
+    skippedDays: skippedDays ?? [],
     allDayPanelMode: 'allDay',
     cellDuration: 30,
   }[name]),
