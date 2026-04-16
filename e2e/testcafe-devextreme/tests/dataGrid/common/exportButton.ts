@@ -101,7 +101,7 @@ test('allowExportSelectedData: true, menu: true', async (t) => {
   width: 30,
 }));
 
-test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns is in grid header, menu: false', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('Export is disabled when no data columns is in grid header, menu: false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');

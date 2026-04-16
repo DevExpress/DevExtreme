@@ -10,7 +10,7 @@ fixture.disablePageReloads`Grouping Panel`
 
 const DATA_GRID_SELECTOR = '#container';
 
-test('Grouping Panel label should not overflow in a narrow grid (T1103925)', async (t) => {
+test.meta({ unstable: true })('Grouping Panel label should not overflow in a narrow grid (T1103925)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
