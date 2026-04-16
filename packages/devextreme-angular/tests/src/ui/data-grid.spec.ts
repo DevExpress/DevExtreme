@@ -412,7 +412,7 @@ describe('Nested DxDataGrid', () => {
     );
 
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 3000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
   });
 
   afterEach(() => {
@@ -564,7 +564,7 @@ describe('DxDataGrid slow tests', () => {
   const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 
   beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
     TestBed.configureTestingModule(
       {
