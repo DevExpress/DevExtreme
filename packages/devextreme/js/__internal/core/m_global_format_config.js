@@ -24,22 +24,25 @@ const resolveByLocaleMap = (localeMap) => {
     return undefined;
 };
 
-const resolveGlobalFormat = (optionName) => {
-    const optionValue = config()[optionName];
-
-    if(optionValue === undefined) {
+const resolveConfigValue = (value) => {
+    if(value === undefined) {
         return undefined;
     }
 
-    if(isString(optionValue) || isFunction(optionValue)) {
-        return optionValue;
+    if(isString(value) || isFunction(value)) {
+        return value;
     }
 
-    if(isPlainObject(optionValue)) {
-        return resolveByLocaleMap(optionValue);
+    if(isPlainObject(value)) {
+        return resolveByLocaleMap(value);
     }
 
     return undefined;
+};
+
+const resolveGlobalFormat = (optionName) => {
+    const optionValue = config()[optionName];
+    return resolveConfigValue(optionValue);
 };
 
 export const getGlobalFormatByDataType = (dataType) => {
@@ -57,6 +60,26 @@ export const getGlobalFormatByDataType = (dataType) => {
     }
 };
 
+export const resolvePresetOverride = (presetName) => {
+    const presets = config().dateTimeFormatPresets;
+
+    if(!presets || !isPlainObject(presets)) {
+        return undefined;
+    }
+
+    const lowerName = presetName.toLowerCase();
+    const keys = Object.keys(presets);
+
+    for(let i = 0; i < keys.length; i++) {
+        if(keys[i].toLowerCase() === lowerName) {
+            return resolveConfigValue(presets[keys[i]]);
+        }
+    }
+
+    return undefined;
+};
+
 export default {
     getGlobalFormatByDataType,
+    resolvePresetOverride,
 };

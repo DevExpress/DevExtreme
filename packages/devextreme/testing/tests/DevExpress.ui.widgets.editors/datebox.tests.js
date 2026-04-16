@@ -3376,15 +3376,30 @@ QUnit.module('validation', {
 
 QUnit.module('Global formatting config (spec)', {
     beforeEach: function() {
-        this.originalConfig = config();
+        const globalConfig = config();
+        this.savedGlobalFormats = {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+            dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+        };
     },
     afterEach: function() {
-        config(this.originalConfig);
+        const globalConfig = config();
+        Object.keys(this.savedGlobalFormats).forEach((key) => {
+            const value = this.savedGlobalFormats[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
     },
 }, () => {
     QUnit.test('implicit date displayFormat uses global dateFormat', function(assert) {
         config({
-            ...this.originalConfig,
+            ...config(),
             dateFormat: 'dd/MM/yyyy',
         });
 
@@ -3399,7 +3414,7 @@ QUnit.module('Global formatting config (spec)', {
 
     QUnit.test('implicit datetime displayFormat uses global dateTimeFormat', function(assert) {
         config({
-            ...this.originalConfig,
+            ...config(),
             dateTimeFormat: 'dd/MM/yyyy, HH:mm',
         });
 
@@ -3414,7 +3429,7 @@ QUnit.module('Global formatting config (spec)', {
 
     QUnit.test('explicit displayFormat keeps priority over global dateFormat', function(assert) {
         config({
-            ...this.originalConfig,
+            ...config(),
             dateFormat: 'dd/MM/yyyy',
         });
 
@@ -3426,5 +3441,59 @@ QUnit.module('Global formatting config (spec)', {
         }).dxDateBox('instance');
 
         assert.strictEqual(instance.option('text'), '1/2/2020');
+    });
+
+    QUnit.test('implicit DateBox uses dateTimeFormatPresets.shortDate when no dateFormat is set', function(assert) {
+        config({
+            ...config(),
+            dateTimeFormatPresets: {
+                shortDate: 'dd/MM/yyyy',
+            },
+        });
+
+        const instance = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            pickerType: 'calendar',
+        }).dxDateBox('instance');
+
+        assert.strictEqual(instance.option('text'), '02/01/2020');
+    });
+
+    QUnit.test('dateFormat takes priority over dateTimeFormatPresets.shortDate for implicit DateBox', function(assert) {
+        config({
+            ...config(),
+            dateFormat: 'yyyy-MM-dd',
+            dateTimeFormatPresets: {
+                shortDate: 'dd/MM/yyyy',
+            },
+        });
+
+        const instance = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            pickerType: 'calendar',
+        }).dxDateBox('instance');
+
+        // dateFormat wins over dateTimeFormatPresets for implicit case
+        assert.strictEqual(instance.option('text'), '2020-01-02');
+    });
+
+    QUnit.test('explicit displayFormat: "shortDate" uses dateTimeFormatPresets override', function(assert) {
+        config({
+            ...config(),
+            dateTimeFormatPresets: {
+                shortDate: 'dd/MM/yyyy',
+            },
+        });
+
+        const instance = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            displayFormat: 'shortDate',
+            pickerType: 'calendar',
+        }).dxDateBox('instance');
+
+        assert.strictEqual(instance.option('text'), '02/01/2020');
     });
 });

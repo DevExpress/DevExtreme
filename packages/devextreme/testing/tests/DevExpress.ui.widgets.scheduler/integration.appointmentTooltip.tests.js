@@ -45,6 +45,7 @@ module('Global formatting config (spec): Scheduler tooltip', {
             timeFormat: globalConfig.timeFormat,
             dateTimeFormat: globalConfig.dateTimeFormat,
             numberFormat: globalConfig.numberFormat,
+            dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
         };
     },
     afterEach() {
