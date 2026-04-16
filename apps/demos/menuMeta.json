@@ -4239,6 +4239,20 @@
                 "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-tool-call-visualization.xml"
               }
             ]
+          },
+          {
+            "Name": "Prompt Suggestions",
+            "Equivalents": "Prompt Suggestions, Question Suggestions, Suggested Prompts, Message Suggestions, Quick Prompts",
+            "Demos": [
+              {
+                "Title": "Prompt Suggestions",
+                "Name": "PromptSuggestions",
+                "Widget": "Chat",
+                "Badge": "New",
+                "Modules": "html-react-parser,openai,unified",
+                "DemoType": "Web"
+              }
+            ]
           }
         ]
       }
