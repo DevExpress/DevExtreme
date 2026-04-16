@@ -64,7 +64,6 @@ import {
  */
 @Component({
     selector: 'dx-tree-view',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
