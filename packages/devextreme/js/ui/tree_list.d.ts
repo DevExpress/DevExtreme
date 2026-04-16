@@ -967,19 +967,19 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @docid
      * @public
      */
-    hasItemsExpr?: string | Function;
+    hasItemsExpr?: string | ((item: TRowData) => TKey);
     /**
      * @docid
      * @default "items"
      * @public
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: TRowData, value?: any) => TKey);
     /**
      * @docid
      * @default "id"
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TRowData) => TKey);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellClickEvent}
@@ -1119,7 +1119,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default "parentId"
      * @public
      */
-    parentIdExpr?: string | Function;
+    parentIdExpr?: string | ((item: TRowData, value?: any) => TKey);
     /**
      * @docid
      * @default "auto"

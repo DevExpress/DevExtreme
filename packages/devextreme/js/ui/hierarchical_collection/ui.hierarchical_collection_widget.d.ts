@@ -19,7 +19,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'disabled'
      * @public
      */
-    disabledExpr?: string | Function;
+    disabledExpr?: string | ((item: TItem) => TKey);
     /**
      * @docid
      * @default 'text'
@@ -44,7 +44,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'items'
      * @public
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: TItem, value?: any) => TKey);
     /**
      * @docid
      * @default 'id'
@@ -56,7 +56,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'selected'
      * @public
      */
-    selectedExpr?: string | Function;
+    selectedExpr?: string | ((item: TItem) => TKey);
 }
 /**
  * @docid
