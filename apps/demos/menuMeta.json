@@ -3704,6 +3704,13 @@
                   "/Models/SampleData/AppointmentsWorkHours.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Hidden Week Days",
+                "Name": "HiddenDays",
+                "Widget": "Scheduler",
+                "Equivalents": "hide week days, custom week days, hidden workdays, business days configuration, calendar day visibility, days visibility, custom workdays",
+                "DemoType": "Web"
               }
             ]
           },
