@@ -8506,27 +8506,27 @@ declare module DevExpress.fileManagement {
     /**
      * [descr:FileSystemProviderBaseOptions.dateModifiedExpr]
      */
-    dateModifiedExpr?: string | Function;
+    dateModifiedExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.isDirectoryExpr]
      */
-    isDirectoryExpr?: string | Function;
+    isDirectoryExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.nameExpr]
      */
-    nameExpr?: string | Function;
+    nameExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.sizeExpr]
      */
-    sizeExpr?: string | Function;
+    sizeExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.thumbnailExpr]
      */
-    thumbnailExpr?: string | Function;
+    thumbnailExpr?: string | ((item: any, value?: any) => any);
   }
   /**
    * [descr:ObjectFileSystemProvider]
@@ -8549,7 +8549,7 @@ declare module DevExpress.fileManagement {
     /**
      * [descr:ObjectFileSystemProviderOptions.contentExpr]
      */
-    contentExpr?: string | Function;
+    contentExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:ObjectFileSystemProviderOptions.data]
      */
@@ -8557,7 +8557,7 @@ declare module DevExpress.fileManagement {
     /**
      * [descr:ObjectFileSystemProviderOptions.itemsExpr]
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: any, value?: any) => any);
   }
   /**
    * [descr:RemoteFileSystemProvider]
@@ -20663,19 +20663,19 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.dependencies.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((dependency: any) => any);
       /**
        * [descr:dxGanttOptions.dependencies.predecessorIdExpr]
        */
-      predecessorIdExpr?: string | Function;
+      predecessorIdExpr?: string | ((dependency: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.dependencies.successorIdExpr]
        */
-      successorIdExpr?: string | Function;
+      successorIdExpr?: string | ((dependency: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.dependencies.typeExpr]
        */
-      typeExpr?: string | Function;
+      typeExpr?: string | ((dependency: any, value?: any) => any);
     };
     /**
      * [descr:dxGanttOptions.editing]
@@ -20903,15 +20903,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resourceAssignments.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((resourceAssignment: any) => any);
       /**
        * [descr:dxGanttOptions.resourceAssignments.resourceIdExpr]
        */
-      resourceIdExpr?: string | Function;
+      resourceIdExpr?: string | ((resourceAssignment: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.resourceAssignments.taskIdExpr]
        */
-      taskIdExpr?: string | Function;
+      taskIdExpr?: string | ((resourceAssignment: any, value?: any) => any);
     };
     /**
      * [descr:dxGanttOptions.resources]
@@ -20920,7 +20920,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resources.colorExpr]
        */
-      colorExpr?: string | Function;
+      colorExpr?: string | ((resource: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.resources.dataSource]
        */
@@ -20928,11 +20928,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resources.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((resource: any) => any);
       /**
        * [descr:dxGanttOptions.resources.textExpr]
        */
-      textExpr?: string | Function;
+      textExpr?: string | ((resource: any, value?: any) => string);
     };
     /**
      * [descr:dxGanttOptions.scaleType]
@@ -20986,7 +20986,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.tasks.colorExpr]
        */
-      colorExpr?: string | Function;
+      colorExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.dataSource]
        */
@@ -20994,27 +20994,27 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.tasks.endExpr]
        */
-      endExpr?: string | Function;
+      endExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((task: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.parentIdExpr]
        */
-      parentIdExpr?: string | Function;
+      parentIdExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.progressExpr]
        */
-      progressExpr?: string | Function;
+      progressExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.startExpr]
        */
-      startExpr?: string | Function;
+      startExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.titleExpr]
        */
-      titleExpr?: string | Function;
+      titleExpr?: string | ((task: any, value?: any) => any);
     };
     /**
      * [descr:dxGanttOptions.toolbar]
@@ -32055,15 +32055,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
-    hasItemsExpr?: string | Function;
+    hasItemsExpr?: string | ((item: TRowData) => TKey);
     /**
      * [descr:dxTreeListOptions.itemsExpr]
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: TRowData, value?: any) => TKey);
     /**
      * [descr:dxTreeListOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TRowData) => TKey);
     /**
      * [descr:dxTreeListOptions.onCellClick]
      */
@@ -32167,7 +32167,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.parentIdExpr]
      */
-    parentIdExpr?: string | Function;
+    parentIdExpr?: string | ((item: TRowData, value?: any) => TKey);
     /**
      * [descr:dxTreeListOptions.remoteOperations]
      */
@@ -32645,11 +32645,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.expandedExpr]
      */
-    expandedExpr?: string | Function;
+    expandedExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:dxTreeViewOptions.hasItemsExpr]
      */
-    hasItemsExpr?: string | Function;
+    hasItemsExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:dxTreeViewOptions.items]
      */
@@ -32711,7 +32711,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
      */
-    parentIdExpr?: string | Function;
+    parentIdExpr?: string | ((item: TItem, value?: any) => TKey);
     /**
      * [descr:dxTreeViewOptions.rootValue]
      */
@@ -33272,7 +33272,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
      */
-    disabledExpr?: string | Function;
+    disabledExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
      */
@@ -33288,7 +33288,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: TItem, value?: any) => TKey);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.keyExpr]
      */
@@ -33296,7 +33296,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
      */
-    selectedExpr?: string | Function;
+    selectedExpr?: string | ((item: TItem) => TKey);
   }
   /**
    * [descr:MapLocation]

@@ -41,26 +41,26 @@ export class DxoGanttResourceAssignmentsComponent extends NestedOption implement
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((resourceAssignment: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((resourceAssignment: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get resourceIdExpr(): Function | string {
+    get resourceIdExpr(): ((resourceAssignment: any, value: any) => any) | string {
         return this._getOption('resourceIdExpr');
     }
-    set resourceIdExpr(value: Function | string) {
+    set resourceIdExpr(value: ((resourceAssignment: any, value: any) => any) | string) {
         this._setOption('resourceIdExpr', value);
     }
 
     @Input()
-    get taskIdExpr(): Function | string {
+    get taskIdExpr(): ((resourceAssignment: any, value: any) => any) | string {
         return this._getOption('taskIdExpr');
     }
-    set taskIdExpr(value: Function | string) {
+    set taskIdExpr(value: ((resourceAssignment: any, value: any) => any) | string) {
         this._setOption('taskIdExpr', value);
     }
 

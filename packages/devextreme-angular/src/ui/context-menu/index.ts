@@ -188,10 +188,10 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get disabledExpr(): Function | string {
+    get disabledExpr(): ((item: any) => any) | string {
         return this._getOption('disabledExpr');
     }
-    set disabledExpr(value: Function | string) {
+    set disabledExpr(value: ((item: any) => any) | string) {
         this._setOption('disabledExpr', value);
     }
 
@@ -305,10 +305,10 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get itemsExpr(): Function | string {
+    get itemsExpr(): ((item: any, value: any) => any) | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: Function | string) {
+    set itemsExpr(value: ((item: any, value: any) => any) | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -370,10 +370,10 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get selectedExpr(): Function | string {
+    get selectedExpr(): ((item: any) => any) | string {
         return this._getOption('selectedExpr');
     }
-    set selectedExpr(value: Function | string) {
+    set selectedExpr(value: ((item: any) => any) | string) {
         this._setOption('selectedExpr', value);
     }
 
@@ -645,7 +645,7 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledExprChange: EventEmitter<Function | string>;
+    @Output() disabledExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
     
@@ -708,7 +708,7 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<Function | string>;
+    @Output() itemsExprChange: EventEmitter<((item: any, value: any) => any) | string>;
 
     /**
     
@@ -743,7 +743,7 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedExprChange: EventEmitter<Function | string>;
+    @Output() selectedExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
     

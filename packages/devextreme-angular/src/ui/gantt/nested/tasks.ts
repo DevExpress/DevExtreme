@@ -33,10 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoGanttTasksComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get colorExpr(): Function | string {
+    get colorExpr(): ((task: any, value: any) => any) | string {
         return this._getOption('colorExpr');
     }
-    set colorExpr(value: Function | string) {
+    set colorExpr(value: ((task: any, value: any) => any) | string) {
         this._setOption('colorExpr', value);
     }
 
@@ -49,50 +49,50 @@ export class DxoGanttTasksComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get endExpr(): Function | string {
+    get endExpr(): ((task: any, value: any) => any) | string {
         return this._getOption('endExpr');
     }
-    set endExpr(value: Function | string) {
+    set endExpr(value: ((task: any, value: any) => any) | string) {
         this._setOption('endExpr', value);
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((task: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((task: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get parentIdExpr(): Function | string {
+    get parentIdExpr(): ((task: any, value: any) => any) | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: Function | string) {
+    set parentIdExpr(value: ((task: any, value: any) => any) | string) {
         this._setOption('parentIdExpr', value);
     }
 
     @Input()
-    get progressExpr(): Function | string {
+    get progressExpr(): ((task: any, value: any) => any) | string {
         return this._getOption('progressExpr');
     }
-    set progressExpr(value: Function | string) {
+    set progressExpr(value: ((task: any, value: any) => any) | string) {
         this._setOption('progressExpr', value);
     }
 
     @Input()
-    get startExpr(): Function | string {
+    get startExpr(): ((task: any, value: any) => any) | string {
         return this._getOption('startExpr');
     }
-    set startExpr(value: Function | string) {
+    set startExpr(value: ((task: any, value: any) => any) | string) {
         this._setOption('startExpr', value);
     }
 
     @Input()
-    get titleExpr(): Function | string {
+    get titleExpr(): ((task: any, value: any) => any) | string {
         return this._getOption('titleExpr');
     }
-    set titleExpr(value: Function | string) {
+    set titleExpr(value: ((task: any, value: any) => any) | string) {
         this._setOption('titleExpr', value);
     }
 

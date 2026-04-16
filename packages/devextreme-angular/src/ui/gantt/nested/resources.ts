@@ -33,10 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoGanttResourcesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get colorExpr(): Function | string {
+    get colorExpr(): ((resource: any, value: any) => any) | string {
         return this._getOption('colorExpr');
     }
-    set colorExpr(value: Function | string) {
+    set colorExpr(value: ((resource: any, value: any) => any) | string) {
         this._setOption('colorExpr', value);
     }
 
@@ -49,18 +49,18 @@ export class DxoGanttResourcesComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((resource: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((resource: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get textExpr(): Function | string {
+    get textExpr(): ((resource: any, value: any) => string) | string {
         return this._getOption('textExpr');
     }
-    set textExpr(value: Function | string) {
+    set textExpr(value: ((resource: any, value: any) => string) | string) {
         this._setOption('textExpr', value);
     }
 
