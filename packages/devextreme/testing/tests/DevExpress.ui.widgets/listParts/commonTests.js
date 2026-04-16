@@ -4686,6 +4686,25 @@ QUnit.module('keyboard navigation', {
 
         assert.strictEqual(document.activeElement, focusTarget, 'DOM focus is on focusTarget after click on item');
     });
+
+    QUnit.test('click on nested focusable element inside item should not steal focus', function(assert) {
+        const $element = $('#list').dxList({
+            focusStateEnabled: true,
+            items: [1, 2, 3],
+            itemTemplate: function(data) {
+                return $('<div>').append($('<input>').addClass('nested-input').val(data));
+            }
+        });
+
+        const instance = $element.dxList('instance');
+        const $input = $element.find('.nested-input').eq(0);
+        const focusTarget = instance._focusTarget().get(0);
+
+        $input.trigger('dxpointerdown');
+        this.clock.tick(10);
+
+        assert.notStrictEqual(document.activeElement, focusTarget, 'DOM focus is NOT forced to container when clicking nested focusable');
+    });
 });
 
 QUnit.module('Search', () => {

@@ -1037,15 +1037,24 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const $target = $(e.target);
     const $closestItem = $target.closest(this._itemElements());
 
-    if ($closestItem.length) {
-      this._shouldSkipSelectOnFocus = true;
-      this.option('focusedElement', getPublicElement($closestItem));
-      this._shouldSkipSelectOnFocus = false;
+    if (!$closestItem.length) {
+      return;
+    }
 
-      const focusTarget = this._focusTarget().get(0) as HTMLElement | undefined;
-      if (focusTarget && focusTarget !== e.target) {
-        focusTarget.focus({ preventScroll: true });
-      }
+    const $closestFocusable = this._closestFocusable($target);
+    const isFocusOnItem = !$closestFocusable?.length || $closestFocusable.is($closestItem);
+
+    if (!isFocusOnItem) {
+      return;
+    }
+
+    this._shouldSkipSelectOnFocus = true;
+    this.option('focusedElement', getPublicElement($closestItem));
+    this._shouldSkipSelectOnFocus = false;
+
+    const focusTarget = this._focusTarget().get(0) as HTMLElement | undefined;
+    if (focusTarget && focusTarget !== e.target) {
+      focusTarget.focus({ preventScroll: true });
     }
   }
 
