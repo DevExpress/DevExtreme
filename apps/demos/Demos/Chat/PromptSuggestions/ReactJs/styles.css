@@ -46,12 +46,6 @@
   font-size: var(--dx-font-size-heading-5);
 }
 
-.dx-chat-messagebubble-content,
-.chat-messagebubble-text {
-  display: flex;
-  flex-direction: column;
-}
-
 .dx-chat-messagebubble-content > div > p:first-child {
   margin-top: 0;
 }
