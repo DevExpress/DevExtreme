@@ -23,6 +23,7 @@ import HTMLReactParser from 'html-react-parser';
 import './styles.css';
 import { Guid } from 'devextreme-react/cjs/common';
 import { Message } from 'devextreme/artifacts/npm/devextreme/ui/chat';
+import type { ItemClickEvent as ButtonGroupItemClickEvent, Item as ButtonGroupItem } from 'devextreme/ui/button_group';
 
 const meta: Meta<typeof Chat> = {
     title: 'Components/Chat',
@@ -1034,6 +1035,64 @@ export const SendButtonOptions: Story = {
                     user={secondAuthor}
                     onMessageEntered={onMessageEntered}
                     sendButtonOptions={sendButtonOptions}
+                />
+            </div>
+        );
+    },
+};
+
+const suggestionItems: ButtonGroupItem[] = [
+    { text: '📦 Track my orders' },
+    { text: '⭐ Check in-stock favorites' },
+    { text: '🔄 Start a return' },
+    { text: '🔍 Find my order' },
+    { text: '💳 Payment & billing help with Soul' },
+];
+
+export const Suggestions: Story = {
+    args: {
+        sendImmediately: false,
+    },
+    argTypes: {
+        sendImmediately: {
+            name: 'Send immediately on suggestion click',
+            control: 'boolean',
+        },
+    },
+    render: ({ sendImmediately }) => {
+        const [messages, setMessages] = useState<ChatTypes.Message[]>([]);
+        const [inputFieldText, setInputFieldText] = useState('');
+
+        const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
+            setMessages((prev) => [...prev, message]);
+            setInputFieldText('');
+        }, []);
+
+        const suggestions = useMemo<ChatTypes.Properties['suggestions']>(() => ({
+            items: suggestionItems,
+            onItemClick: (e: ButtonGroupItemClickEvent) => {
+                if (sendImmediately) {
+                    setMessages((prev) => [...prev, {
+                        timestamp: new Date(),
+                        author: firstAuthor,
+                        text: e.itemData?.text,
+                    }]);
+                } else {
+                    setInputFieldText(e.itemData?.text ?? '');
+                }
+            },
+        }), [sendImmediately]);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={740}
+                    height={500}
+                    items={messages}
+                    user={firstAuthor}
+                    inputFieldText={inputFieldText}
+                    onMessageEntered={onMessageEntered}
+                    suggestions={suggestions}
                 />
             </div>
         );

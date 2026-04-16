@@ -12,6 +12,7 @@ import './chatParts/file.markup.tests.js';
 import './chatParts/messageBox.markup.tests.js';
 import './chatParts/messageBubble.markup.tests.js';
 import './chatParts/confirmationPopup.markup.tests.js';
+import './chatParts/suggestions.markup.tests.js';
 import './chatParts/messageGroup.markup.tests.js';
 import './chatParts/messageList.markup.tests.js';
 import './chatParts/alertList.markup.tests.js';

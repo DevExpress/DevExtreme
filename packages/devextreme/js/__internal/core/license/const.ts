@@ -3,7 +3,7 @@ export const RTM_MIN_PATCH_VERSION = 3;
 export const KEY_SPLITTER = '.';
 
 export const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
-export const LICENSING_DOC_LINK = 'https://go.devexpress.com/Licensing_Documentation_DevExtremeJQuery.aspx';
+export const LICENSING_DOC_LINK = 'https://www.devexpress.com/go/Licensing_Documentation_DevExpress_JQuery.aspx';
 
 export const LICENSE_KEY_PLACEHOLDER = '/* ___$$$$$___devextreme___lcp___placeholder____$$$$$ */';
 
