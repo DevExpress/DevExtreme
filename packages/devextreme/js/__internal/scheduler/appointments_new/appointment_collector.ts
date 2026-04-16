@@ -4,7 +4,6 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-import type { DxEvent } from '@js/events';
 import Button from '@js/ui/button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
@@ -70,14 +69,10 @@ export class AppointmentCollector
     this.buttonInstance?.option({ width, height });
   }
 
-  public override makeFocusable(): void {
-    this.buttonInstance?.option('tabIndex', this.option().tabIndex);
-  }
+  public override setTabIndex(tabIndex: number | undefined): void {
+    super.setTabIndex(tabIndex);
 
-  protected override onFocusOut(e: DxEvent): void {
-    this.buttonInstance?.option('tabIndex', -1);
-
-    super.onFocusOut(e);
+    this.buttonInstance?.option('tabIndex', tabIndex);
   }
 
   private applyElementClasses(): void {
@@ -111,7 +106,7 @@ export class AppointmentCollector
 
     this.buttonInstance = this._createComponent(this.$element(), Button, {
       type: 'default',
-      tabIndex: -1,
+      tabIndex: this.option().tabIndex,
       width: this.option().geometry.width,
       height: this.option().geometry.height,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

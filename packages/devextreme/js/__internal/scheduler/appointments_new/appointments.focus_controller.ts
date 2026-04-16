@@ -1,12 +1,16 @@
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import { focus } from '@ts/events/m_short';
 
 import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { SortedEntity } from '../view_model/types';
 import type { Appointments } from './appointments';
+import type { ViewItem } from './view_item';
 
 export class AppointmentsFocusController {
+  private focusableSortedIndex = 0;
+
   private needRestoreFocusIndex = -1;
 
   private get sortedAppointments(): SortedEntity[] {
@@ -17,13 +21,19 @@ export class AppointmentsFocusController {
     return this.appointments.option().isVirtualScrolling();
   }
 
+  private get tabIndex(): number | undefined {
+    return this.appointments.option().tabIndex;
+  }
+
   constructor(private readonly appointments: Appointments) { }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public onAppointmentFocusIn(sortedIndex: number): void { }
+  public onViewItemClick(viewItem: ViewItem): void {
+    this.focusViewItem(viewItem);
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public onAppointmentFocusOut(e: DxEvent, sortedIndex: number): void {
+  public onViewItemFocusIn(): void { }
+
+  public onViewItemFocusOut(e: DxEvent): void {
     const focusEvent = e.originalEvent as FocusEvent;
 
     const $relatedTarget = $(focusEvent.relatedTarget as Element);
@@ -35,28 +45,39 @@ export class AppointmentsFocusController {
     );
 
     if (isFocusOutside) {
-      this.resetTabIndex();
+      this.resetTabIndex(0);
     }
   }
 
-  public onAppointmentKeyDown(e: KeyboardKeyDownEvent, sortedIndex: number): void {
+  public onViewItemKeyDown(viewItem: ViewItem, e: KeyboardKeyDownEvent): void {
     if (e.key === 'Tab') {
-      this.handleTabKeyDown(e, sortedIndex);
+      this.handleTabKeyDown(e, viewItem.option().sortedIndex);
     }
   }
 
-  public resetTabIndex(): void {
+  public resetTabIndex(newFocusableIndex?: number): void {
     if (this.needRestoreFocusIndex >= 0) {
-      const appointmentView = this.appointments.getViewItemBySortedIndex(
+      const viewItem = this.appointments.getViewItemBySortedIndex(
         this.needRestoreFocusIndex,
       );
-      appointmentView?.focus();
+
+      viewItem?.setTabIndex(this.tabIndex);
+      focus.trigger(viewItem?.$element());
+
+      this.focusableSortedIndex = this.needRestoreFocusIndex;
       this.needRestoreFocusIndex = -1;
       return;
     }
 
+    if (newFocusableIndex !== undefined) {
+      this.appointments.getViewItemBySortedIndex(this.focusableSortedIndex)?.setTabIndex(-1);
+      this.focusableSortedIndex = newFocusableIndex;
+    }
+
     // TODO: in virtual scrolling no appointment may be rendered in the initial viewport
-    this.appointments.getViewItemByIndex(0)?.makeFocusable();
+    this.appointments
+      .getViewItemBySortedIndex(this.focusableSortedIndex)
+      ?.setTabIndex(this.tabIndex);
   }
 
   private handleTabKeyDown(e: KeyboardKeyDownEvent, sortedIndex: number): void {
@@ -76,13 +97,18 @@ export class AppointmentsFocusController {
       this.scrollToItem(itemData);
     }
 
-    const appointmentView = this.appointments.getViewItemBySortedIndex(itemData.sortedIndex);
+    const viewItem = this.appointments.getViewItemBySortedIndex(itemData.sortedIndex);
 
-    if (appointmentView) {
-      appointmentView.focus();
+    if (viewItem) {
+      this.focusViewItem(viewItem);
     } else if (this.isVirtualScrolling) {
       this.needRestoreFocusIndex = itemData.sortedIndex;
     }
+  }
+
+  private focusViewItem(viewItem: ViewItem): void {
+    this.resetTabIndex(viewItem.option().sortedIndex);
+    focus.trigger(viewItem?.$element());
   }
 
   private scrollToItem(itemData: SortedEntity): void {

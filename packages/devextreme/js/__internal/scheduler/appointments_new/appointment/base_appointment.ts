@@ -82,7 +82,7 @@ export class BaseAppointmentView<
   protected applyAria(): void {
     this.$element()
       .attr('role', 'button')
-      .attr('tabindex', -1);
+      .attr('tabindex', this.option().tabIndex);
   }
 
   private attachClickEvent(): void {
@@ -101,11 +101,15 @@ export class BaseAppointmentView<
   }
 
   protected override onFocusOut(e: DxEvent): void {
-    this.$element()
-      .removeClass(FOCUSED_STATE_CLASS)
-      .attr('tabindex', -1);
+    this.$element().removeClass(FOCUSED_STATE_CLASS);
 
     super.onFocusOut(e);
+  }
+
+  public override setTabIndex(tabIndex: number | undefined): void {
+    super.setTabIndex(tabIndex);
+
+    this.$element().attr('tabindex', tabIndex ?? null);
   }
 
   protected getTitleText(): string {

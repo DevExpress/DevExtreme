@@ -429,16 +429,27 @@ describe('Appointments', () => {
           mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
         ]);
 
-        instance.getViewItemByIndex(0)?.focus();
-
         instance.option('tabIndex', 2);
-
-        expect(instance.getViewItemByIndex(0)?.option('tabIndex')).toBe(2);
-        expect(instance.getViewItemByIndex(1)?.option('tabIndex')).toBe(2);
-        expect(instance.getViewItemByIndex(2)?.option('tabIndex')).toBe(2);
 
         expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('2');
         expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('-1');
+        expect(instance.getViewItemByIndex(2)?.$element().attr('tabindex')).toBe('-1');
+      });
+
+      it('should keep only focused appointment tabbable on tabIndex change', () => {
+        const instance = createAppointments(getProperties());
+        instance.option('viewModel', [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ]);
+
+        (instance.getViewItemByIndex(1)?.$element().get(0) as HTMLElement).click();
+
+        instance.option('tabIndex', 2);
+
+        expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('-1');
+        expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('2');
         expect(instance.getViewItemByIndex(2)?.$element().attr('tabindex')).toBe('-1');
       });
 
@@ -469,9 +480,6 @@ describe('Appointments', () => {
         ]);
 
         instance.option('tabIndex', 0);
-
-        expect(instance.getViewItemByIndex(0)?.option('tabIndex')).toBe(0);
-        expect(instance.getViewItemByIndex(1)?.option('tabIndex')).toBe(0);
 
         expect(instance.getViewItemByIndex(0)?.$element().attr('tabindex')).toBe('0');
         expect(instance.getViewItemByIndex(1)?.$element().attr('tabindex')).toBe('-1');
@@ -539,7 +547,7 @@ describe('Appointments', () => {
         const viewItem0 = instance.getViewItemBySortedIndex(0);
         const viewItem1 = instance.getViewItemBySortedIndex(1);
 
-        viewItem0?.focus();
+        (viewItem0?.$element().get(0) as HTMLElement).click();
         viewItem0?.$element().get(0).dispatchEvent(
           new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
         );
@@ -565,7 +573,7 @@ describe('Appointments', () => {
         const viewItem0 = instance.getViewItemBySortedIndex(0);
         const viewItem1 = instance.getViewItemBySortedIndex(1);
 
-        viewItem1?.focus();
+        (viewItem1?.$element().get(0) as HTMLElement).click();
         viewItem1?.$element().get(0).dispatchEvent(
           new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }),
         );
@@ -586,6 +594,7 @@ describe('Appointments', () => {
         element.click();
 
         expect(element.getAttribute('tabindex')).toBe('0');
+        expect(element.classList.contains('dx-state-focused')).toBe(true);
         expect(document.activeElement).toBe(element);
       });
 
@@ -598,7 +607,7 @@ describe('Appointments', () => {
           createItem({ ...defaultAppointmentData }, { sortedIndex: 1 }),
         ]);
 
-        instance.getViewItemBySortedIndex(1)?.focus();
+        (instance.getViewItemBySortedIndex(1)?.$element().get(0) as HTMLElement).click();
 
         externalButton.focus();
 
@@ -638,7 +647,7 @@ describe('Appointments', () => {
         ]);
 
         const viewItem1 = instance.getViewItemBySortedIndex(0);
-        viewItem1?.focus();
+        (viewItem1?.$element().get(0) as HTMLElement).click();
         viewItem1?.$element().get(0).dispatchEvent(
           new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
         );
@@ -663,7 +672,7 @@ describe('Appointments', () => {
         const viewItem1 = instance.getViewItemBySortedIndex(1);
         const viewItem2 = instance.getViewItemBySortedIndex(2);
 
-        viewItem1?.focus();
+        (viewItem1?.$element().get(0) as HTMLElement).click();
         viewItem1?.$element().get(0).dispatchEvent(
           new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
         );
@@ -688,7 +697,7 @@ describe('Appointments', () => {
         instance.option('viewModel', [item0, item1]);
 
         const viewItem1 = instance.getViewItemBySortedIndex(1);
-        viewItem1?.focus();
+        (viewItem1?.$element().get(0) as HTMLElement).click();
         viewItem1?.$element().get(0).dispatchEvent(
           new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
         );
@@ -724,7 +733,7 @@ describe('Appointments', () => {
         ]);
 
         const viewItem0 = instance.getViewItemBySortedIndex(0);
-        viewItem0?.focus();
+        (viewItem0?.$element().get(0) as HTMLElement).click();
         viewItem0?.$element().get(0).dispatchEvent(
           new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
         );
@@ -750,7 +759,7 @@ describe('Appointments', () => {
         instance.option('viewModel', viewModel);
 
         const viewItem0 = instance.getViewItemBySortedIndex(0);
-        viewItem0?.focus();
+        (viewItem0?.$element().get(0) as HTMLElement).click();
         viewItem0?.$element().get(0).dispatchEvent(
           new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
         );
@@ -793,7 +802,7 @@ describe('Appointments', () => {
         ];
         instance.option('viewModel', viewModel);
 
-        instance.getViewItemBySortedIndex(0)?.focus();
+        (instance.getViewItemBySortedIndex(0)?.$element().get(0) as HTMLElement).click();
         pressTab();
         pressTab();
         pressTab();
@@ -827,7 +836,7 @@ describe('Appointments', () => {
 
         instance.option('viewModel', viewModel);
 
-        instance.getViewItemBySortedIndex(0)?.focus();
+        (instance.getViewItemBySortedIndex(0)?.$element().get(0) as HTMLElement).click();
         pressTab();
 
         const lastViewItem = instance.getViewItemBySortedIndex(1);
@@ -860,7 +869,7 @@ describe('Appointments', () => {
 
         instance.option('viewModel', viewModel);
 
-        instance.getViewItemBySortedIndex(0)?.focus();
+        (instance.getViewItemBySortedIndex(0)?.$element().get(0) as HTMLElement).click();
         pressTab();
         pressTab();
 

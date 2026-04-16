@@ -13,7 +13,8 @@ export interface ViewItemProperties
   sortedIndex: number;
   onFocusIn: (sortedIndex: number) => void;
   onFocusOut: (e: DxEvent, sortedIndex: number) => void;
-  onKeyDown: (e: KeyboardKeyDownEvent, sortedIndex: number) => void;
+  onClick: (viewItem: ViewItem) => void;
+  onKeyDown: (viewItem: ViewItem, e: KeyboardKeyDownEvent) => void;
 }
 
 export class ViewItem<
@@ -40,21 +41,8 @@ export class ViewItem<
     geometry?: { height: number; width: number | string; top: number; left: number },
   ): void {}
 
-  public focus(): void {
-    this.makeFocusable();
-    focus.trigger(this.$element());
-  }
-
-  public makeFocusable(): void {
-    this.$element().attr('tabindex', this.option().tabIndex);
-  }
-
   public setTabIndex(tabIndex: number | undefined): void {
     this.option('tabIndex', tabIndex);
-
-    if (this.$element().attr('tabindex') !== '-1') {
-      this.makeFocusable();
-    }
   }
 
   protected attachFocusEvents(): void {
@@ -85,10 +73,10 @@ export class ViewItem<
   }
 
   protected onClick(): void {
-    this.focus();
+    this.option().onClick(this);
   }
 
   private onKeyDown(e: KeyboardKeyDownEvent): void {
-    this.option().onKeyDown(e, this.option().sortedIndex);
+    this.option().onKeyDown(this, e);
   }
 }

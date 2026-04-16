@@ -46,6 +46,7 @@ describe.each([
       sortedIndex: 0,
       onFocusIn: () => {},
       onFocusOut: () => {},
+      onClick: () => {},
       onKeyDown: () => {},
     };
 
@@ -69,111 +70,87 @@ describe.each([
   };
 
   describe('Focus', () => {
-    it('should have tabindex -1 by default', async () => {
-      const instance = await createViewItem();
+    it('should have correct tabindex at init', async () => {
+      const instance = await createViewItem({ tabIndex: -1 });
 
       expect(instance.$element().attr('tabindex')).toBe('-1');
     });
 
-    it('should set tabindex attr on makeFocusable', async () => {
+    it('should set tabindex attr on setTabIndex', async () => {
       const instance = await createViewItem({ tabIndex: 2 });
 
-      instance.makeFocusable();
+      instance.setTabIndex(2);
 
       expect(instance.$element().attr('tabindex')).toBe('2');
-    });
-
-    it('should update tabindex attr on setTabIndex if appointment is focusable', async () => {
-      const instance = await createViewItem();
-
-      instance.makeFocusable();
-      instance.setTabIndex(1);
-
-      expect(instance.$element().attr('tabindex')).toBe('1');
-    });
-
-    it('should not update tabindex attr on setTabIndex if appointment is not focusable', async () => {
-      const instance = await createViewItem();
-
-      instance.setTabIndex(1);
-
-      expect(instance.$element().attr('tabindex')).toBe('-1');
-    });
-
-    it('should set correct tabindex after setTabIndex and makeFocusable calls', async () => {
-      const instance = await createViewItem();
-
-      instance.setTabIndex(1);
-      instance.makeFocusable();
-
-      expect(instance.$element().attr('tabindex')).toBe('1');
-    });
-
-    it('should focus on element when focus method is called', async () => {
-      const instance = await createViewItem();
-
-      instance.focus();
-
-      expect(document.activeElement).toBe(instance.$element().get(0));
-    });
-
-    it('should call onFocusIn callback on focus', async () => {
-      const onFocusIn = jest.fn();
-
-      const instance = await createViewItem({ onFocusIn });
-
-      instance.focus();
-
-      expect(onFocusIn).toHaveBeenCalled();
-      expect(instance.$element().attr('tabindex')).toBe('0');
-      expect(instance.$element().hasClass('dx-state-focused')).toBe(true);
-    });
-
-    it('should call onFocusOut callback on blur', async () => {
-      const onFocusOut = jest.fn();
-
-      const instance = await createViewItem({ onFocusOut });
-
-      instance.focus();
-      (instance.$element().get(0) as HTMLElement).blur();
-
-      expect(onFocusOut).toHaveBeenCalled();
-      expect(instance.$element().attr('tabindex')).toBe('-1');
-      expect(instance.$element().hasClass('dx-state-focused')).toBe(false);
-    });
-
-    it('should be focusable after click', async () => {
-      const instance = await createViewItem({ tabIndex: 1 });
-
-      const element = instance.$element().get(0) as HTMLElement;
-
-      element.click();
-
-      expect(element.getAttribute('tabindex')).toBe('1');
-      expect(element.classList.contains('dx-state-focused')).toBe(true);
-      expect(document.activeElement).toBe(element);
     });
 
     it('should have correct tabindex after setTabIndex(-1) when being focused', async () => {
       const instance = await createViewItem({ tabIndex: 1 });
 
-      instance.focus();
+      (instance.$element().get(0) as HTMLElement).focus();
       instance.setTabIndex(-1);
 
       expect(instance.$element().attr('tabindex')).toBe('-1');
     });
+
+    it('should have dx-state-focused class on focus', async () => {
+      const instance = await createViewItem({ tabIndex: 0 });
+
+      (instance.$element().get(0) as HTMLElement).focus();
+
+      expect(instance.$element().hasClass('dx-state-focused')).toBe(true);
+    });
+
+    it('should not have dx-state-focused class at init', async () => {
+      const instance = await createViewItem({ tabIndex: 0 });
+
+      expect(instance.$element().hasClass('dx-state-focused')).not.toBe(true);
+    });
+
+    it('should not have dx-state-focused class after unfocus', async () => {
+      const instance = await createViewItem({ tabIndex: 0 });
+
+      const element = instance.$element().get(0) as HTMLElement;
+      element.focus();
+      element.blur();
+
+      expect(instance.$element().hasClass('dx-state-focused')).not.toBe(true);
+    });
   });
 
-  describe('Key down', () => {
+  describe('Callbacks', () => {
+    it('should call onFocusIn callback on focus', async () => {
+      const onFocusIn = jest.fn();
+
+      const instance = await createViewItem({ onFocusIn, tabIndex: 0 });
+
+      (instance.$element().get(0) as HTMLElement).focus();
+
+      expect(onFocusIn).toHaveBeenCalled();
+    });
+
+    it('should call onFocusOut callback on blur', async () => {
+      const onFocusOut = jest.fn();
+
+      const instance = await createViewItem({ onFocusOut, tabIndex: 0 });
+
+      const element = instance.$element().get(0) as HTMLElement;
+      element.focus();
+      element.blur();
+
+      expect(onFocusOut).toHaveBeenCalled();
+    });
+
     it('should call onKeyDown callback on enter key press', async () => {
       const onKeyDown = jest.fn();
 
-      const instance = await createViewItem({ onKeyDown });
+      const instance = await createViewItem({ onKeyDown, tabIndex: 0 });
 
-      instance.focus();
-      instance.$element().get(0)?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      const element = instance.$element().get(0) as HTMLElement;
+      element.click();
+      element.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: 'Enter' }), 0);
+      expect(onKeyDown).toHaveBeenCalledWith(instance, expect.objectContaining({ key: 'Enter' }));
     });
   });
 });
