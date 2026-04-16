@@ -23,7 +23,7 @@ export const getSchedulerMock = ({
   isVirtualScrolling?: boolean;
 }): Scheduler => ({
   timeZoneCalculator: mockTimeZoneCalculator,
-  currentView: { type, skippedDays: skippedDays ?? [] },
+  currentView: { type, hiddenWeekDays: skippedDays },
   getWorkSpace: () => ({
     getDateRange: () => dateRange ?? [
       new Date(2000, 0, 10, startDayHour),
@@ -34,6 +34,7 @@ export const getSchedulerMock = ({
   getViewOption: (name: string) => ({
     startDayHour,
     endDayHour,
+    hiddenWeekDays: skippedDays ?? [],
     allDayPanelMode: 'allDay',
     cellDuration: 30,
   }[name]),

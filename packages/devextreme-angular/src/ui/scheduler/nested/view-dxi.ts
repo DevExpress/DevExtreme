@@ -12,7 +12,7 @@ import {
 
 
 
-import type { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, SnapToCellsMode, ViewType } from 'devextreme/ui/scheduler';
+import type { AllDayPanelMode, DayOfWeek, CellAppointmentsLimit, dxSchedulerScrolling, SnapToCellsMode, ViewType } from 'devextreme/ui/scheduler';
 import type { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import {
@@ -139,6 +139,14 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
     set groups(value: Array<string>) {
         this._setOption('groups', value);
+    }
+
+    @Input()
+    get hiddenWeekDays(): Array<DayOfWeek> {
+        return this._getOption('hiddenWeekDays');
+    }
+    set hiddenWeekDays(value: Array<DayOfWeek>) {
+        this._setOption('hiddenWeekDays', value);
     }
 
     @Input()

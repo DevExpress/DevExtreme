@@ -1,8 +1,10 @@
 import { getThemeType } from '@ts/scheduler/r1/utils/themes';
 
 import {
+  calculateEndViewDate,
   calculateRows,
   calculateStartViewDate,
+  getDateByIndex,
 } from './agenda';
 import {
   calculateStartViewDate as dayCalculateStartViewDate,
@@ -64,9 +66,7 @@ export {
   getValidCellDateForLocalTimeFormat,
   getVerticalGroupCountClass,
   getViewStartByOptions,
-  getWeekendsCount,
   isAppointmentTakesAllDay,
-  isDataOnWeekend,
   isDateAndTimeView,
   isDateInRange,
   isFirstCellInMonthWithIntervalCount,
@@ -87,8 +87,10 @@ export {
 } from './format_weekday';
 
 export const agendaUtils = {
+  calculateEndViewDate,
   calculateStartViewDate,
   calculateRows,
+  getDateByIndex,
 };
 
 export const dayUtils = {

@@ -18,6 +18,10 @@ import {
 import type { ViewDataMap, ViewType } from '../../types';
 import { VIEWS } from '../../utils/options/constants_view';
 import { getAllGroupValues } from '../../utils/resource_manager/group_utils';
+import {
+  getVisibleDaysOfWeek,
+  isDateSkipped,
+} from '../../utils/skipped_days';
 import type {
   ViewCellDataSimple,
   ViewCellGeneratedData,
@@ -28,13 +32,26 @@ import type {
 const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGenerator {
-  readonly daysInInterval: number = 1;
-
   protected tableAllDay = false;
 
   public hiddenInterval = 0;
 
+  public skippedDays: number[] = [];
+
   constructor(public readonly viewType: ViewType) {}
+
+  get daysInInterval(): number {
+    const isWeekLikeView = [
+      VIEWS.WEEK,
+      VIEWS.TIMELINE_WEEK,
+      VIEWS.WORK_WEEK,
+      VIEWS.TIMELINE_WORK_WEEK,
+    ].includes(this.viewType);
+
+    return isWeekLikeView
+      ? 7 - this.skippedDays.length
+      : 1;
+  }
 
   public isWorkWeekView(): boolean {
     return [
@@ -43,9 +60,52 @@ export class ViewDataGenerator {
     ].includes(this.viewType);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isSkippedDate(date: any) {
+  protected usesMonthDayLayout(): boolean {
     return false;
+  }
+
+  public getVisibleDaysOfWeek(firstDayOfWeek: number): number[] {
+    return getVisibleDaysOfWeek(firstDayOfWeek, this.skippedDays);
+  }
+
+  protected getSkippedDaysAnchorDay(
+    firstDayOfWeekOption: number | undefined,
+    startViewDate: Date, // eslint-disable-line @typescript-eslint/no-unused-vars
+  ): number {
+    return this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
+  }
+
+  private getVisibleDayOffset(
+    rowIndex: number,
+    columnIndex: number,
+    anchorDay: number,
+    cellCountInDay: number,
+  ): number {
+    const rotated = this.getVisibleDaysOfWeek(anchorDay);
+    const visibleCount = rotated.length;
+    if (visibleCount === 0) {
+      return 0;
+    }
+    if (this.usesMonthDayLayout()) {
+      const targetDayOfWeek = rotated[columnIndex];
+      const naiveDayOffset = rowIndex * visibleCount + columnIndex;
+      const actualDayOffset = rowIndex * 7
+        + ((targetDayOfWeek - anchorDay + 7) % 7);
+      return actualDayOffset - naiveDayOffset;
+    }
+    const dayIndex = isHorizontalView(this.viewType)
+      ? Math.floor(columnIndex / cellCountInDay)
+      : columnIndex;
+    const week = Math.floor(dayIndex / visibleCount);
+    const idxInWeek = dayIndex % visibleCount;
+    const targetDayOfWeek = rotated[idxInWeek];
+    const naiveDayOffset = dayIndex;
+    const actualDayOffset = week * 7 + ((targetDayOfWeek - anchorDay + 7) % 7);
+    return actualDayOffset - naiveDayOffset;
+  }
+
+  public isDateSkipped(date: Date): boolean {
+    return isDateSkipped(date, this.skippedDays);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,6 +134,7 @@ export class ViewDataGenerator {
       hoursInterval,
     } = options;
 
+    this.skippedDays = options.skippedDays ?? this.skippedDays;
     this.setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
 
@@ -502,7 +563,6 @@ export class ViewDataGenerator {
       hoursInterval,
       interval,
       firstDayOfWeek,
-      intervalCount,
       viewOffset,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
@@ -512,13 +572,17 @@ export class ViewDataGenerator {
     const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
-    const offsetByCount = this.isWorkWeekView()
-      ? this.getTimeOffsetByColumnIndex(
+    let offsetByCount: number;
+    if (this.skippedDays.length > 0) {
+      offsetByCount = this.getVisibleDayOffset(
+        rowIndex,
         columnIndex,
-        this.getFirstDayOfWeek(firstDayOfWeek),
-        columnCountBase,
-        intervalCount,
-      ) : 0;
+        this.getSkippedDaysAnchorDay(firstDayOfWeek, startViewDate),
+        cellCountInDay,
+      ) * toMs('day');
+    } else {
+      offsetByCount = 0;
+    }
 
     const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
     let startViewDateTime = startViewDate.getTime();
@@ -557,14 +621,6 @@ export class ViewDataGenerator {
     const realHiddenInterval = dayIndex * this.hiddenInterval;
 
     return interval * cellIndex + realHiddenInterval;
-  }
-
-  getTimeOffsetByColumnIndex(columnIndex, firstDayOfWeek, columnCount, intervalCount) {
-    const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
-    const columnsInWeek = columnCount / intervalCount;
-    const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / columnsInWeek);
-
-    return weekendCount * 2 * toMs('day');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

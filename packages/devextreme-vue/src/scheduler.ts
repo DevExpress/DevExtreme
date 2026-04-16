@@ -10,6 +10,7 @@ import {
  AllDayPanelMode,
  ViewType,
  dxSchedulerAppointment,
+ DayOfWeek,
  CellAppointmentsLimit,
  AppointmentAddedEvent,
  AppointmentAddingEvent,
@@ -161,6 +162,7 @@ type AccessibleOptions = Pick<Properties,
   "groupByDate" |
   "groups" |
   "height" |
+  "hiddenWeekDays" |
   "hint" |
   "indicatorUpdateInterval" |
   "max" |
@@ -248,6 +250,7 @@ const componentConfig = {
     groupByDate: Boolean,
     groups: Array as PropType<Array<string>>,
     height: [Number, String],
+    hiddenWeekDays: Array as PropType<Array<DayOfWeek>>,
     hint: String,
     indicatorUpdateInterval: Number,
     max: [Date, Number, String],
@@ -331,6 +334,7 @@ const componentConfig = {
     "update:groupByDate": null,
     "update:groups": null,
     "update:height": null,
+    "update:hiddenWeekDays": null,
     "update:hint": null,
     "update:indicatorUpdateInterval": null,
     "update:max": null,
@@ -1774,6 +1778,7 @@ const DxViewConfig = {
     "update:groupByDate": null,
     "update:groupOrientation": null,
     "update:groups": null,
+    "update:hiddenWeekDays": null,
     "update:intervalCount": null,
     "update:maxAppointmentsPerCell": null,
     "update:name": null,
@@ -1800,6 +1805,7 @@ const DxViewConfig = {
     groupByDate: Boolean,
     groupOrientation: String as PropType<Orientation>,
     groups: Array as PropType<Array<string>>,
+    hiddenWeekDays: Array as PropType<Array<DayOfWeek>>,
     intervalCount: Number,
     maxAppointmentsPerCell: [String, Number] as PropType<CellAppointmentsLimit | number>,
     name: String,
