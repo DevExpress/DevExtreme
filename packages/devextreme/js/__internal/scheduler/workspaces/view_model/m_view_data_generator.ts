@@ -32,8 +32,6 @@ import type {
 const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGenerator {
-  protected baseDaysInInterval = 1;
-
   protected tableAllDay = false;
 
   public hiddenInterval = 0;
@@ -43,11 +41,16 @@ export class ViewDataGenerator {
   constructor(public readonly viewType: ViewType) {}
 
   get daysInInterval(): number {
-    const isWeekLikeView = this.baseDaysInInterval >= 7;
+    const isWeekLikeView = [
+      VIEWS.WEEK,
+      VIEWS.TIMELINE_WEEK,
+      VIEWS.WORK_WEEK,
+      VIEWS.TIMELINE_WORK_WEEK,
+    ].includes(this.viewType);
 
     return isWeekLikeView
       ? 7 - this.skippedDays.length
-      : this.baseDaysInInterval;
+      : 1;
   }
 
   public isWorkWeekView(): boolean {

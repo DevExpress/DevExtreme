@@ -2,8 +2,6 @@ import { workWeekUtils } from '../../r1/utils/index';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
 
 export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
-  protected baseDaysInInterval = 7;
-
   public skippedDays: number[] = [0, 6];
 
   protected override calculateStartViewDate(options: any): Date {
