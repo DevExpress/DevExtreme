@@ -32,6 +32,7 @@ import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import { getRepeatSelectItems, REPEAT_NEVER_VALUE } from './localized_items';
 import { customizeFormItems } from './m_customize_form_items';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
@@ -79,35 +80,6 @@ const CLASSES = {
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
-
-const repeatSelectBoxItems = [
-  {
-    recurrence: 'dxScheduler-recurrenceNever',
-    value: 'never',
-  }, {
-    recurrence: 'dxScheduler-recurrenceHourly',
-    value: 'hourly',
-  }, {
-    recurrence: 'dxScheduler-recurrenceDaily',
-    value: 'daily',
-  }, {
-    recurrence: 'dxScheduler-recurrenceWeekly',
-    value: 'weekly',
-  }, {
-    recurrence: 'dxScheduler-recurrenceMonthly',
-    value: 'monthly',
-  }, {
-    recurrence: 'dxScheduler-recurrenceYearly',
-    value: 'yearly',
-  },
-].map(
-  (item) => ({
-    text: messageLocalization.format(item.recurrence),
-    value: item.value,
-  }),
-);
-
-const repeatNeverValue = repeatSelectBoxItems[0].value;
 
 const createTimeZoneDataSource = (): DataSource => new DataSource({
   store: timeZoneUtils.getTimeZonesCache(),
@@ -676,14 +648,14 @@ export class AppointmentForm {
           },
           editorType: 'dxSelectBox',
           editorOptions: {
-            items: repeatSelectBoxItems,
+            items: getRepeatSelectItems(),
             valueExpr: 'value',
             displayExpr: 'text',
             onContentReady: (): void => {
               this.updateRepeatEditorValue();
             },
             onValueChanged: (e): void => {
-              if (e.value === repeatNeverValue) {
+              if (e.value === REPEAT_NEVER_VALUE) {
                 this.dxForm.updateData(recurrenceRuleExpr, '');
               } else {
                 const currentRecurrenceRule = this.recurrenceForm.recurrenceRule.toString() ?? '';
@@ -692,7 +664,7 @@ export class AppointmentForm {
                 this.dxForm.updateData(recurrenceRuleExpr, recurrenceRule.toString());
               }
 
-              if (e.value !== repeatNeverValue && e.event) {
+              if (e.value !== REPEAT_NEVER_VALUE && e.event) {
                 this.showRecurrenceGroup();
               }
 
@@ -989,11 +961,11 @@ export class AppointmentForm {
     }
 
     if (this.recurrenceRuleRaw === null) {
-      repeatEditor.option('value', repeatNeverValue);
+      repeatEditor.option('value', REPEAT_NEVER_VALUE);
     } else {
       const recurrenceRule = new RecurrenceRule(this.recurrenceRuleRaw, this.startDate);
       const { frequency } = recurrenceRule;
-      const value = frequency ?? repeatNeverValue;
+      const value = frequency ?? REPEAT_NEVER_VALUE;
 
       repeatEditor.option('value', value);
     }
