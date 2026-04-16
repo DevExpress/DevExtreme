@@ -24,7 +24,6 @@ export interface SchedulerInternalOptions {
   indicatorTime?: Date;
   renovateRender: boolean;
   editing: Properties['editing'];
-  skippedDays: number[];
   _draggingMode: 'outlook' | 'default';
   // TODO: legacy option property name
   _appointmentTooltipOffset: { x: number; y: number };

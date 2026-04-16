@@ -1283,7 +1283,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private headerConfig(): HeaderOptions {
     return {
       currentView: this.currentView,
-      skippedDays: this.getViewOption('skippedDays'),
+      skippedDays: this.getViewOption('hiddenWeekDays') as number[],
       views: this.views,
       currentDate: this.getViewOption('currentDate'),
       min: this.getViewOption('min'),
@@ -1440,7 +1440,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.option('selectedCellData', args.selectedCellData);
       },
       groupByDate: this.getViewOption('groupByDate'),
-      skippedDays: this.getViewOption('skippedDays'),
+      skippedDays: this.getViewOption('hiddenWeekDays') as number[],
       scrolling,
       draggingMode: this.option('_draggingMode'),
       timeZoneCalculator: this.timeZoneCalculator,
@@ -1462,7 +1462,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     result.onCellClick = this._createActionByOption('onCellClick');
     result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
     result.currentDate = this.getViewOption('currentDate');
-    result.skippedDays = this.getViewOption('skippedDays');
+    result.skippedDays = this.getViewOption('hiddenWeekDays') as number[];
     result.hoursInterval = result.cellDuration / 60;
     result.allDayExpanded = false;
     result.dataCellTemplate = result.dataCellTemplate ? this._getTemplate(result.dataCellTemplate) : null;

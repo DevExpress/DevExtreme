@@ -1,45 +1,12 @@
 import { isObject } from '@js/core/utils/type';
-import errors from '@js/ui/widget/ui.errors';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import { extend } from '@ts/core/utils/m_extend';
 
-import { isValidWeekday } from '../skipped_days';
 import { DEFAULT_VIEW_OPTIONS, VIEW_TYPES } from './constants_view';
 import type {
   DateOption, NormalizedView, RawViewType, SafeSchedulerOptions, ViewType,
 } from './types';
-
-const normalizeHiddenWeekDays = (
-  days: unknown,
-): number[] | undefined => {
-  if (!Array.isArray(days)) {
-    return undefined;
-  }
-  const valid = [...new Set(days)]
-    .filter(isValidWeekday)
-    .sort((a, b) => a - b);
-  if (valid.length >= 7) {
-    errors.log('W1029');
-    return [];
-  }
-  return valid;
-};
-
-const resolveSkippedDays = (
-  perViewHiddenWeekDays: unknown,
-  globalHiddenWeekDays: number[] | undefined,
-  viewDefault: number[],
-): number[] => {
-  const perView = normalizeHiddenWeekDays(perViewHiddenWeekDays);
-  if (perView !== undefined) {
-    return perView;
-  }
-  if (globalHiddenWeekDays !== undefined) {
-    return normalizeHiddenWeekDays(globalHiddenWeekDays) ?? [];
-  }
-  return viewDefault;
-};
 
 const isKnownView = (view: RawViewType): boolean => VIEW_TYPES
   .includes((isObject(view) ? view.type : view) as ViewType);
@@ -87,21 +54,7 @@ const isDateOption = (
 export const getViewOption = <K extends keyof SafeSchedulerOptions>(
   optionName: K,
   currentOptionValue: SafeSchedulerOptions[K],
-  currentView?: NormalizedView,
-  globalHiddenWeekDays?: number[],
 ): SafeSchedulerOptions[K] => {
-  if (optionName === 'skippedDays') {
-    if (!currentView) {
-      return currentOptionValue;
-    }
-
-    return resolveSkippedDays(
-      currentView.hiddenWeekDays,
-      globalHiddenWeekDays,
-      DEFAULT_VIEW_OPTIONS[currentView.type].skippedDays,
-    ) as SafeSchedulerOptions[K];
-  }
-
   if (!isDateOption(optionName)) {
     return currentOptionValue;
   }

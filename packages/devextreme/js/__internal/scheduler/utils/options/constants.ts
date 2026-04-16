@@ -108,7 +108,6 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
     ...DEFAULT_SCHEDULER_OPTIONS.editing,
     popup: {},
   },
-  skippedDays: [],
   // TODO: legacy option property name
   _draggingMode: 'outlook',
   // TODO: legacy option property name

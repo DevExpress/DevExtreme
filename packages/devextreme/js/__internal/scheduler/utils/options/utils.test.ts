@@ -3,6 +3,8 @@ import {
 } from '@jest/globals';
 import errors from '@js/ui/widget/ui.errors';
 
+import { DEFAULT_VIEW_OPTIONS } from './constants_view';
+import { resolveSkippedDays } from './normalize_skipped_days';
 import type { RawViewType, ViewType } from './types';
 import {
   getCurrentView,
@@ -145,11 +147,10 @@ describe('views utils', () => {
       ): number[] => {
         const currentView = getCurrentView(viewType, views);
 
-        return getViewOption(
-          'skippedDays',
-          currentView.skippedDays,
-          currentView,
+        return resolveSkippedDays(
+          currentView.hiddenWeekDays,
           globalHiddenWeekDays,
+          DEFAULT_VIEW_OPTIONS[currentView.type].skippedDays,
         );
       };
 

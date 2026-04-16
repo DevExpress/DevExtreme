@@ -12,7 +12,7 @@ export const getCompareOptions = (
     endDayHour: schedulerStore.getViewOption('endDayHour'),
     min: timeZoneUtils.createUTCDateWithLocalOffset(dateRange[0]).getTime(),
     max: timeZoneUtils.createUTCDateWithLocalOffset(dateRange[1]).getTime(),
-    skippedDays: schedulerStore.getViewOption('skippedDays'),
+    skippedDays: schedulerStore.getViewOption('hiddenWeekDays') as number[],
   };
 
   return compareOptions;
