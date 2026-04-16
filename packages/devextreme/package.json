@@ -95,7 +95,7 @@
     "@typescript-eslint/experimental-utils": "5.62.0",
     "@typescript-eslint/parser": "catalog:",
     "ast-types": "0.14.2",
-    "autoprefixer": "10.4.27",
+    "autoprefixer": "10.5.0",
     "axe-core": "catalog:",
     "babel-plugin-add-module-exports": "1.0.4",
     "babel-plugin-inferno": "6.8.5",
