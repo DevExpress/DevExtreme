@@ -18,10 +18,16 @@ export const getBaseAppointmentViewProperties = (
 
   const config: BaseAppointmentViewProperties = {
     index: 0,
+    tabIndex: 0,
+    sortedIndex: 0,
     appointmentData,
     targetedAppointmentData: normalizedTargetedAppointmentData,
     appointmentTemplate: new EmptyTemplate(),
     onRendered: () => {},
+    onFocusIn: () => {},
+    onFocusOut: () => {},
+    onClick: () => {},
+    onKeyDown: () => {},
     getDataAccessor: (): AppointmentDataAccessor => mockAppointmentDataAccessor,
     getResourceColor: (): Promise<string | undefined> => Promise.resolve(undefined),
   };
