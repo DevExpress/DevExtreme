@@ -563,17 +563,17 @@ export class Scroller {
 
   _updateScrollbar(): void {
     deferUpdater(() => {
-      const containerSize = this._containerSize();
+      const dimension = this._dimension;
+      const rawContainerSize = getBoundingRect(this._$container[0])[dimension];
+      const containerSize = Math.round(rawContainerSize);
       const contentSize = this._contentSize();
 
       // NOTE: Real container and content sizes can be a fractional number when scaling.
       //       Let's save sizes when scale = 100% to decide whether it is necessary to show
       //       the scrollbar based on by more precise numbers. We can do it because the container
       //       size to content size ratio should remain approximately the same at any zoom.
-      const dimension = this._dimension;
       const rawBaseContainerSize = this._getBaseDimension(this._$container[0], dimension);
       const baseContentSize = this._getBaseDimension(this._$content[0], dimension);
-      const rawContainerSize = getBoundingRect(this._$container[0])[dimension];
       const baseContainerSize = getAdjustedBaseContainerSize(
         rawContainerSize,
         rawBaseContainerSize,
