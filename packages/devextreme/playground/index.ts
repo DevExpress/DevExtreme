@@ -1,7 +1,7 @@
 import '../js/__internal/integration/jquery';
+import '../js/ui/scheduler';
 import $ from 'jquery';
 import { setupThemeSelector } from './themeSelector';
-import Scheduler from '../js/__internal/scheduler/m_scheduler';
 
 const dataSource = [
     {
@@ -23,7 +23,7 @@ const dataSource = [
 
 window.addEventListener('load', () =>
     setupThemeSelector('theme-selector').then(() => {
-        new (Scheduler as any)($('#container'), {
+        ($('#container') as any).dxScheduler({
             dataSource,
             views: ['day', 'week', 'workWeek', 'month'],
             currentView: 'week',
