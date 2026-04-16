@@ -38,6 +38,7 @@ import Scrollbar from '@ts/ui/scroll_view/scrollbar';
 import type {
   AllowedDirections, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs, ScrollOffset,
 } from '@ts/ui/scroll_view/types';
+import { getAdjustedBaseContainerSize } from '@ts/ui/scroll_view/utils/get_adjusted_base_container_size';
 
 interface ScrollVelocity {
   x: number;
@@ -570,8 +571,14 @@ export class Scroller {
       //       the scrollbar based on by more precise numbers. We can do it because the container
       //       size to content size ratio should remain approximately the same at any zoom.
       const dimension = this._dimension;
-      const baseContainerSize = this._getBaseDimension(this._$container[0], dimension);
+      const rawBaseContainerSize = this._getBaseDimension(this._$container[0], dimension);
       const baseContentSize = this._getBaseDimension(this._$content[0], dimension);
+      const rawContainerSize = getBoundingRect(this._$container[0])[dimension];
+      const baseContainerSize = getAdjustedBaseContainerSize(
+        rawContainerSize,
+        rawBaseContainerSize,
+        baseContentSize,
+      );
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferRender(() => {
@@ -690,10 +697,8 @@ export class SimulatedStrategy<
 
   _$content!: dxElementWrapper;
 
-  // eslint-disable-next-line no-restricted-globals
   _updateHandlerTimeout?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _validateWheelTimer?: ReturnType<typeof setTimeout>;
 
   _eventForUserAction?: unknown;
