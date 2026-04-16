@@ -11,7 +11,8 @@ import { dataSource, useApi } from './useApi.js';
 loadMessages({
   en: {
     'dxChat-emptyListMessage': 'Chat is Empty',
-    'dxChat-emptyListPrompt': 'Your Shopping AI Assistant is ready to help. Ask a question or choose one of the suggested prompts to get started.',
+    'dxChat-emptyListPrompt':
+      'Your Shopping AI Assistant is ready to help. Ask a question or choose one of the suggested prompts to get started.',
     'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
   },
 });

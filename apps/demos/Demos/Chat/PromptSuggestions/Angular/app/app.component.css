@@ -68,3 +68,7 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+::ng-deep .dx-chat-suggestions .dx-button {
+  max-width: 255px;
+}
