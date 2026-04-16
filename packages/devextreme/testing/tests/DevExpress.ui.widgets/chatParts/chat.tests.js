@@ -2821,6 +2821,17 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions container remains in DOM');
             assert.strictEqual(this.getSuggestionItems().length, 0, 'items are removed');
         });
+
+        QUnit.test('suggestions items should be updated via nested option path', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }] },
+            });
+
+            this.instance.option('suggestions.items', [{ text: 'New 1' }, { text: 'New 2' }]);
+
+            assert.strictEqual(this.getSuggestionItems().length, 2, 'items count updated via nested path');
+            assert.strictEqual(this.getSuggestionItems().eq(0).text(), 'New 1', 'first item text updated');
+        });
     });
 
     QUnit.module('Data Layer Integration', {
