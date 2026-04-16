@@ -27,6 +27,44 @@ describe('New Appointments', () => {
     document.body.innerHTML = '';
   });
 
+  describe('Options', () => {
+    describe('tabIndex', () => {
+      it('should have correct tabIndex on init', async () => {
+        const { POM } = await createScheduler({
+          dataSource: [
+            { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+            { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          ],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9, 8),
+          tabIndex: 2,
+        });
+
+        const firstAppointment = POM.getAppointments()[0];
+
+        expect(firstAppointment.element.getAttribute('tabindex')).toBe('2');
+      });
+
+      it('should have correct tabIndex on option change', async () => {
+        const { POM, scheduler } = await createScheduler({
+          dataSource: [
+            { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+            { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          ],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9, 8),
+          tabIndex: 1,
+        });
+
+        scheduler.option('tabIndex', 2);
+
+        const firstAppointment = POM.getAppointments()[0];
+
+        expect(firstAppointment.element.getAttribute('tabindex')).toBe('2');
+      });
+    });
+  });
+
   describe('Templates', () => {
     describe.each([
       'appointmentTemplate',

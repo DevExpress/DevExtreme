@@ -39,3 +39,5 @@ export const AGENDA_APPOINTMENT_CLASSES = {
   RESOURCE_ITEM: 'dx-scheduler-appointment-resource-item',
   RESOURCE_ITEM_VALUE: 'dx-scheduler-appointment-resource-item-value',
 };
+
+export const FOCUSED_STATE_CLASS = 'dx-state-focused';
