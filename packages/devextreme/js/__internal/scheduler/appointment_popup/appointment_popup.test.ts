@@ -114,6 +114,12 @@ describe('Isolated AppointmentPopup environment', () => {
     expect(popup.visible).toBe(false);
   });
 
+  it('should not have lastEditData in state', async () => {
+    const { popup } = await createAppointmentPopup();
+
+    expect(popup.state).not.toHaveProperty('lastEditData');
+  });
+
   it('should support composite onSave for exclude-from-series scenario', async () => {
     const updateAppointment = jest.fn();
     const addAppointment = jest.fn<(appointment: Record<string, unknown>) => Promise<void>>(

@@ -77,7 +77,6 @@ interface CreateAppointmentPopupResult {
     addAppointment: jest.Mock;
     updateAppointment: jest.Mock;
     focus: jest.Mock;
-    updateScrollPosition: jest.Mock;
     onSave: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   };
   dispose: () => void;
@@ -112,7 +111,6 @@ export const createAppointmentPopup = async (
   const updateAppointment = options.updateAppointment
     ?? jest.fn(resolvedDeferred);
   const focus = jest.fn();
-  const updateScrollPosition = jest.fn();
   const onSave = options.onSave
     ?? jest.fn<(appointment: Record<string, unknown>) => PromiseLike<unknown>>(resolvedDeferred);
 
@@ -157,7 +155,6 @@ export const createAppointmentPopup = async (
     },
     addAppointment,
     updateAppointment,
-    updateScrollPosition,
   };
 
   const popup = new AppointmentPopup(popupSchedulerProxy, form);
@@ -199,7 +196,6 @@ export const createAppointmentPopup = async (
       addAppointment,
       updateAppointment,
       focus,
-      updateScrollPosition,
       onSave,
     },
     dispose,
