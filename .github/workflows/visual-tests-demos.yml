@@ -658,37 +658,13 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Cache Roboto font
-      if: contains(matrix.THEME, 'material')
-      id: cache-roboto
-      uses: actions/cache@v4
-      with:
-        path: /usr/share/fonts/truetype/roboto
-        key: roboto-font-${{ runner.os }}
-
-    - name: Install Roboto font for Material theme
-      if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
-      run: |
-        echo "Installing Roboto font..."
-        sudo apt-get update -qq
-        sudo apt-get install -y -qq fonts-roboto fonts-roboto-unhinted
-        sudo fc-cache -f -v > /dev/null 2>&1 || true
-        echo "Roboto font installed"
-
     - name: Run Web Server
       run: python -m http.server 8080 &
 
     - name: Set Chrome flags
       id: chrome-flags
       run: |
-        BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
-
-        # For Material theme, enable better font rendering to avoid instability
-        if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
-          BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
-        fi
-
-        echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
+        echo "flags=chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)
       shell: bash
