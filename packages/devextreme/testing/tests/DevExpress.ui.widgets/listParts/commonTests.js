@@ -4647,7 +4647,7 @@ QUnit.module('keyboard navigation', {
         this.clock.tick(10);
 
         assert.strictEqual($item.hasClass(FOCUSED_STATE_CLASS), true, 'item has focused state');
-        assert.strictEqual(instance.option('focusedElement'), $item.get(0), 'focusedElement is set to clicked item');
+        assert.strictEqual($item.is(instance.option('focusedElement')), true, 'focusedElement is set to clicked item');
     });
 
     QUnit.test('keyboard navigation should work after clicking on item with tabindex=-1', function(assert) {
