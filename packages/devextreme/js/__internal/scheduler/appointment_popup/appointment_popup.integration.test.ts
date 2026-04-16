@@ -1,8 +1,10 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import dateLocalization from '@js/common/core/localization/date';
 import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
+import { loadMessages, locale } from '@js/localization';
 import type { GroupItem, Item as FormItem, SimpleItem } from '@js/ui/form';
 import type { ToolbarItem } from '@js/ui/popup';
 import { toMilliseconds } from '@ts/utils/toMilliseconds';
@@ -1407,6 +1409,40 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceDayOfYearDayEditor')).toBe('1');
         expect(POM.popup.getInputValue('recurrenceDayOfYearMonthEditor')).toBe('May');
         expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('T1325870: should use current locale for recurrence editors after locale change', async () => {
+        const currentLocale = locale();
+
+        loadMessages({
+          de: {
+            'dxScheduler-recurrenceYearly': 'custom yearly',
+            'dxScheduler-recurrenceRepeatYearly': 'custom repeat yearly',
+          },
+        });
+        locale('de');
+
+        try {
+          const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+          scheduler.showAppointmentPopup({
+            text: 'Meeting',
+            startDate: new Date(2017, 4, 1, 10, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule: 'FREQ=YEARLY;INTERVAL=2;BYMONTHDAY=1;BYMONTH=5;COUNT=10',
+            repeatEnd: 'count',
+          });
+          POM.popup.editSeriesButton.click();
+
+          expect(POM.popup.getInputValue('repeatEditor')).toBe('custom yearly');
+
+          POM.popup.recurrenceSettingsButton.click();
+
+          expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Custom repeat yearly');
+          expect(POM.popup.getInputValue('recurrenceDayOfYearMonthEditor')).toBe(dateLocalization.getMonthNames()[4]);
+        } finally {
+          locale(currentLocale);
+        }
       });
 
       it('should have correct input values for appointment with no end', async () => {
