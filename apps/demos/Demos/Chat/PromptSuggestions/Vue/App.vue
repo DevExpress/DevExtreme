@@ -90,12 +90,15 @@ function toggleDisabledState(disabled: boolean, event?: Events.EventObject): voi
 }
 
 function renderAssistantMessage(text: string): void {
-  dataSource.store().push([{ type: 'insert', data: {
-    id: Date.now(),
-    timestamp: new Date(),
-    author: assistant,
-    text,
-  } }]);
+  dataSource.store().push([{
+    type: 'insert',
+    data: {
+      id: Date.now(),
+      timestamp: new Date(),
+      author: assistant,
+      text,
+    },
+  }]);
 }
 
 async function processMessageSending(
