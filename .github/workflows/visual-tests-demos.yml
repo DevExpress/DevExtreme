@@ -658,13 +658,17 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    - name: Set Roboto font directory
+      if: contains(matrix.THEME, 'material')
+      run: echo "ROBOTO_FONT_DIR=${HOME}/.local/share/fonts/roboto" >> $GITHUB_ENV
+
     - name: Cache Roboto font
       if: contains(matrix.THEME, 'material')
       id: cache-roboto
       uses: actions/cache@v4
       with:
-        path: ~/.local/share/fonts/roboto
-        key: roboto-font-v3-${{ runner.os }}
+        path: ${{ env.ROBOTO_FONT_DIR }}
+        key: roboto-font-${{ runner.os }}-8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
 
     - name: Install Roboto font for Material theme
       if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
@@ -673,15 +677,18 @@ jobs:
         ROBOTO_SHA256: d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134
       run: |
         echo "Installing Roboto font from google/fonts (pinned commit)..."
-        mkdir -p ~/.local/share/fonts/roboto
+        mkdir -p "$ROBOTO_FONT_DIR"
         BASE_URL="https://raw.githubusercontent.com/google/fonts/${GOOGLE_FONTS_COMMIT}/ofl/roboto"
 
         curl -fsSL "${BASE_URL}/Roboto%5Bwdth%2Cwght%5D.ttf" -o /tmp/Roboto.ttf
         echo "${ROBOTO_SHA256}  /tmp/Roboto.ttf" | sha256sum -c -
 
-        mv /tmp/Roboto.ttf ~/.local/share/fonts/roboto/
-        fc-cache -f -v > /dev/null 2>&1 || true
+        mv /tmp/Roboto.ttf "$ROBOTO_FONT_DIR/"
         echo "Roboto font installed"
+
+    - name: Refresh font cache
+      if: contains(matrix.THEME, 'material')
+      run: fc-cache -f > /dev/null 2>&1
 
     - name: Run Web Server
       run: python -m http.server 8080 &
