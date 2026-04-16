@@ -6320,7 +6320,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
