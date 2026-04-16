@@ -1166,8 +1166,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const adapter = new AppointmentAdapter(appointment, this._dataAccessors);
     const { startDate, endDate, allDay } = adapter;
 
+    if (!startDate) {
+      return;
+    }
+
     const startTime = startDate.getTime();
-    const endTime = endDate.getTime();
+    const endTime = endDate ? endDate.getTime() : startTime;
     const dayInMs = toMs('day');
 
     const inAllDayRow = allDay || (endTime - startTime) >= dayInMs;
