@@ -10,6 +10,8 @@ import { FlatCompat as FlatCompatibility } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 
+import noIsReadyWithoutExpect from './eslint-rules/no-is-ready-without-expect.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compatibility = new FlatCompatibility({
@@ -254,5 +256,23 @@ export default [
       '@typescript-eslint/no-wrapper-object-types': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
     }
+  },
+  {
+    files: [
+      'tests/dataGrid/**/*.ts',
+      'tests/cardView/**/*.ts',
+      'tests/common/treeList/**/*.ts',
+      'tests/common/filterBuilder/**/*.ts',
+    ],
+    plugins: {
+      'local': {
+        rules: {
+          'no-is-ready-without-expect': noIsReadyWithoutExpect,
+        },
+      },
+    },
+    rules: {
+      'local/no-is-ready-without-expect': 'error',
+    },
   },
 ];

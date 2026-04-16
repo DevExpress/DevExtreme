@@ -1340,6 +1340,90 @@ test('Tab key on the focused group row should be handled by default behavior (T8
   });
 });
 
+test('DataGrid - Focus should move back to headers on Shift+Tab when multiple grouping is applied (T1325775)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+  const headerCell = headerRow.getHeaderCell(2);
+  const stateGroupRow = dataGrid.getGroupRow(0);
+  const cityGroupRow = dataGrid.getGroupRow(1);
+  const firstDataCell = dataGrid.getDataCell(2, 2);
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await addFocusableElementBefore('#container');
+
+  await t
+    .click(Selector('#focusable-start'))
+    .pressKey('tab')
+    .expect(headerCell.isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(stateGroupRow.isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(cityGroupRow.isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(firstDataCell.isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(cityGroupRow.isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(stateGroupRow.isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headerCell.isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    showBorders: true,
+    keyExpr: 'id',
+    dataSource: [
+      {
+        id: 1,
+        state: 'Arkansas',
+        city: 'Bentonville',
+        company: 'Super Mart of the West',
+      },
+      {
+        id: 2,
+        state: 'Arkansas',
+        city: 'Bentonville',
+        company: 'Electronics Depot',
+      },
+      {
+        id: 3,
+        state: 'California',
+        city: 'Cupertino',
+        company: 'Braeburn',
+      },
+    ],
+    grouping: {
+      autoExpandAll: true,
+    },
+    columns: [
+      {
+        dataField: 'state',
+        groupIndex: 0,
+      },
+      {
+        dataField: 'city',
+        groupIndex: 1,
+      },
+      'company',
+    ],
+  });
+});
+
 test('Row should not be focused by "focusedRowIndex" after change "pageIndex" by pager if "autoNavigateToFocused" row is false', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t

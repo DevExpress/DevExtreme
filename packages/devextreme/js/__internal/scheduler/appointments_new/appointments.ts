@@ -14,7 +14,6 @@ import type { AppointmentResource } from '../utils/resource_manager/appointment_
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
 import type {
-  AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
@@ -39,17 +38,27 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
 
-  onAppointmentRendered: BaseAppointmentViewProperties['onAppointmentRendered'];
+  onAppointmentRendered: BaseAppointmentViewProperties['onRendered'];
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
 }
 
-type AppointmentComponent = GridAppointmentView | AgendaAppointmentView | AppointmentCollector;
+type ViewItem = GridAppointmentView | AgendaAppointmentView | AppointmentCollector;
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
-  private appointmentBySortIndex: Record<number, AppointmentComponent> = {};
+  private viewItemBySortedIndex: Record<number, ViewItem> = {};
+
+  private viewItems: ViewItem[] = [];
+
+  public getViewItemByIndex(index: number): ViewItem | undefined {
+    return this.viewItems[index];
+  }
+
+  public getViewItemBySortedIndex(sortedIndex: number): ViewItem | undefined {
+    return this.viewItemBySortedIndex[sortedIndex];
+  }
 
   private get $allDayContainer(): dxElementWrapper | null {
     return this.option().$allDayContainer;
@@ -66,6 +75,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       appointment: new EmptyTemplate(),
       appointmentCollector: new EmptyTemplate(),
     });
+
+    // TODO: legacy compatibility
+    if (this.option().appointmentTemplate === 'item') {
+      this.option('appointmentTemplate', 'appointment');
+    }
   }
 
   override _initMarkup(): void {
@@ -93,15 +107,26 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       }
       case 'viewModel': {
         if (this.option().currentView === 'agenda') {
-          this.renderAgendaAppointments(args.value as AppointmentAgendaViewModel[]);
+          this.renderViewModel(args.value);
           break;
         }
 
         const diff = this.getViewModelDiff(
-          (args.value ?? []) as AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
           args.previousValue ?? [],
+          (args.value ?? []) as AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
         );
         this.renderViewModelDiff(diff);
+        break;
+      }
+      case 'appointmentCollectorTemplate':
+      case 'appointmentTemplate': {
+        // TODO: legacy compatibility
+        if (args.name === 'appointmentTemplate' && args.value === 'item') {
+          this.option('appointmentTemplate', 'appointment');
+          break;
+        }
+
+        this.renderViewModel(this.option().viewModel);
         break;
       }
       default:
@@ -117,13 +142,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
   public _renderAppointmentTemplate(): void { /* TODO: legacy compatibility */ }
 
-  private getAppointmentElement(sortedIndex: number): dxElementWrapper {
-    return this.appointmentBySortIndex[sortedIndex].$element();
-  }
-
   private getViewModelDiff(
-    newViewModel: AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
     oldViewModel: AppointmentViewModelPlain[],
+    newViewModel: AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
   ): DiffItem[] {
     const isPreviousAgenda = oldViewModel.length && isAgendaAppointmentViewModel(oldViewModel[0]);
 
@@ -138,19 +159,26 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     );
   }
 
-  private renderAgendaAppointments(appointments: AppointmentViewModelPlain[]): void {
-    this.$allDayContainer?.empty();
-
+  private renderViewModel(viewModel: AppointmentViewModelPlain[] = []): void {
+    const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
-    this.appointmentBySortIndex = {};
+    this.viewItemBySortedIndex = {};
+    this.$allDayContainer?.empty();
     this.$commonContainer.empty();
 
-    appointments.forEach((appointmentViewModel) => {
-      const appointment = this.renderAppointment(commonFragment, appointmentViewModel);
-      this.appointmentBySortIndex[appointmentViewModel.sortedIndex] = appointment;
+    viewModel.forEach((viewModelItem, index) => {
+      const container = this.option().currentView === 'agenda' || !viewModelItem.allDay
+        ? commonFragment
+        : allDayFragment;
+
+      const viewItem = this.renderViewItem(container, viewModelItem, index);
+      this.viewItemBySortedIndex[viewModelItem.sortedIndex] = viewItem;
     });
 
+    this.viewItems = Object.values(this.viewItemBySortedIndex);
+
+    this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
   }
 
@@ -158,7 +186,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
-    const newAppointmentBySortedIndex: Record<number, AppointmentComponent> = {};
+    const newViewItemBySortedIndex: Record<number, ViewItem> = {};
 
     const isRepaintAll = viewModelDiff.every(
       (item) => Boolean(item.needToAdd ?? item.needToRemove),
@@ -169,8 +197,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       this.$commonContainer.empty();
     }
 
-    viewModelDiff.forEach((diffItem) => {
+    // TODO: remove passing index to appointmentTemplate, need only to avoid BC
+    viewModelDiff.forEach((diffItem, index) => {
       const { allDay, sortedIndex } = diffItem.item;
+      const lookupIndex = diffItem.oldSortedIndex ?? sortedIndex;
+      const viewItem = this.viewItemBySortedIndex[lookupIndex];
 
       switch (true) {
         case diffItem.needToRemove: {
@@ -178,46 +209,44 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
             break;
           }
 
-          this.getAppointmentElement(sortedIndex).remove();
+          viewItem.$element().remove();
           break;
         }
         case diffItem.needToAdd: {
           const fragment = allDay ? allDayFragment : commonFragment;
-          const appointment = this.renderAppointment(fragment, diffItem.item);
+          const newViewItem = this.renderViewItem(fragment, diffItem.item, index);
 
-          newAppointmentBySortedIndex[sortedIndex] = appointment;
+          newViewItemBySortedIndex[sortedIndex] = newViewItem;
           break;
         }
         case diffItem.needToResize: {
-          const appointment = this.appointmentBySortIndex[sortedIndex];
-          appointment.option('geometry', {
+          viewItem.resize({
             height: diffItem.item.height,
             width: diffItem.item.width,
             top: diffItem.item.top,
             left: diffItem.item.left,
           });
-          appointment.resize();
 
-          newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+          newViewItemBySortedIndex[sortedIndex] = viewItem;
           break;
         }
         default:
-          newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+          newViewItemBySortedIndex[sortedIndex] = viewItem;
       }
     });
 
-    this.appointmentBySortIndex = newAppointmentBySortedIndex;
+    this.viewItemBySortedIndex = newViewItemBySortedIndex;
+    this.viewItems = Object.values(this.viewItemBySortedIndex);
 
-    if (this.$allDayContainer) {
-      this.$allDayContainer.get(0).appendChild(allDayFragment);
-    }
+    this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
   }
 
-  private renderAppointment(
+  private renderViewItem(
     fragment: DocumentFragment,
     appointmentViewModel: AppointmentViewModelPlain,
-  ): AppointmentComponent {
+    index: number,
+  ): ViewItem {
     const $element = $('<div>');
 
     fragment.appendChild($element.get(0));
@@ -226,7 +255,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
-        appointmentsCount: appointmentViewModel.items.length,
+        appointmentsData: appointmentViewModel.items.map((item) => item.itemData),
         isCompact: appointmentViewModel.isCompact,
         geometry: {
           height: appointmentViewModel.height,
@@ -240,11 +269,12 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     }
 
     const baseConfig: BaseAppointmentViewProperties = {
+      index,
       appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
       getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
-      onAppointmentRendered: this.option().onAppointmentRendered,
+      onRendered: this.option().onAppointmentRendered,
       getDataAccessor: this.option().getDataAccessor,
     };
 

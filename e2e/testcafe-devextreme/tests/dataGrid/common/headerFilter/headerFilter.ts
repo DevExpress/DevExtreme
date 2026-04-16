@@ -335,7 +335,9 @@ test('DataGrid – Header filters show "No data to display" when "not and" or "n
   const headerFilter = new HeaderFilter();
   const listCount = headerFilter.getList().getItems();
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
   await t.click(headerFilterButton);
 
   await t

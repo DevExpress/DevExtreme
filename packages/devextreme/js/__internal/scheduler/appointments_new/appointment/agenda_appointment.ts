@@ -4,7 +4,11 @@ import type { SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 
 import {
-  AGENDA_APPOINTMENT_CLASSES, ALL_DAY_TEXT, APPOINTMENT_CLASSES, RECURRING_LABEL,
+  AGENDA_APPOINTMENT_CLASSES,
+  ALL_DAY_TEXT,
+  APPOINTMENT_CLASSES,
+  APPOINTMENT_TYPE_CLASSES,
+  RECURRING_LABEL,
 } from '../const';
 import type { BaseAppointmentViewProperties } from './base_appointment';
 import { BaseAppointmentView } from './base_appointment';
@@ -50,7 +54,7 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
 
   private renderMarker($container: dxElementWrapper): void {
     const $leftContainer = $('<div>')
-      .addClass('dx-scheduler-agenda-appointment-left-layout')
+      .addClass(AGENDA_APPOINTMENT_CLASSES.LEFT_LAYOUT)
       .appendTo($container);
 
     const $marker = $('<div>')
@@ -60,6 +64,7 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
     // eslint-disable-next-line no-void
     void this.option().getResourceColor().then((color) => {
       if (color) {
+        this.$element().addClass(APPOINTMENT_TYPE_CLASSES.HAS_RESOURCE);
         $marker.css('backgroundColor', color);
       }
     });
@@ -74,7 +79,7 @@ export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointment
 
   private renderInfo($container: dxElementWrapper): void {
     const $rightContainer = $('<div>')
-      .addClass('dx-scheduler-agenda-appointment-right-layout')
+      .addClass(AGENDA_APPOINTMENT_CLASSES.RIGHT_LAYOUT)
       .appendTo($container);
 
     $('<div>')

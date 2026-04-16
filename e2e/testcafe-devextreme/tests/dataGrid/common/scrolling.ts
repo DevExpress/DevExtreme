@@ -2095,3 +2095,24 @@ test('Warning should not be thrown if scrolling is virtual and height is specifi
     });
   });
 });
+
+// T1326460
+test('Horizontal scrollbar should not appear when columnHidingEnabled is true and vertical scrollbar is present (T1326460)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const scrollContainerWidth = await dataGrid.getScrollContainer().clientWidth;
+  const rowsWidth = await dataGrid.getRows().nth(0).clientWidth;
+
+  await t.expect(rowsWidth).eql(scrollContainerWidth);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 552,
+  height: 300,
+  dataSource: getData(20, 10),
+  columnHidingEnabled: true,
+  columnWidth: 100,
+  scrolling: {
+    useNative: true,
+  },
+}));

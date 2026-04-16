@@ -16,13 +16,15 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
+    "change-package-scope": "ts-node tools/scripts/change-package-scope.ts",
+    "make-artifacts-package": "ts-node tools/scripts/make-artifacts-package.ts",
     "all:set-timestamp-version": "ts-node tools/scripts/set-timestamp-version.ts",
     "all:update-version": "ts-node tools/scripts/update-version.ts",
     "all:build": "ts-node tools/scripts/build-all.ts",
     "all:build-dev": "pnpm run all:build --dev",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
     "demos:prepare": "nx run devextreme-demos:prepare-js",
-    "demos:start": "http-server ./apps/demos --port 8080 -c-1"
+    "demos:start": "node apps/demos/utils/shell/server.js"
   },
   "nx": {},
   "private": true,

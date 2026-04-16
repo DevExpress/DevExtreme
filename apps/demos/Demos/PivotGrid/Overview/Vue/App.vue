@@ -97,7 +97,7 @@ onMounted(() => {
 
   setTimeout(() => {
     pivotGridDataSource?.expandHeaderItem('row', ['North America']);
-    pivotGridDataSource?.expandHeaderItem('column', [2013]);
+    pivotGridDataSource?.expandHeaderItem('column', [2023]);
   });
 });
 
