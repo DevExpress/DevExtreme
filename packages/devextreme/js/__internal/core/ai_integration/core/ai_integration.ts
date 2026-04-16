@@ -8,6 +8,8 @@ import type {
   ChangeToneCommandResult,
   ExecuteCommandParams,
   ExecuteCommandResult,
+  ExecuteGridAssistantCommandParams,
+  ExecuteGridAssistantCommandResult,
   ExpandCommandParams,
   ExpandCommandResult,
   GenerateGridColumnCommandParams,
@@ -40,6 +42,7 @@ import {
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 
+import { ExecuteGridAssistantCommand } from '../commands/executeGridAssistant';
 import { GenerateGridColumnCommand } from '../commands/generateGridColumn';
 
 export const enum CommandNames {
@@ -53,6 +56,7 @@ export const enum CommandNames {
   Translate = 'translate',
   SmartPaste = 'smartPaste',
   GenerateGridColumn = 'generateGridColumn',
+  ExecuteGridAssistant = 'executeGridAssistant',
 }
 
 export const COMMANDS = {
@@ -66,6 +70,7 @@ export const COMMANDS = {
   [CommandNames.Translate]: TranslateCommand,
   [CommandNames.SmartPaste]: SmartPasteCommand,
   [CommandNames.GenerateGridColumn]: GenerateGridColumnCommand,
+  [CommandNames.ExecuteGridAssistant]: ExecuteGridAssistantCommand,
 } as const;
 
 export interface CommandDefinition<TParams extends RequestParamsData, TResult> {
@@ -87,6 +92,10 @@ export interface Commands {
   [CommandNames.GenerateGridColumn]: CommandDefinition<
     GenerateGridColumnCommandParams,
     GenerateGridColumnCommandResult
+  >;
+  [CommandNames.ExecuteGridAssistant]: CommandDefinition<
+    ExecuteGridAssistantCommandParams,
+    ExecuteGridAssistantCommandResult
   >;
 }
 
@@ -229,6 +238,17 @@ export class AIIntegration implements IAIIntegration {
   ): () => void {
     return this.executeCommand(
       CommandNames.GenerateGridColumn,
+      params,
+      callbacks,
+    );
+  }
+
+  public executeGridAssistant(
+    params: ExecuteGridAssistantCommandParams,
+    callbacks: RequestCallbacks<ExecuteGridAssistantCommandResult>,
+  ): () => void {
+    return this.executeCommand(
+      CommandNames.ExecuteGridAssistant,
       params,
       callbacks,
     );

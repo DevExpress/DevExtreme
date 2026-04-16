@@ -1,6 +1,5 @@
 export interface CommandResponse {
   commands: Command[];
-  explanation: string;
 }
 
 export interface Command {
