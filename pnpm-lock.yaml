@@ -86,8 +86,8 @@ catalogs:
       specifier: 4.1.68
       version: 4.1.68
     devextreme-exceljs-fork:
-      specifier: 4.4.7
-      version: 4.4.7
+      specifier: 4.4.8
+      version: 4.4.8
     devextreme-quill:
       specifier: 1.7.9
       version: 1.7.9
@@ -468,7 +468,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.7
+        version: 4.4.8
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.9
@@ -1509,7 +1509,7 @@ importers:
         version: 1.0.3
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.7
+        version: 4.4.8
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.4)
@@ -9548,8 +9548,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.7:
-    resolution: {integrity: sha512-32Zao6Bn1l9owiC7hpyPynUtYY1Tae2eS2Zot3FWZSSWJW0R1O1tF7H1Nn2GOwONTFmaTFML2jo5bZL1idGSFA==}
+  devextreme-exceljs-fork@4.4.8:
+    resolution: {integrity: sha512-XjZ5aqD0MILYW9BLCKiR8CJyDhkROf6bT45dSmczcOT7Ow0GtzLI8RBfTVrBsm0fjUyjNkKFO5d4T5iTHth52A==}
     engines: {node: '>=18.20.8'}
 
   devextreme-internal-tools@20.3.1:
@@ -29227,7 +29227,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.7:
+  devextreme-exceljs-fork@4.4.8:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.13
