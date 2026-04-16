@@ -15,14 +15,12 @@ import { current, isFluent } from '@js/ui/themes';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
 import type { SafeAppointment } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
-import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
+import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
 const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
-
-const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
 export interface AppointmentPopupConfig {
   onSave: (appointment: Record<string, unknown>) => PromiseLike<unknown>;
@@ -61,7 +59,6 @@ export class AppointmentPopup {
     this.form = form;
 
     this.state = {
-      lastEditData: null,
       saveChangesLocker: false,
       appointment: {
         data: null,
@@ -282,7 +279,6 @@ export class AppointmentPopup {
 
       deferred.done(() => {
         hideLoading();
-        this.state.lastEditData = appointment;
       });
     });
 
@@ -300,27 +296,7 @@ export class AppointmentPopup {
 
     if (this.tryLockSaveChanges()) {
       when(this.saveChangesAsync(true)).done(() => {
-        if (this.state.lastEditData) { // TODO
-          const adapter = this.createAppointmentAdapter(this.state.lastEditData);
-
-          const { startDate, endDate, allDay } = adapter;
-
-          const startTime = startDate.getTime();
-          const endTime = endDate.getTime();
-
-          const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
-          const resourceManager = this.scheduler.getResourceManager();
-          const appointmentGroupValues = getAppointmentGroupValues(
-            this.state.lastEditData,
-            resourceManager.resources,
-          );
-
-          this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
-          this.state.lastEditData = null;
-        }
-
         this.unlockSaveChanges();
-
         deferred.resolve();
       });
     }
