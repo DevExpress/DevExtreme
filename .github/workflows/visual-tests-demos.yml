@@ -663,7 +663,7 @@ jobs:
       id: cache-roboto
       uses: actions/cache@v4
       with:
-        path: /usr/share/fonts/truetype/roboto
+        path: ~/.local/share/fonts/roboto
         key: roboto-font-v3-${{ runner.os }}
 
     - name: Install Roboto font for Material theme
@@ -673,14 +673,14 @@ jobs:
         ROBOTO_SHA256: d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134
       run: |
         echo "Installing Roboto font from google/fonts (pinned commit)..."
-        sudo mkdir -p /usr/share/fonts/truetype/roboto
+        mkdir -p ~/.local/share/fonts/roboto
         BASE_URL="https://raw.githubusercontent.com/google/fonts/${GOOGLE_FONTS_COMMIT}/ofl/roboto"
 
         curl -fsSL "${BASE_URL}/Roboto%5Bwdth%2Cwght%5D.ttf" -o /tmp/Roboto.ttf
         echo "${ROBOTO_SHA256}  /tmp/Roboto.ttf" | sha256sum -c -
 
-        sudo mv /tmp/Roboto.ttf /usr/share/fonts/truetype/roboto/
-        sudo fc-cache -f -v > /dev/null 2>&1 || true
+        mv /tmp/Roboto.ttf ~/.local/share/fonts/roboto/
+        fc-cache -f -v > /dev/null 2>&1 || true
         echo "Roboto font installed"
 
     - name: Run Web Server
