@@ -787,8 +787,8 @@ class Chat extends Widget<ChatProperties> {
         this._messageBox.option(name, this._getSendButtonOptionsWithAction());
         break;
       case 'suggestions': {
-        const options = Widget.getOptionsFromContainer(args);
-        this._suggestions?.updateOptions(options);
+        const { suggestions } = this.option();
+        this._suggestions?.updateOptions(suggestions);
         break;
       }
       default:

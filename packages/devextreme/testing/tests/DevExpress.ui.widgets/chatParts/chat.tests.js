@@ -2832,6 +2832,25 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getSuggestionItems().length, 2, 'items count updated via nested path');
             assert.strictEqual(this.getSuggestionItems().eq(0).text(), 'New 1', 'first item text updated');
         });
+
+        QUnit.test('nested option update should not drop other suggestions options', function(assert) {
+            assert.expect(1);
+
+            const clickedText = 'Item 1';
+
+            this.reinit({
+                suggestions: {
+                    items: [{ text: clickedText }],
+                    onItemClick: (e) => {
+                        assert.strictEqual(e.itemData.text, clickedText, 'onItemClick preserved after nested update');
+                    },
+                },
+            });
+
+            this.instance.option('suggestions.items', [{ text: clickedText }, { text: 'Item 2' }]);
+
+            this.getSuggestionItems().first().trigger('dxclick');
+        });
     });
 
     QUnit.module('Data Layer Integration', {
