@@ -2390,9 +2390,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
   test(`The first cell should be focused on pressing the tab key after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the left side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
-    const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
 
     await t.expect(dataGrid.isReady()).ok();
+
+    const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2555,9 +2556,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
   test(`The first cell should be focused on pressing the tab key after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
-    const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
 
     await t.expect(dataGrid.isReady()).ok();
+
+    const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
