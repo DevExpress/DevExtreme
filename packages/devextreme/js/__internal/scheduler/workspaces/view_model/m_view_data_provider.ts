@@ -65,7 +65,7 @@ export default class ViewDataProvider {
 
   get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
 
-  isSkippedDate(date: Date): boolean { return this.viewDataGenerator.isSkippedDate(date); }
+  isDateSkipped(date: Date): boolean { return this.viewDataGenerator.isDateSkipped(date); }
 
   update(options: ViewDataProviderOptions, isGenerateNewViewData: boolean): void {
     this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);

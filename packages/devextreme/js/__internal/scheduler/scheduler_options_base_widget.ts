@@ -8,6 +8,8 @@ import {
   DEFAULT_SCHEDULER_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS_RULES,
 } from './utils/options/constants';
+import { DEFAULT_VIEW_OPTIONS } from './utils/options/constants_view';
+import { resolveSkippedDays } from './utils/options/normalize_hidden_days';
 import type {
   NormalizedView, SafeSchedulerOptions, SchedulerOptionsRule, View,
 } from './utils/options/types';
@@ -102,7 +104,22 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     const viewOptionValue = this.currentView?.[optionName as keyof View];
     const optionValue = (viewOptionValue ?? this.option(optionName)) as SafeSchedulerOptions[K];
 
-    return getViewOption(optionName, optionValue);
+    if (optionName === 'hiddenWeekDays') {
+      if (!this.currentView) {
+        return optionValue;
+      }
+
+      return resolveSkippedDays(
+        this.currentView.hiddenWeekDays,
+        this.option('hiddenWeekDays'),
+        DEFAULT_VIEW_OPTIONS[this.currentView.type].skippedDays,
+      ) as SafeSchedulerOptions[K];
+    }
+
+    return getViewOption(
+      optionName,
+      optionValue,
+    );
   }
 
   hasAgendaView(): boolean {

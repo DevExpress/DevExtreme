@@ -2,23 +2,45 @@ import timeZoneUtils from '../../m_utils_time_zone';
 import type { ListEntity } from '../../view_model/types';
 import { setOptionHour } from './base';
 
-export const calculateStartViewDate = (currentDate: Date, startDayHour: number): Date => {
+export const calculateStartViewDate = (
+  currentDate: Date,
+  startDayHour: number,
+): Date => {
   const validCurrentDate = new Date(currentDate);
-
   return setOptionHour(validCurrentDate, startDayHour);
 };
 
 const getDayStart = (date: Date | number): number => new Date(date).setUTCHours(0, 0, 0, 0);
 
+export const getDateByIndex = (
+  startViewDate: Date,
+  index: number,
+): Date => {
+  const date = new Date(startViewDate);
+  date.setDate(date.getDate() + index);
+  return date;
+};
+
+export const calculateEndViewDate = (
+  startViewDate: Date,
+  endDayHour: number,
+  agendaDuration: number,
+): Date => {
+  const lastVisibleDate = getDateByIndex(
+    startViewDate,
+    Math.max(agendaDuration - 1, 0),
+  );
+  const endViewDate = setOptionHour(lastVisibleDate, endDayHour);
+
+  return new Date(endViewDate.getTime() - 60000);
+};
+
 export const calculateRows = (
   appointments: ListEntity[],
   agendaDuration: number,
-  currentDate: Date,
+  startViewDate: Date,
   groupCount: number,
 ): number[][] => {
-  const dayMs = getDayStart(
-    timeZoneUtils.createUTCDateWithLocalOffset(currentDate),
-  );
   const intervalsStartMap = new Map<number, number>();
   const result = Array.from(
     { length: groupCount || 1 },
@@ -26,8 +48,9 @@ export const calculateRows = (
   );
 
   for (let i = 0; i < agendaDuration; i += 1) {
-    const day = new Date(dayMs);
-    intervalsStartMap.set(day.setUTCDate(day.getUTCDate() + i), i);
+    const date = getDateByIndex(startViewDate, i);
+    const dayStart = getDayStart(timeZoneUtils.createUTCDateWithLocalOffset(date));
+    intervalsStartMap.set(dayStart, i);
   }
 
   appointments.forEach((appointment) => {

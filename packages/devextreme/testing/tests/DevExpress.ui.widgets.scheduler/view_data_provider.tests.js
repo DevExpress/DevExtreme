@@ -960,7 +960,7 @@ module('View Data Provider', {
             });
         });
 
-        module('isSkippedDate', () => {
+        module('isDateSkipped', () => {
             test('it should return correct value for the weekend', async function(assert) {
                 [
                     { viewType: 'day', expected: false },
@@ -973,18 +973,18 @@ module('View Data Provider', {
                     { viewType: 'timelineMonth', expected: false },
                 ].forEach(({ viewType, expected }) => {
                     const viewDataProvider = new ViewDataProvider(viewType);
-                    const result = viewDataProvider.isSkippedDate(new Date(2021, 8, 4));
+                    const result = viewDataProvider.isDateSkipped(new Date(2021, 8, 4));
 
-                    assert.equal(result, expected, `isSkippedDate is correct for the ${viewType} view type`);
+                    assert.equal(result, expected, `isDateSkipped is correct for the ${viewType} view type`);
                 });
             });
 
             test('it should return correct value for the week day', async function(assert) {
                 supportedViews.forEach((viewType) => {
                     const viewDataProvider = new ViewDataProvider(viewType);
-                    const result = viewDataProvider.isSkippedDate(new Date(2021, 8, 3));
+                    const result = viewDataProvider.isDateSkipped(new Date(2021, 8, 3));
 
-                    assert.notOk(result, `isSkippedDate is correct for the ${viewType} view type`);
+                    assert.notOk(result, `isDateSkipped is correct for the ${viewType} view type`);
                 });
             });
         });

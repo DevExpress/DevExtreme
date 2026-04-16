@@ -1,19 +1,17 @@
 import dateUtils from '@js/core/utils/date';
 
-import type { CalculateStartViewDate } from '../../types';
-import { getViewStartByOptions, isDataOnWeekend, setOptionHour } from './base';
+import { getFirstVisibleDate } from '../../utils/skipped_days';
+import { getViewStartByOptions, setOptionHour } from './base';
 import { getValidStartDate } from './week';
 
-const MONDAY_INDEX = 1;
-const DAYS_IN_WEEK = 7;
-
-export const calculateStartViewDate: CalculateStartViewDate = (
-  currentDate,
-  startDayHour,
-  startDate,
-  intervalDuration,
-  firstDayOfWeek,
-) => {
+export const calculateStartViewDate = (
+  currentDate: Date,
+  startDayHour: number,
+  startDate: Date,
+  intervalDuration: number,
+  firstDayOfWeek: number | undefined,
+  skippedDays: number[] = [0, 6],
+): Date => {
   const viewStart = getViewStartByOptions(
     startDate,
     currentDate,
@@ -21,13 +19,11 @@ export const calculateStartViewDate: CalculateStartViewDate = (
     getValidStartDate(startDate, firstDayOfWeek),
   );
 
-  const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
-  if (isDataOnWeekend(firstViewDate)) {
-    const currentDay = firstViewDate.getDay();
-    const distance = (MONDAY_INDEX + DAYS_IN_WEEK - currentDay) % 7;
-
-    firstViewDate.setDate(firstViewDate.getDate() + distance);
-  }
+  const firstViewDate = getFirstVisibleDate(
+    dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek),
+    skippedDays,
+    (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+  );
 
   return setOptionHour(firstViewDate, startDayHour);
 };

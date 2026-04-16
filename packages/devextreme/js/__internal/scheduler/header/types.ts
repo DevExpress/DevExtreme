@@ -5,6 +5,7 @@ import type { NormalizedView, SafeSchedulerOptions } from '../utils/options/type
 
 export interface HeaderOptions {
   currentView: NormalizedView;
+  skippedDays: number[];
   views: NormalizedView[];
   currentDate: Date;
   min?: Date;
@@ -30,6 +31,7 @@ export interface IntervalOptions {
   firstDayOfWeek?: number;
   intervalCount: number;
   agendaDuration?: number;
+  skippedDays: number[];
 }
 
 export interface HeaderCalendarOptions {
