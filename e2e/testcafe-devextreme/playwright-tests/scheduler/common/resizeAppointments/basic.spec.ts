@@ -12,7 +12,7 @@ const dataSource = [
   },
 ];
 
-test.describe.skip('Resize appointments in the Scheduler basic views', () => {
+test.describe('Resize appointments in the Scheduler basic views', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

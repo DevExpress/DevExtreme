@@ -14,7 +14,7 @@ function getData(rowCount: number, fieldCount: number): Record<string, string>[]
   });
 }
 
-test.describe.skip('Accessibility - DataGrid templates', () => {
+test.describe('Accessibility - DataGrid templates', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

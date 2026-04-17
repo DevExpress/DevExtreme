@@ -12,7 +12,7 @@ const resourcesData = [{
   ],
 }];
 
-test.describe.skip('Resize appointments in the Scheduler with vertical grouping', () => {
+test.describe('Resize appointments in the Scheduler with vertical grouping', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

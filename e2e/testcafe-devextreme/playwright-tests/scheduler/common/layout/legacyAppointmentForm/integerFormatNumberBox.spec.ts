@@ -3,7 +3,7 @@ import { createWidget, getContainerUrl, setupTestPage, Scheduler } from '../../.
 
 const containerUrl = getContainerUrl(__dirname, '../../../../../tests/container.html');
 
-test.describe.skip('Layout:AppointmentForm:IntegerFormatNumberBox', () => {
+test.describe('Layout:AppointmentForm:IntegerFormatNumberBox', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

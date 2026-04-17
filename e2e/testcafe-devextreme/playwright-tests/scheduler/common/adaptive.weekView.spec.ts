@@ -33,7 +33,7 @@ const createScheduler = async (page, data, width = '100%'): Promise<void> => {
   });
 };
 
-test.describe.skip('Week view in adaptive mode', () => {
+test.describe('Week view in adaptive mode', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

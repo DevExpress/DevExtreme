@@ -64,7 +64,7 @@ const checkRegularAppointment = async (
   expect(clientHeight).toBeLessThanOrEqual(height + 1);
 };
 
-test.describe.skip('Scheduler - Multiday appointments', () => {
+test.describe('Scheduler - Multiday appointments', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -3,7 +3,7 @@ import { createWidget, getContainerUrl, setupTestPage } from '../../../playwrigh
 
 const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html');
 
-test.describe.skip('Legacy appointment popup form', () => {
+test.describe('Legacy appointment popup form', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

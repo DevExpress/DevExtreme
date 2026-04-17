@@ -25,7 +25,7 @@ const getBaseSchedulerOptions = (currentDate: Date) => ({
   },
 });
 
-test.describe.skip('Drag-n-drop appointments between two schedulers with async DataSource (T1094033)', () => {
+test.describe('Drag-n-drop appointments between two schedulers with async DataSource (T1094033)', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -19,7 +19,7 @@ const schedulerOptions = {
   editing: { legacyForm: true },
 };
 
-test.describe.skip('Appointment popup form:date editors', () => {
+test.describe('Appointment popup form:date editors', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -3,7 +3,7 @@ import { createWidget, setupTestPage, getContainerUrl } from '../../playwright-h
 
 const containerUrl = getContainerUrl(__dirname, '../../tests/container.html');
 
-test.describe.skip('CardView - Items functional', () => {
+test.describe('CardView - Items functional', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

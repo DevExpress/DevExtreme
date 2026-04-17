@@ -14,7 +14,7 @@ const markup = '<div style="display: flex;">' +
   '<div id="scheduler"></div>' +
   '</div>';
 
-test.describe.skip('T1118059', () => {
+test.describe('T1118059', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -22,7 +22,7 @@ const createBasicDataGrid = (page: any) => createWidget(page, 'dxDataGrid', {
   },
 });
 
-test.describe.skip('Keyboard Navigation - skip drag cell', () => {
+test.describe('Keyboard Navigation - skip drag cell', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

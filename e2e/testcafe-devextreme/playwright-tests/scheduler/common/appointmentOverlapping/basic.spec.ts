@@ -68,7 +68,7 @@ const SCHEDULER_DEFAULT_OPTIONS = {
   height: 900,
 };
 
-test.describe.skip('Appointment overlapping in Scheduler', () => {
+test.describe('Appointment overlapping in Scheduler', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

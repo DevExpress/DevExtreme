@@ -16,7 +16,7 @@ const generateData = (rowCount: number, columnCount: number): Record<string, unk
   return items;
 };
 
-test.describe.skip('Virtual Columns.Functional', () => {
+test.describe('Virtual Columns.Functional', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

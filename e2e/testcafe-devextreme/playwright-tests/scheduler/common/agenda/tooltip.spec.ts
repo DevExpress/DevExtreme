@@ -3,7 +3,7 @@ import { createWidget, getContainerUrl, setupTestPage } from '../../../../playwr
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe.skip('Agenda:Tooltip', () => {
+test.describe('Agenda:Tooltip', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

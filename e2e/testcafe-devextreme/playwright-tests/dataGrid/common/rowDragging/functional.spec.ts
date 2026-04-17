@@ -15,7 +15,7 @@ const sharedDataSource = [
   { id: 8, name: 'Name 8', age: 14 },
 ];
 
-test.describe.skip('Row dragging.Functional', () => {
+test.describe('Row dragging.Functional', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

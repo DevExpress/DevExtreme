@@ -12,7 +12,7 @@ const data = [
   },
 ];
 
-test.describe.skip('onAppointmentDeleting event', () => {
+test.describe('onAppointmentDeleting event', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

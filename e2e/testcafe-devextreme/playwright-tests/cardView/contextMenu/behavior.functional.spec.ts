@@ -9,7 +9,7 @@ const baseData = [
   { id: 3, name: 'Charlie', status: 'Active' },
 ];
 
-test.describe.skip('CardView - ContextMenu Functional', () => {
+test.describe('CardView - ContextMenu Functional', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

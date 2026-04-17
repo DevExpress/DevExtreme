@@ -35,7 +35,7 @@ const createDataGrid = (page: any) => createWidget(page, 'dxDataGrid', {
   },
 });
 
-test.describe.skip('Keyboard Navigation - custom buttons', () => {
+test.describe('Keyboard Navigation - custom buttons', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

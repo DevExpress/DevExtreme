@@ -14,7 +14,7 @@ const getData = (rowCount: number, colCount: number): Record<string, string>[] =
   return items;
 };
 
-test.describe.skip('Resize columns - nextColumn mode', () => {
+test.describe('Resize columns - nextColumn mode', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 900, height: 800 });
     await page.goto(containerUrl);

@@ -30,7 +30,7 @@ const createDefaultGrid = (page: any, extraOptions: Record<string, unknown> = {}
   ...extraOptions,
 });
 
-test.describe.skip('Fixed Columns - keyboard navigation', () => {
+test.describe('Fixed Columns - keyboard navigation', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 900, height: 800 });
     await page.goto(containerUrl);

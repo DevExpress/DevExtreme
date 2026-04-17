@@ -3,7 +3,7 @@ import { createWidget, getContainerUrl, setupTestPage, appendElementTo } from '.
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe.skip('Appointment (T1080232)', () => {
+test.describe('Appointment (T1080232)', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });
