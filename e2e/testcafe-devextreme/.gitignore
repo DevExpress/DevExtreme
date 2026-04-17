@@ -1,4 +1,5 @@
 /screenshots
-/artifactsplaywright-results/
+/artifacts
+playwright-results/
 playwright-report/
 pw-browsers/

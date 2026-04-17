@@ -3,7 +3,6 @@
   "version": "26.1.0",
   "scripts": {
     "test": "ts-node ./runner.ts",
-    "posttest": "echo '=== PLAYWRIGHT POC ===' && PLAYWRIGHT_BROWSERS_PATH=./pw-browsers pnpm exec playwright install chromium 2>&1 || true; echo '--- PASS 1: generate baselines ---' && PLAYWRIGHT_BROWSERS_PATH=./pw-browsers pnpm exec playwright test --config playwright.config.ts playwright-tests/scheduler/common/month/ --reporter=list --update-snapshots 2>&1; echo '--- PASS 2: compare against baselines ---' && PLAYWRIGHT_BROWSERS_PATH=./pw-browsers pnpm exec playwright test --config playwright.config.ts playwright-tests/scheduler/common/month/ --reporter=list 2>&1 | tee playwright-run.log; echo \"--- PASS 2 exit code: $? ---\"; echo '=== PLAYWRIGHT DONE ==='",
     "test:playwright": "npx playwright test --config playwright.config.ts --reporter=list",
     "lint": "eslint",
     "update-failed-etalons": "node update_failed_etalons.mjs"

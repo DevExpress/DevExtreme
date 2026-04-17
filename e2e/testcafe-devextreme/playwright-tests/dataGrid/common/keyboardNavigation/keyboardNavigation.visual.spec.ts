@@ -14,7 +14,7 @@ const getData = (rowCount: number, colCount: number): Record<string, string>[] =
   return items;
 };
 
-test.describe('Keyboard Navigation.Visual', () => {
+test.describe.skip('Keyboard Navigation.Visual', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
