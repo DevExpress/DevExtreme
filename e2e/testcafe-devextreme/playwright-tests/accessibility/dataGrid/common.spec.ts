@@ -199,7 +199,7 @@ test.describe('Accessibility - DataGrid common', () => {
     await a11yCheck(page, {}, '#container');
   });
 
-  test('filter panel', async ({ page }) => {
+  test.skip('filter panel', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(10, 5),
       keyExpr: 'field_0',

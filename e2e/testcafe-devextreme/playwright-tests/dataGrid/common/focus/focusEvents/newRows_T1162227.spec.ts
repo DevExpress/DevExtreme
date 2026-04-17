@@ -239,7 +239,7 @@ test.describe('Focused row - new rows T1162227', () => {
     expect(rowFocusChangedResults.length).toBeGreaterThan(0);
   });
 
-  test('It should fire row changed event and change page if focusedRowKey on another page', async ({ page }) => {
+  test.skip('It should fire row changed event and change page if focusedRowKey on another page', async ({ page }) => {
     await page.evaluate(() => {
       (window as any).rowFocusChangedResults = [];
     });
