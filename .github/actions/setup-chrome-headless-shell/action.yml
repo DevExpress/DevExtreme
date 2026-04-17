@@ -18,10 +18,6 @@ runs:
         CHROME_VERSION: ${{ inputs.chrome-version }}
       run: |
         if [ -n "$CHROME_VERSION" ]; then
-          sudo apt-get update
-          sudo apt-get -y install libu2f-udev
-          sudo apt-get -y install dbus
-          
           echo "version to install: $CHROME_VERSION"
           CHROME_BIN=`npx @puppeteer/browsers install chrome-headless-shell@$CHROME_VERSION | awk '{print $2}'`
           chmod +x $CHROME_BIN
