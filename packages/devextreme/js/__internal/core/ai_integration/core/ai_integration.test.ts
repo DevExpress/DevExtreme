@@ -14,13 +14,13 @@ import {
   ChangeStyleCommand,
   ChangeToneCommand,
   ExecuteCommand,
+  ExecuteGridAssistantCommand,
   ExpandCommand,
   ProofreadCommand,
   ShortenCommand,
   SummarizeCommand,
   TranslateCommand,
 } from '@ts/core/ai_integration/commands';
-import { ExecuteGridAssistantCommand } from '@ts/core/ai_integration/commands/executeGridAssistant';
 import { AIIntegration, CommandNames } from '@ts/core/ai_integration/core/ai_integration';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
