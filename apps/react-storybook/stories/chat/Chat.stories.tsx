@@ -1052,14 +1052,20 @@ const suggestionItems: ButtonGroupItem[] = [
 export const Suggestions: Story = {
     args: {
         sendImmediately: false,
+        stylingMode: 'outlined',
     },
     argTypes: {
         sendImmediately: {
             name: 'Send immediately on suggestion click',
             control: 'boolean',
         },
+        stylingMode: {
+            name: 'Suggestions styling mode',
+            control: 'select',
+            options: ['contained', 'outlined', 'text'],
+        },
     },
-    render: ({ sendImmediately }) => {
+    render: ({ sendImmediately, stylingMode }) => {
         const [messages, setMessages] = useState<ChatTypes.Message[]>([]);
         const [inputFieldText, setInputFieldText] = useState('');
 
@@ -1070,6 +1076,7 @@ export const Suggestions: Story = {
 
         const suggestions = useMemo<ChatTypes.Properties['suggestions']>(() => ({
             items: suggestionItems,
+            stylingMode,
             onItemClick: (e: ButtonGroupItemClickEvent) => {
                 if (sendImmediately) {
                     setMessages((prev) => [...prev, {
@@ -1081,7 +1088,7 @@ export const Suggestions: Story = {
                     setInputFieldText(e.itemData?.text ?? '');
                 }
             },
-        }), [sendImmediately]);
+        }), [sendImmediately, stylingMode]);
 
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
