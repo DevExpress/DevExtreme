@@ -69,8 +69,16 @@ const COMMANDS = {
   },
   [CommandNames.ExecuteGridAssistant]: {
     command: ExecuteGridAssistantCommand,
-    params: { text: 'sort by name', context: { columns: [] } },
-    params2: { text: 'filter by id', context: { columns: [] } },
+    params: {
+      text: 'sort by name',
+      context: { columns: [] },
+      responseSchema: { type: 'object', properties: {} },
+    },
+    params2: {
+      text: 'filter by id',
+      context: { columns: [] },
+      responseSchema: { type: 'object', properties: {} },
+    },
   },
 };
 
