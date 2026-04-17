@@ -228,6 +228,7 @@ function onSuggestionItemClick(e: { itemData?: { text: string; prompt: string } 
 
 .dx-chat-messagelist-empty-prompt {
   max-width: 462px;
+  line-height: 20px;
 }
 
 .dx-chat-messagebubble-content > div > p:first-child {
