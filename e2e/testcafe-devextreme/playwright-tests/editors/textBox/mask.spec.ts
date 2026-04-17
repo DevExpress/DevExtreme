@@ -1,0 +1,33 @@
+import { test, expect } from '@playwright/test';
+import { createWidget, appendElementTo } from '../../../playwright-helpers';
+import path from 'path';
+
+const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
+
+test.describe('TextBox_mask', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
+  });
+
+  test('"!" character should not be accepted if mask restricts it (T1156419)', async ({ page }) => {
+
+    await appendElementTo(page, '#container', 'div', 'textBox', { });
+
+    await createWidget(page, 'dxTextBox', {
+      mask: '9',
+    }, '#textBox');
+
+    const input = page.locator('#textBox .dx-texteditor-input');
+
+    await input.click();
+    await page.keyboard.type('!');
+
+    expect(await input.inputValue()).toBe('_');
+
+    });
+});

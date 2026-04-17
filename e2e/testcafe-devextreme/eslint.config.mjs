@@ -27,6 +27,11 @@ export default [
   {
     ignores: [
       'node_modules/**',
+      'playwright-tests/**',
+      'playwright-helpers/**',
+      'playwright-results/**',
+      'playwright-report/**',
+      'playwright.config.ts',
     ],
   },
   ...spellCheckConfig,

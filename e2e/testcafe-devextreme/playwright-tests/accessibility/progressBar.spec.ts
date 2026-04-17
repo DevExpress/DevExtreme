@@ -1,0 +1,56 @@
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../playwright-helpers';
+import path from 'path';
+
+const containerUrl = `file://${path.resolve(__dirname, '../../tests/container.html')}`;
+
+test.describe('Accessibility - progressBar', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
+  });
+
+  test('accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 45, min: 0, max: 100, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar without value', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { min: 0, max: 100, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar disabled', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 45, min: 0, max: 100, disabled: true, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar without showStatus', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 45, min: 0, max: 100, showStatus: false, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar disabled without value', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { min: 0, max: 100, disabled: true, showStatus: true, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar at maximum value', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 100, min: 0, max: 100, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar at minimum value', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 0, min: 0, max: 100, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar with custom min and max', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 50, min: 10, max: 200, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+});

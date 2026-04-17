@@ -1,0 +1,91 @@
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
+import path from 'path';
+
+const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
+
+function getData(rowCount: number, fieldCount: number): Record<string, string>[] {
+  return Array.from({ length: rowCount }, (_, rowIdx) => {
+    const row: Record<string, string> = {};
+    for (let colIdx = 0; colIdx < fieldCount; colIdx += 1) {
+      row[`field_${colIdx}`] = `val_${rowIdx}_${colIdx}`;
+    }
+    return row;
+  });
+}
+
+test.describe('Accessibility - DataGrid fixedColumns', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
+  });
+
+  test('fixed columns accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columns: [
+        { dataField: 'field_0', fixed: true },
+        { dataField: 'field_1', fixed: true },
+        'field_2', 'field_3', 'field_4',
+        { dataField: 'field_5', fixed: true, fixedPosition: 'right' },
+        { dataField: 'field_6', fixed: true, fixedPosition: 'right' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('fixed columns with scrollable content', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      columnWidth: 150,
+      width: 800,
+      keyExpr: 'id',
+      scrolling: { useNative: true },
+      dataSource: [
+        { id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a' },
+        { id: 1, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a' },
+      ],
+      columnFixing: { legacyMode: true } as any,
+      columns: [
+        { dataField: 'column1', fixed: true },
+        { dataField: 'column2', fixed: true },
+        { dataField: 'column3' },
+        { dataField: 'column4' },
+        { dataField: 'column5' },
+        { dataField: 'column6' },
+        { dataField: 'column7', fixed: true, fixedPosition: 'right' },
+        { dataField: 'column8', fixed: true, fixedPosition: 'right' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('fixed columns without left fixed columns', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      columnWidth: 150,
+      width: 800,
+      keyExpr: 'id',
+      scrolling: { useNative: true },
+      dataSource: [
+        { id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a' },
+        { id: 1, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a' },
+      ],
+      columnFixing: { legacyMode: true } as any,
+      columns: [
+        { dataField: 'column1', fixed: false },
+        { dataField: 'column2', fixed: false },
+        { dataField: 'column3' },
+        { dataField: 'column4' },
+        { dataField: 'column5' },
+        { dataField: 'column6' },
+        { dataField: 'column7', fixed: true, fixedPosition: 'right' },
+        { dataField: 'column8', fixed: true, fixedPosition: 'right' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+});

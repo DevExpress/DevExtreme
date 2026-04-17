@@ -1,0 +1,51 @@
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../playwright-helpers';
+import path from 'path';
+
+const containerUrl = `file://${path.resolve(__dirname, '../../tests/container.html')}`;
+
+test.describe('Accessibility - speechToText', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
+  });
+
+  test('accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'custom text' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText default', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: '' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText with stop icon', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'custom text', stopIcon: 'user' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText with empty stop icon', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'custom text', stopIcon: '' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText with start icon', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'Record', startIcon: 'audio' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText disabled', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'disabled', disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText with both icons', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'Start', startIcon: 'audio', stopIcon: 'close' });
+    await a11yCheck(page, {}, '#container');
+  });
+});

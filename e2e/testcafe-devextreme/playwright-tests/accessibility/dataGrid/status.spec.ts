@@ -1,0 +1,90 @@
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
+import path from 'path';
+
+const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
+
+function getData(rowCount: number, fieldCount: number): Record<string, string>[] {
+  return Array.from({ length: rowCount }, (_, rowIdx) => {
+    const row: Record<string, string> = {};
+    for (let colIdx = 0; colIdx < fieldCount; colIdx += 1) {
+      row[`field_${colIdx}`] = `val_${rowIdx}_${colIdx}`;
+    }
+    return row;
+  });
+}
+
+test.describe('Accessibility - DataGrid status', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
+  });
+
+  const statusDataSource = [
+    { id: 0, label: 'A', value: 350 },
+    { id: 1, label: 'B', value: 1200 },
+    { id: 2, label: 'C', value: 750 },
+  ];
+
+  test('grid status accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      columns: ['field_0', 'field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with basic data', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with header filter visible', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      headerFilter: { visible: true },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with filter row visible', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      filterRow: { visible: true, applyFilter: 'onClick' },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with search panel visible', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      searchPanel: { visible: true },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with column chooser select mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      columnChooser: { enabled: true, mode: 'select' },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+});

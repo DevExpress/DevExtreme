@@ -1,0 +1,75 @@
+import { test, expect } from '@playwright/test';
+import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { TabPanel } from '../../../playwright-helpers/tabPanel';
+import path from 'path';
+
+const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
+
+test.describe('Splitter_integration', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 400 });
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
+  });
+
+  test('The splitter pane should be rendered with the correct ratio inside the tab content of TabPanel if pane.size uses pixels', async ({ page }) => {
+    await page.evaluate(() => {
+      ($('#container') as any).dxTabPanel({
+        width: '100%',
+        height: 300,
+        deferRendering: true,
+        templatesRenderAsynchronously: true,
+        dataSource: [{
+          title: 'Tab_1',
+          collapsible: true,
+          text: 'Tab_1 content',
+        }, {
+          title: 'Tab_2',
+          collapsible: true,
+          template: () => ($('<div>') as any).dxSplitter({
+            orientation: 'horizontal',
+            allowKeyboardNavigation: true,
+            dataSource: [{
+              size: '100px',
+              text: 'Pane_1',
+              collapsible: true,
+              template: () => $('<div>').text('Pane_1'),
+            }, {
+              collapsible: true,
+              splitter: {
+                orientation: 'vertical',
+                dataSource: [{
+                  text: 'Pane_2_1',
+                  collapsible: true,
+                  template: () => $('<div>').text('Pane_2_1'),
+                }, {
+                  text: 'Pane_2_2',
+                  collapsible: true,
+                  template: () => $('<div>').text('Pane_2_2'),
+                }],
+              },
+            }],
+          }),
+        }],
+      });
+    });
+
+    await page.setViewportSize({ width: 400, height: 400 });
+
+    const tabPanel = new TabPanel(page);
+
+    await tabPanel.tabs.getItem(1).element.click();
+    await page.locator('.dx-multiview').waitFor({ state: 'visible' });
+    await page.locator('.dx-multiview').click({ force: true });
+
+    await testScreenshot(page, 'Splitter in tab content, pane_1.size=`100px`.png', { element: '#container' });
+
+    await page.setViewportSize({ width: 600, height: 400 });
+
+    await testScreenshot(page, 'Splitter in tab content after window resize, pane_1.size=`100px`.png', { element: '#container' });
+  });
+});
