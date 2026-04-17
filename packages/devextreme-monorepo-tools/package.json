@@ -9,6 +9,6 @@
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "2.0.4",
     "@types/jest": "29.5.14",
-    "ts-jest": "29.1.3"
+    "ts-jest": "29.4.9"
   }
 }
