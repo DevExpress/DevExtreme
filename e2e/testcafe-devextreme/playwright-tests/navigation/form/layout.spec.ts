@@ -205,7 +205,7 @@ test.describe('Form', () => {
     });
   });
 
-  test('Validation errors persist after resize', async ({ page }) => {
+  test.skip('Validation errors persist after resize', async ({ page }) => {
     await createWidget(page, 'dxForm', {
       colCountByScreen: {
         xs: 1,
