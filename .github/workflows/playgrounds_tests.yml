@@ -74,11 +74,6 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Setup Chrome
-      uses: ./.github/actions/setup-chrome
-      with:
-        chrome-version: '133.0.6943.53'
-
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
@@ -111,8 +106,3 @@ jobs:
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
       run: npx --no-install nx build
-
-#    - name: Run test
-#      if: ${{ matrix.ARGS.platform != 'angular' }}
-#      working-directory: ./apps/${{ matrix.ARGS.platform }}
-#      run: npm run test
