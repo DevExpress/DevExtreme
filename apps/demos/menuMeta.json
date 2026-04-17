@@ -3704,6 +3704,13 @@
                   "/Models/SampleData/AppointmentsWorkHours.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Hidden Week Days",
+                "Name": "HiddenDays",
+                "Widget": "Scheduler",
+                "Equivalents": "",
+                "DemoType": "Web"
               }
             ]
           },
