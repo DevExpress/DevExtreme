@@ -31,6 +31,7 @@ export default [
       'playwright-helpers/**',
       'playwright-results/**',
       'playwright-report/**',
+      'playwright.config.ts',
     ],
   },
   ...spellCheckConfig,
