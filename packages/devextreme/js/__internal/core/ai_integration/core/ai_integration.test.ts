@@ -20,6 +20,7 @@ import {
   SummarizeCommand,
   TranslateCommand,
 } from '@ts/core/ai_integration/commands';
+import { ExecuteGridAssistantCommand } from '@ts/core/ai_integration/commands/executeGridAssistant';
 import { AIIntegration, CommandNames } from '@ts/core/ai_integration/core/ai_integration';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
@@ -65,6 +66,11 @@ const COMMANDS = {
     command: TranslateCommand,
     params: { text: 'text for translation', lang: 'French' },
     params2: { text: 'text for translation 2', lang: 'Spanish' },
+  },
+  [CommandNames.ExecuteGridAssistant]: {
+    command: ExecuteGridAssistantCommand,
+    params: { text: 'sort by name', context: { columns: [] } },
+    params2: { text: 'filter by id', context: { columns: [] } },
   },
 };
 
