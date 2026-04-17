@@ -179,6 +179,7 @@ export namespace Common {
         export type AIIntegrationOptions = import('devextreme/common/ai-integration').AIIntegrationOptions;
         export type AIProvider = import('devextreme/common/ai-integration').AIProvider;
         export type AIResponse = import('devextreme/common/ai-integration').AIResponse;
+        export type ExecuteGridAssistantCommandResponse = import('devextreme/common/ai-integration').ExecuteGridAssistantCommandResponse;
         export type GenerateGridColumnCommandResponse = import('devextreme/common/ai-integration').GenerateGridColumnCommandResponse;
         export type Prompt = import('devextreme/common/ai-integration').Prompt;
         export type RequestParams = import('devextreme/common/ai-integration').RequestParams;
