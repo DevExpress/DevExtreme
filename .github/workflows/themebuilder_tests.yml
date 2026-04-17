@@ -46,11 +46,11 @@ jobs:
 
     - name: Check styles for duplicate rules (generic)
       working-directory: ./packages/devextreme-scss
-      run: npx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.light.css"
+      run: npx --no-install stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.light.css"
 
     - name: Check styles for duplicate rules (material)
       working-directory: ./packages/devextreme-scss
-      run: npx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
+      run: npx --no-install stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
 
   notify:
     runs-on: devextreme-shr2

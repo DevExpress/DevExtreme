@@ -358,7 +358,7 @@ jobs:
 
     - name: Update bundles config
       working-directory: apps/demos
-      run: npx gulp update-config
+      run: npx --no-install gulp update-config
 
     - name: Run Web Server
       run: |

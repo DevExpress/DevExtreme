@@ -38,7 +38,7 @@ jobs:
 
     - name: Build localization
       working-directory: ./packages/devextreme
-      run: npx gulp localization
+      run: npx --no-install gulp localization
 
     - name: Jest tests
       run: npx --no-install nx test-jest devextreme-main
