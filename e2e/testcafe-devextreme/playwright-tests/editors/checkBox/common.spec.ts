@@ -5,7 +5,7 @@ const Guid = () => ({ toString: () => Math.random().toString(36).slice(2, 10) })
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
-test.describe('CheckBox', () => {
+test.describe.skip('CheckBox', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

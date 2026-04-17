@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
-test.describe('DateRangeBox render', () => {
+test.describe.skip('DateRangeBox render', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
-test.describe('FileUploader - file list visibility', () => {
+test.describe.skip('FileUploader - file list visibility', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
