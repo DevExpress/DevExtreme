@@ -1359,6 +1359,23 @@ declare module DevExpress.common {
    */
   export type GlobalConfig = {
     versionAssertions?: VersionAssertion[];
+    dateFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    timeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    dateTimeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    numberFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    dateTimeFormatPresets?: Record<
+      string,
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>
+    >;
     /**
      * [descr:GlobalConfig.decimalSeparator]
      * @deprecated [depNote:GlobalConfig.decimalSeparator]
