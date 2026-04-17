@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo, setStyleAttribute, setClassAttribute, insertStylesheetRulesToPage } from '../../../playwright-helpers';
 import path from 'path';
-const Guid = () => ({ toString: () => Math.random().toString(36).slice(2, 10) });
+function Guid() { return { toString: () => Math.random().toString(36).slice(2, 10) }; }
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 

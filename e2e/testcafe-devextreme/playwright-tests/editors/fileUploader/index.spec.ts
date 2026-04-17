@@ -20,15 +20,13 @@ test.describe.skip('FileUploader - file list visibility', () => {
     test(`FileUploader with showFileList: ${showFileList} - after file selected`, async ({ page }) => {
     await createWidget(page, 'dxFileUploader', { showFileList });
 
-      const fileUploader = page.locator('#container');
+      const fileInput = page.locator('#container input[type="file"]');
 
-      await fileUploader.input.setInputFiles([TEST_FILE]);
+      await fileInput.setInputFiles([TEST_FILE]);
 
       await testScreenshot(page, `fileuploader-show-filelist-${showFileList}.png`, {
         element: '#container',
       });
-
-      await clearUpload(fileUploader.input);
 
     });
   });
