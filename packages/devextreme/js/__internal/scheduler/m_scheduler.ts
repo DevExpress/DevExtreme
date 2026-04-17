@@ -78,7 +78,7 @@ import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
 import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView } from './utils/options/types';
-import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
+import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
@@ -1169,11 +1169,29 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       addAppointment: (appointment) => this.addAppointment(appointment),
       updateAppointment: (sourceAppointment, updatedAppointment) => this.updateAppointment(sourceAppointment, updatedAppointment),
 
-      updateScrollPosition: (startDate, appointmentGroupValues, inAllDayRow) => {
-        this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
-      },
     };
     return new AppointmentPopup(scheduler, form);
+  }
+
+  private scrollToAppointment(appointment: Record<string, unknown>): void {
+    const adapter = new AppointmentAdapter(appointment, this._dataAccessors);
+    const { startDate, endDate, allDay } = adapter;
+
+    if (!startDate) {
+      return;
+    }
+
+    const startTime = startDate.getTime();
+    const endTime = endDate ? endDate.getTime() : startTime;
+    const dayInMs = toMs('day');
+
+    const inAllDayRow = allDay || (endTime - startTime) >= dayInMs;
+    const appointmentGroupValues = getAppointmentGroupValues(
+      appointment,
+      this.resourceManager.resources,
+    );
+
+    this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
   }
 
   private getAppointmentTooltipOptions() {
@@ -1638,7 +1656,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this.appointmentPopup.show(singleRawAppointment, {
         onSave: (newAppointment) => {
           this.updateAppointment(rawAppointment, appointment.source);
-          return this.addAppointment(newAppointment);
+          return when(this.addAppointment(newAppointment))
+            .done(() => this.scrollToAppointment(newAppointment));
         },
         title: messageLocalization.format('dxScheduler-editPopupTitle'),
         readOnly: Boolean(appointment.source) && appointment.disabled,
@@ -2012,7 +2031,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       delete this.editAppointmentData; // TODO
       if (this.editing.allowAdding) {
         this.appointmentPopup.show(rawAppointment, {
-          onSave: (appointment) => this.addAppointment(appointment),
+          onSave: (appointment) => when(this.addAppointment(appointment))
+            .done(() => this.scrollToAppointment(appointment)),
           title: messageLocalization.format('dxScheduler-newPopupTitle'),
           readOnly: false,
         });
@@ -2028,7 +2048,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         const readOnly = isDisabled || !this.editing.allowUpdating;
 
         this.appointmentPopup.show(rawAppointment, {
-          onSave: (appointment) => this.updateAppointment(rawAppointment, appointment),
+          onSave: (appointment) => when(this.updateAppointment(rawAppointment, appointment))
+            .done(() => this.scrollToAppointment(appointment)),
           title: messageLocalization.format('dxScheduler-editPopupTitle'),
           readOnly,
         });

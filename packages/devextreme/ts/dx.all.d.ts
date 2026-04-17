@@ -11506,7 +11506,10 @@ declare module DevExpress.ui {
      */
     suggestions?: Omit<
       DevExpress.ui.dxButtonGroup.Properties,
-      'selectionMode' | 'selectedItemKeys' | 'selectedItems'
+      | 'selectionMode'
+      | 'selectedItemKeys'
+      | 'selectedItems'
+      | 'onSelectionChanged'
     >;
     /**
      * [descr:dxChatOptions.typingUsers]

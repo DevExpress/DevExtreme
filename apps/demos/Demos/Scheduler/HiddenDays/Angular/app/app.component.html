@@ -1,0 +1,32 @@
+<div class="hidden-days-demo" [class.is-invalid]="isInvalid">
+  <div class="scheduler-container">
+    <dx-scheduler
+      [dataSource]="dataSource"
+      [views]="['week', 'workWeek', 'month', 'timelineWeek', 'agenda']"
+      [hiddenWeekDays]="hiddenWeekDays"
+      currentView="week"
+      [currentDate]="currentDate"
+      timeZone="America/Los_Angeles"
+      [startDayHour]="9"
+      [height]="730"
+    >
+    </dx-scheduler>
+  </div>
+
+  <div class="options">
+    <div class="caption">Visible Week Days</div>
+    @for (day of dayLabels; track day.index) {
+    <div class="option">
+      <dx-check-box
+        [text]="day.label"
+        [value]="day.visible"
+        (onValueChanged)="onDayToggled($event, day.index)"
+      >
+      </dx-check-box>
+    </div>
+    }
+    <div class="validation-message">
+      {{ validationMessage }}
+    </div>
+  </div>
+</div>
