@@ -75,7 +75,7 @@ jobs:
       shell: bash
       run: |
         node ./tools/scripts/performance_log.js &
-        pnpx nx build devextreme
+        pnpm exec nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
