@@ -11,6 +11,8 @@ test('allowExportSelectedData: false, menu: false', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await testScreenshot(t, takeScreenshot, 'grid-export-one-button.png', { element: dataGrid.getHeaderPanel().element });
   await t
     .expect(compareResults.isValid())
@@ -25,6 +27,8 @@ test('allowExportSelectedData: false, menu: false', async (t) => {
 test('allowExportSelectedData: false, menu: false, PDF', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await testScreenshot(t, takeScreenshot, 'grid-export-one-button-pdf.png', { element: dataGrid.getHeaderPanel().element });
   await t
@@ -42,6 +46,8 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const headerPanel = dataGrid.getHeaderPanel();
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(headerPanel.getExportButton().element);
 
@@ -65,6 +71,8 @@ test('allowExportSelectedData: false, menu: true', async (t) => {
   const dataGrid = new DataGrid('#container');
   const headerPanel = dataGrid.getHeaderPanel();
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await t.click(headerPanel.getDropDownMenuButton());
 
   await testScreenshot(t, takeScreenshot, 'grid-export-one-button-in-menu.png', { element: 'html' });
@@ -84,6 +92,8 @@ test('allowExportSelectedData: true, menu: true', async (t) => {
 
   const dataGrid = new DataGrid('#container');
   const headerPanel = dataGrid.getHeaderPanel();
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(headerPanel.getDropDownMenuButton());
 
@@ -105,6 +115,7 @@ test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await testScreenshot(t, takeScreenshot, 'disabled-export_when-no-columns-visible.png', { element: dataGrid.element });
   await t
@@ -130,6 +141,8 @@ test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns 
 
   const dataGrid = new DataGrid('#container');
   const headerPanel = dataGrid.getHeaderPanel();
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(headerPanel.getDropDownMenuButton());
 

@@ -15,6 +15,8 @@ test('Grouping Panel label should not overflow in a narrow grid (T1103925)', asy
 
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await testScreenshot(t, takeScreenshot, 'groupingPanel.png', { element: dataGrid.getToolbar().element });
   await t
     .expect(compareResults.isValid())
@@ -45,6 +47,8 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await testScreenshot(t, takeScreenshot, 'T1155453-expanded-groups.png', { element: dataGrid.element });
 
@@ -95,6 +99,8 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await testScreenshot(t, takeScreenshot, 'T1155453-expanded-groups-with-fixed-content.png', { element: dataGrid.element });
 
@@ -149,6 +155,8 @@ test.meta({ browserSize: [800, 800] })('Empty header message should appear when 
 
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await testScreenshot(t, takeScreenshot, 'empty-header-message-with-selection-enabled.png', { element: dataGrid.element });
 
   // assert
@@ -185,6 +193,8 @@ test.meta({ browserSize: [800, 800] })('Empty header message should appear when 
 test('Group panel message should be vertically aligned (T1186613)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await testScreenshot(t, takeScreenshot, 'group-panel-message-align.png', { element: dataGrid.getToolbar().element });
   await t
@@ -227,6 +237,8 @@ test('Group panel message should be vertically aligned (T1186613)', async (t) =>
 test('The collapse icon should update if repaintChangesOnly option is enabled (T1201981)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(dataGrid.getPager().getNavPage('2').element);
 
@@ -276,6 +288,8 @@ const customersT1232129 = [
 test('DataGrid loses grouping after the expandAll method if a grouped column has calculateDisplayValue (T1232129)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiExpandAll();
   await t
     .expect(dataGrid.apiColumnOption('groupId', 'groupIndex'))
@@ -301,6 +315,8 @@ test('DataGrid loses grouping after the expandAll method if a grouped column has
 test('DataGrid should not lose grouping after the expandAll method if a grouped column has string calculateGroupValue (T1321187)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiExpandAll();
 
   await t
@@ -323,6 +339,8 @@ test('DataGrid should not lose grouping after the expandAll method if a grouped 
 test('DataGrid should not change group column after the expandAll method, string calculateGroupValue corresponds another column (T1308536)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent;
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiExpandAll();
 
@@ -352,6 +370,8 @@ test('DataGrid should not change group column after the expandAll method, string
 test('DataGrid should not change group column after the expandAll method, string calculateGroupValue corresponds another unbound column (T1308536)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent;
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiExpandAll();
 
