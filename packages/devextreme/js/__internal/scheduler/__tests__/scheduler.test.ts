@@ -63,6 +63,29 @@ describe('Scheduler scrollTo', () => {
     expect(loggerWarnSpy).toHaveBeenCalledTimes(0);
   });
 
+  it('should scroll to appointment position after saving from popup', async () => {
+    const { container, scheduler, POM } = await createScheduler({
+      dataSource: [{
+        text: 'Late appointment',
+        startDate: new Date(2017, 4, 25, 22, 0),
+        endDate: new Date(2017, 4, 25, 23, 0),
+      }],
+      views: ['timelineDay'],
+      currentView: 'timelineDay',
+      currentDate: new Date(2017, 4, 25),
+    });
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+    const scrollLeftBeforeSave = scrollableContainer.scrollLeft;
+
+    const item = (scheduler as any).getDataSource().items()[0];
+    scheduler.showAppointmentPopup(item);
+    POM.popup.saveButton.click();
+
+    expect(scrollLeftBeforeSave).toBe(0);
+    expect(scrollableContainer.scrollLeft).toBeGreaterThan(0);
+  });
+
   it('should pass different left offsets for "start" vs "center" alignInView', async () => {
     const { container, scheduler } = await createScheduler({
       dataSource: [],
