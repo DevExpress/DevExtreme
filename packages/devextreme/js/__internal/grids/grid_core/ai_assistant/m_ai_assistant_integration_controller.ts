@@ -6,7 +6,6 @@ import type {
 import errors from '@js/ui/widget/ui.errors';
 
 import { Controller } from '../m_modules';
-import * as gridCommands from './grid_commands';
 
 export class AIAssistantIntegrationController extends Controller {
   private abort?: () => void;
@@ -107,11 +106,14 @@ export class AIAssistantIntegrationController extends Controller {
     this.abortRequest();
   }
 
+  // TODO: implement buildContext with grid commands
+  // eslint-disable-next-line class-methods-use-this
   private buildContext(): Record<string, unknown> {
-    return gridCommands.buildContext(this.component);
+    return {};
   }
 
+  // TODO: implement buildResponseSchema with grid commands
   private static buildResponseSchema(): Record<string, unknown> {
-    return gridCommands.buildResponseSchema();
+    return {};
   }
 }
