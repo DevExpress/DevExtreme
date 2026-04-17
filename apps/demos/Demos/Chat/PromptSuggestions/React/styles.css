@@ -5,7 +5,7 @@
   gap: 20px;
 }
 
-.options-container {
+.options {
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@
   box-sizing: border-box;
 }
 
-.options {
+.suggestions-options {
   display: flex;
   align-items: center;
   gap: 24px;
@@ -44,6 +44,11 @@
 
 .dx-chat-messagelist-empty-message {
   font-size: var(--dx-font-size-heading-5);
+}
+
+.dx-chat-messagelist-empty-prompt {
+  max-width: 462px;
+  line-height: 20px;
 }
 
 .dx-chat-messagebubble-content > div > p:first-child {

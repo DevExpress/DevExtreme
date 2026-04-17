@@ -89,9 +89,9 @@ export default function App() {
         onMessageEntered={onMessageEntered}
         onInputFieldTextChanged={onInputFieldTextChanged}
       />
-      <div className="options-container">
+      <div className="options">
         <div className="caption">Suggestion Options</div>
-        <div className="options">
+        <div className="suggestions-options">
           <div className="option">
             <Switch
               defaultValue={false}
