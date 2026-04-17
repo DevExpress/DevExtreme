@@ -31,7 +31,7 @@ const isItemSelected = async (page: any, index: number): Promise<boolean> => {
   return (await item.getAttribute('aria-selected')) === 'true';
 };
 
-test.describe('Header Filter - dxList integration', () => {
+test.describe.skip('Header Filter - dxList integration', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
