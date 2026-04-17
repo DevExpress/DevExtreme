@@ -346,6 +346,16 @@ export type InitializedEvent = InitializedEventInfo<dxScheduler>;
  */
 export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
 
+/**
+ * @docid _ui_scheduler_SelectionEndEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type SelectionEndEvent = EventInfo<dxScheduler> & {
+  readonly selectedCellData: Array<any>;
+};
+
 /** @public */
 export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
@@ -820,6 +830,15 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     onCellClick?: ((e: CellClickEvent) => void) | string;
+    /**
+     * @docid
+     * @default null
+     * @type function
+     * @type_function_param1 e:{ui/scheduler:SelectionEndEvent}
+     * @action
+     * @public
+     */
+    onSelectionEnd?: ((e: SelectionEndEvent) => void);
     /**
      * @docid
      * @default null

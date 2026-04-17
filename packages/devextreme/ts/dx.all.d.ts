@@ -25807,6 +25807,13 @@ declare module DevExpress.ui {
         readonly cellElement: DevExpress.core.DxElement;
       };
     /**
+     * [descr:_ui_scheduler_SelectionEndEvent]
+     */
+    export type SelectionEndEvent =
+      DevExpress.common.core.events.EventInfo<dxScheduler> & {
+        readonly selectedCellData: Array<any>;
+      };
+    /**
      * [descr:_ui_scheduler_CellContextMenuEvent]
      */
     export type CellContextMenuEvent =
@@ -26265,6 +26272,12 @@ declare module DevExpress.ui {
     onCellClick?:
       | ((e: DevExpress.ui.dxScheduler.CellClickEvent) => void)
       | string;
+    /**
+     * [descr:dxSchedulerOptions.onSelectionEnd]
+     */
+    onSelectionEnd?: (
+      e: DevExpress.ui.dxScheduler.SelectionEndEvent
+    ) => void;
     /**
      * [descr:dxSchedulerOptions.onCellContextMenu]
      */
