@@ -2,7 +2,7 @@
 
 This repository contains technical DevExtreme demos for Angular, React, Vue, jQuery, ASP.NET MVC, and ASP.NET Core.
 
-To run the demos on your machine, clone this repository, run `npm install`, and follow the instructions below.
+To run the demos on your machine, clone this repository, run `npm ci`, and follow the instructions below.
 
 ## Prepare Demos for Development
 Before running you need execute in `monorepo/root`:

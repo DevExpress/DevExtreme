@@ -41,7 +41,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ github.workflow }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install npm packages
-        run: npm i --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Build devextreme package
         working-directory: ./packages/devextreme

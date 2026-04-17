@@ -48,7 +48,7 @@ function run_test_impl {
 
     if [ "$LOCAL" != "true" ]; then
         if [ "$GITHUBACTION" != "true" ]; then
-        npm i
+        npm ci
         npm run build
         fi
 
