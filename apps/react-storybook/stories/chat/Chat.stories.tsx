@@ -1046,7 +1046,7 @@ const suggestionItems: ButtonGroupItem[] = [
     { text: '⭐ Check in-stock favorites' },
     { text: '🔄 Start a return' },
     { text: '🔍 Find my order' },
-    { text: '💳 Payment & billing help with Soul' },
+    { text: '💳 Payment & billing help' },
 ];
 
 export const Suggestions: Story = {
