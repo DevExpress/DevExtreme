@@ -1,0 +1,1 @@
+This demo illustrates how to use the **onSelectionEnd** event to automatically open the appointment creation form when a user selects a time range via click-and-drag. The appointment start/end dates and resource group are pre-filled based on the selected cells.
