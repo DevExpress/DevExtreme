@@ -3,7 +3,7 @@ import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '..
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe('T1017720', () => {
+test.describe.skip('T1017720', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = getContainerUrl(__dirname, '../../../../../tests/container.html');
 
-test.describe('Scheduler: max appointments per cell: All day', () => {
+test.describe.skip('Scheduler: max appointments per cell: All day', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

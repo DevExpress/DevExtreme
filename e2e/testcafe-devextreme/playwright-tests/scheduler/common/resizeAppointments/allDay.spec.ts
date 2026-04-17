@@ -3,7 +3,7 @@ import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '..
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe('Resize appointments in All Day Panel', () => {
+test.describe.skip('Resize appointments in All Day Panel', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

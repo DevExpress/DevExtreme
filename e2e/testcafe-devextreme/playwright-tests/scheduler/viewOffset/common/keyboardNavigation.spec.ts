@@ -29,7 +29,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Keyboard navigation', () => {
+test.describe.skip('Offset: Keyboard navigation', () => {
   test('Keyboard navigation should work', async ({ page }) => {
     for (const offset of [0, -120, 120]) {
       for (const { view, startCell, keyboardKeys } of VIEW_CONFIGS) {

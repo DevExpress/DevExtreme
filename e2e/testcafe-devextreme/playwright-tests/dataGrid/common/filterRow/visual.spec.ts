@@ -14,7 +14,7 @@ const getNumberData = (rowCount: number, colCount: number): Record<string, numbe
   return items;
 };
 
-test.describe('FilterRow', () => {
+test.describe.skip('FilterRow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

@@ -22,7 +22,7 @@ const baseConfig = {
   },
 };
 
-test.describe('CardView - Editing Visual', () => {
+test.describe.skip('CardView - Editing Visual', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

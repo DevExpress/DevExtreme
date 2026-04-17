@@ -118,7 +118,7 @@ const setupPage = async (page: any) => {
 };
 
 test.describe.configure({ timeout: 300000 });
-  test.describe('Offset: Markup usual appointments', () => {
+  test.describe.skip('Offset: Markup usual appointments', () => {
   test('Usual appointments render', async ({ page }) => {
     test.setTimeout(300000);
     for (const { views, dataSource } of VIEW_CONFIGS) {

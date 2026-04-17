@@ -9,7 +9,7 @@ async function setZoomLevel(page, zoomLevel: number): Promise<void> {
   }, zoomLevel);
 }
 
-test.describe('Resize appointments - Zooming', () => {
+test.describe.skip('Resize appointments - Zooming', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

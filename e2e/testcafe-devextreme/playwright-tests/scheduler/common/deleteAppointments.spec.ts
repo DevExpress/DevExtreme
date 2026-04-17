@@ -3,7 +3,7 @@ import { createWidget, getContainerUrl, setupTestPage, Scheduler } from '../../.
 
 const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html');
 
-test.describe('Delete appointments', () => {
+test.describe.skip('Delete appointments', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

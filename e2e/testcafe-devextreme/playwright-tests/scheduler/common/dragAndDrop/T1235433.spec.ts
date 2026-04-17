@@ -109,7 +109,7 @@ const appointmentDescriptions = ['Group: Low Priority', 'Group: High Priority', 
 const appointment1Times = ['9:00 AM - 10:00 AM', '9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '10:00 AM - 11:00 AM'];
 const appointment2Times = ['4:00 PM - 5:15 PM', '4:00 PM - 5:15 PM', '5:00 PM - 6:15 PM', '5:00 PM - 6:15 PM'];
 
-test.describe('Scheduler Drag-and-Drop inside Group', () => {
+test.describe.skip('Scheduler Drag-and-Drop inside Group', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

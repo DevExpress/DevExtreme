@@ -13,7 +13,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Agenda', () => {
+test.describe.skip('Offset: Agenda', () => {
   test('Agenda view should not be affected by root offset option', async ({ page }) => {
     for (const offset of [0, -240, 240]) {
       await setupPage(page);

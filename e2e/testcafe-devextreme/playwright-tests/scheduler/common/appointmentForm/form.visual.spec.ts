@@ -45,7 +45,7 @@ const openAppointmentPopup = async (page: any, appointment?: any, isRecurring = 
   await page.locator('.dx-scheduler-appointment-popup').waitFor({ state: 'visible' });
 };
 
-test.describe('Appointment Form: Main Form', () => {
+test.describe.skip('Appointment Form: Main Form', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

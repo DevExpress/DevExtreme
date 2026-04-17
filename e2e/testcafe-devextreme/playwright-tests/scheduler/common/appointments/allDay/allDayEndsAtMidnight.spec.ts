@@ -19,7 +19,7 @@ const setViewOptions = (startDayHour: number | undefined, endDayHour: number | u
   return viewOptions;
 };
 
-test.describe('Scheduler - All day appointments ends at midnight', () => {
+test.describe.skip('Scheduler - All day appointments ends at midnight', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

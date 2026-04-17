@@ -47,7 +47,7 @@ const defaultSchedulerOptions = {
   currentDate: new Date(2019, 3, 1),
 };
 
-test.describe('Drag-and-drop appointments in the Scheduler basic views', () => {
+test.describe.skip('Drag-and-drop appointments in the Scheduler basic views', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

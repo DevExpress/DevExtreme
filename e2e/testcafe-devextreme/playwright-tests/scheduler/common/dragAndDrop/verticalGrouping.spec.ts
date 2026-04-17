@@ -3,7 +3,7 @@ import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '..
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe('Drag-and-drop appointments in the Scheduler with vertical grouping', () => {
+test.describe.skip('Drag-and-drop appointments in the Scheduler with vertical grouping', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

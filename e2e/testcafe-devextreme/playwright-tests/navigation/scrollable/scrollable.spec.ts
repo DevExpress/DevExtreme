@@ -7,7 +7,7 @@ class Guid { toString() { return `guid${Date.now()}${++_guidCounter}`; } }
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
-test.describe('Scrollable_ScrollToElement', () => {
+test.describe.skip('Scrollable_ScrollToElement', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

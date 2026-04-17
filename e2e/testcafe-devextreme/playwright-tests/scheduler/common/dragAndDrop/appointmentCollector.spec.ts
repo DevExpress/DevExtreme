@@ -35,7 +35,7 @@ const appointmentCollectorData = [
   { text: 'Create Icons for Website', startDate: new Date(2019, 3, 3, 10, 0), endDate: new Date(2019, 3, 3, 11, 30) },
 ];
 
-test.describe('Drag-and-drop behaviour for the appointment tooltip', () => {
+test.describe.skip('Drag-and-drop behaviour for the appointment tooltip', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

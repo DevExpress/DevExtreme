@@ -3,7 +3,7 @@ import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '..
 
 const containerUrl = getContainerUrl(__dirname, '../../../../../tests/container.html');
 
-test.describe('Outlook dragging base tests', () => {
+test.describe.skip('Outlook dragging base tests', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

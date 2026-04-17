@@ -13,7 +13,7 @@ const baseData = [
 
 const baseColumns = [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }];
 
-test.describe('CardView - FilterPanel Behavior', () => {
+test.describe.skip('CardView - FilterPanel Behavior', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

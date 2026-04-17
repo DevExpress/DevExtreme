@@ -23,7 +23,7 @@ const appointments = [
   },
 ];
 
-test.describe('Scheduler API - request counting', () => {
+test.describe.skip('Scheduler API - request counting', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

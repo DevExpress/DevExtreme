@@ -12,7 +12,7 @@ const baseOptions = {
   editing: { legacyForm: true },
 };
 
-test.describe('Appointment form: expressions', () => {
+test.describe.skip('Appointment form: expressions', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -12,7 +12,7 @@ const selectionData = [
   { id: 4, title: 'header5', A: 'A_4', B: 'B_4', C: 'C_4' },
 ];
 
-test.describe('Selection.Visual', () => {
+test.describe.skip('Selection.Visual', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

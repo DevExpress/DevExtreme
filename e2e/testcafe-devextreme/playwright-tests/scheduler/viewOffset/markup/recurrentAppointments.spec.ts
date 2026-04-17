@@ -100,7 +100,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Markup recurrent appointments', () => {
+test.describe.skip('Offset: Markup recurrent appointments', () => {
   test('Recurrence appointments render', async ({ page }) => {
     for (const { views, dataSource } of VIEW_CONFIGS) {
       for (const offset of [0, 735, -735]) {

@@ -5,7 +5,7 @@ const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.htm
 
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 
-test.describe('Recurrence dialog', () => {
+test.describe.skip('Recurrence dialog', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

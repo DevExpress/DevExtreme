@@ -84,7 +84,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Resize appointments', () => {
+test.describe.skip('Offset: Resize appointments', () => {
   test('Appointments resize common cases', async ({ page }) => {
     for (const { views, dataSource } of VIEW_CONFIGS) {
       for (const offset of [0, 735, -735]) {

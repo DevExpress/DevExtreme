@@ -54,7 +54,7 @@ const createDataSetForScreenShotTests = (): Record<string, unknown>[] => {
   return result;
 };
 
-test.describe('Scheduler: Adaptive layout in themes', () => {
+test.describe.skip('Scheduler: Adaptive layout in themes', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

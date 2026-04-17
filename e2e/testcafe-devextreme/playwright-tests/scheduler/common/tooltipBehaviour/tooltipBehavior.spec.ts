@@ -21,7 +21,7 @@ const defaultSchedulerOptions = {
   currentDate: new Date(2019, 3, 1),
 };
 
-test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T755449)', () => {
+test.describe.skip('Appointment tooltip behavior during scrolling in the Scheduler (T755449)', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

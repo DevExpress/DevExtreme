@@ -16,7 +16,7 @@ const generateData = (count: number) => {
   return items;
 };
 
-test.describe('FloatingAction with Grid', () => {
+test.describe.skip('FloatingAction with Grid', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

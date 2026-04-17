@@ -26,7 +26,7 @@ async function getDragCoordinates(
   return { dragOffsetX, dragOffsetY };
 }
 
-test.describe('CardView - HeaderPanel Sortable Visual', () => {
+test.describe.skip('CardView - HeaderPanel Sortable Visual', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

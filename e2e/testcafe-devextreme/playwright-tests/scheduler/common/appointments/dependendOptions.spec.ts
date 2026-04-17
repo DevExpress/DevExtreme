@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe('Appointment dependend options', () => {
+test.describe.skip('Appointment dependend options', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

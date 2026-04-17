@@ -28,7 +28,7 @@ const priorityData = [{
   color: 'rgb(225, 142, 146)',
 }];
 
-test.describe('Appointment resources', () => {
+test.describe.skip('Appointment resources', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

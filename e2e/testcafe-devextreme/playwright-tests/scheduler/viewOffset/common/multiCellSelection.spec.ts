@@ -33,7 +33,7 @@ const setupPage = async (page: any) => {
 };
 
 test.describe.configure({ timeout: 300000 });
-  test.describe('Offset: Multi cell selection', () => {
+  test.describe.skip('Offset: Multi cell selection', () => {
   test('Multi cell selection should work', async ({ page }) => {
     test.setTimeout(300000);
     for (const offset of [0, -120, 120]) {

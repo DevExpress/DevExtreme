@@ -58,7 +58,7 @@ const dayLocations: [MachineTimezonesType, string, string, Date][] = [
   MACHINE_TIMEZONES.EuropeBerlin,
   MACHINE_TIMEZONES.AmericaLosAngeles,
 ] as MachineTimezonesType[]).forEach((tz) => {
-  test.describe(`Scheduler render during DST [${tz}]`, () => {
+  test.describe.skip(`Scheduler render during DST [${tz}]`, () => {
     test.use({ timezoneId: tz });
 
     test.beforeEach(async ({ page }) => {

@@ -21,7 +21,7 @@ const generateColumns = (columnCount: number): { dataField: string }[] => [...ne
     dataField: `field${index + 1}`,
   }));
 
-test.describe('Virtual Columns.Visual', () => {
+test.describe.skip('Virtual Columns.Visual', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

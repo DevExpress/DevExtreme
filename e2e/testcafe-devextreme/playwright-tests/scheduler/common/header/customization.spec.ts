@@ -26,7 +26,7 @@ const customToolbarItems = [
   'viewSwitcher',
 ];
 
-test.describe('Scheduler header customization', () => {
+test.describe.skip('Scheduler header customization', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

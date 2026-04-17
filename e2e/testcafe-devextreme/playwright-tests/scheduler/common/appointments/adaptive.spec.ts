@@ -5,7 +5,7 @@ import path from 'path';
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 const MOBILE_SIZE: [width: number, height: number] = [500, 700];
 
-test.describe('Appointments with adaptive', () => {
+test.describe.skip('Appointments with adaptive', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

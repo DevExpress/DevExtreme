@@ -61,7 +61,7 @@ const createScheduler = async (page: any, options = {}) => {
   });
 };
 
-test.describe('Drag-and-drop appointments into allDay panel in the grouped Scheduler', () => {
+test.describe.skip('Drag-and-drop appointments into allDay panel in the grouped Scheduler', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

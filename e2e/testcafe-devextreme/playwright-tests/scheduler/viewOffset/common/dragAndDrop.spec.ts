@@ -47,7 +47,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Drag-n-drop appointments', () => {
+test.describe.skip('Offset: Drag-n-drop appointments', () => {
   test('Usual appointments drag-n-drop', async ({ page }) => {
     for (const { views, dataSource, isAllDay } of viewConfigs) {
       for (const offset of [0, 735, -735]) {

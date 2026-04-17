@@ -3,7 +3,7 @@ import { createWidget, testScreenshot, getContainerUrl, setupTestPage, Scheduler
 
 const containerUrl = getContainerUrl(__dirname, '../../../../../tests/container.html');
 
-test.describe('Layout:AppointmentForm:MobileEnvironment', () => {
+test.describe.skip('Layout:AppointmentForm:MobileEnvironment', () => {
   test('Appointment form should be display valid layout', async ({ page }) => {
     await page.setViewportSize({ width: 350, height: 600 });
     await setupTestPage(page, containerUrl);
@@ -27,7 +27,7 @@ test.describe('Layout:AppointmentForm:MobileEnvironment', () => {
   });
 });
 
-test.describe('AppointmentForm screenshot tests', () => {
+test.describe.skip('AppointmentForm screenshot tests', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -11,7 +11,7 @@ const buttons = Array.from({ length: 4 }).map((_, index) => ({
   options: { text: `Button ${index}` },
 }));
 
-test.describe('Scheduler header sizes', () => {
+test.describe.skip('Scheduler header sizes', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

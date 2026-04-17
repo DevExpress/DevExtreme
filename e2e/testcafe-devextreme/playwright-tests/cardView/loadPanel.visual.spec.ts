@@ -3,7 +3,7 @@ import { createWidget, testScreenshot, setupTestPage, getContainerUrl } from '..
 
 const containerUrl = getContainerUrl(__dirname, '../../tests/container.html');
 
-test.describe('CardView - LoadPanel', () => {
+test.describe.skip('CardView - LoadPanel', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

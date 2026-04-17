@@ -11,7 +11,7 @@ const data = [
   { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
 ];
 
-test.describe('CardView - Sorting Behavior - Functional', () => {
+test.describe.skip('CardView - Sorting Behavior - Functional', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

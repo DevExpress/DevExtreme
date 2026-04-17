@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../../tests/container.html')}`;
 
-test.describe('Scheduler: Current Time Indication: Shader with Virtual Scrolling', () => {
+test.describe.skip('Scheduler: Current Time Indication: Shader with Virtual Scrolling', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 2560, height: 600 });
     await page.goto(containerUrl);

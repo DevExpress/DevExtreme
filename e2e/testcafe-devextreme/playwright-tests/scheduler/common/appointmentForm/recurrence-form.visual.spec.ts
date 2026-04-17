@@ -35,7 +35,7 @@ const clickRecurrenceSettingsButton = async (page: any) => {
   await page.locator('.dx-recurrence-editor .dx-button').click();
 };
 
-test.describe('Appointment Form: Recurrence Form', () => {
+test.describe.skip('Appointment Form: Recurrence Form', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

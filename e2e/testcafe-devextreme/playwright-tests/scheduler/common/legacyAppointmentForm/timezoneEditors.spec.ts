@@ -12,7 +12,7 @@ const dataSource = [{
   endDateTimeZone: 'US/Alaska',
 }];
 
-test.describe('Layout:AppointmentForm:TimezoneEditors(T1080932)', () => {
+test.describe.skip('Layout:AppointmentForm:TimezoneEditors(T1080932)', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

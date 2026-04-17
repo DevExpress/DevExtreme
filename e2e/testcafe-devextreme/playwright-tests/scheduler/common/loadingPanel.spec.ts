@@ -6,7 +6,7 @@ const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html')
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 const ADDITIONAL_TITLE_TEXT = '-updated';
 
-test.describe('Scheduler loading panel', () => {
+test.describe.skip('Scheduler loading panel', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

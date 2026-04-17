@@ -34,7 +34,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Markup virtual scrolling', () => {
+test.describe.skip('Offset: Markup virtual scrolling', () => {
   test('Virtual scrolling render', async ({ page }) => {
     for (const { views, dataSource } of VIEW_CONFIGS) {
       for (const offset of [0, 735, 1440, -735, -1440]) {

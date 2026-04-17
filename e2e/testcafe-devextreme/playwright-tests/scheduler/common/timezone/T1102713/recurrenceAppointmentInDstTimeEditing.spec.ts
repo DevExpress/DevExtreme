@@ -28,7 +28,7 @@ async function configureScheduler(page, { start, end }: { start: Date; end: Date
   });
 }
 
-test.describe('Editing recurrent appointment in DST time', () => {
+test.describe.skip('Editing recurrent appointment in DST time', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

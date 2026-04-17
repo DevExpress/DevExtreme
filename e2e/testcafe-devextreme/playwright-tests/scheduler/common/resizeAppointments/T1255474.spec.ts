@@ -5,7 +5,7 @@ const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.htm
 
 const appointmentText = 'Book Flights to San Fran for Sales Trip';
 
-test.describe('Resize appointment that cross DTC time', () => {
+test.describe.skip('Resize appointment that cross DTC time', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

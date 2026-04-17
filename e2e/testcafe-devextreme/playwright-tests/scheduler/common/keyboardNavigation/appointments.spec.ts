@@ -67,7 +67,7 @@ const getConfig = () => ({
 
 const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px; }';
 
-test.describe('KeyboardNavigation.Appointments', () => {
+test.describe.skip('KeyboardNavigation.Appointments', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

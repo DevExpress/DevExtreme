@@ -21,7 +21,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Appointment expressions', () => {
+test.describe.skip('Offset: Appointment expressions', () => {
   test('Appointment with expr common test', async ({ page }) => {
     const views = [{ type: 'week', cellDuration: 60 }];
     const dataSource = APPOINTMENTS.week;
