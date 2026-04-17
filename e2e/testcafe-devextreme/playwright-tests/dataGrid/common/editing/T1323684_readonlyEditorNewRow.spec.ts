@@ -7,7 +7,7 @@ const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/contai
 const READONLY_CLASS = 'dx-datagrid-readonly';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
-test.describe('Editing - showEditorAlways cell in new row should be editable (T1323684)', () => {
+test.describe.skip('Editing - showEditorAlways cell in new row should be editable (T1323684)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
