@@ -8,7 +8,7 @@ const openAIDialog = async (page, htmlEditor: HtmlEditor) => {
   await htmlEditor.toolbar.getItemByName('ai').click();
 };
 
-test.describe.skip('HtmlEditor: AIDialog', () => {
+test.describe('HtmlEditor: AIDialog', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 400, height: 700 });
     await page.goto(containerUrl);

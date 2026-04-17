@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
-test.describe.skip('Lookup', () => {
+test.describe('Lookup', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 300, height: 400 });
     await page.goto(containerUrl);
