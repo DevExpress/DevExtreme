@@ -14,6 +14,24 @@ export const SORT_COMMAND_NAME = 'sort';
 export const sortCommand: GridCommand = {
   name: SORT_COMMAND_NAME,
 
+  description: 'Sorts the grid by a specified column in ascending or descending order.',
+
+  argsSchema: {
+    type: 'object',
+    properties: {
+      columnName: {
+        type: 'string',
+        description: 'The name or dataField of the column to sort.',
+      },
+      sortOrder: {
+        type: 'string',
+        enum: ['asc', 'desc'],
+        description: 'The sort direction.',
+      },
+    },
+    required: ['columnName', 'sortOrder'],
+  },
+
   validateArgs(args: Record<string, unknown>): boolean {
     const { columnName, sortOrder } = args;
 
@@ -43,5 +61,31 @@ export const sortCommand: GridCommand = {
       const message = error instanceof Error ? error.message : String(error);
       return { status: 'error', message };
     }
+  },
+
+  buildContext(gridInstance: InternalGrid, context: Record<string, unknown>): void {
+    const columnsController = gridInstance._controllers.columns;
+    const visibleColumns = columnsController.getVisibleColumns();
+
+    const columns = visibleColumns
+      .filter((column) => !!column.dataField)
+      .map((column) => {
+        const info: Record<string, string> = {
+          name: column.name ?? column.dataField,
+          dataField: column.dataField,
+        };
+
+        if (column.dataType) {
+          info.dataType = column.dataType;
+        }
+
+        if (column.caption) {
+          info.caption = column.caption;
+        }
+
+        return info;
+      });
+
+    context.columns = columns;
   },
 };

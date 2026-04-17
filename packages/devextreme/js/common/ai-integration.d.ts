@@ -171,7 +171,6 @@ export type GenerateGridColumnCommandParams = {
 export type ExecuteGridAssistantCommandParams = {
   text: string;
   context: Record<string, unknown>;
-  responseSchema: Record<string, unknown>;
   additionalInfo?: Record<PropertyKey, unknown>;
 };
 
