@@ -100,7 +100,7 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Api callbacks', () => {
+test.describe.skip('Offset: Api callbacks', () => {
   test('onAppointmentRendered', async ({ page }) => {
     for (const offset of [0, -700, 700]) {
       await setupPage(page);

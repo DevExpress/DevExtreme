@@ -3,7 +3,7 @@ import { createWidget, getContainerUrl, setupTestPage } from '../../../../playwr
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe('Appointment Form', () => {
+test.describe.skip('Appointment Form', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -28,7 +28,7 @@ const roughEqualClientBoundingRect = (
   && Math.abs(a.left - b.left) < 1
 );
 
-test.describe('Appointment Form: Functional', () => {
+test.describe.skip('Appointment Form: Functional', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

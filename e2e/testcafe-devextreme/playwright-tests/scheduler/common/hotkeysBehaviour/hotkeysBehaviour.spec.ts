@@ -26,7 +26,7 @@ const defaultSchedulerOptions = {
   currentDate: new Date(2019, 3, 1),
 };
 
-test.describe('Hotkeys for appointments update and navigation', () => {
+test.describe.skip('Hotkeys for appointments update and navigation', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

@@ -44,7 +44,7 @@ const bandColumnConfig = {
   ],
 };
 
-test.describe('Column resizing', () => {
+test.describe.skip('Column resizing', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

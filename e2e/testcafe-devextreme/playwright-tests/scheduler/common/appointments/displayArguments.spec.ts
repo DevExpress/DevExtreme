@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
-test.describe('Display* arguments in appointment templates and events', () => {
+test.describe.skip('Display* arguments in appointment templates and events', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });

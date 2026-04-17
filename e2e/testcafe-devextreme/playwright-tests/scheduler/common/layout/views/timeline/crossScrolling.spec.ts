@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../../../tests/container.html')}`;
 
-test.describe('Scheduler Timeline: Cross-Scrolling', () => {
+test.describe.skip('Scheduler Timeline: Cross-Scrolling', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

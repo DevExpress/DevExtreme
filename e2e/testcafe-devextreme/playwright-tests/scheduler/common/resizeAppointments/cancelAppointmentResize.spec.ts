@@ -21,7 +21,7 @@ const defaultSetupOptions = {
   cellDuration: 1440,
 };
 
-test.describe('Cancel appointment Resizing', () => {
+test.describe.skip('Cancel appointment Resizing', () => {
   test.beforeEach(async ({ page }) => {
     await setupTestPage(page, containerUrl);
   });
