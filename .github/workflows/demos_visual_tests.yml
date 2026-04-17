@@ -66,7 +66,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: DevExtreme - Build
         shell: bash
@@ -125,7 +125,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: DevExtreme - Build
       run: pnpm exec nx build devextreme
