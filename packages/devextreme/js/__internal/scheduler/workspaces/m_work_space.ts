@@ -1223,7 +1223,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     (eventsEngine.off as any)(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
 
     eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isMouseEvent(e) && e.which === 1) {
+      if ((isMouseEvent(e) || e.pointerType === 'mouse') && e.which === 1) {
         isPointerDown = true;
         (this.$element() as any).addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
         (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
@@ -1235,7 +1235,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
 
     eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
+      if (isPointerDown && this._dateTableScrollable) {
         e.preventDefault();
         e.stopPropagation();
         this._moveToCell($(e.target), true);
@@ -1967,7 +1967,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private _fireSelectionEndEvent() {
     const selectedCellData = this.option('selectedCellData') ?? [];
-    if ((selectedCellData as any[]).length > 0 && this._selectionEndAction) {
+    if (selectedCellData.length > 0 && this._selectionEndAction) {
       this._selectionEndAction({ selectedCellData });
     }
   }
