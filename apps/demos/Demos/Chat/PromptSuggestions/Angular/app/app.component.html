@@ -1,0 +1,46 @@
+<div class="demo-container">
+  <dx-chat
+    [class.chat-disabled]="isDisabled"
+    [dataSource]="dataSource"
+    [reloadOnChange]="false"
+    [showAvatar]="false"
+    [showDayHeaders]="false"
+    [user]="user"
+    height="520"
+    [typingUsers]="typingUsers$ | async"
+    [alerts]="alerts$ | async"
+    [speechToTextEnabled]="true"
+    [inputFieldText]="inputFieldText"
+    [suggestions]="suggestions"
+    (onMessageEntered)="onMessageEntered($event)"
+    (onInputFieldTextChanged)="onInputFieldTextChanged($event)"
+    messageTemplate="messageTemplate"
+  >
+    <div *dxTemplate="let data of 'messageTemplate'">
+      <div
+        class="chat-messagebubble-text"
+        [innerHTML]="convertToHtml(data.message)"
+      ></div>
+    </div>
+  </dx-chat>
+
+  <div class="options-container">
+    <div class="caption">Suggestion Options</div>
+    <div class="options">
+      <div class="option">
+        <dx-switch
+          [value]="sendImmediately"
+          (onValueChanged)="onSendImmediatelyChanged($event)"
+        ></dx-switch>
+        <span>Send Immediately</span>
+      </div>
+      <div class="option">
+        <dx-switch
+          [value]="hideAfterUse"
+          (onValueChanged)="onHideAfterUseChanged($event)"
+        ></dx-switch>
+        <span>Hide After Use</span>
+      </div>
+    </div>
+  </div>
+</div>

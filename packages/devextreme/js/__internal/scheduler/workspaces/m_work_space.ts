@@ -80,6 +80,7 @@ import {
 import { getLeafGroupValues } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
+import { getSkippedDaysCount as countSkippedDays } from '../utils/skipped_days';
 import {
   getAllDayHeight,
   getCellHeight,
@@ -204,6 +205,7 @@ type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
+  skippedDays?: number[];
 };
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;
@@ -908,6 +910,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startDate: this.option('startDate'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
       showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
+      skippedDays: this.option('skippedDays'),
 
       ...this.virtualScrollingDispatcher.getRenderState(),
     };
@@ -1302,9 +1305,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
+      hoursInterval: this.option('hoursInterval'),
       interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
+      intervalCount: this.option('intervalCount'),
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this.firstDayOfWeek(),
+      skippedDays: this.option('skippedDays'),
+      viewOffset: 0,
+      viewType: this.type,
     };
   }
 
@@ -1312,26 +1320,29 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getIntervalBetween(currentDate, allDay) {
     const firstViewDate = this.getStartViewDate();
 
-    const startDayTime = (this.option('startDayHour') as any) * HOUR_MS;
+    const startDayTime = this.option('startDayHour') * HOUR_MS;
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
     const fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset;
     const days = this.getDaysOfInterval(fullInterval, startDayTime);
-    const weekendsCount = this.getWeekendsCount(days);
-    let result = (days - weekendsCount) * DAY_MS;
+    const skippedDaysCount = this.getSkippedDaysCount(firstViewDate, days);
+    let result = (days - skippedDaysCount) * DAY_MS;
 
     if (!allDay) {
       const { hiddenInterval } = this.viewDataProvider;
       const visibleDayDuration = this.getVisibleDayDuration();
 
-      result = fullInterval - days * hiddenInterval - weekendsCount * visibleDayDuration;
+      result = fullInterval - days * hiddenInterval - skippedDaysCount * visibleDayDuration;
     }
 
     return result;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getWeekendsCount(argument?: any) {
-    return 0;
+  protected getSkippedDaysCount(startDate: Date, days: number) {
+    return countSkippedDays(
+      startDate,
+      days,
+      this.option('skippedDays'),
+    );
   }
 
   private getDaysOfInterval(fullInterval, startDayTime) {
@@ -2291,6 +2302,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       groupOrientation: 'horizontal',
       selectedCellData: [],
       groupByDate: false,
+      skippedDays: undefined,
       scrolling: {
         mode: 'standard',
       },

@@ -86,8 +86,8 @@ catalogs:
       specifier: 4.1.68
       version: 4.1.68
     devextreme-exceljs-fork:
-      specifier: 4.4.7
-      version: 4.4.7
+      specifier: 4.4.8
+      version: 4.4.8
     devextreme-quill:
       specifier: 1.7.9
       version: 1.7.9
@@ -187,11 +187,11 @@ overrides:
   immutable@>=5.0.0 <5.1.5: ^5.1.5
   minimatch@<3.1.5: 3.1.5
   minimatch@>=9.0.0 < 9.0.7: 9.0.9
-  minimatch@>=10.0.0 < 10.2.4: 10.2.4
+  minimatch@>=10.0.0 < 10.2.4: 10.2.5
   picomatch@>=2.0.0 <2.3.2: 2.3.2
   picomatch@>=4.0.0 <4.0.4: 4.0.4
   path-to-regexp@0.1.12: 0.1.13
-  path-to-regexp@>=8.0.0 <8.4.0: 8.4.0
+  path-to-regexp@>=8.0.0 <8.4.0: 8.4.2
   serialize-javascript@<=7.0.2: 7.0.5
   flatted@<3.4.0: ^3.4.0
   undici@<7.24.0: ^7.24.0
@@ -468,7 +468,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.7
+        version: 4.4.8
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.9
@@ -918,8 +918,8 @@ importers:
         specifier: 3.3.4
         version: 3.3.4
       '@vue/test-utils':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7(vue@3.2.47)
+        specifier: 2.4.6
+        version: 2.4.6
       css-loader:
         specifier: 6.11.0
         version: 6.11.0(webpack@5.105.4)
@@ -1466,8 +1466,8 @@ importers:
         specifier: 0.14.2
         version: 0.14.2
       autoprefixer:
-        specifier: 10.4.27
-        version: 10.4.27(postcss@8.4.38)
+        specifier: 10.5.0
+        version: 10.5.0(postcss@8.4.38)
       axe-core:
         specifier: 'catalog:'
         version: 4.11.1
@@ -1509,7 +1509,7 @@ importers:
         version: 1.0.3
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.7
+        version: 4.4.8
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.4)
@@ -1888,10 +1888,10 @@ importers:
         specifier: 'catalog:'
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@types/jasmine':
-        specifier: ~6.0.0
+        specifier: 6.0.0
         version: 6.0.0
       '@types/node':
-        specifier: ~20.19.0
+        specifier: 20.19.37
         version: 20.19.37
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
@@ -2242,8 +2242,8 @@ importers:
         specifier: 3.4.26
         version: 3.4.26
       '@vue/test-utils':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7(vue@3.2.47)
+        specifier: 2.4.6
+        version: 2.4.6
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
@@ -7275,10 +7275,8 @@ packages:
   '@vue/shared@3.5.13':
     resolution: {integrity: sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==}
 
-  '@vue/test-utils@2.0.0-beta.7':
-    resolution: {integrity: sha512-cAe7VqoxxkxTr/2N93UpW/LQbcUVKC+QRA3ZBq5ZWImtAf/8jtcdC2mQ9g4AKmSvyaKQtqxrRn4i/y5z7yrrKA==}
-    peerDependencies:
-      vue: ^3.0.1
+  '@vue/test-utils@2.4.6':
+    resolution: {integrity: sha512-FMxEjOpYNYiFe0GkaHsnJPXFHxQ6m4t8vI/ElPGpMWxZKpmRvQ33OIrvRXemy6yha03RxhOlQuy+gZMC3CQSow==}
 
   '@vue/tsconfig@0.9.0':
     resolution: {integrity: sha512-RP+v9Cpbsk1ZVXltCHHkYBr7+624x6gcijJXVjIcsYk7JXqvIpRtMwU2ARLvWDhmy9ffdFYxhsfJnPztADBohQ==}
@@ -7936,8 +7934,8 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
-  autoprefixer@10.4.27:
-    resolution: {integrity: sha512-NP9APE+tO+LuJGn7/9+cohklunJsXWiaWEfV3si4Gi/XHDwVNgkwr1J3RQYFIvPy76GmJ9/bW8vyoU1LcxwKHA==}
+  autoprefixer@10.5.0:
+    resolution: {integrity: sha512-FMhOoZV4+qR6aTUALKX2rEqGG+oyATvwBt9IIzVR5rMa2HRWPkxf+P+PAJLD1I/H5/II+HuZcBJYEFBpq39ong==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
@@ -8215,6 +8213,11 @@ packages:
     resolution: {integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==}
     engines: {node: ^4.5.0 || >= 5.9}
 
+  baseline-browser-mapping@2.10.19:
+    resolution: {integrity: sha512-qCkNLi2sfBOn8XhZQ0FXsT1Ki/Yo5P90hrkRamVFRS7/KV9hpfA4HkoWNU152+8w0zPjnxo5psx5NL3PSGgv5g==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
   baseline-browser-mapping@2.8.30:
     resolution: {integrity: sha512-aTUKW4ptQhS64+v2d6IkPzymEzzhw+G0bA1g3uBRV3+ntkH+svttKseW5IOR4Ed6NUVKqnY7qT3dKvzQ7io4AA==}
     hasBin: true
@@ -8354,6 +8357,11 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
+  browserslist@4.28.2:
+    resolution: {integrity: sha512-48xSriZYYg+8qXna9kwqjIVzuQxi+KYWp2+5nCYnYKPTr0LvD89Jqk2Or5ogxz0NUMfIjhh2lIUX/LyX9B4oIg==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+
   bs-logger@0.2.6:
     resolution: {integrity: sha512-pd8DCoxmbgc7hyPKOvxtqNcjYoOsABPQdcCUjGp3d42VR2CX1ORhk2A87oqqu5R1kk+76nsxZupkmyd+MVtCog==}
     engines: {node: '>= 6'}
@@ -8480,6 +8488,9 @@ packages:
 
   caniuse-lite@1.0.30001776:
     resolution: {integrity: sha512-sg01JDPzZ9jGshqKSckOQthXnYwOEP50jeVFhaSFbZcOy05TiuuaffDOfcwtCisJ9kNQuLBFibYywv2Bgm9osw==}
+
+  caniuse-lite@1.0.30001788:
+    resolution: {integrity: sha512-6q8HFp+lOQtcf7wBK+uEenxymVWkGKkjFpCvw5W25cmMwEDU45p1xQFBQv8JDlMMry7eNxyBaR+qxgmTUZkIRQ==}
 
   canvg@3.0.11:
     resolution: {integrity: sha512-5ON+q7jCTgMp9cjpu4Jo6XbvfYwSB2Ow3kzHKfIyJfaCAOHLbdKPQqGKgfED/R5B+3TFFfe8pegYA+b423SRyA==}
@@ -9548,8 +9559,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.7:
-    resolution: {integrity: sha512-32Zao6Bn1l9owiC7hpyPynUtYY1Tae2eS2Zot3FWZSSWJW0R1O1tF7H1Nn2GOwONTFmaTFML2jo5bZL1idGSFA==}
+  devextreme-exceljs-fork@4.4.8:
+    resolution: {integrity: sha512-XjZ5aqD0MILYW9BLCKiR8CJyDhkROf6bT45dSmczcOT7Ow0GtzLI8RBfTVrBsm0fjUyjNkKFO5d4T5iTHth52A==}
     engines: {node: '>=18.20.8'}
 
   devextreme-internal-tools@20.3.1:
@@ -9743,6 +9754,9 @@ packages:
 
   electron-to-chromium@1.5.267:
     resolution: {integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==}
+
+  electron-to-chromium@1.5.339:
+    resolution: {integrity: sha512-Is+0BBHJ4NrdpAYiperrmp53pLywG/yV/6lIMTAnhxvzj/Cmn5Q/ogSHC6AKe7X+8kPLxxFk0cs5oc/3j/fxIg==}
 
   elegant-spinner@1.0.1:
     resolution: {integrity: sha512-B+ZM+RXvRqQaAmkMlO/oSe5nMUOaUnyfGYCEHoR8wrXsZR2mA0XVibsxV1bvTwxdRWah1PkQqso2EzhILGHtEQ==}
@@ -13519,6 +13533,10 @@ packages:
     resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
     engines: {node: 18 || 20 || >=22}
 
+  minimatch@10.2.5:
+    resolution: {integrity: sha512-MULkVLfKGYDFYejP07QOurDLLQpcjk7Fw+7jXS2R2czRQzR56yHRveU5NDJEOviH+hETZKSkIk5c+T23GjFUMg==}
+    engines: {node: 18 || 20 || >=22}
+
   minimatch@3.1.5:
     resolution: {integrity: sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==}
 
@@ -13817,6 +13835,9 @@ packages:
 
   node-releases@2.0.27:
     resolution: {integrity: sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==}
+
+  node-releases@2.0.37:
+    resolution: {integrity: sha512-1h5gKZCF+pO/o3Iqt5Jp7wc9rH3eJJ0+nh/CIoiRwjRxde/hAHyLPXYN4V3CqKAbiZPSeJFSWHmJsbkicta0Eg==}
 
   node-source-walk@6.0.2:
     resolution: {integrity: sha512-jn9vOIK/nfqoFCcpK89/VCVaLg1IHE6UVfDOzvqmANaJ/rWCTEdH8RZ1V278nv2jr36BJdyQXIAavBLXpzdlag==}
@@ -14374,8 +14395,8 @@ packages:
   path-to-regexp@0.1.13:
     resolution: {integrity: sha512-A/AGNMFN3c8bOlvV9RreMdrv7jsmF9XIfDeCd87+I8RNg6s78BhJxMu69NEMHBSJFxKidViTEdruRwEk/WIKqA==}
 
-  path-to-regexp@8.4.0:
-    resolution: {integrity: sha512-PuseHIvAnz3bjrM2rGJtSgo1zjgxapTLZ7x2pjhzWwlp4SJQgK3f3iZIQwkpEnBaKz6seKBADpM4B4ySkuYypg==}
+  path-to-regexp@8.4.2:
+    resolution: {integrity: sha512-qRcuIdP69NPm4qbACK+aDogI5CBDMi1jKe0ry5rSQJz8JVLsC7jV8XpiJjGRLLol3N+R5ihGYcrPLTno6pAdBA==}
 
   path-type@1.1.0:
     resolution: {integrity: sha512-S4eENJz1pkiQn9Znv33Q+deTOKmbl+jj1Fl+qiP/vYezj+S8x+J3Uo0ISrx/QoEvIlOaDWJhPaRd1flJ9HXZqg==}
@@ -17492,6 +17513,9 @@ packages:
 
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
+
+  vue-component-type-helpers@2.2.12:
+    resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
   vue-eslint-parser@10.0.0:
     resolution: {integrity: sha512-xGtmOQJzWUIi6opA7CfJTJsJyCRjibJKHNzq39yqJ/f4AJ+N7Ngr7lDZMl/9ePaobBnsZgifu+7G6bST+gaYJA==}
@@ -23615,7 +23639,7 @@ snapshots:
       '@zkochan/js-yaml': 0.0.7
       ejs: 3.1.10
       enquirer: 2.3.6
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       nx: 22.4.5(@swc/core@1.15.3)
       semver: 7.7.4
       tslib: 2.8.1
@@ -23632,7 +23656,7 @@ snapshots:
       jest-config: 30.2.0(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.15.3)(@types/node@20.12.8)(typescript@5.9.3))
       jest-resolve: 30.2.0
       jest-util: 30.2.0
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       picocolors: 1.1.1
       resolve.exports: 2.0.3
       semver: 7.7.4
@@ -26383,9 +26407,10 @@ snapshots:
 
   '@vue/shared@3.5.13': {}
 
-  '@vue/test-utils@2.0.0-beta.7(vue@3.2.47)':
+  '@vue/test-utils@2.4.6':
     dependencies:
-      vue: 3.2.47
+      js-beautify: 1.15.1
+      vue-component-type-helpers: 2.2.12
 
   '@vue/tsconfig@0.9.0(typescript@5.9.3)(vue@3.4.27(typescript@5.9.3))':
     optionalDependencies:
@@ -27103,19 +27128,19 @@ snapshots:
       postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
-  autoprefixer@10.4.27(postcss@8.4.38):
+  autoprefixer@10.5.0(postcss@8.4.38):
     dependencies:
-      browserslist: 4.28.1
-      caniuse-lite: 1.0.30001776
+      browserslist: 4.28.2
+      caniuse-lite: 1.0.30001788
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.4.38
       postcss-value-parser: 4.2.0
 
-  autoprefixer@10.4.27(postcss@8.5.6):
+  autoprefixer@10.5.0(postcss@8.5.6):
     dependencies:
-      browserslist: 4.28.1
-      caniuse-lite: 1.0.30001776
+      browserslist: 4.28.2
+      caniuse-lite: 1.0.30001788
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.6
@@ -27611,6 +27636,8 @@ snapshots:
 
   base64id@2.0.0: {}
 
+  baseline-browser-mapping@2.10.19: {}
+
   baseline-browser-mapping@2.8.30: {}
 
   baseline-browser-mapping@2.9.13: {}
@@ -27855,6 +27882,14 @@ snapshots:
       node-releases: 2.0.27
       update-browserslist-db: 1.2.3(browserslist@4.28.1)
 
+  browserslist@4.28.2:
+    dependencies:
+      baseline-browser-mapping: 2.10.19
+      caniuse-lite: 1.0.30001788
+      electron-to-chromium: 1.5.339
+      node-releases: 2.0.37
+      update-browserslist-db: 1.2.3(browserslist@4.28.2)
+
   bs-logger@0.2.6:
     dependencies:
       fast-json-stable-stringify: 2.1.0
@@ -27989,6 +28024,8 @@ snapshots:
   caniuse-lite@1.0.30001763: {}
 
   caniuse-lite@1.0.30001776: {}
+
+  caniuse-lite@1.0.30001788: {}
 
   canvg@3.0.11:
     dependencies:
@@ -29227,7 +29264,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.7:
+  devextreme-exceljs-fork@4.4.8:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.13
@@ -29451,6 +29488,8 @@ snapshots:
   electron-to-chromium@1.5.259: {}
 
   electron-to-chromium@1.5.267: {}
+
+  electron-to-chromium@1.5.339: {}
 
   elegant-spinner@1.0.1: {}
 
@@ -31572,14 +31611,14 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 4.1.1
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       minipass: 7.1.2
       package-json-from-dist: 1.0.1
       path-scurry: 2.0.1
 
   glob@13.0.0:
     dependencies:
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       minipass: 7.1.2
       path-scurry: 2.0.1
 
@@ -31722,7 +31761,7 @@ snapshots:
 
   gulp-autoprefixer@10.0.0(gulp@4.0.2):
     dependencies:
-      autoprefixer: 10.4.27(postcss@8.5.6)
+      autoprefixer: 10.5.0(postcss@8.5.6)
       gulp-plugin-extras: 1.1.0
       postcss: 8.5.6
       vinyl-sourcemaps-apply: 0.2.1
@@ -32522,7 +32561,7 @@ snapshots:
 
   ignore-walk@8.0.0:
     dependencies:
-      minimatch: 10.2.4
+      minimatch: 10.2.5
 
   ignore@4.0.6: {}
 
@@ -35726,6 +35765,10 @@ snapshots:
     dependencies:
       brace-expansion: 5.0.5
 
+  minimatch@10.2.5:
+    dependencies:
+      brace-expansion: 5.0.5
+
   minimatch@3.1.5:
     dependencies:
       brace-expansion: 1.1.14
@@ -36021,7 +36064,7 @@ snapshots:
       '@sinonjs/fake-timers': 13.0.5
       '@sinonjs/text-encoding': 0.7.3
       just-extend: 6.2.0
-      path-to-regexp: 8.4.0
+      path-to-regexp: 8.4.2
 
   no-case@3.0.4:
     dependencies:
@@ -36082,6 +36125,8 @@ snapshots:
       which: 2.0.2
 
   node-releases@2.0.27: {}
+
+  node-releases@2.0.37: {}
 
   node-source-walk@6.0.2:
     dependencies:
@@ -36266,7 +36311,7 @@ snapshots:
       jest-diff: 30.2.0
       jsonc-parser: 3.2.0
       lines-and-columns: 2.0.3
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       node-machine-id: 1.1.12
       npm-run-path: 4.0.1
       open: 8.4.2
@@ -36817,7 +36862,7 @@ snapshots:
 
   path-to-regexp@0.1.13: {}
 
-  path-to-regexp@8.4.0: {}
+  path-to-regexp@8.4.2: {}
 
   path-type@1.1.0:
     dependencies:
@@ -38007,7 +38052,7 @@ snapshots:
       depd: 2.0.0
       is-promise: 4.0.0
       parseurl: 1.3.3
-      path-to-regexp: 8.4.0
+      path-to-regexp: 8.4.2
     transitivePeerDependencies:
       - supports-color
 
@@ -40970,6 +41015,12 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
+  update-browserslist-db@1.2.3(browserslist@4.28.2):
+    dependencies:
+      browserslist: 4.28.2
+      escalade: 3.2.0
+      picocolors: 1.1.1
+
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
@@ -41317,6 +41368,8 @@ snapshots:
   void-elements@2.0.1: {}
 
   vscode-uri@3.1.0: {}
+
+  vue-component-type-helpers@2.2.12: {}
 
   vue-eslint-parser@10.0.0(eslint@9.39.4(jiti@2.6.1)):
     dependencies:

@@ -12,7 +12,10 @@ interface Options {
 const filterBySkippedDays = <T extends DateInterval>(
   intervals: T[],
   skippedDays: number[],
-): T[] => intervals.filter((item) => !skippedDays.includes(new Date(item.min).getUTCDay()));
+): T[] => intervals.filter((item) => {
+  const weekday = new Date(item.min).getUTCDay();
+  return !skippedDays.includes(weekday);
+});
 
 export const getMinutesCellIntervals = ({
   intervals,

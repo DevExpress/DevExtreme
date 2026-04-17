@@ -18,6 +18,7 @@ import {
 import tableCreatorModule from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
+import { getFirstVisibleDate } from '../utils/skipped_days';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
@@ -108,7 +109,21 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected incrementDate(date) {
-    date.setDate(date.getDate() + 1);
+    const skippedDays = this.option('skippedDays') ?? [];
+    const nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const nextVisibleDate = getFirstVisibleDate(
+      nextDate,
+      skippedDays,
+      (currentDate) => {
+        const result = new Date(currentDate);
+        result.setDate(result.getDate() + 1);
+        return result;
+      },
+    );
+
+    date.setTime(nextVisibleDate.getTime());
   }
 
   getIndicationCellCount() {
@@ -133,6 +148,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected calculateDurationInCells(timeDiff) {
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
+    const skippedDaysCount = this.getSkippedDaysCount(
+      this.getIndicationFirstViewDate(),
+      differenceInDays,
+    );
     let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
 
     if (today.getHours() > (this.option('endDayHour') as any)) {
@@ -142,7 +161,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     if (duration < 0) {
       duration = 0;
     }
-    return differenceInDays * this.getCellCountInDay() + duration;
+    return (differenceInDays - skippedDaysCount) * this.getCellCountInDay() + duration;
   }
 
   getIndicationWidth() {
@@ -223,7 +242,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const fullDays = Math.floor(fullInterval / toMs('day'));
     const tailDuration = fullInterval - (fullDays * toMs('day'));
     let tailDelta = 0;
-    const cellCount = this.getCellCountInDay() * (fullDays - this.getWeekendsCount(fullDays));
+    const skippedDaysCount = this.getSkippedDaysCount(firstViewDate, fullDays);
+    const cellCount = this.getCellCountInDay() * (fullDays - skippedDaysCount);
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
     let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
 
@@ -251,11 +271,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     return result;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected override getWeekendsCount(argument?: any) {
-    return 0;
   }
 
   getAllDayContainer() {

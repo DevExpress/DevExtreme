@@ -7,6 +7,7 @@ export {
   SnapToCellsMode,
   RecurrenceEditMode,
   AppointmentFormIconsShowMode,
+  DayOfWeek,
   AppointmentFormProperties,
   ViewType,
   SchedulerScrollToAlign,

@@ -1647,17 +1647,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #region Focusing
   public focus(element) {
-    let activeElementSelector;
-    const focusedRowEnabled = this.option('focusedRowEnabled');
     const isHighlighted = this._isCellElement($(element));
 
     if (!element) {
-      activeElementSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row[tabindex]`;
-      if (!focusedRowEnabled) {
-        activeElementSelector
-          += `, .${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row > td[tabindex]`;
-      }
-      element = this.component.$element().find(activeElementSelector).first();
+      const activeRowSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row[tabindex]`;
+      const activeCellSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row > td[tabindex]`;
+      const selectors = [activeRowSelector, activeCellSelector].join(', ');
+      element = this.component.$element().find(selectors).first();
     }
 
     element && this._focusElement($(element), isHighlighted);
@@ -1785,12 +1781,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           $focusElement
             .removeClass(CELL_FOCUS_DISABLED_CLASS)
             .removeClass(FOCUSED_CLASS);
-
-          const isTargetInGrid = gridCoreUtils.isElementInCurrentGrid(this, $(e.relatedTarget));
-          if (!isTargetInGrid) {
-            this._resetFocusedCell(true);
-            this._resetFocusedView();
-          }
         }
       });
       if (!skipFocusEvent) {
