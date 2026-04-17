@@ -24,9 +24,9 @@
     </template>
   </DxChat>
 
-  <div class="options-container">
+  <div class="options">
     <div class="caption">Suggestion Options</div>
-    <div class="options">
+    <div class="suggestions-options">
       <div class="option">
         <DxSwitch
           :value="sendImmediately"
@@ -185,7 +185,7 @@ function onSuggestionItemClick(e: { itemData?: { text: string; prompt: string } 
   gap: 20px;
 }
 
-.options-container {
+.options {
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -197,7 +197,7 @@ function onSuggestionItemClick(e: { itemData?: { text: string; prompt: string } 
   box-sizing: border-box;
 }
 
-.options {
+.suggestions-options {
   display: flex;
   align-items: center;
   gap: 24px;
@@ -224,6 +224,10 @@ function onSuggestionItemClick(e: { itemData?: { text: string; prompt: string } 
 
 .dx-chat-messagelist-empty-message {
   font-size: var(--dx-font-size-heading-5);
+}
+
+.dx-chat-messagelist-empty-prompt {
+  max-width: 462px;
 }
 
 .dx-chat-messagebubble-content > div > p:first-child {
