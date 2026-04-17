@@ -169,6 +169,7 @@ const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedu
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerDateTable');
+const SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerTable');
 
 const SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME = addNamespace(pointerEvents.move, 'dxSchedulerDateTable');
 
@@ -216,6 +217,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   _dateTableScrollable!: Scrollable;
 
   _selectionChangedAction: any;
+
+  private _selectionEndAction: any;
+
+  private _isSelectionStartedOnCell = false;
 
   _isCellClick: any;
 
@@ -966,6 +971,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _attachEvents() {
     this._createSelectionChangedAction();
+    this._createSelectionEndAction();
     this._attachClickEvent();
     this._attachContextMenuEvent();
   }
@@ -994,6 +1000,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const $cell = $(e.target);
       that._cellClickAction({ event: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
     });
+
+    (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME);
+    eventsEngine.on(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME, () => {
+      if (this._isSelectionStartedOnCell) {
+        this._fireSelectionEndEvent();
+        this._isSelectionStartedOnCell = false;
+      }
+    });
   }
 
   _createCellClickAction() {
@@ -1006,10 +1020,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
   }
 
+  private _createSelectionEndAction() {
+    this._selectionEndAction = this._createActionByOption('onSelectionEnd');
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _cellClickHandler(argument?: any) {
     if (this._showPopup) {
       delete this._showPopup;
+      this._isSelectionStartedOnCell = false;
       this._handleSelectedCellsClick();
     }
   }
@@ -1019,10 +1038,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     if (!$target.hasClass(DATE_TABLE_CELL_CLASS) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
       this._isCellClick = false;
+      this._isSelectionStartedOnCell = false;
       return;
     }
 
     this._isCellClick = true;
+    this._isSelectionStartedOnCell = true;
     if ($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
       this._showPopup = true;
     } else {
@@ -1944,6 +1965,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._selectionChangedAction({ selectedCellData });
   }
 
+  private _fireSelectionEndEvent() {
+    const selectedCellData = this.option('selectedCellData') ?? [];
+    if ((selectedCellData as any[]).length > 0 && this._selectionEndAction) {
+      this._selectionEndAction({ selectedCellData });
+    }
+  }
+
   _getCellByData(cellData) {
     const {
       startDate, groupIndex, allDay, index,
@@ -2367,6 +2395,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'onSelectionChanged':
         this._createSelectionChangedAction();
+        break;
+      case 'onSelectionEnd':
+        this._createSelectionEndAction();
         break;
       case 'onCellClick':
         this._createCellClickAction();

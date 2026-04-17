@@ -382,6 +382,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case StoreEventNames.DELETED:
       case 'onAppointmentFormOpening':
       case 'onAppointmentTooltipShowing':
+      case 'onSelectionEnd':
         this._actions[name] = this._createActionByOption(name);
         break;
       case 'onAppointmentRendered':
@@ -953,6 +954,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onAppointmentDeleted: this._createActionByOption(StoreEventNames.DELETED),
       onAppointmentFormOpening: this._createActionByOption('onAppointmentFormOpening'),
       onAppointmentTooltipShowing: this._createActionByOption('onAppointmentTooltipShowing'),
+      onSelectionEnd: this._createActionByOption('onSelectionEnd'),
     };
   }
 
@@ -1355,6 +1357,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       selectedCellData: this.option('selectedCellData'),
       onSelectionChanged: (args) => {
         this.option('selectedCellData', args.selectedCellData);
+      },
+      onSelectionEnd: (args) => {
+        this._actions.onSelectionEnd({
+          component: this,
+          element: this.$element(),
+          selectedCellData: args.selectedCellData,
+        });
       },
       groupByDate: this.getViewOption('groupByDate'),
       scrolling,
