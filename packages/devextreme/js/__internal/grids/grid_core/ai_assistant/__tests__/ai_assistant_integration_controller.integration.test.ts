@@ -10,6 +10,7 @@ import type {
   ExecuteGridAssistantCommandParams,
   ExecuteGridAssistantCommandResult,
   RequestCallbacks,
+  RequestParams,
 } from '@js/common/ai-integration';
 import type { Properties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
@@ -275,6 +276,47 @@ describe('AIAssistantIntegrationController', () => {
             responseSchema: expect.any(Object),
             cancel: false,
             additionalInfo: expect.any(Object),
+          }),
+        );
+      });
+
+      it('should pass all arguments through to provider sendRequest', async () => {
+        let capturedProviderParams: RequestParams = {} as RequestParams;
+        const aiIntegration = new AIIntegration({
+          sendRequest(params): SendRequestResult {
+            capturedProviderParams = params;
+            return {
+              promise: Promise.resolve('{}'),
+              abort(): void {},
+            };
+          },
+        });
+
+        const controller = await createController({
+          aiAssistant: { enabled: true, aiIntegration },
+          onAIAssistantRequestCreating: (
+            e: { additionalInfo: Record<string, unknown> },
+          ): void => {
+            e.additionalInfo = { customKey: 'customValue' };
+          },
+        });
+
+        controller.sendRequest('Sort by name');
+
+        expect(capturedProviderParams.prompt).toEqual(
+          expect.objectContaining({
+            system: expect.any(String),
+            user: expect.any(String),
+          }),
+        );
+        expect(capturedProviderParams.data).toEqual(
+          expect.objectContaining({
+            text: 'Sort by name',
+            context: expect.any(Object),
+            responseSchema: expect.any(Object),
+            additionalInfo: expect.objectContaining({
+              customKey: 'customValue',
+            }),
           }),
         );
       });

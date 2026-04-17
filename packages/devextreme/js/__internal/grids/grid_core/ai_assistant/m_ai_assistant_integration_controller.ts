@@ -61,10 +61,8 @@ export class AIAssistantIntegrationController extends Controller {
       {
         text,
         context: args.context,
-        additionalInfo: {
-          ...args.additionalInfo,
-          responseSchema: args.responseSchema,
-        },
+        responseSchema: args.responseSchema,
+        additionalInfo: args.additionalInfo,
       },
       this.getAICommandCallbacks(callbacks),
     );
