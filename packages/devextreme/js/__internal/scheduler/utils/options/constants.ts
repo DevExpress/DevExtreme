@@ -54,6 +54,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   maxAppointmentsPerCell: 'auto',
   selectedCellData: [],
   groupByDate: false,
+  hiddenWeekDays: undefined,
   onAppointmentRendered: undefined,
   onAppointmentClick: undefined,
   onAppointmentDblClick: undefined,

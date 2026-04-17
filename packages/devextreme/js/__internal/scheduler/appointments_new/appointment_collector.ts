@@ -7,14 +7,14 @@ import { EmptyTemplate } from '@js/core/templates/empty_template';
 import Button from '@js/ui/button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
-import DOMComponent from '@ts/core/widget/dom_component';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
+import type { ViewItemProperties } from './view_item';
+import { ViewItem } from './view_item';
 
 export interface AppointmentCollectorProperties
-  extends DOMComponentProperties<AppointmentCollector> {
+  extends ViewItemProperties {
   appointmentsData: SafeAppointment[];
   isCompact: boolean;
   geometry: {
@@ -28,7 +28,7 @@ export interface AppointmentCollectorProperties
 }
 
 export class AppointmentCollector
-  extends DOMComponent<AppointmentCollector, AppointmentCollectorProperties> {
+  extends ViewItem<AppointmentCollectorProperties> {
   private defaultAppointmentCollectorTemplate!: FunctionTemplate;
 
   private buttonInstance?: Button;
@@ -51,10 +51,12 @@ export class AppointmentCollector
     this.resize();
     this.applyElementClasses();
     this.applyElementAria();
+    this.attachFocusEvents();
+    this.attachKeydownEvents();
     this.renderContentTemplate();
   }
 
-  public resize(
+  public override resize(
     geometry?: { height: number; width: number; top: number; left: number },
   ): void {
     const newGeometry = geometry ?? this.option().geometry;
@@ -65,6 +67,12 @@ export class AppointmentCollector
     this.$element().css({ top, left });
 
     this.buttonInstance?.option({ width, height });
+  }
+
+  public override setTabIndex(tabIndex: number | undefined): void {
+    super.setTabIndex(tabIndex);
+
+    this.buttonInstance?.option('tabIndex', tabIndex);
   }
 
   private applyElementClasses(): void {
@@ -98,6 +106,7 @@ export class AppointmentCollector
 
     this.buttonInstance = this._createComponent(this.$element(), Button, {
       type: 'default',
+      tabIndex: this.option().tabIndex,
       width: this.option().geometry.width,
       height: this.option().geometry.height,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -109,6 +118,7 @@ export class AppointmentCollector
           items: this.option().appointmentsData,
         },
       })),
+      onClick: this.onClick.bind(this),
     });
   }
 

@@ -57,7 +57,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   public getIntervalOptions(date: Date): IntervalOptions {
-    const { currentView, firstDayOfWeek } = this.option();
+    const { currentView, firstDayOfWeek, skippedDays } = this.option();
     const step = getStep(currentView.type);
 
     return {
@@ -66,6 +66,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       firstDayOfWeek,
       intervalCount: currentView.intervalCount,
       agendaDuration: currentView.agendaDuration,
+      skippedDays,
     };
   }
 

@@ -90,7 +90,11 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
   }
 
   getCellCount() {
-    return DAYS_IN_WEEK;
+    return DAYS_IN_WEEK - this.skippedDays.length;
+  }
+
+  protected usesMonthDayLayout(): boolean {
+    return true;
   }
 
   getRowCount(options) {

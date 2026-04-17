@@ -44,6 +44,7 @@ type WorkspaceConstructor<T> = new (container: Element, options?: any) => T;
 const createWorkspace = <T extends SchedulerWorkSpace>(
   WorkSpace: WorkspaceConstructor<T>,
   currentView: string,
+  options?: any,
 ): { workspace: T; container: Element } => {
   const container = document.createElement('div');
   const workspace = new WorkSpace(container, {
@@ -52,6 +53,7 @@ const createWorkspace = <T extends SchedulerWorkSpace>(
     currentDate: new Date(2017, 4, 25),
     firstDayOfWeek: 0,
     getResourceManager: () => getResourceManagerMock([]),
+    ...options,
   });
   (workspace as any)._isVisible = () => true;
   expect(container.classList).toContain('dx-scheduler-work-space');
@@ -191,5 +193,63 @@ describe('scheduler workspace scrollTo', () => {
     workspace.scrollTo(new Date(2017, 4, 25, 22, 0));
 
     expect(scrollableContainer.scrollLeft).toBeCloseTo(-11125);
+  });
+});
+
+describe('scheduler workspace skipped days support', () => {
+  beforeEach(() => {
+    setupSchedulerTestEnvironment();
+  });
+
+  it('should count configured skipped days in week workspace interval math', () => {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWeek, 'week', {
+      skippedDays: [1, 3],
+    });
+
+    expect((workspace as any).getSkippedDaysCount(new Date(2026, 3, 5), 7)).toBe(2);
+  });
+
+  it('should use full week layout for work week when skippedDays override is empty', () => {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+      currentDate: new Date(2026, 3, 1), // Wednesday
+      firstDayOfWeek: 0, // Sunday
+      skippedDays: [],
+    });
+
+    expect(workspace.getStartViewDate()).toEqual(new Date(2026, 2, 29));
+    expect((workspace as any)._getCellCount()).toBe(7);
+  });
+
+  it('should use custom skippedDays in work week runtime layout', () => {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+      currentDate: new Date(2026, 3, 1), // Wednesday
+      firstDayOfWeek: 0, // Sunday
+      skippedDays: [3], // Wednesday
+    });
+
+    expect(workspace.getStartViewDate()).toEqual(new Date(2026, 2, 29));
+    expect((workspace as any)._getCellCount()).toBe(6);
+  });
+
+  it('should skip configured hidden days when incrementing timeline header dates', () => {
+    const { workspace } = createWorkspace(SchedulerTimelineWeek, 'timelineWeek', {
+      skippedDays: [3],
+    });
+    const date = new Date(2026, 3, 7); // Tuesday
+
+    (workspace as any).incrementDate(date);
+
+    expect(date).toEqual(new Date(2026, 3, 9)); // Thursday
+  });
+
+  it('should skip hidden days when incrementing timeline day dates', () => {
+    const { workspace } = createWorkspace(SchedulerTimelineDay, 'timelineDay', {
+      skippedDays: [0, 6],
+    });
+    const date = new Date(2026, 3, 10); // Friday
+
+    (workspace as any).incrementDate(date);
+
+    expect(date).toEqual(new Date(2026, 3, 13)); // Monday
   });
 });

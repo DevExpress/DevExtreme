@@ -314,6 +314,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.updateOption('header', 'views', this.views);
         }
         break;
+      case 'hiddenWeekDays':
+        this.repaint();
+        break;
       case 'useDropDownViewSwitcher':
         this.updateOption('header', name, value);
         break;
@@ -515,6 +518,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'groupByDate':
         this.updateOption('workSpace', name, value);
         this.repaint();
+        break;
+      case 'skippedDays':
         break;
       case 'indicatorTime':
         this.updateOption('workSpace', name, value);
@@ -904,7 +909,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  isVirtualScrolling() {
+  isVirtualScrolling(): boolean {
     const workspace = this.getWorkSpace();
 
     if (workspace) {
@@ -1058,6 +1063,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (this.option('_newAppointments')) {
       const appointmentsConfig: Partial<AppointmentsProperties> = {
+        tabIndex: this.option('tabIndex'),
         currentView: this.option('currentView') as ViewType,
         appointmentTemplate: this.getViewOption('appointmentTemplate'),
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
@@ -1072,6 +1078,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
         getDataAccessor: () => this._dataAccessors,
+        getStartViewDate: () => this.getStartViewDate(),
+        getSortedAppointments: () => this._layoutManager.sortedItems,
+
+        isVirtualScrolling: () => this.isVirtualScrolling(),
+        scrollTo: this.scrollTo.bind(this),
       };
       // @ts-expect-error
       this._appointments = this._createComponent('<div>', Appointments, appointmentsConfig);
@@ -1283,6 +1294,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private headerConfig(): HeaderOptions {
     return {
       currentView: this.currentView,
+      skippedDays: this.getViewOption('hiddenWeekDays') as number[],
       views: this.views,
       currentDate: this.getViewOption('currentDate'),
       min: this.getViewOption('min'),
@@ -1439,6 +1451,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.option('selectedCellData', args.selectedCellData);
       },
       groupByDate: this.getViewOption('groupByDate'),
+      skippedDays: this.getViewOption('hiddenWeekDays') as number[],
       scrolling,
       draggingMode: this.option('_draggingMode'),
       timeZoneCalculator: this.timeZoneCalculator,
@@ -1460,6 +1473,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     result.onCellClick = this._createActionByOption('onCellClick');
     result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
     result.currentDate = this.getViewOption('currentDate');
+    result.skippedDays = this.getViewOption('hiddenWeekDays') as number[];
     result.hoursInterval = result.cellDuration / 60;
     result.allDayExpanded = false;
     result.dataCellTemplate = result.dataCellTemplate ? this._getTemplate(result.dataCellTemplate) : null;
