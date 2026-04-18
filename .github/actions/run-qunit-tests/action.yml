@@ -87,9 +87,9 @@ runs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
+    - name: Run npm ci
       shell: bash
-      run: npm install --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
     - name: Download artifacts
       uses: actions/download-artifact@v4

@@ -14,20 +14,20 @@ STOPSIGNAL SIGKILL
 
 COPY package*.json .
 
-RUN npm install --no-audit --no-fund
+RUN npm ci --no-audit --no-fund
 
 COPY . .
 
 RUN export PATH=$PATH:~/.dotnet \
     && npm run build:testcafe \
-    && npx gulp localization \
+    && npx --no-install gulp localization \
     && cd testing/renovation \
-    && npm install --no-audit --no-fund --legacy-peer-deps \
+    && npm ci --no-audit --no-fund --legacy-peer-deps \
     && cd ../.. \
     && npm run build:react \
-    && npx gulp build-renovation-testing
+    && npx --no-install gulp build-renovation-testing
 
 RUN npm run build:react \
-    && npx gulp build-renovation-testing
+    && npx --no-install gulp build-renovation-testing
 
 ENTRYPOINT ["node", "./testing/testcafe/docker/run-testcafe"]

@@ -41,11 +41,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ github.workflow }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install npm packages
-        run: npm i --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Build devextreme package
         working-directory: ./packages/devextreme
-        run: npx nx build
+        run: npx --no-install nx build
 
       - name: Generate wrappers
         run: npm run regenerate-all
@@ -63,25 +63,25 @@ jobs:
           fi
 
       - name: Angular - Build
-        run: npx nx build devextreme-angular
+        run: npx --no-install nx build devextreme-angular
 
       - name: Angular - Run tests
-        run: npx nx test:dev devextreme-angular
+        run: npx --no-install nx test:dev devextreme-angular
 
       - name: Angular - Check packing
-        run: npx nx pack devextreme-angular
+        run: npx --no-install nx pack devextreme-angular
 
       - name: React - Run tests
-        run: npx nx test devextreme-react
+        run: npx --no-install nx test devextreme-react
 
       - name: React - Check packing
-        run: npx nx pack devextreme-react
+        run: npx --no-install nx pack devextreme-react
 
       - name: Vue - Run tests
-        run: npx nx test devextreme-vue
+        run: npx --no-install nx test devextreme-vue
 
       - name: Vue - Check packing
-        run: npx nx pack devextreme-vue
+        run: npx --no-install nx pack devextreme-vue
 
       - name: Archive internal-tools artifacts
         uses: actions/upload-artifact@v4

@@ -50,13 +50,13 @@ jobs:
           restore-keys: ${{ runner.os }}-node-modules
 
       - name: DevExtreme - Install packages
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: DevExtreme - Build
         shell: bash
         run: |
           node ./tools/scripts/performance_log.js &
-          npx nx build devextreme-main
+          npx --no-install nx build devextreme-main
 
   testcafe:
     needs: [check-should-run, build]
@@ -96,12 +96,12 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: DevExtreme - Install packages
-      run: npm install --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
     - name: DevExtreme - Build
       env:
         BUILD_TEST_INTERNAL_PACKAGE: true
-      run: npx nx build devextreme-main
+      run: npx --no-install nx build devextreme-main
 
     - name: Run Web Server
       run: |
@@ -128,7 +128,7 @@ jobs:
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: |
         node ../../tools/scripts/performance_log.js &
-        npx nx test-testcafe
+        npx --no-install nx test-testcafe
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'

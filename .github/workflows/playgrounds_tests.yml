@@ -38,12 +38,12 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npx nx build
+      run: npx --no-install nx build
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -74,11 +74,6 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Setup Chrome
-      uses: ./.github/actions/setup-chrome
-      with:
-        chrome-version: '133.0.6943.53'
-
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
@@ -91,8 +86,8 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Download artifacts
       uses: actions/download-artifact@v4
@@ -110,9 +105,4 @@ jobs:
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: npx nx build
-
-#    - name: Run test
-#      if: ${{ matrix.ARGS.platform != 'angular' }}
-#      working-directory: ./apps/${{ matrix.ARGS.platform }}
-#      run: npm run test
+      run: npx --no-install nx build

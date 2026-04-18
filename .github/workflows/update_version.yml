@@ -34,7 +34,7 @@ jobs:
           git config --global user.name "DX Robot"
 
       - name: Install packages in devextreme repo
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Bump version
         run: npm run all:update-version -- ${{ inputs.version }}

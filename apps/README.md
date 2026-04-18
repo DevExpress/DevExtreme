@@ -8,7 +8,7 @@ To run a playground, clone this repository and follow the instructions below.
 
 Before you run a playground, install modules and build the devextreme package. Run the following scripts from the root directory of this repository:
 ```
-npm install
+npm ci
 npm run build -w=devextreme-main
 ```
 

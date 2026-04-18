@@ -29,8 +29,8 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Build etalon bundles
       working-directory: ./packages/devextreme-scss
@@ -38,19 +38,19 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder
-      run: npx nx build
+      run: npx --no-install nx build
 
     - name: Run themebuilder tests (full set, node)
       working-directory: ./packages/devextreme-themebuilder
-      run: npx nx test
+      run: npx --no-install nx test
 
     - name: Check styles for duplicate rules (generic)
       working-directory: ./packages/devextreme-scss
-      run: npx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.light.css"
+      run: npx --no-install stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.light.css"
 
     - name: Check styles for duplicate rules (material)
       working-directory: ./packages/devextreme-scss
-      run: npx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
+      run: npx --no-install stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
 
   notify:
     runs-on: devextreme-shr2

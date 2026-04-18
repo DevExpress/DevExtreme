@@ -53,14 +53,14 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Build
       shell: bash
       run: |
         node ./tools/scripts/performance_log.js &
-        npx nx build devextreme-main
+        npx --no-install nx build devextreme-main
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -182,8 +182,8 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Run npm ci
+      run: npm ci --no-audit --no-fund
 
     - name: Download artifacts
       uses: actions/download-artifact@v4
@@ -205,7 +205,7 @@ jobs:
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
         node ../../tools/scripts/performance_log.js &
-        npx nx test $all_args
+        npx --no-install nx test $all_args
 
     - name: Sanitize job name
       if: ${{ failure() }}

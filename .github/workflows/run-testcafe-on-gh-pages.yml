@@ -54,7 +54,7 @@ jobs:
 
             - name: DevExtreme - Install packages
               working-directory: devextreme
-              run: npm install --no-audit --no-fund
+              run: npm ci --no-audit --no-fund
 
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos
@@ -71,7 +71,7 @@ jobs:
                 # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
                 # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
                 CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-              run: npx nx test-testcafe
+              run: npx --no-install nx test-testcafe
 
             - name: Copy screenshots artifacts
               if: ${{ failure() }}

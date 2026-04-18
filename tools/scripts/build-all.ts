@@ -27,7 +27,7 @@ const injectDescriptions = () => {
     sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
 
     sh.pushd(DOCUMENTATION_TEMP_DIR);
-    sh.exec('npm i');
+    sh.exec('npm ci');
     sh.exec(`npm run update-topics -- --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
     sh.popd();
 
@@ -51,9 +51,9 @@ if (!devMode) {
 }
 
 if (devMode) {
-    sh.exec('npx nx build devextreme-main');
+    sh.exec('npx --no-install nx build devextreme-main');
 } else {
-    sh.exec('npx nx build devextreme-scss');
+    sh.exec('npx --no-install nx build devextreme-scss');
     sh.exec('npm run build-dist -w devextreme-main', {
         env: {
             ...sh.env,
@@ -63,7 +63,7 @@ if (devMode) {
 }
 
 if (devMode) {
-    sh.exec(`npx nx build devextreme-themebuilder`);
+    sh.exec(`npx --no-install nx build devextreme-themebuilder`);
 } else {
     sh.exec('npm run build -w devextreme-themebuilder');
 }

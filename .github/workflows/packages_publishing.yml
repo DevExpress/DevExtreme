@@ -43,11 +43,11 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Set timestamp version
         if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
-        run: npx ts-node tools/scripts/set-timestamp-version
+        run: npx --no-install ts-node tools/scripts/set-timestamp-version
 
       - name: Build npm packages
         env:
@@ -72,7 +72,7 @@ jobs:
           cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build artifacts package
-        run: npx ts-node tools/scripts/make-artifacts-package
+        run: npx -no-install ts-node tools/scripts/make-artifacts-package
 
       - uses: actions/upload-artifact@v4
         with:

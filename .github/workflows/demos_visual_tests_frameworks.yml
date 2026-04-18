@@ -50,7 +50,7 @@ jobs:
           restore-keys: ${{ runner.os }}-node-modules
 
       - name: DevExtreme - Install packages
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: DevExtreme - Build-all
         env:
@@ -124,7 +124,7 @@ jobs:
 
     - name: Prepare bundles
       working-directory: apps/demos
-      run: npx nx prepare-bundles
+      run: npx --no-install nx prepare-bundles
 
     - name: Demos - Run tsc
       working-directory: apps/demos
@@ -177,7 +177,7 @@ jobs:
       matrix:
         include:
           - name: Lint code base (excluding demos)
-            command: npx nx lint-non-demos
+            command: npx --no-install nx lint-non-demos
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos
@@ -262,7 +262,7 @@ jobs:
         name: devextreme-sources
 
     - name: Install packages
-      run: npm install --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
       # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
@@ -334,7 +334,7 @@ jobs:
         name: devextreme-sources
 
     - name: Install packages
-      run: npm install --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
     # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
@@ -358,7 +358,7 @@ jobs:
 
     - name: Update bundles config
       working-directory: apps/demos
-      run: npx gulp update-config
+      run: npx --no-install gulp update-config
 
     - name: Run Web Server
       run: |
@@ -400,7 +400,7 @@ jobs:
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: |
         node ../../tools/scripts/performance_log.js &
-        npx nx test-testcafe
+        npx --no-install nx test-testcafe
 
     - name: Sanitize job name
       if: ${{ failure() }}
