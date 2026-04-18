@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
-import { AI_ASSISTANT_AUTHOR_ID } from '@ts/grids/grid_core/ai_assistant/const';
+import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -17,8 +17,12 @@ import {
   CLASSES, CLEAR_CHAT_ICON,
   DEFAULT_CHAT_OPTIONS,
   DEFAULT_POPUP_OPTIONS,
+  ERROR_ITEM_EMOJI,
+  SUCCESS_ITEM_EMOJI,
 } from './const';
-import type { AIChatOptions, MessageStatus } from './types';
+import type {
+  AIChatOptions, CommandResult, CommandResults,
+} from './types';
 
 export class AIChat {
   private readonly popupInstance: Popup;
@@ -32,6 +36,10 @@ export class AIChat {
 
     container.addClass(CLASSES.aiChat);
     this.popupInstance = createComponent(container, Popup, this.getPopupConfig());
+  }
+
+  private isAIChatMessage(message: Message): boolean {
+    return message.author?.id === AI_ASSISTANT_AUTHOR_ID;
   }
 
   private getChatConfig(): ChatProperties {
@@ -56,8 +64,12 @@ export class AIChat {
       messageTemplate: (data, container): void => {
         const { message } = data;
 
-        if (message?.author?.id === AI_ASSISTANT_AUTHOR_ID) {
-          this.renderMessage(message, container);
+        if (!message) {
+          return;
+        }
+
+        if (this.isAIChatMessage(message)) {
+          this.renderAIMessage(message, container);
         } else {
           $(container).text(message?.text);
         }
@@ -107,9 +119,35 @@ export class AIChat {
     };
   }
 
-  private renderMessageIcon($parent: dxElementWrapper): void {
+  private getMessageStateClass(status: MessageStatus): string {
+    switch (status) {
+      case 'success':
+        return CLASSES.messageSuccess;
+      case 'error':
+        return CLASSES.messageError;
+      case 'pending':
+      default:
+        return CLASSES.messagePending;
+    }
+  }
+
+  private getMessageIconName(message: Message): string {
+    const hasErrors = message.commands?.some(({ status }) => status === MessageStatus.Error);
+
+    if (message.status === MessageStatus.Error || hasErrors) {
+      return 'errorcircle';
+    }
+
+    if (message.status === MessageStatus.Success) {
+      return 'checkmarkcirclefilled';
+    }
+
+    return 'sparkle';
+  }
+
+  private renderMessageIcon($parent: dxElementWrapper, message: Message): void {
     $('<i>')
-      .addClass(`dx-icon dx-icon-sparkle ${CLASSES.messageIcon}`)
+      .addClass(`dx-icon dx-icon-${this.getMessageIconName(message)} ${CLASSES.messageIcon}`)
       .appendTo($parent);
   }
 
@@ -120,25 +158,23 @@ export class AIChat {
       .appendTo($parent);
   }
 
-  private renderMessageGroupOperations($parent: dxElementWrapper, status: MessageStatus): void {
-    switch (status) {
-      case 'pending':
-        this.renderPendingOperation($parent);
-        break;
+  private renderMessageStateContent($parent: dxElementWrapper, message: Message): void {
+    switch (message.status) {
       case 'success':
-        this.renderSuccessOperations($parent);
+        this.renderSuccessState($parent, message.commands);
         break;
       case 'error':
-        this.renderErrorOperations($parent);
+        this.renderErrorState($parent, message);
         break;
+      case 'pending':
       default:
-        break;
+        this.renderPendingState($parent);
     }
   }
 
-  private renderPendingOperation($parent: dxElementWrapper): void {
+  private renderPendingState($parent: dxElementWrapper): void {
     $('<div>')
-      .addClass(CLASSES.messageGroupOperations)
+      .addClass(CLASSES.messageStatus)
       .text('Processing...')
       .appendTo($parent);
 
@@ -154,11 +190,62 @@ export class AIChat {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private renderSuccessOperations($parent: dxElementWrapper): void {}
+  private renderCommandListItem(
+    $parent: dxElementWrapper,
+    command: CommandResult,
+  ): void {
+    const commandStateClass = command.status === 'error'
+      ? CLASSES.messageListItemError
+      : CLASSES.messageListItemSuccess;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private renderErrorOperations($parent: dxElementWrapper): void {}
+    const $item = $('<li>')
+      .addClass(`${CLASSES.messageListItem} ${commandStateClass}`)
+      .appendTo($parent);
+
+    const emoji = command.status === 'error' ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
+
+    $('<span>')
+      .addClass(CLASSES.messageListItemIcon)
+      .text(emoji)
+      .appendTo($item);
+
+    $('<span>')
+      .addClass(CLASSES.messageListItemText)
+      .text(command.message)
+      .appendTo($item);
+  }
+
+  private renderCommandList(
+    $container: dxElementWrapper,
+    commands?: CommandResults,
+  ): void {
+    if (!commands?.length) {
+      return;
+    }
+
+    const $list = $('<ul>')
+      .addClass(CLASSES.messageList)
+      .appendTo($container);
+
+    commands.forEach((command) => {
+      this.renderCommandListItem($list, command);
+    });
+  }
+
+  private renderSuccessState(
+    $container: dxElementWrapper,
+    commands?: CommandResults,
+  ): void {
+    this.renderCommandList($container, commands);
+  }
+
+  private renderErrorState(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    $container: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    message: Message,
+  ): void {
+  }
 
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
     this.options = options;
@@ -184,18 +271,18 @@ export class AIChat {
     return !!this.popupInstance?.option('visible');
   }
 
-  public renderMessage(message: Message, container: HTMLElement): void {
+  public renderAIMessage(message: Message, container: HTMLElement): void {
     const $message = $('<div>')
-      .addClass(`${CLASSES.message} ${CLASSES.messagePending}`)
+      .addClass(`${CLASSES.message} ${this.getMessageStateClass(message.status)}`)
       .appendTo(container);
 
-    this.renderMessageIcon($message);
+    this.renderMessageIcon($message, message);
 
     const $content = $('<div>')
       .addClass(CLASSES.messageContent)
       .appendTo($message);
 
-    this.renderMessageHeader($content, message.text);
-    this.renderMessageGroupOperations($content, message.status);
+    this.renderMessageHeader($content, message.text ?? '');
+    this.renderMessageStateContent($content, message);
   }
 }

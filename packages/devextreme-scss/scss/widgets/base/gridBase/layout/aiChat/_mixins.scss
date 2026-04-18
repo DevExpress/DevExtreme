@@ -12,7 +12,7 @@
   $pending-message-color,
 ) {
   .dx-ai-chat__message--pending {
-    .dx-ai-chat__message-icon, .dx-ai-chat__message-group-operations {
+    .dx-ai-chat__message-icon, .dx-ai-chat__message-status {
       color: $pending-message-color;
     }
   }

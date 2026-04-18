@@ -38,14 +38,14 @@ export interface Command {
   args: Record<string, unknown>;
 }
 
-export interface InternalRequestCallbacks {
-  onComplete?: (finalResponse: CommandResponse) => void;
-  onError?: (error: Error) => void;
-}
-
-export interface ProcessedCommand {
+export interface CommandResult {
   status: 'success' | 'error';
   message: string;
 }
 
-export type ProcessedCommands = ProcessedCommand[];
+export type CommandResults = CommandResult[];
+
+export interface InternalRequestCallbacks {
+  onComplete?: (finalResponse: CommandResponse) => void;
+  onError?: (error: Error) => void;
+}

@@ -27,8 +27,17 @@ export const CLASSES = {
   messageIcon: 'dx-ai-chat__message-icon',
   messageContent: 'dx-ai-chat__message-content',
   messageHeader: 'dx-ai-chat__message-header',
-  messageGroupOperations: 'dx-ai-chat__message-group-operations',
+  messageStatus: 'dx-ai-chat__message-status',
+  messageList: 'dx-ai-chat__message-list',
+  messageListItem: 'dx-ai-chat__message-list-item',
+  messageListItemSuccess: 'dx-ai-chat__message-list-item--success',
+  messageListItemError: 'dx-ai-chat__message-list-item--error',
+  messageListItemIcon: 'dx-ai-chat__message-list-item-icon',
+  messageListItemText: 'dx-ai-chat__message-list-item-text',
   messageProgressBar: 'dx-ai-chat__message-progressbar',
 };
 
 export const CLEAR_CHAT_ICON = 'clearhistory';
+
+export const SUCCESS_ITEM_EMOJI = '✅';
+export const ERROR_ITEM_EMOJI = '❌';

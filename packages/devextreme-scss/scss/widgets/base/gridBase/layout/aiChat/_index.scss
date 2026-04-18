@@ -31,6 +31,36 @@
   gap: 4px;
 }
 
+.dx-ai-chat__message--success .dx-ai-chat__message-icon {
+  color: var(--dx-color-success);
+}
+
+.dx-ai-chat__message--error .dx-ai-chat__message-icon {
+  color: var(--dx-color-danger);
+}
+
+.dx-ai-chat__message-list {
+  display: flex;
+  flex-flow: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dx-ai-chat__message-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.dx-ai-chat__message-list-item--success {
+  color: var(--dx-color-success);
+}
+
+.dx-ai-chat__message-list-item--error {
+  color: var(--dx-color-danger);
+}
+
 .dx-ai-chat__message-progressbar {
   position: absolute;
   left: 0;
