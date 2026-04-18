@@ -32,6 +32,7 @@ export {
   DisposingEvent,
   InitializedEvent,
   OptionChangedEvent,
+  SelectionEndEvent,
   AppointmentDraggingAddEvent,
   AppointmentDraggingEndEvent,
   AppointmentDraggingMoveEvent,
