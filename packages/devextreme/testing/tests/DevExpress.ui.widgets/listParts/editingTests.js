@@ -446,6 +446,42 @@ QUnit.module('keyboard navigation', {
             assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
         });
 
+        QUnit.test('shift+arrowUp should reorder items within second group', function(assert) {
+            const $secondGroupLastItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).eq(1)
+                .find(`.${LIST_ITEM_CLASS}`).last();
+
+            $secondGroupLastItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowUp', { shiftKey: true });
+
+            const expectedItems = [{
+                items: ['1-1', '1-2'],
+            }, {
+                items: ['2-2', '2-1'],
+            }];
+
+            assert.deepEqual(this.list.option('items'), expectedItems, 'items in second group were reordered');
+        });
+
+        QUnit.test('shift+arrowDown should reorder items within second group', function(assert) {
+            const $secondGroupFirstItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).eq(1)
+                .find(`.${LIST_ITEM_CLASS}`).first();
+
+            $secondGroupFirstItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowDown', { shiftKey: true });
+
+            const expectedItems = [{
+                items: ['1-1', '1-2'],
+            }, {
+                items: ['2-2', '2-1'],
+            }];
+
+            assert.deepEqual(this.list.option('items'), expectedItems, 'items in second group were reordered');
+        });
+
         QUnit.test('shift+arrowDown should not move group header (T1281673)', function(assert) {
             const $lastGroupHeader = this.$list.find(`.${LIST_GROUP_HEADER_CLASS}`).last();
 
