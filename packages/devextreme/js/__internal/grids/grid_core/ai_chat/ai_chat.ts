@@ -76,6 +76,7 @@ export class AIChat {
           $(container).text(message?.text);
         }
       },
+      showUserName: false,
       ...this.options.chatOptions,
     };
   }
@@ -153,21 +154,33 @@ export class AIChat {
       .appendTo($parent);
   }
 
+  private getHeaderText(message: Message): string {
+    switch (message.status) {
+      case MessageStatus.Error:
+        return messageLocalization.format('dxDataGrid-aiChatErrorMessageHeader');
+      case MessageStatus.Pending:
+        return messageLocalization.format('dxDataGrid-aiChatPendingMessageHeader');
+      default:
+        return message.text as string ?? '';
+    }
+  }
+
   private renderMessageHeader(
     $parent: dxElementWrapper,
-    text: string,
-    showRegenerate = false,
+    message: Message,
   ): void {
     const $row = $('<div>')
       .addClass(CLASSES.messageHeaderRow)
       .appendTo($parent);
+    const headerText = this.getHeaderText(message);
+    const needToShowRegenerateButton = this.needToShowRegenerateButton(message);
 
     $('<b>')
       .addClass(CLASSES.messageHeader)
-      .text(text)
+      .text(headerText)
       .appendTo($row);
 
-    if (showRegenerate && this.options.onRegenerate) {
+    if (needToShowRegenerateButton && this.options.onRegenerate) {
       const $button = $('<i>')
         .addClass(`dx-icon dx-icon-${REGENERATE_ICON} ${CLASSES.messageRegenerateButton}`)
         .appendTo($row);
@@ -304,8 +317,6 @@ export class AIChat {
   }
 
   public renderAIMessage(message: Message, container: HTMLElement): void {
-    const isError = message.status === MessageStatus.Error;
-
     const $message = $('<div>')
       .addClass(`${CLASSES.message} ${this.getMessageStateClass(message.status)}`)
       .appendTo(container);
@@ -316,13 +327,7 @@ export class AIChat {
       .addClass(CLASSES.messageContent)
       .appendTo($message);
 
-    const headerText = isError
-      ? messageLocalization.format('dxDataGrid-aiChatErrorMessageHeader')
-      : message.text ?? '';
-
-    const needToShowRegenerateButton = this.needToShowRegenerateButton(message);
-
-    this.renderMessageHeader($content, headerText, needToShowRegenerateButton);
+    this.renderMessageHeader($content, message);
     this.renderMessageStateContent($content, message);
   }
 }

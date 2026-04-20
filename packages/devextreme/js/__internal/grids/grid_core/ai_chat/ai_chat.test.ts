@@ -119,6 +119,15 @@ describe('AIChat', () => {
         }),
       );
     });
+
+    it('should configure chat with showUserName set to false', () => {
+      createAIChat();
+      triggerContentTemplate();
+
+      const chatConfig = getChatConfig();
+
+      expect(chatConfig.showUserName).toBe(false);
+    });
   });
 
   describe('toggle', () => {
@@ -209,7 +218,7 @@ describe('AIChat', () => {
         expect(container.querySelector(`.${CLASSES.message}`)?.classList.contains(CLASSES.messagePending)).toBe(true);
         expect(container.querySelector(`.${CLASSES.messageIcon}`)?.classList.contains('dx-icon-sparkle')).toBe(true);
         expect(container.querySelector(`.${CLASSES.messageHeaderRow}`)).not.toBeNull();
-        expect(container.querySelector(`.${CLASSES.messageHeader}`)?.textContent).toBe('Build summary');
+        expect(container.querySelector(`.${CLASSES.messageHeader}`)?.textContent).toBe('Request in progress');
         expect(container.querySelector(`.${CLASSES.messageStatus}`)?.textContent).toBe('Processing...');
       });
 
@@ -272,7 +281,7 @@ describe('AIChat', () => {
         chatConfig.messageTemplate({
           message: {
             author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Done',
+            text: 'Sorting and Page Size',
             status: 'success',
             commands: [{ status: 'success', message: 'OK' }],
           },

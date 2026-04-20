@@ -114,6 +114,7 @@
         "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
+        "dxDataGrid-aiChatPendingMessageHeader": "Request in progress",
         "dxDataGrid-aiChatErrorMessageHeader": "Failed to process request",
         "dxDataGrid-aiPromptEditorTitle": "AI редактор на подсказки",
         "dxDataGrid-aiPromptEditorPlaceholder": "Инструктирайте AI да генерира стойности за колоната...",

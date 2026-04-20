@@ -114,6 +114,7 @@
         "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
+        "dxDataGrid-aiChatPendingMessageHeader": "Request in progress",
         "dxDataGrid-aiChatErrorMessageHeader": "Failed to process request",
         "dxDataGrid-aiPromptEditorTitle": "Trình soạn thảo AI Prompt",
         "dxDataGrid-aiPromptEditorPlaceholder": "Nhắc AI tạo giá trị cho các cột...",
