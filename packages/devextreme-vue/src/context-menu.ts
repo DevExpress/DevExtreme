@@ -106,7 +106,7 @@ const componentConfig = {
     cssClass: String,
     dataSource: [Array, Object, String] as PropType<Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
-    disabledExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
+    disabledExpr: [Function, String] as PropType<(((item: any) => boolean | undefined)) | string>,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,

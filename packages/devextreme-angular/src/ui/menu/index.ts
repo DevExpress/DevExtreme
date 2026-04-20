@@ -200,10 +200,10 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get disabledExpr(): ((item: any) => any) | string {
+    get disabledExpr(): ((item: any) => boolean | undefined) | string {
         return this._getOption('disabledExpr');
     }
-    set disabledExpr(value: ((item: any) => any) | string) {
+    set disabledExpr(value: ((item: any) => boolean | undefined) | string) {
         this._setOption('disabledExpr', value);
     }
 
@@ -643,7 +643,7 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() disabledExprChange: EventEmitter<((item: any) => boolean | undefined) | string>;
 
     /**
     

@@ -32055,11 +32055,13 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
-    hasItemsExpr?: string | ((item: TRowData) => TKey);
+    hasItemsExpr?:
+      | string
+      | ((item: TRowData, value?: boolean) => boolean | undefined);
     /**
      * [descr:dxTreeListOptions.itemsExpr]
      */
-    itemsExpr?: string | ((item: TRowData, value?: any) => TKey);
+    itemsExpr?: string | ((item: TRowData) => TRowData[] | undefined);
     /**
      * [descr:dxTreeListOptions.keyExpr]
      */
@@ -32645,11 +32647,13 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.expandedExpr]
      */
-    expandedExpr?: string | ((item: TItem) => TKey);
+    expandedExpr?:
+      | string
+      | ((item: TItem, value?: boolean) => boolean | undefined);
     /**
      * [descr:dxTreeViewOptions.hasItemsExpr]
      */
-    hasItemsExpr?: string | ((item: TItem) => TKey);
+    hasItemsExpr?: string | ((item: TItem) => boolean | undefined);
     /**
      * [descr:dxTreeViewOptions.items]
      */
@@ -32711,7 +32715,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
      */
-    parentIdExpr?: string | ((item: TItem, value?: any) => TKey);
+    parentIdExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:dxTreeViewOptions.rootValue]
      */
@@ -33272,7 +33276,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
      */
-    disabledExpr?: string | ((item: TItem) => TKey);
+    disabledExpr?: string | ((item: TItem) => boolean | undefined);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
      */

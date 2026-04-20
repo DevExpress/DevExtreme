@@ -197,10 +197,10 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get disabledExpr(): ((item: any) => any) | string {
+    get disabledExpr(): ((item: any) => boolean | undefined) | string {
         return this._getOption('disabledExpr');
     }
-    set disabledExpr(value: ((item: any) => any) | string) {
+    set disabledExpr(value: ((item: any) => boolean | undefined) | string) {
         this._setOption('disabledExpr', value);
     }
 
@@ -262,10 +262,10 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get expandedExpr(): ((item: any) => any) | string {
+    get expandedExpr(): ((item: any, value: boolean) => boolean | undefined) | string {
         return this._getOption('expandedExpr');
     }
-    set expandedExpr(value: ((item: any) => any) | string) {
+    set expandedExpr(value: ((item: any, value: boolean) => boolean | undefined) | string) {
         this._setOption('expandedExpr', value);
     }
 
@@ -327,10 +327,10 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get hasItemsExpr(): ((item: any) => any) | string {
+    get hasItemsExpr(): ((item: any) => boolean | undefined) | string {
         return this._getOption('hasItemsExpr');
     }
-    set hasItemsExpr(value: ((item: any) => any) | string) {
+    set hasItemsExpr(value: ((item: any) => boolean | undefined) | string) {
         this._setOption('hasItemsExpr', value);
     }
 
@@ -457,10 +457,10 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get parentIdExpr(): ((item: any, value: any) => any) | string {
+    get parentIdExpr(): ((item: any) => any) | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: ((item: any, value: any) => any) | string) {
+    set parentIdExpr(value: ((item: any) => any) | string) {
         this._setOption('parentIdExpr', value);
     }
 
@@ -889,7 +889,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() disabledExprChange: EventEmitter<((item: any) => boolean | undefined) | string>;
 
     /**
     
@@ -924,7 +924,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() expandedExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() expandedExprChange: EventEmitter<((item: any, value: boolean) => boolean | undefined) | string>;
 
     /**
     
@@ -959,7 +959,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hasItemsExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() hasItemsExprChange: EventEmitter<((item: any) => boolean | undefined) | string>;
 
     /**
     
@@ -1029,7 +1029,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() parentIdExprChange: EventEmitter<((item: any, value: any) => any) | string>;
+    @Output() parentIdExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
     
