@@ -83,12 +83,6 @@ const configMethod = (...args) => {
   });
 
   extend(config, newConfig);
-  const formatKeys = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
-  for (const key of formatKeys) {
-    if (key in newConfig && newConfig[key] === undefined) {
-      config[key] = undefined;
-    }
-  }
 };
 
 // @ts-expect-error typescript cant see global

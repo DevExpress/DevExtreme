@@ -27,8 +27,7 @@ describe('m_global_format_config', () => {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete currentConfig[key];
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (currentConfig as any)[key] = savedValues[key];
+        currentConfig[key] = savedValues[key];
       }
     });
   });

@@ -26,8 +26,7 @@ const saveAndRestore = (): { save: () => void; restore: () => void } => {
           // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete currentConfig[key];
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (currentConfig as any)[key] = savedValues[key];
+          currentConfig[key] = savedValues[key];
         }
       });
     },
@@ -188,10 +187,7 @@ describe('date localization - dateTimeFormatPresets', () => {
         },
       });
 
-      const customFormatter = (value: number | Date): string => {
-        const d = value instanceof Date ? value : new Date(value);
-        return `custom:${d.getFullYear()}`;
-      };
+      const customFormatter = (d: Date): string => `custom:${d.getFullYear()}`;
       const result = dateLocalization.format(new Date(2020, 0, 2), { formatter: customFormatter });
 
       expect(result).toBe('custom:2020');
