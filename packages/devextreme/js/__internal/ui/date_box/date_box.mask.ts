@@ -716,13 +716,16 @@ class DateBoxMask extends DateBoxBase {
     return this._maskValue?.getTime() !== value?.getTime();
   }
 
-  _fireChangeEvent(): void {
+  _hasEditorSpecificValidationError(): boolean {
     const { isValid, validationError } = this.option();
-    const isInvalidEditorSpecific = !isValid && validationError?.editorSpecific;
 
+    return !isValid && Boolean(validationError?.editorSpecific);
+  }
+
+  _fireChangeEvent(): void {
     this._clearSearchValue();
 
-    if (this._isValueDirty() || isInvalidEditorSpecific) {
+    if (this._isValueDirty() || this._hasEditorSpecificValidationError()) {
       eventsEngine.triggerHandler(this._input(), { type: 'change' });
     }
   }
