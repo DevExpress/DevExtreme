@@ -65,6 +65,7 @@ interface ViewModelDiff {
   element?: dxElementWrapper;
   needToAdd?: true;
   needToRemove?: true;
+  needToUpdateItems?: true;
 }
 
 class SchedulerAppointments extends CollectionWidget<any> {
@@ -323,16 +324,31 @@ class SchedulerAppointments extends CollectionWidget<any> {
         }
 
         if (item.needToRemove) {
-          item.element?.detach();
+          this.hideTooltipIfNeed(item.element);
           item.element?.remove();
           return;
         }
 
+        const container = item.item.allDay
+          ? $allDayFragment
+          : $commonFragment;
+
         if (item.needToAdd) {
-          const container = item.item.allDay
-            ? $allDayFragment
-            : $commonFragment;
           this._renderItem(index, item.item, container);
+          return;
+        }
+
+        if (item.needToUpdateItems) {
+          const $oldElement = item.element as dxElementWrapper;
+          const $newElement = this._renderItem(index, item.item, container);
+
+          this.updateTooltipIfNeed(
+            $oldElement,
+            $newElement,
+            item.item as AppointmentCollectorViewModel,
+          );
+
+          $oldElement?.remove();
           return;
         }
 
@@ -342,6 +358,35 @@ class SchedulerAppointments extends CollectionWidget<any> {
         }
       });
     });
+  }
+
+  private hideTooltipIfNeed($element?: dxElementWrapper): void {
+    const { appointmentTooltip } = this.option();
+
+    if (appointmentTooltip.isShownForTarget($element)) {
+      appointmentTooltip.hide();
+    }
+  }
+
+  private updateTooltipIfNeed(
+    $oldElement: dxElementWrapper,
+    $newElement: dxElementWrapper,
+    collectorViewModel: AppointmentCollectorViewModel,
+  ): void {
+    const { appointmentTooltip } = this.option();
+
+    if (!appointmentTooltip.isShownForTarget($oldElement)) {
+      return;
+    }
+
+    if (collectorViewModel.items.length === 0) {
+      appointmentTooltip.hide();
+    }
+
+    const dataList = this.getCompactAppointmentItems(collectorViewModel);
+
+    appointmentTooltip.setTarget($newElement);
+    appointmentTooltip.setListItems(dataList);
   }
 
   _renderByFragments(renderFunction: (
@@ -980,28 +1025,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     $fragment: dxElementWrapper,
     appointment: AppointmentCollectorViewModel,
   ): dxElementWrapper {
-    const virtualItems = appointment.items;
-    const items: CompactAppointmentOptions['items'] = [];
-    virtualItems.forEach((item) => {
-      const appointmentConfig = {
-        itemData: item.itemData,
-        groupIndex: appointment.groupIndex,
-        groups: this.option('groups'),
-      };
-      const resourceManager = this.getResourceManager();
-
-      items.push({
-        appointment: item.itemData,
-        targetedAppointment: getTargetedAppointment(
-          item.itemData,
-          item,
-          this.dataAccessors,
-          resourceManager,
-        ),
-        color: resourceManager.getAppointmentColor(appointmentConfig),
-        settings: item,
-      });
-    });
+    const compactAppointmentItems = this.getCompactAppointmentItems(appointment);
 
     const $item = this.invoke('renderCompactAppointments', {
       $container: $fragment,
@@ -1009,8 +1033,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
         top: appointment.top,
         left: appointment.left,
       },
-      items,
-      buttonColor: items[0].color,
+      items: compactAppointmentItems,
+      buttonColor: compactAppointmentItems[0].color,
       sortedIndex: appointment.sortedIndex,
       width: appointment.width,
       height: appointment.height,
@@ -1021,6 +1045,34 @@ class SchedulerAppointments extends CollectionWidget<any> {
     this.$itemBySortedIndex[appointment.sortedIndex] = $item;
 
     return $item;
+  }
+
+  private getCompactAppointmentItems(
+    appointment: AppointmentCollectorViewModel,
+  ): CompactAppointmentOptions['items'] {
+    const resourceManager = this.getResourceManager();
+
+    const result = appointment.items.map((item) => {
+      const appointmentConfig = {
+        itemData: item.itemData,
+        groupIndex: appointment.groupIndex,
+        groups: this.option('groups'),
+      };
+
+      return {
+        appointment: item.itemData,
+        targetedAppointment: getTargetedAppointment(
+          item.itemData,
+          item,
+          this.dataAccessors,
+          resourceManager,
+        ),
+        color: resourceManager.getAppointmentColor(appointmentConfig),
+        settings: item,
+      };
+    });
+
+    return result;
   }
 
   moveAppointmentBack(dragEvent?) {

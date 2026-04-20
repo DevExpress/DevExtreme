@@ -1,9 +1,12 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import { isRenderer } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
+
+import type { CompactAppointmentOptions } from '../types';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -36,11 +39,23 @@ export class TooltipStrategyBase {
   }
 
   show(target, dataList, extraOptions) {
-    if (this.canShowTooltip(dataList)) {
+    if (dataList.length) {
       this.hide();
       this.extraOptions = extraOptions;
       this.showCore(target, dataList);
     }
+  }
+
+  public setTarget($target: dxElementWrapper): void {
+    const originalAnimationValue = this.tooltip.option('animation');
+
+    this.tooltip.option('animation', null);
+    this.tooltip.option('target', $target);
+    this.tooltip.option('animation', originalAnimationValue);
+  }
+
+  public setListItems(dataList: CompactAppointmentOptions['items']): void {
+    this.list.option('dataSource', dataList);
   }
 
   private showCore(target, dataList) {
@@ -92,18 +107,18 @@ export class TooltipStrategyBase {
         }
 
         if (this.isDeletingAllowed(appointment)) {
-          this.hide();
           this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
       });
     };
   }
 
-  isAlreadyShown(target) {
-    if (this.tooltip && this.tooltip.option('visible')) {
-      return this.tooltip.option('target')[0] === target[0];
+  isShownForTarget(target: dxElementWrapper): boolean {
+    if (this.tooltip?.option('visible')) {
+      return this.tooltip?.option('target')?.get(0) === target.get(0);
     }
-    return undefined;
+
+    return false;
   }
 
   protected onShown() {
@@ -127,13 +142,6 @@ export class TooltipStrategyBase {
   protected createTooltip(target, dataList) {
   }
 
-  private canShowTooltip(dataList) {
-    if (!dataList.length) {
-      return false;
-    }
-    return true;
-  }
-
   protected createListOption(dataList) {
     return {
       dataSource: dataList,
@@ -142,6 +150,7 @@ export class TooltipStrategyBase {
       onItemContextMenu: this.onListItemContextMenu.bind(this),
       itemTemplate: (item, index) => this.renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
       pageLoadMode: 'scrollBottom',
+      repaintChangesOnly: true,
     };
   }
 
@@ -248,7 +257,6 @@ export class TooltipStrategyBase {
       stylingMode: 'text',
       tabIndex: -1,
       onClick: (e) => {
-        this.hide();
         e.event.stopPropagation();
         this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },

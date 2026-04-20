@@ -19,7 +19,6 @@ const getObjectToCompare = (
       groupIndex: item.groupIndex,
       top: item.top,
       left: item.left,
-      items: item.items.length,
     };
   }
 
@@ -39,6 +38,16 @@ const getObjectToCompare = (
   };
 };
 
+const getItemsLengthToCompare = (item: AppointmentViewModelPlain): object => {
+  if ('items' in item) {
+    return {
+      items: item.items.length,
+    };
+  }
+
+  return {};
+};
+
 const isDataChanged = (
   data: SafeAppointment,
   appointmentDataSource: AppointmentDataSource,
@@ -50,19 +59,39 @@ const isDataChanged = (
     .some((item) => data[item.key] === item.value);
 };
 
-const compareViewModel = (appointmentDataSource: AppointmentDataSource) => (
-  viewModelOld: AppointmentViewModelPlain,
-  viewModelNext: AppointmentViewModelPlain,
-): boolean => viewModelOld.itemData === viewModelNext.itemData
-  && !isDataChanged(viewModelNext.itemData, appointmentDataSource)
-  && equalByValue(getObjectToCompare(viewModelOld), getObjectToCompare(viewModelNext));
-
 export const getViewModelDiff = (
   viewModelOld: AppointmentViewModelPlain[],
   viewModelNext: AppointmentViewModelPlain[],
   appointmentDataSource: AppointmentDataSource,
-): DiffItem<AppointmentViewModelPlain, AppointmentViewModelPlain>[] => getArraysDiff(
-  viewModelOld,
-  viewModelNext,
-  compareViewModel(appointmentDataSource),
-);
+): DiffItem<AppointmentViewModelPlain, AppointmentViewModelPlain>[] => {
+  const match = (
+    a: AppointmentViewModelPlain,
+    b: AppointmentViewModelPlain,
+  ): boolean => {
+    if ('items' in a && 'items' in b) {
+      return true;
+    }
+
+    return a.itemData === b.itemData && !isDataChanged(a.itemData, appointmentDataSource);
+  };
+
+  const equal = (
+    a: AppointmentViewModelPlain,
+    b: AppointmentViewModelPlain,
+  ): boolean => equalByValue(getObjectToCompare(a), getObjectToCompare(b));
+
+  const itemsLengthEqual = (
+    a: AppointmentViewModelPlain,
+    b: AppointmentViewModelPlain,
+  ): boolean => equalByValue(getItemsLengthToCompare(a), getItemsLengthToCompare(b));
+
+  const result = getArraysDiff(
+    viewModelOld,
+    viewModelNext,
+    match,
+    equal,
+    itemsLengthEqual,
+  );
+
+  return result;
+};
