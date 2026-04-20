@@ -3495,12 +3495,12 @@ QUnit.module('Global formatting config (spec)', {
 
         const $element = $('#dateBox').dxDateBox({
             type: 'date',
-            value: new Date(2020, 0, 2),
+            value: new Date(2020, 0, 3),
             pickerType: 'calendar',
         });
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual($input.val(), '02/01/2020');
+        assert.strictEqual($input.val(), '03/01/2020');
     });
 
     QUnit.test('dateFormat takes priority over dateTimeFormatPresets.shortDate for implicit DateBox', function(assert) {
