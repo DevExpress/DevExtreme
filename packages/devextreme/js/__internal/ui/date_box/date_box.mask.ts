@@ -717,9 +717,12 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _fireChangeEvent(): void {
+    const { isValid, validationError } = this.option();
+    const isInvalidEditorSpecific = !isValid && validationError?.editorSpecific;
+
     this._clearSearchValue();
 
-    if (this._isValueDirty()) {
+    if (this._isValueDirty() || isInvalidEditorSpecific) {
       eventsEngine.triggerHandler(this._input(), { type: 'change' });
     }
   }
