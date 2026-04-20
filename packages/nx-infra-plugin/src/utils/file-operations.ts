@@ -64,3 +64,11 @@ export async function writeFileText(filePath: string, content: string): Promise<
 export async function copyRecursive(from: string, to: string): Promise<void> {
   await fse.copy(from, to);
 }
+
+export function normalizeEol(content: string): string {
+  return content.replace(/\r\n/g, '\n');
+}
+
+export function ensureTrailingNewline(content: string): string {
+  return content.endsWith('\n') ? content : content + '\n';
+}

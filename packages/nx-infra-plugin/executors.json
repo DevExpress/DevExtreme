@@ -79,6 +79,11 @@
       "implementation": "./src/executors/bundle/executor",
       "schema": "./src/executors/bundle/schema.json",
       "description": "Bundle JavaScript files using webpack with debug or production mode"
+    },
+    "vectormap": {
+      "implementation": "./src/executors/vectormap/executor",
+      "schema": "./src/executors/vectormap/schema.json",
+      "description": "Build vectormap utility bundles and geographic region data modules"
     }
   }
 }
