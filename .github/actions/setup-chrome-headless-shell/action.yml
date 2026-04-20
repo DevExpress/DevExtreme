@@ -21,8 +21,8 @@ runs:
           echo "version to install: $CHROME_VERSION"
           PUPPETEER_CMD="browsers install chrome-headless-shell@$CHROME_VERSION"
           CHROME_BIN=`pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD | awk '{print $2}'`
-          chmod +x $CHROME_BIN
           echo "chrome-headless-shell installed in: $CHROME_BIN"
+          chmod +x $CHROME_BIN
           $CHROME_BIN --version
           echo "CHROME_SHELL=$CHROME_BIN" >> $GITHUB_ENV
         else
