@@ -66,7 +66,49 @@ function moveFieldInitializersToConstructor(): unknown {
           },
         }));
 
-        ctor.body!.body.push(...assignments);
+        type Stmt = {
+          type: string;
+          expression?: {
+            type: string;
+            operator?: string;
+            callee?: { type: string };
+            left?: { type: string; object?: { type: string }; property?: { name: string } };
+            right?: { type: string; name?: string };
+          };
+        };
+
+        type Param = { type: string; name?: string; left?: { name?: string } };
+        const paramNames = new Set<string>();
+        for (const param of ((ctor as unknown as { params: Param[] }).params ?? [])) {
+          if (param.type === 'Identifier' && param.name) {
+            paramNames.add(param.name);
+          } else if (param.type === 'AssignmentPattern' && param.left?.name) {
+            paramNames.add(param.left.name);
+          }
+        }
+
+        const ctorBody = ctor.body!.body as Stmt[];
+
+        let insertAt = 0;
+        while (insertAt < ctorBody.length) {
+          const stmt = ctorBody[insertAt];
+          const isSuperCall = stmt.type === 'ExpressionStatement'
+            && stmt.expression?.type === 'CallExpression'
+            && stmt.expression.callee?.type === 'Super';
+          const isParamPropertyAssignment = stmt.type === 'ExpressionStatement'
+            && stmt.expression?.type === 'AssignmentExpression'
+            && stmt.expression.operator === '='
+            && stmt.expression.left?.type === 'MemberExpression'
+            && stmt.expression.left.object?.type === 'ThisExpression'
+            && stmt.expression.right?.type === 'Identifier'
+            && stmt.expression.left.property?.name === stmt.expression.right.name
+            && paramNames.has(stmt.expression.right.name!);
+
+          if (!isSuperCall && !isParamPropertyAssignment) break;
+          insertAt += 1;
+        }
+
+        ctorBody.splice(insertAt, 0, ...(assignments as Stmt[]));
 
         path.node.body.body = remaining;
       },
