@@ -3525,6 +3525,7 @@ QUnit.module('Global formatting config (spec)', {
     QUnit.test('explicit displayFormat: "shortDate" uses dateTimeFormatPresets override', function(assert) {
         config({
             ...config(),
+            dateFormat: undefined,
             dateTimeFormatPresets: {
                 shortDate: 'dd/MM/yyyy',
             },
