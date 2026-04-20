@@ -15,11 +15,11 @@ import pointerMock from '../../helpers/pointerMock.js';
 import support from '__internal/core/utils/m_support';
 import typeUtils from 'core/utils/type';
 import uiDateUtils from '__internal/ui/date_box/date_utils';
+import DateBox from 'ui/date_box';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import '../../helpers/calendarFixtures.js';
 
-import 'ui/date_box';
 import 'ui/validator';
 import 'fluent_blue_light.css!';
 
@@ -3395,6 +3395,7 @@ QUnit.module('Global formatting config (spec)', {
                 globalConfig[key] = value;
             }
         });
+        DateBox.defaultOptions([]);
     },
 }, () => {
     QUnit.test('implicit date displayFormat uses global dateFormat', function(assert) {
@@ -3403,13 +3404,14 @@ QUnit.module('Global formatting config (spec)', {
             dateFormat: 'dd/MM/yyyy',
         });
 
-        const instance = $('#dateBox').dxDateBox({
+        const $element = $('#dateBox').dxDateBox({
             type: 'date',
             value: new Date(2020, 0, 2),
             pickerType: 'calendar',
-        }).dxDateBox('instance');
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual(instance.option('text'), '02/01/2020');
+        assert.strictEqual($input.val(), '02/01/2020');
     });
 
     QUnit.test('implicit datetime displayFormat uses global dateTimeFormat', function(assert) {
@@ -3418,13 +3420,30 @@ QUnit.module('Global formatting config (spec)', {
             dateTimeFormat: 'dd/MM/yyyy, HH:mm',
         });
 
-        const instance = $('#dateBox').dxDateBox({
+        const $element = $('#dateBox').dxDateBox({
             type: 'datetime',
             value: new Date(2020, 0, 2, 14, 5),
             pickerType: 'calendar',
-        }).dxDateBox('instance');
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual(instance.option('text'), '02/01/2020, 14:05');
+        assert.strictEqual($input.val(), '02/01/2020, 14:05');
+    });
+
+    QUnit.test('implicit time displayFormat uses global timeFormat', function(assert) {
+        config({
+            ...config(),
+            timeFormat: 'HH:mm:ss',
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'time',
+            value: new Date(2020, 0, 2, 14, 5, 6),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '14:05:06');
     });
 
     QUnit.test('explicit displayFormat keeps priority over global dateFormat', function(assert) {
@@ -3433,14 +3452,36 @@ QUnit.module('Global formatting config (spec)', {
             dateFormat: 'dd/MM/yyyy',
         });
 
-        const instance = $('#dateBox').dxDateBox({
+        const $element = $('#dateBox').dxDateBox({
             type: 'date',
             value: new Date(2020, 0, 2),
             displayFormat: 'shortDate',
             pickerType: 'calendar',
-        }).dxDateBox('instance');
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual(instance.option('text'), '1/2/2020');
+        assert.strictEqual($input.val(), '1/2/2020');
+    });
+
+    QUnit.test('defaultOptions displayFormat keeps priority over global dateFormat', function(assert) {
+        config({
+            ...config(),
+            dateFormat: 'dd/MM/yyyy',
+        });
+        DateBox.defaultOptions({
+            options: {
+                displayFormat: 'yyyy-MM-dd',
+            },
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '2020-01-02');
     });
 
     QUnit.test('implicit DateBox uses dateTimeFormatPresets.shortDate when no dateFormat is set', function(assert) {
@@ -3451,13 +3492,14 @@ QUnit.module('Global formatting config (spec)', {
             },
         });
 
-        const instance = $('#dateBox').dxDateBox({
+        const $element = $('#dateBox').dxDateBox({
             type: 'date',
             value: new Date(2020, 0, 2),
             pickerType: 'calendar',
-        }).dxDateBox('instance');
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual(instance.option('text'), '02/01/2020');
+        assert.strictEqual($input.val(), '02/01/2020');
     });
 
     QUnit.test('dateFormat takes priority over dateTimeFormatPresets.shortDate for implicit DateBox', function(assert) {
@@ -3469,14 +3511,15 @@ QUnit.module('Global formatting config (spec)', {
             },
         });
 
-        const instance = $('#dateBox').dxDateBox({
+        const $element = $('#dateBox').dxDateBox({
             type: 'date',
             value: new Date(2020, 0, 2),
             pickerType: 'calendar',
-        }).dxDateBox('instance');
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         // dateFormat wins over dateTimeFormatPresets for implicit case
-        assert.strictEqual(instance.option('text'), '2020-01-02');
+        assert.strictEqual($input.val(), '2020-01-02');
     });
 
     QUnit.test('explicit displayFormat: "shortDate" uses dateTimeFormatPresets override', function(assert) {
@@ -3487,13 +3530,14 @@ QUnit.module('Global formatting config (spec)', {
             },
         });
 
-        const instance = $('#dateBox').dxDateBox({
+        const $element = $('#dateBox').dxDateBox({
             type: 'date',
             value: new Date(2020, 0, 2),
             displayFormat: 'shortDate',
             pickerType: 'calendar',
-        }).dxDateBox('instance');
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual(instance.option('text'), '02/01/2020');
+        assert.strictEqual($input.val(), '02/01/2020');
     });
 });
