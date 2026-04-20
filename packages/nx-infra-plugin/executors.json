@@ -84,6 +84,11 @@
       "implementation": "./src/executors/vectormap/executor",
       "schema": "./src/executors/vectormap/schema.json",
       "description": "Build vectormap utility bundles and geographic region data modules"
+    },
+    "compress": {
+      "implementation": "./src/executors/compress/executor",
+      "schema": "./src/executors/compress/schema.json",
+      "description": "Compress JavaScript files"
     }
   }
 }
