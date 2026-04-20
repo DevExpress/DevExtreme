@@ -52,31 +52,6 @@ runs:
         version: 9
         run_install: false
 
-    - name: Setup Chrome
-      if: ${{ inputs.browser == 'chrome' }}
-      uses: ./.github/actions/setup-chrome-headless-shell
-      with:
-        chrome-version: '145.0.7632.67'
-
-    - name: Setup Firefox profile
-      if: ${{ inputs.browser == 'firefox' }}
-      shell: bash
-      run: |
-        mkdir -p /tmp/firefox-profile
-        for p in \
-        '"browser.shell.checkDefaultBrowser", false' \
-        '"datareporting.policy.dataSubmissionEnabled", false' \
-        '"font.name-list.monospace.x-western", "Liberation Mono"' \
-        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
-
-    - name: Setup Firefox
-      if: ${{ inputs.browser == 'firefox' }}
-      id: setup-firefox
-      uses: browser-actions/setup-firefox@v1
-      with:
-        firefox-version: '122.0.1'
-
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
@@ -113,6 +88,31 @@ runs:
       working-directory: ./packages/devextreme
       shell: bash
       run: dotnet build build/build-dotnet.sln
+
+    - name: Setup Chrome
+      if: ${{ inputs.browser == 'chrome' }}
+      uses: ./.github/actions/setup-chrome-headless-shell
+      with:
+        chrome-version: '145.0.7632.67'
+
+    - name: Setup Firefox profile
+      if: ${{ inputs.browser == 'firefox' }}
+      shell: bash
+      run: |
+        mkdir -p /tmp/firefox-profile
+        for p in \
+        '"browser.shell.checkDefaultBrowser", false' \
+        '"datareporting.policy.dataSubmissionEnabled", false' \
+        '"font.name-list.monospace.x-western", "Liberation Mono"' \
+        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
+        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
+
+    - name: Setup Firefox
+      if: ${{ inputs.browser == 'firefox' }}
+      id: setup-firefox
+      uses: browser-actions/setup-firefox@v1
+      with:
+        firefox-version: '122.0.1'
 
     - name: Run QUnit tests
       working-directory: ./packages/devextreme
