@@ -1551,11 +1551,12 @@ test('Last group should not disappear after collapsing another subgroup with vir
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.expect(dataGrid.isReady()).ok();
+
     // act
     await dataGrid.scrollTo(t, { y: 200 });
-    await t.wait(100);
-    await dataGrid.scrollTo(t, { y: 400 });
-    await t.wait(500);
+    await dataGrid.scrollTo(t, { y: 600 });
+    await t.expect(dataGrid.isReady()).ok();
 
     // assert
     await testScreenshot(t, takeScreenshot, `grid-${scrollingMode}-scrolling-T1152498.png`, { element: '#container' });
@@ -1585,29 +1586,28 @@ test('Last group should not disappear after collapsing another subgroup with vir
       },
     });
 
-    await t.wait(100);
+    const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
 
     // simulating async rendering in React
     await ClientFunction(() => {
-      const dataGrid = ($('#container') as any).dxDataGrid('instance');
+      const dataGridInstance = ($('#container') as any).dxDataGrid('instance');
 
       // eslint-disable-next-line no-underscore-dangle
-      dataGrid.getView('rowsView')._templatesCache = {};
+      dataGridInstance.getView('rowsView')._templatesCache = {};
 
       // eslint-disable-next-line no-underscore-dangle
-      dataGrid._getTemplate = () => ({
+      dataGridInstance._getTemplate = () => ({
         render(options) {
           setTimeout(() => {
             ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
             options.deferred?.resolve();
-          }, 200);
+          }, 1000);
         },
       });
 
-      dataGrid.repaint();
+      dataGridInstance.repaint();
     })();
-
-    await t.wait(300);
   });
 });
 
