@@ -653,10 +653,16 @@ class DateBoxMask extends DateBoxBase {
     return (this._maskValue && this._maskValue.getTime()) !== (value && value.getTime());
   }
 
+  _hasEditorSpecificValidationError(): boolean {
+    const { isValid, validationError } = this.option();
+
+    return !isValid && Boolean(validationError?.editorSpecific);
+  }
+
   _fireChangeEvent() {
     this._clearSearchValue();
 
-    if (this._isValueDirty()) {
+    if (this._isValueDirty() || this._hasEditorSpecificValidationError()) {
       // @ts-expect-error
       eventsEngine.trigger(this._input(), 'change');
     }

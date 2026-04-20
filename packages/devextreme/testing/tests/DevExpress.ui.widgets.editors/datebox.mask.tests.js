@@ -1672,6 +1672,34 @@ module('Regression', () => {
 
         assert.strictEqual($input.val(), '12:34', 'both digits go to hours and minutes stay unchanged');
     });
+
+    QUnit.test('should be valid when date returns to valid range after out-of-range change (T1326750)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            useMaskBehavior: true,
+            pickerType: 'calendar',
+            type: 'date',
+            displayFormat: 'dd-MM-yyyy',
+            value: new Date(2020, 2, 31),
+            min: new Date(2018, 3, 1),
+            max: new Date(2020, 2, 31),
+        });
+
+        const instance = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.press('right').press('right');
+
+        keyboard.press('up');
+        keyboard.press('enter');
+
+        assert.strictEqual(instance.option('isValid'), false, 'should be invalid when year 2021 exceeds max date');
+
+        keyboard.press('down');
+        keyboard.press('enter');
+
+        assert.strictEqual(instance.option('isValid'), true, 'should be valid when year returns to 2020');
+    });
 });
 
 module('Caret moving', setupModule, () => {
