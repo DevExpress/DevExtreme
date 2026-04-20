@@ -42,6 +42,16 @@ runs:
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
 
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
     - name: Setup Chrome
       if: ${{ inputs.browser == 'chrome' }}
       uses: ./.github/actions/setup-chrome-headless-shell
@@ -67,11 +77,6 @@ runs:
       with:
         firefox-version: '122.0.1'
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
@@ -84,11 +89,6 @@ runs:
       run: |
         rm -rf artifacts/npm
         7z x artifacts.zip
-
-    - uses: pnpm/action-setup@v3
-      with:
-        version: 9
-        run_install: false
 
     - name: Get pnpm store directory
       shell: bash
