@@ -1049,6 +1049,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._layoutManager = new AppointmentLayoutManager(this);
 
+    this.appointmentTooltip = new (this.option('adaptivityEnabled')
+      ? MobileTooltipStrategy
+      : DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
+
     if (this.option('_newAppointments')) {
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         tabIndex: this.option('tabIndex'),
@@ -1079,10 +1083,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
       this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
     }
-
-    this.appointmentTooltip = new (this.option('adaptivityEnabled')
-      ? MobileTooltipStrategy
-      : DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
 
     this.createAppointmentPopupForm();
 
@@ -1327,6 +1327,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getAppointmentDataSource: () => this.appointmentDataSource,
       getSortedAppointments: () => this._layoutManager.sortedItems,
       scrollTo: this.scrollTo.bind(this),
+      appointmentTooltip: this.appointmentTooltip,
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
       onItemRendered: this.getAppointmentRenderedAction(),
@@ -2098,7 +2099,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._createActionByOption('onAppointmentTooltipShowing')(arg);
 
-    if (this.appointmentTooltip.isAlreadyShown(target)) {
+    if (this.appointmentTooltip.isShownForTarget(target)) {
       this.hideAppointmentTooltip();
     } else {
       this.processActionResult(arg, (canceled) => {
