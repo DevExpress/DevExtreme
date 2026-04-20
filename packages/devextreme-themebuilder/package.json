@@ -40,7 +40,7 @@
     "@types/fs-extra": "11.0.4",
     "@types/node": "20.11.17",
     "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-devextreme": "1.1.5",
+    "eslint-config-devextreme": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-config-airbnb-typescript": "catalog:",

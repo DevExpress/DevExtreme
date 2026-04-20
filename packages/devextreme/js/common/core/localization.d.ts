@@ -75,9 +75,8 @@ export function parseDate(text: string, format: Format): Date;
  */
 export function parseNumber(text: string, format: Format): number;
 
-type ExternalFormat =
-  Intl.DateTimeFormatOptions |
-  Intl.NumberFormatOptions;
+type ExternalFormat = Intl.DateTimeFormatOptions
+  | Intl.NumberFormatOptions;
 
 type PredefinedFormat = FormatType;
 
@@ -89,14 +88,13 @@ type PredefinedFormat = FormatType;
  * @namespace DevExpress.common.core.localization
  * @public
  */
-export type Format =
-  FormatObject |
-  PredefinedFormat |
-  string |
-  ((value: number | Date) => string) |
-  ((value: Date) => string) |
-  ((value: number) => string) |
-  ExternalFormat | undefined;
+export type Format = FormatObject
+  | PredefinedFormat
+  | string
+  | ((value: number | Date) => string)
+  | ((value: Date) => string)
+  | ((value: number) => string)
+  | ExternalFormat | undefined;
 
 export interface FormatObject {
     /**

@@ -29,17 +29,16 @@ export interface Coordinates {
 }
 
 // todo: move to upper .d.ts
-type OptionsMethod<TOptions> =
-  (() => TOptions) &
-  ((options: TOptions) => void) &
-  (
+type OptionsMethod<TOptions> = (() => TOptions)
+  & ((options: TOptions) => void)
+  & (
     <TPropertyName extends string>(
-      optionName: TPropertyName
+      optionName: TPropertyName,
     ) => GridPropertyType<TOptions, TPropertyName>
   ) & (
     <TPropertyName extends string>(
       optionName: TPropertyName,
-      optionValue: GridPropertyType<TOptions, TPropertyName>
+      optionValue: GridPropertyType<TOptions, TPropertyName>,
     ) => void
   );
 
@@ -77,7 +76,7 @@ export interface InternalGrid extends GridBaseType {
   _createComponent: <TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options?: TComponent extends Component<infer TOptions> ? TOptions : never
+    options?: TComponent extends Component<infer TOptions> ? TOptions : never,
   ) => TComponent;
 
   _createAction: any;
@@ -89,24 +88,24 @@ export interface InternalGrid extends GridBaseType {
 }
 
 type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
-'onFocusedCellChanged' |
-'onRowClick' |
-'onRowDblClick' |
-'onRowPrepared' |
-'onCellPrepared' |
-'onCellClick' |
-'onCellHoverChanged' |
-'onCellDblClick' |
-'onFocusedCellChanging' |
-'onFocusedRowChanged' |
-'onFocusedRowChanging' |
-'onEditingStart' |
-'toolbar'
+'onFocusedCellChanged'
+| 'onRowClick'
+| 'onRowDblClick'
+| 'onRowPrepared'
+| 'onCellPrepared'
+| 'onCellClick'
+| 'onCellHoverChanged'
+| 'onCellDblClick'
+| 'onFocusedCellChanging'
+| 'onFocusedRowChanged'
+| 'onFocusedRowChanging'
+| 'onEditingStart'
+| 'toolbar'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
-'onNodesInitialized' |
-'expandedRowKeys'
+'onNodesInitialized'
+| 'expandedRowKeys'
 >;
 interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
@@ -135,28 +134,26 @@ type DotPrefix<T extends string> = T extends '' ? '' : `.${T}`;
 type DecrementalCounter = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 // todo: move to upper .d.ts files
-type IsObject<T> =
-  0 extends (1 & T)
+type IsObject<T> = 0 extends (1 & T)
+  ? false
+  : T extends any[]
     ? false
-    : T extends any[]
+    : string extends keyof T
       ? false
-      : string extends keyof T
-        ? false
-        : T extends object
-          ? true
-          : false;
+      : T extends object
+        ? true
+        : false;
 
 // todo: move to upper .d.ts files
-type DotNestedKeys<T, RLIMIT extends number = 10> =
-(
-  IsObject<T> extends true ?
-    (
-      RLIMIT extends 1 ? keyof T :
-        {
+type DotNestedKeys<T, RLIMIT extends number = 10> = (
+  IsObject<T> extends true
+    ? (
+      RLIMIT extends 1 ? keyof T
+        : {
           [K in Exclude<keyof T, symbol>]: `${K}${DotPrefix<DotNestedKeys<T[K], DecrementalCounter[RLIMIT]>>}` | K
         }[Exclude<keyof T, symbol>]
-    ) :
-    ''
+    )
+    : ''
 ) extends infer D ? Extract<D, string> : never;
 
 // todo: move to upper .d.ts files

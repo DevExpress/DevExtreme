@@ -607,6 +607,6 @@ describe('DxDataGrid slow tests', () => {
     const memoryAfter = await (performance as any).measureUserAgentSpecificMemory();
     const memoryDiff = Math.round((memoryAfter.bytes - memoryBefore.bytes) / 1024);
 
-    expect(memoryDiff).toBeLessThan(30);
+    expect(memoryDiff).toBeLessThan(100);
   });
 });

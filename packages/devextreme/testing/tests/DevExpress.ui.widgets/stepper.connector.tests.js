@@ -10,7 +10,7 @@ import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-    `<style nonce="qunit-test">
+        `<style nonce="qunit-test">
         #container {
             position: relative;
             width: 400px;

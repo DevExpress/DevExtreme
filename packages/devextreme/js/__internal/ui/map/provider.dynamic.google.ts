@@ -174,9 +174,9 @@ class GoogleProvider extends DynamicProvider {
       getSouthWest: () => GoogleLocation;
     },
   ): {
-      northEast: { lat: number; lng: number };
-      southWest: { lat: number; lng: number };
-    } {
+    northEast: { lat: number; lng: number };
+    southWest: { lat: number; lng: number };
+  } {
     return {
       northEast: this._normalizeLocation(locationRect.getNorthEast()),
       southWest: this._normalizeLocation(locationRect.getSouthWest()),

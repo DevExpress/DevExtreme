@@ -4,7 +4,6 @@ import i18N from 'eslint-plugin-i18n';
 import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
-import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -14,36 +13,19 @@ import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import unicorn from 'eslint-plugin-unicorn';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import qunitConfig from 'eslint-config-devextreme/qunit';
 import customRules from './eslint_plugins/index.js';
 import { schedulerMemberAllowlistRegex } from './eslint-scheduler-allowlist.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const require = createRequire(import.meta.url);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all
 });
-
-function loadDevExtremeConfig(moduleName, legacyName) {
-    try {
-        const loadedModule = require(moduleName);
-        const normalized = loadedModule.default ?? loadedModule;
-
-        if (Array.isArray(normalized)) {
-            return normalized;
-        }
-
-        return compat.config(normalized);
-    } catch {
-        return compat.extends(legacyName);
-    }
-}
-
-const spellCheckConfig = loadDevExtremeConfig('eslint-config-devextreme/spell-check', 'devextreme/spell-check');
-const typescriptConfig = loadDevExtremeConfig('eslint-config-devextreme/typescript', 'devextreme/typescript');
-const qunitConfig = loadDevExtremeConfig('eslint-config-devextreme/qunit', 'devextreme/qunit');
 
 export default [
     {
@@ -236,6 +218,10 @@ export default [
             '@typescript-eslint/ban-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
             '@typescript-eslint/no-throw-literal': 'off',
+            '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+            '@typescript-eslint/only-throw-error': 'warn',
+            '@typescript-eslint/prefer-optional-chain': 'warn',
+            'require-await': 'warn',
             '@typescript-eslint/switch-exhaustiveness-check': ['error', {
                 considerDefaultExhaustiveForUnions: true,
             }],
@@ -275,6 +261,7 @@ export default [
             '@typescript-eslint/no-unsafe-function-type': 'off',
             '@typescript-eslint/no-wrapper-object-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
+            '@typescript-eslint/no-unused-vars': 'off',
             'i18n/no-russian-character': ['error', {
                 includeIdentifier: true,
             }],

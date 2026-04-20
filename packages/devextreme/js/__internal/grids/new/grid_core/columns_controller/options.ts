@@ -52,8 +52,8 @@ export const defaultColumnProperties = {
 } satisfies Partial<Column>;
 
 export const defaultColumnPropertiesByDataType: Record<
-DataType,
-Exclude<ColumnProperties, string>
+  DataType,
+  Exclude<ColumnProperties, string>
 > = {
   boolean: {
     customizeText({ value }): string {

@@ -454,11 +454,11 @@ class Map extends Widget<MapProperties> {
   ): Promise<void>;
   _removeFunction(
     optionName: 'routes',
-    removingValue: MapProperties['routes' ] | number,
+    removingValue: MapProperties['routes'] | number,
   ): Promise<void>;
   _removeFunction(
     optionName: 'markers' | 'routes',
-    removingValue: MapProperties['markers'] | MapProperties['routes' ] | number,
+    removingValue: MapProperties['markers'] | MapProperties['routes'] | number,
   ): Promise<void> {
     const { [optionName]: optionValue = [] } = this.option();
     const removingValues = wrapToArray(removingValue);

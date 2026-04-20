@@ -18,7 +18,7 @@ interface Watcher {
 const forcibleWatcher = <T>(
   watchMethod: (
     fn: () => void,
-    callback: (value: T) => void
+    callback: (value: T) => void,
   ) => () => void,
   fn: () => T,
   callback: (value: T, oldValue: T) => void,
@@ -45,18 +45,18 @@ const forcibleWatcher = <T>(
 export interface ItemExtraOption<TProperties> {
   owner: Record<string, unknown>;
   fieldGetter: <TT>(
-    field: keyof TProperties
+    field: keyof TProperties,
   ) => (rawData: TProperties | undefined) => TT;
   watchMethod: <TT>() => (
     fn: () => void,
-    callback: (value: TT) => void
+    callback: (value: TT) => void,
   ) => () => void;
 }
 
-export type ItemClickEvent<TProperties> =
+export type ItemClickEvent<
+  TProperties,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  NativeEventInfo<any, KeyboardEvent | MouseEvent | PointerEvent>
-  & ItemInfo<TProperties>;
+> = NativeEventInfo<any, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TProperties>;
 
 export type ClickableCollectionWidgetItem<
   TProperties extends CollectionWidgetItem = CollectionWidgetItem,

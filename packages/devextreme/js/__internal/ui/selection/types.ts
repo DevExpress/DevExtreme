@@ -73,7 +73,7 @@ export type SelectionOptions<
   getLoadOptions?: (
     loadItemIndex: number,
     focusedItemIndex: number,
-    shiftItemIndex?: number
+    shiftItemIndex?: number,
   ) => LoadOptions;
   addedItemKeys: TKey[];
   removedItemKeys: TKey[];

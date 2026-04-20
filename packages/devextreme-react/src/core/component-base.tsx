@@ -206,6 +206,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       const updateFunc = useDeferUpdateForTemplates.current ? deferUpdate : requestAnimationFrame;
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       updateFunc(() => {
         guardsUpdateScheduled.current = false;
 

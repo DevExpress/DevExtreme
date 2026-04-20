@@ -15,9 +15,9 @@ export function useOptionScanning(
   parentUpdateToken: symbol,
   parentType: 'option' | 'component',
 ): [
-    IConfigNode,
-    NestedOptionContextContent,
-  ] {
+  IConfigNode,
+  NestedOptionContextContent,
+] {
   const parentContext = useContext(NestedOptionContext);
 
   const {

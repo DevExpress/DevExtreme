@@ -764,9 +764,9 @@ describe('Appointment popup form', () => {
       items: T[],
       getChildren: (item: T) => T[] | undefined,
     ): T[] => items.flatMap((item) => {
-        const children = getChildren(item);
-        return children?.length ? flattenBy(children, getChildren) : [item];
-      });
+      const children = getChildren(item);
+      return children?.length ? flattenBy(children, getChildren) : [item];
+    });
 
     const $container = $('<div>').appendTo(document.body);
     const editor = ($container as any).dxRecurrenceEditor({

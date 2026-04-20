@@ -71,7 +71,7 @@ export interface ComponentProperties<TComponent> extends ComponentOptions<
   onActionCreated?: (
     component: TComponent,
     action: (e) => void,
-    config: ActionConfig
+    config: ActionConfig,
   ) => () => unknown;
 }
 
@@ -411,7 +411,7 @@ export class Component<
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let actionFunc;
 
-    let actionConfig = { ...config ?? {} } ;
+    let actionConfig = { ...config ?? {} };
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const result = (...args) => {

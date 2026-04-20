@@ -41,23 +41,23 @@ const getGeometry = (element: HTMLDivElement | null): Position => {
 export const createAppointmentModel = <T extends HTMLDivElement | null>(
   element: T,
 ): AppointmentModel<T> => ({
-    element,
-    getText: () => getText(element),
-    getDisplayDate: () => getDisplayDate(element),
-    getAriaLabel: () => element?.getAttribute('aria-label') ?? '',
-    getGeometry: () => getGeometry(element),
-    getColor(view: string): string | undefined {
-      if (!element) {
-        return undefined;
-      }
+  element,
+  getText: () => getText(element),
+  getDisplayDate: () => getDisplayDate(element),
+  getAriaLabel: () => element?.getAttribute('aria-label') ?? '',
+  getGeometry: () => getGeometry(element),
+  getColor(view: string): string | undefined {
+    if (!element) {
+      return undefined;
+    }
 
-      return view === 'agenda'
-        ? getAgendaColor(element)
-        : getColor(element);
-    },
-    getSnapshot: (): object => ({
-      text: getText(element),
-      date: getDisplayDate(element),
-      ...getGeometry(element),
-    }),
-  });
+    return view === 'agenda'
+      ? getAgendaColor(element)
+      : getColor(element);
+  },
+  getSnapshot: (): object => ({
+    text: getText(element),
+    date: getDisplayDate(element),
+    ...getGeometry(element),
+  }),
+});

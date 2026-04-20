@@ -10,26 +10,26 @@ export const createComponentMock = <
   TProps extends Record<string, any>,
   TDefaultProps extends TProps = TProps,
 >(
-    options: TProps,
-    defaultOptions: TDefaultProps,
-    isInitialized = true,
-  ): Component<TProps> => new class ComponentMock extends Component<TProps> {
-    public initialized = signal(isInitialized);
+  options: TProps,
+  defaultOptions: TDefaultProps,
+  isInitialized = true,
+): Component<TProps> => new class ComponentMock extends Component<TProps> {
+  public initialized = signal(isInitialized);
 
-    // NOTE: Add default option values to base Component for merging them
-    // with Component's algorithms
-    public _getDefaultOptions(): TDefaultProps {
+  // NOTE: Add default option values to base Component for merging them
+  // with Component's algorithms
+  public _getDefaultOptions(): TDefaultProps {
     // @ts-expect-error badly typed base Component class
-      const baseDefaultOptions = super._getDefaultOptions();
+    const baseDefaultOptions = super._getDefaultOptions();
 
-      return extend(true, {}, baseDefaultOptions, defaultOptions) as TDefaultProps;
-    }
+    return extend(true, {}, baseDefaultOptions, defaultOptions) as TDefaultProps;
+  }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public _getTemplate(template: any): any {
-      if (typeof template === 'function') {
-        return new FunctionTemplate(template);
-      }
-      return template;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public _getTemplate(template: any): any {
+    if (typeof template === 'function') {
+      return new FunctionTemplate(template);
     }
-  }(extend(true, {}, options));
+    return template;
+  }
+}(extend(true, {}, options));

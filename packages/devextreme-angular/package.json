@@ -54,7 +54,7 @@
     "del": "2.2.2",
     "devextreme-metadata": "workspace:*",
     "eslint": "catalog:",
-    "eslint-config-devextreme": "1.1.5",
+    "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-migration-utils": "workspace:*",
     "gulp": "4.0.2",
@@ -76,7 +76,7 @@
     "style-loader": "3.3.4",
     "tslib": "2.6.3",
     "typescript": "5.4.5",
-    "webpack": "5.96.1",
+    "webpack": "5.105.4",
     "yargs": "17.7.2",
     "zone.js": "0.14.10"
   },

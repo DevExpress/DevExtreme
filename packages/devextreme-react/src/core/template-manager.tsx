@@ -131,20 +131,20 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     function createDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
       const factories = Object.entries(templateOptions)
         .reduce<Record<string, TemplateFunc>>((res, [key, template]) => (
-        {
-          ...res,
-          [key]: getTemplateFunction(template),
-        }
-      ), {});
+          {
+            ...res,
+            [key]: getTemplateFunction(template),
+          }
+        ), {});
 
       templateFactories.current = factories;
 
       const dxTemplates = Object.keys(factories)
         .reduce<DXTemplateCollection>((templates, templateKey) => {
-        templates[templateKey] = { render: getRenderFunc(templateKey) };
+          templates[templateKey] = { render: getRenderFunc(templateKey) };
 
-        return templates;
-      }, {});
+          return templates;
+        }, {});
 
       return dxTemplates;
     }

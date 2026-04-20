@@ -106,7 +106,7 @@ test('Changing keyboardNavigation options should not invalidate the entire conte
       allowUpdating: true,
     },
     onFocusedRowChanging(e) {
-      if ((e.newRowIndex + 1) % 2 === 0) {
+      if ((Number(e.newRowIndex) + 1) % 2 === 0) {
         e.component.option('keyboardNavigation.enterKeyAction', 'moveFocus');
       } else {
         e.component.option('keyboardNavigation.enterKeyAction', 'startEdit');
