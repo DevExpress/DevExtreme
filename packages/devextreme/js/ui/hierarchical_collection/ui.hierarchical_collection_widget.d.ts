@@ -19,7 +19,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'disabled'
      * @public
      */
-    disabledExpr?: string | ((item: TItem) => TKey);
+    disabledExpr?: string | ((item: TItem) => boolean | undefined);
     /**
      * @docid
      * @default 'text'

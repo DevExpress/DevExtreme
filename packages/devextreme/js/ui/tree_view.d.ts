@@ -242,13 +242,13 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @hidden false
      * @public
      */
-    expandedExpr?: string | ((item: TItem) => TKey);
+    expandedExpr?: string | ((item: TItem, value?: boolean) => boolean | undefined);
     /**
      * @docid
      * @default 'hasItems'
      * @public
      */
-    hasItemsExpr?: string | ((item: TItem) => TKey);
+    hasItemsExpr?: string | ((item: TItem) => boolean | undefined);
     /**
      * @docid
      * @type Array<dxTreeViewItem | any>
@@ -335,7 +335,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @hidden false
      * @public
      */
-    parentIdExpr?: string | ((item: TItem, value?: any) => TKey);
+    parentIdExpr?: string | ((item: TItem) => TKey);
     /**
      * @docid
      * @default 0

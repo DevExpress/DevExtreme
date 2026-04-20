@@ -19,7 +19,6 @@ import {
 } from '../events';
 
 import {
-    CollectionWidgetOptions,
     CollectionWidgetItem,
     SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
