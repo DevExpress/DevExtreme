@@ -3377,6 +3377,9 @@ QUnit.module('validation', {
 QUnit.module('Global formatting config (spec)', {
     beforeEach: function() {
         const globalConfig = config();
+        this.defaultOptions = DateBox.defaultOptions
+            ? structuredClone(DateBox.defaultOptions)
+            : DateBox.defaultOptions;
         this.savedGlobalFormats = {
             dateFormat: globalConfig.dateFormat,
             timeFormat: globalConfig.timeFormat,
@@ -3395,7 +3398,7 @@ QUnit.module('Global formatting config (spec)', {
                 globalConfig[key] = value;
             }
         });
-        DateBox.defaultOptions([]);
+        DateBox.defaultOptions(this.defaultOptions);
     },
 }, () => {
     QUnit.test('implicit date displayFormat uses global dateFormat', function(assert) {
@@ -3487,7 +3490,6 @@ QUnit.module('Global formatting config (spec)', {
     QUnit.test('implicit DateBox uses dateTimeFormatPresets.shortDate when no dateFormat is set', function(assert) {
         config({
             ...config(),
-            dateFormat: undefined,
             dateTimeFormatPresets: {
                 shortDate: 'dd/MM/yyyy',
             },
@@ -3526,7 +3528,6 @@ QUnit.module('Global formatting config (spec)', {
     QUnit.test('explicit displayFormat: "shortDate" uses dateTimeFormatPresets override', function(assert) {
         config({
             ...config(),
-            dateFormat: undefined,
             dateTimeFormatPresets: {
                 shortDate: 'dd/MM/yyyy',
             },
