@@ -6,7 +6,7 @@ import Class from 'core/class';
 
 QUnit.testStart(function() {
     const markup =
-            '<div id="container">\
+        '<div id="container">\
 				<div id="element"></div>\
 			</div>';
 

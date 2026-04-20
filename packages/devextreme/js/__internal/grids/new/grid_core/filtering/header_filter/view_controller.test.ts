@@ -167,37 +167,37 @@ describe('HeaderFilter', () => {
         column: Column;
         checkFn: (group: any) => boolean;
       }>([
-            {
-              caseName: 'default',
-              column: { dataField: 'A' } as Column,
-              checkFn: (group): boolean => typeof group === 'function',
-            },
-            {
-              caseName: 'groupInterval',
-              column: { dataField: 'A', headerFilter: { groupInterval: 2 } } as Column,
-              checkFn: ([group]): boolean => typeof group === 'function',
-            },
-            {
-              caseName: 'sortingMethod',
-              column: { dataField: 'A', sortingMethod: () => {} } as unknown as Column,
-              checkFn: ([{ selector, compare }]): boolean => typeof selector === 'function' && typeof compare === 'function',
-            },
-          ])('$caseName: dataSource options should contains correct group', ({ column, checkFn }) => {
-            const { viewController } = setup({
-              headerFilter: { visible: true },
-              columns: [column as any],
-            });
+        {
+          caseName: 'default',
+          column: { dataField: 'A' } as Column,
+          checkFn: (group): boolean => typeof group === 'function',
+        },
+        {
+          caseName: 'groupInterval',
+          column: { dataField: 'A', headerFilter: { groupInterval: 2 } } as Column,
+          checkFn: ([group]): boolean => typeof group === 'function',
+        },
+        {
+          caseName: 'sortingMethod',
+          column: { dataField: 'A', sortingMethod: () => {} } as unknown as Column,
+          checkFn: ([{ selector, compare }]): boolean => typeof selector === 'function' && typeof compare === 'function',
+        },
+      ])('$caseName: dataSource options should contains correct group', ({ column, checkFn }) => {
+        const { viewController } = setup({
+          headerFilter: { visible: true },
+          columns: [column as any],
+        });
 
-            viewController.openPopup(
-              {} as Element,
-              column,
-            );
+        viewController.openPopup(
+          {} as Element,
+          column,
+        );
 
-            const state = viewController.popupState.peek();
+        const state = viewController.popupState.peek();
 
-            expect((state?.options.dataSource as any).group).toBeTruthy();
-            expect(checkFn((state?.options.dataSource as any).group)).toBeTruthy();
-          });
+        expect((state?.options.dataSource as any).group).toBeTruthy();
+        expect(checkFn((state?.options.dataSource as any).group)).toBeTruthy();
+      });
     });
   });
 });

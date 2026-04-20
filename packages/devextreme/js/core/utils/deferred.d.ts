@@ -22,7 +22,6 @@ export class DeferredObj<T> {
 
 export function Deferred<T>(): DeferredObj<T>;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface PromiseType<T> { }
 
 /**

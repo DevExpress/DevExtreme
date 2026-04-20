@@ -71,7 +71,7 @@ export interface ComponentProperties<TComponent> extends ComponentOptions<
   onActionCreated?: (
     component: TComponent,
     action: (e) => void,
-    config: ActionConfig
+    config: ActionConfig,
   ) => () => unknown;
 }
 

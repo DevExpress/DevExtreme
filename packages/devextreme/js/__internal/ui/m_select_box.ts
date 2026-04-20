@@ -32,9 +32,9 @@ const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 
 interface SelectBoxProperties extends Omit<Properties,
-'onItemClick' | 'onSelectionChanged' |
-'onOpened' | 'onClosed' |
-'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+'onItemClick' | 'onSelectionChanged'
+| 'onOpened' | 'onClosed'
+| 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
   selectionMode?: SingleOrMultiple;
 

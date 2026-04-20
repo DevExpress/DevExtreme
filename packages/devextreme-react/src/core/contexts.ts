@@ -25,7 +25,7 @@ export interface NestedOptionContextContent {
     configNode: IConfigNode,
     optionDescriptor: IOptionDescriptor,
     childUpdateToken: symbol,
-    optionComponentKey: number
+    optionComponentKey: number,
   ) => void;
   onNamedTemplateReady: (
     template: ITemplate | null,

@@ -102,9 +102,9 @@ export interface Properties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey extends CollectionItemKey = any,
 > extends PublicProperties<TItem, TKey>, Omit<
-  CollectionWidgetLiveUpdateProperties<Splitter, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey>
-> {
+    CollectionWidgetLiveUpdateProperties<Splitter, TItem, TKey>,
+    keyof PublicProperties<TItem, TKey>
+  > {
   _renderQueue?: RenderQueueItem[];
 }
 

@@ -121,15 +121,15 @@ export type InkRippleEvent = DxEvent<PointerInteractionEvent>;
 export type Constructor<T> = new (...args: unknown[]) => T;
 
 export interface CollectionWidgetBaseProperties<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TComponent extends CollectionWidget<any, TItem, TKey> | any,
-    TItem extends ItemLike = CollectionWidgetItemProperties,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TKey extends CollectionItemKey = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComponent extends CollectionWidget<any, TItem, TKey> | any,
+  TItem extends ItemLike = CollectionWidgetItemProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey extends CollectionItemKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey>, Omit<
-  WidgetProperties<TComponent>,
-  keyof CollectionWidgetOptions<TComponent, TItem, TKey>
-> {
+    WidgetProperties<TComponent>,
+    keyof CollectionWidgetOptions<TComponent, TItem, TKey>
+  > {
   focusedElement?: Element | null;
 
   encodeNoDataText?: boolean;

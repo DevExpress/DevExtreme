@@ -40,10 +40,10 @@ export class SliderTooltipPositionController<
   TElements extends PopoverControllerElements = PopoverControllerElements,
   TPosition extends VerticalEdge = VerticalEdge,
 > extends PopoverPositionController<
-  TProperties,
-  TElements,
-  TPosition
-> {
+    TProperties,
+    TElements,
+    TPosition
+  > {
   _normalizePosition(position?: TPosition): PopoverPosition {
     const { target } = this._properties;
 

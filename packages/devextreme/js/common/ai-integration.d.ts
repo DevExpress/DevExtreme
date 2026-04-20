@@ -129,8 +129,7 @@ export type TranslateCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type SmartPasteFieldType =
-  | 'color'
+export type SmartPasteFieldType = | 'color'
   | 'boolean'
   | 'string'
   | 'stringArray'

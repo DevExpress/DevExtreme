@@ -1,6 +1,9 @@
 import globals from 'globals';
 import babelParser from '@babel/eslint-parser';
-import spellcheckDevextreme from 'eslint-config-devextreme/spell-check.js';
+import spellcheckDevextreme from 'eslint-config-devextreme/spell-check';
+import testcafeConfig from 'eslint-config-devextreme/testcafe';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import javascriptConfig from 'eslint-config-devextreme/javascript';
 import spellcheckPlugin from 'eslint-plugin-spellcheck';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import deprecation from 'eslint-plugin-deprecation';
@@ -29,7 +32,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all
 });
 
-const spellcheckRule = spellcheckDevextreme.rules['spellcheck/spell-checker'];
+const spellcheckRule = spellcheckDevextreme[0].rules['spellcheck/spell-checker'];
 
 export default [
   {
@@ -77,13 +80,13 @@ export default [
     },
   },
 
-  ...compat.extends('eslint:recommended', 'devextreme/spell-check'),
-
-  ...compat.extends('devextreme/javascript').map(config => ({
+  js.configs.recommended,
+  ...spellcheckDevextreme,
+  ...javascriptConfig.map(config => ({
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
   })),
-  ...compat.extends('devextreme/typescript').map(config => ({
+  ...typescriptConfig.map(config => ({
     ...config,
     files: ['**/*.ts', '**/*.tsx'],
     rules: changeRulesToStylistic(config.rules || {}),
@@ -221,6 +224,7 @@ export default [
 
       '@typescript-eslint/naming-convention': 0,
       '@typescript-eslint/no-throw-literal': 0,
+      '@typescript-eslint/only-throw-error': 'warn',
       '@typescript-eslint/no-use-before-define': 0,
       '@typescript-eslint/no-shadow': 0,
       '@typescript-eslint/no-loop-func': 0,
@@ -467,9 +471,12 @@ export default [
   },
 
   // testcafe tests
-  ...compat.extends('devextreme/testcafe').map(config => ({
+  ...testcafeConfig.map(config => ({
     ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
+    rules: {
+      ...changeRulesToStylistic(config.rules || {}),
+      'require-await': 'warn',
+    },
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
 

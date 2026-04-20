@@ -52,10 +52,10 @@ const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
 export interface TagBoxProperties extends Omit<Properties,
-'onCustomItemCreating' |
-'onItemClick' | 'onSelectionChanged' |
-'onOpened' | 'onClosed' |
-'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+'onCustomItemCreating'
+| 'onItemClick' | 'onSelectionChanged'
+| 'onOpened' | 'onClosed'
+| 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
 
 }
@@ -97,7 +97,7 @@ class TagBox<
 
   _supportedKeys(): Record<
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  string, (e: KeyboardEvent, options?: Record<string, unknown>) => boolean | void
+    string, (e: KeyboardEvent, options?: Record<string, unknown>) => boolean | void
   > {
     const parent = super._supportedKeys();
     // @ts-expect-error ts-error

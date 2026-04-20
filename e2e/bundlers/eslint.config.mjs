@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 // eslint-disable-next-line spellcheck/spell-checker
 import { FlatCompat as FlatCompatibility } from '@eslint/eslintrc';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
 import stylistic from '@stylistic/eslint-plugin';
 import i18N from 'eslint-plugin-i18n';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
@@ -22,7 +23,7 @@ export default [
       'node_modules/**',
     ],
   },
-  ...compatibility.extends('devextreme/spell-check'),
+  ...spellCheckConfig,
   {
     plugins: {
       'no-only-tests': noOnlyTests,

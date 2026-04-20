@@ -2,8 +2,7 @@ interface NoChanges<A> { item: A }
 interface ToRemove<A> { item: A; needToRemove: true }
 interface ToAdd<B> { item: B; needToAdd: true }
 
-export type DiffItem<A, B> =
-  | NoChanges<B>
+export type DiffItem<A, B> = | NoChanges<B>
   | ToRemove<A>
   | ToAdd<B>;
 

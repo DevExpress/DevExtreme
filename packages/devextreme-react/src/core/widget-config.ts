@@ -15,7 +15,7 @@ const internalProps: InternalProps = {
   defaults: {},
   templateProps: [],
   expectedChildren: {},
-  // eslint-disable-next-line spellcheck/spell-checker
+
   subscribableOptions: [],
   independentEvents: [],
   useRequestAnimationFrameFlag: false,
@@ -48,10 +48,10 @@ function separateProps(
   defaultsProps: Record<string, string>,
   templateProps: ITemplateMeta[],
 ): {
-    options: Record<string, any>;
-    defaults: Record<string, any>;
-    templates: Record<string, any>;
-  } {
+  options: Record<string, any>;
+  defaults: Record<string, any>;
+  templates: Record<string, any>;
+} {
   // eslint-disable-next-line no-param-reassign
   templateProps = templateProps || [];
   const defaults: Record<string, any> = {};

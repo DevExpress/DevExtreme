@@ -10,7 +10,7 @@ moduleWithoutCsp('Render', () => {
     // T831205
     QUnit.test('Widget rendering when buttonTemplate is used', function(assert) {
         const markup =
-        '<div id="button-with-template" data-bind="dxButton: { template: \'testTemplate\' }">\
+            '<div id="button-with-template" data-bind="dxButton: { template: \'testTemplate\' }">\
             <div data-options="dxTemplate: { name: \'testTemplate\' }">\
                 <div id="template" data-bind="text: $root.text"></div>\
             </div>\

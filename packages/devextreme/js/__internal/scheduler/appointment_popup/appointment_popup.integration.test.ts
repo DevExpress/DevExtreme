@@ -1655,9 +1655,9 @@ describe('Appointment Form', () => {
       items: T[],
       getChildren: (item: T) => T[] | undefined,
     ): T[] => items.flatMap((item) => {
-        const children = getChildren(item);
-        return children?.length ? flattenBy(children, getChildren) : [item];
-      });
+      const children = getChildren(item);
+      return children?.length ? flattenBy(children, getChildren) : [item];
+    });
 
     const { scheduler, POM } = await createScheduler({
       ...getDefaultConfig(),

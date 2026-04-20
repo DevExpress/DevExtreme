@@ -5,19 +5,19 @@ export const filterByAttributes = <T extends MinimalAppointmentEntity & AllDayPa
   appointments: T[],
   { resourceManager, showAllDayPanel, supportAllDayPanel }: FilterOptions,
 ): T[] => appointments.filter((appointment): boolean => {
-    if (!appointment.visible) {
-      return false;
-    }
+  if (!appointment.visible) {
+    return false;
+  }
 
-    const allDayPanelAppointmentHidden = Boolean(
-      supportAllDayPanel
+  const allDayPanelAppointmentHidden = Boolean(
+    supportAllDayPanel
       && !showAllDayPanel
       && appointment.isAllDayPanelOccupied,
-    );
-    if (allDayPanelAppointmentHidden) {
-      return false;
-    }
+  );
+  if (allDayPanelAppointmentHidden) {
+    return false;
+  }
 
-    const resources = resourceManager.groupResources();
-    return isAppointmentMatchedResources(appointment.itemData, resources);
-  });
+  const resources = resourceManager.groupResources();
+  return isAppointmentMatchedResources(appointment.itemData, resources);
+});

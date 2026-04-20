@@ -33,10 +33,10 @@ export interface RefObject<T> {
 export type JSXTemplate<
   PropsType = {},
   RequiredProps extends keyof PropsType = Exclude<
-  keyof PropsType,
-  keyof PropsType
+    keyof PropsType,
+    keyof PropsType
   >,
-  > = ComponentType<
-  Partial<Omit<PropsType, RequiredProps>> &
-  Required<Pick<PropsType, RequiredProps>>
-  >;
+> = ComponentType<
+  Partial<Omit<PropsType, RequiredProps>>
+  & Required<Pick<PropsType, RequiredProps>>
+>;

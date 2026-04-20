@@ -18,7 +18,7 @@ import {
  * @docid
  * @hidden
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * @docid

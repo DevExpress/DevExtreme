@@ -8,14 +8,11 @@ import js from '@eslint/js';
 import { FlatCompat as FlatCompatibility } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const compatibility = new FlatCompatibility({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
-});
 
 export default [
   {
@@ -23,7 +20,7 @@ export default [
       'node_modules/**',
     ],
   },
-  ...compatibility.extends('devextreme/spell-check'),
+  ...spellCheckConfig,
   {
     plugins: {
       'no-only-tests': noOnlyTests,
@@ -37,7 +34,7 @@ export default [
       },
     },
   },
-  ...compatibility.extends('devextreme/typescript').map(config => {
+  ...typescriptConfig.map(config => {
     const newConfig = {
       ...config,
       files: ['**/*.ts?(x)'],

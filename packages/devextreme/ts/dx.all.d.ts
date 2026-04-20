@@ -5284,10 +5284,10 @@ declare module DevExpress.common.grids {
     | 'anyof'
     | 'noneof';
   /**
-   * [descr:FilterPanel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
+    * [descr:FilterPanel]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
     /**
      * [descr:FilterPanel.customizeText]
      */
@@ -7150,7 +7150,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
-
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -8474,10 +8473,10 @@ declare module DevExpress.fileManagement {
     ): DevExpress.core.utils.DxPromise<any>;
   }
   /**
-   * [descr:FileSystemProviderBaseOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
+    * [descr:FileSystemProviderBaseOptions]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * [descr:FileSystemProviderBaseOptions.dateModifiedExpr]
      */
@@ -8837,10 +8836,10 @@ declare module DevExpress.ui {
     getDataSource(): DevExpress.common.data.DataSource;
   }
   /**
-   * [descr:DataExpressionMixinOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
+    * [descr:DataExpressionMixinOptions]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */

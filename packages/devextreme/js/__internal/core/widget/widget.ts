@@ -41,7 +41,7 @@ const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
 
 export type SupportedKeyHandler = (
   e: DxEvent<KeyboardEvent>,
-  options?: KeyboardKeyDownEvent
+  options?: KeyboardKeyDownEvent,
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 ) => void | boolean;
 export type SupportedKeys = Record<

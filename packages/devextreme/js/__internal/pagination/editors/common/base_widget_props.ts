@@ -2,7 +2,7 @@ export interface BaseWidgetProps {
   className?: string;
   accessKey?: string;
   activeStateEnabled?: boolean;
-  disabled?: boolean ;
+  disabled?: boolean;
   focusStateEnabled?: boolean;
   height?: string | number;
   hint?: string;
