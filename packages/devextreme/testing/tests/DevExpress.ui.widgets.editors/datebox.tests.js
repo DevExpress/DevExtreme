@@ -3487,6 +3487,7 @@ QUnit.module('Global formatting config (spec)', {
     QUnit.test('implicit DateBox uses dateTimeFormatPresets.shortDate when no dateFormat is set', function(assert) {
         config({
             ...config(),
+            dateFormat: undefined,
             dateTimeFormatPresets: {
                 shortDate: 'dd/MM/yyyy',
             },
