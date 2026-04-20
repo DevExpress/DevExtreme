@@ -303,14 +303,14 @@ QUnit.test('Delete button shouldn\'t created, appointment is disabled', async fu
     assert.equal(stubCreateComponent.getCall(2), undefined);
 });
 
-QUnit.test('isAlreadyShown method, tooltip is not created', async function(assert) {
+QUnit.test('isShownForTarget method, tooltip is not created', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const target = ['target'];
 
-    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is not created and haven\'t data');
+    assert.ok(!tooltip.isShownForTarget(target), 'tooltip is not created and haven\'t data');
 });
 
-QUnit.test('isAlreadyShown method, tooltip is created and shown', async function(assert) {
+QUnit.test('isShownForTarget method, tooltip is created and shown', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = [{ data: 'data1' }, { data: 'data2' }];
     const target = ['target'];
@@ -323,11 +323,11 @@ QUnit.test('isAlreadyShown method, tooltip is created and shown', async function
     tooltip.show(target, dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
 
-    assert.ok(tooltip.isAlreadyShown(target), 'tooltip is shown and have the same target');
-    assert.ok(!tooltip.isAlreadyShown(['target_1']), 'tooltip is shown and have another target');
+    assert.ok(tooltip.isShownForTarget(target), 'tooltip is shown and have the same target');
+    assert.ok(!tooltip.isShownForTarget(['target_1']), 'tooltip is shown and have another target');
 });
 
-QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
+QUnit.test('isShownForTarget method, tooltip is hide', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = [{ data: 'data1' }, { data: 'data2' }];
     const target = ['target'];
@@ -338,7 +338,7 @@ QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
     stubComponent.option = callback;
     tooltip.show(target, dataList, this.extraOptions);
 
-    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is hidden');
+    assert.ok(!tooltip.isShownForTarget(target), 'tooltip is hidden');
 });
 
 QUnit.test('appointmentTooltipTemplate equal to "appointmentTooltipTemplate"', async function(assert) {

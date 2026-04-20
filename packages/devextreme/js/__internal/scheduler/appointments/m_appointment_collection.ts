@@ -381,6 +381,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
     if (collectorViewModel.items.length === 0) {
       appointmentTooltip.hide();
+      return;
     }
 
     const dataList = this.getCompactAppointmentItems(collectorViewModel);
