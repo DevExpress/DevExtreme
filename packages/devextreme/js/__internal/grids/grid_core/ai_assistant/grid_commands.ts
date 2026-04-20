@@ -12,8 +12,7 @@ export class GridCommands {
   }
 
   // TODO: need to implement real command execution logic
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public executeCommands(commands: Command[]): Promise<CommandResults> {
-    return Promise.resolve([{ status: 'success', message: 'Command executed successfully' }, { status: 'success', message: 'Error' }]);
+    return Promise.resolve([...commands] as unknown as CommandResults);
   }
 }

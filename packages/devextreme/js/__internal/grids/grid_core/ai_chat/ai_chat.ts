@@ -1,3 +1,4 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -18,6 +19,7 @@ import {
   DEFAULT_CHAT_OPTIONS,
   DEFAULT_POPUP_OPTIONS,
   ERROR_ITEM_EMOJI,
+  REGENERATE_ICON,
   SUCCESS_ITEM_EMOJI,
 } from './const';
 import type {
@@ -151,11 +153,27 @@ export class AIChat {
       .appendTo($parent);
   }
 
-  private renderMessageHeader($parent: dxElementWrapper, text: string): void {
+  private renderMessageHeader(
+    $parent: dxElementWrapper,
+    text: string,
+    showRegenerate = false,
+  ): void {
+    const $row = $('<div>')
+      .addClass(CLASSES.messageHeaderRow)
+      .appendTo($parent);
+
     $('<b>')
       .addClass(CLASSES.messageHeader)
       .text(text)
-      .appendTo($parent);
+      .appendTo($row);
+
+    if (showRegenerate && this.options.onRegenerate) {
+      const $button = $('<i>')
+        .addClass(`dx-icon dx-icon-${REGENERATE_ICON} ${CLASSES.messageRegenerateButton}`)
+        .appendTo($row);
+
+      eventsEngine.on($button, 'click', () => this.options.onRegenerate?.());
+    }
   }
 
   private renderMessageStateContent($parent: dxElementWrapper, message: Message): void {
@@ -240,11 +258,25 @@ export class AIChat {
   }
 
   private renderErrorState(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     $container: dxElementWrapper,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     message: Message,
   ): void {
+    $('<div>')
+      .addClass(CLASSES.messageErrorText)
+      .text(message.text ?? '')
+      .appendTo($container);
+  }
+
+  private needToShowRegenerateButton(message: Message): boolean {
+    const isError = message.status === MessageStatus.Error;
+
+    if (isError) {
+      return true;
+    }
+
+    const hasErrors = !!message.commands?.some(({ status }) => status === MessageStatus.Error);
+
+    return hasErrors;
   }
 
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
@@ -272,6 +304,8 @@ export class AIChat {
   }
 
   public renderAIMessage(message: Message, container: HTMLElement): void {
+    const isError = message.status === MessageStatus.Error;
+
     const $message = $('<div>')
       .addClass(`${CLASSES.message} ${this.getMessageStateClass(message.status)}`)
       .appendTo(container);
@@ -282,7 +316,13 @@ export class AIChat {
       .addClass(CLASSES.messageContent)
       .appendTo($message);
 
-    this.renderMessageHeader($content, message.text ?? '');
+    const headerText = isError
+      ? messageLocalization.format('dxDataGrid-aiChatErrorMessageHeader')
+      : message.text ?? '';
+
+    const needToShowRegenerateButton = this.needToShowRegenerateButton(message);
+
+    this.renderMessageHeader($content, headerText, needToShowRegenerateButton);
     this.renderMessageStateContent($content, message);
   }
 }

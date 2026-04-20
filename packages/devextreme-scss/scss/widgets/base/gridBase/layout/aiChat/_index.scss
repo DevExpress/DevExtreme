@@ -39,6 +39,21 @@
   color: var(--dx-color-danger);
 }
 
+.dx-ai-chat__message-error-text {
+  color: var(--dx-color-danger);
+}
+
+.dx-ai-chat__message-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.dx-ai-chat__message-regenerate-button {
+  cursor: pointer;
+}
+
 .dx-ai-chat__message-list {
   display: flex;
   flex-flow: column;

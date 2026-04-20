@@ -44,6 +44,7 @@ export class AIAssistantView extends View {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onChatCleared: (): void => {},
+      onRegenerate: (): void => {},
       popupOptions,
       chatOptions,
     };

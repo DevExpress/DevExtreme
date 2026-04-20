@@ -34,10 +34,14 @@ export const CLASSES = {
   messageListItemError: 'dx-ai-chat__message-list-item--error',
   messageListItemIcon: 'dx-ai-chat__message-list-item-icon',
   messageListItemText: 'dx-ai-chat__message-list-item-text',
+  messageErrorText: 'dx-ai-chat__message-error-text',
+  messageHeaderRow: 'dx-ai-chat__message-header-row',
+  messageRegenerateButton: 'dx-ai-chat__message-regenerate-button',
   messageProgressBar: 'dx-ai-chat__message-progressbar',
 };
 
 export const CLEAR_CHAT_ICON = 'clearhistory';
+export const REGENERATE_ICON = 'restore';
 
 export const SUCCESS_ITEM_EMOJI = '✅';
 export const ERROR_ITEM_EMOJI = '❌';

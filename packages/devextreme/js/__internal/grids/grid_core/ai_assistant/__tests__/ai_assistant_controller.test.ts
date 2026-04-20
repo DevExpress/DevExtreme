@@ -110,10 +110,7 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Error,
-          commands: [{
-            status: MessageStatus.Error,
-            message: 'AI integration is not configured',
-          }],
+          text: 'AI integration is not configured',
         }),
       ]);
     });
@@ -129,8 +126,9 @@ describe('AIAssistantController', () => {
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
 
+      const commands = [{ command: 'sort', args: { column: 'Name' } }];
       const response: CommandResponse = {
-        commands: [{ command: 'sort', args: { column: 'Name' } }],
+        commands,
         explanation: '',
       };
 
@@ -142,10 +140,7 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Success,
-          commands: [
-            { status: 'success', message: 'Command executed successfully' },
-            { status: 'success', message: 'Error' },
-          ],
+          commands,
         }),
       ]);
     });

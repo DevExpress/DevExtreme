@@ -139,7 +139,7 @@ describe('AIAssistantView', () => {
       expect(AIChat).toHaveBeenCalledTimes(1);
     });
 
-    it('should pass container, createComponent, popupOptions, chatOptions, and onChatCleared to AIChat', () => {
+    it('should pass container, createComponent, popupOptions, chatOptions, onChatCleared, and onRegenerate to AIChat', () => {
       const { aiAssistantView } = createAIAssistantView();
 
       expect(AIChat).toHaveBeenCalledWith(
@@ -149,6 +149,7 @@ describe('AIAssistantView', () => {
           popupOptions: expect.any(Object),
           chatOptions: expect.any(Object),
           onChatCleared: expect.any(Function),
+          onRegenerate: expect.any(Function),
         }),
       );
     });
