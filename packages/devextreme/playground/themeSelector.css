@@ -1,0 +1,171 @@
+#theme-selector {
+  display: inline-block;
+  margin: 8px;
+}
+
+.theme-selector-popup .dx-popup-content {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.theme-selector-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.theme-selector-tabs {
+  flex: 0 0 auto;
+}
+
+.theme-selector-list {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.theme-selector-group-header {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.theme-selector-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-selector-icon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
+}
+
+#theme-selector,
+.theme-selector-popup {
+  --tsel-bg: #ffffff;
+  --tsel-bg-subtle: #f4f5f7;
+  --tsel-text: #1a1a1a;
+  --tsel-text-muted: #6b7280;
+  --tsel-border: rgba(0, 0, 0, 0.12);
+  --tsel-hover: rgba(0, 0, 0, 0.04);
+  --tsel-selected: rgba(10, 95, 193, 0.10);
+  --tsel-accent: #0a5fc1;
+  font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+#theme-selector .dx-button,
+#theme-selector .dx-button-content,
+#theme-selector .dx-button .dx-button-text,
+#theme-selector .dx-icon,
+.theme-selector-popup .dx-overlay-content,
+.theme-selector-popup .dx-popup-content,
+.theme-selector-popup .dx-tabs,
+.theme-selector-popup .dx-tab,
+.theme-selector-popup .dx-list,
+.theme-selector-popup .dx-list-group-header,
+.theme-selector-popup .dx-list-item,
+.theme-selector-popup .dx-list-item-content {
+  color: var(--tsel-text) !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-family: inherit !important;
+}
+
+#theme-selector .dx-button {
+  background-color: var(--tsel-bg) !important;
+  border: 1px solid var(--tsel-border) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+#theme-selector .dx-button.dx-state-hover {
+  background-color: var(--tsel-hover) !important;
+}
+
+#theme-selector .dx-button-content {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+#theme-selector .dx-button-content > .dx-icon {
+  display: none !important;
+}
+
+#theme-selector .dx-button-content::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.theme-selector-popup .dx-overlay-content,
+.theme-selector-popup .dx-popup-content,
+.theme-selector-popup .dx-tabs,
+.theme-selector-popup .dx-list {
+  background-color: var(--tsel-bg) !important;
+  border-color: var(--tsel-border) !important;
+}
+
+.theme-selector-popup .dx-overlay-content {
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.theme-selector-popup .dx-tabs {
+  border-bottom: 1px solid var(--tsel-border) !important;
+  width: 100% !important;
+}
+
+.theme-selector-popup .dx-tabs-wrapper,
+.theme-selector-popup .dx-tabs-scrollable .dx-tabs-wrapper {
+  display: flex !important;
+  width: 100% !important;
+}
+
+.theme-selector-popup .dx-tab {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
+
+.theme-selector-popup .dx-tab-text-span-pseudo {
+  visibility: hidden !important;
+}
+
+.theme-selector-popup .dx-tab-text-span {
+  visibility: visible !important;
+  color: var(--tsel-text) !important;
+}
+
+.theme-selector-popup .dx-tab.dx-state-hover {
+  background-color: var(--tsel-hover) !important;
+}
+
+.theme-selector-popup .dx-tab.dx-tab-selected,
+.theme-selector-popup .dx-tab.dx-tab-selected.dx-state-focused {
+  background-color: var(--tsel-bg) !important;
+}
+
+.theme-selector-popup .dx-tab-indicator,
+.theme-selector-popup .dx-tabs-wrapper .dx-tab.dx-tab-selected::after {
+  background-color: var(--tsel-accent) !important;
+  color: var(--tsel-accent) !important;
+}
+
+.theme-selector-popup .dx-list-group-header {
+  background-color: var(--tsel-bg-subtle) !important;
+  color: var(--tsel-text-muted) !important;
+  border-bottom: 1px solid var(--tsel-border) !important;
+}
+
+.theme-selector-popup .dx-list-item.dx-state-hover {
+  background-color: var(--tsel-hover) !important;
+}
+
+.theme-selector-popup .dx-list-item.dx-list-item-selected {
+  background-color: var(--tsel-selected) !important;
+}
