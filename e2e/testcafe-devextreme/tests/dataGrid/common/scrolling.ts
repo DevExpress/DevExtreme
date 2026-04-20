@@ -1546,9 +1546,7 @@ test('Last group should not disappear after collapsing another subgroup with vir
 
 // T1152498
 ['infinite', 'virtual'].forEach((scrollingMode: DataGridScrollMode) => {
-  test.meta({
-    browserSize: [900, 600],
-  })(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
+  test(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
     // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
