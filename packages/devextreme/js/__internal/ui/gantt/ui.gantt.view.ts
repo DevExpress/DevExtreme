@@ -568,7 +568,7 @@ export class GanttView extends Widget<GanttViewProperties> {
     if (date) {
       const globalDateTimeFormat = getGlobalFormatByDataType('datetime');
       if (globalDateTimeFormat) {
-        result = dateLocalization.format(date, globalDateTimeFormat);
+        result = String(dateLocalization.format(date, globalDateTimeFormat) ?? '');
       } else {
         const datePart = dateLocalization.format(date, 'shortDate');
         const timeFormat = this._hasAmPM() ? 'hh:mm a' : 'HH:mm';
