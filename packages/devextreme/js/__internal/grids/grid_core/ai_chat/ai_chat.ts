@@ -73,7 +73,7 @@ export class AIChat {
         if (this.isAIChatMessage(message)) {
           this.renderAIMessage(message, container);
         } else {
-          $(container).text(message?.text);
+          $(container).text(message?.text ?? '');
         }
       },
       showUserName: false,
@@ -157,9 +157,9 @@ export class AIChat {
   private getHeaderText(message: Message): string {
     switch (message.status) {
       case MessageStatus.Error:
-        return messageLocalization.format('dxDataGrid-aiChatErrorMessageHeader');
+        return messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader');
       case MessageStatus.Pending:
-        return messageLocalization.format('dxDataGrid-aiChatPendingMessageHeader');
+        return messageLocalization.format('dxDataGrid-aiAssistantPendingMessageHeader');
       default:
         return message.text as string ?? '';
     }
@@ -206,7 +206,7 @@ export class AIChat {
   private renderPendingState($parent: dxElementWrapper): void {
     $('<div>')
       .addClass(CLASSES.messageStatus)
-      .text('Processing...')
+      .text(messageLocalization.format('dxDataGrid-aiAssistantProcessingMessage'))
       .appendTo($parent);
 
     const $progressBar = $('<div>')

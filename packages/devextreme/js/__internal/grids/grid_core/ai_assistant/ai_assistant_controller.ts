@@ -75,7 +75,6 @@ export class AIAssistantController extends Controller {
         data: {
           id: aiMessageId,
           timestamp: parsedTimestamp,
-          // TODO: need to localize author name and move it to constants or options
           author: AI_ASSISTANT_AUTHOR,
           text: message.text,
           status: MessageStatus.Pending,
