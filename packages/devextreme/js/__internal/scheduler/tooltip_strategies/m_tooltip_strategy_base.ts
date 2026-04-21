@@ -144,7 +144,7 @@ export class TooltipStrategyBase {
     }
   }
 
-  public isDesktop(): boolean {
+  protected isDesktop(): boolean {
     return true;
   }
 
