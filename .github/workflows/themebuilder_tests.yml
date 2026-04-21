@@ -34,7 +34,7 @@ jobs:
 
     - name: Build etalon bundles
       working-directory: ./packages/devextreme-scss
-      run: npx gulp style-compiler-themes-ci
+      run: npx --no-install gulp style-compiler-themes-ci
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder

@@ -205,7 +205,7 @@ jobs:
         name: devextreme-sources
 
     - name: Install packages
-      run: npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz
+      run: npm ci
 
     - uses: actions/setup-dotnet@v3
       with:

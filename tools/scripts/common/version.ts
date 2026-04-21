@@ -16,8 +16,6 @@ export function updateVersion(version: string | undefined): void {
   sh.exec(`npm version ${version} -ws --allow-same-version --include-workspace-root --git-tag-version=false --workspaces-update=false`);
 
   sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, workspacesPaths);
-
-  sh.exec('npm i --legacy-peer-deps');
 }
 
 export function updateVersionJs(version: string | undefined, build?: string | undefined): void {

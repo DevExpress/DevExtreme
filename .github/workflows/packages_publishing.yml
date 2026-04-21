@@ -72,7 +72,7 @@ jobs:
           cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build artifacts package
-        run: npx -no-install ts-node tools/scripts/make-artifacts-package
+        run: npx --no-install ts-node tools/scripts/make-artifacts-package
 
       - uses: actions/upload-artifact@v4
         with:
@@ -110,7 +110,7 @@ jobs:
           name: packages
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund --legacy-peer-deps --ignore-scripts
+        run: npm ci --no-audit --no-fund --legacy-peer-deps --ignore-scripts
 
       - name: Change package scope
         id: scopedPackage
@@ -118,7 +118,7 @@ jobs:
           PACKAGE: ${{ matrix.package }}
         run: |
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          PACKAGE_DIR=$(npx ts-node tools/scripts/change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
+          PACKAGE_DIR=$(npx --no-install ts-node tools/scripts/change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
           npm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
