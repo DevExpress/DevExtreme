@@ -242,7 +242,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @hidden false
      * @public
      */
-    expandedExpr?: string | ((item: TItem, value?: boolean) => boolean | undefined);
+    expandedExpr?: string | ((item: TItem, value: boolean | undefined) => boolean | undefined);
     /**
      * @docid
      * @default 'hasItems'

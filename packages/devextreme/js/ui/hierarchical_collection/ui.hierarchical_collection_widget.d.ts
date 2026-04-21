@@ -56,7 +56,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'selected'
      * @public
      */
-    selectedExpr?: string | ((item: TItem) => TKey);
+    selectedExpr?: string | ((item: TItem, value: any) => boolean | undefined);
 }
 /**
  * @docid
