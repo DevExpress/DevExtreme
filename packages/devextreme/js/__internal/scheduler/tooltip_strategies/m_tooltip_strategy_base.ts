@@ -32,7 +32,7 @@ export class TooltipStrategyBase {
 
   protected list: any;
 
-  protected $target: dxElementWrapper | null = null;
+  private $target: dxElementWrapper | null = null;
 
   constructor(options) {
     this.tooltip = null;
@@ -61,7 +61,15 @@ export class TooltipStrategyBase {
     }
   }
 
+  public getTarget(): dxElementWrapper | null {
+    return this.$target;
+  }
+
   public setListItems(dataList: CompactAppointmentOptions['items']): void {
+    if (dataList.length === 0) {
+      this.hide();
+    }
+
     this.list.option('dataSource', dataList);
   }
 
@@ -161,7 +169,6 @@ export class TooltipStrategyBase {
       itemTemplate: (item, index) => this.renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
       _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
-      repaintChangesOnly: true,
     };
   }
 

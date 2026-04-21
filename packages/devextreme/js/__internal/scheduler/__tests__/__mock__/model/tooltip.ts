@@ -53,7 +53,7 @@ export class TooltipModel {
     return this.element ? within(this.element).queryAllByRole('option') : [];
   }
 
-  getAppointmentItem(index = 0): HTMLElement | null {
+  getAppointmentItem(index = 0): HTMLElement {
     const items = this.getAppointmentItems();
 
     if (items.length <= index) {
