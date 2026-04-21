@@ -115,7 +115,7 @@ export class TooltipStrategyBase {
 
   isShownForTarget(target: dxElementWrapper): boolean {
     if (this.tooltip?.option('visible')) {
-      return this.tooltip?.option('target')?.get(0) === target.get(0);
+      return this.tooltip?.option('target')[0] === target[0];
     }
 
     return false;
