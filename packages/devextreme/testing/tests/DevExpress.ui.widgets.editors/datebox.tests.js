@@ -3377,9 +3377,7 @@ QUnit.module('validation', {
 QUnit.module('Global formatting config (spec)', {
     beforeEach: function() {
         const globalConfig = config();
-        this.defaultOptions = DateBox.defaultOptions
-            ? structuredClone(DateBox.defaultOptions)
-            : DateBox.defaultOptions;
+        this.defaultOptions = DateBox.defaultOptions;
         this.savedGlobalFormats = {
             dateFormat: globalConfig.dateFormat,
             timeFormat: globalConfig.timeFormat,
@@ -3398,7 +3396,7 @@ QUnit.module('Global formatting config (spec)', {
                 globalConfig[key] = value;
             }
         });
-        DateBox.defaultOptions(this.defaultOptions || []);
+        DateBox.defaultOptions(this.defaultOptions || {});
     },
 }, () => {
     QUnit.test('implicit date displayFormat uses global dateFormat', function(assert) {
