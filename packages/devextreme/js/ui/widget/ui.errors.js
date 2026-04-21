@@ -277,6 +277,11 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1067: '\'aiIntegration\' is not configured in the {0} column.',
 
     /**
+    * @name ErrorsUIWidgets.E1068
+    */
+    E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
