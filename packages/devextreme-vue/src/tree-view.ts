@@ -200,7 +200,7 @@ const componentConfig = {
     searchValue: String,
     selectAllText: String,
     selectByClick: Boolean,
-    selectedExpr: [Function, String] as PropType<(((item: any, value: boolean | undefined) => boolean | undefined)) | string>,
+    selectedExpr: [Function, String] as PropType<(((item: any, value: boolean) => boolean | undefined)) | string>,
     selectionMode: String as PropType<SingleOrMultiple>,
     selectNodesRecursive: Boolean,
     showCheckBoxesMode: String as PropType<TreeViewCheckBoxMode>,

@@ -133,7 +133,7 @@ const componentConfig = {
     position: Object as PropType<PositionConfig | Record<string, any>>,
     rtlEnabled: Boolean,
     selectByClick: Boolean,
-    selectedExpr: [Function, String] as PropType<(((item: any, value: boolean | undefined) => boolean | undefined)) | string>,
+    selectedExpr: [Function, String] as PropType<(((item: any, value: boolean) => boolean | undefined)) | string>,
     selectedItem: {},
     selectionMode: String as PropType<SingleOrNone>,
     showEvent: [Object, String] as PropType<Record<string, any> | string>,
