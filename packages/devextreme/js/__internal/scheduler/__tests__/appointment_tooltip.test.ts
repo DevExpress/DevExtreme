@@ -428,7 +428,7 @@ describe.each([
       });
     }
 
-    it('should not rerender tooltip appointments when deleting appointment from tooltip', async () => {
+    it('should rerender tooltip appointments when deleting appointment from tooltip', async () => {
       const { POM } = await createScheduler({
         dataSource: getDataSource(),
       });
@@ -442,9 +442,9 @@ describe.each([
       pressDeleteKeyOnTooltipItem(POM, 0);
 
       expect(POM.tooltip.isVisible()).toBe(true);
-      expect(POM.tooltip.getAppointmentItem(0)).toBe(item1);
-      expect(POM.tooltip.getAppointmentItem(1)).toBe(item2);
-      expect(POM.tooltip.getAppointmentItem(2)).toBe(item3);
+      expect(POM.tooltip.getAppointmentItem(0)).not.toBe(item1);
+      expect(POM.tooltip.getAppointmentItem(1)).not.toBe(item2);
+      expect(POM.tooltip.getAppointmentItem(2)).not.toBe(item3);
     });
   });
 });

@@ -305,6 +305,10 @@ class SchedulerAppointments extends CollectionWidget<any> {
   protected repaintAppointments(diff: ViewModelDiff[]): void {
     this.$itemBySortedIndex = [];
 
+    const { appointmentTooltip } = this.option();
+    let $newTooltipTarget: dxElementWrapper | null = null;
+    let targetViewModel: AppointmentCollectorViewModel | null = null;
+
     this._renderByFragments(($commonFragment, $allDayFragment) => {
       const isRepaintAll = diff.every(
         (item) => Boolean(item.needToAdd ?? item.needToRemove),
@@ -324,7 +328,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
         }
 
         if (item.needToRemove) {
-          this.hideTooltipIfNeed(item.element);
           item.element?.remove();
           return;
         }
@@ -340,15 +343,17 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
         if (item.needToUpdateItems) {
           const $oldElement = item.element as dxElementWrapper;
+          $oldElement.detach();
+
           const $newElement = this._renderItem(index, item.item, container);
 
-          this.updateTooltipIfNeed(
-            $oldElement,
-            $newElement,
-            item.item as AppointmentCollectorViewModel,
-          );
+          if (appointmentTooltip.isShownForTarget($oldElement)) {
+            $newTooltipTarget = $newElement;
+            targetViewModel = item.item as AppointmentCollectorViewModel;
+          }
 
-          $oldElement?.remove();
+          $oldElement.remove();
+
           return;
         }
 
@@ -358,36 +363,24 @@ class SchedulerAppointments extends CollectionWidget<any> {
         }
       });
     });
+
+    this.updateTooltip($newTooltipTarget, targetViewModel);
   }
 
-  private hideTooltipIfNeed($element?: dxElementWrapper): void {
-    const { appointmentTooltip } = this.option();
-
-    if (appointmentTooltip.isShownForTarget($element)) {
-      appointmentTooltip.hide();
-    }
-  }
-
-  private updateTooltipIfNeed(
-    $oldElement: dxElementWrapper,
-    $newElement: dxElementWrapper,
-    collectorViewModel: AppointmentCollectorViewModel,
+  private updateTooltip(
+    $newTarget: dxElementWrapper | null,
+    collectorViewModel: AppointmentCollectorViewModel | null,
   ): void {
     const { appointmentTooltip } = this.option();
 
-    if (!appointmentTooltip.isShownForTarget($oldElement)) {
-      return;
-    }
+    if ($newTarget !== null && collectorViewModel !== null) {
+      const dataList = this.getCompactAppointmentItems(collectorViewModel);
 
-    if (collectorViewModel.items.length === 0) {
+      appointmentTooltip.setTarget($newTarget);
+      appointmentTooltip.setListItems(dataList);
+    } else if (!appointmentTooltip.getTarget()?.[0]?.isConnected) {
       appointmentTooltip.hide();
-      return;
     }
-
-    const dataList = this.getCompactAppointmentItems(collectorViewModel);
-
-    appointmentTooltip.setTarget($newElement);
-    appointmentTooltip.setListItems(dataList);
   }
 
   _renderByFragments(renderFunction: (
