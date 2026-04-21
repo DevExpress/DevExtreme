@@ -39,7 +39,11 @@ async function minify(content: string, eulaUrl?: string): Promise<string> {
     },
   });
 
-  return result.code || content;
+  if (result.code == null) {
+    throw new Error('Terser minification produced no output');
+  }
+
+  return result.code;
 }
 
 async function beautify(content: string, eulaUrl?: string): Promise<string> {
@@ -72,7 +76,11 @@ async function beautify(content: string, eulaUrl?: string): Promise<string> {
     },
   });
 
-  return jsBeautify(uglifyResult.code || content);
+  if (uglifyResult.code == null) {
+    throw new Error('Terser beautification produced no output');
+  }
+
+  return jsBeautify(uglifyResult.code);
 }
 
 function stripDebugBlocks(content: string): string {

@@ -142,7 +142,7 @@ async function buildData(
     const rawData = await readFileText(filePath);
     let wrapped = compiled({ data: rawData });
     wrapped = USE_STRICT_HEADER + wrapped;
-    wrapped = normalizeEol(wrapped);
+    wrapped = ensureTrailingNewline(normalizeEol(wrapped));
     await writeFileText(filePath, wrapped);
   }
 }

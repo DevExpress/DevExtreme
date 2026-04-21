@@ -66,7 +66,7 @@ export async function copyRecursive(from: string, to: string): Promise<void> {
 }
 
 export function normalizeEol(content: string): string {
-  return content.replace(/\r\n/g, '\n');
+  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 }
 
 export function ensureTrailingNewline(content: string): string {
