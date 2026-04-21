@@ -335,7 +335,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @hidden false
      * @public
      */
-    parentIdExpr?: string | ((item: TItem) => TKey);
+    parentIdExpr?: string | ((item: TItem) => TKey | undefined);
     /**
      * @docid
      * @default 0
