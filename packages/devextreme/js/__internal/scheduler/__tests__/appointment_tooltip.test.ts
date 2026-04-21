@@ -4,7 +4,8 @@ import {
 import fx from '@js/common/core/animation/fx';
 import $ from '@js/core/renderer';
 
-import { createScheduler } from './__mock__/create_scheduler';
+import type Scheduler from '../m_scheduler';
+import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 import type { SchedulerModel } from './__mock__/model/scheduler';
 
@@ -57,7 +58,10 @@ const pressDeleteKeyOnTooltipItem = (POM: SchedulerModel, itemIndex: number): vo
   scrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
 };
 
-describe('Appointment tooltip', () => {
+describe.each([
+  'desktop',
+  'mobile',
+])('Appointment tooltip %s', (platform) => {
   beforeEach(() => {
     fx.off = true;
     setupSchedulerTestEnvironment({
@@ -77,19 +81,55 @@ describe('Appointment tooltip', () => {
     document.body.innerHTML = '';
   });
 
+  const createScheduler = (config: any): Promise<{
+    container: HTMLDivElement;
+    scheduler: Scheduler;
+    POM: SchedulerModel;
+    keydown: (element: Element, key: string) => void;
+  }> => baseCreateScheduler({
+    adaptivityEnabled: platform === 'mobile',
+    views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+    currentView: 'month',
+    currentDate: new Date(2017, 4, 1),
+    editing: true,
+    height: 600,
+    width: 1000,
+    ...config,
+  });
+
+  describe('Delete button', () => {
+    it('delete button in tooltip should not be focusable using tab', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [
+          {
+            text: 'Apt1',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 10, 30),
+          },
+          {
+            text: 'Apt2',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 10, 30),
+          },
+        ],
+      });
+
+      POM.getCollectorButton().click();
+
+      expect(POM.tooltip.getDeleteButton().getAttribute('tabindex')).toBe('-1');
+    });
+  });
+
   describe('Deleting appointments', () => {
     describe.each([
-      'delete key', 'click',
+      'delete key',
+      'click',
     ])('Try delete by %s', (method) => {
       it('should delete appointment', async () => {
         const onAppointmentDeleted = jest.fn();
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month' }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -115,10 +155,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month' }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           editing: { allowDeleting: false },
           onAppointmentDeleted,
         });
@@ -137,7 +173,7 @@ describe('Appointment tooltip', () => {
         expect(onAppointmentDeleted).not.toHaveBeenCalled();
       });
 
-      it('should not delete disabled appointment by Delete key', async () => {
+      it('should not delete disabled appointment', async () => {
         const onAppointmentDeleted = jest.fn();
 
         const { POM } = await createScheduler({
@@ -155,10 +191,6 @@ describe('Appointment tooltip', () => {
             endDate: new Date(2017, 4, 21, 10, 30),
             disabled: true,
           }],
-          views: [{ type: 'month' }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -167,7 +199,8 @@ describe('Appointment tooltip', () => {
         if (method === 'delete key') {
           pressDeleteKeyOnTooltipItem(POM, 1);
         } else {
-          expect(POM.tooltip.getDeleteButtons().length).toBe(0);
+          expect(POM.tooltip.getAppointmentItems().length).toBe(2);
+          expect(POM.tooltip.getDeleteButtons().length).toBe(1);
         }
 
         expect(POM.tooltip.isVisible()).toBe(true);
@@ -182,11 +215,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month' }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          editing: true,
-          height: 600,
           onAppointmentDeleted,
           onAppointmentUpdated,
         });
@@ -211,11 +239,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month' }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          editing: true,
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -238,10 +261,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month' }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -265,10 +284,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -287,10 +302,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -310,11 +321,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          editing: true,
-          height: 600,
           onAppointmentDeleted,
           onAppointmentUpdated,
         });
@@ -336,10 +342,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -358,10 +360,6 @@ describe('Appointment tooltip', () => {
 
         const { POM } = await createScheduler({
           dataSource: getDataSource(),
-          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 1),
-          height: 600,
           onAppointmentDeleted,
         });
 
@@ -395,54 +393,44 @@ describe('Appointment tooltip', () => {
   });
 
   describe('State', () => {
-    it('should have correct target after appointment was added before the current target', async () => {
-      const { scheduler, POM } = await createScheduler({
-        dataSource: getDataSource(),
-        views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 1),
-        height: 600,
+    if (platform === 'desktop') {
+      it('should have correct target after appointment was added before the current target', async () => {
+        const { scheduler, POM } = await createScheduler({
+          dataSource: getDataSource(),
+        });
+
+        POM.getCollectorButton().click();
+
+        const initialTarget = POM.tooltip.target;
+
+        scheduler.addAppointment({
+          text: 'New Apt',
+          startDate: new Date(2017, 4, 20, 9, 30),
+          endDate: new Date(2017, 4, 20, 10, 30),
+        });
+
+        await new Promise(process.nextTick);
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(POM.tooltip.target).toBe(initialTarget);
       });
 
-      POM.getCollectorButton().click();
+      it('should have correct target after appointment was deleted from tooltip', async () => {
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+        });
 
-      const initialTarget = POM.tooltip.target;
+        POM.getCollectorButton().click();
+        pressDeleteKeyOnTooltipItem(POM, 0);
 
-      scheduler.addAppointment({
-        text: 'New Apt',
-        startDate: new Date(2017, 4, 20, 9, 30),
-        endDate: new Date(2017, 4, 20, 10, 30),
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(POM.tooltip.target).toBe(POM.getCollectorButton());
       });
-
-      await new Promise(process.nextTick);
-
-      expect(POM.tooltip.isVisible()).toBe(true);
-      expect(POM.tooltip.target).toBe(initialTarget);
-    });
-
-    it('should have correct target after appointment was deleted from tooltip', async () => {
-      const { POM } = await createScheduler({
-        dataSource: getDataSource(),
-        views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 1),
-        height: 600,
-      });
-
-      POM.getCollectorButton().click();
-      pressDeleteKeyOnTooltipItem(POM, 0);
-
-      expect(POM.tooltip.isVisible()).toBe(true);
-      expect(POM.tooltip.target).toBe(POM.getCollectorButton());
-    });
+    }
 
     it('should not rerender tooltip appointments when deleting appointment from tooltip', async () => {
       const { POM } = await createScheduler({
         dataSource: getDataSource(),
-        views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 1),
-        height: 600,
       });
 
       POM.getCollectorButton().click();
