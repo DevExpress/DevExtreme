@@ -88,14 +88,10 @@ import { AIIntegration } from './ai-integration';
  * @namespace DevExpress.common.grids
  */
 export type AIAssistant = {
-  /**
-   * @docid
-   * @public
-   */
+  /** @docid */
   aiIntegration?: AIIntegration;
   /**
    * @docid
-   * @public
    * @type dxChatOptions
    */
   chat?: ChatProperties;
@@ -106,7 +102,6 @@ export type AIAssistant = {
   enabled?: boolean;
   /**
    * @docid
-   * @public
    * @type dxPopupOptions
    */
   popup?: PopupProperties;
