@@ -25,6 +25,7 @@ import { getDatePartIndexByPosition, renderDateParts } from './date_box.mask.par
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
 const BACKWARD = -1;
+const IME_DIGIT_CODE_REGEXP = /^(?:Digit|Numpad)(\d)$/;
 
 export interface DateBoxMaskProperties extends Properties {
   emptyDateValue?: Date;
@@ -212,9 +213,12 @@ class DateBoxMask extends DateBoxBase {
       return result;
     }
 
-    const numPadDigitMatch = /^Numpad(\d)$/.exec(e.code);
-    if (browser.chrome && e.key === 'Process' && (e.code.startsWith('Digit') || numPadDigitMatch)) {
-      key = numPadDigitMatch ? numPadDigitMatch[1] : e.code.replace('Digit', '');
+    const chromiumDigitCodeMatch = IME_DIGIT_CODE_REGEXP.exec(e.code);
+
+    if (browser.chrome && e.key === 'Process' && chromiumDigitCodeMatch) {
+      const [, digit] = chromiumDigitCodeMatch;
+      key = digit;
+
       this._processInputKey(key);
       this._maskInputHandler = (): void => {
         this._renderSelectedPart();
@@ -259,6 +263,7 @@ class DateBoxMask extends DateBoxBase {
 
   _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
+
     if (event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e) && !this._maskInputHandler) {
       this._processInputKey(event.data ?? '');
       this._renderDisplayText(this._getDisplayedText(this._maskValue));
