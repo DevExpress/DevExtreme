@@ -168,12 +168,12 @@ AspNet.makeMetadata({
       ['ui/button:dxButtonOptions', 'ui/form:dxFormButtonItem.buttonOptions'],
       ['ui/button_group:dxButtonGroupOptions', 'ui/chat:dxChatOptions.suggestions'],
       ['ui/calendar:dxCalendarOptions', 'ui/date_box:DateBoxBaseOptions.calendarOptions'],
+      ['ui/chat:dxChatOptions', 'common/grids:AIAssistant.chat'],
       [
         'ui/file_uploader:dxFileUploaderOptions',
         'ui/html_editor:dxHtmlEditorImageUpload.fileUploaderOptions',
       ],
       ['ui/file_uploader:dxFileUploaderOptions', 'ui/chat:dxChatOptions.fileUploaderOptions'],
-      ['ui/chat:dxChatOptions', 'common/grids:AIAssistant.chat'],
       ['ui/filter_builder:dxFilterBuilderOptions', 'common/grids:GridBaseOptions.filterBuilder'],
       ['ui/filter_builder:dxFilterBuilderOptions', 'ui/card_view:dxCardViewOptions.filterBuilder'],
       ['ui/form:dxFormOptions', 'common/grids:EditingBase.form'],
