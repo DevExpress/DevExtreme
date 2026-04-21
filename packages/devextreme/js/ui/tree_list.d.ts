@@ -973,7 +973,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default "items"
      * @public
      */
-    itemsExpr?: string | ((item: TRowData, value: TRowData[] | undefined) => TRowData[] | undefined);
+    itemsExpr?: string | ((item: TRowData, value: undefined | TRowData[]) => TRowData[] | undefined);
     /**
      * @docid
      * @default "id"

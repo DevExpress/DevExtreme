@@ -44,7 +44,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'items'
      * @public
      */
-    itemsExpr?: string | ((item: TItem, value?: any) => TKey);
+    itemsExpr?: string | ((item: TItem) => TItem[] | undefined);
     /**
      * @docid
      * @default 'id'
@@ -56,7 +56,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'selected'
      * @public
      */
-    selectedExpr?: string | ((item: TItem, value: any) => boolean | undefined);
+    selectedExpr?: string | ((item: TItem, value?: boolean | undefined) => boolean | undefined);
 }
 /**
  * @docid
