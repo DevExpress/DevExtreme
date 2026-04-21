@@ -64,7 +64,7 @@ const createTabletDeviceConfig = (listHeight) => {
 };
 
 export class MobileTooltipStrategy extends TooltipStrategyBase {
-  public override isDesktop() {
+  protected override isDesktop() {
     return false;
   }
 
