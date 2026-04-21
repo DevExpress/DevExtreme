@@ -129,7 +129,7 @@ const componentConfig = {
     orientation: String as PropType<Orientation>,
     rtlEnabled: Boolean,
     selectByClick: Boolean,
-    selectedExpr: [Function, String] as PropType<(((item: any, value: boolean) => boolean | undefined)) | string>,
+    selectedExpr: [Function, String] as PropType<(((item: any, value: boolean | undefined) => boolean | undefined)) | string>,
     selectedItem: {},
     selectionMode: String as PropType<SingleOrNone>,
     showFirstSubmenuMode: [Object, String] as PropType<Record<string, any> | SubmenuShowMode>,

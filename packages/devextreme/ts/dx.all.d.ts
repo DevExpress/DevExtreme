@@ -33309,7 +33309,7 @@ declare module DevExpress.ui {
      */
     selectedExpr?:
       | string
-      | ((item: TItem, value?: boolean | undefined) => boolean | undefined);
+      | ((item: TItem, value: boolean | undefined) => boolean | undefined);
   }
   /**
    * [descr:MapLocation]
