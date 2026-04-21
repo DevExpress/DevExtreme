@@ -373,13 +373,21 @@ class SchedulerAppointments extends CollectionWidget<any> {
   ): void {
     const { appointmentTooltip } = this.option();
 
+    if (!appointmentTooltip) {
+      return;
+    }
+
     if ($newTarget !== null && collectorViewModel !== null) {
       const dataList = this.getCompactAppointmentItems(collectorViewModel);
 
       appointmentTooltip.setTarget($newTarget);
       appointmentTooltip.setListItems(dataList);
-    } else if (!appointmentTooltip.getTarget()?.[0]?.isConnected) {
-      appointmentTooltip.hide();
+    } else {
+      const targetElement = appointmentTooltip.getTarget()?.[0];
+
+      if (targetElement && !targetElement.isConnected) {
+        appointmentTooltip.hide();
+      }
     }
   }
 
