@@ -188,7 +188,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onSelectAllValueChanged: Function as PropType<((e: SelectAllValueChangedEvent) => void)>,
     onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
-    parentIdExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
+    parentIdExpr: [Function, String] as PropType<(((item: any) => any | undefined)) | string>,
     rootValue: {},
     rtlEnabled: Boolean,
     scrollDirection: String as PropType<ScrollDirection>,

@@ -880,10 +880,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyExpr(): ((item: any) => any) | string {
+    get keyExpr(): ((item: any, value: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: ((item: any) => any) | string) {
+    set keyExpr(value: ((item: any, value: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -945,10 +945,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get parentIdExpr(): ((item: any, value: any) => any) | string {
+    get parentIdExpr(): ((item: any, value: any) => any | undefined) | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: ((item: any, value: any) => any) | string) {
+    set parentIdExpr(value: ((item: any, value: any) => any | undefined) | string) {
         this._setOption('parentIdExpr', value);
     }
 
@@ -1927,7 +1927,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() keyExprChange: EventEmitter<((item: any, value: any) => any) | string>;
 
     /**
     
@@ -1962,7 +1962,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() parentIdExprChange: EventEmitter<((item: any, value: any) => any) | string>;
+    @Output() parentIdExprChange: EventEmitter<((item: any, value: any) => any | undefined) | string>;
 
     /**
     

@@ -32065,7 +32065,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.keyExpr]
      */
-    keyExpr?: string | ((item: TRowData) => TKey);
+    keyExpr?: string | ((item: TRowData, value?: TKey) => TKey);
     /**
      * [descr:dxTreeListOptions.onCellClick]
      */
@@ -32169,7 +32169,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.parentIdExpr]
      */
-    parentIdExpr?: string | ((item: TRowData, value?: any) => TKey);
+    parentIdExpr?: string | ((item: TRowData, value?: any) => TKey | undefined);
     /**
      * [descr:dxTreeListOptions.remoteOperations]
      */
@@ -32715,7 +32715,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
      */
-    parentIdExpr?: string | ((item: TItem) => TKey);
+    parentIdExpr?: string | ((item: TItem) => TKey | undefined);
     /**
      * [descr:dxTreeViewOptions.rootValue]
      */

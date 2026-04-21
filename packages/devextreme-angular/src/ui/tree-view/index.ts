@@ -457,10 +457,10 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get parentIdExpr(): ((item: any) => any) | string {
+    get parentIdExpr(): ((item: any) => any | undefined) | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: ((item: any) => any) | string) {
+    set parentIdExpr(value: ((item: any) => any | undefined) | string) {
         this._setOption('parentIdExpr', value);
     }
 
@@ -1029,7 +1029,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() parentIdExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() parentIdExprChange: EventEmitter<((item: any) => any | undefined) | string>;
 
     /**
     
