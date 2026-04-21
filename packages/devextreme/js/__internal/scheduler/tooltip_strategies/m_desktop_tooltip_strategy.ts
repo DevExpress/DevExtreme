@@ -40,11 +40,11 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     return result;
   }
 
-  protected override createTooltip(target, dataList) {
+  protected override createTooltip(dataList) {
     const tooltipElement = this.createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
     const tooltip = this._options.createComponent(tooltipElement, Tooltip, {
-      target,
+      target: this.$target,
       maxHeight: MAX_TOOLTIP_HEIGHT,
       rtlEnabled: this.extraOptions.rtlEnabled,
       onShown: this.onShown.bind(this),

@@ -32,46 +32,56 @@ export class TooltipStrategyBase {
 
   protected list: any;
 
+  protected $target: dxElementWrapper | null = null;
+
   constructor(options) {
     this.tooltip = null;
     this._options = options;
     this.extraOptions = null;
   }
 
-  show(target, dataList, extraOptions) {
+  show(target: dxElementWrapper, dataList, extraOptions) {
     if (dataList.length) {
       this.hide();
+      this.$target = target;
       this.extraOptions = extraOptions;
-      this.showCore(target, dataList);
+      this.showCore(dataList);
     }
   }
 
   public setTarget($target: dxElementWrapper): void {
-    const originalAnimationValue = this.tooltip.option('animation');
+    this.$target = $target;
 
-    this.tooltip.option('animation', null);
-    this.tooltip.option('target', $target);
-    this.tooltip.option('animation', originalAnimationValue);
+    if (this.isDesktop()) {
+      const originalAnimationValue = this.tooltip.option('animation');
+
+      this.tooltip.option('animation', null);
+      this.tooltip.option('target', $target);
+      this.tooltip.option('animation', originalAnimationValue);
+    }
   }
 
   public setListItems(dataList: CompactAppointmentOptions['items']): void {
     this.list.option('dataSource', dataList);
   }
 
-  private showCore(target, dataList) {
-    const describedByValue = isRenderer(target) && target.attr('aria-describedby') as string;
+  private showCore(dataList) {
+    const describedByValue = isRenderer(this.$target) && this.$target?.attr('aria-describedby') as string;
 
     if (!this.tooltip) {
-      this.tooltip = this.createTooltip(target, dataList);
+      this.tooltip = this.createTooltip(dataList);
     } else {
-      this.shouldUseTarget() && this.tooltip.option('target', target);
+      if (this.isDesktop()) {
+        this.tooltip.option('target', this.$target);
+      }
+
       this.list.option('dataSource', dataList);
     }
 
     this.prepareBeforeVisibleChanged(dataList);
     this.tooltip.option('visible', true);
 
-    describedByValue && target.attr('aria-describedby', describedByValue);
+    describedByValue && this.$target?.attr('aria-describedby', describedByValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -113,12 +123,12 @@ export class TooltipStrategyBase {
     };
   }
 
-  isShownForTarget(target: dxElementWrapper): boolean {
-    if (this.tooltip?.option('visible')) {
-      return this.tooltip?.option('target')[0] === target[0];
+  isShownForTarget($target: dxElementWrapper): boolean {
+    if (!this.tooltip?.option('visible')) {
+      return false;
     }
 
-    return false;
+    return $target.get(0) === this.$target?.get(0);
   }
 
   protected onShown() {
@@ -134,12 +144,12 @@ export class TooltipStrategyBase {
     }
   }
 
-  protected shouldUseTarget() {
+  public isDesktop(): boolean {
     return true;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected createTooltip(target, dataList) {
+  protected createTooltip(dataList) {
   }
 
   protected createListOption(dataList) {

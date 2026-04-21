@@ -3,7 +3,10 @@ import $ from '@js/core/renderer';
 import type dxTooltip from '@js/ui/tooltip';
 import { within } from '@testing-library/dom';
 
-const TOOLTIP_WRAPPER_SELECTOR = '.dx-overlay-wrapper.dx-scheduler-appointment-tooltip-wrapper';
+const TOOLTIP_WRAPPER_SELECTOR = `
+  .dx-overlay-wrapper.dx-scheduler-overlay-panel,
+  .dx-overlay-wrapper.dx-scheduler-appointment-tooltip-wrapper
+`;
 
 export class TooltipModel {
   get element(): HTMLElement | null {
@@ -22,10 +25,6 @@ export class TooltipModel {
 
   isVisible(): boolean {
     return this.element !== null;
-  }
-
-  getOverlayContent(): HTMLElement | null {
-    return this.element?.querySelector('.dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content') ?? null;
   }
 
   getScrollableContent(): Element | null {
@@ -50,11 +49,17 @@ export class TooltipModel {
     return buttons[index];
   }
 
+  getAppointmentItems(): HTMLElement[] {
+    return this.element ? within(this.element).queryAllByRole('option') : [];
+  }
+
   getAppointmentItem(index = 0): HTMLElement | null {
-    const tooltip = this.element;
-    if (!tooltip) {
-      return null;
+    const items = this.getAppointmentItems();
+
+    if (items.length <= index) {
+      throw new Error('Tooltip appointment item not found');
     }
-    return within(tooltip).queryAllByRole('option')[index] ?? null;
+
+    return items[index];
   }
 }
