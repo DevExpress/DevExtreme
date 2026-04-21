@@ -32,7 +32,7 @@ export class TooltipStrategyBase {
 
   protected list: any;
 
-  private $target: dxElementWrapper | null = null;
+  protected $target: dxElementWrapper | null = null;
 
   constructor(options) {
     this.tooltip = null;
