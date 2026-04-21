@@ -1,7 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
-import defaultDateNames from '@js/common/core/localization/default_date_names';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
@@ -125,7 +124,6 @@ class DateBoxMask extends DateBoxBase {
     const delta = currentValue - originalValue;
 
     this._loadMaskValue(this._initialMaskValue);
-
     this._changePartValue(delta + step, true);
   }
 
@@ -142,12 +140,12 @@ class DateBoxMask extends DateBoxBase {
 
   _toggleAmPm(): void {
     const currentValue = this._getActivePartProp('text');
-    const indexOfCurrentValue = defaultDateNames
-    // @ts-expect-error getPeriodNames type should be fixed
-      .getPeriodNames(this._formatPattern)
-      .indexOf(currentValue);
+    const periodNames = dateLocalization.getPeriodNames(this._formatPattern);
+    const indexOfCurrentValue = periodNames.indexOf(currentValue);
+
     // eslint-disable-next-line no-bitwise
     const newValue = indexOfCurrentValue ^ 1;
+
     this._setActivePartValue(newValue);
   }
 
@@ -543,8 +541,11 @@ class DateBoxMask extends DateBoxBase {
   _getActivePartValue(dateValue?: Date | null): number {
     const date = dateValue ?? this._maskValue as Date;
     const getter = this._getActivePartProp('getter');
+    const isGetterFunction = isFunction(getter);
 
-    return isFunction(getter) ? getter(date) : date[getter]() as number;
+    const activePartValue = isGetterFunction ? getter(date) : date[getter]() as number;
+
+    return activePartValue;
   }
 
   _addLeadingZeroes(value: number): string {
@@ -557,6 +558,7 @@ class DateBoxMask extends DateBoxBase {
 
   _setActivePartValue(value: number | string, dateValue?: Date): void {
     let newValue: number | string = +value;
+
     const newDateValue = dateValue ?? this._maskValue as Date;
     const setter = this._getActivePartProp('setter');
     const limits = this._getActivePartLimits();
@@ -569,8 +571,8 @@ class DateBoxMask extends DateBoxBase {
     } else {
       newDateValue[setter](newValue);
     }
-    this._renderDisplayText(this._getDisplayedText(newDateValue));
 
+    this._renderDisplayText(this._getDisplayedText(newDateValue));
     this._renderDateParts();
   }
 
