@@ -185,7 +185,7 @@ class DateBoxMask extends DateBoxBase {
     alt?: boolean;
   }): boolean {
     const data = e.originalEvent?.data;
-    return data?.length === 1 && Boolean(parseInt(data, 10));
+    return data?.length === 1 && !isNaN(parseInt(data, 10));
   }
 
   _useBeforeInputEvent(): boolean {
@@ -212,8 +212,9 @@ class DateBoxMask extends DateBoxBase {
       return result;
     }
 
-    if (browser.chrome && e.key === 'Process' && e.code.startsWith('Digit')) {
-      key = e.code.replace('Digit', '');
+    const numPadDigitMatch = /^Numpad(\d)$/.exec(e.code);
+    if (browser.chrome && e.key === 'Process' && (e.code.startsWith('Digit') || numPadDigitMatch)) {
+      key = numPadDigitMatch ? numPadDigitMatch[1] : e.code.replace('Digit', '');
       this._processInputKey(key);
       this._maskInputHandler = (): void => {
         this._renderSelectedPart();
@@ -258,7 +259,7 @@ class DateBoxMask extends DateBoxBase {
 
   _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
-    if (event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e)) {
+    if (event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e) && !this._maskInputHandler) {
       this._processInputKey(event.data ?? '');
       this._renderDisplayText(this._getDisplayedText(this._maskValue));
       this._selectNextPart();

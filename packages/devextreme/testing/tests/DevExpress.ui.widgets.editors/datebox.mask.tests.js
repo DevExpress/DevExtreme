@@ -1239,6 +1239,38 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), '5555/05/05', 'year was changed');
     });
 
+    test('Typing a digital IME composition via Numpad keys should not ignore mask rules (T1326628)', function(assert) {
+        this.instance.option('displayFormat', 'yyyy/MM/dd');
+
+        this.keyboard.caret({ start: 0, end: 4 });
+
+        const eventsData = {
+            keyDownCode: 'Numpad5',
+            inputData: '5',
+        };
+
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+
+        assert.strictEqual(this.$input.val(), '5555/05/05', 'year was changed when using Numpad IME');
+    });
+
+    test('Typing zero via Numpad IME composition should be registered (T1326628)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2012, 8, 5),
+        });
+
+        simulateIMEInput.call(this, { keyDownCode: 'Numpad1', inputData: '1' });
+        simulateIMEInput.call(this, { keyDownCode: 'Numpad0', inputData: '0' });
+
+        assert.strictEqual(this.$input.val(), '10/05/2012', 'month is correctly set to 10 after typing "1" then "0" via Numpad IME');
+    });
+
 
     test('Pasting incorrect value to the date part should not ignore mask rules', function(assert) {
         this.instance.option('displayFormat', 'yyyy/MM/dd');
