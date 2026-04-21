@@ -9,11 +9,14 @@ import { SmartPasteCommand } from '@ts/core/ai_integration/commands/smartPaste';
 import { SummarizeCommand } from '@ts/core/ai_integration/commands/summarize';
 import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
 
+import { ExecuteGridAssistantCommand } from './executeGridAssistant';
+
 export {
   BaseCommand,
   ChangeStyleCommand,
   ChangeToneCommand,
   ExecuteCommand,
+  ExecuteGridAssistantCommand,
   ExpandCommand,
   ProofreadCommand,
   ShortenCommand,

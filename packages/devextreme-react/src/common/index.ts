@@ -94,6 +94,7 @@ export namespace AiIntegration {
     export type AIIntegrationOptions = AiIntegrationModule.AIIntegrationOptions;
     export type AIProvider = AiIntegrationModule.AIProvider;
     export type AIResponse = AiIntegrationModule.AIResponse;
+    export type ExecuteGridAssistantCommandResponse = AiIntegrationModule.ExecuteGridAssistantCommandResponse;
     export type GenerateGridColumnCommandResponse = AiIntegrationModule.GenerateGridColumnCommandResponse;
     export type Prompt = AiIntegrationModule.Prompt;
     export type RequestParams = AiIntegrationModule.RequestParams;

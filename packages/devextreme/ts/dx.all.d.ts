@@ -907,6 +907,10 @@ declare module DevExpress.aiIntegration {
       params: GenerateGridColumnCommandParams,
       callbacks: RequestCallbacks<GenerateGridColumnCommandResult>
     ): () => void;
+    executeGridAssistant(
+      params: ExecuteGridAssistantCommandParams,
+      callbacks: RequestCallbacks<ExecuteGridAssistantCommandResult>
+    ): () => void;
   }
   /**
    * [descr:AIIntegrationOptions]
@@ -962,6 +966,39 @@ declare module DevExpress.aiIntegration {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type ExecuteCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteGridAssistantAction = {
+    name: string;
+    args: Record<string, unknown>;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteGridAssistantCommandParams = {
+    text: string;
+    context: Record<string, unknown>;
+    responseSchema: Record<string, unknown>;
+    additionalInfo?: Record<PropertyKey, unknown>;
+  };
+  /**
+   * [descr:ExecuteGridAssistantCommandResponse]
+   */
+  export type ExecuteGridAssistantCommandResponse =
+    | string
+    | {
+        /**
+         * [descr:ExecuteGridAssistantCommandResponse.actions]
+         */
+        actions: ExecuteGridAssistantAction[] | string;
+      };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteGridAssistantCommandResult = {
+    actions: ExecuteGridAssistantAction[];
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
