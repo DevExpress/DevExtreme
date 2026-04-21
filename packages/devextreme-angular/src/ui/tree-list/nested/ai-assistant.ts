@@ -15,7 +15,6 @@ import {
 
 
 import type { AIIntegration } from 'devextreme/common/ai-integration';
-import type { dxChatOptions } from 'devextreme/ui/chat';
 import type { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
@@ -42,10 +41,10 @@ export class DxoTreeListAIAssistantComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get chat(): dxChatOptions {
+    get chat(): Record<string, any> {
         return this._getOption('chat');
     }
-    set chat(value: dxChatOptions) {
+    set chat(value: Record<string, any>) {
         this._setOption('chat', value);
     }
 

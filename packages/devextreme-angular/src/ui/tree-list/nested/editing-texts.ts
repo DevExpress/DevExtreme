@@ -23,19 +23,27 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-data-grid-data-grid-editing-texts',
+    selector: 'dxo-tree-list-editing-texts',
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDataGridDataGridEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get addRow(): string {
         return this._getOption('addRow');
     }
     set addRow(value: string) {
         this._setOption('addRow', value);
+    }
+
+    @Input()
+    get addRowToNode(): string {
+        return this._getOption('addRowToNode');
+    }
+    set addRowToNode(value: string) {
+        this._setOption('addRowToNode', value);
     }
 
     @Input()
@@ -145,10 +153,10 @@ export class DxoDataGridDataGridEditingTextsComponent extends NestedOption imple
 
 @NgModule({
   imports: [
-    DxoDataGridDataGridEditingTextsComponent
+    DxoTreeListEditingTextsComponent
   ],
   exports: [
-    DxoDataGridDataGridEditingTextsComponent
+    DxoTreeListEditingTextsComponent
   ],
 })
-export class DxoDataGridDataGridEditingTextsModule { }
+export class DxoTreeListEditingTextsModule { }

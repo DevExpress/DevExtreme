@@ -13,20 +13,16 @@ import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, AIAssistantRequ
 import type { DataChange, AIColumnMode, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, HeaderFilterSearchConfig, HeaderFilterTexts, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, KeyDownEvent as TextBoxKeyDownEvent, dxTextBoxOptions, OptionChangedEvent as TextBoxOptionChangedEvent, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
-import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, OptionChangedEvent as FileUploaderOptionChangedEvent, dxFileUploaderOptions, ValueChangedEvent as FileUploaderValueChangedEvent, BeforeSendEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, ValueChangedEvent as FilterBuilderValueChangedEvent, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, FormItemType, FormPredefinedButtonItem, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
-import type { ContentReadyEvent as SpeechToTextContentReadyEvent, DisposingEvent as SpeechToTextDisposingEvent, InitializedEvent as SpeechToTextInitializedEvent, OptionChangedEvent as SpeechToTextOptionChangedEvent, dxSpeechToTextOptions, CustomSpeechRecognizer as SpeechToTextCustomSpeechRecognizer, EndEvent, ErrorEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig as SpeechToTextSpeechRecognitionConfig } from "devextreme/ui/speech_to_text";
-import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupOptions, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
-import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, ItemClickEvent as TabPanelItemClickEvent, SelectionChangedEvent as TabPanelSelectionChangedEvent, dxTabPanelItem, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
-import type { DisposingEvent as ChatDisposingEvent, InitializedEvent as ChatInitializedEvent, dxChatOptions, OptionChangedEvent as ChatOptionChangedEvent, Alert as ChatAlert, Message, AttachmentDownloadClickEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, User as ChatUser, Attachment as ChatAttachment, SendButtonAction, SendButtonClickEvent } from "devextreme/ui/chat";
+import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, TextEditorButtonLocation, ButtonStyle, ButtonType, Format as CommonFormat, DataType, SortOrder, SearchMode, ComparisonOperator, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone, TabsIconPosition, TabsStyle } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, TextEditorButtonLocation, ButtonStyle, ButtonType, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone, TabsIconPosition, TabsStyle } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
@@ -35,15 +31,13 @@ import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collectio
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { LoadPanelIndicatorProperties } from "devextreme/ui/load_panel";
 
-import type DataSource from "devextreme/data/data_source";
-import type dxChat from "devextreme/ui/chat";
-import type UploadInfo from "devextreme/file_management/upload_info";
 import type dxOverlay from "devextreme/ui/overlay";
 import type DOMComponent from "devextreme/core/dom_component";
 import type dxPopup from "devextreme/ui/popup";
 import type dxForm from "devextreme/ui/form";
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
+import type DataSource from "devextreme/data/data_source";
 
 import type * as CommonTypes from "devextreme/common";
 
@@ -131,7 +125,7 @@ const TreeList = memo(
         }
       ), []);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","aIAssistant.chat.items","chat.editing.changes","chat.editing.editColumnName","chat.editing.editRowKey","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","treeListEditing.form.formData","treeListEditing.popup.height","aIAssistant.popup.height","treeListEditing.popup.position","aIAssistant.popup.position","treeListEditing.popup.visible","aIAssistant.popup.visible","treeListEditing.popup.width","aIAssistant.popup.width","searchPanel.text","chat.suggestions.selectedItemKeys","chat.suggestions.selectedItems"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","editing.popup.height","aIAssistant.popup.height","editing.popup.position","aIAssistant.popup.position","editing.popup.visible","aIAssistant.popup.visible","editing.popup.width","aIAssistant.popup.width","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onAIAssistantRequestCreating","onAIColumnRequestCreating","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onNodesInitialized","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
@@ -169,7 +163,6 @@ const TreeList = memo(
         sorting: { optionName: "sorting", isCollectionItem: false },
         stateStoring: { optionName: "stateStoring", isCollectionItem: false },
         toolbar: { optionName: "toolbar", isCollectionItem: false },
-        treeListEditing: { optionName: "editing", isCollectionItem: false },
         treeListHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
         treeListSelection: { optionName: "selection", isCollectionItem: false }
       }), []);
@@ -222,7 +215,7 @@ const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI,
 // TreeList
 type IAIAssistantProps = React.PropsWithChildren<{
   aiIntegration?: AIIntegration;
-  chat?: dxChatOptions;
+  chat?: Record<string, any>;
   enabled?: boolean;
   popup?: dxPopupOptions<any>;
   title?: string;
@@ -233,7 +226,6 @@ const _componentAIAssistant = (props: IAIAssistantProps) => {
     elementDescriptor: {
       OptionName: "aiAssistant",
       ExpectedChildren: {
-        chat: { optionName: "chat", isCollectionItem: false },
         popup: { optionName: "popup", isCollectionItem: false }
       },
     },
@@ -261,26 +253,6 @@ const _componentAIOptions = (props: IAIOptionsProps) => {
 };
 
 const AIOptions = Object.assign<typeof _componentAIOptions, NestedComponentMeta>(_componentAIOptions, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IAlertProps = React.PropsWithChildren<{
-  id?: number | string;
-  message?: string;
-}>
-const _componentAlert = (props: IAlertProps) => {
-  return React.createElement(NestedOption<IAlertProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "alerts",
-      IsCollectionItem: true,
-    },
-  });
-};
-
-const Alert = Object.assign<typeof _componentAlert, NestedComponentMeta>(_componentAlert, {
   componentType: "option",
 });
 
@@ -352,47 +324,6 @@ const _componentAt = (props: IAtProps) => {
 };
 
 const At = Object.assign<typeof _componentAt, NestedComponentMeta>(_componentAt, {
-  componentType: "option",
-});
-
-// owners:
-// ChatItem
-type IAttachmentProps = React.PropsWithChildren<{
-  name?: string;
-  size?: number;
-}>
-const _componentAttachment = (props: IAttachmentProps) => {
-  return React.createElement(NestedOption<IAttachmentProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "attachments",
-      IsCollectionItem: true,
-    },
-  });
-};
-
-const Attachment = Object.assign<typeof _componentAttachment, NestedComponentMeta>(_componentAttachment, {
-  componentType: "option",
-});
-
-// owners:
-// ChatItem
-type IAuthorProps = React.PropsWithChildren<{
-  avatarAlt?: string;
-  avatarUrl?: string;
-  id?: number | string;
-  name?: string;
-}>
-const _componentAuthor = (props: IAuthorProps) => {
-  return React.createElement(NestedOption<IAuthorProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "author",
-    },
-  });
-};
-
-const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_componentAuthor, {
   componentType: "option",
 });
 
@@ -537,7 +468,7 @@ const ButtonOptions = Object.assign<typeof _componentButtonOptions, NestedCompon
 });
 
 // owners:
-// TreeListEditing
+// Editing
 type IChangeProps = React.PropsWithChildren<{
   data?: any;
   insertAfterKey?: any;
@@ -556,156 +487,6 @@ const _componentChange = (props: IChangeProps) => {
 };
 
 const Change = Object.assign<typeof _componentChange, NestedComponentMeta>(_componentChange, {
-  componentType: "option",
-});
-
-// owners:
-// AIAssistant
-type IChatProps = React.PropsWithChildren<{
-  accessKey?: string | undefined;
-  activeStateEnabled?: boolean;
-  alerts?: Array<ChatAlert>;
-  dataSource?: Array<Message> | DataSource | DataSourceOptions | null | Store | string;
-  dayHeaderFormat?: LocalizationFormat;
-  disabled?: boolean;
-  editing?: Record<string, any> | {
-    allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean);
-    allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean);
-  };
-  elementAttr?: Record<string, any>;
-  emptyViewTemplate?: ((data: { component: dxChat, texts: Record<string, any> }, itemElement: any) => string | any) | null | template;
-  fileUploaderOptions?: dxFileUploaderOptions;
-  focusStateEnabled?: boolean;
-  height?: number | string | undefined;
-  hint?: string | undefined;
-  hoverStateEnabled?: boolean;
-  inputFieldText?: string | undefined;
-  items?: Array<Message>;
-  messageTemplate?: ((data: { component: dxChat, message: Message }, messageBubbleElement: any) => string | any) | null | template;
-  messageTimestampFormat?: LocalizationFormat;
-  onAttachmentDownloadClick?: ((e: AttachmentDownloadClickEvent) => void) | undefined;
-  onDisposing?: ((e: ChatDisposingEvent) => void);
-  onInitialized?: ((e: ChatInitializedEvent) => void);
-  onInputFieldTextChanged?: ((e: InputFieldTextChangedEvent) => void) | undefined;
-  onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
-  onMessageDeleting?: ((e: MessageDeletingEvent) => void) | undefined;
-  onMessageEditCanceled?: ((e: MessageEditCanceledEvent) => void) | undefined;
-  onMessageEditingStart?: ((e: MessageEditingStartEvent) => void) | undefined;
-  onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
-  onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
-  onMessageUpdating?: ((e: MessageUpdatingEvent) => void) | undefined;
-  onOptionChanged?: ((e: ChatOptionChangedEvent) => void);
-  onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
-  onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
-  reloadOnChange?: boolean;
-  rtlEnabled?: boolean;
-  sendButtonOptions?: SendButtonProperties;
-  showAvatar?: boolean;
-  showDayHeaders?: boolean;
-  showMessageTimestamp?: boolean;
-  showUserName?: boolean;
-  speechToTextEnabled?: boolean;
-  speechToTextOptions?: dxSpeechToTextOptions;
-  suggestions?: dxButtonGroupOptions;
-  typingUsers?: Array<ChatUser>;
-  user?: ChatUser;
-  visible?: boolean;
-  width?: number | string | undefined;
-  defaultItems?: Array<Message>;
-  onItemsChange?: (value: Array<Message>) => void;
-  emptyViewRender?: (...params: any) => React.ReactNode;
-  emptyViewComponent?: React.ComponentType<any>;
-  messageRender?: (...params: any) => React.ReactNode;
-  messageComponent?: React.ComponentType<any>;
-}>
-const _componentChat = (props: IChatProps) => {
-  return React.createElement(NestedOption<IChatProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "chat",
-      DefaultsProps: {
-        defaultItems: "items"
-      },
-      ExpectedChildren: {
-        alert: { optionName: "alerts", isCollectionItem: true },
-        chatEditing: { optionName: "editing", isCollectionItem: false },
-        chatItem: { optionName: "items", isCollectionItem: true },
-        dayHeaderFormat: { optionName: "dayHeaderFormat", isCollectionItem: false },
-        editing: { optionName: "editing", isCollectionItem: false },
-        fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
-        item: { optionName: "items", isCollectionItem: true },
-        messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
-        sendButtonOptions: { optionName: "sendButtonOptions", isCollectionItem: false },
-        speechToTextOptions: { optionName: "speechToTextOptions", isCollectionItem: false },
-        suggestions: { optionName: "suggestions", isCollectionItem: false },
-        typingUser: { optionName: "typingUsers", isCollectionItem: true },
-        user: { optionName: "user", isCollectionItem: false }
-      },
-      TemplateProps: [{
-        tmplOption: "emptyViewTemplate",
-        render: "emptyViewRender",
-        component: "emptyViewComponent"
-      }, {
-        tmplOption: "messageTemplate",
-        render: "messageRender",
-        component: "messageComponent"
-      }],
-    },
-  });
-};
-
-const Chat = Object.assign<typeof _componentChat, NestedComponentMeta>(_componentChat, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IChatEditingProps = React.PropsWithChildren<{
-  allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean);
-  allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean);
-}>
-const _componentChatEditing = (props: IChatEditingProps) => {
-  return React.createElement(NestedOption<IChatEditingProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "editing",
-    },
-  });
-};
-
-const ChatEditing = Object.assign<typeof _componentChatEditing, NestedComponentMeta>(_componentChatEditing, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IChatItemProps = React.PropsWithChildren<{
-  alt?: string;
-  attachments?: Array<ChatAttachment>;
-  author?: ChatUser;
-  id?: number | string;
-  isDeleted?: boolean;
-  isEdited?: boolean;
-  src?: string;
-  text?: string;
-  timestamp?: Date | number | string;
-  type?: string | undefined;
-}>
-const _componentChatItem = (props: IChatItemProps) => {
-  return React.createElement(NestedOption<IChatItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        attachment: { optionName: "attachments", isCollectionItem: true },
-        author: { optionName: "author", isCollectionItem: false }
-      },
-    },
-  });
-};
-
-const ChatItem = Object.assign<typeof _componentChatItem, NestedComponentMeta>(_componentChatItem, {
   componentType: "option",
 });
 
@@ -1247,50 +1028,7 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 });
 
 // owners:
-// SpeechToTextOptions
-type ICustomSpeechRecognizerProps = React.PropsWithChildren<{
-  enabled?: boolean;
-  isListening?: boolean;
-}>
-const _componentCustomSpeechRecognizer = (props: ICustomSpeechRecognizerProps) => {
-  return React.createElement(NestedOption<ICustomSpeechRecognizerProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "customSpeechRecognizer",
-    },
-  });
-};
-
-const CustomSpeechRecognizer = Object.assign<typeof _componentCustomSpeechRecognizer, NestedComponentMeta>(_componentCustomSpeechRecognizer, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IDayHeaderFormatProps = React.PropsWithChildren<{
-  currency?: string;
-  formatter?: ((value: number | Date) => string);
-  parser?: ((value: string) => number | Date);
-  precision?: number;
-  type?: CommonFormat | string;
-  useCurrencyAccountingStyle?: boolean;
-}>
-const _componentDayHeaderFormat = (props: IDayHeaderFormatProps) => {
-  return React.createElement(NestedOption<IDayHeaderFormatProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "dayHeaderFormat",
-    },
-  });
-};
-
-const DayHeaderFormat = Object.assign<typeof _componentDayHeaderFormat, NestedComponentMeta>(_componentDayHeaderFormat, {
-  componentType: "option",
-});
-
-// owners:
 // TreeList
-// Chat
 type IEditingProps = React.PropsWithChildren<{
   allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
   allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
@@ -1339,15 +1077,45 @@ const _componentEditing = (props: IEditingProps) => {
       },
       ExpectedChildren: {
         change: { optionName: "changes", isCollectionItem: true },
+        editingTexts: { optionName: "texts", isCollectionItem: false },
         form: { optionName: "form", isCollectionItem: false },
         popup: { optionName: "popup", isCollectionItem: false },
-        treeListEditingTexts: { optionName: "texts", isCollectionItem: false }
+        texts: { optionName: "texts", isCollectionItem: false }
       },
     },
   });
 };
 
 const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
+
+// owners:
+// Editing
+type IEditingTextsProps = React.PropsWithChildren<{
+  addRow?: string;
+  addRowToNode?: string;
+  cancelAllChanges?: string;
+  cancelRowChanges?: string;
+  confirmDeleteMessage?: string;
+  confirmDeleteTitle?: string;
+  deleteRow?: string;
+  editRow?: string;
+  saveAllChanges?: string;
+  saveRowChanges?: string;
+  undeleteRow?: string;
+  validationCancelChanges?: string;
+}>
+const _componentEditingTexts = (props: IEditingTextsProps) => {
+  return React.createElement(NestedOption<IEditingTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponentMeta>(_componentEditingTexts, {
   componentType: "option",
 });
 
@@ -1575,92 +1343,6 @@ const _componentFieldLookup = (props: IFieldLookupProps) => {
 };
 
 const FieldLookup = Object.assign<typeof _componentFieldLookup, NestedComponentMeta>(_componentFieldLookup, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IFileUploaderOptionsProps = React.PropsWithChildren<{
-  abortUpload?: ((file: any, uploadInfo?: UploadInfo) => any);
-  accept?: string;
-  accessKey?: string | undefined;
-  activeStateEnabled?: boolean;
-  allowCanceling?: boolean;
-  allowedFileExtensions?: Array<string>;
-  chunkSize?: number;
-  dialogTrigger?: any | string | undefined;
-  disabled?: boolean;
-  dropZone?: any | string | undefined;
-  elementAttr?: Record<string, any>;
-  focusStateEnabled?: boolean;
-  height?: number | string | undefined;
-  hint?: string | undefined;
-  hoverStateEnabled?: boolean;
-  inputAttr?: any;
-  invalidFileExtensionMessage?: string;
-  invalidMaxFileSizeMessage?: string;
-  invalidMinFileSizeMessage?: string;
-  isDirty?: boolean;
-  isValid?: boolean;
-  labelText?: string;
-  maxFileSize?: number;
-  minFileSize?: number;
-  multiple?: boolean;
-  name?: string;
-  onBeforeSend?: ((e: BeforeSendEvent) => void);
-  onContentReady?: ((e: FileUploaderContentReadyEvent) => void);
-  onDisposing?: ((e: FileUploaderDisposingEvent) => void);
-  onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
-  onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
-  onFilesUploaded?: ((e: FilesUploadedEvent) => void);
-  onInitialized?: ((e: FileUploaderInitializedEvent) => void);
-  onOptionChanged?: ((e: FileUploaderOptionChangedEvent) => void);
-  onProgress?: ((e: ProgressEvent) => void);
-  onUploadAborted?: ((e: UploadAbortedEvent) => void);
-  onUploaded?: ((e: UploadedEvent) => void);
-  onUploadError?: ((e: UploadErrorEvent) => void);
-  onUploadStarted?: ((e: UploadStartedEvent) => void);
-  onValueChanged?: ((e: FileUploaderValueChangedEvent) => void);
-  progress?: number;
-  readOnly?: boolean;
-  readyToUploadMessage?: string;
-  rtlEnabled?: boolean;
-  selectButtonText?: string;
-  showFileList?: boolean;
-  tabIndex?: number;
-  uploadAbortedMessage?: string;
-  uploadButtonText?: string;
-  uploadChunk?: ((file: any, uploadInfo: UploadInfo) => any);
-  uploadCustomData?: any;
-  uploadedMessage?: string;
-  uploadFailedMessage?: string;
-  uploadFile?: ((file: any, progressCallback: (() => void)) => any);
-  uploadHeaders?: any;
-  uploadMethod?: UploadHttpMethod;
-  uploadMode?: FileUploadMode;
-  uploadUrl?: string;
-  validationError?: any;
-  validationErrors?: Array<any>;
-  validationStatus?: ValidationStatus;
-  value?: Array<any>;
-  visible?: boolean;
-  width?: number | string | undefined;
-  defaultValue?: Array<any>;
-  onValueChange?: (value: Array<any>) => void;
-}>
-const _componentFileUploaderOptions = (props: IFileUploaderOptionsProps) => {
-  return React.createElement(NestedOption<IFileUploaderOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "fileUploaderOptions",
-      DefaultsProps: {
-        defaultValue: "value"
-      },
-    },
-  });
-};
-
-const FileUploaderOptions = Object.assign<typeof _componentFileUploaderOptions, NestedComponentMeta>(_componentFileUploaderOptions, {
   componentType: "option",
 });
 
@@ -1961,7 +1643,7 @@ const FilterRow = Object.assign<typeof _componentFilterRow, NestedComponentMeta>
 });
 
 // owners:
-// TreeListEditing
+// Editing
 type IFormProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
@@ -2340,8 +2022,6 @@ const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, Nested
 // TabPanelOptions
 // Form
 // Toolbar
-// Chat
-// Suggestions
 type IItemProps = React.PropsWithChildren<{
   badge?: string;
   disabled?: boolean;
@@ -2413,17 +2093,6 @@ type IItemProps = React.PropsWithChildren<{
   options?: any;
   showText?: ShowTextMode;
   widget?: ToolbarItemComponent;
-  alt?: string;
-  attachments?: Array<ChatAttachment>;
-  author?: ChatUser;
-  id?: number | string;
-  isDeleted?: boolean;
-  isEdited?: boolean;
-  src?: string;
-  timestamp?: Date | number | string;
-  type?: string | undefined | ButtonType;
-  elementAttr?: Record<string, any>;
-  hint?: string;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -2442,8 +2111,6 @@ const _componentItem = (props: IItemProps) => {
       ExpectedChildren: {
         aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
-        attachment: { optionName: "attachments", isCollectionItem: true },
-        author: { optionName: "author", isCollectionItem: false },
         buttonOptions: { optionName: "buttonOptions", isCollectionItem: false },
         colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
@@ -2586,29 +2253,6 @@ const _componentLookup = (props: ILookupProps) => {
 };
 
 const Lookup = Object.assign<typeof _componentLookup, NestedComponentMeta>(_componentLookup, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IMessageTimestampFormatProps = React.PropsWithChildren<{
-  currency?: string;
-  formatter?: ((value: number | Date) => string);
-  parser?: ((value: string) => number | Date);
-  precision?: number;
-  type?: CommonFormat | string;
-  useCurrencyAccountingStyle?: boolean;
-}>
-const _componentMessageTimestampFormat = (props: IMessageTimestampFormatProps) => {
-  return React.createElement(NestedOption<IMessageTimestampFormatProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "messageTimestampFormat",
-    },
-  });
-};
-
-const MessageTimestampFormat = Object.assign<typeof _componentMessageTimestampFormat, NestedComponentMeta>(_componentMessageTimestampFormat, {
   componentType: "option",
 });
 
@@ -2833,7 +2477,7 @@ const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentM
 });
 
 // owners:
-// TreeListEditing
+// Editing
 // AIAssistant
 type IPopupProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
@@ -3214,26 +2858,6 @@ const Selection = Object.assign<typeof _componentSelection, NestedComponentMeta>
 });
 
 // owners:
-// Chat
-type ISendButtonOptionsProps = React.PropsWithChildren<{
-  action?: SendButtonAction;
-  icon?: string;
-  onClick?: ((e: SendButtonClickEvent) => void);
-}>
-const _componentSendButtonOptions = (props: ISendButtonOptionsProps) => {
-  return React.createElement(NestedOption<ISendButtonOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "sendButtonOptions",
-    },
-  });
-};
-
-const SendButtonOptions = Object.assign<typeof _componentSendButtonOptions, NestedComponentMeta>(_componentSendButtonOptions, {
-  componentType: "option",
-});
-
-// owners:
 // Animation
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
@@ -3354,78 +2978,6 @@ const Sorting = Object.assign<typeof _componentSorting, NestedComponentMeta>(_co
 });
 
 // owners:
-// SpeechToTextOptions
-type ISpeechRecognitionConfigProps = React.PropsWithChildren<{
-  continuous?: boolean;
-  grammars?: Array<string>;
-  interimResults?: boolean;
-  lang?: string;
-  maxAlternatives?: number;
-}>
-const _componentSpeechRecognitionConfig = (props: ISpeechRecognitionConfigProps) => {
-  return React.createElement(NestedOption<ISpeechRecognitionConfigProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "speechRecognitionConfig",
-    },
-  });
-};
-
-const SpeechRecognitionConfig = Object.assign<typeof _componentSpeechRecognitionConfig, NestedComponentMeta>(_componentSpeechRecognitionConfig, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type ISpeechToTextOptionsProps = React.PropsWithChildren<{
-  accessKey?: string | undefined;
-  activeStateEnabled?: boolean;
-  customSpeechRecognizer?: SpeechToTextCustomSpeechRecognizer;
-  disabled?: boolean;
-  elementAttr?: Record<string, any>;
-  focusStateEnabled?: boolean;
-  height?: number | string | undefined;
-  hint?: string | undefined;
-  hoverStateEnabled?: boolean;
-  onContentReady?: ((e: SpeechToTextContentReadyEvent) => void);
-  onDisposing?: ((e: SpeechToTextDisposingEvent) => void);
-  onEnd?: ((e: EndEvent) => void) | undefined;
-  onError?: ((e: ErrorEvent) => void) | undefined;
-  onInitialized?: ((e: SpeechToTextInitializedEvent) => void);
-  onOptionChanged?: ((e: SpeechToTextOptionChangedEvent) => void);
-  onResult?: ((e: ResultEvent) => void) | undefined;
-  onStartClick?: ((e: StartClickEvent) => void) | undefined;
-  onStopClick?: ((e: StopClickEvent) => void) | undefined;
-  rtlEnabled?: boolean;
-  speechRecognitionConfig?: Record<string, any> | SpeechToTextSpeechRecognitionConfig;
-  startIcon?: string;
-  startText?: string;
-  stopIcon?: string;
-  stopText?: string;
-  stylingMode?: ButtonStyle;
-  tabIndex?: number;
-  type?: ButtonType | string;
-  visible?: boolean;
-  width?: number | string | undefined;
-}>
-const _componentSpeechToTextOptions = (props: ISpeechToTextOptionsProps) => {
-  return React.createElement(NestedOption<ISpeechToTextOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "speechToTextOptions",
-      ExpectedChildren: {
-        customSpeechRecognizer: { optionName: "customSpeechRecognizer", isCollectionItem: false },
-        speechRecognitionConfig: { optionName: "speechRecognitionConfig", isCollectionItem: false }
-      },
-    },
-  });
-};
-
-const SpeechToTextOptions = Object.assign<typeof _componentSpeechToTextOptions, NestedComponentMeta>(_componentSpeechToTextOptions, {
-  componentType: "option",
-});
-
-// owners:
 // TreeList
 type IStateStoringProps = React.PropsWithChildren<{
   customLoad?: (() => any);
@@ -3474,100 +3026,6 @@ const _componentStringLengthRule = (props: IStringLengthRuleProps) => {
 };
 
 const StringLengthRule = Object.assign<typeof _componentStringLengthRule, NestedComponentMeta>(_componentStringLengthRule, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type ISuggestionsProps = React.PropsWithChildren<{
-  accessKey?: string | undefined;
-  activeStateEnabled?: boolean;
-  buttonTemplate?: ((buttonData: any, buttonContent: any) => string | any) | template;
-  disabled?: boolean;
-  elementAttr?: Record<string, any>;
-  focusStateEnabled?: boolean;
-  height?: number | string | undefined;
-  hint?: string | undefined;
-  hoverStateEnabled?: boolean;
-  items?: Array<dxButtonGroupItem>;
-  keyExpr?: (() => void) | string;
-  onContentReady?: ((e: ButtonGroupContentReadyEvent) => void);
-  onDisposing?: ((e: ButtonGroupDisposingEvent) => void);
-  onInitialized?: ((e: ButtonGroupInitializedEvent) => void);
-  onItemClick?: ((e: ItemClickEvent) => void);
-  onOptionChanged?: ((e: ButtonGroupOptionChangedEvent) => void);
-  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-  rtlEnabled?: boolean;
-  selectedItemKeys?: Array<any>;
-  selectedItems?: Array<any>;
-  selectionMode?: SingleMultipleOrNone;
-  stylingMode?: ButtonStyle;
-  tabIndex?: number;
-  visible?: boolean;
-  width?: number | string | undefined;
-  defaultSelectedItemKeys?: Array<any>;
-  onSelectedItemKeysChange?: (value: Array<any>) => void;
-  defaultSelectedItems?: Array<any>;
-  onSelectedItemsChange?: (value: Array<any>) => void;
-  buttonRender?: (...params: any) => React.ReactNode;
-  buttonComponent?: React.ComponentType<any>;
-}>
-const _componentSuggestions = (props: ISuggestionsProps) => {
-  return React.createElement(NestedOption<ISuggestionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "suggestions",
-      DefaultsProps: {
-        defaultSelectedItemKeys: "selectedItemKeys",
-        defaultSelectedItems: "selectedItems"
-      },
-      ExpectedChildren: {
-        item: { optionName: "items", isCollectionItem: true },
-        suggestionsItem: { optionName: "items", isCollectionItem: true }
-      },
-      TemplateProps: [{
-        tmplOption: "buttonTemplate",
-        render: "buttonRender",
-        component: "buttonComponent"
-      }],
-    },
-  });
-};
-
-const Suggestions = Object.assign<typeof _componentSuggestions, NestedComponentMeta>(_componentSuggestions, {
-  componentType: "option",
-});
-
-// owners:
-// Suggestions
-type ISuggestionsItemProps = React.PropsWithChildren<{
-  disabled?: boolean;
-  elementAttr?: Record<string, any>;
-  hint?: string;
-  icon?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
-  text?: string;
-  type?: ButtonType | string;
-  visible?: boolean;
-  render?: (...params: any) => React.ReactNode;
-  component?: React.ComponentType<any>;
-}>
-const _componentSuggestionsItem = (props: ISuggestionsItemProps) => {
-  return React.createElement(NestedOption<ISuggestionsItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
-
-const SuggestionsItem = Object.assign<typeof _componentSuggestionsItem, NestedComponentMeta>(_componentSuggestionsItem, {
   componentType: "option",
 });
 
@@ -3694,12 +3152,12 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onContentReady?: ((e: TabPanelContentReadyEvent) => void);
   onDisposing?: ((e: TabPanelDisposingEvent) => void);
   onInitialized?: ((e: TabPanelInitializedEvent) => void);
-  onItemClick?: ((e: TabPanelItemClickEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void);
   onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
   onItemHold?: ((e: ItemHoldEvent) => void);
   onItemRendered?: ((e: ItemRenderedEvent) => void);
   onOptionChanged?: ((e: TabPanelOptionChangedEvent) => void);
-  onSelectionChanged?: ((e: TabPanelSelectionChangedEvent) => void);
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
   onTitleHold?: ((e: TitleHoldEvent) => void);
@@ -3800,7 +3258,7 @@ const TabPanelOptionsItem = Object.assign<typeof _componentTabPanelOptionsItem, 
 });
 
 // owners:
-// TreeListEditing
+// Editing
 // ColumnFixing
 // FilterPanel
 // TreeListHeaderFilter
@@ -3934,98 +3392,6 @@ const _componentToolbarItem = (props: IToolbarItemProps) => {
 };
 
 const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
-  componentType: "option",
-});
-
-// owners:
-// TreeList
-type ITreeListEditingProps = React.PropsWithChildren<{
-  allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
-  allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
-  allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
-  changes?: Array<DataChange>;
-  confirmDelete?: boolean;
-  editColumnName?: string;
-  editRowKey?: any;
-  form?: dxFormOptions;
-  mode?: GridsEditMode;
-  popup?: dxPopupOptions<any>;
-  refreshMode?: GridsEditRefreshMode;
-  selectTextOnEditStart?: boolean;
-  startEditAction?: StartEditAction;
-  texts?: Record<string, any> | {
-    addRow?: string;
-    addRowToNode?: string;
-    cancelAllChanges?: string;
-    cancelRowChanges?: string;
-    confirmDeleteMessage?: string;
-    confirmDeleteTitle?: string;
-    deleteRow?: string;
-    editRow?: string;
-    saveAllChanges?: string;
-    saveRowChanges?: string;
-    undeleteRow?: string;
-    validationCancelChanges?: string;
-  };
-  useIcons?: boolean;
-  defaultChanges?: Array<DataChange>;
-  onChangesChange?: (value: Array<DataChange>) => void;
-  defaultEditColumnName?: string;
-  onEditColumnNameChange?: (value: string) => void;
-  defaultEditRowKey?: any;
-  onEditRowKeyChange?: (value: any) => void;
-}>
-const _componentTreeListEditing = (props: ITreeListEditingProps) => {
-  return React.createElement(NestedOption<ITreeListEditingProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "editing",
-      DefaultsProps: {
-        defaultChanges: "changes",
-        defaultEditColumnName: "editColumnName",
-        defaultEditRowKey: "editRowKey"
-      },
-      ExpectedChildren: {
-        change: { optionName: "changes", isCollectionItem: true },
-        form: { optionName: "form", isCollectionItem: false },
-        popup: { optionName: "popup", isCollectionItem: false },
-        texts: { optionName: "texts", isCollectionItem: false },
-        treeListEditingTexts: { optionName: "texts", isCollectionItem: false }
-      },
-    },
-  });
-};
-
-const TreeListEditing = Object.assign<typeof _componentTreeListEditing, NestedComponentMeta>(_componentTreeListEditing, {
-  componentType: "option",
-});
-
-// owners:
-// TreeListEditing
-type ITreeListEditingTextsProps = React.PropsWithChildren<{
-  addRow?: string;
-  addRowToNode?: string;
-  cancelAllChanges?: string;
-  cancelRowChanges?: string;
-  confirmDeleteMessage?: string;
-  confirmDeleteTitle?: string;
-  deleteRow?: string;
-  editRow?: string;
-  saveAllChanges?: string;
-  saveRowChanges?: string;
-  undeleteRow?: string;
-  validationCancelChanges?: string;
-}>
-const _componentTreeListEditingTexts = (props: ITreeListEditingTextsProps) => {
-  return React.createElement(NestedOption<ITreeListEditingTextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
-
-const TreeListEditingTexts = Object.assign<typeof _componentTreeListEditingTexts, NestedComponentMeta>(_componentTreeListEditingTexts, {
   componentType: "option",
 });
 
@@ -4166,49 +3532,6 @@ const TreeListToolbarItem = Object.assign<typeof _componentTreeListToolbarItem, 
 });
 
 // owners:
-// Chat
-type ITypingUserProps = React.PropsWithChildren<{
-  avatarAlt?: string;
-  avatarUrl?: string;
-  id?: number | string;
-  name?: string;
-}>
-const _componentTypingUser = (props: ITypingUserProps) => {
-  return React.createElement(NestedOption<ITypingUserProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "typingUsers",
-      IsCollectionItem: true,
-    },
-  });
-};
-
-const TypingUser = Object.assign<typeof _componentTypingUser, NestedComponentMeta>(_componentTypingUser, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IUserProps = React.PropsWithChildren<{
-  avatarAlt?: string;
-  avatarUrl?: string;
-  id?: number | string;
-  name?: string;
-}>
-const _componentUser = (props: IUserProps) => {
-  return React.createElement(NestedOption<IUserProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "user",
-    },
-  });
-};
-
-const User = Object.assign<typeof _componentUser, NestedComponentMeta>(_componentUser, {
-  componentType: "option",
-});
-
-// owners:
 // FormItem
 // Column
 // SimpleItem
@@ -4253,18 +3576,12 @@ export {
   IAIAssistantProps,
   AIOptions,
   IAIOptionsProps,
-  Alert,
-  IAlertProps,
   Animation,
   IAnimationProps,
   AsyncRule,
   IAsyncRuleProps,
   At,
   IAtProps,
-  Attachment,
-  IAttachmentProps,
-  Author,
-  IAuthorProps,
   BoundaryOffset,
   IBoundaryOffsetProps,
   Button,
@@ -4275,12 +3592,6 @@ export {
   IButtonOptionsProps,
   Change,
   IChangeProps,
-  Chat,
-  IChatProps,
-  ChatEditing,
-  IChatEditingProps,
-  ChatItem,
-  IChatItemProps,
   ColCountByScreen,
   IColCountByScreenProps,
   Collision,
@@ -4313,12 +3624,10 @@ export {
   ICustomOperationProps,
   CustomRule,
   ICustomRuleProps,
-  CustomSpeechRecognizer,
-  ICustomSpeechRecognizerProps,
-  DayHeaderFormat,
-  IDayHeaderFormatProps,
   Editing,
   IEditingProps,
+  EditingTexts,
+  IEditingTextsProps,
   EditorOptions,
   IEditorOptionsProps,
   EditorOptionsButton,
@@ -4331,8 +3640,6 @@ export {
   IFieldProps,
   FieldLookup,
   IFieldLookupProps,
-  FileUploaderOptions,
-  IFileUploaderOptionsProps,
   FilterBuilder,
   IFilterBuilderProps,
   FilterBuilderPopup,
@@ -4375,8 +3682,6 @@ export {
   ILoadPanelProps,
   Lookup,
   ILookupProps,
-  MessageTimestampFormat,
-  IMessageTimestampFormatProps,
   My,
   IMyProps,
   NumericRule,
@@ -4413,26 +3718,16 @@ export {
   ISearchPanelProps,
   Selection,
   ISelectionProps,
-  SendButtonOptions,
-  ISendButtonOptionsProps,
   Show,
   IShowProps,
   SimpleItem,
   ISimpleItemProps,
   Sorting,
   ISortingProps,
-  SpeechRecognitionConfig,
-  ISpeechRecognitionConfigProps,
-  SpeechToTextOptions,
-  ISpeechToTextOptionsProps,
   StateStoring,
   IStateStoringProps,
   StringLengthRule,
   IStringLengthRuleProps,
-  Suggestions,
-  ISuggestionsProps,
-  SuggestionsItem,
-  ISuggestionsItemProps,
   Tab,
   ITabProps,
   TabbedItem,
@@ -4449,10 +3744,6 @@ export {
   IToolbarProps,
   ToolbarItem,
   IToolbarItemProps,
-  TreeListEditing,
-  ITreeListEditingProps,
-  TreeListEditingTexts,
-  ITreeListEditingTextsProps,
   TreeListHeaderFilter,
   ITreeListHeaderFilterProps,
   TreeListHeaderFilterSearch,
@@ -4463,10 +3754,6 @@ export {
   ITreeListSelectionProps,
   TreeListToolbarItem,
   ITreeListToolbarItemProps,
-  TypingUser,
-  ITypingUserProps,
-  User,
-  IUserProps,
   ValidationRule,
   IValidationRuleProps
 };
