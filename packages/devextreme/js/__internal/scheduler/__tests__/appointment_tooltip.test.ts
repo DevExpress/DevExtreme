@@ -2,217 +2,461 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import fx from '@js/common/core/animation/fx';
+import $ from '@js/core/renderer';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import type { SchedulerModel } from './__mock__/model/scheduler';
 
-describe('Appointment tooltip behavior', () => {
+const getDataSource = (): object[] => [
+  {
+    text: 'Apt1',
+    startDate: new Date(2017, 4, 21, 9, 30),
+    endDate: new Date(2017, 4, 21, 10, 30),
+  },
+  {
+    text: 'Inside Collector Apt1',
+    startDate: new Date(2017, 4, 21, 9, 30),
+    endDate: new Date(2017, 4, 21, 10, 30),
+  },
+  {
+    text: 'Inside Collector Apt2',
+    startDate: new Date(2017, 4, 21, 9, 30),
+    endDate: new Date(2017, 4, 21, 10, 30),
+  },
+  {
+    text: 'Inside Collector Recurring Apt3',
+    startDate: new Date(2017, 4, 21, 9, 30),
+    endDate: new Date(2017, 4, 21, 10, 30),
+    recurrenceRule: 'FREQ=YEARLY',
+  },
+  {
+    text: 'Inside Collector Apt4',
+    startDate: new Date(2017, 4, 21, 9, 30),
+    endDate: new Date(2017, 4, 21, 10, 30),
+  },
+  {
+    text: 'Recurring Apt2',
+    startDate: new Date(2017, 4, 23, 9, 30),
+    endDate: new Date(2017, 4, 23, 10, 30),
+    recurrenceRule: 'FREQ=YEARLY',
+  },
+];
+
+const pressDeleteKeyOnTooltipItem = (POM: SchedulerModel, itemIndex: number): void => {
+  const scrollableContent = POM.tooltip.getScrollableContent();
+
+  scrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+
+  for (let i = 0; i < itemIndex; i += 1) {
+    scrollableContent?.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+    );
+  }
+
+  scrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
+};
+
+describe('Appointment tooltip', () => {
   beforeEach(() => {
     fx.off = true;
-    setupSchedulerTestEnvironment();
+    setupSchedulerTestEnvironment({
+      classRects: {
+        // Note: set sizes, so navigation in tooltip list would work
+        'dx-list-item': { width: 100, height: 50 },
+      },
+    });
   });
 
   afterEach(() => {
     fx.off = false;
     jest.useRealTimers();
+    const $scheduler = $('.dx-scheduler');
+    // @ts-expect-error
+    $scheduler.dxScheduler('dispose');
     document.body.innerHTML = '';
   });
 
   describe('Deleting appointments', () => {
-    it('should delete appointment by Delete key when focused in tooltip from collector', async () => {
-      const data = [
-        {
-          text: 'Apt1',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-        {
-          text: 'Apt2',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-      ];
+    describe.each([
+      'delete key', 'click',
+    ])('Try delete by %s', (method) => {
+      it('should delete appointment', async () => {
+        const onAppointmentDeleted = jest.fn();
 
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month' }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        jest.useFakeTimers();
+        POM.getAppointments()[0].element.click();
+        jest.runAllTimers();
+
+        if (method === 'delete key') {
+          pressDeleteKeyOnTooltipItem(POM, 0);
+        } else {
+          POM.tooltip.getDeleteButton().click();
+        }
+
+        expect(POM.tooltip.isVisible()).toBe(false);
+        expect(onAppointmentDeleted).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDeleted).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Apt1' }) }),
+        );
+      });
+
+      it('should not delete appointment by Delete key when editing.allowDeleting=false', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month' }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          editing: { allowDeleting: false },
+          onAppointmentDeleted,
+        });
+
+        jest.useFakeTimers();
+        POM.getAppointments()[0].element.click();
+        jest.runAllTimers();
+
+        if (method === 'delete key') {
+          pressDeleteKeyOnTooltipItem(POM, 0);
+        } else {
+          expect(POM.tooltip.getDeleteButtons().length).toBe(0);
+        }
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(onAppointmentDeleted).not.toHaveBeenCalled();
+      });
+
+      it('should not delete disabled appointment by Delete key', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: [{
+            text: 'Apt1',
+            startDate: new Date(2017, 4, 21, 9, 30),
+            endDate: new Date(2017, 4, 21, 10, 30),
+          }, {
+            text: 'Apt2',
+            startDate: new Date(2017, 4, 21, 9, 30),
+            endDate: new Date(2017, 4, 21, 10, 30),
+          }, {
+            text: 'Apt3',
+            startDate: new Date(2017, 4, 21, 9, 30),
+            endDate: new Date(2017, 4, 21, 10, 30),
+            disabled: true,
+          }],
+          views: [{ type: 'month' }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        POM.getCollectorButton().click();
+
+        if (method === 'delete key') {
+          pressDeleteKeyOnTooltipItem(POM, 1);
+        } else {
+          expect(POM.tooltip.getDeleteButtons().length).toBe(0);
+        }
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(onAppointmentDeleted).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Single appointment deleting', () => {
+      it('should delete single occurrence on clicking \'Delete appointment\'', async () => {
+        const onAppointmentDeleted = jest.fn();
+        const onAppointmentUpdated = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month' }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          editing: true,
+          height: 600,
+          onAppointmentDeleted,
+          onAppointmentUpdated,
+        });
+
+        jest.useFakeTimers();
+        POM.getAppointment('Recurring Apt2').element?.click();
+        jest.runAllTimers();
+
+        POM.tooltip.getDeleteButton().click();
+        POM.popup.deleteAppointmentButton.click();
+
+        expect(POM.tooltip.isVisible()).toBe(false);
+        expect(onAppointmentDeleted).not.toHaveBeenCalled();
+        expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
+        expect(onAppointmentUpdated).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Recurring Apt2' }) }),
+        );
+      });
+
+      it('should delete all occurrences on clicking \'Delete series\'', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month' }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          editing: true,
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        jest.useFakeTimers();
+        POM.getAppointment('Recurring Apt2').element?.click();
+        jest.runAllTimers();
+
+        POM.tooltip.getDeleteButton().click();
+        POM.popup.deleteSeriesButton.click();
+
+        expect(POM.tooltip.isVisible()).toBe(false);
+        expect(onAppointmentDeleted).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDeleted).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Recurring Apt2' }) }),
+        );
+      });
+
+      it('should delete appointment on delete button click', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month' }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        jest.useFakeTimers();
+        POM.getAppointments()[0].element.click();
+        jest.runAllTimers();
+
+        POM.tooltip.getDeleteButton().click();
+
+        expect(POM.tooltip.isVisible()).toBe(false);
+        expect(onAppointmentDeleted).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDeleted).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Apt1' }) }),
+        );
+      });
+    });
+
+    describe('Deleting from collector tooltip', () => {
+      it('should delete focused appointment by Delete key', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        POM.getCollectorButton().click();
+        pressDeleteKeyOnTooltipItem(POM, 1);
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(onAppointmentDeleted).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDeleted).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Apt2' }) }),
+        );
+      });
+
+      it('should delete specific appointment on delete button click', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        POM.getCollectorButton().click();
+        pressDeleteKeyOnTooltipItem(POM, 1);
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(onAppointmentDeleted).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDeleted).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Apt2' }) }),
+        );
+      });
+
+      it('should delete single occurrence on clicking \'Delete appointment\'', async () => {
+        const onAppointmentUpdated = jest.fn();
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          editing: true,
+          height: 600,
+          onAppointmentDeleted,
+          onAppointmentUpdated,
+        });
+
+        POM.getCollectorButton().click();
+        POM.tooltip.getDeleteButton(2).click();
+        POM.popup.deleteAppointmentButton.click();
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(onAppointmentDeleted).not.toHaveBeenCalled();
+        expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
+        expect(onAppointmentUpdated).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Recurring Apt3' }) }),
+        );
+      });
+
+      it('should not close tooltip if there are still appointments after deleting one of them', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        POM.getCollectorButton().click();
+        POM.tooltip.getDeleteButton(0).click();
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(onAppointmentDeleted).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDeleted).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Apt1' }) }),
+        );
+      });
+
+      it('should close tooltip after deleting all appointments in the tooltip', async () => {
+        const onAppointmentDeleted = jest.fn();
+
+        const { POM } = await createScheduler({
+          dataSource: getDataSource(),
+          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 1),
+          height: 600,
+          onAppointmentDeleted,
+        });
+
+        POM.getCollectorButton().click();
+        POM.tooltip.getDeleteButton(3).click();
+        POM.tooltip.getDeleteButton(2).click();
+        POM.popup.deleteSeriesButton.click();
+        POM.tooltip.getDeleteButton(1).click();
+        POM.tooltip.getDeleteButton(0).click();
+
+        expect(POM.tooltip.isVisible()).toBe(false);
+        expect(onAppointmentDeleted).toHaveBeenCalledTimes(4);
+        expect(onAppointmentDeleted).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Apt4' }) }),
+        );
+        expect(onAppointmentDeleted).toHaveBeenNthCalledWith(
+          2,
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Recurring Apt3' }) }),
+        );
+        expect(onAppointmentDeleted).toHaveBeenNthCalledWith(
+          3,
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Apt2' }) }),
+        );
+        expect(onAppointmentDeleted).toHaveBeenNthCalledWith(
+          4,
+          expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Apt1' }) }),
+        );
+      });
+    });
+  });
+
+  describe('State', () => {
+    it('should have correct target after appointment was added before the current target', async () => {
       const { scheduler, POM } = await createScheduler({
-        dataSource: [...data],
+        dataSource: getDataSource(),
         views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
         currentView: 'month',
-        currentDate: new Date(2017, 4, 22),
+        currentDate: new Date(2017, 4, 1),
         height: 600,
       });
 
       POM.getCollectorButton().click();
 
-      const tooltipScrollableContent = POM.tooltip.getScrollableContent();
-      tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
-      tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
+      const initialTarget = POM.tooltip.target;
 
-      expect(POM.tooltip.isVisible()).toBe(false);
-      expect((scheduler as any).getDataSource().items()).toEqual([data[0]]);
+      scheduler.addAppointment({
+        text: 'New Apt',
+        startDate: new Date(2017, 4, 20, 9, 30),
+        endDate: new Date(2017, 4, 20, 10, 30),
+      });
+
+      await new Promise(process.nextTick);
+
+      expect(POM.tooltip.isVisible()).toBe(true);
+      expect(POM.tooltip.target).toBe(initialTarget);
     });
 
-    it('should delete appointment on delete button click in tooltip', async () => {
-      const data = [
-        {
-          text: 'Apt1',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-        {
-          text: 'Apt2',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-      ];
-
-      const { POM, scheduler } = await createScheduler({
-        dataSource: [...data],
+    it('should have correct target after appointment was deleted from tooltip', async () => {
+      const { POM } = await createScheduler({
+        dataSource: getDataSource(),
         views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
         currentView: 'month',
-        currentDate: new Date(2017, 4, 22),
+        currentDate: new Date(2017, 4, 1),
         height: 600,
       });
 
       POM.getCollectorButton().click();
-      POM.tooltip.getDeleteButton().click();
+      pressDeleteKeyOnTooltipItem(POM, 0);
 
-      expect(POM.tooltip.isVisible()).toBe(false);
-      expect((scheduler as any).getDataSource().items()).toEqual([data[0]]);
+      expect(POM.tooltip.isVisible()).toBe(true);
+      expect(POM.tooltip.target).toBe(POM.getCollectorButton());
     });
 
-    it('should not delete appointment by Delete key when editing.allowDeleting=false', async () => {
-      const data = [
-        {
-          text: 'Apt1',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-        {
-          text: 'Apt2',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-      ];
-
-      const { POM, scheduler } = await createScheduler({
-        dataSource: [...data],
+    it('should not rerender tooltip appointments when deleting appointment from tooltip', async () => {
+      const { POM } = await createScheduler({
+        dataSource: getDataSource(),
         views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
         currentView: 'month',
-        currentDate: new Date(2017, 4, 22),
-        height: 600,
-        editing: {
-          allowDeleting: false,
-        },
-      });
-
-      POM.getCollectorButton().click();
-
-      const tooltipScrollableContent = POM.tooltip.getScrollableContent();
-      tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
-      tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
-
-      expect((scheduler as any).getDataSource().items()).toEqual([...data]);
-    });
-
-    it('should not delete disabled appointment by Delete key when focused in tooltip from collector', async () => {
-      const data = [
-        {
-          text: 'Apt1',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-        {
-          text: 'Apt2',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-          disabled: true,
-        },
-      ];
-
-      const { POM, scheduler } = await createScheduler({
-        dataSource: [...data],
-        views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 22),
+        currentDate: new Date(2017, 4, 1),
         height: 600,
       });
 
       POM.getCollectorButton().click();
 
-      const tooltipScrollableContent = POM.tooltip.getScrollableContent();
-      tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
-      tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
+      const item1 = POM.tooltip.getAppointmentItem(1);
+      const item2 = POM.tooltip.getAppointmentItem(2);
+      const item3 = POM.tooltip.getAppointmentItem(3);
 
-      expect((scheduler as any).getDataSource().items()).toEqual([...data]);
-    });
+      pressDeleteKeyOnTooltipItem(POM, 0);
 
-    it('should delete single occurrence on delete button click and clicking \'Delete appointment\'', async () => {
-      const data = [
-        {
-          text: 'Apt1',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-        {
-          text: 'Apt2',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-          recurrenceRule: 'FREQ=DAILY',
-        },
-      ];
-
-      const { POM, scheduler } = await createScheduler({
-        dataSource: [{ ...data[0] }, { ...data[1] }],
-        views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 22),
-        editing: true,
-        height: 600,
-      });
-
-      POM.getCollectorButton().click();
-      POM.tooltip.getDeleteButton(0).click();
-      POM.popup.deleteAppointmentButton.click();
-
-      const items = (scheduler as any).getDataSource().items();
-
-      expect(items).toEqual([
-        data[0],
-        expect.objectContaining(data[1]),
-      ]);
-
-      expect(items[1].recurrenceException).toContain('20170522');
-    });
-
-    it('should delete all occurrences on delete and clicking \'Delete series\'', async () => {
-      const data = [
-        {
-          text: 'Apt1',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-        {
-          text: 'Apt2',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-          recurrenceRule: 'FREQ=DAILY',
-        },
-      ];
-
-      const { POM, scheduler } = await createScheduler({
-        dataSource: [{ ...data[0] }, { ...data[1] }],
-        views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 22),
-        editing: true,
-        height: 600,
-      });
-
-      POM.getCollectorButton().click();
-      POM.tooltip.getDeleteButton(0).click();
-      POM.popup.deleteSeriesButton.click();
-
-      expect((scheduler as any).getDataSource().items()).toEqual([data[0]]);
+      expect(POM.tooltip.isVisible()).toBe(true);
+      expect(POM.tooltip.getAppointmentItem(0)).toBe(item1);
+      expect(POM.tooltip.getAppointmentItem(1)).toBe(item2);
+      expect(POM.tooltip.getAppointmentItem(2)).toBe(item3);
     });
   });
 });
