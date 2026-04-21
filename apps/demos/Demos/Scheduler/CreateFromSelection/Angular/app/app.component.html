@@ -1,0 +1,25 @@
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  [dataSource]="appointmentsData"
+  currentView="workWeek"
+  [currentDate]="currentDate"
+  [startDayHour]="9"
+  [endDayHour]="16"
+  [groups]="['priorityId']"
+  [showCurrentTimeIndicator]="false"
+  allDayPanelMode="allDay"
+  (onSelectionEnd)="onSelectionEnd($event)"
+>
+  <dxi-scheduler-view
+    type="workWeek"
+    groupOrientation="horizontal"
+    [cellDuration]="30"
+  >
+  </dxi-scheduler-view>
+  <dxi-scheduler-resource
+    [dataSource]="prioritiesData"
+    fieldExpr="priorityId"
+    label="Priority"
+    [allowMultiple]="false"
+  ></dxi-scheduler-resource>
+</dx-scheduler>
