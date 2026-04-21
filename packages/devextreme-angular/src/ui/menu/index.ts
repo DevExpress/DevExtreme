@@ -317,10 +317,10 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get itemsExpr(): ((item: any, value: any) => any) | string {
+    get itemsExpr(): ((item: any) => Array<any> | undefined) | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: ((item: any, value: any) => any) | string) {
+    set itemsExpr(value: ((item: any) => Array<any> | undefined) | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -382,10 +382,10 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get selectedExpr(): ((item: any) => any) | string {
+    get selectedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
         return this._getOption('selectedExpr');
     }
-    set selectedExpr(value: ((item: any) => any) | string) {
+    set selectedExpr(value: ((item: any, value: boolean | undefined) => boolean | undefined) | string) {
         this._setOption('selectedExpr', value);
     }
 
@@ -706,7 +706,7 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<((item: any, value: any) => any) | string>;
+    @Output() itemsExprChange: EventEmitter<((item: any) => Array<any> | undefined) | string>;
 
     /**
     
@@ -741,7 +741,7 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() selectedExprChange: EventEmitter<((item: any, value: boolean | undefined) => boolean | undefined) | string>;
 
     /**
     

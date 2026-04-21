@@ -436,7 +436,7 @@ const componentConfig = {
     highlightChanges: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    itemsExpr: [Function, String] as PropType<(((item: any) => Array<any> | undefined)) | string>,
+    itemsExpr: [Function, String] as PropType<(((item: any, value: Array<any>) => Array<any> | undefined)) | string>,
     keyboardNavigation: Object as PropType<Record<string, any>>,
     keyExpr: [Function, String] as PropType<(((item: any, value: any) => any)) | string>,
     loadPanel: Object as PropType<Record<string, any>>,

@@ -8557,7 +8557,9 @@ declare module DevExpress.fileManagement {
     /**
      * [descr:ObjectFileSystemProviderOptions.itemsExpr]
      */
-    itemsExpr?: string | ((item: any, value?: any) => any);
+    itemsExpr?:
+      | string
+      | ((item: any, value: any[] | undefined) => any[] | undefined);
   }
   /**
    * [descr:RemoteFileSystemProvider]
@@ -32057,11 +32059,16 @@ declare module DevExpress.ui {
      */
     hasItemsExpr?:
       | string
-      | ((item: TRowData, value?: boolean) => boolean | undefined);
+      | ((item: TRowData, value: boolean | undefined) => boolean | undefined);
     /**
      * [descr:dxTreeListOptions.itemsExpr]
      */
-    itemsExpr?: string | ((item: TRowData) => TRowData[] | undefined);
+    itemsExpr?:
+      | string
+      | ((
+          item: TRowData,
+          value: undefined | TRowData[]
+        ) => TRowData[] | undefined);
     /**
      * [descr:dxTreeListOptions.keyExpr]
      */
@@ -32649,7 +32656,7 @@ declare module DevExpress.ui {
      */
     expandedExpr?:
       | string
-      | ((item: TItem, value?: boolean) => boolean | undefined);
+      | ((item: TItem, value: boolean | undefined) => boolean | undefined);
     /**
      * [descr:dxTreeViewOptions.hasItemsExpr]
      */
@@ -33292,7 +33299,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
      */
-    itemsExpr?: string | ((item: TItem, value?: any) => TKey);
+    itemsExpr?: string | ((item: TItem) => TItem[] | undefined);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.keyExpr]
      */
@@ -33300,7 +33307,9 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
      */
-    selectedExpr?: string | ((item: TItem) => TKey);
+    selectedExpr?:
+      | string
+      | ((item: TItem, value?: boolean | undefined) => boolean | undefined);
   }
   /**
    * [descr:MapLocation]
