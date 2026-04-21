@@ -24,7 +24,8 @@ export type PromptTemplateName = | 'changeStyle'
   | 'summarize'
   | 'translate'
   | 'smartPaste'
-  | 'generateGridColumn';
+  | 'generateGridColumn'
+  | 'executeGridAssistant';
 
 export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
 

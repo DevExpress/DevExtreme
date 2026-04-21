@@ -168,6 +168,16 @@ export type GenerateGridColumnCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
+export type ExecuteGridAssistantCommandParams = {
+  text: string;
+  context: Record<string, unknown>;
+  responseSchema: Record<string, unknown>;
+  additionalInfo?: Record<PropertyKey, unknown>;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
 export type ChangeStyleCommandResult = string;
 
 /**
@@ -226,6 +236,21 @@ export type GenerateGridColumnCommandResult = {
 };
 
 /**
+ * @namespace DevExpress.aiIntegration
+ */
+export type ExecuteGridAssistantAction = {
+  name: string;
+  args: Record<string, unknown>;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type ExecuteGridAssistantCommandResult = {
+  actions: ExecuteGridAssistantAction[];
+};
+
+/**
  * @docid
  * @namespace DevExpress.aiIntegration
  * @public
@@ -236,6 +261,19 @@ export type GenerateGridColumnCommandResponse = string | {
  * @public
  */
   data: string | Record<PropertyKey, string>;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type ExecuteGridAssistantCommandResponse = string | {
+/**
+ * @docid
+ * @public
+ */
+  actions: ExecuteGridAssistantAction[] | string;
 };
 
 /**
@@ -320,4 +358,8 @@ export class AIIntegration {
    * @publicName generateGridColumn(params, callbacks)
    */
   generateGridColumn(params: GenerateGridColumnCommandParams, callbacks: RequestCallbacks<GenerateGridColumnCommandResult>): () => void;
+  /**
+   * @publicName executeGridAssistant(params, callbacks)
+   */
+  executeGridAssistant(params: ExecuteGridAssistantCommandParams, callbacks: RequestCallbacks<ExecuteGridAssistantCommandResult>): () => void;
 }
