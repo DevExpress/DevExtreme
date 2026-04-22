@@ -50,7 +50,7 @@ type ISchedulerOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onSelectionEnd?: ((e: SelectionEndEvent) => void);
+  onSelectionEnd?: ((e: SelectionEndEvent) => void) | undefined;
 }
 
 type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISchedulerOptionsNarrowedEvents> & IHtmlOptions & {

@@ -26753,7 +26753,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.onSelectionEnd]
      */
-    onSelectionEnd?: (e: DevExpress.ui.dxScheduler.SelectionEndEvent) => void;
+    onSelectionEnd?:
+      | ((e: DevExpress.ui.dxScheduler.SelectionEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onCellContextMenu]
      */

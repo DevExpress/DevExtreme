@@ -862,13 +862,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onCellClick?: ((e: CellClickEvent) => void) | string;
     /**
      * @docid
-     * @default null
-     * @type function
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:SelectionEndEvent}
      * @action
      * @public
      */
-    onSelectionEnd?: ((e: SelectionEndEvent) => void);
+    onSelectionEnd?: ((e: SelectionEndEvent) => void) | undefined;
     /**
      * @docid
      * @default null

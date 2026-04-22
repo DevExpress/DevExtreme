@@ -47,11 +47,20 @@ describe('onSelectionEnd', () => {
     expect(onSelectionEnd).toHaveBeenCalledTimes(1);
 
     const { selectedCellData, component } = onSelectionEnd.mock.calls[0][0];
+
     expect(selectedCellData).toHaveLength(3);
-    selectedCellData.forEach((cell) => {
-      expect(cell).toHaveProperty('startDate');
-      expect(cell).toHaveProperty('endDate');
-    });
+
+    const firstStart = selectedCellData[0].startDate;
+    expect(firstStart.getHours()).toBe(9);
+    expect(firstStart.getMinutes()).toBe(0);
+
+    expect(selectedCellData[0].endDate.getTime() - firstStart.getTime()).toBe(30 * 60 * 1000);
+    expect(selectedCellData[1].startDate.getTime()).toBe(selectedCellData[0].endDate.getTime());
+    expect(selectedCellData[2].startDate.getTime()).toBe(selectedCellData[1].endDate.getTime());
+
+    expect(selectedCellData[2].endDate.getHours()).toBe(10);
+    expect(selectedCellData[2].endDate.getMinutes()).toBe(30);
+
     expect(component).toBe(scheduler);
   });
 });
