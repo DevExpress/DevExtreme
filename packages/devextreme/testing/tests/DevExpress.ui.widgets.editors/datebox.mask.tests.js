@@ -1302,7 +1302,8 @@ module('Date AM/PM Handling', setupModule, () => {
 
             this.instance.option({
                 value: new Date('10/10/2012 22:00'),
-                displayFormat: 'a'
+                displayFormat: 'a',
+                useMaskBehavior: true,
             });
 
             assert.strictEqual(this.$input.val(), pmName, 'initial value is localized PM');
