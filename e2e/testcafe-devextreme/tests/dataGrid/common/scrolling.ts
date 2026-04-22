@@ -2,6 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import type { DataGridScrollMode } from 'devextreme/ui/data_grid';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -1544,73 +1545,71 @@ test('Last group should not disappear after collapsing another subgroup with vir
 }));
 
 // T1152498
-// TODO: fix unstable tests
-// ['infinite', 'virtual'].forEach((scrollingMode) => {
-// eslint-disable-next-line @stylistic/max-len
-//   test.meta({ browserSize: [900, 600] })(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
-//   // arrange
-//     const dataGrid = new DataGrid('#container');
-//     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-//
-//     // act
-//     await dataGrid.scrollTo({ y: 200 });
-//     await t.wait(100);
-//     await dataGrid.scrollTo({ y: 400 });
-//     await t.wait(300);
-//
-//     // assert
-//     await t
-//       .expect(await takeScreenshot(`grid-${scrollingMode}-scrolling-T1152498.png`, '#container'))
-//       .ok()
-//       .expect(compareResults.isValid())
-//       .ok(compareResults.errorMessages());
-//   }).before(async (t) => {
-//     await createWidget('dxDataGrid', {
-//       dataSource: [...new Array(500)].map((_, index) => ({ id: index, text: `item ${index}` })),
-//       keyExpr: 'id',
-//       height: 440,
-//       width: 800,
-//       renderAsync: false,
-//       templatesRenderAsynchronously: true,
-//       columnFixing: {
-//          // @ts-expect-error private option
-//          legacyMode: true,
-//       },
-//       customizeColumns(columns) {
-//         columns[0].width = 70;
-//         columns[0].fixed = true;
-//         columns[0].cellTemplate = '#test';
-//       },
-//       scrolling: {
-//         mode: scrollingMode,
-//       },
-//     });
-//
-//     await t.wait(100);
-//
-//     // simulating async rendering in React
-//     await ClientFunction(() => {
-//       const dataGrid = ($('#container') as any).dxDataGrid('instance');
-//
-//       // eslint-disable-next-line no-underscore-dangle
-//       dataGrid.getView('rowsView')._templatesCache = {};
-//
-//       // eslint-disable-next-line no-underscore-dangle
-//       dataGrid._getTemplate = () => ({
-//         render(options) {
-//           setTimeout(() => {
-//             ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
-//             options.deferred?.resolve();
-//           }, 200);
-//         },
-//       });
-//
-//       dataGrid.repaint();
-//     })();
-//
-//     await t.wait(300);
-//   });
-// });
+['infinite', 'virtual'].forEach((scrollingMode: DataGridScrollMode) => {
+  test(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    // act
+    await dataGrid.scrollTo(t, { y: 200 });
+    await dataGrid.scrollTo(t, { y: 600 });
+    await t.expect(dataGrid.isReady()).ok();
+
+    // assert
+    await testScreenshot(t, takeScreenshot, `grid-${scrollingMode}-scrolling-T1152498.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    await createWidget('dxDataGrid', {
+      dataSource: [...new Array(500)].map((_, index) => ({ id: index, text: `item ${index}` })),
+      keyExpr: 'id',
+      height: 440,
+      width: 800,
+      renderAsync: false,
+      templatesRenderAsynchronously: true,
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
+      customizeColumns(columns) {
+        columns[0].width = 70;
+        columns[0].fixed = true;
+        columns[0].cellTemplate = '#test';
+      },
+      scrolling: {
+        mode: scrollingMode,
+      },
+    });
+
+    const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
+
+    // simulating async rendering in React
+    await ClientFunction(() => {
+      const dataGridInstance = ($('#container') as any).dxDataGrid('instance');
+
+      // eslint-disable-next-line no-underscore-dangle
+      dataGridInstance.getView('rowsView')._templatesCache = {};
+
+      // eslint-disable-next-line no-underscore-dangle
+      dataGridInstance._getTemplate = () => ({
+        render(options) {
+          setTimeout(() => {
+            ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
+            options.deferred?.resolve();
+          }, 1000);
+        },
+      });
+
+      dataGridInstance.repaint();
+    })();
+  });
+});
 
 test('Editors should keep changes after being scrolled out of sight (T1145698)', async (t) => {
   const dataGrid = new DataGrid('#container');
