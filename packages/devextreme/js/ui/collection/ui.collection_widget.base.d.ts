@@ -80,7 +80,7 @@ export interface CollectionWidgetOptions<
      * @default null
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * @docid
      * @default "No data to display"
