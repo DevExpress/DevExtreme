@@ -54,10 +54,10 @@ if (!devMode) {
 }
 
 if (devMode) {
-    sh.exec('pnpx nx build devextreme');
+    sh.exec('pnpm exec nx build devextreme');
 } else {
-    sh.exec('pnpx nx build devextreme-scss');
-    sh.exec('pnpx nx build-dist devextreme --skipNxCache', {
+    sh.exec('pnpm exec nx build devextreme-scss');
+    sh.exec('pnpm exec nx build-dist devextreme --skipNxCache', {
         env: {
             ...sh.env,
             BUILD_INTERNAL_PACKAGE: 'false'
@@ -65,7 +65,7 @@ if (devMode) {
     });
 }
 
-sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
+sh.exec(`pnpm exec nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
@@ -79,9 +79,9 @@ sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR
 
 sh.exec('pnpm run all:pack-and-copy');
 
-sh.exec('pnpx nx pack devextreme-react', { silent: true });
-sh.exec('pnpx nx pack devextreme-vue', { silent: true });
-sh.exec(`pnpx nx pack devextreme-angular${devMode ? '' : ' --with-descriptions'}`, { silent: true });
+sh.exec('pnpm exec nx pack devextreme-react', { silent: true });
+sh.exec('pnpm exec nx pack devextreme-vue', { silent: true });
+sh.exec(`pnpm exec nx pack devextreme-angular${devMode ? '' : ' --with-descriptions'}`, { silent: true });
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
     packAndCopy(NPM_DIR);
@@ -101,7 +101,7 @@ sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_D
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_DIR);
 
 if (sh.env.BUILD_INTERNAL_PACKAGE === 'true') {
-    sh.exec('pnpx nx build-dist devextreme');
+    sh.exec('pnpm exec nx build-dist devextreme');
 
     sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
         sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);

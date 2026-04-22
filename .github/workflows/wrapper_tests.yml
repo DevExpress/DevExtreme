@@ -57,7 +57,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build devextreme package
         env:
@@ -81,7 +81,9 @@ jobs:
           fi
 
       - name: Angular - Download Browser
-        run: pnpm --filter devextreme-angular exec puppeteer browsers install chrome@130.0.6723.69
+        run: |
+          PUPPETEER_CMD="browsers install chrome@130.0.6723.69"
+          pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
 
       - name: Angular - Build
         run: pnpm exec nx build devextreme-angular

@@ -18,14 +18,11 @@ runs:
         CHROME_VERSION: ${{ inputs.chrome-version }}
       run: |
         if [ -n "$CHROME_VERSION" ]; then
-          sudo apt-get update
-          sudo apt-get -y install libu2f-udev
-          sudo apt-get -y install dbus
-          
           echo "version to install: $CHROME_VERSION"
-          CHROME_BIN=`npx @puppeteer/browsers install chrome-headless-shell@$CHROME_VERSION | awk '{print $2}'`
-          chmod +x $CHROME_BIN
+          PUPPETEER_CMD="browsers install chrome-headless-shell@$CHROME_VERSION"
+          CHROME_BIN=`pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD | awk '{print $2}'`
           echo "chrome-headless-shell installed in: $CHROME_BIN"
+          chmod +x $CHROME_BIN
           $CHROME_BIN --version
           echo "CHROME_SHELL=$CHROME_BIN" >> $GITHUB_ENV
         else
