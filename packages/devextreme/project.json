@@ -858,17 +858,115 @@
         "cwd": "{projectRoot}"
       }
     },
+    "copy:vendor:js": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "./node_modules/devextreme-exceljs-fork/dist/dx-exceljs-fork.js", "to": "./artifacts/js/dx-exceljs-fork.js" },
+          { "from": "./node_modules/devextreme-exceljs-fork/dist/dx-exceljs-fork.min.js", "to": "./artifacts/js/dx-exceljs-fork.min.js" },
+          { "from": "./node_modules/file-saver/dist/FileSaver.js", "to": "./artifacts/js/FileSaver.js" },
+          { "from": "./node_modules/file-saver/dist/FileSaver.min.js", "to": "./artifacts/js/FileSaver.min.js" },
+          { "from": "./node_modules/jquery/dist/jquery.js", "to": "./artifacts/js/jquery.js" },
+          { "from": "./node_modules/jquery/dist/jquery.min.js", "to": "./artifacts/js/jquery.min.js" },
+          { "from": "./node_modules/jspdf/dist/jspdf.umd.js", "to": "./artifacts/js/jspdf.umd.js" },
+          { "from": "./node_modules/jspdf/dist/jspdf.umd.min.js", "to": "./artifacts/js/jspdf.umd.min.js" },
+          { "from": "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js", "to": "./artifacts/js/jspdf.plugin.autotable.js" },
+          { "from": "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.min.js", "to": "./artifacts/js/jspdf.plugin.autotable.min.js" },
+          { "from": "./node_modules/jszip/dist/jszip.js", "to": "./artifacts/js/jszip.js" },
+          { "from": "./node_modules/jszip/dist/jszip.min.js", "to": "./artifacts/js/jszip.min.js" },
+          { "from": "./node_modules/knockout/build/output/knockout-latest.js", "to": "./artifacts/js/knockout-latest.js" },
+          { "from": "./node_modules/knockout/build/output/knockout-latest.debug.js", "to": "./artifacts/js/knockout-latest.debug.js" },
+          { "from": "./node_modules/devexpress-diagram/dist/dx-diagram.js", "to": "./artifacts/js/dx-diagram.js" },
+          { "from": "./node_modules/devexpress-diagram/dist/dx-diagram.min.js", "to": "./artifacts/js/dx-diagram.min.js" },
+          { "from": "./node_modules/devexpress-gantt/dist/dx-gantt.js", "to": "./artifacts/js/dx-gantt.js" },
+          { "from": "./node_modules/devexpress-gantt/dist/dx-gantt.min.js", "to": "./artifacts/js/dx-gantt.min.js" },
+          { "from": "./node_modules/devextreme-quill/dist/dx-quill.js", "to": "./artifacts/js/dx-quill.js" },
+          { "from": "./node_modules/devextreme-quill/dist/dx-quill.min.js", "to": "./artifacts/js/dx-quill.min.js" },
+          { "from": "./node_modules/devextreme-aspnet-data/js/dx.aspnet.data.js", "to": "./artifacts/js/dx.aspnet.data.js" }
+        ]
+      },
+      "inputs": [
+        "{projectRoot}/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.js",
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.min.js",
+        "{projectRoot}/artifacts/js/FileSaver.js",
+        "{projectRoot}/artifacts/js/FileSaver.min.js",
+        "{projectRoot}/artifacts/js/jquery.js",
+        "{projectRoot}/artifacts/js/jquery.min.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.min.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.min.js",
+        "{projectRoot}/artifacts/js/jszip.js",
+        "{projectRoot}/artifacts/js/jszip.min.js",
+        "{projectRoot}/artifacts/js/knockout-latest.js",
+        "{projectRoot}/artifacts/js/knockout-latest.debug.js",
+        "{projectRoot}/artifacts/js/dx-diagram.js",
+        "{projectRoot}/artifacts/js/dx-diagram.min.js",
+        "{projectRoot}/artifacts/js/dx-gantt.js",
+        "{projectRoot}/artifacts/js/dx-gantt.min.js",
+        "{projectRoot}/artifacts/js/dx-quill.js",
+        "{projectRoot}/artifacts/js/dx-quill.min.js",
+        "{projectRoot}/artifacts/js/dx.aspnet.data.js"
+      ]
+    },
+    "copy:vendor:css": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "./node_modules/devexpress-diagram/dist/dx-{diagram,diagram.min}.css", "to": "./artifacts/css" },
+          { "from": "./node_modules/devexpress-gantt/dist/dx-{gantt,gantt.min}.css", "to": "./artifacts/css" }
+        ]
+      },
+      "inputs": [
+        "{projectRoot}/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/css/dx-diagram.css",
+        "{projectRoot}/artifacts/css/dx-diagram.min.css",
+        "{projectRoot}/artifacts/css/dx-gantt.css",
+        "{projectRoot}/artifacts/css/dx-gantt.min.css"
+      ]
+    },
     "copy:vendor": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gulp vendor",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "pnpm nx copy:vendor:js devextreme",
+          "pnpm nx copy:vendor:css devextreme"
+        ],
+        "parallel": false
       },
-      "inputs": [
-        "{projectRoot}/build/gulp/vendor.js"
-      ],
       "outputs": [
-        "{projectRoot}/artifacts/js/cldr"
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.js",
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.min.js",
+        "{projectRoot}/artifacts/js/FileSaver.js",
+        "{projectRoot}/artifacts/js/FileSaver.min.js",
+        "{projectRoot}/artifacts/js/jquery.js",
+        "{projectRoot}/artifacts/js/jquery.min.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.min.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.min.js",
+        "{projectRoot}/artifacts/js/jszip.js",
+        "{projectRoot}/artifacts/js/jszip.min.js",
+        "{projectRoot}/artifacts/js/knockout-latest.js",
+        "{projectRoot}/artifacts/js/knockout-latest.debug.js",
+        "{projectRoot}/artifacts/js/dx-diagram.js",
+        "{projectRoot}/artifacts/js/dx-diagram.min.js",
+        "{projectRoot}/artifacts/js/dx-gantt.js",
+        "{projectRoot}/artifacts/js/dx-gantt.min.js",
+        "{projectRoot}/artifacts/js/dx-quill.js",
+        "{projectRoot}/artifacts/js/dx-quill.min.js",
+        "{projectRoot}/artifacts/js/dx.aspnet.data.js",
+        "{projectRoot}/artifacts/css/dx-diagram.css",
+        "{projectRoot}/artifacts/css/dx-diagram.min.css",
+        "{projectRoot}/artifacts/css/dx-gantt.css",
+        "{projectRoot}/artifacts/css/dx-gantt.min.css"
       ]
     },
     "pack:devextreme-npm": {
