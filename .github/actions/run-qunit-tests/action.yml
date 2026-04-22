@@ -42,13 +42,21 @@ runs:
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
 
-#    - name: Update apt
-#      run: |
-#        sudo apt-get update
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
 
-#    - name: Setup utils
-#      run: |
-#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+    - name: Restore npm cache
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm ci
+      shell: bash
+      run: npm ci --no-audit --no-fund
 
     - name: Setup Chrome
       if: ${{ inputs.browser == 'chrome' }}
@@ -74,22 +82,6 @@ runs:
       uses: browser-actions/setup-firefox@v1
       with:
         firefox-version: '122.0.1'
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - name: Restore npm cache
-      uses: actions/cache@v4
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm ci
-      shell: bash
-      run: npm ci --no-audit --no-fund
 
     - name: Download artifacts
       uses: actions/download-artifact@v4
