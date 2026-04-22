@@ -514,7 +514,7 @@ class DateBoxMask extends DateBoxBase {
 
     const activePartIndex = this._activePartIndex ?? 0;
     let index = fitIntoRange(activePartIndex + step, 0, this._dateParts.length - 1);
-    if (this._dateParts[index].isStub) {
+    if (this._dateParts[index]?.isStub) {
       const isBoundaryIndex = (index === 0 && step < 0)
         || (index === this._dateParts.length - 1 && step > 0);
       if (!isBoundaryIndex) {
