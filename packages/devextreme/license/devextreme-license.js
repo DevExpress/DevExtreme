@@ -212,14 +212,20 @@ function main() {
             if(warning.type !== 'trial') {
                 const code = TEMPLATES.warningCodeByType(warning.type);
 
-                lines.push(
-                    TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion),
-                );
-
-                if(warning.type === 'trialExpired') {
-                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.purchaseLicense}`));
+                if(warning.type === 'incompatibleVersion') {
+                    lines.push(
+                        prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion)}`),
+                    );
                 } else {
-                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
+                    lines.push(
+                        TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion),
+                    );
+
+                    if(warning.type === 'trialExpired') {
+                        lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.purchaseLicense}`));
+                    } else {
+                        lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
+                    }
                 }
             }
 

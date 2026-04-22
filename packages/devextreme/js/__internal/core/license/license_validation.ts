@@ -5,7 +5,6 @@ import { fullVersion } from '@js/core/version';
 import type { Version } from '../../utils/version';
 import {
   assertedVersionsCompatible,
-  getPreviousMajorVersion,
   parseVersion,
 } from '../../utils/version';
 import {
@@ -64,7 +63,7 @@ function getLicenseCheckParams({
   try {
     preview = isPreview(version.patch);
 
-    const { major, minor } = preview ? getPreviousMajorVersion(version) : version;
+    const { major, minor } = version;
 
     if (!licenseKey || licenseKey === LICENSE_KEY_PLACEHOLDER) {
       return { preview, error: 'W0019', warningType: 'no-key' };
