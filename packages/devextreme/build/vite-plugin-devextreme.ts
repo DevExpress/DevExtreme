@@ -121,12 +121,13 @@ export default function devextremeVitePlugin(): PluginOption {
     enforce: 'pre',
 
     async transform(code: string, id: string) {
-      if (!/\.[jt]sx?$/.test(id) || id.includes('node_modules')) {
+      const cleanId = id.split('?')[0].split('#')[0];
+      if (!/\.[jt]sx?$/.test(cleanId) || cleanId.includes('node_modules')) {
         return null;
       }
 
-      const isTSX = id.endsWith('.tsx');
-      const isTS = id.endsWith('.ts') || isTSX;
+      const isTSX = cleanId.endsWith('.tsx');
+      const isTS = cleanId.endsWith('.ts') || isTSX;
 
       const plugins: unknown[] = [];
 
@@ -150,7 +151,7 @@ export default function devextremeVitePlugin(): PluginOption {
       );
 
       const result = await transformAsync(code, {
-        filename: id,
+        filename: cleanId,
         plugins,
         sourceMaps: true,
       });

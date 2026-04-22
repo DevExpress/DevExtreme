@@ -80,7 +80,7 @@ function loadThemeCss(themeId: string): Promise<void> {
       link.onload = () => resolve();
       link.onerror = () => reject(new Error(`Failed to load theme: ${themeId}`));
       document.head.appendChild(link);
-    });
+    }).catch(reject);
   });
 }
 
