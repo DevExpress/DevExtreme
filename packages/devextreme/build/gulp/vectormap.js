@@ -17,6 +17,7 @@ const compressionPipes = require('./compression-pipes.js');
 const VECTORMAP_UTILS_PATH = 'js/viz/vector_map.utils';
 const VECTORMAP_UTILS_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-utils');
 const VECTORMAP_DATA_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-data');
+const VECTORMAP_NODE_TMP_PATH = 'build/.vectormap-node-tmp';
 
 function transformFileName(fileName) {
     return path.join(VECTORMAP_UTILS_PATH, fileName) + '.js';
@@ -35,45 +36,46 @@ function buildNodeUtilsForDataGeneration() {
     return gulp.src(settings.commonFiles.concat(part.files).map(transformFileName))
         .pipe(concat(part.fileName + '.js'))
         .pipe(headerPipes.useStrict())
-        .pipe(gulp.dest(VECTORMAP_UTILS_RESULT_PATH));
+        .pipe(gulp.dest(VECTORMAP_NODE_TMP_PATH));
 }
 
-function cleanNodeUtils(done) {
-    const nodeFile = path.join(VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js');
-    if(fs.existsSync(nodeFile)) {
-        fs.unlinkSync(nodeFile);
-    }
-    done();
+function cleanNodeUtils() {
+    fs.rmSync(VECTORMAP_NODE_TMP_PATH, { recursive: true, force: true });
 }
 
-gulp.task('vectormap-data', gulp.series(buildNodeUtilsForDataGeneration, function() {
-    const stream = merge();
-    const processFiles = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js')).processFiles;
+gulp.task('vectormap-data', gulp.series(buildNodeUtilsForDataGeneration, function generateDataAndCleanup() {
+    try {
+        const stream = merge();
+        const processFiles = require(path.join('../..', VECTORMAP_NODE_TMP_PATH, 'dx.vectormaputils.node.js')).processFiles;
 
-    if(!fs.existsSync(VECTORMAP_DATA_RESULT_PATH)) {
-        fs.mkdirSync(VECTORMAP_DATA_RESULT_PATH);
-    }
+        if(!fs.existsSync(VECTORMAP_DATA_RESULT_PATH)) {
+            fs.mkdirSync(VECTORMAP_DATA_RESULT_PATH);
+        }
 
-    processFiles('build/vectormap-sources', {
-        output: VECTORMAP_DATA_RESULT_PATH,
-        settings: 'build/vectormap-sources/_settings.js'
-    }, function() {
-        const files = fs.readdirSync(VECTORMAP_DATA_RESULT_PATH);
+        processFiles('build/vectormap-sources', {
+            output: VECTORMAP_DATA_RESULT_PATH,
+            settings: 'build/vectormap-sources/_settings.js'
+        }, function() {
+            const files = fs.readdirSync(VECTORMAP_DATA_RESULT_PATH);
 
-        files.forEach(file => {
-            const data = fs.readFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, file), 'utf8');
+            files.forEach(file => {
+                const data = fs.readFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, file), 'utf8');
 
-            stream.add(
-                gulp.src('build/gulp/vectormapdata-template.jst')
-                    .pipe(template({ data: data }))
-                    .pipe(rename(file))
-                    .pipe(headerPipes.useStrict())
-                    .pipe(gulp.dest(VECTORMAP_DATA_RESULT_PATH))
-            );
+                stream.add(
+                    gulp.src('build/gulp/vectormapdata-template.jst')
+                        .pipe(template({ data: data }))
+                        .pipe(rename(file))
+                        .pipe(headerPipes.useStrict())
+                        .pipe(gulp.dest(VECTORMAP_DATA_RESULT_PATH))
+                );
+            });
         });
-    });
-    return stream;
-}, cleanNodeUtils));
+        return stream.on('end', cleanNodeUtils).on('error', cleanNodeUtils);
+    } catch(e) {
+        cleanNodeUtils();
+        throw e;
+    }
+}));
 
 function patchVectorMapUtilsStream(stream, isMinify) {
     return stream.pipe(headerPipes.useStrict())
