@@ -746,11 +746,6 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
     return this.getOverlayContainerIfNeeded($cell) ?? super.getRevertButtonContainer($cell);
   }
 
-  protected getFocusOverlayContainer($focusedElement: dxElementWrapper): dxElementWrapper {
-    return this.getOverlayContainerIfNeeded($focusedElement)
-      ?? super.getFocusOverlayContainer($focusedElement);
-  }
-
   protected overlayPositionedHandler(e, isOverlayVisible: boolean): void {
     const columnHeaders = this.getView('columnHeadersView');
     // @ts-expect-error
