@@ -297,7 +297,7 @@ describe.each([
         );
       });
 
-      it('should delete specific appointment on delete button click', async () => {
+      it('should delete specific appointment by delete key', async () => {
         const onAppointmentDeleted = jest.fn();
 
         const { POM } = await createScheduler({
@@ -388,6 +388,41 @@ describe.each([
           4,
           expect.objectContaining({ appointmentData: expect.objectContaining({ text: 'Inside Collector Apt1' }) }),
         );
+      });
+
+      it('should not close tooltip when there are several collectors', async () => {
+        const { POM } = await createScheduler({
+          dataSource: [{
+            id: 1,
+            text: 'A',
+            startDate: new Date(2025, 0, 8),
+            endDate: new Date(2025, 0, 11),
+          }, {
+            id: 2,
+            text: 'B',
+            startDate: new Date(2025, 0, 8),
+            endDate: new Date(2025, 0, 11),
+          }, {
+            id: 3,
+            text: 'C',
+            startDate: new Date(2025, 0, 8),
+            endDate: new Date(2025, 0, 10),
+          }, {
+            id: 4,
+            text: 'D',
+            startDate: new Date(2025, 0, 8),
+            endDate: new Date(2025, 0, 9),
+          }],
+          views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+          currentView: 'month',
+          currentDate: new Date(2025, 0, 8),
+        });
+
+        POM.getCollectorButton(0).click();
+
+        pressDeleteKeyOnTooltipItem(POM, 0);
+
+        expect(POM.tooltip.isVisible()).toBe(true);
       });
     });
   });
