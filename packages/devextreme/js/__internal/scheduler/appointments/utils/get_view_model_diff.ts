@@ -64,21 +64,21 @@ export const getViewModelDiff = (
   viewModelNext: AppointmentViewModelPlain[],
   appointmentDataSource: AppointmentDataSource,
 ): DiffItem<AppointmentViewModelPlain, AppointmentViewModelPlain>[] => {
+  const equal = (
+    a: AppointmentViewModelPlain,
+    b: AppointmentViewModelPlain,
+  ): boolean => equalByValue(getObjectToCompare(a), getObjectToCompare(b));
+
   const match = (
     a: AppointmentViewModelPlain,
     b: AppointmentViewModelPlain,
   ): boolean => {
     if ('items' in a && 'items' in b) {
-      return true;
+      return equal(a, b);
     }
 
     return a.itemData === b.itemData && !isDataChanged(a.itemData, appointmentDataSource);
   };
-
-  const equal = (
-    a: AppointmentViewModelPlain,
-    b: AppointmentViewModelPlain,
-  ): boolean => equalByValue(getObjectToCompare(a), getObjectToCompare(b));
 
   const itemsLengthEqual = (
     a: AppointmentViewModelPlain,
