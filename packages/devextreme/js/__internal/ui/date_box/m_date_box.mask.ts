@@ -1,6 +1,5 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
-import defaultDateNames from '@js/common/core/localization/default_date_names';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
@@ -132,8 +131,7 @@ class DateBoxMask extends DateBoxBase {
 
   _toggleAmPm(): void {
     const currentValue = this._getActivePartProp('text');
-    // @ts-expect-error ts-error
-    const indexOfCurrentValue = defaultDateNames.getPeriodNames().indexOf(currentValue);
+    const indexOfCurrentValue = dateLocalization.getPeriodNames().indexOf(currentValue);
     const newValue = indexOfCurrentValue ^ 1;
     this._setActivePartValue(newValue);
   }
@@ -478,7 +476,7 @@ class DateBoxMask extends DateBoxBase {
     }
     // @ts-expect-error ts-error
     let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
-    if (this._dateParts[index].isStub) {
+    if (this._dateParts[index]?.isStub) {
       const isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
       if (!isBoundaryIndex) {
         this._selectNextPart(step >= 0 ? step + 1 : step - 1);

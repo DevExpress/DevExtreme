@@ -89,7 +89,7 @@ const getPatternGetter = (patternChar) => {
 };
 
 export const renderDateParts = (text, regExpInfo) => {
-  const result = regExpInfo.regexp.exec(text);
+  const result = regExpInfo.regexp.exec(text) ?? [];
 
   let start = 0;
   let end = 0;
