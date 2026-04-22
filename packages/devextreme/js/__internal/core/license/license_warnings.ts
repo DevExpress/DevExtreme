@@ -70,31 +70,40 @@ export function logLicenseWarning(
 
   const warnings: string[][] = [[purchaseLine]];
 
+  const pushToLastGroup = (...items: string[]): void => {
+    const lastGroup = warnings[warnings.length - 1];
+    if (lastGroup.length === 1) {
+      lastGroup.push('', ...items);
+    } else {
+      lastGroup.push(...items);
+    }
+  };
+
   switch (warningType) {
     case 'no-key':
-      warnings[warnings.length - 1].push(T.keyNotFound);
+      pushToLastGroup(T.keyNotFound);
       warnings.push([installLine]);
       break;
 
     case 'invalid-key':
-      warnings[warnings.length - 1].push(T.keyVerificationFailed());
+      pushToLastGroup(T.keyVerificationFailed());
       warnings.push([installLine]);
       break;
 
     case 'lcx-used':
       // eslint-disable-next-line spellcheck/spell-checker
-      warnings[warnings.length - 1].push(T.keyVerificationFailed(), T.lcxUsedInsteadOfLcp);
+      pushToLastGroup(T.keyVerificationFailed(), T.lcxUsedInsteadOfLcp);
       warnings.push([installLine]);
       break;
 
     case 'old-devextreme-key':
-      warnings[warnings.length - 1].push(T.keyVerificationFailed(), T.oldDevExtremeKey);
+      pushToLastGroup(T.keyVerificationFailed(), T.oldDevExtremeKey);
       warnings.push([installLine]);
       break;
 
     case 'version-mismatch': {
       const incompatibleLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}`;
-      warnings[warnings.length - 1].push(T.keyVerificationFailed());
+      pushToLastGroup(T.keyVerificationFailed());
       warnings.push([incompatibleLine]);
       break;
     }
