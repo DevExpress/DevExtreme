@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/date_box.mask.parts';
 import dateParser from '__internal/core/localization/ldml/dateParserModule';
 import dateLocalization from 'common/core/localization/date';
+import localization from 'localization';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
@@ -1289,6 +1290,32 @@ module('Date AM/PM Handling', setupModule, () => {
 
             assert.strictEqual(this.$input.val(), 'PM');
         });
+    });
+
+    test('up/down arrows should continue to switch AM/PM on subsequent presses when locale has localized period names (T1327076)', function(assert) {
+        const defaultLocale = localization.locale();
+
+        try {
+            localization.locale('es-ES');
+
+            const [amName, pmName] = dateLocalization.getPeriodNames();
+
+            this.instance.option({
+                value: new Date('10/10/2012 22:00'),
+                displayFormat: 'a',
+                useMaskBehavior: true,
+            });
+
+            assert.strictEqual(this.$input.val(), pmName, 'initial value is localized PM');
+
+            this.keyboard.press('up');
+            assert.strictEqual(this.$input.val(), amName, 'value changed to localized AM after first press');
+
+            this.keyboard.press('up');
+            assert.strictEqual(this.$input.val(), pmName, 'value returned to localized PM after second press');
+        } finally {
+            localization.locale(defaultLocale);
+        }
     });
 });
 
