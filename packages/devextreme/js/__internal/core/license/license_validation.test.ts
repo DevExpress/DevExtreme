@@ -378,7 +378,7 @@ describe('license check', () => {
     { token: TOKEN_23_2, version: '42.4.5' },
     { token: TOKEN_23_1, version: '23.3.0' },
     { token: TOKEN_23_2, version: '42.4.0' },
-  ])('Trial panel should be displayed if license is outdated (>=1 major for RTM, >=2 major for preview)', ({ token, version }) => {
+  ])('Trial panel should be displayed if license is outdated', ({ token, version }) => {
     validateLicense(token, version);
     expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
