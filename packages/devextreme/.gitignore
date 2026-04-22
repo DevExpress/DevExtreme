@@ -4,7 +4,6 @@ node_modules
 /testing/LastSuiteTime.txt
 /dotnet_packages
 /build/bundle-templates/dx.custom.js
-/build/.vectormap-node-tmp
 /js/__internal/core/localization/default_messages.ts
 /js/__internal/core/localization/cldr-data
 /js/__internal/grids/__docs__/artifacts
