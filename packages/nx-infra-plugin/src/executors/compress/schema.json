@@ -9,7 +9,7 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["minify", "beautify"],
+      "enum": ["minify", "beautify", "strip-only"],
       "description": "Compression mode"
     },
     "removeDebug": {

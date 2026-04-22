@@ -715,6 +715,15 @@
         "{projectRoot}/artifacts/js/vectormap-utils"
       ]
     },
+    "compress:vectormap:strip-debug": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
+        ],
+        "mode": "strip-only"
+      }
+    },
     "compress:vectormap:beautify": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
@@ -742,7 +751,8 @@
       "options": {
         "commands": [
           "pnpm nx build:vectormap:generate devextreme",
-          "pnpm nx build:vectormap:headers devextreme"
+          "pnpm nx build:vectormap:headers devextreme",
+          "pnpm nx compress:vectormap:strip-debug devextreme"
         ],
         "parallel": false
       },

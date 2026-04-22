@@ -87,11 +87,16 @@ function stripDebugBlocks(content: string): string {
   return content.replace(REMOVE_DEBUG_REGEXP, '');
 }
 
+async function stripOnly(content: string): Promise<string> {
+  return content;
+}
+
 type CompressStrategy = (content: string, eulaUrl?: string) => Promise<string>;
 
 const COMPRESS_STRATEGIES: Record<string, CompressStrategy> = {
   minify,
   beautify,
+  'strip-only': stripOnly,
 };
 
 async function compressFile(
@@ -106,7 +111,7 @@ async function compressFile(
   }
 
   let content = await readFileText(filePath);
-  if (removeDebug) {
+  if (removeDebug || mode === 'strip-only') {
     content = stripDebugBlocks(content);
   }
   content = await strategy(content, eulaUrl);
@@ -116,12 +121,12 @@ async function compressFile(
 
 const runExecutor: PromiseExecutor<CompressExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const { files, mode, removeDebug = false, eulaUrl } = options;
+  const { files, mode, removeDebug, eulaUrl } = options;
 
   try {
     for (const file of files) {
       const filePath = path.resolve(projectRoot, file);
-      await compressFile(filePath, mode, removeDebug, eulaUrl);
+      await compressFile(filePath, mode, removeDebug ?? false, eulaUrl);
       logger.verbose(`Compressed ${file} (${mode}${removeDebug ? ', removeDebug' : ''})`);
     }
 
