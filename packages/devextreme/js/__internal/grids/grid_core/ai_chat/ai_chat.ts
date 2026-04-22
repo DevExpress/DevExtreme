@@ -134,7 +134,7 @@ export class AIChat {
       case MessageStatus.Error:
         return messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader');
       case MessageStatus.Pending:
-        return messageLocalization.format('dxDataGrid-aiAssistantPendingMessageHeader');
+        return messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader');
       default:
         return message.text as string ?? '';
     }
