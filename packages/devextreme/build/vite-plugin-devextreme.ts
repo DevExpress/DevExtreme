@@ -1,7 +1,7 @@
 import { transformAsync } from '@babel/core';
 import type { PluginOption } from 'vite';
 
-function removeUninitializedClassFields(): unknown {
+export function removeUninitializedClassFields(): unknown {
   return {
     visitor: {
       ClassProperty(path: { node: { value: unknown }; remove: () => void }) {
@@ -13,7 +13,7 @@ function removeUninitializedClassFields(): unknown {
   };
 }
 
-function moveFieldInitializersToConstructor(): unknown {
+export function moveFieldInitializersToConstructor(): unknown {
   return {
     visitor: {
       Class(path: { node: { body: { body: unknown[] } } }) {
@@ -90,8 +90,8 @@ function moveFieldInitializersToConstructor(): unknown {
         const ctorBody = ctor.body!.body as Stmt[];
 
         let insertAt = 0;
-        while (insertAt < ctorBody.length) {
-          const stmt = ctorBody[insertAt];
+        for (let i = 0; i < ctorBody.length; i += 1) {
+          const stmt = ctorBody[i];
           const isSuperCall = stmt.type === 'ExpressionStatement'
             && stmt.expression?.type === 'CallExpression'
             && stmt.expression.callee?.type === 'Super';
@@ -104,8 +104,7 @@ function moveFieldInitializersToConstructor(): unknown {
             && stmt.expression.left.property?.name === stmt.expression.right.name
             && paramNames.has(stmt.expression.right.name!);
 
-          if (!isSuperCall && !isParamPropertyAssignment) break;
-          insertAt += 1;
+          if (isSuperCall || isParamPropertyAssignment) insertAt = i + 1;
         }
 
         ctorBody.splice(insertAt, 0, ...(assignments as Stmt[]));
