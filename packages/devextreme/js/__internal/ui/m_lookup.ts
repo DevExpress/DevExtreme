@@ -294,7 +294,7 @@ class Lookup extends DropDownList<LookupProperties> {
     });
   }
 
-  _fireContentReadyAction() {}
+  _fireContentReadyAction() { }
 
   _popupWrapperClass() {
     return '';
@@ -371,7 +371,7 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  _renderButtonContainers(): void {}
+  _renderButtonContainers(): void { }
 
   _renderFieldTemplate(template) {
     this._$field.empty();
@@ -671,7 +671,7 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  _preventFocusOnPopup(): void {}
+  _preventFocusOnPopup(): void { }
 
   _shouldLoopFocusInsidePopup(): boolean {
     const {
@@ -765,32 +765,43 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _popupToolbarItemsConfig() {
+    const { focusStateEnabled, applyButtonText: text } = this.option();
+
     return [
       {
         shortcut: 'done',
         options: {
+          text,
+          focusStateEnabled,
           onClick: this._applyButtonHandler.bind(this),
-          text: this.option('applyButtonText'),
         },
       },
     ];
   }
 
   _getCancelButtonConfig() {
-    return this.option('showCancelButton') ? {
+    const { focusStateEnabled, cancelButtonText: text, showCancelButton } = this.option();
+
+    return showCancelButton ? {
       shortcut: 'cancel',
-      onClick: this._cancelButtonHandler.bind(this),
       options: {
-        text: this.option('cancelButtonText'),
+        text,
+        focusStateEnabled,
       },
+      onClick: this._cancelButtonHandler.bind(this),
     } : null;
   }
 
   _getClearButtonConfig() {
-    return this.option('showClearButton') ? {
+    const { showClearButton, clearButtonText: text, focusStateEnabled } = this.option();
+
+    return showClearButton ? {
       shortcut: 'clear',
+      options: {
+        text,
+        focusStateEnabled,
+      },
       onClick: this._resetValue.bind(this),
-      options: { text: this.option('clearButtonText') },
     } : null;
   }
 
@@ -832,7 +843,7 @@ class Lookup extends DropDownList<LookupProperties> {
     this._renderSearch();
   }
 
-  _renderValueChangeEvent(): void {}
+  _renderValueChangeEvent(): void { }
 
   _renderSearch(): void {
     const isSearchEnabled = this.option('searchEnabled');
@@ -861,8 +872,10 @@ class Lookup extends DropDownList<LookupProperties> {
         onDisposing: () => isKeyboardListeningEnabled = false,
         // eslint-disable-next-line no-return-assign
         onFocusIn: () => isKeyboardListeningEnabled = true,
-        // eslint-disable-next-line no-return-assign
-        onFocusOut: () => isKeyboardListeningEnabled = false,
+        onFocusOut: () => {
+          isKeyboardListeningEnabled = false;
+          this._list?.option('focusedElement', null);
+        },
         // @ts-expect-error ts-error
         onKeyboardHandled: (opts) => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
         onValueChanged: (e) => this._searchHandler(e),
@@ -954,11 +967,11 @@ class Lookup extends DropDownList<LookupProperties> {
     this._searchBox?.option('placeholder', placeholder);
   }
 
-  _setAriaTargetForList(): void {}
+  _setAriaTargetForList(): void { }
 
   _listConfig() {
     return extend(super._listConfig(), {
-      tabIndex: 0,
+      tabIndex: this.option('searchEnabled') ? -1 : 0,
       grouped: this.option('grouped'),
       groupTemplate: this._getTemplateByOption('groupTemplate'),
       pullRefreshEnabled: this.option('pullRefreshEnabled'),
@@ -1093,6 +1106,7 @@ class Lookup extends DropDownList<LookupProperties> {
           this._removeSearch();
           this._renderSearch();
         }
+        this._setListOption('tabindex', value ? -1 : 0);
         break;
       case 'searchPlaceholder':
         this._setSearchPlaceholder();
