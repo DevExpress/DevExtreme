@@ -23,6 +23,7 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { EditingController } from '../editing/m_editing';
+import { isDataRow } from '../keyboard_navigation/utils';
 import type { ViewController } from '../m_modules';
 import modules from '../m_modules';
 import type { Module, ModuleType } from '../m_types';
@@ -233,13 +234,14 @@ export class EditorFactory extends ViewControllerWithMixin {
     } else if ($element.length) {
       // align "right bottom" for Mozilla
       const align = browser.mozilla ? 'right bottom' : 'left top';
+      const isDataRowElement = isDataRow($element);
       const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
       const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
       const $content = this.getFocusOverlayContainer($element);
       const focusOverlaySize = this.getFocusOverlaySize($element);
 
       this._$focusOverlay
-        .removeClass(DX_HIDDEN)
+        .toggleClass(DX_HIDDEN, isDataRowElement)
         .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
         .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
         .appendTo($content);
