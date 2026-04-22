@@ -95,7 +95,6 @@ const resultsReporter = createResultsReporter({
 });
 const vectorMapService = createVectorMapService({
   packageRoot: PACKAGE_ROOT,
-  testingRoot: TESTING_ROOT,
   vectorDataDirectory: VECTOR_DATA_DIRECTORY,
 });
 const staticFiles = createStaticFileService({

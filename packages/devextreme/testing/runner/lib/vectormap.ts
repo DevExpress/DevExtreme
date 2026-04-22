@@ -7,7 +7,6 @@ import {
 
 interface VectorMapServiceOptions {
   packageRoot: string;
-  testingRoot: string;
   vectorDataDirectory: string;
 }
 

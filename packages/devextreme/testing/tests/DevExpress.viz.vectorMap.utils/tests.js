@@ -45,7 +45,6 @@ function getFailCallBack(assert) {
 
 QUnit.module('data loader', {
     before: async function() {
-        debugger;
         const response = await fetch('/TestVectorMapData/GetTestData');
         testData = await response.json();
 
