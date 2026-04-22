@@ -1,7 +1,7 @@
 import { BuildOptions } from 'esbuild';
 
 import vuePlugin from 'esbuild-plugin-vue3';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import {
   getDestinationPathByDemo, getSourcePathByDemo,
 } from '../helper';
@@ -26,6 +26,9 @@ export default class VueBundler extends ESBundler {
       },
       entryNames: '[dir]/bundle.[hash]',
       outdir: destinationDemoPath,
+      alias: {
+        'anti-forgery': resolve(__dirname, '../../../shared/anti-forgery/fetch-override.js'),
+      },
       entryPoints: this.#getEntryPoints(sourceDemoPath),
       plugins: [vuePlugin() as any],
       define: {

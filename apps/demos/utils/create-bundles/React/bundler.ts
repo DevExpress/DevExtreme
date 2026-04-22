@@ -27,6 +27,7 @@ export default class ReactBundler extends ESBundler {
       entryNames: '[dir]/bundle.[hash]',
       outdir: destinationDemoPath,
       alias: {
+        'anti-forgery': resolve(__dirname, '../../../shared/anti-forgery/fetch-override.js'),
         react: resolve(__dirname, '../../../node_modules/react'),
         'react-dom': resolve(__dirname, '../../../node_modules/react-dom'),
       },

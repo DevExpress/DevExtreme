@@ -74,8 +74,8 @@ const createAngularJson = () => {
   };
   const menu: Item[] = (menuMeta as any).default;
 
-  for (const meta of menu) {
-    for (const group of meta.Groups) {
+  const collectProjectsFromGroups = (groups: Item['Groups']) => {
+    for (const group of groups) {
       const demos = group.Demos || [];
       for (const demo of demos) {
         if (!isSkipDemo(demo)) {
@@ -88,7 +88,16 @@ const createAngularJson = () => {
           }
         }
       }
+
+      const subGroups = (group as unknown as { Groups?: Item['Groups'] }).Groups || [];
+      if (subGroups.length) {
+        collectProjectsFromGroups(subGroups);
+      }
     }
+  };
+
+  for (const meta of menu) {
+    collectProjectsFromGroups(meta.Groups || []);
   }
 
   const jsonString = JSON.stringify(angularJsonObject);

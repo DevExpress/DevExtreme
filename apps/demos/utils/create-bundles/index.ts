@@ -35,15 +35,24 @@ const getBundler = (framework: Framework): ESBundler => {
 const menu: Item[] = (menuMeta as any).default;
 const allDemos: Demo[] = [];
 
-for (const meta of menu) {
-  for (const group of meta.Groups) {
+const collectDemosFromGroups = (groups: Item['Groups']) => {
+  for (const group of groups) {
     const demos = group.Demos || [];
     for (const demo of demos) {
       if (!isSkipDemo(demo)) {
         allDemos.push(demo);
       }
     }
+
+    const subGroups = (group as unknown as { Groups?: Item['Groups'] }).Groups || [];
+    if (subGroups.length) {
+      collectDemosFromGroups(subGroups);
+    }
   }
+};
+
+for (const meta of menu) {
+  collectDemosFromGroups(meta.Groups || []);
 }
 
 async function processDemosInBatches(bundler: ESBundler, demoList: Demo[], batchSize: number) {
