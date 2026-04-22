@@ -190,7 +190,7 @@ jobs:
       run: |
         node -v
         npm -v
-        npm ci --no-audit --no-fund --ignore-scripts
+        npm i --no-audit --no-fund --ignore-scripts
 
     - name: Upload package-lock
       uses: actions/upload-artifact@v4
