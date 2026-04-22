@@ -1,5 +1,7 @@
+import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
+
 import type { InternalGrid } from '../m_types';
-import type { Command, CommandResults } from './types';
+import type { CommandResults } from './types';
 
 export class GridCommands {
   constructor(private readonly gridInstance: InternalGrid) {
@@ -7,12 +9,15 @@ export class GridCommands {
 
   // TODO: need to implement real validation logic
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public validate(commands: Command[]): boolean {
+  public validate(actions: ExecuteGridAssistantAction[]): boolean {
     return true;
   }
 
   // TODO: need to implement real command execution logic
-  public executeCommands(commands: Command[]): Promise<CommandResults> {
-    return Promise.resolve([...commands] as unknown as CommandResults);
+  public executeCommands(actions: ExecuteGridAssistantAction[]): Promise<CommandResults> {
+    return Promise.resolve(actions.map((action) => ({
+      status: action.name.includes('Error') ? 'error' : 'success',
+      message: action.name,
+    })));
   }
 }

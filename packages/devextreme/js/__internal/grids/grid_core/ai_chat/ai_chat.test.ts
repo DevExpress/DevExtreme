@@ -313,9 +313,9 @@ describe('AIChat', () => {
           },
         }, container);
 
-        expect(container.querySelector(`.${CLASSES.messageList}`)).not.toBeNull();
-        expect(container.querySelectorAll(`.${CLASSES.messageListItem}`)).toHaveLength(2);
-        expect(container.querySelectorAll(`.${CLASSES.messageListItemSuccess}`)).toHaveLength(2);
+        expect(container.querySelector(`.${CLASSES.actionList}`)).not.toBeNull();
+        expect(container.querySelectorAll(`.${CLASSES.actionListItem}`)).toHaveLength(2);
+        expect(container.querySelectorAll(`.${CLASSES.actionListItemSuccess}`)).toHaveLength(2);
         expect(container.querySelector(`.${CLASSES.messageProgressBar}`)).toBeNull();
       });
 
@@ -339,7 +339,7 @@ describe('AIChat', () => {
           },
         }, container);
 
-        const icons = container.querySelectorAll(`.${CLASSES.messageListItemIcon}`);
+        const icons = container.querySelectorAll(`.${CLASSES.actionListItemIcon}`);
 
         expect(icons).toHaveLength(2);
         expect(icons[0].textContent).toBe(SUCCESS_ITEM_EMOJI);
@@ -430,7 +430,7 @@ describe('AIChat', () => {
           },
         }, container);
 
-        expect(container.querySelector(`.${CLASSES.messageList}`)).toBeNull();
+        expect(container.querySelector(`.${CLASSES.actionList}`)).toBeNull();
       });
     });
 
@@ -488,7 +488,7 @@ describe('AIChat', () => {
           },
         }, container);
 
-        expect(container.querySelector(`.${CLASSES.messageList}`)).toBeNull();
+        expect(container.querySelector(`.${CLASSES.actionList}`)).toBeNull();
         expect(container.querySelector(`.${CLASSES.messageProgressBar}`)).toBeNull();
       });
 

@@ -1,3 +1,4 @@
+import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -5,7 +6,7 @@ import $ from '@js/core/renderer';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
-import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
+import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -25,6 +26,10 @@ import {
 import type {
   AIChatOptions, CommandResult, CommandResults,
 } from './types';
+import {
+  getMessageIconName, getMessageStateClass, isAIChatMessage,
+  needToShowRegenerateButton,
+} from './utils';
 
 export class AIChat {
   private readonly popupInstance: Popup;
@@ -38,10 +43,6 @@ export class AIChat {
 
     container.addClass(CLASSES.aiChat);
     this.popupInstance = createComponent(container, Popup, this.getPopupConfig());
-  }
-
-  private isAIChatMessage(message: Message): boolean {
-    return message.author?.id === AI_ASSISTANT_AUTHOR_ID;
   }
 
   private getChatConfig(): ChatProperties {
@@ -70,7 +71,7 @@ export class AIChat {
           return;
         }
 
-        if (this.isAIChatMessage(message)) {
+        if (isAIChatMessage(message)) {
           this.renderAIMessage(message, container);
         } else {
           $(container).text(message?.text ?? '');
@@ -122,35 +123,9 @@ export class AIChat {
     };
   }
 
-  private getMessageStateClass(status: MessageStatus): string {
-    switch (status) {
-      case 'success':
-        return CLASSES.messageSuccess;
-      case 'error':
-        return CLASSES.messageError;
-      case 'pending':
-      default:
-        return CLASSES.messagePending;
-    }
-  }
-
-  private getMessageIconName(message: Message): string {
-    const hasErrors = message.commands?.some(({ status }) => status === MessageStatus.Error);
-
-    if (message.status === MessageStatus.Error || hasErrors) {
-      return 'errorcircle';
-    }
-
-    if (message.status === MessageStatus.Success) {
-      return 'checkmarkcirclefilled';
-    }
-
-    return 'sparkle';
-  }
-
   private renderMessageIcon($parent: dxElementWrapper, message: Message): void {
     $('<i>')
-      .addClass(`dx-icon dx-icon-${this.getMessageIconName(message)} ${CLASSES.messageIcon}`)
+      .addClass(`dx-icon dx-icon-${getMessageIconName(message)} ${CLASSES.messageIcon}`)
       .appendTo($parent);
   }
 
@@ -173,19 +148,18 @@ export class AIChat {
       .addClass(CLASSES.messageHeaderRow)
       .appendTo($parent);
     const headerText = this.getHeaderText(message);
-    const needToShowRegenerateButton = this.needToShowRegenerateButton(message);
 
-    $('<b>')
+    $('<div>')
       .addClass(CLASSES.messageHeader)
       .text(headerText)
       .appendTo($row);
 
-    if (needToShowRegenerateButton && this.options.onRegenerate) {
+    if (needToShowRegenerateButton(message) && this.options.onRegenerate) {
       const $button = $('<i>')
         .addClass(`dx-icon dx-icon-${REGENERATE_ICON} ${CLASSES.messageRegenerateButton}`)
         .appendTo($row);
 
-      eventsEngine.on($button, 'click', () => this.options.onRegenerate?.());
+      eventsEngine.on($button, clickEventName, () => this.options.onRegenerate?.());
     }
   }
 
@@ -226,22 +200,22 @@ export class AIChat {
     command: CommandResult,
   ): void {
     const commandStateClass = command.status === 'error'
-      ? CLASSES.messageListItemError
-      : CLASSES.messageListItemSuccess;
+      ? CLASSES.actionListItemError
+      : CLASSES.actionListItemSuccess;
 
     const $item = $('<li>')
-      .addClass(`${CLASSES.messageListItem} ${commandStateClass}`)
+      .addClass(`${CLASSES.actionListItem} ${commandStateClass}`)
       .appendTo($parent);
 
     const emoji = command.status === 'error' ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
 
     $('<span>')
-      .addClass(CLASSES.messageListItemIcon)
+      .addClass(CLASSES.actionListItemIcon)
       .text(emoji)
       .appendTo($item);
 
     $('<span>')
-      .addClass(CLASSES.messageListItemText)
+      .addClass(CLASSES.actionListItemText)
       .text(command.message)
       .appendTo($item);
   }
@@ -255,7 +229,7 @@ export class AIChat {
     }
 
     const $list = $('<ul>')
-      .addClass(CLASSES.messageList)
+      .addClass(CLASSES.actionList)
       .appendTo($container);
 
     commands.forEach((command) => {
@@ -278,18 +252,6 @@ export class AIChat {
       .addClass(CLASSES.messageErrorText)
       .text(message.text ?? '')
       .appendTo($container);
-  }
-
-  private needToShowRegenerateButton(message: Message): boolean {
-    const isError = message.status === MessageStatus.Error;
-
-    if (isError) {
-      return true;
-    }
-
-    const hasErrors = !!message.commands?.some(({ status }) => status === MessageStatus.Error);
-
-    return hasErrors;
   }
 
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
@@ -318,7 +280,7 @@ export class AIChat {
 
   public renderAIMessage(message: Message, container: HTMLElement): void {
     const $message = $('<div>')
-      .addClass(`${CLASSES.message} ${this.getMessageStateClass(message.status)}`)
+      .addClass(`${CLASSES.message} ${getMessageStateClass(message.status)}`)
       .appendTo(container);
 
     this.renderMessageIcon($message, message);

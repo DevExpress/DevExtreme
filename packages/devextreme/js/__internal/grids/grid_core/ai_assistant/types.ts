@@ -28,24 +28,13 @@ export interface GridCommand<TArgs = undefined> {
   execute: (component: InternalGrid, callbacks: CommandCallbacks) => CommandExecutor<TArgs>;
 }
 
+export interface Command {
+  command: string;
+  args: Record<string, unknown>;
+}
 export interface CommandResponse {
   commands: Command[];
   explanation: string;
 }
 
-export interface Command {
-  command: string;
-  args: Record<string, unknown>;
-}
-
-export interface CommandResult {
-  status: 'success' | 'error';
-  message: string;
-}
-
 export type CommandResults = CommandResult[];
-
-export interface InternalRequestCallbacks {
-  onComplete?: (finalResponse: CommandResponse) => void;
-  onError?: (error: Error) => void;
-}

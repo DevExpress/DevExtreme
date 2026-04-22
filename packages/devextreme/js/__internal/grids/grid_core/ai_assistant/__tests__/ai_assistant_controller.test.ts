@@ -5,6 +5,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
+import type { ExecuteGridAssistantCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { ArrayStore } from '@js/common/data';
 import type { Message } from '@js/ui/chat';
 
@@ -15,13 +16,16 @@ import {
   AI_ASSISTANT_AUTHOR_ID,
   MessageStatus,
 } from '../const';
-import type { CommandResponse, InternalRequestCallbacks } from '../types';
 
-let sendRequestCallbacks: InternalRequestCallbacks = {};
+let sendRequestCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
 
 const mockAIIntegration = {
-  sendRequest: jest.fn(({ callbacks }: { callbacks: InternalRequestCallbacks }) => {
+  executeGridAssistant: jest.fn((
+    _params: unknown,
+    callbacks: RequestCallbacks<ExecuteGridAssistantCommandResult>,
+  ) => {
     sendRequestCallbacks = callbacks;
+    return jest.fn();
   }),
 };
 
@@ -38,6 +42,7 @@ const createController = (
 
       return options[name];
     }),
+    _createActionByOption: jest.fn(() => jest.fn()),
   };
 
   const controller = new AIAssistantController(mockComponent as unknown as InternalGrid);
@@ -87,7 +92,7 @@ describe('AIAssistantController', () => {
 
       expect(messages).toEqual([
         expect.objectContaining({
-          id: `${AI_ASSISTANT_AUTHOR_ID}-${expectedTimestamp}`,
+          id: expect.stringContaining(AI_ASSISTANT_AUTHOR_ID),
           timestamp: expectedTimestamp,
           author: AI_ASSISTANT_AUTHOR,
           text: 'Generate values',
@@ -96,7 +101,7 @@ describe('AIAssistantController', () => {
       ]);
     });
 
-    it('should fail message when AI integration is not configured', async () => {
+    it('should keep message as pending when AI integration is not configured', async () => {
       const controller = createController();
 
       controller.sendRequestToAI({
@@ -109,13 +114,12 @@ describe('AIAssistantController', () => {
 
       expect(messages).toEqual([
         expect.objectContaining({
-          status: MessageStatus.Error,
-          text: 'AI integration is not configured',
+          status: MessageStatus.Pending,
         }),
       ]);
     });
 
-    it('should complete message as success when all commands succeed', async () => {
+    it('should complete message as success when command succeed', async () => {
       const controller = createController({
         'aiAssistant.aiIntegration': mockAIIntegration,
       });
@@ -126,10 +130,9 @@ describe('AIAssistantController', () => {
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
 
-      const commands = [{ command: 'sort', args: { column: 'Name' } }];
-      const response: CommandResponse = {
-        commands,
-        explanation: '',
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      const response: ExecuteGridAssistantCommandResult = {
+        actions,
       };
 
       sendRequestCallbacks.onComplete?.(response);
@@ -140,7 +143,7 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Success,
-          commands,
+          commands: [{ status: 'success', message: 'sort' }],
         }),
       ]);
     });
@@ -168,7 +171,7 @@ describe('AIAssistantController', () => {
       ]);
     });
 
-    it('should fail message when response has no commands', async () => {
+    it('should fail message when response has no actions', async () => {
       const controller = createController({
         'aiAssistant.aiIntegration': mockAIIntegration,
       });
@@ -179,10 +182,7 @@ describe('AIAssistantController', () => {
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
 
-      const response: CommandResponse = {
-        commands: [],
-        explanation: 'Cannot process this request',
-      };
+      const response = {} as ExecuteGridAssistantCommandResult;
 
       sendRequestCallbacks.onComplete?.(response);
       await Promise.resolve();
@@ -193,7 +193,7 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Error,
-          text: 'Cannot process this request',
+          text: 'Default error message',
         }),
       ]);
     });
