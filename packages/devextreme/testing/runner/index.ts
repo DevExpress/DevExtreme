@@ -21,7 +21,6 @@ import {
   parseNumber,
   readBodyText,
   readFormBody,
-  resolveNodePath,
   safeDecodeURIComponent,
   safeReadFile,
   splitCommaList,
@@ -35,7 +34,6 @@ import { createVectorMapService } from './lib/vectormap';
 import {
   sendHtml,
   sendJson,
-  sendJsonText,
   sendNotFound,
   sendText,
   sendXml,
@@ -77,9 +75,6 @@ const RUN_FLAGS = {
 
 const PORTS = loadPorts(path.join(PACKAGE_ROOT, 'ports.json'));
 const QUNIT_PORT = Number(PORTS.qunit);
-const VECTOR_MAP_TESTER_PORT = Number(PORTS['vectormap-utils-tester']);
-
-const PATH_TO_NODE = resolveNodePath();
 
 const logger = createRunnerLogger(RAW_LOG_FILENAME);
 const templates = createTemplateRenderer(TEMPLATES_ROOT, escapeHtml);
@@ -102,8 +97,6 @@ const vectorMapService = createVectorMapService({
   packageRoot: PACKAGE_ROOT,
   testingRoot: TESTING_ROOT,
   vectorDataDirectory: VECTOR_DATA_DIRECTORY,
-  vectorMapTesterPort: VECTOR_MAP_TESTER_PORT,
-  pathToNode: PATH_TO_NODE,
 });
 const staticFiles = createStaticFileService({
   escapeHtml,
@@ -310,35 +303,6 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     const data = vectorMapService.readVectorMapTestData();
     sendJson(res, data);
     return;
-  }
-
-  if (req.method === 'GET') {
-    const parseBufferMatch = /^\/TestVectorMapData\/ParseBuffer\/(.+)$/i.exec(pathname);
-    if (parseBufferMatch) {
-      const id = safeDecodeURIComponent(parseBufferMatch[1]);
-      const responseText = await vectorMapService.redirectRequestToVectorMapNodeServer('parse-buffer', id);
-      sendJsonText(res, responseText);
-      return;
-    }
-  }
-
-  if (req.method === 'GET') {
-    const readAndParseMatch = /^\/TestVectorMapData\/ReadAndParse\/(.+)$/i.exec(pathname);
-    if (readAndParseMatch) {
-      const id = safeDecodeURIComponent(readAndParseMatch[1]);
-      const responseText = await vectorMapService.redirectRequestToVectorMapNodeServer('read-and-parse', id);
-      sendJsonText(res, responseText);
-      return;
-    }
-  }
-
-  if (req.method === 'GET') {
-    const executeConsoleAppMatch = /^\/TestVectorMapData\/ExecuteConsoleApp(?:\/(.*))?$/i.exec(pathname);
-    if (executeConsoleAppMatch) {
-      const result = vectorMapService.executeVectorMapConsoleApp(requestUrl.searchParams);
-      sendJson(res, result);
-      return;
-    }
   }
 
   if (staticFiles.tryServeStatic(req, res, pathname, requestUrl.searchParams)) {

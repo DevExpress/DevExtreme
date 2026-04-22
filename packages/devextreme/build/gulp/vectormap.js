@@ -24,13 +24,29 @@ function transformFileName(fileName) {
 
 gulp.task('vectormap-utils', function() {
     return merge(
-        createVectorMapUtilsStream('browser', '.debug', false),
-        createVectorMapUtilsStream('browser', '', true),
-        createVectorMapUtilsStream('node', '', false)
+        createBrowserVectorMapUtilsStream('.debug', false),
+        createBrowserVectorMapUtilsStream('', true),
     );
 });
 
-gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
+function buildNodeUtilsForDataGeneration() {
+    const settings = require(path.join('../..', VECTORMAP_UTILS_PATH, '_settings.json'));
+    const part = settings['node'];
+    return gulp.src(settings.commonFiles.concat(part.files).map(transformFileName))
+        .pipe(concat(part.fileName + '.js'))
+        .pipe(headerPipes.useStrict())
+        .pipe(gulp.dest(VECTORMAP_UTILS_RESULT_PATH));
+}
+
+function cleanNodeUtils(done) {
+    const nodeFile = path.join(VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js');
+    if(fs.existsSync(nodeFile)) {
+        fs.unlinkSync(nodeFile);
+    }
+    done();
+}
+
+gulp.task('vectormap-data', gulp.series(buildNodeUtilsForDataGeneration, function() {
     const stream = merge();
     const processFiles = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js')).processFiles;
 
@@ -57,7 +73,7 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
         });
     });
     return stream;
-}));
+}, cleanNodeUtils));
 
 function patchVectorMapUtilsStream(stream, isMinify) {
     return stream.pipe(headerPipes.useStrict())
@@ -67,20 +83,17 @@ function patchVectorMapUtilsStream(stream, isMinify) {
         .pipe(gulp.dest(VECTORMAP_UTILS_RESULT_PATH));
 }
 
-function createVectorMapUtilsStream(name, suffix, isMinify) {
+function createBrowserVectorMapUtilsStream(suffix, isMinify) {
     const settings = require(path.join('../..', VECTORMAP_UTILS_PATH, '_settings.json'));
-    const part = settings[name];
+    const part = settings['browser'];
     const stream = gulp.src(settings.commonFiles.concat(part.files).map(transformFileName))
         .pipe(concat(part.fileName + suffix + '.js'));
 
-    if(name === 'browser') {
-        return stream.pipe(tap(file => {
-            patchVectorMapUtilsStream(gulp.src('build/gulp/vectormaputils-template.jst')
-                .pipe(template({ data: file.contents }))
-                .pipe(rename(path.basename(file.path))), isMinify);
-        }));
-    }
-    return patchVectorMapUtilsStream(stream, isMinify);
+    return stream.pipe(tap(file => {
+        patchVectorMapUtilsStream(gulp.src('build/gulp/vectormaputils-template.jst')
+            .pipe(template({ data: file.contents }))
+            .pipe(rename(path.basename(file.path))), isMinify);
+    }));
 }
 
 gulp.task('vectormap', gulp.series('vectormap-utils', 'vectormap-data'));

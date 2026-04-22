@@ -685,6 +685,7 @@
         "{projectRoot}/build/gulp/vectormap.js"
       ],
       "outputs": [
+        "{projectRoot}/artifacts/js/vectormap-utils",
         "{projectRoot}/artifacts/js/vectormap-data"
       ]
     },
@@ -732,7 +733,6 @@
         "{projectRoot}/build/gulp/vendor.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/vectormap-utils",
         "{projectRoot}/artifacts/js/cldr"
       ]
     },

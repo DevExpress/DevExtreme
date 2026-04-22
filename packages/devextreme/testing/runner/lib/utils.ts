@@ -45,13 +45,12 @@ export function loadPorts(filePath: string): PortsMap {
     throw new Error(`Invalid ports definition: ${filePath}`);
   }
 
-  if (!isPortValue(parsed.qunit) || !isPortValue(parsed['vectormap-utils-tester'])) {
+  if (!isPortValue(parsed.qunit)) {
     throw new Error(`Required ports are missing in ${filePath}`);
   }
 
   const portsMap: PortsMap = {
     qunit: parsed.qunit,
-    'vectormap-utils-tester': parsed['vectormap-utils-tester'],
   };
 
   Object.entries(parsed).forEach(([key, value]) => {
