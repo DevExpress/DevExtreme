@@ -776,10 +776,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get hasItemsExpr(): Function | string {
+    get hasItemsExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
         return this._getOption('hasItemsExpr');
     }
-    set hasItemsExpr(value: Function | string) {
+    set hasItemsExpr(value: ((item: any, value: boolean | undefined) => boolean | undefined) | string) {
         this._setOption('hasItemsExpr', value);
     }
 
@@ -854,10 +854,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get itemsExpr(): Function | string {
+    get itemsExpr(): ((item: any, value: undefined | Array<any>) => Array<any> | undefined) | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: Function | string) {
+    set itemsExpr(value: ((item: any, value: undefined | Array<any>) => Array<any> | undefined) | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -880,10 +880,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((item: any, value: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((item: any, value: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -945,10 +945,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get parentIdExpr(): Function | string {
+    get parentIdExpr(): ((item: any, value: any) => any | undefined) | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: Function | string) {
+    set parentIdExpr(value: ((item: any, value: any) => any | undefined) | string) {
         this._setOption('parentIdExpr', value);
     }
 
@@ -1871,7 +1871,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hasItemsExprChange: EventEmitter<Function | string>;
+    @Output() hasItemsExprChange: EventEmitter<((item: any, value: boolean | undefined) => boolean | undefined) | string>;
 
     /**
     
@@ -1913,7 +1913,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<Function | string>;
+    @Output() itemsExprChange: EventEmitter<((item: any, value: undefined | Array<any>) => Array<any> | undefined) | string>;
 
     /**
     
@@ -1927,7 +1927,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<((item: any, value: any) => any) | string>;
 
     /**
     
@@ -1962,7 +1962,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() parentIdExprChange: EventEmitter<Function | string>;
+    @Output() parentIdExprChange: EventEmitter<((item: any, value: any) => any | undefined) | string>;
 
     /**
     
