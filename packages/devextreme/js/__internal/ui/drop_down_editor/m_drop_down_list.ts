@@ -48,9 +48,9 @@ const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
 const useCompositionEvents = devices.real().platform !== 'android';
 
 interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList>,
-'onOpened' | 'onClosed'
-| 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+  'onOpened' | 'onClosed'
+  | 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+  | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
   encodeNoDataText?: boolean;
 }
 
@@ -624,7 +624,7 @@ class DropDownList<
       dataSource: this._getDataSource(),
       _dataController: this._dataController,
       hoverStateEnabled: this._isDesktopDevice() ? hoverStateEnabled : false,
-      focusStateEnabled: this._isDesktopDevice() ? focusStateEnabled : false,
+      focusStateEnabled,
       _onItemsRendered: (): void => {
         // @ts-expect-error ts-error
         this._popup.repaint();
@@ -699,7 +699,7 @@ class DropDownList<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _listItemClickHandler(e?): void {}
+  _listItemClickHandler(e?): void { }
 
   _setListDataSource(): void {
     if (!this._list) {
@@ -733,10 +733,10 @@ class DropDownList<
   _canKeepDataSource(): boolean {
     const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
     return this._dataController.isLoaded()
-            && this.option('showDataBeforeSearch')
-            && this.option('minSearchLength')
-            && !isMinSearchLengthExceeded
-            && !this._isLastMinSearchLengthExceeded;
+      && this.option('showDataBeforeSearch')
+      && this.option('minSearchLength')
+      && !isMinSearchLengthExceeded
+      && !this._isLastMinSearchLengthExceeded;
   }
 
   _searchValue() {
@@ -992,8 +992,11 @@ class DropDownList<
     this._dataExpressionOptionChanged(args);
     switch (args.name) {
       case 'hoverStateEnabled':
-      case 'focusStateEnabled':
         this._isDesktopDevice() && this._setListOption(args.name, args.value);
+        super._optionChanged(args);
+        break;
+      case 'focusStateEnabled':
+        this._setListOption(args.name, args.value);
         super._optionChanged(args);
         break;
       case 'items':
