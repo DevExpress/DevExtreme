@@ -5,7 +5,7 @@ import { createUnzip } from 'zlib';
 
 console.log('This is a workaround for working with demos until the wrappers are reworked');
 console.log('Please run "npm run all:build" before this script');
-console.log('This script should be run again after each deps installation and running all:build script"\n\n');
+console.log('Please run this script again after installing dependencies and running "all:build"\n\n');
 
 async function main() {
   const VERSION = pkg.version;
