@@ -9,13 +9,8 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["minify", "beautify", "strip-only"],
+      "enum": ["minify", "beautify", "strip-debug", "normalize"],
       "description": "Compression mode"
-    },
-    "removeDebug": {
-      "type": "boolean",
-      "description": "Strip debug blocks before compression",
-      "default": false
     },
     "eulaUrl": {
       "type": "string",

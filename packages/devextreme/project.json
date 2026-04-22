@@ -721,7 +721,7 @@
         "files": [
           "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
         ],
-        "mode": "strip-only"
+        "mode": "strip-debug"
       }
     },
     "compress:vectormap:beautify": {
@@ -741,7 +741,6 @@
           "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
         ],
         "mode": "minify",
-        "removeDebug": true,
         "eulaUrl": "https://js.devexpress.com/Licensing/"
       }
     },
@@ -777,18 +776,66 @@
         }
       }
     },
+    "build:aspnet:copy": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "./js/aspnet.js", "to": "./artifacts/js/dx.aspnet.mvc.js" }
+        ]
+      },
+      "inputs": ["{projectRoot}/js/aspnet.js"],
+      "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
+    },
+    "compress:aspnet:normalize": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/js/dx.aspnet.mvc.js"],
+        "mode": "normalize"
+      }
+    },
+    "compress:aspnet": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/js/dx.aspnet.mvc.js"],
+        "mode": "beautify",
+        "eulaUrl": "https://js.devexpress.com/Licensing/"
+      }
+    },
+    "build:aspnet:headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "options": {
+        "targetDirectory": "./artifacts/js",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/",
+        "includePatterns": ["dx.aspnet.mvc.js"],
+        "separatorBetweenBannerAndContent": ""
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/js/dx.aspnet.mvc.js",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
+    },
     "build:aspnet": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gulp aspnet",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "pnpm nx build:aspnet:copy devextreme",
+          "pnpm nx compress:aspnet:normalize devextreme",
+          "pnpm nx build:aspnet:headers devextreme"
+        ],
+        "parallel": false
       },
-      "inputs": [
-        "{projectRoot}/build/gulp/aspnet.js"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/js/aspnet"
-      ]
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx build:aspnet:copy devextreme",
+            "pnpm nx compress:aspnet devextreme",
+            "pnpm nx build:aspnet:headers devextreme"
+          ]
+        }
+      },
+      "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
     },
     "build:declarations": {
       "executor": "nx:run-commands",

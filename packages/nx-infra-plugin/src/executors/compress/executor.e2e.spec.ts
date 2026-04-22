@@ -47,7 +47,6 @@ describe('CompressExecutor E2E', () => {
     const options: CompressExecutorSchema = {
       files: ['./test.js'],
       mode: 'minify',
-      removeDebug: true,
     };
 
     const result = await executor(options, context);
@@ -64,13 +63,14 @@ describe('CompressExecutor E2E', () => {
     expect(output.length).toBeLessThan(SAMPLE_CODE.length);
   });
 
-  it('should minify but keep debug blocks', async () => {
+  it('should apply normalize: normalize CRLF to LF, ensure trailing newline, preserve debug blocks', async () => {
     const filePath = path.join(projectDir, 'test.js');
-    await writeFileText(filePath, SAMPLE_CODE);
+    const crlfContent = SAMPLE_CODE.replace(/\n/g, '\r\n');
+    await writeFileText(filePath, crlfContent);
 
     const options: CompressExecutorSchema = {
       files: ['./test.js'],
-      mode: 'minify',
+      mode: 'normalize',
     };
 
     const result = await executor(options, context);
@@ -78,6 +78,9 @@ describe('CompressExecutor E2E', () => {
 
     const output = await readFileText(filePath);
 
+    expect(output).not.toContain('\r\n');
+    expect(output.endsWith('\n')).toBe(true);
+    expect(output).toContain('#DEBUG');
     expect(output).toContain('debug only');
   });
 
@@ -100,5 +103,45 @@ describe('CompressExecutor E2E', () => {
     expect(output.split('\n').length).toBeGreaterThan(5);
 
     expect(output).not.toContain('unused');
+  });
+
+  it('should preserve debug blocks in beautify mode', async () => {
+    const filePath = path.join(projectDir, 'test.js');
+    await writeFileText(filePath, SAMPLE_CODE);
+
+    const options: CompressExecutorSchema = {
+      files: ['./test.js'],
+      mode: 'beautify',
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const output = await readFileText(filePath);
+
+    expect(output).toContain('debug only');
+  });
+
+  it('should apply strip-debug: remove debug blocks only, no minification', async () => {
+    const filePath = path.join(projectDir, 'test.js');
+    await writeFileText(filePath, SAMPLE_CODE);
+
+    const options: CompressExecutorSchema = {
+      files: ['./test.js'],
+      mode: 'strip-debug',
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const output = await readFileText(filePath);
+
+    expect(output).not.toContain('#DEBUG');
+    expect(output).not.toContain('debug only');
+
+    expect(output).toContain('function hello');
+    expect(output.split('\n').length).toBeGreaterThan(3);
+
+    expect(output).not.toContain('\r\n');
   });
 });

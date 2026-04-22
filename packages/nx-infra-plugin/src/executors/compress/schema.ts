@@ -1,6 +1,5 @@
 export interface CompressExecutorSchema {
   files: string[];
-  mode: 'minify' | 'beautify' | 'strip-only';
-  removeDebug?: boolean;
+  mode: 'minify' | 'beautify' | 'strip-debug' | 'normalize';
   eulaUrl?: string;
 }

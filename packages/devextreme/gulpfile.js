@@ -32,7 +32,6 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/npm');
-require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
@@ -64,6 +63,12 @@ gulp.task('vectormap', shell.task(
     context.uglify
         ? 'pnpm nx run devextreme:build:vectormap -c production'
         : 'pnpm nx run devextreme:build:vectormap'
+));
+
+gulp.task('aspnet', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:build:aspnet -c production'
+        : 'pnpm nx run devextreme:build:aspnet'
 ));
 
 if(env.TEST_CI) {

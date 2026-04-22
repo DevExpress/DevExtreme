@@ -31,7 +31,7 @@ function createCommentFilter(eulaUrl?: string) {
   };
 }
 
-async function minify(content: string, eulaUrl?: string): Promise<string> {
+async function runMinify(content: string, eulaUrl?: string): Promise<string> {
   const result = await terser.minify(content, {
     output: {
       ascii_only: true,
@@ -46,7 +46,7 @@ async function minify(content: string, eulaUrl?: string): Promise<string> {
   return result.code;
 }
 
-async function beautify(content: string, eulaUrl?: string): Promise<string> {
+async function runBeautify(content: string, eulaUrl?: string): Promise<string> {
   const uglifyResult = await terser.minify(content, {
     mangle: false,
     compress: {
@@ -87,48 +87,39 @@ function stripDebugBlocks(content: string): string {
   return content.replace(REMOVE_DEBUG_REGEXP, '');
 }
 
-async function stripOnly(content: string): Promise<string> {
-  return content;
-}
-
-type CompressMode = CompressExecutorSchema['mode'];
 type CompressStrategy = (content: string, eulaUrl?: string) => Promise<string>;
 
-const COMPRESS_STRATEGIES: Record<CompressMode, CompressStrategy> = {
-  minify,
-  beautify,
-  'strip-only': stripOnly,
+const STRATEGIES: Record<CompressExecutorSchema['mode'], CompressStrategy> = {
+  minify: async (content, eulaUrl) => runMinify(stripDebugBlocks(content), eulaUrl),
+  beautify: async (content, eulaUrl) => runBeautify(content, eulaUrl),
+  'strip-debug': async (content) => stripDebugBlocks(content),
+  normalize: async (content) => content,
 };
 
 async function compressFile(
   filePath: string,
-  mode: CompressMode,
-  removeDebug: boolean,
+  mode: CompressExecutorSchema['mode'],
   eulaUrl?: string,
 ): Promise<void> {
-  const strategy = COMPRESS_STRATEGIES[mode];
+  const strategy = STRATEGIES[mode];
   if (!strategy) {
     throw new Error(`Unknown compress mode: ${mode}`);
   }
 
-  let content = await readFileText(filePath);
-  if (removeDebug || mode === 'strip-only') {
-    content = stripDebugBlocks(content);
-  }
-  content = await strategy(content, eulaUrl);
-  content = ensureTrailingNewline(normalizeEol(content));
-  await writeFileText(filePath, content);
+  const raw = await readFileText(filePath);
+  const transformed = await strategy(raw, eulaUrl);
+  await writeFileText(filePath, ensureTrailingNewline(normalizeEol(transformed)));
 }
 
 const runExecutor: PromiseExecutor<CompressExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const { files, mode, removeDebug, eulaUrl } = options;
+  const { files, mode, eulaUrl } = options;
 
   try {
     for (const file of files) {
       const filePath = path.resolve(projectRoot, file);
-      await compressFile(filePath, mode, removeDebug ?? false, eulaUrl);
-      logger.verbose(`Compressed ${file} (${mode}${removeDebug ? ', removeDebug' : ''})`);
+      await compressFile(filePath, mode, eulaUrl);
+      logger.verbose(`Compressed ${file} (${mode})`);
     }
 
     return { success: true };
