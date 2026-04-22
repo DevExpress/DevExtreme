@@ -214,7 +214,7 @@ function main() {
 
                 if(warning.type === 'incompatibleVersion') {
                     lines.push(
-                        prefixed(`${TEMPLATES.warningPrefix(1002)} ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion)}`),
+                        prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion)}`),
                     );
                 } else {
                     lines.push(
@@ -222,9 +222,9 @@ function main() {
                     );
 
                     if(warning.type === 'trialExpired') {
-                        lines.push(prefixed(`${TEMPLATES.warningPrefix(1003)} ${TEMPLATES.purchaseLicense}`));
+                        lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.purchaseLicense}`));
                     } else {
-                        lines.push(prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}`));
+                        lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
                     }
                 }
             }
