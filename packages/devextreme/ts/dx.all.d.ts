@@ -32176,7 +32176,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.parentIdExpr]
      */
-    parentIdExpr?: string | ((item: TRowData, value?: any) => TKey | undefined);
+    parentIdExpr?:
+      | string
+      | ((item: TRowData, value?: TKey) => TKey | undefined);
     /**
      * [descr:dxTreeListOptions.remoteOperations]
      */

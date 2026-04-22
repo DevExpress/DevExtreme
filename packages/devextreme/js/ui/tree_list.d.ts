@@ -1119,7 +1119,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default "parentId"
      * @public
      */
-    parentIdExpr?: string | ((item: TRowData, value?: any) => TKey | undefined);
+    parentIdExpr?: string | ((item: TRowData, value?: TKey) => TKey | undefined);
     /**
      * @docid
      * @default "auto"
