@@ -19,6 +19,12 @@ interface Bundler {
   getBuildOptions: (demo: Demo) => BuildOptions;
   buildDemo: (demo: Demo, res) => void;
 }
+
+type ChangedFile = {
+  path: string;
+  originalContent: string;
+};
+
 export default class AngularBundler implements Bundler {
   framework: Framework;
 
@@ -28,12 +34,13 @@ export default class AngularBundler implements Bundler {
 
   getBuildOptions = (): BuildOptions => ({});
 
-  private updateAntiForgeryImport = (sourceDemoPath: string) => {
+  private updateAntiForgeryImport = (sourceDemoPath: string): ChangedFile[] => {
     const angularAppPath = join(sourceDemoPath, 'app');
     if (!existsSync(angularAppPath)) {
-      return;
+      return [];
     }
 
+    const changedFiles: ChangedFile[] = [];
     const oldImport = "import 'anti-forgery';";
     const antiForgeryFilePath = join(__dirname, '..', '..', '..', 'shared', 'anti-forgery', 'fetch-override.js');
 
@@ -59,11 +66,21 @@ export default class AngularBundler implements Bundler {
         const relativeImportPath = relative(dirname(entryPath), antiForgeryFilePath).split('\\').join('/');
         const normalizedImportPath = relativeImportPath.startsWith('.') ? relativeImportPath : `./${relativeImportPath}`;
         const newImport = `import '${normalizedImportPath}';`;
+        changedFiles.push({ path: entryPath, originalContent: content });
         writeFileSync(entryPath, content.split(oldImport).join(newImport), 'utf8');
       });
     };
 
     replaceRecursively(angularAppPath);
+    return changedFiles;
+  };
+
+  private restoreChangedFiles = (changedFiles: ChangedFile[]) => {
+    changedFiles.forEach(({ path, originalContent }) => {
+      if (existsSync(path)) {
+        writeFileSync(path, originalContent, 'utf8');
+      }
+    });
   };
 
   buildDemo = (demo: Demo, res): Promise<void> => {
@@ -88,7 +105,7 @@ export default class AngularBundler implements Bundler {
     mkdirSync(indexHtmlPath, { recursive: true });
 
     createDemoLayout(demo, this.framework);
-    this.updateAntiForgeryImport(sourceDemoPath);
+    const changedFiles = this.updateAntiForgeryImport(sourceDemoPath);
 
     const ngBuildCommand = `npm run build-angular -- ${getProjectNameByDemo(demo)}`;
     const ngBuildProcess = exec(ngBuildCommand);
@@ -99,6 +116,7 @@ export default class AngularBundler implements Bundler {
       console.error(`stderr: ${data}`);
     });
     ngBuildProcess.on('close', (code) => {
+      this.restoreChangedFiles(changedFiles);
       console.log(`child process exited with code ${code}`);
       res();
     });
