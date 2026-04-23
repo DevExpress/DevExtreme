@@ -97,9 +97,7 @@ describe('BundleExecutor E2E', () => {
     const result = await executor(options, context);
     expect(result.success).toBe(true);
 
-    const content = await readFileText(
-      path.join(projectDir, 'artifacts', 'js', 'dx.all.debug.js'),
-    );
+    const content = await readFileText(path.join(projectDir, 'artifacts', 'js', 'dx.all.debug.js'));
     expect(content).toContain('greet');
     expect(content).not.toContain('eval(');
   }, 60000);

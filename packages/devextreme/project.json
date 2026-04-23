@@ -915,6 +915,20 @@
         "{projectRoot}/artifacts/ts"
       ]
     },
+    "compress:ts-modules": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/npm/devextreme/**/*.d.ts"],
+        "exclude": ["./artifacts/npm/devextreme/bundles/**"],
+        "mode": "strip-debug"
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
+      ]
+    },
     "verify:licenses": {
       "executor": "nx:run-commands",
       "options": {

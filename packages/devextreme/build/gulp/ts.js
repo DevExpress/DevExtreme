@@ -6,10 +6,10 @@ const footer = require('gulp-footer');
 const concat = require('gulp-concat');
 const path = require('path');
 const replace = require('gulp-replace');
+const shell = require('gulp-shell');
 const ts = require('gulp-typescript');
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
-const compressionPipes = require('./compression-pipes.js');
 const MODULES = require('./modules_metadata.json');
 const { packageDir } = require('./utils');
 
@@ -105,26 +105,27 @@ gulp.task('ts-check-modules', function() {
         .pipe(compileTS());
 });
 
-gulp.task('ts-copy-modules', function() {
-    const BUNDLE_IMPORT = 'import DevExpress from \'../bundles/dx.all\';';
+gulp.task('ts-copy-modules', gulp.series(
+    function tsCopyModulesCopy() {
+        const BUNDLE_IMPORT = 'import DevExpress from \'../bundles/dx.all\';';
 
-    return gulp.src(src)
-        /* legacy modules */
-        .pipe(file('events/click.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/contextmenu.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/dblclick.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/drag.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/hold.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/hover.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/pointer.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/swipe.d.ts', BUNDLE_IMPORT))
-        .pipe(file('events/transform.d.ts', BUNDLE_IMPORT))
-        .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
-
-        .pipe(compressionPipes.removeDebug())
-        .pipe(headerPipes.starLicense())
-        .pipe(gulp.dest(packagePath));
-});
+        return gulp.src(src)
+            /* legacy modules */
+            .pipe(file('events/click.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/contextmenu.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/dblclick.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/drag.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/hold.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/hover.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/pointer.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/swipe.d.ts', BUNDLE_IMPORT))
+            .pipe(file('events/transform.d.ts', BUNDLE_IMPORT))
+            .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
+            .pipe(headerPipes.starLicense())
+            .pipe(gulp.dest(packagePath));
+    },
+    shell.task('pnpm nx run devextreme:compress:ts-modules')
+));
 
 gulp.task('ts-sources', gulp.series('ts-copy-modules', 'ts-copy-bundle'));
 

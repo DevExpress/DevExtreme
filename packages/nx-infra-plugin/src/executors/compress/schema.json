@@ -15,6 +15,11 @@
     "eulaUrl": {
       "type": "string",
       "description": "EULA URL to preserve in comments during compression"
+    },
+    "exclude": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns for files to exclude from compression (relative to project root)"
     }
   },
   "required": ["files", "mode"]

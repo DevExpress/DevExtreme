@@ -144,4 +144,26 @@ describe('CompressExecutor E2E', () => {
 
     expect(output).not.toContain('\r\n');
   });
+
+  it('should expand glob patterns in files array', async () => {
+    const fileNames = ['alpha.js', 'beta.js', 'gamma.js'];
+    for (const name of fileNames) {
+      await writeFileText(path.join(projectDir, name), SAMPLE_CODE);
+    }
+
+    const options: CompressExecutorSchema = {
+      files: ['./*.js'],
+      mode: 'strip-debug',
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    for (const name of fileNames) {
+      const output = await readFileText(path.join(projectDir, name));
+      expect(output).not.toContain('#DEBUG');
+      expect(output).not.toContain('debug only');
+      expect(output).toContain('function hello');
+    }
+  });
 });

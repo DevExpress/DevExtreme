@@ -2,8 +2,11 @@ import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
 import * as terser from 'terser';
 import { js as jsBeautify } from 'js-beautify';
+import { glob } from 'glob';
+import { minimatch } from 'minimatch';
 import { CompressExecutorSchema } from './schema';
-import { resolveProjectPath } from '../../utils/path-resolver';
+import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import { isWindowsOS, containsGlobPattern } from '../../utils/common';
 import {
   readFileText,
   writeFileText,
@@ -111,15 +114,43 @@ async function compressFile(
   await writeFileText(filePath, ensureTrailingNewline(normalizeEol(transformed)));
 }
 
+async function expandFileList(
+  files: string[],
+  exclude: string[] | undefined,
+  projectRoot: string,
+): Promise<string[]> {
+  const toPosixIfWindows = (p: string) => (isWindowsOS() ? normalizeGlobPathForWindows(p) : p);
+
+  const ignorePatterns = exclude?.map((p) => toPosixIfWindows(path.resolve(projectRoot, p)));
+
+  const isExcluded = (absolutePath: string): boolean =>
+    !!ignorePatterns?.some((pattern) =>
+      minimatch(toPosixIfWindows(absolutePath), pattern, { dot: true }),
+    );
+
+  const resolved: string[] = [];
+  for (const entry of files) {
+    const absolute = path.resolve(projectRoot, entry);
+    if (containsGlobPattern(entry)) {
+      const pattern = toPosixIfWindows(absolute);
+      const matches = await glob(pattern, { nodir: true, ignore: ignorePatterns });
+      resolved.push(...matches);
+    } else if (!isExcluded(absolute)) {
+      resolved.push(absolute);
+    }
+  }
+  return [...new Set(resolved)];
+}
+
 const runExecutor: PromiseExecutor<CompressExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const { files, mode, eulaUrl } = options;
+  const { files, mode, eulaUrl, exclude } = options;
 
   try {
-    for (const file of files) {
-      const filePath = path.resolve(projectRoot, file);
+    const expanded = await expandFileList(files, exclude, projectRoot);
+    for (const filePath of expanded) {
       await compressFile(filePath, mode, eulaUrl);
-      logger.verbose(`Compressed ${file} (${mode})`);
+      logger.verbose(`Compressed ${path.relative(projectRoot, filePath)} (${mode})`);
     }
 
     return { success: true };
