@@ -64,4 +64,29 @@ describe('onSelectionEnd', () => {
 
     expect(component).toBe(scheduler);
   });
+
+  it('should not fire onSelectionEnd when clicking on an already-selected cell', async () => {
+    const onSelectionEnd = jest.fn<(e: SelectionEndEvent) => void>();
+
+    const { POM } = await createScheduler({
+      ...defaultOptions,
+      onSelectionEnd,
+    });
+
+    const firstCell = POM.getDateTableCell(0, 0);
+    const secondCell = POM.getDateTableCell(1, 0);
+    const thirdCell = POM.getDateTableCell(2, 0);
+
+    fireEvent.mouseDown(firstCell, { which: 1 });
+    fireEvent.mouseMove(secondCell);
+    fireEvent.mouseMove(thirdCell);
+    fireEvent.mouseUp(thirdCell);
+
+    expect(onSelectionEnd).toHaveBeenCalledTimes(1);
+
+    fireEvent.mouseDown(thirdCell, { which: 1 });
+    fireEvent.mouseUp(thirdCell);
+
+    expect(onSelectionEnd).toHaveBeenCalledTimes(1);
+  });
 });

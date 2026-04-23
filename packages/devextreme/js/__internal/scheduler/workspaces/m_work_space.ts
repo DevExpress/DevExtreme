@@ -1063,10 +1063,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     this.isCellClick = true;
-    this.isSelectionStartedOnCell = true;
     if ($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
       this.showPopup = true;
+      this.isSelectionStartedOnCell = false;
     } else {
+      this.isSelectionStartedOnCell = true;
       const cellCoordinates = this.getCoordinatesByCell($target);
       const isAllDayCell = this.hasAllDayClass($target);
       this.setSelectedCellsStateAndUpdateSelection(isAllDayCell, cellCoordinates, false, $target);
