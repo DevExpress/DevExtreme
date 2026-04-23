@@ -11,9 +11,7 @@ import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
- AIIntegration,
-} from "devextreme/common/ai-integration";
-import {
+ AIAssistant,
  ColumnChooser,
  ColumnResizeMode,
  FilterPanel,
@@ -50,9 +48,13 @@ import {
  StateStoreType,
 } from "devextreme/common/grids";
 import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
+import {
  dxTreeListColumn,
  TreeListFilterMode,
  AdaptiveDetailRowPreparingEvent,
+ AIAssistantRequestCreatingEvent,
  AIColumnRequestCreatingEvent,
  CellClickEvent,
  CellDblClickEvent,
@@ -268,6 +270,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "aiAssistant" |
   "aiIntegration" |
   "allowColumnReordering" |
   "allowColumnResizing" |
@@ -316,6 +319,7 @@ type AccessibleOptions = Pick<Properties,
   "loadPanel" |
   "noDataText" |
   "onAdaptiveDetailRowPreparing" |
+  "onAIAssistantRequestCreating" |
   "onAIColumnRequestCreating" |
   "onCellClick" |
   "onCellDblClick" |
@@ -394,6 +398,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiAssistant: Object as PropType<AIAssistant | Record<string, any>>,
     aiIntegration: Object as PropType<AIIntegration>,
     allowColumnReordering: Boolean,
     allowColumnResizing: Boolean,
@@ -442,6 +447,7 @@ const componentConfig = {
     loadPanel: Object as PropType<Record<string, any>>,
     noDataText: String,
     onAdaptiveDetailRowPreparing: Function as PropType<((e: AdaptiveDetailRowPreparingEvent) => void)>,
+    onAIAssistantRequestCreating: Function as PropType<((e: AIAssistantRequestCreatingEvent) => void)>,
     onAIColumnRequestCreating: Function as PropType<((e: AIColumnRequestCreatingEvent) => void)>,
     onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
     onCellDblClick: Function as PropType<((e: CellDblClickEvent) => void)>,
@@ -516,6 +522,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiAssistant": null,
     "update:aiIntegration": null,
     "update:allowColumnReordering": null,
     "update:allowColumnResizing": null,
@@ -564,6 +571,7 @@ const componentConfig = {
     "update:loadPanel": null,
     "update:noDataText": null,
     "update:onAdaptiveDetailRowPreparing": null,
+    "update:onAIAssistantRequestCreating": null,
     "update:onAIColumnRequestCreating": null,
     "update:onCellClick": null,
     "update:onCellDblClick": null,
@@ -642,6 +650,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = TreeList;
     (this as any).$_hasAsyncTemplate = false;
     (this as any).$_expectedChildren = {
+      aiAssistant: { isCollectionItem: false, optionName: "aiAssistant" },
       column: { isCollectionItem: true, optionName: "columns" },
       columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       columnFixing: { isCollectionItem: false, optionName: "columnFixing" },
@@ -706,6 +715,34 @@ const DxAI = defineComponent(DxAIConfig);
 (DxAI as any).$_optionName = "ai";
 (DxAI as any).$_expectedChildren = {
   editorOptions: { isCollectionItem: false, optionName: "editorOptions" }
+};
+
+const DxAIAssistantConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:aiIntegration": null,
+    "update:chat": null,
+    "update:enabled": null,
+    "update:popup": null,
+    "update:title": null,
+  },
+  props: {
+    aiIntegration: Object as PropType<AIIntegration>,
+    chat: Object as PropType<Record<string, any>>,
+    enabled: Boolean,
+    popup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
+    title: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAIAssistantConfig);
+
+const DxAIAssistant = defineComponent(DxAIAssistantConfig);
+
+(DxAIAssistant as any).$_optionName = "aiAssistant";
+(DxAIAssistant as any).$_expectedChildren = {
+  popup: { isCollectionItem: false, optionName: "popup" }
 };
 
 const DxAIOptionsConfig = {
@@ -4283,6 +4320,7 @@ export default DxTreeList;
 export {
   DxTreeList,
   DxAI,
+  DxAIAssistant,
   DxAIOptions,
   DxAnimation,
   DxAsyncRule,
