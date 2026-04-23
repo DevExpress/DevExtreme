@@ -175,12 +175,11 @@ module('Work Space Week', () => {
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
                 startDayHour: 5,
-                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
 
-            assert.deepEqual($cell.data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cell), {
                 startDate: new Date(2015, 2, 17, 5, 30),
                 endDate: new Date(2015, 2, 17, 6, 0),
                 allDay: false,
@@ -193,12 +192,11 @@ module('Work Space Week', () => {
                 currentDate: new Date(2015, 2, 4),
                 firstDayOfWeek: 1,
                 endDayHour: 10,
-                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
 
-            assert.deepEqual($cell.data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cell), {
                 startDate: new Date(2015, 2, 3, 0, 30),
                 endDate: new Date(2015, 2, 3, 1, 0),
                 allDay: false,
@@ -268,10 +266,9 @@ module('Work Space Week', () => {
                 currentDate: new Date(2016, 10, 6),
                 firstDayOfWeek: 0,
                 startDayHour: 1,
-                renovateRender: false,
             });
 
-            const cellData = this.instance.$element().find('.dx-scheduler-date-table-row').eq(1).find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
+            const cellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-row').eq(1).find('.dx-scheduler-date-table-cell').eq(0));
 
             assert.equal(cellData.startDate.toString(), new Date(2016, 10, 6, 1, 30).toString(), 'Start date is OK');
             assert.equal(cellData.endDate.toString(), new Date(2016, 10, 6, 2).toString(), 'End date is OK');
@@ -403,11 +400,10 @@ module('Work Space Week', () => {
                 groupOrientation: 'vertical',
                 startDayHour: 9,
                 ...resourceConfig,
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(25).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(248).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(25));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(248));
 
             assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 15, 10, 30), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 15, 11), 'cell has right endtDate');
@@ -533,11 +529,10 @@ module('Work Space Week', () => {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 25),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(6).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(671).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(6));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(671));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 1, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 1, 0, 30), 'cell has right endtDate');
@@ -553,12 +548,11 @@ module('Work Space Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 26),
                 startDate: new Date(2017, 6, 4),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(240).data('dxCellData');
-            const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(503).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(240));
+            const thirdCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(503));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 24, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 24, 1), 'cell has right endtDate');
@@ -577,12 +571,11 @@ module('Work Space Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
                 startDate: new Date(2017, 6, 26),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(160).data('dxCellData');
-            const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(335).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(160));
+            const thirdCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(335));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 26, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 26, 1), 'cell has right endtDate');
@@ -716,12 +709,11 @@ module('Work Space Work Week', () => {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 25),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(4).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(5).data('dxCellData');
-            const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(479).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(4));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(5));
+            const thirdCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(479));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 30, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 30, 0, 30), 'cell has right endtDate');
@@ -740,12 +732,11 @@ module('Work Space Work Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 26),
                 startDate: new Date(2017, 6, 4),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(82).data('dxCellData');
-            const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').last().data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(82));
+            const thirdCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').last());
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 24, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 24, 1), 'cell has right endtDate');
@@ -764,12 +755,11 @@ module('Work Space Work Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
                 startDate: new Date(2017, 6, 26),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(36).data('dxCellData');
-            const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').last().data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(36));
+            const thirdCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').last());
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 26, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 26, 1), 'cell has right endtDate');
@@ -799,7 +789,6 @@ module('Work Space Work Week', () => {
                 hoursInterval: 1,
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
-                renovateRender: false,
                 getResourceManager: getEmptyResourceManager,
             });
 
@@ -809,10 +798,10 @@ module('Work Space Work Week', () => {
                 dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
             }]);
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(5).data('dxCellData');
-            const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(10).data('dxCellData');
-            const lastCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(15).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(5));
+            const thirdCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(10));
+            const lastCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(15));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 1), 'cell has right endtDate');

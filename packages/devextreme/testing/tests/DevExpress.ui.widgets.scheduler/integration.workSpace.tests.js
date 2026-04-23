@@ -611,10 +611,9 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             ],
             dataSource: [],
             onContentReady: (e) => {
-                if(!e.component.option('renovateRender')) {
-                    const groups = e.component.$element().find('.dx-scheduler-date-table-cell').data('dxCellData').groups;
-                    assert.deepEqual(groups, { owner: 1 });
-                }
+                const $cell = e.component.$element().find('.dx-scheduler-date-table-cell').eq(0);
+                const groups = e.component.getWorkSpace().getCellData($cell).groups;
+                assert.deepEqual(groups, { owner: 1 });
 
                 const scheduler = new SchedulerTestWrapper(e.component);
                 const cellCount = scheduler.workSpace.getCells().length;
@@ -1570,256 +1569,247 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
     });
 });
 
-module('Resource Cell Template', () => {
-    [true, false].forEach((renovateRender) => {
-        const moduleDescription = renovateRender
-            ? 'Renovated Render'
-            : 'Old Render';
-
-        module(moduleDescription, {
-            beforeEach: function() {
-                fx.off = true;
-                this.createInstance = (options = {}) => {
-                    return createWrapper({
-                        ...options,
-                        renovateRender
-                    });
-                };
-            },
-            afterEach: function() {
-                fx.off = false;
-            },
-        }, () => {
-            test('resourceCellTemplate should take cellElement with correct geometry(T453520)', async function(assert) {
-                assert.expect(3);
-                await this.createInstance({
-                    currentView: 'week',
-                    views: ['week'],
-                    height: 700,
-                    width: 700,
-                    dataSource: [],
-                    groups: ['ownerId'],
-                    resources: [{
-                        fieldExpr: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John', color: '#000' },
-                            { id: 2, text: 'Mike', color: '#FFF' },
-                        ],
-                    }],
-                    resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                        if(!cellIndex) {
-                            assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                            const $cell = $(cellElement).parent();
-                            assert.roughEqual(getOuterWidth($cell), 316, 2.001, 'Resource cell width is OK');
-                            assert.equal(getOuterHeight($cell), 30, 'Resource cell height is OK');
-                        }
-                    }
-                });
+module('Resource Cell Template', {
+    beforeEach: function() {
+        fx.off = true;
+        this.createInstance = (options = {}) => {
+            return createWrapper({
+                ...options,
             });
-
-            test('resourceCellTemplate should take cellElement with correct geometry in timeline (T453520)', async function(assert) {
-                assert.expect(2);
-                await this.createInstance({
-                    currentView: 'timelineWeek',
-                    views: ['timelineWeek'],
-                    height: 700,
-                    width: 700,
-                    dataSource: [],
-                    groups: ['ownerId'],
-                    resources: [{
-                        fieldExpr: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John', color: '#000' },
-                            { id: 2, text: 'Mike', color: '#FFF' },
-                        ],
-                    }],
-                    resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                        const done = assert.async();
-                        setTimeout(() => {
-                            if(!cellIndex) {
-                                const $cell = $(cellElement);
-                                assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
-                                assert.roughEqual(getOuterHeight($cell), 288, 1.001, 'Resource cell height is OK');
-                            }
-                            done();
-                        });
-                    }
-                });
-            });
-
-            test('resourceCellTemplate should have correct options', async function(assert) {
-                let templateOptions;
-
-                await this.createInstance({
-                    currentView: 'week',
-                    currentDate: new Date(2016, 8, 5),
-                    firstDayOfWeek: 0,
-                    groups: ['ownerId'],
-                    resources: [
-                        {
-                            fieldExpr: 'ownerId',
-                            dataSource: [
-                                { id: 1, text: 'John' },
-                                { id: 2, text: 'Mike' }
-                            ]
-                        }
-                    ],
-                    resourceCellTemplate: function(itemData, index, $container) {
-                        if(index === 0) {
-                            templateOptions = itemData;
-                        }
-                    }
-                });
-
-                assert.equal(templateOptions.id, 1, 'id option is OK');
-                assert.equal(templateOptions.text, 'John', 'text option is OK');
-                assert.deepEqual(templateOptions.data, { text: 'John', id: 1 }, 'data option is OK');
-            });
-
-            test('resourceCellTemplate should work correct in timeline view', async function(assert) {
-                const scheduler = await createWrapper({
-                    currentView: 'timelineWeek',
-                    currentDate: new Date(2016, 8, 5),
-                    firstDayOfWeek: 0,
-                    groups: ['ownerId'],
-                    resources: [
-                        {
-                            fieldExpr: 'ownerId',
-                            dataSource: [
-                                { id: 1, text: 'John' },
-                                { id: 2, text: 'Mike' }
-                            ]
-                        }
-                    ],
-                    resourceCellTemplate: function(itemData, index, container) {
-                        if(index === 0) {
-                            $(container).addClass('custom-group-cell-class');
-                        }
-                    }
-                });
-
-                const $cell1 = scheduler.workSpace.groups.getGroupHeader(0);
-                const $cell2 = scheduler.workSpace.groups.getGroupHeader(1);
-
-                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-            });
-
-            test('resourceCellTemplate should work correct in agenda view', async function(assert) {
-                const scheduler = await this.createInstance({
-                    views: ['agenda'],
-                    currentView: 'agenda',
-                    currentDate: new Date(2016, 8, 5),
-                    dataSource: [{
-                        text: 'a',
-                        ownerId: 1,
-                        startDate: new Date(2016, 8, 5, 7),
-                        endDate: new Date(2016, 8, 5, 8),
-                    },
-                    {
-                        text: 'b',
-                        ownerId: 2,
-                        startDate: new Date(2016, 8, 5, 10),
-                        endDate: new Date(2016, 8, 5, 11),
-                    }],
-                    firstDayOfWeek: 0,
-                    groups: ['ownerId'],
-                    resources: [
-                        {
-                            fieldExpr: 'ownerId',
-                            dataSource: [
-                                { id: 1, text: 'John' },
-                                { id: 2, text: 'Mike' }
-                            ]
-                        }
-                    ],
-                    resourceCellTemplate: function(itemData, index, container) {
-                        if(index === 0) {
-                            $(container).addClass('custom-group-cell-class');
-                        }
-
-                        return $('<div />').text(itemData.text);
-                    }
-                });
-
-                const $cell1 = scheduler.instance.$element().find('.dx-scheduler-group-header-content').eq(0);
-                const $cell2 = scheduler.instance.$element().find('.dx-scheduler-group-header-content').eq(1);
-
-                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-            });
-
-            test('Agenda has right arguments in resourceCellTemplate arguments', async function(assert) {
-                let params;
-
-                await this.createInstance({
-                    views: ['agenda'],
-                    currentView: 'agenda',
-                    currentDate: new Date(2016, 8, 5),
-                    groups: ['ownerId'],
-                    dataSource: [{
-                        text: 'a',
-                        ownerId: 1,
-                        startDate: new Date(2016, 8, 5, 7),
-                        endDate: new Date(2016, 8, 5, 8),
-                    },
-                    {
-                        text: 'b',
-                        ownerId: 2,
-                        startDate: new Date(2016, 8, 5, 10),
-                        endDate: new Date(2016, 8, 5, 11),
-                    }],
-                    resources: [
-                        {
-                            fieldExpr: 'ownerId',
-                            dataSource: [
-                                { id: 1, text: 'John', color: '#A2a' },
-                                { id: 2, text: 'Mike', color: '#E2a' }
-                            ]
-                        }
-                    ],
-                    resourceCellTemplate: function(itemData, index, $container) {
-                        if(!index) params = itemData.data;
-                    }
-                });
-
-                await waitForAsync(() => Boolean(params));
-                assert.deepEqual(params, { id: 1, text: 'John', color: '#A2a' }, 'Cell text is OK');
-            });
-
-
-            test('Scheduler should have specific resourceCellTemplate setting of the view', async function(assert) {
-                let countCallTemplate1 = 0;
-                let countCallTemplate2 = 0;
-                const dataSource = [
-                    { id: 1, text: 'group1' },
-                    { id: 2, text: 'group2' }
-                ];
-
-                await this.createInstance({
-                    views: [{
-                        type: 'week',
-                        resourceCellTemplate: function() {
-                            countCallTemplate2++;
-                        }
-                    }],
-                    groups: ['test'],
-                    resources: [
-                        {
-                            fieldExpr: 'test',
-                            dataSource: dataSource
-                        }
-                    ],
-                    resourceCellTemplate: function() {
-                        countCallTemplate1++;
-                    },
-                    currentView: 'week'
-                });
-
-                assert.equal(countCallTemplate1, 0, 'count call first template');
-                assert.notEqual(countCallTemplate2, 0, 'count call second template');
-            });
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+    },
+}, () => {
+    test('resourceCellTemplate should take cellElement with correct geometry(T453520)', async function(assert) {
+        assert.expect(3);
+        await this.createInstance({
+            currentView: 'week',
+            views: ['week'],
+            height: 700,
+            width: 700,
+            dataSource: [],
+            groups: ['ownerId'],
+            resources: [{
+                fieldExpr: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John', color: '#000' },
+                    { id: 2, text: 'Mike', color: '#FFF' },
+                ],
+            }],
+            resourceCellTemplate: function(cellData, cellIndex, cellElement) {
+                if(!cellIndex) {
+                    assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
+                    const $cell = $(cellElement).parent();
+                    assert.roughEqual(getOuterWidth($cell), 316, 2.001, 'Resource cell width is OK');
+                    assert.equal(getOuterHeight($cell), 30, 'Resource cell height is OK');
+                }
+            }
         });
+    });
+
+    test('resourceCellTemplate should take cellElement with correct geometry in timeline (T453520)', async function(assert) {
+        assert.expect(2);
+        await this.createInstance({
+            currentView: 'timelineWeek',
+            views: ['timelineWeek'],
+            height: 700,
+            width: 700,
+            dataSource: [],
+            groups: ['ownerId'],
+            resources: [{
+                fieldExpr: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John', color: '#000' },
+                    { id: 2, text: 'Mike', color: '#FFF' },
+                ],
+            }],
+            resourceCellTemplate: function(cellData, cellIndex, cellElement) {
+                const done = assert.async();
+                setTimeout(() => {
+                    if(!cellIndex) {
+                        const $cell = $(cellElement);
+                        assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
+                        assert.roughEqual(getOuterHeight($cell), 288, 1.001, 'Resource cell height is OK');
+                    }
+                    done();
+                });
+            }
+        });
+    });
+
+    test('resourceCellTemplate should have correct options', async function(assert) {
+        let templateOptions;
+
+        await this.createInstance({
+            currentView: 'week',
+            currentDate: new Date(2016, 8, 5),
+            firstDayOfWeek: 0,
+            groups: ['ownerId'],
+            resources: [
+                {
+                    fieldExpr: 'ownerId',
+                    dataSource: [
+                        { id: 1, text: 'John' },
+                        { id: 2, text: 'Mike' }
+                    ]
+                }
+            ],
+            resourceCellTemplate: function(itemData, index, $container) {
+                if(index === 0) {
+                    templateOptions = itemData;
+                }
+            }
+        });
+
+        assert.equal(templateOptions.id, 1, 'id option is OK');
+        assert.equal(templateOptions.text, 'John', 'text option is OK');
+        assert.deepEqual(templateOptions.data, { text: 'John', id: 1 }, 'data option is OK');
+    });
+
+    test('resourceCellTemplate should work correct in timeline view', async function(assert) {
+        const scheduler = await createWrapper({
+            currentView: 'timelineWeek',
+            currentDate: new Date(2016, 8, 5),
+            firstDayOfWeek: 0,
+            groups: ['ownerId'],
+            resources: [
+                {
+                    fieldExpr: 'ownerId',
+                    dataSource: [
+                        { id: 1, text: 'John' },
+                        { id: 2, text: 'Mike' }
+                    ]
+                }
+            ],
+            resourceCellTemplate: function(itemData, index, container) {
+                if(index === 0) {
+                    $(container).addClass('custom-group-cell-class');
+                }
+            }
+        });
+
+        const $cell1 = scheduler.workSpace.groups.getGroupHeader(0);
+        const $cell2 = scheduler.workSpace.groups.getGroupHeader(1);
+
+        assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+        assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+    });
+
+    test('resourceCellTemplate should work correct in agenda view', async function(assert) {
+        const scheduler = await this.createInstance({
+            views: ['agenda'],
+            currentView: 'agenda',
+            currentDate: new Date(2016, 8, 5),
+            dataSource: [{
+                text: 'a',
+                ownerId: 1,
+                startDate: new Date(2016, 8, 5, 7),
+                endDate: new Date(2016, 8, 5, 8),
+            },
+            {
+                text: 'b',
+                ownerId: 2,
+                startDate: new Date(2016, 8, 5, 10),
+                endDate: new Date(2016, 8, 5, 11),
+            }],
+            firstDayOfWeek: 0,
+            groups: ['ownerId'],
+            resources: [
+                {
+                    fieldExpr: 'ownerId',
+                    dataSource: [
+                        { id: 1, text: 'John' },
+                        { id: 2, text: 'Mike' }
+                    ]
+                }
+            ],
+            resourceCellTemplate: function(itemData, index, container) {
+                if(index === 0) {
+                    $(container).addClass('custom-group-cell-class');
+                }
+
+                return $('<div />').text(itemData.text);
+            }
+        });
+
+        const $cell1 = scheduler.instance.$element().find('.dx-scheduler-group-header-content').eq(0);
+        const $cell2 = scheduler.instance.$element().find('.dx-scheduler-group-header-content').eq(1);
+
+        assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+        assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+    });
+
+    test('Agenda has right arguments in resourceCellTemplate arguments', async function(assert) {
+        let params;
+
+        await this.createInstance({
+            views: ['agenda'],
+            currentView: 'agenda',
+            currentDate: new Date(2016, 8, 5),
+            groups: ['ownerId'],
+            dataSource: [{
+                text: 'a',
+                ownerId: 1,
+                startDate: new Date(2016, 8, 5, 7),
+                endDate: new Date(2016, 8, 5, 8),
+            },
+            {
+                text: 'b',
+                ownerId: 2,
+                startDate: new Date(2016, 8, 5, 10),
+                endDate: new Date(2016, 8, 5, 11),
+            }],
+            resources: [
+                {
+                    fieldExpr: 'ownerId',
+                    dataSource: [
+                        { id: 1, text: 'John', color: '#A2a' },
+                        { id: 2, text: 'Mike', color: '#E2a' }
+                    ]
+                }
+            ],
+            resourceCellTemplate: function(itemData, index, $container) {
+                if(!index) params = itemData.data;
+            }
+        });
+
+        await waitForAsync(() => Boolean(params));
+        assert.deepEqual(params, { id: 1, text: 'John', color: '#A2a' }, 'Cell text is OK');
+    });
+
+
+    test('Scheduler should have specific resourceCellTemplate setting of the view', async function(assert) {
+        let countCallTemplate1 = 0;
+        let countCallTemplate2 = 0;
+        const dataSource = [
+            { id: 1, text: 'group1' },
+            { id: 2, text: 'group2' }
+        ];
+
+        await this.createInstance({
+            views: [{
+                type: 'week',
+                resourceCellTemplate: function() {
+                    countCallTemplate2++;
+                }
+            }],
+            groups: ['test'],
+            resources: [
+                {
+                    fieldExpr: 'test',
+                    dataSource: dataSource
+                }
+            ],
+            resourceCellTemplate: function() {
+                countCallTemplate1++;
+            },
+            currentView: 'week'
+        });
+
+        assert.equal(countCallTemplate1, 0, 'count call first template');
+        assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 });
 
