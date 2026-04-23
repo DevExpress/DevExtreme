@@ -40,7 +40,7 @@ function collectShpFiles(dir) {
         .map(name => path.basename(name, '.shp'));
 }
 
-gulp.task('vectormap-data', gulp.series('vectormap-utils', async function generateData() {
+gulp.task('vectormap-data', gulp.series('vectormap-utils', function generateData() {
     const parse = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.debug.js')).parse;
     const settings = require(path.join('../..', VECTORMAP_SOURCES_PATH, '_settings.js'));
     const precision = settings.precision ? Math.round(settings.precision) : 4;
@@ -52,22 +52,20 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', async function genera
     const sourceDir = path.resolve(VECTORMAP_SOURCES_PATH);
     const files = collectShpFiles(sourceDir);
 
-    await Promise.all(files.map(name => new Promise((resolve) => {
+    files.forEach(name => {
         const shpBuffer = fs.readFileSync(path.join(sourceDir, name + '.shp'));
         const dbfBuffer = fs.readFileSync(path.join(sourceDir, name + '.dbf'));
 
-        parse(
+        const shapeData = parse(
             { shp: toArrayBuffer(shpBuffer), dbf: toArrayBuffer(dbfBuffer) },
             { precision },
-            function(shapeData) {
-                if(shapeData) {
-                    const content = name + ' = ' + JSON.stringify(shapeData) + ';';
-                    fs.writeFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, name + '.js'), content);
-                }
-                resolve();
-            }
         );
-    })));
+
+        if(shapeData) {
+            const content = name + ' = ' + JSON.stringify(shapeData) + ';';
+            fs.writeFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, name + '.js'), content);
+        }
+    });
 
     const stream = merge();
     const dataFiles = fs.readdirSync(VECTORMAP_DATA_RESULT_PATH);
