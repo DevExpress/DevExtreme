@@ -46,7 +46,7 @@ module('Workspace navigation', () => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: true,
+
                             getResourceManager: getEmptyResourceManager,
                             ...options,
                         });
@@ -979,7 +979,7 @@ module('Workspace navigation', () => {
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: true,
+
                             currentDate: new Date(2021, 0, 10),
                             getResourceManager: getEmptyResourceManager,
                             ...options,

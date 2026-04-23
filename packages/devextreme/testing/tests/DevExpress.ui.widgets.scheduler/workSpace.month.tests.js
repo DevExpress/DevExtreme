@@ -103,7 +103,7 @@ module('Work Space Month', () => {
             assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 1, 23, 8, 0), new Date(2015, 3, 5, 19, 59)], 'Range is OK');
         });
 
-        test('Each cell should contain jQuery dxCellData depend on start day hour', async function(assert) {
+        test('Each cell should contain correct cellData depend on start day hour', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -119,7 +119,7 @@ module('Work Space Month', () => {
             });
         });
 
-        test('Each cell should contain jQuery dxCellData depend on end day hour', async function(assert) {
+        test('Each cell should contain correct cellData depend on end day hour', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -135,7 +135,7 @@ module('Work Space Month', () => {
             });
         });
 
-        test('Each cell should contain jQuery dxCellData depend on fractional hoursInterval', async function(assert) {
+        test('Each cell should contain correct cellData depend on fractional hoursInterval', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,

@@ -194,7 +194,7 @@ module('Work Space Day', {
         assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 16, 23, 59)], 'Range is OK');
     });
 
-    test('Each cell should contain jQuery dxCellData', async function(assert) {
+    test('Each cell should contain correct cellData', async function(assert) {
         this.instance.option('currentDate', new Date(2015, 2, 16));
 
         const $cell = this.instance.$element().find('.' + CELL_CLASS).first();
@@ -207,7 +207,7 @@ module('Work Space Day', {
         });
     });
 
-    test('dxCellData should be \'immutable\'', function(assert) {
+    test('cellData should be \'immutable\'', function(assert) {
         const $element = this.instance.$element();
         const $cell = $element.find('.' + CELL_CLASS).first();
         const cellData = this.instance.getCellData($cell);

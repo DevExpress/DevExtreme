@@ -170,7 +170,7 @@ module('Work Space Week', () => {
             assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 2, 0), new Date(2015, 2, 22, 2, 59)], 'Range is OK');
         });
 
-        test('Each cell should contain jQuery dxCellData depend on start day hour', async function(assert) {
+        test('Each cell should contain correct cellData depend on start day hour', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -187,7 +187,7 @@ module('Work Space Week', () => {
             });
         });
 
-        test('Each cell should contain jQuery dxCellData depend on end day hour', async function(assert) {
+        test('Each cell should contain correct cellData depend on end day hour', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 4),
                 firstDayOfWeek: 1,

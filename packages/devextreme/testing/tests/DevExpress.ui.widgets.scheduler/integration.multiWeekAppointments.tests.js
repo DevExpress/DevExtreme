@@ -575,60 +575,57 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
 
 });
 
-[true, false].forEach((renovateRender) => {
-    QUnit.test(`Grouped multi-week appointments should have a correct left offset in rtl mode when renovateRender is ${renovateRender}`, async function(assert) {
+QUnit.test('Grouped multi-week appointments should have a correct left offset in rtl mode', async function(assert) {
 
-        await this.createInstance({ width: 1052 });
+    await this.createInstance({ width: 1052 });
 
-        mockWorkSpaceRendering.call(this, this.instance, 50, [700, 350, 0]);
+    mockWorkSpaceRendering.call(this, this.instance, 50, [700, 350, 0]);
 
-        this.instance.option({
-            views: ['month'],
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9),
-            rtlEnabled: true,
-            dataSource: [],
-            resources: [
-                {
-                    field: 'roomId',
-                    dataSource: [
-                        { id: 1, text: 'One' },
-                        { id: 2, text: 'Two' },
-                        { id: 3, text: 'Three' }
-                    ]
-                }
-            ],
-            groups: ['roomId'],
-            renovateRender,
-        });
-        await waitAsync(0);
-
-        this.instance.option('dataSource', [{
-            text: 'a',
-            startDate: new Date(2015, 1, 10),
-            endDate: new Date(2015, 1, 25),
-            roomId: [1, 2]
-        }]);
-        await waitAsync(0);
-
-        const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-        const leftOffsets = [
-            translator.locate($appointments.eq(0)).left,
-            translator.locate($appointments.eq(1)).left,
-            translator.locate($appointments.eq(2)).left,
-            translator.locate($appointments.eq(3)).left,
-            translator.locate($appointments.eq(4)).left,
-            translator.locate($appointments.eq(5)).left
-        ].sort();
-
-        assert.roughEqual(leftOffsets[0], 350, 1);
-        assert.roughEqual(leftOffsets[1], 350, 1);
-        assert.roughEqual(leftOffsets[2], 600, 1);
-        assert.roughEqual(leftOffsets[3], 700, 1);
-        assert.roughEqual(leftOffsets[4], 700, 1);
-        assert.roughEqual(leftOffsets[5], 950, 1);
+    this.instance.option({
+        views: ['month'],
+        currentView: 'month',
+        firstDayOfWeek: 1,
+        currentDate: new Date(2015, 1, 9),
+        rtlEnabled: true,
+        dataSource: [],
+        resources: [
+            {
+                field: 'roomId',
+                dataSource: [
+                    { id: 1, text: 'One' },
+                    { id: 2, text: 'Two' },
+                    { id: 3, text: 'Three' }
+                ]
+            }
+        ],
+        groups: ['roomId'],
     });
+    await waitAsync(0);
+
+    this.instance.option('dataSource', [{
+        text: 'a',
+        startDate: new Date(2015, 1, 10),
+        endDate: new Date(2015, 1, 25),
+        roomId: [1, 2]
+    }]);
+    await waitAsync(0);
+
+    const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+    const leftOffsets = [
+        translator.locate($appointments.eq(0)).left,
+        translator.locate($appointments.eq(1)).left,
+        translator.locate($appointments.eq(2)).left,
+        translator.locate($appointments.eq(3)).left,
+        translator.locate($appointments.eq(4)).left,
+        translator.locate($appointments.eq(5)).left
+    ].sort();
+
+    assert.roughEqual(leftOffsets[0], 350, 1);
+    assert.roughEqual(leftOffsets[1], 350, 1);
+    assert.roughEqual(leftOffsets[2], 600, 1);
+    assert.roughEqual(leftOffsets[3], 700, 1);
+    assert.roughEqual(leftOffsets[4], 700, 1);
+    assert.roughEqual(leftOffsets[5], 950, 1);
 });
 
 QUnit.test('Multi-week grouped appointments should be painted correctly', async function(assert) {

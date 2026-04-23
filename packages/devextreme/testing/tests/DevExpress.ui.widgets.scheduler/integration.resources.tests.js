@@ -239,29 +239,26 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(getHexColor($appointments.eq(1)), '#0000ff', 'Color is OK');
     });
 
-    [true, false].forEach((renovateRender) => {
-        QUnit.test(`Resources should be set correctly is the resources[].dataSource option is changed(T396746) when renovateRender is ${renovateRender}`, async function(assert) {
-            const resourceData = [{ id: 1, text: 'John', color: 'red' }];
+    QUnit.test('Resources should be set correctly is the resources[].dataSource option is changed(T396746)', async function(assert) {
+        const resourceData = [{ id: 1, text: 'John', color: 'red' }];
 
-            const { instance } = await createWrapper({
-                dataSource: [],
-                currentDate: new Date(2015, 4, 26),
-                groups: ['ownerId'],
-                resources: [{
-                    fieldExpr: 'ownerId',
-                    dataSource: []
-                }],
-                renovateRender,
-            });
-
-            instance.option('resources[0].dataSource', resourceData);
-            await waitAsync(0);
-
-            assert.deepEqual(instance.option('resources'), [{
+        const { instance } = await createWrapper({
+            dataSource: [],
+            currentDate: new Date(2015, 4, 26),
+            groups: ['ownerId'],
+            resources: [{
                 fieldExpr: 'ownerId',
-                dataSource: resourceData
-            }], 'Resources were changed correctly');
+                dataSource: []
+            }],
         });
+
+        instance.option('resources[0].dataSource', resourceData);
+        await waitAsync(0);
+
+        assert.deepEqual(instance.option('resources'), [{
+            fieldExpr: 'ownerId',
+            dataSource: resourceData
+        }], 'Resources were changed correctly');
     });
 
     QUnit.test('Appointment should have correct color after resources option changing', async function(assert) {
