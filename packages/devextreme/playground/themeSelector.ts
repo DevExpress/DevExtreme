@@ -82,6 +82,22 @@ function getGroupedItems(group: string): Array<{ key: string; items: Theme[] }> 
   }));
 }
 
+function createIcon(themeId: string): HTMLImageElement {
+  const img = document.createElement('img');
+  img.className = 'ts-item-icon';
+  img.src = iconUrl(themeId);
+  img.alt = '';
+  return img;
+}
+
+function createBtnIcon(themeId: string): HTMLImageElement {
+  const img = document.createElement('img');
+  img.className = 'ts-btn-icon';
+  img.src = iconUrl(themeId);
+  img.alt = '';
+  return img;
+}
+
 function renderSelector(
   container: HTMLElement,
   selectedId: string,
@@ -92,9 +108,13 @@ function renderSelector(
 
   const btn = document.createElement('button');
   btn.className = 'ts-btn';
-  btn.innerHTML = `<img class="ts-btn-icon" src="${iconUrl(selectedId)}" alt="">`
-    + `<span>${themes.find((t) => t.id === selectedId)?.display ?? selectedId}</span>`
-    + '<span class="ts-btn-arrow"></span>';
+  btn.appendChild(createBtnIcon(selectedId));
+  const btnLabel = document.createElement('span');
+  btnLabel.textContent = themes.find((t) => t.id === selectedId)?.display ?? selectedId;
+  btn.appendChild(btnLabel);
+  const arrow = document.createElement('span');
+  arrow.className = 'ts-btn-arrow';
+  btn.appendChild(arrow);
   container.appendChild(btn);
 
   const popup = document.createElement('div');
@@ -132,8 +152,10 @@ function renderSelector(
       items.forEach((theme) => {
         const item = document.createElement('button');
         item.className = `ts-item${theme.id === selectedId ? ' selected' : ''}`;
-        item.innerHTML = `<img class="ts-item-icon" src="${iconUrl(theme.id)}" alt="">`
-          + `<span>${theme.display}</span>`;
+        item.appendChild(createIcon(theme.id));
+        const label = document.createElement('span');
+        label.textContent = theme.display;
+        item.appendChild(label);
         item.onclick = (e): void => {
           e.stopPropagation();
           onSelect(theme.id, theme.group);
@@ -145,12 +167,6 @@ function renderSelector(
   renderList();
 
   btn.onclick = (): void => container.classList.toggle('open');
-  document.addEventListener('click', (e) => {
-    if (!container.contains(e.target as Node)) container.classList.remove('open');
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') container.classList.remove('open');
-  });
 }
 
 export function setupThemeSelector(containerId: string): Promise<void> {
@@ -175,6 +191,13 @@ export function setupThemeSelector(containerId: string): Promise<void> {
       refresh();
     });
   }
+
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target as Node)) container.classList.remove('open');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') container.classList.remove('open');
+  });
 
   refresh();
   return loadThemeCss(initialId);
