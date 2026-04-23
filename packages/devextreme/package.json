@@ -213,7 +213,7 @@
     "typescript-min": "npm:typescript@4.9.5",
     "uuid": "9.0.1",
     "vinyl": "2.2.1",
-    "vite": "^7.3.2",
+    "vite": "8.0.8",
     "vinyl-named": "1.1.0",
     "webpack": "5.105.4",
     "webpack-stream": "7.0.0",
