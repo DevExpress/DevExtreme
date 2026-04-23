@@ -128,6 +128,22 @@ describe('moveFieldInitializersToConstructor', () => {
     const out = transform(input, moveFieldInitializersToConstructor);
     expect(out).toMatch(/constructor\(\)\s*\{\s*this\.foo\s*=\s*42;\s*const\s+x\s*=\s*1;\s*this\.x\s*=\s*x/);
   });
+
+  test('inserts right after super() when a non-matching statement precedes param-property assignment', () => {
+    const input = `
+      class Derived extends Base {
+        cached = 'init';
+        constructor(x) {
+          super();
+          this.doSetup();
+          this.x = x;
+        }
+      }
+    `;
+    const out = transform(input, moveFieldInitializersToConstructor);
+    expect(out).toMatch(/super\(\);\s*this\.cached\s*=\s*'init';\s*this\.doSetup\(\);\s*this\.x\s*=\s*x/);
+    expect(out).not.toMatch(/this\.x\s*=\s*x;\s*this\.cached\s*=\s*'init'/);
+  });
 });
 
 describe('removeUninitializedClassFields', () => {
