@@ -551,6 +551,11 @@
         "mode": "debug",
         "webpackConfigPath": "./webpack.config.js"
       },
+      "configurations": {
+        "production": {
+          "sourceMap": false
+        }
+      },
       "inputs": [
         {
           "env": "BUILD_TEST_INTERNAL_PACKAGE"
@@ -602,9 +607,19 @@
       "options": {
         "commands": [
           "pnpm nx bundle:debug:build devextreme",
-          "pnpm nx bundle:headers devextreme"
+          "pnpm nx bundle:headers devextreme",
+          "pnpm nx compress:bundles:debug devextreme"
         ],
         "parallel": false
+      },
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx bundle:debug:build devextreme -c production",
+            "pnpm nx bundle:headers devextreme",
+            "pnpm nx compress:bundles:debug devextreme -c production"
+          ]
+        }
       },
       "inputs": [
         {
@@ -615,11 +630,7 @@
         "{projectRoot}/build/gulp/license-header.txt"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.all.debug.js",
-        "{projectRoot}/artifacts/js/dx.web.debug.js",
-        "{projectRoot}/artifacts/js/dx.viz.debug.js",
-        "{projectRoot}/artifacts/js/dx.ai-integration.debug.js",
-        "{projectRoot}/artifacts/js/dx.custom.debug.js"
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
       ]
     },
     "bundle:prod:build": {
@@ -654,7 +665,7 @@
         "commands": [
           "pnpm nx bundle:prod:build devextreme",
           "pnpm nx bundle:headers devextreme -c prod",
-          "pnpm nx compress:bundles devextreme"
+          "pnpm nx compress:bundles:prod devextreme"
         ],
         "parallel": false
       },
@@ -663,7 +674,7 @@
           "commands": [
             "pnpm nx bundle:prod:build devextreme",
             "pnpm nx bundle:headers devextreme -c prod",
-            "pnpm nx compress:bundles devextreme -c production"
+            "pnpm nx compress:bundles:prod devextreme -c production"
           ]
         }
       },
@@ -679,7 +690,7 @@
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
       ]
     },
-    "compress:bundles": {
+    "compress:bundles:prod": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": [
@@ -701,6 +712,31 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
+      ]
+    },
+    "compress:bundles:debug": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/dx.all.debug.js",
+          "./artifacts/js/dx.web.debug.js",
+          "./artifacts/js/dx.viz.debug.js",
+          "./artifacts/js/dx.ai-integration.debug.js",
+          "./artifacts/js/dx.custom.debug.js"
+        ],
+        "mode": "normalize"
+      },
+      "configurations": {
+        "production": {
+          "mode": "beautify",
+          "eulaUrl": "https://js.devexpress.com/Licensing/"
+        }
+      },
+      "inputs": [
+        "debugBundles"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
       ]
     },
     "build:vectormap:generate": {
@@ -1212,6 +1248,13 @@
       "{projectRoot}/artifacts/js/dx.web.js",
       "{projectRoot}/artifacts/js/dx.viz.js",
       "{projectRoot}/artifacts/js/dx.ai-integration.js"
+    ],
+    "debugBundles": [
+      "{projectRoot}/artifacts/js/dx.all.debug.js",
+      "{projectRoot}/artifacts/js/dx.web.debug.js",
+      "{projectRoot}/artifacts/js/dx.viz.debug.js",
+      "{projectRoot}/artifacts/js/dx.ai-integration.debug.js",
+      "{projectRoot}/artifacts/js/dx.custom.debug.js"
     ]
   },
   "tags": []

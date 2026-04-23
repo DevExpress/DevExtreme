@@ -11,7 +11,6 @@ const shell = require('gulp-shell');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 
-const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const webpackConfig = require('../../webpack.config.js');
@@ -80,7 +79,6 @@ function createDebugBundlesStream(watch, displayName) {
         .pipe(webpackStream(debugConfig, webpack, muteWebPack))
         .pipe(headerPipes.useStrict())
         .pipe(headerPipes.bangLicense())
-        .pipe(gulpIf(!watch, compressionPipes.beautify()))
         .pipe(gulp.dest(destination));
 
     task.displayName = `${displayName}-worker`;
@@ -88,8 +86,10 @@ function createDebugBundlesStream(watch, displayName) {
     return task;
 }
 
-gulp.task('js-bundles-debug', gulp.series(
-    createDebugBundlesStream(false, 'js-bundles-debug')
+gulp.task('js-bundles-debug', shell.task(
+    ctx.uglify
+        ? 'pnpm nx run devextreme:bundle:debug -c production'
+        : 'pnpm nx run devextreme:bundle:debug'
 ));
 
 gulp.task('js-bundles-watch', gulp.parallel(
