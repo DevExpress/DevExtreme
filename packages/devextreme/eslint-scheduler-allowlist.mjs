@@ -137,4 +137,4 @@ const schedulerMemberAllowlist = [
 ];
 
 export const schedulerMemberAllowlistRegex =
-    `^(_|__esModule|${schedulerMemberAllowlist.map(s => s.replace(/\$/g, '\\$')).join('|')})$`;
+    `^(_|__esModule|${schedulerMemberAllowlist.map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})$`;
