@@ -1,171 +1,58 @@
-#theme-selector {
-  display: inline-block;
-  margin: 8px;
-}
-
-.theme-selector-popup .dx-popup-content {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.theme-selector-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.theme-selector-tabs {
-  flex: 0 0 auto;
-}
-
-.theme-selector-list {
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.theme-selector-group-header {
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.theme-selector-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.theme-selector-icon {
-  flex-shrink: 0;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
-}
-
-#theme-selector,
-.theme-selector-popup {
-  --tsel-bg: #ffffff;
-  --tsel-bg-subtle: #f4f5f7;
-  --tsel-text: #1a1a1a;
-  --tsel-text-muted: #6b7280;
-  --tsel-border: rgba(0, 0, 0, 0.12);
-  --tsel-hover: rgba(0, 0, 0, 0.04);
-  --tsel-selected: rgba(10, 95, 193, 0.10);
-  --tsel-accent: #0a5fc1;
+.ts { position: relative; display: inline-block; margin: 8px; }
+.ts-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border: 1px solid #ccc; border-radius: 6px;
+  background: #fff; cursor: pointer; font: inherit; font-size: 14px;
+  color: #1a1a1a; transition: border-color 0.15s;
   font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
-
-#theme-selector .dx-button,
-#theme-selector .dx-button-content,
-#theme-selector .dx-button .dx-button-text,
-#theme-selector .dx-icon,
-.theme-selector-popup .dx-overlay-content,
-.theme-selector-popup .dx-popup-content,
-.theme-selector-popup .dx-tabs,
-.theme-selector-popup .dx-tab,
-.theme-selector-popup .dx-list,
-.theme-selector-popup .dx-list-group-header,
-.theme-selector-popup .dx-list-item,
-.theme-selector-popup .dx-list-item-content {
-  color: var(--tsel-text) !important;
-  text-transform: none !important;
-  letter-spacing: normal !important;
-  font-family: inherit !important;
+.ts-btn:hover { border-color: #999; }
+.ts-btn:focus { outline: none; border-color: #0a5fc1; box-shadow: 0 0 0 2px rgba(10,95,193,0.15); }
+.ts-btn-icon { width: 22px; height: 22px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.12)); border-radius: 4px; }
+.ts-btn-arrow {
+  width: 7px; height: 7px; border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor; transform: translateY(-1px) rotate(45deg);
+  margin-left: 4px; transition: transform 0.15s;
 }
+.ts.open .ts-btn-arrow { transform: translateY(2px) rotate(-135deg); }
 
-#theme-selector .dx-button {
-  background-color: var(--tsel-bg) !important;
-  border: 1px solid var(--tsel-border) !important;
-  border-radius: 6px !important;
-  box-shadow: none !important;
+.ts-popup {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  width: 340px; max-height: 460px; background: #fff;
+  border: 1px solid #e0e0e0; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 1000;
+  flex-direction: column; overflow: hidden;
 }
+.ts.open .ts-popup { display: flex; }
 
-#theme-selector .dx-button.dx-state-hover {
-  background-color: var(--tsel-hover) !important;
+.ts-tabs { display: flex; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; }
+.ts-tab {
+  flex: 1; padding: 10px 0; text-align: center; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: #666; border: none;
+  background: none; border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
+.ts-tab:hover { color: #333; background: rgba(0,0,0,0.03); }
+.ts-tab.active { color: #0a5fc1; border-bottom-color: #0a5fc1; }
 
-#theme-selector .dx-button-content {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px !important;
+.ts-list { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+.ts-group-header {
+  padding: 6px 14px; font-size: 11px; font-weight: 600;
+  color: #888; background: #f7f8fa; border-bottom: 1px solid #eee;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
-
-#theme-selector .dx-button-content > .dx-icon {
-  display: none !important;
+.ts-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px; cursor: pointer; font-size: 14px;
+  color: #1a1a1a; transition: background 0.1s; border: none;
+  background: none; width: 100%; text-align: left;
+  font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
-
-#theme-selector .dx-button-content::after {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.theme-selector-popup .dx-overlay-content,
-.theme-selector-popup .dx-popup-content,
-.theme-selector-popup .dx-tabs,
-.theme-selector-popup .dx-list {
-  background-color: var(--tsel-bg) !important;
-  border-color: var(--tsel-border) !important;
-}
-
-.theme-selector-popup .dx-overlay-content {
-  border-radius: 8px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
-}
-
-.theme-selector-popup .dx-tabs {
-  border-bottom: 1px solid var(--tsel-border) !important;
-  width: 100% !important;
-}
-
-.theme-selector-popup .dx-tabs-wrapper,
-.theme-selector-popup .dx-tabs-scrollable .dx-tabs-wrapper {
-  display: flex !important;
-  width: 100% !important;
-}
-
-.theme-selector-popup .dx-tab {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-}
-
-.theme-selector-popup .dx-tab-text-span-pseudo {
-  visibility: hidden !important;
-}
-
-.theme-selector-popup .dx-tab-text-span {
-  visibility: visible !important;
-  color: var(--tsel-text) !important;
-}
-
-.theme-selector-popup .dx-tab.dx-state-hover {
-  background-color: var(--tsel-hover) !important;
-}
-
-.theme-selector-popup .dx-tab.dx-tab-selected,
-.theme-selector-popup .dx-tab.dx-tab-selected.dx-state-focused {
-  background-color: var(--tsel-bg) !important;
-}
-
-.theme-selector-popup .dx-tab-indicator,
-.theme-selector-popup .dx-tabs-wrapper .dx-tab.dx-tab-selected::after {
-  background-color: var(--tsel-accent) !important;
-  color: var(--tsel-accent) !important;
-}
-
-.theme-selector-popup .dx-list-group-header {
-  background-color: var(--tsel-bg-subtle) !important;
-  color: var(--tsel-text-muted) !important;
-  border-bottom: 1px solid var(--tsel-border) !important;
-}
-
-.theme-selector-popup .dx-list-item.dx-state-hover {
-  background-color: var(--tsel-hover) !important;
-}
-
-.theme-selector-popup .dx-list-item.dx-list-item-selected {
-  background-color: var(--tsel-selected) !important;
+.ts-item:hover { background: rgba(0,0,0,0.04); }
+.ts-item.selected { background: rgba(10,95,193,0.08); }
+.ts-item-icon {
+  width: 28px; height: 28px; flex-shrink: 0; border-radius: 4px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.12));
 }
