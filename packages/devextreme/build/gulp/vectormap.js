@@ -43,7 +43,7 @@ function collectShpFiles(dir) {
 gulp.task('vectormap-data', gulp.series('vectormap-utils', function generateData() {
     const parse = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.debug.js')).parse;
     const settings = require(path.join('../..', VECTORMAP_SOURCES_PATH, '_settings.js'));
-    const precision = settings.precision ? Math.round(settings.precision) : 4;
+    const precision = settings.precision >= 0 ? Math.round(settings.precision) : 4;
 
     if(!fs.existsSync(VECTORMAP_DATA_RESULT_PATH)) {
         fs.mkdirSync(VECTORMAP_DATA_RESULT_PATH);
