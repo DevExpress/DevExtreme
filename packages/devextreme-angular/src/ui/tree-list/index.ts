@@ -25,9 +25,9 @@ export type { ExplicitTypes } from 'devextreme/ui/tree_list';
 
 import type dxSortable from 'devextreme/ui/sortable';
 import type dxDraggable from 'devextreme/ui/draggable';
+import type { AIAssistant, ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
 import type { AIIntegration } from 'devextreme/common/ai-integration';
-import type { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
-import type { default as dxTreeList, dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
+import type { default as dxTreeList, dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, AIAssistantRequestCreatingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
 import type { Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
@@ -108,6 +108,7 @@ import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
 import { DxoTreeListAIModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListAIAssistantModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAIOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -300,6 +301,16 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    
+    @Input()
+    get aiAssistant(): AIAssistant {
+        return this._getOption('aiAssistant');
+    }
+    set aiAssistant(value: AIAssistant) {
+        this._setOption('aiAssistant', value);
     }
 
 
@@ -1274,6 +1285,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
     
+     * [descr:dxTreeListOptions.onAIAssistantRequestCreating]
+    
+    
+     */
+    @Output() onAIAssistantRequestCreating: EventEmitter<AIAssistantRequestCreatingEvent>;
+
+    /**
+    
      * [descr:dxTreeListOptions.onAIColumnRequestCreating]
     
     
@@ -1613,6 +1632,13 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() aiAssistantChange: EventEmitter<AIAssistant>;
 
     /**
     
@@ -2146,6 +2172,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
         this._createEventEmitters([
             { subscribe: 'adaptiveDetailRowPreparing', emit: 'onAdaptiveDetailRowPreparing' },
+            { subscribe: 'aIAssistantRequestCreating', emit: 'onAIAssistantRequestCreating' },
             { subscribe: 'aIColumnRequestCreating', emit: 'onAIColumnRequestCreating' },
             { subscribe: 'cellClick', emit: 'onCellClick' },
             { subscribe: 'cellDblClick', emit: 'onCellDblClick' },
@@ -2189,6 +2216,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
             { subscribe: 'toolbarPreparing', emit: 'onToolbarPreparing' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'aiAssistantChange' },
             { emit: 'aiIntegrationChange' },
             { emit: 'allowColumnReorderingChange' },
             { emit: 'allowColumnResizingChange' },
@@ -2374,6 +2402,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoStateStoringModule,
     DxoToolbarModule,
     DxoTreeListAIModule,
+    DxoTreeListAIAssistantModule,
     DxoTreeListAIOptionsModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,
@@ -2526,6 +2555,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoStateStoringModule,
     DxoToolbarModule,
     DxoTreeListAIModule,
+    DxoTreeListAIAssistantModule,
     DxoTreeListAIOptionsModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,

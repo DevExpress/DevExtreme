@@ -6,28 +6,13 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 
 import {
   afterTest,
   beforeTest,
-  createDataGrid as commonCreateDataGrid,
+  createDataGrid,
   type DataGridInstance,
 } from '../../__tests__/__mock__/helpers/utils';
-
-// TODO remove when types added to public dts
-interface AIAssistantDataGridProperties extends DataGridProperties {
-  aiAssistant?: {
-    enabled?: boolean;
-    title?: string;
-  };
-}
-
-// TODO remove when types added to public dts
-const createDataGrid = (
-  options: AIAssistantDataGridProperties = {},
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-): ReturnType<typeof commonCreateDataGrid> => commonCreateDataGrid(options as any);
 
 const AI_ASSISTANT_BUTTON_SELECTOR = '.dx-datagrid-ai-assistant-button';
 const HIDDEN_CLASS = 'dx-hidden';

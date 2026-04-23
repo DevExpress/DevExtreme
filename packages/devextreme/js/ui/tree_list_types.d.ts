@@ -1,6 +1,7 @@
 export {
   DisplayMode,
   SearchMode,
+  AIAssistant,
   ApplyFilterMode,
   ColumnChooser,
   ColumnChooserMode,
@@ -56,6 +57,7 @@ export {
   TreeListCommandColumnType,
   TreeListFilterMode,
   Scrollable,
+  AIAssistantRequestCreatingEvent,
   AdaptiveDetailRowPreparingEvent,
   CellClickEvent,
   CellDblClickEvent,

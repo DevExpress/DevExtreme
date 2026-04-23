@@ -4,9 +4,7 @@ import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids'
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { Properties as ChatOptions } from '@js/ui/chat';
 import type { Properties as DataGridOptions } from '@js/ui/data_grid';
-import type { Properties as PopupOptions } from '@js/ui/popup';
 import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
@@ -129,14 +127,6 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
   selection?: InternalSelection;
-
-  // TODO move to public d.ts
-  aiAssistant?: {
-    enabled?: boolean;
-    title?: string;
-    popup?: PopupOptions;
-    chat?: ChatOptions;
-  };
 }
 
 // todo: move to upper .d.ts files
