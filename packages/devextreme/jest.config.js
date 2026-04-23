@@ -42,11 +42,21 @@ module.exports = {
                 '__test-artifacts__'
             ],
             roots: ['<rootDir>/build', '<rootDir>/eslint_plugins'],
-            moduleFileExtensions: ['js'],
+            moduleFileExtensions: ['ts', 'js'],
             testMatch: [
-                '<rootDir>/build/**/*.test.js',
+                '<rootDir>/build/**/*.test.(ts|js)',
                 '<rootDir>/eslint_plugins/**/*.test.js',
             ],
+            preset: 'ts-jest',
+            transform: {
+                // eslint-disable-next-line spellcheck/spell-checker
+                '\\.ts$': ['ts-jest', {
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    tsconfig: { module: 'commonjs', target: 'es2020', esModuleInterop: true },
+                    diagnostics: false,
+                    isolatedModules: true,
+                }],
+            },
         }
     ]
 };
