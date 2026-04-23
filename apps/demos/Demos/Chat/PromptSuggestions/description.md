@@ -5,5 +5,5 @@ This demo implements [suggestions](/Documentation/ApiReference/UI_Components/dxC
 <!--split-->
 This demo allows you to configure suggestions as follows:
 
-- Specify whether the Chat displays a predefined prompt in the input field or immediately sends a message with that prompt.
+- Specify whether the Chat displays a predefined prompt in the [input field](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#inputFieldText) or immediately sends a message with that prompt.
 - Enable single-use suggestions.
