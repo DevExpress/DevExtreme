@@ -19,6 +19,10 @@ function transform(code: string, plugin: unknown): string {
   return result!.code!;
 }
 
+function normalize(code: string): string {
+  return code.replace(/\s+/g, ' ').trim();
+}
+
 describe('moveFieldInitializersToConstructor', () => {
   test('inserts field initializer after super() in derived class', () => {
     const input = `
@@ -140,9 +144,18 @@ describe('moveFieldInitializersToConstructor', () => {
         }
       }
     `;
+    const expected = `
+      class Derived extends Base {
+        constructor(x) {
+          super();
+          this.cached = 'init';
+          this.doSetup();
+          this.x = x;
+        }
+      }
+    `;
     const out = transform(input, moveFieldInitializersToConstructor);
-    expect(out).toMatch(/super\(\);\s*this\.cached\s*=\s*'init';\s*this\.doSetup\(\);\s*this\.x\s*=\s*x/);
-    expect(out).not.toMatch(/this\.x\s*=\s*x;\s*this\.cached\s*=\s*'init'/);
+    expect(normalize(out)).toBe(normalize(expected));
   });
 });
 
