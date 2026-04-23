@@ -51,9 +51,11 @@
         <br />
         <div id="button"></div>
         <script>
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: () => { alert("clicked"); }
+            $(() => {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: () => { alert("clicked"); }
+                });
             });
         </script>
     </div>
