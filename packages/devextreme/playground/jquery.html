@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -52,15 +51,9 @@
         <br />
         <div id="button"></div>
         <script>
-            $(() => {
-                $("#button").dxLookup({
-                    dataSource: ['A', 'B', 'C'],
-                    showClearButton: true,
-                    focusStateEnabled: true,
-                    searchEnabled: false,
-                    applyButtonText: 'OK',
-                    cancelButtonText: 'Delete',
-                });
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: () => { alert("clicked"); }
             });
         </script>
     </div>
