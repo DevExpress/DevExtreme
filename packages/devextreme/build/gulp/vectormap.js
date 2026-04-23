@@ -60,7 +60,8 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', async function genera
             { },
             function(shapeData) {
                 if(shapeData) {
-                    fs.writeFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, name + '.js'), JSON.stringify(shapeData));
+                    const content = name + ' = ' + JSON.stringify(shapeData) + ';';
+                    fs.writeFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, name + '.js'), content);
                 }
                 resolve();
             }
