@@ -3,5 +3,5 @@ DevExtreme [Chat](/Documentation/Guide/UI_Components/Chat/Overview/) can display
 <!--split-->
 This demo allows you to configure suggestion buttons as follows:
 
-- Send predefined prompts immediately or fill the Chat [input field](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#inputFieldText) when a suggestion is clicked
-- Toggle single-use suggestions (buttons disappear on click)
+- Specify whether the Chat displays a predefined prompt in the input field or immediately sends a message with that prompt.
+- Hide/display single-use suggestions
