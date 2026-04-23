@@ -43,6 +43,7 @@ function collectShpFiles(dir) {
 gulp.task('vectormap-data', gulp.series('vectormap-utils', async function generateData() {
     const parse = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.debug.js')).parse;
     const settings = require(path.join('../..', VECTORMAP_SOURCES_PATH, '_settings.js'));
+    const precision = settings.precision ? Math.round(settings.precision) : 4;
 
     if(!fs.existsSync(VECTORMAP_DATA_RESULT_PATH)) {
         fs.mkdirSync(VECTORMAP_DATA_RESULT_PATH);
@@ -57,7 +58,7 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', async function genera
 
         parse(
             { shp: toArrayBuffer(shpBuffer), dbf: toArrayBuffer(dbfBuffer) },
-            { },
+            { precision },
             function(shapeData) {
                 if(shapeData) {
                     const content = name + ' = ' + JSON.stringify(shapeData) + ';';
