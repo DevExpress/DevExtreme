@@ -168,7 +168,7 @@
         "!{projectRoot}/src/ui/popup/index.ts",
         "{projectRoot}/src/index.ts",
         "{projectRoot}/src/common/index.ts",
-        "{projectRoot}/metadata/generated/**/*"
+        "{projectRoot}/src/metadata/generated/**/*"
       ]
     },
     "regenerate": {
@@ -190,7 +190,7 @@
         "!{projectRoot}/src/ui/popup/index.ts",
         "{projectRoot}/src/index.ts",
         "{projectRoot}/src/common/index.ts",
-        "{projectRoot}/metadata/generated/**/*"
+        "{projectRoot}/src/metadata/generated/**/*"
       ],
       "inputs": [
         "default"
