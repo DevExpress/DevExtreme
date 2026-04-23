@@ -22,7 +22,7 @@ window.addEventListener('load', () =>
   setupThemeSelector('theme-selector')
     .catch((err) => console.error('Theme loading failed:', err))
     .then(() => {
-      $('#container').dxCardView({
+      $('#widget-container').dxCardView({
         dataSource: customers,
         keyExpr: 'ID',
         cardsPerRow: 'auto',
