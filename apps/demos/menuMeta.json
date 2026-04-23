@@ -3649,6 +3649,12 @@
                   "/Models/Scheduler/ResolveTimeConflicts.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Create from Selection",
+                "Name": "CreateFromSelection",
+                "Widget": "Scheduler",
+                "DemoType": "Web"
               }
             ]
           },
