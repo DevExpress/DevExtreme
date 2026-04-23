@@ -1106,7 +1106,7 @@ class Lookup extends DropDownList<LookupProperties> {
           this._removeSearch();
           this._renderSearch();
         }
-        this._setListOption('tabindex', value ? -1 : 0);
+        this._setListOption('tabIndex', value ? -1 : 0);
         break;
       case 'searchPlaceholder':
         this._setSearchPlaceholder();
