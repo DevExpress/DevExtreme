@@ -7,6 +7,7 @@ const named = require('vinyl-named');
 const notify = require('gulp-notify');
 const path = require('path');
 const plumber = require('gulp-plumber');
+const shell = require('gulp-shell');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 
@@ -42,26 +43,11 @@ const getWebpackConfig = () => {
     return Object.assign(webpackConfig, { plugins });
 };
 
-const bundleProdPipe = lazyPipe()
-    .pipe(named)
-    .pipe(() => webpackStream(getWebpackConfig(), webpack, muteWebPack))
-    .pipe(headerPipes.useStrict)
-    .pipe(headerPipes.bangLicense)
-    .pipe(compressionPipes.minify);
-
-const jsBundlesProd = (src, dist, bundles) => (() =>
-    gulp.src(processBundles(bundles, src))
-        .pipe(bundleProdPipe())
-        .pipe(gulp.dest(dist))
-);
-
-gulp.task('js-bundles-prod',
-    jsBundlesProd(
-        ctx.TRANSPILED_PROD_RENOVATION_PATH,
-        ctx.RESULT_JS_PATH,
-        BUNDLES,
-    )
-);
+gulp.task('js-bundles-prod', shell.task(
+    ctx.uglify
+        ? 'pnpm nx run devextreme:bundle:prod -c production'
+        : 'pnpm nx run devextreme:bundle:prod'
+));
 
 function prepareDebugMeta(watch) {
     const debugConfig = Object.assign({ watch }, getWebpackConfig());

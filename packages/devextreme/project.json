@@ -645,10 +645,7 @@
         "{projectRoot}/webpack.config.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.all.js",
-        "{projectRoot}/artifacts/js/dx.web.js",
-        "{projectRoot}/artifacts/js/dx.viz.js",
-        "{projectRoot}/artifacts/js/dx.ai-integration.js"
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
       ]
     },
     "bundle:prod": {
@@ -656,9 +653,19 @@
       "options": {
         "commands": [
           "pnpm nx bundle:prod:build devextreme",
-          "pnpm nx bundle:headers devextreme -c prod"
+          "pnpm nx bundle:headers devextreme -c prod",
+          "pnpm nx compress:bundles devextreme"
         ],
         "parallel": false
+      },
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx bundle:prod:build devextreme",
+            "pnpm nx bundle:headers devextreme -c prod",
+            "pnpm nx compress:bundles devextreme -c production"
+          ]
+        }
       },
       "inputs": [
         {
@@ -669,10 +676,31 @@
         "{projectRoot}/build/gulp/license-header.txt"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.all.js",
-        "{projectRoot}/artifacts/js/dx.web.js",
-        "{projectRoot}/artifacts/js/dx.viz.js",
-        "{projectRoot}/artifacts/js/dx.ai-integration.js"
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
+      ]
+    },
+    "compress:bundles": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/dx.all.js",
+          "./artifacts/js/dx.web.js",
+          "./artifacts/js/dx.viz.js",
+          "./artifacts/js/dx.ai-integration.js"
+        ],
+        "mode": "strip-debug"
+      },
+      "configurations": {
+        "production": {
+          "mode": "minify",
+          "eulaUrl": "https://js.devexpress.com/Licensing/"
+        }
+      },
+      "inputs": [
+        "prodBundles"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
       ]
     },
     "build:vectormap:generate": {
@@ -1178,6 +1206,12 @@
       "!{projectRoot}/testing/*.txt",
       "!{projectRoot}/testing/*.xml",
       "{projectRoot}/*.js"
+    ],
+    "prodBundles": [
+      "{projectRoot}/artifacts/js/dx.all.js",
+      "{projectRoot}/artifacts/js/dx.web.js",
+      "{projectRoot}/artifacts/js/dx.viz.js",
+      "{projectRoot}/artifacts/js/dx.ai-integration.js"
     ]
   },
   "tags": []
