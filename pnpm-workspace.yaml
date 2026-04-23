@@ -27,7 +27,7 @@ catalog:
   gulp-eslint-new: 2.4.0
   jquery: 3.7.1
   jspdf: 4.2.1
-  jspdf-autotable: 3.8.4
+  jspdf-autotable: 5.0.2
   testcafe: 3.7.4
   "@babel/eslint-parser": 7.28.6
   "@eslint-stylistic/metadata": ^2.13.0
