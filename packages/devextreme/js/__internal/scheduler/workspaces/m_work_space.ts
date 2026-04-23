@@ -1020,14 +1020,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const $cell = $(e.target);
       that.cellClickAction({ event: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
     });
-
-    (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME);
-    eventsEngine.on(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME, () => {
-      if (this.isSelectionStartedOnCell && !this._disposed) {
-        this.fireSelectionEndEvent();
-        this.isSelectionStartedOnCell = false;
-      }
-    });
   }
 
   private createCellClickAction() {
@@ -1071,6 +1063,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const cellCoordinates = this.getCoordinatesByCell($target);
       const isAllDayCell = this.hasAllDayClass($target);
       this.setSelectedCellsStateAndUpdateSelection(isAllDayCell, cellCoordinates, false, $target);
+
+      eventsEngine.one(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME, () => {
+        if (this.isSelectionStartedOnCell && !this._disposed) {
+          this.fireSelectionEndEvent();
+          this.isSelectionStartedOnCell = false;
+        }
+      });
     }
   }
 
@@ -2299,7 +2298,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     // @ts-expect-error
     super._dispose();
 
-    (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME);
     this.virtualScrollingDispatcher.dispose();
   }
 

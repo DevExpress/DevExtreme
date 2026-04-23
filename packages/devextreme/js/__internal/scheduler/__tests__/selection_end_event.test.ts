@@ -89,4 +89,28 @@ describe('onSelectionEnd', () => {
 
     expect(onSelectionEnd).toHaveBeenCalledTimes(1);
   });
+
+  it('should fire onSelectionEnd independently for each Scheduler instance on the page', async () => {
+    const onSelectionEndA = jest.fn<(e: SelectionEndEvent) => void>();
+    const onSelectionEndB = jest.fn<(e: SelectionEndEvent) => void>();
+
+    const { POM: POMA } = await createScheduler({
+      ...defaultOptions,
+      onSelectionEnd: onSelectionEndA,
+    });
+    await createScheduler({
+      ...defaultOptions,
+      onSelectionEnd: onSelectionEndB,
+    });
+
+    const firstCell = POMA.getDateTableCell(0, 0);
+    const secondCell = POMA.getDateTableCell(1, 0);
+
+    fireEvent.mouseDown(firstCell, { which: 1 });
+    fireEvent.mouseMove(secondCell);
+    fireEvent.mouseUp(secondCell);
+
+    expect(onSelectionEndA).toHaveBeenCalledTimes(1);
+    expect(onSelectionEndB).toHaveBeenCalledTimes(0);
+  });
 });
