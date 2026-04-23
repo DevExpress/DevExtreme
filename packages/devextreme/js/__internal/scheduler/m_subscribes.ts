@@ -243,7 +243,7 @@ const subscribes = {
   },
 
   getGroupCount() {
-    return this._workSpace._getGroupCount();
+    return this._workSpace.getGroupCount();
   },
 
   mapAppointmentFields(config) {

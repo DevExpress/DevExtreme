@@ -31,7 +31,7 @@ export const createAppointmentFilter = (scheduler: Scheduler): FilterStrategy =>
     viewType: (): ViewType => scheduler._workSpace.type as ViewType,
     viewDirection: (): 'vertical' | 'horizontal' => scheduler._workSpace.viewDirection as 'vertical' | 'horizontal',
     dateRange: (): Date[] => scheduler._workSpace.getDateRange() as Date[],
-    groupCount: (): number => scheduler._workSpace._getGroupCount() as number,
+    groupCount: (): number => scheduler._workSpace.getGroupCount() as number,
     viewDataProvider: (): ViewDataProvider => scheduler
       ._workSpace.viewDataProvider as ViewDataProvider,
     allDayPanelMode: (): AllDayPanelModeType => scheduler.getViewOption('allDayPanelMode'),
