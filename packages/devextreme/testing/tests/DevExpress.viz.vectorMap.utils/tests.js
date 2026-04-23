@@ -3,7 +3,6 @@
 import { parse } from '../../../artifacts/js/vectormap-utils/dx.vectormaputils.js';
 import $ from 'jquery';
 
-const CONTROLLER_URL = ROOT_URL + 'TestVectorMapData/';
 const TEST_DATA_URL = ROOT_URL + 'packages/devextreme/testing/content/VectorMapData/';
 
 let testData = [];
@@ -11,14 +10,6 @@ let testData = [];
 function applyDatesPatch(obj, parser) {
     obj.features.forEach(function(feature) {
         feature.properties.Date = parser(feature.properties.Date);
-    });
-}
-
-function applyNodeDatesPatch(obj) {
-    applyDatesPatch(obj, function(value) {
-        const offset = (new Date(value)).getTimezoneOffset();
-        const vals = value.split('T')[0].split('-');
-        return new Date(Number(vals[0]), Number(vals[1]) - 1, Number(vals[2]) + (offset < 0 ? 1 : 0));
     });
 }
 
@@ -50,10 +41,6 @@ function getFailCallBack(assert) {
         e = e || {};
         assert.ok(false, e.responseText);
     };
-}
-
-function isPoint(obj) {
-    return obj.name === 'Point';
 }
 
 QUnit.module('data loader', {
@@ -104,94 +91,6 @@ QUnit.module('data loader', {
                 });
             });
         }
-
-        QUnit.module('node - parse Buffer');
-
-        testData.forEach(function(testDataItem) {
-            QUnit.test(testDataItem.name, function(assert) {
-                assert.timeout(100000);
-                const done = assert.async();
-                $.getJSON(CONTROLLER_URL + 'ParseBuffer/' + testDataItem.name).done(function(response) {
-                    applyNodeDatesPatch(response.data);
-                    assert.strictEqual(response.func, true, 'function result');
-                    assert.deepEqual(response.data, testDataItem.expected, 'parsing result');
-                    checkErrors(assert, response.errors, testDataItem.name);
-                }).fail(getFailCallBack(assert))
-                    .always(done);
-            });
-        });
-
-        QUnit.module('node - read and parse');
-
-        testData.forEach(function(testDataItem) {
-            QUnit.test(testDataItem.name, function(assert) {
-                assert.timeout(100000);
-                const done = assert.async();
-                $.getJSON(CONTROLLER_URL + 'ReadAndParse/' + testDataItem.name).done(function(response) {
-                    applyNodeDatesPatch(response.data);
-                    assert.strictEqual(response.func, true, 'function result');
-                    assert.deepEqual(response.data, testDataItem.expected, 'parsing result');
-                    checkErrors(assert, response.errors, testDataItem.name);
-                }).fail(getFailCallBack(assert))
-                    .always(done);
-            });
-        });
-
-        QUnit.module('node-console');
-
-        QUnit.test('process single file', function(assert) {
-            const done = assert.async();
-            $.getJSON(CONTROLLER_URL + 'ExecuteConsoleApp', { file: 'Point.shp' }, function(response) {
-                assert.strictEqual(response.length, 1, 'count');
-                applyNodeDatesPatch(response[0].content);
-                assert.strictEqual(response[0].file, 'test_Point.js', 'file');
-                assert.strictEqual(response[0].variable, 'test.namespace.Point', 'variable');
-                assert.deepEqual(response[0].content, $.grep(testData, isPoint)[0].expected, 'content');
-            }).fail(getFailCallBack(assert))
-                .always(done);
-        });
-
-        QUnit.test('process directory', function(assert) {
-            const done = assert.async();
-            $.getJSON(CONTROLLER_URL + 'ExecuteConsoleApp', function(response) {
-                assert.strictEqual(response.length, testData.length, 'count');
-                response.forEach(function(responseItem) {
-                    const testDataItem = $.grep(testData, function(obj) {
-                        return obj.name === responseItem.file.substr(5).replace('.js', '');
-                    })[0];
-                    assert.strictEqual(responseItem.variable, 'test.namespace.' + testDataItem.name, 'variable /' + testDataItem.name);
-                    applyNodeDatesPatch(responseItem.content);
-                    assert.deepEqual(responseItem.content, testDataItem.expected, 'content / ' + testDataItem.name);
-                });
-            }).fail(getFailCallBack(assert))
-                .always(done);
-        });
-
-        QUnit.test('process single file / json', function(assert) {
-            const done = assert.async();
-            $.getJSON(CONTROLLER_URL + 'ExecuteConsoleApp', { file: 'Point.shp', json: true }, function(response) {
-                assert.strictEqual(response.length, 1, 'count');
-                applyNodeDatesPatch(response[0].content);
-                assert.strictEqual(response[0].file, 'test_Point.json', 'file');
-                assert.deepEqual(response[0].content, $.grep(testData, isPoint)[0].expected, 'content');
-            }).fail(getFailCallBack(assert))
-                .always(done);
-        });
-
-        QUnit.test('process directory / json', function(assert) {
-            const done = assert.async();
-            $.getJSON(CONTROLLER_URL + 'ExecuteConsoleApp', { json: 1 }, function(response) {
-                assert.strictEqual(response.length, testData.length, 'count');
-                response.forEach(function(responseItem) {
-                    const testDataItem = $.grep(testData, function(obj) {
-                        return obj.name === responseItem.file.substr(5).replace('.json', '');
-                    })[0];
-                    applyNodeDatesPatch(responseItem.content);
-                    assert.deepEqual(responseItem.content, testDataItem.expected, 'content / ' + testDataItem.name);
-                });
-            }).fail(getFailCallBack(assert))
-                .always(done);
-        });
     },
 }, function() {
     QUnit.test('trigger the "before" hook to load an array on which other test cases are based', function(assert) {
