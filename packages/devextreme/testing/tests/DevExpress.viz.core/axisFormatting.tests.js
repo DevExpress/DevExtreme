@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import config from 'core/config';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import tickGeneratorModule from 'viz/axes/tick_generator';
@@ -139,6 +140,56 @@ const environment = {
         this.translator = null;
     }
 };
+
+const globalConfigEnvironment = $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        this.savedConfig = { ...config() };
+    },
+    afterEach: function() {
+        config(this.savedConfig);
+        environment.afterEach.call(this);
+    }
+});
+
+QUnit.module('Global formatting config. Axis labels', globalConfigEnvironment);
+
+QUnit.test('value axis labels use global numberFormat when label.format is not set', function(assert) {
+    config({
+        ...config(),
+        numberFormat: { type: 'fixedPoint', precision: 2 }
+    });
+
+    this.testTickLabelFormat(assert, [1500], 100, ['1500.00']);
+});
+
+QUnit.test('local axis label.format keeps priority over global numberFormat', function(assert) {
+    config({
+        ...config(),
+        numberFormat: { type: 'fixedPoint', precision: 2 }
+    });
+
+    this.testFormat(assert, {
+        label: {
+            visible: true,
+            format: 'thousands'
+        }
+    }, [1500], 100, ['1.5K']);
+});
+
+QUnit.test('datetime axis labels use global dateTimeFormat when label.format is not set', function(assert) {
+    config({
+        ...config(),
+        dateTimeFormat: 'yyyy-MM-dd'
+    });
+
+    this.testFormat(assert, {
+        argumentType: 'datetime',
+        label: {
+            visible: true
+        }
+    }, [new Date(2020, 0, 2)], 'day', ['2020-01-02']);
+});
 
 QUnit.module('Auto formatting. Tick labels. Numeric.', environment);
 
