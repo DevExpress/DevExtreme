@@ -70,7 +70,6 @@ import {
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import {
   getAppointmentGroupIndex,
@@ -91,6 +90,7 @@ import CellsSelectionState from './m_cells_selection_state';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
+import VerticalShader from './shaders/current_time_shader_vertical';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
 
@@ -2894,6 +2894,30 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   getAllDayContainer() {
     return this.$allDayContainer;
+  }
+
+  getShaderContainer() {
+    return this._dateTableScrollable.$content();
+  }
+
+  getAllDayPanelElement() {
+    return this._$allDayPanel;
+  }
+
+  getGroupCount() {
+    return this._getGroupCount();
+  }
+
+  getCellCount() {
+    return this._getCellCount();
+  }
+
+  isHorizontalGrouping() {
+    return this._isHorizontalGroupedWorkSpace();
+  }
+
+  getHeaderPanelContainer() {
+    return this._$headerPanelContainer;
   }
 
   updateRender() {

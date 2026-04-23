@@ -46,15 +46,15 @@ class VerticalGroupedStrategy {
   }
 
   getTotalCellCount() {
-    return this._workSpace._getCellCount();
+    return this._workSpace.getCellCount();
   }
 
   getTotalRowCount() {
-    return this._workSpace.getRowCount() * this._workSpace._getGroupCount();
+    return this._workSpace.getRowCount() * this._workSpace.getGroupCount();
   }
 
   calculateTimeCellRepeatCount() {
-    return this._workSpace._getGroupCount() || 1;
+    return this._workSpace.getGroupCount() || 1;
   }
 
   getWorkSpaceMinWidth() {
@@ -92,7 +92,7 @@ class VerticalGroupedStrategy {
 
       const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
       const scrollTop = this.getScrollableScrollTop();
-      const headerRowHeight = getBoundingRect(this._workSpace._$headerPanelContainer.get(0)).height;
+      const headerRowHeight = getBoundingRect(this._workSpace.getHeaderPanelContainer().get(0)).height;
 
       let topOffset = groupIndex * dayHeight + headerRowHeight + this._workSpace.option('getHeaderHeight')() - scrollTop;
 

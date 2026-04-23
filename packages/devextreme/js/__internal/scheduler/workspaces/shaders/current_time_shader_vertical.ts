@@ -24,7 +24,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     }
 
     setHeight(this.$shader, shaderHeight);
-    const groupCount = this._workSpace._getGroupCount() || 1;
+    const groupCount = this._workSpace.getGroupCount() || 1;
 
     if (this._workSpace.isGroupedByDate()) {
       this.renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
@@ -125,7 +125,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
       setWidth(this.$allDayIndicator, shaderWidth);
       this.$allDayIndicator.css('left', this.getShaderOffset(i, shaderWidth));
 
-      this._workSpace._$allDayPanel.prepend(this.$allDayIndicator);
+      this._workSpace.getAllDayPanelElement().prepend(this.$allDayIndicator);
     }
   }
 
@@ -152,8 +152,8 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   clean(): void {
     super.clean();
 
-    if (this._workSpace?._$allDayPanel) {
-      this._workSpace._$allDayPanel.find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
+    if (this._workSpace?.getAllDayPanelElement()) {
+      this._workSpace.getAllDayPanelElement().find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
     }
   }
 }
