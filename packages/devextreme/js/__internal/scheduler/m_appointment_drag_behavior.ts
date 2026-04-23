@@ -10,7 +10,7 @@ import type { AppointmentViewModelPlain } from './view_model/generate_view_model
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
 export default class AppointmentDragBehavior {
-  workspace = this.scheduler._workSpace;
+  workspace = this.scheduler.getWorkSpace();
 
   appointments = this.scheduler._appointments;
 

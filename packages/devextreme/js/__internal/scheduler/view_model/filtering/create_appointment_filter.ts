@@ -27,13 +27,13 @@ export const createAppointmentFilter = (scheduler: Scheduler): FilterStrategy =>
     showAllDayPanel: (): boolean => scheduler.option('showAllDayPanel'),
     timeZoneCalculator: scheduler.timeZoneCalculator,
     //
-    supportAllDayRow: scheduler._workSpace.supportAllDayRow(),
-    viewType: (): ViewType => scheduler._workSpace.type as ViewType,
-    viewDirection: (): 'vertical' | 'horizontal' => scheduler._workSpace.viewDirection as 'vertical' | 'horizontal',
-    dateRange: (): Date[] => scheduler._workSpace.getDateRange() as Date[],
-    groupCount: (): number => scheduler._workSpace.getGroupCount() as number,
+    supportAllDayRow: scheduler.getWorkSpace().supportAllDayRow(),
+    viewType: (): ViewType => scheduler.getWorkSpace().type as ViewType,
+    viewDirection: (): 'vertical' | 'horizontal' => scheduler.getWorkSpace().viewDirection as 'vertical' | 'horizontal',
+    dateRange: (): Date[] => scheduler.getWorkSpace().getDateRange() as Date[],
+    groupCount: (): number => scheduler.getWorkSpace().getGroupCount() as number,
     viewDataProvider: (): ViewDataProvider => scheduler
-      ._workSpace.viewDataProvider as ViewDataProvider,
+      .getWorkSpace().viewDataProvider as ViewDataProvider,
     allDayPanelMode: (): AllDayPanelModeType => scheduler.getViewOption('allDayPanelMode'),
   };
   const filterStrategyName = scheduler.isVirtualScrolling()
