@@ -2063,6 +2063,46 @@ testModule('hide on outside click', moduleConfig, () => {
         assert.equal(overlay1.option('visible'), true, 'Bottom overlay should not get outside click when inner overlay clicked');
     });
 
+    test('overlay opened above inner overlay should close on click inside inner overlay', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $(overlay1.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay2.option('visible'), false, 'Overlay opened above inner overlay should close');
+        assert.strictEqual(overlay1.option('visible'), true, 'Inner overlay itself should stay visible');
+    });
+
+    test('click inside inner overlay should not close overlays below it in stack', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $(overlay2.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), true, 'Overlay below inner overlay should not close');
+        assert.strictEqual(overlay2.option('visible'), true, 'Inner overlay should stay visible');
+    });
+
     // T494814
     test('overlay should not be hidden after click in detached element', function(assert) {
         const overlay = $('#overlayWithAnonymousTmpl').dxOverlay({
@@ -4125,7 +4165,7 @@ testModule('renderGeometry', {
         };
         for(const optionName in newOptions) {
             QUnit.testInActiveWindow(optionName, function(assert) {
-                // eslint-disable-next-line qunit/no-async-in-loops
+
                 const showingResizeHandled = assert.async();
                 setTimeout(() => {
                     this.overlayInstance.option(optionName, newOptions[optionName]);
