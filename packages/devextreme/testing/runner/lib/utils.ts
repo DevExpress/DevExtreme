@@ -1,6 +1,5 @@
 import * as fs from 'node:fs';
 import { IncomingMessage } from 'node:http';
-import * as path from 'node:path';
 
 import { PortsMap } from './types';
 
@@ -114,17 +113,6 @@ export function formatDateForSuiteTimestamp(date: Date): string {
 
 export function isContinuousIntegration(): boolean {
   return Boolean(process.env.CCNetWorkingDirectory || process.env.DEVEXTREME_TEST_CI);
-}
-
-export function resolveNodePath(): string {
-  if (process.env.CCNetWorkingDirectory) {
-    const customPath = path.join(process.env.CCNetWorkingDirectory, 'node', 'node.exe');
-    if (fs.existsSync(customPath)) {
-      return customPath;
-    }
-  }
-
-  return 'node';
 }
 
 export function readBodyText(req: IncomingMessage): Promise<string> {
