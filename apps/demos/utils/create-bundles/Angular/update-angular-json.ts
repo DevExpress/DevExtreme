@@ -34,6 +34,11 @@ const createConfigForDemo = (Demo: Demo) => {
           main: `${demoSourcePathRelative}/app/app.component.ts`,
           polyfills: join(__dirname, 'polyfill.ts').split('\\').join('/'),
           tsConfig: `${demoSourcePathRelative}/tsconfig.json`,
+          aot: true,
+          buildOptimizer: false,
+          optimization: false,
+          vendorChunk: true,
+          namedChunks: true,
           scripts: [],
           allowedCommonJsDependencies: [
             'jszip',
@@ -43,24 +48,7 @@ const createConfigForDemo = (Demo: Demo) => {
             'devextreme-aspnet-data-nojquery',
           ],
         },
-        configurations: {
-          production: {
-            budgets: [
-              {
-                type: 'initial',
-                maximumWarning: '2mb',
-                maximumError: '4mb',
-              },
-              {
-                type: 'anyComponentStyle',
-                maximumWarning: '2kb',
-                maximumError: '4kb',
-              },
-            ],
-            outputHashing: 'all',
-          },
-        },
-        defaultConfiguration: 'production',
+        configurations: {},
       },
     },
   };
