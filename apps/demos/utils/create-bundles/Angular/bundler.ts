@@ -1,6 +1,15 @@
 import { exec } from 'child_process';
 import { BuildOptions } from 'esbuild';
-import { existsSync, mkdirSync, removeSync } from 'fs-extra';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  removeSync,
+  statSync,
+  writeFileSync,
+} from 'fs-extra';
+import { dirname, join, relative } from 'path';
 import { Demo, Framework } from '../helper/types';
 import { createDemoLayout, getDestinationPathByDemo, getSourcePathByDemo } from '../helper';
 import { getIndexHtmlPath, getProjectNameByDemo } from './utils';
@@ -18,6 +27,44 @@ export default class AngularBundler implements Bundler {
   }
 
   getBuildOptions = (): BuildOptions => ({});
+
+  private updateAntiForgeryImport = (sourceDemoPath: string) => {
+    const angularAppPath = join(sourceDemoPath, 'app');
+    if (!existsSync(angularAppPath)) {
+      return;
+    }
+
+    const oldImport = "import 'anti-forgery';";
+    const antiForgeryFilePath = join(__dirname, '..', '..', '..', 'shared', 'anti-forgery', 'fetch-override.js');
+
+    const replaceRecursively = (directoryPath: string) => {
+      const entries = readdirSync(directoryPath);
+      entries.forEach((entryName) => {
+        const entryPath = join(directoryPath, entryName);
+        const isDirectory = statSync(entryPath).isDirectory();
+        if (isDirectory) {
+          replaceRecursively(entryPath);
+          return;
+        }
+
+        if (!entryPath.endsWith('.ts')) {
+          return;
+        }
+
+        const content = readFileSync(entryPath, 'utf8');
+        if (!content.includes(oldImport)) {
+          return;
+        }
+
+        const relativeImportPath = relative(dirname(entryPath), antiForgeryFilePath).split('\\').join('/');
+        const normalizedImportPath = relativeImportPath.startsWith('.') ? relativeImportPath : `./${relativeImportPath}`;
+        const newImport = `import '${normalizedImportPath}';`;
+        writeFileSync(entryPath, content.split(oldImport).join(newImport), 'utf8');
+      });
+    };
+
+    replaceRecursively(angularAppPath);
+  };
 
   buildDemo = (demo: Demo, res): Promise<void> => {
     const sourceDemoPath = getSourcePathByDemo(demo, this.framework);
@@ -41,6 +88,7 @@ export default class AngularBundler implements Bundler {
     mkdirSync(indexHtmlPath, { recursive: true });
 
     createDemoLayout(demo, this.framework);
+    this.updateAntiForgeryImport(sourceDemoPath);
 
     const ngBuildCommand = `npm run build-angular -- ${getProjectNameByDemo(demo)}`;
     const ngBuildProcess = exec(ngBuildCommand);
