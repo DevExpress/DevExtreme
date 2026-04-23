@@ -9,8 +9,10 @@ function transform(code: string, plugin: unknown): string {
   const result = transformSync(code, {
     babelrc: false,
     configFile: false,
+    parserOpts: {
+      plugins: ['classProperties'],
+    },
     plugins: [
-      ['@babel/plugin-syntax-class-properties'],
       plugin,
     ],
   });

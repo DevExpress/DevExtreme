@@ -19,14 +19,14 @@ const customers = [
 ];
 
 window.addEventListener('load', () =>
-    setupThemeSelector('theme-selector')
-        .catch((err) => console.error('Theme loading failed:', err))
-        .then(() => {
-            $('#container').dxCardView({
-                dataSource: customers,
-                keyExpr: 'ID',
-                cardsPerRow: 'auto',
-                cardMinWidth: 320,
-                columns: ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'],
-            });
-        }));
+  setupThemeSelector('theme-selector')
+    .catch((err) => console.error('Theme loading failed:', err))
+    .then(() => {
+      $('#container').dxCardView({
+        dataSource: customers,
+        keyExpr: 'ID',
+        cardsPerRow: 'auto',
+        cardMinWidth: 320,
+        columns: ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'],
+      });
+    }));
