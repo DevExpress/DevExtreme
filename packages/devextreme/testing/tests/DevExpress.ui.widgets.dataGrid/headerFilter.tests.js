@@ -804,6 +804,39 @@ QUnit.module('Header Filter', {
         assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(4).text(), '4', 'text the nested treeview item');
     });
 
+    QUnit.test('Header filter date groupInterval levels do not use global numberFormat (T day level)', function(assert) {
+        const that = this;
+        const testElement = $('#container');
+        const savedConfig = { ...config() };
+
+        try {
+            config({
+                ...config(),
+                numberFormat: '#,##0.00',
+            });
+
+            that.columns[0].dataType = 'date';
+            that.items = [{ Test1: new Date(1986, 0, 1), Test2: 'test2' }, { Test1: new Date(1986, 0, 4), Test2: 'test4' }];
+            that.setupDataGrid();
+            that.columnHeadersView.render(testElement);
+            that.headerFilterView.render(testElement);
+
+            that.headerFilterController.showHeaderFilterMenu(0);
+
+            const $popupContent = that.headerFilterView.getPopupContainer().$content();
+
+            assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(1).text(), '1986', 'year level is not formatted as number');
+
+            $($popupContent.find('.dx-treeview-toggle-item-visibility').first()).trigger('dxclick');
+            $($popupContent.find('.dx-treeview-toggle-item-visibility').last()).trigger('dxclick');
+
+            assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(3).text(), '1', 'day level is not formatted as number');
+            assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(4).text(), '4', 'day level is not formatted as number');
+        } finally {
+            config(savedConfig);
+        }
+    });
+
     // T274290
     QUnit.test('Header filter with items when column lookup with simple types', function(assert) {
         // arrange
