@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { SelectionEndEvent } from '@js/ui/scheduler';
 import { fireEvent } from '@testing-library/dom';
 
 import fx from '../../../common/core/animation/fx';
@@ -28,7 +29,7 @@ describe('onSelectionEnd', () => {
   });
 
   it('should fire with selectedCellData on multi-cell mouse drag', async () => {
-    const onSelectionEnd = jest.fn();
+    const onSelectionEnd = jest.fn<(e: SelectionEndEvent) => void>();
 
     const { POM, scheduler } = await createScheduler({
       ...defaultOptions,
