@@ -32,6 +32,7 @@ $(() => {
       e.component.showAppointmentPopup({
         startDate,
         endDate,
+        allDay: cells[0].allDay,
         ...cells[0].groups,
       }, true);
     },
