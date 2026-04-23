@@ -1,5 +1,7 @@
 export type {
     AdaptiveDetailRowPreparingInfo,
+    AIAssistant,
+    AIAssistantRequestCreatingInfo,
     AIColumnMode,
     AIColumnRequestCreatingInfo,
     ApplyChangesMode,

@@ -274,6 +274,8 @@ export namespace Export {
 export function Grids(): void {}
 export namespace Grids {
     export type AdaptiveDetailRowPreparingInfo = GridsModule.AdaptiveDetailRowPreparingInfo;
+    export type AIAssistant = GridsModule.AIAssistant;
+    export type AIAssistantRequestCreatingInfo = GridsModule.AIAssistantRequestCreatingInfo;
     export type AIColumnMode = GridsModule.AIColumnMode;
     export type AIColumnRequestCreatingInfo<TRowData = any> = GridsModule.AIColumnRequestCreatingInfo<TRowData>;
     export type ApplyChangesMode = GridsModule.ApplyChangesMode;

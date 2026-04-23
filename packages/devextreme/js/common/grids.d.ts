@@ -62,6 +62,9 @@ import {
 import { LoadPanelIndicatorProperties } from '../ui/load_panel';
 
 import {
+  Properties as ChatProperties,
+} from '../ui/chat';
+import {
   Properties as PopupProperties,
 } from '../ui/popup';
 import {
@@ -78,6 +81,54 @@ import {
 import { PositionConfig } from './core/animation';
 import { PagerBase } from '../ui/pagination';
 import { AIIntegration } from './ai-integration';
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type AIAssistant = {
+  /** @docid */
+  aiIntegration?: AIIntegration;
+  /**
+   * @docid
+   * @type dxChatOptions
+   */
+  chat?: ChatProperties;
+  /**
+   * @docid
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid
+   * @type dxPopupOptions
+   */
+  popup?: PopupProperties;
+  /**
+   * @docid
+   * @default 'AI Assistant'
+   */
+  title?: string;
+};
+
+/**
+ * @docid
+ * @hidden
+ * @namespace DevExpress.common.grids
+ */
+export type AIAssistantRequestCreatingInfo = {
+  /**
+   * @docid
+   * @type object
+   */
+  context: Record<string, any>;
+  /**
+   * @docid
+   * @type object
+   */
+  responseSchema: Record<string, any>;
+};
 
 /**
  * @docid
@@ -1942,6 +1993,11 @@ interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRow
 export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = Omit<GridBaseOptionsBlank<TComponent, TRowData, TKey>, 'focusStateEnabled'> & {
   /**
    * @docid
+   * @public
+   */
+  aiAssistant?: AIAssistant;
+  /**
+   * @docid
    * @default undefined
    * @public
    */
@@ -2145,6 +2201,15 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @public
    */
   noDataText?: string;
+  /**
+   * @docid
+   * @default null
+   * @type_function_param1 e:object
+   * @type_function_param1_field component:this
+   * @action
+   * @public
+   */
+  onAIAssistantRequestCreating?: ((e: EventInfo<TComponent> & Cancelable & AIAssistantRequestCreatingInfo) => void);
   /**
    * @docid
    * @default null
