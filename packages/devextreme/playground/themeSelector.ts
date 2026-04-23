@@ -58,7 +58,8 @@ export function setupThemeSelector(containerId: string): Promise<void> {
     select.appendChild(optgroup);
   });
 
-  const savedTheme = window.localStorage.getItem(themeKey) || themeList[0];
+  const defaultTheme = themeList.includes('fluent.blue.light') ? 'fluent.blue.light' : themeList[0];
+  const savedTheme = window.localStorage.getItem(themeKey) || defaultTheme;
   select.value = savedTheme;
 
   select.addEventListener('change', () => {
