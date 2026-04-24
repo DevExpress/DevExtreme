@@ -6,6 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 // NOTE: Renovation component import.
 import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekdayAndDay, timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
@@ -57,7 +58,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getFormat(): any {
-    return 'shorttime';
+    return getGlobalFormatByDataType('time') || 'shorttime';
   }
 
   private getWorkSpaceHeight() {
