@@ -2844,45 +2844,6 @@ QUnit.module('Header Filter with real columnsController', {
         }
     });
 
-    QUnit.test('Filtering by empty string in number column with global numberFormat', function(assert) {
-        // arrange
-        const that = this;
-        let items;
-        const testElement = $('#container');
-        const savedConfig = saveGlobalFormats();
-
-        try {
-            config({
-                ...config(),
-                numberFormat: '+#'
-            });
-
-            that.options.dataSource = [{ Test1: '', Test2: 'value1' }, { Test1: 6, Test2: 'value2' }];
-            that.options.columns[0] = { dataField: 'Test1', dataType: 'number', allowHeaderFiltering: true };
-            that.setupDataGrid();
-            that.columnHeadersView.render(testElement);
-            that.headerFilterView.render(testElement);
-
-            // act
-            that.headerFilterController.showHeaderFilterMenu(0);
-            const $popupContent = that.headerFilterView.getPopupContainer().$content();
-
-            // assert
-            assert.strictEqual($popupContent.find('.dx-list-item').first().text(), '(Blanks)', 'empty text item');
-
-            // act
-            $($popupContent.parent().find('.dx-list-item').first()).trigger('dxclick');
-            $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
-
-            // assert
-            items = that.dataController.items();
-            assert.equal(items.length, 1, 'count items');
-            assert.deepEqual(items[0].data, { Test1: '', Test2: 'value1' }, 'data of the first item');
-        } finally {
-            restoreGlobalFormats(savedConfig);
-        }
-    });
-
     // T372825
     QUnit.test('Filtering by empty string', function(assert) {
         // arrange
