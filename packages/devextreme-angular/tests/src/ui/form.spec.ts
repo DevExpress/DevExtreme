@@ -64,6 +64,7 @@ describe('DxForm', () => {
       formGroupItemType: 'itemType="group"',
       formValidationItem: 'dxi-validation-rule',
       formValidationRequiredItemType: 'type="required"',
+      formCustomValidationItem: 'dxi-validation-rule',
       formValidationCustomItemType: 'type="custom"',
     },
     {
@@ -73,6 +74,7 @@ describe('DxForm', () => {
       formGroupItemType: '',
       formValidationItem: 'dxi-form-required-rule',
       formValidationRequiredItemType: '',
+      formCustomValidationItem: 'dxi-form-custom-rule',
       formValidationCustomItemType: '',
     },
   ].forEach(({
@@ -82,6 +84,7 @@ describe('DxForm', () => {
     formGroupItemType,
     formValidationItem,
     formValidationRequiredItemType,
+    formCustomValidationItem,
     formValidationCustomItemType,
   }) => {
     it(`should be able to accept items via nested dxi components (T459714) (with ${testName} nested items)`, () => {
@@ -178,8 +181,8 @@ describe('DxForm', () => {
                     <dx-form [formData]="{ text: 1 }">
                         <${formGroupItem} ${formGroupItemType} *ngIf="true">
                             <${formSimpleItem} dataField="text">
-                                <${formValidationItem} ${formValidationCustomItemType} [validationCallback]="validateForm">
-                                </${formValidationItem}>
+                                <${formCustomValidationItem} ${formValidationCustomItemType} [validationCallback]="validateForm">
+                                </${formCustomValidationItem}>
                             </${formSimpleItem}>
                         </${formGroupItem}>
                     </dx-form>
