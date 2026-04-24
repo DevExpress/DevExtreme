@@ -50,7 +50,7 @@
     "lint-staged": "14.0.1",
     "nx": "22.4.5",
     "nx-cloud": "19.1.0",
-    "postcss": "8.4.38",
+    "postcss": "8.5.10",
     "shelljs": "0.8.5",
     "shx": "0.4.0",
     "source-map": "0.7.6",
