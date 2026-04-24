@@ -3447,6 +3447,24 @@ QUnit.module('Global formatting config (spec)', {
         assert.strictEqual($input.val(), '14:05:06');
     });
 
+    QUnit.test('timeview number editors ignore global numberFormat', function(assert) {
+        config({
+            ...config(),
+            numberFormat: '+#',
+        });
+
+        $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'calendar',
+            value: new Date(2020, 0, 2, 4, 5, 0),
+            opened: true,
+        });
+
+        const $timeInputs = $(`.dx-timeview .dx-numberbox .${TEXTEDITOR_INPUT_CLASS}`);
+        assert.strictEqual($timeInputs.eq(0).val(), '04', 'hours editor does not use global number format');
+        assert.strictEqual($timeInputs.eq(1).val(), '05', 'minutes editor does not use global number format');
+    });
+
     QUnit.test('explicit displayFormat keeps priority over global dateFormat', function(assert) {
         config({
             ...config(),
