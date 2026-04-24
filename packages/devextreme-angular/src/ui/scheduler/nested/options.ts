@@ -127,10 +127,10 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((item: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((item: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 

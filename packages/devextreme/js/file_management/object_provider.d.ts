@@ -15,7 +15,7 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
      * @docid
      * @public
      */
-    contentExpr?: string | Function;
+    contentExpr?: string | ((item: any, value?: any) => any);
     /**
      * @docid
      * @public
@@ -25,7 +25,7 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
      * @docid
      * @public
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: any, value: any[] | undefined) => any[] | undefined);
 }
 /**
  * @docid

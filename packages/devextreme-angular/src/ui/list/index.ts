@@ -47,7 +47,6 @@ import {
 import { DxoItemDraggingModule } from 'devextreme-angular/ui/nested';
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxiMenuItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
@@ -379,10 +378,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((item: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((item: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -1119,7 +1118,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
     
@@ -1499,7 +1498,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
-    DxiMenuItemModule,
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
@@ -1518,7 +1516,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
-    DxiMenuItemModule,
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,

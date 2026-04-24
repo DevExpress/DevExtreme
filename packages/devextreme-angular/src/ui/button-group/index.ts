@@ -207,10 +207,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((item: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((item: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -441,7 +441,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
     
