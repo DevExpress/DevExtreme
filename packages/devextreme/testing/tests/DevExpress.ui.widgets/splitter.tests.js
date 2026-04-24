@@ -2364,6 +2364,20 @@ QUnit.module('Resizing', moduleConfig, () => {
         this.assertLayout(['75', '25']);
     });
 
+    QUnit.test('resize should use current orientation for ratio calculation after orientation runtime change (T1327400)', function(assert) {
+        this.reinit({
+            width: 408, height: 208,
+            items: [{ }, { }],
+        });
+
+        this.instance.option('orientation', 'vertical');
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(0, 50).dragEnd();
+
+        this.assertLayout(['75', '25']);
+    });
+
     QUnit.test('drag resize should work after setting pane size to 0 programmatically', function(assert) {
         this.reinit({
             width: 208, height: 208,
