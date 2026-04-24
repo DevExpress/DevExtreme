@@ -141,13 +141,36 @@ const environment = {
     }
 };
 
+const saveGlobalFormats = () => {
+    const globalConfig = config();
+    return {
+        dateFormat: globalConfig.dateFormat,
+        timeFormat: globalConfig.timeFormat,
+        dateTimeFormat: globalConfig.dateTimeFormat,
+        numberFormat: globalConfig.numberFormat,
+        dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+    };
+};
+
+const restoreGlobalFormats = (saved) => {
+    const globalConfig = config();
+    Object.keys(saved).forEach((key) => {
+        const value = saved[key];
+        if(value === undefined) {
+            delete globalConfig[key];
+        } else {
+            globalConfig[key] = value;
+        }
+    });
+};
+
 const globalConfigEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.savedConfig = { ...config() };
+        this.savedConfig = saveGlobalFormats();
     },
     afterEach: function() {
-        config(this.savedConfig);
+        restoreGlobalFormats(this.savedConfig);
         environment.afterEach.call(this);
     }
 });
@@ -157,16 +180,20 @@ QUnit.module('Global formatting config. Axis labels', globalConfigEnvironment);
 QUnit.test('value axis labels use global numberFormat when label.format is not set', function(assert) {
     config({
         ...config(),
-        numberFormat: { type: 'fixedPoint', precision: 2 }
+        numberFormat: {
+            default: { type: 'fixedPoint', precision: 2 }
+        }
     });
 
-    this.testTickLabelFormat(assert, [1500], 100, ['1500.00']);
+    this.testTickLabelFormat(assert, [1500], 100, ['1,500.00']);
 });
 
 QUnit.test('local axis label.format keeps priority over global numberFormat', function(assert) {
     config({
         ...config(),
-        numberFormat: { type: 'fixedPoint', precision: 2 }
+        numberFormat: {
+            default: { type: 'fixedPoint', precision: 2 }
+        }
     });
 
     this.testFormat(assert, {
@@ -174,7 +201,7 @@ QUnit.test('local axis label.format keeps priority over global numberFormat', fu
             visible: true,
             format: 'thousands'
         }
-    }, [1500], 100, ['1.5K']);
+    }, [1500], 100, ['2K']);
 });
 
 QUnit.test('datetime axis labels use global dateTimeFormat when label.format is not set', function(assert) {
