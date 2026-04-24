@@ -91,9 +91,10 @@ async function stripOnly(content: string): Promise<string> {
   return content;
 }
 
+type CompressMode = CompressExecutorSchema['mode'];
 type CompressStrategy = (content: string, eulaUrl?: string) => Promise<string>;
 
-const COMPRESS_STRATEGIES: Record<string, CompressStrategy> = {
+const COMPRESS_STRATEGIES: Record<CompressMode, CompressStrategy> = {
   minify,
   beautify,
   'strip-only': stripOnly,
@@ -101,7 +102,7 @@ const COMPRESS_STRATEGIES: Record<string, CompressStrategy> = {
 
 async function compressFile(
   filePath: string,
-  mode: string,
+  mode: CompressMode,
   removeDebug: boolean,
   eulaUrl?: string,
 ): Promise<void> {

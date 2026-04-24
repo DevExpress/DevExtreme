@@ -8,7 +8,7 @@
     },
     "settingsFile": {
       "type": "string",
-      "description": "Name of the settings JSON file within sourceDir"
+      "description": "Relative path to the settings JSON file, joined with sourceDir (e.g. './_settings.json')"
     },
     "sourcesDir": {
       "type": "string",
@@ -16,7 +16,7 @@
     },
     "sourcesSettingsFile": {
       "type": "string",
-      "description": "Path to sources settings JS file within sourcesDir"
+      "description": "Relative path to the sources settings JS file, joined with sourcesDir (e.g. './_settings.js')"
     },
     "utilsOutDir": {
       "type": "string",

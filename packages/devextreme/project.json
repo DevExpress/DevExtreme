@@ -755,6 +755,17 @@
         ],
         "parallel": false
       },
+      "inputs": [
+        "{projectRoot}/js/viz/vector_map.utils/**/*",
+        "{projectRoot}/build/vectormap-sources/**/*",
+        "{projectRoot}/build/gulp/vectormaputils-template.jst",
+        "{projectRoot}/build/gulp/vectormapdata-template.jst",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/vectormap-utils",
+        "{projectRoot}/artifacts/js/vectormap-data"
+      ],
       "configurations": {
         "production": {
           "commands": [
