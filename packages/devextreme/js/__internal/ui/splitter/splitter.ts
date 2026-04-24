@@ -492,9 +492,11 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         const leftItemIndex = this._getIndexByItem(leftItemData);
         this._activeResizeHandleIndex = leftItemIndex;
 
+        const { orientation: currentOrientation } = this.option();
+
         this._currentOnePxRatio = convertSizeToRatio(
           1,
-          getElementSize($(this.element()), orientation),
+          getElementSize($(this.element()), currentOrientation),
           this._getResizeHandlesSize(),
         );
 
