@@ -388,10 +388,10 @@ const ContextMenuItemItem = Object.assign<typeof _componentContextMenuItemItem, 
 // Gantt
 type IDependenciesProps = React.PropsWithChildren<{
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
-  keyExpr?: (() => void) | string;
-  predecessorIdExpr?: (() => void) | string;
-  successorIdExpr?: (() => void) | string;
-  typeExpr?: (() => void) | string;
+  keyExpr?: ((dependency: any) => any) | string;
+  predecessorIdExpr?: ((dependency: any, value: any) => any) | string;
+  successorIdExpr?: ((dependency: any, value: any) => any) | string;
+  typeExpr?: ((dependency: any, value: any) => any) | string;
 }>
 const _componentDependencies = (props: IDependenciesProps) => {
   return React.createElement(NestedOption<IDependenciesProps>, {
@@ -656,9 +656,9 @@ const OperationDescriptions = Object.assign<typeof _componentOperationDescriptio
 // Gantt
 type IResourceAssignmentsProps = React.PropsWithChildren<{
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
-  keyExpr?: (() => void) | string;
-  resourceIdExpr?: (() => void) | string;
-  taskIdExpr?: (() => void) | string;
+  keyExpr?: ((resourceAssignment: any) => any) | string;
+  resourceIdExpr?: ((resourceAssignment: any, value: any) => any) | string;
+  taskIdExpr?: ((resourceAssignment: any, value: any) => any) | string;
 }>
 const _componentResourceAssignments = (props: IResourceAssignmentsProps) => {
   return React.createElement(NestedOption<IResourceAssignmentsProps>, {
@@ -676,10 +676,10 @@ const ResourceAssignments = Object.assign<typeof _componentResourceAssignments, 
 // owners:
 // Gantt
 type IResourcesProps = React.PropsWithChildren<{
-  colorExpr?: (() => void) | string;
+  colorExpr?: ((resource: any, value: any) => any) | string;
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
-  keyExpr?: (() => void) | string;
-  textExpr?: (() => void) | string;
+  keyExpr?: ((resource: any) => any) | string;
+  textExpr?: ((resource: any, value: any) => string) | string;
 }>
 const _componentResources = (props: IResourcesProps) => {
   return React.createElement(NestedOption<IResourcesProps>, {
@@ -783,14 +783,14 @@ const StripLine = Object.assign<typeof _componentStripLine, NestedComponentMeta>
 // owners:
 // Gantt
 type ITasksProps = React.PropsWithChildren<{
-  colorExpr?: (() => void) | string;
+  colorExpr?: ((task: any, value: any) => any) | string;
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
-  endExpr?: (() => void) | string;
-  keyExpr?: (() => void) | string;
-  parentIdExpr?: (() => void) | string;
-  progressExpr?: (() => void) | string;
-  startExpr?: (() => void) | string;
-  titleExpr?: (() => void) | string;
+  endExpr?: ((task: any, value: any) => any) | string;
+  keyExpr?: ((task: any) => any) | string;
+  parentIdExpr?: ((task: any, value: any) => any) | string;
+  progressExpr?: ((task: any, value: any) => any) | string;
+  startExpr?: ((task: any, value: any) => any) | string;
+  titleExpr?: ((task: any, value: any) => any) | string;
 }>
 const _componentTasks = (props: ITasksProps) => {
   return React.createElement(NestedOption<ITasksProps>, {

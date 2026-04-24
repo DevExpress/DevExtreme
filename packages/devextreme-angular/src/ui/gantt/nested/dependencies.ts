@@ -41,34 +41,34 @@ export class DxoGanttDependenciesComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((dependency: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((dependency: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get predecessorIdExpr(): Function | string {
+    get predecessorIdExpr(): ((dependency: any, value: any) => any) | string {
         return this._getOption('predecessorIdExpr');
     }
-    set predecessorIdExpr(value: Function | string) {
+    set predecessorIdExpr(value: ((dependency: any, value: any) => any) | string) {
         this._setOption('predecessorIdExpr', value);
     }
 
     @Input()
-    get successorIdExpr(): Function | string {
+    get successorIdExpr(): ((dependency: any, value: any) => any) | string {
         return this._getOption('successorIdExpr');
     }
-    set successorIdExpr(value: Function | string) {
+    set successorIdExpr(value: ((dependency: any, value: any) => any) | string) {
         this._setOption('successorIdExpr', value);
     }
 
     @Input()
-    get typeExpr(): Function | string {
+    get typeExpr(): ((dependency: any, value: any) => any) | string {
         return this._getOption('typeExpr');
     }
-    set typeExpr(value: Function | string) {
+    set typeExpr(value: ((dependency: any, value: any) => any) | string) {
         this._setOption('typeExpr', value);
     }
 

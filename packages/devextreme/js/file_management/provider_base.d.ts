@@ -16,32 +16,32 @@ export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
      * @docid
      * @public
      */
-    dateModifiedExpr?: string | Function;
+    dateModifiedExpr?: string | ((item: any, value?: any) => any);
     /**
      * @docid
      * @public
      */
-    isDirectoryExpr?: string | Function;
+    isDirectoryExpr?: string | ((item: any, value?: any) => any);
     /**
      * @docid
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: any, value?: any) => any);
     /**
      * @docid
      * @public
      */
-    nameExpr?: string | Function;
+    nameExpr?: string | ((item: any, value?: any) => any);
     /**
      * @docid
      * @public
      */
-    sizeExpr?: string | Function;
+    sizeExpr?: string | ((item: any, value?: any) => any);
     /**
      * @docid
      * @public
      */
-    thumbnailExpr?: string | Function;
+    thumbnailExpr?: string | ((item: any, value?: any) => any);
 }
 /**
  * @docid

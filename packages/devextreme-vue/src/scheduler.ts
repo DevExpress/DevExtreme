@@ -30,6 +30,7 @@ import {
  DisposingEvent,
  InitializedEvent,
  OptionChangedEvent,
+ SelectionEndEvent,
  RecurrenceEditMode,
  dxSchedulerScrolling,
  SnapToCellsMode,
@@ -188,6 +189,7 @@ type AccessibleOptions = Pick<Properties,
   "onDisposing" |
   "onInitialized" |
   "onOptionChanged" |
+  "onSelectionEnd" |
   "recurrenceEditMode" |
   "recurrenceExceptionExpr" |
   "recurrenceRuleExpr" |
@@ -276,6 +278,7 @@ const componentConfig = {
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionEnd: Function as PropType<((e: SelectionEndEvent) => void)>,
     recurrenceEditMode: String as PropType<RecurrenceEditMode>,
     recurrenceExceptionExpr: String,
     recurrenceRuleExpr: String,
@@ -360,6 +363,7 @@ const componentConfig = {
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
+    "update:onSelectionEnd": null,
     "update:recurrenceEditMode": null,
     "update:recurrenceExceptionExpr": null,
     "update:recurrenceRuleExpr": null,
@@ -1139,7 +1143,7 @@ const DxOptionsConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>>,
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     onContentReady: Function as PropType<((e: ButtonGroupContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: ButtonGroupDisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: ButtonGroupInitializedEvent) => void)>,
@@ -1572,7 +1576,7 @@ const DxTabPanelOptionsConfig = {
     items: Array as PropType<Array<any | dxTabPanelItem | string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     loop: Boolean,
     noDataText: String,
     onContentReady: Function as PropType<((e: TabPanelContentReadyEvent) => void)>,

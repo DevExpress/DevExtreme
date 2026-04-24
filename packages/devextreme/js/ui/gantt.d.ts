@@ -533,22 +533,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((dependency: any) => any);
       /**
        * @docid
        * @default "predecessorId"
        */
-      predecessorIdExpr?: string | Function;
+      predecessorIdExpr?: string | ((dependency: any, value?: any) => any);
       /**
        * @docid
        * @default "successorId"
        */
-      successorIdExpr?: string | Function;
+      successorIdExpr?: string | ((dependency: any, value?: any) => any);
       /**
        * @docid
        * @default "type"
        */
-      typeExpr?: string | Function;
+      typeExpr?: string | ((dependency: any, value?: any) => any);
     };
     /**
      * @docid
@@ -875,17 +875,17 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((resourceAssignment: any) => any);
       /**
        * @docid
        * @default "resourceId"
        */
-      resourceIdExpr?: string | Function;
+      resourceIdExpr?: string | ((resourceAssignment: any, value?: any) => any);
       /**
        * @docid
        * @default "taskId"
        */
-      taskIdExpr?: string | Function;
+      taskIdExpr?: string | ((resourceAssignment: any, value?: any) => any);
     };
     /**
      * @docid
@@ -897,7 +897,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function;
+      colorExpr?: string | ((resource: any, value?: any) => any);
       /**
        * @docid
        * @default null
@@ -908,12 +908,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((resource: any) => any);
       /**
        * @docid
        * @default "text"
        */
-      textExpr?: string | Function;
+      textExpr?: string | ((resource: any, value?: any) => string);
     };
     /**
      * @docid
@@ -989,7 +989,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function;
+      colorExpr?: string | ((task: any, value?: any) => any);
       /**
        * @docid
        * @default null
@@ -1000,32 +1000,32 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "end"
        */
-      endExpr?: string | Function;
+      endExpr?: string | ((task: any, value?: any) => any);
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((task: any) => any);
       /**
        * @docid
        * @default "parentId"
        */
-      parentIdExpr?: string | Function;
+      parentIdExpr?: string | ((task: any, value?: any) => any);
       /**
        * @docid
        * @default "progress"
        */
-      progressExpr?: string | Function;
+      progressExpr?: string | ((task: any, value?: any) => any);
       /**
        * @docid
        * @default "start"
        */
-      startExpr?: string | Function;
+      startExpr?: string | ((task: any, value?: any) => any);
       /**
        * @docid
        * @default "title"
        */
-      titleExpr?: string | Function;
+      titleExpr?: string | ((task: any, value?: any) => any);
     };
     /**
      * @docid

@@ -105,6 +105,16 @@ export class SchedulerModel {
     return result as HTMLElement;
   }
 
+  getWorkspace(): HTMLElement {
+    const result = this.container.querySelector('.dx-scheduler-work-space');
+
+    if (!result) {
+      throw new Error('Workspace not found');
+    }
+
+    return result as HTMLElement;
+  }
+
   getHeaderPanelContent(): string[] {
     const cells = this.container.querySelectorAll('.dx-scheduler-header-panel-cell');
     return getTexts(cells);

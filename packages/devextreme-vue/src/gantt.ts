@@ -610,10 +610,10 @@ const DxDependenciesConfig = {
   },
   props: {
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
-    predecessorIdExpr: [Function, String] as PropType<((() => void)) | string>,
-    successorIdExpr: [Function, String] as PropType<((() => void)) | string>,
-    typeExpr: [Function, String] as PropType<((() => void)) | string>
+    keyExpr: [Function, String] as PropType<(((dependency: any) => any)) | string>,
+    predecessorIdExpr: [Function, String] as PropType<(((dependency: any, value: any) => any)) | string>,
+    successorIdExpr: [Function, String] as PropType<(((dependency: any, value: any) => any)) | string>,
+    typeExpr: [Function, String] as PropType<(((dependency: any, value: any) => any)) | string>
   }
 };
 
@@ -924,9 +924,9 @@ const DxResourceAssignmentsConfig = {
   },
   props: {
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
-    resourceIdExpr: [Function, String] as PropType<((() => void)) | string>,
-    taskIdExpr: [Function, String] as PropType<((() => void)) | string>
+    keyExpr: [Function, String] as PropType<(((resourceAssignment: any) => any)) | string>,
+    resourceIdExpr: [Function, String] as PropType<(((resourceAssignment: any, value: any) => any)) | string>,
+    taskIdExpr: [Function, String] as PropType<(((resourceAssignment: any, value: any) => any)) | string>
   }
 };
 
@@ -946,10 +946,10 @@ const DxResourcesConfig = {
     "update:textExpr": null,
   },
   props: {
-    colorExpr: [Function, String] as PropType<((() => void)) | string>,
+    colorExpr: [Function, String] as PropType<(((resource: any, value: any) => any)) | string>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
-    textExpr: [Function, String] as PropType<((() => void)) | string>
+    keyExpr: [Function, String] as PropType<(((resource: any) => any)) | string>,
+    textExpr: [Function, String] as PropType<(((resource: any, value: any) => string)) | string>
   }
 };
 
@@ -1066,14 +1066,14 @@ const DxTasksConfig = {
     "update:titleExpr": null,
   },
   props: {
-    colorExpr: [Function, String] as PropType<((() => void)) | string>,
+    colorExpr: [Function, String] as PropType<(((task: any, value: any) => any)) | string>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
-    endExpr: [Function, String] as PropType<((() => void)) | string>,
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
-    parentIdExpr: [Function, String] as PropType<((() => void)) | string>,
-    progressExpr: [Function, String] as PropType<((() => void)) | string>,
-    startExpr: [Function, String] as PropType<((() => void)) | string>,
-    titleExpr: [Function, String] as PropType<((() => void)) | string>
+    endExpr: [Function, String] as PropType<(((task: any, value: any) => any)) | string>,
+    keyExpr: [Function, String] as PropType<(((task: any) => any)) | string>,
+    parentIdExpr: [Function, String] as PropType<(((task: any, value: any) => any)) | string>,
+    progressExpr: [Function, String] as PropType<(((task: any, value: any) => any)) | string>,
+    startExpr: [Function, String] as PropType<(((task: any, value: any) => any)) | string>,
+    titleExpr: [Function, String] as PropType<(((task: any, value: any) => any)) | string>
   }
 };
 
