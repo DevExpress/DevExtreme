@@ -25,6 +25,7 @@ import { getDatePartIndexByPosition, renderDateParts } from './date_box.mask.par
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
 const BACKWARD = -1;
+const IME_DIGIT_CODE_REGEXP = /^(?:Digit|Numpad)(\d)$/;
 
 export interface DateBoxMaskProperties extends Properties {
   emptyDateValue?: Date;
@@ -45,6 +46,12 @@ class DateBoxMask extends DateBoxBase {
   _regExpInfo!: { regexp: RegExp; patterns: string[] };
 
   _formatPattern?: string | null;
+
+  _pendingIMEDigit?: string | null;
+
+  _isIMEDigitProcessed?: boolean;
+
+  _isIMECommitPending?: boolean;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
     const originalHandlers = super._supportedKeys();
@@ -185,7 +192,7 @@ class DateBoxMask extends DateBoxBase {
     alt?: boolean;
   }): boolean {
     const data = e.originalEvent?.data;
-    return data?.length === 1 && Boolean(parseInt(data, 10));
+    return data?.length === 1 && !isNaN(parseInt(data, 10));
   }
 
   _useBeforeInputEvent(): boolean {
@@ -204,21 +211,32 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _keyboardHandler(e: KeyboardKeyDownEvent): boolean {
-    let { key } = e.originalEvent;
+    const { key } = e.originalEvent;
 
     const result = super._keyboardHandler(e);
 
     if (!this._useMaskBehavior() || this._useBeforeInputEvent()) {
+      this._pendingIMEDigit = null;
+      this._isIMEDigitProcessed = false;
+      this._isIMECommitPending = false;
+
       return result;
     }
 
-    if (browser.chrome && e.key === 'Process' && e.code.startsWith('Digit')) {
-      key = e.code.replace('Digit', '');
-      this._processInputKey(key);
-      this._maskInputHandler = (): void => {
-        this._renderSelectedPart();
-      };
-    } else if (this._isSingleCharKey(e)) {
+    const chromiumDigitCodeMatch = IME_DIGIT_CODE_REGEXP.exec(e.code);
+
+    if (browser.chrome && e.key === 'Process' && chromiumDigitCodeMatch) {
+      const [, digit] = chromiumDigitCodeMatch;
+
+      this._pendingIMEDigit = digit;
+
+      return result;
+    }
+
+    this._pendingIMEDigit = null;
+    this._isIMEDigitProcessed = false;
+
+    if (this._isSingleCharKey(e)) {
       this._keyInputHandler(e.originalEvent, key);
     }
 
@@ -258,10 +276,37 @@ class DateBoxMask extends DateBoxBase {
 
   _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
-    if (event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e)) {
-      this._processInputKey(event.data ?? '');
-      this._renderDisplayText(this._getDisplayedText(this._maskValue));
-      this._selectNextPart();
+
+    const isCompositionDigit = event?.inputType === 'insertCompositionText'
+      && this._isSingleDigitKey(e);
+
+    const isIMECommitDigit = event?.inputType === 'insertText'
+      && this._isSingleDigitKey(e)
+      && this._isIMECommitPending;
+
+    if (isCompositionDigit) {
+      const digit = event.data ?? this._pendingIMEDigit ?? '';
+
+      if (!this._isIMEDigitProcessed) {
+        this._processInputKey(digit);
+        this._isIMEDigitProcessed = true;
+        this._isIMECommitPending = true;
+      }
+
+      this._input().val(this._getDisplayedText(this._maskValue));
+      this._caret(this._getActivePartProp('caret'));
+
+      return;
+    }
+
+    if (isIMECommitDigit) {
+      this._isIMECommitPending = false;
+      this._pendingIMEDigit = null;
+
+      this._input().val(this._getDisplayedText(this._maskValue));
+      this._caret(this._getActivePartProp('caret'));
+
+      return;
     }
     super._keyPressHandler(e);
 
@@ -469,6 +514,7 @@ class DateBoxMask extends DateBoxBase {
       this._renderSelectedPart();
     });
 
+    eventsEngine.on(this._input(), addNamespace('compositionstart', MASK_EVENT_NAMESPACE), this._maskCompositionStartHandler.bind(this));
     eventsEngine.on(this._input(), addNamespace('compositionend', MASK_EVENT_NAMESPACE), this._maskCompositionEndHandler.bind(this));
 
     if (this._useBeforeInputEvent()) {
@@ -681,13 +727,16 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
+  _maskCompositionStartHandler(): void {
+    this._isIMEDigitProcessed = false;
+    this._isIMECommitPending = false;
+  }
+
   _maskCompositionEndHandler(): void {
     this._input().val(this._getDisplayedText(this._maskValue));
-    this._selectNextPart();
+    this._caret(this._getActivePartProp('caret'));
 
-    this._maskInputHandler = (): void => {
-      this._renderSelectedPart();
-    };
+    this._maskInputHandler = null;
   }
 
   _maskPasteHandler(e: DxEvent): void {

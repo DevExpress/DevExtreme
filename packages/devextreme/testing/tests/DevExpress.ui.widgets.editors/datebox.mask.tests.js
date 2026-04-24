@@ -19,7 +19,16 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });
 
-const simulateIMEInput = function(eventsData) {
+const insertNativeText = ($input, text) => {
+    const input = $input.get(0);
+    const start = input.selectionStart || input.value.length;
+    const end = input.selectionEnd || start;
+
+    input.value = input.value.slice(0, start) + text + input.value.slice(end);
+    input.setSelectionRange(start + text.length, start + text.length);
+};
+
+const simulateIMEInput = function(eventsData, shouldFireInsertText) {
     this.$input.trigger($.Event('keydown', {
         key: 'Process',
         code: eventsData.keyDownCode,
@@ -55,6 +64,28 @@ const simulateIMEInput = function(eventsData) {
     }));
 
     this.$input.trigger($.Event('compositionend'));
+
+    if(shouldFireInsertText) {
+        insertNativeText(this.$input, eventsData.inputData);
+
+        this.$input.trigger($.Event('input', {
+            type: 'input',
+            originalEvent: $.Event('input', {
+                inputType: 'insertText',
+                isComposing: false,
+                data: eventsData.inputData,
+            }),
+        }));
+
+        this.$input.trigger($.Event('keyup', {
+            key: eventsData.inputData,
+            code: eventsData.keyDownCode,
+            originalEvent: $.Event('keyup', {
+                key: eventsData.inputData,
+                code: eventsData.keyDownCode,
+            }),
+        }));
+    }
 };
 
 const setupModule = {
@@ -1239,6 +1270,78 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), '5555/05/05', 'year was changed');
     });
 
+    test('Typing digits via Numpad IME with final insertText should process every composition cycle once (T1326628)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        const eventsData = {
+            keyDownCode: 'Numpad1',
+            inputData: '1',
+        };
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '01/16/2025', 'first month digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/16/2025', 'second month digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/01/2025', 'first day digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2025', 'second day digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2021', 'first year digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2011', 'second year digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2111', 'third year digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/1111', 'fourth year digit is applied');
+    });
+
+    test('Final insertText after Numpad IME composition should not duplicate digit or corrupt mask value (T1326628)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        simulateIMEInput.call(this, {
+            keyDownCode: 'Numpad1',
+            inputData: '1',
+        }, true);
+
+        simulateIMEInput.call(this, {
+            keyDownCode: 'Numpad1',
+            inputData: '1',
+        }, true);
+
+        assert.strictEqual(this.$input.val(), '11/16/2025', 'final insertText commit is ignored as duplicate IME commit');
+    });
+
+    test('Typing zero via Numpad IME composition with final insertText should be registered (T1326628)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2012, 8, 5),
+        });
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        simulateIMEInput.call(this, { keyDownCode: 'Numpad1', inputData: '1' }, true);
+        simulateIMEInput.call(this, { keyDownCode: 'Numpad0', inputData: '0' }, true);
+
+        assert.strictEqual(this.$input.val(), '10/05/2012', 'month is correctly set to 10 after typing "1" then "0" via Numpad IME');
+    });
 
     test('Pasting incorrect value to the date part should not ignore mask rules', function(assert) {
         this.instance.option('displayFormat', 'yyyy/MM/dd');
