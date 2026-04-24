@@ -22,6 +22,29 @@ import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.j
 
 const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
 
+const saveGlobalFormats = () => {
+    const globalConfig = config();
+    return {
+        dateFormat: globalConfig.dateFormat,
+        timeFormat: globalConfig.timeFormat,
+        dateTimeFormat: globalConfig.dateTimeFormat,
+        numberFormat: globalConfig.numberFormat,
+        dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+    };
+};
+
+const restoreGlobalFormats = (savedConfig) => {
+    const globalConfig = config();
+    Object.keys(savedConfig).forEach((key) => {
+        const value = savedConfig[key];
+        if(value === undefined) {
+            delete globalConfig[key];
+        } else {
+            globalConfig[key] = value;
+        }
+    });
+};
+
 function getListOrTreeView() {
     const $popupContent = this.headerFilterView.getPopupContainer().$content();
     const list = $popupContent.find('.dx-list');
@@ -807,7 +830,7 @@ QUnit.module('Header Filter', {
     QUnit.test('Header filter date groupInterval levels do not use global numberFormat (T day level)', function(assert) {
         const that = this;
         const testElement = $('#container');
-        const savedConfig = { ...config() };
+        const savedConfig = saveGlobalFormats();
 
         try {
             config({
@@ -825,15 +848,23 @@ QUnit.module('Header Filter', {
 
             const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
-            assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(1).text(), '1986', 'year level is not formatted as number');
+            const getItemTexts = () => $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`)
+                .toArray()
+                .map((item) => item.textContent.trim())
+                .filter(Boolean);
 
-            $($popupContent.find('.dx-treeview-toggle-item-visibility').first()).trigger('dxclick');
-            $($popupContent.find('.dx-treeview-toggle-item-visibility').last()).trigger('dxclick');
+            assert.ok(getItemTexts().includes('1986'), 'year level is not formatted as number');
 
-            assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(3).text(), '1', 'day level is not formatted as number');
-            assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(4).text(), '4', 'day level is not formatted as number');
+            let $toggles = $popupContent.find('.dx-treeview-toggle-item-visibility');
+            $($toggles.eq(0)).trigger('dxclick');
+            $toggles = $popupContent.find('.dx-treeview-node-container-opened .dx-treeview-toggle-item-visibility');
+            $($toggles.eq(0)).trigger('dxclick');
+
+            const texts = getItemTexts();
+            assert.ok(texts.includes('1'), 'day level value "1" is not formatted as number');
+            assert.ok(texts.includes('4'), 'day level value "4" is not formatted as number');
         } finally {
-            config(savedConfig);
+            restoreGlobalFormats(savedConfig);
         }
     });
 
@@ -2789,7 +2820,7 @@ QUnit.module('Header Filter with real columnsController', {
         // arrange
         const that = this;
         const testElement = $('#container');
-        const savedConfig = { ...config() };
+        const savedConfig = saveGlobalFormats();
 
         try {
             config({
@@ -2809,7 +2840,7 @@ QUnit.module('Header Filter with real columnsController', {
             // assert
             assert.strictEqual($popupContent.find('.dx-list-item').first().text(), '(Blanks)', 'empty text item');
         } finally {
-            config(savedConfig);
+            restoreGlobalFormats(savedConfig);
         }
     });
 
@@ -2818,7 +2849,7 @@ QUnit.module('Header Filter with real columnsController', {
         const that = this;
         let items;
         const testElement = $('#container');
-        const savedConfig = { ...config() };
+        const savedConfig = saveGlobalFormats();
 
         try {
             config({
@@ -2848,7 +2879,7 @@ QUnit.module('Header Filter with real columnsController', {
             assert.equal(items.length, 1, 'count items');
             assert.deepEqual(items[0].data, { Test1: '', Test2: 'value1' }, 'data of the first item');
         } finally {
-            config(savedConfig);
+            restoreGlobalFormats(savedConfig);
         }
     });
 

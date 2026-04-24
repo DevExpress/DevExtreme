@@ -72,6 +72,8 @@ const getIntervalSelector = function () {
 
   if (!isDefined(value)) {
     return null;
+  } if (this.dataType === 'number' && value === '') {
+    return null;
   } if (isDateType(this.dataType)) {
     const nameIntervalSelector = arguments[0];
     return DATE_INTERVAL_SELECTORS[nameIntervalSelector](value);
@@ -436,7 +438,8 @@ export default {
     } else {
       result = function (data) {
         let result = column.calculateCellValue(data);
-        if (result === undefined || result === '') {
+        // Preserve empty strings for number columns to keep blank filter values distinguishable from null/undefined.
+        if (result === undefined || (result === '' && column.dataType !== 'number')) {
           result = null;
         }
         return result;
