@@ -5,26 +5,23 @@ import { VectormapExecutorSchema } from './schema';
 import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText, readFileText } from '../../utils';
 
-const BROWSER_SOURCE = 'function browserUtil() { return "browser"; }';
-
-const NODE_SOURCE = `
-var path = require('path');
-var fs = require('fs');
-function processFiles(src, opts, cb) {
-  var files = fs.readdirSync(path.resolve(src)).filter(function(f) { return f.endsWith('.shp'); });
-  files.forEach(function(f) {
-    var name = path.basename(f, '.shp');
-    fs.writeFileSync(path.resolve(opts.output, name + '.js'), name + ' = {};');
-  });
-  cb();
-}
-exports.processFiles = processFiles;
+const BROWSER_SOURCE = `
+exports.parse = function(input, options) {
+  return {
+    type: 'FeatureCollection',
+    features: [{
+      precision: options.precision,
+      firstShpByte: input.shp && input.shp.byteLength > 0
+        ? new Uint8Array(input.shp)[0]
+        : 0,
+    }],
+  };
+};
 `;
 
 const SETTINGS_JSON = JSON.stringify({
   commonFiles: ['common'],
   browser: { fileName: 'dx.vectormaputils', files: ['browser'] },
-  node: { fileName: 'dx.vectormaputils.node', files: ['node'] },
 });
 
 const UTILS_TEMPLATE =
@@ -38,9 +35,8 @@ async function setupProject(tempDir: string): Promise<string> {
   const srcDir = path.join(proj, 'js', 'viz', 'vector_map.utils');
   fs.mkdirSync(srcDir, { recursive: true });
   await writeFileText(path.join(srcDir, '_settings.json'), SETTINGS_JSON);
-  await writeFileText(path.join(srcDir, 'common.js'), '// shared code');
+  await writeFileText(path.join(srcDir, 'common.js'), '');
   await writeFileText(path.join(srcDir, 'browser.js'), BROWSER_SOURCE);
-  await writeFileText(path.join(srcDir, 'node.js'), NODE_SOURCE);
 
   const templatesDir = path.join(proj, 'build', 'templates');
   fs.mkdirSync(templatesDir, { recursive: true });
@@ -49,9 +45,12 @@ async function setupProject(tempDir: string): Promise<string> {
 
   const sourcesDir = path.join(proj, 'build', 'vectormap-sources');
   fs.mkdirSync(sourcesDir, { recursive: true });
-  await writeFileText(path.join(sourcesDir, '_settings.js'), 'module.exports = { isQuiet: true };');
-  fs.writeFileSync(path.join(sourcesDir, 'world.shp'), Buffer.alloc(0));
-  fs.writeFileSync(path.join(sourcesDir, 'usa.shp'), Buffer.alloc(0));
+  await writeFileText(path.join(sourcesDir, '_settings.js'), 'module.exports = { precision: 4 };');
+
+  fs.writeFileSync(path.join(sourcesDir, 'world.shp'), Buffer.from([1, 2, 3]));
+  fs.writeFileSync(path.join(sourcesDir, 'world.dbf'), Buffer.from([0]));
+  fs.writeFileSync(path.join(sourcesDir, 'usa.shp'), Buffer.from([4, 5, 6]));
+  fs.writeFileSync(path.join(sourcesDir, 'usa.dbf'), Buffer.from([0]));
 
   await writeFileText(path.join(proj, 'package.json'), '{"name":"test","version":"1.0.0"}');
   return proj;
@@ -98,19 +97,17 @@ describe('VectormapExecutor E2E', () => {
 
     expect(fs.existsSync(path.join(utilsDir, 'dx.vectormaputils.debug.js'))).toBe(true);
     expect(fs.existsSync(path.join(utilsDir, 'dx.vectormaputils.js'))).toBe(true);
-    expect(fs.existsSync(path.join(utilsDir, 'dx.vectormaputils.node.js'))).toBe(true);
 
     const debug = await readFileText(path.join(utilsDir, 'dx.vectormaputils.debug.js'));
     expect(debug).toContain('factory(exports)');
-
-    const node = await readFileText(path.join(utilsDir, 'dx.vectormaputils.node.js'));
-    expect(node).toContain('exports.processFiles');
-    expect(node).not.toContain('factory(exports)');
+    expect(debug).toContain('exports.parse');
 
     const dataFiles = fs.readdirSync(dataDir).filter((f) => f.endsWith('.js'));
     expect(dataFiles.length).toBe(2);
     const worldData = await readFileText(path.join(dataDir, 'world.js'));
     expect(worldData).toContain('sources.');
     expect(worldData).toContain('"use strict"');
+    expect(worldData).toContain('"precision":4');
+    expect(worldData).toContain('"firstShpByte":1');
   }, 30000);
 });

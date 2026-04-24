@@ -728,8 +728,7 @@
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": [
-          "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js",
-          "./artifacts/js/vectormap-utils/dx.vectormaputils.node.js"
+          "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js"
         ],
         "mode": "beautify",
         "eulaUrl": "https://js.devexpress.com/Licensing/"

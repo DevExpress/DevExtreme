@@ -15,7 +15,6 @@ import {
 interface UtilsSettings {
   commonFiles: string[];
   browser: { fileName: string; files: string[] };
-  node: { fileName: string; files: string[] };
 }
 
 interface VariantConfig {
@@ -23,10 +22,25 @@ interface VariantConfig {
   files: string[];
   fileName: string;
   suffix: string;
-  wrapUmd: boolean;
 }
 
+interface ParsedRegion {
+  name: string;
+  data: unknown;
+}
+
+type ParseFn = (
+  input: { shp: ArrayBuffer; dbf: ArrayBuffer },
+  options: { precision: number },
+) => unknown;
+
 const USE_STRICT_HEADER = '"use strict";\n\n';
+const DEBUG_SUFFIX = '.debug';
+const DEFAULT_PRECISION = 4;
+
+function toArrayBuffer(buffer: Buffer): ArrayBuffer {
+  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+}
 
 async function buildUtilsVariant(
   variant: VariantConfig,
@@ -40,12 +54,10 @@ async function buildUtilsVariant(
     const content = await readFileText(filePath);
     contents.push(content);
   }
-  let bundle = contents.join('\n');
+  const concatenated = contents.join('\n');
 
-  if (variant.wrapUmd) {
-    const compiled = _.template(utilsTemplate);
-    bundle = compiled({ data: bundle });
-  }
+  const compiled = _.template(utilsTemplate);
+  let bundle = compiled({ data: concatenated });
 
   bundle = ensureTrailingNewline(normalizeEol(bundle));
 
@@ -58,32 +70,24 @@ async function buildUtils(
   settingsFile: string,
   utilsTemplatePath: string,
   outDir: string,
-): Promise<{ nodeUtilPath: string }> {
+): Promise<{ debugBundlePath: string }> {
   const settingsPath = path.join(sourceDir, settingsFile);
   const settings: UtilsSettings = JSON.parse(await readFileText(settingsPath));
   const utilsTemplate = await readFileText(utilsTemplatePath);
 
+  const browserFiles = [...settings.commonFiles, ...settings.browser.files];
   const variants: VariantConfig[] = [
     {
       name: 'browser-debug',
-      files: [...settings.commonFiles, ...settings.browser.files],
+      files: browserFiles,
       fileName: settings.browser.fileName,
-      suffix: '.debug',
-      wrapUmd: true,
+      suffix: DEBUG_SUFFIX,
     },
     {
       name: 'browser-prod',
-      files: [...settings.commonFiles, ...settings.browser.files],
+      files: browserFiles,
       fileName: settings.browser.fileName,
       suffix: '',
-      wrapUmd: true,
-    },
-    {
-      name: 'node',
-      files: [...settings.commonFiles, ...settings.node.files],
-      fileName: settings.node.fileName,
-      suffix: '',
-      wrapUmd: false,
     },
   ];
 
@@ -94,12 +98,56 @@ async function buildUtils(
     await buildUtilsVariant(variant, sourceDir, utilsTemplate, outDir);
   }
 
-  const nodeUtilPath = path.join(outDir, `${settings.node.fileName}.js`);
-  return { nodeUtilPath };
+  const debugBundlePath = path.join(outDir, `${settings.browser.fileName}${DEBUG_SUFFIX}.js`);
+  return { debugBundlePath };
+}
+
+function parseShapefiles(parse: ParseFn, sourcesDir: string, precision: number): ParsedRegion[] {
+  const shpFiles = fs
+    .readdirSync(sourcesDir)
+    .filter((f) => path.extname(f).toLowerCase() === '.shp')
+    .map((f) => path.basename(f, '.shp'));
+
+  const regions: ParsedRegion[] = [];
+  for (const name of shpFiles) {
+    const shpBuffer = fs.readFileSync(path.join(sourcesDir, `${name}.shp`));
+    const dbfBuffer = fs.readFileSync(path.join(sourcesDir, `${name}.dbf`));
+
+    const data = parse(
+      { shp: toArrayBuffer(shpBuffer), dbf: toArrayBuffer(dbfBuffer) },
+      { precision },
+    );
+
+    if (!data) {
+      throw new Error(
+        `Vectormap: parse() returned no data for "${name}". `
+          + `Check that "${name}.shp" and "${name}.dbf" are valid shapefiles.`,
+      );
+    }
+
+    regions.push({ name, data });
+  }
+
+  return regions;
+}
+
+async function writeRegionModules(
+  regions: ParsedRegion[],
+  dataTemplate: string,
+  outDir: string,
+): Promise<void> {
+  const compiled = _.template(dataTemplate);
+
+  for (const { name, data } of regions) {
+    const rawData = `${name} = ${JSON.stringify(data)};`;
+    let wrapped = USE_STRICT_HEADER + compiled({ data: rawData });
+    wrapped = ensureTrailingNewline(normalizeEol(wrapped));
+    await writeFileText(path.join(outDir, `${name}.js`), wrapped);
+  }
 }
 
 async function buildData(
-  nodeUtilPath: string,
+  debugBundlePath: string,
   sourcesDir: string,
   sourcesSettingsFile: string,
   dataTemplatePath: string,
@@ -108,43 +156,25 @@ async function buildData(
 ): Promise<void> {
   const dataTemplate = await readFileText(dataTemplatePath);
 
-  const resolvedUtilPath = path.resolve(nodeUtilPath);
+  const resolvedUtilPath = path.resolve(debugBundlePath);
   delete require.cache[require.resolve(resolvedUtilPath)];
-  const { processFiles } = require(resolvedUtilPath);
+  const { parse } = require(resolvedUtilPath) as { parse: ParseFn };
 
   const resolvedSourcesDir = path.resolve(projectRoot, sourcesDir);
   const resolvedOutDir = path.resolve(projectRoot, outDir);
+  const resolvedSettingsPath = path.resolve(resolvedSourcesDir, sourcesSettingsFile);
+
+  delete require.cache[require.resolve(resolvedSettingsPath)];
+  const sourcesSettings = require(resolvedSettingsPath) as { precision?: number };
+  const precision =
+    sourcesSettings.precision !== undefined && sourcesSettings.precision >= 0
+      ? Math.round(sourcesSettings.precision)
+      : DEFAULT_PRECISION;
 
   await ensureDir(resolvedOutDir);
 
-  await new Promise<void>((resolve, reject) => {
-    try {
-      processFiles(
-        resolvedSourcesDir,
-        {
-          output: resolvedOutDir,
-          settings: path.resolve(resolvedSourcesDir, sourcesSettingsFile),
-        },
-        () => {
-          resolve();
-        },
-      );
-    } catch (error) {
-      reject(error);
-    }
-  });
-
-  const files = fs.readdirSync(resolvedOutDir).filter((f) => f.endsWith('.js'));
-  const compiled = _.template(dataTemplate);
-
-  for (const file of files) {
-    const filePath = path.join(resolvedOutDir, file);
-    const rawData = await readFileText(filePath);
-    let wrapped = compiled({ data: rawData });
-    wrapped = USE_STRICT_HEADER + wrapped;
-    wrapped = ensureTrailingNewline(normalizeEol(wrapped));
-    await writeFileText(filePath, wrapped);
-  }
+  const regions = parseShapefiles(parse, resolvedSourcesDir, precision);
+  await writeRegionModules(regions, dataTemplate, resolvedOutDir);
 }
 
 const runExecutor: PromiseExecutor<VectormapExecutorSchema> = async (options, context) => {
@@ -167,7 +197,7 @@ const runExecutor: PromiseExecutor<VectormapExecutorSchema> = async (options, co
 
   try {
     logger.verbose('Phase 1: Building vectormap utilities...');
-    const { nodeUtilPath } = await buildUtils(
+    const { debugBundlePath } = await buildUtils(
       resolvedSourceDir,
       settingsFile,
       resolvedUtilsTemplatePath,
@@ -175,9 +205,8 @@ const runExecutor: PromiseExecutor<VectormapExecutorSchema> = async (options, co
     );
 
     logger.verbose('Phase 2: Building vectormap data...');
-
     await buildData(
-      nodeUtilPath,
+      debugBundlePath,
       sourcesDir,
       sourcesSettingsFile,
       resolvedDataTemplatePath,
