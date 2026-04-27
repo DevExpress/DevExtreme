@@ -44,6 +44,16 @@ const getGlobalFormat = (
   return globalFormat as Format;
 };
 
+const getGlobalColumnFormat = (
+  dataType: DataType | undefined,
+): Format | undefined => {
+  if (dataType === 'date' || dataType === 'datetime') {
+    return getGlobalFormat(dataType);
+  }
+
+  return undefined;
+};
+
 export function normalizeColumn(
   column: PreNormalizedColumn,
   templateNormalizationFunc?: TemplateNormalizationFunc,
@@ -53,12 +63,11 @@ export function normalizeColumn(
     ?? columnFromDataOptions?.dataType
     ?? defaultColumnProperties.dataType;
   const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
-  const globalColumnFormat = dataType === 'date' || dataType === 'datetime'
-    ? getGlobalFormat(dataType)
-    : undefined;
+  const shouldUseInferredFormat = column.dataType === undefined
+    || columnFromDataOptions?.dataType === dataType;
   const columnFormat = column.format
-    ?? columnFromDataOptions?.format
-    ?? globalColumnFormat
+    ?? (shouldUseInferredFormat ? columnFromDataOptions?.format : undefined)
+    ?? getGlobalColumnFormat(dataType)
     ?? columnDataTypeDefaultOptions?.format;
   const caption = captionize(column.name);
 
