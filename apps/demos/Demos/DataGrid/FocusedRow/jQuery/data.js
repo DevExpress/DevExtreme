@@ -277,7 +277,7 @@ const tasks = [
     "Task_Subject": "Submit Questions Regarding New NDA",
     "Task_Start_Date": "2023-03-21T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "The new NDA is now required for employment. I need a list of questions or issues so we can submit all paperwork to HR.\r\n\r\nKelly Rodriguez: I don\u2029t have any questions. Thank you.",
+    "Task_Description": "The new NDA is now required for employment. I need a list of questions or issues so we can submit all paperwork to HR.\r\n\r\nKelly Rodriguez: I don't have any questions. Thank you.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -447,7 +447,7 @@ const tasks = [
     "Task_Subject": "Sign Health Insurance Forms",
     "Task_Start_Date": "2023-04-16T00:00:00",
     "Task_Status": "Deferred",
-    "Task_Description": "Kevin asked me to collect all signed health insurance forms for him - he is too busy. Please get this done asap so I can get back to my regular job.\r\n\r\nRobin Cosworth: I'm going with my husband's plan. This new plan is terrible and I don\u2029t want it.",
+    "Task_Description": "Kevin asked me to collect all signed health insurance forms for him - he is too busy. Please get this done asap so I can get back to my regular job.\r\n\r\nRobin Cosworth: I'm going with my husband's plan. This new plan is terrible and I don't want it.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -607,7 +607,7 @@ const tasks = [
     "Task_Subject": "Recall Rebate Form",
     "Task_Start_Date": "2023-06-17T00:00:00",
     "Task_Status": "Deferred",
-    "Task_Description": "I don\u2029t think we can keep sending our existing rebate forms. Like the refund request forms, customers are confused by all the legal language and they refuse to sign it.\r\n\r\nEd Holmes: We have nothing from legal on this and so we have to keep doing what we've been doing.",
+    "Task_Description": "I don't think we can keep sending our existing rebate forms. Like the refund request forms, customers are confused by all the legal language and they refuse to sign it.\r\n\r\nEd Holmes: We have nothing from legal on this and so we have to keep doing what we've been doing.",
     "Task_Completion": 0,
   }, {
     "ResponsibleEmployee": {
@@ -617,7 +617,7 @@ const tasks = [
     "Task_Subject": "Create Report on Customer Feedback",
     "Task_Start_Date": "2023-06-20T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Ed asked me to get with you and prepare a full report of all questions being asked by customers about the recall and refund request forms. Legal does not want to take any action until we submit this.\r\n\r\nSammy Hill: This is crazy. I don\u2029t understand why legal does not change the language.",
+    "Task_Description": "Ed asked me to get with you and prepare a full report of all questions being asked by customers about the recall and refund request forms. Legal does not want to take any action until we submit this.\r\n\r\nSammy Hill: This is crazy. I don't understand why legal does not change the language.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -697,7 +697,7 @@ const tasks = [
     "Task_Subject": "Complete Shipper Selection Form",
     "Task_Start_Date": "2023-07-21T00:00:00",
     "Task_Status": "Deferred",
-    "Task_Description": "John, the natives are getting restless. You need to make a final decision on the shipper we are going to go with. I don\u2029t know why we can't choose a single shipper?\r\n\r\nJohn Heart: Samantha, we've been through this. We need to work with multiple shippers",
+    "Task_Description": "John, the natives are getting restless. You need to make a final decision on the shipper we are going to go with. I don't know why we can't choose a single shipper?\r\n\r\nJohn Heart: Samantha, we've been through this. We need to work with multiple shippers",
     "Task_Completion": 0,
   }, {
     "ResponsibleEmployee": {
@@ -767,7 +767,7 @@ const tasks = [
     "Task_Subject": "Report on Tranistion to Touch-Based Apps",
     "Task_Start_Date": "2023-08-10T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Wally, I've given the approval to go with touch-based apps on WinForms vs complete re-write. I need your report as to when the apps are going to be ready to deploy to the field.\r\n\r\nWally Hobbs: Brett, the apps are already touch-enabled. We didn\u2029t have to do anything.",
+    "Task_Description": "Wally, I've given the approval to go with touch-based apps on WinForms vs complete re-write. I need your report as to when the apps are going to be ready to deploy to the field.\r\n\r\nWally Hobbs: Brett, the apps are already touch-enabled. We didn't have to do anything.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -797,7 +797,7 @@ const tasks = [
     "Task_Subject": "Site Up-Time Report",
     "Task_Start_Date": "2023-08-20T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Need to see site up-time reports. Online sales have taken a big dive and we think it's because the site is not reliable.\r\n\r\nBrett Wade: The site has 100% uptime. Don\u2029t think this is the problem with sales.",
+    "Task_Description": "Need to see site up-time reports. Online sales have taken a big dive and we think it's because the site is not reliable.\r\n\r\nBrett Wade: The site has 100% uptime. Don't think this is the problem with sales.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -827,7 +827,7 @@ const tasks = [
     "Task_Subject": "Determine New Online Marketing Strategy",
     "Task_Start_Date": "2023-09-03T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Online sales are a disaster. We need to rework our entire marketing message and spend a lot of money on ad-words to generate more traffic to our site. We have great products. I don\u2029t understand the problem.\r\n\r\nEd Holmes: You know the reason. We had a recall a couple of months back.",
+    "Task_Description": "Online sales are a disaster. We need to rework our entire marketing message and spend a lot of money on ad-words to generate more traffic to our site. We have great products. I don't understand the problem.\r\n\r\nEd Holmes: You know the reason. We had a recall a couple of months back.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -837,7 +837,7 @@ const tasks = [
     "Task_Subject": "New Online Marketing Strategy",
     "Task_Start_Date": "2023-09-05T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "We need to do something to stop the fall in online sales right away. Management is putting a lot of pressure on me and I don\u2029t know exactly what to do. Send me a report with your opinions.\r\n\r\nHannah Brookly: Report Emailed to you.",
+    "Task_Description": "We need to do something to stop the fall in online sales right away. Management is putting a lot of pressure on me and I don't know exactly what to do. Send me a report with your opinions.\r\n\r\nHannah Brookly: Report Emailed to you.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -997,7 +997,7 @@ const tasks = [
     "Task_Subject": "Contact ISP and Discuss Payment Options",
     "Task_Start_Date": "2023-11-05T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "ISP is being difficult and refusing to increase our bandwidth because they say our credit is not good. Can you please get in touch with Herb Heart and resolve this. I don\u2029t have much more information that I can provide them.\r\n\r\nSamantha Brigh: We are good Sandra. They OK'd it.",
+    "Task_Description": "ISP is being difficult and refusing to increase our bandwidth because they say our credit is not good. Can you please get in touch with Herb Heart and resolve this. I don't have much more information that I can provide them.\r\n\r\nSamantha Brigh: We are good Sandra. They OK'd it.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -1337,7 +1337,7 @@ const tasks = [
     "Task_Subject": "Territory Sales Breakdown Report",
     "Task_Start_Date": "2024-03-17T00:00:00",
     "Task_Status": "In Progress",
-    "Task_Description": "Per discussion, I need territory sales report by EOD.\r\n\r\nJim Packard: John, Im waiting for the report from Sammy. I don\u2029t know what's taking him so long to finish it\u2026we are at 50%.",
+    "Task_Description": "Per discussion, I need territory sales report by EOD.\r\n\r\nJim Packard: John, Im waiting for the report from Sammy. I don't know what's taking him so long to finish it\u2026we are at 50%.",
     "Task_Completion": 50,
   }, {
     "ResponsibleEmployee": {
@@ -1537,7 +1537,7 @@ const tasks = [
     "Task_Subject": "Approve Rental of Forklift",
     "Task_Start_Date": "2024-04-08T00:00:00",
     "Task_Status": "Need Assistance",
-    "Task_Description": "Kevin, do we have the ok to get a forklift rental. I still don\u2029t know when our forklift is going to be fixed and I'm worried it might take a long time.\r\n\r\nKevin Carter: I need to get approval from the Controller",
+    "Task_Description": "Kevin, do we have the ok to get a forklift rental. I still don't know when our forklift is going to be fixed and I'm worried it might take a long time.\r\n\r\nKevin Carter: I need to get approval from the Controller",
     "Task_Completion": 0,
   }, {
     "ResponsibleEmployee": {
@@ -1617,7 +1617,7 @@ const tasks = [
     "Task_Subject": "Fix Synchronization Issues",
     "Task_Start_Date": "2024-04-21T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Terry, I don\u2029t know who else to get help from. The automation app is not synchronizing anything so I'm stuck until I get this fixed. I need to finish my testing. Please look at the log report and send Email with info.\r\n\r\nTerry Bradley: I know why this happened. Fix on the way.",
+    "Task_Description": "Terry, I don't know who else to get help from. The automation app is not synchronizing anything so I'm stuck until I get this fixed. I need to finish my testing. Please look at the log report and send Email with info.\r\n\r\nTerry Bradley: I know why this happened. Fix on the way.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -1647,7 +1647,7 @@ const tasks = [
     "Task_Subject": "Update Your Profile on Website",
     "Task_Start_Date": "2024-04-28T00:00:00",
     "Task_Status": "Need Assistance",
-    "Task_Description": "Antony, it's your responsibility to maintain personal profile on site. I've asked you repeatedly. Is there a problem or something I can help with?\r\n\r\nAntony Remmen: I forgot my password and we don\u2029t have recovery page.",
+    "Task_Description": "Antony, it's your responsibility to maintain personal profile on site. I've asked you repeatedly. Is there a problem or something I can help with?\r\n\r\nAntony Remmen: I forgot my password and we don't have recovery page.",
     "Task_Completion": 0,
   }, {
     "ResponsibleEmployee": {
@@ -1797,7 +1797,7 @@ const tasks = [
     "Task_Subject": "Resubmit Request for Expense Reimbursement",
     "Task_Start_Date": "2024-05-09T00:00:00",
     "Task_Status": "Not Started",
-    "Task_Description": "Kelly, I lost your expense reimbursement documents so I'm going to need you to send them to me by Email so this can get paid in this week's check run.\r\n\r\nKelly Rodriguez: I don\u2029t have receipts scanned. Is that ok?",
+    "Task_Description": "Kelly, I lost your expense reimbursement documents so I'm going to need you to send them to me by Email so this can get paid in this week's check run.\r\n\r\nKelly Rodriguez: I don't have receipts scanned. Is that ok?",
     "Task_Completion": 0,
   }, {
     "ResponsibleEmployee": {
