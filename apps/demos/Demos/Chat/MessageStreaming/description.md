@@ -16,4 +16,4 @@ The [sendButtonOptions](/Documentation/ApiReference/UI_Components/dxChat/Configu
 
 ## Custom Empty View
 
-The Chat component specifies an [emptyViewTemplate](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#emptyViewTemplate) that replaces the default empty state with custom suggestion cards. Clicking a card constructs a message and calls `fetchAIResponse` directly, bypassing the text input.
+The Chat component specifies an [emptyViewTemplate](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#emptyViewTemplate) that replaces the default empty state with custom suggestion cards. Clicking a card constructs a message and triggers the demo's message-sending flow directly, bypassing the text input.
