@@ -220,12 +220,7 @@ function main() {
                     lines.push(
                         TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion),
                     );
-
-                    if(warning.type === 'trialExpired') {
-                        lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.purchaseLicense}`));
-                    } else {
-                        lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
-                    }
+                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
                 }
             }
 
