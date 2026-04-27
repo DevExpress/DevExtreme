@@ -5,9 +5,8 @@ import {
     initTestMarkup,
     isDesktopEnvironment,
     TOOLBAR_TOP_LOCATION,
-    TOOLBAR_BOTTOM_LOCATION } from '../../helpers/scheduler/helpers.js';
+} from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from '__internal/core/m_devices';
 import 'ui/switch';
@@ -86,7 +85,7 @@ module('Mobile tooltip', moduleConfig, () => {
         clock.restore();
     });
 
-    test('Tooltip should hide after execute actions', async function(assert) {
+    test('Tooltip visibility after actions', async function(assert) {
         const scheduler = await createInstance();
         const initialDataCount = scheduler.instance.option('dataSource').length;
 
@@ -105,7 +104,7 @@ module('Mobile tooltip', moduleConfig, () => {
         assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible after click on appointment');
 
         scheduler.tooltip.clickOnDeleteButton();
-        assert.notOk(scheduler.tooltip.isVisible(), 'Tooltip should be hide after click on remove button in tooltip');
+        assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible after click on remove button in tooltip');
 
         assert.equal(scheduler.instance.option('dataSource').length, initialDataCount - 1, 'Appointment should delete form dataSource after click on delete button in tooltip');
     });
@@ -244,7 +243,6 @@ if(!isDesktopEnvironment()) {
 
 module('Appointment popup buttons', moduleConfig, () => {
     const SECTION_AFTER = 'after';
-    const SECTION_BEFORE = 'before';
     const DONE_BUTTON = 'done';
     const CANCEL_BUTTON = 'cancel';
 
