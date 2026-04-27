@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import dateSerialization from 'core/utils/date_serialization';
 import config from 'core/config';
 import Tooltip from 'ui/tooltip';
 import { hide } from '__internal/ui/tooltip/m_tooltip';
