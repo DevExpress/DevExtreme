@@ -177,7 +177,7 @@ export const tasks: Task[] = [
     "Task_Subject": "Deliver R&D Plans for 2023",
     "Task_Start_Date": "2023-03-01T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Marketing strategy is set. R&D needs to deliver a detailed report on product development plans along with final decisions as to which product lines will be terminated.\r\n\r\nArther Miller: I've submitted your reports. Need final approval.",
+    "Task_Description": "Marketing strategy is set. R&D needs to deliver a detailed report on product development plans along with final decisions as to which product lines will be terminated.\r\n\r\nArthur Miller: I've submitted your reports. Need final approval.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -187,7 +187,7 @@ export const tasks: Task[] = [
     "Task_Subject": "Create 2023 R&D Plans",
     "Task_Start_Date": "2023-03-01T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Create 2023 R&D Plan Report for CEO and include information on products under consideration and final decisions as to which products will be depracated.\r\n\r\nBart Arnaz: Done. You should review this Arthur as there are issues we need to consider.",
+    "Task_Description": "Create 2023 R&D Plan Report for CEO and include information on products under consideration and final decisions as to which products will be deprecated.\r\n\r\nBart Arnaz: Done. You should review this Arthur as there are issues we need to consider.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -554,7 +554,7 @@ export const tasks: Task[] = [
       "Employee_Full_Name": "Leah Simpson",
     },
     "Task_ID": 54,
-    "Task_Subject": "Review Training Course for any Ommissions",
+    "Task_Subject": "Review Training Course for any Omissions",
     "Task_Start_Date": "2023-06-01T00:00:00",
     "Task_Status": "Completed",
     "Task_Description": "Leah, consider this most important item on your agenda. I need this new training material reviewed so it can be submitted to management.\r\n\r\nLeah Simpson: I only found a few spelling mistakes.",
@@ -777,14 +777,14 @@ export const tasks: Task[] = [
     "Task_Subject": "Estimate Time Required to Touch-Enable Apps",
     "Task_Start_Date": "2023-08-05T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Management has decided to stick with existing apps. We simply need to make them touch-enabled for the new Surface Tablets being distributed to the field. Can you get me an estimate?\r\n\r\nKaren Goodson: Bard, they are already touch-enabled. We are using DevExpress WinForms Controls",
+    "Task_Description": "Management has decided to stick with existing apps. We simply need to make them touch-enabled for the new Surface Tablets being distributed to the field. Can you get me an estimate?\r\n\r\nKaren Goodson: Brad, they are already touch-enabled. We are using DevExpress WinForms Controls",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
       "Employee_Full_Name": "Wally Hobbs",
     },
     "Task_ID": 77,
-    "Task_Subject": "Report on Tranistion to Touch-Based Apps",
+    "Task_Subject": "Report on Transition to Touch-Based Apps",
     "Task_Start_Date": "2023-08-10T00:00:00",
     "Task_Status": "Completed",
     "Task_Description": "Wally, I've given the approval to go with touch-based apps on WinForms vs complete re-write. I need your report as to when the apps are going to be ready to deploy to the field.\r\n\r\nWally Hobbs: Brett, the apps are already touch-enabled. We didn't have to do anything.",
@@ -807,7 +807,7 @@ export const tasks: Task[] = [
     "Task_Subject": "Rollout New Touch-Enabled WinForms Apps",
     "Task_Start_Date": "2023-08-17T00:00:00",
     "Task_Status": "In Progress",
-    "Task_Description": "We are go to rollout the new WinForms apps to all Surface tablets used in the field.\r\n\r\nBrade Jameson: I'm going to mark this as an on-going task for me to do throughout 2023 and 2024.",
+    "Task_Description": "We are go to rollout the new WinForms apps to all Surface tablets used in the field.\r\n\r\nBrad Jameson: I'm going to mark this as an on-going task for me to do throughout 2023 and 2024.",
     "Task_Completion": 75,
   }, {
     "ResponsibleEmployee": {
@@ -917,7 +917,7 @@ export const tasks: Task[] = [
     "Task_Subject": "Create New Product Pages",
     "Task_Start_Date": "2023-09-24T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "You have the PSDs from the design team. I need the product pages updated. Management wants this done immediately so we can roll out by Octover 15.\r\n\r\nKaren Goodson: I'm going to have a lot of overtime this week.",
+    "Task_Description": "You have the PSDs from the design team. I need the product pages updated. Management wants this done immediately so we can roll out by October 15.\r\n\r\nKaren Goodson: I'm going to have a lot of overtime this week.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -1017,7 +1017,7 @@ export const tasks: Task[] = [
     "Task_Subject": "Contact ISP and Discuss Payment Options",
     "Task_Start_Date": "2023-11-05T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "ISP is being difficult and refusing to increase our bandwidth because they say our credit is not good. Can you please get in touch with Herb Heart and resolve this. I don't have much more information that I can provide them.\r\n\r\nSamantha Brigh: We are good Sandra. They OK'd it.",
+    "Task_Description": "ISP is being difficult and refusing to increase our bandwidth because they say our credit is not good. Can you please get in touch with Herb Heart and resolve this. I don't have much more information that I can provide them.\r\n\r\nSamantha Bright: We are good Sandra. They OK'd it.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -1037,7 +1037,7 @@ export const tasks: Task[] = [
     "Task_Subject": "Analyze Support Traffic for 2023",
     "Task_Start_Date": "2023-11-11T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "Antony, we are being pushed to get the a support issues report delivered before year end. Can you aggragate all of our data so I can compile it and send it over to Barb?",
+    "Task_Description": "Antony, we are being pushed to get the a support issues report delivered before year end. Can you aggregate all of our data so I can compile it and send it over to Barb?",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
@@ -1477,7 +1477,7 @@ export const tasks: Task[] = [
     "Task_Subject": "State of Operations Report",
     "Task_Start_Date": "2024-03-28T00:00:00",
     "Task_Status": "In Progress",
-    "Task_Description": "Samantha, I'm dissapointed you have not sent this report over to me. You know we are trying to manage a crisis and it does not help when you are not proactive.\r\n\r\nSamantha Bright: I know John, I'm collecting info from teams.",
+    "Task_Description": "Samantha, I'm disappointed you have not sent this report over to me. You know we are trying to manage a crisis and it does not help when you are not proactive.\r\n\r\nSamantha Bright: I know John, I'm collecting info from teams.",
     "Task_Completion": 45,
   }, {
     "ResponsibleEmployee": {
@@ -1607,7 +1607,7 @@ export const tasks: Task[] = [
     "Task_Subject": "Review Complaint Reports",
     "Task_Start_Date": "2024-04-17T00:00:00",
     "Task_Status": "In Progress",
-    "Task_Description": "We are getting a lot of complaints sent to the Consumer Affairs dept. Can you please reivew the report I sent you and send me your thoughts as to how we can deal with all this.\r\n\r\nBarb Banks: This is a lot of work. Will do what I can",
+    "Task_Description": "We are getting a lot of complaints sent to the Consumer Affairs dept. Can you please review the report I sent you and send me your thoughts as to how we can deal with all this.\r\n\r\nBarb Banks: This is a lot of work. Will do what I can",
     "Task_Completion": 40,
   }, {
     "ResponsibleEmployee": {
@@ -1714,7 +1714,7 @@ export const tasks: Task[] = [
       "Employee_Full_Name": "Gabe Jones",
     },
     "Task_ID": 170,
-    "Task_Subject": "Sumit Travel Expenses for Recent Trip",
+    "Task_Subject": "Submit Travel Expenses for Recent Trip",
     "Task_Start_Date": "2024-04-30T00:00:00",
     "Task_Status": "In Progress",
     "Task_Description": "Gabe, you sent me some receipts by Email but in order for me to get you a payment for expenses, I need your expense report.\r\n\r\nGabe Jones: I'm missing a receipt. As soon as I find it, I will submit",
