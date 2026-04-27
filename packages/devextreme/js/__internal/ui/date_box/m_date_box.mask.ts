@@ -20,6 +20,7 @@ import { getDatePartIndexByPosition, renderDateParts } from './m_date_box.mask.p
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
 const BACKWARD = -1;
+const IME_DIGIT_CODE_REGEXP = /^(?:Digit|Numpad)(\d)$/;
 
 export interface DateBoxMaskProperties extends Properties {
   emptyDateValue?: Date;
@@ -40,6 +41,12 @@ class DateBoxMask extends DateBoxBase {
   _regExpInfo?: Record<string, unknown>;
 
   _formatPattern?: unknown;
+
+  _pendingIMEDigit?: string | null;
+
+  _isIMEDigitProcessed?: boolean;
+
+  _isIMECommitPending?: boolean;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean> {
     const originalHandlers = super._supportedKeys();
@@ -151,7 +158,7 @@ class DateBoxMask extends DateBoxBase {
 
   _isSingleDigitKey(e) {
     const data = e.originalEvent?.data;
-    return data?.length === 1 && parseInt(data, 10);
+    return data?.length === 1 && !isNaN(parseInt(data, 10));
   }
 
   _useBeforeInputEvent() {
@@ -167,22 +174,33 @@ class DateBoxMask extends DateBoxBase {
     isValueChanged && eventsEngine.trigger(this._input(), 'input');
   }
 
-  _keyboardHandler(e) {
-    let { key } = e.originalEvent;
+  _keyboardHandler(e): boolean {
+    const { key } = e.originalEvent;
 
     const result = super._keyboardHandler(e);
 
     if (!this._useMaskBehavior() || this._useBeforeInputEvent()) {
+      this._pendingIMEDigit = null;
+      this._isIMEDigitProcessed = false;
+      this._isIMECommitPending = false;
+
       return result;
     }
 
-    if (browser.chrome && e.key === 'Process' && e.code.indexOf('Digit') === 0) {
-      key = e.code.replace('Digit', '');
-      this._processInputKey(key);
-      this._maskInputHandler = () => {
-        this._renderSelectedPart();
-      };
-    } else if (this._isSingleCharKey(e)) {
+    const chromiumDigitCodeMatch = IME_DIGIT_CODE_REGEXP.exec(e.code);
+
+    if (browser.chrome && e.key === 'Process' && chromiumDigitCodeMatch) {
+      const [, digit] = chromiumDigitCodeMatch;
+
+      this._pendingIMEDigit = digit;
+
+      return result;
+    }
+
+    this._pendingIMEDigit = null;
+    this._isIMEDigitProcessed = false;
+
+    if (this._isSingleCharKey(e)) {
       this._keyInputHandler(e.originalEvent, key);
     }
 
@@ -220,12 +238,40 @@ class DateBoxMask extends DateBoxBase {
     return true;
   }
 
-  _keyPressHandler(e) {
+  _syncInputWithMask(): void {
+    this._input().val(this._getDisplayedText(this._maskValue));
+    this._caret(this._getActivePartProp('caret'));
+  }
+
+  _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
-    if (event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e)) {
-      this._processInputKey(event.data);
-      this._renderDisplayText(this._getDisplayedText(this._maskValue));
-      this._selectNextPart();
+
+    const isCompositionDigit = event?.inputType === 'insertCompositionText'
+      && this._isSingleDigitKey(e);
+
+    const isIMECommitDigit = event?.inputType === 'insertText'
+      && this._isSingleDigitKey(e)
+      && this._isIMECommitPending;
+
+    if (isCompositionDigit && event.data) {
+      if (!this._isIMEDigitProcessed) {
+        this._processInputKey(event.data);
+        this._isIMEDigitProcessed = true;
+        this._isIMECommitPending = true;
+      }
+
+      this._syncInputWithMask();
+
+      return;
+    }
+
+    if (isIMECommitDigit) {
+      this._isIMECommitPending = false;
+      this._pendingIMEDigit = null;
+
+      this._syncInputWithMask();
+
+      return;
     }
     super._keyPressHandler(e);
 
@@ -429,6 +475,7 @@ class DateBoxMask extends DateBoxBase {
       this._renderSelectedPart();
     });
 
+    eventsEngine.on(this._input(), addNamespace('compositionstart', MASK_EVENT_NAMESPACE), this._maskCompositionStartHandler.bind(this));
     eventsEngine.on(this._input(), addNamespace('compositionend', MASK_EVENT_NAMESPACE), this._maskCompositionEndHandler.bind(this));
 
     if (this._useBeforeInputEvent()) {
@@ -616,14 +663,16 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _maskCompositionEndHandler(e): void {
-    this._input().val(this._getDisplayedText(this._maskValue));
-    this._selectNextPart();
+  _maskCompositionStartHandler(): void {
+    this._isIMEDigitProcessed = false;
+    this._isIMECommitPending = false;
+  }
 
-    this._maskInputHandler = () => {
-      this._renderSelectedPart();
-    };
+  _maskCompositionEndHandler(): void {
+    this._input().val(this._getDisplayedText(this._maskValue));
+    this._caret(this._getActivePartProp('caret'));
+
+    this._maskInputHandler = null;
   }
 
   _maskPasteHandler(e): void {
