@@ -108,14 +108,14 @@
 
 
         "dxDataGrid-aiAssistantTitle": "AI Assistant",
+        "dxDataGrid-aiAssistantProcessingMessageHeader": "Request in progress",
         "dxDataGrid-aiAssistantProcessingMessage": "Processing...",
+        "dxDataGrid-aiAssistantErrorMessageHeader": "Failed to process request",
         "dxDataGrid-aiAssistantSuccessMessage": "Success",
         "dxDataGrid-aiAssistantClearButtonText": "Clear",
         "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
-        "dxDataGrid-aiAssistantProcessingMessageHeader": "Request in progress",
-        "dxDataGrid-aiAssistantErrorMessageHeader": "Failed to process request",
         "dxDataGrid-aiPromptEditorTitle": "AI 提示编辑器",
         "dxDataGrid-aiPromptEditorPlaceholder": "提示 AI 生成列值...",
         "dxDataGrid-aiPromptEditorApplyButton": "应用",
