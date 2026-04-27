@@ -929,6 +929,36 @@
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
       ]
     },
+    "compress:npm-sources": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/npm/devextreme/**/*.js"],
+        "exclude": [
+          "./artifacts/npm/devextreme/bundles/*.js",
+          "./artifacts/npm/devextreme/cjs/bundles/**",
+          "./artifacts/npm/devextreme/esm/bundles/**",
+          "./artifacts/npm/devextreme/bundles/modules/parts/*.js",
+          "./artifacts/npm/devextreme/viz/vector_map.utils/*.js",
+          "./artifacts/npm/devextreme/viz/docs/*.js",
+          "./artifacts/npm/devextreme/dist/**",
+          "./artifacts/npm/devextreme/bin/**",
+          "./artifacts/npm/devextreme/license/**"
+        ],
+        "mode": "normalize"
+      },
+      "configurations": {
+        "production": {
+          "mode": "beautify",
+          "eulaUrl": "https://js.devexpress.com/Licensing/"
+        }
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.js"
+      ]
+    },
     "verify:licenses": {
       "executor": "nx:run-commands",
       "options": {
