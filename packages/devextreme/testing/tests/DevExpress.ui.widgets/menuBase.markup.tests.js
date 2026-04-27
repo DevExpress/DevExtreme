@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import MenuBase from 'ui/context_menu/ui.menu_base';
-import { getWindow } from 'core/utils/window';
 
 import 'fluent_blue_light.css!';
 
@@ -13,8 +12,6 @@ QUnit.testStart(function() {
 
 const DX_MENU_BASE_CLASS = 'dx-menu-base';
 const DX_MENU_ITEM_CLASS = 'dx-menu-item';
-
-const window = getWindow();
 
 function createMenu(options) {
     const element = $('#menu');
@@ -40,7 +37,7 @@ QUnit.module('Menu markup', () => {
             });
 
             const $enabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
-            const cursor = window.getComputedStyle($enabledItem.get(0)).cursor;
+            const cursor = $enabledItem.css('cursor');
 
             assert.strictEqual(cursor, 'pointer', 'enabled item has pointer cursor');
         });
@@ -54,7 +51,7 @@ QUnit.module('Menu markup', () => {
             });
 
             const $disabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
-            const cursor = window.getComputedStyle($disabledItem.get(0)).cursor;
+            const cursor = $disabledItem.css('cursor');
 
             assert.strictEqual(cursor, 'default', 'disabled item has default cursor');
         });
@@ -70,7 +67,7 @@ QUnit.module('Menu markup', () => {
             menuBase.instance.option('items[1].disabled', true);
 
             const $disabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
-            const cursor = window.getComputedStyle($disabledItem.get(0)).cursor;
+            const cursor = $disabledItem.css('cursor');
 
             assert.strictEqual(cursor, 'default', 'item has default cursor after disabling at runtime');
         });
@@ -84,7 +81,7 @@ QUnit.module('Menu markup', () => {
                 ],
             });
             const $item = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
-            const cursor = window.getComputedStyle($item.get(0)).cursor;
+            const cursor = $item.css('cursor');
             assert.strictEqual(cursor, 'default', 'items in disabled menu have default cursor');
         });
 
@@ -97,10 +94,10 @@ QUnit.module('Menu markup', () => {
             });
 
             const $enabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
-            const enabledItemCursor = window.getComputedStyle($enabledItem.get(0)).cursor;
+            const enabledItemCursor = $enabledItem.css('cursor');
 
             const $disabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
-            const disabledItemCursor = window.getComputedStyle($disabledItem.get(0)).cursor;
+            const disabledItemCursor = $disabledItem.css('cursor');
 
             assert.strictEqual(enabledItemCursor, 'pointer', 'enabled item with url has pointer cursor');
             assert.strictEqual(disabledItemCursor, 'default', 'disabled item with url has default cursor');
