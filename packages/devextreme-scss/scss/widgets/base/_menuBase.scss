@@ -23,21 +23,12 @@
     white-space: nowrap;
   }
 
-  .dx-state-disabled,
-  &.dx-state-disabled .dx-menu-items-container {
-    cursor: default;
-  }
-
   .dx-menu-item {
     display: inline-block;
     position: relative;
     height: 100%;
     width: 100%;
     cursor: pointer;
-
-    &.dx-state-disabled {
-      cursor: default;
-    }
 
     .dx-menu-item-content {
       white-space: nowrap;
@@ -84,6 +75,7 @@
 
     .dx-submenu {
       box-sizing: content-box;
+      cursor: default;
     }
   }
 
@@ -108,5 +100,12 @@
     .dx-scrollable-container {
       overscroll-behavior: contain;
     }
+  }
+}
+
+.dx-state-disabled {
+  &.dx-menu-item,
+  .dx-menu-item {
+    cursor: default;
   }
 }

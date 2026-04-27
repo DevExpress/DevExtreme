@@ -1332,7 +1332,7 @@ QUnit.module('Disabled item cursor style (T1327513)', () => {
         assert.strictEqual(cursor, 'default', 'disabled item has default cursor');
     });
 
-    QUnit.test('item disabled at runtime should have default cursor', function(assert) {
+    QUnit.test('item should have default cursor when disabled at runtime', function(assert) {
         const menuBase = createMenu({
             items: [
                 { text: 'Item 1', disabled: false },
@@ -1345,7 +1345,7 @@ QUnit.module('Disabled item cursor style (T1327513)', () => {
         const $disabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
         const cursor = window.getComputedStyle($disabledItem.get(0)).cursor;
 
-        assert.strictEqual(cursor, 'default', 'item disabled at runtime has default cursor');
+        assert.strictEqual(cursor, 'default', 'item has default cursor after disabling at runtime');
     });
 
     QUnit.test('items in disabled menu should have default cursor', function(assert) {
@@ -1356,8 +1356,8 @@ QUnit.module('Disabled item cursor style (T1327513)', () => {
                 { text: 'Item 2' },
             ],
         });
-        const $disabledMenuItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
-        const cursor = window.getComputedStyle($disabledMenuItem.get(0)).cursor;
+        const $item = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+        const cursor = window.getComputedStyle($item.get(0)).cursor;
         assert.strictEqual(cursor, 'default', 'items in disabled menu have default cursor');
     });
 });
