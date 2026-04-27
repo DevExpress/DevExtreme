@@ -116,7 +116,7 @@ QUnit.test('contentTemplate passed to createComponent should work correct', asyn
 
         assert.equal(stubCreateComponent.getCall(1).args[0][0].nodeName, 'DIV');
         assert.equal(stubCreateComponent.getCall(1).args[1], List);
-        assert.equal(Object.keys(stubCreateComponent.getCall(1).args[2]), 8);
+        assert.equal(Object.keys(stubCreateComponent.getCall(1).args[2]).length, 8);
         assert.equal(stubCreateComponent.getCall(1).args[2].dataSource, dataList);
         assert.equal(stubCreateComponent.getCall(1).args[2].showScrollbar, 'onHover');
         assert.ok(stubCreateComponent.getCall(1).args[2].onContentReady);
