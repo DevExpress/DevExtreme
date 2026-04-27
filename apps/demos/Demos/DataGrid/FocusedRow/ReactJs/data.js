@@ -943,7 +943,7 @@ export const tasks = [
     Task_Start_Date: '2023-08-17T00:00:00',
     Task_Status: 'In Progress',
     Task_Description:
-      "We are go to rollout the new WinForms apps to all Surface tablets used in the field.\r\n\r\nBrade Jameson: I'm going to mark this as an on-going task for me to do throughout 2023 and 2024.",
+      "We are going to roll out the new WinForms apps to all Surface tablets used in the field.\r\n\r\nBrade Jameson: I'm going to mark this as an on-going task for me to do throughout 2023 and 2024.",
     Task_Completion: 75,
   },
   {
