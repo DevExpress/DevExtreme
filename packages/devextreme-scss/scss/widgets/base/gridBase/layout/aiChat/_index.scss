@@ -44,14 +44,6 @@
   gap: $ai-chat-message-gap;
 }
 
-.dx-ai-chat__message-regenerate-button {
-  cursor: pointer;
-
-  &:hover {
-    border-radius: 4px;
-  }
-}
-
 .dx-ai-chat__action-list {
   display: flex;
   flex-flow: column;

@@ -9,3 +9,4 @@
 @include ai-chat-message-success($base-success);
 @include ai-chat-message-error($base-danger);
 @include ai-chat-messagebubble-border($base-border-color);
+@include ai-chat-message-regenerate-button($button-normal-active-bg);

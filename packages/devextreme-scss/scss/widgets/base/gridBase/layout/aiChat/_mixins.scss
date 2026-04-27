@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 @mixin ai-chat-messagelist-empty(
   $messagelist-empty-icon-color,
   $messagelist-empty-icon-background-color,
@@ -44,5 +46,18 @@
     border-width: 1px;
     border-style: solid;
     border-color: $border-color;
+  }
+}
+
+@mixin ai-chat-message-regenerate-button(
+  $hover-background-color,
+) {
+  .dx-ai-chat__message-regenerate-button {
+    cursor: pointer;
+
+    &:hover::before {
+      border-radius: $ai-chat-message-regenerate-button-border-radius;
+      background-color: $hover-background-color;
+    }
   }
 }
