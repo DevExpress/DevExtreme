@@ -21,7 +21,6 @@
     list-style-type: none;
     display: inline-block;
     white-space: nowrap;
-    cursor: pointer;
   }
 
   .dx-state-disabled,
@@ -34,6 +33,11 @@
     position: relative;
     height: 100%;
     width: 100%;
+    cursor: pointer;
+
+    &.dx-state-disabled {
+      cursor: default;
+    }
 
     .dx-menu-item-content {
       white-space: nowrap;
