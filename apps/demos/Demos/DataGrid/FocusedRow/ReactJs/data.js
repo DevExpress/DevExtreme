@@ -199,7 +199,7 @@ export const tasks = [
     Task_Start_Date: '2023-03-01T00:00:00',
     Task_Status: 'Completed',
     Task_Description:
-      'Create 2023 R&D Plan Report for CEO and include information on products under consideration and final decisions as to which products will be depracated.\r\n\r\nBart Arnaz: Done. You should review this Arthur as there are issues we need to consider.',
+      'Create 2023 R&D Plan Report for CEO and include information on products under consideration and final decisions as to which products will be deprecated.\r\n\r\nBart Arnaz: Done. You should review this Arthur as there are issues we need to consider.',
     Task_Completion: 100,
   },
   {
