@@ -37,7 +37,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
-import { AppointmentForm } from './appointment_popup/m_form';
+import { AppointmentForm, type AppointmentFormConfig } from './appointment_popup/m_form';
 import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
@@ -276,7 +276,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'firstDayOfWeek':
         this.updateOption('workSpace', name, value);
         this.updateOption('header', name, value);
-        this.cleanPopup();
+        this.createAppointmentPopupForm();
         break;
       case 'currentDate': {
         const dateValue = this.getViewOption(name);
@@ -397,6 +397,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.setRemoteFilterIfNeeded();
 
         this.postponeDataSourceLoading();
+        this.createAppointmentPopupForm();
         break;
         // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
       case 'offset':
@@ -506,7 +507,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.bringEditingModeToAppointments(editing);
 
         this.hideAppointmentTooltip();
-        this.cleanPopup();
+        this.createAppointmentPopupForm();
         break;
       }
       case 'showAllDayPanel':
@@ -1134,22 +1135,18 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   createAppointmentForm() {
-    const scheduler = {
-      getResourceById: () => this.resourceManager.resourceById,
-      getDataAccessors: () => this._dataAccessors,
+    const config: AppointmentFormConfig = {
+      dataAccessors: this._dataAccessors,
+      editing: this.editing,
+      resourceManager: this.resourceManager,
+      firstDayOfWeek: this.option('firstDayOfWeek'),
+      startDayHour: this.option('startDayHour'),
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
-
-      getEditingConfig: () => this.editing,
-      getResourceManager: () => this.resourceManager,
-
-      getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
-      getStartDayHour: () => this.option('startDayHour'),
       getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
-      getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
-    return new AppointmentForm(scheduler);
+    return new AppointmentForm(config);
   }
 
   createAppointmentPopup(form) {
