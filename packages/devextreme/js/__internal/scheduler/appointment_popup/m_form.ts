@@ -38,6 +38,8 @@ import { customizeFormItems } from './m_customize_form_items';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
+type SchedulerEditingObject = Exclude<NonNullable<SchedulerProperties['editing']>, boolean>;
+
 export interface AppointmentFormConfig {
   dataAccessors: AppointmentDataAccessor;
   editing: SchedulerProperties['editing'];
@@ -232,12 +234,17 @@ export class AppointmentForm {
     this.createForm(customizedItems);
   }
 
-  private getEditingForm(): NonNullable<NonNullable<SchedulerProperties['editing']>['form']> | undefined {
+  private getEditingForm(): SchedulerEditingObject['form'] {
+    const editing = this.getEditingObject();
+    return editing?.form;
+  }
+
+  private getEditingObject(): SchedulerEditingObject | undefined {
     const { editing } = this.config;
     if (isBoolean(editing) || !editing) {
       return undefined;
     }
-    return editing.form ?? undefined;
+    return editing;
   }
 
   private getIconsShowMode(): AppointmentFormIconsShowMode {
@@ -512,8 +519,7 @@ export class AppointmentForm {
     timeItemOptions?: SimpleItem,
     timezoneItemOptions?: SimpleItem,
   ): GroupItem {
-    const { editing } = this.config;
-    const allowTimeZoneEditing = !isBoolean(editing) ? editing?.allowTimeZoneEditing : undefined;
+    const allowTimeZoneEditing = this.getEditingObject()?.allowTimeZoneEditing;
     const { startDateExpr, endDateExpr } = this.config.dataAccessors.expr;
     const isStartDateEditor = dateExpr === startDateExpr;
 
@@ -869,8 +875,7 @@ export class AppointmentForm {
 
   showMainGroup(): void {
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
-    const { editing } = this.config;
-    const configuredHeight = (!isBoolean(editing) && editing?.popup?.height) || 'auto';
+    const configuredHeight = this.getEditingObject()?.popup?.height ?? 'auto';
 
     if (typeof currentHeight === 'number') {
       this.dxPopup.option('height', configuredHeight);
