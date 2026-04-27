@@ -20,6 +20,30 @@ type TemplateNormalizationFunc = <T>(
   template: Template<T> | undefined,
 ) => ComponentType<T> | undefined;
 
+const getGlobalFormat = (
+  dataType: 'date' | 'datetime',
+): Format | undefined => {
+  const globalFormat = getGlobalFormatByDataType(dataType);
+
+  if (!globalFormat) {
+    return undefined;
+  }
+
+  if (isString(globalFormat)) {
+    return (
+      (value: Date | string | number) => {
+        const dateValue = value instanceof Date ? value : new Date(value);
+
+        return isNaN(dateValue.getTime())
+          ? ''
+          : dateLocalization.format(dateValue, globalFormat) as string;
+      }
+    ) as unknown as Format;
+  }
+
+  return globalFormat as Format;
+};
+
 export function normalizeColumn(
   column: PreNormalizedColumn,
   templateNormalizationFunc?: TemplateNormalizationFunc,
@@ -29,9 +53,13 @@ export function normalizeColumn(
     ?? columnFromDataOptions?.dataType
     ?? defaultColumnProperties.dataType;
   const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
+  const globalColumnFormat = dataType === 'date' || dataType === 'datetime'
+    ? getGlobalFormat(dataType)
+    : undefined;
   const columnFormat = column.format
-    ?? columnDataTypeDefaultOptions?.format
-    ?? columnFromDataOptions?.format;
+    ?? columnFromDataOptions?.format
+    ?? globalColumnFormat
+    ?? columnDataTypeDefaultOptions?.format;
   const caption = captionize(column.name);
 
   const colWithDefaults = {
@@ -222,30 +250,6 @@ export const getValueDataType = (
   return isUnknownDataType
     ? undefined
     : dataType as DataType;
-};
-
-const getGlobalFormat = (
-  dataType: 'date' | 'datetime',
-): Format | undefined => {
-  const globalFormat = getGlobalFormatByDataType(dataType);
-
-  if (!globalFormat) {
-    return undefined;
-  }
-
-  if (isString(globalFormat)) {
-    return (
-      (value: Date | string | number) => {
-        const dateValue = value instanceof Date ? value : new Date(value);
-
-        return isNaN(dateValue.getTime())
-          ? ''
-          : dateLocalization.format(dateValue, globalFormat) as string;
-      }
-    ) as unknown as Format;
-  }
-
-  return globalFormat as Format;
 };
 
 export const getColumnFormat = (
