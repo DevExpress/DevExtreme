@@ -1360,5 +1360,22 @@ QUnit.module('Disabled item cursor style (T1327513)', () => {
         const cursor = window.getComputedStyle($item.get(0)).cursor;
         assert.strictEqual(cursor, 'default', 'items in disabled menu have default cursor');
     });
-});
 
+    QUnit.test('menu items with url should have correct cursor', function(assert) {
+        const menuBase = createMenu({
+            items: [
+                { text: 'Item 1', url: 'https://example.com' },
+                { text: 'Item 2', url: 'https://example.com/disabled', disabled: true },
+            ],
+        });
+
+        const $enabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+        const enabledItemCursor = window.getComputedStyle($enabledItem.get(0)).cursor;
+
+        const $disabledItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
+        const disabledItemCursor = window.getComputedStyle($disabledItem.get(0)).cursor;
+
+        assert.strictEqual(enabledItemCursor, 'pointer', 'enabled item with url has pointer cursor');
+        assert.strictEqual(disabledItemCursor, 'default', 'disabled item with url has default cursor');
+    });
+});
