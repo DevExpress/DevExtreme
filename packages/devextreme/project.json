@@ -699,12 +699,14 @@
           "./artifacts/js/dx.viz.js",
           "./artifacts/js/dx.ai-integration.js"
         ],
-        "mode": "strip-debug"
+        "mode": { "name": "strip-debug", "trailingNewline": false }
       },
       "configurations": {
         "production": {
-          "mode": "minify",
-          "eulaUrl": "https://js.devexpress.com/Licensing/"
+          "mode": {
+            "name": "minify",
+            "eulaUrl": "https://js.devexpress.com/Licensing/"
+          }
         }
       },
       "inputs": [
@@ -724,12 +726,14 @@
           "./artifacts/js/dx.ai-integration.debug.js",
           "./artifacts/js/dx.custom.debug.js"
         ],
-        "mode": "normalize"
+        "mode": { "name": "normalize", "trailingNewline": false }
       },
       "configurations": {
         "production": {
-          "mode": "beautify",
-          "eulaUrl": "https://js.devexpress.com/Licensing/"
+          "mode": {
+            "name": "beautify",
+            "eulaUrl": "https://js.devexpress.com/Licensing/"
+          }
         }
       },
       "inputs": [
@@ -794,8 +798,7 @@
         "files": [
           "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js"
         ],
-        "mode": "beautify",
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
       }
     },
     "compress:vectormap:minify": {
@@ -804,8 +807,7 @@
         "files": [
           "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
         ],
-        "mode": "minify",
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "mode": { "name": "minify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
       }
     },
     "build:vectormap": {
@@ -861,8 +863,7 @@
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": ["./artifacts/js/dx.aspnet.mvc.js"],
-        "mode": "beautify",
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
       }
     },
     "build:aspnet:headers": {
@@ -920,7 +921,7 @@
       "options": {
         "files": ["./artifacts/npm/devextreme/**/*.d.ts"],
         "exclude": ["./artifacts/npm/devextreme/bundles/**"],
-        "mode": "strip-debug"
+        "mode": { "name": "strip-debug", "trailingNewline": false }
       },
       "inputs": [
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
@@ -948,8 +949,7 @@
       },
       "configurations": {
         "production": {
-          "mode": "beautify",
-          "eulaUrl": "https://js.devexpress.com/Licensing/"
+          "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
         }
       },
       "inputs": [

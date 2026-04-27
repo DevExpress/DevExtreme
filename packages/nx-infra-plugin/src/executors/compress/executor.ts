@@ -4,7 +4,7 @@ import * as terser from 'terser';
 import { js as jsBeautify } from 'js-beautify';
 import { glob } from 'glob';
 import { minimatch } from 'minimatch';
-import { CompressExecutorSchema } from './schema';
+import { CompressExecutorSchema, CompressMode, CompressModeName } from './schema';
 import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
 import { isWindowsOS, containsGlobPattern } from '../../utils/common';
 import {
@@ -90,28 +90,49 @@ function stripDebugBlocks(content: string): string {
   return content.replace(REMOVE_DEBUG_REGEXP, '');
 }
 
-type CompressStrategy = (content: string, eulaUrl?: string) => Promise<string>;
+function normalizeOutput(content: string, trailingNewline: boolean): string {
+  const eolNormalized = normalizeEol(content);
+  return trailingNewline ? ensureTrailingNewline(eolNormalized) : eolNormalized;
+}
 
-const STRATEGIES: Record<CompressExecutorSchema['mode'], CompressStrategy> = {
-  minify: async (content, eulaUrl) => runMinify(stripDebugBlocks(content), eulaUrl),
-  beautify: async (content, eulaUrl) => runBeautify(content, eulaUrl),
-  'strip-debug': async (content) => stripDebugBlocks(content),
-  normalize: async (content) => content,
+type ResolvedMode = {
+  name: CompressModeName;
+  eulaUrl?: string;
+  trailingNewline: boolean;
 };
 
-async function compressFile(
-  filePath: string,
-  mode: CompressExecutorSchema['mode'],
-  eulaUrl?: string,
-): Promise<void> {
-  const strategy = STRATEGIES[mode];
-  if (!strategy) {
-    throw new Error(`Unknown compress mode: ${mode}`);
+function resolveMode(mode: CompressMode): ResolvedMode {
+  if (typeof mode === 'string') {
+    return { name: mode, trailingNewline: true };
+  }
+  const trailingNewline = mode.trailingNewline ?? true;
+  if (mode.name === 'minify' || mode.name === 'beautify') {
+    return { name: mode.name, eulaUrl: mode.eulaUrl, trailingNewline };
+  }
+  return { name: mode.name, trailingNewline };
+}
+
+type CompressStrategy = (content: string, mode: ResolvedMode) => Promise<string>;
+
+const STRATEGIES: Record<CompressModeName, CompressStrategy> = {
+  minify: async (content, { eulaUrl, trailingNewline }) =>
+    normalizeOutput(await runMinify(stripDebugBlocks(content), eulaUrl), trailingNewline),
+  beautify: async (content, { eulaUrl, trailingNewline }) =>
+    normalizeOutput(await runBeautify(content, eulaUrl), trailingNewline),
+  'strip-debug': async (content, { trailingNewline }) =>
+    normalizeOutput(stripDebugBlocks(content), trailingNewline),
+  normalize: async (content, { trailingNewline }) => normalizeOutput(content, trailingNewline),
+};
+
+async function compressFile(filePath: string, mode: CompressMode): Promise<void> {
+  const resolved = resolveMode(mode);
+  const runStrategy = STRATEGIES[resolved.name];
+  if (!runStrategy) {
+    throw new Error(`Unknown compress mode: ${resolved.name}`);
   }
 
   const raw = await readFileText(filePath);
-  const transformed = await strategy(raw, eulaUrl);
-  await writeFileText(filePath, ensureTrailingNewline(normalizeEol(transformed)));
+  await writeFileText(filePath, await runStrategy(raw, resolved));
 }
 
 async function expandFileList(
@@ -144,13 +165,14 @@ async function expandFileList(
 
 const runExecutor: PromiseExecutor<CompressExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const { files, mode, eulaUrl, exclude } = options;
+  const { files, mode, exclude } = options;
+  const modeName = typeof mode === 'string' ? mode : mode.name;
 
   try {
     const expanded = await expandFileList(files, exclude, projectRoot);
     for (const filePath of expanded) {
-      await compressFile(filePath, mode, eulaUrl);
-      logger.verbose(`Compressed ${path.relative(projectRoot, filePath)} (${mode})`);
+      await compressFile(filePath, mode);
+      logger.verbose(`Compressed ${path.relative(projectRoot, filePath)} (${modeName})`);
     }
 
     return { success: true };

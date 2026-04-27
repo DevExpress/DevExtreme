@@ -8,13 +8,32 @@
       "description": "Paths to files to compress (relative to project root)"
     },
     "mode": {
-      "type": "string",
-      "enum": ["minify", "beautify", "strip-debug", "normalize"],
-      "description": "Compression mode"
-    },
-    "eulaUrl": {
-      "type": "string",
-      "description": "EULA URL to preserve in comments during compression"
+      "description": "Compression mode. Use a string for the simple cases or an object to attach mode-specific options (e.g., eulaUrl for minify/beautify, trailingNewline for any mode).",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["minify", "beautify", "strip-debug", "normalize"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "enum": ["minify", "beautify"] },
+            "eulaUrl": { "type": "string" },
+            "trailingNewline": { "type": "boolean", "default": true }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "enum": ["strip-debug", "normalize"] },
+            "trailingNewline": { "type": "boolean", "default": true }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        }
+      ]
     },
     "exclude": {
       "type": "array",
