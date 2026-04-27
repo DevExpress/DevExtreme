@@ -6,7 +6,8 @@ const multiProcess = require('gulp-multi-process');
 const env = require('./build/gulp/env-variables');
 const cache = require('gulp-cache');
 const shell = require('gulp-shell');
-const { REMOVE_NON_PRODUCTION_MODULE } = require('./build/gulp/context');
+const context = require('./build/gulp/context');
+const { REMOVE_NON_PRODUCTION_MODULE } = context;
 
 gulp.task('clean', function(callback) {
     require('del').sync([
@@ -30,7 +31,6 @@ gulp.task('clean', function(callback) {
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
-require('./build/gulp/vectormap');
 require('./build/gulp/npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
@@ -58,6 +58,12 @@ gulp.task('transpile', shell.task(
     transpileConfig
         ? `pnpm nx run devextreme:build:transpile -c ${transpileConfig}`
         : 'pnpm nx run devextreme:build:transpile'
+));
+
+gulp.task('vectormap', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:build:vectormap -c production'
+        : 'pnpm nx run devextreme:build:vectormap'
 ));
 
 if(env.TEST_CI) {
