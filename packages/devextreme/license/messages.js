@@ -34,7 +34,6 @@ const KEY_SOURCES = Object.freeze({
 const WARNING_CODES = Object.freeze({
     general: 1001,
     incompatibleVersion: 1002,
-    trialExpired: 1003,
 });
 
 const TEMPLATES = Object.freeze({
@@ -54,12 +53,6 @@ const TEMPLATES = Object.freeze({
                 `Incompatible DevExpress license key version (${keyVersion}).`,
                 `Download and register an updated DevExpress license key (${requiredVersion}+).`,
                 'Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).',
-            ].join(' ');
-        }
-        if(type === 'trialExpired') {
-            return [
-                'Your DevExpress trial period has expired.',
-                'Purchase a license to continue using DevExpress product libraries.',
             ].join(' ');
         }
         return 'License key verification has failed.';
