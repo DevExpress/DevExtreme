@@ -147,7 +147,7 @@ const tasks = [
     "Task_Subject": "Review 2022 Sales Report and Approve 2023 Plans",
     "Task_Start_Date": "2023-02-23T00:00:00",
     "Task_Status": "Completed",
-    "Task_Description": "2022 Sales Reports along with detailed market comparisons are complete. Management needs to review and provide additional guidance.\r\n\r\nRobert Reagan: We are in agreement with the recommendations in the report. You are go to execute plans.",
+    "Task_Description": "2022 Sales Reports along with detailed market comparisons are complete. Management needs to review and provide additional guidance.\r\n\r\nRobert Reagan: We are in agreement with the recommendations in the report. You are good to execute plans.",
     "Task_Completion": 100,
   }, {
     "ResponsibleEmployee": {
