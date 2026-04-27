@@ -29,6 +29,11 @@
   margin-bottom: 0;
 }
 
+::ng-deep .chat-messagebubble-text pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 ::ng-deep .dx-chat-messagebubble-content h1,
 ::ng-deep .dx-chat-messagebubble-content h2,
 ::ng-deep .dx-chat-messagebubble-content h3,
