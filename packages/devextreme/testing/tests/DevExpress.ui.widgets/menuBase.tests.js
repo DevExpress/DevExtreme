@@ -1347,5 +1347,18 @@ QUnit.module('Disabled item cursor style (T1327513)', () => {
 
         assert.strictEqual(cursor, 'default', 'item disabled at runtime has default cursor');
     });
+
+    QUnit.test('items in disabled menu should have default cursor', function(assert) {
+        const menuBase = createMenu({
+            disabled: true,
+            items: [
+                { text: 'Item 1' },
+                { text: 'Item 2' },
+            ],
+        });
+        const $disabledMenuItem = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+        const cursor = window.getComputedStyle($disabledMenuItem.get(0)).cursor;
+        assert.strictEqual(cursor, 'default', 'items in disabled menu have default cursor');
+    });
 });
 
