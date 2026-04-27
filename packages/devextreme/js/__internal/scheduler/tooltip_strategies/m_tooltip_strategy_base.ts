@@ -1,9 +1,12 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import { isRenderer } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
+
+import type { CompactAppointmentOptions } from '../types';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -29,34 +32,64 @@ export class TooltipStrategyBase {
 
   protected list: any;
 
+  protected $target: dxElementWrapper | null = null;
+
   constructor(options) {
     this.tooltip = null;
     this._options = options;
     this.extraOptions = null;
   }
 
-  show(target, dataList, extraOptions) {
-    if (this.canShowTooltip(dataList)) {
+  show(target: dxElementWrapper, dataList, extraOptions) {
+    if (dataList.length) {
       this.hide();
+      this.$target = target;
       this.extraOptions = extraOptions;
-      this.showCore(target, dataList);
+      this.showCore(dataList);
     }
   }
 
-  private showCore(target, dataList) {
-    const describedByValue = isRenderer(target) && target.attr('aria-describedby') as string;
+  public setTarget($target: dxElementWrapper): void {
+    this.$target = $target;
+
+    if (this.isDesktop()) {
+      const originalAnimationValue = this.tooltip.option('animation');
+
+      this.tooltip.option('animation', null);
+      this.tooltip.option('target', $target);
+      this.tooltip.option('animation', originalAnimationValue);
+    }
+  }
+
+  public getTarget(): dxElementWrapper | null {
+    return this.$target;
+  }
+
+  public setListItems(dataList: CompactAppointmentOptions['items']): void {
+    if (dataList.length === 0) {
+      this.hide();
+    }
+
+    this.list.option('dataSource', dataList);
+  }
+
+  private showCore(dataList) {
+    const describedByValue = isRenderer(this.$target) && this.$target?.attr('aria-describedby') as string;
 
     if (!this.tooltip) {
-      this.tooltip = this.createTooltip(target, dataList);
+      this.tooltip = this.createTooltip(dataList);
     } else {
-      this.shouldUseTarget() && this.tooltip.option('target', target);
+      if (this.isDesktop()) {
+        this.tooltip.option('target', this.$target);
+      }
+
       this.list.option('dataSource', dataList);
     }
 
     this.prepareBeforeVisibleChanged(dataList);
     this.tooltip.option('visible', true);
 
-    describedByValue && target.attr('aria-describedby', describedByValue);
+    describedByValue && this.$target?.attr('aria-describedby', describedByValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -92,18 +125,18 @@ export class TooltipStrategyBase {
         }
 
         if (this.isDeletingAllowed(appointment)) {
-          this.hide();
           this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
       });
     };
   }
 
-  isAlreadyShown(target) {
-    if (this.tooltip && this.tooltip.option('visible')) {
-      return this.tooltip.option('target')[0] === target[0];
+  isShownForTarget($target: dxElementWrapper): boolean {
+    if (!this.tooltip?.option('visible')) {
+      return false;
     }
-    return undefined;
+
+    return $target.get(0) === this.$target?.get(0);
   }
 
   protected onShown() {
@@ -119,19 +152,12 @@ export class TooltipStrategyBase {
     }
   }
 
-  protected shouldUseTarget() {
+  protected isDesktop(): boolean {
     return true;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected createTooltip(target, dataList) {
-  }
-
-  private canShowTooltip(dataList) {
-    if (!dataList.length) {
-      return false;
-    }
-    return true;
+  protected createTooltip(dataList) {
   }
 
   protected createListOption(dataList) {
@@ -248,7 +274,6 @@ export class TooltipStrategyBase {
       icon: 'trash',
       stylingMode: 'text',
       onClick: (e) => {
-        this.hide();
         e.event.stopPropagation();
         this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },

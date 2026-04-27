@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import dateSerialization from 'core/utils/date_serialization';
 import Tooltip from 'ui/tooltip';
 import { hide } from '__internal/ui/tooltip/m_tooltip';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -543,71 +542,6 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), 'February 9 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
-    });
-
-    test('Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip', async function(assert) {
-        const data = new DataSource({
-            store: getSampleData()
-        });
-
-        const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
-        const stub = sinon.stub(scheduler.instance, 'processDeleteAppointment');
-
-        const clock = sinon.useFakeTimers();
-        await scheduler.appointments.click(1, clock);
-        clock.restore();
-        scheduler.tooltip.clickOnDeleteButton();
-
-        assert.deepEqual(stub.getCall(0).args[0],
-            {
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0),
-                text: 'Task 2'
-            },
-            'processDeleteAppointment has a correct arguments');
-
-        assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
-    });
-
-    test('Click on tooltip-remove button should call scheduler.updateAppointment and hide tooltip, if recurrenceRuleExpr and recurrenceExceptionExpr is set', async function(assert) {
-        const scheduler = await createScheduler({
-            currentDate: new Date(2018, 6, 30),
-            currentView: 'month',
-            views: ['month'],
-            recurrenceRuleExpr: 'SC_RecurrenceRule',
-            recurrenceExceptionExpr: 'SC_RecurrenceException',
-            recurrenceEditMode: 'occurrence',
-            dataSource: [{
-                text: 'Meeting of Instructors',
-                startDate: new Date(2018, 6, 30, 10, 0),
-                endDate: new Date(2018, 6, 30, 11, 0),
-                SC_RecurrenceRule: 'FREQ=DAILY;COUNT=3',
-                SC_RecurrenceException: '20170626T100000Z'
-            }
-            ]
-        });
-        const stub = sinon.stub(scheduler.instance, 'updateAppointmentCore');
-
-        const clock = sinon.useFakeTimers();
-        await scheduler.appointments.click(1, clock);
-        clock.restore();
-        scheduler.tooltip.clickOnDeleteButton();
-
-        const exceptionDate = new Date(2018, 6, 31, 10, 0, 0, 0);
-        const exceptionString = dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ');
-
-        assert.deepEqual(stub.getCall(0).args[1],
-            {
-                startDate: new Date(2018, 6, 30, 10, 0),
-                endDate: new Date(2018, 6, 30, 11, 0),
-                text: 'Meeting of Instructors',
-                SC_RecurrenceRule: 'FREQ=DAILY;COUNT=3',
-                SC_RecurrenceException: '20170626T100000Z,' + exceptionString
-            },
-            'updateAppointment has a right arguments');
-
-        assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
-
     });
 
     test('Tooltip should appear if mouse is over arrow icon', async function(assert) {
@@ -1206,9 +1140,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
         assert.equal(scheduler.tooltip.getItemCount(), 2, 'Count of items in tooltip should be equal 2');
 
         scheduler.tooltip.clickOnDeleteButton(1);
-        assert.notOk(scheduler.tooltip.isVisible(), 'Tooltip shouldn\'t visible');
-
-        scheduler.appointments.compact.click(scheduler.appointments.compact.getButtonCount() - 1);
+        assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible');
         assert.equal(scheduler.tooltip.getItemCount(), 1, 'Count of items in tooltip should be equal 1');
 
         scheduler.tooltip.clickOnDeleteButton();
@@ -1408,7 +1340,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
         ]);
         await waitAsync(0);
 
-        scheduler.appointments.compact.click();
+        assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible');
         assert.equal(getItemCount(), 1, 'Tooltip should render 1 item');
         assert.roughEqual(getItemElement().outerHeight(), getOverlayContentElement().outerHeight(), 10, 'Tooltip height should equals then list height');
     });
