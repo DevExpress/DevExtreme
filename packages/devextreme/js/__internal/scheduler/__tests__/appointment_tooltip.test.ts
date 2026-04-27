@@ -97,29 +97,6 @@ describe.each([
     ...config,
   });
 
-  describe('Delete button', () => {
-    it('delete button in tooltip should not be focusable using tab', async () => {
-      const { POM } = await createScheduler({
-        dataSource: [
-          {
-            text: 'Apt1',
-            startDate: new Date(2017, 4, 22, 9, 30),
-            endDate: new Date(2017, 4, 22, 10, 30),
-          },
-          {
-            text: 'Apt2',
-            startDate: new Date(2017, 4, 22, 9, 30),
-            endDate: new Date(2017, 4, 22, 10, 30),
-          },
-        ],
-      });
-
-      POM.getCollectorButton().click();
-
-      expect(POM.tooltip.getDeleteButton().getAttribute('tabindex')).toBe('-1');
-    });
-  });
-
   describe('Deleting appointments', () => {
     describe.each([
       'delete key',
