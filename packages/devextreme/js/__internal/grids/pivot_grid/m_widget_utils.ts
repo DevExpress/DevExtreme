@@ -284,6 +284,9 @@ function getFieldsDataType(fields) {
 }
 
 const DATE_INTERVAL_FORMATS = {
+  year(value) {
+    return String(value);
+  },
   month(value) {
     return localizationDate.getMonthNames()[value - 1];
   },
@@ -299,7 +302,7 @@ function setDefaultFieldValueFormatting(field) {
   if (field.dataType === 'date') {
     if (!field.format) {
       const dateIntervalFormat = DATE_INTERVAL_FORMATS[field.groupInterval];
-      setFieldProperty(field, 'format', dateIntervalFormat ?? getGlobalFormatByDataType('date'));
+      setFieldProperty(field, 'format', field.groupInterval ? dateIntervalFormat : getGlobalFormatByDataType('date'));
     }
   } else if (field.dataType === 'number') {
     const groupInterval = isNumeric(field.groupInterval)
