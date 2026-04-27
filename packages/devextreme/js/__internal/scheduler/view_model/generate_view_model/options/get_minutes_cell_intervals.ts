@@ -1,3 +1,4 @@
+import timeZoneUtils from '../../../m_utils_time_zone';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 
@@ -27,8 +28,12 @@ export const getMinutesCellIntervals = ({
 
   let columnIndex = 0;
   filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
-    const date = new Date(dayInterval.min);
-    while (date.getTime() < dayInterval.max) {
+    const firstAvailableDayTime = timeZoneUtils
+      .adjustDayIntervalMinForMidnightDST(dayInterval.min, startDayHour);
+    const intervalMin = Math.max(firstAvailableDayTime, interval.min);
+    const intervalMax = Math.min(dayInterval.max, interval.max);
+    const date = new Date(intervalMin);
+    while (date.getTime() < intervalMax) {
       const min = date.getTime();
       let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
 
