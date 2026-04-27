@@ -274,6 +274,11 @@ class DateBoxMask extends DateBoxBase {
     return true;
   }
 
+  _syncInputWithMask(): void {
+    this._input().val(this._getDisplayedText(this._maskValue));
+    this._caret(this._getActivePartProp('caret'));
+  }
+
   _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
 
@@ -284,17 +289,14 @@ class DateBoxMask extends DateBoxBase {
       && this._isSingleDigitKey(e)
       && this._isIMECommitPending;
 
-    if (isCompositionDigit) {
-      const digit = event.data ?? this._pendingIMEDigit ?? '';
-
+    if (isCompositionDigit && event.data) {
       if (!this._isIMEDigitProcessed) {
-        this._processInputKey(digit);
+        this._processInputKey(event.data);
         this._isIMEDigitProcessed = true;
         this._isIMECommitPending = true;
       }
 
-      this._input().val(this._getDisplayedText(this._maskValue));
-      this._caret(this._getActivePartProp('caret'));
+      this._syncInputWithMask();
 
       return;
     }
@@ -303,8 +305,7 @@ class DateBoxMask extends DateBoxBase {
       this._isIMECommitPending = false;
       this._pendingIMEDigit = null;
 
-      this._input().val(this._getDisplayedText(this._maskValue));
-      this._caret(this._getActivePartProp('caret'));
+      this._syncInputWithMask();
 
       return;
     }
