@@ -151,7 +151,7 @@ export const tasks = [
     Task_Start_Date: '2023-02-20T00:00:00',
     Task_Status: 'Completed',
     Task_Description:
-      "2022 Sales Report has to be completed so we can determine if major changes are required to sales strategy.\r\n\r\nJim Packard: I've forwarded everything I have via Email. If you need anything else, please let em know.",
+      "2022 Sales Report has to be completed so we can determine if major changes are required to sales strategy.\r\n\r\nJim Packard: I've forwarded everything I have via Email. If you need anything else, please let me know.",
     Task_Completion: 100,
   },
   {
