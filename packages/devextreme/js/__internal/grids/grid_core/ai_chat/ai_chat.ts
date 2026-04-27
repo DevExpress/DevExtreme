@@ -27,7 +27,7 @@ import type {
   AIChatOptions, CommandResult, CommandResults,
 } from './types';
 import {
-  getMessageIconName, getMessageStateClass, isAIChatMessage,
+  getMessageIconName, getMessageStateClass, hasCommandErrors, isAIChatMessage,
   needToShowRegenerateButton,
 } from './utils';
 
@@ -164,14 +164,14 @@ export class AIChat {
   }
 
   private renderMessageStateContent($parent: dxElementWrapper, message: Message): void {
-    switch (message.status) {
-      case 'success':
-        this.renderSuccessState($parent, message.commands);
+    switch (true) {
+      case (message.status === MessageStatus.Success || hasCommandErrors(message.commands)):
+        this.renderCommandList($parent, message.commands);
         break;
-      case 'error':
+      case message.status === MessageStatus.Error:
         this.renderErrorState($parent, message);
         break;
-      case 'pending':
+      case message.status === MessageStatus.Pending:
       default:
         this.renderPendingState($parent);
     }
@@ -199,7 +199,7 @@ export class AIChat {
     $parent: dxElementWrapper,
     command: CommandResult,
   ): void {
-    const commandStateClass = command.status === 'error'
+    const commandStateClass = command.status === MessageStatus.Error
       ? CLASSES.actionListItemError
       : CLASSES.actionListItemSuccess;
 
@@ -207,7 +207,7 @@ export class AIChat {
       .addClass(`${CLASSES.actionListItem} ${commandStateClass}`)
       .appendTo($parent);
 
-    const emoji = command.status === 'error' ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
+    const emoji = command.status === MessageStatus.Error ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
 
     $('<span>')
       .addClass(CLASSES.actionListItemIcon)
@@ -235,13 +235,6 @@ export class AIChat {
     commands.forEach((command) => {
       this.renderCommandListItem($list, command);
     });
-  }
-
-  private renderSuccessState(
-    $container: dxElementWrapper,
-    commands?: CommandResults,
-  ): void {
-    this.renderCommandList($container, commands);
   }
 
   private renderErrorState(

@@ -24,24 +24,13 @@
 .dx-ai-chat__message {
   display: flex;
   gap: $ai-chat-message-gap;
+  min-width: $ai-chat-message-width;
 }
 
 .dx-ai-chat__message-content {
   display: flex;
   flex-flow: column;
   gap: $ai-chat-message-content-gap;
-}
-
-.dx-ai-chat__message--success .dx-ai-chat__message-icon {
-  color: var(--dx-color-success);
-}
-
-.dx-ai-chat__message--error .dx-ai-chat__message-icon {
-  color: var(--dx-color-danger);
-}
-
-.dx-ai-chat__message-error-text {
-  color: var(--dx-color-danger);
 }
 
 .dx-ai-chat__message-header {
@@ -57,6 +46,10 @@
 
 .dx-ai-chat__message-regenerate-button {
   cursor: pointer;
+
+  &:hover {
+    border-radius: 4px;
+  }
 }
 
 .dx-ai-chat__action-list {
@@ -71,14 +64,6 @@
   display: flex;
   align-items: flex-start;
   gap: $ai-chat-message-content-gap;
-}
-
-.dx-ai-chat__action-list-item--success {
-  color: var(--dx-color-success);
-}
-
-.dx-ai-chat__action-list-item--error {
-  color: var(--dx-color-danger);
 }
 
 .dx-ai-chat__message-progressbar {

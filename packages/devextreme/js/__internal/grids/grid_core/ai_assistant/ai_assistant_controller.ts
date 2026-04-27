@@ -6,6 +6,7 @@ import type { DataSourceLike } from '@js/data/data_source';
 import type { Message } from '@js/ui/chat';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 
+import { hasCommandErrors } from '../ai_chat/utils';
 import { Controller } from '../m_modules';
 import { AI_ASSISTANT_AUTHOR, AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
 import { GridCommands } from './grid_commands';
@@ -68,8 +69,10 @@ export class AIAssistantController extends Controller {
   }
 
   private completeAIMessage(messageId: string, commands: CommandResults): void {
+    const messageStatus = hasCommandErrors(commands) ? MessageStatus.Error : MessageStatus.Success;
+
     this.updateAIMessage(messageId, {
-      status: MessageStatus.Success,
+      status: messageStatus,
       commands,
     });
   }
