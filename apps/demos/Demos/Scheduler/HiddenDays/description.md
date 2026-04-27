@@ -4,7 +4,6 @@ Use the checkboxes in the options panel to toggle day visibility. A validation m
 <!--split-->
 
 To hide specific days of the week, assign an array of day indexes to the [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property. The index values follow the JavaScript `Date.getDay()` convention:
- 
 - `0` - Sunday
 - `1` - Monday
 - `2` - Tuesday
