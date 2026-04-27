@@ -1,4 +1,4 @@
-This demo illustrates the Scheduler's [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property. The property accepts an array of day indexes (0 for Sunday through 6 for Saturday) and removes the specified days from the timetable. The hidden days are excluded from all views that display day columns (Week, Work Week, Timeline Week, and Month).
+This demo illustrates the Scheduler's [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property. The property accepts an array of day indexes (0 for Sunday through 6 for Saturday) and removes the specified days from the timetable. The hidden days are excluded from Scheduler views where this option is supported.
 
 Use the checkboxes in the options panel to toggle day visibility. A validation message appears if you attempt to hide all seven days, since at least one day must remain visible.
 <!--split-->
