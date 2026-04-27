@@ -3589,6 +3589,7 @@
                 "Title": "Timeline",
                 "Name": "Timelines",
                 "Widget": "Scheduler",
+                "Badge": "Updated",
                 "MvcAdditionalFiles": [
                   "/Models/EmployeeTask.cs",
                   "/Models/SampleData/TimelineTasks.cs"
@@ -3645,6 +3646,7 @@
                 "Title": "Resolve Time Conflicts",
                 "Name": "ResolveTimeConflicts",
                 "Widget": "Scheduler",
+                "Badge": "New",
                 "MvcAdditionalFiles": [
                   "/Models/Scheduler/ResolveTimeConflicts.cs"
                 ],
@@ -3654,6 +3656,7 @@
                 "Title": "Create from Selection",
                 "Name": "CreateFromSelection",
                 "Widget": "Scheduler",
+                "Badge": "New",
                 "DemoType": "Web"
               }
             ]
@@ -3715,6 +3718,7 @@
                 "Title": "Hidden Week Days",
                 "Name": "HiddenDays",
                 "Widget": "Scheduler",
+                "Badge": "New",
                 "Equivalents": "",
                 "DemoType": "Web"
               }
