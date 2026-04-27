@@ -1,4 +1,4 @@
-This demo integrates the DevExtreme Chat component with [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) to stream AI-generated responses in real time. As the AI model produces output token by token, the Chat component renders the response incrementally inside a message bubble. A typing indicator appears while the response begins, and the send button transforms into a stop button so users can cancel an in-progress stream at any time.
+This demo integrates the DevExtreme Chat component with [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) to stream AI-generated responses in real time. As the AI model produces output token by token, the Chat component renders the response incrementally inside a message bubble. A typing indicator appears while the response is being streamed, and the send button transforms into a stop button so users can cancel an in-progress stream at any time.
 
 The empty state displays custom suggestion cards. Clicking a card sends the corresponding prompt directly to the AI without extra user input.
 
@@ -6,7 +6,7 @@ The empty state displays custom suggestion cards. Clicking a card sends the corr
 
 ## Streaming AI Responses
 
-The demo calls the Azure OpenAI Chat Completions API with `stream: true`. Incoming delta chunks are passed through a `createDelayedRenderer` queue that introduces a short display delay between chunks to produce a smooth typing effect. Each chunk is appended to a growing buffer, and the assistant message is updated in the data store with every render cycle via a `store().push` update operation.
+The demo calls the Azure OpenAI Chat Completions API with `stream: true`. Incoming delta chunks are passed through a `createDelayedRenderer` queue that introduces a short display delay between chunks to produce a smooth typing effect. Each chunk is appended to a growing buffer, and the assistant message is updated in the data store with every render cycle via a `dataSource.store().push(...)` update operation.
 
 ## Stopping a Stream
 
