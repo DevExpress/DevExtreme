@@ -83,9 +83,6 @@ function getLicenseCheckParams({
       if (license.error === 'product-kind') {
         return { preview, error: 'W0021', warningType: 'no-devextreme-license' };
       }
-      if (license.error === 'trial-expired') {
-        return { preview, error: 'W0020', warningType: 'trial-expired' };
-      }
       return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
 
