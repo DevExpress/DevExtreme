@@ -9,6 +9,10 @@ const PAGER_CLASS = 'pager';
 export const MAX_PAGES_COUNT = 10;
 
 const getPageIndex = function (dataController) {
+  if (dataController.pageSize() === 0) {
+    return dataController.pageCount();
+  }
+
   // eslint-disable-next-line radix
   return 1 + (parseInt(dataController.pageIndex()) || 0);
 };
