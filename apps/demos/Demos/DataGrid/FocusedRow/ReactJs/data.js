@@ -331,7 +331,7 @@ export const tasks = [
     Task_Start_Date: '2023-03-21T00:00:00',
     Task_Status: 'Completed',
     Task_Description:
-      'The new NDA is now required for employment. I need a list of questions or issues so we can submit all paperwork to HR.\r\n\r\nKelly Rodriguez: I don\'t have any questions. Thank you.',
+      'The new NDA is now required for employment. I need a list of questions or issues so we can submit all paperwork to HR.\r\n\r\nKelly Rodriguez: I don\u2019t have any questions. Thank you.',
     Task_Completion: 100,
   },
   {
@@ -739,7 +739,7 @@ export const tasks = [
     Task_Start_Date: '2023-06-20T00:00:00',
     Task_Status: 'Completed',
     Task_Description:
-      'Ed asked me to get with you and prepare a full report of all questions being asked by customers about the recall and refund request forms. Legal does not want to take any action until we submit this.\r\n\r\nSammy Hill: This is crazy. I don\'t understand why legal does not change the language.',
+      'Ed asked me to get with you and prepare a full report of all questions being asked by customers about the recall and refund request forms. Legal does not want to take any action until we submit this.\r\n\r\nSammy Hill: This is crazy. I don\u2019t understand why legal does not change the language.',
     Task_Completion: 100,
   },
   {
@@ -991,7 +991,7 @@ export const tasks = [
     Task_Start_Date: '2023-09-03T00:00:00',
     Task_Status: 'Completed',
     Task_Description:
-      'Online sales are a disaster. We need to rework our entire marketing message and spend a lot of money on ad-words to generate more traffic to our site. We have great products. I don\'t understand the problem.\r\n\r\nEd Holmes: You know the reason. We had a recall a couple of months back.',
+      'Online sales are a disaster. We need to rework our entire marketing message and spend a lot of money on ad-words to generate more traffic to our site. We have great products. I don\u2019t understand the problem.\r\n\r\nEd Holmes: You know the reason. We had a recall a couple of months back.',
     Task_Completion: 100,
   },
   {
@@ -1003,7 +1003,7 @@ export const tasks = [
     Task_Start_Date: '2023-09-05T00:00:00',
     Task_Status: 'Completed',
     Task_Description:
-      'We need to do something to stop the fall in online sales right away. Management is putting a lot of pressure on me and I don\'t know exactly what to do. Send me a report with your opinions.\r\n\r\nHannah Brookly: Report Emailed to you.',
+      'We need to do something to stop the fall in online sales right away. Management is putting a lot of pressure on me and I don\u2019t know exactly what to do. Send me a report with your opinions.\r\n\r\nHannah Brookly: Report Emailed to you.',
     Task_Completion: 100,
   },
   {
