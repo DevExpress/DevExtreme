@@ -32,6 +32,9 @@ meta.forEach((section) => {
   section.Groups.forEach(collectDemos);
 });
 
+const primaryDemos = demos.filter((d) => !d.IsDuplicate);
+const duplicateDemos = demos.filter((d) => d.IsDuplicate);
+
 describe('All demos has corresponding folders', () => {
   demos.forEach((demo) => {
     test(`Demo: ${demo.Title} - ${demo.Widget}/${demo.Name}`, () => {
@@ -41,7 +44,6 @@ describe('All demos has corresponding folders', () => {
 });
 
 describe('All folders has corresponding demos', () => {
-  const primaryDemos = demos.filter((d) => !d.IsDuplicate);
   Object.keys(folders).forEach((widgetFolder) => {
     Object.keys(folders[widgetFolder]).forEach((demoFolder) => {
       test(`Folder: ${widgetFolder}/${demoFolder} has demo`, () => {
@@ -54,8 +56,6 @@ describe('All folders has corresponding demos', () => {
 });
 
 describe('Each duplicate demo has exactly one primary entry', () => {
-  const primaryDemos = demos.filter((d) => !d.IsDuplicate);
-  const duplicateDemos = demos.filter((d) => d.IsDuplicate);
   duplicateDemos.forEach((demo) => {
     test(`Duplicate: ${demo.Title} - ${demo.Widget}/${demo.Name}`, () => {
       const primaryMatches = primaryDemos
