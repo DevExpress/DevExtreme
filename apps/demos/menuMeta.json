@@ -104,7 +104,7 @@
         ]
       },
       {
-        "Name": "Forms",
+        "Name": "Form",
         "Equivalents": "dxForm, dx-form",
         "Groups": [
           {
