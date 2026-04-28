@@ -238,6 +238,41 @@ test('Page index should not reset when scrolling while the grid is being refresh
   height: 440,
 }));
 
+test('Pager info should show page 1 of 1 after changing pageSize to \'all\' with virtual scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = dataGrid.getPager();
+
+  await t
+    .click(pager.getNavPage('5').element)
+    .expect(pager.getNavPage('5').selected)
+    .ok()
+    .expect(pager.getInfoText().textContent)
+    .eql('Page 5 of 10 (50 items)');
+
+  await t
+    .click(pager.getPageSize(1).element)
+    .expect(pager.getInfoText().textContent)
+    .eql('Page 1 of 1 (50 items)');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(50).keys()].map((i) => ({ id: i })),
+  keyExpr: 'id',
+  showBorders: true,
+  scrolling: {
+    mode: 'virtual',
+  },
+  paging: {
+    pageSize: 5,
+  },
+  pager: {
+    visible: true,
+    allowedPageSizes: [5, 'all'],
+    showPageSizeSelector: true,
+    showInfo: true,
+    showNavigationButtons: true,
+  },
+  height: 400,
+}));
+
 test('No error should occur if dataSource is not defined and pageIndex is promise chained (T1256070)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
