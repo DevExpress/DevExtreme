@@ -258,18 +258,6 @@ const isLocalTimeMidnightDST = (date: Date): boolean => {
   return startDayDate.getHours() === 1;
 };
 
-const adjustDayIntervalMinForMidnightDST = (
-  dayIntervalMin: number,
-  startDayHour: number,
-): number => {
-  const date = createDateFromUTCWithLocalOffset(new Date(dayIntervalMin));
-  const isMidnightDST = startDayHour === 0 && isLocalTimeMidnightDST(date);
-
-  return isMidnightDST
-    ? dayIntervalMin + date.getHours() * 60 * 60 * 1000
-    : dayIntervalMin;
-};
-
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -297,7 +285,6 @@ const utils = {
   cacheTimeZones,
 
   isLocalTimeMidnightDST,
-  adjustDayIntervalMinForMidnightDST,
 };
 
 export default utils;
