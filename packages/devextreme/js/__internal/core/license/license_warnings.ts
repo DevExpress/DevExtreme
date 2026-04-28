@@ -39,8 +39,6 @@ export const TEMPLATES = Object.freeze({
     switch (type) {
       case 'incompatibleVersion':
         return `Incompatible DevExpress license key version (v${keyVersion}). Download and register an updated DevExpress license key (v${requiredVersion}+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).`;
-      case 'trialExpired':
-        return 'Your DevExpress trial period has expired. Purchase a license to continue using DevExpress product libraries.';
       default:
         return 'License key verification has failed.';
     }
@@ -105,12 +103,6 @@ export function logLicenseWarning(
       const incompatibleLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}`;
       pushToLastGroup(T.keyVerificationFailed());
       warnings.push([incompatibleLine]);
-      break;
-    }
-
-    case 'trial-expired': {
-      const expiredLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('trialExpired')}`;
-      warnings.push([expiredLine]);
       break;
     }
 
