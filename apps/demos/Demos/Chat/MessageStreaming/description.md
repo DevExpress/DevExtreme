@@ -10,7 +10,7 @@ The demo calls the Azure OpenAI Chat Completions API with `stream: true`. Incomi
 
 ## Stopping a Stream
 
-The demo creates an `AbortController` before each request and forwards its output to the Azure OpenAI SDK. When the user clicks the stop button, the demo calls `abortController.abort()` to cancel the in-progress HTTP request.
+The demo creates an `AbortController` before each request and passes its `signal` (`AbortSignal`) to the Azure OpenAI SDK in the request options. When the user clicks the stop button, the demo calls `abortController.abort()` to cancel the in-progress HTTP request.
 
 The [sendButtonOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#sendButtonOptions) property switches the button's `action` property to `'custom'` and the icon to `'stopfilled'` while streaming is active, then reverts to the default (send) configuration once streaming ends.
 
