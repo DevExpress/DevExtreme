@@ -1,7 +1,13 @@
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import type { ZodObject, ZodRawShape } from 'zod';
+import type { JsonSchema7Type } from 'zod-to-json-schema';
 
-type CommandStatus = 'success' | 'failure' | 'aborted';
+/** JSON Schema draft-07 object sent to the LLM. */
+export type JsonSchema = JsonSchema7Type & {
+  $schema?: string;
+};
+
+export type CommandStatus = 'success' | 'failure' | 'aborted';
 
 export interface CommandResult {
   status: CommandStatus;
