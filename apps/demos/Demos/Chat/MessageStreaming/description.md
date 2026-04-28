@@ -10,10 +10,10 @@ The demo calls the Azure OpenAI Chat Completions API with `stream: true`. Incomi
 
 ## Stopping a Stream
 
-The demo creates an `AbortController` before each request and forwards its signal to the Azure OpenAI SDK. When the user clicks the stop button, the demo calls `abortController.abort()`, which cancels the in-progress HTTP request.
+The demo creates an `AbortController` before each request and forwards its output to the Azure OpenAI SDK. When the user clicks the stop button, the demo calls `abortController.abort()` to cancel the in-progress HTTP request.
 
 The [sendButtonOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#sendButtonOptions) property switches the button's `action` property to `'custom'` and the icon to `'stopfilled'` while streaming is active, then reverts to the default (send) configuration once streaming ends.
 
 ## Custom Empty View
 
-The Chat component specifies an [emptyViewTemplate](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#emptyViewTemplate) that replaces the default empty state with custom suggestion cards. Clicking a card constructs a message and triggers the demo message sending flow directly, bypassing the text input.
+The Chat component specifies an [emptyViewTemplate](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#emptyViewTemplate) that replaces the default empty state with custom suggestion cards. Clicking a card creates a message and triggers the demo message sending flow directly, bypassing the text input.
