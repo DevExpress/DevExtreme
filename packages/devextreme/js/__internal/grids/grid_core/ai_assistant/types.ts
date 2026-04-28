@@ -38,3 +38,13 @@ export interface CommandResponse {
 }
 
 export type CommandResults = CommandResult[];
+
+export interface CommandMessages {
+  success: string;
+  failure: string;
+}
+
+export type CustomizeResponseText = (
+  commandName: string,
+  commandArgs: Record<string, unknown>,
+) => Partial<CommandMessages> | undefined;
