@@ -863,7 +863,7 @@ importers:
         version: 8.2.3
       openai:
         specifier: 4.73.1
-        version: 4.73.1(zod@3.23.8)
+        version: 4.73.1(zod@3.24.4)
     devDependencies:
       '@storybook/addon-docs':
         specifier: 10.1.9
@@ -1383,6 +1383,9 @@ importers:
       unplugin:
         specifier: ^3.0.0
         version: 3.0.0
+      zod:
+        specifier: ~3.24.4
+        version: 3.24.4
     devDependencies:
       '@babel/core':
         specifier: 7.29.0
@@ -18117,6 +18120,9 @@ packages:
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
+  zod@3.24.4:
+    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
 
   zod@4.1.13:
     resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
@@ -36146,7 +36152,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.73.1(zod@3.23.8):
+  openai@4.73.1(zod@3.24.4):
     dependencies:
       '@types/node': 18.19.130
       '@types/node-fetch': 2.6.13
@@ -36156,7 +36162,7 @@ snapshots:
       formdata-node: 4.4.1
       node-fetch: 2.7.0
     optionalDependencies:
-      zod: 3.23.8
+      zod: 3.24.4
     transitivePeerDependencies:
       - encoding
 
@@ -41728,6 +41734,8 @@ snapshots:
       zod: 4.3.6
 
   zod@3.23.8: {}
+
+  zod@3.24.4: {}
 
   zod@4.1.13: {}
 
