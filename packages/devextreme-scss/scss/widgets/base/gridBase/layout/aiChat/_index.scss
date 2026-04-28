@@ -30,6 +30,7 @@
 .dx-ai-chat__message-content {
   display: flex;
   flex-flow: column;
+  flex: 1;
   gap: $ai-chat-message-content-gap;
 }
 

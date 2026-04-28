@@ -61,3 +61,11 @@
     }
   }
 }
+
+@mixin ai-chat-message-icon(
+  $icon-size,
+) {
+  .dx-ai-chat__message-icon, .dx-ai-chat__message-regenerate-button {
+    font-size: $icon-size;
+  }
+}
