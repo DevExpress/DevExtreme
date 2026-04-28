@@ -2797,6 +2797,52 @@ QUnit.module('keyboard navigation - focus management', {
         assert.notOk(clearButton.option('focusStateEnabled'), 'clear button has focusStateEnabled=false');
         assert.notOk(cancelButton.option('focusStateEnabled'), 'cancel button has focusStateEnabled=false');
     });
+
+    QUnit.test('toolbar buttons should update focusStateEnabled when Lookup focusStateEnabled changes from true to false at runtime', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            showClearButton: true,
+            showCancelButton: true,
+            applyValueMode: 'useButtons',
+            opened: true,
+        }).dxLookup('instance');
+
+        const $overlayContent = $(instance.content()).parent();
+
+        assert.ok($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button initially has focusStateEnabled=true');
+        assert.ok($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button initially has focusStateEnabled=true');
+        assert.ok($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button initially has focusStateEnabled=true');
+
+        instance.option('focusStateEnabled', false);
+
+        assert.notOk($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button updated to focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button updated to focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button updated to focusStateEnabled=false');
+    });
+
+    QUnit.test('toolbar buttons should update focusStateEnabled when Lookup focusStateEnabled changes from false to true at runtime', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: false,
+            showClearButton: true,
+            showCancelButton: true,
+            applyValueMode: 'useButtons',
+            opened: true,
+        }).dxLookup('instance');
+
+        const $overlayContent = $(instance.content()).parent();
+
+        assert.notOk($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button initially has focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button initially has focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button initially has focusStateEnabled=false');
+
+        instance.option('focusStateEnabled', true);
+
+        assert.ok($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button updated to focusStateEnabled=true');
+        assert.ok($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button updated to focusStateEnabled=true');
+        assert.ok($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button updated to focusStateEnabled=true');
+    });
 });
 
 QUnit.module('Native scrolling', () => {
