@@ -1,4 +1,4 @@
-The DevExtreme Scheduler allows you to exclude specific days of week (using the [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property).
+The DevExtreme Scheduler allows you to exclude specific days of the week (using the [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property).
 
 Use checkboxes in the options panel to toggle day visibility. A validation message appears if you attempt to hide all seven days, since at least one day must remain visible.
 <!--split-->
