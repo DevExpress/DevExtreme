@@ -1047,7 +1047,7 @@
           "pnpm nx copy:vendor:js devextreme",
           "pnpm nx copy:vendor:css devextreme"
         ],
-        "parallel": false
+        "parallel": true
       },
       "outputs": [
         "{projectRoot}/artifacts/js/dx-exceljs-fork.js",
