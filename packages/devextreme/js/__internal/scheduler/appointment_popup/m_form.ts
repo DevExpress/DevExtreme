@@ -40,13 +40,19 @@ import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from
 
 type SchedulerEditingObject = Exclude<NonNullable<SchedulerProperties['editing']>, boolean>;
 
+export type CreateComponentFn = (
+  element: string | HTMLElement | dxElementWrapper | Element,
+  Component: any,
+  options: any,
+) => any;
+
 export interface AppointmentFormConfig {
   dataAccessors: AppointmentDataAccessor;
   editing: SchedulerProperties['editing'];
   resourceManager: ResourceManager;
   firstDayOfWeek: number;
   startDayHour: number;
-  createComponent: (element: dxElementWrapper, Component: any, options: any) => any;
+  createComponent: CreateComponentFn;
   getCalculatedEndDate: (startDate: Date) => Date;
 }
 

@@ -20,7 +20,11 @@ import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from
 
 export interface RecurrenceFormConfig {
   firstDayOfWeek: number;
-  createComponent: (element: dxElementWrapper, Component: any, options: any) => any;
+  createComponent: (
+    element: string | HTMLElement | dxElementWrapper | Element,
+    Component: any,
+    options: any,
+  ) => any;
 }
 
 const CLASSES = {
