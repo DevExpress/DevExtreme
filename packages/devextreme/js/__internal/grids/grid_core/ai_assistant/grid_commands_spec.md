@@ -17,7 +17,7 @@ Each `GridCommand.schema` is defined as a `ZodObject` instead of a raw `JsonSche
 2. `AIAssistantIntegrationController.buildContext()` — collects current grid state for the AI prompt (uses `this.component`)
 3. AI returns `ExecuteGridAssistantCommandResult` (`{ actions: [{ name, args }] }`)
 4. `GridCommands.validateResponse(response)` — structural validation against merged schema; any mismatch → fail entirely
-5. `GridCommands.executeActions(actions, customizeResponseText?)` — runs commands in AI-returned order, awaiting each before next; returns `CommandResult[]` used directly to render response
+5. `GridCommands.executeCommands(actions, customizeResponseText?)` — runs commands in AI-returned order, awaiting each before next; returns `CommandResult[]` used directly to render response
 
 ## File Structure
 
@@ -113,7 +113,7 @@ constructor(component: InternalGrid, commands: GridCommand[])
 ```
 
 **Acceptance criteria:**
-- [ ] Stores `component` for use by `executeActions`
+- [ ] Stores `component` for use by `executeCommands`
 - [ ] Stores commands in an internal registry indexed by `name`
 - [ ] Throws if duplicate command names are provided
 - [ ] Accepts an empty commands array (no commands registered)
@@ -136,21 +136,21 @@ Returns `{ status: 'failure', message: message ?? defaultFailureMessage }`.
 
 ### `abort(): void`
 
-Sets an internal `_aborted` flag to `true`. When `executeActions` is running, it checks this flag before each command iteration. If set, execution stops and returns partial results with an `aborted` entry for the first skipped command. Calling `abort()` when not executing still sets the flag, but the flag is only reset when `executeActions` actually begins execution (i.e., passes the reentrancy guard). A concurrent call rejected by the reentrancy guard does **not** reset `_aborted`.
+Sets an internal `_aborted` flag to `true`. When `executeCommands` is running, it checks this flag before each command iteration. If set, execution stops and returns partial results with an `aborted` entry for the first skipped command. Calling `abort()` when not executing still sets the flag, but the flag is only reset when `executeCommands` actually begins execution (i.e., passes the reentrancy guard). A concurrent call rejected by the reentrancy guard does **not** reset `_aborted`.
 
 **Acceptance criteria:**
 - [ ] Sets `_aborted` to `true`
 - [ ] Idempotent — calling multiple times has no additional effect
-- [ ] Calling when not executing sets the flag; the flag persists until the next successful `executeActions` start
+- [ ] Calling when not executing sets the flag; the flag persists until the next successful `executeCommands` start
 
 ### `isExecuting(): boolean`
 
 Returns the current value of the internal `_executing` flag (the same flag used by the reentrancy guard).
 
 **Acceptance criteria:**
-- [ ] Returns `true` while `executeActions` is in progress
-- [ ] Returns `false` before `executeActions` is called
-- [ ] Returns `false` after `executeActions` completes (normally, via abort, or via reentrancy rejection)
+- [ ] Returns `true` while `executeCommands` is in progress
+- [ ] Returns `false` before `executeCommands` is called
+- [ ] Returns `false` after `executeCommands` completes (normally, via abort, or via reentrancy rejection)
 
 ### JSON Schema LLM Constraints
 
@@ -270,19 +270,19 @@ Validates the AI response against the per-command schemas defined in each `GridC
 - [ ] Returns `true` for no-arg commands when `args` is `{}`
 - [ ] Rejects the entire response on first mismatch
 
-### `async executeActions(actions, customizeResponseText?): Promise<CommandResult[]>`
+### `async executeCommands(commands, customizeResponseText?): Promise<CommandResult[]>`
 
-**Precondition:** `validateResponse` must be called before `executeActions`. If the response is invalid, `executeActions` should not be called. However, as a defensive measure, if an unknown command name is encountered during execution, it records a `failure` result for that action and continues to the next.
+**Precondition:** `validateResponse` must be called before `executeCommands`. If the response is invalid, `executeCommands` should not be called. However, as a defensive measure, if an unknown command name is encountered during execution, it records a `failure` result for that command and continues to the next.
 
-**Reentrancy guard:** `executeActions` tracks whether it is currently executing via an internal `_executing` flag. If called while a previous execution is still in progress, it throws an error immediately (does not queue or execute). This makes the programming error explicit and impossible to silently ignore.
+**Reentrancy guard:** `executeCommands` tracks whether it is currently executing via an internal `_executing` flag. If called while a previous execution is still in progress, it throws an error immediately (does not queue or execute). This makes the programming error explicit and impossible to silently ignore.
 
-**Abort support:** `_aborted` is reset to `false` only when `executeActions` successfully starts (passes the reentrancy guard). A concurrent call rejected by the reentrancy guard does **not** reset the flag — so `abort()` called during an in-progress execution is never lost. Before each loop iteration, the method checks `_aborted`. If `true`, it pushes a `CommandResult` with `status: 'aborted'` and a default message (e.g. `'Command execution aborted'`) for the first skipped command, then breaks. The method returns the partial `CommandResult[]` containing results for already-completed commands plus one `aborted` entry. Remaining actions are not represented in results. After abort-induced exit, `_executing` is set to `false` so subsequent calls work normally.
+**Abort support:** `_aborted` is reset to `false` only when `executeCommands` successfully starts (passes the reentrancy guard). A concurrent call rejected by the reentrancy guard does **not** reset the flag — so `abort()` called during an in-progress execution is never lost. Before each loop iteration, the method checks `_aborted`. If `true`, it pushes a `CommandResult` with `status: 'aborted'` and a default message (e.g. `'Command execution aborted'`) for the first skipped command, then breaks. The method returns the partial `CommandResult[]` containing results for already-completed commands plus one `aborted` entry. Remaining commands are not represented in results. After abort-induced exit, `_executing` is set to `false` so subsequent calls work normally.
 
 - Uses `this.component` (no `component` parameter)
 - Resets `_aborted = false` only on actual execution start (not on reentrancy rejection)
-- Iterates actions in AI-returned order
+- Iterates commands in AI-returned order
 - Before each iteration, checks `_aborted`; if `true`, pushes `{ status: 'aborted', message: defaultAbortedMessage }` and breaks
-- For each action: finds matching `GridCommand` by `name`, calls `execute(this.component, { success, failure })` to get executor, then calls `executor(args)`
+- For each command: finds matching `GridCommand` by `name`, calls `execute(this.component, { success, failure })` to get executor, then calls `executor(args)`
 - If command name is unknown (defensive), records `failure('Unknown command: <name>')` and continues
 - Awaits each command before proceeding to next
 - If executor throws, catches and records `failure(<error message>)`
@@ -292,14 +292,14 @@ Validates the AI response against the per-command schemas defined in each `GridC
 **Acceptance criteria:**
 - [ ] Uses `this.component` (no `component` parameter)
 - [ ] Resets `_aborted` to `false` only on actual execution start (not on reentrancy rejection)
-- [ ] Executes commands in the order provided in `actions` array
+- [ ] Executes commands in the order provided in `commands` array
 - [ ] Each command is awaited before the next one starts
-- [ ] Returns one `CommandResult` per executed action (plus one `aborted` entry if aborted)
+- [ ] Returns one `CommandResult` per executed command (plus one `aborted` entry if aborted)
 - [ ] A throwing executor produces `CommandResult` with `status: 'failure'` and the error message
 - [ ] An async executor that rejects produces `CommandResult` with `status: 'failure'`
 - [ ] Unknown command name (defensive) produces `CommandResult` with `status: 'failure'` and message containing the command name
-- [ ] Returns empty array for empty `actions`
-- [ ] If called while another `executeActions` is in progress, throws an error
+- [ ] Returns empty array for empty `commands`
+- [ ] If called while another `executeCommands` is in progress, throws an error
 - [ ] After the first call completes, subsequent calls work normally
 - [ ] Commands that succeed have `status: 'success'`; commands that fail have `status: 'failure'`
 - [ ] `abort()` called during execution → results contain completed commands + one `{ status: 'aborted' }` entry, then stops
@@ -307,14 +307,14 @@ Validates the AI response against the per-command schemas defined in each `GridC
 - [ ] `_aborted` is reset only on actual execution start, so a previous `abort()` does not affect the next successful call
 - [ ] A concurrent call rejected by reentrancy guard does **not** reset `_aborted`
 - [ ] `_executing` is set to `false` after abort-induced exit
-- [ ] Only one `aborted` result is added (for the first skipped command); remaining actions are not represented
+- [ ] Only one `aborted` result is added (for the first skipped command); remaining commands are not represented
 - [ ] Without `customizeResponseText`, all messages are defaults from command executors
-- [ ] `customizeResponseText` is called once per executed action with correct `commandName` and `commandArgs`
+- [ ] `customizeResponseText` is called once per executed command with correct `commandName` and `commandArgs`
 - [ ] `customizeResponseText` returning `{ success: 'X', failure: 'Y' }` replaces the message for the matching status
 - [ ] `customizeResponseText` returning `{ success: 'X' }` only replaces message when status is `'success'`; `'failure'` stays default
 - [ ] `customizeResponseText` returning `undefined` leaves the default message unchanged
-- [ ] `customizeResponseText` is not called for the `aborted` entry or for actions skipped by abort
-- [ ] `customizeResponseText` is not called for actions that were not executed (e.g. validation failed)
+- [ ] `customizeResponseText` is not called for the `aborted` entry or for commands skipped by abort
+- [ ] `customizeResponseText` is not called for commands that were not executed (e.g. validation failed)
 
 ### Message Customization
 
@@ -336,7 +336,7 @@ type CustomizeResponseText = (
 
 #### Usage
 
-`customizeResponseText` is passed to `GridCommands` (e.g. via constructor or `executeActions` options). For each executed command, if provided, it is called with the command name and args. The callback can:
+`customizeResponseText` is passed to `GridCommands` (e.g. via constructor or `executeCommands` options). For each executed command, if provided, it is called with the command name and args. The callback can:
 
 - Return `{ success, failure }` — overrides both messages
 - Return `{ success }` or `{ failure }` — overrides only specified, keeps default for the other
@@ -365,11 +365,11 @@ customizeResponseText: (commandName, commandArgs) => {
 }
 ```
 
-#### Integration in `executeActions`
+#### Integration in `executeCommands`
 
 ```typescript
-// Inside GridCommands.executeActions:
-for (const { name, args } of actions) {
+// Inside GridCommands.executeCommands:
+for (const { name, args } of commands) {
   if (this._aborted) {
     results.push({ status: 'aborted', message: defaultAbortedMessage });
     break;
@@ -668,7 +668,7 @@ In `m_ai_assistant_integration_controller.ts`:
 3. `buildResponseSchema()` → `gridCommands.buildResponseSchema()`
 4. In `onComplete` callback:
    - `gridCommands.validateResponse(response)` → if `false`, return failure text
-   - `const results = await gridCommands.executeActions(response.actions, customizeResponseText)`
+   - `const results = await gridCommands.executeCommands(response.actions, customizeResponseText)`
    - Use `results` directly to render response message in chat (handle `aborted` status entries appropriately)
 5. In `abortRequest()`:
    - Call existing `this.abort?.()` to abort LLM request
@@ -711,7 +711,7 @@ For next iteration, we might consider:
 - **Structured validation errors:** `validateResponse` currently returns a bare `boolean`. For production debugging, a structured result like `{ valid: boolean; errors: ValidationError[] }` would help explain *why* validation failed. Acceptable for v1 since the controller shows a generic failure message.
 - **Schema versioning:** No `schemaVersion` field or graceful degradation for unknown commands. If commands are added/removed between versions and the LLM provider caches tool definitions, stale schemas will hard-fail at validation. Low risk for v1 since `buildResponseSchema()` is called dynamically per request.
 - **Mid-command abort:** Abort is only checked between commands. If a single command executor is long-running (e.g. `selectAll` on a large dataset), it cannot be interrupted mid-execution. A future iteration could pass an `AbortSignal` to `CommandExecutor` so individual commands can cooperatively check for cancellation.
-- **Command executor return shape validation:** Currently, all built-in command executors are guaranteed to return a valid `CommandResult` (`{ status, message }`). When custom commands are allowed, `executeActions` should defensively validate the executor's return value. We must agree how to treat malformed results.
+- **Command executor return shape validation:** Currently, all built-in command executors are guaranteed to return a valid `CommandResult` (`{ status, message }`). When custom commands are allowed, `executeCommands` should defensively validate the executor's return value. We must agree how to treat malformed results.
 - **Per-command timeouts:** No timeout mechanism for individual command executors. A misbehaving executor could hang indefinitely.
 - **Actions array length limit:** No cap on the number of actions in a response.
 - **No input sanitization on args.** LLM-generated args are passed directly to `component.option()` and `columnOption()`. If `dataField` contains a crafted value, could it access unintended columns or trigger injection? The spec should note that args must be validated against actual grid state (e.g., `dataField` must match an existing column).
@@ -725,7 +725,7 @@ We consider these as excessive:
 ## Implementation Order
 
 1. `types.ts` — interfaces
-2. `grid_commands.ts` — class skeleton with `buildResponseSchema`, `validateResponse`, `executeActions`
+2. `grid_commands.ts` — class skeleton with `buildResponseSchema`, `validateResponse`, `executeCommands`
 3. Tests for `GridCommands` class
 4. Commands one by one (each includes schema + execute + tests):
    1. `sorting.ts` (sorting, clearSorting)
