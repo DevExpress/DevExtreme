@@ -73,7 +73,7 @@ test('DateBox with datetime and root element as container (T1193495)', async (t)
   },
 }, '#container'));
 
-test.meta({ themes: [Themes.materialBlue, Themes.genericLight, Themes.fluentBlue] })('DateBox with datetime and opened AM/PM select (T1312677, T1327616)', async (t) => {
+test.meta({ themes: [Themes.materialBlue, Themes.genericLight, Themes.fluentBlue], browserSize: [1200, 500] })('DateBox with datetime and opened AM/PM select (T1312677, T1327616)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const timeViewSelect = Selector(`#container .${TIME_VIEW_FIELD_CLASS} .${SELECT_BOX_CONTAINER_CLASS}`);
