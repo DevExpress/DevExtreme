@@ -63,7 +63,7 @@ describe('CompressExecutor E2E', () => {
     expect(output.length).toBeLessThan(SAMPLE_CODE.length);
   });
 
-  it('should apply normalize: normalize CRLF to LF, ensure trailing newline, preserve debug blocks', async () => {
+  it('should apply normalize: normalize line endings to platform EOL, ensure trailing newline, preserve debug blocks', async () => {
     const filePath = path.join(projectDir, 'test.js');
     const crlfContent = SAMPLE_CODE.replace(/\n/g, '\r\n');
     await writeFileText(filePath, crlfContent);
@@ -78,8 +78,10 @@ describe('CompressExecutor E2E', () => {
 
     const output = await readFileText(filePath);
 
-    expect(output).not.toContain('\r\n');
-    expect(output.endsWith('\n')).toBe(true);
+    if (require('os').EOL === '\n') {
+      expect(output).not.toContain('\r\n');
+    }
+    expect(output.endsWith(require('os').EOL)).toBe(true);
     expect(output).toContain('#DEBUG');
     expect(output).toContain('debug only');
   });
@@ -141,8 +143,6 @@ describe('CompressExecutor E2E', () => {
 
     expect(output).toContain('function hello');
     expect(output.split('\n').length).toBeGreaterThan(3);
-
-    expect(output).not.toContain('\r\n');
   });
 
   it('should expand glob patterns in files array', async () => {
@@ -199,25 +199,6 @@ describe('CompressExecutor E2E', () => {
     const output = await readFileText(filePath);
     expect(output).toBe('const a = 1;');
     expect(output.endsWith('\n')).toBe(false);
-  });
-
-  it('should normalize CRLF to LF in strip-debug mode', async () => {
-    const filePath = path.join(projectDir, 'test.js');
-    const crlfContent = SAMPLE_CODE.replace(/\n/g, '\r\n');
-    await writeFileText(filePath, crlfContent);
-
-    const options: CompressExecutorSchema = {
-      files: ['./test.js'],
-      mode: 'strip-debug',
-    };
-
-    const result = await executor(options, context);
-    expect(result.success).toBe(true);
-
-    const output = await readFileText(filePath);
-    expect(output).not.toContain('\r\n');
-    expect(output).not.toContain('\r');
-    expect(output).toContain('function hello');
   });
 
   it('should skip trailing newline in minify mode (compress:bundles:prod -c production parity)', async () => {

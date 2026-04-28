@@ -119,8 +119,7 @@ const STRATEGIES: Record<CompressModeName, CompressStrategy> = {
     normalizeOutput(await runMinify(stripDebugBlocks(content), eulaUrl), trailingNewline),
   beautify: async (content, { eulaUrl, trailingNewline }) =>
     normalizeOutput(await runBeautify(content, eulaUrl), trailingNewline),
-  'strip-debug': async (content, { trailingNewline }) =>
-    normalizeOutput(stripDebugBlocks(content), trailingNewline),
+  'strip-debug': async (content) => stripDebugBlocks(content),
   normalize: async (content, { trailingNewline }) => normalizeOutput(content, trailingNewline),
 };
 
