@@ -6,11 +6,11 @@ The empty Chat displays custom suggestion cards. Clicking a card sends the corre
 
 ## Streaming AI Responses
 
-The demo calls the Azure OpenAI Chat Completions API with `stream: true`. Incoming delta chunks are passed through a `createDelayedRenderer` queue that introduces a short display delay between chunks to produce a smooth typing effect. Each chunk is appended to a growing buffer, and the assistant message is updated in the data store with every render cycle via a `dataSource.store().push(...)` update operation.
+The demo calls the Azure OpenAI Chat Completions API with `stream: true`. Incoming delta chunks are passed through a `createDelayedRenderer` queue that introduces a short display delay between chunks to produce a smooth typing effect. The demo appends each chunk to a growing buffer and updates the assistant message in the data store with every render cycle via a `dataSource.store().push(...)` call.
 
 ## Stopping a Stream
 
-An `AbortController` is created before each request and its signal is forwarded to the Azure OpenAI SDK. When the user clicks the stop button, `abortController.abort()` is called, which cancels the in-progress HTTP request.
+The demo creates an `AbortController` before each request and forwards its signal to the Azure OpenAI SDK. When the user clicks the stop button, the demo calls `abortController.abort()`, which cancels the in-progress HTTP request.
 
 The [sendButtonOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#sendButtonOptions) property switches the button's `action` property to `'custom'` and the icon to `'stopfilled'` while streaming is active, then reverts to the default (send) configuration once streaming ends.
 
