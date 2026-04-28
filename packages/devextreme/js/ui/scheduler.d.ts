@@ -375,6 +375,9 @@ export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
  * @inherits EventInfo
  */
 export type SelectionEndEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid
+   */
   readonly selectedCellData: Array<any>;
 };
 
