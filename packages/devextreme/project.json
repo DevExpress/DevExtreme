@@ -675,19 +675,107 @@
         "{projectRoot}/artifacts/js/dx.ai-integration.js"
       ]
     },
-    "build:vectormap": {
-      "executor": "nx:run-commands",
+    "build:vectormap:generate": {
+      "executor": "devextreme-nx-infra-plugin:vectormap",
       "options": {
-        "command": "gulp vectormap",
-        "cwd": "{projectRoot}"
+        "sourceDir": "./js/viz/vector_map.utils",
+        "settingsFile": "./_settings.json",
+        "sourcesDir": "./build/vectormap-sources",
+        "sourcesSettingsFile": "./_settings.js",
+        "utilsOutDir": "./artifacts/js/vectormap-utils",
+        "dataOutDir": "./artifacts/js/vectormap-data",
+        "utilsTemplatePath": "./build/gulp/vectormaputils-template.jst",
+        "dataTemplatePath": "./build/gulp/vectormapdata-template.jst"
       },
       "inputs": [
-        "{projectRoot}/build/gulp/vectormap.js"
+        "{projectRoot}/js/viz/vector_map.utils/**/*",
+        "{projectRoot}/build/vectormap-sources/**/*",
+        "{projectRoot}/build/gulp/vectormaputils-template.jst",
+        "{projectRoot}/build/gulp/vectormapdata-template.jst"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/vectormap-utils",
         "{projectRoot}/artifacts/js/vectormap-data"
       ]
+    },
+    "build:vectormap:headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "options": {
+        "targetDirectory": "./artifacts/js/vectormap-utils",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/",
+        "separatorBetweenBannerAndContent": "",
+        "prependAfterLicense": "\"use strict\";\n\n"
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/js/vectormap-utils/**/*",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/vectormap-utils"
+      ]
+    },
+    "compress:vectormap:strip-debug": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
+        ],
+        "mode": "strip-only"
+      }
+    },
+    "compress:vectormap:beautify": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js"
+        ],
+        "mode": "beautify",
+        "eulaUrl": "https://js.devexpress.com/Licensing/"
+      }
+    },
+    "compress:vectormap:minify": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
+        ],
+        "mode": "minify",
+        "removeDebug": true,
+        "eulaUrl": "https://js.devexpress.com/Licensing/"
+      }
+    },
+    "build:vectormap": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx build:vectormap:generate devextreme",
+          "pnpm nx build:vectormap:headers devextreme",
+          "pnpm nx compress:vectormap:strip-debug devextreme"
+        ],
+        "parallel": false
+      },
+      "inputs": [
+        "{projectRoot}/js/viz/vector_map.utils/**/*",
+        "{projectRoot}/build/vectormap-sources/**/*",
+        "{projectRoot}/build/gulp/vectormaputils-template.jst",
+        "{projectRoot}/build/gulp/vectormapdata-template.jst",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/vectormap-utils",
+        "{projectRoot}/artifacts/js/vectormap-data"
+      ],
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx build:vectormap:generate devextreme",
+            "pnpm nx build:vectormap:headers devextreme",
+            "pnpm nx compress:vectormap:beautify devextreme",
+            "pnpm nx compress:vectormap:minify devextreme"
+          ]
+        }
+      }
     },
     "build:aspnet": {
       "executor": "nx:run-commands",

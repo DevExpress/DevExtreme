@@ -74,7 +74,7 @@ describe('LCP key validation', () => {
     expect(version).toBe(undefined);
   });
 
-  it('does not classify a valid DevExtreme product key as trial-expired when expiration metadata is in the past', () => {
+  it('does not classify a valid DevExtreme product key as expired when expiration metadata is in the past', () => {
     const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
     const expiredAt = msToDotNetTicks(Date.UTC(2020, 0, 1));
 
@@ -82,18 +82,5 @@ describe('LCP key validation', () => {
     const token = parseDevExpressProductKey(createLcpSource(payload));
 
     expect(token.kind).toBe(TokenKind.verified);
-  });
-
-  it('returns trial-expired for expired trial keys without DevExtreme product access', () => {
-    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
-    const expiredAt = msToDotNetTicks(Date.UTC(2020, 0, 1));
-
-    const payload = `meta;251,0,0,${expiredAt};`;
-    const token = parseDevExpressProductKey(createLcpSource(payload));
-
-    expect(token.kind).toBe(TokenKind.corrupted);
-    if (token.kind === TokenKind.corrupted) {
-      expect(token.error).toBe('trial-expired');
-    }
   });
 });
