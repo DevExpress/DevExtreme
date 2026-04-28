@@ -20,9 +20,9 @@
                 "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
                 "Modules": "openai"
               }
-             ]
-           }
-         ]
+            ]
+          }
+        ]
       },
       {
         "Name": "Tree List",
