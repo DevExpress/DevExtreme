@@ -52,9 +52,13 @@ ai_assistant/
 ## Types (`types.ts`)
 
 ```typescript
-import { z, ZodObject } from 'zod';
+import type { ZodObject, ZodRawShape } from 'zod';
+import type { JsonSchema7Type } from 'zod-to-json-schema';
 
-type JsonSchema = Record<string, unknown>;
+/** JSON Schema draft-07 object sent to the LLM. */
+type JsonSchema = JsonSchema7Type & {
+  $schema?: string;
+};
 
 type CommandStatus = 'success' | 'failure' | 'aborted';
 
@@ -64,8 +68,8 @@ interface CommandResult {
 }
 
 interface CommandCallbacks {
-  success(message?: string): CommandResult;
-  failure(message?: string): CommandResult;
+  success: (message?: string) => CommandResult;
+  failure: (message?: string) => CommandResult;
 }
 
 type CommandExecutor = (args: Record<string, unknown>) => Promise<CommandResult>;
@@ -73,11 +77,11 @@ type CommandExecutor = (args: Record<string, unknown>) => Promise<CommandResult>
 interface GridCommand {
   name: string;
   description: string; // Human-readable command purpose, used as branch-level description in schema
-  schema: ZodObject<any>;  // Zod schema defining the `args` shape; converted to JSON Schema by buildResponseSchema(), used by validateResponse() via .safeParse()
-  execute(
+  schema: ZodObject<ZodRawShape>;  // Zod schema defining the `args` shape; converted to JSON Schema by buildResponseSchema(), used by validateResponse() via .safeParse()
+  execute: (
     component: InternalGrid,
     callbacks: CommandCallbacks,
-  ): CommandExecutor;
+  ) => CommandExecutor;
 }
 ```
 
