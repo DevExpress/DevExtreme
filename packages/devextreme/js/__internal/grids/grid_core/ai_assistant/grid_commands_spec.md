@@ -661,7 +661,7 @@ for (const { name, args } of commands) {
   TODO
   ```
 
-In `m_ai_assistant_integration_controller.ts`:
+In `ai_assistant_integration_controller.ts`:
 
 1. Instantiate `GridCommands` with `this.component` and full command list
 2. `buildContext()` — implemented directly on the controller (not delegated to `gridCommands`)
