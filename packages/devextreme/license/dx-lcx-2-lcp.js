@@ -141,7 +141,6 @@ const TokenKind = Object.freeze({
 const GENERAL_ERROR = { kind: TokenKind.corrupted, error: 'general' };
 const DESERIALIZATION_ERROR = { kind: TokenKind.corrupted, error: 'deserialization' };
 const PRODUCT_KIND_ERROR = { kind: TokenKind.corrupted, error: 'product-kind' };
-const TRIAL_EXPIRED_ERROR = { kind: TokenKind.corrupted, error: 'trial-expired' };
 
 function readDevExtremeVersion() {
     try {
@@ -219,12 +218,6 @@ function parseLCP(lcpString) {
         }
 
         const maxVersionAllowed = findLatestDevExtremeVersion(products);
-        if(!maxVersionAllowed) {
-            const maxExpiration = getMaxExpiration(products);
-            if(maxExpiration !== Infinity && maxExpiration < Date.now()) {
-                return { ...TRIAL_EXPIRED_ERROR, licenseId };
-            }
-        }
 
         if(!maxVersionAllowed) { 
             return { ...PRODUCT_KIND_ERROR, licenseId }; 
@@ -260,9 +253,6 @@ function getLCPInfo(lcpString) {
                 break;
             case 'product-kind':
                 warning = { type: 'trial' };
-                break;
-            case 'trial-expired':
-                warning = { type: 'trialExpired' };
                 break;
         }
     } else {

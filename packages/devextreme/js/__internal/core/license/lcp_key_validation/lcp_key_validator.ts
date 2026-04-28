@@ -6,7 +6,6 @@ import {
   PRODUCT_KIND_ERROR,
   type Token,
   TokenKind,
-  TRIAL_EXPIRED_ERROR,
   VERIFICATION_ERROR,
 } from '../types';
 import {
@@ -14,7 +13,7 @@ import {
   RSA_PUBLIC_KEY_XML,
   SIGN_LENGTH,
 } from './const';
-import { findLatestDevExtremeVersion, getMaxExpiration } from './license_info';
+import { findLatestDevExtremeVersion } from './license_info';
 import { createProductInfo, type ProductInfo } from './product_info';
 import {
   dotNetTicksToMs,
@@ -95,13 +94,6 @@ export function parseDevExpressProductKey(productsLicenseSource: string): Token 
     }
 
     const maxVersionAllowed = findLatestDevExtremeVersion({ products });
-
-    if (!maxVersionAllowed) {
-      const maxExpiration = getMaxExpiration({ products });
-      if (maxExpiration !== Infinity && maxExpiration < Date.now()) {
-        return TRIAL_EXPIRED_ERROR;
-      }
-    }
 
     if (!maxVersionAllowed) {
       return PRODUCT_KIND_ERROR;
