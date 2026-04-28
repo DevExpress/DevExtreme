@@ -126,6 +126,9 @@ QUnit.module('focus policy', {
             assert.notOk(list.option('hoverStateEnabled'), 'hover state should be changed to disabled on desktop');
             assert.notOk(list.option('focusStateEnabled'), 'focus state should be changed to disabled on desktop');
         } else {
+            assert.notOk(list.option('hoverStateEnabled'), 'hover state should not be changed on mobiles');
+            assert.notOk(list.option('focusStateEnabled'), 'focus state should be changed on mobiles');
+
             this.instance.option({ hoverStateEnabled: true, focusStateEnabled: true });
 
             assert.notOk(list.option('hoverStateEnabled'), 'hover state should not be changed on mobiles');

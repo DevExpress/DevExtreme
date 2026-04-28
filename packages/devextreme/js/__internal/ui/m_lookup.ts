@@ -1123,6 +1123,11 @@ class Lookup extends DropDownList<LookupProperties> {
       case 'placeholder':
         this._invalidate();
         break;
+      case 'focusStateEnabled':
+        this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
+        // @ts-expect-error ts-error
+        super._optionChanged(...arguments);
+        break;
       case 'clearButtonText':
       case 'showClearButton':
       case 'showCancelButton':
