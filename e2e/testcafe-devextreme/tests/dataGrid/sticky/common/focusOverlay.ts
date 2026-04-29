@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
+import { hasHorizontalScroll } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -123,15 +124,10 @@ test('Focus overlay should be displayed correctly if sticky columns are turned o
 test('Native scrollbar should not be shown when the focus overlay is visible (T1310336)', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const scrollableContainer = dataGrid.getScrollContainer();
   const firstGroupRow = dataGrid.getGroupRow(0);
   const firstDataRow = dataGrid.getDataRow(1);
   const secondDataCell = firstDataRow.getDataCell(2);
-  const hasHorizontalScroll = async () => {
-    const scrollableContainer = dataGrid.getScrollContainer();
-    const scrollWidth = await scrollableContainer.scrollWidth;
-    const clientWidth = await scrollableContainer.clientWidth;
-    return scrollWidth > clientWidth;
-  };
 
   // assert
   await t.expect(dataGrid.isReady()).ok();
@@ -145,7 +141,7 @@ test('Native scrollbar should not be shown when the focus overlay is visible (T1
     .ok()
     .expect(dataGrid.getFocusOverlay().visible)
     .notOk()
-    .expect(await hasHorizontalScroll())
+    .expect(await hasHorizontalScroll(scrollableContainer))
     .notOk();
 
   // act
@@ -157,7 +153,7 @@ test('Native scrollbar should not be shown when the focus overlay is visible (T1
     .ok()
     .expect(dataGrid.getFocusOverlay().visible)
     .ok()
-    .expect(await hasHorizontalScroll())
+    .expect(await hasHorizontalScroll(scrollableContainer))
     .notOk();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(20, 5),
