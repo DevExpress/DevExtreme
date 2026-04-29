@@ -193,6 +193,7 @@ export class GridCommands {
       const command = this.commands.get(name);
 
       if (!command) {
+        this._executing = false;
         throw new Error(`Unknown command: ${name}`);
       }
       // eslint-disable-next-line no-await-in-loop
