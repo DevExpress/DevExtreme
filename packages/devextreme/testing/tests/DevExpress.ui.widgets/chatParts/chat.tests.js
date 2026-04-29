@@ -2871,6 +2871,27 @@ QUnit.module('Chat', () => {
                     assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is passed');
                 });
 
+                QUnit.test('state enabled options should be updated in buttonGroup when changed at runtime', function(assert) {
+                    this.reinit({
+                        activeStateEnabled: !value,
+                        focusStateEnabled: !value,
+                        hoverStateEnabled: !value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option({
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                    });
+
+                    const buttonGroup = this.instance._suggestions._buttonGroup;
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is updated');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is updated');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is updated');
+                });
+
                 QUnit.test('state enabled options should be preserved when suggestions are updated at runtime', function(assert) {
                     this.reinit({
                         activeStateEnabled: value,
@@ -2899,6 +2920,19 @@ QUnit.module('Chat', () => {
                     const buttonGroup = this.instance._suggestions._buttonGroup;
 
                     assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is passed');
+                });
+
+                QUnit.test('rtlEnabled should be updated in buttonGroup when changed at runtime', function(assert) {
+                    this.reinit({
+                        rtlEnabled: !value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('rtlEnabled', value);
+
+                    const buttonGroup = this.instance._suggestions._buttonGroup;
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is updated');
                 });
 
                 QUnit.test('rtlEnabled should be preserved when suggestions are updated at runtime', function(assert) {

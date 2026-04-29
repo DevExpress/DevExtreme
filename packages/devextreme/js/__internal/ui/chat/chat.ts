@@ -486,6 +486,12 @@ class Chat extends Widget<ChatProperties> {
       suggestions,
     } = this.option();
 
+    const hasSuggestionOptions = Boolean(Object.keys(suggestions ?? {}).length);
+
+    if (!hasSuggestionOptions) {
+      return {};
+    }
+
     const config: SuggestionsOptions = {
       activeStateEnabled,
       focusStateEnabled,
@@ -718,7 +724,9 @@ class Chat extends Widget<ChatProperties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
+        this._suggestions?.updateOptions(this._getSuggestionsConfiguration());
         this._messageBox.option(name, value);
+        super._optionChanged(args);
         break;
       case 'speechToTextEnabled':
       case 'speechToTextOptions':
@@ -804,10 +812,13 @@ class Chat extends Widget<ChatProperties> {
         this._createSendButtonAction();
         this._messageBox.option(name, this._getSendButtonOptionsWithAction());
         break;
-      case 'suggestions': {
+      case 'suggestions':
         this._suggestions?.updateOptions(this._getSuggestionsConfiguration());
         break;
-      }
+      case 'rtlEnabled':
+        this._suggestions?.updateOptions(this._getSuggestionsConfiguration());
+        super._optionChanged(args);
+        break;
       default:
         super._optionChanged(args);
     }
