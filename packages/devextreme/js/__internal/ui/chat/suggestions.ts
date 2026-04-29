@@ -4,7 +4,7 @@ import ButtonGroup, { type Properties as ButtonGroupProperties } from '@js/ui/bu
 
 const CHAT_SUGGESTIONS_CLASS = 'dx-chat-suggestions';
 
-type SuggestionsOptions = Omit<ButtonGroupProperties, 'selectionMode'>;
+export type SuggestionsOptions = Omit<ButtonGroupProperties, 'selectionMode'>;
 
 class Suggestions {
   private readonly _$container?: dxElementWrapper;
