@@ -35,12 +35,12 @@
       <div
         *dxTemplate="let item of 'taskContentTemplate'"
         class="custom-task {{ getTaskColor(item.taskData.id) }}"
-        style.width="{{ item.taskSize.width }}px"
+        [style.width]="item.taskSize.width + 'px'"
       >
         <div class="custom-task-img-wrapper">
           <img
             class="custom-task-img"
-            attr.src="{{ getImagePath(item.taskData.id) }}"
+            [attr.src]="getImagePath(item.taskData.id)"
           />
         </div>
         <div class="custom-task-wrapper">
@@ -49,7 +49,7 @@
         </div>
         <div
           class="custom-task-progress"
-          style.width="{{ item.taskData.progress }}%"
+          [style.width]="item.taskData.progress + '%'"
         ></div>
       </div>
     </dx-gantt>

@@ -106,10 +106,6 @@ const CSP_DEMO_ALLOWLIST = {
   Gantt: {
     'img-src': ['data:'],
   },
-  // TODO: fix inline style in taskTemplate
-  'Gantt/TaskTemplate': {
-    'style-src': ["'unsafe-inline'"],
-  },
   Diagram: {
     'img-src': ['data:'],
   },
