@@ -4,10 +4,116 @@
   "sourceRoot": "packages/devextreme-scss",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "nx:run-script",
+    "clean:artifacts": {
+      "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "script": "build"
+        "targetDirectory": "../devextreme/artifacts/css"
+      }
+    },
+    "clean:bundles": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./scss/bundles"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx clean:artifacts devextreme-scss",
+          "pnpm --workspace-root nx clean:bundles devextreme-scss"
+        ],
+        "parallel": false
+      }
+    },
+    "copy:assets": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          {
+            "from": "./fonts/**/*",
+            "to": "../devextreme/artifacts/css/fonts"
+          },
+          {
+            "from": "./icons/**/*",
+            "to": "../devextreme/artifacts/css/icons"
+          }
+        ]
+      },
+      "outputs": [
+        "{workspaceRoot}/packages/devextreme/artifacts/css/fonts",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
+      ]
+    },
+    "build:themes": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm --dir packages/devextreme-scss exec gulp style-compiler-themes"
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*",
+        "{projectRoot}/gulpfile.js"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/bundles",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css"
+      ],
+      "cache": true
+    },
+    "build:themes-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm --dir packages/devextreme-scss exec gulp style-compiler-themes-ci"
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*",
+        "{projectRoot}/gulpfile.js"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/bundles",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css"
+      ],
+      "cache": true
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx clean devextreme-scss",
+          "pnpm --workspace-root nx build:themes devextreme-scss",
+          "pnpm --workspace-root nx copy:assets devextreme-scss"
+        ],
+        "parallel": false
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*",
+        "{projectRoot}/gulpfile.js"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/bundles",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/fonts",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
+      ],
+      "cache": true
+    },
+    "build:ci": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx clean devextreme-scss",
+          "pnpm --workspace-root nx build:themes-dev devextreme-scss",
+          "pnpm --workspace-root nx copy:assets devextreme-scss"
+        ],
+        "parallel": false
       },
       "inputs": [
         "{projectRoot}/build/**/*",
