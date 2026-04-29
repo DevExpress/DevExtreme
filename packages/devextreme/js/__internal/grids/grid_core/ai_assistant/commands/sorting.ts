@@ -1,34 +1,6 @@
+import type { GridCommand } from '@ts/grids/grid_core/ai_assistant/types';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
-import type { ZodObject, ZodRawShape } from 'zod';
 import { z } from 'zod';
-
-// TODO: replace with imports from ../types when types.ts is created.
-type CommandStatus = 'success' | 'failure' | 'aborted';
-interface CommandResult {
-  status: CommandStatus;
-  message: string;
-}
-interface CommandCallbacks {
-  success: (message?: string) => CommandResult;
-  failure: (message?: string) => CommandResult;
-}
-// When TArgs default to `undefined`, the corresponding parameter is
-// elided from the inner method signatures via these conditional tuples.
-type ArgsTuple<T> = T extends undefined ? [] : [args: T];
-
-type CommandExecutor<TArgs = undefined> = (
-  ...args: ArgsTuple<TArgs>
-) => Promise<CommandResult>;
-
-interface GridCommand<TArgs = undefined> {
-  name: string;
-  description: string;
-  schema: ZodObject<ZodRawShape>;
-  execute: (component: InternalGrid, callbacks: CommandCallbacks) => CommandExecutor<TArgs>;
-}
-
-// --------------------------
 
 const sortingCommandSchema = z.object({
   dataField: z.string(),

@@ -7,6 +7,7 @@ import {
   jest,
 } from '@jest/globals';
 import type { Properties } from '@js/ui/data_grid';
+import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
 import {
@@ -15,8 +16,6 @@ import {
   createDataGrid,
 } from '../../../__tests__/__mock__/helpers/utils';
 import { clearSortingCommand, sortingCommand } from '../sorting';
-
-interface CommandResult { status: 'success' | 'failure' | 'aborted'; message: string }
 
 const createCallbacks = (): {
   success: jest.Mock<(message?: string) => CommandResult>;
