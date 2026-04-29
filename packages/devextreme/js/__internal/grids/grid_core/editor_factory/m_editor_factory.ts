@@ -229,19 +229,18 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   protected updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
-    if (isHideBorder) {
+    if (isHideBorder || isDataRow($element)) {
       this._$focusOverlay.addClass(DX_HIDDEN);
     } else if ($element.length) {
       // align "right bottom" for Mozilla
       const align = browser.mozilla ? 'right bottom' : 'left top';
-      const isDataRowElement = isDataRow($element);
       const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
       const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
       const $content = this.getFocusOverlayContainer($element);
       const focusOverlaySize = this.getFocusOverlaySize($element);
 
       this._$focusOverlay
-        .toggleClass(DX_HIDDEN, isDataRowElement)
+        .removeClass(DX_HIDDEN)
         .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
         .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
         .appendTo($content);
