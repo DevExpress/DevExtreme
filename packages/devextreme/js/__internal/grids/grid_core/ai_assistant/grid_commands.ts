@@ -21,7 +21,7 @@ const EXECUTION_ABORT_MESSAGE = 'dxDataGrid-aiAssistantExecutionAbortMessage';
 export class GridCommands {
   private readonly component: InternalGrid;
 
-  private readonly commands: Map<string, GridCommand>;
+  private readonly commands: Map<string, GridCommand<Record<string, unknown>>>;
 
   private _executing = false;
 
@@ -151,7 +151,7 @@ export class GridCommands {
   }
 
   private async executeCommand(
-    command: GridCommand,
+    command: GridCommand<Record<string, unknown>>,
     args: Record<string, unknown>,
     callbacks: CommandCallbacks,
   ): Promise<CommandResult> {
