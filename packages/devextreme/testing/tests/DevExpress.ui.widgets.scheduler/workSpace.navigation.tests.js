@@ -38,18 +38,6 @@ testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
 });
 
-const triggerMouseSelectionStart = ($target, cell) => {
-    $target.trigger($.Event('mousedown', { target: cell, which: 1 }));
-};
-
-const triggerMouseSelectionMove = ($target, cell) => {
-    $target.trigger($.Event('mousemove', { target: cell, which: 1 }));
-};
-
-const triggerMouseSelectionEnd = ($target, cell) => {
-    $target.trigger($.Event('mouseup', { target: cell, which: 1 }));
-};
-
 module('Workspace navigation', () => {
     module('Keyboard', () => {
         ['standard', 'virtual'].forEach((scrollingMode) => {
@@ -787,7 +775,8 @@ module('Workspace navigation', () => {
                     const $table = $element.find('.dx-scheduler-date-table');
 
                     pointerMock(cells.eq(2)).start().click();
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(2).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
                 });
@@ -804,6 +793,9 @@ module('Workspace navigation', () => {
                             currentDate: new Date(2015, 3, 1),
                             height: 400,
                             allowMultipleCellSelection: true,
+                            onContentReady: function(e) {
+                                e.component.attachTablesEvents();
+                            },
                         }, 'dxSchedulerWorkSpaceMonth');
 
                         const cells = $element.find('.' + CELL_CLASS);
@@ -814,8 +806,8 @@ module('Workspace navigation', () => {
 
                         pointerMock(cells.eq(2)).start().click();
 
-                        triggerMouseSelectionStart($($table), cells.eq(2).get(0));
-                        triggerMouseSelectionMove($($table), cell);
+                        $($table).trigger($.Event('mousedown', { target: cells.eq(2).get(0), which: 1 }));
+                        $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                         assert.ok(cells.filter('.dx-state-focused').length > 1, 'cells are selected');
                         assert.ok(cells.eq(2).hasClass('dx-state-focused'), 'the start cell is selected');
@@ -1033,8 +1025,8 @@ module('Workspace navigation', () => {
                         assert.ok(e.isPropagationStopped(), 'propagation is stopped');
                     });
 
-                    triggerMouseSelectionStart($element, cells.eq(15).get(0));
-                    triggerMouseSelectionMove($element, cells.eq(16).get(0));
+                    $element.trigger($.Event('mousedown', { target: cells.eq(15).get(0), which: 1 }));
+                    $element.trigger($.Event('mousemove', { target: cells.eq(16).get(0), which: 1 }));
                 });
 
                 test('Workspace should add/remove specific class while mouse selection', async function(assert) {
@@ -1055,12 +1047,12 @@ module('Workspace navigation', () => {
                     const cell = cells.eq(23).get(0);
                     const $table = $element.find('.dx-scheduler-date-table');
 
-                    triggerMouseSelectionStart($($table), cells.eq(15).get(0));
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(15).get(0), which: 1 }));
 
                     assert.ok($element.hasClass('dx-scheduler-work-space-mouse-selection'), 'right first focused cell');
 
-                    triggerMouseSelectionMove($($table), cell);
-                    triggerMouseSelectionEnd($($table), cell);
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
+                    $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
 
                     assert.notOk($element.hasClass('dx-scheduler-work-space-mouse-selection'), 'right first focused cell');
                 });
@@ -1087,8 +1079,8 @@ module('Workspace navigation', () => {
 
                     pointerMock(cells.eq(15)).start().click();
 
-                    triggerMouseSelectionStart($($table), cells.eq(15).get(0));
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(15).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 10, 'right quantity of focused cells');
                     assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'right first focused cell');
@@ -1096,7 +1088,7 @@ module('Workspace navigation', () => {
 
                     cell = cells.eq(22).get(0);
 
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
                     assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'right first focused cell');
@@ -1104,13 +1096,13 @@ module('Workspace navigation', () => {
 
                     cell = cells.eq(21).get(0);
 
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 8, 'right quantity of focused cells');
                     assert.ok(cells.eq(21).hasClass('dx-state-focused'), 'right first focused cell');
                     assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'right last focused cell');
 
-                    triggerMouseSelectionEnd($($table), cell);
+                    $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
                 });
 
                 test('Multiple selected cells should have focused class in vertical grouped Workspace Week', async function(assert) {
@@ -1141,8 +1133,8 @@ module('Workspace navigation', () => {
 
                     pointerMock(cells.eq(0)).start().click();
 
-                    triggerMouseSelectionStart($($table), cells.eq(0).get(0));
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(0).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 3, 'right quantity of focused cells');
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'right first focused cell');
@@ -1153,8 +1145,8 @@ module('Workspace navigation', () => {
 
                     pointerMock(cells.eq(28)).start().click();
 
-                    triggerMouseSelectionStart($($table), cells.eq(28).get(0));
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(28).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 3, 'right quantity of focused cells');
                     assert.ok(cells.eq(28).hasClass('dx-state-focused'), 'right first focused cell');
@@ -1192,19 +1184,19 @@ module('Workspace navigation', () => {
                     let cell = cells.eq(20).get(0);
                     const $table = $element.find('.dx-scheduler-date-table');
 
-                    triggerMouseSelectionStart($($table), cells.eq(15).get(0));
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(15).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     const $focusedCells = cells.filter('.dx-state-focused');
                     assert.equal($focusedCells.length, 6, 'right quantity of focused cells');
 
                     cell = cells.eq(22).get(0);
 
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 6, 'right quantity of focused cells');
 
-                    triggerMouseSelectionEnd($($table), cell);
+                    $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
                 });
 
                 test('Workspace should handle pointerdown by only left mouse key', async function(assert) {
@@ -1372,8 +1364,8 @@ module('Workspace navigation', () => {
 
                     pointerMock(cells.eq(0)).start().click();
 
-                    triggerMouseSelectionStart($($table), cells.eq(0).get(0));
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(0).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 11, 'right quantity of focused cells');
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'right first focused cell');
@@ -1382,13 +1374,13 @@ module('Workspace navigation', () => {
 
                     cell = cells.eq(12).get(0);
 
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 3, 'cells in other days have not been focused');
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'right first focused cell');
                     assert.ok(cells.eq(12).hasClass('dx-state-focused'), 'right last focused cell');
 
-                    triggerMouseSelectionEnd($($table), cell);
+                    $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
                 });
 
                 test('Workspace Day should not select cells that belong to another group', async function(assert) {
@@ -1418,8 +1410,8 @@ module('Workspace navigation', () => {
 
                     pointerMock(cells.eq(0)).start().click();
 
-                    triggerMouseSelectionStart($($table), cells.eq(0).get(0));
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(0).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 3, 'cells in other days have not been focused');
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'right first focused cell');
@@ -1427,7 +1419,7 @@ module('Workspace navigation', () => {
 
                     cell = cells.eq(5).get(0);
 
-                    triggerMouseSelectionMove($($table), cell);
+                    $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(
                         cells.filter('.dx-state-focused').length, 3,
@@ -1436,7 +1428,7 @@ module('Workspace navigation', () => {
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'the first focused cell did not change');
                     assert.ok(cells.eq(12).hasClass('dx-state-focused'), 'the last focused did not change');
 
-                    triggerMouseSelectionEnd($($table), cell);
+                    $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
                 });
 
                 module('Mouse Multiselection with Vertical Grouping', () => {
@@ -1497,8 +1489,8 @@ module('Workspace navigation', () => {
                             pointerMock(cells.eq(startCell)).start().click();
                             let cell = cells.eq(endCell).get(0);
 
-                            triggerMouseSelectionStart($($table), cells.eq(startCell).get(0));
-                            triggerMouseSelectionMove($($table), cell);
+                            $($table).trigger($.Event('mousedown', { target: cells.eq(startCell).get(0), which: 1 }));
+                            $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                             assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
                             assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
@@ -1508,7 +1500,7 @@ module('Workspace navigation', () => {
                             });
 
                             cell = cells.eq(cellFromAnotherGroup).get(0);
-                            triggerMouseSelectionMove($($table), cell);
+                            $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                             assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
                             assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
@@ -1518,7 +1510,7 @@ module('Workspace navigation', () => {
                             });
                             assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
 
-                            triggerMouseSelectionEnd($($table), cell);
+                            $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
                         });
                     });
                 });
@@ -1555,8 +1547,8 @@ module('Workspace navigation', () => {
 
                     pointerMock(cells.eq(0)).start().click();
 
-                    triggerMouseSelectionStart($($table), cells.eq(0).get(0));
-                    triggerMouseSelectionMove($($table), cells.eq(1).get(0));
+                    $($table).trigger($.Event('mousedown', { target: cells.eq(0).get(0), which: 1 }));
+                    $($table).trigger($.Event('mousemove', { target: cells.eq(1).get(0), which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 5, 'the amount of focused cells is correct');
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'the start cell is focused');

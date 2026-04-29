@@ -412,7 +412,8 @@ if(devices.real().deviceType === 'desktop') {
                 $($table).trigger(
                     $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
                 );
-                $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+                $($table).trigger($.Event('mousedown', { target: $cells.eq(startCell.index).get(0), which: 1 }));
+                $($table).trigger($.Event('mousemove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
 
                 assert.deepEqual(
                     instance.option('selectedCellData'),

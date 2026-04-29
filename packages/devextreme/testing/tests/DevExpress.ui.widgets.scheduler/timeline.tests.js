@@ -522,8 +522,8 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 
                 let cell = cells.eq(15).get(0);
 
-                $($table).trigger($.Event('dxpointerdown', { target: cells.eq(3).get(0), which: 1, pointerType: 'mouse' }));
-                $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+                $($table).trigger($.Event('mousedown', { target: cells.eq(3).get(0), which: 1 }));
+                $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                 assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells is correct');
                 assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is focused');
@@ -531,14 +531,14 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 
                 cell = cells.eq(35).get(0);
 
-                $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+                $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                 assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells has not changed');
                 assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is still focused');
                 assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is still focused');
                 assert.notOk(cells.eq(35).hasClass('dx-state-focused'), 'cell from another group is not focused');
 
-                $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+                $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
             });
 
             QUnit.module('Keyboard Multiselection with GroupByDate', () => {
@@ -626,8 +626,8 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 
                         let cell = cells.eq(endCell).get(0);
 
-                        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
-                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+                        $($table).trigger($.Event('mousedown', { target: cells.eq(startCell).get(0), which: 1 }));
+                        $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                         assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
                         assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
@@ -635,14 +635,14 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 
                         cell = cells.eq(cellFromAnotherGroup).get(0);
 
-                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+                        $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                         assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
                         assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
                         assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is still focused');
                         assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
 
-                        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+                        $($table).trigger($.Event('mouseup', { target: cell, which: 1 }));
                     });
                 });
             });

@@ -693,16 +693,12 @@ export class SchedulerTestWrapper extends ElementWrapper {
             selectCells: (firstCellIndex, lastCellIndex) => {
                 const firstCell = this.workSpace.getCell(firstCellIndex);
                 const secondCell = this.workSpace.getCell(lastCellIndex);
+                const table = this.workSpace.getDateTable();
 
-                const { left: firstCellLeft, top: firstCellTop } = firstCell.offset();
-                const { left: secondCellLeft, top: secondCellTop } = secondCell.offset();
-
-                pointerMock(firstCell)
-                    .start()
-                    .down(firstCellLeft, firstCellTop);
-                pointerMock(secondCell)
-                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
-                    .up();
+                table.trigger($.Event('dxpointerdown', { target: firstCell.get(0), which: 1, pointerType: 'mouse' }));
+                table.trigger($.Event('mousedown', { target: firstCell.get(0), which: 1 }));
+                table.trigger($.Event('mousemove', { target: secondCell.get(0), which: 1 }));
+                table.trigger($.Event('mouseup', { target: secondCell.get(0), which: 1 }));
             },
 
             getShader: () => $(CLASSES.shader),
