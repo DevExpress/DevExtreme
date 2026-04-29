@@ -25,6 +25,23 @@
       "items": {
         "type": "string"
       }
+    },
+    "watch": {
+      "type": "boolean",
+      "description": "Watch SCSS sources and rebuild on changes",
+      "default": false
+    },
+    "bundles": {
+      "description": "Bundle names for watch mode (array or comma-separated string)",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        {
+          "type": "string"
+        }
+      ]
     }
   },
   "required": ["mode"]
