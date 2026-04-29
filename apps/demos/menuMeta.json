@@ -16,7 +16,7 @@
                 "Widget": "DataGrid",
                 "DemoType": "Web",
                 "Badge": "AI",
-                "IsDuplicate": true,
+                "TopLevel": true,
                 "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
                 "Modules": "openai"
               }
@@ -38,7 +38,7 @@
                 "Widget": "TreeList",
                 "DemoType": "Web",
                 "Badge": "AI",
-                "IsDuplicate": true,
+                "TopLevel": true,
                 "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
                 "Modules": "openai"
               }
@@ -59,7 +59,7 @@
                 "Name": "AIAndChatbotIntegration",
                 "Widget": "Chat",
                 "Badge": "AI",
-                "IsDuplicate": true,
+                "TopLevel": true,
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }
@@ -74,7 +74,7 @@
                 "Name": "MessageStreaming",
                 "Widget": "Chat",
                 "Badge": "AI",
-                "IsDuplicate": true,
+                "TopLevel": true,
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }
@@ -95,7 +95,7 @@
                 "Name": "AITextEditing",
                 "Widget": "HtmlEditor",
                 "Badge": "AI",
-                "IsDuplicate": true,
+                "TopLevel": true,
                 "DemoType": "Web",
                 "Modules": "openai"
               }
@@ -117,7 +117,7 @@
                 "Equivalents": "AI paste, AI form filler, AI form paste",
                 "DocUrl": "",
                 "Badge": "AI",
-                "IsDuplicate": true,
+                "TopLevel": true,
                 "Widget": "Form",
                 "MvcDescription": "",
                 "NetCoreDescription": "",

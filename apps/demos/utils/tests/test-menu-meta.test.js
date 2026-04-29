@@ -32,8 +32,8 @@ meta.forEach((section) => {
   section.Groups.forEach(collectDemos);
 });
 
-const primaryDemos = demos.filter((d) => !d.IsDuplicate);
-const duplicateDemos = demos.filter((d) => d.IsDuplicate);
+const primaryDemos = demos.filter((d) => !d.TopLevel);
+const duplicateDemos = demos.filter((d) => d.TopLevel);
 
 describe('All demos has corresponding folders', () => {
   demos.forEach((demo) => {
