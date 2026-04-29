@@ -9,20 +9,22 @@
       "description": "Compilation mode. all = full themes set, ci = reduced dev themes set.",
       "enum": ["all", "ci"]
     },
-    "gulpBinary": {
+    "bundlesDir": {
       "type": "string",
-      "description": "Gulp executable to run via pnpm exec",
-      "default": "gulp"
+      "description": "Generated SCSS bundles directory relative to project root",
+      "default": "./scss/bundles"
     },
-    "allTaskName": {
+    "cssOutputDir": {
       "type": "string",
-      "description": "Gulp task name for full themes build",
-      "default": "style-compiler-themes"
+      "description": "Output CSS artifacts directory relative to project root",
+      "default": "../devextreme/artifacts/css"
     },
-    "ciTaskName": {
-      "type": "string",
-      "description": "Gulp task name for CI/dev themes build",
-      "default": "style-compiler-themes-ci"
+    "devBundles": {
+      "type": "array",
+      "description": "Bundle names used in CI mode",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": ["mode"]
