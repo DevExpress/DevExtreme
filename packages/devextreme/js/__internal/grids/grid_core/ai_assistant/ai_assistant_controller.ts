@@ -69,7 +69,9 @@ export class AIAssistantController extends Controller {
   }
 
   private completeAIMessage(messageId: string, commands: CommandResults): void {
-    const messageStatus = hasCommandErrors(commands) ? MessageStatus.Error : MessageStatus.Success;
+    const messageStatus = hasCommandErrors(commands)
+      ? MessageStatus.Failure
+      : MessageStatus.Success;
 
     this.updateAIMessage(messageId, {
       status: messageStatus,
@@ -79,7 +81,7 @@ export class AIAssistantController extends Controller {
 
   private failAIMessage(messageId: string, error: Error): void {
     this.updateAIMessage(messageId, {
-      status: MessageStatus.Error,
+      status: MessageStatus.Failure,
       text: error.message,
     });
   }

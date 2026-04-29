@@ -165,7 +165,7 @@ describe('AIAssistantController', () => {
 
       expect(messages).toEqual([
         expect.objectContaining({
-          status: MessageStatus.Error,
+          status: MessageStatus.Failure,
           text: 'Network error',
         }),
       ]);
@@ -192,7 +192,7 @@ describe('AIAssistantController', () => {
 
       expect(messages).toEqual([
         expect.objectContaining({
-          status: MessageStatus.Error,
+          status: MessageStatus.Failure,
           text: 'Default error message',
         }),
       ]);

@@ -327,7 +327,7 @@ describe('AIChat', () => {
         const container = document.createElement('div');
         const commands: CommandResults = [
           { status: 'success', message: 'Sorted Name.' },
-          { status: 'error', message: 'Failed to group.' },
+          { status: 'failure', message: 'Failed to group.' },
         ];
 
         chatConfig.messageTemplate({
@@ -360,7 +360,7 @@ describe('AIChat', () => {
             status: 'success',
             commands: [
               { status: 'success', message: 'OK' },
-              { status: 'error', message: 'Failed' },
+              { status: 'failure', message: 'Failed' },
             ],
           },
         }, container);
@@ -403,7 +403,7 @@ describe('AIChat', () => {
             status: 'success',
             commands: [
               { status: 'success', message: 'OK' },
-              { status: 'error', message: 'Failed' },
+              { status: 'failure', message: 'Failed' },
             ],
           },
         }, container);
@@ -446,7 +446,7 @@ describe('AIChat', () => {
           message: {
             author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
             text: 'Invalid prompt. Please try again.',
-            status: 'error',
+            status: 'failure',
           },
         }, container);
 
@@ -466,7 +466,7 @@ describe('AIChat', () => {
         chatConfig.messageTemplate({
           message: {
             author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            status: 'error',
+            status: 'failure',
           },
         }, container);
 
@@ -484,7 +484,7 @@ describe('AIChat', () => {
           message: {
             author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
             text: 'Error occurred',
-            status: 'error',
+            status: 'failure',
           },
         }, container);
 
@@ -504,7 +504,7 @@ describe('AIChat', () => {
           message: {
             author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
             text: 'Error occurred',
-            status: 'error',
+            status: 'failure',
           },
         }, container);
 
@@ -525,7 +525,7 @@ describe('AIChat', () => {
           message: {
             author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
             text: 'Error occurred',
-            status: 'error',
+            status: 'failure',
           },
         }, container);
 
@@ -544,7 +544,7 @@ describe('AIChat', () => {
           message: {
             author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
             text: 'Error occurred',
-            status: 'error',
+            status: 'failure',
           },
         }, container);
 

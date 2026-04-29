@@ -13,5 +13,5 @@ export const AI_ASSISTANT_AUTHOR = { id: AI_ASSISTANT_AUTHOR_ID };
 export enum MessageStatus {
   Pending = 'pending',
   Success = 'success',
-  Error = 'error',
+  Failure = 'failure',
 }

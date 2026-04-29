@@ -12,7 +12,7 @@ export const getMessageStateClass = (status: MessageStatus): string => {
   switch (status) {
     case 'success':
       return CLASSES.messageSuccess;
-    case 'error':
+    case 'failure':
       return CLASSES.messageError;
     case 'pending':
     default:
@@ -22,10 +22,10 @@ export const getMessageStateClass = (status: MessageStatus): string => {
 
 export const hasCommandErrors = (
   commands: CommandResults,
-): boolean => !!commands?.some(({ status }) => status === MessageStatus.Error);
+): boolean => !!commands?.some(({ status }) => status === MessageStatus.Failure);
 
 export const getMessageIconName = (message: Message): string => {
-  if (message.status === MessageStatus.Error || hasCommandErrors(message.commands)) {
+  if (message.status === MessageStatus.Failure || hasCommandErrors(message.commands)) {
     return 'errorcircle';
   }
 
@@ -37,7 +37,7 @@ export const getMessageIconName = (message: Message): string => {
 };
 
 export const needToShowRegenerateButton = (message: Message): boolean => {
-  const isError = message.status === MessageStatus.Error;
+  const isError = message.status === MessageStatus.Failure;
 
   if (isError) {
     return true;

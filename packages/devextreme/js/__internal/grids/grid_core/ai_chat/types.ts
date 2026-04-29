@@ -17,4 +17,4 @@ export interface AIChatOptions {
   onRegenerate?: () => void;
 }
 
-export type MessageStatus = 'pending' | 'success' | 'error';
+export type MessageStatus = 'pending' | 'success' | 'failure';

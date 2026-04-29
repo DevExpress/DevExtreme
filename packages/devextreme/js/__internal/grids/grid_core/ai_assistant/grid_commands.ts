@@ -16,7 +16,7 @@ export class GridCommands {
   // TODO: need to implement real command execution logic
   public executeCommands(actions: ExecuteGridAssistantAction[]): Promise<CommandResults> {
     return Promise.resolve(actions.map((action) => ({
-      status: action.name.includes('Error') ? 'error' : 'success',
+      status: action.name.includes('Error') ? 'failure' : 'success',
       message: action.name,
     })));
   }

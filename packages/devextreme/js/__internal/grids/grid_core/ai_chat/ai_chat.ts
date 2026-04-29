@@ -131,7 +131,7 @@ export class AIChat {
 
   private getHeaderText(message: Message): string {
     switch (message.status) {
-      case MessageStatus.Error:
+      case MessageStatus.Failure:
         return messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader');
       case MessageStatus.Pending:
         return messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader');
@@ -168,7 +168,7 @@ export class AIChat {
       case (message.status === MessageStatus.Success || hasCommandErrors(message.commands)):
         this.renderCommandList($parent, message.commands);
         break;
-      case message.status === MessageStatus.Error:
+      case message.status === MessageStatus.Failure:
         this.renderErrorState($parent, message);
         break;
       case message.status === MessageStatus.Pending:
@@ -199,7 +199,7 @@ export class AIChat {
     $parent: dxElementWrapper,
     command: CommandResult,
   ): void {
-    const commandStateClass = command.status === MessageStatus.Error
+    const commandStateClass = command.status === MessageStatus.Failure
       ? CLASSES.actionListItemError
       : CLASSES.actionListItemSuccess;
 
@@ -207,7 +207,7 @@ export class AIChat {
       .addClass(`${CLASSES.actionListItem} ${commandStateClass}`)
       .appendTo($parent);
 
-    const emoji = command.status === MessageStatus.Error ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
+    const emoji = command.status === MessageStatus.Failure ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
 
     $('<span>')
       .addClass(CLASSES.actionListItemIcon)
