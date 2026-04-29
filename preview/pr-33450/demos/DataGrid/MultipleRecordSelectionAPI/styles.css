@@ -1,0 +1,17 @@
+#grid {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.selected-data {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.selected-data .caption {
+  font-weight: bold;
+  font-size: 115%;
+  margin-right: 4px;
+}

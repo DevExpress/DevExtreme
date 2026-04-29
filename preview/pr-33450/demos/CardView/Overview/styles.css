@@ -1,0 +1,35 @@
+.card-footer {
+  display: flex;
+  padding: 12px;
+  gap: 8px;
+}
+
+.card-footer > * {
+  flex-grow: 1;
+  width: 100%
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.status--salaried {
+  color: var(--dx-color-success);
+}
+
+.status--commission {
+  color: var(--dx-color-warning);
+}
+
+.status--terminated {
+  color: var(--dx-color-danger);
+}
+
+.indicator {
+  background-color: currentcolor;
+  margin-right: 8px;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+}

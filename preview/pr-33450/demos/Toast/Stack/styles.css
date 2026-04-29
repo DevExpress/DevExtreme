@@ -1,0 +1,17 @@
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
