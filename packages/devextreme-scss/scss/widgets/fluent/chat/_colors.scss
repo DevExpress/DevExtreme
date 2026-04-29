@@ -139,7 +139,7 @@ $chat-suggestions-box-shadow: null !default;
 
   $chat-messagelist-day-header-color: color.adjust($base-bg, $lightness: -56.08%, $space: hsl) !default;
   $chat-messagelist-empty-icon-color: color.adjust($base-icon-color, $lightness: 32.16%, $space: hsl) !default;
-  $chat-messagelist-empty-icon-background-color: color.adjust($base-bg, $lightness: 3.92%, $space: hsl) !default;
+  $chat-messagelist-empty-icon-background-color: color.adjust($base-bg, $lightness: -3.92%, $space: hsl) !default;
   $chat-messagelist-empty-prompt-color: color.adjust($base-label-color, $lightness: -5.88%, $space: hsl) !default;
 
   $chat-typingindicator-circle-bg-color: color.adjust($base-bg, $lightness: -29.16%, $space: hsl) !default;
