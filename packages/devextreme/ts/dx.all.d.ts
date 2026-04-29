@@ -26407,7 +26407,7 @@ declare module DevExpress.ui {
     export type SelectionEndEvent =
       DevExpress.common.core.events.EventInfo<dxScheduler> & {
         /**
-         * [descr:SelectionEndEvent.selectedCellData]
+         * [descr:_ui_scheduler_SelectionEndEvent.selectedCellData]
          */
         readonly selectedCellData: Array<any>;
       };
