@@ -3,4 +3,6 @@ export interface ScssBuildExecutorSchema {
   bundlesDir?: string;
   cssOutputDir?: string;
   devBundles?: string[];
+  watch?: boolean;
+  bundles?: string[] | string;
 }

@@ -53,8 +53,7 @@
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*",
-        "{projectRoot}/gulpfile.js"
+        "{projectRoot}/scss/**/*"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
@@ -70,8 +69,7 @@
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*",
-        "{projectRoot}/gulpfile.js"
+        "{projectRoot}/scss/**/*"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
@@ -130,6 +128,21 @@
         "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
       ],
       "cache": true
+    },
+    "watch": {
+      "executor": "devextreme-nx-infra-plugin:scss-build",
+      "options": {
+        "mode": "all",
+        "watch": true
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*"
+      ],
+      "cache": false
     },
     "lint": {
       "executor": "nx:run-script",
