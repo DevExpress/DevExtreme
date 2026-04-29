@@ -1,21 +1,35 @@
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Properties as ChatProperties } from '@js/ui/chat';
+import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS,
 } from '@ts/ui/chat/messagelist';
+import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/m_popup';
 
 import {
   CLASSES, CLEAR_CHAT_ICON,
   DEFAULT_CHAT_OPTIONS,
   DEFAULT_POPUP_OPTIONS,
+  ERROR_ITEM_EMOJI,
+  REGENERATE_ICON,
+  SUCCESS_ITEM_EMOJI,
 } from './const';
-import type { AIChatOptions } from './types';
+import type {
+  AIChatOptions, CommandResult, CommandResults,
+} from './types';
+import {
+  getMessageIconName, getMessageStateClass, hasCommandErrors, isAIChatMessage,
+  needToShowRegenerateButton,
+} from './utils';
 
 export class AIChat {
   private readonly popupInstance: Popup;
@@ -50,6 +64,20 @@ export class AIChat {
           .append($message)
           .append($prompt);
       },
+      messageTemplate: (data, container): void => {
+        const { message } = data;
+
+        if (!message) {
+          return;
+        }
+
+        if (isAIChatMessage(message)) {
+          this.renderAIMessage(message, container);
+        } else {
+          $(container).text(message?.text ?? '');
+        }
+      },
+      showUserName: false,
       ...this.options.chatOptions,
     };
   }
@@ -95,6 +123,130 @@ export class AIChat {
     };
   }
 
+  private renderMessageIcon($parent: dxElementWrapper, message: Message): void {
+    $('<i>')
+      .addClass(`dx-icon dx-icon-${getMessageIconName(message)} ${CLASSES.messageIcon}`)
+      .appendTo($parent);
+  }
+
+  private getHeaderText(message: Message): string {
+    switch (message.status) {
+      case MessageStatus.Failure:
+        return messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader');
+      case MessageStatus.Pending:
+        return messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader');
+      default:
+        return message.text as string ?? '';
+    }
+  }
+
+  private renderMessageHeader(
+    $parent: dxElementWrapper,
+    message: Message,
+  ): void {
+    const $row = $('<div>')
+      .addClass(CLASSES.messageHeaderRow)
+      .appendTo($parent);
+    const headerText = this.getHeaderText(message);
+
+    $('<div>')
+      .addClass(CLASSES.messageHeader)
+      .text(headerText)
+      .appendTo($row);
+
+    if (needToShowRegenerateButton(message) && this.options.onRegenerate) {
+      const $button = $('<i>')
+        .addClass(`dx-icon dx-icon-${REGENERATE_ICON} ${CLASSES.messageRegenerateButton}`)
+        .appendTo($row);
+
+      eventsEngine.on($button, clickEventName, () => this.options.onRegenerate?.());
+    }
+  }
+
+  private renderMessageStateContent($parent: dxElementWrapper, message: Message): void {
+    switch (true) {
+      case (message.status === MessageStatus.Success || hasCommandErrors(message.commands)):
+        this.renderCommandList($parent, message.commands);
+        break;
+      case message.status === MessageStatus.Failure:
+        this.renderErrorState($parent, message);
+        break;
+      case message.status === MessageStatus.Pending:
+      default:
+        this.renderPendingState($parent);
+    }
+  }
+
+  private renderPendingState($parent: dxElementWrapper): void {
+    $('<div>')
+      .addClass(CLASSES.messageStatus)
+      .text(messageLocalization.format('dxDataGrid-aiAssistantProcessingMessage'))
+      .appendTo($parent);
+
+    const $progressBar = $('<div>')
+      .addClass(CLASSES.messageProgressBar)
+      .appendTo($parent);
+
+    this.options.createComponent($progressBar, ProgressBar, {
+      value: false,
+      visible: true,
+      showStatus: false,
+      width: '100%',
+    });
+  }
+
+  private renderCommandListItem(
+    $parent: dxElementWrapper,
+    command: CommandResult,
+  ): void {
+    const commandStateClass = command.status === MessageStatus.Failure
+      ? CLASSES.actionListItemError
+      : CLASSES.actionListItemSuccess;
+
+    const $item = $('<li>')
+      .addClass(`${CLASSES.actionListItem} ${commandStateClass}`)
+      .appendTo($parent);
+
+    const emoji = command.status === MessageStatus.Failure ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
+
+    $('<span>')
+      .addClass(CLASSES.actionListItemIcon)
+      .text(emoji)
+      .appendTo($item);
+
+    $('<span>')
+      .addClass(CLASSES.actionListItemText)
+      .text(command.message)
+      .appendTo($item);
+  }
+
+  private renderCommandList(
+    $container: dxElementWrapper,
+    commands?: CommandResults,
+  ): void {
+    if (!commands?.length) {
+      return;
+    }
+
+    const $list = $('<ul>')
+      .addClass(CLASSES.actionList)
+      .appendTo($container);
+
+    commands.forEach((command) => {
+      this.renderCommandListItem($list, command);
+    });
+  }
+
+  private renderErrorState(
+    $container: dxElementWrapper,
+    message: Message,
+  ): void {
+    $('<div>')
+      .addClass(CLASSES.messageErrorText)
+      .text(message.text ?? '')
+      .appendTo($container);
+  }
+
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
     this.options = options;
 
@@ -117,5 +269,20 @@ export class AIChat {
 
   public isShown(): boolean {
     return !!this.popupInstance?.option('visible');
+  }
+
+  public renderAIMessage(message: Message, container: HTMLElement): void {
+    const $message = $('<div>')
+      .addClass(`${CLASSES.message} ${getMessageStateClass(message.status)}`)
+      .appendTo(container);
+
+    this.renderMessageIcon($message, message);
+
+    const $content = $('<div>')
+      .addClass(CLASSES.messageContent)
+      .appendTo($message);
+
+    this.renderMessageHeader($content, message);
+    this.renderMessageStateContent($content, message);
   }
 }
