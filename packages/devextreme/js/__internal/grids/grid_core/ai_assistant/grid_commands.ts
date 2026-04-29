@@ -16,6 +16,7 @@ import type {
 
 const DEFAULT_SUCCESS_MESSAGE = 'dxDataGrid-aiAssistantSuccessMessage';
 const DEFAULT_FAILURE_MESSAGE = 'dxDataGrid-aiAssistantErrorMessage';
+const EXECUTION_ABORT_MESSAGE = 'dxDataGrid-aiAssistantExecutionAbortMessage';
 
 export class GridCommands {
   private readonly component: InternalGrid;
@@ -159,7 +160,7 @@ export class GridCommands {
       return await executor(args);
     } catch (e: unknown) {
       console.error(`Error executing command "${command.name}":`, e);
-      return GridCommands.failure(`Error executing command "${command.name}"`);
+      return GridCommands.failure();
     }
   }
 
@@ -182,7 +183,10 @@ export class GridCommands {
 
     for (const { name, args } of commands) {
       if (this._aborted) {
-        results.push({ status: 'aborted', message: 'Execution Interrupted' });
+        results.push({
+          status: 'aborted',
+          message: messageLocalization.format(EXECUTION_ABORT_MESSAGE),
+        });
         break;
       }
 

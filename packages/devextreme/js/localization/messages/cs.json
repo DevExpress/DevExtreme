@@ -113,6 +113,7 @@
         "dxDataGrid-aiAssistantErrorMessageHeader": "Failed to process request",
         "dxDataGrid-aiAssistantSuccessMessage": "Success",
         "dxDataGrid-aiAssistantErrorMessage": "Error",
+        "dxDataGrid-aiAssistantExecutionAbortMessage": "Execution Interrupted",
         "dxDataGrid-aiAssistantClearButtonText": "Clear",
         "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
