@@ -81,6 +81,7 @@ onBeforeMount(() => {
 
 function toggleDisabledState(disabled: boolean, event?: Events.EventObject): void {
   isDisabled.value = disabled;
+  suggestions.value = { ...suggestions.value, disabled };
 
   if (disabled) {
     (event?.target as HTMLElement)?.blur();
@@ -136,6 +137,8 @@ function alertLimitReached(): void {
 }
 
 function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent): void {
+  if (isDisabled.value) return;
+
   dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
   if (!alerts.value.length) {
