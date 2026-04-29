@@ -1,6 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "skipLibCheck": true
-  }
-}

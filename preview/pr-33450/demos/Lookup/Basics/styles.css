@@ -1,9 +1,0 @@
-.dx-theme-generic .dx-fieldset,
-.dx-theme-material .dx-fieldset {
-  width: 40%;
-  float: left;
-}
-
-.dx-field > .dx-lookup {
-  flex: 1;
-}
