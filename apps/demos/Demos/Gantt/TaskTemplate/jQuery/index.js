@@ -43,10 +43,9 @@ $(() => {
     const resource = item.taskResources[0];
     const img = getImagePath(item.taskData.id);
     const color = item.taskData.id % 6;
-    const taskWidth = `${item.taskSize.width}px;`;
     const $customContainer = $(document.createElement('div'))
       .addClass('custom-task')
-      .attr('style', `width:${taskWidth}`)
+      .css('width', `${item.taskSize.width}px`)
       .addClass(`custom-task-color-${color}`);
     const $imgWrapper = $(document.createElement('div'))
       .addClass('custom-task-img-wrapper')
@@ -74,7 +73,7 @@ $(() => {
 
     $(document.createElement('div'))
       .addClass('custom-task-progress')
-      .attr('style', `width:${parseFloat(item.taskData.progress)}%;`)
+      .css('width', `${parseFloat(item.taskData.progress)}%`)
       .appendTo($customContainer);
 
     return $customContainer;
