@@ -27,3 +27,14 @@ export interface GridCommand<TArgs = undefined> {
   schema: ZodObject<ZodRawShape>;
   execute: (component: InternalGrid, callbacks: CommandCallbacks) => CommandExecutor<TArgs>;
 }
+
+export interface Command {
+  command: string;
+  args: Record<string, unknown>;
+}
+export interface CommandResponse {
+  commands: Command[];
+  explanation: string;
+}
+
+export type CommandResults = CommandResult[];
