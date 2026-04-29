@@ -52,7 +52,7 @@ jobs:
 
     - name: Build etalon bundles
       working-directory: ./packages/devextreme-scss
-      run: pnpm exec gulp style-compiler-themes-ci
+      run: pnpm --workspace-root nx run devextreme-scss:build:ci
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder

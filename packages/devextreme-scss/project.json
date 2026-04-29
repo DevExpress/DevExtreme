@@ -92,8 +92,7 @@
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*",
-        "{projectRoot}/gulpfile.js"
+        "{projectRoot}/scss/**/*"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
@@ -118,8 +117,7 @@
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*",
-        "{projectRoot}/gulpfile.js"
+        "{projectRoot}/scss/**/*"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
