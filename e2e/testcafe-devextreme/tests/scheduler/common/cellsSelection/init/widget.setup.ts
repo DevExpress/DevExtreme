@@ -31,7 +31,8 @@ export const selectCells = async (
     $($table).trigger(
       $.Event('dxpointerdown', { target: $(firstCell()).get(0), which: 1, pointerType: 'mouse' }),
     );
-    $($table).trigger($.Event('dxpointermove', { target: $(secondCell()).get(0), which: 1 }));
+    $($table).trigger($.Event('mousedown', { target: $(firstCell()).get(0), which: 1 }));
+    $($table).trigger($.Event('mousemove', { target: $(secondCell()).get(0), which: 1 }));
   },
   {
     dependencies: {
@@ -45,7 +46,7 @@ Promise<void> => ClientFunction(
   () => {
     const $table = $(table());
 
-    $($table).trigger($.Event('dxpointermove', { target: $(cell()).get(0), which: 1 }));
+    $($table).trigger($.Event('mousemove', { target: $(cell()).get(0), which: 1 }));
   },
   {
     dependencies: {
