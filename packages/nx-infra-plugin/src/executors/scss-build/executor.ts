@@ -4,7 +4,7 @@ import * as path from 'path';
 import { createRequire } from 'module';
 import { glob } from 'glob';
 import { ScssBuildExecutorSchema } from './schema';
-import { resolveProjectPath } from '../../utils/path-resolver';
+import { normalizeGlobPathForWindows, resolveProjectPath } from '../../utils/path-resolver';
 import { ensureDir, readFileText, writeFileText } from '../../utils/file-operations';
 
 const DEFAULT_BUNDLES_DIR = './scss/bundles';
@@ -155,7 +155,8 @@ function resolveSourceFiles(
     return Promise.resolve(bundleNames.map((name) => path.join(bundlesDir, `dx.${name}.scss`)));
   }
 
-  return glob(path.join(bundlesDir, 'dx.*.scss'), { nodir: true });
+  const pattern = normalizeGlobPathForWindows(path.join(bundlesDir, 'dx.*.scss'));
+  return glob(pattern, { nodir: true });
 }
 
 function createDataUriFunction(projectRoot: string, sass: any): (args: any[]) => any {
