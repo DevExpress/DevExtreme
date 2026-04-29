@@ -403,6 +403,19 @@ export default [
             'spellcheck/spell-checker': 'off',
         },
     },
+    // Spellcheck overrides for ai_assistant (Zod dependency)
+    {
+        files: ['js/__internal/grids/grid_core/ai_assistant/**/*'],
+        rules: {
+            'spellcheck/spell-checker': ['error', {
+                ...spellCheckConfig[0].rules['spellcheck/spell-checker'][1],
+                skipWords: [
+                    ...spellCheckConfig[0].rules['spellcheck/spell-checker'][1].skipWords,
+                    'Zod',
+                ],
+            }],
+        },
+    },
     // Rules for js/__internal folder
     {
         files: ['js/__internal/**/*'],
