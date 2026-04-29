@@ -86,8 +86,8 @@ catalogs:
       specifier: 4.1.68
       version: 4.1.68
     devextreme-exceljs-fork:
-      specifier: 4.4.8
-      version: 4.4.8
+      specifier: 4.4.9
+      version: 4.4.9
     devextreme-quill:
       specifier: 1.7.9
       version: 1.7.9
@@ -471,7 +471,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.8
+        version: 4.4.9
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.9
@@ -1518,7 +1518,7 @@ importers:
         version: 1.0.3
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.8
+        version: 4.4.9
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.4)
@@ -7878,9 +7878,6 @@ packages:
   ajv@8.18.0:
     resolution: {integrity: sha512-PlXPeEWMXMZ7sPYOHqmDyCJzcfNrUr3fGNKtezX14ykXOEIvyK81d+qydx89KY5O71FKMPaQ2vBfBFI5NHR63A==}
 
-  ajv@8.20.0:
-    resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
-
   algoliasearch@5.35.0:
     resolution: {integrity: sha512-Y+moNhsqgLmvJdgTsO4GZNgsaDWv8AOGAaPeIeHKlDn/XunoAqYbA+XNpBd1dW8GOXAUDyxC9Rxc7AV4kpFcIg==}
     engines: {node: '>= 14.0.0'}
@@ -9828,9 +9825,9 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.8:
-    resolution: {integrity: sha512-XjZ5aqD0MILYW9BLCKiR8CJyDhkROf6bT45dSmczcOT7Ow0GtzLI8RBfTVrBsm0fjUyjNkKFO5d4T5iTHth52A==}
-    engines: {node: '>=18.20.8'}
+  devextreme-exceljs-fork@4.4.9:
+    resolution: {integrity: sha512-WiNl1iQD9i1G9AyEnrcBDF2lMHpsNS+zilXhQ72/STkKo9AUbZknYsgvz1vdnfLhdaW8go5zhnryjQ5p6gemfw==}
+    engines: {node: '>=18'}
 
   devextreme-internal-tools@20.4.0:
     resolution: {integrity: sha512-Goo3fV2ItsvLrIPTord7eLmDQNS8u8P0//jkfta/03H9HtEG+U+xD+B8EDFD6KsCOTA1TlUnGXVxSuS5SaMHuA==}
@@ -14358,10 +14355,6 @@ packages:
 
   ora@9.3.0:
     resolution: {integrity: sha512-lBX72MWFduWEf7v7uWf5DHp9Jn5BI8bNPGuFgtXMmr2uDz2Gz2749y3am3agSDdkhHPHYmmxEGSKH85ZLGzgXw==}
-    engines: {node: '>=20'}
-
-  ora@9.4.0:
-    resolution: {integrity: sha512-84cglkRILFxdtA8hAvLNdMrtBpPNBTrQ9/ulg0FA7xLMnD6mifv+enAIeRmvtv+WgdCE+LPGOfQmtJRrVaIVhQ==}
     engines: {node: '>=20'}
 
   ordered-binary@1.6.1:
@@ -26691,14 +26684,6 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  ajv@8.20.0:
-    dependencies:
-      fast-deep-equal: 3.1.3
-      fast-uri: 3.1.0
-      json-schema-traverse: 1.0.0
-      require-from-string: 2.0.2
-    optional: true
-
   algoliasearch@5.35.0:
     dependencies:
       '@algolia/abtesting': 1.1.0
@@ -29150,7 +29135,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.8:
+  devextreme-exceljs-fork@4.4.9:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.20
@@ -29160,7 +29145,6 @@ snapshots:
       saxes: 5.0.1
       tmp: 0.2.5
       unzipper: 0.12.3
-      uuid: 8.3.2
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -35700,7 +35684,7 @@ snapshots:
       '@angular/compiler-cli': 21.1.6(@angular/compiler@21.2.9)(typescript@5.9.3)
       '@rollup/plugin-json': 6.1.0(rollup@4.59.0)
       '@rollup/wasm-node': 4.60.2
-      ajv: 8.20.0
+      ajv: 8.18.0
       ansi-colors: 4.1.3
       browserslist: 4.28.2
       chokidar: 5.0.0
@@ -35711,7 +35695,7 @@ snapshots:
       injection-js: 2.6.1
       jsonc-parser: 3.3.1
       less: 4.6.4
-      ora: 9.4.0
+      ora: 9.3.0
       piscina: 5.1.4
       postcss: 8.5.10
       rollup-plugin-dts: 6.4.1(rollup@4.59.0)(typescript@5.9.3)
@@ -36249,18 +36233,6 @@ snapshots:
       log-symbols: 7.0.1
       stdin-discarder: 0.3.2
       string-width: 8.2.0
-
-  ora@9.4.0:
-    dependencies:
-      chalk: 5.6.2
-      cli-cursor: 5.0.0
-      cli-spinners: 3.4.0
-      is-interactive: 2.0.0
-      is-unicode-supported: 2.1.0
-      log-symbols: 7.0.1
-      stdin-discarder: 0.3.2
-      string-width: 8.2.0
-    optional: true
 
   ordered-binary@1.6.1: {}
 
