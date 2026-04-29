@@ -36,67 +36,67 @@ export class AIAssistantChat extends Popup {
     return new Button(this.getWrapper().find(`.${CLASS.closeButton}`));
   }
 
-  getClearChatButton() {
+  getClearChatButton(): Selector {
     return this.getWrapper().find(`.${CLASS.clearChatButton}`);
   }
 
-  getMessages() {
+  getMessages(): Selector {
     return this.getWrapper().find(`.${CLASS.message}`);
   }
 
-  getPendingMessages() {
+  getPendingMessages(): Selector {
     return this.getWrapper().find(`.${CLASS.messagePending}`);
   }
 
-  getSuccessMessages() {
+  getSuccessMessages(): Selector {
     return this.getWrapper().find(`.${CLASS.messageSuccess}`);
   }
 
-  getErrorMessages() {
+  getErrorMessages(): Selector {
     return this.getWrapper().find(`.${CLASS.messageError}`);
   }
 
-  getMessage(index: number) {
+  getMessage(index: number): Selector {
     return this.getMessages().nth(index);
   }
 
-  getMessageHeader(index: number) {
+  getMessageHeader(index: number): Selector {
     return this.getMessage(index).find(`.${CLASS.messageHeader}`);
   }
 
-  getMessageErrorText(index: number) {
+  getMessageErrorText(index: number): Selector {
     return this.getMessage(index).find(`.${CLASS.messageErrorText}`);
   }
 
-  getMessageProgressBar(index: number) {
+  getMessageProgressBar(index: number): Selector {
     return this.getMessage(index).find(`.${CLASS.messageProgressBar}`);
   }
 
-  getMessageRegenerateButton(index: number) {
+  getMessageRegenerateButton(index: number): Selector {
     return this.getMessage(index).find(`.${CLASS.messageRegenerateButton}`);
   }
 
-  getActionList(messageIndex: number) {
+  getActionList(messageIndex: number): Selector {
     return this.getMessage(messageIndex).find(`.${CLASS.actionList}`);
   }
 
-  getActionItems(messageIndex: number) {
+  getActionItems(messageIndex: number): Selector {
     return this.getMessage(messageIndex).find(`.${CLASS.actionListItem}`);
   }
 
-  getSuccessActionItems(messageIndex: number) {
+  getSuccessActionItems(messageIndex: number): Selector {
     return this.getMessage(messageIndex).find(`.${CLASS.actionListItemSuccess}`);
   }
 
-  getErrorActionItems(messageIndex: number) {
+  getErrorActionItems(messageIndex: number): Selector {
     return this.getMessage(messageIndex).find(`.${CLASS.actionListItemError}`);
   }
 
-  getActionItemText(messageIndex: number, actionIndex: number) {
+  getActionItemText(messageIndex: number, actionIndex: number): Selector {
     return this.getActionItems(messageIndex).nth(actionIndex).find(`.${CLASS.actionListItemText}`);
   }
 
-  getActionItemIcon(messageIndex: number, actionIndex: number) {
+  getActionItemIcon(messageIndex: number, actionIndex: number): Selector {
     return this.getActionItems(messageIndex).nth(actionIndex).find(`.${CLASS.actionListItemIcon}`);
   }
 }
