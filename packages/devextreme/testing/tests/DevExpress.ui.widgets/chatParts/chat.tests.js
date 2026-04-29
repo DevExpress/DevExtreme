@@ -133,6 +133,7 @@ const moduleConfig = {
         this.getAttachButton = () => Button.getInstance(this.$element.find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`));
         this.getSuggestionsElement = () => this.instance._suggestions._$element;
         this.getSuggestionItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        this.getSuggestionButtonGroup = () => this.instance._suggestions._buttonGroup;
 
         init();
     },
@@ -2853,6 +2854,32 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.module('Proxy state options', () => {
+            QUnit.test('buttonGroup should not be created when state options change and suggestions is not set', function(assert) {
+                this.reinit({});
+
+                this.instance.option({
+                    activeStateEnabled: false,
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false,
+                    rtlEnabled: true,
+                });
+
+                assert.strictEqual(this.getSuggestionButtonGroup(), undefined, 'buttonGroup is not created');
+            });
+
+            QUnit.test('buttonGroup should not be created when state options change and suggestions is empty object', function(assert) {
+                this.reinit({ suggestions: {} });
+
+                this.instance.option({
+                    activeStateEnabled: false,
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false,
+                    rtlEnabled: true,
+                });
+
+                assert.strictEqual(this.getSuggestionButtonGroup(), undefined, 'buttonGroup is not created');
+            });
+
             [true, false].forEach(value => {
                 QUnit.test('state enabled options should be passed to buttonGroup on init', function(assert) {
                     const options = {
@@ -2864,7 +2891,7 @@ QUnit.module('Chat', () => {
 
                     this.reinit(options);
 
-                    const buttonGroup = this.instance._suggestions._buttonGroup;
+                    const buttonGroup = this.getSuggestionButtonGroup();
 
                     assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is passed');
                     assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is passed');
@@ -2885,7 +2912,7 @@ QUnit.module('Chat', () => {
                         hoverStateEnabled: value,
                     });
 
-                    const buttonGroup = this.instance._suggestions._buttonGroup;
+                    const buttonGroup = this.getSuggestionButtonGroup();
 
                     assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is updated');
                     assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is updated');
@@ -2902,7 +2929,7 @@ QUnit.module('Chat', () => {
 
                     this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
 
-                    const buttonGroup = this.instance._suggestions._buttonGroup;
+                    const buttonGroup = this.getSuggestionButtonGroup();
 
                     assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is preserved');
                     assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is preserved');
@@ -2917,7 +2944,7 @@ QUnit.module('Chat', () => {
                         suggestions: { items: [{ text: 'Item 1' }] },
                     });
 
-                    const buttonGroup = this.instance._suggestions._buttonGroup;
+                    const buttonGroup = this.getSuggestionButtonGroup();
 
                     assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is passed');
                 });
@@ -2930,7 +2957,7 @@ QUnit.module('Chat', () => {
 
                     this.instance.option('rtlEnabled', value);
 
-                    const buttonGroup = this.instance._suggestions._buttonGroup;
+                    const buttonGroup = this.getSuggestionButtonGroup();
 
                     assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is updated');
                 });
@@ -2943,7 +2970,7 @@ QUnit.module('Chat', () => {
 
                     this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
 
-                    const buttonGroup = this.instance._suggestions._buttonGroup;
+                    const buttonGroup = this.getSuggestionButtonGroup();
 
                     assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is preserved');
                 });
