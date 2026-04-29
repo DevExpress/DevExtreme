@@ -204,7 +204,7 @@ test('AI Assistant popup - success with error command', async (t) => {
     .typeText(chat.getInput(), 'Do something')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().exists).ok();
+  await t.expect(aiChat.getErrorMessages().exists).ok();
 
   await testScreenshot(t, takeScreenshot, 'datagrid__ai-assistant__success-with-error-command.png', { element: aiChat.element });
 
