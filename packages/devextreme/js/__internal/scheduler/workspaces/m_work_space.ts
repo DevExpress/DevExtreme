@@ -169,11 +169,12 @@ const DragEventNames = {
 
 const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedulerDateTable');
 
-const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerDateTable');
 const SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerTable');
 
-const SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME = addNamespace(pointerEvents.move, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_MOUSEDOWN_EVENT_NAME = addNamespace('mousedown', 'dxSchedulerDateTable');
+const SCHEDULER_CELL_MOUSEMOVE_EVENT_NAME = addNamespace('mousemove', 'dxSchedulerDateTable');
+const SCHEDULER_CELL_MOUSEUP_EVENT_NAME = addNamespace('mouseup', 'dxSchedulerDateTable');
 
 const CELL_DATA = 'dxCellData';
 
@@ -1246,23 +1247,26 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private attachPointerEvents(element) {
     let isPointerDown = false;
 
-    (eventsEngine.off as any)(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
-    (eventsEngine.off as any)(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
+    const resetMouseSelectionState = () => {
+      isPointerDown = false;
+      (this.$element() as any).removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
+    };
 
-    eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isMouseEvent(e) && e.which === 1) {
+    (eventsEngine.off as any)(element, SCHEDULER_CELL_MOUSEMOVE_EVENT_NAME);
+    (eventsEngine.off as any)(element, SCHEDULER_CELL_MOUSEDOWN_EVENT_NAME);
+    (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_MOUSEUP_EVENT_NAME);
+
+    eventsEngine.on(element, SCHEDULER_CELL_MOUSEDOWN_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
+      if (e.which === 1) {
         isPointerDown = true;
         (this.$element() as any).addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-        (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-        eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, () => {
-          isPointerDown = false;
-          (this.$element() as any).removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-        });
+        (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_MOUSEUP_EVENT_NAME);
+        eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_MOUSEUP_EVENT_NAME, resetMouseSelectionState);
       }
     });
 
-    eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
+    eventsEngine.on(element, SCHEDULER_CELL_MOUSEMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
+      if (isPointerDown && this._dateTableScrollable) {
         e.preventDefault();
         e.stopPropagation();
         this.moveToCell($(e.target), true);
@@ -2907,6 +2911,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _clean() {
     (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+    (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_MOUSEUP_EVENT_NAME);
     this.disposeRenovatedComponents();
 
     // @ts-expect-error
