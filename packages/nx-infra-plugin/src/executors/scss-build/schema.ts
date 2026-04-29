@@ -1,6 +1,6 @@
 export interface ScssBuildExecutorSchema {
   mode: 'all' | 'ci';
-  gulpBinary?: string;
-  allTaskName?: string;
-  ciTaskName?: string;
+  bundlesDir?: string;
+  cssOutputDir?: string;
+  devBundles?: string[];
 }
