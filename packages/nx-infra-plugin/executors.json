@@ -89,6 +89,11 @@
       "implementation": "./src/executors/compress/executor",
       "schema": "./src/executors/compress/schema.json",
       "description": "Compress JavaScript files"
+    },
+    "scss-build": {
+      "implementation": "./src/executors/scss-build/executor",
+      "schema": "./src/executors/scss-build/schema.json",
+      "description": "Run SCSS themes build pipeline in all or CI mode"
     }
   }
 }

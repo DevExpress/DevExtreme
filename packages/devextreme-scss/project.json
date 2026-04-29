@@ -46,9 +46,9 @@
       ]
     },
     "build:themes": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:scss-build",
       "options": {
-        "command": "pnpm --dir packages/devextreme-scss exec gulp style-compiler-themes"
+        "mode": "all"
       },
       "inputs": [
         "{projectRoot}/build/**/*",
@@ -63,9 +63,9 @@
       "cache": true
     },
     "build:themes-dev": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:scss-build",
       "options": {
-        "command": "pnpm --dir packages/devextreme-scss exec gulp style-compiler-themes-ci"
+        "mode": "ci"
       },
       "inputs": [
         "{projectRoot}/build/**/*",
