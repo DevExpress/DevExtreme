@@ -14,6 +14,8 @@ export interface CommandResult {
   message: string;
 }
 
+export type CommandResults = CommandResult[];
+
 export interface CommandCallbacks {
   success: (message?: string) => CommandResult;
   failure: (message?: string) => CommandResult;
@@ -33,17 +35,6 @@ export interface GridCommand<TArgs = undefined> {
   schema: ZodObject<ZodRawShape>;
   execute: (component: InternalGrid, callbacks: CommandCallbacks) => CommandExecutor<TArgs>;
 }
-
-export interface Command {
-  command: string;
-  args: Record<string, unknown>;
-}
-export interface CommandResponse {
-  commands: Command[];
-  explanation: string;
-}
-
-export type CommandResults = CommandResult[];
 
 export interface CommandMessages {
   success: string;
