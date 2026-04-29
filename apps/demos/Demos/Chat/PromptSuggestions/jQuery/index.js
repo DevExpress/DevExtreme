@@ -47,7 +47,8 @@ $(() => {
   }
 
   function toggleDisabledState(disabled, event) {
-    isProcessing = disabled;
+    isDisabled = disabled;
+    instance.option({ suggestions: { disabled } });
     instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
 
     if (disabled) {
@@ -140,7 +141,7 @@ $(() => {
     paginate: false,
   });
 
-  let isProcessing = false;
+  let isDisabled = false;
   let sendImmediately = false;
   let hideAfterUse = false;
 
@@ -178,7 +179,7 @@ $(() => {
     speechToTextEnabled: true,
     suggestions,
     onMessageEntered: (e) => {
-      if (isProcessing) return;
+      if (isDisabled) return;
 
       const { message, event } = e;
 

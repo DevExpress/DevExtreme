@@ -19,18 +19,18 @@ loadMessages({
 export default function App() {
   const { alerts, insertMessage, fetchAIResponse } = useApi();
   const [typingUsers, setTypingUsers] = useState([]);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [inputFieldText, setInputFieldText] = useState('');
   const [suggestionList, setSuggestionList] = useState(suggestionItems);
   const sendImmediately = useRef(false);
   const hideAfterUse = useRef(false);
   const processAIRequest = useCallback(
     async (message) => {
-      setIsProcessing(true);
+      setIsDisabled(true);
       setTypingUsers([assistant]);
       await fetchAIResponse(message);
       setTypingUsers([]);
-      setIsProcessing(false);
+      setIsDisabled(false);
     },
     [fetchAIResponse],
   );
@@ -54,10 +54,14 @@ export default function App() {
     },
     [alerts.length, insertMessage, processAIRequest],
   );
-  const suggestions = { items: suggestionList, onItemClick: onSuggestionClick };
+  const suggestions = {
+    items: suggestionList,
+    onItemClick: onSuggestionClick,
+    disabled: isDisabled,
+  };
   const onMessageEntered = useCallback(
     async ({ message, event }) => {
-      if (isProcessing) return;
+      if (isDisabled) return;
       insertMessage({ id: Date.now(), ...message });
       if (!alerts.length) {
         (event?.target).blur();
@@ -65,7 +69,7 @@ export default function App() {
         (event?.target).focus();
       }
     },
-    [isProcessing, insertMessage, alerts.length, processAIRequest],
+    [isDisabled, insertMessage, alerts.length, processAIRequest],
   );
   const onInputFieldTextChanged = useCallback((e) => {
     setInputFieldText(e?.value ?? '');
@@ -74,7 +78,7 @@ export default function App() {
   return (
     <>
       <Chat
-        className={isProcessing ? CHAT_DISABLED_CLASS : ''}
+        className={isDisabled ? CHAT_DISABLED_CLASS : ''}
         dataSource={dataSource}
         reloadOnChange={false}
         showAvatar={false}

@@ -81,6 +81,7 @@ onBeforeMount(() => {
 
 function toggleDisabledState(disabled: boolean, event?: Events.EventObject): void {
   isDisabled.value = disabled;
+  suggestions.value = { ...suggestions.value, disabled };
 
   if (disabled) {
     (event?.target as HTMLElement)?.blur();
@@ -218,11 +219,6 @@ function onSuggestionItemClick(e: { itemData?: { text: string; prompt: string } 
 
 .dx-chat {
   max-width: 900px;
-}
-
-.chat-disabled .dx-chat-suggestions {
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 .dx-chat-messagelist-empty-image {

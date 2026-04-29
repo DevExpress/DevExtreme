@@ -68,6 +68,7 @@ export class AppComponent {
 
   toggleDisabledState(disabled: boolean, event = undefined) {
     this.isDisabled = disabled;
+    this.suggestions = { ...this.suggestions, disabled };
 
     if (disabled) {
       event?.target.blur();
