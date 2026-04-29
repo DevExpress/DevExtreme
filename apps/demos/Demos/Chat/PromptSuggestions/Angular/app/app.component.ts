@@ -77,6 +77,8 @@ export class AppComponent {
   }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent): Promise<void> {
+    if (this.isDisabled) return;
+
     if (!this.appService.alerts.length) {
       this.toggleDisabledState(true, e.event);
     }

@@ -67,6 +67,7 @@ export default function App() {
   const suggestions = { items: suggestionList, onItemClick: onSuggestionClick };
 
   const onMessageEntered = useCallback(async ({ message, event }: ChatTypes.MessageEnteredEvent): Promise<void> => {
+    if (isProcessing) return;
     insertMessage({ id: Date.now(), ...message });
 
     if (!alerts.length) {
@@ -76,7 +77,7 @@ export default function App() {
 
       (event?.target as HTMLElement).focus();
     }
-  }, [insertMessage, alerts.length, processAIRequest]);
+  }, [isProcessing, insertMessage, alerts.length, processAIRequest]);
 
   const onInputFieldTextChanged = useCallback((e: ChatTypes.InputFieldTextChangedEvent) => {
     setInputFieldText(e?.value ?? '');

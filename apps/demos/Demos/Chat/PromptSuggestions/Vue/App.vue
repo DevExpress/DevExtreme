@@ -136,6 +136,8 @@ function alertLimitReached(): void {
 }
 
 function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent): void {
+  if (isDisabled.value) return;
+
   dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
   if (!alerts.value.length) {
@@ -216,6 +218,11 @@ function onSuggestionItemClick(e: { itemData?: { text: string; prompt: string } 
 
 .dx-chat {
   max-width: 900px;
+}
+
+.chat-disabled .dx-chat-suggestions {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .dx-chat-messagelist-empty-image {

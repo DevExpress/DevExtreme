@@ -74,6 +74,11 @@
   pointer-events: none;
 }
 
+.chat-disabled .dx-chat-suggestions {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .dx-chat-suggestions .dx-button {
   max-width: 255px;
 }

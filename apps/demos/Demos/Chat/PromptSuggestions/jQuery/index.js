@@ -47,6 +47,7 @@ $(() => {
   }
 
   function toggleDisabledState(disabled, event) {
+    isProcessing = disabled;
     instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
 
     if (disabled) {
@@ -139,6 +140,7 @@ $(() => {
     paginate: false,
   });
 
+  let isProcessing = false;
   let sendImmediately = false;
   let hideAfterUse = false;
 
@@ -176,6 +178,8 @@ $(() => {
     speechToTextEnabled: true,
     suggestions,
     onMessageEntered: (e) => {
+      if (isProcessing) return;
+
       const { message, event } = e;
 
       dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);

@@ -57,6 +57,7 @@ export default function App() {
   const suggestions = { items: suggestionList, onItemClick: onSuggestionClick };
   const onMessageEntered = useCallback(
     async ({ message, event }) => {
+      if (isProcessing) return;
       insertMessage({ id: Date.now(), ...message });
       if (!alerts.length) {
         (event?.target).blur();
@@ -64,7 +65,7 @@ export default function App() {
         (event?.target).focus();
       }
     },
-    [insertMessage, alerts.length, processAIRequest],
+    [isProcessing, insertMessage, alerts.length, processAIRequest],
   );
   const onInputFieldTextChanged = useCallback((e) => {
     setInputFieldText(e?.value ?? '');
