@@ -1217,7 +1217,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     (eventsEngine.off as any)(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
 
     eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isMouseEvent(e) && e.which === 1) {
+      if ((isMouseEvent(e) || isMouseEvent(e.originalEvent)) && e.which === 1) {
         isPointerDown = true;
         (this.$element() as any).addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
         (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
@@ -1229,7 +1229,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
 
     eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
+      if (isPointerDown && this._dateTableScrollable) {
         e.preventDefault();
         e.stopPropagation();
         this.moveToCell($(e.target), true);
