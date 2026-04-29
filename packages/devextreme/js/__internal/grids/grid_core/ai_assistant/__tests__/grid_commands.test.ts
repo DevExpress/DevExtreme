@@ -339,7 +339,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: 'test', args: { value: 'hello' } }],
       });
 
@@ -349,30 +349,30 @@ describe('GridCommands', () => {
     it('should return false if response.actions is not an array', () => {
       const gridCommands = new GridCommands(createMockComponent(), []);
 
-      expect(gridCommands.validateResponse({ actions: 'not-array' })).toBe(false);
-      expect(gridCommands.validateResponse({ actions: 123 })).toBe(false);
-      expect(gridCommands.validateResponse({ actions: {} })).toBe(false);
+      expect(gridCommands.validate({ actions: 'not-array' })).toBe(false);
+      expect(gridCommands.validate({ actions: 123 })).toBe(false);
+      expect(gridCommands.validate({ actions: {} })).toBe(false);
     });
 
     it('should return false if response.actions is missing', () => {
       const gridCommands = new GridCommands(createMockComponent(), []);
 
-      expect(gridCommands.validateResponse({})).toBe(false);
-      expect(gridCommands.validateResponse({ other: [] })).toBe(false);
+      expect(gridCommands.validate({})).toBe(false);
+      expect(gridCommands.validate({ other: [] })).toBe(false);
     });
 
     it('should return false if response is null or undefined', () => {
       const gridCommands = new GridCommands(createMockComponent(), []);
 
-      expect(gridCommands.validateResponse(null)).toBe(false);
-      expect(gridCommands.validateResponse(undefined)).toBe(false);
+      expect(gridCommands.validate(null)).toBe(false);
+      expect(gridCommands.validate(undefined)).toBe(false);
     });
 
     it('should return false if any action has an unknown name', () => {
       const command = createMockCommand('known');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: 'unknown', args: {} }],
       });
 
@@ -384,11 +384,11 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      expect(gridCommands.validateResponse({
+      expect(gridCommands.validate({
         actions: [{ name: 123, args: {} }],
       })).toBe(false);
 
-      expect(gridCommands.validateResponse({
+      expect(gridCommands.validate({
         actions: [{ name: true, args: {} }],
       })).toBe(false);
     });
@@ -398,7 +398,7 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: '', args: {} }],
       });
 
@@ -410,11 +410,11 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      expect(gridCommands.validateResponse({
+      expect(gridCommands.validate({
         actions: [{ args: {} }],
       })).toBe(false);
 
-      expect(gridCommands.validateResponse({
+      expect(gridCommands.validate({
         actions: [{ name: 'test' }],
       })).toBe(false);
     });
@@ -424,7 +424,7 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: 'test', args: null }],
       });
 
@@ -437,7 +437,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: 'test', args: { value: 123 } }],
       });
 
@@ -450,7 +450,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: 'test', args: {} }],
       });
 
@@ -463,7 +463,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: 'test', args: { value: 'ok', extra: true } }],
       });
 
@@ -473,7 +473,7 @@ describe('GridCommands', () => {
     it('should return true for an empty actions array', () => {
       const gridCommands = new GridCommands(createMockComponent(), []);
 
-      const result = gridCommands.validateResponse({ actions: [] });
+      const result = gridCommands.validate({ actions: [] });
 
       expect(result).toBe(true);
     });
@@ -482,7 +482,7 @@ describe('GridCommands', () => {
       const command = createMockCommand('clearFilter');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [{ name: 'clearFilter', args: {} }],
       });
 
@@ -493,7 +493,7 @@ describe('GridCommands', () => {
       const command = createMockCommand('valid');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validateResponse({
+      const result = gridCommands.validate({
         actions: [
           { name: 'valid', args: {} },
           { name: 'invalid', args: {} },

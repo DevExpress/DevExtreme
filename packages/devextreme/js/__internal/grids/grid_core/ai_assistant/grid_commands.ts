@@ -118,7 +118,7 @@ export class GridCommands {
     };
   }
 
-  public validateResponse(response: unknown): boolean {
+  public validate(response: unknown): boolean {
     const res = response as Record<string, unknown>;
 
     if (!res || !Array.isArray(res.actions)) {
