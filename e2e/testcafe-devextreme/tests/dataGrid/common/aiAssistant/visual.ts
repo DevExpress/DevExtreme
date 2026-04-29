@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Ai Assistant.Visual`
+fixture`Ai Assistant.Visual`
   .page(url(__dirname, '../../../container-ai-integration.html'));
 
 const DATA_GRID_SELECTOR = '#container';
