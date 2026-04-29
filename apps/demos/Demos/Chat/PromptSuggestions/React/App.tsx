@@ -28,20 +28,20 @@ export default function App() {
   } = useApi();
 
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [inputFieldText, setInputFieldText] = useState<string>('');
   const [suggestionList, setSuggestionList] = useState(suggestionItems);
   const sendImmediately = useRef<boolean>(false);
   const hideAfterUse = useRef<boolean>(false);
 
   const processAIRequest = useCallback(async (message: ChatTypes.Message): Promise<void> => {
-    setIsProcessing(true);
+    setIsDisabled(true);
     setTypingUsers([assistant]);
 
     await fetchAIResponse(message);
 
     setTypingUsers([]);
-    setIsProcessing(false);
+    setIsDisabled(false);
   }, [fetchAIResponse]);
 
   const onSuggestionClick = useCallback((e: { itemData?: { text: string; prompt: string } }) => {
@@ -64,9 +64,10 @@ export default function App() {
     }
   }, [alerts.length, insertMessage, processAIRequest]);
 
-  const suggestions = { items: suggestionList, onItemClick: onSuggestionClick };
+  const suggestions = { items: suggestionList, onItemClick: onSuggestionClick, disabled: isDisabled };
 
   const onMessageEntered = useCallback(async ({ message, event }: ChatTypes.MessageEnteredEvent): Promise<void> => {
+    if (isDisabled) return;
     insertMessage({ id: Date.now(), ...message });
 
     if (!alerts.length) {
@@ -76,7 +77,7 @@ export default function App() {
 
       (event?.target as HTMLElement).focus();
     }
-  }, [insertMessage, alerts.length, processAIRequest]);
+  }, [isDisabled, insertMessage, alerts.length, processAIRequest]);
 
   const onInputFieldTextChanged = useCallback((e: ChatTypes.InputFieldTextChangedEvent) => {
     setInputFieldText(e?.value ?? '');
@@ -87,7 +88,7 @@ export default function App() {
   return (
     <>
       <Chat
-        className={isProcessing ? CHAT_DISABLED_CLASS : ''}
+        className={isDisabled ? CHAT_DISABLED_CLASS : ''}
         dataSource={dataSource}
         reloadOnChange={false}
         showAvatar={false}
