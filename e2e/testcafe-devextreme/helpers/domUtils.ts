@@ -137,8 +137,8 @@ export const addFocusableElementBefore = ClientFunction((
   return button.id;
 });
 
-export const hasHorizontalScroll = async (container: Selector) => {
+export const hasHorizontalScroll = async (container: Selector): Promise<boolean> => {
   const scrollWidth = await container.scrollWidth;
   const clientWidth = await container.clientWidth;
   return scrollWidth > clientWidth;
-}
+};
