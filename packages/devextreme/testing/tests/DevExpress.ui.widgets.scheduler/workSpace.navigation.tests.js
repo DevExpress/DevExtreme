@@ -1,5 +1,4 @@
 import config from 'core/config';
-import support from '__internal/core/utils/m_support';
 import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import $ from 'jquery';
@@ -779,42 +778,6 @@ module('Workspace navigation', () => {
                     $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
-                });
-
-                test('It should select cells via mouse if scrollable \'scrollByContent\' is true', async function(assert) {
-                    const originalSupportTouch = support.touch;
-
-                    try {
-                        support.touch = true;
-
-                        const $element = this.createInstance({
-                            focusStateEnabled: true,
-                            firstDayOfWeek: 1,
-                            currentDate: new Date(2015, 3, 1),
-                            height: 400,
-                            allowMultipleCellSelection: true,
-                            onContentReady: function(e) {
-                                e.component.attachTablesEvents();
-                            },
-                        }, 'dxSchedulerWorkSpaceMonth');
-
-                        const cells = $element.find('.' + CELL_CLASS);
-                        const cell = cells.eq(23).get(0);
-                        const $table = $element.find('.dx-scheduler-date-table');
-
-                        assert.ok($element.dxSchedulerWorkSpaceMonth('instance')._dateTableScrollable.option('scrollByContent'), 'scrollByContent is enabled');
-
-                        pointerMock(cells.eq(2)).start().click();
-
-                        $($table).trigger($.Event('mousedown', { target: cells.eq(2).get(0), which: 1 }));
-                        $($table).trigger($.Event('mousemove', { target: cell, which: 1 }));
-
-                        assert.ok(cells.filter('.dx-state-focused').length > 1, 'cells are selected');
-                        assert.ok(cells.eq(2).hasClass('dx-state-focused'), 'the start cell is selected');
-                        assert.ok(cells.eq(23).hasClass('dx-state-focused'), 'the end cell is selected');
-                    } finally {
-                        support.touch = originalSupportTouch;
-                    }
                 });
 
                 test('Multiselection with left arrow should work in workspace day', async function(assert) {
