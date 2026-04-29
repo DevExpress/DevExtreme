@@ -2851,6 +2851,70 @@ QUnit.module('Chat', () => {
 
             this.getSuggestionItems().first().trigger('dxclick');
         });
+
+        QUnit.module('Proxy state options', () => {
+            [true, false].forEach(value => {
+                QUnit.test('state enabled options should be passed to buttonGroup on init', function(assert) {
+                    const options = {
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    };
+
+                    this.reinit(options);
+
+                    const buttonGroup = this.instance._suggestions._buttonGroup;
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is passed');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is passed');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is passed');
+                });
+
+                QUnit.test('state enabled options should be preserved when suggestions are updated at runtime', function(assert) {
+                    this.reinit({
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
+
+                    const buttonGroup = this.instance._suggestions._buttonGroup;
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is preserved');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is preserved');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is preserved');
+                });
+            });
+
+            [true, false].forEach(value => {
+                QUnit.test('rtlEnabled should be passed to buttonGroup on init', function(assert) {
+                    this.reinit({
+                        rtlEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    const buttonGroup = this.instance._suggestions._buttonGroup;
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is passed');
+                });
+
+                QUnit.test('rtlEnabled should be preserved when suggestions are updated at runtime', function(assert) {
+                    this.reinit({
+                        rtlEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
+
+                    const buttonGroup = this.instance._suggestions._buttonGroup;
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is preserved');
+                });
+            });
+        });
     });
 
     QUnit.module('Data Layer Integration', {

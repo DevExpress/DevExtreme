@@ -41,7 +41,7 @@ import type {
   Properties as MessageListProperties,
 } from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
-import Suggestions from '@ts/ui/chat/suggestions';
+import Suggestions, { type SuggestionsOptions } from '@ts/ui/chat/suggestions';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
@@ -477,10 +477,28 @@ class Chat extends Widget<ChatProperties> {
     });
   }
 
-  _renderSuggestions(): void {
-    const { suggestions } = this.option();
+  _getSuggestionsConfiguration(): SuggestionsOptions {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      rtlEnabled,
+      suggestions,
+    } = this.option();
 
-    this._suggestions = new Suggestions(this.$element(), suggestions);
+    const config: SuggestionsOptions = {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      rtlEnabled,
+      ...suggestions,
+    };
+
+    return config;
+  }
+
+  _renderSuggestions(): void {
+    this._suggestions = new Suggestions(this.$element(), this._getSuggestionsConfiguration());
   }
 
   _renderMessageBox(): void {
@@ -787,8 +805,7 @@ class Chat extends Widget<ChatProperties> {
         this._messageBox.option(name, this._getSendButtonOptionsWithAction());
         break;
       case 'suggestions': {
-        const { suggestions } = this.option();
-        this._suggestions?.updateOptions(suggestions);
+        this._suggestions?.updateOptions(this._getSuggestionsConfiguration());
         break;
       }
       default:
