@@ -1,16 +1,16 @@
-import type { GridCommand } from '@ts/grids/grid_core/ai_assistant/types';
+import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { z } from 'zod';
+
+import { defineGridCommand } from './defineGridCommand';
 
 const sortingCommandSchema = z.object({
   dataField: z.string(),
   sortOrder: z.enum(['asc', 'desc', 'none']),
 }).strict();
 
-type SortingCommandArgs = z.infer<typeof sortingCommandSchema>;
-
 const getSortingDefaultMessage = (
-  args: SortingCommandArgs,
+  args: z.infer<typeof sortingCommandSchema>,
   column: Column | undefined,
 ): string => {
   const columnName = column?.caption ?? args.dataField;
@@ -24,11 +24,11 @@ const getSortingDefaultMessage = (
   return `Sort data against "${columnName}" in ${sortOrder} order.`;
 };
 
-export const sortingCommand: GridCommand<SortingCommandArgs> = {
+export const sortingCommand = defineGridCommand({
   name: 'sorting',
   description: 'Sort a column ascending, descending, or remove its sort',
   schema: sortingCommandSchema,
-  execute: (component, { success, failure }) => (args) => {
+  execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
     const column: Column | undefined = columnsController.columnOption(args.dataField);
     const defaultMessage = getSortingDefaultMessage(args, column);
@@ -46,13 +46,13 @@ export const sortingCommand: GridCommand<SortingCommandArgs> = {
       return Promise.resolve(failure(defaultMessage));
     }
   },
-};
+});
 
-export const clearSortingCommand: GridCommand = {
+export const clearSortingCommand = defineGridCommand({
   name: 'clearSorting',
   description: 'Remove sorting from all columns',
   schema: z.object({}).strict(),
-  execute: (component, { success, failure }) => () => {
+  execute: (component, { success, failure }) => (): Promise<CommandResult> => {
     const defaultMessage = 'Clear sorting.';
 
     try {
@@ -64,4 +64,4 @@ export const clearSortingCommand: GridCommand = {
       return Promise.resolve(failure(defaultMessage));
     }
   },
-};
+});

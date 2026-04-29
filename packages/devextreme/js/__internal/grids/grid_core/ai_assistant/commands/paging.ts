@@ -1,17 +1,17 @@
-import type { GridCommand } from '@ts/grids/grid_core/ai_assistant/types';
+import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import { z } from 'zod';
+
+import { defineGridCommand } from './defineGridCommand';
 
 const pagingCommandSchema = z.object({
   enabled: z.boolean(),
 }).strict();
 
-type PagingCommandArgs = z.infer<typeof pagingCommandSchema>;
-
-export const pagingCommand: GridCommand<PagingCommandArgs> = {
+export const pagingCommand = defineGridCommand({
   name: 'paging',
   description: 'Enable or disable pagination',
   schema: pagingCommandSchema,
-  execute: (component, { success, failure }) => (args) => {
+  execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const defaultMessage = `Turn ${args.enabled ? 'on' : 'off'} pagination.`;
 
     try {
@@ -22,20 +22,18 @@ export const pagingCommand: GridCommand<PagingCommandArgs> = {
       return Promise.resolve(failure(defaultMessage));
     }
   },
-};
+});
 
 const pageSizeCommandSchema = z.object({
   // eslint-disable-next-line spellcheck/spell-checker
   pageSize: z.number().int().nonnegative(),
 }).strict();
 
-type PageSizeCommandArgs = z.infer<typeof pageSizeCommandSchema>;
-
-export const pageSizeCommand: GridCommand<PageSizeCommandArgs> = {
+export const pageSizeCommand = defineGridCommand({
   name: 'pageSize',
   description: 'Change the number of rows per page',
   schema: pageSizeCommandSchema,
-  execute: (component, { success, failure }) => (args) => {
+  execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const paging = component.option('paging');
     const defaultMessage = args.pageSize === 0
       ? 'Show all rows.'
@@ -53,20 +51,18 @@ export const pageSizeCommand: GridCommand<PageSizeCommandArgs> = {
       return Promise.resolve(failure(defaultMessage));
     }
   },
-};
+});
 
 const pageIndexCommandSchema = z.object({
   // eslint-disable-next-line spellcheck/spell-checker
   pageIndex: z.number().int().nonnegative(),
 }).strict();
 
-type PageIndexCommandArgs = z.infer<typeof pageIndexCommandSchema>;
-
-export const pageIndexCommand: GridCommand<PageIndexCommandArgs> = {
+export const pageIndexCommand = defineGridCommand({
   name: 'pageIndex',
   description: 'Navigate to a specific page (0-based: page 0 is first)',
   schema: pageIndexCommandSchema,
-  execute: (component, { success, failure }) => async (args) => {
+  execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const paging = component.option('paging');
     const dataController = component.getController('data');
     const defaultMessage = `Switch the view to page number ${args.pageIndex}.`;
@@ -85,4 +81,4 @@ export const pageIndexCommand: GridCommand<PageIndexCommandArgs> = {
       return failure(defaultMessage);
     }
   },
-};
+});
