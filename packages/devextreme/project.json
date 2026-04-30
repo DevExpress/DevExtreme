@@ -1305,7 +1305,24 @@
         "{projectRoot}/artifacts/npm/devextreme",
         "{projectRoot}/artifacts/npm/devextreme-dist",
         "{projectRoot}/artifacts/ts/dx.all.d.ts"
-      ]
+      ],
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx run devextreme:build:npm:dts-modules",
+            "pnpm nx run devextreme:build:npm:dts-bundle",
+            "pnpm nx run devextreme:build:npm:dist:package-json",
+            "pnpm nx run devextreme:build:npm:dist:meta",
+            "pnpm nx run devextreme:build:npm:assemble",
+            "pnpm nx run devextreme:build:npm:root-package-json",
+            "pnpm nx run devextreme:build:npm:meta",
+            "pnpm nx run devextreme:compress:npm-sources -c production",
+            "pnpm nx run devextreme:build:npm:dist-flatten",
+            "pnpm nx run devextreme:verify:public-modules",
+            "pnpm nx run devextreme:build:npm:scss"
+          ]
+        }
+      }
     },
     "build": {
       "executor": "nx:run-commands",

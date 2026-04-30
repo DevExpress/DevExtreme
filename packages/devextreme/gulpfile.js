@@ -31,7 +31,6 @@ gulp.task('clean', function(callback) {
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
-require('./build/gulp/npm');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/check_licenses');
@@ -71,6 +70,12 @@ gulp.task('aspnet', shell.task(
 ));
 
 gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
+
+gulp.task('npm', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:build:npm -c production'
+        : 'pnpm nx run devextreme:build:npm'
+));
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
