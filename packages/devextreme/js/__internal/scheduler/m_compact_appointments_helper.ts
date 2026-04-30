@@ -1,5 +1,4 @@
 import { locate, move } from '@js/common/core/animation/translator';
-import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
@@ -9,6 +8,7 @@ import type { Appointment } from '@js/ui/scheduler';
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import type Scheduler from './m_scheduler';
 import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from './types';
+import { formatImplicitSchedulerDate } from './utils/global_formats';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
@@ -185,7 +185,7 @@ export class CompactAppointmentsHelper {
   }
 
   private localizeDate(date) {
-    return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
+    return formatImplicitSchedulerDate(date);
   }
 
   private getDateText(

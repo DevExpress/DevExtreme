@@ -1,4 +1,5 @@
 import { PositionConfig } from './common/core/animation';
+import type { Format as LocalizationFormat } from './common/core/localization';
 import type {
   OmitInternal,
 } from './core';
@@ -284,6 +285,36 @@ export type VersionAssertion = {
  */
 export type GlobalConfig = {
   versionAssertions?: VersionAssertion[];
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  dateFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  timeFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  dateTimeFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  numberFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  dateTimeFormatPresets?: Record<string, LocalizationFormat | Record<string, LocalizationFormat>>;
   /**
    * @docid
    * @default "."

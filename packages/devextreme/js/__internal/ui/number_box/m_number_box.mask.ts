@@ -12,6 +12,7 @@ import {
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/number_box';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 import NumberBoxBase from './m_number_box.base';
 import {
@@ -92,9 +93,18 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     };
   }
 
+  _getEffectiveFormatOption() {
+    const format = this.option('format');
+    return isDefined(format)
+      ? format
+      : getGlobalFormatByDataType('number');
+  }
+
   _getTextSeparatorIndex(text) {
     const decimalSeparator = number.getDecimalSeparator();
-    const realSeparatorOccurrenceIndex = getRealSeparatorIndex(this.option('format')).occurrence;
+    const formatPattern = this._getFormatPattern();
+    const patternString = isString(formatPattern) ? formatPattern : '';
+    const realSeparatorOccurrenceIndex = getRealSeparatorIndex(patternString).occurrence;
     return getNthOccurrence(text, decimalSeparator, realSeparatorOccurrenceIndex);
   }
 
@@ -336,10 +346,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _parse(text, format) {
-    const formatOption = this.option('format');
-    // @ts-expect-error ts-error
+    const formatOption = this._getEffectiveFormatOption();
     const isCustomParser = isFunction(formatOption.parser);
-    // @ts-expect-error ts-error
     const parser = isCustomParser ? formatOption.parser : number.parse;
     let integerPartStartIndex = 0;
 
@@ -361,8 +369,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _format(value, format) {
-    const formatOption = this.option('format');
-    // @ts-expect-error ts-error
+    const formatOption = this._getEffectiveFormatOption();
     const customFormatter = formatOption?.formatter || formatOption;
     const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
@@ -380,11 +387,9 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _updateFormat(): void {
-    const { format } = this.option();
-    // @ts-expect-error ts-error
+    const format = this._getEffectiveFormatOption();
     const isCustomParser = isFunction(format?.parser);
     const isLDMLPattern = isString(format) && (format.includes('0') || format.includes('#'));
-    // @ts-expect-error ts-error
     const isExponentialFormat = format === 'exponential' || format?.type === 'exponential';
     const shouldUseFormatAsIs = isCustomParser || isLDMLPattern || isExponentialFormat;
 
@@ -568,8 +573,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _useMaskBehavior(): boolean {
     const { useMaskBehavior } = this.option();
-    // @ts-expect-error ts-error
-    return !!this.option('format') && useMaskBehavior;
+    return !!this._getEffectiveFormatOption() && !!useMaskBehavior;
   }
 
   _renderInputType(): void {

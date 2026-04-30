@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
 import type { Format } from '@js/localization';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 import type { PopupProperties } from '../popup/m_popup';
 import type DateBox from './date_box.base';
@@ -39,9 +40,12 @@ class DateViewStrategy extends DateBoxStrategy {
 
   getDisplayFormat(displayFormat: Format): Format {
     const { type = 'date' } = this.dateBox.option();
+    const globalFormat = type === 'date' || type === 'datetime'
+      ? getGlobalFormatByDataType(type)
+      : undefined;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || dateUtils.FORMATS_MAP[type];
+    return displayFormat || globalFormat || dateUtils.FORMATS_MAP[type];
   }
 
   popupConfig(config: PopupProperties): PopupProperties {
