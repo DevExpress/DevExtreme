@@ -44,11 +44,24 @@ const mockChatInstance = {
   $element: jest.fn(() => mockChatElement),
 };
 
+const mockClearChatButtonInstance = {
+  option: jest.fn(),
+};
+
 const createComponentMock = jest.fn((
   _el: any,
   Widget: any,
+  options?: any,
 ): any => {
   if (Widget === Popup) {
+    const toolbarItems = options?.toolbarItems;
+
+    if (toolbarItems) {
+      toolbarItems.forEach((item: any) => {
+        item.options?.onInitialized?.({ component: mockClearChatButtonInstance });
+      });
+    }
+
     return mockPopupInstance;
   }
   if (Widget === Chat) {
@@ -105,6 +118,7 @@ const beforeTest = (): void => {
   mockChatElement.removeClass(CLASSES.disabled);
   mockChatElement.empty();
   mockWidgetInstance.option.mockClear();
+  mockClearChatButtonInstance.option.mockClear();
 };
 
 const afterTest = (): void => {
@@ -750,7 +764,7 @@ describe('AIChat', () => {
 
         aiChat.setDisabled(true);
 
-        expect(mockPopupInstance.option).toHaveBeenCalledWith('toolbarItems[0].options.disabled', true);
+        expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', true);
       });
 
       it('should enable clear button via popup toolbarItems option', () => {
@@ -761,7 +775,7 @@ describe('AIChat', () => {
         aiChat.setDisabled(true);
         aiChat.setDisabled(false);
 
-        expect(mockPopupInstance.option).toHaveBeenCalledWith('toolbarItems[0].options.disabled', false);
+        expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
       });
 
       it('should not update popup toolbarItems when onChatCleared is not provided', () => {
@@ -770,8 +784,8 @@ describe('AIChat', () => {
 
         aiChat.setDisabled(true);
 
-        expect(mockPopupInstance.option).not.toHaveBeenCalledWith(
-          'toolbarItems[0].options.disabled',
+        expect(mockClearChatButtonInstance.option).not.toHaveBeenCalledWith(
+          'disabled',
           expect.anything(),
         );
       });
@@ -781,12 +795,12 @@ describe('AIChat', () => {
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
-        mockPopupInstance.option.mockClear();
+        mockClearChatButtonInstance.option.mockClear();
         mockWidgetInstance.option.mockClear();
 
         aiChat.setDisabled(true);
 
-        expect(mockPopupInstance.option).not.toHaveBeenCalled();
+        expect(mockClearChatButtonInstance.option).not.toHaveBeenCalled();
         expect(mockWidgetInstance.option).not.toHaveBeenCalled();
       });
 

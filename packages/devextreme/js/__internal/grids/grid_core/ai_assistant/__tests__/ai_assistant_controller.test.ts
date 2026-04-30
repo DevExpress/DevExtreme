@@ -156,11 +156,11 @@ describe('AIAssistantController', () => {
         'aiAssistant.aiIntegration': mockAIIntegration,
       });
 
-      controller.sendRequestToAI({
+      const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message).catch(() => {});
+      } as Message);
 
       sendRequestCallbacks.onError?.(new Error('Network error'));
 
@@ -172,6 +172,8 @@ describe('AIAssistantController', () => {
           text: 'Network error',
         }),
       ]);
+
+      await expect(promise).rejects.toThrow('Network error');
     });
 
     it('should fail message when response has no actions', async () => {
@@ -179,11 +181,11 @@ describe('AIAssistantController', () => {
         'aiAssistant.aiIntegration': mockAIIntegration,
       });
 
-      controller.sendRequestToAI({
+      const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message).catch(() => {});
+      } as Message);
 
       const response = {} as ExecuteGridAssistantCommandResult;
 
@@ -199,6 +201,8 @@ describe('AIAssistantController', () => {
           text: 'Default error message',
         }),
       ]);
+
+      await expect(promise).rejects.toThrow('Default error message');
     });
 
     it('should resolve promise when command succeeds', async () => {
