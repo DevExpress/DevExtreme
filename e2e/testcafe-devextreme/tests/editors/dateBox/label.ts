@@ -25,10 +25,9 @@ test('Symbol parts in label should not be cropped', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}).before(async () => {
   await appendElementTo('#container', 'div', 'dateBox');
-  await setStyleAttribute(Selector('#container'), 'padding: 8px;');
-  await t.resizeWindow(300, 600);
+  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 600px; padding: 8px;');
 
   for (const stylingMode of stylingModes) {
     for (const labelMode of visibleLabelModes) {
