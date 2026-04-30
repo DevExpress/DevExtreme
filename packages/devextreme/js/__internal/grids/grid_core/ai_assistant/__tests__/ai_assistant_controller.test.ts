@@ -21,7 +21,7 @@ import type { CommandResult } from '../types';
 
 jest.mock('../grid_commands');
 
-const MockedGridCommands = jest.mocked(GridCommands);
+const MockedGridCommands = GridCommands as jest.MockedClass<typeof GridCommands>;
 
 let sendRequestCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
 
@@ -67,10 +67,13 @@ describe('AIAssistantController', () => {
     jest.clearAllMocks();
 
     // TODO: Rework the tests using updated GridCommands implementation
-    MockedGridCommands.mockImplementation(() => ({
-      validate: jest.fn().mockReturnValue(true),
-      executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([{ status: 'success', message: 'sort' }]),
-    }) as unknown as GridCommands);
+    (MockedGridCommands.mockImplementation as jest.Mock).call(
+      MockedGridCommands,
+      () => ({
+        validate: jest.fn().mockReturnValue(true),
+        executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([{ status: 'success', message: 'sort' }]),
+      }),
+    );
   });
 
   describe('getMessageDataSource', () => {
