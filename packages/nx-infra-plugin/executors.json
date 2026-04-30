@@ -104,6 +104,11 @@
       "implementation": "./src/executors/npm-assemble/executor",
       "schema": "./src/executors/npm-assemble/schema.json",
       "description": "Assemble npm package from transpiled sources, bin, license, dist files and meta"
+    },
+    "scss-assemble": {
+      "implementation": "./src/executors/scss-assemble/executor",
+      "schema": "./src/executors/scss-assemble/schema.json",
+      "description": "Assemble SCSS package: copy files with data-uri inlining, fonts, and icons"
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "description": "Assemble SCSS package: copy files with data-uri inlining, fonts, and icons.",
+  "properties": {
+    "scssPackagePath": {
+      "type": "string",
+      "description": "Path to the devextreme-scss package directory (relative to project root)."
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "Output directory for assembled SCSS files (relative to project root)."
+    }
+  },
+  "required": ["scssPackagePath", "outputDir"]
+}

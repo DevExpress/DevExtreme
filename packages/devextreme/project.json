@@ -1032,6 +1032,21 @@
         "{projectRoot}/artifacts/npm/devextreme/**/*"
       ]
     },
+    "build:npm:scss": {
+      "executor": "devextreme-nx-infra-plugin:scss-assemble",
+      "options": {
+        "scssPackagePath": "../devextreme-scss",
+        "outputDir": "./artifacts/npm/devextreme/scss"
+      },
+      "inputs": [
+        "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/scss/**/*"
+      ]
+    },
     "build:npm:root-package-json": {
       "executor": "devextreme-nx-infra-plugin:prepare-package-json",
       "options": {
