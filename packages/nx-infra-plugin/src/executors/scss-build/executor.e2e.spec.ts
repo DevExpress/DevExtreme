@@ -16,7 +16,7 @@ function createMockModules(workspaceRoot: string, projectRoot: string): void {
       '}',
       'module.exports = {',
       '  SassString,',
-      "  compile: () => ({ css: '@charset \"UTF-8\"; .a{display:flex}' })",
+      '  compile: () => ({ css: \'@charset "UTF-8"; .a{display:flex}\' })',
       '};',
       '',
     ].join('\n'),
@@ -102,8 +102,14 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
     ].join('\n'),
   );
 
-  await writeFileText(path.join(buildDir, 'bundle-template.common.scss'), '.common { color: red; }');
-  await writeFileText(path.join(buildDir, 'bundle-template.generic.scss'), '.generic-$COLOR { color: red; }');
+  await writeFileText(
+    path.join(buildDir, 'bundle-template.common.scss'),
+    '.common { color: red; }',
+  );
+  await writeFileText(
+    path.join(buildDir, 'bundle-template.generic.scss'),
+    '.generic-$COLOR { color: red; }',
+  );
 
   createMockModules(workspaceRoot, projectRoot);
   return projectRoot;
