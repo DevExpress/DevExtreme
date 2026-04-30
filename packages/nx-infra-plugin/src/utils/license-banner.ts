@@ -110,15 +110,11 @@ export async function applyLicenseBannerToFile(
   filePath: string,
   banner: string,
   options: {
-    commentType: '!' | '*';
     separator?: string;
     prependAfterLicense?: string;
-  },
+  } = {},
 ): Promise<void> {
   const content = await readFileText(filePath);
-  if (content.startsWith(COMMENT_OPEN + options.commentType)) {
-    return;
-  }
   const separator = options.separator ?? '';
   const prepend = options.prependAfterLicense ?? '';
   await writeFileText(filePath, banner + separator + prepend + content);

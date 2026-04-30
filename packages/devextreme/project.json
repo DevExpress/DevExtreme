@@ -1238,23 +1238,73 @@
         "cwd": "{projectRoot}/artifacts/npm/devextreme-dist"
       }
     },
-    "build:npm": {
+    "build:npm:dist-flatten": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          {
+            "from": "./artifacts/npm/devextreme/dist",
+            "to": "./artifacts/npm/devextreme-dist"
+          }
+        ]
+      },
+      "inputs": ["{projectRoot}/artifacts/npm/devextreme/dist/**/*"],
+      "outputs": ["{projectRoot}/artifacts/npm/devextreme-dist/**/*"]
+    },
+    "verify:public-modules": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cross-env BUILD_ESM_PACKAGE=true gulp npm",
+        "command": "cross-env BUILD_ESM_PACKAGE=true gulp ts-check-public-modules",
         "cwd": "{projectRoot}"
       },
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
+        "{projectRoot}/build/gulp/modules_metadata.json"
+      ]
+    },
+    "build:npm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx run devextreme:build:npm:dts-modules",
+          "pnpm nx run devextreme:build:npm:dts-bundle",
+          "pnpm nx run devextreme:build:npm:dist:package-json",
+          "pnpm nx run devextreme:build:npm:dist:meta",
+          "pnpm nx run devextreme:build:npm:assemble",
+          "pnpm nx run devextreme:build:npm:root-package-json",
+          "pnpm nx run devextreme:build:npm:meta",
+          "pnpm nx run devextreme:compress:npm-sources",
+          "pnpm nx run devextreme:build:npm:dist-flatten",
+          "pnpm nx run devextreme:verify:public-modules",
+          "pnpm nx run devextreme:build:npm:scss"
+        ],
+        "parallel": false
+      },
+      "inputs": [
         "{workspaceRoot}/packages/devextreme-dist/package.json",
-        "{projectRoot}/artifacts/transpiled/**/*",
-        "{projectRoot}/artifacts/transpiled-esm-npm/**/*"
+        "{workspaceRoot}/packages/devextreme-dist/README.md",
+        "{workspaceRoot}/packages/devextreme-dist/LICENSE.md",
+        "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
+        "{workspaceRoot}/README.md",
+        "{projectRoot}/artifacts/transpiled-esm-npm/**/*",
+        "{projectRoot}/artifacts/dist_ts/**/*",
+        "{projectRoot}/js/**/*.json",
+        "{projectRoot}/license/**/*",
+        "{projectRoot}/build/npm-bin/**/*",
+        "{projectRoot}/build/npm-templates/**/*",
+        "{projectRoot}/build/gulp/license-header.txt",
+        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{projectRoot}/ts/dx.all.d.ts",
+        "{projectRoot}/ts/aliases.d.ts",
+        "{projectRoot}/webpack.config.js",
+        "{projectRoot}/package.json"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme",
-        "{projectRoot}/artifacts/npm/devextreme-dist"
+        "{projectRoot}/artifacts/npm/devextreme-dist",
+        "{projectRoot}/artifacts/ts/dx.all.d.ts"
       ]
     },
     "build": {

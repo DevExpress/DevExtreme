@@ -41,7 +41,7 @@ const runExecutor: PromiseExecutor<DtsModulesExecutorSchema> = async (options, c
 
     const cwd = toPosixPath(outputDir);
     const dtsFiles = await glob('**/*.d.ts', { cwd, nodir: true, absolute: true });
-    const jsFiles = await glob('bundles/*.js', { cwd, nodir: true, absolute: true });
+    const jsFiles = await glob('bundles/dx.all.js', { cwd, nodir: true, absolute: true });
 
     const renderBanner = await buildLicenseBannerRenderer({ ...bannerBase, commentType: '*' });
 

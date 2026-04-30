@@ -171,56 +171,6 @@ describe('AddLicenseHeadersExecutor E2E', () => {
     });
   });
 
-  describe('Idempotence', () => {
-    it('should not add duplicate headers on multiple runs', async () => {
-      const options: AddLicenseHeadersExecutorSchema = {
-        targetDirectory: './npm',
-        packageJsonPath: './package.json',
-      };
-
-      const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
-
-      const result1 = await executor(options, context);
-      expect(result1.success).toBe(true);
-
-      const contentAfterFirst = await readFileText(path.join(npmDir, 'index.js'));
-      const headerCount1 = (contentAfterFirst.match(/\/\*!/g) || []).length;
-
-      const result2 = await executor(options, context);
-      expect(result2.success).toBe(true);
-
-      const contentAfterSecond = await readFileText(path.join(npmDir, 'index.js'));
-      const headerCount2 = (contentAfterSecond.match(/\/\*!/g) || []).length;
-
-      expect(headerCount1).toBe(1);
-      expect(headerCount2).toBe(1);
-      expect(contentAfterFirst).toBe(contentAfterSecond);
-    });
-
-    it('should skip files that already have license headers', async () => {
-      const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
-
-      await writeFileText(
-        path.join(npmDir, 'with-header.js'),
-        `/*!\n * Existing header\n */\nexport const foo = 'bar';\n`,
-      );
-
-      const options: AddLicenseHeadersExecutorSchema = {
-        targetDirectory: './npm',
-        packageJsonPath: './package.json',
-      };
-
-      const result = await executor(options, context);
-      expect(result.success).toBe(true);
-
-      const content = await readFileText(path.join(npmDir, 'with-header.js'));
-
-      expect(content).toMatch(/^\/\*!/);
-      expect(content).toContain('Existing header');
-      expect(content).not.toContain('test-package');
-    });
-  });
-
   describe('Error handling', () => {
     it('should fail gracefully with missing package.json', async () => {
       const options: AddLicenseHeadersExecutorSchema = {
@@ -364,37 +314,6 @@ export const value = 42;
     expect(content).not.toMatch(/^\/\*!/);
   });
 
-  it('should skip files already stamped with /** when commentType is *', async () => {
-    const projectDir = path.join(tempDir, 'packages', 'test-lib');
-    const npmDir = path.join(projectDir, 'npm');
-    await setupLicenseHeaderTemplate();
-
-    await writeFileText(
-      path.join(npmDir, 'pre-stamped.js'),
-      `/**\n * Already stamped\n */\nexport const x = 1;\n`,
-    );
-
-    const options: AddLicenseHeadersExecutorSchema = {
-      targetDirectory: './npm',
-      packageJsonPath: './package.json',
-      licenseTemplateFile: './build/gulp/license-header.txt',
-      eulaUrl: 'https://js.devexpress.com/Licensing/',
-      includePatterns: ['**/*.js'],
-      commentType: '*',
-    };
-
-    await executor(options, context);
-
-    const contentAfterFirst = await readFileText(path.join(npmDir, 'pre-stamped.js'));
-
-    await executor(options, context);
-
-    const contentAfterSecond = await readFileText(path.join(npmDir, 'pre-stamped.js'));
-
-    expect(contentAfterFirst).toBe(contentAfterSecond);
-    expect((contentAfterFirst.match(/\/\*\*/g) || []).length).toBe(1);
-  });
-
   it('should default to ! when commentType is not specified', async () => {
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
     const npmDir = path.join(projectDir, 'npm');
@@ -428,17 +347,11 @@ export const value = 42;
       includePatterns: ['**/*.js'],
     };
 
-    const result1 = await executor(options, context);
-    expect(result1.success).toBe(true);
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
 
-    const contentAfterFirst = await readFileText(path.join(npmDir, 'index.js'));
-    expect(contentAfterFirst).toMatch(/^\/\*\*/);
-    expect(contentAfterFirst).not.toMatch(/^\/\*!/);
-
-    const result2 = await executor(options, context);
-    expect(result2.success).toBe(true);
-
-    const contentAfterSecond = await readFileText(path.join(npmDir, 'index.js'));
-    expect(contentAfterSecond).toBe(contentAfterFirst);
+    const content = await readFileText(path.join(npmDir, 'index.js'));
+    expect(content).toMatch(/^\/\*\*/);
+    expect(content).not.toMatch(/^\/\*!/);
   });
 });

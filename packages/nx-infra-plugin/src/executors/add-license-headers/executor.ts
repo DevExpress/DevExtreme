@@ -90,7 +90,6 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
         const fileRelative = path.relative(targetDirectory, file).replace(/\\/g, '/');
         const banner = renderBanner(fileRelative);
         await applyLicenseBannerToFile(file, banner, {
-          commentType,
           separator,
           prependAfterLicense,
         });

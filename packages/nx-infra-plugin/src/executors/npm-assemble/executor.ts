@@ -133,7 +133,7 @@ async function applyHeadersToSourceJs(
     jsFiles.map(async (filePath) => {
       const fileRelative = path.relative(outputDir, filePath).replace(/\\/g, '/');
       const banner = renderBanner(fileRelative);
-      await applyLicenseBannerToFile(filePath, banner, { commentType: '*' });
+      await applyLicenseBannerToFile(filePath, banner);
     }),
   );
 }
