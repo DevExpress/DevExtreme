@@ -10,7 +10,7 @@
 - **Languages:** TypeScript, JavaScript, SCSS
 - **Package Manager:** pnpm 9.15.4 (specified in package.json)
 - **Node Version:** 20.x (required by CI)
-- **Build System:** Gulp + Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
+- **Build System:** Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
 - **Test Frameworks:** QUnit, Jest, TestCafe, Karma (Angular)
 
 ## Critical Setup Requirements
@@ -493,7 +493,7 @@ Before making any changes, always check `.github/instructions/` directory for fi
 These instructions are based on actual repository analysis including:
 - Package.json scripts and configurations
 - GitHub Actions workflows
-- Build system files (gulpfile.js, nx.json)
+- Build system files (nx.json, project.json)
 - Project structure and file organization
 - CI/CD pipeline requirements
 

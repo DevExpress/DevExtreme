@@ -49,16 +49,24 @@
       ]
     },
     "prepare-bundles": {
-      "executor": "nx:run-script",
+      "executor": "nx:run-commands",
       "options": {
-        "script": "prepare-bundles"
+        "commands": [
+          "pnpm run generate-devextreme-angular-umd",
+          "node scripts/build-bundles.js",
+          "node scripts/update-config.js"
+        ],
+        "parallel": false,
+        "cwd": "{projectRoot}"
       },
       "dependsOn": [
         // "^build" uncomment me after migrating to PNPM
       ],
       "inputs": [
         "default",
-        "{projectRoot}/gulpfile.js/**/*",
+        "{projectRoot}/scripts/**/*",
+        "{projectRoot}/utils/bundle/**/*",
+        "{projectRoot}/utils/internal/create-config.js",
         "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
       ],
       "outputs": [
@@ -103,14 +111,21 @@
         "commands": [
           "pnpm nx build devextreme",
           "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
-          "pnpm run prepare-js"
+          "node scripts/prepare-js-configs.js",
+          "pnpm run generate-ng-umd",
+          "pnpm run generate-devextreme-angular-umd",
+          "pnpm run generate-external-bundles",
+          "node utils/create-tgz-packages.js"
         ],
         "parallel": false,
         "cwd": "{projectRoot}"
       },
       "inputs": [
         "default",
-        "{projectRoot}/gulpfile.js/**/*",
+        "{projectRoot}/scripts/**/*",
+        "{projectRoot}/utils/shared/config-helper.js",
+        "{projectRoot}/utils/internal/create-config.js",
+        "{projectRoot}/utils/copy-shared-resources/**/*",
         "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
       ],
       "outputs": [
