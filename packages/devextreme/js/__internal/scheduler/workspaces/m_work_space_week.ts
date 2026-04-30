@@ -6,7 +6,9 @@ import SchedulerWorkSpaceVertical from './m_work_space_vertical';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
-  get type() { return VIEWS.WEEK; }
+  get type(): string {
+    return this.option('type') ?? VIEWS.WEEK;
+  }
 
   protected override getElementClass() {
     return WEEK_CLASS;

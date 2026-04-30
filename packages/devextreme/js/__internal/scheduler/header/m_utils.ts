@@ -97,8 +97,7 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
       );
     case 'month':
       return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
-    case 'week':
-    case 'workWeek': {
+    case 'week': {
       const weekStart = getPeriodStart(date, 'week', false, firstDayOfWeek) as Date;
       return getFirstVisibleDate(weekStart, skippedDays, nextDay);
     }
@@ -120,7 +119,6 @@ const getPeriodEndDate = (
     day: () => nextDay(currentPeriodStartDate),
     week: () => getDateAfterWeek(currentPeriodStartDate, firstDayOfWeek, skippedDays),
     month: () => nextMonth(currentPeriodStartDate),
-    workWeek: () => getDateAfterWeek(currentPeriodStartDate, firstDayOfWeek, skippedDays),
     agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration),
   };
 
@@ -134,7 +132,7 @@ const getNextPeriodStartDate = (
 ): Date => {
   let date = addMS(currentPeriodEndDate);
 
-  if (step === 'day' || step === 'week' || step === 'workWeek') {
+  if (step === 'day' || step === 'week') {
     date = getFirstVisibleDate(date, skippedDays, nextDay);
   }
 
@@ -204,7 +202,6 @@ export const getNextIntervalDate = (options: IntervalOptions, direction: Directi
         direction,
       );
     case 'week':
-    case 'workWeek':
       dayDuration = 7 * intervalCount;
       break;
     case 'agenda':
@@ -342,11 +339,11 @@ export const getCaption = (options: IntervalOptions, isShort: boolean, customiza
 const STEP_MAP: Record<ViewType, Step> = {
   day: 'day',
   week: 'week',
-  workWeek: 'workWeek',
+  workWeek: 'week',
   month: 'month',
   timelineDay: 'day',
   timelineWeek: 'week',
-  timelineWorkWeek: 'workWeek',
+  timelineWorkWeek: 'week',
   timelineMonth: 'month',
   agenda: 'agenda',
 } as const;
