@@ -2,7 +2,140 @@
 
 DevExtreme is an enterprise-ready suite of UI components for Angular, React, Vue, and jQuery, distributed as a pnpm/Nx monorepo containing the core library, framework wrappers, themes, themebuilder, and test suites. Stack: TypeScript, JavaScript, SCSS, pnpm + Nx, Node, Gulp + custom Nx executors (`devextreme-nx-infra-plugin`). The .NET SDK is required for `devextreme-internal-tools` code generation.
 
-## Commands
+**DevExtreme** is an enterprise-ready suite of powerful UI components for Angular, React, Vue, and jQuery. This is a large-scale monorepo containing the core library, framework wrappers, demos, and extensive test suites.
+
+**Repository Stats:**
+- **Type:** Monorepo (pnpm workspaces + Nx)
+- **Size:** Large (1000+ files across multiple packages)
+- **Languages:** TypeScript, JavaScript, SCSS
+- **Package Manager:** pnpm 9.15.4 (specified in package.json)
+- **Node Version:** 20.x (required by CI)
+- **Build System:** Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
+- **Test Frameworks:** QUnit, Jest, TestCafe, Karma (Angular)
+
+## Critical Setup Requirements
+
+### Environment Prerequisites
+
+**ALWAYS install dependencies with frozen lockfile:**
+```bash
+pnpm install --frozen-lockfile
+```
+
+**Node.js:** Version 20.x is required (CI uses Node 20)
+**pnpm:** Version 9.15.4 (managed via packageManager field)
+**.NET SDK:** Version 8.0.x required for running devextreme-internal-tools (uses .NET tool for code generation)
+
+### First-Time Setup
+
+1. **Install dependencies from repository root:**
+   ```bash
+   pnpm install --frozen-lockfile
+   ```
+
+2. **For development builds of devextreme package:**
+   ```bash
+   pnpm exec nx build:dev devextreme
+   ```
+   OR from monorepo root:
+   ```bash
+   pnpm run all:build-dev
+   ```
+
+3. **For production builds:**
+   ```bash
+   pnpm run all:build
+   ```
+
+## Repository Structure
+
+### Key Directories
+
+```
+/packages/
+  devextreme/              # Core library (main package)
+    js/                    # JavaScript/TypeScript source code
+      ui/                  # UI widgets
+      viz/                 # Visualization components
+      core/                # Core utilities
+      data/                # Data layer
+      renovation/          # Renovation components (new architecture)
+    testing/               # QUnit tests
+    build/                 # Build scripts and Gulp tasks
+    artifacts/             # Build output (generated)
+  devextreme-angular/      # Angular wrapper
+  devextreme-react/        # React wrapper
+  devextreme-vue/          # Vue wrapper
+  devextreme-scss/         # SCSS themes and styles
+  devextreme-themebuilder/ # Theme builder package
+  devextreme-metadata/     # Metadata generation for wrappers
+  devextreme-monorepo-tools/ # Internal tooling
+  nx-infra-plugin/         # Custom Nx executors for build automation
+  workflows/               # Cross-package NX build orchestration (all:build-dev, all:build-testing)
+  testcafe-models/         # TestCafe page object models
+
+/apps/
+  demos/                   # Technical demos (Angular, React, Vue, jQuery)
+  angular/                 # Angular playground
+  react/                   # React playground
+  vue/                     # Vue playground
+  react-storybook/         # Storybook for React components
+
+/e2e/
+  testcafe-devextreme/     # TestCafe end-to-end tests
+  wrappers/                # Wrapper integration tests
+  bundlers/                # Bundler compatibility tests
+  compilation-cases/       # TypeScript compilation tests
+
+/tools/scripts/            # Build and utility scripts
+```
+
+### Configuration Files
+
+- **Root:** `nx.json`, `pnpm-workspace.yaml`, `tsconfig.json`, `package.json`
+- **Linting:** `.lintstagedrc`, `eslint.config.mjs` (per package)
+- **Styles:** `.stylelintrc.json` (in devextreme-scss)
+- **Git Hooks:** `.husky/pre-commit` (runs lint-staged)
+
+## Build System
+
+### Build Commands (from root)
+
+**Development build (faster, for testing):**
+```bash
+pnpm run all:build-dev
+```
+- Sets `DEVEXTREME_TEST_CI=TRUE`
+- Skips some production optimizations
+- Builds all packages
+
+**Production build (full):**
+```bash
+pnpm run all:build
+```
+- Includes documentation injection
+- Creates minified bundles
+- Generates all npm packages
+- Takes significantly longer (~15-30 minutes)
+
+**Build specific package:**
+```bash
+pnpm exec nx build devextreme
+pnpm exec nx build devextreme-angular
+pnpm exec nx build devextreme-react
+pnpm exec nx build devextreme-vue
+pnpm exec nx build devextreme-scss
+pnpm exec nx build devextreme-themebuilder
+```
+
+**Build with Nx cache skip:**
+```bash
+pnpm exec nx build devextreme --skipNxCache
+```
+
+### DevExtreme Package Build Details
+
+**From packages/devextreme directory:**
 
 ```bash
 # Install (frozen lockfile is mandatory; CI fails otherwise)
