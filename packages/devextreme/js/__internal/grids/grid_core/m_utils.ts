@@ -144,9 +144,9 @@ const getSummaryText = function (summaryItem, summaryTexts) {
 };
 
 const getWidgetInstance = function ($element) {
-  const editorData = $element.data && $element.data();
-  const dxComponents = editorData && editorData.dxComponents;
-  const widgetName = dxComponents && dxComponents[0];
+  const editorData = $element?.data();
+  const dxComponents = editorData?.dxComponents;
+  const widgetName = dxComponents?.[0];
 
   return widgetName && editorData[widgetName];
 };

@@ -20,14 +20,28 @@ import {
 } from './const';
 import type { AIChatOptions, CommandResults } from './types';
 
+const mockWidgetInstance = {
+  option: jest.fn(),
+};
+
+jest.mock('../m_utils', () => ({
+  __esModule: true,
+  default: {
+    getWidgetInstance: jest.fn(() => mockWidgetInstance),
+  },
+}));
+
 const mockPopupInstance = {
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   option: jest.fn<(name: string) => unknown>().mockReturnValue(false),
 };
 
+const mockChatElement = $('<div>');
+
 const mockChatInstance = {
   option: jest.fn(),
+  $element: jest.fn(() => mockChatElement),
 };
 
 const createComponentMock = jest.fn((
@@ -88,6 +102,9 @@ const getChatConfig = (): any => {
 
 const beforeTest = (): void => {
   jest.clearAllMocks();
+  mockChatElement.removeClass(CLASSES.disabled);
+  mockChatElement.empty();
+  mockWidgetInstance.option.mockClear();
 };
 
 const afterTest = (): void => {
@@ -660,6 +677,223 @@ describe('AIChat', () => {
           chatOptions: { showAvatar: true },
         }, false, true);
       }).not.toThrow();
+    });
+  });
+
+  describe('disabled state', () => {
+    describe('setDisabled', () => {
+      it('should add disabled class to chat element', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+
+        expect(mockChatElement.hasClass(CLASSES.disabled)).toBe(true);
+      });
+
+      it('should remove disabled class from chat element when set to false', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        expect(mockChatElement.hasClass(CLASSES.disabled)).toBe(false);
+      });
+
+      it('should disable text area widget', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+        mockChatElement.append($('<div>').addClass('dx-textarea'));
+
+        aiChat.setDisabled(true);
+
+        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', true);
+      });
+
+      it('should enable text area widget when set to false', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+        mockChatElement.append($('<div>').addClass('dx-textarea'));
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', false);
+      });
+
+      it('should disable speech-to-text widget', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+        mockChatElement.append($('<div>').addClass('dx-speech-to-text'));
+
+        aiChat.setDisabled(true);
+
+        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', true);
+      });
+
+      it('should enable speech-to-text widget when set to false', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+        mockChatElement.append($('<div>').addClass('dx-speech-to-text'));
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', false);
+      });
+
+      it('should disable clear button via popup toolbarItems option', () => {
+        const onChatCleared = jest.fn();
+        const { aiChat } = createAIChat({ onChatCleared });
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+
+        expect(mockPopupInstance.option).toHaveBeenCalledWith('toolbarItems[0].options.disabled', true);
+      });
+
+      it('should enable clear button via popup toolbarItems option', () => {
+        const onChatCleared = jest.fn();
+        const { aiChat } = createAIChat({ onChatCleared });
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        expect(mockPopupInstance.option).toHaveBeenCalledWith('toolbarItems[0].options.disabled', false);
+      });
+
+      it('should not update popup toolbarItems when onChatCleared is not provided', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+
+        expect(mockPopupInstance.option).not.toHaveBeenCalledWith(
+          'toolbarItems[0].options.disabled',
+          expect.anything(),
+        );
+      });
+
+      it('should not update when setting same disabled value', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+        mockPopupInstance.option.mockClear();
+        mockWidgetInstance.option.mockClear();
+
+        aiChat.setDisabled(true);
+
+        expect(mockPopupInstance.option).not.toHaveBeenCalled();
+        expect(mockWidgetInstance.option).not.toHaveBeenCalled();
+      });
+
+      it('should not throw when chatInstance is not created', () => {
+        const { aiChat } = createAIChat();
+
+        expect(() => {
+          aiChat.setDisabled(true);
+        }).not.toThrow();
+      });
+    });
+
+    describe('isDisabled', () => {
+      it('should return false by default', () => {
+        const { aiChat } = createAIChat();
+
+        expect(aiChat.isDisabled()).toBe(false);
+      });
+
+      it('should return true after setDisabled(true)', () => {
+        const { aiChat } = createAIChat();
+
+        aiChat.setDisabled(true);
+
+        expect(aiChat.isDisabled()).toBe(true);
+      });
+
+      it('should return false after setDisabled(false)', () => {
+        const { aiChat } = createAIChat();
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        expect(aiChat.isDisabled()).toBe(false);
+      });
+    });
+
+    describe('regenerate button in disabled state', () => {
+      it('should not call onRegenerate when chat is disabled', () => {
+        const onRegenerate = jest.fn();
+        const { aiChat } = createAIChat({ onRegenerate });
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+
+        chatConfig.messageTemplate({
+          message: {
+            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+            text: 'Error occurred',
+            status: 'failure',
+          },
+        }, container);
+
+        const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`) as HTMLElement;
+        regenerateButton.click();
+
+        expect(onRegenerate).not.toHaveBeenCalled();
+      });
+
+      it('should render regenerate button when chat is disabled', () => {
+        const onRegenerate = jest.fn();
+        const { aiChat } = createAIChat({ onRegenerate });
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+
+        chatConfig.messageTemplate({
+          message: {
+            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+            text: 'Error occurred',
+            status: 'failure',
+          },
+        }, container);
+
+        expect(container.querySelector(`.${CLASSES.messageRegenerateButton}`)).not.toBeNull();
+      });
+
+      it('should call onRegenerate when chat is re-enabled', () => {
+        const onRegenerate = jest.fn();
+        const { aiChat } = createAIChat({ onRegenerate });
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+
+        chatConfig.messageTemplate({
+          message: {
+            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+            text: 'Error occurred',
+            status: 'failure',
+          },
+        }, container);
+
+        const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`) as HTMLElement;
+        regenerateButton.click();
+
+        expect(onRegenerate).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });

@@ -102,26 +102,31 @@ export class AIAssistantController extends Controller {
     };
   }
 
-  public sendRequestToAI(message: Message): void {
+  public sendRequestToAI(message: Message): Promise<void> {
     const aiMessageId = this.createPendingAIMessage(message);
 
-    this.aiAssistantIntegrationController?.sendRequest(message.text, {
-      onComplete: (response: ExecuteGridAssistantCommandResult): void => {
-        fromPromise(this.processResponse(response))
-          .done((commands: CommandResults) => {
-            this.completeAIMessage(aiMessageId, commands);
-          })
-          .fail((errorMessage) => {
-            const error = errorMessage instanceof Error
-              ? errorMessage
-              : new Error(String(errorMessage));
+    return new Promise((resolve, reject) => {
+      this.aiAssistantIntegrationController?.sendRequest(message.text, {
+        onComplete: (response: ExecuteGridAssistantCommandResult): void => {
+          fromPromise(this.processResponse(response))
+            .done((commands: CommandResults) => {
+              this.completeAIMessage(aiMessageId, commands);
+              resolve();
+            })
+            .fail((errorMessage) => {
+              const error = errorMessage instanceof Error
+                ? errorMessage
+                : new Error(String(errorMessage));
 
-            this.failAIMessage(aiMessageId, error);
-          });
-      },
-      onError: (error: Error): void => {
-        this.failAIMessage(aiMessageId, error);
-      },
+              this.failAIMessage(aiMessageId, error);
+              reject(error);
+            });
+        },
+        onError: (error: Error): void => {
+          this.failAIMessage(aiMessageId, error);
+          reject(error);
+        },
+      });
     });
   }
 

@@ -38,6 +38,10 @@ export const CLASSES = {
   messageHeaderRow: 'dx-ai-chat__message-header-row',
   messageRegenerateButton: 'dx-ai-chat__message-regenerate-button',
   messageProgressBar: 'dx-ai-chat__message-progressbar',
+  clearChatButton: 'dx-ai-chat__clear-button',
+  disabled: 'dx-ai-chat--disabled',
+  textArea: '.dx-textarea',
+  speechToTextButton: '.dx-speech-to-text',
 };
 
 export const CLEAR_CHAT_ICON = 'clearhistory';

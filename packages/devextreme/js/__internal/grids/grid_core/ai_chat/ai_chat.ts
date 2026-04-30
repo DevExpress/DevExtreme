@@ -15,6 +15,7 @@ import {
 import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/m_popup';
 
+import gridCoreUtils from '../m_utils';
 import {
   CLASSES, CLEAR_CHAT_ICON,
   DEFAULT_CHAT_OPTIONS,
@@ -35,6 +36,8 @@ export class AIChat {
   private readonly popupInstance: Popup;
 
   private chatInstance?: Chat;
+
+  private disabled = false;
 
   constructor(
     private options: AIChatOptions,
@@ -115,6 +118,7 @@ export class AIChat {
       widget: 'dxButton',
       toolbar: 'top',
       location: 'after',
+      cssClass: `${CLASSES.clearChatButton}`,
       options: {
         icon: CLEAR_CHAT_ICON,
         hint: messageLocalization.format('dxDataGrid-aiAssistantClearButtonText'),
@@ -159,7 +163,11 @@ export class AIChat {
         .addClass(`dx-icon dx-icon-${REGENERATE_ICON} ${CLASSES.messageRegenerateButton}`)
         .appendTo($row);
 
-      eventsEngine.on($button, clickEventName, () => this.options.onRegenerate?.());
+      eventsEngine.on($button, clickEventName, () => {
+        if (!this.disabled) {
+          this.options.onRegenerate?.();
+        }
+      });
     }
   }
 
@@ -247,6 +255,22 @@ export class AIChat {
       .appendTo($container);
   }
 
+  private setTextAreaDisabled(disabled: boolean): void {
+    const $textArea = this.chatInstance?.$element().find(CLASSES.textArea);
+
+    if ($textArea?.length) {
+      gridCoreUtils.getWidgetInstance($textArea)?.option('disabled', disabled);
+    }
+  }
+
+  private setSpeechToTextDisabled(disabled: boolean): void {
+    const $speechToText = this.chatInstance?.$element().find(CLASSES.speechToTextButton);
+
+    if ($speechToText?.length) {
+      gridCoreUtils.getWidgetInstance($speechToText)?.option('disabled', disabled);
+    }
+  }
+
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
     this.options = options;
 
@@ -269,6 +293,26 @@ export class AIChat {
 
   public isShown(): boolean {
     return !!this.popupInstance?.option('visible');
+  }
+
+  public setDisabled(disabled: boolean): void {
+    if (this.disabled === disabled) {
+      return;
+    }
+
+    this.disabled = disabled;
+    this.chatInstance?.$element().toggleClass(CLASSES.disabled, disabled);
+
+    this.setTextAreaDisabled(disabled);
+    this.setSpeechToTextDisabled(disabled);
+
+    if (this.options.onChatCleared) {
+      this.popupInstance.option('toolbarItems[0].options.disabled', disabled);
+    }
+  }
+
+  public isDisabled(): boolean {
+    return this.disabled;
   }
 
   public renderAIMessage(message: Message, container: HTMLElement): void {
