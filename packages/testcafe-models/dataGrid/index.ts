@@ -26,6 +26,7 @@ import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
 import { AIPromptEditor } from './aiPromptEditor';
+import { AIAssistantChat } from './aiAssistantChat';
 import EditPopup from './editPopup';
 
 export const CLASS = {
@@ -83,6 +84,8 @@ export const CLASS = {
   toast: 'dx-toast-wrapper',
   dragHeader: 'drag-header',
   aiPromptEditor: 'dx-ai-prompt-editor',
+  aiAssistantChat: 'dx-ai-chat',
+  aiAssistantButton: 'ai-assistant-button',
   sortableDragging: 'dx-sortable-dragging',
 };
 
@@ -1023,5 +1026,13 @@ export default class DataGrid extends GridCore {
 
   getAIPromptEditor(): AIPromptEditor {
     return new AIPromptEditor(this.body.find(`.${CLASS.aiPromptEditor}`));
+  }
+
+  getAIAssistantChat(): AIAssistantChat {
+    return new AIAssistantChat(this.body.find(`.${CLASS.aiAssistantChat}`));
+  }
+
+  getAIAssistantButton(): Selector {
+    return this.getHeaderPanel().element.find(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
   }
 }

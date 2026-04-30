@@ -86,8 +86,8 @@ catalogs:
       specifier: 4.1.68
       version: 4.1.68
     devextreme-exceljs-fork:
-      specifier: 4.4.8
-      version: 4.4.8
+      specifier: 4.4.9
+      version: 4.4.9
     devextreme-quill:
       specifier: 1.7.9
       version: 1.7.9
@@ -217,6 +217,7 @@ overrides:
   follow-redirects@<=1.15.11: '>=1.16.0'
   '@angular/platform-server@>=20.0.0-next.0 <20.3.19': ^20.3.19
   stylelint-config-recommended-vue@1.6.1>stylelint-config-recommended: ^16.0.0
+  uuid@<14.0.0: ~14.0.0
 
 importers:
 
@@ -286,7 +287,7 @@ importers:
         specifier: 19.1.0
         version: 19.1.0
       postcss:
-        specifier: 8.5.10
+        specifier: ~8.5.10
         version: 8.5.10
       shelljs:
         specifier: 0.8.5
@@ -471,7 +472,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.8
+        version: 4.4.9
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.9
@@ -863,7 +864,7 @@ importers:
         version: 8.2.3
       openai:
         specifier: 4.73.1
-        version: 4.73.1(zod@3.23.8)
+        version: 4.73.1(zod@3.24.4)
     devDependencies:
       '@storybook/addon-docs':
         specifier: 10.1.9
@@ -1383,6 +1384,9 @@ importers:
       unplugin:
         specifier: ^3.0.0
         version: 3.0.0
+      zod:
+        specifier: ~3.24.4
+        version: 3.24.4
     devDependencies:
       '@babel/core':
         specifier: 7.29.0
@@ -1518,7 +1522,7 @@ importers:
         version: 1.0.3
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.8
+        version: 4.4.9
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.4)
@@ -7878,9 +7882,6 @@ packages:
   ajv@8.18.0:
     resolution: {integrity: sha512-PlXPeEWMXMZ7sPYOHqmDyCJzcfNrUr3fGNKtezX14ykXOEIvyK81d+qydx89KY5O71FKMPaQ2vBfBFI5NHR63A==}
 
-  ajv@8.20.0:
-    resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
-
   algoliasearch@5.35.0:
     resolution: {integrity: sha512-Y+moNhsqgLmvJdgTsO4GZNgsaDWv8AOGAaPeIeHKlDn/XunoAqYbA+XNpBd1dW8GOXAUDyxC9Rxc7AV4kpFcIg==}
     engines: {node: '>= 14.0.0'}
@@ -9828,9 +9829,9 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.8:
-    resolution: {integrity: sha512-XjZ5aqD0MILYW9BLCKiR8CJyDhkROf6bT45dSmczcOT7Ow0GtzLI8RBfTVrBsm0fjUyjNkKFO5d4T5iTHth52A==}
-    engines: {node: '>=18.20.8'}
+  devextreme-exceljs-fork@4.4.9:
+    resolution: {integrity: sha512-WiNl1iQD9i1G9AyEnrcBDF2lMHpsNS+zilXhQ72/STkKo9AUbZknYsgvz1vdnfLhdaW8go5zhnryjQ5p6gemfw==}
+    engines: {node: '>=18'}
 
   devextreme-internal-tools@20.4.0:
     resolution: {integrity: sha512-Goo3fV2ItsvLrIPTord7eLmDQNS8u8P0//jkfta/03H9HtEG+U+xD+B8EDFD6KsCOTA1TlUnGXVxSuS5SaMHuA==}
@@ -14360,10 +14361,6 @@ packages:
     resolution: {integrity: sha512-lBX72MWFduWEf7v7uWf5DHp9Jn5BI8bNPGuFgtXMmr2uDz2Gz2749y3am3agSDdkhHPHYmmxEGSKH85ZLGzgXw==}
     engines: {node: '>=20'}
 
-  ora@9.4.0:
-    resolution: {integrity: sha512-84cglkRILFxdtA8hAvLNdMrtBpPNBTrQ9/ulg0FA7xLMnD6mifv+enAIeRmvtv+WgdCE+LPGOfQmtJRrVaIVhQ==}
-    engines: {node: '>=20'}
-
   ordered-binary@1.6.1:
     resolution: {integrity: sha512-QkCdPooczexPLiXIrbVOPYkR3VO3T6v2OyKRkR1Xbhpy7/LAVXwahnRCgRp78Oe/Ehf0C/HATAxfSr6eA1oX+w==}
 
@@ -17361,15 +17358,6 @@ packages:
     resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
     hasBin: true
 
-  uuid@3.4.0:
-    resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
-    deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-    hasBin: true
-
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    hasBin: true
-
   uvu@0.5.6:
     resolution: {integrity: sha512-+g8ENReyr8YsOc6fv/NVJs2vFdHBnBNdfE49rshrTzDWOlUx4Gq7KOS2GD8eqhy2j+Ejq29+SbKH8yjkAqXqoA==}
     engines: {node: '>=8'}
@@ -18117,6 +18105,9 @@ packages:
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
+  zod@3.24.4:
+    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
 
   zod@4.1.13:
     resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
@@ -26691,14 +26682,6 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  ajv@8.20.0:
-    dependencies:
-      fast-deep-equal: 3.1.3
-      fast-uri: 3.1.0
-      json-schema-traverse: 1.0.0
-      require-from-string: 2.0.2
-    optional: true
-
   algoliasearch@5.35.0:
     dependencies:
       '@algolia/abtesting': 1.1.0
@@ -27627,7 +27610,7 @@ snapshots:
       domhandler: 5.0.3
       htmlparser2: 10.1.0
       picocolors: 1.1.1
-      postcss: 8.5.6
+      postcss: 8.5.10
       postcss-media-query-parser: 0.2.3
 
   big.js@5.2.2: {}
@@ -28736,12 +28719,12 @@ snapshots:
 
   css-loader@7.1.2(webpack@5.105.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.27.2)):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.6)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
-      postcss-modules-scope: 3.2.1(postcss@8.5.6)
-      postcss-modules-values: 4.0.0(postcss@8.5.6)
+      icss-utils: 5.1.0(postcss@8.5.10)
+      postcss: 8.5.10
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.10)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.10)
+      postcss-modules-scope: 3.2.1(postcss@8.5.10)
+      postcss-modules-values: 4.0.0(postcss@8.5.10)
       postcss-value-parser: 4.2.0
       semver: 7.7.4
     optionalDependencies:
@@ -28749,12 +28732,12 @@ snapshots:
 
   css-loader@7.1.2(webpack@5.105.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.0)):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.6)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
-      postcss-modules-scope: 3.2.1(postcss@8.5.6)
-      postcss-modules-values: 4.0.0(postcss@8.5.6)
+      icss-utils: 5.1.0(postcss@8.5.10)
+      postcss: 8.5.10
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.10)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.10)
+      postcss-modules-scope: 3.2.1(postcss@8.5.10)
+      postcss-modules-values: 4.0.0(postcss@8.5.10)
       postcss-value-parser: 4.2.0
       semver: 7.7.4
     optionalDependencies:
@@ -29150,7 +29133,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.8:
+  devextreme-exceljs-fork@4.4.9:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.20
@@ -29160,7 +29143,6 @@ snapshots:
       saxes: 5.0.1
       tmp: 0.2.5
       unzipper: 0.12.3
-      uuid: 8.3.2
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -32286,10 +32268,6 @@ snapshots:
   icss-utils@5.1.0(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-
-  icss-utils@5.1.0(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
 
   identity-obj-proxy@3.0.0:
     dependencies:
@@ -35700,7 +35678,7 @@ snapshots:
       '@angular/compiler-cli': 21.1.6(@angular/compiler@21.2.9)(typescript@5.9.3)
       '@rollup/plugin-json': 6.1.0(rollup@4.59.0)
       '@rollup/wasm-node': 4.60.2
-      ajv: 8.20.0
+      ajv: 8.18.0
       ansi-colors: 4.1.3
       browserslist: 4.28.2
       chokidar: 5.0.0
@@ -35711,7 +35689,7 @@ snapshots:
       injection-js: 2.6.1
       jsonc-parser: 3.3.1
       less: 4.6.4
-      ora: 9.4.0
+      ora: 9.3.0
       piscina: 5.1.4
       postcss: 8.5.10
       rollup-plugin-dts: 6.4.1(rollup@4.59.0)(typescript@5.9.3)
@@ -35793,7 +35771,7 @@ snapshots:
       is-wsl: 2.2.0
       semver: 7.7.4
       shellwords: 0.1.1
-      uuid: 8.3.2
+      uuid: 14.0.0
       which: 2.0.2
 
   node-releases@2.0.37: {}
@@ -36146,7 +36124,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.73.1(zod@3.23.8):
+  openai@4.73.1(zod@3.24.4):
     dependencies:
       '@types/node': 18.19.130
       '@types/node-fetch': 2.6.13
@@ -36156,7 +36134,7 @@ snapshots:
       formdata-node: 4.4.1
       node-fetch: 2.7.0
     optionalDependencies:
-      zod: 3.23.8
+      zod: 3.24.4
     transitivePeerDependencies:
       - encoding
 
@@ -36249,18 +36227,6 @@ snapshots:
       log-symbols: 7.0.1
       stdin-discarder: 0.3.2
       string-width: 8.2.0
-
-  ora@9.4.0:
-    dependencies:
-      chalk: 5.6.2
-      cli-cursor: 5.0.0
-      cli-spinners: 3.4.0
-      is-interactive: 2.0.0
-      is-unicode-supported: 2.1.0
-      log-symbols: 7.0.1
-      stdin-discarder: 0.3.2
-      string-width: 8.2.0
-    optional: true
 
   ordered-binary@1.6.1: {}
 
@@ -36699,10 +36665,6 @@ snapshots:
     dependencies:
       postcss: 8.5.10
 
-  postcss-modules-extract-imports@3.1.0(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
-
   postcss-modules-local-by-default@4.2.0(postcss@8.4.38):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.38)
@@ -36717,13 +36679,6 @@ snapshots:
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
 
-  postcss-modules-local-by-default@4.2.0(postcss@8.5.6):
-    dependencies:
-      icss-utils: 5.1.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-selector-parser: 7.1.1
-      postcss-value-parser: 4.2.0
-
   postcss-modules-scope@3.2.1(postcss@8.4.38):
     dependencies:
       postcss: 8.4.38
@@ -36732,11 +36687,6 @@ snapshots:
   postcss-modules-scope@3.2.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.1
-
-  postcss-modules-scope@3.2.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-selector-parser: 7.1.1
 
   postcss-modules-values@4.0.0(postcss@8.4.38):
@@ -36748,11 +36698,6 @@ snapshots:
     dependencies:
       icss-utils: 5.1.0(postcss@8.5.10)
       postcss: 8.5.10
-
-  postcss-modules-values@4.0.0(postcss@8.5.6):
-    dependencies:
-      icss-utils: 5.1.0(postcss@8.5.6)
-      postcss: 8.5.6
 
   postcss-resolve-nested-selector@0.1.6: {}
 
@@ -37535,7 +37480,7 @@ snapshots:
       safe-buffer: 5.2.1
       tough-cookie: 4.1.4
       tunnel-agent: 0.6.0
-      uuid: 3.4.0
+      uuid: 14.0.0
 
   require-directory@2.1.1: {}
 
@@ -37594,7 +37539,7 @@ snapshots:
       adjust-sourcemap-loader: 4.0.0
       convert-source-map: 1.9.0
       loader-utils: 2.0.4
-      postcss: 8.5.6
+      postcss: 8.5.10
       source-map: 0.6.1
 
   resolve.exports@2.0.3: {}
@@ -38349,7 +38294,7 @@ snapshots:
   sockjs@0.3.24:
     dependencies:
       faye-websocket: 0.11.4
-      uuid: 8.3.2
+      uuid: 14.0.0
       websocket-driver: 0.7.4
 
   socks-proxy-agent@8.0.5:
@@ -40467,10 +40412,6 @@ snapshots:
 
   uuid@14.0.0: {}
 
-  uuid@3.4.0: {}
-
-  uuid@8.3.2: {}
-
   uvu@0.5.6:
     dependencies:
       dequal: 2.0.3
@@ -41728,6 +41669,8 @@ snapshots:
       zod: 4.3.6
 
   zod@3.23.8: {}
+
+  zod@3.24.4: {}
 
   zod@4.1.13: {}
 

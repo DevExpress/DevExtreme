@@ -206,7 +206,8 @@ export interface Controllers {
   toastViewController: import('./toast/m_toast_controller').ToastViewController;
   aiColumn: import('./ai_column/controllers/m_ai_column_controller').AIColumnController;
   aiPromptEditor: import('./ai_column/controllers/m_ai_prompt_editor_view_controller').AIPromptEditorViewController;
-  aiAssistant: import('./ai_assistant/ai_assistant_view_controller').AIAssistantViewController;
+  aiAssistant: import('./ai_assistant/ai_assistant_controller').AIAssistantController;
+  aiAssistantViewController: import('./ai_assistant/ai_assistant_view_controller').AIAssistantViewController;
 }
 
 type ControllerTypes = {
