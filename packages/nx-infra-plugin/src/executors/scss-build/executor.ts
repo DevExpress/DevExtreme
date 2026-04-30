@@ -29,7 +29,7 @@ const EULA_URL = 'https://js.devexpress.com/Licensing/';
 interface BuildDependencies {
   sass: any;
   postcss: any;
-  autoprefixer: () => any;
+  autoprefixer: (options?: { overrideBrowserslist?: string[] }) => any;
   CleanCss: new (options: unknown) => { minify: (input: string) => { styles: string } };
   themeOptions: { getThemes: () => Array<[string, string, string, string?]> };
   cleanCssSanitizeOptions: unknown;
@@ -51,9 +51,13 @@ function resolveDataUri(filePath: string, svgEncoding?: string): string {
   return `data:image/${ext};base64,${data.toString('base64')}`;
 }
 
-function createLicenseHeader(fileName: string, version: string): string {
+/**
+ * Same shape as `packages/devextreme/build/gulp/license-header.txt` with
+ * `gulp-header` `commentType: '*'` (starLicense) — matches legacy Gulp output.
+ */
+function createStarLicenseHeader(fileName: string, version: string): string {
   return [
-    '/*!',
+    '/**',
     `* DevExtreme (${fileName.replace(/\\/g, '/')})`,
     `* Version: ${version}`,
     `* Build date: ${new Date().toDateString()}`,
@@ -65,24 +69,24 @@ function createLicenseHeader(fileName: string, version: string): string {
   ].join('\n');
 }
 
-function moveCharsetToTop(css: string): string {
-  const match = css.match(/@charset\s+[^;]+;\s*/);
-  if (!match) {
-    return css;
-  }
-
-  const charset = match[0];
-  const withoutCharset = css.replace(charset, '');
-  return charset + withoutCharset;
+/**
+ * Mirrors `style-compiler.js`: starLicense prepend, then
+ * `.replace(/([\s\S]*)(@charset.*?;\s)/, '$2$1')` so `@charset` is the first bytes of output.
+ */
+function prependLicenseAndMoveCharsetFirst(minifiedCss: string, license: string): string {
+  const withLicense = `${license}${minifiedCss}`;
+  return withLicense.replace(/([\s\S]*)(@charset[^;]+;\s*)/, '$2$1');
 }
 
 function generateBundleName(theme: string, size: string, color: string, mode?: string): string {
-  return 'dx'
+  return (
+    'dx'
     + (theme === 'material' || theme === 'fluent' ? `.${theme}` : '')
     + `.${color}`
     + (mode ? `.${mode}` : '')
     + (size === 'default' ? '' : '.compact')
-    + '.scss';
+    + '.scss'
+  );
 }
 
 async function generateScssBundles(
@@ -100,7 +104,10 @@ async function generateScssBundles(
   const themes = deps.themeOptions.getThemes();
   for (const [theme, size, color, mode] of themes) {
     const template = await readTemplate(theme);
-    const content = template.replace('$COLOR', color).replace('$SIZE', size).replace('$MODE', mode || '');
+    const content = template
+      .replace('$COLOR', color)
+      .replace('$SIZE', size)
+      .replace('$MODE', mode || '');
     const fileName = generateBundleName(theme, size, color, mode);
     await writeFileText(path.join(resolvedBundlesDir, fileName), content);
   }
@@ -121,11 +128,14 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.cjs')) as {
       getThemes: () => Array<[string, string, string, string?]>;
     },
-    cleanCssSanitizeOptions: projectRequire(path.resolve(projectRoot, 'build/clean-css-options.json')),
+    cleanCssSanitizeOptions: projectRequire(
+      path.resolve(projectRoot, 'build/clean-css-options.json'),
+    ),
     cleanCssDevOptions: workspaceRequire(
       path.resolve(projectRoot, '../devextreme-themebuilder/src/data/clean-css-options.json'),
     ),
-    devextremeVersion: workspaceRequire(path.resolve(projectRoot, '../devextreme/package.json')).version,
+    devextremeVersion: workspaceRequire(path.resolve(projectRoot, '../devextreme/package.json'))
+      .version,
   };
 }
 
@@ -188,15 +198,17 @@ async function compileFile(
 
   const postcssFactory = (deps.postcss as unknown as { default?: any }).default || deps.postcss;
   const prefixed = await postcssFactory([deps.autoprefixer()]).process(compiled.css, {
-    from: undefined,
+    from: sourceFile,
   });
 
-  const minifierOptions = minifyProfile === 'ci' ? deps.cleanCssDevOptions : deps.cleanCssSanitizeOptions;
+  const minifierOptions =
+    minifyProfile === 'ci' ? deps.cleanCssDevOptions : deps.cleanCssSanitizeOptions;
   const minifier = new deps.CleanCss(minifierOptions);
   const minified = minifier.minify(prefixed.css).styles;
 
   const outFileName = path.basename(sourceFile, '.scss') + '.css';
-  const withHeader = createLicenseHeader(outFileName, deps.devextremeVersion) + moveCharsetToTop(minified);
+  const license = createStarLicenseHeader(outFileName, deps.devextremeVersion);
+  const withHeader = prependLicenseAndMoveCharsetFirst(minified, license);
   await writeFileText(path.join(outputDir, outFileName), withHeader);
 }
 
@@ -319,16 +331,12 @@ async function runWatchBuild(
       }, 200);
     };
 
-    const watcher = fs.watch(
-      watchDir,
-      { recursive: true },
-      (_eventType, fileName) => {
-        if (!fileName || !fileName.endsWith('.scss')) {
-          return;
-        }
-        scheduleRebuild();
-      },
-    );
+    const watcher = fs.watch(watchDir, { recursive: true }, (_eventType, fileName) => {
+      if (!fileName || !fileName.endsWith('.scss')) {
+        return;
+      }
+      scheduleRebuild();
+    });
 
     const stopWatcher = () => {
       watcher.close();
