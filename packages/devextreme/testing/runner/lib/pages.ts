@@ -179,12 +179,16 @@ export function createPagesRenderer({
       'plugin-babel': '/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': '/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
       // eslint-disable-next-line spellcheck/spell-checker
-      zod: '/packages/devextreme/node_modules/zod/lib/index.js',
-      'zod-to-json-schema': '/packages/devextreme/node_modules/zod-to-json-schema/dist/cjs/zodToJsonSchema.js',
+      zod: '/packages/devextreme/node_modules/zod/lib',
+      'zod-to-json-schema': '/packages/devextreme/node_modules/zod-to-json-schema/dist/cjs',
       ...cspMap,
     };
 
-    const systemPackages: Record<string, { defaultExtension?: string; main?: string }> = {
+    const systemPackages: Record<string, {
+      defaultExtension?: string;
+      main?: string;
+      format?: string;
+    }> = {
       '': {
         defaultExtension: 'js',
       },
@@ -204,6 +208,17 @@ export function createPagesRenderer({
       },
       events: {
         main: 'index',
+      },
+      // eslint-disable-next-line spellcheck/spell-checker
+      zod: {
+        main: 'index.js',
+        defaultExtension: 'js',
+        format: 'cjs',
+      },
+      'zod-to-json-schema': {
+        main: 'index.js',
+        defaultExtension: 'js',
+        format: 'cjs',
       },
     };
 
