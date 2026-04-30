@@ -9,6 +9,24 @@ describe('AddLicenseHeadersExecutor E2E', () => {
   let tempDir: string;
   let context = createMockContext();
 
+  async function setupLicenseHeaderTemplate(): Promise<void> {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const buildDir = path.join(projectDir, 'build', 'gulp');
+    fs.mkdirSync(buildDir, { recursive: true });
+    await writeFileText(
+      path.join(buildDir, 'license-header.txt'),
+      `/*<%= commentType %>
+* DevExtreme (<%= file.relative %>)
+* Version: <%= version %>
+* Build date: <%= date %>
+*
+* Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED
+* Read about DevExtreme licensing here: <%= eula %>
+*/
+`,
+    );
+  }
+
   beforeEach(async () => {
     tempDir = createTempDir('nx-license-e2e-');
     context = createMockContext({ root: tempDir });
@@ -321,5 +339,106 @@ export const value = 42;
     const contentWithoutHeader = newContent.replace(/^\/\*![\s\S]*?\*\/\n\n/, '');
 
     expect(contentWithoutHeader).toBe(originalContent);
+  });
+
+  it('should produce /** banner when commentType is *', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const npmDir = path.join(projectDir, 'npm');
+    await setupLicenseHeaderTemplate();
+
+    const options: AddLicenseHeadersExecutorSchema = {
+      targetDirectory: './npm',
+      packageJsonPath: './package.json',
+      licenseTemplateFile: './build/gulp/license-header.txt',
+      eulaUrl: 'https://js.devexpress.com/Licensing/',
+      includePatterns: ['**/*.js'],
+      commentType: '*',
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const content = await readFileText(path.join(npmDir, 'index.js'));
+    expect(content).toMatch(/^\/\*\*/);
+    expect(content).not.toMatch(/^\/\*!/);
+  });
+
+  it('should skip files already stamped with /** when commentType is *', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const npmDir = path.join(projectDir, 'npm');
+    await setupLicenseHeaderTemplate();
+
+    await writeFileText(
+      path.join(npmDir, 'pre-stamped.js'),
+      `/**\n * Already stamped\n */\nexport const x = 1;\n`,
+    );
+
+    const options: AddLicenseHeadersExecutorSchema = {
+      targetDirectory: './npm',
+      packageJsonPath: './package.json',
+      licenseTemplateFile: './build/gulp/license-header.txt',
+      eulaUrl: 'https://js.devexpress.com/Licensing/',
+      includePatterns: ['**/*.js'],
+      commentType: '*',
+    };
+
+    await executor(options, context);
+
+    const contentAfterFirst = await readFileText(path.join(npmDir, 'pre-stamped.js'));
+
+    await executor(options, context);
+
+    const contentAfterSecond = await readFileText(path.join(npmDir, 'pre-stamped.js'));
+
+    expect(contentAfterFirst).toBe(contentAfterSecond);
+    expect((contentAfterFirst.match(/\/\*\*/g) || []).length).toBe(1);
+  });
+
+  it('should default to ! when commentType is not specified', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const npmDir = path.join(projectDir, 'npm');
+    await setupLicenseHeaderTemplate();
+
+    const options: AddLicenseHeadersExecutorSchema = {
+      targetDirectory: './npm',
+      packageJsonPath: './package.json',
+      licenseTemplateFile: './build/gulp/license-header.txt',
+      eulaUrl: 'https://js.devexpress.com/Licensing/',
+      includePatterns: ['**/*.js'],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const content = await readFileText(path.join(npmDir, 'index.js'));
+    expect(content).toMatch(/^\/\*!/);
+    expect(content).not.toMatch(/^\/\*\*/);
+  });
+
+  it('should use commentType in default banner when no licenseTemplateFile is provided', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const npmDir = path.join(projectDir, 'npm');
+
+    const options: AddLicenseHeadersExecutorSchema = {
+      targetDirectory: './npm',
+      packageJsonPath: './package.json',
+      commentType: '*',
+      includePatterns: ['**/*.js'],
+    };
+
+    const result1 = await executor(options, context);
+    expect(result1.success).toBe(true);
+
+    const contentAfterFirst = await readFileText(path.join(npmDir, 'index.js'));
+    expect(contentAfterFirst).toMatch(/^\/\*\*/);
+    expect(contentAfterFirst).not.toMatch(/^\/\*!/);
+
+    const result2 = await executor(options, context);
+    expect(result2.success).toBe(true);
+
+    const contentAfterSecond = await readFileText(path.join(npmDir, 'index.js'));
+    expect(contentAfterSecond).toBe(contentAfterFirst);
   });
 });

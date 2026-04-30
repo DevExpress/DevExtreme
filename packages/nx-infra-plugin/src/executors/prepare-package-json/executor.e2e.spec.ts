@@ -100,4 +100,150 @@ describe('PreparePackageJsonExecutor E2E', () => {
       expect(distPackage.author).toBe('Test Author');
     });
   });
+
+  it('should override name and version with setName and setVersion', async () => {
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+      setName: 'devextreme',
+      setVersion: '1.2.3',
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
+
+    expect(distPkg.name).toBe('devextreme');
+    expect(distPkg.version).toBe('1.2.3');
+  });
+
+  it('should remove all specified fields via removeFields', async () => {
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+      removeFields: ['devDependencies', 'publishConfig', 'scripts'],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
+
+    expect(distPkg.devDependencies).toBeUndefined();
+    expect(distPkg.publishConfig).toBeUndefined();
+    expect(distPkg.scripts).toBeUndefined();
+  });
+
+  it('should read version from versionFrom file and apply it to the output', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+
+    await writeJson(path.join(projectDir, 'version-source.json'), {
+      name: 'workspace-root',
+      version: '9.8.7',
+    });
+
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+      versionFrom: './version-source.json',
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
+
+    expect(distPkg.version).toBe('9.8.7');
+  });
+
+  it('should rename devextreme to devextreme-internal after setName via renameInternalPattern', async () => {
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+      setName: 'devextreme',
+      renameInternalPattern: { find: '^devextreme(-.*)?$', replace: 'devextreme$1-internal' },
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
+
+    expect(distPkg.name).toBe('devextreme-internal');
+  });
+
+  it('should rename devextreme-foo to devextreme-foo-internal via renameInternalPattern', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+
+    await writeJson(path.join(projectDir, 'package.json'), {
+      name: 'devextreme-foo',
+      version: '1.0.0',
+      publishConfig: { access: 'public' },
+    });
+
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+      renameInternalPattern: { find: '^devextreme(-.*)?$', replace: 'devextreme$1-internal' },
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
+
+    expect(distPkg.name).toBe('devextreme-foo-internal');
+  });
+
+  it('should remove only publishConfig by default when no new options are specified', async () => {
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+    };
+
+    await executor(options, context);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
+
+    expect(distPkg.publishConfig).toBeUndefined();
+    expect(distPkg.devDependencies).toBeDefined();
+    expect(distPkg.scripts).toBeDefined();
+  });
+
+  it('should remove nothing when removeFields is an empty array', async () => {
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+      removeFields: [],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
+
+    expect(distPkg.publishConfig).toBeDefined();
+  });
+
+  it('should fail when versionFrom file has no version field', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+
+    await writeJson(path.join(projectDir, 'no-version.json'), {
+      name: 'workspace-root',
+    });
+
+    const options: NpmPackageExecutorSchema = {
+      distDirectory: './npm',
+      versionFrom: './no-version.json',
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(false);
+  });
 });

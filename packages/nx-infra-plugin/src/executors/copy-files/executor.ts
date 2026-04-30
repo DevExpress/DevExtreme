@@ -18,9 +18,11 @@ const ERROR_MESSAGES = {
 async function copyGlobPatternFiles(
   sourcePath: string,
   destPath: string,
+  excludePatterns: string[] = [],
 ): Promise<{ success: boolean }> {
   const globPattern = isWindowsOS() ? normalizeGlobPathForWindows(sourcePath) : sourcePath;
-  const files = await glob(globPattern, { nodir: true });
+  const ignore = isWindowsOS() ? excludePatterns.map(normalizeGlobPathForWindows) : excludePatterns;
+  const files = await glob(globPattern, { nodir: true, ignore });
 
   if (files.length === 0) {
     logger.error(ERROR_MESSAGES.NO_FILES_MATCH_PATTERN(sourcePath));
@@ -67,12 +69,12 @@ const runExecutor: PromiseExecutor<CopyFilesExecutorSchema> = async (options, co
   }
 
   try {
-    for (const { from, to } of options.files) {
+    for (const { from, to, excludePatterns } of options.files) {
       const sourcePath = path.resolve(projectRoot, from);
       const destPath = path.resolve(projectRoot, to);
 
       const result = containsGlobPattern(from)
-        ? await copyGlobPatternFiles(sourcePath, destPath)
+        ? await copyGlobPatternFiles(sourcePath, destPath, excludePatterns)
         : await copyDirectPath(sourcePath, destPath);
 
       if (!result.success) {

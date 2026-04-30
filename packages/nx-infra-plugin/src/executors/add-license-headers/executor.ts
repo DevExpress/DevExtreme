@@ -38,7 +38,7 @@ const DEFAULTS = {
 } as const;
 
 const COMMENT = {
-  MARKER: '/*!',
+  OPEN: '/*',
   END: ' */',
   PREFIX: ' *',
 } as const;
@@ -81,9 +81,10 @@ function extractGitHubUrl(
   return rawUrl.replace(/^git\+/, '').replace(/\.git$/, '');
 }
 
-function buildDefaultBannerTemplate(): string {
+function buildDefaultBannerTemplate(commentType: string): string {
+  const marker = `${COMMENT.OPEN}${commentType}`;
   return [
-    COMMENT.MARKER,
+    marker,
     BANNER.PKG_NAME,
     BANNER.VERSION,
     BANNER.BUILD_DATE,
@@ -148,6 +149,7 @@ interface ProcessFileOptions {
   useCustomTemplate: boolean;
   separatorBetweenBannerAndContent: string;
   prependAfterLicense: string;
+  commentType: string;
 }
 
 async function processFile(options: ProcessFileOptions): Promise<void> {
@@ -160,11 +162,12 @@ async function processFile(options: ProcessFileOptions): Promise<void> {
     useCustomTemplate,
     separatorBetweenBannerAndContent,
     prependAfterLicense,
+    commentType,
   } = options;
 
   const content = await readFileText(file);
 
-  if (content.startsWith(COMMENT.MARKER)) {
+  if (content.startsWith(COMMENT.OPEN + commentType)) {
     return;
   }
 
@@ -172,7 +175,7 @@ async function processFile(options: ProcessFileOptions): Promise<void> {
   const fileData: FileTemplateData = {
     ...baseData,
     file: { relative: relativePath },
-    commentType: '!',
+    commentType,
   };
 
   const banner = useCustomTemplate
@@ -195,9 +198,10 @@ interface LoadTemplateError {
 async function loadBannerTemplate(
   absoluteProjectRoot: string,
   licenseTemplateFile: string | undefined,
+  commentType: string,
 ): Promise<LoadTemplateResult | LoadTemplateError> {
   if (!licenseTemplateFile) {
-    return { success: true, template: buildDefaultBannerTemplate() };
+    return { success: true, template: buildDefaultBannerTemplate(commentType) };
   }
 
   const templatePath = path.join(absoluteProjectRoot, licenseTemplateFile);
@@ -224,6 +228,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
     options.separatorBetweenBannerAndContent ?? CHARS.NEWLINE;
   const prependAfterLicense = options.prependAfterLicense ?? '';
   const useCustomTemplate = !!options.licenseTemplateFile;
+  const commentType = options.commentType ?? '!';
 
   let pkg: PackageJson;
   try {
@@ -235,7 +240,11 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
 
   const githubUrl = useCustomTemplate ? '' : extractGitHubUrl(pkg.repository, packageJsonPath);
 
-  const templateResult = await loadBannerTemplate(absoluteProjectRoot, options.licenseTemplateFile);
+  const templateResult = await loadBannerTemplate(
+    absoluteProjectRoot,
+    options.licenseTemplateFile,
+    commentType,
+  );
   if (!templateResult.success) {
     return { success: false };
   }
@@ -273,6 +282,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
           useCustomTemplate,
           separatorBetweenBannerAndContent,
           prependAfterLicense,
+          commentType,
         }),
       ),
     );

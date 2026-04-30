@@ -50,6 +50,12 @@
     "version": {
       "type": "string",
       "description": "Version to use in template (defaults to pkg.version)"
+    },
+    "commentType": {
+      "type": "string",
+      "description": "Comment type marker placed after /* in the license banner opening",
+      "enum": ["!", "*"],
+      "default": "!"
     }
   },
   "required": []

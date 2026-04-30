@@ -8,4 +8,5 @@ export interface AddLicenseHeadersExecutorSchema {
   eulaUrl?: string;
   prependAfterLicense?: string;
   version?: string;
+  commentType?: '!' | '*';
 }
