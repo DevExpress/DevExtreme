@@ -98,11 +98,13 @@ test.meta({ browserSize: [300, 400] })('Check popup height with no found data op
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
 
-test.meta({ browserSize: [300, 400], unstable: true })('Check popup height in loading state', async (t) => {
+test.meta({ browserSize: [300, 400] })('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
   await t.hover(`.${OVERLAY_CLASS}`);
+
+  await insertStylesheetRulesToPage('* { animation-play-state: paused !important; }');
 
   await testScreenshot(t, takeScreenshot, 'Lookup in loading.png');
 
