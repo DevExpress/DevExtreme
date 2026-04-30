@@ -7,6 +7,7 @@ import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
+import type Button from '@ts/ui/button';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -36,6 +37,8 @@ export class AIChat {
   private readonly popupInstance: Popup;
 
   private chatInstance?: Chat;
+
+  private clearChatButtonInstance?: Button;
 
   private disabled = false;
 
@@ -123,6 +126,9 @@ export class AIChat {
         icon: CLEAR_CHAT_ICON,
         hint: messageLocalization.format('dxDataGrid-aiAssistantClearButtonText'),
         onClick: onChatCleared,
+        onInitialized: (e): void => {
+          this.clearChatButtonInstance = e.component;
+        },
       },
     };
   }
@@ -256,7 +262,7 @@ export class AIChat {
   }
 
   private setTextAreaDisabled(disabled: boolean): void {
-    const $textArea = this.chatInstance?.$element().find(CLASSES.textArea);
+    const $textArea = this.chatInstance?.$element().find(`.${CLASSES.textArea}`);
 
     if ($textArea?.length) {
       gridCoreUtils.getWidgetInstance($textArea)?.option('disabled', disabled);
@@ -264,11 +270,15 @@ export class AIChat {
   }
 
   private setSpeechToTextDisabled(disabled: boolean): void {
-    const $speechToText = this.chatInstance?.$element().find(CLASSES.speechToTextButton);
+    const $speechToText = this.chatInstance?.$element().find(`.${CLASSES.speechToTextButton}`);
 
     if ($speechToText?.length) {
       gridCoreUtils.getWidgetInstance($speechToText)?.option('disabled', disabled);
     }
+  }
+
+  private setClearChatButtonDisabled(disabled: boolean): void {
+    this.clearChatButtonInstance?.option('disabled', disabled);
   }
 
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
@@ -305,10 +315,7 @@ export class AIChat {
 
     this.setTextAreaDisabled(disabled);
     this.setSpeechToTextDisabled(disabled);
-
-    if (this.options.onChatCleared) {
-      this.popupInstance.option('toolbarItems[0].options.disabled', disabled);
-    }
+    this.setClearChatButtonDisabled(disabled);
   }
 
   public isDisabled(): boolean {
