@@ -7,7 +7,7 @@ import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/th
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
-  appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
+  appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
@@ -104,26 +104,35 @@ test.meta({ browserSize: [300, 400] })('Check popup height in loading state', as
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
   await t.hover(`.${OVERLAY_CLASS}`);
 
-  await insertStylesheetRulesToPage('* { animation-play-state: paused !important; }');
-
   await testScreenshot(t, takeScreenshot, 'Lookup in loading.png');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxLookup', {
-  dataSource: {
-    load() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([1, 2, 3]);
-        }, 5000);
-      });
+}).before(async () => {
+  await insertStylesheetRulesToPage(`
+    .dx-loadindicator-segment,
+    .dx-loadindicator-segment-inner,
+    .dx-loadindicator-content,
+    .dx-loadindicator-icon {
+      animation: none !important;
+    }
+  `);
+
+  return createWidget('dxLookup', {
+    dataSource: {
+      load() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve([1, 2, 3]);
+          }, 5000);
+        });
+      },
     },
-  },
-  valueExpr: 'id',
-  displayExpr: 'text',
-}));
+    valueExpr: 'id',
+    displayExpr: 'text',
+  });
+}).after(async () => removeStylesheetRulesFromPage());
 
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
