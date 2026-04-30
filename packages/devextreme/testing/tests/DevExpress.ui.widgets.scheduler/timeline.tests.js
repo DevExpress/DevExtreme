@@ -8,7 +8,6 @@ import '__internal/scheduler/workspaces/m_timeline';
 import '__internal/scheduler/workspaces/m_timeline_day';
 import '__internal/scheduler/workspaces/m_timeline_month';
 import '__internal/scheduler/workspaces/m_timeline_week';
-import '__internal/scheduler/workspaces/m_timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import {
@@ -668,10 +667,12 @@ QUnit.module('Mouse Interaction', () => {
 
 QUnit.module('TimelineWorkWeek with intervalCount', {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            type: 'timelineWorkWeek',
+            skippedDays: [0, 6],
             currentDate: new Date(2015, 9, 16),
             getResourceManager: getEmptyResourceManager,
-        }).dxSchedulerTimelineWorkWeek('instance');
+        }).dxSchedulerTimelineWeek('instance');
     }
 });
 

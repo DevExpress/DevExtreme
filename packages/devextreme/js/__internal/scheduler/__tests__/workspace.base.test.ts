@@ -7,12 +7,10 @@ import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import SchedulerTimelineDay from '../workspaces/m_timeline_day';
 import SchedulerTimelineMonth from '../workspaces/m_timeline_month';
 import SchedulerTimelineWeek from '../workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from '../workspaces/m_timeline_work_week';
 import type SchedulerWorkSpace from '../workspaces/m_work_space';
 import SchedulerWorkSpaceDay from '../workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from '../workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from '../workspaces/m_work_space_week';
-import SchedulerWorkSpaceWorkWeek from '../workspaces/m_work_space_work_week';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 jest.mock('@ts/core/m_devices', () => {
@@ -39,23 +37,29 @@ jest.mock('@ts/core/m_devices', () => {
   };
 });
 
-type WorkspaceConstructor<T> = new (container: Element, options?: any) => T;
+type WorkspaceConstructor = new (
+  container: Element,
+  options?: Record<string, unknown>
+) => SchedulerWorkSpace;
 
-const createWorkspace = <T extends SchedulerWorkSpace>(
-  WorkSpace: WorkspaceConstructor<T>,
+const createWorkspace = (
+  WorkSpace: unknown,
   currentView: string,
-  options?: any,
-): { workspace: T; container: Element } => {
+  options?: Record<string, unknown>,
+): { workspace: SchedulerWorkSpace; container: Element } => {
   const container = document.createElement('div');
-  const workspace = new WorkSpace(container, {
+  const WorkspaceCtor = WorkSpace as WorkspaceConstructor;
+  const workspace = new WorkspaceCtor(container, {
     views: [currentView],
     currentView,
+    type: currentView,
     currentDate: new Date(2017, 4, 25),
     firstDayOfWeek: 0,
-    getResourceManager: () => getResourceManagerMock([]),
+    getResourceManager: (): unknown => getResourceManagerMock([]),
     ...options,
   });
-  (workspace as any)._isVisible = () => true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (workspace as any)._isVisible = (): boolean => true;
   expect(container.classList).toContain('dx-scheduler-work-space');
 
   return { workspace, container };
@@ -63,15 +67,15 @@ const createWorkspace = <T extends SchedulerWorkSpace>(
 
 const workSpaces: {
   currentView: string;
-  WorkSpace: WorkspaceConstructor<SchedulerWorkSpace>;
+  WorkSpace: unknown;
 }[] = [
   { currentView: 'day', WorkSpace: SchedulerWorkSpaceDay },
   { currentView: 'week', WorkSpace: SchedulerWorkSpaceWeek },
-  { currentView: 'workWeek', WorkSpace: SchedulerWorkSpaceWorkWeek },
+  { currentView: 'workWeek', WorkSpace: SchedulerWorkSpaceWeek },
   { currentView: 'month', WorkSpace: SchedulerWorkSpaceMonth },
   { currentView: 'timelineDay', WorkSpace: SchedulerTimelineDay },
   { currentView: 'timelineWeek', WorkSpace: SchedulerTimelineWeek },
-  { currentView: 'timelineWorkWeek', WorkSpace: SchedulerTimelineWorkWeek },
+  { currentView: 'timelineWorkWeek', WorkSpace: SchedulerTimelineWeek },
   { currentView: 'timelineMonth', WorkSpace: SchedulerTimelineMonth },
 ];
 
@@ -210,7 +214,7 @@ describe('scheduler workspace skipped days support', () => {
   });
 
   it('should use full week layout for work week when skippedDays override is empty', () => {
-    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWeek, 'workWeek', {
       currentDate: new Date(2026, 3, 1), // Wednesday
       firstDayOfWeek: 0, // Sunday
       skippedDays: [],
@@ -221,7 +225,7 @@ describe('scheduler workspace skipped days support', () => {
   });
 
   it('should use custom skippedDays in work week runtime layout', () => {
-    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWeek, 'workWeek', {
       currentDate: new Date(2026, 3, 1), // Wednesday
       firstDayOfWeek: 0, // Sunday
       skippedDays: [3], // Wednesday

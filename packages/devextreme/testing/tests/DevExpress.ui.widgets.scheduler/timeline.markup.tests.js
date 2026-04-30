@@ -2,7 +2,6 @@ import $ from 'jquery';
 import SchedulerTimeline from '__internal/scheduler/workspaces/m_timeline';
 import SchedulerTimelineDay from '__internal/scheduler/workspaces/m_timeline_day';
 import SchedulerTimelineWeek from '__internal/scheduler/workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from '__internal/scheduler/workspaces/m_timeline_work_week';
 import SchedulerTimelineMonth from '__internal/scheduler/workspaces/m_timeline_month';
 import dataUtils from 'core/element_data';
 import dateLocalization from 'common/core/localization/date';
@@ -790,21 +789,23 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
 
 let timelineWorkWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            type: 'timelineWorkWeek',
+            skippedDays: [0, 6],
             getResourceManager: getEmptyResourceManager,
-        }).dxSchedulerTimelineWorkWeek('instance');
+        }).dxSchedulerTimelineWeek('instance');
     }
 };
 
 QUnit.module('TimelineWorkWeek markup', timelineWorkWeekModuleConfig, () => {
     QUnit.test('Scheduler timeline work week should be initialized', async function(assert) {
-        assert.ok(this.instance instanceof SchedulerTimelineWorkWeek, 'dxSchedulerTimeLineWorkWeek was initialized');
+        assert.ok(this.instance instanceof SchedulerTimelineWeek, 'timelineWorkWeek uses SchedulerTimelineWeek');
     });
 
-    QUnit.test('Scheduler timeline work week should have a right css class', async function(assert) {
+    QUnit.test('Scheduler timeline work week should use week css class', async function(assert) {
         const $element = this.instance.$element();
-        assert.ok($element.hasClass('dx-scheduler-timeline'), 'dxSchedulerTimelineWorkWeek has \'dx-scheduler-timeline\' css class');
-        assert.ok($element.hasClass('dx-scheduler-timeline-work-week'), 'dxSchedulerTimelineWorkWeek has \'dx-scheduler-timeline-work-week\' css class');
+        assert.ok($element.hasClass('dx-scheduler-timeline'), 'timelineWorkWeek has \'dx-scheduler-timeline\' css class');
+        assert.ok($element.hasClass('dx-scheduler-timeline-week'), 'timelineWorkWeek uses timeline week css class');
     });
 
     QUnit.test('Scheduler timeline work week view should have right cell & row count', async function(assert) {
@@ -860,10 +861,12 @@ QUnit.module('TimelineWorkWeek markup', timelineWorkWeekModuleConfig, () => {
 
 timelineWorkWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            type: 'timelineWorkWeek',
+            skippedDays: [0, 6],
             currentDate: new Date(2015, 9, 16),
             getResourceManager: getEmptyResourceManager,
-        }).dxSchedulerTimelineWorkWeek('instance');
+        }).dxSchedulerTimelineWeek('instance');
     }
 };
 
