@@ -968,6 +968,42 @@
         "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts"
       ]
     },
+    "build:npm:dist:package-json": {
+      "executor": "devextreme-nx-infra-plugin:prepare-package-json",
+      "options": {
+        "sourcePackageJson": "../devextreme-dist/package.json",
+        "distDirectory": "./artifacts/npm/devextreme-dist",
+        "versionFrom": "./package.json"
+      },
+      "inputs": [
+        "{workspaceRoot}/packages/devextreme-dist/package.json",
+        "{projectRoot}/package.json"
+      ],
+      "outputs": ["{projectRoot}/artifacts/npm/devextreme-dist/package.json"]
+    },
+    "build:npm:dist:meta": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          {
+            "from": "../devextreme-dist/README.md",
+            "to": "./artifacts/npm/devextreme-dist/README.md"
+          },
+          {
+            "from": "../devextreme-dist/LICENSE.md",
+            "to": "./artifacts/npm/devextreme-dist/LICENSE.md"
+          }
+        ]
+      },
+      "inputs": [
+        "{workspaceRoot}/packages/devextreme-dist/README.md",
+        "{workspaceRoot}/packages/devextreme-dist/LICENSE.md"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme-dist/README.md",
+        "{projectRoot}/artifacts/npm/devextreme-dist/LICENSE.md"
+      ]
+    },
     "compress:npm-sources": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
