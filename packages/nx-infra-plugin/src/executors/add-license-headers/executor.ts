@@ -2,8 +2,7 @@ import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
 import { glob } from 'glob';
 import { AddLicenseHeadersExecutorSchema } from './schema';
-import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS } from '../../utils/common';
+import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
 import { readJson } from '../../utils/file-operations';
 import { buildLicenseBannerRenderer, applyLicenseBannerToFile } from '../../utils/license-banner';
@@ -32,7 +31,7 @@ async function discoverFiles(options: DiscoverFilesOptions): Promise<string[]> {
 
   const patterns = includePatterns.map((pattern) => {
     const fullPath = path.join(targetDirectory, pattern);
-    return isWindowsOS() ? normalizeGlobPathForWindows(fullPath) : fullPath;
+    return toPosixPath(fullPath);
   });
 
   const allFiles: string[] = [];

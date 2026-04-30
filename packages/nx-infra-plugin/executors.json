@@ -99,6 +99,11 @@
       "implementation": "./src/executors/dts-bundle/executor",
       "schema": "./src/executors/dts-bundle/schema.json",
       "description": "Assemble TypeScript declaration bundle files from source"
+    },
+    "npm-assemble": {
+      "implementation": "./src/executors/npm-assemble/executor",
+      "schema": "./src/executors/npm-assemble/schema.json",
+      "description": "Assemble npm package from transpiled sources, bin, license, dist files and meta"
     }
   }
 }

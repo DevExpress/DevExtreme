@@ -5,8 +5,8 @@ import { js as jsBeautify } from 'js-beautify';
 import { glob } from 'glob';
 import { minimatch } from 'minimatch';
 import { CompressExecutorSchema, CompressMode, CompressModeName } from './schema';
-import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS, containsGlobPattern } from '../../utils/common';
+import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
+import { containsGlobPattern } from '../../utils/common';
 import {
   readFileText,
   writeFileText,
@@ -78,8 +78,8 @@ async function runBeautify(content: string, eulaUrl?: string): Promise<string> {
 }
 
 function normalizeOutput(content: string, trailingNewline: boolean): string {
-  const eolNormalized = normalizeEol(content);
-  return trailingNewline ? ensureTrailingNewline(eolNormalized) : eolNormalized;
+  const normalized = normalizeEol(content);
+  return trailingNewline ? ensureTrailingNewline(normalized) : normalized;
 }
 
 type ResolvedMode = {
@@ -126,20 +126,18 @@ async function expandFileList(
   exclude: string[] | undefined,
   projectRoot: string,
 ): Promise<string[]> {
-  const toPosixIfWindows = (p: string) => (isWindowsOS() ? normalizeGlobPathForWindows(p) : p);
-
-  const ignorePatterns = exclude?.map((p) => toPosixIfWindows(path.resolve(projectRoot, p)));
+  const ignorePatterns = exclude?.map((p) => toPosixPath(path.resolve(projectRoot, p)));
 
   const isExcluded = (absolutePath: string): boolean =>
     !!ignorePatterns?.some((pattern) =>
-      minimatch(toPosixIfWindows(absolutePath), pattern, { dot: true }),
+      minimatch(toPosixPath(absolutePath), pattern, { dot: true }),
     );
 
   const resolved: string[] = [];
   for (const entry of files) {
     const absolute = path.resolve(projectRoot, entry);
     if (containsGlobPattern(entry)) {
-      const pattern = toPosixIfWindows(absolute);
+      const pattern = toPosixPath(absolute);
       const matches = await glob(pattern, { nodir: true, ignore: ignorePatterns });
       resolved.push(...matches);
     } else if (!isExcluded(absolute)) {

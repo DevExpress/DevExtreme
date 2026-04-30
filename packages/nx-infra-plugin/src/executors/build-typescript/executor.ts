@@ -5,7 +5,11 @@ import { glob } from 'glob';
 import { prepareSingleFileReplaceTscAliasPaths } from 'tsc-alias';
 import { BuildTypescriptExecutorSchema } from './schema';
 import { TsConfig, CompilerOptions } from '../../utils/types';
-import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import {
+  resolveProjectPath,
+  normalizeGlobPathForWindows,
+  toPosixPath,
+} from '../../utils/path-resolver';
 import { isWindowsOS } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { exists, ensureDir, writeFileText } from '../../utils/file-operations';
@@ -115,13 +119,11 @@ async function resolveSourceFiles(
   srcPattern: string,
   excludePatterns: string[],
 ): Promise<string[]> {
-  const globPattern = isWindowsOS()
-    ? normalizeGlobPathForWindows(path.join(projectRoot, srcPattern))
-    : path.join(projectRoot, srcPattern);
+  const globPattern = toPosixPath(path.join(projectRoot, srcPattern));
 
   const resolvedExcludes = excludePatterns.map((pattern) => {
     const result = path.join(projectRoot, pattern);
-    return isWindowsOS() ? normalizeGlobPathForWindows(result) : result;
+    return toPosixPath(result);
   });
 
   const files = await glob(globPattern, {

@@ -2,8 +2,8 @@ import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
 import { glob } from 'glob';
 import { ConcatenateFilesExecutorSchema } from './schema';
-import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS, containsGlobPattern } from '../../utils/common';
+import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
+import { containsGlobPattern } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { exists } from '../../utils/file-operations';
 import { concatToFile } from '../../utils/concat-content';
@@ -18,7 +18,7 @@ const ERROR_MESSAGES = {
 
 async function resolveGlobPattern(pattern: string, projectRoot: string): Promise<string[]> {
   const sourcePath = path.resolve(projectRoot, pattern);
-  const globPattern = isWindowsOS() ? normalizeGlobPathForWindows(sourcePath) : sourcePath;
+  const globPattern = toPosixPath(sourcePath);
   const files = await glob(globPattern, { nodir: true });
 
   if (files.length === 0) {

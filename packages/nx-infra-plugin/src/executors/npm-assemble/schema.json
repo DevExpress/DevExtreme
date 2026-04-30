@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "description": "Assemble npm package from transpiled sources, bin, license, dist files and meta.",
+  "properties": {
+    "transpiledDir": {
+      "type": "string",
+      "description": "Directory containing transpiled ESM+CJS sources (relative to project root)."
+    },
+    "jsSrcDir": {
+      "type": "string",
+      "description": "Directory containing js source JSON files (relative to project root)."
+    },
+    "licenseSrcDir": {
+      "type": "string",
+      "description": "Directory containing license files to copy (relative to project root)."
+    },
+    "npmBinDir": {
+      "type": "string",
+      "description": "Directory containing npm bin scripts (relative to project root)."
+    },
+    "webpackConfig": {
+      "type": "string",
+      "description": "Path to the webpack config file to copy into bin/ (relative to project root)."
+    },
+    "artifactsDir": {
+      "type": "string",
+      "description": "Artifacts directory containing js, css, ts sub-dirs for dist copy (relative to project root)."
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "Output directory for the assembled npm package (relative to project root)."
+    },
+    "licenseTemplateFile": {
+      "type": "string",
+      "description": "Path to the license header template file (relative to project root)."
+    },
+    "eulaUrl": {
+      "type": "string",
+      "description": "EULA URL embedded in the license header."
+    }
+  },
+  "required": [
+    "transpiledDir",
+    "jsSrcDir",
+    "licenseSrcDir",
+    "npmBinDir",
+    "webpackConfig",
+    "artifactsDir",
+    "outputDir",
+    "licenseTemplateFile",
+    "eulaUrl"
+  ]
+}

@@ -2,7 +2,7 @@ import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
 import { glob } from 'glob';
 import { DtsModulesExecutorSchema } from './schema';
-import { resolveProjectPath } from '../../utils/path-resolver';
+import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
 import { readJson, readFileText, writeFileText } from '../../utils/file-operations';
 import { copyDirectory } from '../../utils/copy-directory';
@@ -39,8 +39,9 @@ const runExecutor: PromiseExecutor<DtsModulesExecutorSchema> = async (options, c
 
     const bannerBase = { templatePath: licenseTemplatePath, pkg, eulaUrl: options.eulaUrl };
 
-    const dtsFiles = await glob('**/*.d.ts', { cwd: outputDir, nodir: true, absolute: true });
-    const jsFiles = await glob('bundles/*.js', { cwd: outputDir, nodir: true, absolute: true });
+    const cwd = toPosixPath(outputDir);
+    const dtsFiles = await glob('**/*.d.ts', { cwd, nodir: true, absolute: true });
+    const jsFiles = await glob('bundles/*.js', { cwd, nodir: true, absolute: true });
 
     const renderBanner = await buildLicenseBannerRenderer({ ...bannerBase, commentType: '*' });
 

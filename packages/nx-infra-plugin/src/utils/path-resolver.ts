@@ -1,5 +1,6 @@
 import { ExecutorContext } from '@nx/devkit';
 import * as path from 'path';
+import { isWindowsOS } from './common';
 
 const ERROR_CONFIGURATIONS_NOT_FOUND = 'Project configurations not found in executor context';
 const ERROR_PROJECT_NAME_NOT_FOUND = 'Project name not found in executor context';
@@ -33,4 +34,8 @@ export function resolveFromWorkspace(context: ExecutorContext, relativePath: str
 
 export function normalizeGlobPathForWindows(filePath: string): string {
   return filePath.replace(/\\/g, '/');
+}
+
+export function toPosixPath(absolutePath: string): string {
+  return isWindowsOS() ? normalizeGlobPathForWindows(absolutePath) : absolutePath;
 }

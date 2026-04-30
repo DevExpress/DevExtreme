@@ -2,6 +2,7 @@ import { glob } from 'glob';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { ensureDir } from './file-operations';
+import { toPosixPath } from './path-resolver';
 
 export async function copyDirectory(
   sourceDir: string,
@@ -10,11 +11,12 @@ export async function copyDirectory(
 ): Promise<void> {
   const includePatterns = options.include ?? ['**/*'];
   const excludePatterns = options.exclude ?? [];
+  const cwd = toPosixPath(sourceDir);
 
   const relPaths = new Set<string>();
   for (const pattern of includePatterns) {
     const matches = await glob(pattern, {
-      cwd: sourceDir,
+      cwd,
       nodir: true,
       ignore: excludePatterns,
     });

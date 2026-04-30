@@ -4,8 +4,7 @@ import * as fs from 'fs-extra';
 import * as babel from '@babel/core';
 import { glob } from 'glob';
 import { BabelTransformExecutorSchema } from './schema';
-import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS } from '../../utils/common';
+import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
 
 function removeDebugBlocks(content: string): string {
   return content.replace(/\/{2,}\s*#DEBUG[\s\S]*?\/{2,}\s*#ENDDEBUG/g, '');
@@ -91,12 +90,12 @@ const runExecutor: PromiseExecutor<BabelTransformExecutorSchema> = async (option
     const renameExtensions = options.renameExtensions ?? {};
 
     const sourcePath = path.join(projectRoot, options.sourcePattern);
-    const globPattern = isWindowsOS() ? normalizeGlobPathForWindows(sourcePath) : sourcePath;
+    const globPattern = toPosixPath(sourcePath);
 
     const rawExcludePatterns = options.excludePatterns ?? [];
     const excludePatterns = rawExcludePatterns.map((pattern) => {
       const resolved = path.isAbsolute(pattern) ? pattern : path.join(projectRoot, pattern);
-      return isWindowsOS() ? normalizeGlobPathForWindows(resolved) : resolved;
+      return toPosixPath(resolved);
     });
 
     const sourceFiles = await glob(globPattern, {

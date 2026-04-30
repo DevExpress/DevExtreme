@@ -4,8 +4,7 @@ import { glob } from 'glob';
 import { minimatch } from 'minimatch';
 import { CreateDualModeManifestExecutorSchema } from './schema';
 import { SideEffectFinder } from './side-effect-finder';
-import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS } from '../../utils/common';
+import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
 import { exists, ensureDir, writeFileText } from '../../utils/file-operations';
 
@@ -100,7 +99,7 @@ async function validateDirectories(esmDir: string, cjsDir: string): Promise<void
 
 async function discoverJsFiles(esmDir: string): Promise<string[]> {
   const pattern = path.join(esmDir, '**/*.js');
-  const globPattern = isWindowsOS() ? normalizeGlobPathForWindows(pattern) : pattern;
+  const globPattern = toPosixPath(pattern);
 
   return glob(globPattern, {
     nodir: true,

@@ -1004,6 +1004,64 @@
         "{projectRoot}/artifacts/npm/devextreme-dist/LICENSE.md"
       ]
     },
+    "build:npm:assemble": {
+      "executor": "devextreme-nx-infra-plugin:npm-assemble",
+      "options": {
+        "transpiledDir": "./artifacts/transpiled-esm-npm",
+        "jsSrcDir": "./js",
+        "licenseSrcDir": "./license",
+        "npmBinDir": "./build/npm-bin",
+        "webpackConfig": "./webpack.config.js",
+        "artifactsDir": "./artifacts",
+        "outputDir": "./artifacts/npm/devextreme",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/"
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/transpiled-esm-npm/**/*",
+        "{projectRoot}/js/**/*.json",
+        "{projectRoot}/license/**/*",
+        "{projectRoot}/build/npm-bin/**/*",
+        "{projectRoot}/webpack.config.js",
+        "{projectRoot}/artifacts/js/**/*",
+        "{projectRoot}/artifacts/css/**/*",
+        "{projectRoot}/artifacts/ts/**/*",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*"
+      ]
+    },
+    "build:npm:root-package-json": {
+      "executor": "devextreme-nx-infra-plugin:prepare-package-json",
+      "options": {
+        "sourcePackageJson": "./package.json",
+        "distDirectory": "./artifacts/npm/devextreme",
+        "setName": "devextreme",
+        "removeFields": ["devDependencies", "publishConfig", "scripts"]
+      },
+      "inputs": [
+        "{projectRoot}/package.json"
+      ],
+      "outputs": ["{projectRoot}/artifacts/npm/devextreme/package.json"]
+    },
+    "build:npm:meta": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "../../README.md", "to": "./artifacts/npm/devextreme/README.md" },
+          { "from": "./build/npm-templates/.npmignore", "to": "./artifacts/npm/devextreme/.npmignore" }
+        ]
+      },
+      "inputs": [
+        "{workspaceRoot}/README.md",
+        "{projectRoot}/build/npm-templates/.npmignore"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/README.md",
+        "{projectRoot}/artifacts/npm/devextreme/.npmignore"
+      ]
+    },
     "compress:npm-sources": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {

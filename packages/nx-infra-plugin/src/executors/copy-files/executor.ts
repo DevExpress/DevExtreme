@@ -3,8 +3,8 @@ import * as path from 'path';
 import { stat } from 'fs/promises';
 import { glob } from 'glob';
 import { CopyFilesExecutorSchema } from './schema';
-import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS, containsGlobPattern } from '../../utils/common';
+import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
+import { containsGlobPattern } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { copyFile, copyRecursive, exists, ensureDir } from '../../utils/file-operations';
 
@@ -20,8 +20,8 @@ async function copyGlobPatternFiles(
   destPath: string,
   excludePatterns: string[] = [],
 ): Promise<{ success: boolean }> {
-  const globPattern = isWindowsOS() ? normalizeGlobPathForWindows(sourcePath) : sourcePath;
-  const ignore = isWindowsOS() ? excludePatterns.map(normalizeGlobPathForWindows) : excludePatterns;
+  const globPattern = toPosixPath(sourcePath);
+  const ignore = excludePatterns.map(toPosixPath);
   const files = await glob(globPattern, { nodir: true, ignore });
 
   if (files.length === 0) {
