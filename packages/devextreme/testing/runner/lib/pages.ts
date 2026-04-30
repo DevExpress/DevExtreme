@@ -179,8 +179,8 @@ export function createPagesRenderer({
       'plugin-babel': '/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': '/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
       // eslint-disable-next-line spellcheck/spell-checker
-      zod: '/packages/devextreme/node_modules/zod/lib/index.mjs',
-      'zod-to-json-schema': '/packages/devextreme/node_modules/zod-to-json-schema/dist/esm/zodToJsonSchema.js',
+      zod: '/packages/devextreme/node_modules/zod/lib/index.js',
+      'zod-to-json-schema': '/packages/devextreme/node_modules/zod-to-json-schema/dist/cjs/zodToJsonSchema.js',
       ...cspMap,
     };
 
