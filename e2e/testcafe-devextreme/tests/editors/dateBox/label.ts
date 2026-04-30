@@ -21,13 +21,12 @@ test('Symbol parts in label should not be cropped', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Datebox label symbols.png', { element: '#container' });
 
-  await removeStylesheetRulesFromPage();
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateBox');
+  await removeStylesheetRulesFromPage();
   await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 600px; padding: 8px; }');
 
   for (const stylingMode of stylingModes) {
@@ -44,21 +43,21 @@ test('Symbol parts in label should not be cropped', async (t) => {
       }, `#${id}`);
     }
   }
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });
 
 test('DateBox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${DATEBOX_CLASS} { width: 220px; margin: 2px; }`);
-
   await testScreenshot(t, takeScreenshot, 'DateBox render with buttons container.png');
-
-  await removeStylesheetRulesFromPage();
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await removeStylesheetRulesFromPage();
+
   for (const stylingMode of stylingModes) {
     for (const buttons of [
       ['clear'],
@@ -82,4 +81,8 @@ test('DateBox with buttons container', async (t) => {
       }
     }
   }
+
+  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${DATEBOX_CLASS} { width: 220px; margin: 2px; }`);
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });
