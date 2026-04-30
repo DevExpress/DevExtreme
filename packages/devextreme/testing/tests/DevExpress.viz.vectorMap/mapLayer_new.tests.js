@@ -263,8 +263,88 @@ QUnit.test('Lines (MultiLineString)', function(assert) {
         ]
     }], 'line 2 (complex)');
     assert.deepEqual(this.getLine(2).attr.getCall(0).args, [{
-        points: []
+        points: [[]]
     }], 'line 3 (degenerate)');
+});
+
+QUnit.test('Lines (mixed LineString and MultiLineString, MultiLineString first) (T1327745)', function(assert) {
+    this.createLayer({
+        dataSource: {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'MultiLineString',
+                        coordinates: [
+                            [[200, 100], [400, 0], [400, 300]],
+                            [[0, 0], [0, 300], [400, 300], [400, 0]]
+                        ]
+                    },
+                    properties: {}
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: [[100, 200], [300, 300], [400, 0]]
+                    },
+                    properties: {}
+                }
+            ]
+        }
+    });
+
+    assert.strictEqual(this.getLine(0).attr.getCall(1).args[0]['class'], 'dxm-line', 'type');
+    assert.deepEqual(this.getLine(0).attr.getCall(0).args, [{
+        points: [
+            [600, 400, 1000, 600, 1000, 0],
+            [200, 600, 200, 0, 1000, 0, 1000, 600]
+        ]
+    }], 'line 1 - MultiLineString');
+    assert.deepEqual(this.getLine(1).attr.getCall(0).args, [{
+        points: [[400, 200, 800, 0, 1000, 600]]
+    }], 'line 2 - LineString (no NaN)');
+});
+
+QUnit.test('Lines (mixed LineString and MultiLineString, LineString first) (T1327745)', function(assert) {
+    this.createLayer({
+        dataSource: {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: [[100, 200], [300, 300], [400, 0]]
+                    },
+                    properties: {}
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'MultiLineString',
+                        coordinates: [
+                            [[200, 100], [400, 0], [400, 300]],
+                            [[0, 0], [0, 300], [400, 300], [400, 0]]
+                        ]
+                    },
+                    properties: {}
+                }
+            ]
+        }
+    });
+
+    assert.strictEqual(this.getLine(0).attr.getCall(1).args[0]['class'], 'dxm-line', 'type');
+    assert.deepEqual(this.getLine(0).attr.getCall(0).args, [{
+        points: [[400, 200, 800, 0, 1000, 600]]
+    }], 'line 1 - LineString');
+    assert.deepEqual(this.getLine(1).attr.getCall(0).args, [{
+        points: [
+            [600, 400, 1000, 600, 1000, 0],
+            [200, 600, 200, 0, 1000, 0, 1000, 600]
+        ]
+    }], 'line 2 - MultiLineString (no NaN)');
 });
 
 QUnit.test('Lines (simple data source)', function(assert) {
