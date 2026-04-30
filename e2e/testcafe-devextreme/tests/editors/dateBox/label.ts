@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-syntax */
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
-  appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
+  appendElementTo, setStyleAttribute, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 
 const DATEBOX_CLASS = 'dx-datebox';
@@ -13,7 +14,7 @@ const DATEBOX_CLASS = 'dx-datebox';
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const visibleLabelModes = ['floating', 'static', 'outside'];
 
-fixture.disablePageReloads`DateBox_Label`
+fixture`DateBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 test('Symbol parts in label should not be cropped', async (t) => {
@@ -24,10 +25,10 @@ test('Symbol parts in label should not be cropped', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}).before(async (t) => {
   await appendElementTo('#container', 'div', 'dateBox');
-  await removeStylesheetRulesFromPage();
-  await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 600px; padding: 8px; }');
+  await setStyleAttribute(Selector('#container'), 'padding: 8px;');
+  await t.resizeWindow(300, 600);
 
   for (const stylingMode of stylingModes) {
     for (const labelMode of visibleLabelModes) {
@@ -43,8 +44,6 @@ test('Symbol parts in label should not be cropped', async (t) => {
       }, `#${id}`);
     }
   }
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
 
 test('DateBox with buttons container', async (t) => {
@@ -56,8 +55,6 @@ test('DateBox with buttons container', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await removeStylesheetRulesFromPage();
-
   for (const stylingMode of stylingModes) {
     for (const buttons of [
       ['clear'],
