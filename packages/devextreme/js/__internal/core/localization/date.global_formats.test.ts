@@ -5,9 +5,10 @@ import dateLocalization from '@js/common/core/localization/date';
 import config from '@js/core/config';
 
 const GLOBAL_FORMAT_KEYS = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
+type GlobalFormatKey = typeof GLOBAL_FORMAT_KEYS[number];
 
 const saveAndRestore = (): { save: () => void; restore: () => void } => {
-  let savedValues: Record<string, unknown> = {};
+  let savedValues: Partial<Record<GlobalFormatKey, unknown>> = {};
 
   return {
     save() {
@@ -26,7 +27,7 @@ const saveAndRestore = (): { save: () => void; restore: () => void } => {
           // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete currentConfig[key];
         } else {
-          currentConfig[key] = savedValues[key];
+          currentConfig[key] = savedValues[key] as never;
         }
       });
     },
@@ -187,7 +188,7 @@ describe('date localization - dateTimeFormatPresets', () => {
         },
       });
 
-      const customFormatter = (d: Date): string => `custom:${d.getFullYear()}`;
+      const customFormatter = (d: number | Date): string => `custom:${(d as Date).getFullYear()}`;
       const result = dateLocalization.format(new Date(2020, 0, 2), { formatter: customFormatter });
 
       expect(result).toBe('custom:2020');

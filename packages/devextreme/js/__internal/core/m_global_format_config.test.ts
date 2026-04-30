@@ -6,9 +6,10 @@ import config from '@js/core/config';
 import { getGlobalFormatByDataType, resolvePresetOverride } from './m_global_format_config';
 
 const GLOBAL_FORMAT_KEYS = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
+type GlobalFormatKey = typeof GLOBAL_FORMAT_KEYS[number];
 
 describe('m_global_format_config', () => {
-  let savedValues: Record<string, unknown>;
+  let savedValues: Partial<Record<GlobalFormatKey, unknown>>;
 
   beforeEach(() => {
     const currentConfig = config();
@@ -27,7 +28,7 @@ describe('m_global_format_config', () => {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete currentConfig[key];
       } else {
-        currentConfig[key] = savedValues[key];
+        currentConfig[key] = savedValues[key] as never;
       }
     });
   });
