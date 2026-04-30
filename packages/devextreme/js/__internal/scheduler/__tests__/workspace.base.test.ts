@@ -37,29 +37,23 @@ jest.mock('@ts/core/m_devices', () => {
   };
 });
 
-type WorkspaceConstructor = new (
-  container: Element,
-  options?: Record<string, unknown>
-) => SchedulerWorkSpace;
+type WorkspaceConstructor<T> = new (container: Element, options?: any) => T;
 
-const createWorkspace = (
-  WorkSpace: unknown,
+const createWorkspace = <T extends SchedulerWorkSpace>(
+  WorkSpace: WorkspaceConstructor<T>,
   currentView: string,
-  options?: Record<string, unknown>,
-): { workspace: SchedulerWorkSpace; container: Element } => {
+  options?: any,
+): { workspace: T; container: Element } => {
   const container = document.createElement('div');
-  const WorkspaceCtor = WorkSpace as WorkspaceConstructor;
-  const workspace = new WorkspaceCtor(container, {
+  const workspace = new WorkSpace(container, {
     views: [currentView],
     currentView,
-    type: currentView,
     currentDate: new Date(2017, 4, 25),
     firstDayOfWeek: 0,
-    getResourceManager: (): unknown => getResourceManagerMock([]),
+    getResourceManager: () => getResourceManagerMock([]),
     ...options,
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (workspace as any)._isVisible = (): boolean => true;
+  (workspace as any)._isVisible = () => true;
   expect(container.classList).toContain('dx-scheduler-work-space');
 
   return { workspace, container };
@@ -67,7 +61,7 @@ const createWorkspace = (
 
 const workSpaces: {
   currentView: string;
-  WorkSpace: unknown;
+  WorkSpace: WorkspaceConstructor<SchedulerWorkSpace>;
 }[] = [
   { currentView: 'day', WorkSpace: SchedulerWorkSpaceDay },
   { currentView: 'week', WorkSpace: SchedulerWorkSpaceWeek },
