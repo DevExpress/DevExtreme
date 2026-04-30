@@ -187,7 +187,10 @@ describe('date localization - dateTimeFormatPresets', () => {
         },
       });
 
-      const customFormatter = (d: Date): string => `custom:${d.getFullYear()}`;
+      const customFormatter = (value: number | Date): string => {
+        const d = value instanceof Date ? value : new Date(value);
+        return `custom:${d.getFullYear()}`;
+      };
       const result = dateLocalization.format(new Date(2020, 0, 2), { formatter: customFormatter });
 
       expect(result).toBe('custom:2020');
