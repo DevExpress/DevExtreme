@@ -1,0 +1,154 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import executor from './executor';
+import { DtsModulesExecutorSchema } from './schema';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
+import { writeFileText, readFileText, writeJson } from '../../utils';
+
+const LICENSE_TEMPLATE = `/*<%= commentType %>
+* DevExtreme (<%= file.relative.replace(/\\\\/g, '/') %>)
+* Version: <%= version %>
+* Build date: <%= (new Date()).toDateString() %>
+*
+* Copyright (c) 2012 - <%= (new Date()).getFullYear() %> Developer Express Inc. ALL RIGHTS RESERVED
+* Read about DevExtreme licensing here: <%= eula %>
+*/
+`;
+
+const DEBUG_CONTENT = `export declare function accordion(): void;
+//#DEBUG
+export declare function debugHelper(): void;
+//#ENDDEBUG
+`;
+
+const LEGACY_HOVER = `import DevExpress from '../bundles/dx.all';`;
+const LEGACY_DX_ALL_JS = `// This file is required to compile devextreme-angular`;
+
+const OPTIONS: DtsModulesExecutorSchema = {
+  sourceDir: './js',
+  outputDir: './artifacts/npm/devextreme',
+  legacyTemplatesDir: './build/npm-templates',
+  licenseTemplateFile: './build/gulp/license-header.txt',
+  eulaUrl: 'https://js.devexpress.com/Licensing/',
+};
+
+describe('DtsModulesExecutor E2E', () => {
+  let tempDir: string;
+  let context = createMockContext();
+  let projectDir: string;
+
+  beforeEach(async () => {
+    tempDir = createTempDir('nx-dts-modules-e2e-');
+    context = createMockContext({ root: tempDir });
+    projectDir = path.join(tempDir, 'packages', 'test-lib');
+
+    fs.mkdirSync(path.join(projectDir, 'js', 'ui'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build', 'gulp'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build', 'npm-templates', 'events'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build', 'npm-templates', 'bundles'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build', 'npm-templates', 'integration'), {
+      recursive: true,
+    });
+
+    await writeJson(path.join(projectDir, 'package.json'), {
+      name: 'devextreme',
+      version: '26.1.0',
+    });
+
+    await writeFileText(
+      path.join(projectDir, 'build', 'gulp', 'license-header.txt'),
+      LICENSE_TEMPLATE,
+    );
+
+    await writeFileText(path.join(projectDir, 'js', 'accordion.d.ts'), DEBUG_CONTENT);
+    await writeFileText(
+      path.join(projectDir, 'js', 'ui', 'button.d.ts'),
+      'export declare class Button {}',
+    );
+
+    await writeFileText(
+      path.join(projectDir, 'build', 'npm-templates', 'events', 'hover.d.ts'),
+      LEGACY_HOVER,
+    );
+    await writeFileText(
+      path.join(projectDir, 'build', 'npm-templates', 'bundles', 'dx.all.js'),
+      LEGACY_DX_ALL_JS,
+    );
+    await writeFileText(
+      path.join(projectDir, 'build', 'npm-templates', 'integration', 'jquery.d.ts'),
+      "import 'jquery';",
+    );
+  });
+
+  afterEach(() => {
+    cleanupTempDir(tempDir);
+  });
+
+  it('should produce the expected file tree (real .d.ts + legacy templates) with star-license banners and stripped debug blocks', async () => {
+    const result = await executor(OPTIONS, context);
+    expect(result.success).toBe(true);
+
+    const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
+
+    const accordionContent = await readFileText(path.join(outDir, 'accordion.d.ts'));
+    expect(accordionContent).toMatch(/^\/\*\*/);
+    expect(accordionContent).toContain('DevExtreme (accordion.d.ts)');
+    expect(accordionContent).not.toContain('#DEBUG');
+    expect(accordionContent).not.toContain('debugHelper');
+    expect(accordionContent).toContain('accordion');
+
+    const buttonContent = await readFileText(path.join(outDir, 'ui', 'button.d.ts'));
+    expect(buttonContent).toMatch(/^\/\*\*/);
+    expect(buttonContent).toContain('DevExtreme (ui/button.d.ts)');
+
+    const hoverContent = await readFileText(path.join(outDir, 'events', 'hover.d.ts'));
+    expect(hoverContent).toMatch(/^\/\*\*/);
+    expect(hoverContent).toContain('DevExtreme (events/hover.d.ts)');
+    expect(hoverContent).toContain(LEGACY_HOVER);
+
+    const jqContent = await readFileText(path.join(outDir, 'integration', 'jquery.d.ts'));
+    expect(jqContent).toMatch(/^\/\*\*/);
+
+    const dxAllJsContent = await readFileText(path.join(outDir, 'bundles', 'dx.all.js'));
+    expect(dxAllJsContent).toMatch(/^\/\*\*/);
+    expect(dxAllJsContent).toContain('DevExtreme (dx.all.js)');
+    expect(dxAllJsContent).not.toContain('DevExtreme (bundles/dx.all.js)');
+    expect(dxAllJsContent).toContain(LEGACY_DX_ALL_JS);
+
+    expect(fs.existsSync(path.join(outDir, 'bundles', 'dx.all.d.ts'))).toBe(false);
+  });
+
+  it('should overwrite legacy template when a real source d.ts exists at the same relative path', async () => {
+    const REAL_CONTENT = 'export declare function click(): void;';
+    await writeFileText(path.join(projectDir, 'js', 'events', 'click.d.ts'), REAL_CONTENT);
+    await writeFileText(
+      path.join(projectDir, 'build', 'npm-templates', 'events', 'click.d.ts'),
+      'import DevExpress from "../bundles/dx.all";',
+    );
+
+    const result = await executor(OPTIONS, context);
+    expect(result.success).toBe(true);
+
+    const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
+    const clickContent = await readFileText(path.join(outDir, 'events', 'click.d.ts'));
+
+    expect(clickContent).toContain(REAL_CONTENT);
+    expect(clickContent).not.toContain('import DevExpress from "../bundles/dx.all"');
+  });
+
+  it('should be idempotent across two runs', async () => {
+    const result1 = await executor(OPTIONS, context);
+    expect(result1.success).toBe(true);
+
+    const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
+    const contentAfterFirst = await readFileText(path.join(outDir, 'accordion.d.ts'));
+
+    const result2 = await executor(OPTIONS, context);
+    expect(result2.success).toBe(true);
+
+    const contentAfterSecond = await readFileText(path.join(outDir, 'accordion.d.ts'));
+
+    expect(contentAfterFirst).toBe(contentAfterSecond);
+    expect((contentAfterFirst.match(/\/\*\*/g) ?? []).length).toBe(1);
+  });
+});

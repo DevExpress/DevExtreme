@@ -930,6 +930,44 @@
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
       ]
     },
+    "build:npm:dts-modules": {
+      "executor": "devextreme-nx-infra-plugin:dts-modules",
+      "options": {
+        "sourceDir": "./js",
+        "outputDir": "./artifacts/npm/devextreme",
+        "legacyTemplatesDir": "./build/npm-templates",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/"
+      },
+      "inputs": [
+        "{projectRoot}/js/**/*.d.ts",
+        "{projectRoot}/build/npm-templates/**/*",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.js"
+      ]
+    },
+    "build:npm:dts-bundle": {
+      "executor": "devextreme-nx-infra-plugin:dts-bundle",
+      "options": {
+        "bundleSources": ["./ts/dx.all.d.ts", "./ts/aliases.d.ts"],
+        "artifactPath": "./artifacts/ts/dx.all.d.ts",
+        "packagePath": "./artifacts/npm/devextreme/bundles/dx.all.d.ts",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/"
+      },
+      "inputs": [
+        "{projectRoot}/ts/dx.all.d.ts",
+        "{projectRoot}/ts/aliases.d.ts",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/ts/dx.all.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts"
+      ]
+    },
     "compress:npm-sources": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {

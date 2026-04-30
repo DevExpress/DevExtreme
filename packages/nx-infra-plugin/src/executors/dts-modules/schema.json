@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "description": "Assemble TypeScript declaration modules: copy, stamp with license, and strip debug blocks.",
+  "properties": {
+    "sourceDir": {
+      "type": "string",
+      "description": "Directory containing source .d.ts files (relative to project root)."
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "Output directory for assembled modules (relative to project root)."
+    },
+    "legacyTemplatesDir": {
+      "type": "string",
+      "description": "Directory containing legacy template files to overlay on the output (relative to project root)."
+    },
+    "licenseTemplateFile": {
+      "type": "string",
+      "description": "Path to the license header template file (relative to project root)."
+    },
+    "eulaUrl": {
+      "type": "string",
+      "description": "EULA URL embedded in the license header."
+    }
+  },
+  "required": ["sourceDir", "outputDir", "legacyTemplatesDir", "licenseTemplateFile", "eulaUrl"]
+}

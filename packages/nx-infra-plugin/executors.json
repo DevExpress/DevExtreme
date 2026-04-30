@@ -89,6 +89,16 @@
       "implementation": "./src/executors/compress/executor",
       "schema": "./src/executors/compress/schema.json",
       "description": "Compress JavaScript files"
+    },
+    "dts-modules": {
+      "implementation": "./src/executors/dts-modules/executor",
+      "schema": "./src/executors/dts-modules/schema.json",
+      "description": "Assemble TypeScript declaration modules: copy, stamp with license, and strip debug blocks"
+    },
+    "dts-bundle": {
+      "implementation": "./src/executors/dts-bundle/executor",
+      "schema": "./src/executors/dts-bundle/schema.json",
+      "description": "Assemble TypeScript declaration bundle files from source"
     }
   }
 }

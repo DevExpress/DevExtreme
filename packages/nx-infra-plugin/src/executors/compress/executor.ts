@@ -13,21 +13,12 @@ import {
   normalizeEol,
   ensureTrailingNewline,
 } from '../../utils/file-operations';
-
-// NOTE:
-// Removes the #DEBUG section from the code in the production build.
-// E.g. removes the next code:
-// //#DEBUG
-// // some code.
-// //#ENDDEBUG
-// Between comment slashes (/) and # may be space symbols (count doesn't matter).
-const REMOVE_DEBUG_REGEXP = /\/{2,}\s{0,}#DEBUG[\s\S]*?\/{2,}\s{0,}#ENDDEBUG/g;
+import { stripDebug } from '../../utils/debug-strip';
 
 function createCommentFilter(eulaUrl?: string) {
-  return function saveLicenseComments(_node: any, comment: { value: string }): boolean {
+  return function saveLicenseComments(_node: unknown, comment: { value: string }): boolean {
     return (
       comment.value.charAt(0) === '!'
-      // Workaround for rrule, on v2.7.1 the space char was added to the license header https://github.com/jakubroztocil/rrule/commit/803c03b85ac074d92d443306805a68e104069c02#diff-a2a171449d862fe29692ce031981047d7ab755ae7f84c707aef80701b3ea0c80R1
       || comment.value.startsWith(' !')
       || (!!eulaUrl && comment.value.indexOf(eulaUrl) > -1)
     );
@@ -86,10 +77,6 @@ async function runBeautify(content: string, eulaUrl?: string): Promise<string> {
   return jsBeautify(uglifyResult.code);
 }
 
-function stripDebugBlocks(content: string): string {
-  return content.replace(REMOVE_DEBUG_REGEXP, '');
-}
-
 function normalizeOutput(content: string, trailingNewline: boolean): string {
   const eolNormalized = normalizeEol(content);
   return trailingNewline ? ensureTrailingNewline(eolNormalized) : eolNormalized;
@@ -116,10 +103,10 @@ type CompressStrategy = (content: string, mode: ResolvedMode) => Promise<string>
 
 const STRATEGIES: Record<CompressModeName, CompressStrategy> = {
   minify: async (content, { eulaUrl, trailingNewline }) =>
-    normalizeOutput(await runMinify(stripDebugBlocks(content), eulaUrl), trailingNewline),
+    normalizeOutput(await runMinify(stripDebug(content), eulaUrl), trailingNewline),
   beautify: async (content, { eulaUrl, trailingNewline }) =>
     normalizeOutput(await runBeautify(content, eulaUrl), trailingNewline),
-  'strip-debug': async (content) => stripDebugBlocks(content),
+  'strip-debug': async (content) => stripDebug(content),
   normalize: async (content, { trailingNewline }) => normalizeOutput(content, trailingNewline),
 };
 
