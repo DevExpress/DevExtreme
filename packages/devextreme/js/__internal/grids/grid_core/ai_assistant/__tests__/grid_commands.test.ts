@@ -339,42 +339,20 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: 'test', args: { value: 'hello' } }],
-      });
+      const result = gridCommands.validate(
+        [{ name: 'test', args: { value: 'hello' } }],
+      );
 
       expect(result).toBe(true);
-    });
-
-    it('should return false if response.actions is not an array', () => {
-      const gridCommands = new GridCommands(createMockComponent(), []);
-
-      expect(gridCommands.validate({ actions: 'not-array' })).toBe(false);
-      expect(gridCommands.validate({ actions: 123 })).toBe(false);
-      expect(gridCommands.validate({ actions: {} })).toBe(false);
-    });
-
-    it('should return false if response.actions is missing', () => {
-      const gridCommands = new GridCommands(createMockComponent(), []);
-
-      expect(gridCommands.validate({})).toBe(false);
-      expect(gridCommands.validate({ other: [] })).toBe(false);
-    });
-
-    it('should return false if response is null or undefined', () => {
-      const gridCommands = new GridCommands(createMockComponent(), []);
-
-      expect(gridCommands.validate(null)).toBe(false);
-      expect(gridCommands.validate(undefined)).toBe(false);
     });
 
     it('should return false if any action has an unknown name', () => {
       const command = createMockCommand('known');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: 'unknown', args: {} }],
-      });
+      const result = gridCommands.validate(
+        [{ name: 'unknown', args: {} }],
+      );
 
       expect(result).toBe(false);
     });
@@ -384,13 +362,13 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      expect(gridCommands.validate({
-        actions: [{ name: 123, args: {} }],
-      })).toBe(false);
+      expect(gridCommands.validate(
+        [{ name: 123 as unknown as string, args: {} }],
+      )).toBe(false);
 
-      expect(gridCommands.validate({
-        actions: [{ name: true, args: {} }],
-      })).toBe(false);
+      expect(gridCommands.validate(
+        [{ name: true as unknown as string, args: {} }],
+      )).toBe(false);
     });
 
     it('should return false if any action name is an empty string', () => {
@@ -398,9 +376,9 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: '', args: {} }],
-      });
+      const result = gridCommands.validate(
+        [{ name: '', args: {} }],
+      );
 
       expect(result).toBe(false);
     });
@@ -410,13 +388,13 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      expect(gridCommands.validate({
-        actions: [{ args: {} }],
-      })).toBe(false);
+      expect(gridCommands.validate(
+        [{ args: {} } as any],
+      )).toBe(false);
 
-      expect(gridCommands.validate({
-        actions: [{ name: 'test' }],
-      })).toBe(false);
+      expect(gridCommands.validate(
+        [{ name: 'test' } as any],
+      )).toBe(false);
     });
 
     it('should return false if any action args is null', () => {
@@ -424,9 +402,9 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: 'test', args: null }],
-      });
+      const result = gridCommands.validate(
+        [{ name: 'test', args: null as unknown as Record<string, unknown> }],
+      );
 
       expect(result).toBe(false);
     });
@@ -437,9 +415,9 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: 'test', args: { value: 123 } }],
-      });
+      const result = gridCommands.validate(
+        [{ name: 'test', args: { value: 123 } }],
+      );
 
       expect(result).toBe(false);
     });
@@ -450,9 +428,9 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: 'test', args: {} }],
-      });
+      const result = gridCommands.validate(
+        [{ name: 'test', args: {} }],
+      );
 
       expect(result).toBe(false);
     });
@@ -463,9 +441,9 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: 'test', args: { value: 'ok', extra: true } }],
-      });
+      const result = gridCommands.validate(
+        [{ name: 'test', args: { value: 'ok', extra: true } }],
+      );
 
       expect(result).toBe(false);
     });
@@ -473,7 +451,7 @@ describe('GridCommands', () => {
     it('should return true for an empty actions array', () => {
       const gridCommands = new GridCommands(createMockComponent(), []);
 
-      const result = gridCommands.validate({ actions: [] });
+      const result = gridCommands.validate([]);
 
       expect(result).toBe(true);
     });
@@ -482,9 +460,9 @@ describe('GridCommands', () => {
       const command = createMockCommand('clearFilter');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate({
-        actions: [{ name: 'clearFilter', args: {} }],
-      });
+      const result = gridCommands.validate(
+        [{ name: 'clearFilter', args: {} }],
+      );
 
       expect(result).toBe(true);
     });
@@ -493,12 +471,12 @@ describe('GridCommands', () => {
       const command = createMockCommand('valid');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate({
-        actions: [
+      const result = gridCommands.validate(
+        [
           { name: 'valid', args: {} },
           { name: 'invalid', args: {} },
         ],
-      });
+      );
 
       expect(result).toBe(false);
     });

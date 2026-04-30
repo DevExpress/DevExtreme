@@ -33,7 +33,7 @@ export class AIAssistantController extends Controller {
   }
 
   private processResponse(response: ExecuteGridAssistantCommandResult): Promise<CommandResults> {
-    if (!response?.actions) {
+    if (!response?.actions || !Array.isArray(response.actions)) {
       // TODO: need to localize default error message when there are no commands
       return Promise.reject(new Error('Default error message'));
     }

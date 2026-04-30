@@ -1,6 +1,4 @@
-import type {
-  ExecuteGridAssistantAction,
-} from '@js/common/ai-integration';
+import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { zodToJsonSchema } from 'zod-to-json-schema';
@@ -118,14 +116,8 @@ export class GridCommands {
     };
   }
 
-  public validate(response: unknown): boolean {
-    const res = response as Record<string, unknown>;
-
-    if (!res || !Array.isArray(res.actions)) {
-      return false;
-    }
-
-    for (const action of res.actions as Record<string, unknown>[]) {
+  public validate(actions: ExecuteGridAssistantAction[]): boolean {
+    for (const action of actions as Record<string, unknown>[]) {
       if (!action || typeof action.name !== 'string' || action.name === '') {
         return false;
       }
