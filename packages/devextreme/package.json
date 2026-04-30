@@ -64,7 +64,8 @@
     "inferno-hydrate": "catalog:",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1",
-    "unplugin": "^3.0.0"
+    "unplugin": "^3.0.0",
+    "zod": "~3.24.4"
   },
   "devDependencies": {
     "@babel/core": "7.29.0",
@@ -242,6 +243,7 @@
     "build:community-localization": "gulp generate-community-locales",
     "build:systemjs": "gulp transpile-systemjs",
     "dev": "cross-env DEVEXTREME_TEST_CI=true gulp dev",
+    "dev:playground": "vite",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
     "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|palette|set_template_engine|splitter_control|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
@@ -250,7 +252,6 @@
     "validate-ts": "gulp validate-ts",
     "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
-    "dev:playground": "vite",
     "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",
     "test-jest:watch": "jest --watch",
     "test-jest:node": "jest --no-coverage --runInBand --selectProjects node-tests",

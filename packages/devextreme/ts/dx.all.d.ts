@@ -26406,6 +26406,9 @@ declare module DevExpress.ui {
      */
     export type SelectionEndEvent =
       DevExpress.common.core.events.EventInfo<dxScheduler> & {
+        /**
+         * [descr:_ui_scheduler_SelectionEndEvent.selectedCellData]
+         */
         readonly selectedCellData: Array<any>;
       };
     export type SnapToCellsMode = 'always' | 'auto' | 'never';

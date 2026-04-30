@@ -1,0 +1,14 @@
+@use '../../../../base/gridBase/layout/aiChat/mixins' as *;
+@use "../../../colors" as *;
+@use "../../../button/colors" as *;
+@use './sizes' as *;
+@include ai-chat-messagelist-empty(
+  $button-default-bg,
+  $button-default-outlined-hover-bg,
+);
+@include ai-chat-message-pending($base-accent);
+@include ai-chat-message-success($base-success);
+@include ai-chat-message-error($base-danger);
+@include ai-chat-messagebubble-border($base-border-color);
+@include ai-chat-message-regenerate-button($button-normal-active-bg);
+@include ai-chat-message-icon($ai-chat-message-icon-size);

@@ -21,7 +21,6 @@
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
-@use "../../base/gridBase/mixins" as *;
 
 // adduse
 @use "../scrollable";
@@ -30,6 +29,7 @@
 @use 'variables' as *;
 @forward 'variables';
 @use 'layout/cell' as *;
+@use "layout/aiChat" as *;
 
 $fluent-grid-base-border-hidden: 1px solid transparent;
 $fluent-grid-base-row-border: 1px solid transparent;
@@ -1056,9 +1056,4 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     height: $fluent-grid-base-ai-prompt-editor-progressbar-height;
     border-radius: 0;
   }
-
-  @include ai-chat-messagelist-empty(
-    $button-default-bg,
-    $button-default-outlined-hover-bg,
-  );
 }
