@@ -95,6 +95,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             $.each([
                 'dx-scheduler-work-space-day',
                 'dx-scheduler-work-space-week',
+                'dx-scheduler-work-space-work-week',
                 'dx-scheduler-work-space-month'
             ], function(_, item) {
                 if(className === item) {
@@ -117,7 +118,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         scheduler.instance.option('currentView', 'workWeek');
         await waitAsync(0);
-        assert.ok(check('dx-scheduler-work-space-week'), 'Work space has a right type class');
+        assert.ok(check('dx-scheduler-work-space-work-week'), 'Work space has a right type class');
 
         scheduler.instance.option('currentView', 'month');
         await waitAsync(0);

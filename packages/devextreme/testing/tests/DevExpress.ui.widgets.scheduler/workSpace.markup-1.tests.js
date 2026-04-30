@@ -595,10 +595,10 @@ const workWeekModuleConfig = {
 };
 
 QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
-    QUnit.test('Scheduler workspace work week should use week css class', async function(assert) {
+    QUnit.test('Scheduler workspace work week should have a right css class', async function(assert) {
         const $element = this.instance.$element();
 
-        assert.ok($element.hasClass('dx-scheduler-work-space-week'), 'workWeek uses week workspace css class');
+        assert.ok($element.hasClass('dx-scheduler-work-space-work-week'), 'workWeek has \'dx-scheduler-workspace-work-week\' css class');
     });
 
     QUnit.test('Scheduler all day panel should contain one row & 5 cells', async function(assert) {

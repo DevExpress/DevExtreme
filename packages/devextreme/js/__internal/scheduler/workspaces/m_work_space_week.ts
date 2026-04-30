@@ -5,13 +5,14 @@ import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpaceVertical from './m_work_space_vertical';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
+const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
   get type(): string {
     return this.option('type') ?? VIEWS.WEEK;
   }
 
   protected override getElementClass() {
-    return WEEK_CLASS;
+    return this.type === VIEWS.WORK_WEEK ? WORK_WEEK_CLASS : WEEK_CLASS;
   }
 
   protected override calculateViewStartDate() {

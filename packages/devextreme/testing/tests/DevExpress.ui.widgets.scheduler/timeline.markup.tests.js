@@ -802,10 +802,10 @@ QUnit.module('TimelineWorkWeek markup', timelineWorkWeekModuleConfig, () => {
         assert.ok(this.instance instanceof SchedulerTimelineWeek, 'timelineWorkWeek uses SchedulerTimelineWeek');
     });
 
-    QUnit.test('Scheduler timeline work week should use week css class', async function(assert) {
+    QUnit.test('Scheduler timeline work week should have a right css class', async function(assert) {
         const $element = this.instance.$element();
         assert.ok($element.hasClass('dx-scheduler-timeline'), 'timelineWorkWeek has \'dx-scheduler-timeline\' css class');
-        assert.ok($element.hasClass('dx-scheduler-timeline-week'), 'timelineWorkWeek uses timeline week css class');
+        assert.ok($element.hasClass('dx-scheduler-timeline-work-week'), 'timelineWorkWeek has \'dx-scheduler-timeline-work-week\' css class');
     });
 
     QUnit.test('Scheduler timeline work week view should have right cell & row count', async function(assert) {
