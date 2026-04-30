@@ -1,12 +1,11 @@
 /* eslint-disable no-restricted-syntax */
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
-  appendElementTo, setStyleAttribute, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
+  appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 
 const DATEBOX_CLASS = 'dx-datebox';
@@ -22,12 +21,14 @@ test('Symbol parts in label should not be cropped', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Datebox label symbols.png', { element: '#container' });
 
+  await removeStylesheetRulesFromPage();
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateBox');
-  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 600px; padding: 8px;');
+  await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 600px; padding: 8px; }');
 
   for (const stylingMode of stylingModes) {
     for (const labelMode of visibleLabelModes) {
