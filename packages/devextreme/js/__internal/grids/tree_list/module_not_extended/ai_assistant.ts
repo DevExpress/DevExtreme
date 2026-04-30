@@ -1,4 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
+import { AIAssistantController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_controller';
 import { AIAssistantView } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view';
 import { AIAssistantViewController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view_controller';
 
@@ -14,7 +15,8 @@ gridCore.registerModule('aiAssistant', {
     };
   },
   controllers: {
-    aiAssistant: AIAssistantViewController,
+    aiAssistant: AIAssistantController,
+    aiAssistantViewController: AIAssistantViewController,
   },
   views: {
     aiAssistantView: AIAssistantView,
