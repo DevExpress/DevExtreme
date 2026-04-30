@@ -17,7 +17,7 @@ export function updateVersion(version: string | undefined): void {
 
   sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, workspacesPaths);
 
-  sh.exec('npm ci');
+  sh.exec('npm ci --legacy-peer-deps');
 }
 
 export function updateVersionJs(version: string | undefined, build?: string | undefined): void {
