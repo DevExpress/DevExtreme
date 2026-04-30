@@ -13,6 +13,11 @@ import {
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const OVERLAY_CLASS = 'dx-overlay-content';
 
+const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
+
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];
 
@@ -111,10 +116,10 @@ test.meta({ browserSize: [300, 400] })('Check popup height in loading state', as
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await insertStylesheetRulesToPage(`
-    .dx-loadindicator-segment,
-    .dx-loadindicator-segment-inner,
-    .dx-loadindicator-content,
-    .dx-loadindicator-icon {
+    .${LOADINDICATOR_SEGMENT_CLASS},
+    .${LOADINDICATOR_CONTENT_CLASS},
+    .${LOADINDICATOR_ICON_CLASS},
+    .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
       animation: none !important;
     }
   `);
