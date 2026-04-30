@@ -1,9 +1,7 @@
 import type { PositionConfig } from '@js/common/core/animation';
-import { ArrayStore } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { getHeight } from '@js/core/utils/size';
-import { isString } from '@js/core/utils/type';
-import type { Message, Properties as ChatProperties } from '@js/ui/chat';
+import type { Properties as ChatProperties } from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
 import {
@@ -19,9 +17,12 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
 import { View } from '../m_modules';
+import type { AIAssistantController } from './ai_assistant_controller';
 
 export class AIAssistantView extends View {
-  private aiChatInstance?: AIChat;
+  private aiChatInstance!: AIChat;
+
+  private aiAssistantController!: AIAssistantController;
 
   private columnHeadersView!: ColumnHeadersView;
 
@@ -29,15 +30,10 @@ export class AIAssistantView extends View {
 
   public visibilityChanged?: Callback;
 
-  private messageStore?: ArrayStore<Message, string>;
-
   public init(): void {
     this.columnHeadersView = this.getView('columnHeadersView');
     this.rowsView = this.getView('rowsView');
-
-    this.messageStore = new ArrayStore<Message, string>({
-      key: 'id',
-    });
+    this.aiAssistantController = this.getController('aiAssistant');
   }
 
   private getAIChatConfig(): AIChatOptions {
@@ -48,6 +44,7 @@ export class AIAssistantView extends View {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onChatCleared: (): void => {},
+      onRegenerate: (): void => {},
       popupOptions,
       chatOptions,
     };
@@ -90,17 +87,10 @@ export class AIAssistantView extends View {
 
   private getAIChatOptions(): ChatProperties {
     return {
-      dataSource: this.messageStore,
+      dataSource: this.aiAssistantController.getMessageDataSource(),
+      reloadOnChange: true,
       onMessageEntered: (e): void => {
-        const parsedTimestamp = isString(e.message.timestamp)
-          ? Date.parse(e.message.timestamp)
-          : e.message.timestamp?.toString() ?? '';
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.messageStore?.insert({
-          ...e.message,
-          id: `${e.message.author?.id}-${parsedTimestamp}`,
-        });
+        this.aiAssistantController.sendRequestToAI(e.message);
       },
       ...this.option('aiAssistant.chat'),
     };
