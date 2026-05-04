@@ -209,9 +209,7 @@
         }
       },
       "inputs": [
-        "{projectRoot}/js/**/*.{js,jsx}",
-        "!{projectRoot}/js/**/*.d.ts",
-        "!{projectRoot}/js/__internal/**/*"
+        "jsSourcesProduction"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled",
@@ -233,8 +231,7 @@
         ]
       },
       "inputs": [
-        "{projectRoot}/js/**/*.json",
-        "!{projectRoot}/js/__internal/**/*"
+        "jsAssetsProduction"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled/**/*.json"
@@ -255,8 +252,7 @@
         ]
       },
       "inputs": [
-        "{projectRoot}/js/**/*.json",
-        "!{projectRoot}/js/__internal/**/*"
+        "jsAssetsProduction"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled-renovation-npm/**/*.json"
@@ -285,8 +281,7 @@
         ]
       },
       "inputs": [
-        "{projectRoot}/js/**/*.json",
-        "!{projectRoot}/js/__internal/**/*"
+        "jsAssetsProduction"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/**/*.json"
@@ -306,9 +301,7 @@
         "removeDebug": true
       },
       "inputs": [
-        "{projectRoot}/js/**/*.{js,jsx}",
-        "!{projectRoot}/js/**/*.d.ts",
-        "!{projectRoot}/js/__internal/**/*"
+        "jsSourcesProduction"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/esm"
@@ -328,9 +321,7 @@
         "removeDebug": true
       },
       "inputs": [
-        "{projectRoot}/js/**/*.{js,jsx}",
-        "!{projectRoot}/js/**/*.d.ts",
-        "!{projectRoot}/js/__internal/**/*"
+        "jsSourcesProduction"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/cjs"
@@ -353,7 +344,7 @@
           "removeDebug": true
         }
       },
-      "inputs": ["{projectRoot}/artifacts/dist_ts/__internal/**/*.{js,jsx}"],
+      "inputs": ["internalTsArtifacts"],
       "outputs": [
         "{projectRoot}/artifacts/transpiled/__internal",
         "{projectRoot}/artifacts/transpiled-renovation-npm/__internal"
@@ -372,7 +363,7 @@
         }
       },
       "inputs": [
-        "{projectRoot}/artifacts/dist_ts/__internal/**/*.{js,jsx}"
+        "internalTsArtifacts"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/esm/__internal"
@@ -391,7 +382,7 @@
         }
       },
       "inputs": [
-        "{projectRoot}/artifacts/dist_ts/__internal/**/*.{js,jsx}"
+        "internalTsArtifacts"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/cjs/__internal"
@@ -553,12 +544,10 @@
         }
       },
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "internalPackageEnv",
         "{projectRoot}/artifacts/transpiled-renovation-npm/bundles/**/*",
         "{projectRoot}/artifacts/transpiled-renovation-npm/**/*.js",
-        "{projectRoot}/webpack.config.js"
+        "webpackConfig"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.all.debug.js",
@@ -615,11 +604,9 @@
         }
       },
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "internalPackageEnv",
         "{projectRoot}/artifacts/transpiled-renovation-npm/**/*",
-        "{projectRoot}/webpack.config.js"
+        "webpackConfig"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
@@ -640,12 +627,10 @@
         "webpackConfigPath": "./webpack.config.js"
       },
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "internalPackageEnv",
         "{projectRoot}/artifacts/transpiled-renovation-npm/bundles/**/*",
         "{projectRoot}/artifacts/transpiled-renovation-npm/**/*.js",
-        "{projectRoot}/webpack.config.js"
+        "webpackConfig"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
@@ -671,11 +656,9 @@
         }
       },
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "internalPackageEnv",
         "{projectRoot}/artifacts/transpiled-renovation-npm/**/*",
-        "{projectRoot}/webpack.config.js"
+        "webpackConfig"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
@@ -974,8 +957,7 @@
         ]
       },
       "inputs": [
-        "{workspaceRoot}/packages/devextreme-dist/README.md",
-        "{workspaceRoot}/packages/devextreme-dist/LICENSE.md"
+        "devextremeDistMeta"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme-dist/README.md",
@@ -998,7 +980,7 @@
         "{projectRoot}/js/**/*.json",
         "{projectRoot}/license/**/*",
         "{projectRoot}/build/npm-bin/**/*",
-        "{projectRoot}/webpack.config.js",
+        "webpackConfig",
         "{projectRoot}/artifacts/js/**/*",
         "{projectRoot}/artifacts/css/**/*",
         "{projectRoot}/artifacts/ts/**/*"
@@ -1256,9 +1238,8 @@
         "parallel": false
       },
       "inputs": [
+        "devextremeDistMeta",
         "{workspaceRoot}/packages/devextreme-dist/package.json",
-        "{workspaceRoot}/packages/devextreme-dist/README.md",
-        "{workspaceRoot}/packages/devextreme-dist/LICENSE.md",
         "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
         "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
         "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
@@ -1272,7 +1253,7 @@
         "{projectRoot}/build/gulp/modules_metadata.json",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",
-        "{projectRoot}/webpack.config.js",
+        "webpackConfig",
         "{projectRoot}/package.json"
       ],
       "outputs": [
@@ -1312,9 +1293,7 @@
         "parallel": false
       },
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "internalPackageEnv",
         "default",
         "test"
       ],
@@ -1338,9 +1317,7 @@
         "script": "build-dist"
       },
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "internalPackageEnv",
         "default",
         "test"
       ],
@@ -1358,9 +1335,7 @@
         "^build"
       ],
       "inputs": [
-        {
-          "env": "BUILD_TEST_INTERNAL_PACKAGE"
-        },
+        "internalPackageEnv",
         {
           "env": "DEVEXTREME_TEST_CI"
         },
@@ -1487,6 +1462,28 @@
       "{projectRoot}/artifacts/js/dx.viz.debug.js",
       "{projectRoot}/artifacts/js/dx.ai-integration.debug.js",
       "{projectRoot}/artifacts/js/dx.custom.debug.js"
+    ],
+    "jsSourcesProduction": [
+      "{projectRoot}/js/**/*.{js,jsx}",
+      "!{projectRoot}/js/**/*.d.ts",
+      "!{projectRoot}/js/__internal/**/*"
+    ],
+    "jsAssetsProduction": [
+      "{projectRoot}/js/**/*.json",
+      "!{projectRoot}/js/__internal/**/*"
+    ],
+    "internalTsArtifacts": [
+      "{projectRoot}/artifacts/dist_ts/__internal/**/*.{js,jsx}"
+    ],
+    "webpackConfig": [
+      "{projectRoot}/webpack.config.js"
+    ],
+    "internalPackageEnv": [
+      { "env": "BUILD_TEST_INTERNAL_PACKAGE" }
+    ],
+    "devextremeDistMeta": [
+      "{workspaceRoot}/packages/devextreme-dist/README.md",
+      "{workspaceRoot}/packages/devextreme-dist/LICENSE.md"
     ]
   },
   "tags": []
