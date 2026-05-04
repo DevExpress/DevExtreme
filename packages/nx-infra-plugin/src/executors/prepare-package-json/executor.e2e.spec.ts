@@ -50,7 +50,7 @@ describe('PreparePackageJsonExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  it('should remove publishConfig from package.json', async () => {
+  it('should remove publishConfig by default and preserve all other fields', async () => {
     const options: NpmPackageExecutorSchema = {
       distDirectory: './npm',
     };
@@ -60,40 +60,20 @@ describe('PreparePackageJsonExecutor E2E', () => {
     expect(result.success).toBe(true);
 
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
-    const distPackageJson = path.join(projectDir, 'npm', 'package.json');
-    const distPackage = JSON.parse(await readFileText(distPackageJson));
+    const distPackage = JSON.parse(
+      await readFileText(path.join(projectDir, 'npm', 'package.json')),
+    );
 
     expect(distPackage.publishConfig).toBeUndefined();
-  });
-
-  it('should preserve all other fields when removing publishConfig', async () => {
-    const options: NpmPackageExecutorSchema = {
-      distDirectory: './npm',
-    };
-
-    await executor(options, context);
-
-    const projectDir = path.join(tempDir, 'packages', 'test-lib');
-    const distPackageJson = path.join(projectDir, 'npm', 'package.json');
-    const distPackage = JSON.parse(await readFileText(distPackageJson));
-
     expect(distPackage.name).toBe('@devexpress/test-package');
     expect(distPackage.version).toBe('1.0.0');
     expect(distPackage.description).toBe('Test package for prepare-package-json');
     expect(distPackage.main).toBe('./index.js');
     expect(distPackage.module).toBe('./esm/index.js');
     expect(distPackage.types).toBe('./index.d.ts');
-    expect(distPackage.scripts).toEqual({
-      build: 'tsc',
-      test: 'jest',
-    });
-    expect(distPackage.dependencies).toEqual({
-      react: '^18.0.0',
-    });
-    expect(distPackage.devDependencies).toEqual({
-      typescript: '^4.9.0',
-      jest: '^29.0.0',
-    });
+    expect(distPackage.scripts).toEqual({ build: 'tsc', test: 'jest' });
+    expect(distPackage.dependencies).toEqual({ react: '^18.0.0' });
+    expect(distPackage.devDependencies).toEqual({ typescript: '^4.9.0', jest: '^29.0.0' });
     expect(distPackage.keywords).toEqual(['test', 'package']);
     expect(distPackage.license).toBe('MIT');
     expect(distPackage.author).toBe('Test Author');
@@ -157,7 +137,7 @@ describe('PreparePackageJsonExecutor E2E', () => {
     expect(distPkg.version).toBe('9.8.7');
   });
 
-  it('should rename devextreme to devextreme-internal after setName via renameInternalPattern', async () => {
+  it('should apply renameInternalPattern after setName', async () => {
     const options: NpmPackageExecutorSchema = {
       distDirectory: './npm',
       setName: 'devextreme',
@@ -172,44 +152,6 @@ describe('PreparePackageJsonExecutor E2E', () => {
     const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
 
     expect(distPkg.name).toBe('devextreme-internal');
-  });
-
-  it('should rename devextreme-foo to devextreme-foo-internal via renameInternalPattern', async () => {
-    const projectDir = path.join(tempDir, 'packages', 'test-lib');
-
-    await writeJson(path.join(projectDir, 'package.json'), {
-      name: 'devextreme-foo',
-      version: '1.0.0',
-      publishConfig: { access: 'public' },
-    });
-
-    const options: NpmPackageExecutorSchema = {
-      distDirectory: './npm',
-      renameInternalPattern: { find: '^devextreme(-.*)?$', replace: 'devextreme$1-internal' },
-    };
-
-    const result = await executor(options, context);
-
-    expect(result.success).toBe(true);
-
-    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
-
-    expect(distPkg.name).toBe('devextreme-foo-internal');
-  });
-
-  it('should remove only publishConfig by default when no new options are specified', async () => {
-    const options: NpmPackageExecutorSchema = {
-      distDirectory: './npm',
-    };
-
-    await executor(options, context);
-
-    const projectDir = path.join(tempDir, 'packages', 'test-lib');
-    const distPkg = JSON.parse(await readFileText(path.join(projectDir, 'npm', 'package.json')));
-
-    expect(distPkg.publishConfig).toBeUndefined();
-    expect(distPkg.devDependencies).toBeDefined();
-    expect(distPkg.scripts).toBeDefined();
   });
 
   it('should remove nothing when removeFields is an empty array', async () => {

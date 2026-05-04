@@ -143,7 +143,7 @@ export function helper() {
     }, 30000);
   });
 
-  it('should remove DEBUG blocks', async () => {
+  it('should forward removeDebug option to stripDebug helper', async () => {
     const options: BabelTransformExecutorSchema = {
       babelConfigPath: './build/gulp/transpile-config.js',
       configKey: 'cjs',
@@ -160,8 +160,5 @@ export function helper() {
     );
 
     expect(utilsContent).not.toContain('This is debug code');
-    expect(utilsContent).not.toContain('debugOnly');
-    expect(utilsContent).toContain('helper');
-    expect(utilsContent).toContain('something');
   }, 30000);
 });

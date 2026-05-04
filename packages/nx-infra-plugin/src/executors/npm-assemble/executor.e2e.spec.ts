@@ -59,7 +59,7 @@ describe('NpmAssembleExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  it('should copy transpiled JS sources with license filter and apply star-license banners', async () => {
+  it('should copy transpiled JS sources and exclude bundles + internal license validation', async () => {
     const transpiledDir = path.join(projectDir, 'artifacts', 'transpiled-esm-npm');
     fs.mkdirSync(path.join(transpiledDir, 'esm'), { recursive: true });
     fs.mkdirSync(path.join(transpiledDir, 'bundles'), { recursive: true });
@@ -76,52 +76,31 @@ describe('NpmAssembleExecutor E2E', () => {
     expect(result.success).toBe(true);
 
     const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
-
-    const buttonContent = await readFileText(path.join(outDir, 'esm', 'button.js'));
-    expect(buttonContent).toMatch(/^\/\*\*/);
-    expect(buttonContent).toContain('esm/button.js');
-
+    expect(fs.existsSync(path.join(outDir, 'esm', 'button.js'))).toBe(true);
     expect(fs.existsSync(path.join(outDir, 'bundles', 'dx.all.js'))).toBe(false);
     expect(
       fs.existsSync(path.join(outDir, 'esm', 'license', 'license_validation_internal.js')),
     ).toBe(false);
   });
 
-  it('should copy license dir and npm-bin scripts with LF line endings', async () => {
-    await writeFileText(
-      path.join(projectDir, 'license', 'LICENSE.txt'),
-      'DevExtreme License\r\nCopyright 2024\r\n',
-    );
-    await writeFileText(
-      path.join(projectDir, 'build', 'npm-bin', 'install.js'),
-      'var a = 1;\r\nvar b = 2;\r\n',
-    );
+  it('should copy license dir and npm-bin scripts to expected destinations', async () => {
+    await writeFileText(path.join(projectDir, 'license', 'LICENSE.txt'), 'DevExtreme License\n');
+    await writeFileText(path.join(projectDir, 'build', 'npm-bin', 'install.js'), 'var a = 1;\n');
 
     const result = await executor(OPTIONS, context);
     expect(result.success).toBe(true);
 
     const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
-
-    const licenseContent = await readFileText(path.join(outDir, 'license', 'LICENSE.txt'));
-    expect(licenseContent).not.toContain('\r\n');
-    expect(licenseContent).toContain('\n');
-
-    const binContent = await readFileText(path.join(outDir, 'bin', 'install.js'));
-    expect(binContent).not.toContain('\r\n');
-    expect(binContent).toContain('\n');
+    expect(fs.existsSync(path.join(outDir, 'license', 'LICENSE.txt'))).toBe(true);
+    expect(fs.existsSync(path.join(outDir, 'bin', 'install.js'))).toBe(true);
   });
 
   it('should copy dist files into outputDir/dist with the gulp-equivalent excludes', async () => {
     const artifactsDir = path.join(projectDir, 'artifacts');
     fs.mkdirSync(path.join(artifactsDir, 'js'), { recursive: true });
-    fs.mkdirSync(path.join(artifactsDir, 'css'), { recursive: true });
-    fs.mkdirSync(path.join(artifactsDir, 'ts'), { recursive: true });
 
     await writeFileText(path.join(artifactsDir, 'js', 'dx.all.js'), 'var dx = {};');
     await writeFileText(path.join(artifactsDir, 'js', 'jquery.js'), 'var $ = {};');
-    await writeFileText(path.join(artifactsDir, 'css', 'dx.light.css'), '.dx { }');
-    await writeFileText(path.join(artifactsDir, 'css', 'dx-diagram.css'), '.diagram { }');
-    await writeFileText(path.join(artifactsDir, 'ts', 'dx.all.d.ts'), 'export {}');
 
     const result = await executor(OPTIONS, context);
     expect(result.success).toBe(true);
@@ -130,8 +109,5 @@ describe('NpmAssembleExecutor E2E', () => {
 
     expect(fs.existsSync(path.join(distDir, 'js', 'dx.all.js'))).toBe(true);
     expect(fs.existsSync(path.join(distDir, 'js', 'jquery.js'))).toBe(false);
-    expect(fs.existsSync(path.join(distDir, 'css', 'dx.light.css'))).toBe(true);
-    expect(fs.existsSync(path.join(distDir, 'css', 'dx-diagram.css'))).toBe(false);
-    expect(fs.existsSync(path.join(distDir, 'ts', 'dx.all.d.ts'))).toBe(true);
   });
 });

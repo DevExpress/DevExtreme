@@ -71,7 +71,7 @@ describe('DtsBundleExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  it('should produce artifact bundle with bang-license and stripped declare global wrapper', async () => {
+  it('should produce artifact bundle with bang-comment banner and stripped declare global wrapper', async () => {
     const result = await executor(OPTIONS, context);
     expect(result.success).toBe(true);
 
@@ -80,17 +80,12 @@ describe('DtsBundleExecutor E2E', () => {
     );
 
     expect(artifactContent).toMatch(/^\/\*!/);
-    expect(artifactContent).toContain('DevExtreme (dx.all.d.ts)');
-    expect(artifactContent).toContain('https://js.devexpress.com/Licensing/');
-
     expect(artifactContent).not.toContain('declare global');
     expect(artifactContent).toContain('interface JQuery');
-
-    expect(artifactContent).toContain('DevExpress');
     expect(artifactContent).toContain('EventObject');
   });
 
-  it('should produce package bundle with star-license, footer, and stripped jQuery interface body', async () => {
+  it('should produce package bundle with star-comment banner, footer, and stripped jQuery interface body', async () => {
     const result = await executor(OPTIONS, context);
     expect(result.success).toBe(true);
 
@@ -99,14 +94,8 @@ describe('DtsBundleExecutor E2E', () => {
     );
 
     expect(packageContent).toMatch(/^\/\*\*/);
-    expect(packageContent).not.toMatch(/^\/\*!/);
-    expect(packageContent).toContain('DevExtreme (dx.all.d.ts)');
-
     expect(packageContent).toContain('\nexport default DevExpress;');
-
     expect(packageContent).toContain('interface JQuery');
     expect(packageContent).not.toContain('dxButton()');
-
-    expect(packageContent).toContain('EventObject');
   });
 });

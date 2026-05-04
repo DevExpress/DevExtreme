@@ -39,3 +39,19 @@ export function normalizeGlobPathForWindows(filePath: string): string {
 export function toPosixPath(absolutePath: string): string {
   return isWindowsOS() ? normalizeGlobPathForWindows(absolutePath) : absolutePath;
 }
+
+export function resolveOptionPaths<T extends Record<string, unknown>, K extends keyof T>(
+  options: T,
+  projectRoot: string,
+  keys: readonly K[],
+  defaults?: Partial<Record<K, string>>,
+): Record<K, string> {
+  const out = {} as Record<K, string>;
+  for (const key of keys) {
+    const raw = (options[key] as string | undefined) ?? defaults?.[key];
+    if (raw !== undefined) {
+      out[key] = path.resolve(projectRoot, raw);
+    }
+  }
+  return out;
+}

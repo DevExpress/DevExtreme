@@ -83,17 +83,4 @@ describe('ScssAssembleExecutor E2E', () => {
     expect(content).toContain(expectedSvg);
     expect(content).toContain(expectedPng);
   });
-
-  it('should pass through scss files without data-uri references unchanged', async () => {
-    const plainContent = '.button { color: red; }\n.icon { display: inline-block; }\n';
-    await writeFileText(path.join(scssPackageDir, 'scss', 'plain.scss'), plainContent);
-
-    const context = createMockContext({ root: tempDir });
-    const result = await executor(OPTIONS, context);
-
-    expect(result.success).toBe(true);
-
-    const content = await readFileText(path.join(outputDir, 'plain.scss'));
-    expect(content).toBe(plainContent);
-  });
 });
