@@ -16838,7 +16838,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxDropDownEditorOptions.onClosed]
      */
@@ -27313,7 +27313,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
