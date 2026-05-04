@@ -82,7 +82,7 @@
         "{projectRoot}/js/__internal/core/localization/cldr-data"
       ]
     },
-    "build:devextreme-bundler-config:generate": {
+    "build:devextreme-bundler-config": {
       "executor": "devextreme-nx-infra-plugin:concatenate-files",
       "options": {
         "sourceFiles": [
@@ -114,44 +114,45 @@
           }
         ]
       },
-      "inputs": [
-        "{projectRoot}/build/bundle-templates/modules/parts/**/*.js"
-      ],
-      "outputs": [
-        "{projectRoot}/build/bundle-templates/dx.custom.js"
-      ]
-    },
-    "build:devextreme-bundler-config:prod": {
-      "dependsOn": [
-        "build:devextreme-bundler-config:generate"
-      ],
-      "executor": "devextreme-nx-infra-plugin:concatenate-files",
-      "options": {
-        "sourceFiles": [
-          "./build/bundle-templates/dx.custom.js"
-        ],
-        "outputFile": "./artifacts/npm/devextreme/bundles/dx.custom.config.js",
-        "transforms": [
-          {
-            "find": "require *\\( *[\"']\\.\\.\\/",
-            "replace": "require('devextreme/"
-          }
-        ]
-      },
-      "inputs": [
-        "{projectRoot}/build/bundle-templates/dx.custom.js"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
-      ],
       "configurations": {
-        "internal": {
+        "prod": {
+          "sourceFiles": [
+            "./build/bundle-templates/dx.custom.js"
+          ],
+          "outputFile": "./artifacts/npm/devextreme/bundles/dx.custom.config.js",
+          "extractPattern": "",
+          "header": "",
+          "transforms": [
+            {
+              "find": "require *\\( *[\"']\\.\\.\\/",
+              "replace": "require('devextreme/"
+            }
+          ]
+        },
+        "prod-internal": {
+          "sourceFiles": [
+            "./build/bundle-templates/dx.custom.js"
+          ],
           "outputFile": "./artifacts/npm/devextreme-internal/bundles/dx.custom.config.js",
-          "outputs": [
-            "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
+          "extractPattern": "",
+          "header": "",
+          "transforms": [
+            {
+              "find": "require *\\( *[\"']\\.\\.\\/",
+              "replace": "require('devextreme/"
+            }
           ]
         }
-      }
+      },
+      "inputs": [
+        "{projectRoot}/build/bundle-templates/modules/parts/**/*.js",
+        "{projectRoot}/build/bundle-templates/dx.custom.js"
+      ],
+      "outputs": [
+        "{projectRoot}/build/bundle-templates/dx.custom.js",
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js",
+        "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
+      ]
     },
     "clean:dist-ts": {
       "executor": "devextreme-nx-infra-plugin:clean",
@@ -450,8 +451,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm nx build:devextreme-bundler-config:generate devextreme",
-          "pnpm nx build:devextreme-bundler-config:prod devextreme",
+          "pnpm nx build:devextreme-bundler-config devextreme",
+          "pnpm nx build:devextreme-bundler-config devextreme -c prod",
           "pnpm nx build:ts:internal devextreme",
           "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
           "pnpm nx copy:json:transpiled devextreme",
@@ -481,8 +482,8 @@
       "configurations": {
         "ci": {
           "commands": [
-            "pnpm nx build:devextreme-bundler-config:generate devextreme",
-            "pnpm nx build:devextreme-bundler-config:prod devextreme",
+            "pnpm nx build:devextreme-bundler-config devextreme",
+            "pnpm nx build:devextreme-bundler-config devextreme -c prod",
             "pnpm nx build:ts:internal devextreme",
             "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
             "pnpm nx copy:json:transpiled devextreme",
@@ -500,8 +501,8 @@
         },
         "internal": {
           "commands": [
-            "pnpm nx build:devextreme-bundler-config:generate devextreme",
-            "pnpm nx build:devextreme-bundler-config:prod devextreme -c internal",
+            "pnpm nx build:devextreme-bundler-config devextreme",
+            "pnpm nx build:devextreme-bundler-config devextreme -c prod-internal",
             "pnpm nx build:ts:internal devextreme",
             "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
             "pnpm nx copy:json:transpiled devextreme",
@@ -523,7 +524,7 @@
         }
       }
     },
-    "bundle:debug:build": {
+    "bundle:build": {
       "executor": "devextreme-nx-infra-plugin:bundle",
       "options": {
         "entries": [
@@ -539,8 +540,35 @@
         "webpackConfigPath": "./webpack.config.js"
       },
       "configurations": {
-        "production": {
+        "debug": {
+          "entries": [
+            "bundles/dx.all.js",
+            "bundles/dx.web.js",
+            "bundles/dx.viz.js",
+            "bundles/dx.ai-integration.js",
+            "bundles/dx.custom.js"
+          ],
+          "mode": "debug"
+        },
+        "debug-production": {
+          "entries": [
+            "bundles/dx.all.js",
+            "bundles/dx.web.js",
+            "bundles/dx.viz.js",
+            "bundles/dx.ai-integration.js",
+            "bundles/dx.custom.js"
+          ],
+          "mode": "debug",
           "sourceMap": false
+        },
+        "prod": {
+          "entries": [
+            "bundles/dx.ai-integration.js",
+            "bundles/dx.all.js",
+            "bundles/dx.web.js",
+            "bundles/dx.viz.js"
+          ],
+          "mode": "production"
         }
       },
       "inputs": [
@@ -554,7 +582,8 @@
         "{projectRoot}/artifacts/js/dx.web.debug.js",
         "{projectRoot}/artifacts/js/dx.viz.debug.js",
         "{projectRoot}/artifacts/js/dx.ai-integration.debug.js",
-        "{projectRoot}/artifacts/js/dx.custom.debug.js"
+        "{projectRoot}/artifacts/js/dx.custom.debug.js",
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
       ]
     },
     "bundle:headers": {
@@ -588,18 +617,18 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm nx bundle:debug:build devextreme",
+          "pnpm nx bundle:build devextreme -c debug",
           "pnpm nx bundle:headers devextreme",
-          "pnpm nx compress:bundles:debug devextreme"
+          "pnpm nx compress:bundles devextreme -c debug"
         ],
         "parallel": false
       },
       "configurations": {
         "production": {
           "commands": [
-            "pnpm nx bundle:debug:build devextreme -c production",
+            "pnpm nx bundle:build devextreme -c debug-production",
             "pnpm nx bundle:headers devextreme",
-            "pnpm nx compress:bundles:debug devextreme -c production"
+            "pnpm nx compress:bundles devextreme -c debug-production"
           ]
         }
       },
@@ -612,46 +641,22 @@
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
       ]
     },
-    "bundle:prod:build": {
-      "executor": "devextreme-nx-infra-plugin:bundle",
-      "options": {
-        "entries": [
-          "bundles/dx.ai-integration.js",
-          "bundles/dx.all.js",
-          "bundles/dx.web.js",
-          "bundles/dx.viz.js"
-        ],
-        "sourceDir": "./artifacts/transpiled-renovation-npm",
-        "outDir": "./artifacts/js",
-        "mode": "production",
-        "webpackConfigPath": "./webpack.config.js"
-      },
-      "inputs": [
-        "internalPackageEnv",
-        "{projectRoot}/artifacts/transpiled-renovation-npm/bundles/**/*",
-        "{projectRoot}/artifacts/transpiled-renovation-npm/**/*.js",
-        "webpackConfig"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
-      ]
-    },
     "bundle:prod": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm nx bundle:prod:build devextreme",
+          "pnpm nx bundle:build devextreme -c prod",
           "pnpm nx bundle:headers devextreme -c prod",
-          "pnpm nx compress:bundles:prod devextreme"
+          "pnpm nx compress:bundles devextreme -c prod"
         ],
         "parallel": false
       },
       "configurations": {
         "production": {
           "commands": [
-            "pnpm nx bundle:prod:build devextreme",
+            "pnpm nx bundle:build devextreme -c prod",
             "pnpm nx bundle:headers devextreme -c prod",
-            "pnpm nx compress:bundles:prod devextreme -c production"
+            "pnpm nx compress:bundles devextreme -c prod-production"
           ]
         }
       },
@@ -664,33 +669,7 @@
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
       ]
     },
-    "compress:bundles:prod": {
-      "executor": "devextreme-nx-infra-plugin:compress",
-      "options": {
-        "files": [
-          "./artifacts/js/dx.all.js",
-          "./artifacts/js/dx.web.js",
-          "./artifacts/js/dx.viz.js",
-          "./artifacts/js/dx.ai-integration.js"
-        ],
-        "mode": { "name": "strip-debug", "trailingNewline": false }
-      },
-      "configurations": {
-        "production": {
-          "mode": {
-            "name": "minify",
-            "eulaUrl": "https://js.devexpress.com/Licensing/"
-          }
-        }
-      },
-      "inputs": [
-        "prodBundles"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
-      ]
-    },
-    "compress:bundles:debug": {
+    "compress:bundles": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": [
@@ -703,18 +682,58 @@
         "mode": { "name": "normalize", "trailingNewline": false }
       },
       "configurations": {
-        "production": {
+        "debug": {
+          "files": [
+            "./artifacts/js/dx.all.debug.js",
+            "./artifacts/js/dx.web.debug.js",
+            "./artifacts/js/dx.viz.debug.js",
+            "./artifacts/js/dx.ai-integration.debug.js",
+            "./artifacts/js/dx.custom.debug.js"
+          ],
+          "mode": { "name": "normalize", "trailingNewline": false }
+        },
+        "debug-production": {
+          "files": [
+            "./artifacts/js/dx.all.debug.js",
+            "./artifacts/js/dx.web.debug.js",
+            "./artifacts/js/dx.viz.debug.js",
+            "./artifacts/js/dx.ai-integration.debug.js",
+            "./artifacts/js/dx.custom.debug.js"
+          ],
           "mode": {
             "name": "beautify",
+            "eulaUrl": "https://js.devexpress.com/Licensing/"
+          }
+        },
+        "prod": {
+          "files": [
+            "./artifacts/js/dx.all.js",
+            "./artifacts/js/dx.web.js",
+            "./artifacts/js/dx.viz.js",
+            "./artifacts/js/dx.ai-integration.js"
+          ],
+          "mode": { "name": "strip-debug", "trailingNewline": false }
+        },
+        "prod-production": {
+          "files": [
+            "./artifacts/js/dx.all.js",
+            "./artifacts/js/dx.web.js",
+            "./artifacts/js/dx.viz.js",
+            "./artifacts/js/dx.ai-integration.js"
+          ],
+          "mode": {
+            "name": "minify",
             "eulaUrl": "https://js.devexpress.com/Licensing/"
           }
         }
       },
       "inputs": [
-        "debugBundles"
+        "debugBundles",
+        "prodBundles"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js",
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
       ]
     },
     "build:vectormap:generate": {
@@ -754,31 +773,33 @@
         "{projectRoot}/artifacts/js/vectormap-utils"
       ]
     },
-    "compress:vectormap:strip-debug": {
+    "compress:vectormap": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": [
           "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
         ],
         "mode": "strip-debug"
-      }
-    },
-    "compress:vectormap:beautify": {
-      "executor": "devextreme-nx-infra-plugin:compress",
-      "options": {
-        "files": [
-          "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js"
-        ],
-        "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
-      }
-    },
-    "compress:vectormap:minify": {
-      "executor": "devextreme-nx-infra-plugin:compress",
-      "options": {
-        "files": [
-          "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
-        ],
-        "mode": { "name": "minify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+      },
+      "configurations": {
+        "strip-debug": {
+          "files": [
+            "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
+          ],
+          "mode": "strip-debug"
+        },
+        "beautify": {
+          "files": [
+            "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js"
+          ],
+          "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+        },
+        "minify": {
+          "files": [
+            "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
+          ],
+          "mode": { "name": "minify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+        }
       }
     },
     "build:vectormap": {
@@ -787,7 +808,7 @@
         "commands": [
           "pnpm nx build:vectormap:generate devextreme",
           "pnpm nx build:vectormap:headers devextreme",
-          "pnpm nx compress:vectormap:strip-debug devextreme"
+          "pnpm nx compress:vectormap devextreme -c strip-debug"
         ],
         "parallel": false
       },
@@ -806,8 +827,8 @@
           "commands": [
             "pnpm nx build:vectormap:generate devextreme",
             "pnpm nx build:vectormap:headers devextreme",
-            "pnpm nx compress:vectormap:beautify devextreme",
-            "pnpm nx compress:vectormap:minify devextreme"
+            "pnpm nx compress:vectormap devextreme -c beautify",
+            "pnpm nx compress:vectormap devextreme -c minify"
           ]
         }
       }
@@ -822,18 +843,16 @@
       "inputs": ["{projectRoot}/js/aspnet.js"],
       "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
     },
-    "compress:aspnet:normalize": {
-      "executor": "devextreme-nx-infra-plugin:compress",
-      "options": {
-        "files": ["./artifacts/js/dx.aspnet.mvc.js"],
-        "mode": "normalize"
-      }
-    },
     "compress:aspnet": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": ["./artifacts/js/dx.aspnet.mvc.js"],
         "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+      },
+      "configurations": {
+        "normalize": {
+          "mode": "normalize"
+        }
       }
     },
     "build:aspnet:headers": {
@@ -853,7 +872,7 @@
       "options": {
         "commands": [
           "pnpm nx build:aspnet:copy devextreme",
-          "pnpm nx compress:aspnet:normalize devextreme",
+          "pnpm nx compress:aspnet devextreme -c normalize",
           "pnpm nx build:aspnet:headers devextreme"
         ],
         "parallel": false
