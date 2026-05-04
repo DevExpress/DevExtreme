@@ -21,13 +21,13 @@ export declare function debugHelper(): void;
 //#ENDDEBUG
 `;
 
-const LEGACY_HOVER = `import DevExpress from '../bundles/dx.all';`;
-const LEGACY_DX_ALL_JS = `// This file is required to compile devextreme-angular`;
+const HOVER_TEMPLATE = `import DevExpress from '../bundles/dx.all';`;
+const DX_ALL_JS_TEMPLATE = `// This file is required to compile devextreme-angular`;
 
 const OPTIONS: DtsModulesExecutorSchema = {
   sourceDir: './js',
   outputDir: './artifacts/npm/devextreme',
-  legacyTemplatesDir: './build/npm-templates',
+  templatesDir: './build/npm-templates',
   licenseTemplateFile: './build/gulp/license-header.txt',
   eulaUrl: 'https://js.devexpress.com/Licensing/',
 };
@@ -68,11 +68,11 @@ describe('DtsModulesExecutor E2E', () => {
 
     await writeFileText(
       path.join(projectDir, 'build', 'npm-templates', 'events', 'hover.d.ts'),
-      LEGACY_HOVER,
+      HOVER_TEMPLATE,
     );
     await writeFileText(
       path.join(projectDir, 'build', 'npm-templates', 'bundles', 'dx.all.js'),
-      LEGACY_DX_ALL_JS,
+      DX_ALL_JS_TEMPLATE,
     );
     await writeFileText(
       path.join(projectDir, 'build', 'npm-templates', 'integration', 'jquery.d.ts'),
@@ -84,7 +84,7 @@ describe('DtsModulesExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  it('should produce the expected file tree (real .d.ts + legacy templates) with star-license banners and stripped debug blocks', async () => {
+  it('should produce the expected file tree (real .d.ts + templates) with star-license banners and stripped debug blocks', async () => {
     const result = await executor(OPTIONS, context);
     expect(result.success).toBe(true);
 
@@ -104,7 +104,7 @@ describe('DtsModulesExecutor E2E', () => {
     const hoverContent = await readFileText(path.join(outDir, 'events', 'hover.d.ts'));
     expect(hoverContent).toMatch(/^\/\*\*/);
     expect(hoverContent).toContain('DevExtreme (events/hover.d.ts)');
-    expect(hoverContent).toContain(LEGACY_HOVER);
+    expect(hoverContent).toContain(HOVER_TEMPLATE);
 
     const jqContent = await readFileText(path.join(outDir, 'integration', 'jquery.d.ts'));
     expect(jqContent).toMatch(/^\/\*\*/);
@@ -113,12 +113,12 @@ describe('DtsModulesExecutor E2E', () => {
     expect(dxAllJsContent).toMatch(/^\/\*\*/);
     expect(dxAllJsContent).toContain('DevExtreme (dx.all.js)');
     expect(dxAllJsContent).not.toContain('DevExtreme (bundles/dx.all.js)');
-    expect(dxAllJsContent).toContain(LEGACY_DX_ALL_JS);
+    expect(dxAllJsContent).toContain(DX_ALL_JS_TEMPLATE);
 
     expect(fs.existsSync(path.join(outDir, 'bundles', 'dx.all.d.ts'))).toBe(false);
   });
 
-  it('should overwrite legacy template when a real source d.ts exists at the same relative path', async () => {
+  it('should overwrite a template when a real source d.ts exists at the same relative path', async () => {
     const REAL_CONTENT = 'export declare function click(): void;';
     await writeFileText(path.join(projectDir, 'js', 'events', 'click.d.ts'), REAL_CONTENT);
     await writeFileText(

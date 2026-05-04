@@ -19,12 +19,12 @@ const runExecutor: PromiseExecutor<DtsModulesExecutorSchema> = async (options, c
   const projectRoot = resolveProjectPath(context);
   const sourceDir = path.resolve(projectRoot, options.sourceDir);
   const outputDir = path.resolve(projectRoot, options.outputDir);
-  const legacyTemplatesDir = path.resolve(projectRoot, options.legacyTemplatesDir);
+  const templatesDir = path.resolve(projectRoot, options.templatesDir);
   const licenseTemplatePath = path.resolve(projectRoot, options.licenseTemplateFile);
 
   try {
-    await copyDirectory(legacyTemplatesDir, outputDir);
-    logger.verbose(`Copied legacy templates from ${options.legacyTemplatesDir}`);
+    await copyDirectory(templatesDir, outputDir);
+    logger.verbose(`Copied templates from ${options.templatesDir}`);
 
     await copyDirectory(sourceDir, outputDir, { include: ['**/*.d.ts'] });
     logger.verbose(`Copied .d.ts files from ${options.sourceDir} to ${options.outputDir}`);
@@ -41,7 +41,10 @@ const runExecutor: PromiseExecutor<DtsModulesExecutorSchema> = async (options, c
 
     const cwd = toPosixPath(outputDir);
     const dtsFiles = await glob('**/*.d.ts', { cwd, nodir: true, absolute: true });
-    const jsFiles = await glob('bundles/dx.all.js', { cwd, nodir: true, absolute: true });
+
+    const templatesCwd = toPosixPath(templatesDir);
+    const templateJsRelPaths = await glob('**/*.js', { cwd: templatesCwd, nodir: true });
+    const jsFiles = templateJsRelPaths.map((rel) => path.resolve(outputDir, rel));
 
     const renderBanner = await buildLicenseBannerRenderer({ ...bannerBase, commentType: '*' });
 

@@ -11,9 +11,9 @@
       "type": "string",
       "description": "Output directory for assembled modules (relative to project root)."
     },
-    "legacyTemplatesDir": {
+    "templatesDir": {
       "type": "string",
-      "description": "Directory containing legacy template files to overlay on the output (relative to project root)."
+      "description": "Directory containing static template files to overlay on the output (relative to project root)."
     },
     "licenseTemplateFile": {
       "type": "string",
@@ -24,5 +24,5 @@
       "description": "EULA URL embedded in the license header."
     }
   },
-  "required": ["sourceDir", "outputDir", "legacyTemplatesDir", "licenseTemplateFile", "eulaUrl"]
+  "required": ["sourceDir", "outputDir", "templatesDir", "licenseTemplateFile", "eulaUrl"]
 }

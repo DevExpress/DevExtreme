@@ -1,7 +1,7 @@
 export interface DtsModulesExecutorSchema {
   sourceDir: string;
   outputDir: string;
-  legacyTemplatesDir: string;
+  templatesDir: string;
   licenseTemplateFile: string;
   eulaUrl: string;
 }

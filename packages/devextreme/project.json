@@ -935,7 +935,7 @@
       "options": {
         "sourceDir": "./js",
         "outputDir": "./artifacts/npm/devextreme",
-        "legacyTemplatesDir": "./build/npm-templates",
+        "templatesDir": "./build/npm-templates",
         "licenseTemplateFile": "./build/gulp/license-header.txt",
         "eulaUrl": "https://js.devexpress.com/Licensing/"
       },
