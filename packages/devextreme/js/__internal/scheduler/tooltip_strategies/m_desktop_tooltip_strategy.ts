@@ -71,7 +71,9 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   protected override onListRender(
     e: ContentReadyEvent<AppointmentTooltipItem>,
   ): void {
-    this.extraOptions?.dragBehavior?.(e);
+    if (this.extraOptions?.dragBehavior) {
+      this.extraOptions.dragBehavior(e);
+    }
   }
 
   protected override onListItemContextMenu(
