@@ -1,14 +1,18 @@
 import * as path from 'path';
 import * as fs from 'fs-extra';
+import { stat } from 'fs/promises';
 import * as babel from '@babel/core';
 import { glob } from 'glob';
 import { logger } from '@nx/devkit';
 import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
+import { copyFile } from '../../utils/file-operations';
+import { copyDirectory } from '../copy-files/copy-files.impl';
 import { stripDebug } from '../compress/compress.impl';
-import { BabelTransformExecutorSchema } from './schema';
+import { BabelTransformAsset, BabelTransformExecutorSchema } from './schema';
 
 const ERROR_NO_FILES_MATCHED = 'No files matched the source pattern';
+const ERROR_ASSET_NOT_FOUND = (source: string) => `Asset source not found: ${source}`;
 
 function loadBabelConfig(
   projectRoot: string,
@@ -81,6 +85,29 @@ async function transformFile(
   await fs.writeFile(outputPath, result.code);
 }
 
+interface ResolvedBabelTransformAsset {
+  source: string;
+  destination: string;
+}
+
+async function copyResolvedAsset(asset: ResolvedBabelTransformAsset): Promise<void> {
+  let assetStat;
+  try {
+    assetStat = await stat(asset.source);
+  } catch {
+    throw new Error(ERROR_ASSET_NOT_FOUND(asset.source));
+  }
+
+  if (assetStat.isDirectory()) {
+    await copyDirectory(asset.source, asset.destination);
+    logger.verbose(`Copied asset directory ${asset.source} -> ${asset.destination}`);
+    return;
+  }
+
+  await copyFile(asset.source, asset.destination);
+  logger.verbose(`Copied asset file ${asset.source} -> ${asset.destination}`);
+}
+
 interface ResolvedBabelTransform {
   projectRoot: string;
   babelConfig: babel.TransformOptions;
@@ -88,6 +115,19 @@ interface ResolvedBabelTransform {
   renameExtensions: Record<string, string>;
   globPattern: string;
   excludePatterns: string[];
+  resolvedAssets: ResolvedBabelTransformAsset[];
+}
+
+function resolveAssets(
+  assets: BabelTransformAsset[],
+  projectRoot: string,
+  outDir: string,
+): ResolvedBabelTransformAsset[] {
+  const outDirAbsolute = path.isAbsolute(outDir) ? outDir : path.join(projectRoot, outDir);
+  return assets.map((asset) => ({
+    source: path.isAbsolute(asset.from) ? asset.from : path.join(projectRoot, asset.from),
+    destination: path.isAbsolute(asset.to) ? asset.to : path.join(outDirAbsolute, asset.to),
+  }));
 }
 
 export default createExecutor<BabelTransformExecutorSchema, ResolvedBabelTransform>({
@@ -106,6 +146,8 @@ export default createExecutor<BabelTransformExecutorSchema, ResolvedBabelTransfo
       return toPosixPath(resolved);
     });
 
+    const resolvedAssets = resolveAssets(options.copyAssets ?? [], projectRoot, options.outDir);
+
     return {
       projectRoot,
       babelConfig,
@@ -113,6 +155,7 @@ export default createExecutor<BabelTransformExecutorSchema, ResolvedBabelTransfo
       renameExtensions,
       globPattern,
       excludePatterns,
+      resolvedAssets,
     };
   },
   run: async (resolved, options) => {
@@ -148,5 +191,14 @@ export default createExecutor<BabelTransformExecutorSchema, ResolvedBabelTransfo
     );
 
     logger.verbose(`Successfully transformed ${sourceFiles.length} files to ${options.outDir}`);
+
+    if (resolved.resolvedAssets.length > 0) {
+      logger.verbose(
+        `Copying ${resolved.resolvedAssets.length} asset entries to ${options.outDir}`,
+      );
+      for (const asset of resolved.resolvedAssets) {
+        await copyResolvedAsset(asset);
+      }
+    }
   },
 });

@@ -38,6 +38,42 @@
     "eulaUrl": {
       "type": "string",
       "description": "EULA URL embedded in the license header."
+    },
+    "metadataFiles": {
+      "type": "array",
+      "description": "Metadata files (README, LICENSE, .npmignore, etc.) to copy after assembly. 'from' is resolved against projectRoot; 'to' is resolved against outputDir.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Source file path, resolved against projectRoot."
+          },
+          "to": {
+            "type": "string",
+            "description": "Destination file path, resolved against outputDir."
+          }
+        },
+        "required": ["from", "to"]
+      }
+    },
+    "flatten": {
+      "type": "array",
+      "description": "Secondary directories populated by recursively copying a sub-tree from outputDir. 'from' is resolved against outputDir; 'to' is resolved against projectRoot.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Source directory inside outputDir, resolved as outputDir/from."
+          },
+          "to": {
+            "type": "string",
+            "description": "Destination directory, resolved against projectRoot."
+          }
+        },
+        "required": ["from", "to"]
+      }
     }
   },
   "required": [

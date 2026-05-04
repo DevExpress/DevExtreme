@@ -110,4 +110,101 @@ describe('NpmAssembleExecutor E2E', () => {
     expect(fs.existsSync(path.join(distDir, 'js', 'dx.all.js'))).toBe(true);
     expect(fs.existsSync(path.join(distDir, 'js', 'jquery.js'))).toBe(false);
   });
+
+  it('should not produce metadata or flatten artifacts when neither option is set', async () => {
+    const result = await executor(OPTIONS, context);
+    expect(result.success).toBe(true);
+
+    const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
+    const distArtifacts = path.join(projectDir, 'artifacts', 'npm', 'devextreme-dist');
+
+    expect(fs.existsSync(path.join(outDir, 'README.md'))).toBe(false);
+    expect(fs.existsSync(path.join(outDir, '.npmignore'))).toBe(false);
+    expect(fs.existsSync(distArtifacts)).toBe(false);
+  });
+
+  it('should copy metadata files relative to projectRoot/outputDir when provided', async () => {
+    fs.mkdirSync(path.join(projectDir, 'build', 'npm-templates'), { recursive: true });
+    fs.mkdirSync(path.join(tempDir, 'packages', 'devextreme-dist'), { recursive: true });
+
+    await writeFileText(path.join(tempDir, 'README.md'), 'workspace readme');
+    await writeFileText(path.join(projectDir, 'build', 'npm-templates', '.npmignore'), '*.log\n');
+    await writeFileText(
+      path.join(tempDir, 'packages', 'devextreme-dist', 'README.md'),
+      'dist readme',
+    );
+    await writeFileText(
+      path.join(tempDir, 'packages', 'devextreme-dist', 'LICENSE.md'),
+      'dist license',
+    );
+
+    const optionsWithMetadata: NpmAssembleExecutorSchema = {
+      ...OPTIONS,
+      metadataFiles: [
+        { from: '../../README.md', to: './README.md' },
+        { from: './build/npm-templates/.npmignore', to: './.npmignore' },
+        { from: '../devextreme-dist/README.md', to: '../devextreme-dist/README.md' },
+        { from: '../devextreme-dist/LICENSE.md', to: '../devextreme-dist/LICENSE.md' },
+      ],
+    };
+
+    const result = await executor(optionsWithMetadata, context);
+    expect(result.success).toBe(true);
+
+    const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
+    const distMetaDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme-dist');
+
+    expect(await readFileText(path.join(outDir, 'README.md'))).toBe('workspace readme');
+    expect(await readFileText(path.join(outDir, '.npmignore'))).toBe('*.log\n');
+    expect(await readFileText(path.join(distMetaDir, 'README.md'))).toBe('dist readme');
+    expect(await readFileText(path.join(distMetaDir, 'LICENSE.md'))).toBe('dist license');
+  });
+
+  it('should flatten outputDir sub-trees into a secondary dir relative to projectRoot', async () => {
+    const artifactsDir = path.join(projectDir, 'artifacts');
+    fs.mkdirSync(path.join(artifactsDir, 'js'), { recursive: true });
+    fs.mkdirSync(path.join(artifactsDir, 'css'), { recursive: true });
+
+    await writeFileText(path.join(artifactsDir, 'js', 'dx.all.js'), 'var dx = {};');
+    await writeFileText(path.join(artifactsDir, 'css', 'dx.light.css'), '.dx { }');
+
+    const optionsWithFlatten: NpmAssembleExecutorSchema = {
+      ...OPTIONS,
+      flatten: [{ from: './dist', to: './artifacts/npm/devextreme-dist' }],
+    };
+
+    const result = await executor(optionsWithFlatten, context);
+    expect(result.success).toBe(true);
+
+    const flattenedDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme-dist');
+
+    expect(fs.existsSync(path.join(flattenedDir, 'js', 'dx.all.js'))).toBe(true);
+    expect(fs.existsSync(path.join(flattenedDir, 'css', 'dx.light.css'))).toBe(true);
+  });
+
+  it('should support metadataFiles and flatten together', async () => {
+    const artifactsDir = path.join(projectDir, 'artifacts');
+    fs.mkdirSync(path.join(artifactsDir, 'js'), { recursive: true });
+    fs.mkdirSync(path.join(tempDir, 'packages', 'devextreme-dist'), { recursive: true });
+
+    await writeFileText(path.join(artifactsDir, 'js', 'dx.all.js'), 'var dx = {};');
+    await writeFileText(
+      path.join(tempDir, 'packages', 'devextreme-dist', 'README.md'),
+      'dist readme',
+    );
+
+    const combinedOptions: NpmAssembleExecutorSchema = {
+      ...OPTIONS,
+      metadataFiles: [{ from: '../devextreme-dist/README.md', to: '../devextreme-dist/README.md' }],
+      flatten: [{ from: './dist', to: './artifacts/npm/devextreme-dist' }],
+    };
+
+    const result = await executor(combinedOptions, context);
+    expect(result.success).toBe(true);
+
+    const distMetaDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme-dist');
+
+    expect(await readFileText(path.join(distMetaDir, 'README.md'))).toBe('dist readme');
+    expect(fs.existsSync(path.join(distMetaDir, 'js', 'dx.all.js'))).toBe(true);
+  });
 });

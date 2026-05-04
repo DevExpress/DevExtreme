@@ -17,7 +17,11 @@ import { copyDirectory } from '../copy-files/copy-files.impl';
 import { applyLicenseHeadersToDirectory } from '../add-license-headers/add-license-headers.impl';
 import { DEFAULT_EULA_URL, resolveLicenseTemplate } from '../add-license-headers/defaults';
 import type { PackageJson } from '../../utils/types';
-import { NpmAssembleExecutorSchema } from './schema';
+import {
+  NpmAssembleExecutorSchema,
+  NpmAssembleFlattenStep,
+  NpmAssembleMetadataFile,
+} from './schema';
 
 const SRC_JS_EXCLUDES = [
   'bundles/*.js',
@@ -115,6 +119,16 @@ async function copyDistFiles(artifactsDir: string, outputDir: string): Promise<v
   });
 }
 
+interface ResolvedMetadataFile {
+  from: string;
+  to: string;
+}
+
+interface ResolvedFlattenStep {
+  from: string;
+  to: string;
+}
+
 interface ResolvedNpmAssemble {
   pkg: PackageJson;
   templatePath: string;
@@ -126,6 +140,46 @@ interface ResolvedNpmAssemble {
   webpackConfigSrc: string;
   artifactsDir: string;
   outputDir: string;
+  metadataFiles: ResolvedMetadataFile[];
+  flattenSteps: ResolvedFlattenStep[];
+}
+
+function resolveMetadataFiles(
+  entries: NpmAssembleMetadataFile[] | undefined,
+  projectRoot: string,
+  outputDir: string,
+): ResolvedMetadataFile[] {
+  if (!entries) {
+    return [];
+  }
+  return entries.map((entry) => ({
+    from: path.resolve(projectRoot, entry.from),
+    to: path.resolve(outputDir, entry.to),
+  }));
+}
+
+function resolveFlattenSteps(
+  entries: NpmAssembleFlattenStep[] | undefined,
+  projectRoot: string,
+  outputDir: string,
+): ResolvedFlattenStep[] {
+  if (!entries) {
+    return [];
+  }
+  return entries.map((entry) => ({
+    from: path.resolve(outputDir, entry.from),
+    to: path.resolve(projectRoot, entry.to),
+  }));
+}
+
+async function copyMetadataFiles(entries: ResolvedMetadataFile[]): Promise<void> {
+  await Promise.all(entries.map((entry) => copyFile(entry.from, entry.to)));
+}
+
+async function applyFlattenSteps(entries: ResolvedFlattenStep[]): Promise<void> {
+  for (const entry of entries) {
+    await copyDirectory(entry.from, entry.to);
+  }
 }
 
 export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
@@ -133,6 +187,7 @@ export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
   resolve: async (options, { projectRoot }) => {
     const pkg = await loadProjectPackageJson(projectRoot);
     const templatePath = resolveLicenseTemplate(projectRoot, options);
+    const outputDir = path.resolve(projectRoot, options.outputDir);
 
     return {
       pkg,
@@ -144,7 +199,9 @@ export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
       npmBinDir: path.resolve(projectRoot, options.npmBinDir),
       webpackConfigSrc: path.resolve(projectRoot, options.webpackConfig),
       artifactsDir: path.resolve(projectRoot, options.artifactsDir),
-      outputDir: path.resolve(projectRoot, options.outputDir),
+      outputDir,
+      metadataFiles: resolveMetadataFiles(options.metadataFiles, projectRoot, outputDir),
+      flattenSteps: resolveFlattenSteps(options.flatten, projectRoot, outputDir),
     };
   },
   run: async (resolved) => {
@@ -176,5 +233,15 @@ export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
       filenameMode: 'relative',
     });
     logger.verbose('Applied star-license banners to source JS files');
+
+    if (resolved.metadataFiles.length > 0) {
+      await copyMetadataFiles(resolved.metadataFiles);
+      logger.verbose('Copied metadata files to output directory');
+    }
+
+    if (resolved.flattenSteps.length > 0) {
+      await applyFlattenSteps(resolved.flattenSteps);
+      logger.verbose('Applied flatten steps from output directory');
+    }
   },
 });

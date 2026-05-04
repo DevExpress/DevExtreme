@@ -251,4 +251,37 @@ describe('CopyFilesExecutor E2E', () => {
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
     expect(fs.existsSync(path.join(projectDir, 'dist-direct', 'README.md'))).toBe(true);
   });
+
+  it('should forward applyLicenseHeaders option to license header pipeline', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const buildDir = path.join(projectDir, 'build', 'gulp');
+    fs.mkdirSync(buildDir, { recursive: true });
+    await writeFileText(
+      path.join(buildDir, 'license-header.txt'),
+      `/*<%= commentType %>\n* DevExtreme (<%= file.relative %>)\n*/\n`,
+    );
+    await writeFileText(
+      path.join(projectDir, 'aspnet-source.js'),
+      'module.exports = function aspnet() {};\n',
+    );
+
+    const options: CopyFilesExecutorSchema = {
+      files: [{ from: './aspnet-source.js', to: './artifacts/js/dx.aspnet.mvc.js' }],
+      applyLicenseHeaders: {
+        licenseTemplateFile: './build/gulp/license-header.txt',
+        targetSubdir: './artifacts/js',
+        separator: '',
+        includePatterns: ['dx.aspnet.mvc.js'],
+      },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const copiedContent = await readFileText(
+      path.join(projectDir, 'artifacts', 'js', 'dx.aspnet.mvc.js'),
+    );
+    expect(copiedContent).toMatch(/^\/\*!/);
+    expect(copiedContent).toContain('DevExtreme (dx.aspnet.mvc.js)');
+  });
 });

@@ -37,6 +37,24 @@
         "type": "string"
       },
       "description": "Map of file extension renames to apply to output files"
+    },
+    "copyAssets": {
+      "type": "array",
+      "description": "Additional asset files or directories to copy verbatim into outDir after transformation",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Source path relative to project root. Can be a file or directory."
+          },
+          "to": {
+            "type": "string",
+            "description": "Destination path relative to outDir."
+          }
+        },
+        "required": ["from", "to"]
+      }
     }
   },
   "required": ["babelConfigPath", "configKey", "sourcePattern", "outDir"],

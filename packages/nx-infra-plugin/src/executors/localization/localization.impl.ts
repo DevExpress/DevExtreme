@@ -4,8 +4,15 @@ import * as fs from 'fs';
 import { createRequire } from 'module';
 import _ from 'lodash';
 import { createExecutor } from '../../utils/create-executor';
-import { readFileText, writeFileText, readJson } from '../../utils/file-operations';
-import { LocalizationExecutorSchema } from './schema';
+import {
+  loadProjectPackageJson,
+  readFileText,
+  writeFileText,
+  readJson,
+} from '../../utils/file-operations';
+import { ApplyLicenseHeadersOption, LocalizationExecutorSchema } from './schema';
+import { applyLicenseHeadersToDirectory } from '../add-license-headers/add-license-headers.impl';
+import { DEFAULT_EULA_URL, resolveLicenseTemplate } from '../add-license-headers/defaults';
 
 interface CldrInstance {
   supplemental: {
@@ -368,6 +375,35 @@ async function generateCldrModules(
   }
 }
 
+async function applyLicenseHeadersIfRequested(
+  applyLicenseHeaders: ApplyLicenseHeadersOption | undefined,
+  projectRoot: string,
+  defaultTargetDir: string,
+): Promise<void> {
+  if (!applyLicenseHeaders) {
+    return;
+  }
+  const pkg = await loadProjectPackageJson(projectRoot);
+  const templatePath = resolveLicenseTemplate(projectRoot, applyLicenseHeaders);
+  const targetDir = applyLicenseHeaders.targetSubdir
+    ? path.join(projectRoot, applyLicenseHeaders.targetSubdir)
+    : defaultTargetDir;
+  await applyLicenseHeadersToDirectory({
+    targetDir,
+    pkg,
+    templatePath,
+    eulaUrl: applyLicenseHeaders.eulaUrl ?? DEFAULT_EULA_URL,
+    mode: applyLicenseHeaders.mode,
+    version: applyLicenseHeaders.version,
+    commentType: applyLicenseHeaders.commentType,
+    separator: applyLicenseHeaders.separator,
+    prependAfterLicense: applyLicenseHeaders.prependAfterLicense,
+    filenameMode: applyLicenseHeaders.filenameMode,
+    includePatterns: applyLicenseHeaders.includePatterns,
+    excludePatterns: applyLicenseHeaders.excludePatterns,
+  });
+}
+
 interface ResolvedLocalization {
   projectRoot: string;
   messagesDir: string;
@@ -379,6 +415,7 @@ interface ResolvedLocalization {
   skipCldrGeneration: boolean;
   skipMessageGeneration: boolean;
   lintGeneratedFiles: boolean;
+  applyLicenseHeaders?: ApplyLicenseHeadersOption;
 }
 
 export default createExecutor<LocalizationExecutorSchema, ResolvedLocalization>({
@@ -417,6 +454,7 @@ export default createExecutor<LocalizationExecutorSchema, ResolvedLocalization>(
       skipCldrGeneration: options.skipCldrGeneration ?? false,
       skipMessageGeneration: options.skipMessageGeneration ?? false,
       lintGeneratedFiles: options.lintGeneratedFiles ?? true,
+      applyLicenseHeaders: options.applyLicenseHeaders,
     };
   },
   run: async (resolved) => {
@@ -458,6 +496,12 @@ export default createExecutor<LocalizationExecutorSchema, ResolvedLocalization>(
       );
       logger.verbose(`CLDR modules generated in ${resolved.cldrDataOutputDir}`);
     }
+
+    await applyLicenseHeadersIfRequested(
+      resolved.applyLicenseHeaders,
+      resolved.projectRoot,
+      resolved.messageOutputDir,
+    );
 
     logger.verbose('Localization generation completed successfully');
   },

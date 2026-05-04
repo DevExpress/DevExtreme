@@ -3,7 +3,11 @@ import * as path from 'path';
 import * as fs from 'fs';
 import type { Configuration, Stats } from 'webpack';
 import { createExecutor } from '../../utils/create-executor';
-import { BundleExecutorSchema } from './schema';
+import { loadProjectPackageJson } from '../../utils/file-operations';
+import type { PackageJson } from '../../utils/types';
+import { applyLicenseHeadersToDirectory } from '../add-license-headers/add-license-headers.impl';
+import { DEFAULT_EULA_URL, resolveLicenseTemplate } from '../add-license-headers/defaults';
+import { BundleExecutorSchema, BundleLicenseHeadersOption } from './schema';
 
 const ERROR_MESSAGES = {
   ENTRIES_EMPTY: 'entries must contain at least one entry point',
@@ -129,6 +133,12 @@ function loadWebpackConfig(resolvedConfigPath: string): Configuration {
   }
 }
 
+interface ResolvedLicenseHeaders {
+  pkg: PackageJson;
+  templatePath: string;
+  options: BundleLicenseHeadersOption;
+}
+
 interface ResolvedBundle {
   projectRoot: string;
   entries: string[];
@@ -138,11 +148,46 @@ interface ResolvedBundle {
   sourceMap: boolean;
   webpack: typeof import('webpack');
   baseConfig: Configuration;
+  licenseHeaders?: ResolvedLicenseHeaders;
+}
+
+async function resolveLicenseHeadersStep(
+  projectRoot: string,
+  options: BundleLicenseHeadersOption | undefined,
+): Promise<ResolvedLicenseHeaders | undefined> {
+  if (!options) {
+    return undefined;
+  }
+  const pkg = await loadProjectPackageJson(projectRoot);
+  const templatePath = resolveLicenseTemplate(projectRoot, options);
+  return { pkg, templatePath, options };
+}
+
+async function applyLicenseHeadersStep(
+  outDir: string,
+  resolved: ResolvedLicenseHeaders,
+): Promise<void> {
+  const { pkg, templatePath, options } = resolved;
+  const count = await applyLicenseHeadersToDirectory({
+    targetDir: outDir,
+    pkg,
+    templatePath,
+    eulaUrl: options.eulaUrl ?? DEFAULT_EULA_URL,
+    mode: options.mode,
+    version: options.version,
+    commentType: options.commentType,
+    separator: options.separator,
+    prependAfterLicense: options.prependAfterLicense,
+    filenameMode: options.filenameMode,
+    includePatterns: options.includePatterns,
+    excludePatterns: options.excludePatterns,
+  });
+  logger.verbose(`Applied license headers to ${count} bundle file(s)`);
 }
 
 export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
   name: 'Bundle',
-  resolve: (options, { projectRoot }) => {
+  resolve: async (options, { projectRoot }) => {
     const {
       entries,
       sourceDir,
@@ -150,6 +195,7 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
       mode,
       webpackConfigPath = './webpack.config.js',
       sourceMap = true,
+      applyLicenseHeaders,
     } = options;
 
     if (!entries?.length) {
@@ -162,6 +208,7 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
 
     const webpack = loadWebpack();
     const baseConfig = loadWebpackConfig(resolvedConfigPath);
+    const licenseHeaders = await resolveLicenseHeadersStep(projectRoot, applyLicenseHeaders);
 
     return {
       projectRoot,
@@ -172,6 +219,7 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
       sourceMap,
       webpack,
       baseConfig,
+      licenseHeaders,
     };
   },
   run: async (resolved) => {
@@ -203,6 +251,10 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       throw new Error(ERROR_MESSAGES.WEBPACK_ERROR(message));
+    }
+
+    if (resolved.licenseHeaders) {
+      await applyLicenseHeadersStep(resolved.resolvedOutDir, resolved.licenseHeaders);
     }
   },
 });

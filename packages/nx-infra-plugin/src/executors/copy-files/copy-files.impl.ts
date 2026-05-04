@@ -6,13 +6,23 @@ import { glob } from 'glob';
 import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
 import { containsGlobPattern } from '../../utils/common';
-import { copyFile, copyRecursive, ensureDir, exists } from '../../utils/file-operations';
-import { CopyFilesExecutorSchema } from './schema';
+import {
+  copyFile,
+  copyRecursive,
+  ensureDir,
+  exists,
+  loadProjectPackageJson,
+} from '../../utils/file-operations';
+import { ApplyLicenseHeadersOption, CopyFilesExecutorSchema } from './schema';
+import { applyLicenseHeadersToDirectory } from '../add-license-headers/add-license-headers.impl';
+import { DEFAULT_EULA_URL, resolveLicenseTemplate } from '../add-license-headers/defaults';
 
 const ERROR_FILES_MUST_BE_ARRAY = 'Files option must be an array';
 const ERROR_NO_FILES_MATCH_PATTERN = (pattern: string) =>
   `No files found matching pattern: ${pattern}`;
 const ERROR_SOURCE_NOT_FOUND = (source: string) => `Source file not found: ${source}`;
+const ERROR_APPLY_LICENSE_HEADERS_TARGET_SUBDIR_REQUIRED =
+  'CopyFiles: applyLicenseHeaders.targetSubdir is required to specify the directory to apply headers to';
 
 export interface CopyDirectoryOptions {
   include?: string[];
@@ -88,6 +98,35 @@ async function copyDirectPath(sourcePath: string, destPath: string): Promise<voi
   logger.verbose(`Copied file ${sourcePath} -> ${destPath}`);
 }
 
+async function applyLicenseHeadersIfRequested(
+  applyLicenseHeaders: ApplyLicenseHeadersOption | undefined,
+  projectRoot: string,
+): Promise<void> {
+  if (!applyLicenseHeaders) {
+    return;
+  }
+  if (!applyLicenseHeaders.targetSubdir) {
+    throw new Error(ERROR_APPLY_LICENSE_HEADERS_TARGET_SUBDIR_REQUIRED);
+  }
+  const pkg = await loadProjectPackageJson(projectRoot);
+  const templatePath = resolveLicenseTemplate(projectRoot, applyLicenseHeaders);
+  const targetDir = path.join(projectRoot, applyLicenseHeaders.targetSubdir);
+  await applyLicenseHeadersToDirectory({
+    targetDir,
+    pkg,
+    templatePath,
+    eulaUrl: applyLicenseHeaders.eulaUrl ?? DEFAULT_EULA_URL,
+    mode: applyLicenseHeaders.mode,
+    version: applyLicenseHeaders.version,
+    commentType: applyLicenseHeaders.commentType,
+    separator: applyLicenseHeaders.separator,
+    prependAfterLicense: applyLicenseHeaders.prependAfterLicense,
+    filenameMode: applyLicenseHeaders.filenameMode,
+    includePatterns: applyLicenseHeaders.includePatterns,
+    excludePatterns: applyLicenseHeaders.excludePatterns,
+  });
+}
+
 interface ResolvedCopyFiles {
   projectRoot: string;
 }
@@ -111,6 +150,8 @@ export default createExecutor<CopyFilesExecutorSchema, ResolvedCopyFiles>({
         await copyDirectPath(sourcePath, destPath);
       }
     }
+
+    await applyLicenseHeadersIfRequested(options.applyLicenseHeaders, projectRoot);
   },
 });
 

@@ -1,3 +1,13 @@
+export interface NpmAssembleMetadataFile {
+  from: string;
+  to: string;
+}
+
+export interface NpmAssembleFlattenStep {
+  from: string;
+  to: string;
+}
+
 export interface NpmAssembleExecutorSchema {
   transpiledDir: string;
   jsSrcDir: string;
@@ -8,4 +18,6 @@ export interface NpmAssembleExecutorSchema {
   outputDir: string;
   licenseTemplateFile?: string;
   eulaUrl?: string;
+  metadataFiles?: NpmAssembleMetadataFile[];
+  flatten?: NpmAssembleFlattenStep[];
 }

@@ -3,14 +3,17 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as _ from 'lodash';
 import { createExecutor } from '../../utils/create-executor';
-import { VectormapExecutorSchema } from './schema';
+import { ApplyLicenseHeadersOption, VectormapExecutorSchema } from './schema';
 import {
   ensureDir,
+  loadProjectPackageJson,
   readFileText,
   writeFileText,
   normalizeEol,
   ensureTrailingNewline,
 } from '../../utils/file-operations';
+import { applyLicenseHeadersToDirectory } from '../add-license-headers/add-license-headers.impl';
+import { DEFAULT_EULA_URL, resolveLicenseTemplate } from '../add-license-headers/defaults';
 
 interface UtilsSettings {
   commonFiles: string[];
@@ -177,6 +180,35 @@ async function buildData(
   await writeRegionModules(regions, dataTemplate, resolvedOutDir);
 }
 
+async function applyLicenseHeadersIfRequested(
+  applyLicenseHeaders: ApplyLicenseHeadersOption | undefined,
+  projectRoot: string,
+  defaultTargetDir: string,
+): Promise<void> {
+  if (!applyLicenseHeaders) {
+    return;
+  }
+  const pkg = await loadProjectPackageJson(projectRoot);
+  const templatePath = resolveLicenseTemplate(projectRoot, applyLicenseHeaders);
+  const targetDir = applyLicenseHeaders.targetSubdir
+    ? path.join(projectRoot, applyLicenseHeaders.targetSubdir)
+    : defaultTargetDir;
+  await applyLicenseHeadersToDirectory({
+    targetDir,
+    pkg,
+    templatePath,
+    eulaUrl: applyLicenseHeaders.eulaUrl ?? DEFAULT_EULA_URL,
+    mode: applyLicenseHeaders.mode,
+    version: applyLicenseHeaders.version,
+    commentType: applyLicenseHeaders.commentType,
+    separator: applyLicenseHeaders.separator,
+    prependAfterLicense: applyLicenseHeaders.prependAfterLicense,
+    filenameMode: applyLicenseHeaders.filenameMode,
+    includePatterns: applyLicenseHeaders.includePatterns,
+    excludePatterns: applyLicenseHeaders.excludePatterns,
+  });
+}
+
 interface ResolvedVectormap {
   projectRoot: string;
   resolvedSourceDir: string;
@@ -187,6 +219,7 @@ interface ResolvedVectormap {
   dataOutDir: string;
   resolvedUtilsTemplatePath: string;
   resolvedDataTemplatePath: string;
+  applyLicenseHeaders?: ApplyLicenseHeadersOption;
 }
 
 export default createExecutor<VectormapExecutorSchema, ResolvedVectormap>({
@@ -202,6 +235,7 @@ export default createExecutor<VectormapExecutorSchema, ResolvedVectormap>({
       dataOutDir: options.dataOutDir,
       resolvedUtilsTemplatePath: path.resolve(projectRoot, options.utilsTemplatePath),
       resolvedDataTemplatePath: path.resolve(projectRoot, options.dataTemplatePath),
+      applyLicenseHeaders: options.applyLicenseHeaders,
     };
   },
   run: async (resolved) => {
@@ -226,5 +260,11 @@ export default createExecutor<VectormapExecutorSchema, ResolvedVectormap>({
       .readdirSync(path.resolve(resolved.projectRoot, resolved.dataOutDir))
       .filter((entry) => entry.endsWith('.js'));
     logger.verbose(`Phase 2 complete: ${dataFiles.length} region modules produced`);
+
+    await applyLicenseHeadersIfRequested(
+      resolved.applyLicenseHeaders,
+      resolved.projectRoot,
+      resolved.resolvedUtilsOutDir,
+    );
   },
 });

@@ -33,6 +33,23 @@
     "dataTemplatePath": {
       "type": "string",
       "description": "Path to vectormapdata UMD template file"
+    },
+    "applyLicenseHeaders": {
+      "type": "object",
+      "description": "When provided, applies DevExtreme license headers to the executor output. Defaults the target directory to utilsOutDir; override via targetSubdir.",
+      "properties": {
+        "licenseTemplateFile": { "type": "string" },
+        "mode": { "type": "string", "enum": ["eula", "mit"] },
+        "eulaUrl": { "type": "string" },
+        "version": { "type": "string" },
+        "commentType": { "type": "string", "enum": ["!", "*"] },
+        "separator": { "type": "string" },
+        "prependAfterLicense": { "type": "string" },
+        "filenameMode": { "type": "string", "enum": ["relative", "basename"] },
+        "includePatterns": { "type": "array", "items": { "type": "string" } },
+        "excludePatterns": { "type": "array", "items": { "type": "string" } },
+        "targetSubdir": { "type": "string" }
+      }
     }
   },
   "required": [
