@@ -1,12 +1,24 @@
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import { isRenderer } from '@js/core/utils/type';
+import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type {
+  ContentReadyEvent,
+  ItemClickEvent,
+  ItemContextMenuEvent,
+  Properties as ListProperties,
+} from '@js/ui/list';
+import type dxOverlay from '@js/ui/overlay';
+import type { Properties as OverlayProperties } from '@js/ui/overlay';
+import type { Appointment, Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
+import type Tooltip from '@ts/ui/m_tooltip';
 
-import type { CompactAppointmentOptions } from '../types';
+import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from '../types';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -20,27 +32,73 @@ const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = `${TOOLTIP_APPOINTMENT_ITEM}-dele
 
 const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
 
-export class TooltipStrategyBase {
+interface AppointmentTooltipOptions {
+  createComponent: (
+    element: dxElementWrapper,
+    component: unknown,
+    options: unknown,
+  ) => unknown;
+  container: dxElementWrapper;
+  getScrollableContainer: () => dxElementWrapper;
+  addDefaultTemplates: (templates: Record<string, FunctionTemplate>) => void;
+  getAppointmentTemplate: (optionName: string) => FunctionTemplate;
+  showAppointmentPopup: (
+    appointment: Appointment,
+    createNewAppointment: boolean,
+    targetedAppointment?: Appointment | TargetedAppointment,
+  ) => void;
+  checkAndDeleteAppointment: (
+    appointment: Appointment,
+    targetedAppointment?: Appointment | TargetedAppointment,
+  ) => void;
+  isAppointmentInAllDayPanel: (appointment: Appointment) => boolean;
+  createFormattedDateText: (
+    appointment: Appointment,
+    targetedAppointment?: Appointment | TargetedAppointment,
+    format?: string,
+  ) => {
+    text: string;
+    formatDate: string;
+  };
+  getAppointmentDisabled: (appointment: Appointment) => boolean | undefined;
+  onItemContextMenu: (eventArgs: unknown) => void;
+  createEventArgs: (e: ItemContextMenuEvent<AppointmentTooltipItem>) => unknown;
+}
+
+interface AppointmentTooltipExtraOptions {
+  clickEvent?: (e: ItemClickEvent<AppointmentTooltipItem>) => void;
+  dragBehavior?: (e: ContentReadyEvent<AppointmentTooltipItem>) => void;
+  editing?: SchedulerProperties['editing'];
+  focusStateEnabled?: boolean;
+  isButtonClick?: boolean;
+  offset?: unknown;
+  rtlEnabled?: boolean;
+  tabFocusLoopEnabled?: boolean;
+}
+
+export abstract class TooltipStrategyBase {
   protected asyncTemplatePromises = new Set<Promise<void>>();
 
-  protected tooltip: any;
+  protected tooltip: Tooltip | dxOverlay<OverlayProperties> | null = null;
 
   // TODO: make private once external usages in m_scheduler.ts are removed
-  _options: any;
+  _options: AppointmentTooltipOptions;
 
-  protected extraOptions: any;
+  protected extraOptions: AppointmentTooltipExtraOptions | null = null;
 
-  protected list: any;
+  protected list!: List;
 
   protected $target: dxElementWrapper | null = null;
 
-  constructor(options) {
-    this.tooltip = null;
+  constructor(options: AppointmentTooltipOptions) {
     this._options = options;
-    this.extraOptions = null;
   }
 
-  show(target: dxElementWrapper, dataList, extraOptions) {
+  show(
+    target: dxElementWrapper,
+    dataList: AppointmentTooltipItem[],
+    extraOptions: AppointmentTooltipExtraOptions,
+  ): void {
     if (dataList.length) {
       this.hide();
       this.$target = target;
@@ -52,7 +110,7 @@ export class TooltipStrategyBase {
   public setTarget($target: dxElementWrapper): void {
     this.$target = $target;
 
-    if (this.isDesktop()) {
+    if (this.isDesktop() && this.tooltip) {
       const originalAnimationValue = this.tooltip.option('animation');
 
       this.tooltip.option('animation', null);
@@ -73,8 +131,11 @@ export class TooltipStrategyBase {
     this.list.option('dataSource', dataList);
   }
 
-  private showCore(dataList) {
-    const describedByValue = isRenderer(this.$target) && this.$target?.attr('aria-describedby') as string;
+  private showCore(dataList: AppointmentTooltipItem[]): void {
+    const { $target } = this;
+    const describedByValue = $target && isRenderer($target)
+      ? $target.attr('aria-describedby')
+      : undefined;
 
     if (!this.tooltip) {
       this.tooltip = this.createTooltip(dataList);
@@ -89,36 +150,41 @@ export class TooltipStrategyBase {
     this.prepareBeforeVisibleChanged(dataList);
     this.tooltip.option('visible', true);
 
-    describedByValue && this.$target?.attr('aria-describedby', describedByValue);
+    if (describedByValue) {
+      this.$target?.attr('aria-describedby', describedByValue);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected prepareBeforeVisibleChanged(dataList) {
+  protected prepareBeforeVisibleChanged(dataList: AppointmentTooltipItem[]): void {
 
   }
 
-  private isDeletingAllowed(appointment) {
-    const { editing } = this.extraOptions;
+  private isDeletingAllowed(appointment: Appointment): boolean {
+    const { editing } = this.extraOptions ?? {};
     const disabled = this._options.getAppointmentDisabled(appointment);
-    const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
+    const isDeletingAllowed = editing === true
+      || (typeof editing === 'object' && editing.allowDeleting === true);
     return !disabled && isDeletingAllowed;
   }
 
-  protected getContentTemplate(dataList) {
-    return (container) => {
+  protected getContentTemplate(dataList: AppointmentTooltipItem[]) {
+    return (container: DxElement): void => {
       const listElement = $('<div>');
       $(container).append(listElement);
       this.list = this.createList(listElement, dataList);
-      this.list.registerKeyHandler?.('escape', () => {
+      this.list.registerKeyHandler?.('escape', (): void => {
         this.hide();
-        this.tooltip.option('target').focus();
+        const target = this.tooltip?.option('target') as { focus?: () => void } | undefined;
+        target?.focus?.();
       });
-      this.list.registerKeyHandler?.('del', () => {
+      this.list.registerKeyHandler?.('del', (): void => {
         const { focusedElement } = this.list.option();
         if (!focusedElement) {
           return;
         }
 
+        // @ts-expect-error
         const { appointment, targetedAppointment } = this.list._getItemData(focusedElement);
         if (!appointment) {
           return;
@@ -139,14 +205,14 @@ export class TooltipStrategyBase {
     return $target.get(0) === this.$target?.get(0);
   }
 
-  protected onShown() {
-    this.list.option('focusStateEnabled', this.extraOptions.focusStateEnabled);
+  protected onShown(): void {
+    this.list.option('focusStateEnabled', this.extraOptions?.focusStateEnabled);
   }
 
-  dispose() {
+  dispose(): void {
   }
 
-  hide() {
+  hide(): void {
     if (this.tooltip) {
       this.tooltip.option('visible', false);
     }
@@ -156,53 +222,84 @@ export class TooltipStrategyBase {
     return true;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected createTooltip(dataList) {
-  }
+  protected abstract createTooltip(
+    dataList: AppointmentTooltipItem[],
+  ): Tooltip | dxOverlay<OverlayProperties>;
 
-  protected createListOption(dataList) {
+  protected createListOption(
+    dataList: AppointmentTooltipItem[],
+  ): ListProperties<AppointmentTooltipItem> {
     return {
       dataSource: dataList,
       onContentReady: this.onListRender.bind(this),
-      onItemClick: (e) => this.onListItemClick(e),
+      onItemClick: (
+        e: ItemClickEvent<AppointmentTooltipItem>,
+      ): void => this.onListItemClick(e),
       onItemContextMenu: this.onListItemContextMenu.bind(this),
-      itemTemplate: (item, index) => this.renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
+      itemTemplate: (
+        item: AppointmentTooltipItem,
+        index: number,
+      ): FunctionTemplate => this.renderTemplate(
+        item.appointment,
+        item.targetedAppointment,
+        index,
+        item.color,
+      ),
       _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
     };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onListRender(e) { }
+  protected onListRender(e: ContentReadyEvent<AppointmentTooltipItem>): void { }
 
-  protected createTooltipElement(wrapperClass) {
+  protected createTooltipElement(wrapperClass: string): dxElementWrapper {
     return $('<div>').appendTo(this._options.container).addClass(wrapperClass);
   }
 
-  private createList(listElement, dataList) {
-    return this._options.createComponent(listElement, List, this.createListOption(dataList));
+  private createList(
+    listElement: dxElementWrapper,
+    dataList: AppointmentTooltipItem[],
+  ): List {
+    return this._options.createComponent(
+      listElement,
+      List,
+      this.createListOption(dataList),
+    ) as List;
   }
 
-  private renderTemplate(appointment, targetedAppointment, index, color) {
+  private renderTemplate(
+    appointment: Appointment,
+    targetedAppointment: Appointment | TargetedAppointment | undefined,
+    index: number,
+    color: Promise<string | undefined>,
+  ): FunctionTemplate {
     const itemListContent = this.createItemListContent(appointment, targetedAppointment, color);
     this._options.addDefaultTemplates({
-      // @ts-expect-error
-      appointmentTooltip: new FunctionTemplate((options) => {
-        const $container = $(options.container);
-        $container.append(itemListContent);
-        return $container;
-      }),
+      appointmentTooltip: new FunctionTemplate(
+        // @ts-expect-error
+        (options: { container: DxElement }): dxElementWrapper => {
+          const $container = $(options.container);
+          $container.append(itemListContent);
+          return $container;
+        },
+      ),
     });
 
     const template = this._options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
     return this.createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
 
-  private createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
-    const isButtonClicked = Boolean(this.extraOptions.isButtonClick);
+  private createFunctionTemplate(
+    template: FunctionTemplate,
+    appointmentData: Appointment,
+    targetedAppointmentData: Appointment | TargetedAppointment | undefined,
+    index: number,
+  ): FunctionTemplate {
+    const isButtonClicked = Boolean(this.extraOptions?.isButtonClick);
 
     // @ts-expect-error
-    return new FunctionTemplate((options) => {
+    return new FunctionTemplate((options: { container: DxElement }): DxElement => {
       // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
       const { promise, resolve } = createPromise<void>();
       this.asyncTemplatePromises.add(promise);
@@ -213,6 +310,7 @@ export class TooltipStrategyBase {
           isButtonClicked,
         },
         container: options.container,
+        // @ts-expect-error
         index,
         onRendered: () => {
           this.asyncTemplatePromises.delete(promise);
@@ -222,19 +320,33 @@ export class TooltipStrategyBase {
     });
   }
 
-  private onListItemClick(e) {
+  private onListItemClick(e: ItemClickEvent<AppointmentTooltipItem>): void {
+    if (!e.itemData) {
+      return;
+    }
+
     this.hide();
-    this.extraOptions.clickEvent && this.extraOptions.clickEvent(e);
-    this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
+    this.extraOptions?.clickEvent?.(e);
+    this._options.showAppointmentPopup(
+      e.itemData.appointment,
+      false,
+      e.itemData.targetedAppointment,
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onListItemContextMenu(e) { }
+  protected onListItemContextMenu(e: ItemContextMenuEvent<AppointmentTooltipItem>): void { }
 
-  private createItemListContent(appointment, targetedAppointment, color) {
+  private createItemListContent(
+    appointment: Appointment,
+    targetedAppointment: Appointment | TargetedAppointment | undefined,
+    color: Promise<string | undefined>,
+  ): dxElementWrapper {
     const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
     $itemElement.append(this.createItemListMarker(color));
-    $itemElement.append(this.createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
+    $itemElement.append(this.createItemListInfo(
+      this._options.createFormattedDateText(appointment, targetedAppointment),
+    ));
 
     if (this.isDeletingAllowed(appointment)) {
       $itemElement.append(this.createDeleteButton(appointment, targetedAppointment));
@@ -243,21 +355,21 @@ export class TooltipStrategyBase {
     return $itemElement;
   }
 
-  private createItemListMarker(color) {
+  private createItemListMarker(color: Promise<string | undefined>): dxElementWrapper {
     const $marker = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER);
     const $markerBody = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY);
 
     $marker.append($markerBody);
-    color.then((value) => {
+    color.then((value: string | undefined): void => {
       if (value) {
         $markerBody.css('background', value);
       }
-    });
+    }, () => {});
 
     return $marker;
   }
 
-  private createItemListInfo(object) {
+  private createItemListInfo(object: { text: string; formatDate: string }): dxElementWrapper {
     const result = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT);
     const $title = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT).text(object.text);
     const $date = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE).text(object.formatDate);
@@ -265,7 +377,10 @@ export class TooltipStrategyBase {
     return result.append($title).append($date);
   }
 
-  private createDeleteButton(appointment, targetedAppointment) {
+  private createDeleteButton(
+    appointment: Appointment,
+    targetedAppointment: Appointment | TargetedAppointment | undefined,
+  ): dxElementWrapper {
     const $container = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER);
     const $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
@@ -273,8 +388,8 @@ export class TooltipStrategyBase {
     this._options.createComponent($deleteButton, Button, {
       icon: 'trash',
       stylingMode: 'text',
-      onClick: (e) => {
-        e.event.stopPropagation();
+      onClick: (e: ButtonClickEvent): void => {
+        e.event?.stopPropagation();
         this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },
     });
