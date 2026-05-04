@@ -135,6 +135,9 @@ export class ToolbarKBN {
   // Document-level capture handler for overflow popup navigation.
   private _docKeydownHandler: ((e: KeyboardEvent) => void) | null = null;
 
+  // focusout handler to clear stale BG dx-state-focused when Tab moves focus out of toolbar.
+  private _focusOutHandler: ((e: FocusEvent) => void) | null = null;
+
   private _domEl: HTMLElement | null = null;
 
   constructor(toolbar: Toolbar) {
@@ -167,6 +170,15 @@ export class ToolbarKBN {
       (e: MouseEvent) => { this._handleMouseDown(e); },
     );
 
+    // focusout listener: clears BG dx-state-focused when focus leaves the toolbar via Tab.
+    this._focusOutHandler = (e: FocusEvent) => {
+      const relatedTarget = e.relatedTarget as HTMLElement | null;
+      if (!this._domEl?.contains(relatedTarget)) {
+        this._clearBGFocusedState();
+      }
+    };
+    this._domEl.addEventListener('focusout', this._focusOutHandler);
+
     this._isAttached = true;
   }
 
@@ -176,8 +188,14 @@ export class ToolbarKBN {
     if (this._captureKeydownHandler && this._domEl) {
       this._domEl.removeEventListener('keydown', this._captureKeydownHandler, { capture: true });
       this._captureKeydownHandler = null;
-      this._domEl = null;
     }
+
+    if (this._focusOutHandler && this._domEl) {
+      this._domEl.removeEventListener('focusout', this._focusOutHandler);
+      this._focusOutHandler = null;
+    }
+
+    this._domEl = null;
 
     if (this._docKeydownHandler) {
       document.removeEventListener('keydown', this._docKeydownHandler, { capture: true });
@@ -375,6 +393,15 @@ export class ToolbarKBN {
    */
   private _moveTo(index: number, items: FocusableItem[], direction: 1 | -1 = 1): void {
     if (index < 0 || index >= items.length) return;
+
+    // Clear stale BG focused state when leaving a ButtonGroup item.
+    if (index !== this._rovingIndex) {
+      const prevItem = items[this._rovingIndex];
+      if (prevItem) {
+        this._clearBGFocusedState(prevItem);
+      }
+    }
+
     this._rovingIndex = index;
     this._applyRovingTabindex(items);
     const item = items[index];
@@ -405,6 +432,14 @@ export class ToolbarKBN {
     if (item.itemData?.widget !== 'dxButtonGroup') return null;
     const $bg = item.$toolbarItem.find(`.${BUTTON_GROUP_CLASS}`).first();
     return $bg.length ? getWidgetInstance($bg) : null;
+  }
+
+  /** Removes dx-state-focused from all ButtonGroup items in the given toolbar item (or all BGs if not provided). */
+  private _clearBGFocusedState(item?: FocusableItem): void {
+    const $scope = item
+      ? item.$toolbarItem
+      : this._toolbar.$element();
+    $scope.find(`.${BUTTON_GROUP_ITEM_CLASS}`).removeClass('dx-state-focused');
   }
 
   // ─── Issue 2: SelectBox open-state guard ──────────────────────────────────
@@ -497,7 +532,12 @@ export class ToolbarKBN {
 
     if (e.key === 'Escape') {
       this._closeOverflowPopup();
-      // Focus stays on overflow button — no .focus() call needed.
+      // The overlay steals HTML focus from the overflow button when the popup opens.
+      // After closing, explicitly restore focus to the overflow button.
+      const items = this._getFocusableItems();
+      const rovingItem = items[this._rovingIndex];
+      const el = rovingItem?.$focusTarget.get(0) as HTMLElement | undefined;
+      el?.focus();
       return;
     }
 
@@ -512,6 +552,16 @@ export class ToolbarKBN {
         );
         clickTarget?.click();
       }
+      // Popup closes via the click above (not via _closeOverflowPopup), so we must
+      // manually reset virtual-focus state and clean up CSS classes.
+      rows.forEach((r) => r.classList.remove('dx-state-focused'));
+      this._popupFocusIdx = -1;
+      this._wasPopupOpen = false;
+      // Restore HTML focus to the overflow button (overlay stole it when popup opened).
+      const items = this._getFocusableItems();
+      const rovingItem = items[this._rovingIndex];
+      const el = rovingItem?.$focusTarget.get(0) as HTMLElement | undefined;
+      el?.focus();
       return;
     }
 
