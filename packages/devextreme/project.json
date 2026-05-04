@@ -608,10 +608,7 @@
             "./artifacts/js/dx.ai-integration.debug.js",
             "./artifacts/js/dx.custom.debug.js"
           ],
-          "mode": {
-            "name": "beautify",
-            "eulaUrl": "https://js.devexpress.com/Licensing/"
-          }
+          "mode": { "name": "beautify" }
         },
         "prod": {
           "files": [
@@ -629,10 +626,7 @@
             "./artifacts/js/dx.viz.js",
             "./artifacts/js/dx.ai-integration.js"
           ],
-          "mode": {
-            "name": "minify",
-            "eulaUrl": "https://js.devexpress.com/Licensing/"
-          }
+          "mode": { "name": "minify" }
         }
       },
       "inputs": [
@@ -690,13 +684,13 @@
           "files": [
             "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js"
           ],
-          "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+          "mode": { "name": "beautify" }
         },
         "minify": {
           "files": [
             "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
           ],
-          "mode": { "name": "minify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+          "mode": { "name": "minify" }
         }
       }
     },
@@ -748,7 +742,7 @@
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": ["./artifacts/js/dx.aspnet.mvc.js"],
-        "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+        "mode": { "name": "beautify" }
       },
       "configurations": {
         "normalize": {
@@ -935,7 +929,7 @@
       },
       "configurations": {
         "production": {
-          "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+          "mode": { "name": "beautify" }
         }
       },
       "inputs": [

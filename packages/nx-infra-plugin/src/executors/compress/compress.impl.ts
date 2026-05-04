@@ -11,6 +11,7 @@ import {
   writeFileText,
 } from '../../utils/file-operations';
 import { CompressExecutorSchema, CompressMode, CompressModeName } from './schema';
+import { DEFAULT_EULA_URL } from '../add-license-headers/defaults';
 
 const STRIP_DEBUG_REGEX = /\/{2,}\s{0,}#DEBUG[\s\S]*?\/{2,}\s{0,}#ENDDEBUG/g;
 
@@ -104,7 +105,7 @@ function resolveMode(mode: CompressMode): ResolvedMode {
   }
   const trailingNewline = mode.trailingNewline ?? true;
   if (mode.name === 'minify' || mode.name === 'beautify') {
-    return { name: mode.name, eulaUrl: mode.eulaUrl, trailingNewline };
+    return { name: mode.name, eulaUrl: mode.eulaUrl ?? DEFAULT_EULA_URL, trailingNewline };
   }
   return { name: mode.name, trailingNewline };
 }
