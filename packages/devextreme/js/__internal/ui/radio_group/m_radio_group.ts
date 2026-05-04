@@ -6,7 +6,8 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
-import type { CollectionWidgetItem } from '@js/ui/collection/ui.collection_widget.base';
+import type { ItemInfo, NativeEventInfo } from '@js/events';
+import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties } from '@js/ui/radio_group';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -90,7 +91,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     } as RadioGroupProperties;
   }
 
-  _getItemValue(item: CollectionWidgetItem): unknown {
+  _getItemValue(item: ItemLike): unknown {
     // @ts-expect-error valueGetter is injected by DataExpressionMixin
     return this._valueGetter ? this._valueGetter(item) : item.text;
   }
@@ -115,17 +116,14 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     super._initMarkup();
   }
 
-  _itemClickHandler({ itemElement, event, itemData }: {
-    itemElement: Element;
-    event: ValueChangedEvent;
-    itemData: CollectionWidgetItem;
-  }): void {
+  _itemClickHandler({ itemElement, event, itemData }:
+    NativeEventInfo<RadioCollection, MouseEvent | PointerEvent> & ItemInfo): void {
     if (this.itemElements()?.is($(itemElement))) {
       const { value } = this.option();
       const newValue = this._getItemValue(itemData);
 
       if (newValue !== value) {
-        this._saveValueChangeEvent(event);
+        this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
         this.option('value', newValue);
       }
     }
@@ -230,8 +228,6 @@ class RadioGroup extends Editor<RadioGroupProperties> {
       onContentReady: () => {
         this._fireContentReadyAction(true);
       },
-      // @ts-expect-error RadioCollection.Properties should define onItemClick with the
-      // correct internal callback type
       onItemClick: this._itemClickHandler.bind(this),
       displayExpr,
       accessKey,
@@ -242,6 +238,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
       // @ts-expect-error _getCollectionKeyExpr is injected by DataExpressionMixin
       keyExpr: this._getCollectionKeyExpr(),
       noDataText: '',
+      // @ts-expect-error scrollingEnabled is absent from CollectionWidgetProperties
       scrollingEnabled: false,
       selectByClick: false,
       selectionMode: 'single',
