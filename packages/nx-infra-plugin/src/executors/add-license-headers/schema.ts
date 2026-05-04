@@ -9,4 +9,5 @@ export interface AddLicenseHeadersExecutorSchema {
   prependAfterLicense?: string;
   version?: string;
   commentType?: '!' | '*';
+  mode?: 'eula' | 'mit';
 }

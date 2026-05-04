@@ -5,21 +5,34 @@ import { AddLicenseHeadersExecutorSchema } from './schema';
 import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
 import { readJson } from '../../utils/file-operations';
-import { buildLicenseBannerRenderer, applyLicenseBannerToFile } from '../../utils/license-banner';
-import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
+import {
+  buildLicenseBannerRenderer,
+  applyLicenseBannerToFile,
+  extractGitHubUrl,
+} from '../../utils/license-banner';
+import type { PackageJson } from '../../utils/types';
+import {
+  DEFAULT_LICENSE_TEMPLATE_EULA,
+  DEFAULT_LICENSE_TEMPLATE_MIT,
+  DEFAULT_EULA_URL,
+  DEFAULT_TARGET_DIR,
+  DEFAULT_PACKAGE_JSON,
+  DEFAULT_INCLUDE_PATTERNS,
+  DEFAULT_EXCLUDE_PATTERNS,
+} from './defaults';
 
-interface PackageJson {
-  name: string;
-  version: string;
-  repository?: string | { url?: string };
+function resolveTemplatePath(
+  absoluteProjectRoot: string,
+  options: { licenseTemplateFile?: string; mode?: 'eula' | 'mit' },
+): string {
+  if (options.licenseTemplateFile) {
+    return path.join(absoluteProjectRoot, options.licenseTemplateFile);
+  }
+  if (options.mode === 'mit') {
+    return DEFAULT_LICENSE_TEMPLATE_MIT;
+  }
+  return DEFAULT_LICENSE_TEMPLATE_EULA;
 }
-
-const DEFAULTS = {
-  TARGET_DIR: './npm',
-  PACKAGE_JSON: './package.json',
-  INCLUDE_PATTERNS: ['**/*.{ts,js}'],
-  EXCLUDE_PATTERNS: ['**/*.json', '**/*.map'],
-} as const;
 
 interface DiscoverFilesOptions {
   targetDirectory: string;
@@ -29,15 +42,16 @@ interface DiscoverFilesOptions {
 
 async function discoverFiles(options: DiscoverFilesOptions): Promise<string[]> {
   const { targetDirectory, includePatterns, excludePatterns } = options;
-
-  const patterns = includePatterns.map((pattern) => {
-    const fullPath = path.join(targetDirectory, pattern);
-    return toPosixPath(fullPath);
-  });
+  const cwd = toPosixPath(targetDirectory);
 
   const allFiles: string[] = [];
-  for (const pattern of patterns) {
-    const matchedFiles = await glob(pattern, { ignore: [...excludePatterns] });
+  for (const pattern of includePatterns) {
+    const matchedFiles = await glob(pattern, {
+      cwd,
+      absolute: true,
+      nodir: true,
+      ignore: [...excludePatterns],
+    });
     allFiles.push(...matchedFiles);
   }
 
@@ -48,19 +62,16 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
   const absoluteProjectRoot = resolveProjectPath(context);
   const targetDirectory = path.join(
     absoluteProjectRoot,
-    options.targetDirectory ?? DEFAULTS.TARGET_DIR,
+    options.targetDirectory ?? DEFAULT_TARGET_DIR,
   );
   const packageJsonPath = path.join(
     absoluteProjectRoot,
-    options.packageJsonPath ?? DEFAULTS.PACKAGE_JSON,
+    options.packageJsonPath ?? DEFAULT_PACKAGE_JSON,
   );
   const separator = options.separatorBetweenBannerAndContent ?? '\n';
   const prependAfterLicense = options.prependAfterLicense ?? '';
   const commentType = options.commentType ?? '!';
-  const templatePath = path.join(
-    absoluteProjectRoot,
-    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
-  );
+  const templatePath = resolveTemplatePath(absoluteProjectRoot, options);
 
   let pkg: PackageJson;
   try {
@@ -70,11 +81,16 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
     return { success: false };
   }
 
+  const githubUrl =
+    templatePath === DEFAULT_LICENSE_TEMPLATE_MIT
+      ? extractGitHubUrl(pkg.repository, packageJsonPath)
+      : '';
+
   try {
     const files = await discoverFiles({
       targetDirectory,
-      includePatterns: options.includePatterns ?? DEFAULTS.INCLUDE_PATTERNS,
-      excludePatterns: options.excludePatterns ?? DEFAULTS.EXCLUDE_PATTERNS,
+      includePatterns: options.includePatterns ?? DEFAULT_INCLUDE_PATTERNS,
+      excludePatterns: options.excludePatterns ?? DEFAULT_EXCLUDE_PATTERNS,
     });
 
     logger.verbose(`Adding license headers to ${files.length} files...`);
@@ -85,6 +101,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
       eulaUrl: options.eulaUrl ?? DEFAULT_EULA_URL,
       version: options.version,
       commentType,
+      githubUrl,
     });
 
     await Promise.all(

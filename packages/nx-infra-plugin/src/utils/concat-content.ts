@@ -1,4 +1,4 @@
-import { readFileText, writeFileText } from './file-operations';
+import { readFileText, writeFileText, normalizeEol } from './file-operations';
 
 export interface ConcatOptions {
   sourceFiles: string[];
@@ -36,10 +36,6 @@ function applyTransforms(
   }, content);
 }
 
-function normalizeLf(content: string): string {
-  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-}
-
 function applyHeaderFooter(content: string, header?: string, footer?: string): string {
   let result = content;
   if (header) result = header + result;
@@ -61,7 +57,7 @@ export async function concatFiles(opts: ConcatOptions): Promise<string> {
   let output = contents.join(opts.separator ?? '\n');
 
   if (opts.normalizeLineEndings !== false) {
-    output = normalizeLf(output);
+    output = normalizeEol(output);
   }
 
   output = applyHeaderFooter(output, opts.header, opts.footer);

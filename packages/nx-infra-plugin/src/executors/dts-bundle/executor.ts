@@ -6,20 +6,18 @@ import { logError } from '../../utils/error-handler';
 import { readJson, writeFileText } from '../../utils/file-operations';
 import { concatFiles } from '../../utils/concat-content';
 import { buildLicenseBannerRenderer } from '../../utils/license-banner';
-import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
+import { DEFAULT_LICENSE_TEMPLATE_EULA, DEFAULT_EULA_URL } from '../add-license-headers/defaults';
+import type { PackageJson } from '../../utils/types';
 
-interface PackageJson {
-  name: string;
-  version: string;
-  repository?: string | { url?: string };
-}
+const STRIP_DECLARE_GLOBAL = /^declare global\s*\{([\s\S]*?)^\}/gm;
+const STRIP_JQUERY_INTERFACE_BODY = /(interface JQuery\b[\s\S]*?\{)[\s\S]+?(\})/gm;
 
 async function writeArtifactBundle(
   artifactPath: string,
   concatContent: string,
   banner: string,
 ): Promise<void> {
-  const content = concatContent.replace(/^declare global\s*\{([\s\S]*?)^\}/gm, '$1');
+  const content = concatContent.replace(STRIP_DECLARE_GLOBAL, '$1');
   await writeFileText(artifactPath, banner + content);
 }
 
@@ -28,16 +26,15 @@ async function writePackageBundle(
   concatContent: string,
   banner: string,
 ): Promise<void> {
-  const content = concatContent.replace(/(interface JQuery\b[\s\S]*?\{)[\s\S]+?(\})/gm, '$1$2');
+  const content = concatContent.replace(STRIP_JQUERY_INTERFACE_BODY, '$1$2');
   await writeFileText(packagePath, banner + content + '\nexport default DevExpress;');
 }
 
 const runExecutor: PromiseExecutor<DtsBundleExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const licenseTemplatePath = path.resolve(
-    projectRoot,
-    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
-  );
+  const licenseTemplatePath = options.licenseTemplateFile
+    ? path.resolve(projectRoot, options.licenseTemplateFile)
+    : DEFAULT_LICENSE_TEMPLATE_EULA;
 
   let pkg: PackageJson;
   try {

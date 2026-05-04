@@ -1,18 +1,41 @@
 import _ from 'lodash';
 import { readFileText, writeFileText } from './file-operations';
+import type { PackageJson } from './types';
 
 export interface LicenseBannerOptions {
   templatePath: string;
-  pkg: { name: string; version: string; repository?: string | { url?: string } };
+  pkg: PackageJson;
   eulaUrl?: string;
   version?: string;
   commentType: '!' | '*';
+  githubUrl?: string;
+}
+
+export function extractGitHubUrl(
+  repository: string | { url?: string } | undefined,
+  packageJsonPath: string,
+): string {
+  if (!repository) {
+    throw new Error(
+      `Missing 'repository' field in ${packageJsonPath}. License headers require a repository URL.`,
+    );
+  }
+
+  const rawUrl = typeof repository === 'string' ? repository : repository.url;
+
+  if (!rawUrl) {
+    throw new Error(
+      `Invalid 'repository' format in ${packageJsonPath}. Expected string or object with 'url' property.`,
+    );
+  }
+
+  return rawUrl.replace(/^git\+/, '').replace(/\.git$/, '');
 }
 
 export async function buildLicenseBannerRenderer(
   opts: LicenseBannerOptions,
 ): Promise<(fileRelative: string) => string> {
-  const { templatePath, pkg, eulaUrl = '', commentType } = opts;
+  const { templatePath, pkg, eulaUrl = '', commentType, githubUrl = '' } = opts;
   const resolvedVersion = opts.version ?? pkg.version;
   const now = new Date();
 
@@ -27,7 +50,7 @@ export async function buildLicenseBannerRenderer(
       date: now.toDateString(),
       year: now.getFullYear(),
       pkg,
-      githubUrl: '',
+      githubUrl,
     });
 }
 

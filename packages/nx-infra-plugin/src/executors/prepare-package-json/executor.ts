@@ -27,27 +27,33 @@ function applyPackageJsonTransformations(
   transformations: PackageJsonTransformations,
   versionFromValue?: unknown,
 ): Record<string, unknown> {
+  const result: Record<string, unknown> = { ...pkg };
+
   if (transformations.setName !== undefined) {
-    pkg['name'] = transformations.setName;
+    result['name'] = transformations.setName;
   }
 
   if (transformations.setVersion !== undefined) {
-    pkg['version'] = transformations.setVersion;
+    result['version'] = transformations.setVersion;
   } else if (versionFromValue !== undefined) {
-    pkg['version'] = versionFromValue;
+    result['version'] = versionFromValue;
   }
 
   if (transformations.renameInternalPattern !== undefined) {
     const { find, replace } = transformations.renameInternalPattern;
-    pkg['name'] = String.prototype.replace.call(String(pkg['name']), new RegExp(find), replace);
+    result['name'] = String.prototype.replace.call(
+      String(result['name']),
+      new RegExp(find),
+      replace,
+    );
   }
 
   const fieldsToRemove = transformations.removeFields ?? [PUBLISH_CONFIG_FIELD];
   for (const field of fieldsToRemove) {
-    delete pkg[field];
+    delete result[field];
   }
 
-  return pkg;
+  return result;
 }
 
 const runExecutor: PromiseExecutor<NpmPackageExecutorSchema> = async (options, context) => {
@@ -73,11 +79,11 @@ const runExecutor: PromiseExecutor<NpmPackageExecutorSchema> = async (options, c
       versionFromValue = versionSource['version'];
     }
 
-    applyPackageJsonTransformations(pkg, options, versionFromValue);
+    const transformed = applyPackageJsonTransformations(pkg, options, versionFromValue);
 
     const outputFileName = options.outputFileName ?? PACKAGE_JSON_FILE;
     const distPackageJson = path.join(distDirectory, outputFileName);
-    await writeJson(distPackageJson, pkg, JSON_INDENT);
+    await writeJson(distPackageJson, transformed, JSON_INDENT);
 
     logger.verbose(`Created ${distPackageJson}`);
 

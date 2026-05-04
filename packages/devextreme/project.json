@@ -55,8 +55,7 @@
         ]
       },
       "inputs": [
-        "{projectRoot}/artifacts/js/localization/**/*.js",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/artifacts/js/localization/**/*.js"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/localization"
@@ -75,8 +74,7 @@
       "inputs": [
         "{projectRoot}/js/localization/messages/**/*.json",
         "{projectRoot}/build/gulp/localization-template.jst",
-        "{projectRoot}/build/gulp/generated_js.jst",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/build/gulp/generated_js.jst"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/localization",
@@ -591,8 +589,7 @@
         }
       },
       "inputs": [
-        "{projectRoot}/artifacts/js/dx.*.js",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/artifacts/js/dx.*.js"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.*.js"
@@ -622,8 +619,7 @@
           "env": "BUILD_TEST_INTERNAL_PACKAGE"
         },
         "{projectRoot}/artifacts/transpiled-renovation-npm/**/*",
-        "{projectRoot}/webpack.config.js",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/webpack.config.js"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
@@ -679,8 +675,7 @@
           "env": "BUILD_TEST_INTERNAL_PACKAGE"
         },
         "{projectRoot}/artifacts/transpiled-renovation-npm/**/*",
-        "{projectRoot}/webpack.config.js",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/webpack.config.js"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
@@ -770,8 +765,7 @@
         "prependAfterLicense": "\"use strict\";\n\n"
       },
       "inputs": [
-        "{projectRoot}/artifacts/js/vectormap-utils/**/*",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/artifacts/js/vectormap-utils/**/*"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/vectormap-utils"
@@ -818,8 +812,7 @@
         "{projectRoot}/js/viz/vector_map.utils/**/*",
         "{projectRoot}/build/vectormap-sources/**/*",
         "{projectRoot}/build/gulp/vectormaputils-template.jst",
-        "{projectRoot}/build/gulp/vectormapdata-template.jst",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/build/gulp/vectormapdata-template.jst"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/vectormap-utils",
@@ -868,8 +861,7 @@
         "separatorBetweenBannerAndContent": ""
       },
       "inputs": [
-        "{projectRoot}/artifacts/js/dx.aspnet.mvc.js",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/artifacts/js/dx.aspnet.mvc.js"
       ],
       "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
     },
@@ -931,8 +923,7 @@
       },
       "inputs": [
         "{projectRoot}/js/**/*.d.ts",
-        "{projectRoot}/build/npm-templates/**/*",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/build/npm-templates/**/*"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
@@ -948,8 +939,7 @@
       },
       "inputs": [
         "{projectRoot}/ts/dx.all.d.ts",
-        "{projectRoot}/ts/aliases.d.ts",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/ts/aliases.d.ts"
       ],
       "outputs": [
         "{projectRoot}/artifacts/ts/dx.all.d.ts",
@@ -1011,8 +1001,7 @@
         "{projectRoot}/webpack.config.js",
         "{projectRoot}/artifacts/js/**/*",
         "{projectRoot}/artifacts/css/**/*",
-        "{projectRoot}/artifacts/ts/**/*",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/artifacts/ts/**/*"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme/**/*"
@@ -1280,7 +1269,6 @@
         "{projectRoot}/license/**/*",
         "{projectRoot}/build/npm-bin/**/*",
         "{projectRoot}/build/npm-templates/**/*",
-        "{projectRoot}/build/gulp/license-header.txt",
         "{projectRoot}/build/gulp/modules_metadata.json",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",

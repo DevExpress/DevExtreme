@@ -70,7 +70,8 @@
         "packageJsonPath": "./package.json",
         "includePatterns": [
           "**/*.ts"
-        ]
+        ],
+        "mode": "mit"
       }
     },
     "build:ngc": {

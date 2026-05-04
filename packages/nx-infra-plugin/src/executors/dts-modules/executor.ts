@@ -8,23 +8,17 @@ import { readJson, readFileText, writeFileText } from '../../utils/file-operatio
 import { copyDirectory } from '../../utils/copy-directory';
 import { buildLicenseBannerRenderer } from '../../utils/license-banner';
 import { stripDebug } from '../../utils/debug-strip';
-import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
-
-interface PackageJson {
-  name: string;
-  version: string;
-  repository?: string | { url?: string };
-}
+import { DEFAULT_LICENSE_TEMPLATE_EULA, DEFAULT_EULA_URL } from '../add-license-headers/defaults';
+import type { PackageJson } from '../../utils/types';
 
 const runExecutor: PromiseExecutor<DtsModulesExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
   const sourceDir = path.resolve(projectRoot, options.sourceDir);
   const outputDir = path.resolve(projectRoot, options.outputDir);
   const templatesDir = path.resolve(projectRoot, options.templatesDir);
-  const licenseTemplatePath = path.resolve(
-    projectRoot,
-    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
-  );
+  const licenseTemplatePath = options.licenseTemplateFile
+    ? path.resolve(projectRoot, options.licenseTemplateFile)
+    : DEFAULT_LICENSE_TEMPLATE_EULA;
 
   try {
     await copyDirectory(templatesDir, outputDir);

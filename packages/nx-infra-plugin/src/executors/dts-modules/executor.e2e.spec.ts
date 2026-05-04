@@ -151,4 +151,21 @@ describe('DtsModulesExecutor E2E', () => {
     expect(contentAfterFirst).toBe(contentAfterSecond);
     expect((contentAfterFirst.match(/\/\*\*/g) ?? []).length).toBe(1);
   });
+
+  it('should use the bundled template when licenseTemplateFile is omitted', async () => {
+    const options: DtsModulesExecutorSchema = {
+      sourceDir: './js',
+      outputDir: './artifacts/npm/devextreme',
+      templatesDir: './build/npm-templates',
+      eulaUrl: 'https://js.devexpress.com/Licensing/',
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
+    const accordionContent = await readFileText(path.join(outDir, 'accordion.d.ts'));
+    expect(accordionContent).toMatch(/^\/\*\*/);
+    expect(accordionContent).toContain('DevExtreme (accordion.d.ts)');
+  });
 });

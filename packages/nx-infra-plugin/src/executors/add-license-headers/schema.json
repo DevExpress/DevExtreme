@@ -56,6 +56,11 @@
       "description": "Comment type marker placed after /* in the license banner opening",
       "enum": ["!", "*"],
       "default": "!"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["eula", "mit"],
+      "description": "Selects which bundled license template to use. 'eula' references the DevExtreme EULA URL; 'mit' references MIT terms and a GitHub repo URL. When licenseTemplateFile is provided, mode is ignored."
     }
   },
   "required": []

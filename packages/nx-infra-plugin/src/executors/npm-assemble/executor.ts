@@ -16,13 +16,8 @@ import {
 } from '../../utils/file-operations';
 import { copyDirectory } from '../../utils/copy-directory';
 import { buildLicenseBannerRenderer, applyLicenseBannerToFile } from '../../utils/license-banner';
-import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
-
-interface PackageJson {
-  name: string;
-  version: string;
-  repository?: string | { url?: string };
-}
+import { DEFAULT_LICENSE_TEMPLATE_EULA, DEFAULT_EULA_URL } from '../add-license-headers/defaults';
+import type { PackageJson } from '../../utils/types';
 
 const SRC_JS_EXCLUDES = [
   'bundles/*.js',
@@ -83,34 +78,30 @@ async function copyJsSrcJsonFiles(jsSrcDir: string, outputDir: string): Promise<
   });
 }
 
-async function copyLicenseFiles(licenseSrcDir: string, outputDir: string): Promise<void> {
-  const licenseOutDir = path.join(outputDir, 'license');
-  const cwd = toPosixPath(licenseSrcDir);
-  const relPaths = await glob('**/*', { cwd, nodir: true });
+async function copyAndNormalizeFiles(
+  srcDir: string,
+  outDir: string,
+  pattern: string,
+): Promise<void> {
+  const cwd = toPosixPath(srcDir);
+  const relPaths = await glob(pattern, { cwd, nodir: true });
   await Promise.all(
     relPaths.map(async (rel) => {
-      const dest = path.join(licenseOutDir, rel);
+      const dest = path.join(outDir, rel);
       await ensureDir(path.dirname(dest));
-      await fs.copyFile(path.join(licenseSrcDir, rel), dest);
+      await fs.copyFile(path.join(srcDir, rel), dest);
       const content = await readFileText(dest);
       await writeFileText(dest, ensureTrailingNewline(normalizeEol(content)));
     }),
   );
 }
 
+async function copyLicenseFiles(licenseSrcDir: string, outputDir: string): Promise<void> {
+  await copyAndNormalizeFiles(licenseSrcDir, path.join(outputDir, 'license'), '**/*');
+}
+
 async function copyNpmBinFiles(npmBinDir: string, outputDir: string): Promise<void> {
-  const binOutDir = path.join(outputDir, 'bin');
-  const cwd = toPosixPath(npmBinDir);
-  const relPaths = await glob('*.js', { cwd, nodir: true });
-  await ensureDir(binOutDir);
-  await Promise.all(
-    relPaths.map(async (rel) => {
-      const dest = path.join(binOutDir, rel);
-      await fs.copyFile(path.join(npmBinDir, rel), dest);
-      const content = await readFileText(dest);
-      await writeFileText(dest, ensureTrailingNewline(normalizeEol(content)));
-    }),
-  );
+  await copyAndNormalizeFiles(npmBinDir, path.join(outputDir, 'bin'), '*.js');
 }
 
 async function copyDistFiles(artifactsDir: string, outputDir: string): Promise<void> {
@@ -157,14 +148,19 @@ const runExecutor: PromiseExecutor<NpmAssembleExecutorSchema> = async (options, 
   const webpackConfigSrc = path.resolve(projectRoot, options.webpackConfig);
   const artifactsDir = path.resolve(projectRoot, options.artifactsDir);
   const outputDir = path.resolve(projectRoot, options.outputDir);
-  const licenseTemplatePath = path.resolve(
-    projectRoot,
-    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
-  );
+  const licenseTemplatePath = options.licenseTemplateFile
+    ? path.resolve(projectRoot, options.licenseTemplateFile)
+    : DEFAULT_LICENSE_TEMPLATE_EULA;
+
+  let pkg: PackageJson;
+  try {
+    pkg = await readJson<PackageJson>(path.join(projectRoot, 'package.json'));
+  } catch (error) {
+    logError('Failed to read package.json', error);
+    return { success: false };
+  }
 
   try {
-    const pkg = await readJson<PackageJson>(path.join(projectRoot, 'package.json'));
-
     const webpackConfigDest = path.join(outputDir, 'bin', path.basename(webpackConfigSrc));
 
     await Promise.all([
