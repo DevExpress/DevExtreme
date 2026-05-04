@@ -1,5 +1,6 @@
 import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
+import * as fs from 'fs/promises';
 import { glob } from 'glob';
 import { NpmAssembleExecutorSchema } from './schema';
 import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
@@ -11,6 +12,7 @@ import {
   readJson,
   normalizeEol,
   ensureTrailingNewline,
+  ensureDir,
 } from '../../utils/file-operations';
 import { copyDirectory } from '../../utils/copy-directory';
 import { buildLicenseBannerRenderer, applyLicenseBannerToFile } from '../../utils/license-banner';
@@ -81,27 +83,34 @@ async function copyJsSrcJsonFiles(jsSrcDir: string, outputDir: string): Promise<
   });
 }
 
-async function normalizeDirectoryEol(dirPath: string, pattern: string): Promise<void> {
-  const cwd = toPosixPath(dirPath);
-  const files = await glob(pattern, { cwd, nodir: true, absolute: true });
+async function copyLicenseFiles(licenseSrcDir: string, outputDir: string): Promise<void> {
+  const licenseOutDir = path.join(outputDir, 'license');
+  const cwd = toPosixPath(licenseSrcDir);
+  const relPaths = await glob('**/*', { cwd, nodir: true });
   await Promise.all(
-    files.map(async (filePath) => {
-      const content = await readFileText(filePath);
-      await writeFileText(filePath, ensureTrailingNewline(normalizeEol(content)));
+    relPaths.map(async (rel) => {
+      const dest = path.join(licenseOutDir, rel);
+      await ensureDir(path.dirname(dest));
+      await fs.copyFile(path.join(licenseSrcDir, rel), dest);
+      const content = await readFileText(dest);
+      await writeFileText(dest, ensureTrailingNewline(normalizeEol(content)));
     }),
   );
 }
 
-async function copyLicenseFiles(licenseSrcDir: string, outputDir: string): Promise<void> {
-  const licenseOutDir = path.join(outputDir, 'license');
-  await copyDirectory(licenseSrcDir, licenseOutDir);
-  await normalizeDirectoryEol(licenseOutDir, '**/*');
-}
-
 async function copyNpmBinFiles(npmBinDir: string, outputDir: string): Promise<void> {
   const binOutDir = path.join(outputDir, 'bin');
-  await copyDirectory(npmBinDir, binOutDir, { include: ['*.js'] });
-  await normalizeDirectoryEol(binOutDir, '*.js');
+  const cwd = toPosixPath(npmBinDir);
+  const relPaths = await glob('*.js', { cwd, nodir: true });
+  await ensureDir(binOutDir);
+  await Promise.all(
+    relPaths.map(async (rel) => {
+      const dest = path.join(binOutDir, rel);
+      await fs.copyFile(path.join(npmBinDir, rel), dest);
+      const content = await readFileText(dest);
+      await writeFileText(dest, ensureTrailingNewline(normalizeEol(content)));
+    }),
+  );
 }
 
 async function copyDistFiles(artifactsDir: string, outputDir: string): Promise<void> {
@@ -156,26 +165,18 @@ const runExecutor: PromiseExecutor<NpmAssembleExecutorSchema> = async (options, 
   try {
     const pkg = await readJson<PackageJson>(path.join(projectRoot, 'package.json'));
 
-    await copySourceJs(transpiledDir, outputDir);
-    logger.verbose(`Copied source JS from ${options.transpiledDir}`);
+    const webpackConfigDest = path.join(outputDir, 'bin', path.basename(webpackConfigSrc));
 
-    await copyEsmPackageJsonFiles(transpiledDir, outputDir);
-    logger.verbose(`Copied ESM package.json files from ${options.transpiledDir}`);
-
-    await copyJsSrcJsonFiles(jsSrcDir, outputDir);
-    logger.verbose(`Copied js/**/*.json from ${options.jsSrcDir}`);
-
-    await copyLicenseFiles(licenseSrcDir, outputDir);
-    logger.verbose(`Copied license files from ${options.licenseSrcDir}`);
-
-    await copyNpmBinFiles(npmBinDir, outputDir);
-    logger.verbose(`Copied npm-bin scripts from ${options.npmBinDir}`);
-
-    await copyFile(webpackConfigSrc, path.join(outputDir, 'bin', path.basename(webpackConfigSrc)));
-    logger.verbose(`Copied ${options.webpackConfig} to bin/`);
-
-    await copyDistFiles(artifactsDir, outputDir);
-    logger.verbose(`Copied dist files from ${options.artifactsDir}`);
+    await Promise.all([
+      copySourceJs(transpiledDir, outputDir),
+      copyEsmPackageJsonFiles(transpiledDir, outputDir),
+      copyJsSrcJsonFiles(jsSrcDir, outputDir),
+      copyLicenseFiles(licenseSrcDir, outputDir),
+      copyNpmBinFiles(npmBinDir, outputDir),
+      copyFile(webpackConfigSrc, webpackConfigDest),
+      copyDistFiles(artifactsDir, outputDir),
+    ]);
+    logger.verbose('Assembled npm package contents');
 
     await applyHeadersToSourceJs(
       outputDir,

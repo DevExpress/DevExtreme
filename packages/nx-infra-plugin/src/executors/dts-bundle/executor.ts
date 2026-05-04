@@ -14,6 +14,24 @@ interface PackageJson {
   repository?: string | { url?: string };
 }
 
+async function writeArtifactBundle(
+  artifactPath: string,
+  concatContent: string,
+  banner: string,
+): Promise<void> {
+  const content = concatContent.replace(/^declare global\s*\{([\s\S]*?)^\}/gm, '$1');
+  await writeFileText(artifactPath, banner + content);
+}
+
+async function writePackageBundle(
+  packagePath: string,
+  concatContent: string,
+  banner: string,
+): Promise<void> {
+  const content = concatContent.replace(/(interface JQuery\b[\s\S]*?\{)[\s\S]+?(\})/gm, '$1$2');
+  await writeFileText(packagePath, banner + content + '\nexport default DevExpress;');
+}
+
 const runExecutor: PromiseExecutor<DtsBundleExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
   const licenseTemplatePath = path.resolve(
@@ -49,21 +67,15 @@ const runExecutor: PromiseExecutor<DtsBundleExecutorSchema> = async (options, co
     ]);
 
     const artifactPath = path.resolve(projectRoot, options.artifactPath);
-    const artifactContent = concatContent.replace(/^declare global\s*\{([\s\S]*?)^\}/gm, '$1');
-    const artifactBanner = renderArtifactBanner(path.basename(artifactPath));
-    await writeFileText(artifactPath, artifactBanner + artifactContent);
-    logger.verbose(`Written artifact bundle: ${options.artifactPath}`);
-
     const packagePath = path.resolve(projectRoot, options.packagePath);
-    const packageContent = concatContent.replace(
-      /(interface JQuery\b[\s\S]*?\{)[\s\S]+?(\})/gm,
-      '$1$2',
-    );
+    const artifactBanner = renderArtifactBanner(path.basename(artifactPath));
     const packageBanner = renderPackageBanner(path.basename(packagePath));
-    await writeFileText(
-      packagePath,
-      packageBanner + packageContent + '\nexport default DevExpress;',
-    );
+
+    await Promise.all([
+      writeArtifactBundle(artifactPath, concatContent, artifactBanner),
+      writePackageBundle(packagePath, concatContent, packageBanner),
+    ]);
+    logger.verbose(`Written artifact bundle: ${options.artifactPath}`);
     logger.verbose(`Written package bundle: ${options.packagePath}`);
 
     return { success: true };

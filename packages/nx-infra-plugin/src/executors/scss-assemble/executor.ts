@@ -92,14 +92,12 @@ const runExecutor: PromiseExecutor<ScssAssembleExecutorSchema> = async (options,
   const outputDir = path.resolve(projectRoot, options.outputDir);
 
   try {
-    await copyScssWithInlineDataUri(scssPackagePath, outputDir);
-    logger.verbose('Copied SCSS files with data-uri inlining');
-
-    await copyFonts(scssPackagePath, outputDir);
-    logger.verbose('Copied fonts to widgets/material/typography/fonts');
-
-    await copyIcons(scssPackagePath, outputDir);
-    logger.verbose('Copied icons to widgets/base/icons');
+    await Promise.all([
+      copyScssWithInlineDataUri(scssPackagePath, outputDir),
+      copyFonts(scssPackagePath, outputDir),
+      copyIcons(scssPackagePath, outputDir),
+    ]);
+    logger.verbose('Assembled SCSS package contents');
 
     return { success: true };
   } catch (error) {
