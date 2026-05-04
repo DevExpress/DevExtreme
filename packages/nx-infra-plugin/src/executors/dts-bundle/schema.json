@@ -25,5 +25,5 @@
       "description": "EULA URL embedded in the license header."
     }
   },
-  "required": ["bundleSources", "artifactPath", "packagePath", "licenseTemplateFile", "eulaUrl"]
+  "required": ["bundleSources", "artifactPath", "packagePath"]
 }

@@ -8,6 +8,7 @@ import { readJson, readFileText, writeFileText } from '../../utils/file-operatio
 import { copyDirectory } from '../../utils/copy-directory';
 import { buildLicenseBannerRenderer } from '../../utils/license-banner';
 import { stripDebug } from '../../utils/debug-strip';
+import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
 
 interface PackageJson {
   name: string;
@@ -20,7 +21,10 @@ const runExecutor: PromiseExecutor<DtsModulesExecutorSchema> = async (options, c
   const sourceDir = path.resolve(projectRoot, options.sourceDir);
   const outputDir = path.resolve(projectRoot, options.outputDir);
   const templatesDir = path.resolve(projectRoot, options.templatesDir);
-  const licenseTemplatePath = path.resolve(projectRoot, options.licenseTemplateFile);
+  const licenseTemplatePath = path.resolve(
+    projectRoot,
+    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
+  );
 
   try {
     await copyDirectory(templatesDir, outputDir);
@@ -37,7 +41,11 @@ const runExecutor: PromiseExecutor<DtsModulesExecutorSchema> = async (options, c
       return { success: false };
     }
 
-    const bannerBase = { templatePath: licenseTemplatePath, pkg, eulaUrl: options.eulaUrl };
+    const bannerBase = {
+      templatePath: licenseTemplatePath,
+      pkg,
+      eulaUrl: options.eulaUrl ?? DEFAULT_EULA_URL,
+    };
 
     const cwd = toPosixPath(outputDir);
     const dtsFiles = await glob('**/*.d.ts', { cwd, nodir: true, absolute: true });

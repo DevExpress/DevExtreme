@@ -14,6 +14,7 @@ import {
 } from '../../utils/file-operations';
 import { copyDirectory } from '../../utils/copy-directory';
 import { buildLicenseBannerRenderer, applyLicenseBannerToFile } from '../../utils/license-banner';
+import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
 
 interface PackageJson {
   name: string;
@@ -147,7 +148,10 @@ const runExecutor: PromiseExecutor<NpmAssembleExecutorSchema> = async (options, 
   const webpackConfigSrc = path.resolve(projectRoot, options.webpackConfig);
   const artifactsDir = path.resolve(projectRoot, options.artifactsDir);
   const outputDir = path.resolve(projectRoot, options.outputDir);
-  const licenseTemplatePath = path.resolve(projectRoot, options.licenseTemplateFile);
+  const licenseTemplatePath = path.resolve(
+    projectRoot,
+    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
+  );
 
   try {
     const pkg = await readJson<PackageJson>(path.join(projectRoot, 'package.json'));
@@ -173,7 +177,12 @@ const runExecutor: PromiseExecutor<NpmAssembleExecutorSchema> = async (options, 
     await copyDistFiles(artifactsDir, outputDir);
     logger.verbose(`Copied dist files from ${options.artifactsDir}`);
 
-    await applyHeadersToSourceJs(outputDir, licenseTemplatePath, pkg, options.eulaUrl);
+    await applyHeadersToSourceJs(
+      outputDir,
+      licenseTemplatePath,
+      pkg,
+      options.eulaUrl ?? DEFAULT_EULA_URL,
+    );
     logger.verbose('Applied star-license banners to source JS files');
 
     return { success: true };

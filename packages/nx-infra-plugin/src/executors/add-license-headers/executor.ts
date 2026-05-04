@@ -6,6 +6,7 @@ import { resolveProjectPath, toPosixPath } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
 import { readJson } from '../../utils/file-operations';
 import { buildLicenseBannerRenderer, applyLicenseBannerToFile } from '../../utils/license-banner';
+import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
 
 interface PackageJson {
   name: string;
@@ -56,9 +57,10 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
   const separator = options.separatorBetweenBannerAndContent ?? '\n';
   const prependAfterLicense = options.prependAfterLicense ?? '';
   const commentType = options.commentType ?? '!';
-  const templatePath = options.licenseTemplateFile
-    ? path.join(absoluteProjectRoot, options.licenseTemplateFile)
-    : undefined;
+  const templatePath = path.join(
+    absoluteProjectRoot,
+    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
+  );
 
   let pkg: PackageJson;
   try {
@@ -80,7 +82,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
     const renderBanner = await buildLicenseBannerRenderer({
       templatePath,
       pkg,
-      eulaUrl: options.eulaUrl,
+      eulaUrl: options.eulaUrl ?? DEFAULT_EULA_URL,
       version: options.version,
       commentType,
     });

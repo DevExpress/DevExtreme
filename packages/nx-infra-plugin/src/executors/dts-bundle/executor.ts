@@ -6,6 +6,7 @@ import { logError } from '../../utils/error-handler';
 import { readJson, writeFileText } from '../../utils/file-operations';
 import { concatFiles } from '../../utils/concat-content';
 import { buildLicenseBannerRenderer } from '../../utils/license-banner';
+import { DEFAULT_LICENSE_TEMPLATE_FILE, DEFAULT_EULA_URL } from '../../license-defaults';
 
 interface PackageJson {
   name: string;
@@ -15,7 +16,10 @@ interface PackageJson {
 
 const runExecutor: PromiseExecutor<DtsBundleExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const licenseTemplatePath = path.resolve(projectRoot, options.licenseTemplateFile);
+  const licenseTemplatePath = path.resolve(
+    projectRoot,
+    options.licenseTemplateFile ?? DEFAULT_LICENSE_TEMPLATE_FILE,
+  );
 
   let pkg: PackageJson;
   try {
@@ -33,7 +37,11 @@ const runExecutor: PromiseExecutor<DtsBundleExecutorSchema> = async (options, co
       normalizeLineEndings: false,
     });
 
-    const bannerBase = { templatePath: licenseTemplatePath, pkg, eulaUrl: options.eulaUrl };
+    const bannerBase = {
+      templatePath: licenseTemplatePath,
+      pkg,
+      eulaUrl: options.eulaUrl ?? DEFAULT_EULA_URL,
+    };
 
     const [renderArtifactBanner, renderPackageBanner] = await Promise.all([
       buildLicenseBannerRenderer({ ...bannerBase, commentType: '!' }),

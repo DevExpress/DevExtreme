@@ -28,18 +28,30 @@ it('buildLicenseBannerRenderer compiles template once and returns a sync rendere
   }
 });
 
-it('buildLicenseBannerRenderer uses default banner template when templatePath is omitted', async () => {
-  const pkg = {
-    name: 'devextreme',
-    version: '26.1.0',
-    repository: 'https://github.com/DevExpress/DevExtreme',
-  };
-  const render = await buildLicenseBannerRenderer({ pkg, commentType: '!' });
+it('buildLicenseBannerRenderer interpolates eulaUrl and year into the rendered banner', async () => {
+  const tempDir = createTempDir('nx-license-renderer-eula-e2e-');
+  try {
+    const templatePath = path.join(tempDir, 'license.txt');
+    await writeFileText(
+      templatePath,
+      `/*<%= commentType %>\n* Copyright (c) 2012 - <%= year %> Developer Express Inc.\n* Read about DevExtreme licensing here: <%= eula %>\n*/\n`,
+    );
+    const pkg = { name: 'devextreme', version: '26.1.0' };
+    const render = await buildLicenseBannerRenderer({
+      templatePath,
+      pkg,
+      eulaUrl: 'https://js.devexpress.com/Licensing/',
+      commentType: '!',
+    });
 
-  const banner = render('events/hover.d.ts');
+    const banner = render('events/hover.d.ts');
+    const currentYear = new Date().getFullYear();
 
-  expect(banner).toMatch(/^\/\*!/);
-  expect(banner).toContain('devextreme');
-  expect(banner).toContain('26.1.0');
-  expect(banner).toContain('Developer Express Inc.');
+    expect(banner).toMatch(/^\/\*!/);
+    expect(banner).toContain('Developer Express Inc.');
+    expect(banner).toContain(`2012 - ${currentYear}`);
+    expect(banner).toContain('https://js.devexpress.com/Licensing/');
+  } finally {
+    cleanupTempDir(tempDir);
+  }
 });

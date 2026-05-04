@@ -47,8 +47,6 @@
     "npmBinDir",
     "webpackConfig",
     "artifactsDir",
-    "outputDir",
-    "licenseTemplateFile",
-    "eulaUrl"
+    "outputDir"
   ]
 }

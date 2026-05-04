@@ -34,6 +34,8 @@ describe('AddLicenseHeadersExecutor E2E', () => {
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
     const npmDir = path.join(projectDir, 'npm');
 
+    await setupLicenseHeaderTemplate();
+
     fs.mkdirSync(npmDir, { recursive: true });
 
     await writeJson(path.join(projectDir, 'package.json'), {
@@ -80,10 +82,9 @@ describe('AddLicenseHeadersExecutor E2E', () => {
 
       const indexContent = await readFileText(path.join(npmDir, 'index.js'));
       expect(indexContent).toMatch(/^\/\*!/);
-      expect(indexContent).toContain('test-package');
+      expect(indexContent).toContain('DevExtreme (index.js)');
       expect(indexContent).toContain('Version: 1.0.0');
       expect(indexContent).toContain('Developer Express Inc.');
-      expect(indexContent).toContain('MIT license');
       const currentYear = new Date().getFullYear();
       expect(indexContent).toContain(`2012 - ${currentYear}`);
       expect(indexContent).toMatch(/Build date:/);
@@ -109,7 +110,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       const buttonContent = await readFileText(path.join(npmDir, 'components', 'button.js'));
 
       expect(buttonContent).toMatch(/^\/\*!/);
-      expect(buttonContent).toContain('test-package');
+      expect(buttonContent).toContain('components/button.js');
     });
 
     it('should preserve original file content after header', async () => {
@@ -233,7 +234,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
 
       const content = await readFileText(path.join(customDir, 'custom.js'));
       expect(content).toMatch(/^\/\*!/);
-      expect(content).toContain('test-package');
+      expect(content).toContain('custom.js');
     });
 
     it('should work with custom package.json path', async () => {
@@ -257,7 +258,6 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       const npmDir = path.join(projectDir, 'npm');
       const content = await readFileText(path.join(npmDir, 'index.js'));
 
-      expect(content).toContain('custom-package-name');
       expect(content).toContain('Version: 2.0.0');
     });
   });
@@ -336,7 +336,7 @@ export const value = 42;
     expect(content).not.toMatch(/^\/\*\*/);
   });
 
-  it('should use commentType in default banner when no licenseTemplateFile is provided', async () => {
+  it('should fall back to DEFAULT_LICENSE_TEMPLATE_FILE when licenseTemplateFile is omitted', async () => {
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
     const npmDir = path.join(projectDir, 'npm');
 
@@ -353,5 +353,6 @@ export const value = 42;
     const content = await readFileText(path.join(npmDir, 'index.js'));
     expect(content).toMatch(/^\/\*\*/);
     expect(content).not.toMatch(/^\/\*!/);
+    expect(content).toContain('DevExtreme');
   });
 });

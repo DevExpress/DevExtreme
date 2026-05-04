@@ -48,8 +48,6 @@
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
       "options": {
         "targetDirectory": "./artifacts/js/localization",
-        "licenseTemplateFile": "./build/gulp/license-header.txt",
-        "eulaUrl": "https://js.devexpress.com/Licensing/",
         "prependAfterLicense": "\"use strict\";\n\n",
         "separatorBetweenBannerAndContent": "",
         "includePatterns": [
@@ -576,8 +574,6 @@
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
       "options": {
         "targetDirectory": "./artifacts/js",
-        "licenseTemplateFile": "./build/gulp/license-header.txt",
-        "eulaUrl": "https://js.devexpress.com/Licensing/",
         "prependAfterLicense": "\"use strict\";\n\n",
         "separatorBetweenBannerAndContent": "",
         "includePatterns": [
@@ -770,8 +766,6 @@
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
       "options": {
         "targetDirectory": "./artifacts/js/vectormap-utils",
-        "licenseTemplateFile": "./build/gulp/license-header.txt",
-        "eulaUrl": "https://js.devexpress.com/Licensing/",
         "separatorBetweenBannerAndContent": "",
         "prependAfterLicense": "\"use strict\";\n\n"
       },
@@ -870,8 +864,6 @@
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
       "options": {
         "targetDirectory": "./artifacts/js",
-        "licenseTemplateFile": "./build/gulp/license-header.txt",
-        "eulaUrl": "https://js.devexpress.com/Licensing/",
         "includePatterns": ["dx.aspnet.mvc.js"],
         "separatorBetweenBannerAndContent": ""
       },
@@ -935,9 +927,7 @@
       "options": {
         "sourceDir": "./js",
         "outputDir": "./artifacts/npm/devextreme",
-        "templatesDir": "./build/npm-templates",
-        "licenseTemplateFile": "./build/gulp/license-header.txt",
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "templatesDir": "./build/npm-templates"
       },
       "inputs": [
         "{projectRoot}/js/**/*.d.ts",
@@ -954,9 +944,7 @@
       "options": {
         "bundleSources": ["./ts/dx.all.d.ts", "./ts/aliases.d.ts"],
         "artifactPath": "./artifacts/ts/dx.all.d.ts",
-        "packagePath": "./artifacts/npm/devextreme/bundles/dx.all.d.ts",
-        "licenseTemplateFile": "./build/gulp/license-header.txt",
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "packagePath": "./artifacts/npm/devextreme/bundles/dx.all.d.ts"
       },
       "inputs": [
         "{projectRoot}/ts/dx.all.d.ts",
@@ -1013,9 +1001,7 @@
         "npmBinDir": "./build/npm-bin",
         "webpackConfig": "./webpack.config.js",
         "artifactsDir": "./artifacts",
-        "outputDir": "./artifacts/npm/devextreme",
-        "licenseTemplateFile": "./build/gulp/license-header.txt",
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "outputDir": "./artifacts/npm/devextreme"
       },
       "inputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/**/*",

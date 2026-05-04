@@ -6,6 +6,6 @@ export interface NpmAssembleExecutorSchema {
   webpackConfig: string;
   artifactsDir: string;
   outputDir: string;
-  licenseTemplateFile: string;
-  eulaUrl: string;
+  licenseTemplateFile?: string;
+  eulaUrl?: string;
 }
