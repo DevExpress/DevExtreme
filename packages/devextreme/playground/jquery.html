@@ -49,12 +49,62 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <h2>dxRecurrenceEditor</h2>
+        <p>Standalone recurrence rule editor (<code>FREQ</code>, <code>INTERVAL</code>, <code>BYDAY</code>, end condition). Uses the same implementation as the scheduler (<code>m_recurrence_editor</code>).</p>
+
+        <div id="recurrence-editor" style="max-width: 520px;"></div>
+
+        <p style="margin-top: 1rem;"><strong>Current rule string</strong></p>
+        <pre id="recurrence-output" style="background: var(--dx-color-bg, #f5f5f5); padding: 0.75rem; border-radius: 4px; min-height: 1.5rem;">—</pre>
+
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            <div id="btn-set-sample"></div>
+            <div id="btn-clear-rule"></div>
+            <div id="btn-log-instance"></div>
+        </div>
+
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const startDate = new Date(2026, 4, 5);
+
+                const $out = $('#recurrence-output');
+                const writeOutput = (text) => { $out.text(text || '—'); };
+
+                const identityTimeZone = {
+                    createDate: (date) => new Date(date),
+                };
+
+                const editor = $('#recurrence-editor').dxRecurrenceEditor({
+                    startDate,
+                    firstDayOfWeek: 1,
+                    getStartDateTimeZone: () => undefined,
+                    timeZoneCalculator: identityTimeZone,
+                    value: 'FREQ=DAILY;INTERVAL=1',
+                    onValueChanged: (e) => writeOutput(e.value),
+                }).dxRecurrenceEditor('instance');
+
+                writeOutput(editor.option('value'));
+
+                $('#btn-set-sample').dxButton({
+                    text: 'Set sample: weekly Mon/Wed/Fri',
+                    onClick: () => {
+                        editor.option('value', 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,WE,FR');
+                    },
+                });
+
+                $('#btn-clear-rule').dxButton({
+                    text: 'Clear rule',
+                    onClick: () => {
+                        editor.option('value', '');
+                    },
+                });
+
+                $('#btn-log-instance').dxButton({
+                    text: 'Log to console',
+                    onClick: () => {
+                        console.log('dxRecurrenceEditor value:', editor.option('value'));
+                    },
                 });
             });
         </script>
