@@ -15,6 +15,7 @@ const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
 const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
 const TOOLBAR_ITEM_INVISIBLE_CLASS = 'dx-toolbar-item-invisible';
 const KBN_NAMESPACE = 'toolbar-keyboard-nav';
 
@@ -68,14 +69,64 @@ class Toolbar extends ToolbarBase<Properties> {
   }
 
   _initMarkup(): void {
-    this._activeItemIndex = 0;
+    // On first render _activeItemIndex is still undefined (class field runs after super()),
+    // so we initialise it here only when needed.
+    const isFirstRender = typeof this._activeItemIndex !== 'number';
+    if (isFirstRender) {
+      this._activeItemIndex = 0;
+    }
+
+    // Before re-render: snapshot the active item's data reference so we can
+    // relocate it after the DOM is rebuilt.  This correctly handles insertions
+    // (the same item shifts to a new index) and deletions (item disappears →
+    // fall back to the previous position).
+    const savedIndex = this._activeItemIndex;
+    let activeItemData: Item | null = null;
+    let activeWasOverflow = false;
+
+    if (!isFirstRender) {
+      const prevFocusItems = this._getFocusableItems();
+      if (savedIndex >= 0 && savedIndex < prevFocusItems.length) {
+        const $prevFocusTarget = prevFocusItems[savedIndex];
+        const $item = $prevFocusTarget.closest(`.${TOOLBAR_ITEM_CLASS}`);
+        if ($item.length) {
+          activeItemData = this._getItemData($item) as Item;
+        } else {
+          activeWasOverflow = true; // e.g. the "More" overflow button
+        }
+      }
+    }
 
     super._initMarkup();
+
+    // After re-render: update _activeItemIndex to track the same item.
+    if (!isFirstRender) {
+      if (activeWasOverflow) {
+        if (this._getOverflowButtonFocusTarget()) {
+          this._activeItemIndex = this._getFocusableItems().length - 1;
+        }
+      } else if (activeItemData !== null) {
+        const newIndex = this._findFocusItemIndexByData(activeItemData);
+        // If item still exists use its new index; otherwise move to the
+        // previous item (item was deleted → keep focus near that position).
+        this._activeItemIndex = newIndex !== -1 ? newIndex : Math.max(0, savedIndex - 1);
+      }
+    }
 
     this._attachKeyboardNavigation();
     this._updateFocusableItemsTabIndex();
 
     this._layoutStrategy._initMarkup();
+  }
+
+  /** Finds the focusable-item index that matches the given item data reference. */
+  _findFocusItemIndexByData(data: Item): number {
+    const focusItems = this._getFocusableItems();
+    for (let i = 0; i < focusItems.length; i += 1) {
+      const $item = focusItems[i].closest(`.${TOOLBAR_ITEM_CLASS}`);
+      if ($item.length && this._getItemData($item) === data) return i;
+    }
+    return -1;
   }
 
   _renderToolbar(): void {
@@ -192,20 +243,20 @@ class Toolbar extends ToolbarBase<Properties> {
   /**
    * Returns the focus targets of all enabled widget items visible in the toolbar,
    * plus the overflow "More" button if present. Used for roving tabindex navigation.
+   * Items are returned in visual (DOM) order, not items-array order, so that items
+   * in the 'before' / 'after' sections are navigated in the order the user sees them.
    */
   _getFocusableItems(): dxElementWrapper[] {
     const result: dxElementWrapper[] = [];
     const toolbarDisabled = !!this.option('disabled');
 
-    this._getToolbarItems().forEach((item) => {
-      const $item = this._findItemElementByItem(item);
-      if (!$item.length) return;
-
-      const itemData = this._getItemData($item);
-      if ($item.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS)) return; // collapsed into overflow
-      const isDisabled = !!(itemData.options?.disabled ?? itemData.disabled ?? toolbarDisabled);
+    const toolbarItemDomNodes = this._$toolbarItemsContainer?.find(`.${TOOLBAR_ITEM_CLASS}`).toArray() ?? [];
+    toolbarItemDomNodes.forEach((el) => {
+      const $item = $(el);
+      if ($item.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS)) return;
+      const itemData = this._getItemData($item) as Item;
+      const isDisabled = !!(itemData?.options?.disabled ?? itemData?.disabled ?? toolbarDisabled);
       if (isDisabled) return;
-
       const $focusTarget = resolveItemFocusTarget($item, itemData);
       if ($focusTarget) {
         result.push($focusTarget);
@@ -259,7 +310,7 @@ class Toolbar extends ToolbarBase<Properties> {
     const focusableItems = this._getFocusableItems();
     if (!focusableItems.length) return;
 
-    if (this._activeItemIndex >= focusableItems.length) {
+    if (this._activeItemIndex < 0 || this._activeItemIndex >= focusableItems.length) {
       this._activeItemIndex = focusableItems.length - 1;
     }
 
@@ -485,7 +536,6 @@ class Toolbar extends ToolbarBase<Properties> {
   _openDropDownButtonAndFocus(focusTarget: HTMLElement): void {
     const dropDownButtonRoot = focusTarget.closest('.dx-dropdownbutton');
     if (!dropDownButtonRoot) return;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const instance = $(dropDownButtonRoot).data('dxDropDownButton') as unknown as { open: () => void } | undefined;
     if (!instance) return;
 
@@ -506,7 +556,6 @@ class Toolbar extends ToolbarBase<Properties> {
   _openSelectBoxAndFocus(focusTarget: HTMLElement): void {
     const selectBoxRoot = focusTarget.closest('.dx-selectbox');
     if (!selectBoxRoot) return;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const instance = $(selectBoxRoot).data('dxSelectBox') as unknown as { open: () => void } | undefined;
     if (!instance) return;
 
