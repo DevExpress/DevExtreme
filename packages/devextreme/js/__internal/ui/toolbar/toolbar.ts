@@ -43,6 +43,10 @@ class Toolbar extends ToolbarBase<Properties> {
 
   _keyboardNavContainer: Element | undefined;
 
+  // Snapshot of the active item captured in _refresh() BEFORE _clean() erases the DOM.
+  // Used by _initMarkup() to re-locate the active item after the re-render.
+  _pendingSnapshot: { savedIndex: number; data: Item | null; wasOverflow: boolean } | null = null;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -68,6 +72,44 @@ class Toolbar extends ToolbarBase<Properties> {
     this._syncRovingTabIndex();
   }
 
+  _refresh(): void {
+    // Capture the active item's identity from the live DOM *before* _clean() erases it.
+    // _initMarkup() is called after _clean(), so it would see an empty container otherwise.
+    this._captureActiveItemSnapshot();
+    super._refresh();
+  }
+
+  /** Snapshots the active item data before the DOM is cleared by _clean(). */
+  _captureActiveItemSnapshot(): void {
+    const savedIndex = this._activeItemIndex;
+    if (typeof savedIndex !== 'number') return;
+
+    const prevFocusItems = this._getFocusableItems();
+    if (savedIndex < 0 || savedIndex >= prevFocusItems.length) {
+      this._pendingSnapshot = null;
+      return;
+    }
+
+    const $prevFT = prevFocusItems[savedIndex];
+    const $item = $prevFT.closest(`.${TOOLBAR_ITEM_CLASS}`);
+    this._pendingSnapshot = $item.length
+      ? { savedIndex, data: this._getItemData($item) as Item, wasOverflow: false }
+      : { savedIndex, data: null, wasOverflow: true };
+  }
+
+  /** Reads active item identity from the live DOM (fallback when _pendingSnapshot is absent). */
+  _resolveActiveItemFromDOM(index: number): { data: Item | null; wasOverflow: boolean } {
+    const prevFocusItems = this._getFocusableItems();
+    if (index < 0 || index >= prevFocusItems.length) {
+      return { data: null, wasOverflow: false };
+    }
+    const $item = prevFocusItems[index].closest(`.${TOOLBAR_ITEM_CLASS}`);
+    if ($item.length) {
+      return { data: this._getItemData($item) as Item, wasOverflow: false };
+    }
+    return { data: null, wasOverflow: true };
+  }
+
   _initMarkup(): void {
     // On first render _activeItemIndex is still undefined (class field runs after super()),
     // so we initialise it here only when needed.
@@ -76,24 +118,26 @@ class Toolbar extends ToolbarBase<Properties> {
       this._activeItemIndex = 0;
     }
 
-    // Before re-render: snapshot the active item's data reference so we can
-    // relocate it after the DOM is rebuilt.  This correctly handles insertions
-    // (the same item shifts to a new index) and deletions (item disappears →
-    // fall back to the previous position).
+    // Resolve the active item's pre-render identity.
+    // _refresh() captures it before _clean(); for the initial render path (no _refresh)
+    // we fall back to reading the DOM directly (which is still intact at that point).
     const savedIndex = this._activeItemIndex;
     let activeItemData: Item | null = null;
     let activeWasOverflow = false;
 
     if (!isFirstRender) {
-      const prevFocusItems = this._getFocusableItems();
-      if (savedIndex >= 0 && savedIndex < prevFocusItems.length) {
-        const $prevFocusTarget = prevFocusItems[savedIndex];
-        const $item = $prevFocusTarget.closest(`.${TOOLBAR_ITEM_CLASS}`);
-        if ($item.length) {
-          activeItemData = this._getItemData($item) as Item;
-        } else {
-          activeWasOverflow = true; // e.g. the "More" overflow button
-        }
+      const snap = this._pendingSnapshot;
+      this._pendingSnapshot = null;
+
+      if (snap !== null) {
+        // Use the pre-captured snapshot (DOM may already be empty after _clean()).
+        activeItemData = snap.data;
+        activeWasOverflow = snap.wasOverflow;
+      } else {
+        // Fallback: DOM is still intact (non-_refresh re-render path).
+        const domSnap = this._resolveActiveItemFromDOM(savedIndex);
+        activeItemData = domSnap.data;
+        activeWasOverflow = domSnap.wasOverflow;
       }
     }
 
@@ -376,12 +420,11 @@ class Toolbar extends ToolbarBase<Properties> {
     if (key === 'escape') {
       if (this._insideActiveItem) {
         this._insideActiveItem = false;
-        // For inline widgets (TextBox, ButtonGroup inside toolbar DOM): explicitly refocus
-        // and stop propagation so the widget doesn't steal focus back.
-        // For popup widgets (popup rendered outside toolbar DOM): the widget's own Esc
-        // closes the popup and returns focus here; _handleFocusIn then resets the flag.
         const isInsideToolbar = !!this._keyboardNavContainer?.contains(e.target as Element);
-        if (isInsideToolbar) {
+        const isActiveSelectBox = !!activeEl?.closest('.dx-selectbox');
+        // For inline widgets: refocus and block propagation. For SelectBox: propagate
+        // so the SelectBox can close its popup; _handleFocusIn finalises state afterward.
+        if (isInsideToolbar && !isActiveSelectBox) {
           activeEl?.focus();
           e.stopPropagation();
         }
@@ -550,8 +593,10 @@ class Toolbar extends ToolbarBase<Properties> {
   }
 
   /**
-   * Opens a SelectBox dropdown and moves focus to the first (or selected) list item.
-   * Temporarily sets tabindex=0 on the item so it can receive focus.
+   * Opens a SelectBox dropdown and enters "active item" mode.
+   * Focus remains on the SelectBox input; the SelectBox handles arrow-key navigation
+   * through its own keyboard listeners once the popup is open.
+   * Keeping focus on the input avoids leaking tabindex=0 on popup list items.
    */
   _openSelectBoxAndFocus(focusTarget: HTMLElement): void {
     const selectBoxRoot = focusTarget.closest('.dx-selectbox');
@@ -561,17 +606,8 @@ class Toolbar extends ToolbarBase<Properties> {
 
     instance.open();
     this._insideActiveItem = true;
-
-    // Popup DOM is created synchronously. Focus the selected or first list item.
-    const popupWrapper = document.querySelector<HTMLElement>('.dx-dropdownlist-popup-wrapper');
-    if (!popupWrapper) return;
-
-    const selectedItem = popupWrapper.querySelector<HTMLElement>('.dx-list-item.dx-state-selected');
-    const focusTarget2 = selectedItem ?? popupWrapper.querySelector<HTMLElement>('.dx-list-item');
-    if (!focusTarget2) return;
-
-    focusTarget2.setAttribute('tabindex', '0');
-    focusTarget2.focus();
+    // Focus stays on the SelectBox input. The SelectBox widget handles ArrowDown/Up
+    // to navigate the list. Esc will be forwarded to the SelectBox to close the popup.
   }
 
   /**
