@@ -224,6 +224,7 @@ class DropDownEditor<
       activeStateEnabled: true,
       dropDownButtonTemplate: 'dropDownButton',
       fieldTemplate: null,
+      fieldAddons: null,
       openOnFieldClick: false,
       showDropDownButton: true,
       // eslint-disable-next-line no-void
