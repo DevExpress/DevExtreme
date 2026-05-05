@@ -26,7 +26,7 @@ const getSortingDefaultMessage = (
 
 export const sortingCommand = defineGridCommand({
   name: 'sorting',
-  description: 'Sort a column ascending, descending, or remove its sort',
+  description: 'Sort a column ascending or descending. Pass sortOrder "none" to remove sorting from this column only (use clearSorting to remove sorting from all columns).',
   schema: sortingCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');

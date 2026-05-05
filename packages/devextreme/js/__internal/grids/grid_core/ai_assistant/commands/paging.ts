@@ -31,7 +31,7 @@ const pageSizeCommandSchema = z.object({
 
 export const pageSizeCommand = defineGridCommand({
   name: 'pageSize',
-  description: 'Change the number of rows per page',
+  description: 'Change the number of rows per page. Pass 0 to show all rows on a single page.',
   schema: pageSizeCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const paging = component.option('paging');
@@ -60,7 +60,7 @@ const pageIndexCommandSchema = z.object({
 
 export const pageIndexCommand = defineGridCommand({
   name: 'pageIndex',
-  description: 'Navigate to a specific page (0-based: page 0 is first)',
+  description: 'Navigate to a specific page (0-based: page 0 is first; pageIndex must be less than the total page count).',
   schema: pageIndexCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const paging = component.option('paging');

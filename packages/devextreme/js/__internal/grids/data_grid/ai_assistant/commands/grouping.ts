@@ -27,7 +27,7 @@ const getGroupingDefaultMessage = (
 
 export const groupingCommand = defineGridCommand({
   name: 'grouping',
-  description: 'Group rows by a column at the given level (0 = first level), or pass null to ungroup',
+  description: 'Group rows by a column at the given level (0 = outermost). Setting groupIndex to an in-use value shifts the existing column down; gaps auto-collapse. Pass null to ungroup. To replace existing grouping, ungroup each currently grouped column, then group new ones at consecutive indices 0, 1, 2, ...',
   schema: groupingCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');

@@ -33,7 +33,7 @@ const filterValueCommandSchema = z.object({
 
 export const filterValueCommand = defineGridCommand({
   name: 'filterValue',
-  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null to clear. To express "not and" / "not or", wrap the group in negation: ["!", [a, "and", b]].',
+  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. Expression forms: basic [dataField, op, value], combined [expr, "and"|"or", expr], negated ["!", expr]. The first element of a basic expression is the column dataField (not the caption). Supported ops: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". To express "not and" / "not or", wrap the group in negation: ["!", [a, "and", b]].',
   schema: filterValueCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const defaultMessage = args.expression === null
@@ -75,7 +75,7 @@ const searchingCommandSchema = z.object({
 
 export const searchingCommand = defineGridCommand({
   name: 'searching',
-  description: 'Set search panel text. Pass empty string to clear search.',
+  description: 'Set the global search text that filters rows across all searchable columns. Pass empty string to clear search.',
   schema: searchingCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const defaultMessage = args.text === ''
