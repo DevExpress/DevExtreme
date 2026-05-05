@@ -457,12 +457,12 @@
         ]
       },
       "inputs": [
-        "{projectRoot}/artifacts/transpiled-renovation-npm/{esm,cjs}/__internal/core/state_manager/**/*",
-        "{projectRoot}/artifacts/transpiled-esm-npm/{esm,cjs}/__internal/core/state_manager/**/*"
+        "{projectRoot}/artifacts/transpiled-renovation-npm/**/__internal/core/state_manager/**/*",
+        "{projectRoot}/artifacts/transpiled-esm-npm/**/__internal/core/state_manager/**/*"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/transpiled-renovation-npm/{esm,cjs}/__internal/core/state_manager",
-        "{projectRoot}/artifacts/transpiled-esm-npm/{esm,cjs}/__internal/core/state_manager"
+        "{projectRoot}/artifacts/transpiled-renovation-npm/**/__internal/core/state_manager",
+        "{projectRoot}/artifacts/transpiled-esm-npm/**/__internal/core/state_manager"
       ]
     },
     "bundle:build": {
