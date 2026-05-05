@@ -60,10 +60,11 @@ module('Integration: collector', baseConfig, () => {
             currentDate: new Date(2017, 4, 25),
             height: 600,
             onAppointmentFormOpening: e => {
-                const startDate = e.form.getEditor('startDateEditor').option('value');
+                const startDate = e.form.getEditor('startDate').option('value');
                 assert.equal(startDate.getDate(), 16, 'Recurrence appointment date should be display equal targetedAppointmentData date in form');
             },
             editing: {
+                legacyForm: true
             },
             maxAppointmentsPerCell: 2
         });

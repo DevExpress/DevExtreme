@@ -102,6 +102,7 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
   indicatorTime: undefined,
   renovateRender: true,
   editing: {
+    legacyForm: false,
     // @ts-expect-error copy from default so that you can rewrite it
     ...DEFAULT_SCHEDULER_OPTIONS.editing,
     popup: {},

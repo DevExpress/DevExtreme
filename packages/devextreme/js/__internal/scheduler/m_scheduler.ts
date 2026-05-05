@@ -38,6 +38,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
+import { AppointmentForm as AppointmentLegacyForm } from './appointment_popup/m_legacy_form';
+import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './appointment_popup/m_legacy_popup';
 import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
@@ -79,6 +81,7 @@ import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component
 import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView } from './utils/options/types';
 import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
+import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
@@ -949,6 +952,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allowDeleting: Boolean(editing),
       allowResizing: Boolean(editing),
       allowDragging: Boolean(editing),
+      legacyForm: false,
     };
 
     if (isObject(editing)) {
@@ -1105,7 +1109,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private createAppointmentPopupForm() {
     if (this.appointmentForm) {
-      this.appointmentForm.dispose();
+      this.appointmentForm.form?.dispose();
     }
     this.appointmentForm = this.createAppointmentForm();
 
@@ -1135,6 +1139,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
+    if (this.editing.legacyForm) {
+      (scheduler as any).createResourceEditorModel = () => createResourceEditorModel(this.resourceManager.resourceById);
+
+      return new AppointmentLegacyForm(scheduler);
+    }
+
     return new AppointmentForm(scheduler);
   }
 
@@ -1157,8 +1167,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       addAppointment: (appointment) => this.addAppointment(appointment),
       updateAppointment: (sourceAppointment, updatedAppointment) => this.updateAppointment(sourceAppointment, updatedAppointment),
 
+      updateScrollPosition: (startDate, appointmentGroupValues, inAllDayRow) => {
+        this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
+      },
     };
-    return new AppointmentPopup(scheduler, form);
+    return this.editing.legacyForm
+      ? new AppointmentLegacyPopup(scheduler, form)
+      : new AppointmentPopup(scheduler, form);
   }
 
   private scrollToAppointment(appointment: Record<string, unknown>): void {
@@ -1638,15 +1653,25 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
 
     if (isPopupEditing) {
-      this.appointmentPopup.show(singleRawAppointment, {
-        onSave: (newAppointment) => {
-          this.updateAppointment(rawAppointment, appointment.source);
-          return when(this.addAppointment(newAppointment))
-            .done(() => this.scrollToAppointment(newAppointment));
-        },
-        title: messageLocalization.format('dxScheduler-editPopupTitle'),
-        readOnly: Boolean(appointment.source) && appointment.disabled,
-      });
+      const popupConfig = this.editing.legacyForm
+        ? {
+          isToolbarVisible: true,
+          action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
+          excludeInfo: {
+            sourceAppointment: rawAppointment,
+            updatedAppointment: appointment.source,
+          },
+        }
+        : {
+          onSave: (newAppointment) => {
+            this.updateAppointment(rawAppointment, appointment.source);
+            return when(this.addAppointment(newAppointment))
+              .done(() => this.scrollToAppointment(newAppointment));
+          },
+          title: messageLocalization.format('dxScheduler-editPopupTitle'),
+          readOnly: Boolean(appointment.source) && appointment.disabled,
+        };
+      this.appointmentPopup.show(singleRawAppointment, popupConfig);
       this.editAppointmentData = rawAppointment;
     } else {
       this.updateAppointmentCore(rawAppointment, appointment.source, () => {
@@ -1923,6 +1948,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._fireContentReadyAction();
   }
 
+  /// #DEBUG
+  // TODO: remove when legacyForm is deleted
+  getAppointmentDetailsForm() { // for tests
+    return this.appointmentForm.form;
+  }
+  /// #ENDDEBUG
+
   getAppointmentsInstance() {
     return this._appointments;
   }
@@ -2015,12 +2047,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (isCreateAppointment) {
       delete this.editAppointmentData; // TODO
       if (this.editing.allowAdding) {
-        this.appointmentPopup.show(rawAppointment, {
-          onSave: (appointment) => when(this.addAppointment(appointment))
-            .done(() => this.scrollToAppointment(appointment)),
-          title: messageLocalization.format('dxScheduler-newPopupTitle'),
-          readOnly: false,
-        });
+        const popupConfig = this.editing.legacyForm
+          ? { isToolbarVisible: true, action: ACTION_TO_APPOINTMENT.CREATE }
+          : {
+            onSave: (appointment) => when(this.addAppointment(appointment))
+              .done(() => this.scrollToAppointment(appointment)),
+            title: messageLocalization.format('dxScheduler-newPopupTitle'),
+            readOnly: false,
+          };
+        this.appointmentPopup.show(rawAppointment, popupConfig);
       }
     } else {
       const startDate = this._dataAccessors.get('startDate', newRawTargetedAppointment || rawAppointment);
@@ -2032,12 +2067,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         const isDisabled = Boolean(adapter.source) && adapter.disabled;
         const readOnly = isDisabled || !this.editing.allowUpdating;
 
-        this.appointmentPopup.show(rawAppointment, {
-          onSave: (appointment) => when(this.updateAppointment(rawAppointment, appointment))
-            .done(() => this.scrollToAppointment(appointment)),
-          title: messageLocalization.format('dxScheduler-editPopupTitle'),
-          readOnly,
-        });
+        const popupConfig = this.editing.legacyForm
+          ? { isToolbarVisible: this.editing.allowUpdating, action: ACTION_TO_APPOINTMENT.UPDATE }
+          : {
+            onSave: (appointment) => when(this.updateAppointment(rawAppointment, appointment))
+              .done(() => this.scrollToAppointment(appointment)),
+            title: messageLocalization.format('dxScheduler-editPopupTitle'),
+            readOnly,
+          };
+        this.appointmentPopup.show(rawAppointment, popupConfig);
       }, false, true);
     }
   }

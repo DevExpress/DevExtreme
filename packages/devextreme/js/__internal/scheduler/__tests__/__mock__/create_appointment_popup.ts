@@ -39,6 +39,7 @@ const DEFAULT_EDITING = {
   allowDeleting: true,
   allowResizing: true,
   allowDragging: true,
+  legacyForm: false,
 };
 
 const DEFAULT_APPOINTMENT = {

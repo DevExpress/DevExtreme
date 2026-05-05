@@ -95,6 +95,129 @@ const createScheduler = (options = {}) => {
 module('Common', moduleConfig, () => {
     if(isDesktopEnvironment()) {
         module('Appointments rendering when appointment timeZone is set', () => {
+            const cases = [{
+                caseName: 'startDateTimeZone = endDateTimezone',
+                appointment: {
+                    startDate: new Date(2020, 1, 4, 5).toString(),
+                    startDateTimeZone: timeZones.Yekaterinburg,
+                    endDateTimeZone: timeZones.Yekaterinburg,
+                    endDate: new Date(2020, 1, 4, 6).toString(),
+                },
+                expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
+                expectedPosition: {
+                    top: 380,
+                    left: 0
+                },
+                expectedPopupDates: {
+                    startDate: '2/4/2020, 7:00 AM',
+                    endDate: '2/4/2020, 8:00 AM'
+                },
+                expectedHeight: 100,
+                stubClientTimeZone: true
+            },
+            {
+                caseName: 'startDateTimeZone != endDateTimezone',
+                appointment: {
+                    startDate: new Date(2020, 1, 4, 5).toString(),
+                    startDateTimeZone: timeZones.Moscow,
+                    endDateTimeZone: timeZones.Yekaterinburg,
+                    endDate: new Date(2020, 1, 4, 6).toString()
+                },
+                expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
+                expectedPosition: {
+                    top: 380,
+                    left: 0
+                },
+                expectedPopupDates: {
+                    startDate: '2/4/2020, 5:00 AM',
+                    endDate: '2/4/2020, 8:00 AM'
+                },
+                expectedHeight: 100,
+                stubClientTimeZone: true
+            },
+            {
+                caseName: 'startDateTimeZone = endDateTimezone and scheduler timeZone is set',
+                appointment: {
+                    startDate: new Date('2020-02-04T14:00:00.000Z'),
+                    endDate: new Date('2020-02-04T15:00:00.000Z'),
+                    startDateTimeZone: 'Africa/Algiers',
+                    endDateTimeZone: 'Africa/Algiers'
+                },
+                schedulerTimeZone: timeZones.Yekaterinburg,
+                expectedContent: '7:00 PM - 8:00 PM',
+                expectedPosition: {
+                    top: 1444,
+                    left: 0
+                },
+                expectedPopupDates: {
+                    startDate: '2/4/2020, 3:00 PM',
+                    endDate: '2/4/2020, 4:00 PM'
+                },
+                expectedHeight: 100,
+                stubClientTimeZone: false
+            },
+            {
+                caseName: 'startDateTimeZone != endDateTimezone and scheduler timeZone is set',
+                appointment: {
+                    startDate: new Date('2020-02-04T14:00:00.000Z'),
+                    endDate: new Date('2020-02-04T15:00:00.000Z'),
+                    startDateTimeZone: 'Africa/Algiers',
+                    endDateTimeZone: 'Africa/Cairo'
+                },
+                schedulerTimeZone: timeZones.Yekaterinburg,
+                expectedContent: '7:00 PM - 8:00 PM',
+                expectedPosition: {
+                    top: 1444,
+                    left: 0
+                },
+                expectedPopupDates: {
+                    startDate: '2/4/2020, 3:00 PM',
+                    endDate: '2/4/2020, 5:00 PM'
+                },
+                expectedHeight: 100,
+                stubClientTimeZone: false
+            }];
+
+            const runTest = async(config, assert) => {
+                const scheduler = await createWrapper({
+                    currentDate: new Date(2020, 1, 4),
+                    views: ['day'],
+                    currentView: 'day',
+                    firstDayOfWeek: 1,
+                    dataSource: [config.appointment],
+                    timeZone: config.schedulerTimeZone,
+                    editing: config.editing,
+                });
+
+                assert.equal(scheduler.appointments.getDateText(), config.expectedContent, 'Appointment content has correct dates');
+                assert.deepEqual(scheduler.appointments.getAppointmentPosition(), config.expectedPosition, 'Appointment is rendered in right cell');
+
+                scheduler.appointments.dblclick(0);
+                const form = scheduler.instance.getAppointmentDetailsForm();
+                const startDateBox = form.getEditor('startDate');
+                const endDateBox = form.getEditor('endDate');
+
+                assert.equal(startDateBox.option('text'), config.expectedPopupDates.startDate, 'Appointment popup has right startDate');
+                assert.equal(endDateBox.option('text'), config.expectedPopupDates.endDate, 'Appointment popup has right endDate');
+            };
+
+            cases.forEach(config => {
+                test(`Appointment should have correct size, position and popup content if ${config.caseName}`, async function(assert) {
+                    const schedulerOptions = { ...config, editing: { legacyForm: true } };
+
+                    if(config.stubClientTimeZone) {
+                        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
+                        try {
+                            await runTest(schedulerOptions, assert);
+                        } finally {
+                            tzOffsetStub.restore();
+                        }
+                    } else {
+                        await runTest(schedulerOptions, assert);
+                    }
+                });
+            });
+
             test('Appointments should be filtered correctly when remoteFiltering is enabled', async function(assert) {
                 const dataSource = new DataSource({
                     store: new ArrayStore({
@@ -188,6 +311,7 @@ module('Common', moduleConfig, () => {
                             allowTimeZoneEditing: true,
                             allowAdding: true,
                             allowUpdating: true,
+                            legacyForm: true,
                         },
                         height: 600,
                         appointmentDragging: {
@@ -195,8 +319,8 @@ module('Common', moduleConfig, () => {
                             onAdd: e => {
                                 e.component.showAppointmentPopup(e.itemData, true);
 
-                                const startDate = scheduler.appointmentForm.getEditor('startDateEditor').option('value');
-                                const endDate = scheduler.appointmentForm.getEditor('endDateEditor').option('value');
+                                const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
+                                const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
 
                                 assert.equal(startDate.valueOf(), expectedStartDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:00 AM');
                                 assert.equal(endDate.valueOf(), expectedEndDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:30 AM');
@@ -299,7 +423,7 @@ module('API', moduleConfig, () => {
 
             assert.ok(updateAppointment.calledOnce, 'Update method is called');
             assert.deepEqual(updateAppointment.getCall(0).args[0], updatedItem, 'Target item is correct');
-            assert.deepEqual(updateAppointment.getCall(0).args[1], { ...updatedItem, allDay: false, recurrenceRule: '' }, 'New data is correct');
+            assert.deepEqual(updateAppointment.getCall(0).args[1], updatedItem, 'New data is correct');
         } finally {
             updateAppointment.restore();
         }
@@ -1658,13 +1782,13 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler({ timeZone: timeZones.NewYork, }); // -4 offset
+                const scheduler = await createScheduler({ timeZone: timeZones.NewYork, editing: { legacyForm: true } }); // -4 offset
 
                 scheduler.appointments.dblclick(index);
 
                 const text = scheduler.appointments.getTitleText(index);
-                const startDate = scheduler.appointmentForm.getEditor('startDateEditor').option('value');
-                const endDate = scheduler.appointmentForm.getEditor('endDateEditor').option('value');
+                const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
+                const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
 
                 assert.equal(startDate.valueOf(), testCase.startDate, `StartDate of '${text}' should be valid`);
                 assert.equal(endDate.valueOf(), testCase.endDate, `EndDate of '${text}' should be valid`);
@@ -1686,19 +1810,78 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler({ });
+                const scheduler = await createScheduler({ editing: { legacyForm: true } });
 
                 scheduler.appointments.dblclick(index);
 
                 const text = scheduler.appointments.getTitleText(index);
-                const startDate = scheduler.appointmentForm.getEditor('startDateEditor').option('value');
-                const endDate = scheduler.appointmentForm.getEditor('endDateEditor').option('value');
+                const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
+                const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
 
                 assert.equal(startDate.valueOf(), testCase.startDate, `StartDate of '${text}' should be valid`);
                 assert.equal(endDate.valueOf(), testCase.endDate, `EndDate of '${text}' should be valid`);
             });
         });
     });
+
+    ['Etc/GMT-5', 'Asia/Ashkhabad'].forEach(timeZone => {
+        test(`Appointment startDate and endDate should be correct in the details view, if custom timeZone='${timeZone}' is setting`,
+            async function(assert) {
+                const startDate = new Date(2015, 3, 11, 11);
+                const endDate = new Date(2015, 3, 11, 11, 30);
+
+                const appointment = {
+                    text: 'Task 1',
+                    Start: startDate,
+                    End: endDate
+                };
+
+                const scheduler = await createWrapper({
+                    timeZone,
+                    dataSource: new DataSource({
+                        store: [appointment]
+                    }),
+                    editing: {
+                        legacyForm: true,
+                    },
+                    currentDate: new Date(2015, 3, 23),
+                    startDateExpr: 'Start',
+                    endDateExpr: 'End'
+                });
+
+
+                scheduler.instance.showAppointmentPopup(appointment);
+
+                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
+                const formData = detailsForm.option('formData');
+                const deltaTz = getDeltaTz(5, startDate);
+
+                assert.deepEqual(formData.Start, new Date(startDate.getTime() + deltaTz), 'start date is correct');
+                assert.deepEqual(formData.End, new Date(endDate.getTime() + deltaTz), 'end date is correct');
+            });
+    });
+
+    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set, legacyForm',
+        async function(assert) {
+            const scheduler = await createWrapper({
+                dataSource: new DataSource({
+                    store: []
+                }),
+                currentDate: new Date(2015, 3, 23),
+                startDateExpr: 'Start',
+                endDateExpr: 'End',
+                timeZone: 'Asia/Calcutta',
+                editing: { legacyForm: true }
+            });
+
+            pointerMock(scheduler.getElement().find(CLASSES.dateTableCell).eq(22)).start().click().click();
+
+            const detailsForm = scheduler.instance.getAppointmentDetailsForm();
+            const formData = detailsForm.option('formData');
+
+            assert.deepEqual(formData.Start, new Date(2015, 3, 23, 11), 'start date is correct');
+            assert.deepEqual(formData.End, new Date(2015, 3, 23, 11, 30), 'end date is correct');
+        });
 
     test('Appointment date correction should be rollback after closing popup, if custom timeZone was set as string', async function(assert) {
         const updatedItem = {
@@ -1726,7 +1909,7 @@ module('Appointment popup', moduleConfig, () => {
 
             assert.ok(updateAppointment.calledOnce, 'Update method is called');
             assert.deepEqual(updateAppointment.getCall(0).args[0], updatedItem, 'Target item is correct');
-            assert.deepEqual(updateAppointment.getCall(0).args[1], { ...updatedItem, allDay: false, recurrenceRule: '' }, 'New data is correct');
+            assert.deepEqual(updateAppointment.getCall(0).args[1], updatedItem, 'New data is correct');
         } finally {
             updateAppointment.restore();
         }

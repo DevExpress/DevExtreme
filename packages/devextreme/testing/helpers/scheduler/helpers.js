@@ -556,7 +556,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getSubject: () => {
                     const textBox = this.appointmentPopup.form.getSubjectTextBox();
                     return textBox.option('value');
-                }
+                },
+                isRecurrenceEditorVisible: () => $('.dx-recurrence-editor-container').is(':visible')
             },
 
             dialog: {
@@ -565,14 +566,14 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 hide: () => $(CLASSES.dialog).find('.dx-closebutton.dx-button').trigger('dxclick')
             },
 
-            getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup'),
+            getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup, .dx-overlay-wrapper.dx-scheduler-legacy-appointment-popup'),
             getRecurrenceDialog: () => $(`${CLASSES.dialog}${CLASSES.popup}`),
             getPopupTitleElement: () => this.appointmentPopup.getPopup().find('.dx-popup-title'),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find('.dx-scrollable-container').get(0);
                 return scrollableContainer.scrollHeight > scrollableContainer.clientHeight;
             },
-            getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget').dxPopup('instance'),
+            getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget, .dx-scheduler-legacy-appointment-popup.dx-widget').dxPopup('instance'),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             setPopupHeight: height => this.appointmentPopup.getPopupInstance().option('height', height),
             getToolbarElementByLocation: location => {
@@ -600,10 +601,11 @@ export class SchedulerTestWrapper extends ElementWrapper {
         this.appointmentForm = {
             getFormInstance: () => this.appointmentPopup.getPopup().find('.dx-form').dxForm('instance'),
             getEditor: name => this.appointmentForm.getFormInstance().getEditor(name),
-            setSubject: (value, fieldName = 'subjectEditor') => this.appointmentForm.getEditor(fieldName).option('value', value),
-            setStartDate: (value) => this.appointmentForm.getEditor('startDateEditor').option('value', value),
-            setEndDate: (value) => this.appointmentForm.getEditor('endDateEditor').option('value', value),
+            setSubject: (value, fieldName = 'text') => this.appointmentForm.getEditor(fieldName).option('value', value),
+            setStartDate: (value) => this.appointmentForm.getEditor('startDate').option('value', value),
+            setEndDate: (value) => this.appointmentForm.getEditor('endDate').option('value', value),
 
+            hasFormSingleColumn: () => $('.dx-responsivebox').first().hasClass('dx-responsivebox-screen-xs'),
             getRecurrentAppointmentFormDialogButtons: () => $('.dx-dialog-buttons .dx-button'),
             clickFormDialogButton: (index = 0) => this.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(index).trigger('dxclick'),
             getPendingEditorsCount: () => $(this.appointmentForm.getFormInstance().element()).find('.dx-validation-pending').length,

@@ -257,6 +257,13 @@ QUnit.test('Scheduler should not throw an error when the details form is opened 
     }
 });
 
+QUnit.test('The \'scrollingEnabled\' option of an appointment form should be \'true\'', async function(assert) {
+    await this.createInstance({ editing: { legacyForm: true } });
+    this.instance.showAppointmentPopup({ startDate: new Date() });
+
+    assert.strictEqual(this.instance.getAppointmentDetailsForm().option('scrollingEnabled'), true, 'the scrollingEnabled option is OK');
+});
+
 QUnit.module('Integration: Date options with ISO8601', {
     beforeEach: function() {
         this.defaultForceIsoDateParsing = config().forceIsoDateParsing;
