@@ -110,6 +110,11 @@
       "schema": "./src/executors/scss-assemble/schema.json",
       "description": "Assemble SCSS package: copy files with data-uri inlining, fonts, and icons"
     },
+    "license-check": {
+      "implementation": "./src/executors/license-check/executor",
+      "schema": "./src/executors/license-check/schema.json",
+      "description": "Verify embedded license notices in built artifacts"
+    },
     "state-manager-optimize": {
       "implementation": "./src/executors/state-manager-optimize/executor",
       "schema": "./src/executors/state-manager-optimize/schema.json",

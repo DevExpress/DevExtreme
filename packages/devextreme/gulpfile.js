@@ -33,7 +33,6 @@ require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
-require('./build/gulp/check_licenses');
 require('./build/gulp/systemjs');
 
 function getTranspileConfig() {
@@ -69,6 +68,8 @@ gulp.task('aspnet', shell.task(
 ));
 
 gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
+
+gulp.task('check-license-notices', shell.task('pnpm nx run devextreme:verify:licenses'));
 
 gulp.task('state-manager-optimize', shell.task('pnpm nx run devextreme:state-manager:optimize'));
 

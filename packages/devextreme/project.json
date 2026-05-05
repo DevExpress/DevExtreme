@@ -957,10 +957,23 @@
       ]
     },
     "verify:licenses": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:license-check",
+      "inputs": [
+        "{projectRoot}/artifacts/js/dx.all.js"
+      ],
       "options": {
-        "command": "gulp check-license-notices",
-        "cwd": "{projectRoot}"
+        "files": [
+          "./artifacts/js/dx.all.js"
+        ],
+        "licenses": [
+          {
+            "name": "rrule.js - Library for working with recurrence rules for calendar dates.",
+            "homepageUrl": "https://github.com/jakubroztocil/rrule",
+            "copyright": "Copyright 2010, Jakub Roztocil and Lars Schoning",
+            "licenseType": "Licenced under the BSD licence.",
+            "licenseUrl": "https://github.com/jakubroztocil/rrule/blob/master/LICENCE"
+          }
+        ]
       }
     },
     "copy:vendor:js": {
