@@ -18,7 +18,7 @@ import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
 import type Tooltip from '@ts/ui/m_tooltip';
 
-import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from '../types';
+import type { AppointmentTooltipItem, TargetedAppointment } from '../types';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -123,7 +123,7 @@ export abstract class TooltipStrategyBase {
     return this.$target;
   }
 
-  public setListItems(dataList: CompactAppointmentOptions['items']): void {
+  public setListItems(dataList: AppointmentTooltipItem[]): void {
     if (dataList.length === 0) {
       this.hide();
     }
@@ -175,8 +175,7 @@ export abstract class TooltipStrategyBase {
       this.list = this.createList(listElement, dataList);
       this.list.registerKeyHandler?.('escape', (): void => {
         this.hide();
-        const target = this.tooltip?.option('target') as { focus?: () => void } | undefined;
-        target?.focus?.();
+        (this.getTarget()?.get(0) as HTMLElement | undefined)?.focus();
       });
       this.list.registerKeyHandler?.('del', (): void => {
         const { focusedElement } = this.list.option();
