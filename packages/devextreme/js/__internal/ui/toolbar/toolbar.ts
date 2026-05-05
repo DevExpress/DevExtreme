@@ -9,7 +9,7 @@ import { MultiLineStrategy } from './strategy/toolbar.multiline';
 import { SingleLineStrategy } from './strategy/toolbar.singleline';
 import type { ToolbarBaseProperties } from './toolbar.base';
 import ToolbarBase from './toolbar.base';
-import { resolveItemFocusTarget } from './toolbar.utils';
+import { resolveItemFocusTarget, TEMPLATE_FOCUSABLE_SELECTOR } from './toolbar.utils';
 
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
@@ -245,7 +245,13 @@ class Toolbar extends ToolbarBase<Properties> {
       const $item = this._findItemElementByItem(item);
       if (!$item.length) return;
       const itemData = this._getItemData($item);
-      resolveItemFocusTarget($item, itemData)?.attr('tabIndex', -1);
+      const $ft = resolveItemFocusTarget($item, itemData);
+      $ft?.attr('tabIndex', -1);
+      // For template items: also suppress inner focusables so they don't appear
+      // in the global Tab sequence while in toolbar-navigation mode.
+      if ($ft?.get(0)?.classList.contains('dx-item-content')) {
+        $ft.find(TEMPLATE_FOCUSABLE_SELECTOR).attr('tabindex', '-1');
+      }
     });
 
     this._getOverflowButtonFocusTarget()?.attr('tabIndex', -1);
@@ -258,6 +264,13 @@ class Toolbar extends ToolbarBase<Properties> {
     }
 
     focusableItems[this._activeItemIndex].attr('tabIndex', 0);
+
+    // Template item in edit mode: restore inner focusables to natural tabindex so
+    // the user can Tab through them and interact normally.
+    const activeEl = focusableItems[this._activeItemIndex].get(0);
+    if (activeEl?.classList.contains('dx-item-content') && this._insideActiveItem) {
+      $(activeEl).find(TEMPLATE_FOCUSABLE_SELECTOR).removeAttr('tabindex');
+    }
   }
 
   /** Moves focus to the item at the given index and updates the roving tabindex. */
@@ -343,6 +356,7 @@ class Toolbar extends ToolbarBase<Properties> {
     const isInput = activeEl.tagName === 'INPUT';
     const isSelectBox = isInput && !!activeEl.closest('.dx-selectbox');
     const isTextBox = isInput && !isSelectBox;
+    const isTemplateContainer = activeEl.classList.contains('dx-item-content');
 
     const isVertical = this.$element().attr('aria-orientation') === 'vertical';
     const isRTL = !!this.option('rtlEnabled');
@@ -373,6 +387,18 @@ class Toolbar extends ToolbarBase<Properties> {
         return;
       }
       // Standalone ButtonGroup or simple Button: pass through unchanged.
+      if (isTemplateContainer) {
+        if (key === 'enter') {
+          e.preventDefault();
+          e.stopPropagation();
+          this._enterTemplateItem(activeEl);
+          return;
+        }
+        // Space: prevent accidental page scroll, otherwise no-op.
+        e.preventDefault();
+        return;
+      }
+      // ButtonGroup or Button: pass through unchanged.
       return;
     }
 
@@ -499,6 +525,18 @@ class Toolbar extends ToolbarBase<Properties> {
     focusTarget2.focus();
   }
 
+  /**
+   * Activates a template item container: enters edit mode so the user can interact
+   * with inner focusable elements, and moves focus to the first one.
+   */
+  _enterTemplateItem(containerEl: HTMLElement): void {
+    const firstFocusable = containerEl.querySelector<HTMLElement>(TEMPLATE_FOCUSABLE_SELECTOR);
+    if (!firstFocusable) return;
+    this._insideActiveItem = true;
+    this._syncRovingTabIndex();
+    firstFocusable.focus();
+  }
+
   _handleFocusIn(e: { target: EventTarget | null }): void {
     const targetEl = e.target as Element;
     const focusableItems = this._getFocusableItems();
@@ -527,6 +565,12 @@ class Toolbar extends ToolbarBase<Properties> {
       const isFocusTargetTextBox = isFocusTargetInput && !isFocusTargetSelectBox;
 
       this._insideActiveItem = fromMouse && isFocusTargetTextBox;
+    } else {
+      // Focus landed on a child element inside the item (e.g. mouse click on an inner
+      // input/button inside a template). Enter edit mode for template containers;
+      // reset to toolbar mode for everything else (guards against stale state).
+      const isFocusTargetTemplate = !!focusTargetEl?.classList.contains('dx-item-content');
+      this._insideActiveItem = isFocusTargetTemplate;
     }
 
     this._activeItemIndex = index;

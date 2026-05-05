@@ -9,6 +9,18 @@ import type Toolbar from './toolbar';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const TOOLBAR_ITEMS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
+/**
+ * CSS selector for keyboard-focusable elements inside template item containers.
+ * Used to manage tabindex of inner elements so they don't appear in the global
+ * Tab sequence while the toolbar is in toolbar-navigation mode.
+ */
+export const TEMPLATE_FOCUSABLE_SELECTOR = [
+  'input:not([disabled])',
+  'button:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+].join(', ');
+
 const getItemInstance = ($element: dxElementWrapper): Widget => {
   // @ts-expect-error ts-error
   const itemData = $element?.data();
@@ -29,29 +41,36 @@ export function resolveItemFocusTarget(
 ): dxElementWrapper | undefined {
   const { widget } = itemData;
 
-  if (!widget || !TOOLBAR_ITEMS.includes(widget)) {
-    return undefined;
+  if (widget && TOOLBAR_ITEMS.includes(widget)) {
+    const $widget = $item.find(widget.toLowerCase().replace('dx', '.dx-'));
+    if (!$widget.length) {
+      return undefined;
+    }
+
+    const itemInstance = getItemInstance($widget);
+    if (!itemInstance) {
+      return undefined;
+    }
+
+    let $focusTarget = itemInstance._focusTarget?.();
+
+    if (widget === 'dxDropDownButton') {
+      $focusTarget = $focusTarget?.find(`.${BUTTON_GROUP_CLASS}`);
+    } else {
+      $focusTarget = $focusTarget ?? $(itemInstance.element());
+    }
+
+    return $focusTarget?.length ? $focusTarget : undefined;
   }
 
-  const $widget = $item.find(widget.toLowerCase().replace('dx', '.dx-'));
-  if (!$widget.length) {
-    return undefined;
+  // Template / custom items: use .dx-item-content as the focus target when the
+  // template contains at least one keyboard-focusable descendant.
+  const $content = $item.find('.dx-item-content').first();
+  if ($content.length && $content.find(TEMPLATE_FOCUSABLE_SELECTOR).length > 0) {
+    return $content;
   }
 
-  const itemInstance = getItemInstance($widget);
-  if (!itemInstance) {
-    return undefined;
-  }
-
-  let $focusTarget = itemInstance._focusTarget?.();
-
-  if (widget === 'dxDropDownButton') {
-    $focusTarget = $focusTarget?.find(`.${BUTTON_GROUP_CLASS}`);
-  } else {
-    $focusTarget = $focusTarget ?? $(itemInstance.element());
-  }
-
-  return $focusTarget?.length ? $focusTarget : undefined;
+  return undefined;
 }
 
 export function toggleItemFocusableElementTabIndex(

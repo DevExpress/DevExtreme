@@ -419,6 +419,16 @@
                 toolbarSeparator,
                 {
                     location: 'before',
+                    locateInMenu: 'never',
+                    template() {
+                        return $('<div style="display:flex;gap:4px;align-items:center">')
+                            .append($('<input placeholder="Filter..." style="width:80px;padding:2px 4px">'))
+                            .append($('<button>Go</button>'));
+                    },
+                },
+                toolbarSeparator,
+                {
+                    location: 'before',
                     locateInMenu: 'auto',
                     widget: 'dxButton',
                     showText: 'inMenu',
