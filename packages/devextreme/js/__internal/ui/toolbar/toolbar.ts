@@ -700,7 +700,22 @@ class Toolbar extends ToolbarBase<Properties> {
         '.dx-popup-wrapper:not(.dx-dropdownmenu-popup-wrapper)',
       );
 
-      if (key === 'downArrow' || key === 'upArrow') {
+      if (key === 'enter' || key === 'space') {
+        // When focus is on a DropDown-style INPUT inside the overflow menu (e.g.
+        // SelectBox), Enter/Space should open its popup — same as in the main toolbar.
+        // For plain buttons and ButtonGroups the browser default (click) is correct.
+        if (nestedPopupOpen || !focusInOverflow || !ae) return;
+        const selectBoxRoot = ae.closest<HTMLElement>('.dx-selectbox');
+        if (selectBoxRoot) {
+          const selectBoxInst = $(selectBoxRoot).data('dxSelectBox') as unknown as
+            { open: () => void } | undefined;
+          if (selectBoxInst) {
+            selectBoxInst.open();
+            (ev as KeyboardEvent).preventDefault();
+            (ev as KeyboardEvent).stopPropagation();
+          }
+        }
+      } else if (key === 'downArrow' || key === 'upArrow') {
         // Don't intercept arrows with modifiers — Alt+↓ opens a SelectBox dropdown,
         // etc. Also skip when a nested popup is open (SelectBox/DropDownBox dropdown)
         // or when focus left the overflow popup entirely.
