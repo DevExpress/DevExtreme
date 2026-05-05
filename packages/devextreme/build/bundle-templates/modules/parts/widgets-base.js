@@ -52,6 +52,7 @@ ui.dxPopover = require('../../../ui/popover');
 ui.dxPopup = require('../../../ui/popup');
 ui.dxProgressBar = require('../../../ui/progress_bar');
 ui.dxRadioGroup = require('../../../ui/radio_group');
+ui.dxRecurrenceEditor = require('../../../ui/recurrence_editor');
 ui.dxRangeSlider = require('../../../ui/range_slider');
 ui.dxResizable = require('../../../ui/resizable');
 ui.dxResponsiveBox = require('../../../ui/responsive_box');

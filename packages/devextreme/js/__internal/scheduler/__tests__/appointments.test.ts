@@ -1,5 +1,5 @@
 import {
-  afterEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
