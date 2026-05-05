@@ -64,6 +64,24 @@ function createMockModules(workspaceRoot: string, projectRoot: string): void {
     ].join('\n'),
     'utf8',
   );
+
+  const chokidarDir = path.join(workspaceNodeModules, 'chokidar');
+  fs.mkdirSync(chokidarDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(chokidarDir, 'index.js'),
+    [
+      'module.exports = {',
+      '  watch: function watch() {',
+      '    return {',
+      '      on: function on() { return this; },',
+      '      close: function close() { return Promise.resolve(); },',
+      '    };',
+      '  },',
+      '};',
+      '',
+    ].join('\n'),
+    'utf8',
+  );
 }
 
 async function setupProjectStructure(workspaceRoot: string): Promise<string> {
