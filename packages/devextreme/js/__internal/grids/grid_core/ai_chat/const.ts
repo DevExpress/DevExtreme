@@ -1,3 +1,6 @@
+import { TEXTAREA_CLASS } from '@ts/ui/m_text_area';
+import { SPEECH_TO_TEXT_CLASS } from '@ts/ui/speech_to_text/speech_to_text';
+
 export const DEFAULT_POPUP_OPTIONS = {
   width: 400,
   minWidth: 400,
@@ -40,8 +43,8 @@ export const CLASSES = {
   messageProgressBar: 'dx-ai-chat__message-progressbar',
   clearChatButton: 'dx-ai-chat__clear-button',
   disabled: 'dx-ai-chat--disabled',
-  textArea: 'dx-textarea',
-  speechToTextButton: 'dx-speech-to-text',
+  textArea: TEXTAREA_CLASS,
+  speechToTextButton: SPEECH_TO_TEXT_CLASS,
 };
 
 export const CLEAR_CHAT_ICON = 'clearhistory';
