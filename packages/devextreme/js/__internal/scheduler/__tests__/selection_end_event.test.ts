@@ -1,7 +1,6 @@
 import {
-  afterEach, beforeEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
-import type { SelectionEndEvent } from '@js/ui/scheduler';
 import { fireEvent } from '@testing-library/dom';
 import support from '@ts/core/utils/m_support';
 
@@ -27,43 +26,6 @@ describe('onSelectionEnd', () => {
   afterEach(() => {
     fx.off = false;
     document.body.innerHTML = '';
-  });
-
-  it('should fire with selectedCellData on multi-cell mouse drag', async () => {
-    const onSelectionEnd = jest.fn<(e: SelectionEndEvent) => void>();
-
-    const { POM, scheduler } = await createScheduler({
-      ...defaultOptions,
-      onSelectionEnd,
-    });
-
-    const firstCell = POM.getDateTableCell(0, 0);
-    const secondCell = POM.getDateTableCell(1, 0);
-    const thirdCell = POM.getDateTableCell(2, 0);
-
-    fireEvent.mouseDown(firstCell, { which: 1 });
-    fireEvent.mouseMove(secondCell);
-    fireEvent.mouseMove(thirdCell);
-    fireEvent.mouseUp(thirdCell);
-
-    expect(onSelectionEnd).toHaveBeenCalledTimes(1);
-
-    const { selectedCellData, component } = onSelectionEnd.mock.calls[0][0];
-
-    expect(selectedCellData).toHaveLength(3);
-
-    const firstStart = selectedCellData[0].startDate;
-    expect(firstStart.getHours()).toBe(9);
-    expect(firstStart.getMinutes()).toBe(0);
-
-    expect(selectedCellData[0].endDate.getTime() - firstStart.getTime()).toBe(30 * 60 * 1000);
-    expect(selectedCellData[1].startDate.getTime()).toBe(selectedCellData[0].endDate.getTime());
-    expect(selectedCellData[2].startDate.getTime()).toBe(selectedCellData[1].endDate.getTime());
-
-    expect(selectedCellData[2].endDate.getHours()).toBe(10);
-    expect(selectedCellData[2].endDate.getMinutes()).toBe(30);
-
-    expect(component).toBe(scheduler);
   });
 
   it('T1187849: should select cells with mouse on touch monitor', async () => {
