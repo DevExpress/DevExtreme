@@ -30,6 +30,15 @@ interface BuildDependencies {
   sass: any;
   postcss: any;
   autoprefixer: (options?: { overrideBrowserslist?: string[] }) => any;
+  chokidar: {
+    watch: (
+      paths: string | string[],
+      options?: Record<string, unknown>,
+    ) => {
+      on: (event: string, handler: (...args: any[]) => void) => unknown;
+      close: () => Promise<void> | void;
+    };
+  };
   CleanCss: new (options: unknown) => { minify: (input: string) => { styles: string } };
   themeOptions: { getThemes: () => Array<[string, string, string, string?]> };
   cleanCssSanitizeOptions: unknown;
@@ -124,6 +133,7 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     sass: projectRequire('sass-embedded'),
     postcss: workspaceRequire('postcss'),
     autoprefixer: workspaceRequire('autoprefixer'),
+    chokidar: workspaceRequire('chokidar'),
     CleanCss: workspaceRequire('clean-css'),
     themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.cjs')) as {
       getThemes: () => Array<[string, string, string, string?]>;
@@ -288,6 +298,7 @@ async function runWatchBuild(
   const cssOutputDir = path.resolve(projectRoot, options.cssOutputDir || DEFAULT_CSS_OUTPUT_DIR);
   const watchDir = path.resolve(projectRoot, 'scss');
   const watchBundleNames = getWatchBundleNames(options);
+  const minifyProfile: MinifyProfile = options.mode === 'ci' ? 'ci' : 'all';
 
   const rebuild = async (): Promise<void> => {
     await generateScssBundles(projectRoot, bundlesDir, deps);
@@ -295,7 +306,7 @@ async function runWatchBuild(
 
     const sources = resolveSourcesByBundleNames(projectRoot, bundlesDir, watchBundleNames);
     for (const source of sources) {
-      await compileFile(source, cssOutputDir, 'all', deps, projectRoot);
+      await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
     }
 
     await copyAssets(projectRoot, cssOutputDir);
@@ -331,15 +342,13 @@ async function runWatchBuild(
       }, 200);
     };
 
-    const watcher = fs.watch(watchDir, { recursive: true }, (_eventType, fileName) => {
-      if (!fileName || !fileName.endsWith('.scss')) {
-        return;
-      }
-      scheduleRebuild();
+    const watcher = deps.chokidar.watch(path.join(watchDir, '**/*.scss'), {
+      ignoreInitial: true,
     });
+    watcher.on('all', scheduleRebuild);
 
     const stopWatcher = () => {
-      watcher.close();
+      void watcher.close();
       if (timer) {
         clearTimeout(timer);
       }
