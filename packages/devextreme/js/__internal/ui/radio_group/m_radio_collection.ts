@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
+import type { DxEvent } from '@js/events';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
@@ -26,12 +26,13 @@ class RadioCollection extends CollectionWidget<Properties> {
   }
 
   _getDefaultOptions(): Properties {
-    const defaultOptions = super._getDefaultOptions();
-
-    // @ts-expect-error
-    return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
+      // @ts-expect-error DataExpressionMixin._dataExpressionDefaultOptions()
+      // should be added to the type
+      ...DataExpressionMixin._dataExpressionDefaultOptions(),
       _itemAttributes: { role: 'radio' },
-    });
+    } as Properties;
   }
 
   _initMarkup(): void {
@@ -83,22 +84,21 @@ class RadioCollection extends CollectionWidget<Properties> {
     this._renderContent();
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  _supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => void> {
     const parent = super._supportedKeys();
 
-    return extend({}, parent, {
-      enter(e) {
+    return {
+      ...parent,
+      enter(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
-        // @ts-expect-error
-        return parent.enter.apply(this, arguments);
+        parent.enter?.apply(this, [e]);
       },
 
-      space(e) {
+      space(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
-        // @ts-expect-error
-        return parent.space.apply(this, arguments);
+        parent.space?.apply(this, [e]);
       },
-    });
+    };
   }
 
   _itemElements(): dxElementWrapper {
