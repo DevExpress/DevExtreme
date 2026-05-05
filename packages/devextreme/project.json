@@ -745,12 +745,7 @@
       "options": {
         "files": [
           { "from": "./js/aspnet.js", "to": "./artifacts/js/dx.aspnet.mvc.js" }
-        ],
-        "applyLicenseHeaders": {
-          "targetSubdir": "./artifacts/js",
-          "separator": "",
-          "includePatterns": ["dx.aspnet.mvc.js"]
-        }
+        ]
       },
       "inputs": ["{projectRoot}/js/aspnet.js"],
       "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
@@ -759,7 +754,12 @@
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
         "files": ["./artifacts/js/dx.aspnet.mvc.js"],
-        "mode": { "name": "beautify" }
+        "mode": { "name": "beautify" },
+        "applyLicenseHeaders": {
+          "targetSubdir": "./artifacts/js",
+          "separator": "",
+          "includePatterns": ["dx.aspnet.mvc.js"]
+        }
       },
       "configurations": {
         "normalize": {

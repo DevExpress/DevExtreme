@@ -6,12 +6,18 @@ import { createExecutor } from '../../utils/create-executor';
 import { expandEntries } from '../../utils/glob-discovery';
 import {
   ensureTrailingNewline,
+  loadProjectPackageJson,
   normalizeEol,
   readFileText,
   writeFileText,
 } from '../../utils/file-operations';
 import { CompressExecutorSchema, CompressMode, CompressModeName } from './schema';
-import { DEFAULT_EULA_URL } from '../add-license-headers/defaults';
+import { applyLicenseHeadersToDirectory } from '../add-license-headers/add-license-headers.impl';
+import { DEFAULT_EULA_URL, resolveLicenseTemplate } from '../add-license-headers/defaults';
+import type { ApplyLicenseHeadersOption } from '../add-license-headers/schema';
+
+const ERROR_APPLY_LICENSE_HEADERS_TARGET_SUBDIR_REQUIRED =
+  'Compress: applyLicenseHeaders.targetSubdir is required to specify the directory to apply headers to';
 
 const STRIP_DEBUG_REGEX = /\/{2,}\s{0,}#DEBUG[\s\S]*?\/{2,}\s{0,}#ENDDEBUG/g;
 
@@ -132,11 +138,41 @@ async function compressFile(filePath: string, mode: CompressMode): Promise<void>
   await writeFileText(filePath, await runStrategy(raw, resolved));
 }
 
+async function applyLicenseHeadersIfRequested(
+  applyLicenseHeaders: ApplyLicenseHeadersOption | undefined,
+  projectRoot: string,
+): Promise<void> {
+  if (!applyLicenseHeaders) {
+    return;
+  }
+  if (!applyLicenseHeaders.targetSubdir) {
+    throw new Error(ERROR_APPLY_LICENSE_HEADERS_TARGET_SUBDIR_REQUIRED);
+  }
+  const pkg = await loadProjectPackageJson(projectRoot);
+  const templatePath = resolveLicenseTemplate(projectRoot, applyLicenseHeaders);
+  const targetDir = path.join(projectRoot, applyLicenseHeaders.targetSubdir);
+  await applyLicenseHeadersToDirectory({
+    targetDir,
+    pkg,
+    templatePath,
+    eulaUrl: applyLicenseHeaders.eulaUrl ?? DEFAULT_EULA_URL,
+    mode: applyLicenseHeaders.mode,
+    version: applyLicenseHeaders.version,
+    commentType: applyLicenseHeaders.commentType,
+    separator: applyLicenseHeaders.separator,
+    prependAfterLicense: applyLicenseHeaders.prependAfterLicense,
+    filenameMode: applyLicenseHeaders.filenameMode,
+    includePatterns: applyLicenseHeaders.includePatterns,
+    excludePatterns: applyLicenseHeaders.excludePatterns,
+  });
+}
+
 interface ResolvedCompress {
   projectRoot: string;
   files: string[];
   mode: CompressMode;
   modeName: string;
+  applyLicenseHeaders?: ApplyLicenseHeadersOption;
 }
 
 export default createExecutor<CompressExecutorSchema, ResolvedCompress>({
@@ -151,12 +187,14 @@ export default createExecutor<CompressExecutorSchema, ResolvedCompress>({
       files: expanded,
       mode: options.mode,
       modeName: typeof options.mode === 'string' ? options.mode : options.mode.name,
+      applyLicenseHeaders: options.applyLicenseHeaders,
     };
   },
-  run: async ({ projectRoot, files, mode, modeName }) => {
+  run: async ({ projectRoot, files, mode, modeName, applyLicenseHeaders }) => {
     for (const filePath of files) {
       await compressFile(filePath, mode);
       logger.verbose(`Compressed ${path.relative(projectRoot, filePath)} (${modeName})`);
     }
+    await applyLicenseHeadersIfRequested(applyLicenseHeaders, projectRoot);
   },
 });
