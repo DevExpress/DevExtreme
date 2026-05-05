@@ -44,7 +44,6 @@ class RadioButton extends Editor {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _canValueBeChangedByClick(): boolean {
     return true;
   }
