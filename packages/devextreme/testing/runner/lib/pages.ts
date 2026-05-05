@@ -238,6 +238,12 @@ export function createPagesRenderer({
           deps: ['jquery'],
           exports: 'ko',
         },
+        '/packages/devextreme/node_modules/zod/lib/*.js': {
+          format: 'cjs',
+        },
+        '/packages/devextreme/node_modules/zod-to-json-schema/dist/cjs/*.js': {
+          format: 'cjs',
+        },
         '*.js': {
           babelOptions: {
             es2015: false,
