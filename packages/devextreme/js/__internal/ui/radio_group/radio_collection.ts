@@ -24,7 +24,6 @@ class RadioCollection extends CollectionWidget<Properties> {
     return $(this.element()).parent();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _nullValueSelectionSupported(): boolean {
     return true;
   }
@@ -51,7 +50,6 @@ class RadioCollection extends CollectionWidget<Properties> {
     return this._focusTarget();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemIdTarget($target: dxElementWrapper): dxElementWrapper {
     const $radioContainer = $target.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
 
@@ -150,7 +148,6 @@ class RadioCollection extends CollectionWidget<Properties> {
     return this._itemContainer().children(this._itemSelector());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setAriaSelectionAttribute(): void {}
 }
 

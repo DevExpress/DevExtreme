@@ -9,4 +9,4 @@ on:
 jobs:
   invoke:
     name: Invoke
-    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repo-check/latest
+    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check
