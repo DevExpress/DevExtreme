@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { logger } from '@nx/devkit';
 import executor from './executor';
 import { StateManagerOptimizeExecutorSchema } from './schema';
 import {
@@ -37,9 +38,9 @@ describe('StateManagerOptimizeExecutor E2E', () => {
   const indexPathFor = (variant: Variant): string =>
     path.join(stateManagerAbsoluteFor(variant), 'index.js');
 
-  const runOptimize = async (): Promise<void> => {
+  const runOptimize = async (): Promise<{ success: boolean }> => {
     const options: StateManagerOptimizeExecutorSchema = { transpiledDirs: [TRANSPILED_DIR] };
-    await executor(options, context);
+    return executor(options, context);
   };
 
   beforeEach(async () => {
@@ -97,5 +98,52 @@ describe('StateManagerOptimizeExecutor E2E', () => {
 
     const cjsIndexContent = await readFileText(indexPathFor('cjs'));
     expect(cjsIndexContent).toContain('require("./prod/index")');
+  }, 30000);
+
+  it('should optimize index.js when state_manager lives at flat root layout (no cjs/esm variant subdir)', async () => {
+    const flatStateManagerDir = path.join(projectDir, TRANSPILED_DIR, STATE_MANAGER_RELATIVE_PATH);
+    await writeFileText(path.join(flatStateManagerDir, 'index.js'), INDEX_DEV_CONTENT);
+    await writeFileText(path.join(flatStateManagerDir, 'dev', 'index.js'), DEV_FILE_CONTENT);
+    await writeFileText(path.join(flatStateManagerDir, 'prod', 'index.js'), PROD_FILE_CONTENT);
+    await writeFileText(
+      path.join(flatStateManagerDir, 'state_manager.test.js'),
+      TOP_LEVEL_NON_INDEX_CONTENT,
+    );
+
+    await runOptimize();
+
+    expect(await readFileText(path.join(flatStateManagerDir, 'index.js'))).toBe(INDEX_PROD_CONTENT);
+    expect(fs.existsSync(path.join(flatStateManagerDir, 'dev'))).toBe(false);
+    expect(fs.existsSync(path.join(flatStateManagerDir, 'state_manager.test.js'))).toBe(false);
+    expect(await readFileText(path.join(flatStateManagerDir, 'prod', 'index.js'))).toBe(
+      PROD_FILE_CONTENT,
+    );
+  }, 30000);
+
+  it('should optimize state_manager at any depth (mixed flat + nested in same tree)', async () => {
+    const flatStateManagerDir = path.join(projectDir, TRANSPILED_DIR, STATE_MANAGER_RELATIVE_PATH);
+    await writeFileText(path.join(flatStateManagerDir, 'index.js'), INDEX_DEV_CONTENT);
+    await writeFileText(path.join(flatStateManagerDir, 'dev', 'index.js'), DEV_FILE_CONTENT);
+    await writeFileText(path.join(flatStateManagerDir, 'prod', 'index.js'), PROD_FILE_CONTENT);
+
+    await runOptimize();
+
+    expect(await readFileText(path.join(flatStateManagerDir, 'index.js'))).toBe(INDEX_PROD_CONTENT);
+    expect(await readFileText(indexPathFor('cjs'))).toContain('require("./prod/index")');
+  }, 30000);
+
+  it('should throw when no state_manager directories are found in any transpiledDir', async () => {
+    const errorSpy = jest.spyOn(logger, 'error').mockImplementation(() => undefined);
+
+    const options: StateManagerOptimizeExecutorSchema = {
+      transpiledDirs: ['./artifacts/transpiled-no-state-manager'],
+    };
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(false);
+    const errorMessage = String(errorSpy.mock.calls[0][0]);
+    expect(errorMessage).toContain('No state_manager/index.js');
+
+    errorSpy.mockRestore();
   }, 30000);
 });

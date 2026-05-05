@@ -1,21 +1,20 @@
-import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as babel from '@babel/core';
+import { glob } from 'glob';
 import { logger } from '@nx/devkit';
 import { createExecutor } from '../../utils/create-executor';
 import { writeFileText } from '../../utils/file-operations';
 import { removeDirectoryRespectingExclusions } from '../clean/clean.impl';
+import { toPosixPath } from '../../utils/path-resolver';
 import { StateManagerOptimizeExecutorSchema } from './schema';
 
 const ESM_REEXPORT = "export * from './prod/index';";
-const STATE_MANAGER_REL_PATH = path.join('__internal', 'core', 'state_manager');
+const STATE_MANAGER_INDEX_GLOB = '**/__internal/core/state_manager/index.js';
 const ERROR_BABEL_NO_CODE = 'Babel returned no code for CJS state_manager index.js';
+const ERROR_NO_STATE_MANAGER_FOUND =
+  'No state_manager/index.js found in any configured transpiledDirs';
 
-const VARIANTS = ['esm', 'cjs'] as const;
-type Variant = (typeof VARIANTS)[number];
-type ContentBuilder = (indexPath: string) => string;
-
-function transformReexportToCjs(indexPath: string): string {
+export function transformReexportToCjs(indexPath: string): string {
   const result = babel.transformSync(ESM_REEXPORT, {
     filename: indexPath,
     plugins: [['@babel/plugin-transform-modules-commonjs']],
@@ -28,33 +27,33 @@ function transformReexportToCjs(indexPath: string): string {
   return result.code;
 }
 
-const CONTENT_BUILDERS: Record<Variant, ContentBuilder> = {
-  esm: () => ESM_REEXPORT,
-  cjs: (indexPath) => transformReexportToCjs(indexPath),
-};
+function isCjsFile(filePath: string): boolean {
+  return toPosixPath(filePath).includes('/cjs/');
+}
 
-async function optimizeVariant(variant: Variant, transpiledRoot: string): Promise<void> {
-  const stateManagerDir = path.join(transpiledRoot, variant, STATE_MANAGER_REL_PATH);
+async function optimizeIndexFile(indexPath: string): Promise<void> {
+  const content = isCjsFile(indexPath) ? transformReexportToCjs(indexPath) : ESM_REEXPORT;
+  await writeFileText(indexPath, content);
 
-  if (!fs.existsSync(stateManagerDir)) {
-    logger.verbose(`Skipping ${variant} state_manager: ${stateManagerDir} does not exist`);
-    return;
-  }
-
-  const indexPath = path.join(stateManagerDir, 'index.js');
-  if (fs.existsSync(indexPath)) {
-    await writeFileText(indexPath, CONTENT_BUILDERS[variant](indexPath));
-  }
-
+  const stateManagerDir = path.dirname(indexPath);
   await removeDirectoryRespectingExclusions(stateManagerDir, [
     indexPath,
     path.join(stateManagerDir, 'prod'),
   ]);
 }
 
-async function optimizeTranspiledDir(transpiledDir: string, projectRoot: string): Promise<void> {
-  const transpiledRoot = path.join(projectRoot, transpiledDir);
-  await Promise.all(VARIANTS.map((variant) => optimizeVariant(variant, transpiledRoot)));
+async function optimizeTranspiledDir(transpiledRoot: string): Promise<number> {
+  const indexFiles = await glob(STATE_MANAGER_INDEX_GLOB, {
+    cwd: toPosixPath(transpiledRoot),
+    absolute: true,
+    nodir: true,
+  });
+
+  logger.verbose(`Found ${indexFiles.length} state_manager index.js file(s) in ${transpiledRoot}`);
+
+  await Promise.all(indexFiles.map(optimizeIndexFile));
+
+  return indexFiles.length;
 }
 
 interface ResolvedStateManagerOptimize {
@@ -73,10 +72,18 @@ export default createExecutor<StateManagerOptimizeExecutorSchema, ResolvedStateM
       `Optimizing state_manager modules in ${resolved.transpiledDirs.length} transpiled tree(s)`,
     );
 
-    await Promise.all(
+    const counts = await Promise.all(
       resolved.transpiledDirs.map((transpiledDir) =>
-        optimizeTranspiledDir(transpiledDir, resolved.projectRoot),
+        optimizeTranspiledDir(path.join(resolved.projectRoot, transpiledDir)),
       ),
     );
+
+    const totalFound = counts.reduce((sum, count) => sum + count, 0);
+
+    if (totalFound === 0) {
+      throw new Error(
+        `${ERROR_NO_STATE_MANAGER_FOUND}: ${resolved.transpiledDirs.join(', ')}. Check transpile output layout or transpiledDirs option.`,
+      );
+    }
   },
 });
