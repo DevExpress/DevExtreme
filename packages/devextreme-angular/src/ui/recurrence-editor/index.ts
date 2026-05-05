@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import type { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/recurrence_editor';
-import type { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/recurrence_editor';
+import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxRecurrenceEditor from 'devextreme/ui/recurrence_editor';
 
