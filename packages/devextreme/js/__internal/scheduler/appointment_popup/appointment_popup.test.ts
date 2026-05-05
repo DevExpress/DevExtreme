@@ -123,7 +123,6 @@ describe('Isolated AppointmentPopup environment', () => {
 
     const onSave = jest.fn((newAppointment) => {
       updateAppointment(sourceAppointment, updatedAppointment);
-      // @ts-expect-error
       return addAppointment(newAppointment);
     });
 
