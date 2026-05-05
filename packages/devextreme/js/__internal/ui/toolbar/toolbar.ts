@@ -32,7 +32,13 @@ class Toolbar extends ToolbarBase<Properties> {
   // Arrow keys pass through to the widget; Esc returns to toolbar navigation.
   _insideActiveItem = false;
 
+  // True when the most recent focus change inside the toolbar was triggered by a mouse click.
+  // Used to distinguish mouse-initiated focus from keyboard navigation.
+  _lastFocusFromMouse = false;
+
   _keyboardNavHandler: EventListener | undefined;
+
+  _mouseDownHandler: EventListener | undefined;
 
   _keyboardNavContainer: Element | undefined;
 
@@ -272,6 +278,10 @@ class Toolbar extends ToolbarBase<Properties> {
       this._handleKeyboardNavigation(e as KeyboardEvent);
     };
     container.addEventListener('keydown', this._keyboardNavHandler, true);
+    this._mouseDownHandler = (): void => {
+      this._lastFocusFromMouse = true;
+    };
+    container.addEventListener('mousedown', this._mouseDownHandler, true);
     this._keyboardNavContainer = container;
     eventsEngine.on(container, addNamespace('focusin', KBN_NAMESPACE), (e): void => { this._handleFocusIn(e); });
   }
@@ -280,6 +290,10 @@ class Toolbar extends ToolbarBase<Properties> {
     if (this._keyboardNavContainer) {
       if (this._keyboardNavHandler) {
         this._keyboardNavContainer.removeEventListener('keydown', this._keyboardNavHandler, true);
+      }
+      if (this._mouseDownHandler) {
+        this._keyboardNavContainer.removeEventListener('mousedown', this._mouseDownHandler, true);
+        this._mouseDownHandler = undefined;
       }
       eventsEngine.off(this._keyboardNavContainer, addNamespace('focusin', KBN_NAMESPACE));
       this._keyboardNavContainer = undefined;
@@ -489,19 +503,30 @@ class Toolbar extends ToolbarBase<Properties> {
     const targetEl = e.target as Element;
     const focusableItems = this._getFocusableItems();
 
-    // Reset "inside widget" mode when focus comes back to a toolbar-level focus target.
     const index = focusableItems.findIndex(($ft) => {
       const el = $ft.get(0) as Element | undefined;
       return el === targetEl || (!!el && el.contains(targetEl));
     });
 
-    if (index === -1) return;
+    if (index === -1) {
+      this._lastFocusFromMouse = false;
+      return;
+    }
 
-    // If focus returns to the top-level focus target (not a child button inside ButtonGroup),
-    // exit inside-widget mode.
-    const isOnFocusTarget = focusableItems[index]?.get(0) === targetEl;
+    const focusTargetEl = focusableItems[index]?.get(0) as Element | undefined;
+    const isOnFocusTarget = focusTargetEl === targetEl;
+
+    const fromMouse = this._lastFocusFromMouse;
+    this._lastFocusFromMouse = false;
+
     if (isOnFocusTarget) {
-      this._insideActiveItem = false;
+      // For a mouse click on a TextBox, immediately activate edit mode so the user can
+      // type without pressing Enter first. For all other items, always reset to toolbar mode.
+      const isFocusTargetInput = focusTargetEl?.tagName === 'INPUT';
+      const isFocusTargetSelectBox = isFocusTargetInput && !!focusTargetEl?.closest?.('.dx-selectbox');
+      const isFocusTargetTextBox = isFocusTargetInput && !isFocusTargetSelectBox;
+
+      this._insideActiveItem = fromMouse && isFocusTargetTextBox;
     }
 
     this._activeItemIndex = index;
