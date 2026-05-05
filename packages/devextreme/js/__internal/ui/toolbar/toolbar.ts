@@ -1,7 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
-import type { dxElementWrapper } from '@js/core/renderer';
+import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { Item } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 
@@ -292,22 +292,29 @@ class Toolbar extends ToolbarBase<Properties> {
     if (!key) return;
 
     const focusableItems = this._getFocusableItems();
+    const activeEl = focusableItems[this._activeItemIndex]?.get(0) as HTMLElement | undefined;
 
-    // Esc: exit "inside widget" mode → return focus to the toolbar-level focus target.
+    // ── Esc ──────────────────────────────────────────────────────────────────
     if (key === 'escape') {
       if (this._insideActiveItem) {
         this._insideActiveItem = false;
-        const $target = focusableItems[this._activeItemIndex];
-        ($target?.get(0) as HTMLElement | undefined)?.focus();
-        e.stopPropagation();
+        // For inline widgets (TextBox, ButtonGroup inside toolbar DOM): explicitly refocus
+        // and stop propagation so the widget doesn't steal focus back.
+        // For popup widgets (popup rendered outside toolbar DOM): the widget's own Esc
+        // closes the popup and returns focus here; _handleFocusIn then resets the flag.
+        const isInsideToolbar = !!this._keyboardNavContainer?.contains(e.target as Element);
+        if (isInsideToolbar) {
+          activeEl?.focus();
+          e.stopPropagation();
+        }
       }
       return;
     }
 
-    // While inside a widget, pass all keys through.
+    // ── Widget mode: pass all keys through ───────────────────────────────────
     if (this._insideActiveItem) return;
 
-    // Toolbar level: only act when focus is on one of our focus targets.
+    // ── Must be on a toolbar-level focus target ───────────────────────────────
     const targetEl = e.target as Element;
     const isOnToolbarItem = focusableItems.some(($ft) => {
       const el = $ft.get(0);
@@ -315,29 +322,65 @@ class Toolbar extends ToolbarBase<Properties> {
     });
     if (!isOnToolbarItem) return;
 
-    if (key === 'enter' || key === 'space') {
-      const activeEl = focusableItems[this._activeItemIndex]?.get(0) as HTMLElement | undefined;
-      if (!activeEl) return;
+    if (!activeEl) return;
 
-      // Standalone ButtonGroup (not DropDownButton): intercept Enter/Space to prevent
-      // immediate button activation. Enter navigation mode and focus the first button.
-      const isStandaloneButtonGroup = activeEl.classList.contains('dx-buttongroup')
-        && !activeEl.closest('.dx-dropdownbutton');
-      if (!isStandaloneButtonGroup) return; // For Button, DropDownButton, etc.: pass through.
+    // ── Categorise active item ────────────────────────────────────────────────
+    const isInsideDropDownButton = !!activeEl.closest('.dx-dropdownbutton');
+    const isInput = activeEl.tagName === 'INPUT';
+    const isSelectBox = isInput && !!activeEl.closest('.dx-selectbox');
+    const isTextBox = isInput && !isSelectBox;
 
-      e.preventDefault();
-      e.stopPropagation();
-      const firstBtn = activeEl.querySelector<HTMLElement>('.dx-button:not(.dx-state-disabled)');
-      if (!firstBtn) return;
-      this._insideActiveItem = true;
-      firstBtn.focus();
-      return;
-    }
-
-    // Arrow / Home / End: navigate between toolbar items.
     const isVertical = this.$element().attr('aria-orientation') === 'vertical';
     const isRTL = !!this.option('rtlEnabled');
 
+    // ── Enter / Space ─────────────────────────────────────────────────────────
+    if (key === 'enter' || key === 'space') {
+      if (isInsideDropDownButton) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._openDropDownButtonAndFocus(activeEl);
+        return;
+      }
+      if (isSelectBox) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._openSelectBoxAndFocus(activeEl);
+        return;
+      }
+      if (isTextBox) {
+        if (key === 'enter') {
+          // Only Enter activates editing mode (not Space).
+          this._insideActiveItem = true;
+          return; // pass through to input
+        }
+        // Space: stay in toolbar mode, block insertion.
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      // Standalone ButtonGroup or simple Button: pass through unchanged.
+      return;
+    }
+
+    // ── ↓ opens popup widgets ─────────────────────────────────────────────────
+    if (key === 'downArrow' && !isVertical) {
+      if (isInsideDropDownButton) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._openDropDownButtonAndFocus(activeEl);
+        return;
+      }
+      if (isSelectBox) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._openSelectBoxAndFocus(activeEl);
+        return;
+      }
+      // ButtonGroup or Button: fall through (ButtonGroup handles ↓ internally).
+      return;
+    }
+
+    // ── Arrow / Home / End: toolbar navigation ────────────────────────────────
     let direction: 'next' | 'prev' | 'first' | 'last' | null = null;
 
     if (key === 'home') {
@@ -353,7 +396,18 @@ class Toolbar extends ToolbarBase<Properties> {
       direction = 'prev';
     }
 
-    if (direction === null) return;
+    if (direction === null) {
+      // For TextBox in toolbar mode: block any key that would produce text input
+      // (characters, Backspace, Delete). Tab and F-keys are NOT blocked.
+      if (isTextBox) {
+        const isTextInputKey = e.key.length === 1 || key === 'backspace' || key === 'del';
+        if (isTextInputKey) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+      return;
+    }
 
     e.preventDefault();
     e.stopPropagation();
@@ -385,16 +439,50 @@ class Toolbar extends ToolbarBase<Properties> {
   }
 
   /**
-   * After a DropDownButton opens its popup via keyboard (Enter), moves focus to
-   * the first focusable element inside the popup overlay so the user can navigate
-   * the list with arrow keys without needing to Tab.
+   * Opens a DropDownButton popup using its public API and moves focus
+   * into the popup's scrollable list.
    */
-  _focusOpenDropDownPopup(): void {
-    // Exclude wrappers that DevExtreme has hidden (they stay in the DOM).
-    const popupFocusTarget = document.querySelector<HTMLElement>(
-      '.dx-dropdownbutton-popup-wrapper:not([aria-hidden="true"]) [tabindex="0"]',
+  _openDropDownButtonAndFocus(focusTarget: HTMLElement): void {
+    const dropDownButtonRoot = focusTarget.closest('.dx-dropdownbutton');
+    if (!dropDownButtonRoot) return;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const instance = $(dropDownButtonRoot).data('dxDropDownButton') as unknown as { open: () => void } | undefined;
+    if (!instance) return;
+
+    instance.open();
+    this._insideActiveItem = true;
+
+    // Popup DOM is created synchronously; focus the scrollable list container.
+    const listContainer = document.querySelector<HTMLElement>(
+      '.dx-dropdownbutton-popup-wrapper .dx-scrollview-content',
     );
-    popupFocusTarget?.focus();
+    listContainer?.focus();
+  }
+
+  /**
+   * Opens a SelectBox dropdown and moves focus to the first (or selected) list item.
+   * Temporarily sets tabindex=0 on the item so it can receive focus.
+   */
+  _openSelectBoxAndFocus(focusTarget: HTMLElement): void {
+    const selectBoxRoot = focusTarget.closest('.dx-selectbox');
+    if (!selectBoxRoot) return;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const instance = $(selectBoxRoot).data('dxSelectBox') as unknown as { open: () => void } | undefined;
+    if (!instance) return;
+
+    instance.open();
+    this._insideActiveItem = true;
+
+    // Popup DOM is created synchronously. Focus the selected or first list item.
+    const popupWrapper = document.querySelector<HTMLElement>('.dx-dropdownlist-popup-wrapper');
+    if (!popupWrapper) return;
+
+    const selectedItem = popupWrapper.querySelector<HTMLElement>('.dx-list-item.dx-state-selected');
+    const focusTarget2 = selectedItem ?? popupWrapper.querySelector<HTMLElement>('.dx-list-item');
+    if (!focusTarget2) return;
+
+    focusTarget2.setAttribute('tabindex', '0');
+    focusTarget2.focus();
   }
 
   _handleFocusIn(e: { target: EventTarget | null }): void {
@@ -416,10 +504,10 @@ class Toolbar extends ToolbarBase<Properties> {
       this._insideActiveItem = false;
     }
 
-    if (index !== this._activeItemIndex) {
-      this._activeItemIndex = index;
-      this._syncRovingTabIndex();
-    }
+    this._activeItemIndex = index;
+    // Always sync to clean up any rogue tabindices set by inner widgets
+    // (e.g. dx-list sets tabindex=0 on its scrollview after popup opens).
+    this._syncRovingTabIndex();
   }
 
   _isMenuItem(itemData: Item): boolean {

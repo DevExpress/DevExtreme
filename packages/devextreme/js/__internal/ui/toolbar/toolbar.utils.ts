@@ -19,6 +19,41 @@ const getItemInstance = ($element: dxElementWrapper): Widget => {
   return (widgetName && itemData[widgetName]) as Widget;
 };
 
+/**
+ * Resolves the focusable DOM element for a toolbar item widget.
+ * Returns undefined for non-widget items (templates, separators, labels).
+ */
+export function resolveItemFocusTarget(
+  $item: dxElementWrapper,
+  itemData: Item,
+): dxElementWrapper | undefined {
+  const { widget } = itemData;
+
+  if (!widget || !TOOLBAR_ITEMS.includes(widget)) {
+    return undefined;
+  }
+
+  const $widget = $item.find(widget.toLowerCase().replace('dx', '.dx-'));
+  if (!$widget.length) {
+    return undefined;
+  }
+
+  const itemInstance = getItemInstance($widget);
+  if (!itemInstance) {
+    return undefined;
+  }
+
+  let $focusTarget = itemInstance._focusTarget?.();
+
+  if (widget === 'dxDropDownButton') {
+    $focusTarget = $focusTarget?.find(`.${BUTTON_GROUP_CLASS}`);
+  } else {
+    $focusTarget = $focusTarget ?? $(itemInstance.element());
+  }
+
+  return $focusTarget?.length ? $focusTarget : undefined;
+}
+
 export function toggleItemFocusableElementTabIndex(
   context: Toolbar | ListBase | undefined,
   item: Item,
@@ -33,31 +68,15 @@ export function toggleItemFocusableElementTabIndex(
   const itemData = context._getItemData($item);
   const isItemNotFocusable = !!(itemData.options?.disabled || itemData.disabled || context.option('disabled'));
 
-  const { widget } = itemData;
+  const $focusTarget = resolveItemFocusTarget($item, itemData);
+  if (!$focusTarget) {
+    return;
+  }
 
-  if (widget && TOOLBAR_ITEMS.includes(widget)) {
-    const $widget = $item.find(widget.toLowerCase().replace('dx', '.dx-'));
-    if ($widget.length) {
-      const itemInstance = getItemInstance($widget);
-
-      if (!itemInstance) {
-        return;
-      }
-
-      let $focusTarget = itemInstance._focusTarget?.();
-
-      if (widget === 'dxDropDownButton') {
-        $focusTarget = $focusTarget?.find(`.${BUTTON_GROUP_CLASS}`);
-      } else {
-        $focusTarget = $focusTarget ?? $(itemInstance.element());
-      }
-
-      const tabIndex = itemData.options?.tabIndex;
-      if (isItemNotFocusable) {
-        $focusTarget.attr('tabIndex', -1);
-      } else {
-        $focusTarget.attr('tabIndex', tabIndex ?? 0);
-      }
-    }
+  const tabIndex = itemData.options?.tabIndex;
+  if (isItemNotFocusable) {
+    $focusTarget.attr('tabIndex', -1);
+  } else {
+    $focusTarget.attr('tabIndex', tabIndex ?? 0);
   }
 }
