@@ -286,6 +286,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       showTitle: false,
       fullScreen: false,
       ignoreChildEvents: false,
+      // Prevent the overlay from auto-focusing its content after the show
+      // animation completes. Focus management for the overflow menu popup is
+      // handled entirely by the toolbar's keyboard navigation logic.
+      focusStateEnabled: false,
       _ignoreCloseOnChildEscape: true,
       _fixWrapperPosition: true,
     });

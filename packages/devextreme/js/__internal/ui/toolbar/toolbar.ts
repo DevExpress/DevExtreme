@@ -670,8 +670,13 @@ class Toolbar extends ToolbarBase<Properties> {
       )];
     };
 
-    const items = getFocusableMenuItems();
-    items[0]?.focus();
+    // Focus the first item after the popup finishes opening.
+    // The popup overlay previously stole focus via its onShown handler, but
+    // toolbar.menu.ts now has focusStateEnabled:false on the popup to prevent that.
+    // We still defer with rAF to let the popup finish rendering.
+    window.requestAnimationFrame(() => {
+      getFocusableMenuItems()[0]?.focus();
+    });
 
     // Attach a document-level capture listener to handle Esc/Tab/↑/↓ from the popup.
     // The popup is outside _$toolbarItemsContainer so the toolbar capture handler
@@ -684,20 +689,43 @@ class Toolbar extends ToolbarBase<Properties> {
     this._overflowMenuKeyHandler = (ev: Event): void => {
       const key = normalizeKeyName(ev as Parameters<typeof normalizeKeyName>[0]);
 
+      // If focus has moved into a sub-popup (e.g. SelectBox dropdown) or a nested
+      // overlay opened by a widget inside the overflow menu, let that widget handle
+      // keyboard events first. We detect this by checking whether focus left the
+      // overflow popup wrapper, or whether any overlay other than our own is open.
+      const overflowWrapper = document.querySelector('.dx-dropdownmenu-popup-wrapper');
+      const ae = document.activeElement as HTMLElement | null;
+      const focusInOverflow = !!overflowWrapper && !!ae && overflowWrapper.contains(ae);
+      const nestedPopupOpen = !!document.querySelector(
+        '.dx-popup-wrapper:not(.dx-dropdownmenu-popup-wrapper)',
+      );
+
       if (key === 'downArrow' || key === 'upArrow') {
+        // Don't intercept arrows with modifiers — Alt+↓ opens a SelectBox dropdown,
+        // etc. Also skip when a nested popup is open (SelectBox/DropDownBox dropdown)
+        // or when focus left the overflow popup entirely.
+        const evt = ev as KeyboardEvent;
+        if (evt.altKey || evt.ctrlKey || evt.metaKey) return;
+        if (nestedPopupOpen || !focusInOverflow) return;
+
         const menuItems = getFocusableMenuItems();
         if (!menuItems.length) return;
-        const currentIdx = menuItems.indexOf(document.activeElement as HTMLElement);
+        const currentIdx = menuItems.indexOf(ae);
+        if (currentIdx < 0) return; // focus not on a menu item — don't navigate
         let nextIdx = 0;
         if (key === 'downArrow') {
-          nextIdx = currentIdx < 0 ? 0 : Math.min(currentIdx + 1, menuItems.length - 1);
+          nextIdx = Math.min(currentIdx + 1, menuItems.length - 1);
         } else {
-          nextIdx = currentIdx < 0 ? menuItems.length - 1 : Math.max(currentIdx - 1, 0);
+          nextIdx = Math.max(currentIdx - 1, 0);
         }
         menuItems[nextIdx]?.focus();
         (ev as KeyboardEvent).preventDefault();
         (ev as KeyboardEvent).stopPropagation();
       } else if (key === 'escape') {
+        // Don't intercept Escape if a nested popup (SelectBox dropdown) is open —
+        // let the widget close its own popup first. A subsequent Escape will then
+        // reach us to close the overflow menu.
+        if (nestedPopupOpen || !focusInOverflow) return;
         // Close popup; _optionChanged handles cleanup and focus-return.
         instance.option('opened', false);
         (ev as KeyboardEvent).stopPropagation();
