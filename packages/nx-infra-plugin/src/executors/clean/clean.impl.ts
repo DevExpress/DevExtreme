@@ -48,13 +48,13 @@ async function generateDeletionPlan(targetDir: string, excludePaths: string[]): 
   return fullPaths.filter((fullPath) => !isPathExcluded(fullPath, excludePaths));
 }
 
-async function removeDirectoryCompletely(targetDirectory: string): Promise<void> {
+export async function removeDirectoryCompletely(targetDirectory: string): Promise<void> {
   if (fs.existsSync(targetDirectory)) {
     await rimrafAsync(targetDirectory);
   }
 }
 
-async function removeDirectoryWithExclusions(
+export async function removeDirectoryRespectingExclusions(
   targetDirectory: string,
   excludePaths: string[],
 ): Promise<void> {
@@ -126,7 +126,7 @@ export default createExecutor<CleanExecutorSchema, ResolvedClean>({
       return;
     }
 
-    await removeDirectoryWithExclusions(targetDirectory, absoluteExcludePaths);
+    await removeDirectoryRespectingExclusions(targetDirectory, absoluteExcludePaths);
 
     logger.verbose(
       `Cleaned directory: ${targetDirectory} with ${absoluteExcludePaths.length} exclusions preserved`,

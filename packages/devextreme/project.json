@@ -448,6 +448,23 @@
         }
       }
     },
+    "state-manager:optimize": {
+      "executor": "devextreme-nx-infra-plugin:state-manager-optimize",
+      "options": {
+        "transpiledDirs": [
+          "./artifacts/transpiled-renovation-npm",
+          "./artifacts/transpiled-esm-npm"
+        ]
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/transpiled-renovation-npm/{esm,cjs}/__internal/core/state_manager/**/*",
+        "{projectRoot}/artifacts/transpiled-esm-npm/{esm,cjs}/__internal/core/state_manager/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled-renovation-npm/{esm,cjs}/__internal/core/state_manager",
+        "{projectRoot}/artifacts/transpiled-esm-npm/{esm,cjs}/__internal/core/state_manager"
+      ]
+    },
     "bundle:build": {
       "executor": "devextreme-nx-infra-plugin:bundle",
       "options": {
@@ -1165,6 +1182,17 @@
           "env": {
             "BUILD_TEST_INTERNAL_PACKAGE": "true"
           }
+        },
+        "production": {
+          "commands": [
+            "pnpm nx clean:artifacts devextreme",
+            "pnpm nx build:localization devextreme",
+            "pnpm nx build:transpile devextreme",
+            "pnpm nx state-manager:optimize devextreme",
+            "pnpm nx run-many --targets=bundle:debug,bundle:prod,build:vectormap,copy:vendor,build:aspnet,build:declarations --projects=devextreme --parallel -c production",
+            "pnpm nx build:npm devextreme",
+            "pnpm nx verify:licenses devextreme"
+          ]
         }
       }
     },

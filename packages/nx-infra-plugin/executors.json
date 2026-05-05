@@ -109,6 +109,11 @@
       "implementation": "./src/executors/scss-assemble/executor",
       "schema": "./src/executors/scss-assemble/schema.json",
       "description": "Assemble SCSS package: copy files with data-uri inlining, fonts, and icons"
+    },
+    "state-manager-optimize": {
+      "implementation": "./src/executors/state-manager-optimize/executor",
+      "schema": "./src/executors/state-manager-optimize/schema.json",
+      "description": "Optimize state_manager modules for production builds"
     }
   }
 }

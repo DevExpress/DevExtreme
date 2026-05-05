@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "transpiledDirs": {
+      "type": "array",
+      "description": "List of transpiled tree paths (relative to project root) whose state_manager modules should be optimized for production: replace each {esm,cjs}/__internal/core/state_manager/index.js with a re-export from prod/, then remove every entry inside state_manager/ except index.js and prod/.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["transpiledDirs"]
+}

@@ -35,7 +35,6 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/check_licenses');
 require('./build/gulp/systemjs');
-require('./build/gulp/state_manager');
 
 function getTranspileConfig() {
     if(env.TEST_CI) {
@@ -70,6 +69,8 @@ gulp.task('aspnet', shell.task(
 ));
 
 gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
+
+gulp.task('state-manager-optimize', shell.task('pnpm nx run devextreme:state-manager:optimize'));
 
 gulp.task('npm', shell.task(
     context.uglify
@@ -107,11 +108,7 @@ function createDefaultBatch(dev) {
     tasks.push('transpile');
 
     if(REMOVE_NON_PRODUCTION_MODULE) {
-        tasks.push('state-manager-replace-production-modules-transpiled-prod-renovation');
-        tasks.push('state-manager-replace-production-modules-transpiled-prod-esm');
-
-        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-renovation');
-        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-esm');
+        tasks.push('state-manager-optimize');
     }
 
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
