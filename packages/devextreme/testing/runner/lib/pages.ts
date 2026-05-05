@@ -137,6 +137,11 @@ export function createPagesRenderer({
         'cldr-core': '/packages/devextreme/artifacts/js-systemjs/cldr-core',
         json: '/packages/devextreme/artifacts/js-systemjs/json.js',
         '@preact/signals-core': '/packages/devextreme/artifacts/js-systemjs/preact-signals.js',
+        // QUnit doesn't exercise AI assistant; CSP-production SystemJS can't load CJS.
+        // Stub zod and zod-to-json-schema so DataGrid module loading succeeds.
+        // eslint-disable-next-line spellcheck/spell-checker
+        zod: '/packages/devextreme/artifacts/transpiled-testing/helpers/qunit-stubs/zod',
+        'zod-to-json-schema': '/packages/devextreme/artifacts/transpiled-testing/helpers/qunit-stubs/zod-to-json-schema',
       }
       : {
         'devextreme-cldr-data': '/packages/devextreme/node_modules/devextreme-cldr-data',
@@ -237,12 +242,6 @@ export function createPagesRenderer({
           format: 'global',
           deps: ['jquery'],
           exports: 'ko',
-        },
-        '/packages/devextreme/node_modules/zod/lib/*.js': {
-          format: 'cjs',
-        },
-        '/packages/devextreme/node_modules/zod-to-json-schema/dist/cjs/*.js': {
-          format: 'cjs',
         },
         '*.js': {
           babelOptions: {
