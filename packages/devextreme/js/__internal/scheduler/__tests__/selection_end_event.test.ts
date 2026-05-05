@@ -1,7 +1,6 @@
 import {
-  afterEach, beforeEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
-import type { SelectionEndEvent } from '@js/ui/scheduler';
 import { fireEvent } from '@testing-library/dom';
 import support from '@ts/core/utils/m_support';
 
