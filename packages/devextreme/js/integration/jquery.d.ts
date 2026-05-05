@@ -40,6 +40,7 @@ import dxPopup, { Properties as PopupProperties } from '../ui/popup';
 import dxProgressBar, { Properties as ProgressBarProperties } from '../ui/progress_bar';
 import dxRadioGroup, { Properties as RadioGroupProperties } from '../ui/radio_group';
 import dxRangeSlider, { Properties as RangeSliderProperties } from '../ui/range_slider';
+import dxRecurrenceEditor, { Properties as RecurrenceEditorProperties } from '../ui/recurrence_editor';
 import dxResizable, { Properties as ResizableProperties } from '../ui/resizable';
 import dxResponsiveBox, { Properties as ResponsiveBoxProperties } from '../ui/responsive_box';
 import dxScheduler, { Properties as SchedulerProperties } from '../ui/scheduler';
@@ -412,6 +413,12 @@ declare global {
         dxRangeSlider(options: RangeSliderProperties): JQuery;
         dxRangeSlider(options: string): any;
         dxRangeSlider(options: string, ...params: any[]): any;
+
+        dxRecurrenceEditor(): JQuery;
+        dxRecurrenceEditor(options: 'instance'): dxRecurrenceEditor;
+        dxRecurrenceEditor(options: RecurrenceEditorProperties): JQuery;
+        dxRecurrenceEditor(options: string): any;
+        dxRecurrenceEditor(options: string, ...params: any[]): any;
 
         dxResizable(): JQuery;
         dxResizable(options: 'instance'): dxResizable;

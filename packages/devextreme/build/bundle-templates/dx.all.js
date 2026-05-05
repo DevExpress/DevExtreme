@@ -1,4 +1,5 @@
 import './modules/parts/widgets-web';
+import '../ui/recurrence_editor';
 import './modules/parts/viz';
 import DevExpress from './modules/core';
 import { EventsStrategy } from '../core/events_strategy';
