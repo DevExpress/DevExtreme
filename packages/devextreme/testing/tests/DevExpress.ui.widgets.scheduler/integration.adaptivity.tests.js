@@ -7,7 +7,6 @@ import {
     TOOLBAR_TOP_LOCATION,
     TOOLBAR_BOTTOM_LOCATION } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from '__internal/core/m_devices';
 import 'ui/switch';
@@ -297,7 +296,7 @@ if(isDesktopEnvironment()) {
                 endDate: new Date(2015, 1, 2),
                 recurrenceRule: 'FREQ=WEEKLY'
             }]);
-            await waitAsync(0);
+            await new Promise(resolve => setTimeout(resolve, 0));
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
@@ -442,7 +441,7 @@ module('Appointment popup buttons', moduleConfig, () => {
             this.realDeviceMock.restore();
         }
     });
-}),
+});
 
 module('View switcher', moduleConfig, () => {
     if(!isDesktopEnvironment()) {
