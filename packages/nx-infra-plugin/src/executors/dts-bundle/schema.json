@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Dts Bundle Executor Schema",
+  "description": "Assemble TypeScript declaration bundle files from source",
   "type": "object",
-  "description": "Assemble TypeScript declaration bundle files from source.",
   "properties": {
     "bundleSources": {
       "type": "array",

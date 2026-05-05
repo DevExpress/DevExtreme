@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Dts Modules Executor Schema",
+  "description": "Assemble TypeScript declaration modules: copy, stamp with license, and strip debug blocks",
   "type": "object",
-  "description": "Assemble TypeScript declaration modules: copy, stamp with license, and strip debug blocks.",
   "properties": {
     "sourceDir": {
       "type": "string",

@@ -1,5 +1,7 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Vectormap Executor Schema",
+  "description": "Build vectormap utility bundles and geographic region data modules",
   "type": "object",
   "properties": {
     "sourceDir": {

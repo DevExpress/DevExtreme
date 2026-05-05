@@ -1,5 +1,7 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Compress Executor Schema",
+  "description": "Compress JavaScript files",
   "type": "object",
   "properties": {
     "files": {

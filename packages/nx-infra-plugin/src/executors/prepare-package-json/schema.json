@@ -1,4 +1,7 @@
 {
+  "$schema": "https://json-schema.org/schema",
+  "title": "Prepare Package Json Executor Schema",
+  "description": "Create npm distribution package.json",
   "type": "object",
   "properties": {
     "sourcePackageJson": {
@@ -50,6 +53,5 @@
       },
       "required": ["find", "replace"]
     }
-  },
-  "required": []
+  }
 }

@@ -1,7 +1,7 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema",
-  "title": "Add License Headers Executor",
-  "description": "Add license headers to compiled files with support for custom templates",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Add License Headers Executor Schema",
+  "description": "Add license headers to compiled files",
   "type": "object",
   "properties": {
     "targetDirectory": {
@@ -62,6 +62,5 @@
       "enum": ["eula", "mit"],
       "description": "Selects which bundled license template to use. 'eula' references the DevExtreme EULA URL; 'mit' references MIT terms and a GitHub repo URL. When licenseTemplateFile is provided, mode is ignored."
     }
-  },
-  "required": []
+  }
 }

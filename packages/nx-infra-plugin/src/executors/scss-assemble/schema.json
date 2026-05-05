@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Scss Assemble Executor Schema",
+  "description": "Assemble SCSS package: copy files with data-uri inlining, fonts, and icons",
   "type": "object",
-  "description": "Assemble SCSS package: copy files with data-uri inlining, fonts, and icons.",
   "properties": {
     "scssPackagePath": {
       "type": "string",

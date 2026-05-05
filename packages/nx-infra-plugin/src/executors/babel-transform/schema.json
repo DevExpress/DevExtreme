@@ -1,7 +1,8 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Babel Transform Executor Schema",
+  "description": "Transform JavaScript/TypeScript files using Babel with configurable presets",
   "type": "object",
-  "title": "Babel Transform Executor",
   "properties": {
     "babelConfigPath": {
       "type": "string",
@@ -53,10 +54,17 @@
             "description": "Destination path relative to outDir."
           }
         },
-        "required": ["from", "to"]
+        "required": [
+          "from",
+          "to"
+        ]
       }
     }
   },
-  "required": ["babelConfigPath", "configKey", "sourcePattern", "outDir"],
-  "additionalProperties": false
+  "required": [
+    "babelConfigPath",
+    "configKey",
+    "sourcePattern",
+    "outDir"
+  ]
 }

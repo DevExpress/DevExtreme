@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Npm Assemble Executor Schema",
+  "description": "Assemble npm package from transpiled sources, bin, license, dist files and meta",
   "type": "object",
-  "description": "Assemble npm package from transpiled sources, bin, license, dist files and meta.",
   "properties": {
     "transpiledDir": {
       "type": "string",

@@ -1,4 +1,7 @@
 {
+  "$schema": "https://json-schema.org/schema",
+  "title": "State Manager Optimize Executor Schema",
+  "description": "Optimize state_manager modules for production builds",
   "type": "object",
   "properties": {
     "transpiledDirs": {
