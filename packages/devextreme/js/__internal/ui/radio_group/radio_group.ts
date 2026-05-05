@@ -14,7 +14,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
-import RadioCollection from './m_radio_collection';
+import RadioCollection from './radio_collection';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
