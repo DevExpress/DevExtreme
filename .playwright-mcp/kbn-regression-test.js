@@ -478,6 +478,117 @@ async (page) => {
     await page.click('#btn-remove-item'); await sleep(300);
   }
 
+  // ═══ 1.6 Overflow Menu Keyboard Navigation ════════════════════════════════
+
+  // Navigate to the overflow "More" button (last focusable item)
+  await reset();
+  await page.evaluate(() => { const r = document.querySelector('#resizable-container'); r.tabIndex = -1; r.focus(); });
+  await tabIntoToolbar();
+  await pressKey('End');  // jump to "More" button (last item)
+  await sleep(80);
+
+  const overflowFI = fi.total - 1;
+
+  // AC-1.6.1: Enter on overflow → popup opens, focus inside list
+  {
+    await navToFI(overflowFI);
+    await pressKey('Enter');
+    await sleep(150);
+    const popupOpen = await page.evaluate(() => {
+      const btn = document.querySelector('.dx-toolbar-menu-container .dx-dropdownmenu-button');
+      return btn?.getAttribute('aria-expanded') === 'true';
+    });
+    const focusInMenu = await page.evaluate(() => {
+      const ae = document.activeElement;
+      // Focus lands on the list's scrollview container or a list item.
+      return !!ae?.closest('.dx-dropdownmenu-popup-wrapper');
+    });
+    check('AC-1.6.1', popupOpen && focusInMenu, `popupOpen=${popupOpen} focusInMenu=${focusInMenu}`);
+
+    // Esc to clean up
+    await pressKey('Escape'); await sleep(200);
+  }
+
+  // AC-1.6.3: Esc from menu → popup closed, focus on "More" button
+  {
+    await navToFI(overflowFI);
+    await pressKey('Enter'); await sleep(150);
+    await pressKey('Escape'); await sleep(200);
+    // aria-expanded is updated synchronously on close (not animation-dependent).
+    const popupGone = await page.evaluate(() => {
+      const btn = document.querySelector('.dx-toolbar-menu-container .dx-dropdownmenu-button');
+      return btn?.getAttribute('aria-expanded') === 'false';
+    });
+    const focusOnMore = await page.evaluate(() => {
+      const ae = document.activeElement;
+      return !!(ae && ae.closest('.dx-toolbar-menu-container'));
+    });
+    check('AC-1.6.3', popupGone && focusOnMore, `popupGone=${popupGone} focusOnMore=${focusOnMore}`);
+  }
+
+  // AC-1.6.6: Roving tabindex anchor is "More" button after Esc
+  {
+    const tabZeroCount = await countTabZero();
+    const moreHasTabZero = await page.evaluate(() => {
+      const el = document.querySelector('.dx-toolbar-menu-container [tabindex="0"]');
+      return !!el;
+    });
+    check('AC-1.6.6', tabZeroCount === 1 && moreHasTabZero,
+      `tabZeros=${tabZeroCount} moreHasTabZero=${moreHasTabZero}`);
+  }
+
+  // AC-1.6.7: ↓ on "More" → popup opens, focus inside list
+  {
+    await navToFI(overflowFI);
+    await pressKey('ArrowDown'); await sleep(150);
+    const popupOpen = await page.evaluate(() => {
+      const btn = document.querySelector('.dx-toolbar-menu-container .dx-dropdownmenu-button');
+      return btn?.getAttribute('aria-expanded') === 'true';
+    });
+    const focusInMenu = await page.evaluate(() => !!document.activeElement?.closest('.dx-dropdownmenu-popup-wrapper'));
+    check('AC-1.6.7', popupOpen && focusInMenu, `popupOpen=${popupOpen} focusInMenu=${focusInMenu}`);
+    await pressKey('Escape'); await sleep(200);
+  }
+
+  // AC-1.6.4: Item activation (Enter on first list item) → popup closes, focus on "More"
+  {
+    await navToFI(overflowFI);
+    await pressKey('Enter'); await sleep(150);
+    await pressKey('Enter'); await sleep(300);  // activate first menu item
+    const popupGone = await page.evaluate(() => {
+      const btn = document.querySelector('.dx-toolbar-menu-container .dx-dropdownmenu-button');
+      return btn?.getAttribute('aria-expanded') === 'false';
+    });
+    const focusOnMore = await page.evaluate(() => !!document.activeElement?.closest('.dx-toolbar-menu-container'));
+    check('AC-1.6.4', popupGone && focusOnMore, `popupGone=${popupGone} focusOnMore=${focusOnMore}`);
+  }
+
+  // AC-1.6.2: ↑/↓ navigate inside menu (dxList handles it); ← / → do NOT navigate toolbar
+  {
+    await navToFI(overflowFI);
+    await pressKey('Enter'); await sleep(150);
+    // Press ↓ — should move to second item (list handles it), not close menu
+    await pressKey('ArrowDown'); await sleep(80);
+    const stillOpen = await page.evaluate(() => {
+      const btn = document.querySelector('.dx-toolbar-menu-container .dx-dropdownmenu-button');
+      return btn?.getAttribute('aria-expanded') === 'true';
+    });
+    const focusOnSecond = await page.evaluate(() => {
+      const ae = document.activeElement;
+      const items = [...document.querySelectorAll(
+        '.dx-dropdownmenu-popup-wrapper .dx-list-item:not(.dx-state-disabled) [tabindex="0"]'
+      )];
+      return items.length > 1 && ae === items[1];
+    });
+    // Press → — should NOT navigate toolbar (insideActiveItem guards it)
+    const idxBefore = await page.evaluate(() => $(document.querySelector('#toolbar')).dxToolbar('instance')._activeItemIndex);
+    await pressKey('ArrowRight'); await sleep(80);
+    const idxAfter = await page.evaluate(() => $(document.querySelector('#toolbar')).dxToolbar('instance')._activeItemIndex);
+    check('AC-1.6.2', stillOpen && focusOnSecond && idxBefore === idxAfter,
+      `stillOpen=${stillOpen} focusOnSecond=${focusOnSecond} toolbarIdxUnchanged=${idxBefore === idxAfter}`);
+    await pressKey('Escape'); await sleep(200);
+  }
+
   // ═══ Final report ══════════════════════════════════════════════════════════
   const output = results.join('\n') + `\n\nTotal: ${pass+fail} | PASS: ${pass} | FAIL: ${fail}`;
   return output;

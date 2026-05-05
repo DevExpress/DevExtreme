@@ -47,6 +47,13 @@ class Toolbar extends ToolbarBase<Properties> {
   // Used by _initMarkup() to re-locate the active item after the re-render.
   _pendingSnapshot: { savedIndex: number; data: Item | null; wasOverflow: boolean } | null = null;
 
+  // Document-level keydown handler attached while the overflow menu is open.
+  // Handles Esc / Tab from inside the popup (which is outside the toolbar DOM).
+  _overflowMenuKeyHandler: EventListener | undefined;
+
+  // True when the overflow menu was closed by Tab (prevents focus being returned to "More" button).
+  _overflowMenuClosedByTab = false;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -451,12 +458,19 @@ class Toolbar extends ToolbarBase<Properties> {
     const isSelectBox = isInput && !!activeEl.closest('.dx-selectbox');
     const isTextBox = isInput && !isSelectBox;
     const isTemplateContainer = activeEl.classList.contains('dx-item-content');
+    const isOverflowButton = !!activeEl.closest('.dx-toolbar-menu-container');
 
     const isVertical = this.$element().attr('aria-orientation') === 'vertical';
     const isRTL = !!this.option('rtlEnabled');
 
     // ── Enter / Space ─────────────────────────────────────────────────────────
     if (key === 'enter' || key === 'space') {
+      if (isOverflowButton) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._openOverflowMenuAndFocus();
+        return;
+      }
       if (isInsideDropDownButton) {
         e.preventDefault();
         e.stopPropagation();
@@ -498,6 +512,12 @@ class Toolbar extends ToolbarBase<Properties> {
 
     // ── ↓ opens popup widgets ─────────────────────────────────────────────────
     if (key === 'downArrow' && !isVertical) {
+      if (isOverflowButton) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._openOverflowMenuAndFocus();
+        return;
+      }
       if (isInsideDropDownButton) {
         e.preventDefault();
         e.stopPropagation();
@@ -622,6 +642,103 @@ class Toolbar extends ToolbarBase<Properties> {
     firstFocusable.focus();
   }
 
+  /**
+   * Opens the overflow ("More") dropdown menu and moves focus to the first list item.
+   * Because the popup is rendered outside the toolbar DOM, a document-level keydown
+   * capture listener is attached to handle Esc and Tab while the menu is open.
+   */
+  _openOverflowMenuAndFocus(): void {
+    // Access the DropDownMenu instance through the layout strategy (it is an
+    // internal component not registered as a jQuery plugin, so it cannot be
+    // retrieved via $(el).data()).
+    interface StrategyWithMenu { _menu?: { option: (name: string, val?: unknown) => unknown } }
+    const instance = (this._layoutStrategy as unknown as StrategyWithMenu)?._menu;
+    if (!instance) return;
+
+    instance.option('opened', true);
+    this._insideActiveItem = true;
+
+    // Collect all focusable targets inside the popup list items.
+    // We navigate between these with ↑/↓ via our document-level listener.
+    // Focusing the scrollview root won't work — ToolbarMenuList has focusStateEnabled=false,
+    // so dxList does not apply .dx-state-focused or move focus between items on arrow keys.
+    const getFocusableMenuItems = (): HTMLElement[] => {
+      const popup = document.querySelector('.dx-dropdownmenu-popup-wrapper');
+      if (!popup) return [];
+      return [...popup.querySelectorAll<HTMLElement>(
+        '.dx-list-item:not(.dx-state-disabled) [tabindex="0"]',
+      )];
+    };
+
+    const items = getFocusableMenuItems();
+    items[0]?.focus();
+
+    // Attach a document-level capture listener to handle Esc/Tab/↑/↓ from the popup.
+    // The popup is outside _$toolbarItemsContainer so the toolbar capture handler
+    // cannot intercept those events.
+    // ALL cleanup is delegated to _optionChanged('overflowMenuVisible') so that
+    // item-click and outside-click are handled uniformly.
+    this._detachOverflowMenuKeyHandler();
+    this._overflowMenuClosedByTab = false;
+
+    this._overflowMenuKeyHandler = (ev: Event): void => {
+      const key = normalizeKeyName(ev as Parameters<typeof normalizeKeyName>[0]);
+
+      if (key === 'downArrow' || key === 'upArrow') {
+        const menuItems = getFocusableMenuItems();
+        if (!menuItems.length) return;
+        const currentIdx = menuItems.indexOf(document.activeElement as HTMLElement);
+        let nextIdx = 0;
+        if (key === 'downArrow') {
+          nextIdx = currentIdx < 0 ? 0 : Math.min(currentIdx + 1, menuItems.length - 1);
+        } else {
+          nextIdx = currentIdx < 0 ? menuItems.length - 1 : Math.max(currentIdx - 1, 0);
+        }
+        menuItems[nextIdx]?.focus();
+        (ev as KeyboardEvent).preventDefault();
+        (ev as KeyboardEvent).stopPropagation();
+      } else if (key === 'escape') {
+        // Close popup; _optionChanged handles cleanup and focus-return.
+        instance.option('opened', false);
+        (ev as KeyboardEvent).stopPropagation();
+        (ev as KeyboardEvent).preventDefault();
+      } else if (key === 'tab') {
+        // Close popup but let Tab propagate so the browser moves focus naturally.
+        this._overflowMenuClosedByTab = true;
+        instance.option('opened', false);
+        // NOTE: do NOT stopPropagation / preventDefault here.
+      }
+    };
+    document.addEventListener('keydown', this._overflowMenuKeyHandler, true);
+  }
+
+  /** Removes the document-level overflow menu keyboard listener if attached. */
+  _detachOverflowMenuKeyHandler(): void {
+    if (this._overflowMenuKeyHandler) {
+      document.removeEventListener('keydown', this._overflowMenuKeyHandler, true);
+      this._overflowMenuKeyHandler = undefined;
+    }
+  }
+
+  /**
+   * Cleans up all state when the overflow menu closes (Esc, Tab, item click, or
+   * outside click). Called from _optionChanged('overflowMenuVisible').
+   */
+  _closeOverflowMenuState(): void {
+    const wasTab = this._overflowMenuClosedByTab;
+    this._insideActiveItem = false;
+    this._overflowMenuClosedByTab = false;
+    this._detachOverflowMenuKeyHandler();
+    if (!wasTab) {
+      const $overflowFT = this._getOverflowButtonFocusTarget();
+      const el = $overflowFT?.get(0) as HTMLElement | undefined;
+      // Defer focus so the popup's hide animation does not intercept focus.
+      if (el) {
+        setTimeout(() => { el.focus(); }, 0);
+      }
+    }
+  }
+
   _handleFocusIn(e: { target: EventTarget | null }): void {
     const targetEl = e.target as Element;
     const focusableItems = this._getFocusableItems();
@@ -680,7 +797,14 @@ class Toolbar extends ToolbarBase<Properties> {
     switch (name) {
       case 'menuContainer':
       case 'menuItemTemplate':
+        break;
       case 'overflowMenuVisible':
+        // When the overflow menu closes while we are in active-item mode, restore state
+        // and return focus to the "More" button (unless menu was closed by Tab, in which
+        // case the browser handles focus navigation naturally).
+        if (!value && this._insideActiveItem) {
+          this._closeOverflowMenuState();
+        }
         break;
       case 'multiline':
         this._invalidate();
@@ -697,6 +821,7 @@ class Toolbar extends ToolbarBase<Properties> {
 
   _dispose(): void {
     this._detachKeyboardNavigation();
+    this._detachOverflowMenuKeyHandler();
     super._dispose();
   }
 
