@@ -39,7 +39,7 @@ export async function buildLicenseBannerRenderer(
   const resolvedVersion = opts.version ?? pkg.version;
   const now = new Date();
 
-  const templateText = await readFileText(templatePath);
+  const templateText = (await readFileText(templatePath)).replace(/\r\n/g, '\n');
   const compiled = _.template(templateText);
   return (fileRelative: string) =>
     compiled({

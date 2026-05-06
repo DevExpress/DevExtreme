@@ -84,4 +84,24 @@ describe('buildLicenseBannerRenderer', () => {
   it('should throw when repository.url is missing on object form', () => {
     expect(() => extractGitHubUrl({}, '/fake/path.json')).toThrow("Invalid 'repository' format");
   });
+
+  it('normalizes CRLF in template to LF so banner output is identical across Windows and Linux runners', async () => {
+    const tempDir = createTempDir('nx-license-renderer-crlf-e2e-');
+    try {
+      const templatePath = path.join(tempDir, 'license.txt');
+      await writeFileText(
+        templatePath,
+        `/*<%= commentType %>\r\n* <%= file.relative %>\r\n* Version: <%= version %>\r\n*/\r\n`,
+      );
+      const pkg = { name: 'test-pkg', version: '1.0.0' };
+      const render = await buildLicenseBannerRenderer({ templatePath, pkg, commentType: '*' });
+
+      const banner = render('foo.d.ts');
+
+      expect(banner).not.toContain('\r');
+      expect(banner.split('\n').length).toBeGreaterThan(1);
+    } finally {
+      cleanupTempDir(tempDir);
+    }
+  });
 });

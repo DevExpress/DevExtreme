@@ -7,9 +7,7 @@ import { toPosixPath } from '../../utils/path-resolver';
 import {
   copyFile,
   ensureDir,
-  ensureTrailingNewline,
   loadProjectPackageJson,
-  normalizeEol,
   readFileText,
   writeFileText,
 } from '../../utils/file-operations';
@@ -101,7 +99,9 @@ async function copyAndNormalizeFiles(
       await ensureDir(path.dirname(destination));
       await fs.copyFile(path.join(sourceDir, relative), destination);
       const content = await readFileText(destination);
-      await writeFileText(destination, ensureTrailingNewline(normalizeEol(content)));
+      const lfContent = content.replace(/\r\n/g, '\n');
+      const withTrailingLf = lfContent.endsWith('\n') ? lfContent : `${lfContent}\n`;
+      await writeFileText(destination, withTrailingLf);
     }),
   );
 }
