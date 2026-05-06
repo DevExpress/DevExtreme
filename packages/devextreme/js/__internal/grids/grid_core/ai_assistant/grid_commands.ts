@@ -137,6 +137,7 @@ export class GridCommands {
   }
 
   private async executeCommand(
+    // TODO: specify type when default commands are implemented
     command: GridCommand<Record<string, unknown>>,
     args: Record<string, unknown>,
     callbacks: CommandCallbacks,
@@ -178,6 +179,8 @@ export class GridCommands {
 
       const command = this.commands.get(name);
 
+      // Ideally, this case should never happen since the validation is
+      // performed beforehand, but it's better to handle it for future-proofing.
       if (!command) {
         this.executing = false;
         throw new Error(`Unknown command: ${name}`);
