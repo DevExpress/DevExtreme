@@ -66,3 +66,7 @@
   bottom: 0;
   line-height: 0;
 }
+
+.dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
+  pointer-events: none;
+}
