@@ -16,11 +16,12 @@ import type {
 export class GridCommands {
   private readonly component: InternalGrid;
 
+  // TODO: specify type of command arguments when default commands are implemented
   private readonly commands: Map<string, GridCommand<Record<string, unknown>>>;
 
-  private _executing = false;
+  private executing = false;
 
-  private _aborted = false;
+  private aborted = false;
 
   constructor(component: InternalGrid, commands: GridCommand[]) {
     this.component = component;
@@ -63,15 +64,15 @@ export class GridCommands {
   }
 
   public abort(): void {
-    this._aborted = true;
+    this.aborted = true;
   }
 
   public isAborted(): boolean {
-    return this._aborted;
+    return this.aborted;
   }
 
   public isExecuting(): boolean {
-    return this._executing;
+    return this.executing;
   }
 
   public buildResponseSchema(): JsonSchema {
@@ -157,12 +158,12 @@ export class GridCommands {
     commands: ExecuteGridAssistantAction[],
     customizeResponseText?: CustomizeResponseText,
   ): Promise<CommandResult[]> {
-    if (this._executing) {
+    if (this.executing) {
       throw new Error('executeCommands is already in progress');
     }
 
-    this._executing = true;
-    this._aborted = false;
+    this.executing = true;
+    this.aborted = false;
 
     const results: CommandResult[] = [];
     const callbacks: CommandCallbacks = {
@@ -171,7 +172,7 @@ export class GridCommands {
     };
 
     for (const { name, args } of commands) {
-      if (this._aborted) {
+      if (this.aborted) {
         results.push({
           status: 'aborted',
           message: messageLocalization.format(EXECUTION_ABORT_MESSAGE),
@@ -182,7 +183,7 @@ export class GridCommands {
       const command = this.commands.get(name);
 
       if (!command) {
-        this._executing = false;
+        this.executing = false;
         throw new Error(`Unknown command: ${name}`);
       }
       // eslint-disable-next-line no-await-in-loop
@@ -192,7 +193,7 @@ export class GridCommands {
       results.push(result);
     }
 
-    this._executing = false;
+    this.executing = false;
 
     return results;
   }
