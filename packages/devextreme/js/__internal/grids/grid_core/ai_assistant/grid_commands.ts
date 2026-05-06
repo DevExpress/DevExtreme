@@ -1,6 +1,7 @@
 import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined, isObject } from '@js/core/utils/type';
+import { logger } from '@ts/core/utils/m_console';
 import {
   DEFAULT_FAILURE_MESSAGE,
   DEFAULT_SUCCESS_MESSAGE,
@@ -29,7 +30,7 @@ export class GridCommands {
 
     for (const command of commands) {
       if (this.commands.has(command.name)) {
-        console.error(`Duplicate command name: "${command.name}"`);
+        logger.error(`Duplicate command name: "${command.name}"`);
       }
       this.commands.set(command.name, command);
     }
@@ -146,7 +147,7 @@ export class GridCommands {
       const executor = command.execute(this.component, callbacks);
       return await executor(args);
     } catch (e: unknown) {
-      console.error(`Error executing command "${command.name}":`, e);
+      logger.error(`Error executing command "${command.name}":`, e);
       return GridCommands.failure();
     }
   }
