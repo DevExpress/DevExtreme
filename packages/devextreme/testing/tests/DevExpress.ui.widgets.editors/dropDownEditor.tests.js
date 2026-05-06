@@ -1952,8 +1952,6 @@ QUnit.module('popup integration', () => {
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
 
-            debugger;
-
             assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'overlay content width is correct');
         });
 
