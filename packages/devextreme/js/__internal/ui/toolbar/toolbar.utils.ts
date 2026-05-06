@@ -56,6 +56,10 @@ export function resolveItemFocusTarget(
 
     if (widget === 'dxDropDownButton') {
       $focusTarget = $focusTarget?.find(`.${BUTTON_GROUP_CLASS}`);
+    } else if (widget === 'dxTextBox') {
+      // Use the container div (not the inner <input>) as the toolbar focus target so
+      // the blinking caret is hidden until the user presses Enter to enter edit mode.
+      $focusTarget = $(itemInstance.element());
     } else {
       $focusTarget = $focusTarget ?? $(itemInstance.element());
     }

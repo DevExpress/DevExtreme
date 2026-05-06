@@ -60,7 +60,8 @@ async (page) => {
         const inBG = el.classList.contains('dx-buttongroup') || el.tagName === 'INPUT' && !!el.closest('.dx-buttongroup');
         const inDDB = !!el.closest('.dx-dropdownbutton');
         const isSB = el.tagName === 'INPUT' && !!el.closest('.dx-selectbox');
-        const isTB = el.tagName === 'INPUT' && !isSB;
+        // TextBox focus target is now the .dx-textbox container div (not the inner input)
+        const isTB = el.classList.contains('dx-textbox') && !el.classList.contains('dx-selectbox');
         const isTmpl = el.classList.contains('dx-item-content');
         const isStandaloneBG = inBG && !inDDB && !isSB;
         return { isSB, isTB, isTmpl, isStandaloneBG, inDDB };

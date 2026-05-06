@@ -358,6 +358,10 @@ class Toolbar extends ToolbarBase<Properties> {
 
     this._getOverflowButtonFocusTarget()?.attr('tabIndex', -1);
 
+    // TextBox items use the container div as the tab stop; keep the inner <input>
+    // non-tabbable so Tab does not land directly on it in toolbar-navigation mode.
+    this._$toolbarItemsContainer?.find('.dx-textbox input').attr('tabIndex', -1);
+
     const focusableItems = this._getFocusableItems();
     if (!focusableItems.length) return;
 
@@ -456,7 +460,7 @@ class Toolbar extends ToolbarBase<Properties> {
     const isInsideDropDownButton = !!activeEl.closest('.dx-dropdownbutton');
     const isInput = activeEl.tagName === 'INPUT';
     const isSelectBox = isInput && !!activeEl.closest('.dx-selectbox');
-    const isTextBox = isInput && !isSelectBox;
+    const isTextBox = activeEl.classList.contains('dx-textbox') && !activeEl.classList.contains('dx-selectbox');
     const isTemplateContainer = activeEl.classList.contains('dx-item-content');
     const isOverflowButton = !!activeEl.closest('.dx-toolbar-menu-container');
 
@@ -487,7 +491,9 @@ class Toolbar extends ToolbarBase<Properties> {
         if (key === 'enter') {
           // Only Enter activates editing mode (not Space).
           this._insideActiveItem = true;
-          return; // pass through to input
+          e.preventDefault();
+          activeEl.querySelector<HTMLInputElement>('input')?.focus();
+          return;
         }
         // Space: stay in toolbar mode, block insertion.
         e.preventDefault();
@@ -803,19 +809,22 @@ class Toolbar extends ToolbarBase<Properties> {
     this._lastFocusFromMouse = false;
 
     if (isOnFocusTarget) {
-      // For a mouse click on a TextBox, immediately activate edit mode so the user can
-      // type without pressing Enter first. For all other items, always reset to toolbar mode.
-      const isFocusTargetInput = focusTargetEl?.tagName === 'INPUT';
-      const isFocusTargetSelectBox = isFocusTargetInput && !!focusTargetEl?.closest?.('.dx-selectbox');
-      const isFocusTargetTextBox = isFocusTargetInput && !isFocusTargetSelectBox;
-
-      this._insideActiveItem = fromMouse && isFocusTargetTextBox;
+      // Keyboard navigation focused the exact focus target element.
+      // TextBox containers are never focused by mouse (the inner input is), so this
+      // path never activates TextBox edit mode — always reset to toolbar mode.
+      this._insideActiveItem = false;
     } else {
-      // Focus landed on a child element inside the item (e.g. mouse click on an inner
-      // input/button inside a template). Enter edit mode for template containers;
-      // reset to toolbar mode for everything else (guards against stale state).
+      // Focus landed inside a child element (e.g. mouse click on an inner input/button).
+      // Enter edit mode for template containers and for mouse clicks into a TextBox
+      // (so the user can type immediately without pressing Enter first).
+      // Also preserve edit mode when focus programmatically moves from the TextBox
+      // container to its inner <input> (i.e. after Enter activates edit mode).
       const isFocusTargetTemplate = !!focusTargetEl?.classList.contains('dx-item-content');
-      this._insideActiveItem = isFocusTargetTemplate;
+      const isMouseClickIntoTextBox = fromMouse && !!focusTargetEl?.classList.contains('dx-textbox');
+      const isTransitionIntoTextBoxEdit = !!focusTargetEl?.classList.contains('dx-textbox') && this._insideActiveItem;
+      this._insideActiveItem = isFocusTargetTemplate
+        || isMouseClickIntoTextBox
+        || isTransitionIntoTextBoxEdit;
     }
 
     this._activeItemIndex = index;
