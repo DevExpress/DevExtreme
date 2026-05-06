@@ -42,6 +42,12 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
     <style>
+        .dx-item-content:focus-within,
+        .dx-toolbar-menu-container:focus-within {
+            outline: 2px solid #555 !important;
+            outline-offset: 1px !important;
+        }
+
         .dx-resizable-handle::after {
             content: "";
             position: absolute;
