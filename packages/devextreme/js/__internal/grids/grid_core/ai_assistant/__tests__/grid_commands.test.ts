@@ -100,14 +100,16 @@ describe('GridCommands', () => {
       expect(commandNames).toEqual(['commandA', 'commandB']);
     });
 
-    it('should throw if duplicate command names are provided', () => {
+    it('should log a console error if duplicate command names are provided', () => {
       const component = createMockComponent();
       const command1 = createMockCommand('duplicate');
       const command2 = createMockCommand('duplicate');
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      // eslint-disable-next-line no-new
+      new GridCommands(component, [command1, command2]);
 
-      expect(
-        () => new GridCommands(component, [command1, command2]),
-      ).toThrow('Duplicate command name: "duplicate"');
+      expect(consoleSpy).toHaveBeenCalledWith('Duplicate command name: "duplicate"');
+      consoleSpy.mockRestore();
     });
   });
 

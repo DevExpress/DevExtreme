@@ -29,7 +29,7 @@ export class GridCommands {
 
     for (const command of commands) {
       if (this.commands.has(command.name)) {
-        throw new Error(`Duplicate command name: "${command.name}"`);
+        console.error(`Duplicate command name: "${command.name}"`);
       }
       this.commands.set(command.name, command);
     }
