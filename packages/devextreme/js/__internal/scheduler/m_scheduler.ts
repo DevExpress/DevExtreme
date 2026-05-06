@@ -87,11 +87,9 @@ import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
 import SchedulerTimelineWeek from './workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from './workspaces/m_timeline_work_week';
 import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
-import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -115,7 +113,7 @@ const VIEWS_CONFIG = {
     renderingStrategy: 'vertical',
   },
   workWeek: {
-    workSpace: SchedulerWorkSpaceWorkWeek,
+    workSpace: SchedulerWorkSpaceWeek,
     renderingStrategy: 'vertical',
   },
   month: {
@@ -131,7 +129,7 @@ const VIEWS_CONFIG = {
     renderingStrategy: 'horizontal',
   },
   timelineWorkWeek: {
-    workSpace: SchedulerTimelineWorkWeek,
+    workSpace: SchedulerTimelineWeek,
     renderingStrategy: 'horizontal',
   },
   timelineMonth: {
