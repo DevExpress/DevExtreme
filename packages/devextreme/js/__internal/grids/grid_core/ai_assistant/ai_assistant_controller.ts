@@ -87,6 +87,7 @@ export class AIAssistantController extends Controller {
   }
 
   public init(): void {
+    // TODO: initialize default commands list when they are ready
     this.gridCommands = new GridCommands(this.component, []);
     this.messageStore = new ArrayStore<Message, string>({
       key: 'id',

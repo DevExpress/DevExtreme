@@ -1,20 +1,17 @@
 import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined, isObject } from '@js/core/utils/type';
+import {
+  DEFAULT_FAILURE_MESSAGE,
+  DEFAULT_SUCCESS_MESSAGE,
+  EXECUTION_ABORT_MESSAGE,
+} from '@ts/grids/grid_core/ai_assistant/const';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
 import type { InternalGrid } from '../m_types';
 import type {
-  CommandCallbacks,
-  CommandResult,
-  CustomizeResponseText,
-  GridCommand,
-  JsonSchema,
+  CommandCallbacks, CommandResult, CustomizeResponseText, GridCommand, JsonSchema,
 } from './types';
-
-const DEFAULT_SUCCESS_MESSAGE = 'dxDataGrid-aiAssistantSuccessMessage';
-const DEFAULT_FAILURE_MESSAGE = 'dxDataGrid-aiAssistantErrorMessage';
-const EXECUTION_ABORT_MESSAGE = 'dxDataGrid-aiAssistantExecutionAbortMessage';
 
 export class GridCommands {
   private readonly component: InternalGrid;
