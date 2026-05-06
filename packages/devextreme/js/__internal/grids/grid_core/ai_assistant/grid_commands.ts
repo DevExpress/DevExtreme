@@ -122,11 +122,7 @@ export class GridCommands {
 
       const command = this.commands.get(action.name);
 
-      if (!command) {
-        return false;
-      }
-
-      if (!isDefined(action.args) || !isObject(action.args)) {
+      if (!command || !isDefined(action.args) || !isObject(action.args)) {
         return false;
       }
 
