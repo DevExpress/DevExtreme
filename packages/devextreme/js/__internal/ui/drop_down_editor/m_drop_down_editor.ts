@@ -867,9 +867,10 @@ class DropDownEditor<
       // @ts-expect-error ts-error
       showTitle: this.option('dropDownOptions.showTitle'),
       _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error The width cannot be a static value due to the mechanism of size updates
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      width: (): number => getElementWidth(this.$element()),
+      // // @ts-expect-error The width cannot be a static value due to the mechanism of size updates
+      // // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      // width: (): number => getElementWidth(this.$element()),
+      width: getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
       hideOnParentScroll: true,
@@ -926,12 +927,14 @@ class DropDownEditor<
   }
 
   _updatePopupWidth(): void {
-    const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+    // const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+    const popupWidth = getSizeValue(this.option('_cached_dropDownOptions.width'));
 
     if (popupWidth === undefined) {
-      // The width cannot be a static value due to the mechanism of size updates
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      this._setPopupOption('width', () => getElementWidth(this.$element()));
+      // // The width cannot be a static value due to the mechanism of size updates
+      // // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      // this._setPopupOption('width', () => getElementWidth(this.$element()));
+      this._setPopupOption('width', getElementWidth(this.$element()));
     }
   }
 
@@ -1172,6 +1175,7 @@ class DropDownEditor<
       case 'width':
       case 'height':
         super._optionChanged(args);
+        // this._updatePopupWidth();
         this._popup?.repaint();
         break;
       case 'opened':
