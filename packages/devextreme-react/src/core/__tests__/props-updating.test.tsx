@@ -968,6 +968,38 @@ describe('cfg-component option control', () => {
     expect((optionsManager as any).setValue).toHaveBeenCalledTimes(1);
   });
 
+  it('does not crash when option change handler unmounts component (T1327953)', () => {
+    const optionsManager = new OptionsManagerModule.OptionsManager();
+    const config = {
+      name: '',
+      predefinedOptions: {},
+      initialOptions: {},
+      options: {
+        value: 1,
+        onValueChange: () => {
+          optionsManager.dispose();
+        },
+      },
+      templates: [],
+      configs: {},
+      configCollections: {},
+    };
+
+    optionsManager.setInstance({
+      skipOptionsRollBack: false,
+      option: jest.fn(),
+      resetOption: jest.fn(),
+      on: jest.fn(),
+      off: jest.fn(),
+      beginUpdate: jest.fn(),
+      endUpdate: jest.fn(),
+    }, config, ['value'], []);
+
+    expect(() => {
+      optionsManager.onOptionChanged({ name: 'value', value: 2, fullName: 'value' });
+    }).not.toThrow();
+  });
+
   it('apply cfg-component option change if value really change', () => {
     const TestContainer = (props: any) => {
       const { value } = props;
