@@ -1,6 +1,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
+import { logger } from '@ts/core/utils/m_console';
 import { z } from 'zod';
 
 import type { InternalGrid } from '../../m_types';
@@ -104,12 +105,12 @@ describe('GridCommands', () => {
       const component = createMockComponent();
       const command1 = createMockCommand('duplicate');
       const command2 = createMockCommand('duplicate');
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const loggerSpy = jest.spyOn(logger, 'error').mockImplementation(() => {});
       // eslint-disable-next-line no-new
       new GridCommands(component, [command1, command2]);
 
-      expect(consoleSpy).toHaveBeenCalledWith('Duplicate command name: "duplicate"');
-      consoleSpy.mockRestore();
+      expect(loggerSpy).toHaveBeenCalledWith('Duplicate command name: "duplicate"');
+      loggerSpy.mockRestore();
     });
   });
 
@@ -603,6 +604,24 @@ describe('GridCommands', () => {
       ]);
 
       expect(results[0].status).toBe('failure');
+    });
+
+    it('should log "Error executing command" when executor throws', async () => {
+      const error = new Error('something went wrong');
+      const command = createMockCommand('failing', {
+        execute: () => async () => {
+          throw error;
+        },
+      });
+      const gridCommands = new GridCommands(createMockComponent(), [command]);
+      const loggerSpy = jest.spyOn(logger, 'error').mockImplementation(() => {});
+
+      await gridCommands.executeCommands([
+        { name: 'failing', args: {} },
+      ]);
+
+      expect(loggerSpy).toHaveBeenCalledWith('Error executing command "failing":', error);
+      loggerSpy.mockRestore();
     });
 
     it('should throw for unknown command name', async () => {
