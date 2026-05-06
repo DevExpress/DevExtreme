@@ -68,6 +68,7 @@ export class AppComponent {
 
   toggleDisabledState(disabled: boolean, event = undefined) {
     this.isDisabled = disabled;
+    this.suggestions = { ...this.suggestions, disabled };
 
     if (disabled) {
       event?.target.blur();
@@ -77,6 +78,8 @@ export class AppComponent {
   }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent): Promise<void> {
+    if (this.isDisabled) return;
+
     if (!this.appService.alerts.length) {
       this.toggleDisabledState(true, e.event);
     }

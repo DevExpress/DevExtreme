@@ -112,7 +112,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @default null
      * @public
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * @docid
      * @default null

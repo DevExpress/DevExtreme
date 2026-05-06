@@ -1,9 +1,10 @@
 import $ from 'jquery';
+import config from 'core/config';
 import localization from 'localization';
+import NumberBox from 'ui/number_box';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 
-import 'ui/number_box';
 import 'ui/validator';
 import 'ui/text_box/ui.text_editor';
 
@@ -64,5 +65,76 @@ QUnit.module('localization: separator keys', moduleConfig, () => {
         } finally {
             localization.locale(currentLocale);
         }
+    });
+});
+
+QUnit.module('localization: global number format', {
+    beforeEach: function() {
+        this.savedConfig = { ...config() };
+        this.savedLocale = localization.locale();
+        localization.locale('en');
+    },
+
+    afterEach: function() {
+        localization.locale(this.savedLocale);
+        config(this.savedConfig);
+        NumberBox.defaultOptions([]);
+    },
+}, () => {
+    QUnit.test('uses global numberFormat when local format is not set', function(assert) {
+        config({
+            ...config(),
+            numberFormat: '#,##0.00',
+        });
+
+        const $element = $('#numberbox').dxNumberBox({
+            value: 1234.5,
+            useMaskBehavior: true,
+        });
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+
+        assert.strictEqual($input.val(), '1,234.50', 'text uses global format');
+    });
+
+    QUnit.test('local format option has priority over global numberFormat', function(assert) {
+        config({
+            ...config(),
+            numberFormat: '#,##0.00',
+        });
+
+        const $element = $('#numberbox').dxNumberBox({
+            value: 1234.5,
+            useMaskBehavior: true,
+            format: {
+                type: 'fixedPoint',
+                precision: 0,
+            },
+        });
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+
+        assert.strictEqual($input.val(), '1,235', 'local format wins over global');
+    });
+
+    QUnit.test('defaultOptions format has priority over global numberFormat', function(assert) {
+        config({
+            ...config(),
+            numberFormat: '#,##0.00',
+        });
+        NumberBox.defaultOptions({
+            options: {
+                format: {
+                    type: 'fixedPoint',
+                    precision: 0,
+                },
+            },
+        });
+
+        const $element = $('#numberbox').dxNumberBox({
+            value: 1234.5,
+            useMaskBehavior: true,
+        });
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+
+        assert.strictEqual($input.val(), '1,235', 'defaultOptions format wins over global');
     });
 });

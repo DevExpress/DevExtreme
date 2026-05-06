@@ -9,6 +9,7 @@ import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
 import errors from '@ts/core/m_errors';
+import { resolvePresetOverride } from '@ts/core/m_global_format_config';
 import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
 import { each } from '@ts/core/utils/m_iterator';
 import { isString } from '@ts/core/utils/m_type';
@@ -66,6 +67,31 @@ const dateLocalization = dependencyInjector({
   _expandPattern(pattern: string): string {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._getPatternByFormat(pattern) || pattern;
+  },
+  _resolveStringFormat(
+    format: string,
+    date: Date,
+  ): string | undefined {
+    const presetOverride = resolvePresetOverride(format);
+
+    if (presetOverride === undefined) {
+      return undefined;
+    }
+    if (typeof presetOverride === 'function') {
+      return (presetOverride as DateFormatter)(date);
+    }
+    if (isString(presetOverride)) {
+      const pattern = FORMATS_TO_PATTERN_MAP[
+        (presetOverride as string).toLowerCase()
+      ] || presetOverride as string;
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return numberLocalization.convertDigits(
+        getLDMLDateFormatter(pattern, this)(date),
+      );
+    }
+
+    return undefined;
   },
   formatUsesMonthName(format: string): boolean {
     return this._expandPattern(format).indexOf('MMMM') !== -1;
@@ -139,6 +165,13 @@ const dateLocalization = dependencyInjector({
       // eslint-disable-next-line no-param-reassign
       format = (format as FormatObject).type ?? format;
       if (isString(format)) {
+        const resolvedFormat = this._resolveStringFormat(format as string, date);
+
+        if (resolvedFormat !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          return resolvedFormat;
+        }
+
         // eslint-disable-next-line no-param-reassign
         format = (FORMATS_TO_PATTERN_MAP[(format as string).toLowerCase()] || format) as string;
 

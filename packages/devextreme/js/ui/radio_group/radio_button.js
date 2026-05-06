@@ -1,4 +1,4 @@
-import RadioButton from '../../__internal/ui/radio_group/m_radio_button';
+import RadioButton from '../../__internal/ui/radio_group/radio_button';
 
 export default RadioButton;
 

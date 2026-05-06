@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
+import config from '@js/core/config';
 
 import { DataController } from '../data_controller';
 import { getContext } from '../di.test_utils';
@@ -7,8 +8,8 @@ import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnsController } from './columns_controller';
 
-const setup = (config: Options = {}) => {
-  const context = getContext(config);
+const setup = (options: Options = {}) => {
+  const context = getContext(options);
 
   return {
     options: context.get(OptionsControllerMock),
@@ -62,6 +63,33 @@ describe('ColumnsController', () => {
           format: 'shortDate',
         },
       ]);
+    });
+
+    it('should use global format before data type default format', () => {
+      const globalConfig = config();
+      const savedFormat = globalConfig.dateFormat;
+
+      try {
+        config({
+          ...config(),
+          dateFormat: 'dd/MM/yyyy',
+        });
+
+        const { columnsController } = setup({
+          columns: [{ dataField: 'createdAt', dataType: 'date' }],
+        });
+
+        const columns = columnsController.columns.peek();
+
+        expect(columns[0].format).not.toBe('shortDate');
+        expect(typeof columns[0].format).toBe('function');
+      } finally {
+        if (savedFormat === undefined) {
+          delete globalConfig.dateFormat;
+        } else {
+          globalConfig.dateFormat = savedFormat;
+        }
+      }
     });
 
     it('should generate columns from firstItems when no columns config is provided', () => {

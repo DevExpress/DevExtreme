@@ -5,15 +5,16 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import type { ItemInfo, NativeEventInfo } from '@js/events';
+import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties } from '@js/ui/radio_group';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
+import type { EditorProperties, UnresolvedEvents, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
-import RadioCollection from './m_radio_collection';
+import RadioCollection from './radio_collection';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
@@ -28,21 +29,18 @@ interface RadioGroupProperties extends Properties,
 class RadioGroup extends Editor<RadioGroupProperties> {
   private _radios?: RadioCollection;
 
-  private _areRadiosCreated!: DeferredObj<unknown>;
+  private _areRadiosCreated!: DeferredObj<void>;
 
   private _$submitElement!: dxElementWrapper;
 
-  // eslint-disable-next-line class-methods-use-this
   _dataSourceOptions(): { paginate: boolean } {
     return { paginate: false };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected _activeStateUnit(): string {
     return `.${RADIO_BUTTON_CLASS}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected _feedbackHideTimeout(): number {
     return RADIO_FEEDBACK_HIDE_TIMEOUT;
   }
@@ -63,32 +61,38 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     }]);
   }
 
-  // @ts-expect-error
+  // @ts-expect-error widget.ts _fireContentReadyAction should accept an optional `force` parameter
   _fireContentReadyAction(force: boolean): void {
-    force && super._fireContentReadyAction();
+    if (!force) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    super._fireContentReadyAction();
   }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this.$element();
   }
 
-  _getAriaTarget() {
+  _getAriaTarget(): dxElementWrapper {
     return this.$element();
   }
 
-  _getDefaultOptions() {
-    const defaultOptions = super._getDefaultOptions();
-
-    // @ts-expect-error
-    return extend(defaultOptions, extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
+  _getDefaultOptions(): RadioGroupProperties {
+    return {
+      ...super._getDefaultOptions(),
+      // @ts-expect-error DataExpressionMixin should expose _dataExpressionDefaultOptions as a
+      // typed static method
+      ...DataExpressionMixin._dataExpressionDefaultOptions(),
       hoverStateEnabled: true,
       activeStateEnabled: true,
       layout: 'vertical',
-    }));
+    } as RadioGroupProperties;
   }
 
-  _getItemValue(item) {
-    // @ts-expect-error
+  _getItemValue(item: ItemLike): unknown {
+    // @ts-expect-error valueGetter is injected by DataExpressionMixin
     return this._valueGetter ? this._valueGetter(item) : item.text;
   }
 
@@ -99,7 +103,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
   _init(): void {
     super._init();
 
-    // @ts-expect-error
+    // @ts-expect-error _initDataExpressions is injected by DataExpressionMixin
     this._initDataExpressions();
   }
 
@@ -112,28 +116,29 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     super._initMarkup();
   }
 
-  _itemClickHandler({ itemElement, event, itemData }): void {
-    // @ts-expect-error
-    if (this.itemElements().is(itemElement)) {
+  _itemClickHandler({ itemElement, event, itemData }:
+    NativeEventInfo<RadioCollection, MouseEvent | PointerEvent> & ItemInfo): void {
+    if (this.itemElements()?.is($(itemElement))) {
+      const { value } = this.option();
       const newValue = this._getItemValue(itemData);
 
-      if (newValue !== this.option('value')) {
-        this._saveValueChangeEvent(event);
+      if (newValue !== value) {
+        this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
         this.option('value', newValue);
       }
     }
   }
 
-  _getSelectedItemKeys(value) {
-    // @ts-expect-error
-    const isNullSelectable = this.option('valueExpr') !== 'this';
-    const shouldSelectValue = isNullSelectable && value === null || isDefined(value);
+  _getSelectedItemKeys(value: unknown): unknown[] {
+    const { valueExpr } = this.option();
+    const isNullSelectable = valueExpr !== 'this';
+    const shouldSelectValue = (isNullSelectable && value === null) || isDefined(value);
 
     return shouldSelectValue ? [value] : [];
   }
 
-  _setSelection(currentValue): void {
-    // @ts-expect-error
+  _setSelection(currentValue: unknown): void {
+    // @ts-expect-error _unwrappedValue is injected by DataExpressionMixin
     const value = this._unwrappedValue(currentValue);
     this._setCollectionWidgetOption('selectedItemKeys', this._getSelectedItemKeys(value));
   }
@@ -152,7 +157,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
 
   _optionChanged(args: OptionChanged<RadioGroupProperties>): void {
     const { name, value } = args;
-    // @ts-expect-error
+    // @ts-expect-error _dataExpressionOptionChanged is injected by DataExpressionMixin
     this._dataExpressionOptionChanged(args);
 
     switch (name) {
@@ -169,7 +174,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
         this._setCollectionWidgetOption(name, value);
         break;
       case 'valueExpr':
-        // @ts-expect-error
+        // @ts-expect-error _getCollectionKeyExpr is injected by DataExpressionMixin
         this._setCollectionWidgetOption('keyExpr', this._getCollectionKeyExpr());
         break;
       case 'value':
@@ -178,7 +183,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
         super._optionChanged(args);
         break;
       case 'items':
-        this._setSelection(this.option('value'));
+        this._setSelection(this.option().value);
         break;
       case 'itemTemplate':
       case 'displayExpr':
@@ -220,21 +225,20 @@ class RadioGroup extends Editor<RadioGroupProperties> {
       onInitialized: ({ component }) => {
         this._radios = component;
       },
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      onContentReady: (e) => {
+      onContentReady: () => {
         this._fireContentReadyAction(true);
       },
-      // @ts-expect-error
       onItemClick: this._itemClickHandler.bind(this),
       displayExpr,
       accessKey,
-      // @ts-expect-error
+      // @ts-expect-error _dataSource is injected by DataExpressionMixin
       dataSource: this._dataSource,
       focusStateEnabled,
       itemTemplate,
-      // @ts-expect-error
+      // @ts-expect-error _getCollectionKeyExpr is injected by DataExpressionMixin
       keyExpr: this._getCollectionKeyExpr(),
       noDataText: '',
+      // @ts-expect-error scrollingEnabled is absent from CollectionWidgetProperties
       scrollingEnabled: false,
       selectByClick: false,
       selectionMode: 'single',
@@ -254,35 +258,33 @@ class RadioGroup extends Editor<RadioGroupProperties> {
 
   _setOptionsByReference(): void {
     super._setOptionsByReference();
-    extend(this._optionsByReference, { value: true });
+    this._optionsByReference = { ...this._optionsByReference, value: true };
   }
 
   _setSubmitValue(value?: unknown): void {
-    value = value ?? this.option('value');
-    // @ts-expect-error
-    const submitValue = this.option('valueExpr') === 'this'
-      // @ts-expect-error
-      ? this._displayGetter(value)
-      : value;
+    const { valueExpr, value: optionValue } = this.option();
+    const resolvedValue = value ?? optionValue;
 
-    this._$submitElement.val(submitValue);
+    const submitValue = valueExpr === 'this'
+      // @ts-expect-error _displayGetter is injected by DataExpressionMixin
+      ? this._displayGetter(resolvedValue)
+      : resolvedValue;
+
+    this._$submitElement.val(submitValue as string | number | undefined);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _setCollectionWidgetOption(name: string, value: unknown): void {
-    // @ts-expect-error
-
-    this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', arguments));
+  _setCollectionWidgetOption(...args: [string, unknown]): void {
+    // @ts-expect-error widget._setWidgetOption args should be typed as ArrayLike<unknown>
+    this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', args));
   }
 
   _updateItemsSize(): void {
-    const { layout } = this.option();
+    const { layout, items } = this.option();
 
     if (layout === 'horizontal') {
       this.itemElements()?.css('height', 'auto');
     } else {
-      // @ts-expect-error
-      const itemsCount = this.option('items').length;
+      const itemsCount = (items ?? []).length;
 
       this.itemElements()?.css('height', `${100 / itemsCount}%`);
     }
@@ -296,7 +298,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     return this._radios?._itemElements();
   }
 }
-// @ts-expect-error
+// @ts-expect-error Widget base class should define a typed static include() method
 RadioGroup.include(DataExpressionMixin);
 
 registerComponent('dxRadioGroup', RadioGroup);

@@ -101,25 +101,30 @@ QUnit.test('Select project strategy by type (polygon/multipolygon)', function(as
 QUnit.test('Project', function(assert) {
     const projection = {
         project: function(coordinates) {
-            return coordinates + '-proj';
+            return coordinates * 2;
+        }
+    };
+    const multilineProjection = {
+        project: function(coordinates) {
+            return coordinates.map(item => item * 2);
         }
     };
 
     assert.deepEqual(lineStrategyLineString.project(projection, [
-        'p1', 'p2', 'p3'
+        1, 2, 3
     ]), [
-        ['p1-proj', 'p2-proj', 'p3-proj']
+        [2, 4, 6]
     ], 'line linestring');
-    assert.deepEqual(lineStrategyMultiLineString.project(projection, [
-        ['p1', 'p2'],
-        ['p3', 'p4', 'p5'],
-        ['p6']
-    ]), [
-        ['p1-proj', 'p2-proj'],
-        ['p3-proj', 'p4-proj', 'p5-proj'],
-        ['p6-proj']
-    ], 'line multilinestring');
-    assert.deepEqual(pointDotStrategy.project(projection, ['p']), 'p-proj', 'point');
+    assert.deepEqual(lineStrategyMultiLineString.project(multilineProjection, [[
+        [1, 2],
+        [3, 4, 5],
+        [6]
+    ]]), [[
+        [2, 4],
+        [6, 8, 10],
+        [12]
+    ]], 'line multilinestring');
+    assert.deepEqual(pointDotStrategy.project(projection, [1]), 2, 'point');
 });
 
 QUnit.test('Project area label', function(assert) {

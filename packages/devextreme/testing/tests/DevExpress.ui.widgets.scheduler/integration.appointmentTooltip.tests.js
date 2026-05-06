@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import dateSerialization from 'core/utils/date_serialization';
+import config from 'core/config';
 import Tooltip from 'ui/tooltip';
 import { hide } from '__internal/ui/tooltip/m_tooltip';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -33,6 +35,88 @@ const moduleConfig = {
         hide();
     }
 };
+
+module('Global formatting config (spec): Scheduler tooltip', {
+    beforeEach() {
+        fx.off = true;
+        const globalConfig = config();
+        this.savedGlobalFormats = {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+            dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+        };
+    },
+    afterEach() {
+        fx.off = false;
+        hide();
+        const globalConfig = config();
+        Object.keys(this.savedGlobalFormats).forEach((key) => {
+            const value = this.savedGlobalFormats[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
+    }
+}, () => {
+    const createScheduler = (options) => createWrapper($.extend({
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+        height: 600,
+        dataSource: [{
+            text: 'Task 1',
+            startDate: new Date(2015, 1, 9, 11, 0),
+            endDate: new Date(2015, 1, 9, 12, 0),
+        }],
+    }, options));
+
+    test('implicit Scheduler tooltip time format uses global timeFormat', async function(assert) {
+        config({
+            ...config(),
+            timeFormat: (date) => `T${date.getHours()}`,
+        });
+
+        const scheduler = await createScheduler();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
+
+        assert.strictEqual(scheduler.tooltip.getDateText(), 'T11 - T12');
+    });
+
+    test('implicit Scheduler tooltip uses built-in format when global timeFormat is not set', async function(assert) {
+        const scheduler = await createScheduler();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
+
+        assert.strictEqual(scheduler.tooltip.getDateText(), '11:00 AM - 12:00 PM');
+    });
+
+    test('implicit Scheduler tooltip date/time use global dateFormat and timeFormat', async function(assert) {
+        config({
+            ...config(),
+            dateFormat: (date) => `Date${date.getDate()}`,
+            timeFormat: (date) => `Time${date.getHours()}`,
+        });
+
+        const scheduler = await createScheduler({
+            dataSource: [{
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 9, 23, 0),
+                endDate: new Date(2015, 1, 10, 1, 0),
+            }],
+        });
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
+
+        assert.strictEqual(scheduler.tooltip.getDateText(), 'Date9 Time23 - Date10 Time1');
+    });
+});
 
 module('Integration: Appointment tooltip', moduleConfig, () => {
     const createScheduler = (options) => createWrapper($.extend(options, { height: 600 }));

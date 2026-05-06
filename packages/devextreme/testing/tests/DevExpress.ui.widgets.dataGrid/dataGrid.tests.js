@@ -5522,3 +5522,154 @@ QUnit.module('Formatting', baseModuleConfig, () => {
         }), '216 rub');
     });
 });
+
+QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
+    const saveGlobalFormats = () => {
+        const globalConfig = config();
+
+        return {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+            dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+        };
+    };
+    const restoreGlobalFormats = (saved) => {
+        const globalConfig = config();
+
+        Object.keys(saved).forEach((key) => {
+            const value = saved[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
+    };
+
+    QUnit.test('implicit date format uses global dateFormat', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateFormat: 'dd/MM/yyyy',
+            });
+
+            const format = gridCore.getFormatByDataType('date');
+            const dateText = gridCore.formatValue(new Date(2020, 0, 2), { format });
+
+            assert.strictEqual(dateText, '02/01/2020', 'global date format is applied for implicit DataGrid date format');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('implicit datetime format uses global dateTimeFormat', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormat: 'dd/MM/yyyy, HH:mm',
+            });
+
+            const format = gridCore.getFormatByDataType('datetime');
+            const dateText = gridCore.formatValue(new Date(2020, 0, 2, 14, 5), { format });
+
+            assert.strictEqual(dateText, '02/01/2020, 14:05', 'global datetime format is applied for implicit DataGrid datetime format');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('explicit column.format keeps priority over global format', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateFormat: 'dd/MM/yyyy',
+            });
+
+            const dataGrid = createDataGrid({
+                dataSource: [{ createdAt: new Date(2020, 0, 2) }],
+                columns: [{ dataField: 'createdAt', dataType: 'date', format: 'shortDate' }],
+            });
+            this.clock.tick(10);
+
+            const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
+            assert.strictEqual(dateText, '1/2/2020', 'explicit preset format is not replaced by global dateFormat');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('implicit date column uses dateTimeFormatPresets.shortDate when no dateFormat is set', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    shortDate: 'dd/MM/yyyy',
+                },
+            });
+
+            const format = gridCore.getFormatByDataType('date');
+            const dateText = gridCore.formatValue(new Date(2020, 0, 2), { format });
+
+            // Implicit path: no dateFormat → falls to 'shortDate' → preset override applies
+            assert.strictEqual(dateText, '02/01/2020', 'dateTimeFormatPresets.shortDate is used for implicit date column');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('dateFormat takes priority over dateTimeFormatPresets.shortDate for implicit columns', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateFormat: 'yyyy-MM-dd',
+                dateTimeFormatPresets: {
+                    shortDate: 'dd/MM/yyyy',
+                },
+            });
+
+            const format = gridCore.getFormatByDataType('date');
+            const dateText = gridCore.formatValue(new Date(2020, 0, 2), { format });
+
+            // Implicit path: dateFormat is set → wins over dateTimeFormatPresets
+            assert.strictEqual(dateText, '2020-01-02', 'dateFormat takes priority over dateTimeFormatPresets for implicit date columns');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('explicit column.format: "shortDate" uses dateTimeFormatPresets.shortDate', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    shortDate: 'dd/MM/yyyy',
+                },
+            });
+
+            const dataGrid = createDataGrid({
+                dataSource: [{ createdAt: new Date(2020, 0, 2) }],
+                columns: [{ dataField: 'createdAt', dataType: 'date', format: 'shortDate' }],
+            });
+            this.clock.tick(10);
+
+            const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
+            assert.strictEqual(dateText, '02/01/2020', 'explicit shortDate preset uses dateTimeFormatPresets override');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+});
