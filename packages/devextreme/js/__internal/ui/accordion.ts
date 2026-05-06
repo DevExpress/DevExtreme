@@ -345,6 +345,9 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
       finalItemHeight = getOuterHeight($title);
     }
 
+    $item.css('overflow', '');
+    $item.find(`.${ACCORDION_ITEM_BODY_CLASS}`).css('overflow', '');
+
     return this._animateItem($item, startItemHeight, finalItemHeight, skipAnimation, !!itemHeight);
   }
 
@@ -383,6 +386,11 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
     return deferred.done(() => {
       if ($element.hasClass(ACCORDION_ITEM_OPENED_CLASS) && !fixedHeight) {
         $element.css('height', '');
+      }
+
+      if ($element.hasClass(ACCORDION_ITEM_OPENED_CLASS)) {
+        $element.css('overflow', 'visible');
+        $element.find(`.${ACCORDION_ITEM_BODY_CLASS}`).css('overflow', 'visible');
       }
 
       $element
