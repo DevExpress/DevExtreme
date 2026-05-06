@@ -43,8 +43,7 @@ export class AIAssistantController extends Controller {
       return Promise.reject(new Error('Received invalid commands'));
     }
 
-    // @ts-expect-error TODO: remove when d.ts is updated
-    const { customizeResponseText } = this.option('aiAssistant');
+    const customizeResponseText = this.option('aiAssistant.customizeResponseText');
 
     return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
       ?? Promise.reject(new Error('Grid commands not initialized'));
