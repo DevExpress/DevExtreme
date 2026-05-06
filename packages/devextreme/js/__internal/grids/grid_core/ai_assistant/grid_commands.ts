@@ -168,31 +168,32 @@ export class GridCommands {
       failure: GridCommands.failure,
     };
 
-    for (const { name, args } of commands) {
-      if (this.aborted) {
-        results.push({
-          status: 'aborted',
-          message: messageLocalization.format(EXECUTION_ABORT_MESSAGE),
-        });
-        break;
+    try {
+      for (const { name, args } of commands) {
+        if (this.aborted) {
+          results.push({
+            status: 'aborted',
+            message: messageLocalization.format(EXECUTION_ABORT_MESSAGE),
+          });
+          break;
+        }
+
+        const command = this.commands.get(name);
+
+        // Ideally, this case should never happen since the validation is
+        // performed beforehand, but it's better to handle it for future-proofing.
+        if (!command) {
+          throw new Error(`Unknown command: ${name}`);
+        }
+        // eslint-disable-next-line no-await-in-loop
+        const result = await this.executeCommand(command, args, callbacks);
+
+        GridCommands.applyCustomizedResponseText(result, name, args, customizeResponseText);
+        results.push(result);
       }
-
-      const command = this.commands.get(name);
-
-      // Ideally, this case should never happen since the validation is
-      // performed beforehand, but it's better to handle it for future-proofing.
-      if (!command) {
-        this.executing = false;
-        throw new Error(`Unknown command: ${name}`);
-      }
-      // eslint-disable-next-line no-await-in-loop
-      const result = await this.executeCommand(command, args, callbacks);
-
-      GridCommands.applyCustomizedResponseText(result, name, args, customizeResponseText);
-      results.push(result);
+    } finally {
+      this.executing = false;
     }
-
-    this.executing = false;
 
     return results;
   }
