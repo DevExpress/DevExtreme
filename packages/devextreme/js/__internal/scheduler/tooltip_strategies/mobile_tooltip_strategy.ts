@@ -1,8 +1,11 @@
 import { getHeight, getOuterHeight, getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
+import type dxOverlay from '@js/ui/overlay';
+import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
 
-import { TooltipStrategyBase } from './m_tooltip_strategy_base';
+import type { AppointmentTooltipItem } from '../types';
+import { TooltipStrategyBase } from './tooltip_strategy_base';
 
 const CLASS = {
   slidePanel: 'dx-scheduler-overlay-panel',
@@ -22,7 +25,7 @@ const MAX_WIDTH = {
   TABLET: '80%',
 };
 
-const animationConfig = {
+const animationConfig: OverlayProperties['animation'] = {
   show: {
     type: 'slide',
     duration: 300,
@@ -37,7 +40,7 @@ const animationConfig = {
   },
 };
 
-const createPhoneDeviceConfig = (listHeight) => ({
+const createPhoneDeviceConfig = (listHeight: number): OverlayProperties => ({
   shading: false,
   width: MAX_WIDTH.PHONE,
   height: listHeight > MAX_HEIGHT.PHONE ? MAX_HEIGHT.PHONE : MAX_HEIGHT.DEFAULT,
@@ -48,7 +51,7 @@ const createPhoneDeviceConfig = (listHeight) => ({
   },
 });
 
-const createTabletDeviceConfig = (listHeight) => {
+const createTabletDeviceConfig = (listHeight: number): OverlayProperties => {
   const currentMaxHeight = getHeight(getWindow()) * MAX_TABLET_OVERLAY_HEIGHT_FACTOR;
 
   return {
@@ -64,7 +67,7 @@ const createTabletDeviceConfig = (listHeight) => {
 };
 
 export class MobileTooltipStrategy extends TooltipStrategyBase {
-  protected override isDesktop() {
+  protected override isDesktop(): boolean {
     return false;
   }
 
@@ -72,7 +75,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     const isTabletWidth = getWidth(getWindow()) > 700;
 
     const listHeight = getOuterHeight(this.list.$element().find(CLASS.scrollableContent));
-    this.tooltip.option(
+    this.tooltip?.option(
       isTabletWidth
         ? createTabletDeviceConfig(listHeight)
         : createPhoneDeviceConfig(listHeight),
@@ -80,7 +83,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   }
 
   private async onShowing(): Promise<void> {
-    this.tooltip.option('height', MAX_HEIGHT.DEFAULT);
+    this.tooltip?.option('height', MAX_HEIGHT.DEFAULT);
     /*
     NOTE: there are two setTooltipConfig calls to reduce blinking of overlay.
     The first one sets initial sizes, the second updates them after rendering async templates
@@ -91,7 +94,9 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     this.setTooltipConfig();
   }
 
-  protected override createTooltip(dataList) {
+  protected override createTooltip(
+    dataList: AppointmentTooltipItem[],
+  ): dxOverlay<OverlayProperties> {
     const element = this.createTooltipElement(CLASS.slidePanel);
 
     return this._options.createComponent(element, Overlay, {
@@ -103,6 +108,6 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: { class: CLASS.slidePanel },
-    });
+    }) as dxOverlay<OverlayProperties>;
   }
 }
