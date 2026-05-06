@@ -376,12 +376,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.resourceManager?.dispose();
         this.resourceManager = new ResourceManager(this.option('resources'));
         this.updateAppointmentDataSource();
+        this.createAppointmentPopupForm();
 
         this.postponeResourceLoading().done(() => {
           this._appointments.option('items', []);
           this.refreshWorkSpace();
           this.setRemoteFilterIfNeeded();
-          this.createAppointmentPopupForm();
         });
         break;
       case 'startDayHour':
@@ -1139,7 +1139,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dataAccessors: this._dataAccessors,
       editing: this.editing,
       resourceManager: this.resourceManager,
-      firstDayOfWeek: this.getFirstDayOfWeek(),
+      firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour') ?? 0,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),

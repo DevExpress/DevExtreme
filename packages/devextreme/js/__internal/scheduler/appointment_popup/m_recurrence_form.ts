@@ -19,7 +19,7 @@ import {
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 export interface RecurrenceFormConfig {
-  firstDayOfWeek: number;
+  firstDayOfWeek: number | undefined;
   createComponent: (
     element: string | HTMLElement | dxElementWrapper | Element,
     Component: any,
@@ -554,7 +554,7 @@ export class RecurrenceForm {
 
     if (recurrenceRule.byDay.length === 0) {
       const defaultByDay = [
-        ICAL_WEEK_DAYS[startDate?.getDay() ?? this.config.firstDayOfWeek],
+        ICAL_WEEK_DAYS[startDate?.getDay() ?? this.config.firstDayOfWeek ?? 0],
       ];
 
       recurrenceRule.byDay = defaultByDay;
