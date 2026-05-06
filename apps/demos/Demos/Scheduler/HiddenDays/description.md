@@ -1,9 +1,9 @@
 The DevExtreme Scheduler allows you to exclude specific days of the week (using the [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property).
 
-Use checkboxes in the options panel to toggle day visibility. A validation message appears if you attempt to hide all seven days, since at least one day must remain visible.
+Use checkboxes in the options panel to toggle day visibility. A validation message appears if you attempt to hide all seven days (at least one day must remain visible).
 <!--split-->
 
-To hide specific days of the week, assign an array of day indexes to the [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property. The index values follow the JavaScript `date.getDay()` convention:
+To hide specific days of the week, assign an array of day indexes to the [hiddenWeekDays](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#hiddenWeekDays) property. Index values follow the JavaScript `date.getDay()` convention:
 
 - `0` - Sunday
 - `1` - Monday
