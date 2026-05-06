@@ -244,6 +244,7 @@ export abstract class TooltipStrategyBase {
         index,
         item.color,
       ),
+      // @ts-expect-error
       _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
     };
