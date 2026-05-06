@@ -43,7 +43,11 @@ export class AIAssistantController extends Controller {
       return Promise.reject(new Error('Received invalid commands'));
     }
 
-    return this.gridCommands?.executeCommands(response.actions) ?? Promise.reject(new Error('Grid commands not initialized'));
+    // @ts-expect-error TODO: remove when d.ts is updated
+    const { customizeResponseText } = this.option('aiAssistant');
+
+    return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
+      ?? Promise.reject(new Error('Grid commands not initialized'));
   }
 
   private createPendingAIMessage(message: Message): string {
