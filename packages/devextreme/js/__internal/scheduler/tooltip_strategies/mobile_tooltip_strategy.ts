@@ -5,7 +5,7 @@ import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
 
 import type { AppointmentTooltipItem } from '../types';
-import { TooltipStrategyBase } from './m_tooltip_strategy_base';
+import { TooltipStrategyBase } from './tooltip_strategy_base';
 
 const CLASS = {
   slidePanel: 'dx-scheduler-overlay-panel',

@@ -5,7 +5,7 @@ import supportUtils from '@ts/core/utils/m_support';
 import Tooltip from '@ts/ui/m_tooltip';
 
 import type { AppointmentTooltipItem } from '../types';
-import { TooltipStrategyBase } from './m_tooltip_strategy_base';
+import { TooltipStrategyBase } from './tooltip_strategy_base';
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = 'dx-scheduler-appointment-tooltip-wrapper';
 const MAX_TOOLTIP_HEIGHT = 200;
