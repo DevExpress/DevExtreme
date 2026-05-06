@@ -78,10 +78,6 @@ function createStarLicenseHeader(fileName: string, version: string): string {
   ].join('\n');
 }
 
-/**
- * Mirrors `style-compiler.js`: starLicense prepend, then
- * `.replace(/([\s\S]*)(@charset.*?;\s)/, '$2$1')` so `@charset` is the first bytes of output.
- */
 function prependLicenseAndMoveCharsetFirst(minifiedCss: string, license: string): string {
   const withLicense = `${license}${minifiedCss}`;
   return withLicense.replace(/([\s\S]*)(@charset[^;]+;\s*)/, '$2$1');

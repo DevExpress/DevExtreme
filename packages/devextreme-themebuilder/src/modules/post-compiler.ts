@@ -26,10 +26,9 @@ export function addInfoHeader(
   const header = buildThemeBuilderInfoHeader(version);
   const source = css.toString();
   const encoding = '@charset "UTF-8";';
-
-  // clean-css may emit @charset immediately followed by :root / @import with no newline.
   const charsetPrefix = /^@charset\s+"utf-8";\s*/i;
   const match = source.match(charsetPrefix);
+
   if (match) {
     const rest = source.slice(match[0].length).trimStart();
 
