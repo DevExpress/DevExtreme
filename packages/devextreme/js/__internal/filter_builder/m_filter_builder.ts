@@ -92,6 +92,8 @@ class FilterBuilder extends Widget<any> {
 
   _documentClickHandler!: any;
 
+  _popupWithTreeView?: InstanceType<typeof Popup>;
+
   _getDefaultOptions() {
     // @ts-expect-error
     return extend(super._getDefaultOptions(), {
@@ -871,14 +873,29 @@ class FilterBuilder extends Widget<any> {
     return $editor;
   }
 
+  _dimensionChanged(): void {
+    // @ts-expect-error 'of' does not exist on type 'PopupProperties'
+    const positionOf = this._popupWithTreeView?.option('position')?.of;
+
+    if (positionOf) {
+      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow(positionOf));
+    }
+  }
+
   _createPopupWithTreeView(options, $container) {
     const that = this;
+    const { onHidden } = options.menu;
     const $popup = $('<div>')
-      .addClass(options.menu.cssClass).appendTo($container);
+      .addClass(options.menu.cssClass)
+      .appendTo($container);
+
     // @ts-expect-error
-    this._createComponent($popup, Popup, {
+    this._popupWithTreeView = this._createComponent($popup, Popup, {
       onHiding: options.menu.onHiding,
-      onHidden: options.menu.onHidden,
+      onHidden: (...args) => {
+        onHidden?.(...args);
+        this._popupWithTreeView = undefined;
+      },
       rtlEnabled: options.menu.rtlEnabled,
       position: options.menu.position,
       animation: options.menu.animation,

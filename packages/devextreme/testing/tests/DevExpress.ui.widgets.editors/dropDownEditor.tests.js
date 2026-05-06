@@ -1944,13 +1944,16 @@ QUnit.module('popup integration', () => {
 
         QUnit.test('should be equal to the editor width when dropDownOptions.width in not defined after editor width runtime change', function(assert) {
             const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-                opened: true
+                opened: true,
             });
             const instance = $dropDownEditor.dxDropDownEditor('instance');
 
             instance.option('width', 153);
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+            debugger;
+
             assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'overlay content width is correct');
         });
 

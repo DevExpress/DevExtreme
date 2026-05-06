@@ -794,7 +794,9 @@ class DropDownEditor<
   _renderPopupContent(): void {}
 
   _renderPopup(): void {
-    const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
+    const defaultOptions = this._popupConfig();
+    const cachedOptions = this._options.cache('dropDownOptions');
+    const popupConfig = extend(defaultOptions, cachedOptions);
 
     // @ts-expect-error ts-error
     this._popup = this._createComponent(this._$popup, Popup, popupConfig);
@@ -808,11 +810,8 @@ class DropDownEditor<
     });
 
     this._attachPopupKeyHandler();
-
     this._contentReadyHandler();
-
     this._setPopupContentId(this._popup.$content());
-
     this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
   }
 
@@ -867,7 +866,10 @@ class DropDownEditor<
       }),
       // @ts-expect-error ts-error
       showTitle: this.option('dropDownOptions.showTitle'),
-      width: getElementWidth(this.$element()),
+      _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error The width cannot be a static value due to the mechanism of size updates
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      width: (): number => getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
       hideOnParentScroll: true,
@@ -924,10 +926,12 @@ class DropDownEditor<
   }
 
   _updatePopupWidth(): void {
-    const popupWidth = getSizeValue(this.option('_cached_dropDownOptions.width'));
+    const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
 
     if (popupWidth === undefined) {
-      this._setPopupOption('width', getElementWidth(this.$element()));
+      // The width cannot be a static value due to the mechanism of size updates
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      this._setPopupOption('width', () => getElementWidth(this.$element()));
     }
   }
 
@@ -1115,6 +1119,7 @@ class DropDownEditor<
     this._setPopupOption(options);
 
     const optionsKeys = Object.keys(options);
+
     if (optionsKeys.includes('width') || optionsKeys.includes('height')) {
       this._dimensionChanged();
     }
@@ -1167,7 +1172,6 @@ class DropDownEditor<
       case 'width':
       case 'height':
         super._optionChanged(args);
-        this._updatePopupWidth();
         this._popup?.repaint();
         break;
       case 'opened':

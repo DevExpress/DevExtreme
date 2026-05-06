@@ -278,14 +278,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     this._updatePopupHeight();
   }
 
-  _updatePopupWidth(): void {
-    if (this._strategy instanceof Calendar || this._strategy instanceof CalendarWithTime) {
-      return;
-    }
-
-    super._updatePopupWidth();
-  }
-
   _dimensionChanged(): void {
     super._dimensionChanged();
 

@@ -164,7 +164,6 @@ export const createAppointmentPopup = async (
   const title = options.title ?? 'New Appointment';
   const readOnly = options.readOnly ?? false;
 
-  // @ts-expect-error onSave
   popup.show(appointmentData, { onSave, title, readOnly });
   await new Promise(process.nextTick);
 
