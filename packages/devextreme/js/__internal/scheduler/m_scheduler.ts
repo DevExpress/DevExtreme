@@ -62,8 +62,8 @@ import {
 } from './r1/utils/index';
 import { validateRRule } from './recurrence/validate_rule';
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
-import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
-import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
+import { DesktopTooltipStrategy } from './tooltip_strategies/desktop_tooltip_strategy';
+import { MobileTooltipStrategy } from './tooltip_strategies/mobile_tooltip_strategy';
 import type {
   AppointmentTooltipItem,
   SafeAppointment,
