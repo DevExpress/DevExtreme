@@ -212,11 +212,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     this._isPaging = false;
     this._currentOperationTypes = null;
-    this._dataChangedHandler = (e) => {
-      this._currentOperationTypes = this._dataSource.operationTypes();
-      this._handleDataChanged(e);
-      this._currentOperationTypes = null;
-    };
+    this._dataChangedHandler = this._handleDataChanged.bind(this);
     this._columnsChangedHandler = this._handleColumnsChanged.bind(this);
     this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
     this._loadErrorHandler = this._handleLoadError.bind(this);
@@ -577,6 +573,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           errors.log('W1005', that.component.NAME);
           that._applyFilter();
         } else {
+          this._currentOperationTypes = dataSource.operationTypes();
           that.updateItems(e, true);
         }
       }).fail(() => {
@@ -1159,6 +1156,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const changeType = change.changeType || 'refresh';
 
     change.changeType = changeType;
+    change.operationTypes = this._currentOperationTypes;
+    this._currentOperationTypes = null;
 
     if (dataSource) {
       const cachedProcessedItems = this._cachedProcessedItems;
@@ -1220,36 +1219,32 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  public updateItems(change?, isDataChanged?) {
-    change = change || {};
-    const that = this;
-    change.isFirstRender = !that.changed.fired();
+  public updateItems(change: any = {}, isDataChanged?: boolean) {
+    change.isFirstRender = !this.changed.fired();
 
-    if (that._repaintChangesOnly !== undefined) {
-      change.repaintChangesOnly = change.repaintChangesOnly ?? that._repaintChangesOnly;
-      change.needUpdateDimensions = change.needUpdateDimensions || that._needUpdateDimensions;
+    if (this._repaintChangesOnly !== undefined) {
+      change.repaintChangesOnly ??= this._repaintChangesOnly;
+      change.needUpdateDimensions ??= this._needUpdateDimensions;
     } else if (change.changes) {
-      change.repaintChangesOnly = that.option('repaintChangesOnly');
+      change.repaintChangesOnly = this.option('repaintChangesOnly');
     } else if (isDataChanged) {
-      const operationTypes = that.dataSource().operationTypes();
+      const operationTypes = this.dataSource().operationTypes();
 
-      change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option('repaintChangesOnly');
       change.isDataChanged = true;
-      if (operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
-        change.needUpdateDimensions = true;
-      }
+      change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && this.option('repaintChangesOnly');
+      change.needUpdateDimensions = operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding);
     }
 
-    if (that._updateLockCount && !change.cancel) {
-      that._changes.push(change);
+    if (this._updateLockCount && !change.cancel) {
+      this._changes.push(change);
       return;
     }
 
-    that._updateItemsCore(change);
+    this._updateItemsCore(change);
 
     if (change.cancel) return;
 
-    that._fireChanged(change);
+    this._fireChanged(change);
   }
 
   public loadingOperationTypes() {
@@ -1262,10 +1257,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: virtual_scrolling, focus
    */
   protected _fireChanged(change) {
-    if (this._currentOperationTypes) {
-      change.operationTypes = this._currentOperationTypes;
-      this._currentOperationTypes = null;
-    }
     deferRender(() => {
       this.changed.fire(change);
     });
