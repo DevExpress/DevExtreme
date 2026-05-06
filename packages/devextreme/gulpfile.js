@@ -73,11 +73,31 @@ gulp.task('check-license-notices', shell.task('pnpm nx run devextreme:verify:lic
 
 gulp.task('state-manager-optimize', shell.task('pnpm nx run devextreme:state-manager:optimize'));
 
-gulp.task('npm', shell.task(
-    context.uglify
-        ? 'pnpm nx run devextreme:build:npm -c production'
-        : 'pnpm nx run devextreme:build:npm'
-));
+function getNpmConfiguration() {
+    if(context.uglify && env.BUILD_INTERNAL_PACKAGE) {
+        return 'production-internal';
+    }
+    if(env.BUILD_INTERNAL_PACKAGE) {
+        return 'internal';
+    }
+    if(context.uglify && env.BUILD_TEST_INTERNAL_PACKAGE) {
+        return 'production-test-internal';
+    }
+    if(env.BUILD_TEST_INTERNAL_PACKAGE) {
+        return 'test-internal';
+    }
+    if(context.uglify) {
+        return 'production';
+    }
+    return '';
+}
+
+gulp.task('npm', shell.task((function() {
+    const config = getNpmConfiguration();
+    return config
+        ? `pnpm nx run devextreme:build:npm -c ${config}`
+        : 'pnpm nx run devextreme:build:npm';
+})()));
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');

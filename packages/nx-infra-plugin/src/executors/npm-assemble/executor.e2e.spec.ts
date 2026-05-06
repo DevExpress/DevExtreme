@@ -25,6 +25,9 @@ const OPTIONS: NpmAssembleExecutorSchema = {
   outputDir: './artifacts/npm/devextreme',
   licenseTemplateFile: './build/gulp/license-header.txt',
   eulaUrl: 'https://js.devexpress.com/Licensing/',
+  srcExcludes: ['bundles/**/*'],
+  distExcludes: ['js/jquery*'],
+  excludeLicenseValidator: '**/license/license_validation_internal.js',
 };
 
 describe('NpmAssembleExecutor E2E', () => {
@@ -206,5 +209,72 @@ describe('NpmAssembleExecutor E2E', () => {
 
     expect(await readFileText(path.join(distMetaDir, 'README.md'))).toBe('dist readme');
     expect(fs.existsSync(path.join(distMetaDir, 'js', 'dx.all.js'))).toBe(true);
+  });
+
+  it('should exclude default license validator when excludeLicenseValidator targets it', async () => {
+    const transpiledDir = path.join(projectDir, 'artifacts', 'transpiled-esm-npm');
+    fs.mkdirSync(path.join(transpiledDir, 'esm', 'license'), { recursive: true });
+
+    await writeFileText(
+      path.join(transpiledDir, 'esm', 'license', 'license_validation.js'),
+      'var d = {};',
+    );
+    await writeFileText(
+      path.join(transpiledDir, 'esm', 'license', 'license_validation_internal.js'),
+      'var i = {};',
+    );
+
+    const internalOptions: NpmAssembleExecutorSchema = {
+      ...OPTIONS,
+      outputDir: './artifacts/npm/devextreme-internal',
+      excludeLicenseValidator: '**/license/license_validation.js',
+      renameLicenseValidator: {
+        fromGlob: '**/license/license_validation_internal.js',
+        toBasename: 'license_validation.js',
+      },
+    };
+
+    const result = await executor(internalOptions, context);
+    expect(result.success).toBe(true);
+
+    const outDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme-internal');
+    expect(fs.existsSync(path.join(outDir, 'esm', 'license', 'license_validation.js'))).toBe(true);
+    expect(
+      fs.existsSync(path.join(outDir, 'esm', 'license', 'license_validation_internal.js')),
+    ).toBe(false);
+
+    const renamedContent = await readFileText(
+      path.join(outDir, 'esm', 'license', 'license_validation.js'),
+    );
+    expect(renamedContent).toContain('var i = {};');
+  });
+
+  it('should write to a different outputDir/flatten target when overridden via options', async () => {
+    const transpiledDir = path.join(projectDir, 'artifacts', 'transpiled-esm-npm');
+    const artifactsDir = path.join(projectDir, 'artifacts');
+    fs.mkdirSync(path.join(transpiledDir, 'esm'), { recursive: true });
+    fs.mkdirSync(path.join(artifactsDir, 'js'), { recursive: true });
+
+    await writeFileText(path.join(transpiledDir, 'esm', 'button.js'), 'export class Button {}');
+    await writeFileText(path.join(artifactsDir, 'js', 'dx.all.js'), 'var dx = {};');
+
+    const internalOptions: NpmAssembleExecutorSchema = {
+      ...OPTIONS,
+      outputDir: './artifacts/npm/devextreme-internal',
+      flatten: [{ from: './dist', to: './artifacts/npm/devextreme-dist-internal' }],
+    };
+
+    const result = await executor(internalOptions, context);
+    expect(result.success).toBe(true);
+
+    const internalDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme-internal');
+    const internalDistDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme-dist-internal');
+    const regularDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme');
+    const regularDistDir = path.join(projectDir, 'artifacts', 'npm', 'devextreme-dist');
+
+    expect(fs.existsSync(path.join(internalDir, 'esm', 'button.js'))).toBe(true);
+    expect(fs.existsSync(path.join(internalDistDir, 'js', 'dx.all.js'))).toBe(true);
+    expect(fs.existsSync(regularDir)).toBe(false);
+    expect(fs.existsSync(regularDistDir)).toBe(false);
   });
 });

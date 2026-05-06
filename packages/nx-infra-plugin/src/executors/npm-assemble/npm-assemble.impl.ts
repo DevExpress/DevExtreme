@@ -21,89 +21,42 @@ import {
   NpmAssembleExecutorSchema,
   NpmAssembleFlattenStep,
   NpmAssembleMetadataFile,
+  NpmAssembleRename,
 } from './schema';
 
-function isInternalPackageBuild(): boolean {
-  return (
-    process.env.BUILD_INTERNAL_PACKAGE === 'true'
-    || process.env.BUILD_TEST_INTERNAL_PACKAGE === 'true'
-  );
+function buildSrcExcludes(
+  baseExcludes: readonly string[],
+  excludeLicenseValidator: string | undefined,
+): string[] {
+  return excludeLicenseValidator ? [...baseExcludes, excludeLicenseValidator] : [...baseExcludes];
 }
 
-const SRC_JS_BASE_EXCLUDES = [
-  'bundles/*.js',
-  'cjs/bundles/**/*',
-  'esm/bundles/**/*',
-  'bundles/modules/parts/*.js',
-  'viz/vector_map.utils/*.js',
-  'viz/docs/*.js',
-];
-
-function buildSrcJsExcludes(internalBuild: boolean): string[] {
-  return [
-    ...SRC_JS_BASE_EXCLUDES,
-    internalBuild
-      ? '**/license/license_validation.js'
-      : '**/license/license_validation_internal.js',
-  ];
+function buildSrcHeaderExcludes(srcExcludes: readonly string[]): string[] {
+  return [...srcExcludes, 'dist/**/*', 'bin/**/*', 'license/**/*'];
 }
-
-const DIST_EXCLUDES = [
-  'transpiled**/**/*',
-  'npm/**/*.*',
-  'ts/jquery*',
-  'ts/knockout*',
-  'ts/globalize*',
-  'ts/cldr*',
-  'css/dx-diagram.*',
-  'css/dx-gantt.*',
-  'js/knockout*',
-  'js/cldr/*.*',
-  'js/cldr*',
-  'js/globalize/*.*',
-  'js/globalize*',
-  'js/dx-exceljs-fork*',
-  'js/file-saver*',
-  'js/jquery*',
-  'js/jspdf*',
-  'js/jspdf-autotable*',
-  'js/jszip*',
-  'js/dx.custom*',
-  'js/dx.viz*',
-  'js/dx.web*',
-  'js/dx-diagram*',
-  'js/dx-gantt*',
-  'js/dx-quill*',
-];
-
-function buildSrcJsHeaderExcludes(internalBuild: boolean): string[] {
-  return [...buildSrcJsExcludes(internalBuild), 'dist/**/*', 'bin/**/*', 'license/**/*'];
-}
-
-const VECTOR_MAP_UTILS_EXCLUDES = ['viz/vector_map.utils/**'];
 
 async function copySourceJs(
   transpiledDir: string,
   outputDir: string,
-  internalBuild: boolean,
+  excludes: readonly string[],
 ): Promise<void> {
   await copyDirectory(transpiledDir, outputDir, {
     include: ['**/*.js'],
-    exclude: buildSrcJsExcludes(internalBuild),
+    exclude: [...excludes],
   });
 }
 
-async function renameInternalLicenseValidator(outputDir: string): Promise<void> {
-  const licenseDirs = await glob('**/__internal/core/license', {
-    cwd: toPosixPath(outputDir),
-    absolute: true,
-  });
+async function applyRenameLicenseValidator(
+  outputDir: string,
+  rename: NpmAssembleRename,
+): Promise<void> {
+  const cwd = toPosixPath(outputDir);
+  const matches = await glob(rename.fromGlob, { cwd, absolute: true });
   await Promise.all(
-    licenseDirs.map(async (licenseDir) => {
-      const internalPath = path.join(licenseDir, 'license_validation_internal.js');
-      const defaultPath = path.join(licenseDir, 'license_validation.js');
+    matches.map(async (sourcePath) => {
+      const targetPath = path.join(path.dirname(sourcePath), rename.toBasename);
       try {
-        await fs.rename(internalPath, defaultPath);
+        await fs.rename(sourcePath, targetPath);
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
           throw error;
@@ -113,17 +66,25 @@ async function renameInternalLicenseValidator(outputDir: string): Promise<void> 
   );
 }
 
-async function copyEsmPackageJsonFiles(transpiledDir: string, outputDir: string): Promise<void> {
+async function copyEsmPackageJsonFiles(
+  transpiledDir: string,
+  outputDir: string,
+  nestedPackageJsonExcludes: readonly string[],
+): Promise<void> {
   await copyDirectory(transpiledDir, outputDir, {
     include: ['**/*.json'],
-    exclude: VECTOR_MAP_UTILS_EXCLUDES,
+    exclude: [...nestedPackageJsonExcludes],
   });
 }
 
-async function copyJsSrcJsonFiles(jsSrcDir: string, outputDir: string): Promise<void> {
+async function copyJsSrcJsonFiles(
+  jsSrcDir: string,
+  outputDir: string,
+  nestedPackageJsonExcludes: readonly string[],
+): Promise<void> {
   await copyDirectory(jsSrcDir, outputDir, {
     include: ['**/*.json'],
-    exclude: VECTOR_MAP_UTILS_EXCLUDES,
+    exclude: [...nestedPackageJsonExcludes],
   });
 }
 
@@ -153,10 +114,14 @@ async function copyNpmBinFiles(npmBinDir: string, outputDir: string): Promise<vo
   await copyAndNormalizeFiles(npmBinDir, path.join(outputDir, 'bin'), '*.js');
 }
 
-async function copyDistFiles(artifactsDir: string, outputDir: string): Promise<void> {
+async function copyDistFiles(
+  artifactsDir: string,
+  outputDir: string,
+  excludes: readonly string[],
+): Promise<void> {
   await copyDirectory(artifactsDir, path.join(outputDir, 'dist'), {
     include: ['**/*'],
-    exclude: DIST_EXCLUDES,
+    exclude: [...excludes],
   });
 }
 
@@ -183,7 +148,11 @@ interface ResolvedNpmAssemble {
   outputDir: string;
   metadataFiles: ResolvedMetadataFile[];
   flattenSteps: ResolvedFlattenStep[];
-  internalBuild: boolean;
+  srcExcludes: string[];
+  srcHeaderExcludes: string[];
+  distExcludes: readonly string[];
+  nestedPackageJsonExcludes: readonly string[];
+  renameLicenseValidator?: NpmAssembleRename;
 }
 
 function resolveMetadataFiles(
@@ -230,6 +199,10 @@ export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
     const pkg = await loadProjectPackageJson(projectRoot);
     const templatePath = resolveLicenseTemplate(projectRoot, options);
     const outputDir = path.resolve(projectRoot, options.outputDir);
+    const srcExcludes = buildSrcExcludes(
+      options.srcExcludes ?? [],
+      options.excludeLicenseValidator,
+    );
 
     return {
       pkg,
@@ -244,7 +217,11 @@ export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
       outputDir,
       metadataFiles: resolveMetadataFiles(options.metadataFiles, projectRoot, outputDir),
       flattenSteps: resolveFlattenSteps(options.flatten, projectRoot, outputDir),
-      internalBuild: isInternalPackageBuild(),
+      srcExcludes,
+      srcHeaderExcludes: buildSrcHeaderExcludes(srcExcludes),
+      distExcludes: options.distExcludes ?? [],
+      nestedPackageJsonExcludes: options.nestedPackageJsonExcludes ?? [],
+      renameLicenseValidator: options.renameLicenseValidator,
     };
   },
   run: async (resolved) => {
@@ -255,19 +232,23 @@ export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
     );
 
     await Promise.all([
-      copySourceJs(resolved.transpiledDir, resolved.outputDir, resolved.internalBuild),
-      copyEsmPackageJsonFiles(resolved.transpiledDir, resolved.outputDir),
-      copyJsSrcJsonFiles(resolved.jsSrcDir, resolved.outputDir),
+      copySourceJs(resolved.transpiledDir, resolved.outputDir, resolved.srcExcludes),
+      copyEsmPackageJsonFiles(
+        resolved.transpiledDir,
+        resolved.outputDir,
+        resolved.nestedPackageJsonExcludes,
+      ),
+      copyJsSrcJsonFiles(resolved.jsSrcDir, resolved.outputDir, resolved.nestedPackageJsonExcludes),
       copyLicenseFiles(resolved.licenseSrcDir, resolved.outputDir),
       copyNpmBinFiles(resolved.npmBinDir, resolved.outputDir),
       copyFile(resolved.webpackConfigSrc, webpackConfigDestination),
-      copyDistFiles(resolved.artifactsDir, resolved.outputDir),
+      copyDistFiles(resolved.artifactsDir, resolved.outputDir, resolved.distExcludes),
     ]);
     logger.verbose('Assembled npm package contents');
 
-    if (resolved.internalBuild) {
-      await renameInternalLicenseValidator(resolved.outputDir);
-      logger.verbose('Renamed internal license validator to default');
+    if (resolved.renameLicenseValidator) {
+      await applyRenameLicenseValidator(resolved.outputDir, resolved.renameLicenseValidator);
+      logger.verbose('Renamed license validator');
     }
 
     await applyLicenseHeadersToDirectory({
@@ -277,7 +258,7 @@ export default createExecutor<NpmAssembleExecutorSchema, ResolvedNpmAssemble>({
       eulaUrl: resolved.eulaUrl,
       commentType: '*',
       includePatterns: ['**/*.js'],
-      excludePatterns: buildSrcJsHeaderExcludes(resolved.internalBuild),
+      excludePatterns: resolved.srcHeaderExcludes,
       filenameMode: 'relative',
     });
     logger.verbose('Applied star-license banners to source JS files');

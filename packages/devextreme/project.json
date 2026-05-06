@@ -821,13 +821,20 @@
         "outputDir": "./artifacts/npm/devextreme",
         "templatesDir": "./build/npm-templates"
       },
+      "configurations": {
+        "internal": {
+          "outputDir": "./artifacts/npm/devextreme-internal"
+        }
+      },
       "inputs": [
         "{projectRoot}/js/**/*.d.ts",
         "{projectRoot}/build/npm-templates/**/*"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
-        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.js"
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.js",
+        "{projectRoot}/artifacts/npm/devextreme-internal/**/*.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.all.js"
       ]
     },
     "build:npm:dts-bundle": {
@@ -837,13 +844,19 @@
         "artifactPath": "./artifacts/ts/dx.all.d.ts",
         "packagePath": "./artifacts/npm/devextreme/bundles/dx.all.d.ts"
       },
+      "configurations": {
+        "internal": {
+          "packagePath": "./artifacts/npm/devextreme-internal/bundles/dx.all.d.ts"
+        }
+      },
       "inputs": [
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts"
       ],
       "outputs": [
         "{projectRoot}/artifacts/ts/dx.all.d.ts",
-        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts"
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.all.d.ts"
       ]
     },
     "build:npm:dist:package-json": {
@@ -853,11 +866,19 @@
         "distDirectory": "./artifacts/npm/devextreme-dist",
         "versionFrom": "./package.json"
       },
+      "configurations": {
+        "internal": {
+          "distDirectory": "./artifacts/npm/devextreme-dist-internal"
+        }
+      },
       "inputs": [
         "{workspaceRoot}/packages/devextreme-dist/package.json",
         "{projectRoot}/package.json"
       ],
-      "outputs": ["{projectRoot}/artifacts/npm/devextreme-dist/package.json"]
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme-dist/package.json",
+        "{projectRoot}/artifacts/npm/devextreme-dist-internal/package.json"
+      ]
     },
     "build:npm:assemble": {
       "executor": "devextreme-nx-infra-plugin:npm-assemble",
@@ -869,6 +890,43 @@
         "webpackConfig": "./webpack.config.js",
         "artifactsDir": "./artifacts",
         "outputDir": "./artifacts/npm/devextreme",
+        "srcExcludes": [
+          "bundles/*.js",
+          "cjs/bundles/**/*",
+          "esm/bundles/**/*",
+          "bundles/modules/parts/*.js",
+          "viz/vector_map.utils/*.js",
+          "viz/docs/*.js"
+        ],
+        "distExcludes": [
+          "transpiled**/**/*",
+          "npm/**/*.*",
+          "ts/jquery*",
+          "ts/knockout*",
+          "ts/globalize*",
+          "ts/cldr*",
+          "css/dx-diagram.*",
+          "css/dx-gantt.*",
+          "js/knockout*",
+          "js/cldr/*.*",
+          "js/cldr*",
+          "js/globalize/*.*",
+          "js/globalize*",
+          "js/dx-exceljs-fork*",
+          "js/file-saver*",
+          "js/jquery*",
+          "js/jspdf*",
+          "js/jspdf-autotable*",
+          "js/jszip*",
+          "js/dx.custom*",
+          "js/dx.viz*",
+          "js/dx.web*",
+          "js/dx-diagram*",
+          "js/dx-gantt*",
+          "js/dx-quill*"
+        ],
+        "nestedPackageJsonExcludes": ["viz/vector_map.utils/**"],
+        "excludeLicenseValidator": "**/license/license_validation_internal.js",
         "metadataFiles": [
           { "from": "../../README.md", "to": "./README.md" },
           { "from": "./build/npm-templates/.npmignore", "to": "./.npmignore" },
@@ -878,6 +936,32 @@
         "flatten": [
           { "from": "./dist", "to": "./artifacts/npm/devextreme-dist" }
         ]
+      },
+      "configurations": {
+        "internal": {
+          "outputDir": "./artifacts/npm/devextreme-internal",
+          "excludeLicenseValidator": "**/license/license_validation.js",
+          "renameLicenseValidator": {
+            "fromGlob": "**/license/license_validation_internal.js",
+            "toBasename": "license_validation.js"
+          },
+          "metadataFiles": [
+            { "from": "../../README.md", "to": "./README.md" },
+            { "from": "./build/npm-templates/.npmignore", "to": "./.npmignore" },
+            { "from": "../devextreme-dist/README.md", "to": "../devextreme-dist-internal/README.md" },
+            { "from": "../devextreme-dist/LICENSE.md", "to": "../devextreme-dist-internal/LICENSE.md" }
+          ],
+          "flatten": [
+            { "from": "./dist", "to": "./artifacts/npm/devextreme-dist-internal" }
+          ]
+        },
+        "test-internal": {
+          "excludeLicenseValidator": "**/license/license_validation.js",
+          "renameLicenseValidator": {
+            "fromGlob": "**/license/license_validation_internal.js",
+            "toBasename": "license_validation.js"
+          }
+        }
       },
       "inputs": [
         "internalPackageEnv",
@@ -897,7 +981,9 @@
         "{projectRoot}/artifacts/npm/devextreme/**/*",
         "{projectRoot}/artifacts/npm/devextreme-dist/README.md",
         "{projectRoot}/artifacts/npm/devextreme-dist/LICENSE.md",
-        "{projectRoot}/artifacts/npm/devextreme-dist/**/*"
+        "{projectRoot}/artifacts/npm/devextreme-dist/**/*",
+        "{projectRoot}/artifacts/npm/devextreme-internal/**/*",
+        "{projectRoot}/artifacts/npm/devextreme-dist-internal/**/*"
       ]
     },
     "build:npm:scss": {
@@ -906,13 +992,19 @@
         "scssPackagePath": "../devextreme-scss",
         "outputDir": "./artifacts/npm/devextreme/scss"
       },
+      "configurations": {
+        "internal": {
+          "outputDir": "./artifacts/npm/devextreme-internal/scss"
+        }
+      },
       "inputs": [
         "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
         "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
         "{workspaceRoot}/packages/devextreme-scss/icons/**/*"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/npm/devextreme/scss/**/*"
+        "{projectRoot}/artifacts/npm/devextreme/scss/**/*",
+        "{projectRoot}/artifacts/npm/devextreme-internal/scss/**/*"
       ]
     },
     "build:npm:root-package-json": {
@@ -923,10 +1015,19 @@
         "setName": "devextreme",
         "removeFields": ["devDependencies", "publishConfig", "scripts"]
       },
+      "configurations": {
+        "internal": {
+          "distDirectory": "./artifacts/npm/devextreme-internal",
+          "setName": "devextreme-internal"
+        }
+      },
       "inputs": [
         "{projectRoot}/package.json"
       ],
-      "outputs": ["{projectRoot}/artifacts/npm/devextreme/package.json"]
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/package.json",
+        "{projectRoot}/artifacts/npm/devextreme-internal/package.json"
+      ]
     },
     "compress:npm-sources": {
       "executor": "devextreme-nx-infra-plugin:compress",
@@ -948,13 +1049,44 @@
       "configurations": {
         "production": {
           "mode": { "name": "beautify" }
+        },
+        "internal": {
+          "files": ["./artifacts/npm/devextreme-internal/**/*.js"],
+          "exclude": [
+            "./artifacts/npm/devextreme-internal/bundles/*.js",
+            "./artifacts/npm/devextreme-internal/cjs/bundles/**",
+            "./artifacts/npm/devextreme-internal/esm/bundles/**",
+            "./artifacts/npm/devextreme-internal/bundles/modules/parts/*.js",
+            "./artifacts/npm/devextreme-internal/viz/vector_map.utils/*.js",
+            "./artifacts/npm/devextreme-internal/viz/docs/*.js",
+            "./artifacts/npm/devextreme-internal/dist/**",
+            "./artifacts/npm/devextreme-internal/bin/**",
+            "./artifacts/npm/devextreme-internal/license/**"
+          ]
+        },
+        "production-internal": {
+          "files": ["./artifacts/npm/devextreme-internal/**/*.js"],
+          "exclude": [
+            "./artifacts/npm/devextreme-internal/bundles/*.js",
+            "./artifacts/npm/devextreme-internal/cjs/bundles/**",
+            "./artifacts/npm/devextreme-internal/esm/bundles/**",
+            "./artifacts/npm/devextreme-internal/bundles/modules/parts/*.js",
+            "./artifacts/npm/devextreme-internal/viz/vector_map.utils/*.js",
+            "./artifacts/npm/devextreme-internal/viz/docs/*.js",
+            "./artifacts/npm/devextreme-internal/dist/**",
+            "./artifacts/npm/devextreme-internal/bin/**",
+            "./artifacts/npm/devextreme-internal/license/**"
+          ],
+          "mode": { "name": "beautify" }
         }
       },
       "inputs": [
-        "{projectRoot}/artifacts/npm/devextreme/**/*.js"
+        "{projectRoot}/artifacts/npm/devextreme/**/*.js",
+        "{projectRoot}/artifacts/npm/devextreme-internal/**/*.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/npm/devextreme/**/*.js"
+        "{projectRoot}/artifacts/npm/devextreme/**/*.js",
+        "{projectRoot}/artifacts/npm/devextreme-internal/**/*.js"
       ]
     },
     "verify:licenses": {
@@ -1151,6 +1283,8 @@
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme",
         "{projectRoot}/artifacts/npm/devextreme-dist",
+        "{projectRoot}/artifacts/npm/devextreme-internal",
+        "{projectRoot}/artifacts/npm/devextreme-dist-internal",
         "{projectRoot}/artifacts/ts/dx.all.d.ts"
       ],
       "configurations": {
@@ -1160,6 +1294,54 @@
             "pnpm nx run devextreme:build:npm:dts-bundle",
             "pnpm nx run devextreme:build:npm:dist:package-json",
             "pnpm nx run devextreme:build:npm:assemble",
+            "pnpm nx run devextreme:build:npm:root-package-json",
+            "pnpm nx run devextreme:compress:npm-sources -c production",
+            "pnpm nx run devextreme:verify:public-modules",
+            "pnpm nx run devextreme:build:npm:scss"
+          ]
+        },
+        "internal": {
+          "commands": [
+            "pnpm nx run devextreme:build:npm:dts-modules -c internal",
+            "pnpm nx run devextreme:build:npm:dts-bundle -c internal",
+            "pnpm nx run devextreme:build:npm:dist:package-json -c internal",
+            "pnpm nx run devextreme:build:npm:assemble -c internal",
+            "pnpm nx run devextreme:build:npm:root-package-json -c internal",
+            "pnpm nx run devextreme:compress:npm-sources -c internal",
+            "pnpm nx run devextreme:verify:public-modules",
+            "pnpm nx run devextreme:build:npm:scss -c internal"
+          ]
+        },
+        "production-internal": {
+          "commands": [
+            "pnpm nx run devextreme:build:npm:dts-modules -c internal",
+            "pnpm nx run devextreme:build:npm:dts-bundle -c internal",
+            "pnpm nx run devextreme:build:npm:dist:package-json -c internal",
+            "pnpm nx run devextreme:build:npm:assemble -c internal",
+            "pnpm nx run devextreme:build:npm:root-package-json -c internal",
+            "pnpm nx run devextreme:compress:npm-sources -c production-internal",
+            "pnpm nx run devextreme:verify:public-modules",
+            "pnpm nx run devextreme:build:npm:scss -c internal"
+          ]
+        },
+        "test-internal": {
+          "commands": [
+            "pnpm nx run devextreme:build:npm:dts-modules",
+            "pnpm nx run devextreme:build:npm:dts-bundle",
+            "pnpm nx run devextreme:build:npm:dist:package-json",
+            "pnpm nx run devextreme:build:npm:assemble -c test-internal",
+            "pnpm nx run devextreme:build:npm:root-package-json",
+            "pnpm nx run devextreme:compress:npm-sources",
+            "pnpm nx run devextreme:verify:public-modules",
+            "pnpm nx run devextreme:build:npm:scss"
+          ]
+        },
+        "production-test-internal": {
+          "commands": [
+            "pnpm nx run devextreme:build:npm:dts-modules",
+            "pnpm nx run devextreme:build:npm:dts-bundle",
+            "pnpm nx run devextreme:build:npm:dist:package-json",
+            "pnpm nx run devextreme:build:npm:assemble -c test-internal",
             "pnpm nx run devextreme:build:npm:root-package-json",
             "pnpm nx run devextreme:compress:npm-sources -c production",
             "pnpm nx run devextreme:verify:public-modules",
@@ -1196,7 +1378,15 @@
         "testing": {
           "env": {
             "BUILD_TEST_INTERNAL_PACKAGE": "true"
-          }
+          },
+          "commands": [
+            "pnpm nx clean:artifacts devextreme",
+            "pnpm nx build:localization devextreme",
+            "pnpm nx build:transpile devextreme",
+            "pnpm nx run-many --targets=bundle:debug,bundle:prod,build:vectormap,copy:vendor,build:aspnet,build:declarations --projects=devextreme --parallel",
+            "pnpm nx build:npm devextreme -c test-internal",
+            "pnpm nx verify:licenses devextreme"
+          ]
         },
         "production": {
           "commands": [

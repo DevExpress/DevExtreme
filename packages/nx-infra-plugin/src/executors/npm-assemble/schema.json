@@ -6,35 +6,63 @@
   "properties": {
     "transpiledDir": {
       "type": "string",
-      "description": "Directory containing transpiled ESM+CJS sources (relative to project root)."
+      "description": "Transpiled ESM+CJS sources dir (relative to project root)."
     },
     "jsSrcDir": {
       "type": "string",
-      "description": "Directory containing js source JSON files (relative to project root)."
+      "description": "JS source dir for JSON copy (relative to project root)."
     },
     "licenseSrcDir": {
       "type": "string",
-      "description": "Directory containing license files to copy (relative to project root)."
+      "description": "License files dir (relative to project root)."
     },
     "npmBinDir": {
       "type": "string",
-      "description": "Directory containing npm bin scripts (relative to project root)."
+      "description": "Npm bin scripts dir (relative to project root)."
     },
     "webpackConfig": {
       "type": "string",
-      "description": "Path to the webpack config file to copy into bin/ (relative to project root)."
+      "description": "Webpack config to copy into bin/ (relative to project root)."
     },
     "artifactsDir": {
       "type": "string",
-      "description": "Artifacts directory containing js, css, ts sub-dirs for dist copy (relative to project root)."
+      "description": "Artifacts dir for dist copy (relative to project root)."
     },
     "outputDir": {
       "type": "string",
-      "description": "Output directory for the assembled npm package (relative to project root)."
+      "description": "Assembled package output dir (relative to project root)."
+    },
+    "srcExcludes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Globs excluded from source-JS copy (relative to transpiledDir)."
+    },
+    "distExcludes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Globs excluded from dist copy (relative to artifactsDir)."
+    },
+    "nestedPackageJsonExcludes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Globs excluded from JSON copy to skip nested sub-packages whose own package.json must not merge into the parent tarball."
+    },
+    "excludeLicenseValidator": {
+      "type": "string",
+      "description": "Glob of a license validator file to exclude during source-JS copy (e.g. exclude default validator in internal mode, or exclude internal validator in default mode)."
+    },
+    "renameLicenseValidator": {
+      "type": "object",
+      "description": "Post-assembly rename: every file matching fromGlob is renamed to toBasename in its directory. Used in internal mode to promote 'license_validation_internal.js' to 'license_validation.js'.",
+      "properties": {
+        "fromGlob": { "type": "string", "description": "Glob matching files to rename (relative to outputDir)." },
+        "toBasename": { "type": "string", "description": "New basename for matched files." }
+      },
+      "required": ["fromGlob", "toBasename"]
     },
     "licenseTemplateFile": {
       "type": "string",
-      "description": "Path to the license header template file (relative to project root)."
+      "description": "License header template (relative to project root)."
     },
     "eulaUrl": {
       "type": "string",
@@ -42,36 +70,24 @@
     },
     "metadataFiles": {
       "type": "array",
-      "description": "Metadata files (README, LICENSE, .npmignore, etc.) to copy after assembly. 'from' is resolved against projectRoot; 'to' is resolved against outputDir.",
+      "description": "Files copied after assembly. 'from' resolved against projectRoot, 'to' against outputDir.",
       "items": {
         "type": "object",
         "properties": {
-          "from": {
-            "type": "string",
-            "description": "Source file path, resolved against projectRoot."
-          },
-          "to": {
-            "type": "string",
-            "description": "Destination file path, resolved against outputDir."
-          }
+          "from": { "type": "string", "description": "Source path (vs projectRoot)." },
+          "to": { "type": "string", "description": "Destination path (vs outputDir)." }
         },
         "required": ["from", "to"]
       }
     },
     "flatten": {
       "type": "array",
-      "description": "Secondary directories populated by recursively copying a sub-tree from outputDir. 'from' is resolved against outputDir; 'to' is resolved against projectRoot.",
+      "description": "Secondary dirs populated by copying sub-trees from outputDir. 'from' vs outputDir, 'to' vs projectRoot.",
       "items": {
         "type": "object",
         "properties": {
-          "from": {
-            "type": "string",
-            "description": "Source directory inside outputDir, resolved as outputDir/from."
-          },
-          "to": {
-            "type": "string",
-            "description": "Destination directory, resolved against projectRoot."
-          }
+          "from": { "type": "string", "description": "Source dir inside outputDir." },
+          "to": { "type": "string", "description": "Destination dir (vs projectRoot)." }
         },
         "required": ["from", "to"]
       }
