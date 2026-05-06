@@ -1618,7 +1618,7 @@ QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
         });
 
         const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
-        const $body = $item.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
+        const $body = $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`);
 
         assert.strictEqual($item.get(0).style.overflow, 'visible', 'item has overflow:visible');
         assert.strictEqual($body.get(0).style.overflow, 'visible', 'item body has overflow:visible');
@@ -1681,7 +1681,7 @@ QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
 
         instance.expandItem(0);
 
-        const $body = $item.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
+        const $body = $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`);
 
         assert.strictEqual($item.get(0).style.overflow, '', 'overflow is not yet visible during animation');
 

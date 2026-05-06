@@ -346,7 +346,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
     }
 
     $item.css('overflow', '');
-    $item.find(`.${ACCORDION_ITEM_BODY_CLASS}`).css('overflow', '');
+    $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`).css('overflow', '');
 
     return this._animateItem($item, startItemHeight, finalItemHeight, skipAnimation, !!itemHeight);
   }
@@ -390,7 +390,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
 
       if ($element.hasClass(ACCORDION_ITEM_OPENED_CLASS)) {
         $element.css('overflow', 'visible');
-        $element.find(`.${ACCORDION_ITEM_BODY_CLASS}`).css('overflow', 'visible');
+        $element.children(`.${ACCORDION_ITEM_BODY_CLASS}`).css('overflow', 'visible');
       }
 
       $element
