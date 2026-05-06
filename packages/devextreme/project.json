@@ -880,6 +880,7 @@
         ]
       },
       "inputs": [
+        "internalPackageEnv",
         "{projectRoot}/artifacts/transpiled-esm-npm/**/*",
         "{projectRoot}/js/**/*.json",
         "{projectRoot}/license/**/*",
@@ -1128,6 +1129,7 @@
         "parallel": false
       },
       "inputs": [
+        "internalPackageEnv",
         "devextremeDistMeta",
         "{workspaceRoot}/packages/devextreme-dist/package.json",
         "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
@@ -1377,7 +1379,8 @@
       "{projectRoot}/webpack.config.js"
     ],
     "internalPackageEnv": [
-      { "env": "BUILD_TEST_INTERNAL_PACKAGE" }
+      { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+      { "env": "BUILD_INTERNAL_PACKAGE" }
     ],
     "devextremeDistMeta": [
       "{workspaceRoot}/packages/devextreme-dist/README.md",
