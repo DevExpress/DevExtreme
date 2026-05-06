@@ -7,6 +7,7 @@ import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
+import type Button from '@ts/ui/button';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -15,6 +16,7 @@ import {
 import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/m_popup';
 
+import gridCoreUtils from '../m_utils';
 import {
   CLASSES, CLEAR_CHAT_ICON,
   DEFAULT_CHAT_OPTIONS,
@@ -35,6 +37,10 @@ export class AIChat {
   private readonly popupInstance: Popup;
 
   private chatInstance?: Chat;
+
+  private clearChatButtonInstance?: Button;
+
+  private disabled = false;
 
   constructor(
     private options: AIChatOptions,
@@ -115,10 +121,14 @@ export class AIChat {
       widget: 'dxButton',
       toolbar: 'top',
       location: 'after',
+      cssClass: `${CLASSES.clearChatButton}`,
       options: {
         icon: CLEAR_CHAT_ICON,
         hint: messageLocalization.format('dxDataGrid-aiAssistantClearButtonText'),
         onClick: onChatCleared,
+        onInitialized: (e): void => {
+          this.clearChatButtonInstance = e.component;
+        },
       },
     };
   }
@@ -159,7 +169,11 @@ export class AIChat {
         .addClass(`dx-icon dx-icon-${REGENERATE_ICON} ${CLASSES.messageRegenerateButton}`)
         .appendTo($row);
 
-      eventsEngine.on($button, clickEventName, () => this.options.onRegenerate?.());
+      eventsEngine.on($button, clickEventName, () => {
+        if (!this.disabled) {
+          this.options.onRegenerate?.();
+        }
+      });
     }
   }
 
@@ -247,6 +261,26 @@ export class AIChat {
       .appendTo($container);
   }
 
+  private setTextAreaDisabled(disabled: boolean): void {
+    const $textArea = this.chatInstance?.$element().find(`.${CLASSES.textArea}`);
+
+    if ($textArea?.length) {
+      gridCoreUtils.getWidgetInstance($textArea)?.option('disabled', disabled);
+    }
+  }
+
+  private setSpeechToTextDisabled(disabled: boolean): void {
+    const $speechToText = this.chatInstance?.$element().find(`.${CLASSES.speechToTextButton}`);
+
+    if ($speechToText?.length) {
+      gridCoreUtils.getWidgetInstance($speechToText)?.option('disabled', disabled);
+    }
+  }
+
+  private setClearChatButtonDisabled(disabled: boolean): void {
+    this.clearChatButtonInstance?.option('disabled', disabled);
+  }
+
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
     this.options = options;
 
@@ -269,6 +303,23 @@ export class AIChat {
 
   public isShown(): boolean {
     return !!this.popupInstance?.option('visible');
+  }
+
+  public setDisabled(disabled: boolean): void {
+    if (this.disabled === disabled) {
+      return;
+    }
+
+    this.disabled = disabled;
+    this.chatInstance?.$element().toggleClass(CLASSES.disabled, disabled);
+
+    this.setTextAreaDisabled(disabled);
+    this.setSpeechToTextDisabled(disabled);
+    this.setClearChatButtonDisabled(disabled);
+  }
+
+  public isDisabled(): boolean {
+    return this.disabled;
   }
 
   public renderAIMessage(message: Message, container: HTMLElement): void {

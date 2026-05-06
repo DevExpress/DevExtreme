@@ -82,6 +82,7 @@ describe('AIAssistantController', () => {
       const timestamp = '2026-04-16T10:00:00.000Z';
       const expectedTimestamp = Date.parse(timestamp);
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
@@ -104,6 +105,7 @@ describe('AIAssistantController', () => {
     it('should keep message as pending when AI integration is not configured', async () => {
       const controller = createController();
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
@@ -124,6 +126,7 @@ describe('AIAssistantController', () => {
         'aiAssistant.aiIntegration': mockAIIntegration,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
@@ -153,7 +156,7 @@ describe('AIAssistantController', () => {
         'aiAssistant.aiIntegration': mockAIIntegration,
       });
 
-      controller.sendRequestToAI({
+      const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
@@ -169,6 +172,8 @@ describe('AIAssistantController', () => {
           text: 'Network error',
         }),
       ]);
+
+      await expect(promise).rejects.toThrow('Network error');
     });
 
     it('should fail message when response has no actions', async () => {
@@ -176,7 +181,7 @@ describe('AIAssistantController', () => {
         'aiAssistant.aiIntegration': mockAIIntegration,
       });
 
-      controller.sendRequestToAI({
+      const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
@@ -196,6 +201,57 @@ describe('AIAssistantController', () => {
           text: 'Default error message',
         }),
       ]);
+
+      await expect(promise).rejects.toThrow('Default error message');
+    });
+
+    it('should resolve promise when command succeeds', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+
+      await expect(promise).resolves.toBeUndefined();
+    });
+
+    it('should reject promise when onError is called', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      sendRequestCallbacks.onError?.(new Error('Network error'));
+
+      await expect(promise).rejects.toThrow('Network error');
+    });
+
+    it('should reject promise when response has no actions', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      sendRequestCallbacks.onComplete?.({} as ExecuteGridAssistantCommandResult);
+
+      await expect(promise).rejects.toThrow('Default error message');
     });
   });
 });

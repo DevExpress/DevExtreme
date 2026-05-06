@@ -283,6 +283,7 @@ describe('AIAssistantView', () => {
   describe('chat event handlers', () => {
     describe('onMessageEntered', () => {
       it('should send request to AI with the entered message', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
         createAIAssistantView();
 
         const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
@@ -295,6 +296,82 @@ describe('AIAssistantView', () => {
 
         expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledTimes(1);
         expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledWith(message);
+      });
+
+      it('should not send request when chat is disabled', () => {
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { isDisabled: jest.Mock; setDisabled: jest.Mock };
+        aiChatInstance.isDisabled.mockReturnValue(true);
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
+
+      it('should call setDisabled(true) before sending request', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+
+        expect(aiChatInstance.setDisabled).toHaveBeenCalledWith(true);
+      });
+
+      it('should call setDisabled(false) after request completes successfully', async () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+        await Promise.resolve();
+
+        expect(aiChatInstance.setDisabled).toHaveBeenLastCalledWith(false);
+      });
+
+      it('should call setDisabled(false) after request fails', async () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(
+          Promise.reject(new Error('Network error')),
+        );
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+        await Promise.resolve();
+
+        expect(aiChatInstance.setDisabled).toHaveBeenLastCalledWith(false);
       });
     });
   });

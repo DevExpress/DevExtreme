@@ -3,6 +3,7 @@ import type { Callback } from '@js/core/utils/callbacks';
 import { getHeight } from '@js/core/utils/size';
 import type { Properties as ChatProperties } from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
+import { fromPromise } from '@ts/core/utils/m_deferred';
 import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
 import {
   isChatOptions,
@@ -90,7 +91,14 @@ export class AIAssistantView extends View {
       dataSource: this.aiAssistantController.getMessageDataSource(),
       reloadOnChange: true,
       onMessageEntered: (e): void => {
-        this.aiAssistantController.sendRequestToAI(e.message);
+        if (this.aiChatInstance?.isDisabled()) {
+          return;
+        }
+
+        this.aiChatInstance?.setDisabled(true);
+        fromPromise(this.aiAssistantController.sendRequestToAI(e.message)).always(() => {
+          this.aiChatInstance?.setDisabled(false);
+        });
       },
       ...this.option('aiAssistant.chat'),
     };
