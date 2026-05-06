@@ -60,11 +60,11 @@ describe('day hiddenWeekDays support in header utils', () => {
   });
 });
 
-describe('workWeek hiddenWeekDays support in header utils', () => {
-  it('should keep Mon-Fri caption for default skippedDays', () => {
+describe('week hiddenWeekDays support in header utils', () => {
+  it('should keep Mon-Fri caption for weekend skippedDays', () => {
     expect(getCaptionInterval({
       date: new Date(2026, 3, 8), // Wednesday
-      step: 'workWeek',
+      step: 'week',
       intervalCount: 1,
       skippedDays: [0, 6],
       firstDayOfWeek: 0,
@@ -77,7 +77,7 @@ describe('workWeek hiddenWeekDays support in header utils', () => {
   it('should use full week caption when skippedDays override is empty', () => {
     expect(getCaptionInterval({
       date: new Date(2026, 3, 8), // Wednesday
-      step: 'workWeek',
+      step: 'week',
       intervalCount: 1,
       skippedDays: [],
       firstDayOfWeek: 0,
@@ -90,7 +90,7 @@ describe('workWeek hiddenWeekDays support in header utils', () => {
   it('should use first and last visible days for custom skippedDays', () => {
     expect(getCaptionInterval({
       date: new Date(2026, 3, 8), // Wednesday
-      step: 'workWeek',
+      step: 'week',
       intervalCount: 1,
       skippedDays: [1, 2],
       firstDayOfWeek: 0,
@@ -99,9 +99,6 @@ describe('workWeek hiddenWeekDays support in header utils', () => {
       endDate: new Date(2026, 3, 11, 23, 59, 59, 999),
     });
   });
-});
-
-describe('week hiddenWeekDays support in header utils', () => {
   it('should use first and last visible day for week caption', () => {
     expect(getCaptionInterval({
       date: new Date(2026, 3, 8), // Wednesday
