@@ -76,6 +76,20 @@ export class SchedulerModel {
     return getTexts(cells);
   }
 
+  getDateTableCell(rowIndex = 0, cellIndex = 0): HTMLElement {
+    const rowSelector = `.dx-scheduler-date-table-row:nth-child(${rowIndex + 1})`;
+    const cellSelector = `.dx-scheduler-date-table-cell:nth-child(${cellIndex + 1})`;
+    const selector = `${rowSelector} ${cellSelector}`;
+
+    const result = this.container.querySelector(selector);
+
+    if (!result) {
+      throw new Error(`Date cell in row ${rowIndex} and column ${cellIndex} not found`);
+    }
+
+    return result as HTMLElement;
+  }
+
   getHeaderPanelContent(): string[] {
     const cells = this.container.querySelectorAll('.dx-scheduler-header-panel-cell');
     return getTexts(cells);
