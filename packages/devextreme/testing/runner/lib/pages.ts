@@ -2,6 +2,11 @@ import {
   BaseRunProps, RunAllModel, RunSuiteModel, TemplateVars,
 } from './types';
 
+interface SystemPackage {
+  main?: string;
+  defaultExtension?: string;
+}
+
 interface PagesRendererDeps {
   contentWithCacheBuster: (contentPath: string, cacheBuster: string) => string;
   getCacheBuster: (searchParams: URLSearchParams) => string;
@@ -137,11 +142,6 @@ export function createPagesRenderer({
         'cldr-core': '/packages/devextreme/artifacts/js-systemjs/cldr-core',
         json: '/packages/devextreme/artifacts/js-systemjs/json.js',
         '@preact/signals-core': '/packages/devextreme/artifacts/js-systemjs/preact-signals.js',
-        // QUnit doesn't exercise AI assistant; CSP-production SystemJS can't load CJS.
-        // Stub zod and zod-to-json-schema so DataGrid module loading succeeds.
-        // eslint-disable-next-line spellcheck/spell-checker
-        zod: '/packages/devextreme/artifacts/transpiled-testing/helpers/qunit-stubs/zod',
-        'zod-to-json-schema': '/packages/devextreme/artifacts/transpiled-testing/helpers/qunit-stubs/zod-to-json-schema',
       }
       : {
         'devextreme-cldr-data': '/packages/devextreme/node_modules/devextreme-cldr-data',
@@ -183,17 +183,14 @@ export function createPagesRenderer({
       json: '/packages/devextreme/node_modules/systemjs-plugin-json/json.js',
       'plugin-babel': '/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': '/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
+      // QUnit doesn't execute DataGrid AI assistant
       // eslint-disable-next-line spellcheck/spell-checker
-      zod: '/packages/devextreme/node_modules/zod/lib',
-      'zod-to-json-schema': '/packages/devextreme/node_modules/zod-to-json-schema/dist/cjs',
+      zod: '@empty',
+      'zod-to-json-schema': '@empty',
       ...cspMap,
     };
 
-    const systemPackages: Record<string, {
-      defaultExtension?: string;
-      main?: string;
-      format?: string;
-    }> = {
+    const systemPackages: Record<string, SystemPackage> = {
       '': {
         defaultExtension: 'js',
       },
@@ -213,17 +210,6 @@ export function createPagesRenderer({
       },
       events: {
         main: 'index',
-      },
-      // eslint-disable-next-line spellcheck/spell-checker
-      zod: {
-        main: 'index.js',
-        defaultExtension: 'js',
-        format: 'cjs',
-      },
-      'zod-to-json-schema': {
-        main: 'index.js',
-        defaultExtension: 'js',
-        format: 'cjs',
       },
     };
 
