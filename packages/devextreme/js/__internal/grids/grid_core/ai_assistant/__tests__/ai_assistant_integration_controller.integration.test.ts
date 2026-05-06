@@ -21,7 +21,7 @@ import {
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
-import { AIAssistantIntegrationController } from '../m_ai_assistant_integration_controller';
+import { AIAssistantIntegrationController } from '../ai_assistant_integration_controller';
 
 interface SendRequestResult {
   promise: Promise<string>;
