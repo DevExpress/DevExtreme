@@ -8,9 +8,9 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 
 import { hasCommandErrors } from '../ai_chat/utils';
 import { Controller } from '../m_modules';
+import { AIAssistantIntegrationController } from './ai_assistant_integration_controller';
 import { AI_ASSISTANT_AUTHOR, AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
 import { GridCommands } from './grid_commands';
-import { AIAssistantIntegrationController } from './m_ai_assistant_integration_controller';
 import type {
   CommandResults,
 } from './types';
@@ -33,7 +33,7 @@ export class AIAssistantController extends Controller {
   }
 
   private processResponse(response: ExecuteGridAssistantCommandResult): Promise<CommandResults> {
-    if (!response?.actions) {
+    if (!response?.actions || !Array.isArray(response.actions)) {
       // TODO: need to localize default error message when there are no commands
       return Promise.reject(new Error('Default error message'));
     }
@@ -43,7 +43,10 @@ export class AIAssistantController extends Controller {
       return Promise.reject(new Error('Received invalid commands'));
     }
 
-    return this.gridCommands?.executeCommands(response.actions) ?? Promise.reject(new Error('Grid commands not initialized'));
+    const customizeResponseText = this.option('aiAssistant.customizeResponseText');
+
+    return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
+      ?? Promise.reject(new Error('Grid commands not initialized'));
   }
 
   private createPendingAIMessage(message: Message): string {
@@ -87,7 +90,8 @@ export class AIAssistantController extends Controller {
   }
 
   public init(): void {
-    this.gridCommands = new GridCommands(this.component);
+    // TODO: initialize default commands list when they are ready
+    this.gridCommands = new GridCommands(this.component, []);
     this.messageStore = new ArrayStore<Message, string>({
       key: 'id',
     });
