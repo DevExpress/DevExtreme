@@ -84,8 +84,8 @@ export const columnsPinningCommand = defineGridCommand({
 
     const caption = column?.caption ?? args.dataField;
     const defaultMessage = args.fixed
-      ? `Unfix the column "${caption}".`
-      : `Fix the column "${caption}".`;
+      ? `Fix the column "${caption}".`
+      : `Unfix the column "${caption}".`;
 
     if (!column || column.allowFixing === false) {
       return Promise.resolve(failure(defaultMessage));

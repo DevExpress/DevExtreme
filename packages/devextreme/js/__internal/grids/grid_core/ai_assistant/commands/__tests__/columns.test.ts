@@ -546,7 +546,7 @@ describe('columnsPinningCommand', () => {
   });
 
   describe('default message', () => {
-    it('uses "Unfix the column …" for fixed=true', async () => {
+    it('uses "Fix the column …" for fixed=true', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
 
@@ -556,10 +556,10 @@ describe('columnsPinningCommand', () => {
         fixedPosition: 'left',
       });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Unfix the column "Full Name".');
+      expect(callbacks.success).toHaveBeenCalledWith('Fix the column "Full Name".');
     });
 
-    it('uses "Fix the column …" for fixed=false', async () => {
+    it('uses "Unfix the column …" for fixed=false', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
 
@@ -568,7 +568,7 @@ describe('columnsPinningCommand', () => {
         fixed: false,
       });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Fix the column "Full Name".');
+      expect(callbacks.success).toHaveBeenCalledWith('Unfix the column "Full Name".');
     });
 
     it('falls back to dataField when no column matches', async () => {
@@ -581,7 +581,7 @@ describe('columnsPinningCommand', () => {
         fixedPosition: 'right',
       });
 
-      expect(callbacks.failure).toHaveBeenCalledWith('Unfix the column "unknown".');
+      expect(callbacks.failure).toHaveBeenCalledWith('Fix the column "unknown".');
     });
   });
 });
