@@ -96,7 +96,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override getGroupHeaderContainer() {
     if (this._isHorizontalGroupedWorkSpace()) {
-      return this._$thead;
+      return this.$thead;
     }
     return this.$sidebarTable;
   }

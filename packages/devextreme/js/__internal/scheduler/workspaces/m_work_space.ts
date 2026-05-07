@@ -270,8 +270,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected $groupTable: any;
 
-  // TODO: make private once external usages in m_timeline.ts are removed
-  _$thead: any;
+  protected $thead: any;
 
   private headerScrollable: any;
 
@@ -1140,11 +1139,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return this.$groupTable;
     }
 
-    return this._$thead;
+    return this.$thead;
   }
 
   private getDateHeaderContainer() {
-    return this._$thead;
+    return this.$thead;
   }
 
   private getCalculateHeaderCellRepeatCount() {
@@ -2228,7 +2227,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     utils.renovation.renderComponent(
       this,
-      this._$thead,
+      this.$thead,
       this.renovatedHeaderPanelComponent,
       'renovatedHeaderPanel',
       {
@@ -2614,7 +2613,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$headerPanelContainer = $('<div>').addClass('dx-scheduler-header-panel-container');
     this.$headerTablesContainer = $('<div>').addClass('dx-scheduler-header-tables-container');
     this.$headerPanel = $('<table>').attr('aria-hidden', true);
-    this._$thead = $('<thead>').appendTo(this.$headerPanel);
+    this.$thead = $('<thead>').appendTo(this.$headerPanel);
     this.$headerPanelEmptyCell = $('<div>').addClass('dx-scheduler-header-panel-empty-cell');
     this.$allDayTable = $('<table>').attr('aria-hidden', true);
 
@@ -2906,7 +2905,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
     if (!this.isRenovatedRender()) {
-      this._$thead.empty();
+      this.$thead.empty();
       this.$dateTable.empty();
       this.$timePanel.empty();
       this.$groupTable.empty();
