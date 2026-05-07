@@ -3,7 +3,9 @@
   "version": "26.1.0",
   "license": "MIT",
   "author": "Developer Express Inc.",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": "24.15.0"
+  },
   "scripts": {
     "devextreme:inject-descriptions-to-bundle": "dx-tools inject-descriptions --target-path ./packages/devextreme/ts/dx.all.d.ts --artifacts ./node_modules/devextreme-metadata/dist",
     "devextreme:inject-descriptions-to-modules": "dx-tools inject-descriptions --collapse-tags --sources ./packages/devextreme/js --artifacts ./node_modules/devextreme-metadata/dist",
@@ -125,5 +127,8 @@
       "stylelint-config-recommended-vue@1.6.1>stylelint-config-recommended": "^16.0.0"
     }
   },
-  "packageManager": "pnpm@9.15.9"
+  "packageManager": "pnpm@9.15.9",
+  "volta": {
+    "node": "24.15.0"
+  }
 }
