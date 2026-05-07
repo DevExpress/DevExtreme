@@ -184,7 +184,6 @@ export function createPagesRenderer({
       'plugin-babel': '/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': '/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
       // QUnit doesn't execute DataGrid AI assistant
-      // eslint-disable-next-line spellcheck/spell-checker
       zod: '@empty',
       'zod-to-json-schema': '@empty',
       ...cspMap,
