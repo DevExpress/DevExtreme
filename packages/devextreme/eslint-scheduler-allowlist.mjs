@@ -69,7 +69,6 @@ const schedulerLegacyMembers = [
     // workspaces/m_work_space.ts
     '_$groupTable',
     '_$thead',
-    '_dateTableScrollable',
     '_getCellCount',
     '_getGroupCount',
     '_groupedStrategy',

@@ -154,7 +154,7 @@ class HorizontalGroupedStrategy {
 
   getShaderOffset(i, width) {
     const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * i;
-    return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
+    return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace.$dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
   }
 
   getShaderTopOffset(i) {
@@ -168,7 +168,7 @@ class HorizontalGroupedStrategy {
   }
 
   getShaderMaxHeight() {
-    return getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).height;
+    return getBoundingRect(this._workSpace.$dateTableScrollable.$content().get(0)).height;
   }
 
   getShaderWidth() {
