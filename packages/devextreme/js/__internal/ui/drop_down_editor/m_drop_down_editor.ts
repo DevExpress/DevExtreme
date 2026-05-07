@@ -859,7 +859,7 @@ class DropDownEditor<
   _contentReadyHandler(): void {}
 
   _popupConfig(): PopupProperties {
-    return {
+    const config: PopupProperties = {
       onInitialized: this._getPopupInitializedHandler(),
       position: extend(this.option('popupPosition'), {
         of: this.$element(),
@@ -894,6 +894,8 @@ class DropDownEditor<
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
       _ignorePreventScrollEventsDeprecation: true,
     };
+
+    return config;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -923,9 +925,9 @@ class DropDownEditor<
   }
 
   _updatePopupWidth(): void {
-    const cachedWidth = this._options.cache('dropDownOptions')?.width;
+    const width = this._options.cache('dropDownOptions')?.width;
 
-    if (cachedWidth === undefined) {
+    if (width === undefined) {
       this._setPopupOption('width', getElementWidth(this.$element()));
     }
   }
