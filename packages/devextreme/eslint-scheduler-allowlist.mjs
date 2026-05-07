@@ -67,7 +67,6 @@ const schedulerR1Overrides = [
 
 const schedulerLegacyMembers = [
     // workspaces/m_work_space.ts
-    '_$allDayPanel',
     '_$dateTable',
     '_$dateTableScrollableContent',
     '_$groupTable',
