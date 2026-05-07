@@ -63,7 +63,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   private getWorkSpaceHeight() {
     if (this.option('crossScrollingEnabled') && hasWindow()) {
-      return getBoundingRect(this._$dateTable.get(0)).height;
+      return getBoundingRect(this.$dateTable.get(0)).height;
     }
 
     return getBoundingRect((this.$element() as any).get(0)).height;
@@ -189,7 +189,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     const minHeight = this.getWorkSpaceMinHeight();
     setHeight(this.$sidebarTable, minHeight);
-    setHeight(this._$dateTable, minHeight);
+    setHeight(this.$dateTable, minHeight);
 
     this.virtualScrollingDispatcher.updateDimensions();
   }
@@ -216,7 +216,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected override getCellElementByPosition(cellCoordinates, groupIndex) {
     const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
-    return this._$dateTable
+    return this.$dateTable
       .find('tr')
       .eq(indexes.rowIndex)
       .find('td')
@@ -224,7 +224,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getWorkSpaceWidth() {
-    return getOuterWidth(this._$dateTable, true);
+    return getOuterWidth(this.$dateTable, true);
   }
 
   private getIndicationFirstViewDate() {

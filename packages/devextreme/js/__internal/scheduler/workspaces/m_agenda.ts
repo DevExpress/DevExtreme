@@ -139,8 +139,8 @@ class SchedulerAgenda extends WorkSpace {
   protected override initWorkSpaceUnits() {
     this.initGroupTable();
     this.$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
-    this._$dateTable = $('<table>').attr('aria-hidden', true).addClass(DATE_TABLE_CLASS);
-    this._$dateTableScrollableContent = $('<div>').addClass('dx-scheduler-date-table-scrollable-content');
+    this.$dateTable = $('<table>').attr('aria-hidden', true).addClass(DATE_TABLE_CLASS);
+    this.$dateTableScrollableContent = $('<div>').addClass('dx-scheduler-date-table-scrollable-content');
     this.$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
   }
 
@@ -306,7 +306,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override cleanView() {
-    this._$dateTable.empty();
+    this.$dateTable.empty();
     this.$timePanel.empty();
 
     if (this._$groupTable) {
@@ -326,20 +326,20 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override createWorkSpaceStaticElements() {
-    this.$dateTableContainer.append(this._$dateTable);
-    this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
+    this.$dateTableContainer.append(this.$dateTable);
+    this._dateTableScrollable.$content().append(this.$dateTableScrollableContent);
 
     if (this._$groupTable) {
-      this._$dateTableScrollableContent.prepend(this._$groupTable);
+      this.$dateTableScrollableContent.prepend(this._$groupTable);
     }
 
-    this._$dateTableScrollableContent.append(this.$timePanel, this.$dateTableContainer);
+    this.$dateTableScrollableContent.append(this.$timePanel, this.$dateTableContainer);
     this.$element().append(this._dateTableScrollable.$element());
   }
 
   protected override renderDateTable() {
     this.renderTableBody({
-      container: getPublicElement(this._$dateTable),
+      container: getPublicElement(this.$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
       cellClass: this.getDateTableCellClass(),
     });
