@@ -1,5 +1,4 @@
-import { weekUtils } from '@ts/scheduler/r1/utils/index';
-
+import { weekUtils } from '../../r1/utils/index';
 import { ViewDataGenerator } from './m_view_data_generator';
 
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
@@ -9,7 +8,7 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
     return weekUtils.getIntervalDuration(intervalCount);
   }
 
-  _calculateStartViewDate(options) {
+  protected calculateStartViewDate(options) {
     return weekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

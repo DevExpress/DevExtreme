@@ -19,11 +19,11 @@ import type {
 } from '@js/ui/button_group';
 import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
-import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import List from '@ts/ui/list/list.edit.search';
 import Popup from '@ts/ui/popup/m_popup';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
@@ -54,7 +54,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _loadSingleDeferred?: DeferredObj<unknown>;
 
-  _list?: dxList;
+  _list!: List;
 
   _lastSelectedItemData?: Item;
 
@@ -146,6 +146,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       content: new FunctionTemplate((options) => {
         const $popupContent = $(options.container);
         const $listContainer = $('<div>').appendTo($popupContent);
+
         this._list = this._createComponent($listContainer, List, this._listOptions());
 
         this._list.registerKeyHandler('escape', this._escHandler.bind(this));
@@ -370,13 +371,13 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const $content = this._popup!.$content();
     const template = this._getTemplateByOption('dropDownContentTemplate');
 
-    $content.empty();
+    $content?.empty();
 
     this._popupContentId = `dx-${new Guid()}`;
     this.setAria('id', this._popupContentId, $content);
 
     const result = template.render({
-      container: getPublicElement($content),
+      container: $content ? getPublicElement($content) : undefined,
       model: this.option('items') || this._dataController.getDataSource(),
     });
 
@@ -418,24 +419,40 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
   }
 
-  _listOptions() {
-    const selectedItemKey = this.option('selectedItemKey');
-    const useSelectMode = this.option('useSelectMode');
+  _listOptions(): ListBaseProperties {
+    const {
+      wrapItemText,
+      focusStateEnabled,
+      hoverStateEnabled,
+      useItemTextAsTitle,
+      grouped,
+      groupTemplate,
+      noDataText,
+      displayExpr,
+      itemTemplate,
+      items,
+
+      selectedItemKey,
+      useSelectMode,
+    } = this.option();
+
     return {
       selectionMode: useSelectMode ? 'single' : 'none',
-      wrapItemText: this.option('wrapItemText'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      hoverStateEnabled: this.option('hoverStateEnabled'),
-      useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      wrapItemText,
+      focusStateEnabled,
+      hoverStateEnabled,
+      useItemTextAsTitle,
+      // eslint-disable-next-line
       onContentReady: () => this._fireContentReadyAction(),
       selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],
-      grouped: this.option('grouped'),
-      groupTemplate: this.option('groupTemplate'),
+      grouped,
+      groupTemplate,
       keyExpr: this._dataController.key(),
-      noDataText: this.option('noDataText'),
-      displayExpr: this.option('displayExpr'),
-      itemTemplate: this.option('itemTemplate'),
-      items: this.option('items'),
+      noDataText,
+      displayExpr,
+      itemTemplate,
+      items,
+      // @ts-expect-error ts-error
       dataSource: this._dataController.getDataSource(),
       onItemClick: (e) => {
         if (!this.option('useSelectMode')) {
@@ -443,6 +460,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         }
         // @ts-expect-error ts-error
         this.option('selectedItemKey', this._keyGetter(e.itemData));
+        // @ts-expect-error ts-error
         const actionResult = this._fireItemClickAction(e);
         // @ts-expect-error ts-error
         if (actionResult !== false) {
@@ -480,8 +498,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const $popup = $('<div>');
     this.$element().append($popup);
     this._popup = this._createComponent($popup, Popup, this._popupOptions());
-    this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
-    this._popup.$wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
+    this._popup.$content()?.addClass(DROP_DOWN_BUTTON_CONTENT);
+    this._popup.$wrapper()?.addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
     this._popup.$overlayContent().attr('aria-label', OVERLAY_CONTENT_LABEL);
     this._popup.on('hiding', this._popupHidingHandler.bind(this));
     this._popup.on('showing', this._popupShowingHandler.bind(this));
@@ -567,7 +585,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     if (!this._buttonGroup) {
       this.$element().append($buttonGroup);
     }
-    // @ts-expect-error ts-error
+
     this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._getButtonGroupOptions());
 
     this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
@@ -677,7 +695,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   _updateItemCollection(optionName): void {
-    const selectedItemKey = this.option('selectedItemKey');
+    const { selectedItemKey, useSelectMode } = this.option();
     this._setListOption('selectedItem', null);
     // @ts-expect-error ts-error
     this._setWidgetOption('_list', [optionName]);
@@ -685,8 +703,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     if (isDefined(selectedItemKey)) {
       this._loadSelectedItem()
         .done((selectedItem) => {
-          this._setListOption('selectedItemKeys', [selectedItemKey]);
-          this._setListOption('selectedItem', selectedItem);
+          if (useSelectMode) {
+            this._setListOption('selectedItemKeys', [selectedItemKey]);
+            this._setListOption('selectedItem', selectedItem);
+          }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }).fail((error) => {
           this._setListOption('selectedItemKeys', []);

@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, dxCardViewToolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, OptionChangedEvent, SavedEvent, SavingEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, dxCardViewToolbar } from 'devextreme/ui/card_view';
 import { Mode, ScrollbarMode } from 'devextreme/common';
 import { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel, Sorting } from 'devextreme/common/grids';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -43,7 +43,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 
@@ -122,9 +123,15 @@ import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
-
-
-import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nested';
+import { 
+           PROPERTY_TOKEN_validationRules,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_changes,
+           PROPERTY_TOKEN_columns,
+           PROPERTY_TOKEN_customOperations,
+           PROPERTY_TOKEN_fields,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -142,6 +149,42 @@ import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nest
     ]
 })
 export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_changes)
+    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('changes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxCardView<TCardData, TKey> = null;
 
     
@@ -683,22 +726,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
     
      */
-    @Output() onCardSaved: EventEmitter<CardSavedEvent>;
-
-    /**
-    
-     * [descr:undefined]
-    
-    
-     */
-    @Output() onCardSaving: EventEmitter<CardSavingEvent>;
-
-    /**
-    
-     * [descr:undefined]
-    
-    
-     */
     @Output() onCardUpdated: EventEmitter<CardUpdatedEvent>;
 
     /**
@@ -843,7 +870,23 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
     
      */
-    @Output() onOptionChanged: EventEmitter<Object>;
+    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
+
+    /**
+    
+     * [descr:undefined]
+    
+    
+     */
+    @Output() onSaved: EventEmitter<SavedEvent>;
+
+    /**
+    
+     * [descr:undefined]
+    
+    
+     */
+    @Output() onSaving: EventEmitter<SavingEvent>;
 
     /**
     
@@ -1185,18 +1228,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
 
-    @ContentChildren(DxiCardViewColumnComponent)
-    get columnsChildren(): QueryList<DxiCardViewColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiCardViewColumnComponent');
-    }
-
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -1215,8 +1246,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'cardPrepared', emit: 'onCardPrepared' },
             { subscribe: 'cardRemoved', emit: 'onCardRemoved' },
             { subscribe: 'cardRemoving', emit: 'onCardRemoving' },
-            { subscribe: 'cardSaved', emit: 'onCardSaved' },
-            { subscribe: 'cardSaving', emit: 'onCardSaving' },
             { subscribe: 'cardUpdated', emit: 'onCardUpdated' },
             { subscribe: 'cardUpdating', emit: 'onCardUpdating' },
             { subscribe: 'contentReady', emit: 'onContentReady' },
@@ -1236,6 +1265,8 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'initNewCard', emit: 'onInitNewCard' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'saved', emit: 'onSaved' },
+            { subscribe: 'saving', emit: 'onSaving' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },

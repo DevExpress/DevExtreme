@@ -36,3 +36,11 @@ const groups = ['priority'];
 const currentDate = new Date(2021, 1, 2);
 const dataSource = data;
 </script>
+
+<style scoped>
+.dx-scheduler-timeline-day .dx-scheduler-cell-sizes-horizontal,
+.dx-scheduler-timeline-week .dx-scheduler-cell-sizes-horizontal,
+.dx-scheduler-timeline-work-week .dx-scheduler-cell-sizes-horizontal {
+    width: 100px;
+}
+</style>

@@ -2,7 +2,7 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
-import { getResourceManagerMock } from '../__mock__/resourceManager.mock';
+import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import SchedulerTimelineDay from '../workspaces/m_timeline_day';
 import SchedulerTimelineMonth from '../workspaces/m_timeline_month';
 import SchedulerTimelineWeek from '../workspaces/m_timeline_week';
@@ -58,12 +58,12 @@ describe('scheduler workspace', () => {
       expect(workspace.cache.clear).toHaveBeenCalledTimes(1);
     });
 
-    it(`should clear cache on _cleanView call, view: ${currentView}`, () => {
+    it(`should clear cache on cleanView call, view: ${currentView}`, () => {
       const workspace = createWorkspace(WorkSpace, currentView);
       jest.spyOn(workspace.cache, 'clear');
 
       workspace.cache.memo('test', () => 'value');
-      workspace._cleanView();
+      (workspace as any).cleanView();
 
       expect(workspace.cache.clear).toHaveBeenCalledTimes(1);
       expect(workspace.cache.size).toBe(0);

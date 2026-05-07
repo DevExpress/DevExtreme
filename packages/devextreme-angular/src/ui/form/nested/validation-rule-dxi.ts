@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-form-validation-rule',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiFormValidationRuleComponent,
+        }
+    ]
 })
 export class DxiFormValidationRuleComponent extends CollectionNestedOption {
     @Input()
@@ -87,10 +94,10 @@ export class DxiFormValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean) {
+    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean) {
         return this._getOption('validationCallback');
     }
-    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)) {
+    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)) {
         this._setOption('validationCallback', value);
     }
 
@@ -129,6 +136,8 @@ export class DxiFormValidationRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'required';
+    
     }
 
 

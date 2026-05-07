@@ -120,8 +120,8 @@ window.config = {
     'devextreme/viz/palette.js': {
       'esModule': true,
     },
-    /** exceljs&file-saver */
-    'exceljs': {
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': {
       'esModule': true,
     },
     /**/
@@ -195,6 +195,7 @@ window.config = {
     'devextreme-angular/common/grids': 'bundles:devextreme-angular/devextreme-angular-common-grids.umd.js',
     'devextreme-angular/common': 'bundles:devextreme-angular/devextreme-angular-common.umd.js',
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
+    'devextreme-angular/core/tokens': 'bundles:devextreme-angular/devextreme-angular-core-tokens.umd.js',
     ...componentNames.reduce((acc, name) => {
       acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
       acc[`devextreme-angular/ui/${name}/nested`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}-nested.umd.js`;
@@ -234,8 +235,8 @@ window.config = {
     'cldr': 'npm:cldrjs/dist/cldr',
     /**/
 
-    /** exceljs&file-saver */
-    'exceljs': 'npm:exceljs/dist/exceljs.min.js',
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': 'npm:devextreme-exceljs-fork/dist/dx-exceljs-fork.min.js',
     'file-saver-es': 'npm:file-saver-es/dist/FileSaver.min.js',
     /**/
 
@@ -331,3 +332,5 @@ window.config = {
 
 System.config(window.config);
 System.import('@angular/compiler').catch(console.error.bind(console));
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

@@ -2,11 +2,11 @@ Our PivotGrid allows you to control and manage the data export process. You can 
 
 Our PivotGrid gives you access and allows you to change the following attributes:
 
-- <a href="https://github.com/exceljs/exceljs#fonts" target="_blank">Font</a> properties
-- <a href="https://github.com/exceljs/exceljs#fills" target="_blank">Cell background</a>
-- <a href="https://github.com/exceljs/exceljs#hyperlink-value" target="_blank">Cell values</a>
-- <a href="https://github.com/exceljs/exceljs#borders" target="_blank">Border</a> properties
-- <a href="https://github.com/exceljs/exceljs#number-formats" target="_blank">Formatting</a> properties
+- <a href="https://github.com/DevExpress/devextreme-exceljs-fork#fonts" target="_blank">Font</a> properties
+- <a href="https://github.com/DevExpress/devextreme-exceljs-fork#fills" target="_blank">Cell background</a>
+- <a href="https://github.com/DevExpress/devextreme-exceljs-fork#hyperlink-value" target="_blank">Cell values</a>
+- <a href="https://github.com/DevExpress/devextreme-exceljs-fork#borders" target="_blank">Border</a> properties
+- <a href="https://github.com/DevExpress/devextreme-exceljs-fork#number-formats" target="_blank">Formatting</a> properties
 
 The **customizeCell** function also allows you to identify cell area types.
 <!--split-->

@@ -825,3 +825,39 @@ QUnit.module('initialized method', (hooks) => {
         });
     });
 });
+
+QUnit.module('readThemeMarker error handling', () => {
+    test('readThemeMarker returns null when getComputedStyle throws an error', function(assert) {
+        const done = assert.async();
+        const originalGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = undefined;
+
+        try {
+            themes.resetTheme();
+            const value = themes.current();
+            assert.strictEqual(value, null, 'current() returns null on getComputedStyle being undefined');
+        } finally {
+            window.getComputedStyle = originalGetComputedStyle;
+            done();
+        }
+    });
+
+    test('waitForThemeLoad resolves even if getComputedStyle continuously throws', function(assert) {
+        const done = assert.async();
+        const originalGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = undefined;
+
+        const TEST_TIMEOUT = 30;
+        themes.resetTheme();
+        themes.setDefaultTimeout(TEST_TIMEOUT);
+
+        themes.ready(() => {
+            assert.strictEqual(themes.current(), null, 'theme remains null after timeout');
+            window.getComputedStyle = originalGetComputedStyle;
+            themes.setDefaultTimeout(defaultTimeout);
+            done();
+        });
+
+        themes.waitForThemeLoad('some.nonexistent.theme');
+    });
+});

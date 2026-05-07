@@ -1,6 +1,7 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Appointment overlapping in Scheduler`
   .page(url(__dirname, '../../../container.html'));
@@ -77,10 +78,10 @@ test('Multi-day appointment should not overlap other appointments when specific 
     .expect(scheduler.collectors.count).eql(3)
 
     .expect(parseInt(await appointment.size.height, 10))
-    .eql(350)
+    .eql(266)
 
     .expect(parseInt(await appointment.size.width, 10))
-    .eql(93);
+    .eql(94);
 }).before(async () => createWidget('dxScheduler', {
   ...SCHEDULER_DEFAULT_OPTIONS,
   dataSource: SIMPLE_DATA,
@@ -91,14 +92,14 @@ test('Simple appointment should not overlap allDay appointment when specific wid
   const { element } = scheduler.getAppointment('Appointment 4');
 
   await t
-    .expect(scheduler.collectors.count).eql(0)
-    .expect(await element.getBoundingClientRectProperty('top')).eql(114);
+    .expect(scheduler.collectors.count).eql(1)
+    .expect(await element.getBoundingClientRectProperty('top')).eql(108.828125);
 }).before(async () => createWidget('dxScheduler', {
   ...SCHEDULER_DEFAULT_OPTIONS,
   dataSource: ALL_DAY_DATA,
 }));
 
-test('Crossing allDay appointments should not overlap each other (T893674)', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('Crossing allDay appointments should not overlap each other (T893674)', async (t) => {
   const scheduler = new Scheduler('#container');
   const firstAppointment = scheduler.getAppointment('Appointment 1');
   const secondAppointment = scheduler.getAppointment('Appointment 2');

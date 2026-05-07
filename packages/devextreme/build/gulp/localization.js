@@ -110,7 +110,7 @@ const getMessages = function(directory, locale) {
 };
 
 gulp.task('clean-cldr-data', function() {
-    return del('js/common/core/localization/cldr-data/**', { force: true });
+    return del('js/__internal/core/localization/cldr-data/**', { force: true });
 });
 
 gulp.task('generate-community-locales', () => {
@@ -170,37 +170,37 @@ gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FO
 gulp.task('localization-generated-sources', gulp.parallel([
     {
         data: require('../../js/localization/messages/en.json'),
-        filename: 'default_messages.js',
+        filename: 'default_messages.ts',
         exportName: 'defaultMessages',
-        destination: 'js/common/core/localization'
+        destination: 'js/__internal/core/localization'
     },
     {
         data: parentLocales,
-        filename: 'parent_locales.js',
-        destination: 'js/common/core/localization/cldr-data'
+        filename: 'parent_locales.ts',
+        destination: 'js/__internal/core/localization/cldr-data'
     },
     {
         data: firstDayOfWeekData(),
-        filename: 'first_day_of_week_data.js',
-        destination: 'js/common/core/localization/cldr-data'
+        filename: 'first_day_of_week_data.ts',
+        destination: 'js/__internal/core/localization/cldr-data'
     },
     {
         data: accountingFormats(),
-        filename: 'accounting_formats.js',
-        destination: 'js/common/core/localization/cldr-data'
+        filename: 'accounting_formats.ts',
+        destination: 'js/__internal/core/localization/cldr-data'
 
     },
     {
         data: globalizeEnCldr,
         exportName: 'enCldr',
-        filename: 'en.js',
-        destination: 'js/common/core/localization/cldr-data'
+        filename: 'en.ts',
+        destination: 'js/__internal/core/localization/cldr-data'
     },
     {
         data: globalizeSupplementalCldr,
         exportName: 'supplementalCldr',
-        filename: 'supplemental.js',
-        destination: 'js/common/core/localization/cldr-data'
+        filename: 'supplemental.ts',
+        destination: 'js/__internal/core/localization/cldr-data'
     }
 ].map((source) => Object.assign(
     function() {

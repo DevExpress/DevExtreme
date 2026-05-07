@@ -28,28 +28,28 @@ module('RTL', moduleConfig, () => {
                 month: [
                     {
                         top: 256,
-                        left: 599
+                        left: 250
                     }, {
                         top: 256,
-                        left: 250
+                        left: 599
                     }
                 ],
                 week: [
                     {
                         top: 0,
-                        left: 539
+                        left: 241
                     }, {
                         top: 0,
-                        left: 241
+                        left: 539
                     }
                 ],
                 day: [
                     {
                         top: 0,
-                        left: 324
+                        left: 25
                     }, {
                         top: 0,
-                        left: 25
+                        left: 324
                     }
                 ]
             };

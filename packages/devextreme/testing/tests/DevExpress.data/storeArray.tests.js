@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import ArrayStore from 'common/data/array_store';
+import Guid from 'core/guid';
 import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 
@@ -1113,6 +1114,45 @@ QUnit.test('prevent passing data as non-array', function(assert) {
             data: 'string'
         });
     });
+});
+
+QUnit.module('Push changes');
+
+QUnit.test('push update preserves custom object instances inside arrays', function(assert) {
+    function createPerson(id, name) {
+        return {
+            id,
+            name,
+            guidArray: [new Guid(), new Guid(), new Guid()]
+        };
+    }
+
+    const guidPerson1 = new Guid();
+    const guidPerson2 = new Guid();
+    const person1 = createPerson(guidPerson1, 'Paul');
+    const person2 = createPerson(guidPerson2, 'George');
+
+    const store = new ArrayStore({
+        key: 'id',
+        data: [person1, person2]
+    });
+
+    const originalGuidArray = store.createQuery().toArray()[0].guidArray;
+    assert.ok(originalGuidArray[0] instanceof Guid, 'Guid instance is preserved before push');
+
+    person1.name = 'Will';
+    store.push([{ type: 'update', key: guidPerson1, data: person1 }]);
+
+    const updatedPerson = store.createQuery().toArray().find(item => item.id === guidPerson1);
+    assert.ok(updatedPerson, 'updated person is found');
+    const updatedGuidArray = updatedPerson.guidArray;
+
+    assert.strictEqual(updatedGuidArray.length, originalGuidArray.length, 'array length remains the same');
+    updatedGuidArray.forEach((guidInstance, index) => {
+        assert.ok(guidInstance instanceof Guid, `item ${index} keeps Guid type after push`);
+        assert.strictEqual(guidInstance.toString(), originalGuidArray[index].toString(), 'Guid value is preserved');
+    });
+    assert.equal(updatedPerson.name, 'Will', 'person data is updated');
 });
 
 QUnit.module('Error handling');

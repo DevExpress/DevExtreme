@@ -5,15 +5,16 @@ import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import {
   isDefined, isFunction, isNumeric, isObject, isString, type,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import type { DataGridCommandColumnType } from '@js/ui/data_grid';
+import errors from '@js/ui/widget/ui.errors';
 
-import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -24,10 +25,37 @@ import {
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
   IGNORE_COLUMN_OPTION_NAMES,
+  UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS,
   USER_STATE_FIELD_NAMES,
   USER_STATE_FIELD_NAMES_15_1,
+  VIRTUAL_COMMAND_COLUMN_NAME,
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
+import type { Column, ColumnIndex, DropLocationNames } from './types';
+
+const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
+  if (controller?._isWarnedAboutUnsupportedProperties) return;
+  if (!childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
+
+  let unsupportedProperty: string | null = null;
+
+  for (const column of childColumns) {
+    if (unsupportedProperty) break;
+    if (!column || typeof column !== 'object' || column === null) continue;
+
+    for (const property of UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
+      if (property in column) {
+        unsupportedProperty = property;
+        break;
+      }
+    }
+  }
+
+  if (unsupportedProperty) {
+    controller && (controller._isWarnedAboutUnsupportedProperties = true);
+    errors.log('W1028', unsupportedProperty);
+  }
+};
 
 export const setFilterOperationsAsDefaultValues = function (column) {
   column.filterOperations = column.defaultFilterOperations;
@@ -47,7 +75,7 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
 
     that.setName(columnOptions);
 
-    let result = { };
+    let result = {};
     if (columnOptions.command) {
       result = deepExtendArraySafe(commonColumnOptions, columnOptions);
     } else {
@@ -90,6 +118,7 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
+          warnFixedInChildColumnsOnce(that, column.columns);
           result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
           delete column.columns;
           column.hasColumns = true;
@@ -311,7 +340,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
 
   for (let i = 0; i < firstItems.length; i++) {
     if (firstItems[i]) {
-      // eslint-disable-next-line no-restricted-syntax
       for (fieldName in firstItems[i]) {
         if (!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
           processedFields[fieldName] = true;
@@ -320,7 +348,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
     }
   }
 
-  // eslint-disable-next-line no-restricted-syntax
   for (fieldName in processedFields) {
     if (fieldName.indexOf('__') !== 0) {
       const column = createColumn(that, fieldName);
@@ -387,22 +414,60 @@ export const updateColumnVisibleIndexes = function (that: ColumnsController, cur
   normalizeIndexes(result, 'visibleIndex', currentColumn);
 };
 
-export const getColumnIndexByVisibleIndex = function (that: ColumnsController, visibleIndex, location) {
-  // @ts-expect-error
+function getColumnsByLocation(
+  that: ColumnsController,
+  location: DropLocationNames,
+  rowIndex: number | null,
+): Column[] {
+  switch (location) {
+    case GROUP_LOCATION:
+      return that.getGroupColumns();
+    case COLUMN_CHOOSER_LOCATION:
+      return that.getChooserColumns();
+    default:
+      return that.getVisibleColumns(rowIndex);
+  }
+}
+
+function correctVisibleIndex(
+  that: ColumnsController,
+  visibleIndex: ColumnIndex,
+): number {
+  return isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
+}
+
+function getColumnByVisibleIndex(
+  that: ColumnsController,
+  visibleIndex: ColumnIndex,
+  location: DropLocationNames,
+): Column {
   const rowIndex = isObject(visibleIndex) ? visibleIndex.rowIndex : null;
-  const columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex, true);
-  let column;
+  const columns = getColumnsByLocation(that, location, rowIndex);
+  const correctedVisibleIndex = correctVisibleIndex(that, visibleIndex);
+  const column = columns[correctedVisibleIndex];
 
-  // @ts-expect-error
-  visibleIndex = isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
-  column = columns[visibleIndex];
-
-  if (column && column.type === GROUP_COMMAND_COLUMN_NAME) {
-    column = that._columns.filter((col) => column.type === col.type)[0] || column;
+  if (column?.type === GROUP_COMMAND_COLUMN_NAME) {
+    return that._columns.filter((col) => column.type === col.type)[0] || column;
   }
 
-  return column && isDefined(column.index) ? column.index : -1;
-};
+  if (that.isVirtualMode() && (!column || column.command === VIRTUAL_COMMAND_COLUMN_NAME)) {
+    const columnIndexOffset = that.getColumnIndexOffset();
+
+    return that.getVisibleColumns(rowIndex, true)[correctedVisibleIndex + columnIndexOffset];
+  }
+
+  return column;
+}
+
+export function getColumnIndexByVisibleIndex(
+  that: ColumnsController,
+  visibleIndex: ColumnIndex,
+  location: DropLocationNames,
+): number {
+  const column = getColumnByVisibleIndex(that, visibleIndex, location);
+
+  return column?.index ?? -1;
+}
 
 export const moveColumnToGroup = function (that: ColumnsController, column, groupIndex) {
   const groupColumns = that.getGroupColumns();
@@ -657,9 +722,11 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
   // @ts-expect-error
   const prevValue = optionGetter(column, { functionsAsIs: true });
   if (!equalByValue(prevValue, value, { maxDepth: 5 })) {
-    if (optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
+    if (optionName === 'groupIndex') {
       changeType = 'grouping';
       updateSortOrderWhenGrouping(that, column, value, prevValue);
+    } else if (optionName === 'calculateGroupValue') {
+      changeType = 'grouping';
     } else if (optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
       changeType = 'sorting';
     } else {
@@ -786,26 +853,22 @@ export const getFixedPosition = function (that: ColumnsController, column) {
   return column.fixedPosition;
 };
 
-export const processExpandColumns = function (columns, expandColumns, type, columnIndex) {
-  let customColumnIndex;
-  const rowCount = this.getRowCount();
-  let rowspan = columns[columnIndex] && columns[columnIndex].rowspan;
-  let expandColumnsByType = expandColumns.filter((column) => column.type === type);
+export const processExpandColumns = (
+  columns: Column[],
+  expandColumns: Column[],
+  commandType: DataGridCommandColumnType,
+  columnIndex: number,
+  rowspan: number,
+): void => {
+  const expandColumnsByType = expandColumns
+    .filter((column) => column.type === commandType)
+    .map((column): Column => (rowspan > 1 ? { ...column, rowspan } : column));
 
-  columns.forEach((column, index) => {
-    if (column.type === type) {
-      customColumnIndex = index;
-      rowspan = columns[index + 1] ? columns[index + 1].rowspan : rowCount;
-    }
-  });
+  const customExpandColumnIndex = columns.findIndex((column) => column.type === commandType);
+  const targetIndex = customExpandColumnIndex >= 0 ? customExpandColumnIndex : columnIndex;
+  const deleteCount = customExpandColumnIndex >= 0 ? 1 : 0;
 
-  if (rowspan > 1) {
-    expandColumnsByType = map(expandColumnsByType, (expandColumn) => extend({}, expandColumn, { rowspan }));
-  }
-  expandColumnsByType.unshift.apply(expandColumnsByType, isDefined(customColumnIndex) ? [customColumnIndex, 1] : [columnIndex, 0]);
-  columns.splice.apply(columns, expandColumnsByType);
-
-  return rowspan || 1;
+  columns.splice(targetIndex, deleteCount, ...expandColumnsByType);
 };
 
 export const digitsCount = function (number) {
@@ -945,7 +1008,7 @@ const isFirstOrLastBandColumn = function (
   fixedPosition?: StickyPosition,
 ): boolean {
   return bandColumns.every((column, index) => onlyWithinBandColumn && index === 0
-        || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
+    || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
 };
 
 const isFirstOrLastColumnCore = function (
@@ -960,7 +1023,7 @@ const isFirstOrLastColumnCore = function (
     .filter((col) => {
       let res = true;
 
-      if (col.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+      if (that.isAdaptiveHiddenColumn(col)) {
         return false;
       }
 
@@ -991,7 +1054,7 @@ export const isFirstOrLastColumn = function (
 ): boolean {
   const targetColumnIndex = targetColumn.index;
   const bandColumnsCache = that.getBandColumnsCache();
-  const parentBandColumns = getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
+  const parentBandColumns = !isDefined(targetColumn.type) && getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
 
   if (parentBandColumns?.length) {
     return isFirstOrLastBandColumn(that, parentBandColumns.concat([targetColumn]), onlyWithinBandColumn, isLast, fixedPosition);

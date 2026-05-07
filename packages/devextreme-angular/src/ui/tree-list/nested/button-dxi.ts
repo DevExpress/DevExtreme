@@ -17,8 +17,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import dxTreeList from 'devextreme/ui/tree_list';
-import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
-import { event } from 'devextreme/events/events.types';
+import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/tree_list';
 
 import {
     DxIntegrationModule,
@@ -26,10 +25,11 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-button',
@@ -37,7 +37,14 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiTreeListButtonComponent,
+        }
+    ]
 })
 export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -82,10 +89,10 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get onClick(): ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void) {
+    get onClick(): ((e: ColumnButtonClickEvent) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void)) {
+    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
         this._setOption('onClick', value);
     }
 

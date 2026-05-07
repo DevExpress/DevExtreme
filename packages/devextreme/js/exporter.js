@@ -1,14 +1,14 @@
-import { fileSaver } from './exporter/file_saver';
+import { fileSaver } from './__internal/exporter/file_saver';
 import {
     imageCreator, testFormats, getData as getImageData,
-    ///#DEBUG
+    /// #DEBUG
     asyncEach
-    ///#ENDDEBUG
-} from './exporter/image_creator';
-import { svgCreator, getData as getSvgData } from './exporter/svg_creator';
+    /// #ENDDEBUG
+} from './__internal/exporter/image_creator';
+import { svgCreator, getData as getSvgData } from './__internal/exporter/svg_creator';
 import { isFunction as _isFunction, isBoolean } from './core/utils/type';
 import { Deferred } from './core/utils/deferred';
-import { getData } from './exporter/pdf_creator';
+import { getData } from './__internal/exporter/pdf_creator';
 
 function _export(data, options, getData) {
     if(!data) {
@@ -57,9 +57,9 @@ export {
 };
 
 export const image = {
-    ///#DEBUG
+    /// #DEBUG
     asyncEach,
-    ///#ENDDEBUG
+    /// #ENDDEBUG
     creator: imageCreator,
     getData: getImageData,
     testFormats: testFormats

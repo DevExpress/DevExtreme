@@ -2,9 +2,10 @@ import type { NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $, { type dxElementWrapper } from '@js/core/renderer';
-import type { ClickEvent } from '@js/ui/button';
+import type { InteractionEvent } from '@js/events';
+import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import EditingPreview from '@ts/ui/chat/editing_preview';
@@ -20,9 +21,8 @@ export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
 
-export type MessageEnteredEvent =
-  NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
-  { text?: string };
+export type MessageEnteredEvent = NativeEventInfo<MessageBox, InteractionEvent>
+  & { text?: string };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
 
@@ -197,7 +197,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     $parent.append($button);
 
-    this._button = this._createComponent($button, Button, {
+    this._button = this._createComponent<Button, ButtonProperties>($button, Button, {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,

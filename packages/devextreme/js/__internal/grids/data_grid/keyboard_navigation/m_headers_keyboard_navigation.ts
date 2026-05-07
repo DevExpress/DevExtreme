@@ -1,7 +1,7 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
@@ -114,9 +114,6 @@ gridCore.registerModule('headersKeyboardNavigation', {
   extenders: {
     controllers: {
       headersKeyboardNavigation,
-    },
-    views: {
-      ...headersKeyboardNavigationModule.extenders.views,
     },
   },
 });

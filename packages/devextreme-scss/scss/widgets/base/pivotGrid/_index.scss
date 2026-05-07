@@ -20,7 +20,7 @@ $pivotgrid-empty-area-text-padding: null !default;
 $pivotgrid-button-top-padding: null !default;
 
 @use "../mixins" as *;
-@use "../icons" as *;
+@use "../icon_fonts" as *;
 @use "./common";
 
 $pivotgrid-drag-header-border: 1px solid $pivotgrid-drag-header-border-color;

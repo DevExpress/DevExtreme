@@ -16,8 +16,8 @@ testStart(function() {
 });
 
 const createInstance = (options) => {
-    const observer = {
-        fire: (command, field, obj, value) => {
+    const notifyScheduler = {
+        invoke: (command, field, obj, value) => {
             switch(command) {
                 case 'getAppointmentGeometry':
                     return {
@@ -34,12 +34,16 @@ const createInstance = (options) => {
     };
 
     return $('#scheduler-appointments').dxSchedulerAppointments({
-        observer,
+        notifyScheduler,
         ...options,
         dataAccessors: mockDataAccessor,
         getLoadedResources: () => [],
         getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
+        getAppointmentDataSource: () => ({
+            getUpdatedAppointment: () => false,
+            getUpdatedAppointmentKeys: () => [],
+        }),
     }).dxSchedulerAppointments('instance');
 };
 
@@ -63,9 +67,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 0,
+            width: 40, height: 100, allDay: true,
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -73,9 +76,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 1,
+            width: 40, height: 100, allDay: true,
         }];
 
         const instance = createInstance({
@@ -96,9 +98,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 35, height: 100, allDay: true, empty: true
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -106,9 +107,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 1,
+            maxLevel: 1, level: 0, width: 35, height: 100, allDay: true, empty: true
         }];
 
         const instance = createInstance({
@@ -134,17 +134,15 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 40, height: 100, allDay: true,
         }, {
             itemData: {
                 text: 'Appointment 2',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 1,
+            maxLevel: 1, level: 0, width: 40, height: 100,
         }];
 
         instance.option('items', items);
@@ -159,9 +157,8 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 text: 'Appointment 1',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 40, height: 100,
         }];
 
         const instance = createInstance({
@@ -179,9 +176,8 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 40, height: 100, allDay: true,
         }]
         );
 

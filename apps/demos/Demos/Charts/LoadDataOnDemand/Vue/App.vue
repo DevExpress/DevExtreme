@@ -3,7 +3,7 @@
     id="chart"
     ref="chart"
     :data-source="chartDataSource"
-    title="Temperature in Toronto (2017)"
+    title="Temperature in Toronto (2025)"
   >
     <DxZoomAndPan argument-axis="pan"/>
     <DxScrollBar :visible="true"/>
@@ -57,11 +57,13 @@ import DxChart, {
 import { DataSource } from 'devextreme-vue/common/data';
 import 'whatwg-fetch';
 
+type AjaxArgs = { startVisible: string; endVisible: string; startBound?: string; endBound?: string };
+
 const HALFDAY = 43200000;
 const chart = ref();
 const visualRange = ref({
-  startValue: new Date(2017, 3, 1),
-  endValue: new Date(2017, 3, 15),
+  startValue: new Date(2025, 3, 1),
+  endValue: new Date(2025, 3, 15),
 });
 const chartDataSource = ref(new DataSource({
   store: [],
@@ -69,8 +71,8 @@ const chartDataSource = ref(new DataSource({
   paginate: false,
 }));
 const bounds = ref({
-  startValue: new Date(2017, 0, 1),
-  endValue: new Date(2017, 11, 31),
+  startValue: new Date(2025, 0, 1),
+  endValue: new Date(2025, 11, 31),
 });
 
 let packetsLock = 0;
@@ -78,7 +80,7 @@ const currentVisualRange = computed({
   get() {
     return visualRange.value;
   },
-  set(newRange) {
+  set(newRange: { startValue: Date; endValue: Date }) {
     const stateStart = visualRange.value.startValue;
     const currentStart = newRange.startValue;
     if (stateStart.valueOf() !== currentStart.valueOf()) {
@@ -88,7 +90,7 @@ const currentVisualRange = computed({
   },
 });
 
-function onVisualRangeChanged() {
+function onVisualRangeChanged(): void {
   const component = chart.value.instance;
   const items: { date: Date }[] = component.getDataSource().items();
 
@@ -98,19 +100,15 @@ function onVisualRangeChanged() {
     uploadDataByVisualRange(visualRange.value, component);
   }
 }
-function uploadDataByVisualRange({ startValue, endValue }, component) {
+
+function uploadDataByVisualRange({ startValue, endValue }: { startValue: Date; endValue: Date }, component: any): void {
   const dataSource = component.getDataSource();
-  const storage = dataSource.items();
-  const ajaxArgs = {
+  const ajaxArgs: AjaxArgs = {
     startVisible: getDateString(startValue),
     endVisible: getDateString(endValue),
-    startBound: getDateString(storage.length ? storage[0].date : null),
-    endBound: getDateString(storage.length
-      ? storage[storage.length - 1].date : null),
   };
 
-  if (ajaxArgs.startVisible !== ajaxArgs.startBound
-        && ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
+  if (!packetsLock) {
     packetsLock += 1;
     component.showLoadingIndicator();
 
@@ -121,12 +119,12 @@ function uploadDataByVisualRange({ startValue, endValue }, component) {
         const componentStorage = dataSource.store();
 
         dataFrame
-          .map((i) => ({
+          .map((i: Record<string, any>) => ({
             date: new Date(i.Date),
             minTemp: i.MinTemp,
             maxTemp: i.MaxTemp,
           }))
-          .forEach((item) => componentStorage.insert(item));
+          .forEach((item: Record<string, any>) => componentStorage.insert(item));
 
         dataSource.reload();
 
@@ -138,18 +136,18 @@ function uploadDataByVisualRange({ startValue, endValue }, component) {
       });
   }
 }
-function getDataFrame(args) {
+
+function getDataFrame(args: AjaxArgs): Promise<any[]> {
   let params = '?';
 
   params += `startVisible=${args.startVisible}
-        &endVisible=${args.endVisible}
-        &startBound=${args.startBound}
-        &endBound=${args.endBound}`;
+        &endVisible=${args.endVisible}`;
 
-  return fetch(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`)
+  return fetch(`https://js.devexpress.com/Demos/NetCore/api/TemperatureData${params}`)
     .then((response) => response.json());
 }
-function getDateString(dateTime) {
+
+function getDateString(dateTime: Date | null): string {
   return dateTime ? dateTime.toLocaleDateString('en-US') : '';
 }
 </script>

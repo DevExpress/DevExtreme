@@ -1,43 +1,41 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
-import { borderConfigs, rtlAndRowAltConfigs } from '../helpers/testMatrixConfig';
+import { borderConfigs } from '../helpers/testMatrixConfig';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../../container.html'));
 
-borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
-  rtlAndRowAltConfigs.forEach(({ rtlEnabled, rowAlternationEnabled }) => {
-    safeSizeTest(`Band sticky columns: left and right positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+borderConfigs.forEach(({ showColumnLines, showBorders }) => {
+  [true, false].forEach((rtlEnabled) => {
+    test.meta({ browserSize: [1000, 800] })(`Band sticky columns: left and right positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-1)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-1)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.push({
@@ -76,31 +74,29 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Band sticky columns: left positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Band sticky columns: left positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-2)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-2)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.push({
@@ -139,31 +135,29 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Band sticky columns: right positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Band sticky columns: right positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-3)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-3)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.push({
@@ -202,31 +196,29 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Band sticky column with left position and unfixed band column (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Band sticky column with left position and unfixed band column (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-4)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-4)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-4)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-4)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.push({
@@ -263,31 +255,29 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Band sticky column with right position and unfixed band column (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Band sticky column with right position and unfixed band column (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-5)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-5)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-5)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-5)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.push({
@@ -324,31 +314,29 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Adjacent band sticky columns: sticky positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Adjacent band sticky columns: sticky positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-6)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-6)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-6)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-6)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.splice(2, 0, {
@@ -388,31 +376,29 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`First and last band sticky columns: sticky positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`First and last band sticky columns: sticky positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-7)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-7)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-7)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-7)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.unshift({

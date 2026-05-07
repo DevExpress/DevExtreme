@@ -3,12 +3,11 @@ import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Popup can not be dragged outside of the container (window)', async (t) => {
+test.meta({ browserSize: [700, 700] })('Popup can not be dragged outside of the container (window)', async (t) => {
   const popup = new Popup('#container');
 
   const content = popup.getContent();
@@ -47,7 +46,7 @@ safeSizeTest('Popup can not be dragged outside of the container (window)', async
   await t
     .expect(popupRect.right)
     .eql(700);
-}, [700, 700]).before(async () => createWidget('dxPopup', {
+}).before(async () => createWidget('dxPopup', {
   width: 100,
   height: 100,
   visible: true,

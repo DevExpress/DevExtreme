@@ -1,6 +1,5 @@
 import { getOuterHeight } from 'core/utils/size';
 import dragEvents from 'common/core/events/drag';
-import 'generic_light.css!';
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dateLocalization from 'common/core/localization/date';
@@ -33,7 +32,7 @@ module('Work Space Day', {
             getResourceManager: getEmptyResourceManager,
         }).dxSchedulerWorkSpaceDay('instance');
         this.instance.initDragBehavior();
-        this.instance._attachTablesEvents();
+        this.instance.attachTablesEvents();
     }
 }, () => {
     test('Workspace getAllDayHeight() should return 0 or allDayPanel-height depending on the showAllDayPanel option', async function(assert) {

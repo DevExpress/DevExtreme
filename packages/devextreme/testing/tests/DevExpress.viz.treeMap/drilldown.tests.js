@@ -1,16 +1,19 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
+import $ from 'jquery';
 
-require('viz/tree_map/drilldown');
+import '__internal/viz/tree_map/drilldown';
 
 QUnit.module('Drilldown', $.extend({
     create: function(options) {
-        return common.createWidget($.extend(true, {
+        return createWidget($.extend(true, {
             tile: { border: { width: 0 } },
             group: { padding: 0, border: { width: 0 } }
         }, options));
     }
-}, common.environment));
+}, environment));
 
 QUnit.test('Drilldown to node', function(assert) {
     const spy = sinon.spy();

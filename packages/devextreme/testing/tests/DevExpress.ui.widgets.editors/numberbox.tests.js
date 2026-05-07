@@ -1,7 +1,7 @@
 import '../../helpers/noIntl.js';
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

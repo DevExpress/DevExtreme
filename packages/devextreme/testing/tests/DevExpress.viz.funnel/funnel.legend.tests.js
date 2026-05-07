@@ -1,13 +1,12 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createFunnel = common.createFunnel;
-const environment = common.environment;
-const stubAlgorithm = common.stubAlgorithm;
-const legendModule = require('viz/components/legend');
-const Legend = legendModule.Legend;
-const stubLegend = require('../../helpers/vizMocks.js').stubClass(Legend);
+import $ from 'jquery';
+import legendModule from 'viz/components/legend';
+import dxFunnel from '__internal/viz/funnel/funnel';
+import { createFunnel, environment, stubAlgorithm } from './commonParts/common.js';
+import { stubClass } from '../../helpers/vizMocks.js';
 
-const dxFunnel = require('viz/funnel/funnel');
+const { Legend } = legendModule;
+const stubLegend = stubClass(Legend);
+
 dxFunnel.addPlugin(legendModule.plugin);
 
 QUnit.module('Legend', $.extend({}, environment, {

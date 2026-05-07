@@ -1624,3 +1624,92 @@ QUnit.module('validation', () => {
         assert.strictEqual($('.dx-invalid-message-content').attr('id'), messageId, 'message content id is correct');
     });
 });
+
+QUnit.module('TextEditorButton - Memory Leaks', {
+    beforeEach: function() {
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+        this.getButton = (instance, name) => instance._buttonCollection.buttons.find(button => button.name === name);
+    },
+    afterEach: function() {
+        this.$element.remove();
+    }
+}, () => {
+    [
+        'editor',
+        '$container',
+        'instance',
+    ].forEach((property) => {
+        QUnit.test(`should clear ${property} reference on dispose`, function(assert) {
+            const instance = this.$element.dxTextEditor({
+                showClearButton: true,
+                value: 'test',
+            }).dxTextEditor('instance');
+
+            const clearButton = this.getButton(instance, 'clear');
+
+            assert.notStrictEqual(clearButton[property], undefined, `button has ${property} reference before dispose`);
+
+            instance.dispose();
+
+            assert.strictEqual(clearButton[property], null, `button.${property} is null after dispose`);
+        });
+    });
+
+    QUnit.test('should clear $placeMarker reference on dispose', function(assert) {
+        const instance = this.$element.dxTextEditor({
+            showClearButton: true,
+            value: 'test',
+            readOnly: true,
+        }).dxTextEditor('instance');
+
+        const clearButton = this.getButton(instance, 'clear');
+
+        assert.notStrictEqual(clearButton.$placeMarker, null, 'button has $placeMarker reference before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(clearButton.$placeMarker, null, 'button.$placeMarker is null after dispose');
+    });
+});
+
+QUnit.module('TextEditorBase - Memory Leaks', {
+    beforeEach: function() {
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+    },
+    afterEach: function() {
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test('should clear DOM element references on dispose', function(assert) {
+        const instance = this.$element.dxTextEditor({
+            value: 'test',
+            placeholder: 'Enter text',
+            buttons: [
+                {
+                    name: 'custom1',
+                    location: 'after',
+                    options: { icon: 'search' }
+                },
+                {
+                    name: 'custom2',
+                    location: 'before',
+                    options: { icon: 'search' }
+                },
+            ]
+        }).dxTextEditor('instance');
+
+        assert.notStrictEqual(instance._$beforeButtonsContainer, null, '_$beforeButtonsContainer exists before dispose');
+        assert.notStrictEqual(instance._$afterButtonsContainer, null, '_$afterButtonsContainer exists before dispose');
+        assert.notStrictEqual(instance._$textEditorContainer, undefined, '_$textEditorContainer exists before dispose');
+        assert.notStrictEqual(instance._$textEditorInputContainer, undefined, '_$textEditorInputContainer exists before dispose');
+        assert.notStrictEqual(instance._$placeholder, null, '_$placeholder exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance._$beforeButtonsContainer, null, '_$beforeButtonsContainer is null after dispose');
+        assert.strictEqual(instance._$afterButtonsContainer, null, '_$afterButtonsContainer is null after dispose');
+        assert.strictEqual(instance._$textEditorContainer, null, '_$textEditorContainer is null after dispose');
+        assert.strictEqual(instance._$textEditorInputContainer, null, '_$textEditorInputContainer is null after dispose');
+        assert.strictEqual(instance._$placeholder, null, '_$placeholder is null after dispose');
+    });
+});

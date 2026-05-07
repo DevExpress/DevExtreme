@@ -1,7 +1,6 @@
 import { createWrapperFakeClock, initTestMarkup, CLASSES } from '../../helpers/scheduler/helpers.js';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 
-import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { testStart, module, test } = QUnit;

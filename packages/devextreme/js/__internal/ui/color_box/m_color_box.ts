@@ -31,8 +31,8 @@ const colorUtils = {
 };
 
 export interface ColorBoxProperties extends Omit<Properties,
-'onClosed' | 'onOpened' |
-'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+'onClosed' | 'onOpened'
+| 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
 }
 
@@ -148,7 +148,13 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _createColorView(): void {
     this._popup.$overlayContent().addClass(COLOR_BOX_OVERLAY_CLASS);
 
-    const $colorView = $('<div>').appendTo(this._popup.$content());
+    const $content = this._popup.$content();
+
+    if (!$content) {
+      return;
+    }
+
+    const $colorView = $('<div>').appendTo($content);
 
     this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
   }
@@ -224,7 +230,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     const color = new Color(newValue);
 
     if (color.colorIsInvalid) {
-      this._input().val(oldValue);
+      this._input().val(oldValue === null ? undefined : oldValue);
       return;
     }
     // @ts-expect-error ts-error

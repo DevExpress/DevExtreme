@@ -212,3 +212,12 @@ QUnit.test('deepExtendArraySafe copies array into object property deeply', funct
     timeArray[0] = 5;
     assert.deepEqual(objWithValue.time, [1, complexTime, 3]);
 });
+
+QUnit.test('deepExtendArraySafe preserves custom object instances in arrays', function(assert) {
+    const CustomClass = function(value) { this.value = value; };
+    const target = { items: [new CustomClass(1), new CustomClass(2)] };
+    const changes = { items: [new CustomClass(3), new CustomClass(4)] };
+    const result = objectUtils.deepExtendArraySafe(target, changes, true, false, false, objectUtils.newAssign);
+    assert.ok(result.items[0] instanceof CustomClass, 'First item preserves custom type');
+    assert.ok(result.items[1] instanceof CustomClass, 'Second item preserves custom type');
+});

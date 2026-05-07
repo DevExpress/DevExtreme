@@ -19,7 +19,13 @@ import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
+import { isNumeric } from '@ts/core/utils/m_type';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
+
+import type { Column } from './columns_controller/types';
+import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
+
+const BASE_LOAD_PANEL_Z_INDEX = 1000;
 
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
 const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
@@ -55,6 +61,8 @@ const DATE_INTERVAL_SELECTORS = {
   },
 };
 
+const DEFAULT_COLUMN_WIDTH = 50;
+
 const getIntervalSelector = function () {
   const data = arguments[1];
   const value = this.calculateCellValue(data);
@@ -68,16 +76,6 @@ const getIntervalSelector = function () {
     const groupInterval = arguments[0];
     return Math.floor(Number(value) / groupInterval) * groupInterval;
   }
-};
-
-const equalSelectors = function (selector1, selector2) {
-  if (isFunction(selector1) && isFunction(selector2)) {
-    if (selector1.originalCallback && selector2.originalCallback) {
-      return selector1.originalCallback === selector2.originalCallback && selector1.columnIndex === selector2.columnIndex;
-    }
-  }
-
-  return selector1 === selector2;
 };
 
 function isDateType(dataType) {
@@ -176,6 +174,14 @@ const addPointIfNeed = <T extends ColumnPoint> (points: ColumnPoint[], pointProp
   }
 };
 
+const getColumnWidths = (columns: Column[]): number[] => columns
+  .map((column) => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const width = column.visibleWidth || column.width;
+
+    return isNumeric(width) ? parseFloat(width as string) : DEFAULT_COLUMN_WIDTH;
+  });
+
 function normalizeGroupingLoadOptions(group) {
   if (!Array.isArray(group)) {
     group = [group];
@@ -205,7 +211,7 @@ export default {
     const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
     let noDataElement = $element.find(`.${noDataClass}`).last();
     const isVisible = this._dataController.isEmpty();
-    const isLoading = this._dataController.isLoading();
+    const isDefaultLoading = this._dataController.isLoading() && !this._dataController.isCustomLoading?.();
 
     if (!noDataElement.length) {
       noDataElement = $('<span>')
@@ -216,7 +222,7 @@ export default {
       noDataElement.appendTo($element);
     }
 
-    if (isVisible && !isLoading) {
+    if (isVisible && !isDefaultLoading) {
       noDataElement
         .removeClass('dx-hidden')
         .text(that._getNoDataText());
@@ -238,6 +244,7 @@ export default {
         shading: false,
         message: loadPanelOptions.text,
         container: $container,
+        zIndex: BASE_LOAD_PANEL_Z_INDEX,
       }, loadPanelOptions);
 
       that._loadPanel = that._createComponent($('<div>').appendTo($container), LoadPanel, loadPanelOptions);
@@ -247,7 +254,6 @@ export default {
   },
 
   calculateLoadPanelPosition($element) {
-    // @ts-expect-error
     const $window = $(getWindow());
     if (getHeight($element) > getHeight($window)) {
       return {
@@ -372,7 +378,6 @@ export default {
   normalizeSortingInfo,
 
   getFormatByDataType(dataType) {
-    // eslint-disable-next-line default-case
     switch (dataType) {
       case 'date':
         return 'shortDate';
@@ -428,7 +433,7 @@ export default {
         return false;
       }
       for (let i = 0; i < sortParameters1.length; i++) {
-        if (!equalSelectors(sortParameters1[i].selector, sortParameters2[i].selector) || sortParameters1[i].desc !== sortParameters2[i].desc || sortParameters1[i].groupInterval !== sortParameters2[i].groupInterval || (!ignoreIsExpanded && Boolean(sortParameters1[i].isExpanded) !== Boolean(sortParameters2[i].isExpanded))) {
+        if (!isEqualSelectors(sortParameters1[i].selector, sortParameters2[i].selector) || sortParameters1[i].desc !== sortParameters2[i].desc || sortParameters1[i].groupInterval !== sortParameters2[i].groupInterval || (!ignoreIsExpanded && Boolean(sortParameters1[i].isExpanded) !== Boolean(sortParameters2[i].isExpanded))) {
           return false;
         }
       }
@@ -590,6 +595,7 @@ export default {
   isElementInCurrentGrid(controller, $element) {
     if ($element && $element.length) {
       const $grid = $element.closest(`.${controller.getWidgetContainerClass()}`).parent();
+
       return $grid.is(controller.component.$element());
     }
     return false;
@@ -797,4 +803,9 @@ export default {
 
     return !!customCommandColumns.length;
   },
+
+  // New utils
+  isEqualSelectors,
+  isSelectorEqualWithCallback,
+  getColumnWidths,
 };

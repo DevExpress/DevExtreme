@@ -11,7 +11,8 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import ArrayStore from 'common/data/array_store';
 import DataGrid from 'ui/data_grid';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+
+import 'generic_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -111,10 +112,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover, row position and focused row', function(assert) {
-        if(shouldSkipOnMobile(assert, 'hover is disabled for non-desktop devices')) {
-            return;
-        }
-
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [],
@@ -656,7 +653,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-edit').trigger(pointerEvents.up).click();
         this.clock.tick(10);
 
-        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').get(0) }) });
 
         $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.up);
         this.clock.tick(10);
@@ -1785,10 +1782,6 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
     // T872126
     QUnit.test('Incorrect cell should not be focused after editing boolean column in cell edit mode', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         // arrange
         const store = [];
 
@@ -2837,9 +2830,6 @@ QUnit.module('View\'s focus', {
 
     ['Batch', 'Cell'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - Date cell should have correct text when the useMaskBehavior and editOnKeyPress options are enabled (T976144)`, function(assert) {
-            if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-                return;
-            }
             // arrange
             this.dataGrid.dispose();
             const dataGrid = createDataGrid({
@@ -2934,57 +2924,7 @@ QUnit.module('View\'s focus', {
         const keyboard = keyboardMock($cell1_0);
         keyboard.keyDown('tab', { shiftKey: true });
         this.clock.tick(10);
-
-        const $lastCell = $(dataGrid.getRowElement(0)).children().last();
-        const $editButton = $lastCell.find('.dx-link-edit');
-
-        // assert
-        assert.ok($lastCell.hasClass('dx-command-edit'), 'command cell');
-        assert.notOk($lastCell.hasClass('dx-focused'), 'cell is not focused');
-        assert.ok($editButton.is(':focus'), 'edit button is focused');
-    });
-
-    QUnit.testInActiveWindow('Edit command button should be focused in the last column when virtual column rendering mode and fixed columns are used', function(assert) {
-        // arrange
-        this.dataGrid.dispose();
-        const generateData = function() {
-            const items = [];
-            for(let i = 0; i < 2; i += 1) {
-                const item = {};
-                for(let j = 0; j < 17; j += 1) {
-                    item[`field${j}`] = `${i}-${j}`;
-                }
-                items.push(item);
-            }
-            return items;
-        };
-        const dataGrid = createDataGrid({
-            width: 500,
-            columnWidth: 70,
-            dataSource: generateData(),
-            columnFixing: { legacyMode: true },
-            customizeColumns: function(columns) {
-                columns[0].fixed = true;
-                columns[16].fixedPosition = 'right';
-                columns[16].fixed = true;
-            },
-            scrolling: {
-                columnRenderingMode: 'virtual',
-            },
-            editing: {
-                mode: 'row',
-                allowUpdating: true,
-            }
-        });
-
-        this.clock.tick(10);
-
-        const $cell1_0 = $(dataGrid.getCellElement(1, 0));
-        $cell1_0.trigger(CLICK_EVENT).trigger('dxclick');
-
-        const keyboard = keyboardMock($cell1_0);
-        keyboard.keyDown('tab', { shiftKey: true });
-        this.clock.tick(10);
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         const $lastCell = $(dataGrid.getRowElement(0)).children().last();
         const $editButton = $lastCell.find('.dx-link-edit');
@@ -3088,6 +3028,8 @@ QUnit.module('View\'s focus', {
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('tab');
         this.clock.tick(10);
+        $(scrollable.container()).trigger('scroll');
+
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
 
@@ -4140,7 +4082,7 @@ QUnit.module('View\'s focus', {
             assert.strictEqual($firstCellInput.val(), 'a', 'correct editor value');
 
             // act
-            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input'));
             keyboard.keyDown('tab');
             this.clock.tick(25);
             const $secondCellInput = $(this.dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input');
@@ -4153,10 +4095,6 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.testInActiveWindow('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         // arrange
         const generateData = (rowCount, columnCount) => {
             const items = [];
@@ -4380,6 +4318,90 @@ QUnit.module('View\'s focus', {
         assert.equal(this.dataGrid.option('focusedRowKey'), 2, 'row key is changed');
         assert.ok($(this.dataGrid.getRowElement(1)).hasClass('dx-row-focused'), 'second row is focused');
     });
+
+    // T1310557
+    QUnit.testInActiveWindow('Browser should not scroll back to the grid when a focused cell is updated or rerendered', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: new ArrayStore({
+                    key: 'id',
+                    data: [{ id: 1, name: 'test1' }],
+                }),
+                pushAggregationTimeout: 0,
+            },
+        });
+        this.clock.tick(10);
+
+        try {
+            $('body').css('height', 2000);
+            window.scrollTo(0, 0);
+
+            const keyboardController = dataGrid.getController('keyboardNavigation');
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+            const scrollPosition = 300;
+
+            // assert
+            assert.strictEqual(window.pageYOffset, 0, 'document scroll is at the top');
+
+            // act
+            $firstCell.trigger(CLICK_EVENT);
+            this.clock.tick(10);
+
+            keyboardController.keyDownHandler({
+                key: 'Tab',
+                keyName: 'tab',
+                originalEvent: $.Event('keydown', { target: $firstCell.get(0) }),
+            });
+            this.clock.tick(10);
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'second cell is focused');
+
+            // act
+            window.scrollTo(0, scrollPosition);
+
+            // assert
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is changed');
+
+            // act
+            dataGrid.getDataSource().store().push([{ type: 'update', key: 1, data: { name: 'updated' } }]);
+            this.clock.tick(10);
+
+            // assert
+            assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'updated', 'second cell text is updated');
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after push update');
+
+            // act
+            dataGrid.refresh();
+            this.clock.tick(10);
+
+            // assert
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after refresh');
+
+            // act
+            dataGrid.repaint();
+            this.clock.tick(10);
+
+            // assert
+            assert.strictEqual(window.pageYOffset, scrollPosition, 'document scroll is preserved after repaint');
+
+            // act
+            keyboardController.keyDownHandler({
+                key: 'ArrowLeft',
+                keyName: 'leftArrow',
+                originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 1)).get(0) }),
+            });
+            this.clock.tick(10);
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'first cell is focused');
+            assert.strictEqual(window.pageYOffset, 0, 'document scroll is changed after keyboard navigation');
+        } finally {
+            $('body').css('height', '');
+            window.scrollTo(0, 0);
+        }
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
@@ -4410,10 +4432,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T460276
     QUnit.testInActiveWindow('Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
-
         const array = [];
 
         for(let i = 0; i < 100; i++) {
@@ -4458,9 +4476,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T460276
     QUnit.testInActiveWindow('Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell at the end of table', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
         const array = [];
 
         for(let i = 0; i < 200; i++) {
@@ -4824,10 +4839,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('DataGrid should not focus command cell after edit canceling', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         // arrange, act
         const dataGrid = createDataGrid({
             editing: {
@@ -4948,9 +4959,6 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
 
     // T882682
     QUnit.test('focus overlay should be shown again after resizing', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
@@ -5031,10 +5039,6 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Scroll position should not be changed after click on button element (T945907)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         // arrange
         const dataGrid = createDataGrid({
             height: 50,

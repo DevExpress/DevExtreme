@@ -6,4 +6,4 @@ export {
     locale,
     parseDate,
     parseNumber,
-} from './common/core/localization';
+} from './__internal/core/localization';

@@ -1650,11 +1650,13 @@ QUnit.module('Keyboard keys', {
         this.columns = [
             {
                 caption: 'Column 0',
+                name: 'column0',
                 visible: true,
                 allowEditing: true
             },
             {
                 caption: 'Column 1',
+                name: 'column1',
                 visible: true,
                 showEditorAlways: true,
                 allowEditing: true,
@@ -1665,6 +1667,7 @@ QUnit.module('Keyboard keys', {
             },
             {
                 caption: 'Column 2',
+                name: 'column2',
                 visible: true,
                 allowEditing: true
             }
@@ -1676,12 +1679,12 @@ QUnit.module('Keyboard keys', {
         this.gridView.render($('#container'));
         this.editingController.editCell(0, 1);
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 1 };
-        this.keyboardNavigationController._tabKeyHandler({
+        this.keyboardNavigationController.tabKeyHandler({
             originalEvent: {
                 target: $('#container').find('.txt').first(),
                 preventDefault: commonUtils.noop
             }
-        }, true);
+        });
 
         // assert
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 2, 'column index');
@@ -3220,7 +3223,7 @@ QUnit.module('Keyboard keys', {
         };
 
         // act
-        this.triggerKeyDown('tab', false, false, this.keyboardNavigationController._getFocusedCell());
+        this.triggerKeyDown('tab', false, false, $(this.keyboardNavigationController._getFocusedCell()).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -3230,7 +3233,7 @@ QUnit.module('Keyboard keys', {
         // act
         isFocusedInput = false;
 
-        this.triggerKeyDown('tab', false, false, this.keyboardNavigationController._getFocusedCell());
+        this.triggerKeyDown('tab', false, false, $(this.keyboardNavigationController._getFocusedCell()).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert

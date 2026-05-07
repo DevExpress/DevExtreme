@@ -31,6 +31,8 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
   await t
     .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#drag-container'), { speed: 0.5 });
 
+  await t.wait(500);
+
   await t
     .expect(ClientFunction(() => (window as any).eventName)())
     .eql('onAppointmentDeleting');

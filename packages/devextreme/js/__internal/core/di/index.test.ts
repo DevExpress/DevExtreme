@@ -163,19 +163,21 @@ it('should work regardless of registration order', () => {
 
 describe('dependency cycle', () => {
   class MyClass1 {
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    static dependencies = [MyClass2] as const;
+    static dependencies: readonly any[] = [];
 
-    constructor(private readonly myClass2: MyClass2) {}
+    constructor(private readonly myClass2?: MyClass2) {}
   }
+
   class MyClass2 {
     static dependencies = [MyClass1] as const;
 
     constructor(private readonly myClass1: MyClass1) {}
   }
 
+  MyClass1.dependencies = [MyClass2] as const;
+
   const ctx = new DIContext();
+  // @ts-expect-error
   ctx.register(MyClass1);
   ctx.register(MyClass2);
 

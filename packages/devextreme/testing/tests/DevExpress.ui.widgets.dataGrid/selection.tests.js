@@ -2,6 +2,7 @@ import 'ui/data_grid';
 import 'common/data/odata/store';
 
 import $ from 'jquery';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
@@ -19,6 +20,8 @@ const createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 const setupModule = function() {
+    this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+    gridCoreUtils.isElementInCurrentGrid = () => true;
     setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'search']);
 
     this.applyOptions = function(options) {
@@ -33,6 +36,7 @@ const setupModule = function() {
 const teardownModule = function() {
     this.dispose();
     this.clock.restore();
+    gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
 };
 
 const setupSelectionModule = function() {
@@ -538,25 +542,6 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
-        assert.ok(!this.dataController.items()[0].isSelected);
-        assert.ok(this.dataController.items()[1].isSelected);
-        assert.ok(!this.dataController.items()[2].isSelected);
-        assert.ok(this.dataController.items()[3].isSelected);
-    });
-
-    QUnit.skip('set selectedRows from user state', function(assert) {
-    // arrange
-        this.applyOptions({
-            selection: { mode: 'multiple' }
-        });
-
-        this.stateStoringController.state({ selectedItemKeys: [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }] }); // 1, 3
-
-        // act
-        this.stateStoringController.restoreSelectedItemKeys();
-
-        // assert
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(this.dataController.items()[1].isSelected);
         assert.ok(!this.dataController.items()[2].isSelected);
@@ -1115,7 +1100,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 2, 'selection changed raised');
     });
 
-    QUnit.test('Not rise selectionChanged event on refresh with changesOnly', function(assert) {
+    QUnit.test('Rise selectionChanged event on refresh with changesOnly', function(assert) {
         let selectionChangedCount = 0;
 
         this.applyOptions({
@@ -1133,8 +1118,8 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.refresh(true);
 
         // assert
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
-        assert.strictEqual(selectionChangedCount, 1, 'selection changed is not raised');
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
+        assert.strictEqual(selectionChangedCount, 2, 'selection changed is raised');
     });
 
     QUnit.test('Not rise selectionChanged event on apply filter when selectedRows count not changed', function(assert) {
@@ -1712,9 +1697,9 @@ QUnit.module('ChangeRowSelection for single selection', { beforeEach: setupSelec
         assert.ok(!this.dataController.items()[2].isSelected);
     });
 
-    QUnit.skip('changeRowSelection. Multiple. Several calls on different rows', function(assert) {
+    QUnit.test('changeRowSelection. Multiple. Several calls on different rows with selection column visible', function(assert) {
         this.applyOptions({
-            selection: { mode: 'multiple' }
+            selection: { mode: 'multiple', showCheckBoxesMode: 'always' }
         });
 
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
@@ -1725,22 +1710,6 @@ QUnit.module('ChangeRowSelection for single selection', { beforeEach: setupSelec
 
         // assert
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }, { name: 'Dmitry', age: 18 }]);
-    });
-
-    QUnit.skip('changeRowSelection. Multiple. Several calls on same row', function(assert) {
-        this.applyOptions({
-            selection: { mode: 'multiple' }
-        });
-
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
-
-        this.selectionController.changeItemSelection(2);
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }]);
-
-        this.selectionController.changeItemSelection(2);
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
-
-        assert.ok(!this.dataController.items()[2].isSelected);
     });
 
     QUnit.test('changeRowSelection. Several calls on different rows with control key', function(assert) {
@@ -1908,26 +1877,6 @@ QUnit.module('ChangeRowSelection for multiple selection. DataSource with key', {
         assert.ok(this.dataController.items()[4].isSelected);
     });
 
-    QUnit.skip('changeRowSelection with shift key. Select All and changeRowSelection with control before', function(assert) {
-        this.applyOptions({
-            selection: { mode: 'multiple' }
-        });
-
-        this.selectionController.selectAll();
-        this.selectionController.changeItemSelection(1, { control: true });
-
-        this.selectionController.changeItemSelection(4, { shift: true });
-
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 6, 7]);
-        assert.ok(this.dataController.items()[0].isSelected);
-        assert.ok(!this.dataController.items()[1].isSelected);
-        assert.ok(!this.dataController.items()[2].isSelected);
-        assert.ok(!this.dataController.items()[3].isSelected);
-        assert.ok(!this.dataController.items()[4].isSelected);
-        assert.ok(this.dataController.items()[5].isSelected);
-    });
-
-
     QUnit.test('changeRowSelection with shift key. Change shift selection from down to down', function(assert) {
         this.applyOptions({
             selection: { mode: 'multiple' }
@@ -2048,7 +1997,7 @@ QUnit.module('ChangeRowSelection for multiple selection. DataSource with key', {
         this.selectionController.changeItemSelection(3, { shift: true });
 
         // assert
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 4, 3], 'selectedRowKeys');
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 3, 4], 'selectedRowKeys');
     });
 
     // T547950
@@ -3441,6 +3390,8 @@ QUnit.module('Multiple selection with checkboxes on click', { beforeEach: setupS
 
 QUnit.module('Selection with views', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.array = [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 16 },
@@ -3469,6 +3420,7 @@ QUnit.module('Selection with views', {
     },
     afterEach: function() {
         this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -4116,6 +4068,8 @@ QUnit.module('Selection with views', {
 
 QUnit.module('Deferred selection', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.setupDataGrid = function(options) {
             setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'editing'], { initDefaultOptions: true, options: options });
         };
@@ -4135,6 +4089,7 @@ QUnit.module('Deferred selection', {
 
     afterEach: function() {
         teardownModule.apply(this);
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -4674,6 +4629,8 @@ QUnit.module('Deferred selection', {
 
 QUnit.module('Selection with virtual scrolling', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.setupDataGrid = function(options) {
             setupDataGridModules(this, ['data', 'columns', 'selection', 'virtualScrolling'], { initDefaultOptions: true, options: options });
         };

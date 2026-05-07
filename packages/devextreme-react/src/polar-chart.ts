@@ -60,7 +60,7 @@ const PolarChart = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","valueAxis","valueAxis.visualRange","valueAxis.visualRange.endValue","valueAxis.visualRange.startValue","valueAxis.wholeRange.endValue","valueAxis.wholeRange.startValue"]), []);
       const independentEvents = useMemo(() => (["onArgumentAxisClick","onDisposing","onDone","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onLegendClick","onPointClick","onSeriesClick","onTooltipHidden","onTooltipShown","onZoomEnd","onZoomStart"]), []);

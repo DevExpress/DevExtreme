@@ -59,7 +59,7 @@
 import DxDataGrid, {
   DxColumn, DxExport, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
@@ -90,7 +90,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     headerRow.getCell(1).alignment = { horizontal: 'center' };
 
     // footer
-    const footerRowIndex = cellRange.to.row + 2;
+    const footerRowIndex = (cellRange.to?.row || 0) + 2;
     const footerRow = worksheet.getRow(footerRowIndex);
     worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
 

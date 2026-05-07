@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
@@ -6,12 +5,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
-import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { Column } from '../columns_controller/m_columns_controller';
-import type { ModuleType, Views } from '../m_types';
+import type { Column } from '../columns_controller/types';
+import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -39,6 +35,16 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
         );
       }
       originalEvent?.preventDefault();
+    }
+  }
+
+  private correctFocusedColumnIndexAfterScroll(columnIndexOffset: number): void {
+    if (isDefined(this._focusedCellPosition?.columnIndex)) {
+      const columnIndexOffsetDiff = this._columnsController.getColumnIndexOffset() - columnIndexOffset;
+
+      this.setFocusedColumnIndex(
+        this._focusedCellPosition.columnIndex - columnIndexOffsetDiff,
+      );
     }
   }
 
@@ -126,15 +132,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected _getCell(cellPosition): dxElementWrapper {
-    const columnIndexOffset = this.getColumnIndexOffset(cellPosition.columnIndex);
-    const columnIndex = cellPosition.columnIndex >= 0
-      ? cellPosition.columnIndex - columnIndexOffset
-      : -1;
-
-    return this._columnHeadersView?.getCell({
-      rowIndex: cellPosition.rowIndex,
-      columnIndex,
-    });
+    return this._columnHeadersView?.getCell(cellPosition);
   }
 
   protected getFocusedView(): any {
@@ -162,30 +160,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return result;
   }
 
-  protected getContainerBoundingRect($container: dxElementWrapper) {
-    const containerRect = getBoundingRect($container.get(0));
-
-    return {
-      left: containerRect.left,
-      right: containerRect.right,
-    };
-  }
-
-  protected getScrollPadding(
-    $container: dxElementWrapper,
-  ): {
-      left: number;
-      right: number;
-    } {
-    const containerRect = getBoundingRect($container.get(0));
-    const containerBoundingRect = this.getContainerBoundingRect($container);
-
-    return {
-      left: containerBoundingRect.left - containerRect.left,
-      right: containerRect.right - containerBoundingRect.right,
-    };
-  }
-
   protected isOutsideVisibleArea = (
     $element: dxElementWrapper,
     $container: dxElementWrapper,
@@ -198,26 +172,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return elementRectLeft < containerBoundingRect.left
       || elementRectRight > containerBoundingRect.right;
   };
-
-  protected scrollToColumn($cell: dxElementWrapper): void {
-    const scrollable = this.getView('rowsView')?.getScrollable();
-
-    if (!scrollable) {
-      return;
-    }
-
-    const scrollPadding = this.getScrollPadding($(scrollable.container()));
-    const scrollPosition = getElementLocationInternal(
-      $cell[0],
-      'horizontal',
-      $(this._columnHeadersView.getContent())[0],
-      scrollable.scrollOffset(),
-      scrollPadding,
-      this.addWidgetPrefix('table'),
-    );
-
-    scrollable.scrollTo({ x: scrollPosition });
-  }
 
   public init(): void {
     super.init();
@@ -265,10 +219,17 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     );
 
     if (focusedCellIsOutsideVisibleArea) {
-      this.scrollToColumn($focusedCell);
-    } else {
-      super.restoreFocus();
+      const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+
+      this.needToRestoreFocus = false;
+      this.scrollToNextCell($focusedCell).then(() => {
+        this.correctFocusedColumnIndexAfterScroll(columnIndexOffset);
+        super.restoreFocus();
+      });
+      return;
     }
+
+    super.restoreFocus();
   }
 
   public needToFocus(): boolean {
@@ -276,33 +237,9 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 }
 
-const columnHeadersView = (
-  Base: ModuleType<ColumnHeadersView>,
-) => class ColumnHeadersViewKeyboardNavigationExtender extends Base {
-  protected handleScroll(e: DxEvent): void {
-    super.handleScroll(e);
-
-    if (!this._headersKeyboardNavigation?.needToFocus()) {
-      return;
-    }
-
-    const isNeedToRenderVirtualColumns = this._columnsController
-      ?.isNeedToRenderVirtualColumns(e.target.scrollLeft);
-
-    if (!isNeedToRenderVirtualColumns) {
-      this._headersKeyboardNavigation.restoreFocus();
-    }
-  }
-};
-
 export const headersKeyboardNavigationModule = {
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
     columnFocusDispatcher: ColumnFocusDispatcher,
-  },
-  extenders: {
-    views: {
-      columnHeadersView,
-    },
   },
 };

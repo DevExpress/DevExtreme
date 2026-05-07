@@ -17,7 +17,7 @@ import {
 } from '../index';
 
 jest.mock(
-  '../../../appointments/data_provider/m_appointment_filter',
+  '@ts/scheduler/view_model/filtering/m_appointment_filter',
   () => ({
     AppointmentFilterBaseStrategy: jest.fn(() => ({ strategy: 'base' })),
     AppointmentFilterVirtualStrategy: jest.fn(() => ({ strategy: 'virtual' })),
@@ -692,66 +692,56 @@ describe('base utils', () => {
   });
 
   describe('isVerticalGroupingApplied', () => {
-    const groups = [{
-      name: 'groupId',
-      items: [{ id: 1 }],
-      data: [{ id: 1 }],
-    }];
-
     it('should return true if group orientation is vertical', () => {
-      expect(isVerticalGroupingApplied(groups, VERTICAL_GROUP_ORIENTATION))
+      expect(isVerticalGroupingApplied(1, VERTICAL_GROUP_ORIENTATION))
         .toBe(true);
     });
 
     it('should return false if group orientation is not vertical', () => {
-      expect(isVerticalGroupingApplied(groups, HORIZONTAL_GROUP_ORIENTATION))
+      expect(isVerticalGroupingApplied(1, HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
-      expect(isVerticalGroupingApplied(groups))
+      expect(isVerticalGroupingApplied(1))
         .toBe(false);
     });
 
     it('should return false if groups are empty', () => {
-      expect(isVerticalGroupingApplied([], VERTICAL_GROUP_ORIENTATION))
+      expect(isVerticalGroupingApplied(0, VERTICAL_GROUP_ORIENTATION))
         .toBe(false);
     });
   });
 
   describe('isHorizontalGroupingApplied', () => {
-    const testGroups = [{}] as any;
-
     it('should return true if group orientation is horizontal and groups length is more than 0', () => {
-      expect(isHorizontalGroupingApplied(testGroups, HORIZONTAL_GROUP_ORIENTATION))
+      expect(isHorizontalGroupingApplied(1, HORIZONTAL_GROUP_ORIENTATION))
         .toBe(true);
     });
 
     it('should return false if group orientation is not horizontal', () => {
-      expect(isHorizontalGroupingApplied(testGroups, VERTICAL_GROUP_ORIENTATION))
+      expect(isHorizontalGroupingApplied(1, VERTICAL_GROUP_ORIENTATION))
         .toBe(false);
-      expect(isHorizontalGroupingApplied(testGroups))
+      expect(isHorizontalGroupingApplied(1))
         .toBe(false);
     });
 
     it('should return false if groups length is 0', () => {
-      expect(isHorizontalGroupingApplied([], HORIZONTAL_GROUP_ORIENTATION))
+      expect(isHorizontalGroupingApplied(0, HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
     });
   });
 
   describe('isGroupingByDate', () => {
-    const testGroups = [{}] as any;
-
     it('should return true if group orientation is horizontal and groupByDate is true', () => {
-      expect(isGroupingByDate(testGroups, HORIZONTAL_GROUP_ORIENTATION, true))
+      expect(isGroupingByDate(1, HORIZONTAL_GROUP_ORIENTATION, true))
         .toBe(true);
     });
 
     it('should return false if group orientation is horizontal and groupByDate is false', () => {
-      expect(isGroupingByDate(testGroups, HORIZONTAL_GROUP_ORIENTATION, false))
+      expect(isGroupingByDate(1, HORIZONTAL_GROUP_ORIENTATION, false))
         .toBe(false);
     });
 
     it('should return false if group orientation is vertical', () => {
-      expect(isGroupingByDate(testGroups, VERTICAL_GROUP_ORIENTATION, false))
+      expect(isGroupingByDate(1, VERTICAL_GROUP_ORIENTATION, false))
         .toBe(false);
     });
   });

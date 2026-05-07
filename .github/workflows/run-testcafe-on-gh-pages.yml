@@ -13,7 +13,7 @@ jobs:
             fail-fast: false
             matrix:
               CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
-              THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
+              THEME: ['material.blue.light', 'fluent.blue.light']
 
 
         runs-on: ubuntu-22.04
@@ -54,7 +54,7 @@ jobs:
             - name: Setup Chrome
               uses: ./devextreme/.github/actions/setup-chrome
               with:
-                chrome-version: '133.0.6943.53'
+                chrome-version: '145.0.7632.67'
 
             - uses: pnpm/action-setup@v3
               with:
@@ -75,7 +75,7 @@ jobs:
               working-directory: devextreme
               run: |
                 corepack enable
-                pnpm install
+                pnpm install --frozen-lockfile
             
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos
@@ -92,7 +92,7 @@ jobs:
                 # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
                 # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
                 CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-              run: pnpx nx test-testcafe
+              run: pnpm exec nx test-testcafe
 
             - name: Copy screenshots artifacts
               if: ${{ failure() }}

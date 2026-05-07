@@ -3,6 +3,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DataType } from '@js/common';
 import $ from '@js/core/renderer';
+import messageLocalization from '@js/localization/message';
 import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
@@ -70,6 +71,19 @@ export class EditPopupView extends View<Props> {
 
   private readonly visible = computed(() => !!this.editingController.editingCard.value);
 
+  private readonly editingTexts = computed((): EditingTexts => {
+    const texts = this.editingController.texts.value;
+    return {
+      confirmDeleteMessage: texts.confirmDeleteMessage ?? messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
+      confirmDeleteTitle: texts.confirmDeleteTitle ?? '',
+      deleteCard: texts.deleteCard ?? messageLocalization.format('dxDataGrid-editingDeleteRow'),
+      editCard: texts.editCard ?? messageLocalization.format('dxDataGrid-editingEditRow'),
+      saveCard: texts.saveCard ?? messageLocalization.format('dxDataGrid-editingSaveRowChanges'),
+      addCard: texts.addCard ?? messageLocalization.format('dxDataGrid-editingAddRow'),
+      cancel: texts.cancel ?? messageLocalization.format('dxDataGrid-editingCancelRowChanges'),
+    };
+  });
+
   public static dependencies = [
     OptionsController, ColumnsController,
     ItemsController, EditingController,
@@ -131,7 +145,7 @@ export class EditPopupView extends View<Props> {
       },
       items: this.items.value,
       customizeItem: this.customizeItems,
-      texts: this.editingController.texts.value as EditingTexts, // TODO: bad typing
+      texts: this.editingTexts.value,
     }));
   }
 

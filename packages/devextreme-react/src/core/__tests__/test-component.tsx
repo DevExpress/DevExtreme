@@ -8,6 +8,7 @@ import {
   useCallback,
   useContext,
   useRef,
+  useLayoutEffect,
   forwardRef,
   ReactElement,
 } from 'react';
@@ -65,6 +66,12 @@ const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestCompon
     Widget.resetOption.mockReset();
   }, []);
 
+  const propsRef = useRef(props);
+
+  useLayoutEffect(() => {
+    propsRef.current = props;
+  }, [props]);
+
   useImperativeHandle(ref, () => {
     return {
       instance() {
@@ -72,13 +79,13 @@ const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestCompon
           element() {
             return getElement();
           }
-        }
+        };
       },
       getProps() {
-        return props;
+        return propsRef.current;
       },
     };
-  }, [componentRef.current, getElement, props]);
+  }, []);
 
   return (
     <Component<P & IHtmlOptions>
@@ -104,12 +111,17 @@ const TestPortalComponent = memo(forwardRef<TestComponentRef, any>(function Test
 
 const TestRestoreTreeComponent = forwardRef((_, ref: React.ForwardedRef<{ restoreTree?: () => void }>) => {
   const restoreParentLink = useContext(RestoreTreeContext);
+  const restoreParentLinkRef = useRef<() => void>(() => {});
+
+  useLayoutEffect(() => {
+    restoreParentLinkRef.current = restoreParentLink ?? (() => {});
+  }, [restoreParentLink]);
 
   useImperativeHandle(ref, () => {
     return {
-      restoreTree: restoreParentLink
+      restoreTree: () => restoreParentLinkRef.current(),
     };
-  }, [restoreParentLink]);
+  }, []);
 
   return <div>Context Component</div>;
 });

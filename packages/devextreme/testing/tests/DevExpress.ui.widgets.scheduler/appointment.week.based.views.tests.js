@@ -17,7 +17,7 @@ import {
     createWrapper,
     supportedScrollingModes, createWrapperFakeClock
 } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
@@ -230,7 +230,7 @@ module('Integration: Appointment Day, Week views', {
                     height: 1500
                 });
 
-                const spy = sinon.spy(scheduler.instance._appointmentPopup, 'show');
+                const spy = sinon.spy(scheduler.instance.appointmentPopup, 'show');
 
                 const clock = sinon.useFakeTimers();
                 await scheduler.appointments.click(0, clock);
@@ -244,7 +244,7 @@ module('Integration: Appointment Day, Week views', {
 
                     hide();
                 } finally {
-                    scheduler.instance._appointmentPopup.show.restore();
+                    scheduler.instance.appointmentPopup.show.restore();
                 }
             });
 
@@ -414,10 +414,11 @@ module('Integration: Appointment Day, Week views', {
 
                 const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
+                await waitForAsync(() => getAppointmentColor(tasks.eq(0)) === '#cb2824');
                 assert.equal(getAppointmentColor(tasks.eq(0)), '#cb2824', 'Color is OK');
                 assert.equal(getAppointmentColor(tasks.eq(1)), '#cb7d7b', 'Color is OK');
-                assert.equal(getAppointmentColor(tasks.eq(2)), '#cb2824', 'Color is OK');
-                assert.equal(getAppointmentColor(tasks.eq(3)), '#cb7d7b', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(2)), '#cb7d7b', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(3)), '#cb2824', 'Color is OK');
                 assert.equal(getAppointmentColor(tasks.eq(4)), '#cb7d7b', 'Color is OK');
             });
 
@@ -442,6 +443,7 @@ module('Integration: Appointment Day, Week views', {
                     });
 
                     const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
+                    await waitForAsync(() => getAppointmentColor(tasks.eq(0)) === '#0000ff');
                     assert.equal(getAppointmentColor(tasks.eq(0)), '#0000ff', 'Color is OK');
                     assert.equal($.inArray(getAppointmentColor(tasks.eq(1)), ['#ff0000', '#0000ff']), -1, 'Color is OK');
                 } finally {

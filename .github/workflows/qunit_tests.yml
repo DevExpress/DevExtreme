@@ -1,0 +1,183 @@
+name: QUnit tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'apps/**/*.md'
+  push:
+    branches: [25_1]
+  workflow_dispatch:
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  RUN_ALL_TESTS: true
+
+jobs:
+  check-should-run-all:
+    name: Check if all tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_ALL_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_ALL_TESTS }}" >> $GITHUB_OUTPUT
+
+  build:
+    runs-on: devextreme-shr2
+    name: Build
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build
+      working-directory: ./packages/devextreme
+      env:
+        DEVEXTREME_TEST_CI: "true"
+        BUILD_INPROGRESS_RENOVATION: "true"
+      run: pnpm exec nx build:systemjs
+
+    - name: Zip artifacts
+      working-directory: ./packages/devextreme
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: devextreme-artifacts
+        path: packages/devextreme/artifacts.zip
+        retention-days: 1
+
+  qunit-tests:
+    needs: build
+    runs-on: devextreme-shr2
+    name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [
+          misc,
+          ui,
+          ui.editors,
+          ui.grid,
+          ui.scheduler,
+        ]
+        TIMEZONE: ['']
+        CSP: ['true']
+        useJQuery: ['false']
+        MAX_WORKERS: ['']
+        include:
+          - CONSTEL: export
+            MAX_WORKERS: '3'
+            useJQuery: 'false'
+            CSP: 'true'
+          - CONSTEL: ui.scheduler
+            TIMEZONE: US/Pacific
+            useJQuery: 'false'
+          - CONSTEL: misc
+            CSP: 'false'
+            useJQuery: 'true'
+          - CONSTEL: ui.widgets
+            CSP: 'false'
+            useJQuery: 'false'
+            MAX_WORKERS: '3'
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Run QUnit tests
+      uses: ./.github/actions/run-qunit-tests
+      with:
+        name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
+        constel: ${{ matrix.CONSTEL }}
+        timezone: ${{ matrix.TIMEZONE }}
+        useJQuery: ${{ matrix.useJQuery }}
+        useCsp: ${{ matrix.CSP }}
+        maxWorkers: ${{ matrix.MAX_WORKERS || '' }}
+
+  qunit-tests-shadow-dom:
+    needs: [check-should-run-all, build]
+    if: needs.check-should-run-all.outputs.should-run == 'true'
+    runs-on: devextreme-shr2
+    name: ${{ matrix.constel }}-shadow-dom
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        constel: [
+          'ui',
+          'ui.widgets',
+          'ui.editors',
+          'ui.grid',
+          'ui.scheduler',
+        ]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          name: ${{ matrix.constel }}-shadow-dom
+          constel: ${{ matrix.constel }}
+          useJQuery: 'true'
+          useShadowDom: 'true'
+          useCsp: 'true'
+          maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '3' || '' }}
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [
+      build,
+      qunit-tests-shadow-dom,
+      qunit-tests,
+    ]
+    if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DevExpress/github-actions/send-teams-notification@v1
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme

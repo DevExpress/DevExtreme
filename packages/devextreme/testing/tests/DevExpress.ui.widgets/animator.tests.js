@@ -1,20 +1,19 @@
-import Animator from '__internal/ui/scroll_view/m_animator';
-import animationFrame from 'common/core/animation/frame';
+import Animator from '__internal/ui/scroll_view/animator';
+import animationFrame from '__internal/common/core/animation/frameModule';
 
-const REQEST_ANIMATION_FRAME_TIMEOUT = 10;
+const REQUEST_ANIMATION_FRAME_TIMEOUT = 10;
 
 QUnit.module('Animator', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.originalRAF = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
-            return window.setTimeout(callback, REQEST_ANIMATION_FRAME_TIMEOUT);
-        };
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            return window.setTimeout(callback, REQUEST_ANIMATION_FRAME_TIMEOUT);
+        });
     },
 
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this.originalRAF;
+        this.requestAnimationFrameStub.restore();
     }
 }, () => {
     QUnit.test('basic', function(assert) {
@@ -22,23 +21,23 @@ QUnit.module('Animator', {
 
         let stepsAmount = 10;
 
-        const TestAnimator = Animator.inherit({
-            _isFinished: function() {
+        class TestAnimator extends Animator {
+            _isFinished() {
                 return stepsAmount <= 0;
-            },
+            }
 
-            _step: function() {
+            _step() {
                 stepsAmount--;
-            },
+            }
 
-            _complete: function() {
+            _complete() {
                 assert.ok(true, 'animation executed');
             }
-        });
+        };
         const animator = new TestAnimator();
 
         animator.start();
-        this.clock.tick(10 * REQEST_ANIMATION_FRAME_TIMEOUT);
+        this.clock.tick(10 * REQUEST_ANIMATION_FRAME_TIMEOUT);
     });
 
     QUnit.test('stop', function(assert) {
@@ -46,31 +45,31 @@ QUnit.module('Animator', {
 
         let stepsAmount = 10;
 
-        const TestAnimator = Animator.inherit({
-            _isFinished: function() {
+        class TestAnimator extends Animator {
+            _isFinished() {
                 return stepsAmount <= 0;
-            },
+            }
 
-            _step: function() {
+            _step() {
                 stepsAmount--;
                 if(stepsAmount === 5) {
                     animator.stop();
                 }
-            },
+            }
 
-            _stop: function() {
+            _stop() {
                 assert.ok(true, 'animation stopped');
                 assert.equal(stepsAmount, 5, 'animation stopped with right iteration amount');
-            },
+            }
 
-            _complete: function() {
+            _complete() {
                 assert.ok(false, 'complete shouldn`t be fired');
             }
-        });
+        };
         const animator = new TestAnimator();
 
         animator.start();
-        this.clock.tick(10 * REQEST_ANIMATION_FRAME_TIMEOUT);
+        this.clock.tick(10 * REQUEST_ANIMATION_FRAME_TIMEOUT);
     });
 
     QUnit.test('infinite execution without isFinished callback', function(assert) {
@@ -79,15 +78,15 @@ QUnit.module('Animator', {
         let completed = 0;
         let stepCount = 0;
 
-        const TestAnimator = Animator.inherit({
-            _step: function() {
+        class TestAnimator extends Animator {
+            _step() {
                 stepCount++;
-            },
+            }
 
-            _complete: function() {
+            _complete() {
                 completed++;
             }
-        });
+        }
         const animator = new TestAnimator();
 
         animator.start();
@@ -103,18 +102,17 @@ QUnit.module('Animator', {
         assert.expect(2);
 
         let completed = 0;
-
         let stepCount = 0;
 
-        const TestAnimator = Animator.inherit({
-            _step: function() {
+        class TestAnimator extends Animator {
+            _step() {
                 stepCount++;
-            },
+            }
 
-            _complete: function() {
+            _complete() {
                 completed++;
             }
-        });
+        };
         const animator = new TestAnimator();
 
         animator.start();

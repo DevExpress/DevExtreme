@@ -25,21 +25,23 @@
   </DxChart>
 </template>
 <script setup lang="ts">
-import DxChart, {
+import {
+  DxChart,
   DxCommonSeriesSettings,
+  DxSeries,
   DxSelectionStyle,
   DxHatching,
-  DxSeries,
   DxLegend,
   DxExport,
   type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { catBreedsData } from './data.ts';
 
-function onDone({ component }) {
+function onDone({ component }: DxChartTypes.DoneEvent): void {
   component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();
 }
-function onPointClick({ target: point }: DxChartTypes.PointClickEvent) {
+function onPointClick(e: DxChartTypes.PointClickEvent) {
+  const point = e.target;
   if (point.isSelected()) {
     point.clearSelection();
   } else {

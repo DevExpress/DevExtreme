@@ -1,5 +1,5 @@
 import { extend } from 'core/utils/extend';
-import FileManagerProgressPanel from 'ui/file_manager/ui.file_manager.notification.progress_panel';
+import FileManagerProgressPanel from '__internal/ui/file_manager/ui.file_manager.notification.progress_panel';
 
 export default class FileManagerProgressPanelMock extends FileManagerProgressPanel {
 

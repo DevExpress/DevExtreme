@@ -1,4 +1,4 @@
-import FileManager from './file_manager/ui.file_manager';
+import FileManager from '../__internal/ui/file_manager/ui.file_manager';
 export default FileManager;
 
 // STYLE fileManager

@@ -1,13 +1,13 @@
 import $ from 'jquery';
 
-import ToolbarBase from '__internal/ui/toolbar/m_toolbar.base';
+import ToolbarBase from '__internal/ui/toolbar/toolbar.base';
 
 import fx from 'common/core/animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/text_box';
 import 'ui/drop_down_button';
@@ -102,6 +102,35 @@ QUnit.module('render', {
 
         const labelWidth = labelElement.getBoundingClientRect().width;
         assert.ok(labelWidth <= labelMaxWidth, 'Real label width less or equal to the max width');
+    });
+
+    QUnit.test('label max-width should be calculated correctly when parent has CSS transform scale (T1245421)', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').css('width', '400px');
+        const $element = $('<div>').appendTo($container);
+
+        $element.dxToolbar({
+            items: [
+                { location: 'before', text: 'Very long toolbar label text that should be truncated' },
+                { location: 'after', widget: 'dxButton', options: { text: 'Action' } }
+            ]
+        });
+
+        const toolbar = $element.dxToolbar('instance');
+        const $label = $element.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
+        const maxWidthBefore = parseFloat($label.css('max-width'));
+
+        $container.css('transform', 'scale(0.5)');
+        toolbar._dimensionChanged();
+        const maxWidthDuringScale = parseFloat($label.css('max-width'));
+
+        $container.css('transform', '');
+        toolbar._dimensionChanged();
+        const maxWidthAfter = parseFloat($label.css('max-width'));
+
+        assert.roughEqual(maxWidthDuringScale, maxWidthBefore, 1, 'max-width is not affected by CSS transform scale');
+        assert.roughEqual(maxWidthAfter, maxWidthBefore, 1, 'max-width is restored correctly after transform is removed');
+
+        $container.remove();
     });
 
     QUnit.test('items - long labels', function(assert) {
@@ -303,22 +332,6 @@ QUnit.module('render', {
         toolbar.option('width', 400);
 
         assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), 'toolbar with compact mode has not the compact class if widget has a large width');
-    });
-
-    QUnit.test('Buttons has default style in generic theme', function(assert) {
-        const element = this.$element.dxToolbar({
-            items: [{
-                location: 'before',
-                widget: 'dxButton',
-                options: {
-                    type: 'default',
-                    text: 'Back'
-                }
-            }]
-        });
-        const button = element.find('.dx-button');
-
-        assert.notOk(button.hasClass('dx-button-mode-text'));
     });
 
     QUnit.test('Toolbar provides its own templates for the item widgets', function(assert) {
@@ -587,8 +600,14 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
             widget: 'dxDropDownButton',
             options: { items: ['item'] },
         },
+        {
+            locateInMenu: 'always',
+            location: 'after',
+            widget: 'dxDropDownButton',
+            options: { items: ['item'] },
+        }
     ].forEach(({ widget, options }) => {
-        QUnit.test(`click on editor component (${widget}) inside the toolbar menu should not close it (T1287462)`, function(assert) {
+        QUnit.test(`click on editor component (${widget}) inside the toolbar menu should not close it (T1287462, T1298858)`, function(assert) {
             this.instance.option('items', [{
                 locateInMenu: 'always',
                 widget,
@@ -715,10 +734,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.strictEqual(parseInt($center.css('margin-left')), 115);
-        assert.strictEqual(parseInt($center.css('margin-right')), 65);
+        assert.strictEqual(parseInt($center.css('margin-left')), 112);
+        assert.strictEqual(parseInt($center.css('margin-right')), 62);
         assert.strictEqual($center.css('float'), 'none');
-        assert.strictEqual($center.width(), 220);
+        assert.strictEqual($center.width(), 226);
     });
 
     QUnit.test('title should be centered considering different before/after block widths (big after case)', function(assert) {
@@ -739,10 +758,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.strictEqual(parseInt($center.css('margin-left')), 65);
-        assert.strictEqual(parseInt($center.css('margin-right')), 115);
+        assert.strictEqual(parseInt($center.css('margin-left')), 62);
+        assert.strictEqual(parseInt($center.css('margin-right')), 112);
         assert.strictEqual($center.css('float'), 'right');
-        assert.strictEqual($center.width(), 220);
+        assert.strictEqual($center.width(), 226);
     });
 
     QUnit.test('title should be centered considering different before/after block widths after visible option change', function(assert) {
@@ -758,7 +777,7 @@ QUnit.module('widget sizing render', () => {
         $element.dxToolbar('option', 'items[0].visible', true);
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.strictEqual(parseInt($center.css('margin-left')), 65);
+        assert.strictEqual(parseInt($center.css('margin-left')), 62);
     });
 
     QUnit.test('items should be arranged after rendering in the dxToolbarBase used in the dxPopup', function(assert) {
@@ -787,10 +806,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.strictEqual(parseInt($center.css('margin-left')), 115);
-        assert.strictEqual(parseInt($center.css('margin-right')), 65);
+        assert.strictEqual(parseInt($center.css('margin-left')), 112);
+        assert.strictEqual(parseInt($center.css('margin-right')), 62);
         assert.strictEqual($center.css('float'), 'none');
-        assert.strictEqual($center.width(), 220);
+        assert.strictEqual($center.width(), 226);
     });
 
     [
@@ -1061,12 +1080,12 @@ QUnit.module('adaptivity', moduleConfig, () => {
             width: 400
         });
 
-        this.instance.option('width', 230);
+        this.instance.option('width', 220);
 
         this.overflowMenu.click();
         this.overflowMenu.click();
 
-        this.instance.option('width', 228);
+        this.instance.option('width', 218);
 
         assert.strictEqual(this.overflowMenu.instance().option('items').length, 1);
     });
@@ -1261,6 +1280,23 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         assert.ok($.contains($sections.eq(2).get(0), $afterItem.get(0)));
         assert.ok($sections.eq(2).hasClass('dx-toolbar-menu-last-section'), 'border for last section is removed');
+    });
+
+    QUnit.test('menu shouldn\'t be closed after click on editors', function(assert) {
+        const $beforeItem = $('<div>').width(150);
+
+        this.instance.option({
+            items: [
+                { location: 'before', locateInMenu: 'auto', template: () => $beforeItem },
+            ],
+            width: 100
+        });
+
+        this.overflowMenu.click();
+
+        $($beforeItem).trigger('dxclick');
+
+        assert.ok(this.overflowMenu.instance().option('opened'), 'dropdown isn\'t closed');
     });
 
     QUnit.test('menu should be closed after click on button or menu items', function(assert) {
@@ -1568,30 +1604,6 @@ QUnit.module('adaptivity', moduleConfig, () => {
 });
 
 QUnit.module('default template', moduleConfig, () => {
-    QUnit.test('T430159 menu should be closed after click on item if location is defined', function(assert) {
-        const onClickActionStub = sinon.stub();
-
-        this.instance.option({
-            items: [
-                {
-                    location: 'center',
-                    text: '123',
-                    locateInMenu: 'always',
-                    onClick: onClickActionStub
-                }
-            ],
-            width: 100
-        });
-
-        this.overflowMenu.click();
-
-        const $menuItem = $(`.${TOOLBAR_MENU_SECTION_CLASS} .${LIST_ITEM_CLASS}`).eq(0);
-        $menuItem.trigger('dxclick');
-
-        assert.strictEqual(this.instance.option('overflowMenuVisible'), false, 'dropdown is closed');
-        assert.strictEqual(onClickActionStub.callCount, 1, 'onClick was fired');
-    });
-
     ['single', 'multiple'].forEach(selectionMode => {
         QUnit.test(`Click on buttonGroup item inside menu (T977105). selectionMode: ${selectionMode}`, function(assert) {
             const onClickActionStub = sinon.stub();
@@ -1656,7 +1668,7 @@ QUnit.module('adaptivity without hiding in menu', {
 
         $.each(this.getToolbarItems(), function(index, $item) {
             if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 64, 1, 'Width is correct');
             } else {
                 assert.roughEqual($($item).outerWidth(), 60, 1, 'Width is correct');
             }
@@ -1666,16 +1678,16 @@ QUnit.module('adaptivity without hiding in menu', {
 
         $.each(this.getToolbarItems(), function(index, $item) {
             if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 64, 1, 'Width is correct');
             } else {
-                assert.roughEqual($($item).outerWidth(), 40, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 44, 1, 'Width is correct');
             }
         });
 
         toolBar.option('width', 100);
 
-        assert.roughEqual(this.getToolbarItems().eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual(this.getToolbarItems().eq(1).outerWidth(), 30, 1, 'Width of the second item is correct');
+        assert.roughEqual(this.getToolbarItems().eq(0).outerWidth(), 64, 1, 'Width of the first item is correct');
+        assert.roughEqual(this.getToolbarItems().eq(1).outerWidth(), 32, 1, 'Width of the second item is correct');
         assert.roughEqual(this.getToolbarItems().eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
     });
 
@@ -1692,7 +1704,7 @@ QUnit.module('adaptivity without hiding in menu', {
 
         $.each(this.getToolbarItems(), function(index, $item) {
             if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 64, 1, 'Width is correct');
             } else {
                 assert.roughEqual($($item).outerWidth(), 60, 1, 'Width is correct');
             }
@@ -1702,9 +1714,9 @@ QUnit.module('adaptivity without hiding in menu', {
 
         $.each(this.getToolbarItems(), function(index, $item) {
             if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 64, 1, 'Width is correct');
             } else {
-                assert.roughEqual($($item).outerWidth(), 10, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 14, 1, 'Width is correct');
             }
         });
 
@@ -1712,8 +1724,8 @@ QUnit.module('adaptivity without hiding in menu', {
 
         const $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 30, 2, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 64, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 32, 2, 'Width of the second item is correct');
         assert.roughEqual($toolbarItems.eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
     });
 
@@ -1732,17 +1744,17 @@ QUnit.module('adaptivity without hiding in menu', {
 
         let $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 45, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 64, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 48, 1, 'Width of the second item is correct');
         assert.roughEqual($toolbarItems.eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
 
         toolBar.option('width', 260);
 
         $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 65, 1, 'Width of the second item is correct');
-        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, 'Width of the third item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 64, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 64, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 12, 1, 'Width of the third item is correct');
     });
 
     QUnit.test('items in center section should have correct sizes, width increases', function(assert) {
@@ -1760,17 +1772,17 @@ QUnit.module('adaptivity without hiding in menu', {
 
         let $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 20, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 64, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 22, 1, 'Width of the second item is correct');
         assert.roughEqual($toolbarItems.eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
 
         toolBar.option('width', 250);
 
         $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 65, 1, 'Width of the second item is correct');
-        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 25, 1, 'Width of the third item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 64, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 64, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 28, 1, 'Width of the third item is correct');
     });
 });
 
@@ -1793,9 +1805,9 @@ QUnit.module('Toolbar disposing', () => {
 QUnit.module('Waiting fonts for material theme', moduleConfig, () => {
     QUnit.test('Toolbar calls font-waiting function for labels (T736793)', function(assert) {
         const estimatedData = [
-            { args: [ 'text1', '400' ], description: 'call for the first label' },
-            { args: [ 'text2', '400' ], description: 'call for the second label' },
-            { args: [ 'text3', '400' ], description: 'call for the third label' }
+            { args: [ 'text1', '500' ], description: 'call for the first label' },
+            { args: [ 'text2', '500' ], description: 'call for the second label' },
+            { args: [ 'text3', '500' ], description: 'call for the third label' }
         ];
 
         let executionCount = 0;
@@ -1828,9 +1840,9 @@ QUnit.module('Waiting fonts for material theme', moduleConfig, () => {
 
     QUnit.test('Toolbar calls _dimensionChanged function in Material theme to recalculate labels (T736793)', function(assert) {
         const estimatedData = [
-            { args: [ 'text1', '400' ], description: 'call for the first label' },
-            { args: [ 'text2', '400' ], description: 'call for the second label' },
-            { args: [ 'text3', '400' ], description: 'call for the third label' }
+            { args: [ 'text1', '500' ], description: 'call for the first label' },
+            { args: [ 'text2', '500' ], description: 'call for the second label' },
+            { args: [ 'text3', '500' ], description: 'call for the third label' }
         ];
 
         let executionCount = 0;

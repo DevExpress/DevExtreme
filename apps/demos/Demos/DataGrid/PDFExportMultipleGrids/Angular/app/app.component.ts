@@ -8,9 +8,8 @@ import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
-import {DataSourceOptions as DataSourceConfig} from 'devextreme-angular/common/data';
-
-import 'devextreme/data/odata/store';
+import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
+import { Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -26,6 +25,7 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  providers: [Service],
 })
 
 export class AppComponent {
@@ -33,32 +33,28 @@ export class AppComponent {
 
   @ViewChild('ratingDataGrid', { static: false }) ratingDataGrid: DxDataGridComponent;
 
-  priceDataSource: DataSourceConfig;
+  priceDataSource: DataSource<Product, number>;
 
-  ratingDataSource: DataSourceConfig;
+  ratingDataSource: DataSource<Product, number>;
 
-  constructor() {
-    this.priceDataSource = {
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-        key: 'Product_ID',
-      },
+  store: ArrayStore<Product, number>;
+
+  constructor(service: Service) {
+    this.store = new ArrayStore<Product, number>({
+      key: 'Product_ID',
+      data: service.getProducts(),
+    });
+    this.priceDataSource = new DataSource<Product, number>({
+      store: this.store,
       select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
       filter: ['Product_ID', '<', 10],
-    };
+    });
 
-    this.ratingDataSource = {
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-        key: 'Product_ID',
-      },
+    this.ratingDataSource = new DataSource<Product, number>({
+      store: this.store,
       select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
       filter: ['Product_ID', '<', 10],
-    };
+    });
   }
 
   setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {

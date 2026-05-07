@@ -1,12 +1,12 @@
 /* global currentTest */
 
-const vizMocks = require('../../helpers/vizMocks.js');
-const circularIndicatorsModule = require('viz/gauges/circular_indicators');
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import { Renderer } from '../../helpers/vizMocks.js';
+import * as circularIndicatorsModule from '__internal/viz/gauges/circular_indicators';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('CircularRangeBar', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },
@@ -149,7 +149,6 @@ QUnit.test('render - currentValue and baseValue are reversed, with text', functi
 
     assert.ok(this.rangeBar._line, '_line');
     assert.strictEqual(this.rangeBar._line.parent, this.rangeBar._rootElement, '_line parent');
-
 
     assert.deepEqual(this.rangeBar._text._stored_settings, {
         x: this.rangeBar._text._stored_settings.x,

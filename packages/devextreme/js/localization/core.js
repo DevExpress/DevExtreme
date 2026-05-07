@@ -1,1 +1,1 @@
-export { default } from '../common/core/localization/core';
+export { default } from '../__internal/core/localization/core';

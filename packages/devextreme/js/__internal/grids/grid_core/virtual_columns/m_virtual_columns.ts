@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import browser from '@js/core/utils/browser';
-import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
+import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
@@ -12,8 +12,6 @@ import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { createColumnsInfo } from './m_virtual_columns_core';
-
-const DEFAULT_COLUMN_WIDTH = 50;
 
 const baseView = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseViewVirtualColumnsExtender extends Base {
   protected _needToSetCellWidths() {
@@ -38,21 +36,15 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
   }
 
   protected _handleScroll(e) {
-    const that = this;
-    const scrollable = this.getScrollable();
-    let { left } = e.scrollOffset;
+    const left = this.normalizeScrollLeft(e.scrollOffset.left);
 
     this._scrollLeft = left;
 
     // @ts-expect-error
-    super._handleScroll.apply(that, arguments);
-
-    if (that.option('rtlEnabled') && scrollable) {
-      left = getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - left;
-    }
+    super._handleScroll.apply(this, arguments);
 
     // @ts-expect-error
-    that._columnsController.setScrollPosition(left, e.event);
+    this._columnsController.setScrollPosition(left, e.event);
   }
 
   protected _renderCore(e) {
@@ -96,10 +88,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class Virtual
   }
 };
 
-const getWidths = function (columns) {
-  return columns.map((column) => column.visibleWidth || parseFloat(column.width) || DEFAULT_COLUMN_WIDTH);
-};
-
 const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsControllerExtender extends Base {
   private _beginPageIndex: any;
 
@@ -141,7 +129,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   private getBeginPageIndex(position) {
     const visibleColumns = this.getVisibleColumns(undefined, true);
-    const widths = getWidths(visibleColumns);
+    const widths = gridCoreUtils.getColumnWidths(visibleColumns);
     let currentPosition = 0;
 
     for (let index = 0; index < widths.length; index++) {
@@ -164,7 +152,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   private getEndPageIndex(position) {
     const visibleColumns = this.getVisibleColumns(undefined, true);
-    const widths = getWidths(visibleColumns);
+    const widths = gridCoreUtils.getColumnWidths(visibleColumns);
     let currentPosition = 0;
 
     position += this.getTotalWidth();
@@ -204,20 +192,6 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     }
 
     return scrollingTimeout;
-  }
-
-  private setScrollPosition(position, event?) {
-    const scrollingTimeout = this.getScrollingTimeout();
-
-    if (scrollingTimeout > 0) {
-      clearTimeout(this._changedTimeout);
-
-      this._changedTimeout = setTimeout(() => {
-        this._setScrollPositionCore(position, event);
-      }, scrollingTimeout);
-    } else {
-      this._setScrollPositionCore(position, event);
-    }
   }
 
   private resize() {
@@ -287,7 +261,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     const beginFixedColumnCount = fixedColumns.length ? transparentColumnIndex : 0;
     let beginFixedColumns = visibleColumns.slice(0, beginFixedColumnCount);
     const beginColumns = visibleColumns.slice(beginFixedColumnCount, startIndex);
-    const beginWidth = getWidths(beginColumns).reduce((a, b) => a + b, 0);
+    const beginWidth = gridCoreUtils.getColumnWidths(beginColumns).reduce((a, b) => a + b, 0);
 
     if (!beginWidth) {
       startIndex = 0;
@@ -296,7 +270,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     const endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
     let endFixedColumns = visibleColumns.slice(visibleColumns.length - endFixedColumnCount);
     const endColumns = visibleColumns.slice(endIndex, visibleColumns.length - endFixedColumnCount);
-    const endWidth = getWidths(endColumns).reduce((a, b) => a + b, 0);
+    const endWidth = gridCoreUtils.getColumnWidths(endColumns).reduce((a, b) => a + b, 0);
 
     if (!endWidth) {
       endIndex = visibleColumns.length;
@@ -342,6 +316,20 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   public isVirtualMode(): boolean {
     return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
+  }
+
+  public setScrollPosition(position, event?) {
+    const scrollingTimeout = this.getScrollingTimeout();
+
+    if (scrollingTimeout > 0) {
+      clearTimeout(this._changedTimeout);
+
+      this._changedTimeout = setTimeout(() => {
+        this._setScrollPositionCore(position, event);
+      }, scrollingTimeout);
+    } else {
+      this._setScrollPositionCore(position, event);
+    }
   }
 };
 

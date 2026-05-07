@@ -1,14 +1,13 @@
 import { ClientFunction } from 'testcafe';
 
-type WindowCallbackExtended =
-  Window
-  & typeof globalThis
-  & {
-    clientTesting?: {
-      data: Record<string, any>;
-      addCallbackResult: <T>(key: string, result: T) => void;
-    };
+type WindowCallbackExtended = Window
+& typeof globalThis
+& {
+  clientTesting?: {
+    data: Record<string, any>;
+    addCallbackResult: <T>(key: string, result: T) => void;
   };
+};
 
 const initClientTesting = async (keyArray: string[]): Promise<void> => {
   await ClientFunction(

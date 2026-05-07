@@ -1,2 +1,15 @@
-The DevExtreme JavaScript Pyramid Chart is&nbsp;often used to&nbsp;visualize an&nbsp;organizational structure. In&nbsp;this demo, the pyramid displays a&nbsp;team&rsquo;s composition, reflecting both subordination and strength. In&nbsp;code, the pyramid is&nbsp;created using the Funnel component with the **algorithm** property set to _&laquo;dynamicHeight&raquo;_ and **inverted** property set to&nbsp;**true**.
+DevExtreme Funnel can display data/information as a pyramid chart. To generate pyramid visualizations, set the [algorithm](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/#algorithm) property to *"dynamicHeight"* and [invert the Funnel](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/#inverted).
 <!--split-->
+
+This demo configures the following objects:
+
+- [title](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/title/)    
+Specifies component title.
+- [tooltip](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/tooltip/)    
+Specifies item tooltips.
+- [item](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/item/)    
+Customizes item appearance.
+- [legend](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/legend/)    
+Configures the component legend.
+- [label](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/label/)    
+Configures item labels.

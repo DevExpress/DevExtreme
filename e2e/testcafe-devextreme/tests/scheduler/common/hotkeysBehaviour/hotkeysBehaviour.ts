@@ -117,8 +117,10 @@ test('Navigate between toolbar items', async (t) => {
     .pressKey('tab')
     .expect(viewSwitcher.getButton('Day').hasFocusedState)
     .ok()
-
-    .pressKey('right')
+    .pressKey('enter')
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter')
     .expect(viewSwitcher.getButton('Week').hasFocusedState)
     .ok();
 }).before(async () => createScheduler({
@@ -144,6 +146,10 @@ test('Navigate between custom toolbar items', async (t) => {
     .ok()
 
     .pressKey('right')
+    .pressKey('enter')
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter')
     .expect(viewSwitcher.getButton('Week').hasFocusedState)
     .ok()
 

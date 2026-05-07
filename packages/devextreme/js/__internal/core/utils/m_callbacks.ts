@@ -1,5 +1,4 @@
-type CallbackType<TArgs extends any[], TContext>
-  = ((this: TContext, ...args: TArgs) => boolean)
+type CallbackType<TArgs extends any[], TContext> = ((this: TContext, ...args: TArgs) => boolean)
   | ((this: TContext, ...args: TArgs) => void);
 
 export interface CallbackInterface<TArgs extends any[] = any[], TContext = any> {

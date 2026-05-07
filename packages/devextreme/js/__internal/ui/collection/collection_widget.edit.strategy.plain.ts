@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { CollectionItemKey } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
 import EditStrategy from '@ts/ui/collection/collection_widget.edit.strategy';
 
@@ -7,13 +8,13 @@ class PlainEditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends EditStrategy<TItem, TKey> {
   _getPlainItems(): TItem[] {
     return this._getItems() ?? [];
   }
 
-  getIndexByItemData(itemData: TItem): number {
+  getIndexByItemData(itemData: TItem): CollectionItemIndex {
     const keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
     if (keyOf) {
       return this.getIndexByKey(keyOf(itemData));
@@ -61,7 +62,7 @@ class PlainEditStrategy<
     return -1;
   }
 
-  getItemsByKeys(keys: TKey[], items?: TItem[]): TItem[] {
+  getItemsByKeys(keys: TKey[], items: TItem[] | undefined): TItem[] {
     return (items ?? keys).slice() as TItem[];
   }
 
@@ -76,8 +77,8 @@ class PlainEditStrategy<
     items.splice(destinationIndex, 0, movedItemData);
   }
 
-  _isItemIndex(index: number | Element | TItem): boolean {
-    return (typeof index === 'number') && Math.round(index) === index;
+  _isItemIndex(index: CollectionItemIndex): index is CollectionItemIndex {
+    return this._isNormalizedItemIndex(index);
   }
 
   _getNormalizedItemIndex(itemElement: Element): number {

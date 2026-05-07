@@ -269,6 +269,9 @@ class TimeView extends Editor<TimeViewProperties> {
           time.setHours(newHours);
           this.option('value', time);
         },
+        dropDownOptions: {
+          container: this.$element(),
+        },
         value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
         stylingMode: this.option('stylingMode'),
       },

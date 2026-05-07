@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 
 import $ from 'jquery';
@@ -13,6 +13,8 @@ import config from 'core/config';
 import renderer from 'core/renderer';
 import themes from 'ui/themes';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 const device = devices.real();
 
@@ -68,10 +70,13 @@ QUnit.testStart(function() {
 QUnit.module('AdaptiveColumns', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -1728,7 +1733,7 @@ QUnit.module('AdaptiveColumns', {
         this.clock.tick(10);
 
         // assert
-        assert.ok(this.rowsView._getRowElements.calledTwice);
+        assert.strictEqual(this.rowsView._getRowElements.callCount, 4);
     });
 
     QUnit.test('Form has 2 columns in material theme', function(assert) {
@@ -2006,10 +2011,13 @@ QUnit.module('AdaptiveColumns', {
 QUnit.module('API', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -2294,10 +2302,13 @@ QUnit.module('API', {
 QUnit.module('Editing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -3982,10 +3993,13 @@ QUnit.module('Editing', {
 QUnit.module('Validation', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, function() {
 
@@ -4498,6 +4512,8 @@ QUnit.module('Keyboard navigation', {
 
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
 
     afterEach: function() {
@@ -4505,6 +4521,7 @@ QUnit.module('Keyboard navigation', {
             this.dispose();
         }
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, function() {
     QUnit.testInActiveWindow('Edit next an adaptive detail item by tab key', function(assert) {
@@ -4556,7 +4573,7 @@ QUnit.module('Keyboard navigation', {
         this.getActiveInputElement().trigger(e);
         this.clock.tick(10);
 
-        const $cell = this.$dataGrid.find('td:not([class])').eq(1);
+        const $cell = $(this.getRowElement(2)).children().eq(0);
         eventsEngine.triggerHandler($cell, 'focus');
         this.clock.tick(10);
 

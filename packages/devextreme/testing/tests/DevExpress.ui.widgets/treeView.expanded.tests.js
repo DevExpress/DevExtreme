@@ -6,7 +6,7 @@ import { DATA } from './treeViewParts/testData.js';
 import { makeSlowDataSource } from './treeViewParts/testUtils.js';
 import 'ui/tree_view';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
 const TREEVIEW_NODE_CLASS = 'dx-treeview-node';

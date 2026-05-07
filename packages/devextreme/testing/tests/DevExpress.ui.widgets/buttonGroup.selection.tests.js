@@ -3,7 +3,7 @@ import 'ui/button';
 import 'ui/button_group';
 import eventsEngine from 'common/core/events/core/events_engine';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';

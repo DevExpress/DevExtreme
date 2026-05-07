@@ -1,6 +1,6 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../../helpers/getPageUrl';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes CSS classes`
@@ -95,7 +95,7 @@ const HORIZONTAL_VIEW_CROSS_SCROLLING_CASES = {
   HORIZONTAL_VIEW_CROSS_SCROLLING_CASES,
 ].forEach(({ views, expect, crossScrollingEnabled }) => {
   views.forEach((view) => {
-    test.skip(
+    test(
       `Cells should have correct sizes and css classes (view:${view}, crossScrolling:${crossScrollingEnabled})`,
       async (t) => {
         const scheduler = new Scheduler(SELECTOR);
@@ -121,8 +121,6 @@ const HORIZONTAL_VIEW_CROSS_SCROLLING_CASES = {
         currentDate: '2024-01-01',
         crossScrollingEnabled,
       });
-    }).after(async () => {
-      await removeStylesheetRulesFromPage();
     });
   });
 });

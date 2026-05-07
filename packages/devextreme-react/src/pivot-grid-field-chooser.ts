@@ -40,7 +40,7 @@ const PivotGridFieldChooser = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onContentReady","onContextMenuPreparing","onDisposing","onInitialized"]), []);
 

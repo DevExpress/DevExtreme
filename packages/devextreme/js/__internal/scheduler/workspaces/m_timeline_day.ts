@@ -8,12 +8,12 @@ const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 class SchedulerTimelineDay extends SchedulerTimeline {
   get type() { return VIEWS.TIMELINE_DAY; }
 
-  _getElementClass() {
+  protected override getElementClass() {
     return TIMELINE_CLASS;
   }
 
-  _needRenderWeekHeader() {
-    return this._isWorkSpaceWithCount();
+  protected override needRenderWeekHeader() {
+    return this.isWorkSpaceWithCount();
   }
 }
 

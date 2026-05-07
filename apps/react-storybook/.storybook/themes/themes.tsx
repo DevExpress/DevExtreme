@@ -1,5 +1,5 @@
 import React from 'react';
-import { Decorator } from '@storybook/react';
+import { Decorator } from '@storybook/react-webpack5';
 import './styles.css';
 
 export const themeToolbarItems = [
@@ -34,12 +34,18 @@ export const compact = [
 
 export const ThemeDecorator: Decorator = (Story, ctx) => {
     const { theme, compact } = ctx.globals;
+    const [cssLoaded, setCssLoaded] = React.useState(false);
     const themeName = theme.split('.').length < 3 ? 'generic' : theme.split('.')[0];
     const cssFileHref = `css/dx.${theme}${compact ? '.compact' : ''}.css`
     return (
-        <div className={`dx-theme-${themeName}-typography storybook-theme-decorator`}>
-            <link rel="stylesheet" href={cssFileHref} />
-            <Story />
+        <div key={cssFileHref} className={`dx-theme-${themeName}-typography storybook-theme-decorator`}>
+            <link
+                rel="stylesheet"
+                href={cssFileHref}
+                onLoad={() => setCssLoaded(true)}
+                onError={() => setCssLoaded(true)}
+            />
+            {cssLoaded && <Story />}
         </div>
     );
 }

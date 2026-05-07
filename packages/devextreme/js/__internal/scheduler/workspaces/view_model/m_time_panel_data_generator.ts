@@ -24,7 +24,7 @@ interface TimePanelVisibleInterval {
 }
 
 export class TimePanelDataGenerator {
-  constructor(public _viewDataGenerator) {
+  constructor(private readonly viewDataGenerator) {
   }
 
   getCompleteTimePanelMap(options: ViewDataProviderExtendedOptions, completeViewDataMap) {
@@ -45,7 +45,7 @@ export class TimePanelDataGenerator {
     const rowsCount = completeViewDataMap.length - 1;
     const realEndViewDate = completeViewDataMap[rowsCount][completeViewDataMap[rowsCount].length - 1].endDate;
 
-    const rowCountInGroup = this._viewDataGenerator.getRowCount({
+    const rowCountInGroup = this.viewDataGenerator.getRowCount({
       intervalCount,
       currentDate,
       viewType,
@@ -53,7 +53,7 @@ export class TimePanelDataGenerator {
       startDayHour,
       endDayHour,
     });
-    const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+    const cellCountInGroupRow = this.viewDataGenerator.getCellCount({
       intervalCount,
       currentDate,
       viewType,
@@ -155,20 +155,20 @@ export class TimePanelDataGenerator {
 
     const {
       previousGroupedData: groupedData,
-    } = this._generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping);
+    } = this.generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping);
 
     timePanelData.groupedData = groupedData;
 
     return timePanelData;
   }
 
-  _generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping) {
+  private generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping) {
     return timePanelMap.reduce(({ previousGroupIndex, previousGroupedData }, cellData) => {
       const currentGroupIndex = cellData.groupIndex;
       if (currentGroupIndex !== previousGroupIndex) {
         previousGroupedData.push({
           dateTable: [],
-          isGroupedAllDayPanel: getIsGroupedAllDayPanel(!!cellData.allDay, isVerticalGrouping),
+          isGroupedAllDayPanel: getIsGroupedAllDayPanel(Boolean(cellData.allDay), isVerticalGrouping),
           groupIndex: currentGroupIndex,
           key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
         });

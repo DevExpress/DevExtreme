@@ -10,12 +10,6 @@
   position: relative;
   cursor: default;
   white-space: normal;
-  line-height: normal;
-}
-
-.dx-hidden.dx-group-cell {
-  display: table-cell !important; // stylelint-disable-line declaration-no-important
-  font-size: 0 !important; // stylelint-disable-line declaration-no-important
 }
 
 @mixin dx-group-panel-item() {
@@ -50,27 +44,9 @@
 }
 
 .dx-datagrid-rowsview {
-  .dx-row.dx-group-row {
-    td {
-      border-top: 1px solid;
-      border-bottom: 1px solid;
-    }
-  }
-
-  .dx-row.dx-group-row:first-child {
-    td {
-      border-top: none;
-    }
-  }
-
   .dx-group-row {
     &:focus {
       outline: 0;
-    }
-
-    &.dx-row > td {
-      border-left-color: transparent;
-      border-right-color: transparent;
     }
   }
 
@@ -97,13 +73,6 @@
 .dx-rtl {
   .dx-datagrid-group-closed {
     @include flip-horizontally();
-  }
-
-  .dx-datagrid-content .dx-datagrid-table {
-    .dx-group-row.dx-row.dx-column-lines > td {
-      border-left: none;
-      border-right: none;
-    }
   }
 
   .dx-datagrid-group-panel {

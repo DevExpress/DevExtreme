@@ -2,7 +2,6 @@ import type { DisplayMode } from '@js/common';
 import type { PageSize } from '@js/ui/pagination_types';
 import { BaseWidgetDefaultProps, type BaseWidgetProps } from '@ts/core/r1/base_props';
 
-import messageLocalization from '../../../common/core/localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
 
 export interface BasePaginationProps extends BaseWidgetProps {
@@ -18,7 +17,7 @@ export interface BasePaginationProps extends BaseWidgetProps {
   visible?: boolean;
   hasKnownLastPage?: boolean;
   pagesNavigatorVisible?: boolean | 'auto';
-  showPageSizeSelector?: boolean;
+  showPageSizeSelector?: boolean | 'auto';
   allowedPageSizes: (number | PageSize)[];
   rtlEnabled?: boolean;
   showNavigationButtons?: boolean;
@@ -37,9 +36,9 @@ export const BasePaginationDefaultProps: BasePaginationProps = {
   visible: true,
   hasKnownLastPage: true,
   pagesNavigatorVisible: 'auto',
-  showPageSizeSelector: true,
+  showPageSizeSelector: 'auto',
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   itemCount: 1,
-  label: messageLocalization.format('dxPagination-ariaLabel'),
+  label: undefined,
 };

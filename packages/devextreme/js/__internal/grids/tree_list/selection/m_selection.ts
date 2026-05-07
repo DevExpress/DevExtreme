@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue, noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -18,6 +19,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../m_core';
 
+const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
@@ -541,6 +543,8 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     const selectedKeys = this.getSelectedRowKeys(mode) || [];
     const selectedRowsData: any[] = [];
 
+    // @ts-expect-error selection may be deferred only in DataGrid,
+    // we need to improve GridCore types to take it into account
     selectedKeys.forEach((key) => {
       // @ts-expect-error
       const node = dataController.getNodeByKey(key);
@@ -568,11 +572,14 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     if (renderingTemplate && options.rowType === 'header' && options.column.index === firstDataColumnIndex) {
       resultTemplate = {
         render(options) {
+          // NOTE: Template may be attached with "prepend"
+          // Therefore, to have "select all" checkbox as first element
+          // We should render template first
+          renderingTemplate.render(options);
+
           if (that.option('selection.mode') === 'multiple') {
             that.renderSelectAll(options.container, options.model);
           }
-
-          renderingTemplate.render(options);
         },
       };
     } else {
@@ -580,6 +587,20 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     return resultTemplate;
+  }
+
+  protected _renderSelectAllCheckBox(
+    $container: dxElementWrapper,
+  ): dxElementWrapper {
+    const $checkboxWrapper = $('<div>')
+      .addClass(TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS);
+    const $checkbox = this._createSelectAllCheckboxElement();
+
+    $checkbox.appendTo($checkboxWrapper);
+    // NOTE: It's important to have checkbox as first child inside <td>
+    $checkboxWrapper.prependTo($container);
+
+    return $checkbox;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -595,13 +616,19 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeListExtender extends rowsViewSelectionExtenderMixin(Base) {
-  private _renderIcons($iconContainer, options) {
-    // @ts-expect-error
-    super._renderIcons.apply(this, arguments);
+  protected _renderIcons(
+    $container: dxElementWrapper,
+    options,
+  ): dxElementWrapper {
+    const $iconContainer = super._renderIcons($container, options);
+    const isMultipleSelection = this.option('selection.mode') === 'multiple';
 
-    if (!options.row.isNewRow && this.option('selection.mode') === 'multiple') {
-      // @ts-expect-error
-      this._selectionController.renderSelectCheckBoxContainer($iconContainer, options);
+    if (!options.row.isNewRow && isMultipleSelection) {
+      const $checkboxWrapper = $('<div>').addClass(TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS);
+      $checkboxWrapper.appendTo($iconContainer);
+
+      // @ts-expect-error This method added only in TreeList's selection module
+      this._selectionController.renderSelectCheckBoxContainer($checkboxWrapper, options);
     }
 
     return $iconContainer;

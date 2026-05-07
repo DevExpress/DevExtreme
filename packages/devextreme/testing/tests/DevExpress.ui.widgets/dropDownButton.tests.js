@@ -11,7 +11,7 @@ import { CustomStore } from 'common/data/custom_store';
 import { extend } from 'core/utils/extend';
 import devices from '__internal/core/m_devices';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
@@ -32,6 +32,8 @@ const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
+const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
@@ -1074,7 +1076,7 @@ QUnit.module('list integration', {}, () => {
         });
 
         const $buttonText = $dropDownButton.find(`.${BUTTON_TEXT}`);
-        const dropDownButtonRect = $dropDownButton.get(0).getBoundingClientRect();
+        const dropDownButtonRect = $dropDownButton.find(`.${BUTTON}`).get(0).getBoundingClientRect();
         const buttonTextRect = $buttonText.get(0).getBoundingClientRect();
 
         const dropDownButtonVerticalCenter = (dropDownButtonRect.top + dropDownButtonRect.bottom) / 2;
@@ -1101,8 +1103,8 @@ QUnit.module('list integration', {}, () => {
         const toggleButtonElement = getToggleButton(dropDownButton);
         const actionButtonElement = getActionButton(dropDownButton);
 
-        assert.strictEqual(getOuterHeight(toggleButtonElement), 36, 'toggleButton has correct height in generic theme');
-        assert.strictEqual(getOuterHeight(actionButtonElement), 36, 'actionButton has correct height in generic theme');
+        assert.strictEqual(getOuterHeight(toggleButtonElement), 32, 'toggleButton has correct height in fluent theme');
+        assert.strictEqual(getOuterHeight(actionButtonElement), 32, 'actionButton has correct height in fluent theme');
     });
 
     QUnit.test('list selection should depend on selectedItemKey option', function(assert) {
@@ -1213,6 +1215,22 @@ QUnit.module('list integration', {}, () => {
 
         assert.deepEqual(list.option('selectedItemKeys'), [0], 'List has correct selection');
     });
+
+    QUnit.test('list items should not have selected class from ddb selectedItemKey after set items at runtime (T1314783)', function(assert) {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
+            items: ['item1'],
+            useSelectMode: false,
+            opened: true,
+            selectedItemKey: 'item1',
+        });
+        const list = getList(dropDownButton);
+
+        dropDownButton.option('items', ['item1']);
+        const $listItems = list.itemElements();
+
+        assert.strictEqual($listItems.length, 1, 'there is one list item');
+        assert.strictEqual($listItems.hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item does not have selected class');
+    });
 });
 
 QUnit.module('common use cases', {
@@ -1269,7 +1287,7 @@ QUnit.module('common use cases', {
 
         const toggleButtonElement = getToggleButton(dropDownButton);
 
-        assert.strictEqual(getWidth(toggleButtonElement), 18, 'toggleButton has correct width in generic theme');
+        assert.strictEqual(getWidth(toggleButtonElement), 24, 'toggleButton has correct width in fluent theme');
     });
 
     QUnit.test('it should be possible to set non-datasource action button', function(assert) {

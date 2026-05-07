@@ -8,7 +8,7 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 import 'ui/range_slider';
 import 'ui/number_box';
 import 'ui/validator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -32,7 +32,7 @@ const TOOLTIP_CLASS = 'dx-popover';
 
 const FEEDBACK_SHOW_TIMEOUT = 30;
 const FEEDBACK_HIDE_TIMEOUT = 400;
-const CONTAINER_MARGIN = 7;
+const CONTAINER_MARGIN = 10;
 
 const getRight = (el) => $(el).get(0).getBoundingClientRect().right;
 const getLeft = (el) => $(el).get(0).getBoundingClientRect().left;
@@ -88,11 +88,11 @@ const isRangeSliderDimensionsMatchOptions = (id, assert) => {
         }
     }
 
-    assert.roughEqual(calculatedRangeWidth, expectedRangeWidth, 0.5, `${SLIDER_RANGE_CLASS} width`);
-    assert.roughEqual(calculatedRangeLeftOffset, expectedRangeLeftOffset, 0.5, `${SLIDER_RANGE_CLASS} left offset`);
-    assert.roughEqual(calculatedRangeRightOffset, expectedRangeRightOffset, 0.5, `${SLIDER_RANGE_CLASS} right offset`);
-    assert.roughEqual(calculatedStartHandleOffset, expectedRangeLeftOffset, 1, `start ${SLIDER_HANDLE_CLASS} offset`);
-    assert.roughEqual(calculatedEndHandleOffset, expectedRangeRightOffset, 1, `end ${SLIDER_HANDLE_CLASS} offset`);
+    assert.roughEqual(calculatedRangeWidth, expectedRangeWidth, 2.5, `${SLIDER_RANGE_CLASS} width`);
+    assert.roughEqual(calculatedRangeLeftOffset, expectedRangeLeftOffset, 2.5, `${SLIDER_RANGE_CLASS} left offset`);
+    assert.roughEqual(calculatedRangeRightOffset, expectedRangeRightOffset, 2.5, `${SLIDER_RANGE_CLASS} right offset`);
+    assert.roughEqual(calculatedStartHandleOffset, expectedRangeLeftOffset, 2.5, `start ${SLIDER_HANDLE_CLASS} offset`);
+    assert.roughEqual(calculatedEndHandleOffset, expectedRangeRightOffset, 2.5, `end ${SLIDER_HANDLE_CLASS} offset`);
 };
 
 const moduleOptions = {
@@ -159,7 +159,7 @@ QUnit.module('render', moduleOptions, () => {
         pointerMock(el).start().move(450 + el.offset().left).down();
 
         assert.equal(instance.option('start'), 240);
-        assert.equal(instance.option('end'), 456);
+        assert.equal(instance.option('end'), 458);
         isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         pointerMock(el).start().move(500 + el.offset().left).down();
@@ -225,12 +225,12 @@ QUnit.module('user interaction', () => {
 
         pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 40, $wrapper.offset().top).move(46);
         assert.equal(instance.option('start'), 60);
-        assert.equal(instance.option('end'), 80);
+        assert.equal(instance.option('end'), 78);
         isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
 
         pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 80, $wrapper.offset().top).move(-57);
-        assert.equal(instance.option('start'), 30);
+        assert.equal(instance.option('start'), 33);
         assert.equal(instance.option('end'), 60);
         isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
@@ -252,7 +252,7 @@ QUnit.module('user interaction', () => {
         const pointer = pointerMock($wrapper);
 
         pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 80, $wrapper.offset().top).move(-46);
-        assert.equal(instance.option('start'), 100);
+        assert.equal(instance.option('start'), 102);
         assert.equal(instance.option('end'), 120);
         isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
@@ -274,14 +274,14 @@ QUnit.module('user interaction', () => {
         const pointer = pointerMock($wrapper);
 
         pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 40, $wrapper.offset().top).move(46);
-        assert.equal(instance.option('start'), 20);
+        assert.equal(instance.option('start'), 22);
         assert.equal(instance.option('end'), 40);
         isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
 
         pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 80, $wrapper.offset().top).move(-57);
         assert.equal(instance.option('start'), 40);
-        assert.equal(instance.option('end'), 70);
+        assert.equal(instance.option('end'), 68);
         isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
     });

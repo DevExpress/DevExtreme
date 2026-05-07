@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import TagBox from 'devextreme-testcafe-models/tagBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Appointment resources`
   .page(url(__dirname, '../../../container.html'));
@@ -149,7 +150,7 @@ test('Resource with allowMultiple should be set correctly for new the appointmen
   }],
 }));
 
-test('Resource color should be correct for the complex resource id without grouping', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('Resource color should be correct for the complex resource id without grouping', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointmentA = scheduler.getAppointment('a');
   const appointmentB = scheduler.getAppointment('b');

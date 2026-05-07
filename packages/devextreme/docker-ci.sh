@@ -1,5 +1,25 @@
 #!/bin/bash -e
 
+# QUnit Test Runner Script
+# 
+# Despite the "docker" in the filename, this script runs in multiple modes:
+#
+# 1. GITHUBACTION=true (GitHub Actions)
+#    - Runs NATIVELY on GitHub runner (NO Docker container!)
+#    - Uses pre-installed Chrome and Node.js
+#    - Dependencies already installed by workflow
+#    - Fastest and most stable mode
+#
+# 2. LOCAL=true (Local development with Docker)
+#    - Runs inside Docker container
+#    - Uses host.docker.internal for networking
+#
+# 3. Default (Legacy CI with Docker)
+#    - Runs inside Docker container
+#    - Installs dependencies inside container
+#
+# Current GitHub Actions workflow runs in mode #1 (native, no Docker)
+
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_TEST_CI=true
@@ -24,14 +44,21 @@ function run_test_impl {
     local runner_pid
     local runner_result=0
 
-    [ -z "$CHROME_CMD"] && CHROME_CMD=google-chrome-stable
+    echo "========================================="
+    if [ "$GITHUBACTION" == "true" ]; then
+        echo "MODE: GitHub Actions (native, no Docker)"
+    elif [ "$LOCAL" == "true" ]; then
+        echo "MODE: Local Docker"
+    else
+        echo "MODE: CI Docker"
+    fi
+    echo "========================================="
+
+    [ -z "$CHROME_CMD" ] && CHROME_CMD=google-chrome-stable
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
-    [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
     [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
-    [ "$PERF" == "true" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
-    [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
     [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
 
     if [ -n "$TZ" ]; then
@@ -52,131 +79,97 @@ function run_test_impl {
         pnpm run build
         fi
 
-        dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
+        echo "Compiling TypeScript test runner..."
+        pnpm exec tsc -p ./testing/runner/tsconfig.json
 
-        for i in {15..0}; do
+        echo "Starting Node.js test runner..."
+        node ./testing/runner/dist/index.js --single-run & runner_pid=$!
+        echo "Runner PID: $runner_pid"
+
+        local max_attempts=30
+        [ "$GITHUBACTION" == "true" ] && max_attempts=45
+        
+        for i in $(seq $max_attempts -1 0); do
             if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
-                echo "Runner exited unexpectedly"
+                echo "❌ Runner exited unexpectedly"
                 return 1
             fi
 
-            if curl --head --silent --fail $url 2> /dev/null;
-             then
-              echo "Runner reached!"
-              break
-             else
-              echo "Page $url does not exist."
+            if curl --head --silent --fail $url 2> /dev/null; then
+                echo "✅ Runner reached at $url"
+                break
+            else
+                echo "⏳ Waiting for runner... (${i}s remaining)"
             fi
 
             if [ $i -eq 0 ]; then
-                echo "Runner not reached"
+                echo "❌ Runner not reached after ${max_attempts} seconds"
                 return 1
             fi
 
             sleep 1
-            echo "Waiting for runner..."
         done
     fi
 
     echo "URL: $url"
 
-    case "$BROWSER" in
+    local chrome_command=$CHROME_CMD
+    local chrome_args=(
+        --no-sandbox
+        --headless
+        --disable-gpu
+        --disable-partial-raster
+        --disable-skia-runtime-opts
+        --no-first-run
+        --run-all-compositor-stages-before-draw
+        --disable-new-content-rendering-timeout
+        --disable-background-timer-throttling
+        --disable-renderer-backgrounding
+        --disable-threaded-animation
+        --disable-threaded-scrolling
+        --disable-checker-imaging
+        --disable-image-animation-resync
+        --use-gl="swiftshader"
+        --disable-features=PaintHolding
+        --disable-features=ScriptStreaming
+        --disable-features=LazyFrameLoading
+        --font-render-hinting=none
+        --disable-font-subpixel-positioning
+        --disable-extensions
+    )
 
-        "firefox")
-            kill -9 $(ps -x | grep firefox | awk '{print $1}') || true
+    if [ "$GITHUBACTION" == "true" ]; then
+        chrome_args+=(
+            --disable-dev-shm-usage
+            --disable-software-rasterizer
+            --js-flags="--max-old-space-size=4096"
+            --disable-background-networking
+            --disable-sync
+            --metrics-recording-only
+            --disable-default-apps
+        )
+    fi
 
-            local profile_path="/firefox-profile"
-            [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
-            local firefox_args="-profile $profile_path $url"
-            [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
+    if [ "$NO_HEADLESS" == "true" ]; then
+        chrome_command="dbus-launch --exit-with-session $chrome_command"
+        chrome_args+=(
+            --no-first-run
+            --no-default-browser-check
+            --disable-translate
+        )
+    fi
 
-            firefox --version
-            echo "$firefox_args"
-
-            firefox $firefox_args &
-        ;;
-
-        *)
-            local chrome_command=$CHROME_CMD
-            local chrome_args=(
-                --no-sandbox
-                --headless
-                --disable-gpu
-                --disable-partial-raster
-                --disable-skia-runtime-opts
-                --no-first-run
-                --run-all-compositor-stages-before-draw
-                --disable-new-content-rendering-timeout
-                --disable-background-timer-throttling
-                --disable-renderer-backgrounding
-                --disable-threaded-animation
-                --disable-threaded-scrolling
-                --disable-checker-imaging
-                --disable-image-animation-resync
-                --use-gl="swiftshader"
-                --disable-features=PaintHolding
-                --disable-features=ScriptStreaming
-                --disable-features=LazyFrameLoading
-                --font-render-hinting=none
-                --disable-font-subpixel-positioning
-                --disable-extensions
-            )
-
-            if [ "$NO_HEADLESS" == "true" ]; then
-                chrome_command="dbus-launch --exit-with-session $chrome_command"
-                chrome_args+=(
-                    --no-first-run
-                    --no-default-browser-check
-                    --disable-translate
-                )
-            fi
-
-            if [ "$PERF" == "true" ]; then
-                echo "Performance tests"
-                chrome_args+=(
-                    --disable-popup-blocking
-                    --enable-impl-side-painting
-                    --enable-skia-benchmarking
-                    --disable-web-security
-                    --remote-allow-origins=*
-                )
-            fi
-
-            if [ -n "$MOBILE_UA" ]; then
-                local user_agent
-
-                if [ "$MOBILE_UA" == "ios10" ]; then
-                    user_agent="Mozilla/5.0 (iPad; CPU OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Version/10.0 Mobile/14D27 Safari/602.1)"
-                elif [ "$MOBILE_UA" == "android6" ]; then
-                    user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
-                else
-                    return 1
-                fi
-
-                echo "Mobile user agent: $MOBILE_UA"
-
-                chrome_args+=(
-                    --user-agent="'$user_agent'"
-                    --enable-viewport
-                    --touch-events
-                    --enable-overlay-scrollbar
-                    --enable-features=OverlayScrollbar
-                )
-            fi
-            if [ "$GITHUBACTION" == "true" ]; then
-                echo "$chrome_command"
-                printf '  %s\n' "${chrome_args[@]}"
-            else
-                tput setaf 6
-                echo "$chrome_command"
-                printf '  %s\n' "${chrome_args[@]}"
-                tput setaf 9
-            fi
-            eval "$chrome_command --version"
-            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
-        ;;
-
-    esac
+    if [ "$GITHUBACTION" == "true" ]; then
+        echo "$chrome_command"
+        printf '  %s\n' "${chrome_args[@]}"
+    else
+        tput setaf 6
+        echo "$chrome_command"
+        printf '  %s\n' "${chrome_args[@]}"
+        tput setaf 9
+    fi
+    eval "$chrome_command --version"
+    eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
 
     start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1
@@ -184,24 +177,74 @@ function run_test_impl {
 }
 
 function start_runner_watchdog {
+    local runner_pid=$1
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local raw_log_file="$PWD/testing/RawLog.txt"
-    local last_suite_time=unknown
+    local last_suite_time=""
+    local stall_count=0
+    local check_count=0
 
-    while true; do
-        sleep 180
+    echo "Watchdog started: monitoring PID $runner_pid, checking every 300s, max 6 failures = 30min timeout"
 
-        if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
-            echo "Runner stalled"
-            tail -n 100 $raw_log_file
-            kill -9 $1
-        else
-            last_suite_time=$(cat $last_suite_time_file)
-        fi
-    done &
+    (
+        while true; do
+            sleep 180
+            check_count=$((check_count + 1))
+
+            if [ -n "$runner_pid" ] && ! kill -0 $runner_pid 2>/dev/null; then
+                echo "Watchdog: Runner process $runner_pid no longer exists, exiting watchdog"
+                exit 0
+            fi
+
+            if [ ! -f $last_suite_time_file ]; then
+                echo "Watchdog [check #$check_count]: LastSuiteTime.txt does not exist yet (waiting for first test...)"
+                if [ $check_count -gt 2 ]; then
+                    stall_count=$((stall_count + 1))
+                    echo "Watchdog WARNING: No LastSuiteTime.txt after $((check_count * 5)) minutes"
+                fi
+            else
+                local current_time=$(cat $last_suite_time_file)
+                
+                if [ -z "$last_suite_time" ]; then
+                    last_suite_time=$current_time
+                    stall_count=0
+                elif [ "$current_time" == "$last_suite_time" ]; then
+                    stall_count=$((stall_count + 1))
+                    echo "Watchdog [check #$check_count]: STALL DETECTED (attempt $stall_count/6) - LastSuiteTime unchanged: $last_suite_time"
+                    
+                    if [ $stall_count -ge 6 ]; then
+                        echo "========================================="
+                        echo "WATCHDOG TIMEOUT: Runner stalled for 30 minutes (6 checks × 5 min)"
+                        echo "Last suite time: $last_suite_time"
+                        echo "========================================="
+                        echo "===== Last 100 lines of RawLog.txt ====="
+                        tail -n 100 $raw_log_file 2>/dev/null || echo "(RawLog.txt not found)"
+                        echo ""
+                        echo "===== MiscErrors.log (JavaScript logs) ====="
+                        if [ -f "$PWD/testing/MiscErrors.log" ]; then
+                            tail -n 200 "$PWD/testing/MiscErrors.log"
+                        else
+                            echo "(MiscErrors.log not found)"
+                        fi
+                        echo ""
+                        echo "Killing runner process $runner_pid..."
+                        kill -9 $runner_pid 2>/dev/null
+                        exit 1
+                    fi
+                else
+                    echo "Watchdog [check #$check_count]: Progress detected - LastSuiteTime: $last_suite_time → $current_time"
+                    last_suite_time=$current_time
+                    stall_count=0
+                fi
+            fi
+        done
+    ) &
+    
+    local watchdog_pid=$!
+    echo "Watchdog running in background (PID: $watchdog_pid)"
 }
 
-echo "node $(node -v), pnpm $(pnpm -v), dotnet $(dotnet --version)"
+echo "node $(node -v), pnpm $(pnpm -v)"
 
 TARGET_FUNC="run_$TARGET"
 

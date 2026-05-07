@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import devices from '__internal/core/m_devices';
 import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
@@ -19,7 +20,8 @@ import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 import messageLocalization from 'common/core/localization/message';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../helpers/device.js';
+
+import 'generic_light.css!';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -2807,10 +2809,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
             this.clock.tick(10);
             $(grid.getCellElement(0, 1)).trigger('dxclick');
             this.clock.tick(10);
-            const callCount = action === 'close edit cell' ? 3 : 4;
 
             // assert
-            assert.equal(validationCallback.callCount, callCount, 'validation callback call count');
+            assert.equal(validationCallback.callCount, 3, 'validation callback call count');
         });
     });
 
@@ -3317,57 +3318,6 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // assert
             assert.strictEqual(insertSpy.callCount, 1, 'insert is called after the last click');
             assert.strictEqual(insertSpy.args[0][0].field2, true, 'insert is called with valid value');
-        });
-    });
-
-    ['Batch', 'Cell'].forEach((editMode) => {
-        QUnit.testInActiveWindow(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, function(assert) {
-            if(shouldSkipOnDesktop(assert)) {
-                return;
-            }
-
-            const data = [
-                { id: 1, field1: 'test', field2: true }
-            ];
-            const dataGrid = createDataGrid({
-                dataSource: data,
-                keyExpr: 'id',
-                columns: ['field1', 'field2'],
-                editing: {
-                    mode: editMode.toLowerCase(),
-                    allowUpdating: true
-                }
-            });
-            this.clock.tick(10);
-            dataGrid.editCell(0, 0);
-            this.clock.tick(10);
-
-            // act
-            const $firstCell = $(dataGrid.getCellElement(0, 0));
-            const $firstInput = $firstCell.find('input.dx-texteditor-input');
-            $firstInput.focus();
-            this.clock.tick(10);
-
-            // assert
-            assert.ok($firstCell.hasClass('dx-focused'));
-            assert.ok($firstInput.is(':focus'), 'input is focused');
-
-            // act
-            // mock for real blur
-            $firstInput.on('blur', function(e) {
-                $(e.target).trigger('change');
-            });
-            $firstInput.val('123');
-            let $secondCell = $(dataGrid.getCellElement(0, 1));
-            $secondCell.find('.dx-checkbox').trigger(pointerEvents.down);
-            this.clock.tick(10);
-            $secondCell = $(dataGrid.getCellElement(0, 1));
-            $secondCell.find('.dx-checkbox').trigger('dxclick');
-            this.clock.tick(10);
-
-            // assert
-            assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'first cell value');
-            assert.strictEqual(dataGrid.cellValue(0, 1), false, 'second cell value');
         });
     });
 
@@ -4202,6 +4152,8 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
 QUnit.module('Validation with virtual scrolling and rendering', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.addHiddenColumn = () => {
             this.columns.push({
                 dataField: 'hiddenField',
@@ -4249,6 +4201,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     },
     afterEach: function() {
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -5269,10 +5222,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T553067
     QUnit.testInActiveWindow('Enter key on editor should prevent default behaviour', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
-
         // arrange
         const dataGrid = createDataGrid({
             dataSource: [{ name: 'name 1', value: 1 }, { name: 'name 2', value: 2 }],
@@ -5338,10 +5287,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced by noop (T819067)', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
-
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const dataGrid = createDataGrid({
@@ -5368,10 +5313,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Datebox changed value should be saved on enter key if useMaskBehaviour is true (T1070850)', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
-
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const dataGrid = createDataGrid({
@@ -5421,10 +5362,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
     ['date', 'datetime'].forEach(dataType => {
         [true, false].forEach(useMaskBehavior => {
             QUnit.testInActiveWindow(`Datebox editor's value should be selected from calendar by keyboard (useMaskBehavior = ${useMaskBehavior}, dataType = ${dataType})`, function(assert) {
-                if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-                    return;
-                }
-
                 // arrange
                 const rowsViewWrapper = dataGridWrapper.rowsView;
                 const dataGrid = createDataGrid({
@@ -5595,10 +5532,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Scroll positioned correct with fixed columns and editing', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
-
         // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -6624,7 +6557,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
     });
 
-    QUnit.skip('editRowKey in init configuration (editMode = popup)', function(assert) {
+    QUnit.test('editRowKey in init configuration (editMode = popup)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ id: 1 }, { id: 2 }],
@@ -6634,12 +6567,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 mode: 'popup',
                 editRowKey: 1
             },
-            loadingTimeout: null
         }).dxDataGrid('instance');
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
-        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'editing row');
         assert.ok($('.dx-datagrid-edit-popup').length, 'popup is shown');
         assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
     });

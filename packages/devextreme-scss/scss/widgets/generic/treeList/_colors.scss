@@ -12,16 +12,16 @@ $treelist-selection-spin-icon-color: null !default;
 
 @if $color == "carmine" {
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
-  $treelist-selection-spin-icon-color: lighten($base-icon-color, 100%) !default;
+  $treelist-selection-spin-icon-color: lighten($datagrid-spin-icon-color, 100%) !default;
 }
 
 @if $color == "contrast" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-inverted-text-color !default;
 }
 
 @if $color == "dark" {
-  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color!default;
   $treelist-selection-spin-icon-color: $treelist-spin-icon-color !default;
 }
 
@@ -46,7 +46,6 @@ $treelist-selection-spin-icon-color: null !default;
 }
 
 @if $color == "softblue" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-icon-color !default;
 }
-

@@ -1,5 +1,5 @@
 {
-    "constellation": "ui.htmlEditor",
+    "constellation": "ui.editors",
     "explicit": false,
     "runOnDevices": false
 }

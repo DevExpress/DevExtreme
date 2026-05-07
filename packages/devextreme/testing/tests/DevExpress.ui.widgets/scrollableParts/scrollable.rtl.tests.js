@@ -1,5 +1,4 @@
-import animationFrame from 'common/core/animation/frame';
-import 'generic_light.css!';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
@@ -33,14 +32,13 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
-        this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             callback();
-        };
+        });
     },
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
+        this.requestAnimationFrameStub.restore();
     }
 };
 

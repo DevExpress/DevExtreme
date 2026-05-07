@@ -1,7 +1,7 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Week view in adaptive mode`
   .page(url(__dirname, '../../container.html'));
@@ -73,8 +73,10 @@ const roughEqual = (actual: number, expected: number): boolean => {
   width: 640,
   windowWidth: 800,
   name: 'align by center in tablet',
-}].forEach((testCase) => {
-  safeSizeTest(`Mobile tooltip should be ${testCase.name} screen`, async (t) => {
+}].forEach(({
+  windowWidth, name, left, bottom, top, width,
+}) => {
+  test.meta({ runInTheme: Themes.genericLight, browserSize: [windowWidth, 700] })(`Mobile tooltip should be ${name} screen`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     await t
@@ -83,22 +85,22 @@ const roughEqual = (actual: number, expected: number): boolean => {
     const leftPosition = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('left');
     const bottomPosition = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('bottom');
     const topPosition = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('top');
-    const width = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('width');
+    const mobileElementWidth = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('width');
 
     await t
-      .expect(roughEqual(leftPosition, testCase.left))
+      .expect(roughEqual(leftPosition, left))
       .ok()
-      .expect(roughEqual(bottomPosition, testCase.bottom))
+      .expect(roughEqual(bottomPosition, bottom))
       .ok()
-      .expect(roughEqual(topPosition, testCase.top))
+      .expect(roughEqual(topPosition, top))
       .ok()
-      .expect(roughEqual(width, testCase.width))
+      .expect(roughEqual(mobileElementWidth, width))
       .ok();
-  }, [testCase.windowWidth, 700])
+  })
     .before(async () => createScheduler(sampleData, '80%'));
 });
 
-safeSizeTest('Compact appointment should be center by vertical alignment', async (t) => {
+test.meta({ runInTheme: Themes.genericLight, browserSize: [350, 600] })('Compact appointment should be center by vertical alignment', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -127,10 +129,9 @@ safeSizeTest('Compact appointment should be center by vertical alignment', async
     .ok()
     .expect(roughEqual(thirdAppointmentLeft, 177))
     .ok();
-}, [350, 600])
-  .before(async () => createScheduler(sampleDataNotRoundedMinutes));
+}).before(async () => createScheduler(sampleDataNotRoundedMinutes));
 
-safeSizeTest('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
+test.meta({ runInTheme: Themes.genericLight, browserSize: [350, 600] })('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -174,5 +175,4 @@ safeSizeTest('With a large browser width, should be visible common appointment i
     .ok()
     .expect(roughEqual(secondAppointmentLeftAfterResize, 236.5))
     .ok();
-}, [350, 600])
-  .before(async () => createScheduler(sampleData));
+}).before(async () => createScheduler(sampleData));

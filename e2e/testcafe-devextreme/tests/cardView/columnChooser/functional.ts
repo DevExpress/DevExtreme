@@ -1,8 +1,9 @@
 import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { getCardFieldCaptions } from '../helpers/cardUtils';
 
-fixture.disablePageReloads`CardView - ColumnChooser.Functional`
+fixture`CardView - ColumnChooser.Functional`
   .page(url(__dirname, '../../container.html'));
 
 function testsFactory(testModel: {
@@ -145,3 +146,104 @@ testsFactory({
     ).eql('A');
   },
 });
+
+test('ColumnChooser should receive and render custom texts', async (t) => {
+  const cardView = new CardView('#container');
+
+  const columnChooserBtn = cardView.getColumnChooserButton();
+  await t.click(columnChooserBtn);
+  const columnChooser = cardView.getColumnChooser();
+  const title = columnChooser.getTitle();
+  const emptyMessage = columnChooser.getEmptyMessage();
+  const titleText = await title.innerText;
+  const emptyMessageText = await emptyMessage.innerText;
+
+  await t.expect(titleText).eql('customTitle');
+  await t.expect(emptyMessageText).eql('customEmptyText');
+}).before(async (t) => {
+  await t.eval(() => {
+    (window as any).DevExpress.localization.loadMessages({
+      en: {
+        'dxDataGrid-columnChooserTitle': 'customTitle',
+        'dxDataGrid-columnChooserEmptyText': 'customEmptyText',
+      },
+    });
+  });
+
+  await createWidget('dxCardView', {
+    dataSource: [],
+    keyExpr: 'ID',
+    cardsPerRow: 'auto',
+    cardMinWidth: 300,
+    columnChooser: {
+      enabled: true,
+      mode: 'dragAndDrop',
+      height: '340px',
+    },
+    columns: [],
+  });
+}).after(async (t) => {
+  await t.eval(() => location.reload());
+});
+
+test('cards should update when column is hidden via column chooser (select mode) (T1324855)', async (t) => {
+  const cardView = new CardView('#container');
+
+  const initialCaptions = await getCardFieldCaptions(t, cardView, 3);
+  await t.expect(initialCaptions).eql(['A', 'B', 'C']);
+
+  await cardView.apiShowColumnChooser();
+
+  await t.click(cardView.getColumnChooser().getCheckbox(0));
+
+  const captionsAfterHide = await getCardFieldCaptions(t, cardView, 2);
+  await t.expect(captionsAfterHide).eql(['B', 'C']);
+
+  await t.click(cardView.getColumnChooser().getCheckbox(0));
+
+  const captionsAfterShow = await getCardFieldCaptions(t, cardView, 3);
+  await t.expect(captionsAfterShow).eql(['A', 'B', 'C']);
+}).before(async () => createWidget('dxCardView', {
+  dataSource: [
+    { a: 1, b: 2, c: 3 },
+  ],
+  columns: ['a', 'b', 'c'],
+  columnChooser: {
+    enabled: true,
+    mode: 'select',
+  },
+}));
+
+test('cards should update when column is hidden via column chooser (dragAndDrop mode) (T1324855)', async (t) => {
+  const cardView = new CardView('#container');
+
+  const initialCaptions = await getCardFieldCaptions(t, cardView, 3);
+  await t.expect(initialCaptions).eql(['A', 'B', 'C']);
+
+  await cardView.apiShowColumnChooser();
+
+  await t.dragToElement(
+    cardView.getHeaderPanel().getHeaderItem(0).element,
+    cardView.getColumnChooser().content,
+  );
+
+  const captionsAfterHide = await getCardFieldCaptions(t, cardView, 2);
+  await t.expect(captionsAfterHide).eql(['B', 'C']);
+
+  await t.dragToElement(
+    cardView.getColumnChooser().getColumn(0),
+    cardView.getHeaderPanel().element,
+  );
+
+  const captionsAfterShow = await getCardFieldCaptions(t, cardView, 3);
+  await t.expect(captionsAfterShow).eql(['A', 'B', 'C']);
+}).before(async () => createWidget('dxCardView', {
+  dataSource: [
+    { a: 1, b: 2, c: 3 },
+  ],
+  columns: ['a', 'b', 'c'],
+  columnChooser: {
+    enabled: true,
+    mode: 'dragAndDrop',
+  },
+}));

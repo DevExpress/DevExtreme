@@ -17,6 +17,8 @@ import dragEvents from 'common/core/events/drag';
 import pointerMock from '../../helpers/pointerMock.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
+import 'fluent_blue_light.css!';
+
 const { module, test, testStart } = QUnit;
 
 testStart(() => initTestMarkup());
@@ -261,7 +263,7 @@ module('Events', {
                 scheduler.instance.showAppointmentPopup(appointments[0]);
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const appointmentForm = scheduler.instance._appointmentPopup.form;
+                const appointmentForm = scheduler.instance.appointmentPopup.form;
 
                 assert.deepEqual(appointmentForm.formData.startDate, new Date(2015, 1, 9, 13), 'Form data is correct');
             } finally {

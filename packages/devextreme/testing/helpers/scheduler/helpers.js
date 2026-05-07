@@ -5,7 +5,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';
 import Color from 'color';
 
-import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 import 'ui/drop_down_button';
 
@@ -592,11 +591,11 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
             getCancelButton: () => this.appointmentPopup.getPopup().find('.dx-popup-cancel'),
             clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger('dxclick'),
-            saveAppointmentData: () => this.instance._appointmentPopup.saveEditDataAsync.call(this.instance._appointmentPopup),
+            saveAppointmentData: () => this.instance.appointmentPopup.saveEditDataAsync.call(this.instance.appointmentPopup),
 
             hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0,
 
-            getInstance: () => this.instance._appointmentPopup
+            getInstance: () => this.instance.appointmentPopup
         };
 
         this.appointmentForm = {

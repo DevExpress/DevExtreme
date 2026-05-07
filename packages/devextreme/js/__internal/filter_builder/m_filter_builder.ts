@@ -13,7 +13,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
 import Widget from '@js/ui/widget/ui.widget';
-import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
 import {
   addItem, convertToInnerStructure,
@@ -608,7 +608,12 @@ class FilterBuilder extends Widget<any> {
 
   _getGroupOperations(criteria) {
     let groupOperations = this.option('groupOperations');
-    const groupOperationDescriptions = this.option('groupOperationDescriptions');
+    const groupOperationDescriptions = {
+      and: this.option('groupOperationDescriptions.and') ?? messageLocalization.format('dxFilterBuilder-and'),
+      or: this.option('groupOperationDescriptions.or') ?? messageLocalization.format('dxFilterBuilder-or'),
+      notAnd: this.option('groupOperationDescriptions.notAnd') ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+      notOr: this.option('groupOperationDescriptions.notOr') ?? messageLocalization.format('dxFilterBuilder-notOr'),
+    };
 
     if (!groupOperations || !groupOperations.length) {
       groupOperations = [getGroupValue(criteria).replace('!', 'not')];
@@ -893,7 +898,8 @@ class FilterBuilder extends Widget<any> {
       visible: true,
       focusStateEnabled: false,
       preventScrollEvents: false,
-      container: $popup,
+      hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+      _hideOnParentScrollTarget: $popup,
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,
       shading: false,
@@ -920,6 +926,10 @@ class FilterBuilder extends Widget<any> {
 
     const treeViewNode = treeViewPopup?.find?.(`.${TREEVIEW_NODE_CONTAINER}`);
     treeViewNode?.attr('role', 'presentation');
+  }
+
+  addWidgetPrefix(className: string): string {
+    return `${FILTER_BUILDER_CLASS}-${className}`;
   }
 }
 

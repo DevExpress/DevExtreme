@@ -6,7 +6,7 @@ import {
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -55,7 +55,7 @@ module('Integration: Appointment tooltip', {
                 height: 600
             });
 
-            const getAppointmentDisabled = sinon.spy(scheduler.instance._appointmentTooltip._options, 'getAppointmentDisabled');
+            const getAppointmentDisabled = sinon.spy(scheduler.instance.appointmentTooltip._options, 'getAppointmentDisabled');
 
             const clock = sinon.useFakeTimers();
             await scheduler.appointments.click(0, clock);

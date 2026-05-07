@@ -8,7 +8,7 @@ $(() => {
       sort: 'date',
       paginate: false,
     }),
-    title: 'Temperature in Toronto (2017)',
+    title: 'Temperature in Toronto (2025)',
     zoomAndPan: {
       argumentAxis: 'pan',
     },
@@ -17,9 +17,9 @@ $(() => {
     },
     argumentAxis: {
       argumentType: 'datetime',
-      wholeRange: [new Date(2017, 0, 1), new Date(2017, 11, 31)],
+      wholeRange: [new Date(2025, 0, 1), new Date(2025, 11, 31)],
       visualRange: {
-        startValue: new Date(2017, 3, 1),
+        startValue: new Date(2025, 3, 1),
         length: {
           weeks: 2,
         },
@@ -79,17 +79,12 @@ $(() => {
 
   function uploadDataByVisualRange(visualRange, component) {
     const dataSource = component.getDataSource();
-    const storage = dataSource.items();
     const ajaxArgs = {
       startVisible: getDateString(visualRange.startValue),
       endVisible: getDateString(visualRange.endValue),
-      startBound: getDateString(storage.length ? storage[0].date : null),
-      endBound: getDateString(storage.length
-        ? storage[storage.length - 1].date : null),
     };
 
-    if (ajaxArgs.startVisible !== ajaxArgs.startBound
-            && ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
+    if (!packetsLock) {
       packetsLock += 1;
       component.showLoadingIndicator();
       getDataFrame(ajaxArgs)
@@ -115,7 +110,7 @@ $(() => {
   function getDataFrame(args) {
     const deferred = $.Deferred();
     $.ajax({
-      url: 'https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData',
+      url: 'https://js.devexpress.com/Demos/NetCore/api/TemperatureData',
       dataType: 'json',
       data: args,
       success(result) {

@@ -6,7 +6,7 @@ import NumberBox from 'ui/number_box';
 import RadioGroup from 'ui/radio_group';
 import ButtonGroup from 'ui/button_group';
 import DateBox from 'ui/date_box';
-import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
+import { getAsciiStringByDate, getDateByAsciiString } from '__internal/scheduler/recurrence/base';
 import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
 import dateLocalization from 'common/core/localization/date';
 
@@ -332,7 +332,7 @@ module('Repeat-end editor', () => {
         date = new Date(date.getTime() - 1);
 
         getRepeatEndEditor(instance).option('value', 'until');
-        assert.equal(instance.option('value').substring(0, 26), ('FREQ=WEEKLY;UNTIL=' + getRecurrenceProcessor().getAsciiStringByDate(date)).substring(0, 26), 'Recurrence editor have right value');
+        assert.equal(instance.option('value').substring(0, 26), ('FREQ=WEEKLY;UNTIL=' + getAsciiStringByDate(date)).substring(0, 26), 'Recurrence editor have right value');
     });
 
     test('Recurrence repeat-count editor should be rendered with right defaults', async function(assert) {
@@ -374,7 +374,7 @@ module('Repeat-end editor', () => {
 
         assert.equal(untilDate.option('type'), 'date', 'dateBox has right type');
         assert.deepEqual(untilDate.option('calendarOptions'), { firstDayOfWeek: 2 }, 'dateBox has right calendarOptions');
-        assert.deepEqual(untilDate.option('value'), getRecurrenceProcessor().getDateByAsciiString('20151007'), 'dateBox has right value');
+        assert.deepEqual(untilDate.option('value'), getDateByAsciiString('20151007'), 'dateBox has right value');
     });
 
     test('Recurrence repeat-until editor should process rules correctly', async function(assert) {
@@ -385,7 +385,7 @@ module('Repeat-end editor', () => {
             instance.option('value', recurrenceString);
 
             const ruleParts = recurrenceString.split(';');
-            assert.deepEqual(untilDate.option('value'), getRecurrenceProcessor().getDateByAsciiString(ruleParts[1].split('=')[1]), 'value of until-date editor is correct');
+            assert.deepEqual(untilDate.option('value'), getDateByAsciiString(ruleParts[1].split('=')[1]), 'value of until-date editor is correct');
         });
     });
 
@@ -400,7 +400,7 @@ module('Repeat-end editor', () => {
             date.setDate(date.getDate() + 1);
             date = new Date(date.getTime() - 1);
 
-            assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${getRecurrenceProcessor().getAsciiStringByDate(date)}`, 'Recurrence editor has right value');
+            assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${getAsciiStringByDate(date)}`, 'Recurrence editor has right value');
         });
     });
 
@@ -482,7 +482,7 @@ module('Interval editor', () => {
         assert.equal(getIntervalEditor(instance).option('useLargeSpinButtons'), false, 'Interval editor has right useLargeSpinButtons');
         assert.equal(getIntervalEditor(instance).option('min'), 1, 'Interval editor has right min value');
         assert.equal(getIntervalEditor(instance).option('value'), 1, 'Interval editor hase right value');
-        assert.equal(getIntervalEditor(instance).option('width'), 90, 'Interval editor has right width');
+        assert.equal(getIntervalEditor(instance).option('width'), 150, 'Interval editor has right width');
     });
 
     test('Interval editor should have right css class', async function(assert) {

@@ -1,8 +1,10 @@
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import gridCore from '../m_core';
+import type { GroupInfoData } from './types';
 
 export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
   const groups = normalizeSortingInfo(storeLoadOptions.group);
@@ -205,7 +207,7 @@ export class GroupingHelper {
     groupsInfo.sort((a, b) => a.offset - b.offset);
   }
 
-  public findGroupInfo(path) {
+  public findGroupInfo(path): GroupInfoData | undefined {
     const that = this;
     let groupInfo;
     let groupsInfo = that._groupsInfo;
@@ -262,7 +264,7 @@ export class GroupingHelper {
     that._group = storeLoadOptions.group;
 
     for (let groupIndex = 0; groupIndex < groupsCount; groupIndex++) {
-      if (oldGroups[groupIndex].selector !== groups[groupIndex].selector) {
+      if (!gridCoreUtils.isEqualSelectors(oldGroups[groupIndex].selector, groups[groupIndex].selector)) {
         groupsCount = groupIndex;
         break;
       }

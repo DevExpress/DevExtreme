@@ -6,10 +6,11 @@ import type { RefObject } from '@ts/core/r1/types';
 import { Widget } from '@ts/core/r1/widget';
 import { createRef as infernoCreateRef } from 'inferno';
 
-import { registerKeyboardAction } from '../../ui/shared/accessibility';
+import messageLocalization from '../../common/core/localization/message';
 import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
 import { combineClasses } from '../core/r1/utils/render_utils';
+import { registerKeyboardAction } from '../ui/shared/accessibility';
 import {
   LIGHT_MODE_CLASS,
   PAGER_CLASS,
@@ -159,10 +160,24 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   }
 
   getPagesContainerVisibility(): 'hidden' | undefined {
-    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
-      return 'hidden';
-    }
-    return undefined;
+    const {
+      pagesNavigatorVisible,
+      pageCount,
+      hasKnownLastPage,
+      showInfo,
+      showNavigationButtons,
+      showPageSizeSelector,
+    } = this.props;
+
+    const shouldHideBasedOnPageCount = pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage;
+
+    const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons)
+    || showPageSizeSelector === true;
+
+    const shouldHide = shouldHideBasedOnPageCount && !hasExplicitVisibleComponents;
+    const result = shouldHide ? 'hidden' : undefined;
+
+    return result;
   }
 
   getIsLargeDisplayMode(): boolean {
@@ -187,9 +202,10 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   }
 
   getAria(): Record<string, string> {
+    const label = this.props.label ?? messageLocalization.format('dxPagination-ariaLabel');
     return {
       role: 'navigation',
-      label: this.props.label ?? '',
+      label,
     };
   }
 

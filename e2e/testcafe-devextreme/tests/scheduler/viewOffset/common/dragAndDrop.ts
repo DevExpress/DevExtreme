@@ -1,8 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Drag-n-drop appointments`
   .page(url(__dirname, '../../../container.html'));
@@ -89,13 +90,12 @@ const getScreenshotName = (
 
       const { x, y } = getDragCoordinatesByView(viewType);
       await t.drag(appointment.element, x, y);
-      await takeScreenshot(
-        getScreenshotName(
-          viewType,
-          offset,
-          isAllDay,
-        ),
-        scheduler.workSpace,
+
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        getScreenshotName(viewType, offset, isAllDay),
+        { element: scheduler.workSpace },
       );
 
       await t.expect(compareResults.isValid())
@@ -110,9 +110,6 @@ const getScreenshotName = (
         currentView: views[0].type,
         offset,
       });
-    })
-      .after(async () => {
-        await removeStylesheetRulesFromPage();
-      });
+    });
   });
 });

@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { appendElementTo } from '../../../../helpers/domUtils';
 
-fixture.disablePageReloads`Appointment (T1080232)`
+fixture`Appointment (T1080232)`
   .page(url(__dirname, '../../../container.html'));
 
 test('it should correctly drag external item to the appointment after drag appointment', async (t) => {
@@ -17,7 +17,7 @@ test('it should correctly drag external item to the appointment after drag appoi
   await t
     .dragToElement(appt01.element, cell01, { speed: 0.5 })
     .expect((await appt01.element.boundingClientRect).top)
-    .eql(208)
+    .eql(183)
     .dragToElement(dragItem, appt02.element, { speed: 0.5 })
     .expect(appt02.element.find('.dx-item-content').getAttribute('data-status'))
     .eql('Added');

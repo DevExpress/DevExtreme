@@ -67,7 +67,7 @@ QUnit.module('DateTime indicator on Day View', () => {
 
     QUnit.test('Indication should be updated by some timer', async function(assert) {
         const instance = createInstance({});
-        const renderIndicatorStub = sinon.stub(instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(instance, 'renderDateTimeIndication');
 
         instance.option({
             indicatorUpdateInterval: 10
@@ -82,7 +82,7 @@ QUnit.module('DateTime indicator on Day View', () => {
     QUnit.test('Indication should not be updated by some timer if indicatorUpdateInterval = 0', async function(assert) {
         const instance = createInstance({});
 
-        const renderIndicatorStub = sinon.stub(instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(instance, 'renderDateTimeIndication');
 
         instance.option({
             indicatorUpdateInterval: 0
@@ -95,7 +95,7 @@ QUnit.module('DateTime indicator on Day View', () => {
     QUnit.test('Indication should be updated on dimensionChanged', async function(assert) {
         const instance = createInstance({});
 
-        const renderIndicatorStub = sinon.stub(instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(instance, 'renderDateTimeIndication');
 
         instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45)
@@ -151,7 +151,7 @@ QUnit.module('DateTime indicator on Day View', () => {
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, instance.getRoundedCellWidth(1));
+        assert.equal($indicators.eq(1).position().left, instance.getCellWidth());
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
@@ -174,7 +174,7 @@ QUnit.module('DateTime indicator on Day View', () => {
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, instance.getRoundedCellWidth(1));
+        assert.equal($indicators.eq(1).position().left, instance.getCellWidth());
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
@@ -357,7 +357,7 @@ QUnit.module('DateTime indicator on Day View', () => {
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         const $cell = instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
         const cellHeight = $cell.get(0).getBoundingClientRect().height;
-        const cellWidth = instance.getRoundedCellWidth(1);
+        const cellWidth = instance.getCellWidth();
 
         assert.roughEqual(getOuterHeight($shader), 9.5 * cellHeight, 1, 'Shader has correct height');
         assert.roughEqual(getOuterWidth($shader), 9 * cellWidth, 5, 'Shader has correct width');
@@ -574,7 +574,7 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', () => {
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         const $cell = instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
         const cellHeight = getOuterHeight($cell);
-        const cellWidth = instance.getRoundedCellWidth(0);
+        const cellWidth = instance.getCellWidth();
 
         assert.roughEqual(getOuterHeight($shader), 10.5 * cellHeight, 1, 'Shader has correct height');
         assert.roughEqual(getOuterWidth($shader), 3 * cellWidth + 100, 5, 'Shader has correct width');

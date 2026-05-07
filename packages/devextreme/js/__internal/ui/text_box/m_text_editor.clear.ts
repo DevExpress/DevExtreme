@@ -21,7 +21,9 @@ export default class ClearButton extends TextEditorButton {
   } {
     const $element = $('<span>')
       .addClass(TEXTEDITOR_CLEAR_BUTTON_CLASS)
-      .append($('<span>').addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS));
+      .append($('<span>')
+        .addClass(TEXTEDITOR_ICON_CLASS)
+        .addClass(TEXTEDITOR_CLEAR_ICON_CLASS));
 
     this._addToContainer($element);
     this.update(true);
@@ -35,30 +37,27 @@ export default class ClearButton extends TextEditorButton {
   _isVisible(): boolean {
     const { editor } = this;
 
-    return editor._isClearButtonVisible();
+    return !!editor?._isClearButtonVisible();
   }
 
-  _attachEvents(instance, $button: dxElementWrapper): void {
-    const { editor } = this;
-    const editorName = editor.NAME;
+  _attachEvents(instance: dxElementWrapper, $button: dxElementWrapper): void {
+    const editorName = this.editor?.NAME ?? '';
 
     eventsEngine.on(
       $button,
-      // @ts-expect-error ts-error
       addNamespace(pointerDown, editorName),
       (e) => {
         e.preventDefault();
         if (e.pointerType !== 'mouse') {
-          editor._clearValueHandler(e);
+          this.editor?._clearValueHandler(e);
         }
       },
     );
 
     eventsEngine.on(
       $button,
-      // @ts-expect-error ts-error
       addNamespace(click, editorName),
-      (e) => editor._clearValueHandler(e),
+      (e) => this.editor?._clearValueHandler(e),
     );
   }
 
@@ -75,13 +74,19 @@ export default class ClearButton extends TextEditorButton {
     }
 
     const { editor, instance } = this;
+
+    if (!editor) {
+      return;
+    }
+
     const $editor = editor.$element();
     const isVisible = this._isVisible();
 
     if (instance) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error instance is dxElementWrapper
       instance.toggleClass(STATE_INVISIBLE_CLASS, !isVisible);
     }
+
     this._legacyRender($editor, isVisible);
   }
 }

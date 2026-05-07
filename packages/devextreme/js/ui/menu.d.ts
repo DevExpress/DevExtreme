@@ -10,7 +10,8 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+    PointerInteractionEvent,
+} from '../events';
 
 import {
     CollectionWidgetItem,
@@ -72,7 +73,7 @@ export type ItemClickEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, KeyboardE
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, PointerInteractionEvent> & ItemInfo<Item>;
 
 /**
  * @docid _ui_menu_ItemRenderedEvent

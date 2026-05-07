@@ -15,12 +15,12 @@ const { testStart } = QUnit;
 testStart(() => initTestMarkup());
 
 const mockWorkSpaceRendering = function(schedulerInst, cellSize, bounds) {
-    const base = schedulerInst._renderWorkSpace;
+    const base = schedulerInst.renderWorkSpace;
     const getMaxAllowedPosition = (groupIndex) => {
         return bounds[groupIndex];
     };
 
-    sinon.stub(schedulerInst, '_renderWorkSpace').callsFake(function(groups) {
+    sinon.stub(schedulerInst, 'renderWorkSpace').callsFake(function(groups) {
         base.call(this, groups);
 
         sinon.stub(this._workSpace, 'getCellWidth').returns(cellSize);
@@ -564,11 +564,10 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 50, 2.001);
-    assert.roughEqual(translator.locate($appointments.eq(1)).left, 0, 1.001);
+    assert.roughEqual(translator.locate($appointments.eq(1)).left, 399, 1.001);
     assert.roughEqual(translator.locate($appointments.eq(2)).left, 0, 1.001);
-
-    assert.roughEqual(translator.locate($appointments.eq(3)).left, 399, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(4)).left, 349, 1.001);
+    assert.roughEqual(translator.locate($appointments.eq(3)).left, 349, 1.001);
+    assert.roughEqual(translator.locate($appointments.eq(4)).left, 0, 1.001);
     assert.roughEqual(translator.locate($appointments.eq(5)).left, 349, 1.001);
 
 });
@@ -614,13 +613,12 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
 
         const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-        assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 14, 2.001, 'The first head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 1.001, 'The first body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 19, 2.001, 'The first tail is OK');
-
-        assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 7, 1.001, 'The second head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 7, 1.001, 'The second body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 12, 2.001, 'The second tail is OK');
+        assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 7, 1.001, 'The second head is OK');
+        assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 2.001, 'The first head is OK');
+        assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 7, 1.001, 'The second body is OK');
+        assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 14, 1.001, 'The first body is OK');
+        assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 12, 2.001, 'The second tail is OK');
+        assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 19, 2.001, 'The first tail is OK');
 
     });
 });
@@ -654,15 +652,15 @@ QUnit.test('Multi-week grouped appointments should be painted correctly', async 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
     assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
-    assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
-    assert.equal(new Color($appointments.eq(2).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
+    assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
+    assert.equal(new Color($appointments.eq(2).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
 
-    assert.equal(new Color($appointments.eq(3).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
+    assert.equal(new Color($appointments.eq(3).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
     assert.equal(new Color($appointments.eq(4).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
-    assert.equal(new Color($appointments.eq(5).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
+    assert.equal(new Color($appointments.eq(5).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
 
-    assert.equal(new Color($appointments.eq(6).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
-    assert.equal(new Color($appointments.eq(7).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
+    assert.equal(new Color($appointments.eq(6).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
+    assert.equal(new Color($appointments.eq(7).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
     assert.equal(new Color($appointments.eq(8).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
 });
 

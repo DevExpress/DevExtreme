@@ -1,13 +1,8 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createSankey = common.createSankey;
-const layoutBuilder = common.layoutBuilder;
-const spiesLayoutBuilder = common.spiesLayoutBuilder;
-const environment = common.environment;
-const find = common.find;
-const rendererModule = require('viz/core/renderers/renderer');
-const paletteModule = require('viz/palette');
-const themeModule = require('viz/themes');
+import $ from 'jquery';
+import { testData, createSankey, layoutBuilder, spiesLayoutBuilder, environment, find } from './commonParts/common.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import paletteModule from '__internal/viz/paletteModule';
+import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -93,7 +88,6 @@ QUnit.test('Process values from dataSource with custom sourceField, targetField,
     assert.deepEqual(spiesLayoutBuilder.computeLayout.lastCall.args[0][1], ['B', 'C', 1]);
     assert.equal(spiesLayoutBuilder.computeLayout.lastCall.args[0].length, data.length);
 });
-
 
 QUnit.test('Trigger error on invalid source data', function(assert) {
     const invalidDataSets = [
@@ -205,7 +199,6 @@ QUnit.test('Number of cascades with simplest dataSource possible', function(asse
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].cascades.length, 2);
 });
 
-
 QUnit.test('Number of nodes with simplest dataSource possible', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
@@ -217,7 +210,6 @@ QUnit.test('Number of nodes with simplest dataSource possible', function(assert)
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].nodes.length, 2);
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].nodes[0].length, 1);
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].nodes[1].length, 1);
-
 });
 
 QUnit.test('Number of links with simplest dataSource possible', function(assert) {
@@ -234,7 +226,7 @@ QUnit.test('Number of links with simplest dataSource possible', function(assert)
 QUnit.test('Number of cascades with big dataSource', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
 
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].cascades.length, 4);
@@ -243,7 +235,7 @@ QUnit.test('Number of cascades with big dataSource', function(assert) {
 QUnit.test('Number of nodes with big dataSource', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
 
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].nodes.length, 4);
@@ -256,7 +248,7 @@ QUnit.test('Number of nodes with big dataSource', function(assert) {
 QUnit.test('Number of links with big dataSource', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
 
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links.length, 46);
@@ -281,7 +273,7 @@ QUnit.test('Node weights with simplest dataSource possible', function(assert) {
 QUnit.test('Node input weights with big dataSource', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].cascades[0]['Brazil'].inWeight, 0);
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].cascades[0]['Canada'].inWeight, 0);
@@ -307,7 +299,7 @@ QUnit.test('Node input weights with big dataSource', function(assert) {
 QUnit.test('Node output and max weights with big dataSource', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
 
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].cascades[0]['Brazil'].outWeight, 8);
@@ -362,7 +354,7 @@ QUnit.test('Links configuration with simplest dataSource possible', function(ass
 QUnit.test('Some links configuration with big dataSource', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[0]._from._name, 'Brazil');
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[0]._to._name, 'Portugal');
@@ -425,7 +417,7 @@ QUnit.module('Returning correct layout data', $.extend({}, environment, {
 QUnit.test('Returning all nodes in getAllNodes', function(assert) {
     const sankey = createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
     const nodes = sankey.getAllNodes();
 
@@ -435,7 +427,7 @@ QUnit.test('Returning all nodes in getAllNodes', function(assert) {
 QUnit.test('Returning all links data in getAllLinks', function(assert) {
     const sankey = createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.countriesData
+        dataSource: testData.countriesData
     });
     const links = sankey.getAllLinks();
 
@@ -445,12 +437,12 @@ QUnit.test('Returning all links data in getAllLinks', function(assert) {
 QUnit.test('Returning correct links[].connection data in getAllLinks', function(assert) {
     const sankey = createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.simpleData
+        dataSource: testData.simpleData
     });
     const links = sankey.getAllLinks();
 
-    assert.equal(links.length, common.testData.simpleData.length);
-    common.testData.simpleData.forEach(function(linkData) {
+    assert.equal(links.length, testData.simpleData.length);
+    testData.simpleData.forEach(function(linkData) {
         const output = find(links, function(i) {
             return i.connection.source === linkData.source && i.connection.target === linkData.target && i.connection.weight === linkData.weight;
         });
@@ -461,7 +453,7 @@ QUnit.test('Returning correct links[].connection data in getAllLinks', function(
 QUnit.test('Returning correct nodes[].linksIn and nodes[].linksOut data in getAllNodes', function(assert) {
     const sankey = createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.simpleData
+        dataSource: testData.simpleData
     });
     const nodes = sankey.getAllNodes();
     const expected = { 'A': [0, 1], 'B': [0, 2], 'C': [0, 1], 'M': [2, 1], Y: [3, 0] };
@@ -489,7 +481,7 @@ QUnit.module('Drawing', $.extend({}, environment, {
 QUnit.test('Draw Links', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.simpleData
+        dataSource: testData.simpleData
     });
 
     const links = this.links();
@@ -528,7 +520,7 @@ QUnit.test('Draw Links', function(assert) {
 QUnit.test('Draw Nodes', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        dataSource: common.testData.simpleData
+        dataSource: testData.simpleData
     });
 
     const nodes = this.nodes();
@@ -639,7 +631,7 @@ QUnit.test('Largest cascade occupies full chart height', function(assert) {
 
 QUnit.test('Default align option', function(assert) {
     const sankey = createSankey({
-        dataSource: common.testData.simpleData
+        dataSource: testData.simpleData
     });
     const size = sankey.getSize();
     const nodes = sankey.getAllNodes();
@@ -666,7 +658,7 @@ QUnit.test('Align option as <String>', function(assert) {
 
 QUnit.test('Align option as <Array>', function(assert) {
     const sankey = createSankey({
-        dataSource: common.testData.simpleData,
+        dataSource: testData.simpleData,
         alignment: ['top', 'top', 'top']
     });
     const nodes = sankey.getAllNodes();
@@ -675,7 +667,6 @@ QUnit.test('Align option as <Array>', function(assert) {
         const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.rect.y, 0, nodeName + ' aligned to top');
     });
-
 });
 
 QUnit.test('Default alignment value for cascade which is not mentioned in options.alignment', function(assert) {
@@ -808,7 +799,7 @@ QUnit.test('Align option updated as <String>', function(assert) {
 
 QUnit.test('Align option updated as <Array>', function(assert) {
     const sankey = createSankey({
-        dataSource: common.testData.simpleData,
+        dataSource: testData.simpleData,
         alignment: 'bottom'
     });
 
@@ -824,7 +815,7 @@ QUnit.test('Align option updated as <Array>', function(assert) {
 QUnit.test('Redrawn on nodes.padding option updated', function(assert) {
     const drawn = sinon.spy();
     const sankey = createSankey({
-        dataSource: common.testData.simpleData,
+        dataSource: testData.simpleData,
         onDrawn: drawn
     });
 
@@ -835,7 +826,6 @@ QUnit.test('Redrawn on nodes.padding option updated', function(assert) {
 });
 
 QUnit.test('layout.overlap utility method', function(assert) {
-
     assert.equal(layoutBuilder.overlap(
         { x: 10, y: 10, width: 10, height: 15 },
         { x: 50, y: 50, width: 20, height: 25 }
@@ -855,5 +845,4 @@ QUnit.test('layout.overlap utility method', function(assert) {
         { x: 10, y: 10, width: 20, height: 10 },
         { x: 10, y: 30, width: 10, height: 10 }
     ), false);
-
 });

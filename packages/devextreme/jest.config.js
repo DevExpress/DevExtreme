@@ -1,6 +1,6 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} **/
 module.exports = {
-    testEnvironment: 'jsdom',
+    testEnvironment: '<rootDir>/jsdom-with-timezone.js',
     roots: ['<rootDir>/js'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     moduleNameMapper: {

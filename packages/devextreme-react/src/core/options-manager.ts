@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { compareValues, getChanges } from './configuration/comparer';
 import { buildConfig, findValue, ValueType } from './configuration/tree';
 import { mergeNameParts, shallowEquals } from './configuration/utils';

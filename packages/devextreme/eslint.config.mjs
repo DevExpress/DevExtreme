@@ -12,6 +12,12 @@ import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
+import unicorn from 'eslint-plugin-unicorn';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import qunitConfig from 'eslint-config-devextreme/qunit';
+import customRules from './eslint_plugins/index.js';
+import { schedulerMemberAllowlistRegex } from './eslint-scheduler-allowlist.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,17 +42,19 @@ export default [
             'themebuilder-scss/src/data/metadata/*',
             'js/bundles/dx.custom.js',
             'testing/jest/utils/transformers/*',
+            'vite.config.ts',
             '**/ts/',
             'js/common/core/localization/cldr-data/*',
             'js/common/core/localization/default_messages.js',
-            'js/renovation/*',
         ],
     },
-    ...compat.extends('devextreme/spell-check'),
+    ...spellCheckConfig,
     {
         plugins: {
             'no-only-tests': noOnlyTests,
             i18n: i18N,
+            unicorn,
+            'devextreme-custom': customRules,
         },
         settings: {
             'import/resolver': {
@@ -170,7 +178,7 @@ export default [
             'import': importPlugin,
         }
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.ts?(x)'],
@@ -211,12 +219,16 @@ export default [
             '@typescript-eslint/ban-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
             '@typescript-eslint/no-throw-literal': 'off',
+            '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+            '@typescript-eslint/only-throw-error': 'warn',
+            '@typescript-eslint/prefer-optional-chain': 'warn',
+            'require-await': 'warn',
             '@typescript-eslint/switch-exhaustiveness-check': ['error', {
                 considerDefaultExhaustiveForUnions: true,
             }],
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.d.ts'],
@@ -250,13 +262,14 @@ export default [
             '@typescript-eslint/no-unsafe-function-type': 'off',
             '@typescript-eslint/no-wrapper-object-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
+            '@typescript-eslint/no-unused-vars': 'off',
             'i18n/no-russian-character': ['error', {
                 includeIdentifier: true,
             }],
         }
     },
     //  Rules for QUnit tests
-    ...compat.extends('devextreme/qunit').map(config => ({
+    ...qunitConfig.map(config => ({
         ...config,
         files: ['testing/tests/**/*.js', 'testing/helpers/**/*.js'],
     })),
@@ -518,6 +531,97 @@ export default [
             '@typescript-eslint/no-implied-eval': 'warn',
             '@typescript-eslint/ban-ts-comment': 'warn',
             '@typescript-eslint/prefer-for-of': 'warn',
+        },
+    },
+    // Rules for scheduler
+    {
+        files: ['js/__internal/scheduler/**/*.ts?(x)'],
+        languageOptions: {
+            parser: tsParser,
+            ecmaVersion: 5,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
+            },
+        },
+        rules: {
+            'no-implicit-coercion': ['error'],
+            'no-extra-boolean-cast': 'error',
+            'unicorn/filename-case': ['error', { case: 'snakeCase' }],
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    selector: ['variable', 'function', 'parameter'],
+                    format: null,
+                    leadingUnderscore: 'forbid',
+                    // allow only a single underscore identifier `_` to bypass this rule
+                    filter: {
+                        regex: '^_$',
+                        match: false,
+                    },
+                },
+                {
+                    selector: 'memberLike',
+                    format: null,
+                    leadingUnderscore: 'forbid',
+                    filter: {
+                        regex: schedulerMemberAllowlistRegex,
+                        match: false,
+                    },
+                },
+            ],
+            'devextreme-custom/no-deferred': 'error',
+            'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
+        },
+    },
+    // Temporarily allow underscore members in appointments/ (pending refactoring)
+    {
+        files: ['js/__internal/scheduler/appointments/**/*.ts?(x)'],
+        rules: {
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    selector: ['variable', 'function', 'parameter'],
+                    format: null,
+                    leadingUnderscore: 'forbid',
+                    filter: {
+                        regex: '^_$',
+                        match: false,
+                    },
+                },
+                {
+                    selector: 'memberLike',
+                    format: null,
+                    leadingUnderscore: 'allow',
+                },
+            ],
+        },
+    },
+    // Allow Deferred in m_* scheduler files only
+    {
+        files: ['js/__internal/scheduler/**/m_*.ts?(x)'],
+        rules: {
+            'devextreme-custom/no-deferred': 'off',
+        },
+    },
+    // Strict TypeScript rules for scheduler/header
+    {
+        files: ['js/__internal/scheduler/header/**/*.ts?(x)'],
+        languageOptions: {
+            parser: tsParser,
+            ecmaVersion: 5,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-explicit-any': 'error',
+            '@typescript-eslint/explicit-function-return-type': 'error',
+            '@typescript-eslint/no-unsafe-return': 'error',
+            '@typescript-eslint/explicit-module-boundary-types': 'error',
         },
     },
     // Rules for grid controls

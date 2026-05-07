@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -25,10 +24,13 @@ import { PositionConfig } from 'devextreme/common/core/animation';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoPopupOptions } from './base/popup-options';
-import { DxiToolbarItemComponent } from './toolbar-item-dxi';
 
+import {
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-popup',
@@ -89,6 +91,11 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
     ]
 })
 export class DxoPopupComponent extends DxoPopupOptions implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+    
 
     /**
     
@@ -122,18 +129,9 @@ export class DxoPopupComponent extends DxoPopupOptions implements OnDestroy, OnI
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },

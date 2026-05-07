@@ -276,7 +276,7 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(list.option('items'), items, 'deletion by keyboard is impossible if \'allowItemDeleting\' = false ');
 
         list.option('allowItemDeleting', true);
-        list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1));
+        list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1).get(0));
 
         keyboard.keyDown('del');
 
@@ -318,6 +318,62 @@ QUnit.module('keyboard navigation', {
 
         assert.deepEqual(list.option('items'), items, 'items were reordered');
     });
+
+    QUnit.test('shift+arrowUp on first item should not throw error (T1320189)', function(assert) {
+        const items = ['1', '2', '3'];
+
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            itemDragging: {
+                allowReordering: true
+            },
+            focusStateEnabled: true
+        });
+
+        const list = $list.dxList('instance');
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
+        const $firstItem = $list.find('.' + LIST_ITEM_CLASS).eq(0);
+        list.option('focusedElement', $firstItem.get(0));
+
+        let errorMessage = '';
+        try {
+            keyboard.keyDown('arrowUp', { shiftKey: true });
+        } catch(e) {
+            errorMessage = `error message: ${e.message}`;
+        }
+
+        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move first item up');
+    });
+
+    QUnit.test('shift+arrowDown on last item should not throw error (T1320189)', function(assert) {
+        const items = ['1', '2', '3'];
+
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            itemDragging: {
+                allowReordering: true
+            },
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
+        const $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
+        list.option('focusedElement', $lastItem.get(0));
+
+        let errorMessage = '';
+        try {
+            keyboard.keyDown('arrowDown', { shiftKey: true });
+        } catch(e) {
+            errorMessage = `error message: ${e.message}`;
+        }
+
+        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move last item down');
+    });
+
 
     QUnit.module('grouped', {
         beforeEach: function() {
@@ -388,6 +444,42 @@ QUnit.module('keyboard navigation', {
             this.keyboard.keyDown('arrowUp', { shiftKey: true });
 
             assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+        });
+
+        QUnit.test('shift+arrowUp should reorder items within second group', function(assert) {
+            const $secondGroupLastItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).eq(1)
+                .find(`.${LIST_ITEM_CLASS}`).last();
+
+            $secondGroupLastItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowUp', { shiftKey: true });
+
+            const expectedItems = [{
+                items: ['1-1', '1-2'],
+            }, {
+                items: ['2-2', '2-1'],
+            }];
+
+            assert.deepEqual(this.list.option('items'), expectedItems, 'items in second group were reordered');
+        });
+
+        QUnit.test('shift+arrowDown should reorder items within second group', function(assert) {
+            const $secondGroupFirstItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).eq(1)
+                .find(`.${LIST_ITEM_CLASS}`).first();
+
+            $secondGroupFirstItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowDown', { shiftKey: true });
+
+            const expectedItems = [{
+                items: ['1-1', '1-2'],
+            }, {
+                items: ['2-2', '2-1'],
+            }];
+
+            assert.deepEqual(this.list.option('items'), expectedItems, 'items in second group were reordered');
         });
 
         QUnit.test('shift+arrowDown should not move group header (T1281673)', function(assert) {
@@ -1422,7 +1514,8 @@ QUnit.module('onSelectionChanging', {
             assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
 
             const $firstItem = $list.find(`.${LIST_ITEM_CLASS}`);
-            assert.strictEqual($list.dxList('option', 'focusedElement'), $firstItem.get(0), 'focusedElement is updated correctly');
+            const focusedElement = $list.dxList('option', 'focusedElement');
+            assert.strictEqual($(focusedElement).get(0), $firstItem.get(0), 'focusedElement is updated correctly');
         });
 
         QUnit.test(`should be raised only once on radioButton click if selectByClick=${selectByClick} and selection is applied`, function(assert) {
@@ -1459,7 +1552,8 @@ QUnit.module('onSelectionChanging', {
             assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
 
             const $selectAllItem = $list.find(`.${LIST_SELECT_ALL_CLASS}`);
-            assert.strictEqual($list.dxList('option', 'focusedElement'), $selectAllItem.get(0), 'focusedElement is updated correctly');
+            const focusedElement = $list.dxList('option', 'focusedElement');
+            assert.strictEqual($(focusedElement).get(0), $selectAllItem.get(0), 'focusedElement is updated correctly');
         });
 
         QUnit.test(`should be raised only once on selectAll checkbox click if selectByClick=${selectByClick} and selection is cancelled`, function(assert) {

@@ -3,11 +3,12 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
 
-fixture`Accessibility bugs`
+fixture.disablePageReloads`Accessibility bugs`
   .page(url(__dirname, '../../../container.html'));
 
 test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if there is no data after filtering', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiFilter(['id', '=', '1']);
   await t
@@ -25,6 +26,7 @@ test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if the
 
 test('DataGrid - The \'aria-label\' attribute value is "Show filter options for column \'undefined\' for the header filter icon in grouped fields (T1205784)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .expect(dataGrid.getGroupPanel().getHeader(0).getFilterButton().getAttribute('aria-label'))
@@ -54,7 +56,7 @@ test('DataGrid - NVDA reads column information twice (T1286287)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const dataCell = dataGrid.getDataCell(1, 1).element;
 
-  await dataGrid.isReady();
+  await t.expect(dataGrid.isReady()).ok();
   await t
     .expect(dataCell.hasAttribute('aria-describedby'))
     .notOk();

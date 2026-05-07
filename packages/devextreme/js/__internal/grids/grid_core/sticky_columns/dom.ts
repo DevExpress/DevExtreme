@@ -29,10 +29,6 @@ const addStickyColumnClass = ($cell, fixedPosition, addWidgetPrefix): void => {
   }
 };
 
-const toggleFirstHeaderClass = ($cell, value, addWidgetPrefix): void => {
-  $cell.toggleClass(addWidgetPrefix(CLASSES.firstHeader), value);
-};
-
 const toggleColumnNoBorderClass = ($cell, value, addWidgetPrefix): void => {
   $cell.toggleClass(addWidgetPrefix(CLASSES.columnNoBorder), value);
 };
@@ -138,7 +134,6 @@ const getLastLeftFixedCell = (
   $container: dxElementWrapper,
   addWidgetPrefix,
 ): dxElementWrapper => {
-  // @ts-expect-error
   const rtlEnabled = $container.css('direction') === 'rtl';
   const processedCells = rtlEnabled ? $cells.toArray() : $cells.toArray().reverse();
   const lastLeftFixedCell = processedCells
@@ -153,7 +148,6 @@ const getFirstRightFixedCell = (
   $container: dxElementWrapper,
   addWidgetPrefix,
 ): dxElementWrapper => {
-  // @ts-expect-error
   const rtlEnabled = $container.css('direction') === 'rtl';
   const processedCells = rtlEnabled ? $cells.toArray().reverse() : $cells.toArray();
   const firstRightFixedCell = processedCells
@@ -196,6 +190,7 @@ const noNeedToCreateResizingPoint = (
     point,
     column,
     nextColumn,
+    cells,
   }: {
     point: {
       x: number;
@@ -206,6 +201,7 @@ const noNeedToCreateResizingPoint = (
     };
     column;
     nextColumn;
+    cells: dxElementWrapper | undefined;
   },
   addWidgetPrefix,
 ): boolean => {
@@ -214,7 +210,7 @@ const noNeedToCreateResizingPoint = (
   const offsetX = Math.round(point.x);
   const rtlEnabled = that.option('rtlEnabled') as boolean;
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
-  const $cells = $(that.getColumnElements() ?? '');
+  const $cells = $(cells ?? '');
   const $container = $(that.getContent());
   const isFixedPoint = column?.fixed && nextColumn?.fixed;
   const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
@@ -349,7 +345,6 @@ const getNextHeaderCell = (
 };
 
 export const GridCoreStickyColumnsDom = {
-  toggleFirstHeaderClass,
   toggleColumnNoBorderClass,
   addStickyColumnClass,
   addStickyColumnBorderLeftClass,

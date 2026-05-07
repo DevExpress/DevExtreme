@@ -2,7 +2,7 @@ import { getWidth, getHeight, getOuterWidth } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import positionUtils from 'common/core/animation/position';
 import { locate } from 'common/core/animation/translator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { Template } from 'core/templates/template';
@@ -16,10 +16,10 @@ import { hideCallback as hideTopOverlayCallback } from 'common/core/environment/
 import errors from 'core/errors';
 import uiErrors from 'ui/widget/ui.errors';
 import Overlay from 'ui/overlay/ui.overlay';
-import * as zIndex from '__internal/ui/overlay/m_z_index';
+import * as zIndex from '__internal/ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
-import selectors from 'ui/widget/selectors';
-import swatch from 'ui/widget/swatch_container';
+import selectors from '__internal/core/utils/m_selectors';
+import swatch from '__internal/core/utils/swatch_container';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
@@ -130,9 +130,7 @@ const IS_SAFARI = !!browser.safari;
 const VIEWPORT_CLASS = 'dx-viewport';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
-const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
-
-const toSelector = (cssClass) => `.${cssClass}`;
+const viewport = function() { return $(`.${VIEWPORT_CLASS}`); };
 
 const moduleConfig = {
     beforeEach: function() {
@@ -169,10 +167,10 @@ testModule('render', moduleConfig, () => {
         const $element = $('#overlay').dxOverlay();
         const instance = $element.dxOverlay('instance');
 
-        assert.ok($(toSelector(OVERLAY_CONTENT_CLASS)).length);
+        assert.ok($(`.${OVERLAY_CONTENT_CLASS}`).length);
 
         instance.dispose();
-        assert.ok(!$(toSelector(OVERLAY_CONTENT_CLASS)).length);
+        assert.ok(!$(`.${OVERLAY_CONTENT_CLASS}`).length);
     });
 
     test('overlay should use default template when element with data-options has not dxTemplate params (B253554)', function(assert) {
@@ -198,29 +196,10 @@ testModule('render', moduleConfig, () => {
 
                 onContentReady: function() {
                     resizeCallbacks.fire();
-                    getWidth($(toSelector(OVERLAY_CONTENT_CLASS)));
+                    getWidth($(`.${OVERLAY_CONTENT_CLASS}`));
                     resizeCallbacks.fire();
                 }
             }).remove();
-    });
-
-    test('overlay created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
-        const clock = sinon.useFakeTimers();
-        try {
-            const onShowingSpy = sinon.spy();
-
-            $('#overlay').dxOverlay({
-                templatesRenderAsynchronously: true,
-                visible: true,
-                onShowing: onShowingSpy
-            });
-
-            assert.strictEqual(onShowingSpy.called, false);
-            clock.tick(10);
-            assert.strictEqual(onShowingSpy.called, true);
-        } finally {
-            clock.restore();
-        }
     });
 
     test('overlay should be positioned correctly after async template is rendered (T1114344)', function(assert) {
@@ -290,7 +269,7 @@ testModule('render', moduleConfig, () => {
         const $content = instance.$content();
 
         assert.ok(!$content.is(':visible'));
-        assert.ok(!viewport().children(toSelector(OVERLAY_SHADER_CLASS)).is(':visible'));
+        assert.ok(!viewport().children(`.${OVERLAY_SHADER_CLASS}`).is(':visible'));
         assert.ok(getWidth($content) < getWidth($(window)));
         assert.ok(getHeight($content) < getHeight($(window)));
     });
@@ -1140,7 +1119,7 @@ testModule('position', moduleConfig, () => {
             position: { my: 'left top', at: 'center', of: viewport() }
         });
 
-        const position = viewport().find(toSelector(OVERLAY_CONTENT_CLASS)).position();
+        const position = viewport().find(`.${OVERLAY_CONTENT_CLASS}`).position();
 
         assert.notEqual(position.left, 0);
         assert.notEqual(position.top, 0);
@@ -1152,7 +1131,7 @@ testModule('position', moduleConfig, () => {
             visualContainer: viewPort()
         });
 
-        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $overlayWrapper = viewport().find(`.${OVERLAY_WRAPPER_CLASS}`);
         assert.strictEqual($overlayWrapper.css('position'), 'absolute');
     });
 
@@ -1162,7 +1141,7 @@ testModule('position', moduleConfig, () => {
             shading: false
         });
 
-        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $overlayWrapper = viewport().find(`.${OVERLAY_WRAPPER_CLASS}`);
         const wrapperStyle = getComputedStyle($overlayWrapper.get(0));
 
         assert.strictEqual(parseInt(wrapperStyle.width), getWidth($(window)), 'width is 100%');
@@ -1483,8 +1462,8 @@ testModule('animation', moduleConfig, () => {
         const originAnimate = fx.animate;
 
         try {
-            fx.animate = ($element, config) => {
-                if(instance.$content().get(0) === $element.get(0)) {
+            fx.animate = (element, config) => {
+                if(instance.$content().get(0) === element) {
                     lastConfig = config;
                 }
             };
@@ -1864,20 +1843,6 @@ testModule('content', moduleConfig, () => {
         assert.ok(contentReadyStub.calledOnce);
     });
 
-    test('content shouldn`t clean when component is renovated', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            isRenovated: true,
-            contentTemplate: 'template',
-            visible: true
-        });
-        const instance = $overlay.dxOverlay('instance');
-        const $content = instance.$content();
-        const contentRenderSpy = sinon.spy($content, 'empty');
-
-        instance.option({ visible: false, contentTemplate: 'template1' });
-        assert.equal(contentRenderSpy.callCount, 0);
-    });
-
     test('content should be rendered only once after resize', function(assert) {
         const contentReadyStub = sinon.stub();
 
@@ -2098,6 +2063,46 @@ testModule('hide on outside click', moduleConfig, () => {
         assert.equal(overlay1.option('visible'), true, 'Bottom overlay should not get outside click when inner overlay clicked');
     });
 
+    test('overlay opened above inner overlay should close on click inside inner overlay', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $(overlay1.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay2.option('visible'), false, 'Overlay opened above inner overlay should close');
+        assert.strictEqual(overlay1.option('visible'), true, 'Inner overlay itself should stay visible');
+    });
+
+    test('click inside inner overlay should not close overlays below it in stack', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $(overlay2.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), true, 'Overlay below inner overlay should not close');
+        assert.strictEqual(overlay2.option('visible'), true, 'Inner overlay should stay visible');
+    });
+
     // T494814
     test('overlay should not be hidden after click in detached element', function(assert) {
         const overlay = $('#overlayWithAnonymousTmpl').dxOverlay({
@@ -2178,7 +2183,7 @@ testModule('hide on outside click', moduleConfig, () => {
 
         overlay1.show();
         overlay2.option('hideOnOutsideClick', function(e) {
-            return !e.target.closest(toSelector(OVERLAY_CONTENT_CLASS));
+            return !e.target.closest(`.${OVERLAY_CONTENT_CLASS}`);
         });
         $(overlay1.$content()).trigger('dxpointerdown');
 
@@ -2232,6 +2237,27 @@ testModule('hide on outside click', moduleConfig, () => {
 
         assert.strictEqual(overlay1.option('visible'), false, 'First overlay is hidden, because of calling hide');
         assert.strictEqual(overlay2.option('visible'), false, 'Second overlay is hidden, because of outsideclick');
+    });
+
+    test('overlay should handle outside click without errors when content is null', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+        }).dxOverlay('instance');
+
+        const originalContent = overlay._$content;
+
+        overlay._$content = null;
+
+        try {
+            $(document).trigger('dxpointerdown');
+            assert.ok(true, 'No error when content is null');
+            assert.strictEqual(overlay.option('visible'), false, 'Overlay should hide on outside click when content is null');
+        } catch(e) {
+            assert.ok(false, `Error occurred with null content: ${e.message}`);
+        } finally {
+            overlay._$content = originalContent;
+        }
     });
 
     test('document events should be unsubscribed at each overlay hiding', function(assert) {
@@ -2643,7 +2669,7 @@ testModule('container', moduleConfig, () => {
         beforeEach: function() {
             this.$container = $('#customTargetContainer');
             this.isContentInContainer = () => {
-                return this.$container.children(toSelector(OVERLAY_WRAPPER_CLASS)).length === 1;
+                return this.$container.children(`.${OVERLAY_WRAPPER_CLASS}`).length === 1;
             };
         }
     }, () => {
@@ -2687,8 +2713,8 @@ testModule('container', moduleConfig, () => {
         const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
         overlay.show();
 
-        assert.strictEqual($(toSelector(VIEWPORT_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
-        assert.strictEqual($('#parentContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
+        assert.strictEqual($(`.${VIEWPORT_CLASS}`).children(`.${OVERLAY_WRAPPER_CLASS}`).length, 1);
+        assert.strictEqual($('#parentContainer').children(`.${OVERLAY_WRAPPER_CLASS}`).length, 0);
     });
 
     test('content should be moved back to overlay element on hide (B253278)', function(assert) {
@@ -2736,7 +2762,7 @@ testModule('container', moduleConfig, () => {
 
         $overlay.dxOverlay('show');
 
-        const $shader = $container.find(toSelector(OVERLAY_SHADER_CLASS));
+        const $shader = $container.find(`.${OVERLAY_SHADER_CLASS}`);
 
         assert.ok(Math.abs(Math.round($shader.offset().top) - Math.round($container.offset().top)) <= 1, 'shader top position is correct');
         assert.strictEqual(getWidth($shader), getWidth($container), 'shader width is correct');
@@ -2762,7 +2788,7 @@ testModule('container', moduleConfig, () => {
                 },
             });
 
-            const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+            const $overlayWrapper = viewport().find(`.${OVERLAY_WRAPPER_CLASS}`);
             const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
             const targetRect = $targetContainer.get(0).getBoundingClientRect();
 
@@ -2794,7 +2820,7 @@ testModule('container', moduleConfig, () => {
 
         $overlay.dxOverlay('show');
 
-        const $content = $container.find(toSelector(OVERLAY_CONTENT_CLASS));
+        const $content = $container.find(`.${OVERLAY_CONTENT_CLASS}`);
         assert.strictEqual(getHeight($content), getHeight($container) * 0.5, 'overlay height is correct');
         assert.strictEqual(getWidth($content), getWidth($container) * 0.5, 'overlay width is correct');
     });
@@ -2810,7 +2836,7 @@ testModule('container', moduleConfig, () => {
 
             const $viewport = $('<div>');
             viewPort($viewport);
-            assert.strictEqual($viewport.children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1, 'overlay moved to new viewport');
+            assert.strictEqual($viewport.children(`.${OVERLAY_WRAPPER_CLASS}`).length, 1, 'overlay moved to new viewport');
         } finally {
             viewPort(origViewport);
         }
@@ -2829,7 +2855,7 @@ testModule('container', moduleConfig, () => {
             overlay.$element().parent().hide();
 
             viewPort($origViewport); // Need to trigger viewport change callback but not change viewport value
-            assert.strictEqual($origViewport.children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0, 'overlay not rendered because parent is hidden');
+            assert.strictEqual($origViewport.children(`.${OVERLAY_WRAPPER_CLASS}`).length, 0, 'overlay not rendered because parent is hidden');
         } finally {
             viewPort($origViewport);
         }
@@ -2846,7 +2872,7 @@ testModule('container', moduleConfig, () => {
 
             const $viewport = $('<div>');
             viewPort($viewport);
-            assert.strictEqual($viewport.children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0, 'overlay not moved to new viewport');
+            assert.strictEqual($viewport.children(`.${OVERLAY_WRAPPER_CLASS}`).length, 0, 'overlay not moved to new viewport');
         } finally {
             viewPort(origViewport);
         }
@@ -2863,7 +2889,7 @@ testModule('container', moduleConfig, () => {
 
         const overlay = new TestOverlay($('#overlay'));
         overlay.show();
-        assert.strictEqual($('#customTargetContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
+        assert.strictEqual($('#customTargetContainer').children(`.${OVERLAY_WRAPPER_CLASS}`).length, 1);
     });
 });
 
@@ -3107,6 +3133,50 @@ testModule('API', moduleConfig, () => {
 
         assert.strictEqual(resizeStub.callCount, 1, '\'dxresize\' event handler was called');
         resizeStub.restore();
+    });
+
+    test('Overlay uses custom zIndex on init if zIndex option is provided', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            zIndex: 2000
+        }).dxOverlay('instance');
+
+        const contentZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(contentZIndex, 2000, 'custom zIndex assigned');
+    });
+
+    test('Changing zIndex option replaces old pool zIndex with custom', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+
+        const initialZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(initialZIndex, 1501, 'overlay has initial pool zIndex');
+
+        overlay.option('zIndex', 5000);
+
+        const finalZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(finalZIndex, 5000, 'custom zIndex applied');
+    });
+
+    test('Changing zIndex option to undefined resets the default pool zIndex', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            zIndex: 5000
+        }).dxOverlay('instance');
+
+        const initialZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(initialZIndex, 5000, 'overlay has custom zIndex');
+
+        overlay.option('zIndex', undefined);
+
+        const finalZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(finalZIndex, 1501, 'initial pool zIndex applied');
     });
 });
 
@@ -3405,7 +3475,7 @@ testModule('focus policy', {
             contentTemplate: $('#focusableTemplate')
         });
         const $content = overlay.$content();
-        const $wrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $wrapper = $content.closest(`.${OVERLAY_WRAPPER_CLASS}`);
 
         const contentFocusHandler = sinon.spy();
         const $tabbableDiv = $('<div>')
@@ -3655,7 +3725,7 @@ testModule('scrollable interaction', {
         $overlay.dxOverlay('option', 'visible', true);
 
         const $content = $overlay.dxOverlay('$content');
-        const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+        const $shader = $content.closest(`.${OVERLAY_SHADER_CLASS}`);
 
         $($shader.parent()).on('dxdrag.TEST', {
             getDirection: function() { return 'both'; },
@@ -3676,7 +3746,7 @@ testModule('scrollable interaction', {
         });
 
         const $content = $overlay.dxOverlay('$content');
-        const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+        const $shader = $content.closest(`.${OVERLAY_SHADER_CLASS}`);
 
         $($shader).on('dxdrag', {
             getDirection: function() { return 'both'; },
@@ -3749,7 +3819,7 @@ testModule('scrollable interaction', {
             inertiaEnabled: false
         });
 
-        const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $overlayWrapper = $content.closest(`.${OVERLAY_WRAPPER_CLASS}`);
 
         $($overlayWrapper).on('dxdrag.TEST', {
             getDirection: function() { return 'both'; },
@@ -3792,7 +3862,7 @@ testModule('scrollable interaction', {
             inertiaEnabled: false
         });
 
-        const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $overlayWrapper = $content.closest(`.${OVERLAY_WRAPPER_CLASS}`);
 
         $($overlayWrapper).on('dxdrag', {
             getDirection: () => 'both',
@@ -3828,7 +3898,7 @@ testModule('scrollable interaction', {
         });
 
         const $content = $overlay.dxOverlay('$content');
-        const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+        const $shader = $content.closest(`.${OVERLAY_SHADER_CLASS}`);
 
         $($shader).on({
             'dxdragstart': function() {
@@ -3853,7 +3923,7 @@ testModule('scrollable interaction', {
         });
 
         const $content = $overlay.dxOverlay('$content');
-        const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+        const $shader = $content.closest(`.${OVERLAY_SHADER_CLASS}`);
 
         const e = pointerMock($shader)
             .start()
@@ -3879,7 +3949,7 @@ testModule('scrollable interaction', {
             $('#qunit-fixture').on('wheel', handler);
 
             const $content = $overlay.dxOverlay('$content');
-            const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+            const $shader = $content.closest(`.${OVERLAY_SHADER_CLASS}`);
 
             nativePointerMock($shader)
                 .start()
@@ -4095,7 +4165,7 @@ testModule('renderGeometry', {
         };
         for(const optionName in newOptions) {
             QUnit.testInActiveWindow(optionName, function(assert) {
-                // eslint-disable-next-line qunit/no-async-in-loops
+
                 const showingResizeHandled = assert.async();
                 setTimeout(() => {
                     this.overlayInstance.option(optionName, newOptions[optionName]);
@@ -4341,5 +4411,61 @@ QUnit.module('wrapper covered element choice', {
         const containerLocation = $positionOf.position();
         assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by position.of');
         assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by position.of');
+    });
+});
+
+QUnit.module('Memory Leaks', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.$element = $('#overlay');
+
+        this.getPositionController = (instance) => {
+            return instance._positionController;
+        };
+    },
+    afterEach: function() {
+        this.$element.remove();
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('should clear _$wrapper reference on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        assert.notStrictEqual(instance.$wrapper(), null, 'wrapper exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$wrapper(), null, '$wrapper() returns null after dispose');
+    });
+
+    QUnit.test('should clear _$content reference on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        assert.notStrictEqual(instance.$content(), null, 'content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$content(), null, '$content() returns null after dispose');
+    });
+
+    QUnit.test('should clear PositionController references on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        const positionController = this.getPositionController(instance);
+        assert.ok(positionController._$content, 'PositionController._$content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(positionController._$content, undefined, 'PositionController._$content is undefined after dispose');
+        assert.strictEqual(positionController._$wrapper, undefined, 'PositionController._$wrapper is undefined after dispose');
+        assert.strictEqual(positionController._$root, undefined, 'PositionController._$root is undefined after dispose');
+        assert.strictEqual(positionController._$markupContainer, undefined, 'PositionController._$markupContainer is undefined after dispose');
+        assert.strictEqual(positionController._$visualContainer, undefined, 'PositionController._$visualContainer is undefined after dispose');
     });
 });

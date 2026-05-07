@@ -279,7 +279,10 @@ export class RowsView extends ColumnsView {
         setWatcher({
           element: $row.get(0),
           watch: rowOptions.watch,
-          getter: () => this._isAltRow(row),
+          getter: () => this._isAltRow(
+            // The row needs to be obtained again because the current row is out of date.
+            this._dataController.getRowByKey(row.key),
+          ),
           callBack: (value) => {
             $row.toggleClass(ROW_ALTERNATION_CLASS, value);
           },
@@ -514,10 +517,9 @@ export class RowsView extends ColumnsView {
   }
 
   private _setGridRole($element: dxElementWrapper): void {
-    const hasData = !this._dataController?.isEmpty();
     const gridRoleName = this._getGridRoleName();
 
-    if ($element?.length && hasData) {
+    if ($element?.length) {
       this.setAria('role', gridRoleName, $element);
     }
   }
@@ -1149,10 +1151,7 @@ export class RowsView extends ColumnsView {
       // @ts-expect-error
       scrollable.update();
 
-      // @ts-expect-error
-      if (scrollable.option('useNative') || !scrollable?.isRenovated()) {
-        this._updateHorizontalScrollPosition();
-      }
+      this._updateHorizontalScrollPosition();
     }
   }
 
@@ -1178,17 +1177,16 @@ export class RowsView extends ColumnsView {
    * @extended: column_fixing, filter_row, row_dragging, vitrual_columns, virtual_scrolling
    */
   protected _resizeCore() {
-    const that = this;
-
-    that._fireColumnResizedCallbacks();
-    that._updateRowHeight();
+    this._fireColumnResizedCallbacks();
+    this._updateRowHeight();
 
     deferRender(() => {
-      that._renderScrollable();
-      that.renderNoDataText();
-      that.updateFreeSpaceRowHeight();
+      this._renderScrollable();
+      this.renderNoDataText();
+      this.updateFreeSpaceRowHeight();
+
       deferUpdate(() => {
-        that._updateScrollable();
+        this._updateScrollable();
       });
     });
   }
@@ -1271,7 +1269,6 @@ export class RowsView extends ColumnsView {
     this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const $cells = super._getCellElementsCore.apply(this, arguments as any);
 
@@ -1435,6 +1432,26 @@ export class RowsView extends ColumnsView {
     const $rowsViewElement = $element.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`);
 
     return $rowsViewElement.is(this.element());
+  }
+
+  /**
+   * @extended: TreeList's rowsView extender & selection
+   */
+  protected _renderIcons(
+    $iconContainer: dxElementWrapper,
+    options,
+  ): dxElementWrapper {
+    return $iconContainer;
+  }
+
+  public normalizeScrollLeft(scrollLeft: number): number {
+    const scrollable = this.getScrollable();
+
+    if (this.option('rtlEnabled') && scrollable) {
+      return getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - scrollLeft;
+    }
+
+    return scrollLeft;
   }
 }
 

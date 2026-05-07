@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { getStyleAttribute, setStyleAttribute } from '../../../../helpers/domUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import { scrollToDate } from '../../helpers/utils';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
@@ -13,11 +14,12 @@ test.skip('Appointment should not repaint after scrolling if present on viewport
   const { element } = scheduler.getAppointment('', 0);
 
   await setStyleAttribute(element, 'background-color: red;');
-  await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
+  const initialStyle = await getStyleAttribute(element);
 
   await scrollToDate(new Date(2020, 8, 17, 4));
+  await t.wait(300);
 
-  await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
+  await t.expect(await getStyleAttribute(element)).eql(initialStyle);
 }).before(async () => {
   await createWidget('dxScheduler', {
     height: 600,
@@ -25,8 +27,6 @@ test.skip('Appointment should not repaint after scrolling if present on viewport
     currentDate: new Date(2020, 8, 7),
     scrolling: {
       mode: 'virtual',
-      orientation: 'both',
-      outlineCount: 0,
     },
     currentView: 'week',
     views: [{
@@ -47,7 +47,9 @@ test('The appointment should render correctly when scrolling vertically (T126342
 
   await scrollToDate(new Date('2024-11-12T09:00:00+0100'));
 
-  await takeScreenshot('T1263428-virtual-scrolling-render-appointment.png', scheduler.element);
+  await testScreenshot(t, takeScreenshot, 'T1263428-virtual-scrolling-render-appointment.png', {
+    element: scheduler.element,
+  });
 
   await t
     .expect(compareResults.isValid())

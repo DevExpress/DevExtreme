@@ -1,25 +1,27 @@
-require('../../helpers/trackerMock.js');
+import '../../helpers/trackerMock.js';
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const trackerModule = require('viz/chart_components/tracker');
-const chartThemeManagerModule = require('viz/components/chart_theme_manager');
-const legendModule = require('viz/components/legend');
-const seriesModule = require('viz/series/base_series');
-const Series = seriesModule.Series;
-const seriesFamilyModule = require('viz/core/series_family');
-const axisModule = require('viz/axes/base_axis');
-const dxPolarChart = require('viz/polar_chart');
-const rendererModule = require('viz/core/renderers/renderer');
-const dataValidatorModule = require('viz/components/data_validator');
-const rangeModule = require('viz/translators/range');
-const tooltipModule = require('viz/core/tooltip');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
+import $ from 'jquery';
+import { Renderer, Legend, ExportMenu } from '../../helpers/vizMocks.js';
+import trackerModule from 'viz/chart_components/tracker';
+import chartThemeManagerModule from 'viz/components/chart_theme_manager';
+import legendModule from 'viz/components/legend';
+import seriesModule, { Series } from 'viz/series/base_series';
+import seriesFamilyModule from 'viz/core/series_family';
+import axisModule from 'viz/axes/base_axis';
+import dxPolarChart from 'viz/polar_chart';
+import rendererModule from 'viz/core/renderers/renderer_default';
+import dataValidatorModule from 'viz/components/data_validator';
+import rangeModule from 'viz/translators/range';
+import tooltipModule from 'viz/core/tooltip';
+import layoutManagerModule from 'viz/chart_components/layout_manager';
+import exportModule from '__internal/viz/core/exportModule';
+
+import 'viz/chart';
+
 const stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip);
 const stubRange = sinon.createStubInstance(rangeModule.Range);
 const stubSeriesFamily = createStubSeriesFamily();
 const stubThemeManager = createStubThemeManager();
-const exportModule = require('viz/core/export');
 const stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
 
 QUnit.testStart(function() {
@@ -29,7 +31,7 @@ QUnit.testStart(function() {
 });
 
 legendModule.Legend = sinon.spy(function(parameters) {
-    const legend = new vizMocks.Legend(parameters);
+    const legend = new Legend(parameters);
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
     });
@@ -42,13 +44,11 @@ legendModule.Legend = sinon.spy(function(parameters) {
     return legend;
 });
 
-
 function stubExport() {
-    const that = this;
-    that.export = new vizMocks.ExportMenu();
-    that.export.stub('measure').returns([0, 0]);
+    const exportMenuInstance = new ExportMenu();
+    exportMenuInstance.stub('measure').returns([0, 0]);
     exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
-        return that.export;
+        return exportMenuInstance;
     }));
 }
 
@@ -168,7 +168,7 @@ const environment = {
         };
 
         that.createRenderer = sinon.stub(rendererModule, 'Renderer').callsFake(function() {
-            const stubRenderer = new vizMocks.Renderer();
+            const stubRenderer = new Renderer();
             stubRenderer.clipCircle = that.clipFunc;
             stubRenderer.clipRect = that.clipFunc;
             return stubRenderer;
@@ -364,7 +364,7 @@ QUnit.test('create series with correct theme and renderer', function(assert) {
         rotated: true
     });
 
-    assert.ok(this.createSeries.args[0][0].renderer instanceof vizMocks.Renderer);
+    assert.ok(this.createSeries.args[0][0].renderer instanceof Renderer);
 
     assert.strictEqual(this.createSeries.args[0][1].rotated, undefined);
     assert.deepEqual(this.createSeries.args[0][1], this.themeManager.getOptions.withArgs('series').returnValues[0]);
@@ -392,7 +392,6 @@ QUnit.test('render', function(assert) {
 });
 
 QUnit.test('Actions sequence with series on render chart', function(assert) {
-    // arrange
     const chart = this.createSimplePolarChart();
     const argumentAxis = chart._argumentAxes[0];
     const series = chart.getAllSeries()[0];
@@ -566,7 +565,6 @@ QUnit.test('Adaptive layout', function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10 });
     stubThemeManager.getOptions.withArgs('adaptiveLayout').returns({ width: 1000, keepLabels: false });
 
-
     stubAxes[0].getMargins.onCall(1).returns({ left: 2, right: 2, top: 2, bottom: 2 });
     stubAxes[0].getMargins.onCall(2).returns({ left: 2, right: 2, top: 2, bottom: 2 });
     stubAxes[0].getCanvas.returns({ stubAxisCanvas: true });
@@ -627,18 +625,11 @@ QUnit.test('create correct seriesFamily', function(assert) {
 
 QUnit.test('adjust series dimension in seriesFamily', function(assert) {
     const chart = this.createSimplePolarChart(); // ,
-    // translators = {
-    //     arg: chart.translator,
-    //     val: chart.translator
-    // };
 
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);
     assert.ok(chart.seriesFamilies[0].updateSeriesValues.called);
-    // assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
-
     assert.ok(chart.seriesFamilies[0].adjustSeriesDimensions.called);
-    // assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
 });
 
 QUnit.test('require not need more space in canvas', function(assert) {
@@ -656,7 +647,6 @@ QUnit.test('set value axes spider ticks from argument axis', function(assert) {
     assert.ok(valueAxis.setSpiderTicks.calledWith(argumentAxis.getSpiderTicks.returnValues[0]));
     assert.ok(valueAxis.setSpiderTicks.calledAfter(argumentAxis.draw));
 });
-
 
 QUnit.test('create axis with correct options', function(assert) {
     this.createSimplePolarChart({});

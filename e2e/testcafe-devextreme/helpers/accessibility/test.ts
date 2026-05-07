@@ -1,7 +1,7 @@
 import { ElementContext } from 'axe-core';
 import type { WidgetName } from 'devextreme-testcafe-models/types';
 import { createWidget } from '../createWidget';
-import { isMaterialBased } from '../themeUtils';
+import { isFluent } from '../themeUtils';
 import { a11yCheck, A11yCheckOptions } from './utils';
 import { generateOptionMatrix, Options } from '../generateOptionMatrix';
 
@@ -16,9 +16,9 @@ export interface Configuration<TComponentOptions = unknown> {
 export const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultCreated = async () => {};
-const defaultA11yCheckConfig = isMaterialBased() ? {
+const defaultA11yCheckConfig = isFluent() ? {} : {
   runOnly: 'color-contrast',
-} : {};
+};
 
 const getOptionConfigurations = <TComponentOptions = unknown>(
   options: Options<TComponentOptions> | undefined,

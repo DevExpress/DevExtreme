@@ -80,7 +80,7 @@
     .dx-field-item-content {
       vertical-align: top;
 
-      // TODO: form layout manager should not contains settings with checkbox/switch classes
+      // TODO: form layout manager should not contain settings with checkbox/switch classes
       .dx-checkbox,
       .dx-switch {
         margin-top: 7px;
@@ -91,6 +91,7 @@
     .dx-field-item-content,
     .dx-field-item-content-wrapper {
       width: 100%;
+      min-width: 0;
     }
   }
 
@@ -155,7 +156,7 @@
 .dx-field-item-optional {
   .dx-label > span {
     &::after {
-      content: attr(data-mark);
+      content: attr(data-mark) / '';
     }
   }
 }

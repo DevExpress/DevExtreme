@@ -23,7 +23,7 @@ import type {
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import type { ModuleType } from '../m_types';
+import type { ColumnPoint, Coordinates, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import { normalizeWidth } from '../views/m_columns_view';
@@ -408,7 +408,6 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return cellElements;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getColumnWidths(fixedTableElement?: any, rowIndex?: number) {
     const result = super.getColumnWidths(fixedTableElement, rowIndex);
     const fixedColumns = this.getFixedColumns();
@@ -1077,8 +1076,12 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
     return super._generatePointsByColumns(options, needToCheckPrevPoint);
   }
 
-  protected _pointCreated(point, columns, location, sourceColumn) {
-    const result = super._pointCreated.apply(this, arguments as any);
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn, cells,
+    });
     const targetColumn = columns[point.columnIndex];
     // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
@@ -1122,24 +1125,28 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
           point.index += correctIndex;
         }
 
-        return that._pointCreated(point, columns.length, columns);
+        return that._pointCreated(point, columns);
       });
     }
   }
 
-  protected _getTargetPoint(pointsByColumns, currentX, deltaX) {
+  protected _getTargetPoint(
+    pointsByColumns: ColumnPoint[] | null | undefined,
+    currentPoint: Coordinates,
+    deltaX: number,
+  ): ColumnPoint | null {
     // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if ($transparentColumn && $transparentColumn.length) {
       const boundingRect = getBoundingRect($transparentColumn.get(0));
 
-      if (currentX <= boundingRect.left || currentX >= boundingRect.right) {
-        return super._getTargetPoint(this._pointsByFixedColumns, currentX, deltaX);
+      if (currentPoint.x <= boundingRect.left || currentPoint.x >= boundingRect.right) {
+        return super._getTargetPoint(this._pointsByFixedColumns, currentPoint, deltaX);
       }
     }
 
-    return super._getTargetPoint(pointsByColumns, currentX, deltaX);
+    return super._getTargetPoint(pointsByColumns, currentPoint, deltaX);
   }
 };
 

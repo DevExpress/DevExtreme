@@ -1,6 +1,6 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction } from 'testcafe';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
+import TextBox from 'devextreme-testcafe-models/textBox';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -152,7 +152,7 @@ test('Should remove dx-focused class on blur event from the cell', async (t) => 
 
 test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and editing is in batch mode (T1246926)', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox).getInput();
+  const filterEditor = dataGrid.getFilterEditor(0, TextBox).getInput();
 
   await t
     .click(dataGrid.getDataCell(0, 0).element)
@@ -188,8 +188,8 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
       .ok();
 
     // act
-    await grid.scrollBy({ y: 200 });
-    await grid.scrollBy({ y: 200 });
+    await grid.scrollBy(t, { y: 200 });
+    await grid.scrollBy(t, { y: 200 });
     await grid.scrollTo(t, { top: 0 });
     await t.wait(300);
 
@@ -238,6 +238,10 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
       focusedRowEnabled: true,
       focusedRowKey: 1,
     });
+  }).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).myStore;
+    })();
   });
 });
 
@@ -298,3 +302,77 @@ test('DataGrid - FocusedRowChanged event isnt raised when the push API is used t
     },
   }));
 });
+
+test('DataGrid - Focused cell appearance is applied to non-editable CheckBox cells on mouse clicks (T1282082)', async (t) => {
+  const grid = new DataGrid(GRID_SELECTOR);
+
+  await t
+    .click(grid.getDataCell(0, 0).element)
+    .click(grid.getDataCell(0, 1).element)
+    .click(grid.getDataCell(0, 0).element)
+    .expect(grid.getDataCell(0, 0).isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { BoolOne: false, BoolTwo: false },
+  ],
+  columns: [
+    'BoolOne',
+    'BoolTwo',
+  ],
+}));
+
+// T1293309
+test('Focus method should focus the first data cell', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiFocus();
+
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'name 1' },
+    { id: 2, name: 'name 2' },
+    { id: 3, name: 'name 3' },
+  ],
+  keyExpr: 'id',
+  columns: [
+    'id',
+    {
+      dataField: 'name',
+      cellTemplate: (_, options) => $('<div>').attr('tabindex', 0).text(options.text),
+    },
+  ],
+}));
+
+// T1293309
+test('Focus method should focus the first data row when focusedRowEnabled = true', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiFocus();
+
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'name 1' },
+    { id: 2, name: 'name 2' },
+    { id: 3, name: 'name 3' },
+  ],
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  columns: [
+    'id',
+    {
+      dataField: 'name',
+      cellTemplate: (_, options) => $('<div>').attr('tabindex', 0).text(options.text),
+    },
+  ],
+}));

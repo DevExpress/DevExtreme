@@ -517,6 +517,7 @@
           {
             "Name": "Columns",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Auto-Populated Columns",
@@ -586,6 +587,22 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "TagBox Columns",
+                "Name": "TagBoxColumns",
+                "Widget": "DataGrid",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-tagbox-columns.xml"
+              },
+              {
+                "Title": "AI Column",
+                "Name": "AIColumn",
+                "Widget": "DataGrid",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai-column.xml"
               }
             ]
           },
@@ -791,7 +808,7 @@
                 "Title": "Overview",
                 "Name": "ExcelJSOverview",
                 "Widget": "DataGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "MvcAdditionalFiles": [
                   "/Models/DataGrid/Employee.cs",
                   "/Models/SampleData/DataGridEmployees.cs"
@@ -802,7 +819,7 @@
                 "Title": "Cell Customization",
                 "Name": "ExcelJSCellCustomization",
                 "Widget": "DataGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "MvcAdditionalFiles": [
                   "/Scripts/data/companies.js",
                   "/Models/Company.cs"
@@ -813,7 +830,7 @@
                 "Title": "Header and Footer",
                 "Name": "ExcelJSHeaderAndFooter",
                 "Widget": "DataGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "Credits": "www.wikipedia.org",
                 "MvcAdditionalFiles": [
                   "/Models/SampleData/CountriesPopulationAndGDP.cs"
@@ -824,14 +841,14 @@
                 "Title": "Multiple Grids Export",
                 "Name": "ExcelJSExportMultipleGrids",
                 "Widget": "DataGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "DemoType": "Web"
               },
               {
                 "Title": "Image Export",
                 "Name": "ExcelJSExportImages",
                 "Widget": "DataGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "MvcAdditionalFiles": [
                   "/Scripts/data/employeesEI.js"
                 ],
@@ -1291,6 +1308,7 @@
           {
             "Name": "Columns",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Column Reordering",
@@ -1332,6 +1350,22 @@
                   "/Models/SampleData/TreeListEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "TagBox Columns",
+                "Name": "TagBoxColumns",
+                "Widget": "TreeList",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-tagbox-columns.xml"
+              },
+              {
+                "Title": "AI Column",
+                "Name": "AIColumn",
+                "Widget": "TreeList",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai-column.xml"
               }
             ]
           },
@@ -1774,7 +1808,7 @@
                 "Title": "Overview",
                 "Name": "ExcelJSOverview",
                 "Widget": "PivotGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/PivotGridDataController.cs",
                   "/Models/Sale.cs",
@@ -1786,7 +1820,7 @@
                 "Title": "Cell Customization",
                 "Name": "ExcelJSCellCustomization",
                 "Widget": "PivotGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/PivotGridDataController.cs",
                   "/Models/Sale.cs",
@@ -1798,7 +1832,7 @@
                 "Title": "Header and Footer",
                 "Name": "ExcelJsHeaderAndFooter",
                 "Widget": "PivotGrid",
-                "Modules": "exceljs&file-saver",
+                "Modules": "devextreme-exceljs-fork&file-saver",
                 "Credits": "www.wikipedia.org",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/PivotGridDataController.cs",
@@ -1962,8 +1996,10 @@
                 "Name": "ServerSideDataProcessing",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "MvcAdditionalFiles": [
-                  "/Models/SampleData/MonthNames.cs"
+                  "/Models/SampleData/MonthNames.cs",
+                  "/Controllers/ApiControllers/TemperatureDataController.cs"
                 ],
                 "DemoType": "Viz"
               },
@@ -4114,6 +4150,32 @@
             ]
           },
           {
+            "Name": "File Attachments",
+            "Demos": [
+              {
+                "Title": "File Attachments",
+                "Name": "FileAttachments",
+                "Widget": "Chat",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-file-attachments.xml"
+              }
+            ]
+          },
+          {
+            "Name": "Empty View Template",
+            "Demos": [
+              {
+                "Title": "Empty View Template",
+                "Name": "EmptyViewTemplate",
+                "Widget": "Chat",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-empty-view-template.xml"
+              }
+            ]
+          },
+          {
             "Name": "Customization",
             "Equivalents": "Settings, Options",
             "Demos": [
@@ -4269,6 +4331,7 @@
         "Name": "Form",
         "Breadcrumb": true,
         "Equivalents": "dxForm, dx-form",
+        "Badge": "Updated",
         "Demos": [
           {
             "Title": "Overview",
@@ -4289,6 +4352,13 @@
             "Title": "Grouping",
             "Name": "Grouping",
             "Widget": "Form"
+          },
+          {
+            "Title": "AI Smart Paste",
+            "Name": "AISmartPaste",
+            "Widget": "Form",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-smart-paste.xml"
           },
           {
             "Title": "Adaptability",
@@ -4696,6 +4766,22 @@
         ]
       },
       {
+        "Name": "Speech To Text",
+        "Badge": "Roadmap",
+        "Equivalents": "SpeechToText, Speech Recognition, Dictation, Voice Input, dxSpeechToText, dx-speech-to-text",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "SpeechToText",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "ShowOnMainPage": true,
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-speech-to-text.xml"
+          }
+        ]
+      },
+      {
         "Name": "Switch",
         "Breadcrumb": true,
         "Equivalents": "Switch, CheckBox, dxSwitch, dx-switch",
@@ -4749,11 +4835,12 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Autocomplete",
-            "Modules": "whatwg-fetch",
+            "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
               "/Models/SampleData/Names.cs",
               "/Models/SampleData/Surnames.cs",
-              "/Models/SampleData/Cities.cs"
+              "/Models/SampleData/Cities.cs",
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs"
             ],
             "ShowOnMainPage": true
           }
@@ -5730,6 +5817,10 @@
                 "Title": "Virtual Mode",
                 "Name": "VirtualMode",
                 "Widget": "TreeView",
+                "Modules": "devextreme-aspnet-data-nojquery",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/TreeViewPlainDataController.cs"
+                ],
                 "DemoType": "Web"
               }
             ]
@@ -5885,10 +5976,10 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Splitter",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           }
-        ],
-        "ShowOnMainPage": true
+        ]
       },
       {
         "Name": "Gallery",

@@ -1,5 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
+
+import timeZoneUtils from '../../m_utils_time_zone';
 import {
   calculateIsGroupedAllDayPanel,
   getGroupPanelData,
@@ -7,37 +9,43 @@ import {
   isHorizontalGroupingApplied,
   isHorizontalView,
   isVerticalGroupingApplied,
-} from '@ts/scheduler/r1/utils/index';
-import type { ViewCellData, ViewType } from '@ts/scheduler/types';
-import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from '@ts/scheduler/workspaces/view_model/m_types';
-
-import timeZoneUtils from '../../m_utils_time_zone';
+} from '../../r1/utils/index';
+import type {
+  CountGenerationConfig,
+  DateHeaderData,
+  TimePanelData,
+  ViewCellData,
+  ViewDataMap, ViewOptions,
+  ViewType,
+} from '../../types';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
-import { getViewDataGeneratorByViewType } from './m_utils';
+import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './m_types';
+import type { ViewDataGenerator } from './m_view_data_generator';
+import { getViewDataGeneratorByViewType } from './utils/view_provider_utils';
 
 // TODO: Vinogradov types refactoring.
 export default class ViewDataProvider {
-  viewDataGenerator: any;
+  viewDataGenerator: ViewDataGenerator;
 
   viewData: any;
 
-  completeViewDataMap: any[];
+  completeViewDataMap: ViewCellData[][];
 
   completeDateHeaderMap: any[];
 
-  viewDataMap: any;
+  viewDataMap!: ViewDataMap;
 
-  _groupedDataMapProvider!: GroupedDataMapProvider;
+  private groupedDataMapProvider!: GroupedDataMapProvider;
 
-  _options: any;
+  private options!: ViewDataProviderExtendedOptions;
 
   completeTimePanelMap: any;
 
-  dateHeaderData: any;
+  dateHeaderData!: DateHeaderData;
 
-  timePanelData: any;
+  timePanelData!: TimePanelData;
 
   viewDataMapWithSelection: any;
 
@@ -46,27 +54,29 @@ export default class ViewDataProvider {
     this.viewData = {};
     this.completeViewDataMap = [];
     this.completeDateHeaderMap = [];
-    this.viewDataMap = {};
-    this._groupedDataMapProvider = null as unknown as GroupedDataMapProvider;
+    this.viewDataMap = {
+      dateTableMap: [],
+      allDayPanelMap: [],
+    };
+    this.groupedDataMapProvider = null as unknown as GroupedDataMapProvider;
   }
 
-  get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
+  get groupedDataMap() { return this.groupedDataMapProvider.groupedDataMap; }
 
   get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
 
-  isSkippedDate(date) { return this.viewDataGenerator.isSkippedDate(date); }
+  isSkippedDate(date: Date): boolean { return this.viewDataGenerator.isSkippedDate(date); }
 
-  update(options, isGenerateNewViewData) {
+  update(options: ViewDataProviderOptions, isGenerateNewViewData: boolean): void {
     this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);
 
     const { viewDataGenerator } = this;
     const dateHeaderDataGenerator = new DateHeaderDataGenerator(viewDataGenerator);
     const timePanelDataGenerator = new TimePanelDataGenerator(viewDataGenerator);
 
-    const renderOptions = this._transformRenderOptions(options);
+    const renderOptions = this.transformRenderOptions(options);
 
-    renderOptions.interval = this.viewDataGenerator.getInterval(renderOptions.hoursInterval);
-    this._options = renderOptions;
+    this.options = renderOptions;
 
     if (isGenerateNewViewData) {
       this.completeViewDataMap = viewDataGenerator.getCompleteViewDataMap(renderOptions);
@@ -81,7 +91,7 @@ export default class ViewDataProvider {
     this.viewDataMap = viewDataGenerator.generateViewDataMap(this.completeViewDataMap, renderOptions);
     this.updateViewData(renderOptions);
 
-    this._groupedDataMapProvider = new GroupedDataMapProvider(
+    this.groupedDataMapProvider = new GroupedDataMapProvider(
       this.viewDataGenerator,
       this.viewDataMap,
       this.completeViewDataMap,
@@ -103,20 +113,20 @@ export default class ViewDataProvider {
     }
   }
 
-  createGroupedDataMapProvider() {
-    this._groupedDataMapProvider = new GroupedDataMapProvider(
+  createGroupedDataMapProvider(): void {
+    this.groupedDataMapProvider = new GroupedDataMapProvider(
       this.viewDataGenerator,
       this.viewDataMap,
       this.completeViewDataMap,
       {
-        isVerticalGrouping: this._options.isVerticalGrouping,
-        viewType: this._options.viewType,
+        isVerticalGrouping: this.options.isVerticalGrouping,
+        viewType: this.options.viewType,
       },
     );
   }
 
   updateViewData(options) {
-    const renderOptions = this._transformRenderOptions(options);
+    const renderOptions = this.transformRenderOptions(options);
     this.viewDataMapWithSelection = this.viewDataGenerator
       .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
     this.viewData = this.viewDataGenerator
@@ -127,7 +137,7 @@ export default class ViewDataProvider {
       );
   }
 
-  _transformRenderOptions(renderOptions: ViewDataProviderOptions): ViewDataProviderExtendedOptions {
+  private transformRenderOptions(renderOptions: ViewDataProviderOptions): ViewDataProviderExtendedOptions {
     const {
       getResourceManager,
       groupOrientation,
@@ -137,23 +147,26 @@ export default class ViewDataProvider {
       ...restOptions
     } = renderOptions;
     const resourceManager = getResourceManager();
+    const groupCount = resourceManager.groupCount();
+    const interval = this.viewDataGenerator.getInterval(renderOptions.hoursInterval);
 
     return {
       ...restOptions,
-      startViewDate: this.viewDataGenerator._calculateStartViewDate(renderOptions),
-      isVerticalGrouping: isVerticalGroupingApplied(resourceManager.groups, groupOrientation),
-      isHorizontalGrouping: isHorizontalGroupingApplied(resourceManager.groups, groupOrientation),
-      isGroupedByDate: isGroupingByDate(resourceManager.groups, groupOrientation, groupByDate),
-      isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(resourceManager.groups, groupOrientation, isAllDayPanelVisible),
+      startViewDate: this.viewDataGenerator.getStartViewDate(renderOptions),
+      isVerticalGrouping: isVerticalGroupingApplied(groupCount, groupOrientation),
+      isHorizontalGrouping: isHorizontalGroupingApplied(groupCount, groupOrientation),
+      isGroupedByDate: isGroupingByDate(groupCount, groupOrientation, groupByDate),
+      isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(groupCount, groupOrientation, isAllDayPanelVisible),
       getResourceManager,
       groupOrientation,
       isAllDayPanelVisible,
       viewOffset,
+      interval,
     };
   }
 
   getGroupPanelData(options) {
-    const renderOptions = this._transformRenderOptions(options);
+    const renderOptions = this.transformRenderOptions(options);
     const groupResources = renderOptions.getResourceManager().groupResources();
 
     if (groupResources.length > 0) {
@@ -170,54 +183,47 @@ export default class ViewDataProvider {
   }
 
   getGroupStartDate(groupIndex) {
-    return this._groupedDataMapProvider.getGroupStartDate(groupIndex);
+    return this.groupedDataMapProvider.getGroupStartDate(groupIndex);
   }
 
   getGroupEndDate(groupIndex) {
-    return this._groupedDataMapProvider.getGroupEndDate(groupIndex);
+    return this.groupedDataMapProvider.getGroupEndDate(groupIndex);
   }
 
   findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate = false) {
-    return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
+    return this.groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
   }
 
   findAllDayGroupCellStartDate(groupIndex: number): Date | null {
-    return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
+    return this.groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
 
   findCellPositionInMap(cellInfo: any, isAppointmentRender = false): any {
-    return this._groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
-  }
-
-  hasAllDayPanel() {
-    const { viewData } = this.viewDataMap;
-    const { allDayPanel } = viewData.groupedData[0];
-
-    return !viewData.isGroupedAllDayPanel && allDayPanel?.length > 0;
+    return this.groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
 
   getCellsGroup(groupIndex) {
-    return this._groupedDataMapProvider.getCellsGroup(groupIndex);
+    return this.groupedDataMapProvider.getCellsGroup(groupIndex);
   }
 
   getCompletedGroupsInfo() {
-    return this._groupedDataMapProvider.getCompletedGroupsInfo();
+    return this.groupedDataMapProvider.getCompletedGroupsInfo();
   }
 
   getGroupIndices() {
-    return this._groupedDataMapProvider.getGroupIndices();
+    return this.groupedDataMapProvider.getGroupIndices();
   }
 
   getLastGroupCellPosition(groupIndex) {
-    return this._groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
+    return this.groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
   }
 
   getRowCountInGroup(groupIndex) {
-    return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
+    return this.groupedDataMapProvider.getRowCountInGroup(groupIndex);
   }
 
-  getCellData(rowIndex, columnIndex, isAllDay, rtlEnabled = false) {
-    const row = isAllDay && !this._options.isVerticalGrouping
+  getCellData(rowIndex: number, columnIndex: number, isAllDay = false, rtlEnabled = false) {
+    const row = isAllDay && !this.options.isVerticalGrouping
       ? this.viewDataMap.allDayPanelMap
       : this.viewDataMap.dateTableMap[rowIndex];
 
@@ -230,20 +236,20 @@ export default class ViewDataProvider {
     return cellData;
   }
 
-  getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
-    const rowsPerGroup = this._getRowCountWithAllDayRows();
-    const isShowAllDayPanel = this._options.isAllDayPanelVisible;
+  getCellsByGroupIndexAndAllDay(groupIndex: number, isAllDay: boolean): ViewCellData[][] {
+    const rowsPerGroup = this.getRowCountWithAllDayRows();
+    const isShowAllDayPanel = this.options.isAllDayPanelVisible;
 
-    const firstRowInGroup = this._options.isVerticalGrouping
+    const firstRowInGroup = this.options.isVerticalGrouping
       ? groupIndex * rowsPerGroup
       : 0;
-    const lastRowInGroup = this._options.isVerticalGrouping
+    const lastRowInGroup = this.options.isVerticalGrouping
       ? (groupIndex + 1) * rowsPerGroup - 1
       : rowsPerGroup;
-    const correctedFirstRow = isShowAllDayPanel && !allDay
+    const correctedFirstRow = isShowAllDayPanel && !isAllDay
       ? firstRowInGroup + 1
       : firstRowInGroup;
-    const correctedLastRow = allDay ? correctedFirstRow : lastRowInGroup;
+    const correctedLastRow = isAllDay ? correctedFirstRow : lastRowInGroup;
 
     return this.completeViewDataMap
       .slice(correctedFirstRow, correctedLastRow + 1)
@@ -262,8 +268,8 @@ export default class ViewDataProvider {
   }
 
   hasGroupAllDayPanel(groupIndex) {
-    if (this._options.isVerticalGrouping) {
-      return !!this.groupedDataMap.dateTableGroupedMap[groupIndex]?.[0][0].cellData.allDay;
+    if (this.options.isVerticalGrouping) {
+      return Boolean(this.groupedDataMap.dateTableGroupedMap[groupIndex]?.[0][0].cellData.allDay);
     }
 
     return this.groupedDataMap.allDayPanelGroupedMap[groupIndex]?.length > 0;
@@ -276,10 +282,22 @@ export default class ViewDataProvider {
     return startDate < groupEndDate && endDate > groupStartDate;
   }
 
-  findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
+  findGlobalCellPosition(date, groupIndex = 0, allDay = false, findClosest = false) {
     const { completeViewDataMap } = this;
 
-    const showAllDayPanel = this._options.isAllDayPanelVisible;
+    const showAllDayPanel = this.options.isAllDayPanelVisible;
+
+    let resultDiff = Number.MAX_VALUE;
+    let resultCellData: ViewCellData | undefined;
+    let resultCellColumnIndex = -1;
+    let resultCellRowIndex = -1;
+
+    const getCellPosition = (columnIndex: number, rowIndex: number) => ({
+      columnIndex,
+      rowIndex: showAllDayPanel && !this.options.isVerticalGrouping
+        ? rowIndex - 1
+        : rowIndex,
+    });
 
     for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
       const currentRow = completeViewDataMap[rowIndex];
@@ -287,44 +305,48 @@ export default class ViewDataProvider {
       for (let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
         const cellData = currentRow[columnIndex];
         const {
-          startDate: currentStartDate,
-          endDate: currentEndDate,
-          groupIndex: currentGroupIndex,
-          allDay: currentAllDay,
+          startDate: cellStartDate,
+          endDate: cellEndDate,
+          groupIndex: cellGroupIndex,
+          allDay: cellAllDay,
         } = cellData;
 
-        if (groupIndex === currentGroupIndex
-                    && allDay === !!currentAllDay
-                    && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
+        if (groupIndex !== cellGroupIndex || allDay !== Boolean(cellAllDay)) {
+          continue;
+        }
+
+        const isDateInCell = allDay
+          ? dateUtils.sameDate(date, cellStartDate)
+          : date >= cellStartDate && date < cellEndDate;
+
+        if (isDateInCell) {
           return {
-            position: {
-              columnIndex,
-              rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
-                ? rowIndex - 1
-                : rowIndex,
-            },
+            position: getCellPosition(columnIndex, rowIndex),
             cellData,
           };
+        }
+
+        const diff = Math.abs(date.getTime() - cellStartDate.getTime());
+
+        if (findClosest && diff < resultDiff) {
+          resultDiff = diff;
+          resultCellData = cellData;
+          resultCellColumnIndex = columnIndex;
+          resultCellRowIndex = rowIndex;
         }
       }
     }
 
-    return undefined;
-  }
-
-  private _compareDatesAndAllDay(
-    date: Date,
-    cellStartDate: Date,
-    cellEndDate: Date,
-    allDay: boolean,
-  ): boolean {
-    return allDay
-      ? dateUtils.sameDate(date, cellStartDate)
-      : date >= cellStartDate && date < cellEndDate;
+    return resultCellData
+      ? {
+        position: getCellPosition(resultCellColumnIndex, resultCellRowIndex),
+        cellData: resultCellData,
+      }
+      : undefined;
   }
 
   getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
-    const { dateTableGroupedMap } = this._groupedDataMapProvider.groupedDataMap;
+    const { dateTableGroupedMap } = this.groupedDataMapProvider.groupedDataMap;
     const groupedData = dateTableGroupedMap[groupIndex];
     let includedDays = 0;
 
@@ -427,21 +449,21 @@ export default class ViewDataProvider {
   }
 
   getStartViewDate() {
-    return this._options.startViewDate;
+    return this.options.startViewDate;
   }
 
-  getIntervalDuration(intervalCount) {
+  getIntervalDuration(intervalCount: number): number {
     return this.viewDataGenerator._getIntervalDuration(intervalCount);
   }
 
-  getLastCellEndDate() {
+  getLastCellEndDate(): Date {
     const lastEndDate = new Date(
       this.getLastViewDate().getTime() - dateUtils.dateToMilliseconds('minute'),
     );
-    return dateUtilsTs.addOffsets(lastEndDate, [-this._options.viewOffset]);
+    return dateUtilsTs.addOffsets(lastEndDate, [-this.options.viewOffset]);
   }
 
-  getLastViewDateByEndDayHour(endDayHour) {
+  getLastViewDateByEndDayHour(endDayHour: number): Date {
     const lastCellEndDate = this.getLastCellEndDate();
     const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
 
@@ -452,10 +474,10 @@ export default class ViewDataProvider {
       ),
     );
 
-    return this._adjustEndDateByDaylightDiff(lastCellEndDate, endDateOfLastViewCell);
+    return this.adjustEndDateByDaylightDiff(lastCellEndDate, endDateOfLastViewCell);
   }
 
-  _adjustEndDateByDaylightDiff(startDate, endDate) {
+  private adjustEndDateByDaylightDiff(startDate, endDate) {
     const daylightDiff = timeZoneUtils.getDaylightOffsetInMs(startDate, endDate);
 
     const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
@@ -467,34 +489,38 @@ export default class ViewDataProvider {
     return this.viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
   }
 
-  getCellCount(options) {
+  getCellCount(options: CountGenerationConfig) {
     return this.viewDataGenerator.getCellCount(options);
   }
 
-  getRowCount(options) {
+  getRowCount(options: CountGenerationConfig) {
     return this.viewDataGenerator.getRowCount(options);
   }
 
-  getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
+  getVisibleDayDuration(
+    startDayHour: number,
+    endDayHour: number,
+    hoursInterval: number,
+  ): number {
     return this.viewDataGenerator.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
   }
 
-  _getRowCountWithAllDayRows() {
-    const allDayRowCount = this._options.isAllDayPanelVisible ? 1 : 0;
+  private getRowCountWithAllDayRows() {
+    const allDayRowCount = this.options.isAllDayPanelVisible ? 1 : 0;
 
-    return this.getRowCount(this._options) + allDayRowCount;
+    return this.getRowCount(this.options) + allDayRowCount;
   }
 
   getFirstDayOfWeek(firstDayOfWeekOption) {
     return this.viewDataGenerator.getFirstDayOfWeek(firstDayOfWeekOption);
   }
 
-  setViewOptions(options) {
-    this._options = this._transformRenderOptions(options);
+  setViewOptions(options: ViewDataProviderOptions) {
+    this.options = this.transformRenderOptions(options);
   }
 
-  getViewOptions() {
-    return this._options;
+  getViewOptions(): ViewOptions {
+    return this.options;
   }
 
   getViewPortGroupCount() {

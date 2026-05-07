@@ -9,9 +9,9 @@ import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { format } from '@js/core/utils/string';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import List from '@js/ui/list_light';
 import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
+import List from '@ts/ui/list/list.edit.search';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
@@ -611,13 +611,15 @@ export class ExportController extends dataGridCore.ViewController {
 
   private _getSummaryCells(summaryTotalItems, totalAggregates) {
     // @ts-expect-error
-    return this._dataController._calculateSummaryCells(
-      summaryTotalItems,
-      totalAggregates,
-      this._columnsController.getVisibleColumns(null, true),
-      // @ts-expect-error
-      (summaryItem, column) => (this._dataController._isDataColumn(column) ? column.index : -1),
-    );
+    return this._dataController._calculateSummaryCells({
+      summaryItems: summaryTotalItems,
+      aggregates: totalAggregates,
+      visibleColumns: this._columnsController.getVisibleColumns(null, true),
+      calculateTargetColumnIndex: (summaryItem, column) => (
+        // @ts-expect-error
+        this._dataController._isDataColumn(column) ? column.index : -1
+      ),
+    });
   }
 
   public _getSelectedItems() {

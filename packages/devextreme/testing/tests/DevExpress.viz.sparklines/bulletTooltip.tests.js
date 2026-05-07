@@ -1,23 +1,27 @@
 /* global currentTest, createTestContainer */
 
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+    forceThemeOptions,
+} from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import baseThemeManagerModule from 'viz/core/base_theme_manager';
 import { isFunction } from 'core/utils/type';
+import 'viz/bullet';
+
 const TOOLTIP_TABLE_BORDER_SPACING = 0;
 const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
-
-import 'viz/bullet';
 
 $('<div>')
     .attr('id', 'container')
     .css({ width: 250, height: 20 })
     .appendTo('#qunit-fixture');
 
-const StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
-const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
+const StubThemeManager = stubClass(baseThemeManagerModule.BaseThemeManager);
+const StubTooltip = stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
 
 tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
@@ -31,7 +35,7 @@ baseThemeManagerModule.BaseThemeManager = function() {
 };
 
 StubThemeManager.prototype.setTheme = function() {
-    vizMocks.forceThemeOptions(this);
+    forceThemeOptions(this);
 };
 
 function getBulletTooltip(bullet) {
@@ -78,7 +82,7 @@ const environment = {
             enabled: true,
             font: {}
         });
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.$container = $(createTestContainer('#container'));
     },
     afterEach: function() {
@@ -226,7 +230,6 @@ QUnit.test('Default template should be used when customizeTooltip is not specifi
         lineHeight: '14px'
     });
 });
-
 
 QUnit.test('Default tooltip template should have valid text align when rtl is enabled', function(assert) {
     const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];

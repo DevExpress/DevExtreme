@@ -1,7 +1,7 @@
 import { getHeight, getWidth, getOuterWidth } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
@@ -11,7 +11,7 @@ import visibilityChange from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';
-import { animation } from '__internal/ui/drawer/m_drawer.animation';
+import { animation } from '__internal/ui/drawer/drawer.animation';
 import Overlay from 'ui/overlay/ui.overlay';
 
 
@@ -365,20 +365,20 @@ QUnit.module('Drawer behavior', () => {
         });
 
         const instance = $element.dxDrawer('instance');
-        fx.stop = function($element, jumpToEnd) {
+        fx.stop = function(element, jumpToEnd) {
             if(jumpToEnd) {
                 isJumpedToEnd = true;
             }
-            if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+            if($(element).hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
                 panelStopCalls++;
             }
-            if($element.hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
+            if($(element).hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
                 contentStopCalls++;
             }
-            if($element.hasClass('dx-overlay-content')) {
+            if($(element).hasClass('dx-overlay-content')) {
                 overlayContentStopCalls++;
             }
-            if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            if($(element).hasClass(DRAWER_SHADER_CLASS)) {
                 shaderStopCalls++;
             }
         };
@@ -417,20 +417,20 @@ QUnit.module('Drawer behavior', () => {
         let isJumpedToEnd = false;
 
         const instance = $element.dxDrawer('instance');
-        fx.stop = function($element, jumpToEnd) {
+        fx.stop = function(element, jumpToEnd) {
             if(jumpToEnd) {
                 isJumpedToEnd = true;
             }
-            if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+            if($(element).hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
                 panelStopCalls++;
             }
-            if($element.hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
+            if($(element).hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
                 contentStopCalls++;
             }
-            if($element.hasClass('dx-overlay-content')) {
+            if($(element).hasClass('dx-overlay-content')) {
                 overlayContentStopCalls++;
             }
-            if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            if($(element).hasClass(DRAWER_SHADER_CLASS)) {
                 shaderStopCalls++;
             }
         };
@@ -468,16 +468,16 @@ QUnit.module('Drawer behavior', () => {
         let isJumpedToEnd = false;
 
         const instance = $element.dxDrawer('instance');
-        fx.stop = function($element, jumpToEnd) {
+        fx.stop = function(element, jumpToEnd) {
             isJumpedToEnd = jumpToEnd;
 
-            if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+            if($(element).hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
                 panelStopCalls++;
             }
-            if($element.hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
+            if($(element).hasClass(DRAWER_VIEW_CONTENT_CLASS)) {
                 contentStopCalls++;
             }
-            if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            if($(element).hasClass(DRAWER_SHADER_CLASS)) {
                 shaderStopCalls++;
             }
         };

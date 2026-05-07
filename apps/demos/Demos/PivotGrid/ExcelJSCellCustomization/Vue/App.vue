@@ -23,11 +23,11 @@ import DxPivotGrid, {
   type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
-import { exportPivotGrid } from 'devextreme/excel_exporter';
+import { exportPivotGrid, type PivotGridCell } from 'devextreme-vue/common/export/excel';
 import { sales } from './data.ts';
 
 interface ConditionalAppearance {
@@ -69,8 +69,8 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   exportPivotGrid({
     component: e.component,
     worksheet,
-    customizeCell: ({ pivotCell, excelCell }) => {
-      if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
+    customizeCell: ({ pivotCell, excelCell }: { pivotCell?: PivotGridCell, excelCell?: any }) => {
+      if (pivotCell && (isDataCell(pivotCell) || isTotalCell(pivotCell))) {
         const appearance = getConditionalAppearance(pivotCell);
         Object.assign(excelCell, getExcelCellFormat(appearance));
       }
@@ -89,16 +89,16 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
     });
   });
 }
-function onCellPrepared({ cell, area, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
-  if (isDataCell(cell) || isTotalCell(cell)) {
+function onCellPrepared({ cell, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
+  if (cell && cellElement && (isDataCell(cell) || isTotalCell(cell))) {
     const appearance = getConditionalAppearance(cell);
     Object.assign(cellElement.style, getCssStyles(appearance));
   }
 }
-function isDataCell(cell) {
+function isDataCell(cell: DxPivotGridTypes.Cell) {
   return (cell.rowType === 'D' && cell.columnType === 'D');
 }
-function isTotalCell(cell) {
+function isTotalCell(cell: DxPivotGridTypes.Cell) {
   return (cell.type === 'T' || cell.type === 'GT' || cell.rowType === 'T' || cell.rowType === 'GT' || cell.columnType === 'T' || cell.columnType === 'GT');
 }
 function getExcelCellFormat({ fill, font, bold = false }: ConditionalAppearance) {
@@ -114,7 +114,7 @@ function getCssStyles({ fill, font, bold = false }: ConditionalAppearance) {
     'font-weight': bold ? 'bold' : undefined,
   };
 }
-function getConditionalAppearance(cell): ConditionalAppearance {
+function getConditionalAppearance(cell: DxPivotGridTypes.Cell): ConditionalAppearance {
   if (isTotalCell(cell)) {
     return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
   }

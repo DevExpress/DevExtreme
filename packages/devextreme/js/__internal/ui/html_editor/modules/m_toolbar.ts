@@ -20,7 +20,7 @@ import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import { capitalize } from '@ts/core/utils/capitalize';
-import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/m_menu';
+import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
 import Quill from 'devextreme-quill';
 
 import type { CommandsMap } from '../utils/ai';
@@ -134,13 +134,16 @@ if (Quill) {
         }
 
         this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
-          const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
+          const isSilentMode = eventSource === SILENT_ACTION
+            && isEmptyObject(this.quill.getFormat());
 
           if (!isSilentMode) {
             const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
 
             this._updateToolbar(isSelectionChanged);
           }
+
+          this._updateHeaderFormatWidget();
         });
       }
     }
@@ -669,6 +672,18 @@ if (Quill) {
       }
 
       this._toggleClearFormatting(hasFormats || selection.length > 1);
+    }
+
+    _updateHeaderFormatWidget() {
+      const selection = this.quill.getSelection();
+      const formatName = 'header';
+      const formatWidget = this._toolbarWidgets.getByName(formatName);
+      const formats = this.quill.getFormat(selection);
+      if (!selection || !formatWidget) {
+        return;
+      }
+
+      this._markActiveFormatWidget(formatName, formatWidget, formats);
     }
 
     _markActiveFormatWidget(name, widget, formats) {

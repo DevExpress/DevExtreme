@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
@@ -61,30 +60,52 @@ function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
   return offset;
 }
 
-const AreaItem = Class.inherit({
-  ctor(component) {
+abstract class AreaItem {
+  component: any;
+
+  _tableElement: any;
+
+  _tableHeight: any;
+
+  _colgroupElement: any;
+
+  _tableWidth: any;
+
+  _groupElement: any;
+
+  _rootElement: any;
+
+  _virtualContent: any;
+
+  _fakeTable: any;
+
+  _memoizeScrollTo: any;
+
+  constructor(component) {
     this.component = component;
-  },
+  }
 
-  option() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  option(...args: any[]): any {
     return this.component.option.apply(this.component, arguments);
-  },
+  }
 
-  _getRowElement(index) {
-    const that = this;
-    if (that._tableElement && that._tableElement.length > 0) {
-      return that._tableElement[0].rows[index];
+  _getRowElement(index: number): HTMLTableRowElement | null {
+    if (this._tableElement?.length > 0) {
+      const tableElement = this._tableElement.get(0) as HTMLTableElement;
+      return tableElement.rows[index];
     }
+
     return null;
-  },
+  }
 
   _createGroupElement() {
     return $('<div>');
-  },
+  }
 
   _createTableElement() {
     return $('<table>');
-  },
+  }
 
   _getCellText(cell, encodeHtml) {
     let cellText = cell.isWhiteSpace ? '&nbsp' : cell.text || '&nbsp';
@@ -94,11 +115,12 @@ const AreaItem = Class.inherit({
     }
 
     return cellText;
-  },
+  }
 
-  _getRowClassNames() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getRowClassNames(...args: any[]): any {
 
-  },
+  }
 
   _applyCustomStyles(options) {
     if (options.cell.width) {
@@ -107,60 +129,51 @@ const AreaItem = Class.inherit({
     if (options.cell.sorted) {
       options.classArray.push('dx-pivotgrid-sorted');
     }
-  },
+  }
 
   _getMainElementMarkup() {
     return domAdapter.createElement('tbody');
-  },
+  }
 
   _getCloseMainElementMarkup() {
     return '</tbody>';
-  },
+  }
 
   _renderTableContent(tableElement, data) {
-    const that = this;
     const rowsCount = data.length;
-    let row;
-    let cell;
-    let i;
-    let j;
-    let rowElement;
-    let cellElement;
-    let cellText;
-    const rtlEnabled = that.option('rtlEnabled');
-    const encodeHtml = that.option('encodeHtml');
-    let rowClassNames;
+    const rtlEnabled = this.option('rtlEnabled');
+    const encodeHtml = this.option('encodeHtml');
 
-    tableElement.data('area', that._getAreaName());
+    tableElement.data('area', this._getAreaName());
     tableElement.data('data', data);
-
     tableElement.css('width', '');
 
     const tbody = this._getMainElementMarkup();
 
-    for (i = 0; i < rowsCount; i += 1) {
-      row = data[i];
-      rowClassNames = [];
+    for (let i = 0; i < rowsCount; i += 1) {
+      const row = data[i];
+      const rowClassNames = [];
 
       const tr = domAdapter.createElement('tr');
 
-      for (j = 0; j < row.length; j += 1) {
-        cell = row[j];
+      for (let j = 0; j < row.length; j += 1) {
+        const cell = row[j];
+        const td = domAdapter.createElement('td');
 
         this._getRowClassNames(i, cell, rowClassNames);
 
-        const td = domAdapter.createElement('td');
+        let cellText = '';
 
         if (cell) {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
           cell.colspan && td.setAttribute('colspan', cell.colspan || 1);
 
           const styleOptions = {
-            cellElement,
+            cellElement: undefined,
             cell,
             cellsCount: row.length,
             cellIndex: j,
-            rowElement,
+            rowElement: undefined,
             rowIndex: i,
             rowsCount,
             rtlEnabled,
@@ -168,7 +181,7 @@ const AreaItem = Class.inherit({
             cssArray: [],
           };
 
-          that._applyCustomStyles(styleOptions);
+          this._applyCustomStyles(styleOptions);
 
           if (styleOptions.cssArray.length) {
             setStyle(td, styleOptions.cssArray.join(';'));
@@ -188,8 +201,6 @@ const AreaItem = Class.inherit({
           }
 
           cellText = this._getCellText(cell, encodeHtml);
-        } else {
-          cellText = '';
         }
 
         const span = domAdapter.createElement('span');
@@ -219,7 +230,9 @@ const AreaItem = Class.inherit({
     tableElement.append(tbody);
 
     this._triggerOnCellPrepared(tableElement, data);
-  },
+  }
+
+  abstract _getAreaName(): any;
 
   _triggerOnCellPrepared(tableElement, data) {
     const that = this;
@@ -259,35 +272,26 @@ const AreaItem = Class.inherit({
         }
       }
     }
-  },
+  }
 
-  _getRowHeight(index) {
+  _getRowHeight(index: number): number {
     const row = this._getRowElement(index);
-    let height = 0;
 
-    const { offsetHeight } = row;
+    if (row?.lastChild) {
+      const { height } = row.getBoundingClientRect();
 
-    if (row && row.lastChild) {
-      if (row.getBoundingClientRect) {
-        const clientRect = getBoundingRect(row);
-        height = clientRect.height;
-
-        if (height <= offsetHeight - 1) {
-          height = offsetHeight;
-        }
-      }
-
-      return height > 0 ? height : offsetHeight;
+      return height <= row.offsetHeight - 1 ? row.offsetHeight : height;
     }
+
     return 0;
-  },
+  }
 
   _setRowHeight(index, value) {
     const row = this._getRowElement(index);
     if (row) {
       row.style.height = `${value}px`;
     }
-  },
+  }
 
   getRowsLength() {
     const that = this;
@@ -295,7 +299,7 @@ const AreaItem = Class.inherit({
       return that._tableElement[0].rows.length;
     }
     return 0;
-  },
+  }
 
   getRowsHeight() {
     const that = this;
@@ -306,7 +310,7 @@ const AreaItem = Class.inherit({
       result.push(that._getRowHeight(i));
     }
     return result;
-  },
+  }
 
   setRowsHeight(values) {
     const that = this;
@@ -320,74 +324,68 @@ const AreaItem = Class.inherit({
 
     this._tableHeight = totalHeight;
     this._tableElement[0].style.height = `${totalHeight}px`;
-  },
+  }
 
-  getColumnsWidth() {
+  getColumnsWidth(): number[] {
     const rowsLength = this.getRowsLength();
-    let rowIndex;
-    let row;
-    let i;
-    let columnIndex;
-    const processedCells = [];
-    const result = [];
-    const fillCells = function (cells, rowIndex, columnIndex, rowSpan, colSpan) {
-      let rowOffset;
-      let columnOffset;
-      for (rowOffset = 0; rowOffset < rowSpan; rowOffset += 1) {
-        for (columnOffset = 0; columnOffset < colSpan; columnOffset += 1) {
-          cells[rowIndex + rowOffset] = cells[rowIndex + rowOffset] || [];
-          cells[rowIndex + rowOffset][columnIndex + columnOffset] = true;
-        }
-      }
-    };
+    const processedCells: boolean[][] = [];
+    const result: number[] = [];
+    const colSpans: number[] = [];
 
-    if (rowsLength) {
-      for (rowIndex = 0; rowIndex < rowsLength; rowIndex += 1) {
-        processedCells[rowIndex] = processedCells[rowIndex] || [];
-        row = this._getRowElement(rowIndex);
-        for (i = 0; i < row.cells.length; i += 1) {
-          for (columnIndex = 0; processedCells[rowIndex][columnIndex]; columnIndex += 1);
-          fillCells(
-            processedCells,
-            rowIndex,
-            columnIndex,
-            row.cells[i].rowSpan,
-            row.cells[i].colSpan,
-          );
-          if (row.cells[i].colSpan === 1) {
-            result[columnIndex] = result[columnIndex] || getRealElementWidth(row.cells[i]);
+    if (!rowsLength) {
+      return [];
+    }
+
+    for (let rowIndex = 0; rowIndex < rowsLength; rowIndex += 1) {
+      processedCells[rowIndex] ||= [];
+      const row = this._getRowElement(rowIndex) as HTMLTableRowElement;
+
+      Array.from(row.cells).forEach((cell) => {
+        let columnIndex = 0;
+        for (; processedCells[rowIndex][columnIndex]; columnIndex += 1);
+
+        for (let rowOffset = 0; rowOffset < cell.rowSpan; rowOffset += 1) {
+          for (let columnOffset = 0; columnOffset < cell.colSpan; columnOffset += 1) {
+            processedCells[rowIndex + rowOffset] ||= [];
+            processedCells[rowIndex + rowOffset][columnIndex + columnOffset] = true;
           }
         }
-      }
+
+        if (colSpans[columnIndex] === undefined || cell.colSpan < colSpans[columnIndex]) {
+          result[columnIndex] = getRealElementWidth(cell);
+          colSpans[columnIndex] = cell.colSpan;
+        }
+      });
     }
+
     return result;
-  },
+  }
 
-  setColumnsWidth(values) {
-    let i;
-    const tableElement = this._tableElement[0];
-    this._colgroupElement.html('');
+  setColumnsWidth(values: number[]): void {
+    const tableElement = this._tableElement.get(0);
     const columnsCount = this.getColumnsCount();
-    const columnWidth: any = [];
+    const columnWidth: number[] = [];
 
-    for (i = 0; i < columnsCount; i += 1) {
+    for (let i = 0; i < columnsCount; i += 1) {
       columnWidth.push(values[i] || 0);
     }
 
-    for (i = columnsCount; i < values.length && values; i += 1) {
+    for (let i = columnsCount; i < values.length && values; i += 1) {
       columnWidth[columnsCount - 1] += values[i];
     }
 
-    for (i = 0; i < columnsCount; i += 1) {
+    this._colgroupElement.html('');
+
+    for (let i = 0; i < columnsCount; i += 1) {
       const col = domAdapter.createElement('col');
       col.style.width = `${columnWidth[i]}px`;
       this._colgroupElement.append(col);
     }
-    this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
 
+    this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
     tableElement.style.width = `${this._tableWidth}px`;
     tableElement.style.tableLayout = 'fixed';
-  },
+  }
 
   resetColumnsWidth() {
     setWidth(this._colgroupElement.find('col'), 'auto');
@@ -395,23 +393,23 @@ const AreaItem = Class.inherit({
       width: '',
       tableLayout: '',
     });
-  },
+  }
 
   setGroupWidth(value) {
     this._getScrollable().option('width', value);
-  },
+  }
 
   setGroupHeight(value) {
     this._getScrollable().option('height', value);
-  },
+  }
 
   getGroupHeight() {
     return this._getGroupElementSize('height');
-  },
+  }
 
   getGroupWidth() {
     return this._getGroupElementSize('width');
-  },
+  }
 
   _getGroupElementSize(dimension) {
     const size = this.groupElement()[0].style[dimension];
@@ -421,23 +419,23 @@ const AreaItem = Class.inherit({
     }
 
     return null;
-  },
+  }
 
   groupElement() {
     return this._groupElement;
-  },
+  }
 
   tableElement() {
     return this._tableElement;
-  },
+  }
 
   element() {
     return this._rootElement;
-  },
+  }
 
   headElement() {
     return this._tableElement.find('thead');
-  },
+  }
 
   _setTableCss(styles) {
     if (this.option('rtlEnabled')) {
@@ -446,7 +444,7 @@ const AreaItem = Class.inherit({
     }
 
     this.tableElement().css(styles);
-  },
+  }
 
   setVirtualContentParams(params) {
     this._virtualContent.css({
@@ -454,31 +452,19 @@ const AreaItem = Class.inherit({
       height: params.height,
     });
 
-    const scrollable = this._getScrollable();
-
-    if (scrollable?.isRenovated()) {
-      this._getScrollable().option('classes', 'dx-virtual-mode');
-    } else {
-      this.groupElement().addClass('dx-virtual-mode');
-    }
-  },
+    this.groupElement().addClass('dx-virtual-mode');
+  }
 
   disableVirtualMode() {
-    const scrollable = this._getScrollable();
-
-    if (scrollable?.isRenovated()) {
-      this._getScrollable().option('classes', '');
-    } else {
-      this.groupElement().removeClass('dx-virtual-mode');
-    }
-  },
+    this.groupElement().removeClass('dx-virtual-mode');
+  }
 
   _renderVirtualContent() {
     const that = this;
     if (!that._virtualContent && that.option('scrolling.mode') === 'virtual') {
       that._virtualContent = $('<div>').addClass('dx-virtual-content').insertBefore(that._tableElement);
     }
-  },
+  }
 
   reset() {
     const that = this;
@@ -500,7 +486,7 @@ const AreaItem = Class.inherit({
       tableElement.style.height = '';
       tableElement.style.width = '100%';
     }
-  },
+  }
 
   _updateFakeTableVisibility() {
     const that = this;
@@ -516,7 +502,7 @@ const AreaItem = Class.inherit({
     } else {
       that._fakeTable.removeClass('dx-hidden');
     }
-  },
+  }
 
   _moveFakeTableHorizontally(scrollPos) {
     const that: any = this;
@@ -532,7 +518,7 @@ const AreaItem = Class.inherit({
     if (parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
       that._fakeTable[0].style[offsetStyleName] = `${offset}px`;
     }
-  },
+  }
 
   _moveFakeTableTop(scrollPos) {
     const that = this;
@@ -547,11 +533,12 @@ const AreaItem = Class.inherit({
     if (parseFloat(that._fakeTable[0].style.top) !== offsetTop) {
       that._fakeTable[0].style.top = `${offsetTop}px`;
     }
-  },
+  }
 
-  _moveFakeTable() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _moveFakeTable(...args: any[]) {
     this._updateFakeTableVisibility();
-  },
+  }
 
   _createFakeTable() {
     const that = this;
@@ -562,7 +549,7 @@ const AreaItem = Class.inherit({
         .addClass('dx-pivot-grid-fake-table')
         .appendTo(that._virtualContent);
     }
-  },
+  }
 
   render(rootElement, data) {
     const that = this;
@@ -587,23 +574,23 @@ const AreaItem = Class.inherit({
     that._renderTableContent(that._tableElement, data);
 
     that._renderVirtualContent();
-  },
+  }
 
   _getScrollable() {
     return this.groupElement().data('dxScrollable');
-  },
+  }
 
   _getMemoizeScrollTo() {
     this._memoizeScrollTo = this._memoizeScrollTo
       ?? getMemoizeScrollTo(() => this._getScrollable());
     return this._memoizeScrollTo;
-  },
+  }
 
   _getMaxLeftOffset(scrollable) {
     const containerElement = $(scrollable.container()).get(0);
 
     return containerElement.scrollWidth - containerElement.clientWidth;
-  },
+  }
 
   on(eventName, handler) {
     const that = this;
@@ -618,7 +605,7 @@ const AreaItem = Class.inherit({
       });
     }
     return this;
-  },
+  }
 
   off(eventName) {
     const scrollable = this._getScrollable();
@@ -626,7 +613,8 @@ const AreaItem = Class.inherit({
       scrollable.off(eventName);
     }
     return this;
-  },
+  }
+
   scrollTo(pos, force = false) {
     const scrollable = this._getScrollable();
     if (!scrollable) {
@@ -649,7 +637,7 @@ const AreaItem = Class.inherit({
       this._createFakeTable();
       this._moveFakeTable(pos);
     }
-  },
+  }
 
   updateScrollable() {
     const scrollable = this._getScrollable();
@@ -658,7 +646,7 @@ const AreaItem = Class.inherit({
     }
 
     return undefined;
-  },
+  }
 
   getColumnsCount() {
     let columnCount = 0;
@@ -674,13 +662,13 @@ const AreaItem = Class.inherit({
     }
 
     return columnCount;
-  },
+  }
 
   getData() {
     const tableElement = this._tableElement;
     return tableElement ? tableElement.data('data') : [];
-  },
-});
+  }
+}
 
 export default { AreaItem, getRealElementWidth };
 export { AreaItem, getRealElementWidth };

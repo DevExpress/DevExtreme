@@ -740,8 +740,8 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         const details = infos[0].details;
         assert.equal(details.length, 1, 'one detail item rendered');
 
-        assert.strictEqual(details[0].$image.css('width'), '36px', 'detail item icon has correct width');
-        assert.strictEqual(details[0].$image.css('height'), '36px', 'detail item icon has correct height');
+        assert.strictEqual(details[0].$image.css('width'), '40px', 'detail item icon has correct width');
+        assert.strictEqual(details[0].$image.css('height'), '40px', 'detail item icon has correct height');
     });
 
     test('upload operation must be finalized correctly when notifications.showPanel is false (T1136702)', function(assert) {

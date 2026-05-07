@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { getPublicElementJQuery } from 'integration/jquery/element';
+import { getPublicElementJQuery } from '__internal/integration/jquery/element';
 
 const jQueryDiv = $('div');
 const HTMLDiv = document.createElement('div');

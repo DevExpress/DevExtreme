@@ -20,8 +20,9 @@ import { getExponentLength, getRemainderByDivision, roundFloatPart } from '@js/c
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { dxSliderBaseOptions } from '@js/ui/slider';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 
 import TrackBar from '../m_track_bar';
 import SliderHandle from './m_slider_handle';
@@ -76,7 +77,12 @@ class Slider<
 
   _startOffset?: number;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return SLIDER_HANDLE_SELECTOR;
+  }
+
+  _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
     const roundedValue = (offset, isLeftDirection) => {
@@ -185,12 +191,6 @@ class Slider<
       focusStateEnabled: true,
       valueChangeMode: 'onHandleMove',
     };
-  }
-
-  _init(): void {
-    super._init();
-
-    this._activeStateUnit = SLIDER_HANDLE_SELECTOR;
   }
 
   _toggleValidationMessage(visible: boolean): void {
@@ -610,6 +610,7 @@ class Slider<
     } else {
       this.option('value', value);
       this._saveValueChangeEvent(undefined);
+      this._actualValue = undefined;
     }
   }
 

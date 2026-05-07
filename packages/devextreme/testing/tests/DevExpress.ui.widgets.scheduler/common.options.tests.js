@@ -3,6 +3,8 @@ import devices from '__internal/core/m_devices';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
+import 'generic_light.css!';
+
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/m_work_space_day';
@@ -86,36 +88,6 @@ QUnit.module('Options', () => {
                 dataAccessors.setter[name](appointment, 'xyz');
                 assert.equal(appointment['_' + name], 'xyz', 'setter for ' + name + ' is OK');
             });
-        } finally {
-            repaintStub.restore();
-        }
-    });
-
-    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataProvider', async function(assert) {
-        const { instance } = await createWrapper();
-        const repaintStub = sinon.stub(instance, 'repaint');
-
-        try {
-            const { appointmentDataProvider } = instance;
-
-            instance.option({
-                'startDateExpr': '_startDate',
-                'endDateExpr': '_endDate',
-                'startDateTimeZoneExpr': '_startDateTimeZone',
-                'endDateTimeZoneExpr': '_endDateTimeZone',
-                'textExpr': '_text',
-                'descriptionExpr': '_description',
-                'allDayExpr': '_allDay',
-                'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
-            });
-
-            const dataAccessors = instance._dataAccessors;
-
-            assert.deepEqual(dataAccessors.getter, appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.setter, appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.expr, appointmentDataProvider.dataAccessors.expr, 'dataExpressions were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.resources, appointmentDataProvider.dataAccessors.resources, 'resources were passed to appointmentDataProvider');
         } finally {
             repaintStub.restore();
         }
@@ -656,15 +628,16 @@ QUnit.module('Options', () => {
             view: 'timelineWeek',
         });
 
-        const spyAppointmentPopupForm = sinon.spy(
-            scheduler.instance,
-            '_createAppointmentPopupForm'
-        );
-
         scheduler.instance.option('resources', resources);
         await waitAsync(10);
 
-        assert.ok(spyAppointmentPopupForm.calledOnce, 'Appointment form was recreated');
+        scheduler.instance.showAppointmentPopup({
+            startDate: new Date(2017, 11, 18, 10),
+            endDate: new Date(2017, 11, 18, 11),
+        }, true);
+
+        const resourceEditor = scheduler.appointmentForm.getEditor('TestResources');
+        assert.ok(resourceEditor, 'Appointment form contains the resource editor after changing resources');
     });
 
     QUnit.test('Filter options should be updated when dataSource is changed', async function(assert) {
@@ -955,16 +928,14 @@ QUnit.module('Options', () => {
             dataSource,
         });
 
-        const initMarkupSpy = sinon.spy(scheduler.instance, '_initMarkup');
-        const reloadDataSourceSpy = sinon.spy(scheduler.instance, '_reloadDataSource');
-        let count = 0;
+        let loadCount = 0;
 
         const nextDataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
                     const d = $.Deferred();
                     setTimeout(function() {
-                        count++;
+                        loadCount++;
                         d.resolve([]);
                     }, 100);
 
@@ -979,10 +950,10 @@ QUnit.module('Options', () => {
             'views[2].intervalCount': 2,
             'views[2].startDate': new Date(),
         });
-        await waitForAsync(() => count === 2);
+        await waitForAsync(() => loadCount === 2);
+        await waitAsync(200);
 
-        assert.equal(initMarkupSpy.callCount, 2, 'Init markup was called on each dataSource changes');
-        assert.equal(reloadDataSourceSpy.callCount, 2, '_reloadDataSource was called on each changes');
+        assert.equal(loadCount, 2, 'Data source load was called exactly twice — once per option change');
     });
 
     QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {

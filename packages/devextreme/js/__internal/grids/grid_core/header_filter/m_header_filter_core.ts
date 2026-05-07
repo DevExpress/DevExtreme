@@ -1,29 +1,32 @@
 /* eslint-disable max-classes-per-file */
-import '@ts/ui/list/modules/m_search';
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/search';
+import '@ts/ui/list/modules/selection';
 
-import type { ChangedOptionInfo } from '@js/common/core/events';
+import type { ChangedOptionInfo, NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
-import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDeferred, isDefined, isFunction } from '@js/core/utils/type';
+import { isDefined, isFunction } from '@js/core/utils/type';
 import type dxCheckBox from '@js/ui/check_box';
+import type { ValueChangedInfo } from '@js/ui/editor/editor';
 import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
-import TreeView from '@js/ui/tree_view';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type TextBox from '@ts/ui/text_box/m_text_box';
+import List from '@ts/ui/list/list.edit.search';
+import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../m_utils';
+
+type CheckBoxValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
+type CheckBoxValueChangedHandler = (event: CheckBoxValueChangedEvent) => void;
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
 
 const DEFAULT_SEARCH_EXPRESSION = 'text';
+const HANDLER_DECORATED_KEY = Symbol('HANDLER_DECORATED_KEY');
 
 function resetChildrenItemSelection(items) {
   items = items || [];
@@ -39,10 +42,56 @@ function getSelectAllCheckBox(listComponent): dxCheckBox {
   return listComponent.$element().find(selector).dxCheckBox('instance');
 }
 
+function getListSelectAllValueChangedHandler(
+  selectAllCheckBox: dxCheckBox,
+  listComponent: dxList,
+): CheckBoxValueChangedHandler {
+  const originalHandler = selectAllCheckBox.option('onValueChanged') as CheckBoxValueChangedHandler;
+
+  if (originalHandler?.[HANDLER_DECORATED_KEY]) {
+    return originalHandler;
+  }
+
+  const handler = (originalEvent: CheckBoxValueChangedEvent): void => {
+    const { event, value } = originalEvent;
+    const isEventFromUI = !!event;
+
+    event?.stopPropagation();
+
+    switch (true) {
+      case isEventFromUI && value === true:
+        listComponent.selectAll();
+        return;
+      case isEventFromUI && value === false:
+        listComponent.unselectAll();
+        return;
+      default:
+        originalHandler?.(originalEvent);
+    }
+  };
+  handler[HANDLER_DECORATED_KEY] = true;
+
+  return handler;
+}
+
+// NOTE: T1284200 fix + after T1293295 regression fix
+// We take control of list's select all checkbox on our side
+// It's temporary solution, in future we should implement this functionality in list
+// or change our HeaderFilter UX behavior
+function decorateListSelectAllValueChanged(
+  listComponent: dxList,
+): void {
+  const selectAllCheckBox = getSelectAllCheckBox(listComponent);
+  if (!selectAllCheckBox) {
+    return;
+  }
+
+  const handler = getListSelectAllValueChangedHandler(selectAllCheckBox, listComponent);
+  selectAllCheckBox.option('onValueChanged', handler);
+}
+
 function updateListSelectAllState(
-  // NOTE: In runtime dxList's "unselectAll" returns Deferred.
-  // But in d.ts dxList has a void return type.
-  listComponent: Omit<dxList, 'unselectAll'> & { unselectAll: () => (DeferredObj<void> | void) },
+  listComponent: dxList,
   filterValues: any[],
 ): void {
   if (listComponent.option('searchValue')) {
@@ -53,25 +102,6 @@ function updateListSelectAllState(
 
   if (selectAllCheckBox && filterValues?.length) {
     selectAllCheckBox.option('value', undefined);
-
-    // NOTE: T1284200 fix
-    // We manually set checkbox state (value) above
-    // So, list do nothing because inner list component's "select all" state
-    // doesn't react to our manual update.
-    // Therefore -> we should handle first "select all" checkbox click manually.
-    // And after it return original "onValueChanged" handler back.
-    const originalValueChanged = selectAllCheckBox.option('onValueChanged');
-    selectAllCheckBox.option('onValueChanged', (event) => {
-      selectAllCheckBox.option('onValueChanged', originalValueChanged);
-
-      const deferred = listComponent.unselectAll();
-
-      if (isDeferred(deferred)) {
-        (deferred as DeferredObj<void>).always(() => { originalValueChanged?.(event); });
-      } else {
-        originalValueChanged?.(event);
-      }
-    });
   }
 }
 
@@ -260,22 +290,24 @@ export class HeaderFilterView extends Modules.View {
       focusStateEnabled: false,
       toolbarItems: [
         {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
+          toolbar: 'bottom' as const,
+          location: 'after' as const,
+          widget: 'dxButton' as const,
           options: {
-            text: headerFilterOptions.texts.ok,
+            text: headerFilterOptions.texts.ok
+              ?? messageLocalization.format('dxDataGrid-headerFilterOK'),
             onClick() {
               that.applyHeaderFilter(options);
             },
           },
         },
         {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
+          toolbar: 'bottom' as const,
+          location: 'after' as const,
+          widget: 'dxButton' as const,
           options: {
-            text: headerFilterOptions.texts.cancel,
+            text: headerFilterOptions.texts.cancel
+              ?? messageLocalization.format('dxDataGrid-headerFilterCancel'),
             onClick() {
               that.hideHeaderFilterMenu();
               hidePopupCallback?.();
@@ -323,7 +355,7 @@ export class HeaderFilterView extends Modules.View {
       },
       itemTemplate(data, _, element) {
         const $element = $(element);
-        if (options.encodeHtml) {
+        if (options.encodeHtml !== false) {
           return $element.text(data.text);
         }
 
@@ -336,7 +368,7 @@ export class HeaderFilterView extends Modules.View {
 
     const onTreeViewOptionChanged = (
       event: ChangedOptionInfo & {
-        component: TreeView & { _searchEditor: TextBox };
+        component: TreeView;
       },
     ): void => {
       switch (true) {
@@ -351,7 +383,7 @@ export class HeaderFilterView extends Modules.View {
           // So we should focus the searchEditor only after render will be completed
           Promise.resolve()
             .then(() => {
-              event.component._searchEditor.focus();
+              event.component.getSearchBoxController().focus();
             })
             .catch(() => {});
           break;
@@ -444,6 +476,7 @@ export class HeaderFilterView extends Modules.View {
             listComponent.option('selectedItems', selectedItems);
             listComponent._selectedItemsUpdating = false;
 
+            decorateListSelectAllValueChanged(listComponent);
             updateListSelectAllState(listComponent, options.filterValues);
           },
         }),
@@ -511,9 +544,9 @@ export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class H
 
         const indicatorLabel = (messageLocalization.format as any)('dxDataGrid-headerFilterIndicatorLabel', column.caption);
 
-        $headerFilterIndicator.attr('aria-label', indicatorLabel);
-        $headerFilterIndicator.attr('aria-haspopup', 'dialog');
-        $headerFilterIndicator.attr('role', 'button');
+        this.setAria('label', indicatorLabel, $headerFilterIndicator);
+        this.setAria('haspopup', 'dialog', $headerFilterIndicator);
+        this.setAria('role', 'button', $headerFilterIndicator);
       }
 
       return $headerFilterIndicator;

@@ -5,6 +5,8 @@ import fx from 'common/core/animation/fx';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
+import 'fluent_blue_light.css!';
+
 const { module, test, testStart } = QUnit;
 
 const CELL_HEIGHT = 20;
@@ -16,8 +18,8 @@ testStart(function() {
 });
 
 const createInstance = () => {
-    const observer = {
-        fire: (command) => {
+    const notifyScheduler = {
+        invoke: (command) => {
             switch(command) {
                 case 'getCellHeight':
                     return CELL_HEIGHT;
@@ -32,7 +34,7 @@ const createInstance = () => {
     };
 
     return $('#scheduler-appointment').dxSchedulerAppointment({
-        observer,
+        notifyScheduler,
         getAppointmentColor: () => new Deferred(),
         dataAccessors: {
             get(prop, obj) {

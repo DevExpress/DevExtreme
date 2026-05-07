@@ -1,4 +1,4 @@
-$recurrence-interval-number-box-margin-top: 25px;
+$recurrence-interval-number-box-margin-bottom: 6px;
 $recurrence-radio-group-item-padding: 10px;
 $recurrence-button-group-item-padding: 8px;
 
@@ -26,7 +26,11 @@ $recurrence-button-group-item-padding: 8px;
 }
 
 .dx-recurrence-numberbox-interval-label {
-  margin-top: $recurrence-interval-number-box-margin-top;
+  margin-bottom: $recurrence-interval-number-box-margin-bottom;
+}
+
+.dx-recurrence-numberbox-interval-wrapper .dx-box-item:last-child .dx-box-item-content {
+  justify-content: flex-end;
 }
 
 .dx-recurrence-radiogroup-repeat-type {

@@ -11,8 +11,9 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isEmpty } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
-import { focused } from '@js/ui/widget/selectors';
+import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 
 import type { TextEditorBaseProperties } from './m_text_editor.base';
 import TextEditorBase from './m_text_editor.base';
@@ -103,7 +104,7 @@ class TextEditorMask<
     };
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  _supportedKeys(): SupportedKeys {
     const that = this;
 
     const keyHandlerMap = {

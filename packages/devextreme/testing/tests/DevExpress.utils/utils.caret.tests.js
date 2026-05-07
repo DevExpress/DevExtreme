@@ -28,15 +28,28 @@ testModule('caret', () => {
         assert.deepEqual(caret($input), caretPosition, 'caret position set correctly');
     });
 
-    test('T341277 - an exception if element is not in document', function(assert) {
-        const caretPosition = { start: 1, end: 2 };
+    test('exception should not be thrown if the input is not attached to the DOM (T341277)', function(assert) {
+        const setterStub = sinon.stub();
         const input = document.createElement('input');
 
+        Object.defineProperty(input, 'selectionStart', {
+            set() {
+                setterStub();
+                throw new Error('Cannot set selection');
+            },
+        });
+
+        const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').returns(input);
+
         try {
-            caret(input, caretPosition);
+            caret(input, { start: 1, end: 2 });
+
+            assert.strictEqual(setterStub.callCount, 1, 'setter has been called');
             assert.ok(true, 'exception is not thrown');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
+        } finally {
+            getActiveElementStub.restore();
         }
     });
 
@@ -61,19 +74,12 @@ testModule('caret', () => {
 
     test('\'setCaret\' does not raise an error when it is impossible to set a range', function(assert) {
         const caretPosition = { start: 1, end: 2 };
-        const initialDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'selectionStart');
-        const getterSetterConfig = {
-            get: function() {
-                throw 'You can not get a selection';
-            },
-            set: function(value) {
-                throw 'You can not set a selection';
-            }
-        };
-
-        Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', $.extend({}, initialDescriptor, getterSetterConfig));
-
         const input = $('<input>').appendTo('#qunit-fixture').get(0);
+
+        Object.defineProperty(input, 'selectionStart', {
+            set() { throw new Error('Cannot set selection'); },
+            get() { throw new Error('Cannot set selection'); },
+        });
 
         try {
             caret(input, caretPosition);
@@ -81,8 +87,6 @@ testModule('caret', () => {
         } catch(e) {
             assert.ok(false, 'exception is thrown');
         }
-
-        Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', initialDescriptor);
     });
 
     [false, true].forEach((forceSetCaret) => {

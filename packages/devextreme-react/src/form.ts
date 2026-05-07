@@ -51,7 +51,7 @@ const Form = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["formData"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onEditorEnterKey","onInitialized"]), []);
@@ -93,7 +93,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any);
 }>
 const _componentAsyncRule = (props: IAsyncRuleProps) => {
   return React.createElement(NestedOption<IAsyncRuleProps>, {
@@ -150,7 +150,6 @@ const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMet
 type IButtonOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -250,7 +249,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
 }>
 const _componentCustomRule = (props: ICustomRuleProps) => {
   return React.createElement(NestedOption<ICustomRuleProps>, {
@@ -813,7 +812,6 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   animationEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   dataSource?: Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string;
   deferRendering?: boolean;
   disabled?: boolean;
@@ -827,6 +825,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   itemTitleTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  keyExpr?: (() => void) | string;
   loop?: boolean;
   noDataText?: string;
   onContentReady?: ((e: TabPanelContentReadyEvent) => void);
@@ -947,7 +946,7 @@ type IValidationRuleProps = React.PropsWithChildren<{
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;

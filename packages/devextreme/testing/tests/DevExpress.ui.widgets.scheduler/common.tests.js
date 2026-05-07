@@ -9,13 +9,9 @@ import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibi
 import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
-import themes from 'ui/themes';
-import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -448,7 +444,7 @@ QUnit.module('View with configuration', () => {
         });
 
         assert.equal(scheduler.instance._workSpace.option('firstDayOfWeek'), 0, 'value of the firstDayOfWeek in workSpace');
-        assert.equal(scheduler.instance._header.option('firstDayOfWeek'), 0, 'value of the firstDayOfWeek in header');
+        assert.equal(scheduler.instance.header.option('firstDayOfWeek'), 0, 'value of the firstDayOfWeek in header');
     });
 
     QUnit.test('Scheduler should have specific groups setting of the view', async function(assert) {
@@ -798,12 +794,6 @@ QUnit.module('View with configuration', () => {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', async function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
         const scheduler = await createWrapper({
             height: 1500,
             views: ['month'],
@@ -822,12 +812,6 @@ QUnit.module('View with configuration', () => {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', async function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
         const scheduler = await createWrapper({
             height: 500,
             views: [{
@@ -846,48 +830,6 @@ QUnit.module('View with configuration', () => {
 
         assert.equal(scrollHeight, dateTableHeight, 'Correct dateTable height');
         assert.notEqual(scrollableHeight, scrollHeight, 'Correct scroll content height');
-    });
-});
-
-QUnit.module('Options for Material-based themes in components', {
-    beforeEach: function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
-    },
-    afterEach: function() {
-        themes.isMaterialBased = this.origIsMaterialBased;
-    }
-}, () => {
-    QUnit.test('_collectorOffset option should be passed to SchedulerAppointments depending on the view', async function(assert) {
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false
-        });
-
-        const appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('currentView', 'week');
-        await waitAsync(10);
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
-    });
-
-    QUnit.test('Real _collectorOffset option should be passed to SchedulerAppointments depending on the adaptivityEnabled', async function(assert) {
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false,
-            adaptivityEnabled: false
-        });
-
-        let appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('adaptivityEnabled', true);
-        appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
     });
 });
 

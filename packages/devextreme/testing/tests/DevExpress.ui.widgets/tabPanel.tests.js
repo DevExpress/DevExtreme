@@ -1,17 +1,16 @@
 import fx from 'common/core/animation/fx';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
 import { deferUpdate } from 'core/utils/common';
 import support from '__internal/core/utils/m_support';
 import { isRenderer } from 'core/utils/type';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+import { current as currentTheme } from 'ui/themes';
 import {
     TABPANEL_TABS_ITEM_CLASS,
     TABPANEL_CONTAINER_CLASS,
@@ -61,8 +60,6 @@ const TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION = {
     bottom: TABS_INDICATOR_POSITION_CLASS.top,
     left: TABS_INDICATOR_POSITION_CLASS.right,
 };
-
-const toSelector = cssClass => '.' + cssClass;
 
 QUnit.module('rendering', {
     beforeEach() {
@@ -134,12 +131,10 @@ QUnit.module('rendering', {
             const textRect = $title.find('span').get(0).getBoundingClientRect();
 
             const epsilon = 2.1;
-            assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+            assert.roughEqual((iconRect.left + iconRect.width / 2), textRect.left + textRect.width / 2, epsilon, `correct horizontal centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
 
-            const horizontalMargin = rtlEnabled
-                ? iconRect.right - textRect.right - iconRect.width
-                : textRect.left - iconRect.left - iconRect.width;
-            assert.strictEqual(horizontalMargin, 8, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+            const verticalMargin = textRect.top - iconRect.bottom;
+            assert.strictEqual(verticalMargin, 4, `correct vertical alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
     });
 
@@ -162,9 +157,9 @@ QUnit.module('rendering', {
             const $tabPanelContainer = $tabPanel.find(`.${TABPANEL_CONTAINER_CLASS}`);
 
             if(tabsPosition === 'top' || tabsPosition === 'bottom') {
-                assert.strictEqual($tabPanelContainer.get(0).clientHeight, 62);
+                assert.strictEqual($tabPanelContainer.get(0).clientHeight, 55);
             } else {
-                assert.strictEqual($tabPanelContainer.get(0).clientWidth, 72);
+                assert.strictEqual($tabPanelContainer.get(0).clientWidth, 71);
             }
         });
     });
@@ -182,7 +177,7 @@ QUnit.module('options', {
         });
 
         this.tabPanelInstance = this.$tabPanel.dxTabPanel('instance');
-        this.tabWidgetInstance = this.$tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        this.tabWidgetInstance = this.$tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
     },
     afterEach() {
         fx.off = false;
@@ -221,19 +216,19 @@ QUnit.module('options', {
     });
 
     QUnit.test('iconPosition option should be passed to tabs correctly', function(assert) {
-        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'start', 'option <iconPosition> successfully passed to nested tabs widget');
+        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'top', 'option <iconPosition> successfully passed to nested tabs widget');
 
-        this.tabPanelInstance.option('iconPosition', 'top');
+        this.tabPanelInstance.option('iconPosition', 'start');
 
-        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'top', 'option <iconPosition> of nested tabs widget successfully changed');
+        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'start', 'option <iconPosition> of nested tabs widget successfully changed');
     });
 
     QUnit.test('stylingMode option should be passed to tabs correctly', function(assert) {
-        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'primary', 'option <stylingMode> successfully passed to nested tabs widget');
+        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'secondary', 'option <stylingMode> successfully passed to nested tabs widget');
 
-        this.tabPanelInstance.option('stylingMode', 'secondary');
+        this.tabPanelInstance.option('stylingMode', 'primary');
 
-        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'secondary', 'option <stylingMode> of nested tabs widget successfully changed');
+        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'primary', 'option <stylingMode> of nested tabs widget successfully changed');
     });
 
     QUnit.test('dataSource option test', function(assert) {
@@ -319,7 +314,7 @@ QUnit.module('onSelectionChanging', {
             this.tabPanel = this.$tabPanel
                 .dxTabPanel($.extend({}, initialOptions, options))
                 .dxTabPanel('instance');
-            this.$tabs = this.$tabPanel.find(toSelector(TABS_CLASS));
+            this.$tabs = this.$tabPanel.find(`.${TABS_CLASS}`);
             this.tabs = this.$tabs.dxTabs('instance');
         };
         this.reinit = (options) => {
@@ -761,10 +756,10 @@ QUnit.module('action handlers', {
         });
 
         this.tabPanelInstance = this.$tabPanel.dxTabPanel('instance');
-        this.tabWidgetInstance = this.$tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        this.tabWidgetInstance = this.$tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
 
-        this.multiViewMouse = pointerMock(this.$tabPanel.find(toSelector(MULTIVIEW_ITEM_CLASS))[0]).start();
-        this.tabWidgetMouse = pointerMock(this.$tabPanel.find(toSelector(TABS_ITEM_CLASS))[0]).start();
+        this.multiViewMouse = pointerMock(this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`)[0]).start();
+        this.tabWidgetMouse = pointerMock(this.$tabPanel.find(`.${TABS_ITEM_CLASS}`)[0]).start();
     },
     afterEach() {
         this.clock.restore();
@@ -832,15 +827,15 @@ QUnit.module('action handlers', {
         });
 
         try {
-            assert.equal($element.find(toSelector(MULTIVIEW_ITEM_CLASS + '-content')).length, 1, 'only one multiView item is rendered on init');
+            assert.equal($element.find(`.${MULTIVIEW_ITEM_CLASS}-content`).length, 1, 'only one multiView item is rendered on init');
 
             const index = 2;
-            const pointer = pointerMock($element.find(toSelector(TABS_ITEM_CLASS)).eq(index));
+            const pointer = pointerMock($element.find(`.${TABS_ITEM_CLASS}`).eq(index));
 
             pointer.start().click();
 
-            assert.equal($element.find(toSelector(MULTIVIEW_ITEM_CLASS + '-content')).length, 2, 'one multiView item is rendered after click on tab');
-            assert.equal($element.find(toSelector(SELECTED_ITEM_CLASS)).text(), items[index].text, 'selected multiView item has correct data');
+            assert.equal($element.find(`.${MULTIVIEW_ITEM_CLASS}-content`).length, 2, 'one multiView item is rendered after click on tab');
+            assert.equal($element.find(`.${SELECTED_ITEM_CLASS}`).text(), items[index].text, 'selected multiView item has correct data');
         } finally {
             $element.remove();
         }
@@ -879,7 +874,7 @@ QUnit.module('events handlers', {
 
             that.tabPanelInstance = that.$tabPanel.dxTabPanel('instance');
 
-            that.tabWidgetMouse = pointerMock(that.$tabPanel.find(toSelector(TABS_ITEM_CLASS))[0]).start();
+            that.tabWidgetMouse = pointerMock(that.$tabPanel.find(`.${TABS_ITEM_CLASS}`)[0]).start();
         };
     },
     afterEach() {
@@ -1026,8 +1021,8 @@ QUnit.module('focus policy', {
             focusStateEnabled: true,
         });
 
-        const $tabs = $tabPanel.find(toSelector(TABPANEL_TABS_ITEM_CLASS));
-        const tabsInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        const $tabs = $tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
+        const tabsInstance = $tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
         const $firstTab = $tabs.first();
 
         assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
@@ -1049,7 +1044,7 @@ QUnit.module('keyboard navigation', {
             items
         });
         this.instance = this.$element.dxTabPanel('instance');
-        this.$tabs = this.$element.find(toSelector(TABS_CLASS));
+        this.$tabs = this.$element.find(`.${TABS_CLASS}`);
         this.tabs = this.$tabs.dxTabs('instance');
         this.clock = sinon.useFakeTimers();
     },
@@ -1072,7 +1067,7 @@ QUnit.module('keyboard navigation', {
         assert.expect(4);
 
         this.instance.focus();
-        $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
+        $(`.${MULTIVIEW_ITEM_CLASS}`).eq(1).trigger('dxpointerdown');
         this.clock.tick(10);
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
@@ -1090,7 +1085,7 @@ QUnit.module('keyboard navigation', {
         const keyboard = keyboardMock(this.$tabs);
         keyboard.press('right');
 
-        const $thirdTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(2);
+        const $thirdTab = this.$tabs.find(`.${TABPANEL_TABS_ITEM_CLASS}`).get(2);
         pointerMock($thirdTab).start().click();
 
         this.clock.tick(10);
@@ -1098,7 +1093,7 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual($($thirdTab).hasClass(FOCUS_STATE_CLASS), true);
         assert.strictEqual($($thirdTab).hasClass(TABS_ITEM_SELECTED_CLASS), true);
 
-        const $firstTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(0);
+        const $firstTab = this.$tabs.find(`.${TABPANEL_TABS_ITEM_CLASS}`).get(0);
         assert.strictEqual($($firstTab).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), false);
 
         keyboard.press('left');
@@ -1112,7 +1107,7 @@ QUnit.module('keyboard navigation', {
         assert.expect(3);
 
         this.instance.focus();
-        $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger('dxpointerup');
+        $(`.${TABS_ITEM_CLASS}`).eq(1).trigger('dxpointerup');
         this.clock.tick(10);
 
         const tabsFocusedIndex = $(this.instance.option('focusedElement')).index();
@@ -1122,10 +1117,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
-        if(shouldSkipOnMobile(assert, 'there is no keyboard navigation on mobile devices')) {
-            return;
-        }
-
         this.instance.option({
             items: [1, 2, 3],
             loop: false,
@@ -1133,29 +1124,30 @@ QUnit.module('keyboard navigation', {
         });
         this.instance.option('loop', true);
         const pointer = pointerMock(this.$element);
-        const keyDownEvent = $.Event('keydown', { key: 'ArrowRight' });
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
-        this.$element.trigger(keyDownEvent).trigger(keyDownEvent);
+        assert.strictEqual(this.instance.option('selectedIndex'), 1, 'at second element after swipe');
 
+        this.$element.trigger($.Event('keydown', { key: 'ArrowRight' }));
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'at third element after first keydown');
+
+        this.$element.trigger($.Event('keydown', { key: 'ArrowRight' }));
         assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
     });
 
-    if(devices.current().deviceType === 'desktop') {
-        const createWidget = ($element) => {
-            const widget = $element.dxTabPanel({
-                focusStateEnabled: true,
-                items: [{ text: 'text' }]
-            }).dxTabPanel('instance');
+    const createWidget = ($element) => {
+        const widget = $element.dxTabPanel({
+            focusStateEnabled: true,
+            items: [{ text: 'text' }]
+        }).dxTabPanel('instance');
 
-            $element.attr('tabIndex', 1);
+        $element.attr('tabIndex', 1);
 
-            return widget;
-        };
+        return widget;
+    };
 
-        registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, checkInitialize: false });
-        registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: 'Tabs: ' });
-    }
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, checkInitialize: false });
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: 'Tabs: ' });
 });
 
 QUnit.module('Disabled items', {
@@ -1173,7 +1165,7 @@ QUnit.module('Disabled items', {
         });
 
         this.instance = this.$element.dxTabPanel('instance');
-        this.$tabs = this.$element.find(toSelector(TABS_CLASS));
+        this.$tabs = this.$element.find(`.${TABS_CLASS}`);
 
         this.instance.option('items[1].disabled', true);
         this.instance.focus();
@@ -1183,7 +1175,7 @@ QUnit.module('Disabled items', {
     }
 }, () => {
     QUnit.test('disabled item can be focused by keyboard', function(assert) {
-        const $disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
+        const $disabledItem = $(`.${TABS_ITEM_CLASS}`).eq(1);
         const keyboard = keyboardMock(this.$tabs);
 
         keyboard.press('right');
@@ -1193,7 +1185,7 @@ QUnit.module('Disabled items', {
     });
 
     QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
-        const multiViewWrapper = this.$element.find(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const multiViewWrapper = this.$element.find(`.${MULTIVIEW_WRAPPER_CLASS}`);
         const keyboard = keyboardMock(this.$tabs);
 
         assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class set');
@@ -1269,7 +1261,7 @@ QUnit.module('Tabs Indicator position', () => {
     ['top', 'right', 'bottom', 'left'].forEach(tabsPosition => {
         QUnit.test(`The tabs element must have the correct indicator position class when tabsPosition=${tabsPosition}`, function(assert) {
             const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3], tabsPosition });
-            const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+            const $tabs = $tabPanel.find(`.${TABS_CLASS}`);
 
             assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION[tabsPosition]));
         });
@@ -1278,7 +1270,7 @@ QUnit.module('Tabs Indicator position', () => {
     QUnit.test('The tabs element must have the correct indicator position class when tabsPosition was changed', function(assert) {
         const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
         const tabPanel = $tabPanel.dxTabPanel('instance');
-        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+        const $tabs = $tabPanel.find(`.${TABS_CLASS}`);
 
         assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
 
@@ -1306,7 +1298,7 @@ QUnit.module('Tabs Indicator position', () => {
     QUnit.test('The tabs element must have the correct indicator position class when _tabsIndicatorPosition was changed', function(assert) {
         const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
         const tabPanel = $tabPanel.dxTabPanel('instance');
-        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+        const $tabs = $tabPanel.find(`.${TABS_CLASS}`);
 
         assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
 

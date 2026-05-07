@@ -1,9 +1,9 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import { getResourceManagerMock, resourceItemsByIdMock } from '@ts/scheduler/__mock__/resourceManager.mock';
 
-import { convertToOldTree, reduceResourcesTree } from './agenda_group_utils';
+import { getResourceManagerMock } from '../../__mock__/resource_manager.mock';
+import { reduceResourcesTree } from './agenda_group_utils';
 
 describe('agenda group utils', () => {
   describe('reduceResourcesTree', () => {
@@ -59,90 +59,6 @@ describe('agenda group utils', () => {
       const manager = getResourceManagerMock();
       await manager.loadGroupResources(['roomId', 'nested.priorityId']);
       expect(reduceResourcesTree(manager.resourceById, manager.groupsTree, [])).toEqual([]);
-    });
-  });
-
-  describe('convertToOldTree', () => {
-    it('should convert to old tree structure', async () => {
-      const manager = getResourceManagerMock();
-      await manager.loadGroupResources(['roomId', 'nested.priorityId']);
-      expect(convertToOldTree(manager.resourceById, manager.groupsTree)).toEqual([
-        {
-          children: [
-            {
-              children: [],
-              name: 'nested.priorityId',
-              title: 'Low Priority',
-              color: '#1e90ff',
-              data: resourceItemsByIdMock['nested.priorityId'][0],
-              value: 1,
-            },
-            {
-              children: [],
-              name: 'nested.priorityId',
-              title: 'High Priority',
-              color: '#ff9747',
-              data: resourceItemsByIdMock['nested.priorityId'][1],
-              value: 2,
-            },
-          ],
-          name: 'roomId',
-          title: 'Room 1',
-          color: '#aaa',
-          data: resourceItemsByIdMock.roomId[0],
-          value: 0,
-        },
-        {
-          children: [
-            {
-              children: [],
-              name: 'nested.priorityId',
-              title: 'Low Priority',
-              color: '#1e90ff',
-              data: resourceItemsByIdMock['nested.priorityId'][0],
-              value: 1,
-            },
-            {
-              children: [],
-              name: 'nested.priorityId',
-              title: 'High Priority',
-              color: '#ff9747',
-              data: resourceItemsByIdMock['nested.priorityId'][1],
-              value: 2,
-            },
-          ],
-          name: 'roomId',
-          title: 'Room 2',
-          color: '#ccc',
-          data: resourceItemsByIdMock.roomId[1],
-          value: 1,
-        },
-        {
-          children: [
-            {
-              children: [],
-              name: 'nested.priorityId',
-              title: 'Low Priority',
-              color: '#1e90ff',
-              data: resourceItemsByIdMock['nested.priorityId'][0],
-              value: 1,
-            },
-            {
-              children: [],
-              name: 'nested.priorityId',
-              title: 'High Priority',
-              color: '#ff9747',
-              data: resourceItemsByIdMock['nested.priorityId'][1],
-              value: 2,
-            },
-          ],
-          name: 'roomId',
-          title: 'Room 3',
-          color: '#777',
-          data: resourceItemsByIdMock.roomId[2],
-          value: 2,
-        },
-      ]);
     });
   });
 });

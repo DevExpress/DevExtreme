@@ -1,2 +1,3 @@
-import Bullet from './sparklines/bullet';
+import Bullet from '../__internal/viz/sparklines/bullet';
+
 export default Bullet;

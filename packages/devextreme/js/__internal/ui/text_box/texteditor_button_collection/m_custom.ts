@@ -3,25 +3,24 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end, start } from '@js/common/core/events/hover';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 
 import type TextEditorBase from '../m_text_editor.base';
-import TextEditorButton from './m_button';
+import TextEditorButton, { isButtonInstance } from './m_button';
 
 const CUSTOM_BUTTON_HOVERED_CLASS = 'dx-custom-button-hovered';
 
 export default class CustomButton extends TextEditorButton {
   _attachEvents(
-    instance: unknown,
+    instance: Button,
     $element: dxElementWrapper,
   ): void {
-    const { editor } = this;
-
     eventsEngine.on($element, start, () => {
-      editor.$element().addClass(CUSTOM_BUTTON_HOVERED_CLASS);
+      this.editor?.$element().addClass(CUSTOM_BUTTON_HOVERED_CLASS);
     });
     eventsEngine.on($element, end, () => {
-      editor.$element().removeClass(CUSTOM_BUTTON_HOVERED_CLASS);
+      this.editor?.$element().removeClass(CUSTOM_BUTTON_HOVERED_CLASS);
     });
     eventsEngine.on($element, clickEventName, (e) => {
       e.stopPropagation();
@@ -29,24 +28,34 @@ export default class CustomButton extends TextEditorButton {
   }
 
   _create(): {
-    $element: dxElementWrapper;
     instance: Button;
-  } {
+    $element: dxElementWrapper;
+  } | undefined {
     const { editor } = this;
+
+    if (!editor) {
+      return undefined;
+    }
+
     const $element = $('<div>');
 
     this._addToContainer($element);
 
-    const instance = editor._createComponent($element, Button, {
-      ...this.options,
-      ignoreParentReadOnly: true,
-      disabled: this._isDisabled(),
-      integrationOptions: this._prepareIntegrationOptions(editor),
-    });
+    const instance = editor._createComponent<Button, ButtonProperties>(
+      $element,
+      Button,
+      {
+        ...this.options,
+        // @ts-expect-error ignoreParentReadOnly is private
+        ignoreParentReadOnly: true,
+        disabled: this._isDisabled(),
+        integrationOptions: this._prepareIntegrationOptions(editor),
+      },
+    );
 
     return {
-      $element,
       instance,
+      $element,
     };
   }
 
@@ -61,7 +70,7 @@ export default class CustomButton extends TextEditorButton {
   update(): boolean {
     const isUpdated = super.update();
 
-    if (this.instance) {
+    if (isButtonInstance(this.instance)) {
       this.instance.option('disabled', this._isDisabled());
     }
 
@@ -69,7 +78,7 @@ export default class CustomButton extends TextEditorButton {
   }
 
   _isVisible(): boolean {
-    const { visible } = this.editor.option();
+    const { visible } = this.editor?.option() ?? {};
 
     return !!visible;
   }
@@ -77,13 +86,13 @@ export default class CustomButton extends TextEditorButton {
   _isDisabled(): boolean | undefined {
     const isDefinedByUser = this.options.disabled !== undefined;
     if (isDefinedByUser) {
-      if (this.instance) {
+      if (isButtonInstance(this.instance)) {
         return this.instance.option('disabled');
       }
 
       return this.options.disabled;
     }
-    const { readOnly } = this.editor.option();
+    const { readOnly } = this.editor?.option() ?? {};
 
     return readOnly;
   }

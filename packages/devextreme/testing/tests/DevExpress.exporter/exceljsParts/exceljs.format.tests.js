@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ExcelJS from 'exceljs';
+import ExcelJS from 'devextreme-exceljs-fork';
 import { ExcelJSDataGridTestHelper, ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid, exportPivotGrid } from 'excel_exporter';
 

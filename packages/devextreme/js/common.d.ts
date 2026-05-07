@@ -58,7 +58,7 @@ export type AsyncRule = {
   * @docid
   * @type_function_return Promise<any>
   * @type_function_param1 options:object
-  * @type_function_param1_field value:string|number
+  * @type_function_param1_field value:any
   * @type_function_param1_field rule:object
   * @type_function_param1_field validator:object
   * @type_function_param1_field data:object
@@ -160,7 +160,7 @@ export type CustomRule = {
   /**
   * @docid
   * @type_function_param1 options:object
-  * @type_function_param1_field value:string|number
+  * @type_function_param1_field value:any
   * @type_function_param1_field rule:object
   * @type_function_param1_field validator:object
   * @type_function_param1_field data:object
@@ -270,6 +270,11 @@ export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
  */
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
+export type VersionAssertion = {
+  packageName: string;
+  version: string;
+};
+
 /**
  * @docid
  * @section commonObjectStructures
@@ -278,6 +283,7 @@ export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential'
  * @type object
  */
 export type GlobalConfig = {
+  versionAssertions?: VersionAssertion[];
   /**
    * @docid
    * @default "."
@@ -298,6 +304,12 @@ export type GlobalConfig = {
    * @public
    */
   defaultUseCurrencyAccountingStyle?: boolean;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  copyStylesToShadowDom?: boolean;
   /**
    * @docid
    * @default undefined

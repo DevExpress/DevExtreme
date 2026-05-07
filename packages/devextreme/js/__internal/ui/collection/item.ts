@@ -1,9 +1,10 @@
-import Class from '@js/core/class';
+import type { ItemInfo, NativeEventInfo } from '@js/common/core/events';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { attachInstanceToElement, getInstanceByElement } from '@js/core/utils/public_component';
-import type { CollectionWidgetItem } from '@js/ui/collection/ui.collection_widget.base';
+import { isObject } from '@js/core/utils/type';
+import type { CollectionWidgetItem, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -17,7 +18,7 @@ interface Watcher {
 const forcibleWatcher = <T>(
   watchMethod: (
     fn: () => void,
-    callback: (value: T) => void
+    callback: (value: T) => void,
   ) => () => void,
   fn: () => T,
   callback: (value: T, oldValue: T) => void,
@@ -44,18 +45,28 @@ const forcibleWatcher = <T>(
 export interface ItemExtraOption<TProperties> {
   owner: Record<string, unknown>;
   fieldGetter: <TT>(
-    field: keyof TProperties
+    field: keyof TProperties,
   ) => (rawData: TProperties | undefined) => TT;
   watchMethod: <TT>() => (
     fn: () => void,
-    callback: (value: TT) => void
+    callback: (value: TT) => void,
   ) => () => void;
 }
 
+export type ItemClickEvent<
+  TProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> = NativeEventInfo<any, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TProperties>;
+
+export type ClickableCollectionWidgetItem<
+  TProperties extends CollectionWidgetItem = CollectionWidgetItem,
+> = TProperties & {
+  onClick: (e: ItemClickEvent<TProperties>) => void;
+};
+
 class CollectionItem<
   TProperties extends CollectionWidgetItem = CollectionWidgetItem,
-  // @ts-expect-error dxClass inheritance issue
-> extends (Class.inherit({}) as new() => {}) {
+> {
   _dirty?: boolean;
 
   _watchers!: Watcher[];
@@ -66,11 +77,11 @@ class CollectionItem<
 
   _rawData?: TProperties;
 
-  ctor(
+  constructor(
     $element: dxElementWrapper,
     options: ItemExtraOption<TProperties>,
     rawData: TProperties,
-  ): void {
+  ) {
     this._$element = $element;
     this._options = options;
     this._rawData = rawData;
@@ -161,8 +172,13 @@ class CollectionItem<
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance<T = CollectionItem<any>>($element: dxElementWrapper): T {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getInstanceByElement($element, this);
+  }
+
+  static isClickableItem(
+    item: ItemLike,
+  ): item is ClickableCollectionWidgetItem {
+    return isObject(item) && 'onClick' in item;
   }
 }
 

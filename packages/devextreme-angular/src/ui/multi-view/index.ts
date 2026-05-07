@@ -38,16 +38,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -68,6 +68,12 @@ import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nest
     ]
 })
 export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxMultiView<TItem, TKey> = null;
 
     /**
@@ -600,26 +606,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiMultiViewItemComponent)
-    get itemsChildren(): QueryList<DxiMultiViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMultiViewItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

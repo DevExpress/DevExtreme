@@ -1,17 +1,18 @@
 import $ from 'jquery';
 import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/m_date_box.mask.parts';
-import dateParser from 'common/core/localization/ldml/date.parser';
+import dateParser from '__internal/core/localization/ldml/dateParserModule';
 import dateLocalization from 'common/core/localization/date';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from '__internal/core/m_devices';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+import localization from 'localization';
 
 const { test, module } = QUnit;
 
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -19,7 +20,16 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });
 
-const simulateIMEInput = function(eventsData) {
+const insertNativeText = ($input, text) => {
+    const input = $input.get(0);
+    const start = input.selectionStart || input.value.length;
+    const end = input.selectionEnd || start;
+
+    input.value = input.value.slice(0, start) + text + input.value.slice(end);
+    input.setSelectionRange(start + text.length, start + text.length);
+};
+
+const simulateIMEInput = function(eventsData, shouldFireInsertText) {
     this.$input.trigger($.Event('keydown', {
         key: 'Process',
         code: eventsData.keyDownCode,
@@ -55,6 +65,28 @@ const simulateIMEInput = function(eventsData) {
     }));
 
     this.$input.trigger($.Event('compositionend'));
+
+    if(shouldFireInsertText) {
+        insertNativeText(this.$input, eventsData.inputData);
+
+        this.$input.trigger($.Event('input', {
+            type: 'input',
+            originalEvent: $.Event('input', {
+                inputType: 'insertText',
+                isComposing: false,
+                data: eventsData.inputData,
+            }),
+        }));
+
+        this.$input.trigger($.Event('keyup', {
+            key: eventsData.inputData,
+            code: eventsData.keyDownCode,
+            originalEvent: $.Event('keyup', {
+                key: eventsData.inputData,
+                code: eventsData.keyDownCode,
+            }),
+        }));
+    }
 };
 
 const setupModule = {
@@ -1239,6 +1271,78 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), '5555/05/05', 'year was changed');
     });
 
+    test('Typing digits via Numpad IME with final insertText should process every composition cycle once (T1326628)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        const eventsData = {
+            keyDownCode: 'Numpad1',
+            inputData: '1',
+        };
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '01/16/2025', 'first month digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/16/2025', 'second month digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/01/2025', 'first day digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2025', 'second day digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2021', 'first year digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2011', 'second year digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/2111', 'third year digit is applied');
+
+        simulateIMEInput.call(this, eventsData, true);
+        assert.strictEqual(this.$input.val(), '11/11/1111', 'fourth year digit is applied');
+    });
+
+    test('Final insertText after Numpad IME composition should not duplicate digit or corrupt mask value (T1326628)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        simulateIMEInput.call(this, {
+            keyDownCode: 'Numpad1',
+            inputData: '1',
+        }, true);
+
+        simulateIMEInput.call(this, {
+            keyDownCode: 'Numpad1',
+            inputData: '1',
+        }, true);
+
+        assert.strictEqual(this.$input.val(), '11/16/2025', 'final insertText commit is ignored as duplicate IME commit');
+    });
+
+    test('Typing zero via Numpad IME composition with final insertText should be registered (T1326628)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2012, 8, 5),
+        });
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        simulateIMEInput.call(this, { keyDownCode: 'Numpad1', inputData: '1' }, true);
+        simulateIMEInput.call(this, { keyDownCode: 'Numpad0', inputData: '0' }, true);
+
+        assert.strictEqual(this.$input.val(), '10/05/2012', 'month is correctly set to 10 after typing "1" then "0" via Numpad IME');
+    });
 
     test('Pasting incorrect value to the date part should not ignore mask rules', function(assert) {
         this.instance.option('displayFormat', 'yyyy/MM/dd');
@@ -1289,6 +1393,32 @@ module('Date AM/PM Handling', setupModule, () => {
 
             assert.strictEqual(this.$input.val(), 'PM');
         });
+    });
+
+    test('up/down arrows should continue to switch AM/PM on subsequent presses when locale has localized period names (T1327076)', function(assert) {
+        const defaultLocale = localization.locale();
+
+        try {
+            localization.locale('es-ES');
+
+            const [amName, pmName] = dateLocalization.getPeriodNames();
+
+            this.instance.option({
+                value: new Date('10/10/2012 22:00'),
+                displayFormat: 'a',
+                useMaskBehavior: true,
+            });
+
+            assert.strictEqual(this.$input.val(), pmName, 'initial value is localized PM');
+
+            this.keyboard.press('up');
+            assert.strictEqual(this.$input.val(), amName, 'value changed to localized AM after first press');
+
+            this.keyboard.press('up');
+            assert.strictEqual(this.$input.val(), pmName, 'value returned to localized PM after second press');
+        } finally {
+            localization.locale(defaultLocale);
+        }
     });
 });
 
@@ -1452,10 +1582,6 @@ module('Empty dateBox', {
     });
 
     test('space keydown event should be prevented', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const value = new Date(2020, 5, 5);
         this.instance.option({ value });
         this.keyboard.keyDown('space');
@@ -1648,6 +1774,61 @@ module('Regression', () => {
         }).dxDateBox('instance');
 
         instance.focus();
+    });
+
+    QUnit.test('mask for HH:mm should be reset after selecting all multiple times (T1308916)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            value: new Date(2021, 9, 17, 16, 6),
+            displayFormat: 'HH:mm',
+            type: 'time',
+            useMaskBehavior: true,
+        });
+
+        const $input = $dateBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        const { length } = $input.val();
+
+        keyboard
+            .focus()
+            .caret({ start: 0, end: length })
+            .type('1234');
+
+        assert.strictEqual($input.val(), '12:34', 'text is correct after typing "1234" over full selection');
+
+        keyboard
+            .caret({ start: 0, end: length })
+            .type('12');
+
+        assert.strictEqual($input.val(), '12:34', 'both digits go to hours and minutes stay unchanged');
+    });
+
+    QUnit.test('should be valid when date returns to valid range after out-of-range change (T1326750)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            useMaskBehavior: true,
+            pickerType: 'calendar',
+            type: 'date',
+            displayFormat: 'dd-MM-yyyy',
+            value: new Date(2020, 2, 31),
+            min: new Date(2018, 3, 1),
+            max: new Date(2020, 2, 31),
+        });
+
+        const instance = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.press('right').press('right');
+
+        keyboard.press('up');
+        keyboard.press('enter');
+
+        assert.strictEqual(instance.option('isValid'), false, 'should be invalid when year 2021 exceeds max date');
+
+        keyboard.press('down');
+        keyboard.press('enter');
+
+        assert.strictEqual(instance.option('isValid'), true, 'should be valid when year returns to 2020');
     });
 });
 
@@ -1842,6 +2023,24 @@ module('Caret moving', setupModule, () => {
         this.$input.trigger('dxclick');
 
         assert.deepEqual(this.keyboard.caret(), allSelectedCaret, 'no date part is selected');
+    });
+
+    test('should keep active part after focus out and focus in (T1318439)', function(assert) {
+        const caretYear = { start: 11, end: 15 };
+
+        this.instance.option({
+            useMaskBehavior: true,
+            mode: 'text',
+        });
+
+        this.keyboard.press('end');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected initially');
+
+        this.$input.trigger('focusout');
+        this.$input.trigger('focusin');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected after focus return');
     });
 });
 

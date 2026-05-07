@@ -1,6 +1,6 @@
 import React from 'react';
 import { HtmlEditor, Toolbar, Item, IHtmlEditorOptions, IItemProps } from 'devextreme-react/html-editor';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import { defaultToolbarItems, fullToolbarItems } from './data';
 import { AIIntegration } from 'devextreme/artifacts/npm/devextreme/common/ai-integration';
 

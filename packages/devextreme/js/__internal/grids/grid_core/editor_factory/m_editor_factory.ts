@@ -23,6 +23,7 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { EditingController } from '../editing/m_editing';
+import { isDataRow } from '../keyboard_navigation/utils';
 import type { ViewController } from '../m_modules';
 import modules from '../m_modules';
 import type { Module, ModuleType } from '../m_types';
@@ -50,7 +51,7 @@ interface EditorFactoryMixinType {
 
 }
 
-const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = EditorFactoryMixin(modules.ViewController) as any;
+const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = EditorFactoryMixin(modules.ViewController);
 
 export class EditorFactory extends ViewControllerWithMixin {
   private _isFocusOverlay: any;
@@ -228,7 +229,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   protected updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
-    if (isHideBorder) {
+    if (isHideBorder || isDataRow($element)) {
       this._$focusOverlay.addClass(DX_HIDDEN);
     } else if ($element.length) {
       // align "right bottom" for Mozilla

@@ -12,7 +12,13 @@ import {
 } from '../common/grids';
 import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
-import { Cancelable, EventInfo, NativeEventInfo } from '../events';
+import {
+    Cancelable,
+    ChangedOptionInfo,
+    EventInfo,
+    NativeEventInfo,
+    PointerInteractionEvent,
+} from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxLoadPanelOptions } from './load_panel';
 import dxScrollable from './scroll_view/ui.scrollable';
@@ -633,7 +639,7 @@ type WithFieldValueInfo = {
  * @type object
  * @inherits NativeEventInfo,WithCardInfo
  */
-export type CardClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithCardInfo;
+export type CardClickEvent = NativeEventInfo<dxCardView, PointerInteractionEvent> & WithCardInfo;
 
 /**
  * @docid _ui_card_view_CardDblClickEvent
@@ -641,7 +647,7 @@ export type CardClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEve
  * @type object
  * @inherits NativeEventInfo,WithCardInfo
  */
-export type CardDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithCardInfo;
+export type CardDblClickEvent = NativeEventInfo<dxCardView, PointerInteractionEvent> & WithCardInfo;
 
 /**
  * @docid _ui_card_view_CardPreparedEvent
@@ -657,7 +663,7 @@ export type CardPreparedEvent = EventInfo<dxCardView> & WithCardInfo;
  * @type object
  * @inherits NativeEventInfo,WithFieldCaptionInfo
  */
-export type FieldCaptionClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldCaptionInfo;
+export type FieldCaptionClickEvent = NativeEventInfo<dxCardView, PointerInteractionEvent> & WithFieldCaptionInfo;
 
 /**
  * @docid _ui_card_view_FieldCaptionDblClickEvent
@@ -665,7 +671,7 @@ export type FieldCaptionClickEvent = NativeEventInfo<dxCardView, PointerEvent | 
  * @type object
  * @inherits NativeEventInfo,WithFieldCaptionInfo
  */
-export type FieldCaptionDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldCaptionInfo;
+export type FieldCaptionDblClickEvent = NativeEventInfo<dxCardView, PointerInteractionEvent> & WithFieldCaptionInfo;
 
 /**
  * @docid _ui_card_view_FieldValuePreparedEvent
@@ -681,7 +687,7 @@ export type FieldValuePreparedEvent = EventInfo<dxCardView> & WithFieldValueInfo
  * @type object
  * @inherits NativeEventInfo,WithFieldValueInfo
  */
-export type FieldValueClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldValueInfo;
+export type FieldValueClickEvent = NativeEventInfo<dxCardView, PointerInteractionEvent> & WithFieldValueInfo;
 
 /**
  * @docid _ui_card_view_FieldValueDblClickEvent
@@ -689,7 +695,7 @@ export type FieldValueClickEvent = NativeEventInfo<dxCardView, PointerEvent | Mo
  * @type object
  * @inherits NativeEventInfo,WithFieldValueInfo
  */
-export type FieldValueDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldValueInfo;
+export type FieldValueDblClickEvent = NativeEventInfo<dxCardView, PointerInteractionEvent> & WithFieldValueInfo;
 
 /**
  * @docid _ui_card_view_FieldCaptionPreparedEvent
@@ -711,8 +717,8 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
 };
 
 /**
- * @public
  * @docid
+ * @public
  */
 export type FieldTemplateData = {
     /**
@@ -723,18 +729,26 @@ export type FieldTemplateData = {
 };
 
 /**
- * @public
  * @docid
+ * @public
  */
 export type CardTemplateData = {
+  /**
+   * @docid
+   * @public
+   */
     card: CardInfo;
 };
 
 /**
- * @public
  * @docid
+ * @public
  */
 export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+  /**
+   * @docid
+   * @public
+   */
     column: Column<TCardData, TKey>;
 };
 
@@ -1121,34 +1135,42 @@ export type CardUpdatingEvent<TCardData = unknown, TKey = unknown> = EventInfo<d
 };
 
 /**
- * @docid _ui_card_view_CardSavedEvent
+ * @docid _ui_card_view_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
+export type OptionChangedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView<TCardData, TKey>> & ChangedOptionInfo;
+
+/**
+ * @docid _ui_card_view_SavedEvent
  * @public
  * @type object
  * @inherits EventInfo
  */
-export type CardSavedEvent = EventInfo<dxCardView> & {
+export type SavedEvent = EventInfo<dxCardView> & {
     /**
-     * @docid _ui_card_view_CardSavedEvent.changes
+     * @docid _ui_card_view_SavedEvent.changes
      * @public
      */
     changes: DataChange[];
 };
 
 /**
- * @docid _ui_card_view_CardSavingEvent
+ * @docid _ui_card_view_SavingEvent
  * @public
  * @type object
  * @inherits EventInfo,Cancelable
  */
-export type CardSavingEvent = EventInfo<dxCardView> & Cancelable & {
+export type SavingEvent = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid _ui_card_view_CardSavingEvent.promise
+     * @docid _ui_card_view_SavingEvent.promise
      * @type Promise<void>
      * @public
      */
     promise?: PromiseLike<void>;
     /**
-     * @docid _ui_card_view_CardSavingEvent.changes
+     * @docid _ui_card_view_SavingEvent.changes
      * @public
      */
     changes: DataChange[];
@@ -1285,7 +1307,7 @@ export type FocusedCardChanged = EventInfo<dxCardView> & WithCardInfo;
  * @docid
  * @deprecated use Properties instead
  */
-export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends WidgetOptions<dxCardView> {
+export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends Omit<WidgetOptions<dxCardView>, 'onOptionChanged'> {
 
     // #region DataController
 
@@ -1684,17 +1706,24 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
-     * @type_function_param1 e:{ui/card_view:CardSavedEvent}
+     * @type_function_param1 e:{ui/card_view:OptionChangedEvent}
      * @action
      */
-    onCardSaved?: (e: CardSavedEvent) => void;
+    onOptionChanged?: (e: OptionChangedEvent) => void;
     /**
      * @docid
      * @public
-     * @type_function_param1 e:{ui/card_view:CardSavingEvent}
+     * @type_function_param1 e:{ui/card_view:SavedEvent}
      * @action
      */
-    onCardSaving?: (e: CardSavingEvent) => void;
+    onSaved?: (e: SavedEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @type_function_param1 e:{ui/card_view:SavingEvent}
+     * @action
+     */
+    onSaving?: (e: SavingEvent) => void;
 
     // #endregion
 

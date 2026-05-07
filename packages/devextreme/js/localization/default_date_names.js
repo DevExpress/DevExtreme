@@ -1,1 +1,1 @@
-export { default } from '../common/core/localization/default_date_names';
+export { default } from '../__internal/core/localization/default_date_names';

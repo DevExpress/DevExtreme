@@ -54,11 +54,11 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -92,7 +92,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -130,15 +130,15 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}
-      run: pnpx nx pack
+      run: pnpm exec nx pack
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: pnpx nx build
+      run: pnpm exec nx build
 
 #    - name: Run test
 #      if: ${{ matrix.ARGS.platform != 'angular' }}

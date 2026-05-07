@@ -237,12 +237,19 @@ export default class MaskStrategy {
 
     editor._maskKeyHandler(event, () => {
       const pastedText = getClipboardText(event);
+
+      if (!pastedText) {
+        return undefined;
+      }
+
       const restText = editor._maskRulesChain.text().substring(caret.end);
       const accepted = editor._handleChain({ text: pastedText, start: caret.start, length: pastedText.length });
       const newCaret = caret.start + accepted;
 
       editor._handleChain({ text: restText, start: newCaret, length: restText.length });
       editor._caret({ start: newCaret, end: newCaret });
+
+      return undefined;
     });
   }
 

@@ -39,6 +39,8 @@ import {
   NativeEventInfo,
 } from './core/events';
 
+import { PointerInteractionEvent } from '../events';
+
 import {
   DxPromise,
 } from '../core/utils/deferred';
@@ -1109,7 +1111,7 @@ export type FilterPanelTexts = {
  * @docid
  * @namespace DevExpress.common.grids
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
   /**
    * @docid
@@ -2552,7 +2554,7 @@ export interface PagingBase {
   pageSize?: number;
 }
 
-export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerEvent | MouseEvent | TouchEvent>, 'component' | 'event'>>;
+export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerInteractionEvent>, 'component' | 'event'>>;
 
 /**
  * @docid
@@ -2957,6 +2959,7 @@ export interface ScrollingBase {
   /**
    * @docid GridBaseOptions.scrolling.scrollByThumb
    * @default false
+   * @default true &for(desktop)
    * @public
    */
   scrollByThumb?: boolean;

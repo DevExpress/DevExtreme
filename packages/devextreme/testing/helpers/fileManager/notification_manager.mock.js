@@ -1,4 +1,4 @@
-import { NotificationManager } from 'ui/file_manager/ui.file_manager.notification_manager';
+import { NotificationManager } from '__internal/ui/file_manager/ui.file_manager.notification_manager';
 
 export default class FileManagerNotificationManagerMock extends NotificationManager {
     constructor(options) {

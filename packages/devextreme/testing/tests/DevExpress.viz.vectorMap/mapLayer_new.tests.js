@@ -1,17 +1,20 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
-const titleModule = require('viz/core/title');
-const projectionEnginesModule = require('viz/vector_map/projection');
-const controlBarModule = require('viz/vector_map/control_bar/control_bar');
-const legendModule = require('viz/vector_map/legend');
-const tooltipModule = require('viz/core/tooltip');
-const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const exportMenuModule = require('viz/core/export'); // TODO maybe if you test layer - you should create exact layer?
-const rendererModule = require('viz/core/renderers/renderer');
+import $ from 'jquery';
+import {
+    Renderer,
+    stubClass
+} from '../../helpers/vizMocks.js';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import titleModule from 'viz/core/title';
+import { projection } from 'viz/vector_map/projection';
+import controlBarModule from 'viz/vector_map/control_bar/control_bar';
+import legendModule from 'viz/vector_map/legend';
+import tooltipModule from 'viz/core/tooltip';
+import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
+import { DataSource } from 'common/data/data_source/data_source';
+import exportMenuModule from '__internal/viz/core/exportModule';
+import rendererModule from 'viz/core/renderers/renderer_default';
 
-require('viz/vector_map/vector_map');
+import '__internal/viz/vector_map/vector_map';
 
 $('#qunit-fixture').append('<div id="container"></div>');
 
@@ -20,15 +23,15 @@ $('#container').css({
     height: '600px'
 });
 
-titleModule.DEBUG_set_title(vizMocks.stubClass(titleModule.Title, { }));
-tooltipModule.DEBUG_set_tooltip(vizMocks.stubClass(tooltipModule.Tooltip));
-exportMenuModule.DEBUG_set_ExportMenu(vizMocks.stubClass(exportMenuModule.ExportMenu)); // TODO maybe if you test layer - you should create exact layer?
-loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.stubClass(loadingIndicatorModule.LoadingIndicator));
-controlBarModule.ControlBar = vizMocks.stubClass(controlBarModule.ControlBar);
-legendModule.LegendsControl = vizMocks.stubClass(legendModule.LegendsControl);
-tooltipViewerModule.TooltipViewer = vizMocks.stubClass(tooltipViewerModule.TooltipViewer);
+titleModule.DEBUG_set_title(stubClass(titleModule.Title, { }));
+tooltipModule.DEBUG_set_tooltip(stubClass(tooltipModule.Tooltip));
+exportMenuModule.DEBUG_set_ExportMenu(stubClass(exportMenuModule.ExportMenu)); // TODO maybe if you test layer - you should create exact layer?
+loadingIndicatorModule.DEBUG_set_LoadingIndicator(stubClass(loadingIndicatorModule.LoadingIndicator));
+controlBarModule.ControlBar = stubClass(controlBarModule.ControlBar);
+legendModule.LegendsControl = stubClass(legendModule.LegendsControl);
+tooltipViewerModule.TooltipViewer = stubClass(tooltipViewerModule.TooltipViewer);
 
-const simpleProjection = projectionEnginesModule.projection({
+const simpleProjection = projection({
     aspectRatio: 4 / 3,
 
     to: function(coordinates) {
@@ -64,7 +67,7 @@ const createData = function(featureType, items) {
 
 const environment = {
     beforeEach: function() {
-        const renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new Renderer();
         rendererModule.Renderer = function() { return renderer; };
     },
 
@@ -260,8 +263,88 @@ QUnit.test('Lines (MultiLineString)', function(assert) {
         ]
     }], 'line 2 (complex)');
     assert.deepEqual(this.getLine(2).attr.getCall(0).args, [{
-        points: []
+        points: [[]]
     }], 'line 3 (degenerate)');
+});
+
+QUnit.test('Lines (mixed LineString and MultiLineString, MultiLineString first) (T1327745)', function(assert) {
+    this.createLayer({
+        dataSource: {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'MultiLineString',
+                        coordinates: [
+                            [[200, 100], [400, 0], [400, 300]],
+                            [[0, 0], [0, 300], [400, 300], [400, 0]]
+                        ]
+                    },
+                    properties: {}
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: [[100, 200], [300, 300], [400, 0]]
+                    },
+                    properties: {}
+                }
+            ]
+        }
+    });
+
+    assert.strictEqual(this.getLine(0).attr.getCall(1).args[0]['class'], 'dxm-line', 'type');
+    assert.deepEqual(this.getLine(0).attr.getCall(0).args, [{
+        points: [
+            [600, 400, 1000, 600, 1000, 0],
+            [200, 600, 200, 0, 1000, 0, 1000, 600]
+        ]
+    }], 'line 1 - MultiLineString');
+    assert.deepEqual(this.getLine(1).attr.getCall(0).args, [{
+        points: [[400, 200, 800, 0, 1000, 600]]
+    }], 'line 2 - LineString (no NaN)');
+});
+
+QUnit.test('Lines (mixed LineString and MultiLineString, LineString first) (T1327745)', function(assert) {
+    this.createLayer({
+        dataSource: {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: [[100, 200], [300, 300], [400, 0]]
+                    },
+                    properties: {}
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'MultiLineString',
+                        coordinates: [
+                            [[200, 100], [400, 0], [400, 300]],
+                            [[0, 0], [0, 300], [400, 300], [400, 0]]
+                        ]
+                    },
+                    properties: {}
+                }
+            ]
+        }
+    });
+
+    assert.strictEqual(this.getLine(0).attr.getCall(1).args[0]['class'], 'dxm-line', 'type');
+    assert.deepEqual(this.getLine(0).attr.getCall(0).args, [{
+        points: [[400, 200, 800, 0, 1000, 600]]
+    }], 'line 1 - LineString');
+    assert.deepEqual(this.getLine(1).attr.getCall(0).args, [{
+        points: [
+            [600, 400, 1000, 600, 1000, 0],
+            [200, 600, 200, 0, 1000, 0, 1000, 600]
+        ]
+    }], 'line 2 - MultiLineString (no NaN)');
 });
 
 QUnit.test('Lines (simple data source)', function(assert) {
@@ -389,7 +472,7 @@ QUnit.test('Line labels', function(assert) {
 
 QUnit.module('Layers management', {
     beforeEach: function() {
-        const renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new Renderer();
         rendererModule.Renderer = function() { return renderer; };
     },
 

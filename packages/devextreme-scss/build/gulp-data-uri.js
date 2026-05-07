@@ -1,8 +1,11 @@
-'use strict';
+import path, { dirname } from 'path';
+import fs from 'fs';
+import sass from 'sass-embedded';
+import { fileURLToPath } from 'url';
 
-const path = require('path');
-const fs = require('fs');
-const sass = require('sass-embedded');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const dataUriRegex = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
 
 const svg = (buffer, svgEncoding) => {
@@ -34,9 +37,8 @@ const sassFunction = (args) => {
     return new sass.SassString(handler(null, encoding, url), { quotes: false });
 };
 
-module.exports = {
-    resolveDataUri: (content) => content.replace(dataUriRegex, handler),
-    sassFunctions: {
-        'data-uri($args...)': sassFunction,
-    }
+export const resolveDataUri = (content) => content.replace(dataUriRegex, handler);
+
+export const sassFunctions = {
+    'data-uri($args...)': sassFunction,
 };

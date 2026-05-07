@@ -240,7 +240,7 @@ const DxAsyncRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any)>
   }
 };
 
@@ -300,7 +300,6 @@ const DxButtonOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -327,7 +326,6 @@ const DxButtonOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
@@ -426,7 +424,7 @@ const DxCustomRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -952,7 +950,6 @@ const DxTabPanelOptionsConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:animationEnabled": null,
-    "update:bindingOptions": null,
     "update:dataSource": null,
     "update:deferRendering": null,
     "update:disabled": null,
@@ -966,6 +963,7 @@ const DxTabPanelOptionsConfig = {
     "update:items": null,
     "update:itemTemplate": null,
     "update:itemTitleTemplate": null,
+    "update:keyExpr": null,
     "update:loop": null,
     "update:noDataText": null,
     "update:onContentReady": null,
@@ -999,7 +997,6 @@ const DxTabPanelOptionsConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     dataSource: [Array, Object, String] as PropType<(Array<any | dxTabPanelItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
@@ -1013,6 +1010,7 @@ const DxTabPanelOptionsConfig = {
     items: Array as PropType<Array<any | dxTabPanelItem | string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
     loop: Boolean,
     noDataText: String,
     onContentReady: Function as PropType<((e: TabPanelContentReadyEvent) => void)>,
@@ -1115,7 +1113,7 @@ const DxValidationRuleConfig = {
     reevaluate: Boolean,
     trim: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 

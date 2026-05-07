@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
@@ -71,11 +70,13 @@ interface HandleDataChangedArguments {
   error?: any;
 }
 
-type UserData = Record<string, unknown>;
+export type UserData = Record<string, unknown>;
 
-interface Item {
+export interface Item {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';
   data: UserData;
+  key: unknown;
+  oldData?: UserData;
   dataIndex?: number;
   values?: unknown[];
   visible?: boolean;
@@ -85,8 +86,8 @@ interface Item {
   rowIndex?: number;
   cells?: unknown[];
   loadIndex?: number;
-  key: unknown;
   isSelected?: boolean;
+  removed?: boolean;
 }
 
 export type Filter = any;
@@ -607,7 +608,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.pushed.fire(changes);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public fireError(...args: any[]) {
     this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
@@ -1548,6 +1548,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return gridCoreUtils.getIndexByKey(key, this.items(byLoaded));
   }
 
+  public getRowByKey(key: unknown): Item | undefined {
+    return this.items()?.[this.getRowIndexByKey(key)];
+  }
+
   public keyOf(data) {
     const store = this.store();
     if (store) {
@@ -1617,6 +1621,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return changePaging(this, 'pageSize', value);
   }
 
+  public isCustomLoading() {
+    return this._isCustomLoading || this._dataSource?.isCustomLoading();
+  }
+
   private beginCustomLoading(messageText) {
     this._isCustomLoading = true;
     this._loadingText = messageText || '';
@@ -1636,7 +1644,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (options === true) {
       options = { reload: true, changesOnly: true };
     } else if (!options) {
-      options = { lookup: true, selection: true, reload: true };
+      options = { reload: true, lookup: true };
     }
 
     const that = this;
@@ -1728,7 +1736,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing, virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public reload(reload?, changesOnly?): any {
     return this._dataSource?.reload(reload, changesOnly);
   }
@@ -1764,6 +1772,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const operationTypes = this._dataSource?.operationTypes() ?? {};
 
     return Object.keys(operationTypes).some((type) => operationTypes[type]);
+  }
+
+  public resetCachedProcessedItems(): void {
+    this._cachedProcessedItems = null;
   }
 }
 export const dataControllerModule: Module = {

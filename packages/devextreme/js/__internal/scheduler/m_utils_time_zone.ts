@@ -5,7 +5,6 @@ import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';
 import { globalCache } from './global_cache';
-import DateAdapter from './m_date_adapter';
 import timeZoneDataUtils from './timezones/m_utils_timezones_data';
 import timeZoneList from './timezones/timezone_list';
 
@@ -43,17 +42,16 @@ const createUTCDateWithLocalOffset = (date) => {
   ));
 };
 
-const createDateFromUTCWithLocalOffset = (date) => {
-  const result = DateAdapter(date);
+const createDateFromUTCWithLocalOffset = (date: Date): Date => new Date(
+  date.getUTCFullYear(),
+  date.getUTCMonth(),
+  date.getUTCDate(),
+  date.getUTCHours(),
+  date.getUTCMinutes(),
+  date.getUTCSeconds(),
+);
 
-  const timezoneOffsetBeforeInMin = result.getTimezoneOffset();
-  result.addTime(result.getTimezoneOffset('minute'));
-  result.subtractMinutes(timezoneOffsetBeforeInMin - result.getTimezoneOffset());
-
-  return result.source;
-};
-
-const createUTCDate = (date) => new Date(Date.UTC(
+const createUTCDate = (date: Date): Date => new Date(Date.UTC(
   date.getUTCFullYear(),
   date.getUTCMonth(),
   date.getUTCDate(),
@@ -189,16 +187,10 @@ const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, converted
   return new Date(date.getTime() - diff * toMs('hour'));
 };
 
-const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate, timeZone, startDateTimeZone?: any, isBackConversion = false) => {
-  let timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / MINUTES_IN_HOUR;
+const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate) => {
+  const timezoneOffset = (exception.getTimezoneOffset() - exceptionByStartDate.getTimezoneOffset()) / MINUTES_IN_HOUR;
 
-  if (startDateTimeZone) {
-    timezoneOffset = _getDaylightOffsetByTimezone(exceptionByStartDate, exception, startDateTimeZone);
-  } else if (timeZone) {
-    timezoneOffset = _getDaylightOffsetByTimezone(exceptionByStartDate, exception, timeZone);
-  }
-
-  return new Date(exception.getTime() + (isBackConversion ? -1 : 1) * timezoneOffset * toMs('hour'));
+  return new Date(exception.getTime() + timezoneOffset * toMs('hour'));
 };
 
 const isTimezoneChangeInDate = (date) => {
@@ -360,6 +352,12 @@ const cacheTimeZones = async (): Promise<TimezoneLabel[]> => globalCache.timezon
 
 const getTimeZonesCache = (): TimezoneLabel[] => globalCache.timezones.get('timeZonesCache') ?? [];
 
+const isLocalTimeMidnightDST = (date: Date): boolean => {
+  const startDayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+  return startDayDate.getHours() === 1;
+};
+
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -389,6 +387,8 @@ const utils = {
   getTimeZones,
   getTimeZonesCache,
   cacheTimeZones,
+
+  isLocalTimeMidnightDST,
 };
 
 export default utils;

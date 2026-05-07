@@ -23,6 +23,8 @@ import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
+import type { CalculateSummaryCellsArgs, ColumnMap, SummaryCellItem } from './types';
+import { getColumnFromMap, getSummaryCellIndex } from './utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
@@ -36,25 +38,25 @@ const DATAGRID_CELL_DISABLED = 'dx-cell-focus-disabled';
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
 
-export const renderSummaryCell = function (cell, options) {
+export const renderSummaryCell = function (cell, options, setAria) {
   const $cell = $(cell);
   const { column } = options;
   const { summaryItems } = options;
   const $summaryItems: any = [];
 
   if (!column.command && summaryItems) {
-    for (let i = 0; i < summaryItems.length; i++) {
-      const summaryItem = summaryItems[i];
+    for (const summaryItem of summaryItems) {
       const text = gridCore.getSummaryText(summaryItem, options.summaryTexts);
-
-      $summaryItems.push($('<div>')
+      const $summaryItemElement = $('<div>')
         .css('textAlign', summaryItem.alignment || column.alignment)
         .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
         .addClass(DATAGRID_TEXT_CONTENT_CLASS)
         .addClass(summaryItem.cssClass)
         .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
-        .text(text)
-        .attr('aria-label', `${column.caption} ${text}`));
+        .text(text);
+
+      setAria('label', `${column.caption ?? ''} ${text ?? ''}`, $summaryItemElement);
+      $summaryItems.push($summaryItemElement);
     }
     $cell.append($summaryItems);
   }
@@ -203,7 +205,7 @@ export class FooterView extends ColumnsView {
   }
 
   protected _renderCellContent($cell, options) {
-    renderSummaryCell($cell, options);
+    renderSummaryCell($cell, options, this.setAria.bind(this));
     // @ts-expect-error
     super._renderCellContent.apply(this, arguments);
   }
@@ -468,11 +470,9 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }
 
   private _processGroupItem(groupItem, options) {
-    const that = this;
+    options.summaryGroupItems ??= this.option('summary.groupItems') || [];
+    options.summaryColumnMap ??= this._buildColumnLookupMap();
 
-    if (!options.summaryGroupItems) {
-      options.summaryGroupItems = that.option('summary.groupItems') || [];
-    }
     if (groupItem.rowType === 'group') {
       let groupColumnIndex = -1;
       let afterGroupColumnIndex = -1;
@@ -489,33 +489,93 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
         }
       });
 
-      groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, (summaryItem, column) => {
-        if (summaryItem.showInGroupFooter) {
-          return -1;
-        }
+      groupItem.summaryCells = this._calculateSummaryCells({
+        summaryItems: options.summaryGroupItems,
+        aggregates: getGroupAggregates(groupItem.data),
+        visibleColumns: options.visibleColumns,
+        calculateTargetColumnIndex: (summaryItem, column) => {
+          if (summaryItem.showInGroupFooter) {
+            return -1;
+          }
 
-        if (summaryItem.alignByColumn && column && !isDefined(column.groupIndex) && (column.index !== afterGroupColumnIndex)) {
-          return column.index;
-        }
-        return groupColumnIndex;
-      }, true);
+          if (summaryItem.alignByColumn
+            && column
+            && !isDefined(column.groupIndex)
+            && (column.index !== afterGroupColumnIndex)
+          ) {
+            return column.index;
+          }
+
+          return groupColumnIndex;
+        },
+        isGroupRow: true,
+        columnMap: options.summaryColumnMap,
+      });
     }
+
     if (groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
-      groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, (summaryItem, column) => (summaryItem.showInGroupFooter && that._isDataColumn(column) ? column.index : -1));
+      groupItem.summaryCells = this._calculateSummaryCells({
+        summaryItems: options.summaryGroupItems,
+        aggregates: getGroupAggregates(groupItem.data),
+        visibleColumns: options.visibleColumns,
+        calculateTargetColumnIndex: (summaryItem, column) => (
+          summaryItem.showInGroupFooter && this._isDataColumn(column) ? column.index : -1
+        ),
+        isGroupRow: false,
+        columnMap: options.summaryColumnMap,
+      });
     }
 
     return groupItem;
   }
 
-  private _calculateSummaryCells(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex, isGroupRow?) {
-    const that = this;
-    const summaryCells: any = [];
-    const summaryCellsByColumns = {};
+  // The map is built once per _processItems cycle (via options) and discarded after.
+  private _buildColumnLookupMap(): ColumnMap {
+    const columnMap: ColumnMap = new Map();
+    const allColumns = this._columnsController.getColumns();
+
+    for (const column of allColumns) {
+      const copiedColumn = { ...column };
+      // The method registers each column under a few keys: index, name, dataField, and caption.
+      // This is because the developer can specify summaryItem.column (and summaryItem.showInColumn)
+      // in any of these forms — number for column index and string for all the rest.
+      const keys = [
+        column.index,
+        column.name,
+        column.dataField,
+        column.caption,
+      ].filter((key) => key !== undefined && !columnMap.has(key));
+
+      for (const key of keys) {
+        columnMap.set(key, copiedColumn);
+      }
+    }
+
+    return columnMap;
+  }
+
+  private _calculateSummaryCells({
+    summaryItems,
+    aggregates,
+    visibleColumns,
+    calculateTargetColumnIndex,
+    isGroupRow,
+    columnMap,
+  }: CalculateSummaryCellsArgs) {
+    const summaryCells: SummaryCellItem[][] = [];
+    const summaryCellsByColumns: Record<number, SummaryCellItem[]> = {};
+    const getColumnByKey = (key) => (
+      columnMap
+        ? getColumnFromMap(key, columnMap)
+        : this._columnsController.columnOption(key)
+    );
 
     each(summaryItems, (summaryIndex, summaryItem) => {
-      const column = that._columnsController.columnOption(summaryItem.column);
-      const showInColumn = summaryItem.showInColumn && that._columnsController.columnOption(summaryItem.showInColumn) || column;
-      const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
+      const column = getColumnByKey(summaryItem.column);
+      const showInColumn = summaryItem.showInColumn
+        ? getColumnByKey(summaryItem.showInColumn)
+        : undefined;
+      const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn ?? column);
 
       if (columnIndex >= 0) {
         if (!summaryCellsByColumns[columnIndex]) {
@@ -531,17 +591,21 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
             valueFormat = gridCore.getFormatByDataType(column && column.dataType);
           }
           summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
-            value: isString(aggregate) && column && column.deserializeValue ? column.deserializeValue(aggregate) : aggregate,
+            value: isString(aggregate) && column && column.deserializeValue
+              ? column.deserializeValue(aggregate)
+              : aggregate,
             valueFormat,
             columnCaption: column && column.index !== columnIndex ? column.caption : undefined,
           }));
         }
       }
     });
+
     if (!isEmptyObject(summaryCellsByColumns)) {
       visibleColumns.forEach((column, visibleIndex) => {
         const prevColumn = visibleColumns[visibleIndex - 1];
-        const columnIndex = isGroupRow && (prevColumn?.command === 'expand' || column.command === 'expand') ? prevColumn?.index : column.index;
+        const columnIndex = getSummaryCellIndex(column, prevColumn, isGroupRow);
+
         summaryCells.push(summaryCellsByColumns[columnIndex] || []);
       });
     }
@@ -550,15 +614,21 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }
 
   private _getSummaryCells(summaryTotalItems, totalAggregates) {
-    const that = this;
-    const columnsController = that._columnsController;
+    const columnsController = this._columnsController;
 
-    return that._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(), (summaryItem, column) => (that._isDataColumn(column) ? column.index : -1));
+    return this._calculateSummaryCells({
+      summaryItems: summaryTotalItems,
+      aggregates: totalAggregates,
+      visibleColumns: columnsController.getVisibleColumns(),
+      calculateTargetColumnIndex: (_, column) => (
+        this._isDataColumn(column) ? column.index : -1
+      ),
+    });
   }
 
   protected _updateItemsCore(change) {
     const that = this;
-    let summaryCells;
+    let summaryCells: SummaryCellItem[][] | undefined;
     const dataSource = that._dataSource;
     const footerItems = that._footerItems;
     const oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells;
@@ -866,8 +936,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     }
   }
 
-  private _hasAlignByColumnSummaryItems(columnIndex, options) {
-    return !isDefined(options.columns[columnIndex].groupIndex) && options.row.summaryCells[columnIndex].length;
+  private _hasAlignByColumnSummaryItems(columnIndex, options): boolean {
+    const column = options.columns[columnIndex];
+    const isGrouped = isDefined(column.groupIndex);
+    const isVirtual = column.command === 'virtual';
+    const hasSummaryCells = !!options.row.summaryCells[columnIndex].length;
+    return !isGrouped && (isVirtual || hasSummaryCells);
   }
 
   private _getAlignByColumnCellCount(groupCellColSpan, options) {
@@ -875,7 +949,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
 
     for (let i = 1; i < groupCellColSpan; i++) {
       const columnIndex = options.row.summaryCells.length - i;
-      alignByColumnCellCount = this._hasAlignByColumnSummaryItems(columnIndex, options) ? i : alignByColumnCellCount;
+      const hasAlignBySummary = this._hasAlignByColumnSummaryItems(columnIndex, options);
+      if (hasAlignBySummary) {
+        alignByColumnCellCount = i;
+      }
     }
 
     return alignByColumnCellCount;
@@ -908,7 +985,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
 
   protected _getCellTemplate(options) {
     if (!options.column.command && !isDefined(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
-      return renderSummaryCell;
+      return (cell, options) => renderSummaryCell(cell, options, this.setAria.bind(this));
     }
     return super._getCellTemplate(options);
   }

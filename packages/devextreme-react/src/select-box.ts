@@ -78,7 +78,7 @@ const SelectBox = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["opened","value"]), []);
       const independentEvents = useMemo(() => (["onChange","onClosed","onContentReady","onCopy","onCustomItemCreating","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onOpened","onPaste","onValueChanged"]), []);
@@ -246,7 +246,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -469,7 +468,6 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;

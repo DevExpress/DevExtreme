@@ -1,1 +1,1 @@
-import '../../common/core/localization/globalize/number';
+import '../../__internal/core/localization/globalize/number';

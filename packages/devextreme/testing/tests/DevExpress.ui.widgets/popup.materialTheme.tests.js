@@ -27,16 +27,16 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-executeAsyncMock.setup();
-
 QUnit.module('popover content size', {
     beforeEach: function() {
         viewPort($('#qunit-fixture').addClass('dx-viewport'));
 
         fx.off = true;
+        executeAsyncMock.setup();
     },
     afterEach: function() {
         fx.off = false;
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('popover content has correct size switch', function(assert) {

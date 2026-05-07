@@ -7,5 +7,5 @@ export interface KeyboardActionContextType {
   registerKeyboardAction: (el: HTMLElement, handler: EventCallback) => DisposeEffectReturn;
 }
 
-export const KeyboardActionContext = createContext<KeyboardActionContextType |
-undefined>(undefined);
+export const KeyboardActionContext = createContext<KeyboardActionContextType
+| undefined>(undefined);

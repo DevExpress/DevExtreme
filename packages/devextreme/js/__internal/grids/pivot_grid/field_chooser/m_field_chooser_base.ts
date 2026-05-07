@@ -23,7 +23,7 @@ import { createPath, foreachTree } from '../m_widget_utils';
 import SortableModule from '../sortable/m_sortable';
 import { ATTRIBUTES, CLASSES } from './const';
 import { dragAndDropItemRender } from './dom';
-import { reverseSortOrder } from './utils';
+import { reverseSortOrder, shouldCancelDragging } from './utils';
 
 const { Sortable } = SortableModule;
 
@@ -120,6 +120,9 @@ export class FieldChooserBase extends mixinWidget {
       },
     };
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _setAriaSortAttribute(_column, _ariaSortState, _$rootElement) { }
 
   _init() {
     super._init();
@@ -250,15 +253,7 @@ export class FieldChooserBase extends mixinWidget {
       onDragging(e) {
         const field = e.sourceElement.data('field');
         const { targetGroup } = e;
-        e.cancel = false;
-
-        if (field.isMeasure === true) {
-          if (targetGroup === 'column' || targetGroup === 'row' || targetGroup === 'filter') {
-            e.cancel = true;
-          }
-        } else if (field.isMeasure === false && targetGroup === 'data') {
-          e.cancel = true;
-        }
+        e.cancel = shouldCancelDragging(field, targetGroup);
       },
       useIndicator: true,
       onChanged(e) {

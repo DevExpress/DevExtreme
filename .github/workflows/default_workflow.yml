@@ -51,12 +51,12 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Run targets
       run: >
-        pnpx nx run-many
-        -t test
+        pnpm exec nx run-many
+        -t lint,test
         --exclude
         devextreme
         devextreme-themebuilder

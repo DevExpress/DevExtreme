@@ -7,6 +7,8 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import * as summaryModule from '__internal/grids/data_grid/summary/m_summary';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import { noop } from 'core/utils/common';
 
 QUnit.testStart(function() {
     const markup =
@@ -47,6 +49,9 @@ QUnit.module('Summary footer', {
             ]
         }, 5);
 
+        that.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         that.createFooterView = function(totalItem, rows, columns) {
             rows = rows || [{ values: [1, 2, 3, 4, 5] }];
             columns = columns || [
@@ -80,7 +85,10 @@ QUnit.module('Summary footer', {
 
             return mockDataGrid.footerView;
         };
-    }
+    },
+    afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
+    },
 }, () => {
 
     QUnit.test('Render when summary is defined', function(assert) {
@@ -441,7 +449,7 @@ QUnit.module('Summary footer', {
             }],
             column: { alignment: 'left' },
             summaryTexts: summaryTexts
-        });
+        }, noop);
 
         // assert
         assert.equal($cellElements[0].find('.dx-datagrid-summary-item').text(), 119, 'column is not command');
@@ -455,7 +463,7 @@ QUnit.module('Summary footer', {
             }],
             column: { command: 'expand', alignment: 'left' },
             summaryTexts: summaryTexts
-        });
+        }, noop);
 
         // assert
         assert.equal($cellElements[1].html(), '', 'command column');
@@ -965,8 +973,11 @@ QUnit.module('Footer with real dataController and columnController', {
             { dataField: 'age', index: 1 },
             { dataField: 'cash', index: 2 }
         ];
-        const summaryCells = this.dataController._calculateSummaryCells(summaryItems, aggregates, visibleColumns, function(summaryItem, column) {
-            return column.index;
+        const summaryCells = this.dataController._calculateSummaryCells({
+            summaryItems: summaryItems,
+            aggregates: aggregates,
+            visibleColumns: visibleColumns,
+            calculateTargetColumnIndex: (summaryItem, column) => column.index,
         });
 
         // assert

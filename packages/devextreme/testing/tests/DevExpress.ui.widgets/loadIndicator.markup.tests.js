@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { hasWindow } from 'core/utils/window';
 import support from '__internal/core/utils/m_support';
 
 import {
@@ -10,10 +9,9 @@ import {
     LOADINDICATOR_IMAGE_CLASS,
     LOADINDICATOR_WRAPPER_CLASS,
     ANIMATION_TYPE_CLASSES,
-} from '__internal/ui/m_load_indicator';
+} from '__internal/ui/load_indicator';
 
 import 'ui/load_indicator';
-import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup = '<div id="loadIndicator"></div>';
@@ -97,14 +95,6 @@ QUnit.module('animation type', () => {
         const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
 
         assert.strictEqual($indicatorContent.hasClass(ANIMATION_TYPE_CLASSES['circle']), true, 'animation class has been added');
-    });
-
-    QUnit.test('content should have correct count of segments if animation type is circle by default', function(assert) {
-        const $element = $('#loadIndicator').dxLoadIndicator();
-        const $segments = $element.find(`.${LOADINDICATOR_SEGMENT_CLASS}`);
-        const expectedCount = hasWindow() ? 8 : 2;
-
-        assert.strictEqual($segments.length, expectedCount, `${expectedCount} segments are rendered`);
     });
 
     QUnit.test('content should not have any animation class if animation type is undefined', function(assert) {

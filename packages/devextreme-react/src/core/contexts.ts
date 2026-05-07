@@ -13,7 +13,6 @@ export interface UpdateLocker {
 
 export const RemovalLockerContext: Context<UpdateLocker | undefined> = createContext<UpdateLocker | undefined>(undefined);
 
-// eslint-disable-next-line @typescript-eslint/no-extra-parens
 export const RestoreTreeContext: Context<(() => void) | undefined> = createContext<(() => void) | undefined>(undefined);
 
 export interface NestedOptionContextContent {
@@ -24,7 +23,7 @@ export interface NestedOptionContextContent {
     configNode: IConfigNode,
     optionDescriptor: IOptionDescriptor,
     childUpdateToken: symbol,
-    optionComponentKey: number
+    optionComponentKey: number,
   ) => void;
   onNamedTemplateReady: (
     template: ITemplate | null,

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 import { createEvent } from 'common/core/events/utils/index';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
@@ -137,10 +137,10 @@ QUnit.module('Keyboard navigation accessibility', {
         this.gridView.render($('#container'));
         this.clock.tick(10);
 
-        const _editingCellTabHandler = this.keyboardNavigationController._editingCellTabHandler;
-        this.keyboardNavigationController._editingCellTabHandler = (eventArgs, direction) => {
+        const editingCellTabHandler = this.keyboardNavigationController.editingCellTabHandler;
+        this.keyboardNavigationController.editingCellTabHandler = (eventArgs, direction) => {
             const $target = $(eventArgs.originalEvent.target);
-            const result = _editingCellTabHandler.bind(this.keyboardNavigationController)(eventArgs, direction);
+            const result = editingCellTabHandler.bind(this.keyboardNavigationController)(eventArgs, direction);
 
             if($target.hasClass('dx-link')) {
                 assert.equal(result, eventArgs.shift ? $target.index() === 0 : $target.index() === 1, 'need default behavior');
@@ -152,7 +152,7 @@ QUnit.module('Keyboard navigation accessibility', {
         this.editRow(1);
         this.clock.tick(10);
         $(this.getCellElement(1, 1)).focus().trigger('dxclick');
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -160,37 +160,37 @@ QUnit.module('Keyboard navigation accessibility', {
         assert.equal($('#qunit-fixture').find(':focus').index(), 0, 'focused element index');
 
         // act
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').first());
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').first().get(0));
 
         // assert
-        assert.equal(counter, 1, '_editingCellTabHandler counter');
+        assert.equal(counter, 1, 'editingCellTabHandler counter');
 
         // act
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').last());
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').last().get(0));
 
         // assert
-        assert.equal(counter, 2, '_editingCellTabHandler counter');
+        assert.equal(counter, 2, 'editingCellTabHandler counter');
         assert.ok($('#qunit-fixture').find(':focus').is('input'), 'focused element');
         assert.equal($('#qunit-fixture').find(':focus').closest('td').index(), 3, 'focused element index');
 
         // act
-        this.triggerKeyDown('tab', false, true, $('#qunit-fixture').find(':focus'));
+        this.triggerKeyDown('tab', false, true, $('#qunit-fixture').find(':focus').get(0));
 
         // assert
         assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-link'), 'focused element');
         assert.equal($('#qunit-fixture').find(':focus').index(), 1, 'focused element index');
 
         // act
-        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').last());
+        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').last().get(0));
 
         // assert
-        assert.equal(counter, 3, '_editingCellTabHandler counter');
+        assert.equal(counter, 3, 'editingCellTabHandler counter');
 
         // act
-        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').first());
+        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').first().get(0));
 
         // assert
-        assert.equal(counter, 4, '_editingCellTabHandler counter');
+        assert.equal(counter, 4, 'editingCellTabHandler counter');
     });
 
     // T741590
@@ -236,7 +236,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 1);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -245,7 +245,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 4);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -266,7 +266,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 1);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -275,7 +275,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 4);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert

@@ -43,6 +43,11 @@ jobs:
           version: 9
           run_install: false
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
       - name: Get pnpm store directory
         shell: bash
         run: |
@@ -59,11 +64,11 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Set timestamp version
         if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
-        run: pnpx ts-node tools/scripts/set-timestamp-version
+        run: pnpm run all:set-timestamp-version
 
       - name: Build npm packages
         env:
@@ -88,7 +93,7 @@ jobs:
           cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build artifacts package
-        run: npx ts-node tools/scripts/make-artifacts-package
+        run: pnpm run make-artifacts-package
 
       - uses: actions/upload-artifact@v4
         with:
@@ -113,12 +118,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            /tools
-            /packages/devextreme-monorepo-tools
-            package.json
-          sparse-checkout-cone-mode: false
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -151,7 +150,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Change package scope
         id: scopedPackage
@@ -159,7 +158,7 @@ jobs:
           PACKAGE: ${{ matrix.package }}
         run: |
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          PACKAGE_DIR=$(npx ts-node tools/scripts/change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
+          PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
           pnpm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";

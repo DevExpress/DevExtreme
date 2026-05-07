@@ -18,6 +18,8 @@ import ArrayStore from 'common/data/array_store';
 import dragEvents from 'common/core/events/drag';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
+import 'generic_light.css!';
+
 const { testStart, test, module } = QUnit;
 
 const timeZones = {
@@ -1607,7 +1609,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         const $element = scheduler.getElement();
         let $appt = $element.find(CLASSES.appointment);
         const cellHeight = $element.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().height;
-        const apptPosition = translator.locate($appt.eq(0));
+        const apptPosition = translator.locate($appt.eq(1));
         const clientTzOffset = new Date('2015-05-27T23:00:00+01:00').getTimezoneOffset() / 60;
 
         const cellsCount = (new Date(
@@ -2122,8 +2124,8 @@ module('Fixed client time zone offset', {
         $appointments = rootElement.find(CLASSES.appointment);
 
         assert.equal($appointments.length, 2, 'Appointment count is OK');
-        assert.equal($appointments.eq(1).position().top, initialAppointmentTop, 'Appointment top is OK');
-        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight * 5, 2.001, 'Appointment height is OK');
+        assert.equal($appointments.eq(0).position().top, initialAppointmentTop, 'Appointment top is OK');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), cellHeight * 5, 2.001, 'Appointment height is OK');
     });
 
     [{

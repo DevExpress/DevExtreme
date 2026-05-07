@@ -28,7 +28,7 @@ export class Cover extends Component<CoverProps> {
 
     const containerClasses = combineClasses({
       [CLASSES.cover]: true,
-      [CLASSES.noImage]: !src,
+      [CLASSES.noImage]: !src && !Template,
     });
 
     return (

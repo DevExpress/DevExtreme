@@ -8,7 +8,7 @@ import uiErrors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 $('<style nonce="qunit-test">.dx-popup-content { padding: 10px; }</style>').appendTo($('head'));
 
@@ -28,12 +28,8 @@ const positionAtWindowCenter = function(element) {
     });
 };
 
-const toSelector = function(cssClass) {
-    return '.' + cssClass;
-};
-
 const wrapper = function() {
-    return $('body').find(toSelector(POPOVER_WRAPPER_CLASS));
+    return $('body').find(`.${POPOVER_WRAPPER_CLASS}`);
 };
 
 const getArrow = function() {
@@ -546,7 +542,7 @@ QUnit.module('arrow positioning', () => {
                 height: 50,
                 visible: true
             });
-            const $arrow = $(toSelector(POPOVER_ARROW_CLASS));
+            const $arrow = $(`.${POPOVER_ARROW_CLASS}`);
             const $content = $(`.${POPUP_CONTENT_CLASS}`);
 
             const positions = [
@@ -1722,7 +1718,7 @@ QUnit.module('position offset', {
         const arrow = elements.arrow;
 
         assert.equal(Math.round(target.offsetLeft - arrow.offsetLeft - arrow.width), 5, 'arrow with right offset is OK');
-        assert.equal(Math.round(arrow.offsetTop - (target.offsetTop + (target.height - arrow.height) / 2)), -5, 'arrow with bottom offset is OK');
+        assert.roughEqual(Math.round(arrow.offsetTop - (target.offsetTop + (target.height - arrow.height) / 2)), -5, 1.01, 'arrow with bottom offset is OK');
 
         assert.equal(Math.round(target.offsetLeft - (popupContent.offsetLeft + popupContent.outerWidth + arrow.width)), 5, 'content with right offset is OK');
         assert.equal(Math.round(target.offsetTop + (target.height - content.height) / 2 - content.offsetTop), 5, 'content with top offset is OK');
@@ -1865,8 +1861,7 @@ QUnit.module('popover content size', () => {
             const content = elements.content;
 
             const $popupContent = popover.$content();
-            const overlayContentBordersHeight = 2;
-            assert.equal(content.height - overlayContentBordersHeight, contentSize + getOuterHeight($popupContent) - getHeight($popupContent), 'content shrunk to available space by height');
+            assert.equal(content.height, contentSize + getOuterHeight($popupContent) - getHeight($popupContent), 'content shrunk to available space by height');
         } finally {
             fixtures.customBoundary.drop();
         }

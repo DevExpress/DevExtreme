@@ -1,5 +1,5 @@
-import messageLocalization from '@js/common/core/localization/message';
 import type { ColumnChooser } from '@js/common/grids';
+import messageLocalization from '@js/localization/message';
 
 export const defaultOptions = {
   columnChooser: {
@@ -19,8 +19,12 @@ export const defaultOptions = {
     mode: 'dragAndDrop',
     width: 250,
     height: 260,
-    title: messageLocalization.format('dxDataGrid-columnChooserTitle'),
-    emptyPanelText: messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
+    get title() {
+      return messageLocalization.format('dxDataGrid-columnChooserTitle');
+    },
+    get emptyPanelText() {
+      return messageLocalization.format('dxDataGrid-columnChooserEmptyText');
+    },
     container: undefined,
   } as ColumnChooser,
 };

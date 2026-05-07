@@ -41,7 +41,7 @@ const ProgressBar = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["value"]), []);
       const independentEvents = useMemo(() => (["onComplete","onContentReady","onDisposing","onInitialized","onValueChanged"]), []);

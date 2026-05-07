@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     const markup =
-'<style nonce="qunit-test">\
+        '<style nonce="qunit-test">\
     table {table-layout: fixed;}/*T428108*/\
     .dx-scrollable-content {\
         padding: 0 !important;\
@@ -43,8 +43,6 @@ import pivotGridUtils, { getScrollbarWidth } from '__internal/grids/pivot_grid/m
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import pointerMock from '../../helpers/pointerMock.js';
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 
@@ -765,7 +763,7 @@ QUnit.module('dxPivotGrid', {
         fieldChooserPopup.show();
         this.clock.tick(500);
 
-        assert.equal($(fieldChooserPopup._$bottom).find('.dx-toolbar-button').length, 2, '2 buttons in toolbar');
+        assert.equal($(fieldChooserPopup.bottomToolbar()).find('.dx-toolbar-button').length, 2, '2 buttons in toolbar');
     });
 
     QUnit.test('apply changes in fieldchooser on button click in onDemand mode', function(assert) {
@@ -791,7 +789,7 @@ QUnit.module('dxPivotGrid', {
 
         assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, 'desc', 'ds state is not changed yet');
 
-        const applyButton = $(fieldChooserPopup._$bottom).find('.dx-button').eq(0);
+        const applyButton = $(fieldChooserPopup.bottomToolbar()).find('.dx-button').eq(0);
         applyButton.trigger('dxclick');
         this.clock.tick(500);
 
@@ -908,6 +906,42 @@ QUnit.module('dxPivotGrid', {
         this.clock.tick(500);
 
         assert.equal($('.dx-header-filter-menu').find('.dx-list-item').text(), 'test <test>', 'encoded');
+    });
+
+    QUnit.test('T1325377: Field panel operations should work after dataSource reassignment', function(assert) {
+        const assignedDataSource = new PivotGridDataSource({
+            fields: [
+                { dataField: 'region', area: 'row' },
+                { dataField: 'date', dataType: 'date', area: 'column' },
+                { dataField: 'sales', dataType: 'number', summaryType: 'sum', area: 'data' }
+            ],
+            store: [
+                { region: 'North America', date: '2013/01/06', sales: 1740 },
+                { region: 'South America', date: '2013/01/13', sales: 850 }
+            ]
+        });
+
+        const pivotGrid = createPivotGrid({
+            allowSorting: true,
+            allowFiltering: true,
+            fieldPanel: {
+                visible: true
+            },
+            dataSource: null
+        });
+        pivotGrid.option('dataSource', assignedDataSource);
+        this.clock.tick(500);
+
+        const $pivotGrid = $('#pivotGrid');
+
+        $pivotGrid.find('.dx-area-description-cell .dx-area-field').first().trigger('dxclick');
+        this.clock.tick(500);
+
+        $pivotGrid.find('.dx-header-filter').first().trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.equal(pivotGrid.getDataSource().state().fields[0].sortOrder, 'desc', 'sorting changes current dataSource state');
+        assert.ok($('.dx-header-filter-menu').find('.dx-list-item').length > 0, 'header filter has items');
     });
 
     QUnit.test('Field chooser inherits encodeHtml option', function(assert) {
@@ -1046,6 +1080,28 @@ QUnit.module('dxPivotGrid', {
 
     });
 
+    QUnit.test('T1317109: FieldChooserBase internal _dataSource matches PivotGrid on dataSource change', function(assert) {
+        const pivotGrid = createPivotGrid({
+            dataSource: {
+                rows: [],
+                columns: [],
+                values: []
+            }
+        });
+
+        pivotGrid.option('dataSource', this.testOptions.dataSource);
+        this.clock.tick(500);
+
+        const fieldChooserBase = $('#pivotGrid').dxPivotGridFieldChooserBase('instance');
+        const pivotDataSource = pivotGrid.getDataSource();
+
+        assert.strictEqual(
+            fieldChooserBase._dataSource,
+            pivotDataSource,
+            'FieldChooserBase._dataSource must equal getDataSource() after dataSource change'
+        );
+    });
+
     QUnit.test('not show field chooser popup on description area click when fieldChooser disabled', function(assert) {
         createPivotGrid({
             fieldChooser: {
@@ -1133,7 +1189,7 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('changing rtlEnabled for all children widgets', function(assert) {
         const pivotGrid = createPivotGrid({
-            rtlEnabled: true
+            rtlEnabled: true,
         });
 
         this.clock.tick(10);
@@ -1143,7 +1199,6 @@ QUnit.module('dxPivotGrid', {
         this.clock.tick(500);
 
         pivotGrid.option('rtlEnabled', false);
-
         pivotGrid._fieldChooserPopup.show();
 
         this.clock.tick(500);
@@ -1154,9 +1209,13 @@ QUnit.module('dxPivotGrid', {
             const $widget = $(this);
             const componentNames = dataUtils.data($widget[0], 'dxComponents');
 
-            $.each(componentNames, function(index, componentName) {
+            $.each(componentNames, function(_, componentName) {
                 if(componentName !== 'dxCheckBox' && componentName !== 'dxButton') {
-                    assert.ok(!dataUtils.data($widget[0], componentName).option('rtlEnabled'), 'rtlEnabled disabled for ' + componentName);
+                    const component = dataUtils.data($widget[0], componentName);
+                    const rtlEnabled = component.option('rtlEnabled');
+                    const result = !rtlEnabled;
+
+                    assert.ok(result, `rtlEnabled disabled for ${componentName}`);
                 }
             });
         });
@@ -1179,13 +1238,13 @@ QUnit.module('dxPivotGrid', {
                 const $rowsAreaScrollable = pivotGrid.$element().find('.dx-scrollable.dx-pivotgrid-vertical-headers');
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), false);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
 
                 pivotGrid.option('rtlEnabled', !rtlEnabled);
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), !rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && !rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), false);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
             });
         });
@@ -2896,6 +2955,57 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'rows area scroll');
     });
 
+    QUnit.test('T1317673 - First and third columns should have width > 0 in virtual scrolling mode with many fields', function(assert) {
+        const fields = [
+            { dataField: 'row1', area: 'row', dataType: 'string', index: 0, },
+            { dataField: 'row2', area: 'row', dataType: 'string', index: 1 },
+        ];
+        const dataFieldsNum = 40;
+
+        for(let i = 0; i < dataFieldsNum; i++) {
+            fields.push({ dataField: 'data' + i, area: 'data', dataType: 'number', index: i });
+        }
+
+        const data = [];
+        const dataItemsNum = 10;
+
+        for(let i = 0; i < dataItemsNum; i++) {
+            const item = {
+                row1: i % 2 === 0 ? 'Category A' : 'Category B',
+                row2: i % 3 === 0 ? 'Subcategory X' : 'Subcategory Y'
+            };
+
+            data.push(item);
+        }
+
+        $('#pivotGrid').empty();
+        $('#pivotGrid').width(800);
+        $('#pivotGrid').height(400);
+
+        const pivotGrid = createPivotGrid({
+            dataFieldArea: 'row',
+            rowHeaderLayout: 'tree',
+            scrolling: {
+                mode: 'virtual',
+                timeout: 0
+            },
+            dataSource: {
+                fields: fields,
+                store: data
+            }
+        });
+        this.clock.tick(10);
+
+        pivotGrid.getDataSource().expandHeaderItem('rowsArea', ['Category A']);
+        this.clock.tick(10);
+
+        const $cols = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers table:not(.dx-pivot-grid-fake-table) colgroup col');
+
+        assert.strictEqual($cols.length, 3, 'colgroup has 3 elements');
+        assert.ok(getWidth($cols.eq(0)) > 0, 'first column width > 0');
+        assert.ok(getWidth($cols.eq(2)) > 0, 'third column width > 0');
+    });
+
     // T518512;
     QUnit.test('render should be called once after expand item if virtual scrolling enabled', function(assert) {
         $('#pivotGrid').empty();
@@ -4095,7 +4205,7 @@ QUnit.module('T984139, T1010175', {
                 QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 2, `expected row position ${errorMessageDetails}`);
                 // the rendered widget in native mode does not take into account the width of the dataArea scrollbar for the test Render -> scrollTo() -> filter -> clearFilter
                 // however, on the test page everything works as expected
-                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, isRenovatedScrollable ? 12 : 2, `expected column position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 2, `expected column position ${errorMessageDetails}`);
             }
 
             function triggerScrollEvent(scrollable) {
@@ -6104,7 +6214,7 @@ QUnit.module('Vertical headers', {
     });
 
     // T696415
-    QUnit.skip('headers and data columns has same width', function(assert) {
+    QUnit.test('headers and data columns has same width', function(assert) {
         const fields = [
             { area: 'row', dataField: 'row1' },
             { area: 'column', dataField: 'col1' }
@@ -6128,10 +6238,16 @@ QUnit.module('Vertical headers', {
         this.clock.tick(10);
         grid.$element().css('zoom', 1.35);
         grid.repaint();
+        this.clock.tick(10);
 
         const columnsWidth = grid._columnsArea.getColumnsWidth();
         const dataWidth = grid._dataArea.getColumnsWidth();
-        assert.deepEqual(columnsWidth, dataWidth);
+
+        assert.strictEqual(columnsWidth.length, dataWidth.length, 'arrays have same length');
+
+        for(let i = 0; i < columnsWidth.length; i++) {
+            assert.roughEqual(columnsWidth[i], dataWidth[i], 1.1, `column ${i} width`);
+        }
     });
 
     function needRunZoomTest() {

@@ -50,27 +50,27 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build etalon bundles
       working-directory: ./packages/devextreme-scss
-      run: pnpx gulp style-compiler-themes-ci
+      run: pnpm exec gulp style-compiler-themes-ci
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Run themebuilder tests (full set, node)
       working-directory: ./packages/devextreme-themebuilder
-      run: pnpx nx test
+      run: pnpm exec nx test
 
     - name: Check styles for duplicate rules (generic)
       working-directory: ./packages/devextreme-scss
-      run: pnpx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.light.css"
+      run: pnpm exec stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.light.css"
 
     - name: Check styles for duplicate rules (material)
       working-directory: ./packages/devextreme-scss
-      run: pnpx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
+      run: pnpm exec stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
 
   notify:
     runs-on: devextreme-shr2

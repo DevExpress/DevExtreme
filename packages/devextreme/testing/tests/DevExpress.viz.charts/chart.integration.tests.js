@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import { Renderer } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';
@@ -862,6 +862,36 @@ QUnit.test('Using the single section of axis options for some panes (check custo
     assert.deepEqual(visualRangeChanged.getCall(2).args[0].value, { startValue: 18, endValue: 25 });
 });
 
+// T1317590
+QUnit.test('Argument axis overlays/labels are removed when dataSource update', function(assert) {
+    const initialData = [
+        { arg: 'Monday', val: 1 },
+        { arg: 'Friday', val: 2 }
+    ];
+    const updatedData = [
+        { arg: 'Tuesday', val: 3 },
+        { arg: 'Thursday', val: 4 }
+    ];
+
+    const chart = this.createChart({
+        dataSource: initialData,
+        series: { argumentField: 'arg', valueField: 'val' },
+        argumentAxis: { label: { visible: true } }
+    });
+
+    let label = this.$container.find('.dxc-arg-elements text').filter(function() {
+        return $(this).text() === 'Friday';
+    });
+    assert.ok(label.length, 'Friday label exists');
+
+    chart.option('dataSource', updatedData);
+
+    label = this.$container.find('.dxc-arg-elements text').filter(function() {
+        return $(this).text() === 'Friday';
+    });
+    assert.notOk(label.length, 'Friday label is not exists');
+});
+
 // T681674
 QUnit.test('actual value axis visualRange after dataSource updating (argument axis without visual range)', function(assert) {
     const chart = this.createChart({
@@ -1031,6 +1061,53 @@ QUnit.test('Set the visualRange option by the different ways', function(assert) 
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), { length: 2 });
 });
 
+QUnit.test('visualRangeUpdateMode change should not corrupt _customVisualRange causing incorrect visualRange on subsequent axis rerender (T1315301)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
+    const dataSource = [{
+        arg: 1,
+        val: 4
+    }, {
+        arg: 2,
+        val: 5
+    }, {
+        arg: 5,
+        val: 7
+    }, {
+        arg: 8,
+        val: 3
+    }, {
+        arg: 11,
+        val: 8
+    }];
+
+    const chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: dataSource,
+        series: { type: 'bar' },
+        valueAxis: {
+            visualRangeUpdateMode: 'auto',
+        }
+    });
+
+    const initialVisualRange = chart.option('valueAxis.visualRange');
+
+    chart.option('valueAxis.visualRangeUpdateMode', 'keep');
+
+    assert.strictEqual(chart.option('valueAxis.visualRangeUpdateMode'), 'keep', 'visualRangeUpdateMode has changed to "keep"');
+    assert.deepEqual(chart.option('valueAxis.visualRange'), initialVisualRange, 'visualRange remains unchanged');
+    assert.deepEqual(chart.option('valueAxis._customVisualRange'), undefined, '_customVisualRange not set');
+
+    chart.option('commonAxisSettings.title', 'custom');
+
+    assert.strictEqual(chart.option('valueAxis.visualRangeUpdateMode'), 'keep', 'visualRangeUpdateMode is still "keep" after rerender');
+    assert.strictEqual(chart.option('commonAxisSettings.title'), 'custom', 'commonAxisSettings.title was successfully changed');
+    assert.deepEqual(chart.option('valueAxis.visualRange'), initialVisualRange, 'visualRange remains correct after axis rerender');
+    assert.deepEqual(chart.option('valueAxis._customVisualRange'), undefined, '_customVisualRange not set');
+});
+
 QUnit.test('Reload dataSource - visualRange option should be changed', function(assert) {
     this.$container.css({ width: '1000px', height: '600px' });
     const visualRangeChanged = sinon.spy();
@@ -1062,14 +1139,12 @@ QUnit.test('Reload dataSource - visualRange option should be changed', function(
 
     visualRangeChanged.resetHistory();
 
-    // act
     const ds = chart.getDataSource();
     ds.store().push([
         { type: 'insert', data: { arg: 8, val: 3 } },
         { type: 'insert', data: { arg: 11, val: 8 } }
     ]);
 
-    // assert
     // argumentAxis
     assert.deepEqual(visualRangeChanged.getCall(0).args[0].previousValue, { startValue: 1, endValue: 5 });
     assert.deepEqual(visualRangeChanged.getCall(0).args[0].value, { startValue: 1, endValue: 11 });
@@ -1188,7 +1263,6 @@ QUnit.test('Move visual frame by visualRangeLength', function(assert) {
         valueAxis: { valueMarginsEnabled: false }
     });
 
-    // act
     chart.getArgumentAxis().visualRange({ startValue: new Date(2010, 3, 1), length: { years: 2 } });
 
     assert.deepEqual(chart._argumentAxes[0].visualRange(), {
@@ -1505,7 +1579,6 @@ QUnit.test('Reset chart viewport', function(assert) {
 });
 
 QUnit.test('dxChart reinitialization - series - dataSource', function(assert) {
-    // arrange
     let chart = this.$container.dxChart({
         dataSource: [{ arg: 'January', val1: 24, val2: 0, val3: 15 },
             { arg: 'February', val1: 0, val2: 34, val3: 40 },
@@ -1519,7 +1592,7 @@ QUnit.test('dxChart reinitialization - series - dataSource', function(assert) {
         }],
         title: 'original'
     });
-    // act
+
     chart = this.$container.dxChart({
         series: [{
             name: 'Third',
@@ -1530,14 +1603,12 @@ QUnit.test('dxChart reinitialization - series - dataSource', function(assert) {
         }
     });
 
-    // assert
     chart = this.$container.dxChart('instance');
     assert.equal(chart.series.length, 1, 'Series number');
     assert.equal(chart._legend._data.length, 1, 'Legend reinitialized');
 });
 
 QUnit.test('dxChart reinitialization - dataSource - correct axes/data types', function(assert) {
-    // arrange
     const chart = this.createChart({
         dataSource: [],
         series: [{
@@ -1546,7 +1617,7 @@ QUnit.test('dxChart reinitialization - dataSource - correct axes/data types', fu
         }],
         title: 'original'
     });
-    // act
+
     assert.equal(chart._argumentAxes[0].getOptions().type, 'continuous');
     assert.equal(chart._argumentAxes[0].getOptions().dataType, undefined);
     assert.equal(chart._valueAxes[0].getOptions().type, 'continuous');
@@ -1557,16 +1628,12 @@ QUnit.test('dxChart reinitialization - dataSource - correct axes/data types', fu
             { arg: 'February', val1: new Date(100000) }]
     });
 
-    // assert
     assert.ok(chart);
     assert.equal(chart._argumentAxes[0].getOptions().type, 'discrete');
-    // equal(chart._argumentAxes[0].getOptions().dataType, "string");
     assert.equal(chart._valueAxes[0].getOptions().type, 'continuous');
-    // equal(chart._valueAxes[0].getOptions().dataType, "datetime");
 });
 
 QUnit.test('dxChart reinitialization - dataSource - correct axes min max', function(assert) {
-    // arrange
     const chart = this.createChart({
         dataSource: [],
         series: [{
@@ -1584,13 +1651,11 @@ QUnit.test('dxChart reinitialization - dataSource - correct axes min max', funct
     argAxis.setBusinessRange = sinon.spy(function() { return argFunction.apply(argAxis, arguments); });
     valAxis.setBusinessRange = sinon.spy(function() { return valFunction.apply(valAxis, arguments); });
 
-    // act
     this.$container.dxChart({
         dataSource: [{ arg: 223, val1: 1 },
             { arg: 445, val1: 4 }]
     });
 
-    // assert
     assert.equal(argAxis.setBusinessRange.lastCall.args[0].min, 223);
     assert.equal(argAxis.setBusinessRange.lastCall.args[0].max, 445);
     assert.equal(valAxis.setBusinessRange.lastCall.args[0].min, 1);
@@ -1598,7 +1663,6 @@ QUnit.test('dxChart reinitialization - dataSource - correct axes min max', funct
 });
 
 QUnit.test('dxChart dataSource update - pass current argument axis\' visualRangeUpdateMode to valueAxis', function(assert) {
-    // arrange
     const chart = this.createChart({
         dataSource: [{ arg: 1, val1: 1 },
             { arg: 2, val1: 2 }],
@@ -1615,18 +1679,15 @@ QUnit.test('dxChart dataSource update - pass current argument axis\' visualRange
 
     valAxis.setBusinessRange = sinon.spy(function() { return valFunction.apply(valAxis, arguments); });
 
-    // act
     this.$container.dxChart({
         dataSource: [{ arg: 223, val1: 1 },
             { arg: 445, val1: 4 }]
     });
 
-    // assert
     assert.equal(valAxis.setBusinessRange.lastCall.args[2], 'reset');
 });
 
 QUnit.test('dxChart with vertical axis with title', function(assert) {
-    // arrange, act
     this.$container.width('300px');
     this.$container.dxChart({
         valueAxis: {
@@ -1634,12 +1695,11 @@ QUnit.test('dxChart with vertical axis with title', function(assert) {
             position: 'left'
         }
     });
-    // assert
+
     assert.equal(this.$container.find('.dxc-val-title').text(), 'some title');
 });
 
 QUnit.test('dxChart with horizontal axis with title', function(assert) {
-    // arrange, act
     this.$container.width('300px');
     this.$container.dxChart({
         valueAxis: {
@@ -1647,7 +1707,7 @@ QUnit.test('dxChart with horizontal axis with title', function(assert) {
             position: 'bottom'
         }
     });
-    // assert
+
     assert.equal(this.$container.find('.dxc-val-title').text(), 'some title');
 });
 
@@ -1953,7 +2013,6 @@ QUnit.test('Validate Axis on update', function(assert) {
     assert.strictEqual(chart.getValueAxis().getOptions().dataType, 'datetime');
     assert.strictEqual(chart.getValueAxis().getOptions().type, 'continuous');
     assert.strictEqual(chart.getArgumentAxis().getOptions().type, 'continuous');
-
 });
 
 // T951843
@@ -2485,7 +2544,6 @@ QUnit.test('Points on the graph should be hidden when they have multiple interse
     assert.notOk(series[0].getVisiblePoints()[0].graphic);
 });
 
-
 QUnit.test('don\'t hide scatter points (T929480)', function(assert) {
     const chart = this.createChart({
         series: [
@@ -2609,7 +2667,6 @@ QUnit.test('View hovered point marker for invisible point', function(assert) {
 
     const point = chart.getAllSeries()[0].getAllPoints()[pointIndex];
 
-    // act
     point.hover();
 
     assert.notOk(point.graphic);
@@ -2839,7 +2896,6 @@ QUnit.test('Multicolor bars', function(assert) {
             'year': '1954',
             'Africa': 51,
             'America': 25
-
         }],
         animation: { enabled: false }
     });
@@ -3103,7 +3159,6 @@ QUnit.test('Get pane index when panes is object', function(assert) {
     }, this.$container);
     const paneIndex = chart._getPaneIndex('pane-name');
 
-    // assert
     assert.equal(paneIndex, 0, 'Pane index should be 0');
 });
 
@@ -3121,7 +3176,6 @@ QUnit.test('Get pane index when panes is array', function(assert) {
     const paneIndex2 = chart._getPaneIndex('pane2');
     const paneIndex3 = chart._getPaneIndex('pane3');
 
-    // assert
     assert.equal(paneIndex1, 0, 'First pane index should be 0');
     assert.equal(paneIndex2, 1, 'Second pane index should be 1');
     assert.equal(paneIndex3, 2, 'Third pane index should be 2');
@@ -3144,7 +3198,6 @@ QUnit.test('Get pane border visibility when commonPaneSettings border is undefin
     const borderVisible1 = chart._getPaneBorderVisibility(0);
     const borderVisible2 = chart._getPaneBorderVisibility(1);
 
-    // assert
     assert.equal(borderVisible1, true, 'First pane border should be visible');
     assert.equal(borderVisible2, false, 'Second pane border should not be visible');
 });
@@ -3174,7 +3227,6 @@ QUnit.test('Get pane border visibility when commonPaneSettings border is visible
     const borderVisible2 = chart._getPaneBorderVisibility(1);
     const borderVisible3 = chart._getPaneBorderVisibility(2);
 
-    // assert
     assert.equal(borderVisible1, true, 'First pane border should be visible');
     assert.equal(borderVisible2, true, 'Second pane border should be visible');
     assert.equal(borderVisible3, false, 'Third pane border should not be visible');
@@ -3205,7 +3257,6 @@ QUnit.test('Get pane border visibility when commonPaneSettings border is not vis
     const borderVisible2 = chart._getPaneBorderVisibility(1);
     const borderVisible3 = chart._getPaneBorderVisibility(2);
 
-    // assert
     assert.equal(borderVisible1, false, 'First pane border should not be visible');
     assert.equal(borderVisible2, true, 'Second pane border should be visible');
     assert.equal(borderVisible3, false, 'Third pane border should not be visible');
@@ -3217,7 +3268,7 @@ QUnit.module('Option changing in onDrawn after zooming', {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
         this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
         sinon.stub(rendererModule, 'Renderer').callsFake(function() {
-            return new vizMocks.Renderer();
+            return new Renderer();
         });
     },
     afterEach: function() {
@@ -3228,7 +3279,6 @@ QUnit.module('Option changing in onDrawn after zooming', {
 });
 
 QUnit.test('Legend and title should have original place', function(assert) {
-    // act
     const chart = createChartInstance({
         dataSource: [{ arg: 1, val: 2 }],
         series: [{
@@ -3249,13 +3299,11 @@ QUnit.test('Legend and title should have original place', function(assert) {
     });
     chart.zoomArgument(0, 1);
 
-    // assert
     assert.deepEqual(this.legendShiftSpy.getCall(0).args, this.legendShiftSpy.getCall(1).args, 'the same place');
     assert.deepEqual(this.titleShiftSpy.getCall(0).args, this.titleShiftSpy.getCall(1).args, 'title shift');
 });
 
 QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
-    // arrange
     const chart = createChartInstance({
         dataSource: [{ arg: 10, val1: 100 }, { arg: 20, val1: 200 }],
         series: [{
@@ -3267,10 +3315,9 @@ QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
         },
         title: 'original'
     }, $('#chartContainer'));
-    // act
+
     chart.option('size', { width: 50, height: 50 });
 
-    // assert
     assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, 10, 'min arg');
     assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 20, 'max arg');
     assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 100, 'min val');
@@ -3280,7 +3327,7 @@ QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
 QUnit.test('Pie chart with sizeGroup, change option in between rendering steps - legend and title should have original place', function(assert) {
     const that = this;
     const done = assert.async();
-    // act
+
     const chart = $('#chartContainer').dxPieChart({
         sizeGroup: 'test-group',
         dataSource: [{ arg: 1, val: 2 }],
@@ -3290,7 +3337,6 @@ QUnit.test('Pie chart with sizeGroup, change option in between rendering steps -
             visible: true
         },
         onDrawn: function() {
-            // assert
             assert.deepEqual(that.legendShiftSpy.getCall(0).args, that.legendShiftSpy.getCall(1).args, 'the same place');
             assert.deepEqual(that.titleShiftSpy.getCall(0).args, that.titleShiftSpy.getCall(1).args, 'title shift');
             done();
@@ -3308,7 +3354,6 @@ QUnit.module('T218011 for dashboards. Private method for getting visible argumen
 QUnit.test('Category', function(assert) {
     const categories = ['A', 'B', 'C', 'D', 'E'];
 
-    // act
     const chart = createChartInstance({
         argumentAxis: {
             categories: categories
@@ -3318,14 +3363,12 @@ QUnit.test('Category', function(assert) {
         }]
     }, this.$container);
 
-    // assert
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 'A', maxVisible: 'E' });
 });
 
 QUnit.test('Category. After zoomArgument', function(assert) {
     const categories = ['A', 'B', 'C', 'D', 'E'];
 
-    // act
     const chart = createChartInstance({
         argumentAxis: {
             categories: categories
@@ -3334,13 +3377,13 @@ QUnit.test('Category. After zoomArgument', function(assert) {
             type: 'line'
         }]
     }, this.$container);
+
     chart.zoomArgument('B', 'C');
-    // assert
+
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 'B', maxVisible: 'C' });
 });
 
 QUnit.test('Numeric', function(assert) {
-    // act
     const chart = createChartInstance({
         dataSource: [{ arg: 20, val: 10 }, { arg: 40, val: 11 }],
         series: {
@@ -3351,20 +3394,19 @@ QUnit.test('Numeric', function(assert) {
         }
     }, this.$container);
 
-    // assert
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 20, maxVisible: 40 });
 });
 
 QUnit.test('Numeric. After zoomArgument', function(assert) {
-    // act
     const chart = createChartInstance({
         dataSource: [{ arg: 20, val: 10 }, { arg: 40, val: 11 }],
         series: {
             type: 'line'
         }
     }, this.$container);
+
     chart.zoomArgument(25, 30);
-    // assert
+
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 25, maxVisible: 30 });
 });
 
@@ -3442,7 +3484,6 @@ QUnit.test('pie chart groups order', function(assert) {
 
 // T412270
 QUnit.test('select point after dataSource updating', function(assert) {
-    // arrange
     const dataSource = [{ arg: 'arg1', val: 1 }];
     const chart = this.createPieChart({
         series: [{}],
@@ -3779,7 +3820,6 @@ QUnit.module('T576725', $.extend({}, moduleSetup, {
 }));
 
 QUnit.test('Overlapping of the labels should be taken into account canvas with legend and title.', function(assert) {
-    // arrange
     const dataSource = [];
 
     for(let i = 0; i < 15; i++) {
@@ -4113,7 +4153,6 @@ QUnit.test('axis.label.template option changing', function(assert) {
     });
 
     assert.strictEqual(template.callCount, 1);
-
 });
 
 QUnit.module('Discrete axis label layout', $.extend({}, moduleSetup, {
@@ -4991,7 +5030,6 @@ QUnit.module('React async templates rendering', {
 
         chart.render({ force: true });
         stub.callThrough();
-
 
         chart._applyingChanges = true;
         this.clock.tick(this.templateTimeout);

@@ -4,6 +4,8 @@ import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
+import FilterRow from './filter/row';
+import FilterCell from './filter/cell';
 import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
@@ -12,14 +14,18 @@ import ContextMenu from '../contextMenu';
 
 import type { WidgetName } from '../types';
 import { Overlay } from './overlay';
+import LoadPanel from '../loadPanel';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
+import DateBox from '../dateBox';
+import NumberBox from '../numberBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
+import EditPopup from './editPopup';
 
 export const CLASS = {
   ...CLASS_BASE,
@@ -27,6 +33,7 @@ export const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   searchBox: 'dx-searchbox',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
@@ -34,6 +41,8 @@ export const CLASS = {
   focusedRow: 'dx-row-focused',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
+  filterRangeStartEditor: 'filter-range-start',
+  filterRangeEndEditor: 'filter-range-end',
   focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -41,6 +50,8 @@ export const CLASS = {
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
+  adaptiveColumnButton: 'dx-datagrid-adaptive-more',
   errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
@@ -67,6 +78,7 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
+  sortableDragging: 'dx-sortable-dragging',
 };
 
 const E2E_ATTRIBUTES = {
@@ -131,6 +143,10 @@ export default class DataGrid extends GridCore {
   constructor(id: string | Selector) {
     super(id);
 
+    /*
+      dataRows contains double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
   }
 
@@ -139,6 +155,10 @@ export default class DataGrid extends GridCore {
 
   getContainer(): Selector {
     return this.element.find(`.${CLASS.dataGrid}`);
+  }
+
+  getHeadersContainer(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`);
   }
 
   getHeaders(): Headers {
@@ -151,6 +171,18 @@ export default class DataGrid extends GridCore {
 
   getScrollContainer(): Selector {
     return this.getRowsView().find(`.${CLASS.scrollableContainer}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  getRows(): Selector {
+    return this.getRowsView().find(`.${CLASS.row}`);
+  }
+
+  getCells(): Selector {
+    return this.getRowsView().find('td');
   }
 
   getDataRow(index: number): DataRow {
@@ -201,26 +233,39 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.errorRow}`);
   }
 
-  getFilterRow(): Selector {
-    return this.element.find(`.${this.addWidgetPrefix(CLASS.filterRow)}`);
+  getFilterRow(): FilterRow {
+    return this.getHeaders().getFilterRow();
   }
 
-  getFilterCell(columnIndex: number): Selector {
-    return this.getFilterRow().find(`[aria-colindex='${columnIndex + 1}']`);
+  getFilterCell(columnIndex: number): FilterCell {
+    return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
   }
 
   getFilterRangeOverlay(): Selector {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+    return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
+
+  getFilterRangeStartEditor(): DateBox;
+  getFilterRangeStartEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  }
+
+  getFilterRangeEndEditor(): DateBox;
+  getFilterRangeEndEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
+  }
+
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
   }
 
   getFilterEditor<T>(
     columnIndex: number,
-    EditorType: new(mainElement: Selector) => T,
+    EditorType: new (mainElement: Selector) => T,
   ): T {
-    return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
+    return this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor<T>(EditorType);
   }
 
   getSearchBox(): TextBox {
@@ -235,8 +280,8 @@ export default class DataGrid extends GridCore {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
-  getLoadPanel(): Overlay {
-    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
+  getLoadPanel(): LoadPanel {
+    return new LoadPanel(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -315,7 +360,9 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  scrollBy(options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
+  async scrollBy(t: TestController, options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
+    await t.expect(this.hasScrollable()).ok();
+
     const { getInstance } = this;
 
     return ClientFunction(
@@ -384,6 +431,10 @@ export default class DataGrid extends GridCore {
     return new EditForm(element, buttons);
   }
 
+  getEditPopup(): EditPopup {
+    return new EditPopup(Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
+  }
+
   getToolbar(): Toolbar {
     return new Toolbar(this.element.find(`.${CLASS.toolbar}`));
   }
@@ -398,6 +449,18 @@ export default class DataGrid extends GridCore {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
+   getAdaptiveButtonSelector(): string {
+    return `.${CLASS.adaptiveColumnButton}`;
+  }
+
+  getAdaptiveButton(nth: number = 0): Selector {
+    return this.element.find(this.getAdaptiveButtonSelector()).nth(nth);
+  }
+
+  isAdaptiveColumnHidden(): Promise<boolean> {
+    return this.element.find(`.${CLASS.adaptiveCommandCellHidden}`).exists;
   }
 
   apiAddRow(): Promise<void> {
@@ -514,6 +577,7 @@ export default class DataGrid extends GridCore {
       return dataGrid.getVisibleRows().map((r) => ({
         key: r.key,
         rowType: r.rowType,
+        rowIndex: r.rowIndex,
       }));
     }, { dependencies: { getInstance } })();
   }
@@ -592,7 +656,7 @@ export default class DataGrid extends GridCore {
     const { getInstance } = this;
     return ClientFunction(
       () => {
-        (getInstance() as DataGridInstance).refresh().catch(() => {});
+        (getInstance() as DataGridInstance).refresh().catch(() => { });
       },
       { dependencies: { getInstance } },
     )();
@@ -651,6 +715,39 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  apiAddColumn(config: any): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).addColumn(config),
+      { dependencies: { getInstance, config } },
+    )();
+  }
+
+  apiFocus(cellElement?: Selector): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).focus(cellElement?.()),
+      { dependencies: { getInstance, cellElement } },
+    )();
+  }
+
+  apiPageIndex(pageIndex?: number): Promise<number | void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        if (pageIndex === undefined) {
+          return (getInstance() as any).pageIndex();
+        }
+
+        (getInstance() as any).pageIndex(pageIndex);
+      },
+      { dependencies: { getInstance, pageIndex } },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
@@ -672,7 +769,22 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void>  {
+  dropRow(): Promise<void> {
+    return ClientFunction((sortableDraggingClass) => {
+        const $dragElement = $(`.${sortableDraggingClass}`);
+        const dragOffset = $dragElement.offset();
+
+        triggerPointerUp($dragElement, dragOffset.left, dragOffset.top);
+      },
+      {
+        dependencies: {
+          triggerPointerUp,
+        },
+      },
+    )(CLASS.sortableDragging);
+  }
+
+  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -852,10 +964,10 @@ export default class DataGrid extends GridCore {
   ): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
-        () => {
-          (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
-        },
-        { dependencies: { getInstance, sensitivity } },
+      () => {
+        (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
+      },
+      { dependencies: { getInstance, sensitivity } },
     )();
   }
 }

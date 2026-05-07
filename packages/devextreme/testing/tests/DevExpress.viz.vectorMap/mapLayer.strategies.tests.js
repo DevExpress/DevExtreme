@@ -1,7 +1,11 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const mapLayerModule = require('viz/vector_map/map_layer');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    Element,
+} from '../../helpers/vizMocks.js';
+import mapLayerModule from 'viz/vector_map/map_layer';
+
 const selectStrategy = mapLayerModule._TESTS_selectStrategy;
 
 const emptyStrategy = selectStrategy({}, createData(0));
@@ -97,25 +101,30 @@ QUnit.test('Select project strategy by type (polygon/multipolygon)', function(as
 QUnit.test('Project', function(assert) {
     const projection = {
         project: function(coordinates) {
-            return coordinates + '-proj';
+            return coordinates * 2;
+        }
+    };
+    const multilineProjection = {
+        project: function(coordinates) {
+            return coordinates.map(item => item * 2);
         }
     };
 
     assert.deepEqual(lineStrategyLineString.project(projection, [
-        'p1', 'p2', 'p3'
+        1, 2, 3
     ]), [
-        ['p1-proj', 'p2-proj', 'p3-proj']
+        [2, 4, 6]
     ], 'line linestring');
-    assert.deepEqual(lineStrategyMultiLineString.project(projection, [
-        ['p1', 'p2'],
-        ['p3', 'p4', 'p5'],
-        ['p6']
-    ]), [
-        ['p1-proj', 'p2-proj'],
-        ['p3-proj', 'p4-proj', 'p5-proj'],
-        ['p6-proj']
-    ], 'line multilinestring');
-    assert.deepEqual(pointDotStrategy.project(projection, ['p']), 'p-proj', 'point');
+    assert.deepEqual(lineStrategyMultiLineString.project(multilineProjection, [[
+        [1, 2],
+        [3, 4, 5],
+        [6]
+    ]]), [[
+        [2, 4],
+        [6, 8, 10],
+        [12]
+    ]], 'line multilinestring');
+    assert.deepEqual(pointDotStrategy.project(projection, [1]), 2, 'point');
 });
 
 QUnit.test('Project area label', function(assert) {
@@ -144,7 +153,7 @@ QUnit.test('Project line label', function(assert) {
 });
 
 QUnit.test('Transform area', function(assert) {
-    const figure = { root: new vizMocks.Element() };
+    const figure = { root: new Element() };
     const projection = {
         transform: function(coordinates) {
             return [coordinates + '-tr1', coordinates + '-tr2'];
@@ -171,7 +180,7 @@ QUnit.test('Transform area', function(assert) {
 });
 
 QUnit.test('Transform area label', function(assert) {
-    const figure = { text: new vizMocks.Element(), size: [10, 20] };
+    const figure = { text: new Element(), size: [10, 20] };
     const projection = {
         transform: function(coordinates) {
             return [coordinates[0] + 10, coordinates[1] - 20];
@@ -193,7 +202,7 @@ QUnit.test('Transform area label', function(assert) {
 });
 
 QUnit.test('Transform line', function(assert) {
-    const figure = { root: new vizMocks.Element() };
+    const figure = { root: new Element() };
     const projection = {
         transform: function(coordinates) {
             return [coordinates + '-tr1', coordinates + '-tr2'];
@@ -220,7 +229,7 @@ QUnit.test('Transform line', function(assert) {
 });
 
 QUnit.test('Transform line label', function(assert) {
-    const figure = { text: new vizMocks.Element(), size: [10, 20] };
+    const figure = { text: new Element(), size: [10, 20] };
     const projection = {
         transform: function(coordinates) {
             return [coordinates[0] + 10, coordinates[1] - 20];
@@ -242,7 +251,7 @@ QUnit.test('Transform line label', function(assert) {
 });
 
 QUnit.test('Transform point', function(assert) {
-    const figure = { root: new vizMocks.Element() };
+    const figure = { root: new Element() };
     const projection = {
         transform: function(coordinates) {
             return [coordinates[0] + 10, coordinates[1] - 20];
@@ -407,7 +416,7 @@ QUnit.test('Find grouping index', function(assert) {
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.context = {
             renderer: this.renderer,
             dataKey: 'data-key'
@@ -434,9 +443,9 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Get label offset', function(assert) {
-    const label1 = { size: [10, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
-    const label2 = { size: [30, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
-    const label3 = { size: [10, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label1 = { size: [10, 20], spaceSize: [30, 40], text: new Element() };
+    const label2 = { size: [30, 20], spaceSize: [30, 40], text: new Element() };
+    const label3 = { size: [10, 40], spaceSize: [30, 40], text: new Element() };
 
     assert.deepEqual(areaStrategyPolygon.getLabelOffset(label1), [0, 0], 'offset 1');
     assert.deepEqual(label1.text.attr.lastCall.args, [{ visibility: null }], 'visibility 1');
@@ -477,7 +486,7 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    const figure = { root: new vizMocks.Element() };
+    const figure = { root: new Element() };
     const style = { tag: 'style' };
 
     areaStrategyPolygon.setState(figure, { root: [null, style, null] }, 1);
@@ -527,10 +536,10 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Get label offset', function(assert) {
-    const label1 = { size: [10, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
-    const label2 = { size: [30, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
-    const label3 = { size: [10, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
-    const label4 = { size: [30, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label1 = { size: [10, 20], spaceSize: [30, 40], text: new Element() };
+    const label2 = { size: [30, 20], spaceSize: [30, 40], text: new Element() };
+    const label3 = { size: [10, 40], spaceSize: [30, 40], text: new Element() };
+    const label4 = { size: [30, 40], spaceSize: [30, 40], text: new Element() };
 
     assert.deepEqual(lineStrategyLineString.getLabelOffset(label1), [0, 0], 'offset 1');
     assert.deepEqual(label1.text.attr.lastCall.args, [{ visibility: null }], 'visibility 1');
@@ -574,7 +583,7 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    const figure = { root: new vizMocks.Element() };
+    const figure = { root: new Element() };
     const style = { tag: 'style' };
 
     lineStrategyLineString.setState(figure, { root: [null, style, null] }, 1);
@@ -655,7 +664,7 @@ QUnit.test('Setup', function(assert) {
 });
 
 QUnit.test('Reset', function(assert) {
-    const filter = this.context.filter = new vizMocks.Element();
+    const filter = this.context.filter = new Element();
     pointDotStrategy.reset(this.context);
 
     assert.deepEqual(filter.dispose.lastCall.args, []);
@@ -685,7 +694,7 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    const figure = { dot: new vizMocks.Element() };
+    const figure = { dot: new Element() };
     this.context.filter = { id: 'test-filter' };
 
     pointDotStrategy.refresh(this.context, figure, null, null, { shadow: true });
@@ -755,7 +764,7 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    const figure = { root: new vizMocks.Element(), back: new vizMocks.Element(), dot: new vizMocks.Element() };
+    const figure = { root: new Element(), back: new Element(), dot: new Element() };
     const rootStyle = { tag: 'root' };
     const backStyle = { tag: 'back' };
     const dotStyle = { tag: 'dot' };
@@ -797,7 +806,7 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    const figure = { bubble: new vizMocks.Element() };
+    const figure = { bubble: new Element() };
 
     pointBubbleStrategy.refresh(this.context, figure, null, null, { size: 8 });
 
@@ -843,7 +852,7 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    const figure = { root: new vizMocks.Element(), bubble: new vizMocks.Element() };
+    const figure = { root: new Element(), bubble: new Element() };
     const rootStyle = { tag: 'root' };
     const bubbleStyle = { tag: 'back' };
 
@@ -984,7 +993,7 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    const figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const figure = { pie: new Element(), border: new Element() };
     const stub = sinon.stub().returns([1, 2, 3]);
     this.context.settings = { dataField: 'data-field' };
 
@@ -1007,7 +1016,7 @@ QUnit.test('Refresh', function(assert) {
 });
 
 QUnit.test('Refresh / values', function(assert) {
-    const figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const figure = { pie: new Element(), border: new Element() };
     this.context.settings = { dataField: 'data-field' };
 
     pointPieStrategy.refresh(this.context, figure, 'test-data',
@@ -1081,7 +1090,7 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    const figure = { root: new vizMocks.Element(), pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const figure = { root: new Element(), pie: new Element(), border: new Element() };
     const rootStyle = { tag: 'root' };
     const pieStyle = { tag: 'pie' };
     const borderStyle = { tag: 'border' };
@@ -1126,7 +1135,7 @@ QUnit.test('Arrange', function(assert) {
 
 // T712894
 QUnit.test('Refresh. All values is zero', function(assert) {
-    const figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const figure = { pie: new Element(), border: new Element() };
     this.context.settings = { dataField: 'data-field' };
 
     pointPieStrategy.refresh(this.context, figure, 'test-data',
@@ -1168,7 +1177,7 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    const figure = { image: new vizMocks.Element() };
+    const figure = { image: new Element() };
     const stub = sinon.stub().returns('test-url');
     this.context.settings = { dataField: 'data-field' };
 
@@ -1179,7 +1188,7 @@ QUnit.test('Refresh', function(assert) {
 });
 
 QUnit.test('Refresh / url', function(assert) {
-    const figure = { image: new vizMocks.Element() };
+    const figure = { image: new Element() };
     const stub = sinon.spy(function() {
         return this.url;
     });
@@ -1232,7 +1241,7 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    const figure = { root: new vizMocks.Element(), image: new vizMocks.Element() };
+    const figure = { root: new Element(), image: new Element() };
     const rootStyle = { tag: 'root' };
     const imageStyle = { tag: 'pie' };
 

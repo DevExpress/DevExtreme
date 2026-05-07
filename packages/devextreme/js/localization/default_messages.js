@@ -1,1 +1,1 @@
-export * from '../common/core/localization/default_messages';
+export * from '../__internal/core/localization/default_messages';

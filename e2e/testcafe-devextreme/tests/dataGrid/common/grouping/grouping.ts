@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { makeColumnHeadersViewTemplatesAsync } from '../../helpers/asyncTemplates';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Grouping Panel`
   .page(url(__dirname, '../../../container.html'));
@@ -15,9 +15,10 @@ test('Grouping Panel label should not overflow in a narrow grid (T1103925)', asy
 
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
+  await testScreenshot(t, takeScreenshot, 'groupingPanel.png', { element: dataGrid.getToolbar().element });
   await t
-    .expect(await takeScreenshot('groupingPanel', dataGrid.getToolbar().element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -41,101 +42,21 @@ test('Grouping Panel label should not overflow in a narrow grid (T1103925)', asy
   },
 }));
 
-// T1112573
-test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
-
-  await dataGrid.apiExpandAllGroups();
-
-  await t
-    .wait(100)
-    .expect(await takeScreenshot('expanded-groups-content', dataGrid.element))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [
-    {
-      field1: '1', field2: 'test1',
-    },
-    {
-      field1: '2', field2: 'test1',
-    },
-    {
-      field1: '3', field2: 'test2',
-    },
-  ],
-  width: 700,
-  columns: [
-    'field1',
-    { dataField: 'field2', groupIndex: 0 },
-  ],
-  dataRowTemplate(container, { data }) {
-    return $(container).append($(`<tr><td>${data.field1}</td></tr>`));
-  },
-  groupPanel: {
-    visible: true,
-  },
-  grouping: {
-    autoExpandAll: false,
-  },
-}));
-
-// T1112573
-test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
-
-  await dataGrid.apiExpandAllGroups();
-
-  await t
-    .wait(100)
-    .expect(await takeScreenshot('expanded-groups-content', dataGrid.element))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [
-    {
-      field1: '1', field2: 'test1',
-    },
-    {
-      field1: '2', field2: 'test1',
-    },
-    {
-      field1: '3', field2: 'test2',
-    },
-  ],
-  width: 700,
-  columns: [
-    'field1',
-    { dataField: 'field2', groupIndex: 0 },
-  ],
-  dataRowTemplate(container, { data }) {
-    return $(container).append($(`<tr><td>${data.field1}</td></tr>`));
-  },
-  groupPanel: {
-    visible: true,
-  },
-  grouping: {
-    autoExpandAll: false,
-  },
-}));
-
 // T1155453
 test('Headers should be rendered correctly after changing the grouping.autoExpandAll when headerCellTemplate is given (React)', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
-  await takeScreenshot('T1155453-expanded-groups', dataGrid.element);
+  await t.expect(dataGrid.isReady()).ok();
+
+  await testScreenshot(t, takeScreenshot, 'T1155453-expanded-groups.png', { element: dataGrid.element });
 
   // act
   await dataGrid.apiCollapseAllGroups();
   await t.wait(100);
 
-  await takeScreenshot('T1155453-collapsed-groups', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1155453-collapsed-groups.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -179,13 +100,15 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
-  await takeScreenshot('T1155453-expanded-groups-with-fixed-content', dataGrid.element);
+  await t.expect(dataGrid.isReady()).ok();
+
+  await testScreenshot(t, takeScreenshot, 'T1155453-expanded-groups-with-fixed-content.png', { element: dataGrid.element });
 
   // act
   await dataGrid.apiCollapseAllGroups();
   await t.wait(200);
 
-  await takeScreenshot('T1155453-collapsed-groups-with-fixed-content', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1155453-collapsed-groups-with-fixed-content.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -227,18 +150,20 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   await makeColumnHeadersViewTemplatesAsync(DATA_GRID_SELECTOR);
 });
 
-safeSizeTest('Empty header message should appear when all columns grouped and selection is enabled', async (t) => {
+test.meta({ browserSize: [800, 800] })('Empty header message should appear when all columns grouped and selection is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
 
-  await takeScreenshot('empty-header-message-with-selection-enabled', dataGrid.element);
+  await t.expect(dataGrid.isReady()).ok();
+
+  await testScreenshot(t, takeScreenshot, 'empty-header-message-with-selection-enabled.png', { element: dataGrid.element });
 
   // assert
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => {
+}).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [
       {
@@ -269,9 +194,10 @@ test('Group panel message should be vertically aligned (T1186613)', async (t) =>
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
+  await testScreenshot(t, takeScreenshot, 'group-panel-message-align.png', { element: dataGrid.getToolbar().element });
   await t
-    .expect(await takeScreenshot('group-panel-message-align.png', dataGrid.getToolbar().element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -312,10 +238,12 @@ test('The collapse icon should update if repaintChangesOnly option is enabled (T
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getPager().getNavPage('2').element);
+
+  await testScreenshot(t, takeScreenshot, 'continued_group-collapse_icon-T1201981.png', { element: dataGrid.element });
   await t
-    .click(dataGrid.getPager().getNavPage('2').element)
-    .expect(await takeScreenshot('continued_group-collapse_icon-T1201981.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -360,6 +288,8 @@ const customersT1232129 = [
 test('DataGrid loses grouping after the expandAll method if a grouped column has calculateDisplayValue (T1232129)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiExpandAll();
   await t
     .expect(dataGrid.apiColumnOption('groupId', 'groupIndex'))
@@ -382,6 +312,95 @@ test('DataGrid loses grouping after the expandAll method if a grouped column has
   ],
 }));
 
+test('DataGrid should not lose grouping after the expandAll method if a grouped column has string calculateGroupValue (T1321187)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiExpandAll();
+
+  await t
+    .expect(dataGrid.apiColumnOption('a', 'groupIndex'))
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    id: 0, a: 0, aLabel: 'A_0', b: 'B_0', c: 'C_0',
+  }],
+  keyExpr: 'id',
+  grouping: { autoExpandAll: false },
+  columns: [{
+    dataField: 'a',
+    groupIndex: 0,
+    calculateGroupValue: 'aLabel',
+  },
+  'b', 'c'],
+}));
+
+test('DataGrid should not change group column after the expandAll method, string calculateGroupValue corresponds another column (T1308536)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiExpandAll();
+
+  await t
+    .expect(dataGrid.apiColumnOption('a', 'groupIndex'))
+    .eql(0)
+    .expect(dataGrid.apiColumnOption('aLabel', 'groupIndex'))
+    .eql(undefined)
+    .expect(dataGrid.getGroupRow(0).getCell(1).element.textContent)
+    .eql(firstGroupCellText);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    id: 0, a: 0, aLabel: 'A_0', b: 'B_0', c: 'C_0',
+  }],
+  keyExpr: 'id',
+  grouping: { autoExpandAll: false },
+  columns: [{
+    dataField: 'a',
+    groupIndex: 0,
+    calculateGroupValue: 'aLabel',
+  },
+  { dataField: 'aLabel', visible: false },
+
+  'b', 'c'],
+}));
+
+test('DataGrid should not change group column after the expandAll method, string calculateGroupValue corresponds another unbound column (T1308536)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiExpandAll();
+
+  await t
+    .expect(dataGrid.apiColumnOption('a', 'groupIndex'))
+    .eql(0)
+    .expect(dataGrid.apiColumnOption('aLabel', 'groupIndex'))
+    .eql(undefined)
+    .expect(dataGrid.getGroupRow(0).getCell(1).element.textContent)
+    .eql(firstGroupCellText);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    id: 0, a: 0, aLabel: 'A_0', b: 'B_0', c: 'C_0',
+  }],
+  keyExpr: 'id',
+  grouping: { autoExpandAll: false },
+  columns: [{
+    dataField: 'a',
+    groupIndex: 0,
+    calculateGroupValue: 'aLabel',
+  },
+  {
+    name: 'aLabel',
+    caption: 'aLabel',
+    calculateCellValue(data) { return data.aLabel; },
+  },
+  'b', 'c'],
+}));
+
 test('Grouping and filtering should be applied correctly when they change at runtime (T1237863)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -395,12 +414,12 @@ test('Grouping and filtering should be applied correctly when they change at run
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('T1237863_datagrid-grouping_and_filtering.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1237863_datagrid-grouping_and_filtering.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     {
       ID: 1,
@@ -419,4 +438,49 @@ test('Grouping and filtering should be applied correctly when they change at run
     },
   ],
   keyExpr: 'ID',
+}));
+
+// T1112573
+test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiExpandAllGroups();
+
+  await t
+    .wait(100);
+
+  await testScreenshot(t, takeScreenshot, 'expanded-groups-content.png', { element: dataGrid.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      field1: '1', field2: 'test1',
+    },
+    {
+      field1: '2', field2: 'test1',
+    },
+    {
+      field1: '3', field2: 'test2',
+    },
+  ],
+  width: 700,
+  columns: [
+    'field1',
+    { dataField: 'field2', groupIndex: 0 },
+  ],
+  dataRowTemplate(container, { data }) {
+    return $(container).append($(`<tr><td>${data.field1}</td></tr>`));
+  },
+  groupPanel: {
+    visible: true,
+  },
+  grouping: {
+    autoExpandAll: false,
+  },
 }));

@@ -1,1 +1,1 @@
-export { default } from '../../common/core/localization/intl/date';
+export { default } from '../../__internal/core/localization/intl/date';

@@ -3,9 +3,10 @@ import $ from 'jquery';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
 import Button from 'ui/button';
-import Popup from 'ui/popup';
-import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
-import ToolbarMenuList from '__internal/ui/toolbar/internal/m_toolbar.menu.list';
+import 'ui/check_box';
+import Popup from '__internal/ui/popup/m_popup';
+import DropDownMenu from '__internal/ui/toolbar/internal/toolbar.menu';
+import ToolbarMenuList from '__internal/ui/toolbar/internal/toolbar.menu.list';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -13,8 +14,9 @@ import config from 'core/config';
 import { DataSource } from 'common/data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import themes from 'ui/themes';
+import errors from 'core/errors';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -32,6 +34,8 @@ const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const CHECK_BOX_CLASS = 'dx-checkbox';
+const BUTTON_CLASS = 'dx-button';
 
 
 const moduleConfig = {
@@ -188,6 +192,15 @@ QUnit.module('render with popup', moduleConfig, () => {
 
         assert.ok(overlayTop >= buttonBottom);
     });
+
+    QUnit.test('should not throw a warning about the preventScroll event option is deprecated on popup opening (T1306077)', function(assert) {
+        sinon.spy(errors, 'log');
+
+        this.overflowMenu.click();
+
+        assert.strictEqual(errors.log.callCount, 0, 'warning was not called');
+        errors.log.restore();
+    });
 });
 
 
@@ -267,7 +280,7 @@ QUnit.module('render', moduleConfig, () => {
         assert.ok(this.overflowMenu.popup().option('visible'), 'popup is visible');
     });
 
-    QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {
+    QUnit.test('popup should be placed into container specified in the container option', function(assert) {
         const $container = $('#dropDownMenu');
         this.instance.option({
             container: $container,
@@ -277,7 +290,42 @@ QUnit.module('render', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.$popupContent().closest($container).length, 1, 'Popover content located into desired container');
     });
 
-    QUnit.test('popup should be placed into new container after changing the \'container\' option', function(assert) {
+    QUnit.test('popup should have correct height after async item templates are rendered (T1322123)', function(assert) {
+        const templateRenderingTimeout = 10;
+        const itemHeight = 50;
+
+        this.instance.option({
+            items: [1, 2, 3],
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'item': {
+                        render({ model, container, onRendered }) {
+                            setTimeout(() => {
+                                const $item = $(`<div>${model}</div>`);
+                                $item.css('height', itemHeight);
+                                $item.appendTo(container);
+
+                                onRendered();
+                            }, templateRenderingTimeout);
+                        }
+                    }
+                }
+            },
+        });
+
+        this.overflowMenu.click();
+
+        this.clock.tick(templateRenderingTimeout);
+
+        const $overlayContent = this.overflowMenu.popup().$overlayContent();
+        const overlayContentHeight = getOuterHeight($overlayContent);
+
+        assert.strictEqual(this.overflowMenu.$items().length, 3, 'all items are rendered');
+        assert.strictEqual(overlayContentHeight, 197, 'popup height is updated');
+    });
+
+    QUnit.test('popup should be placed into new container after changing the container option', function(assert) {
         const $container = $('#dropDownMenu');
 
         this.instance.option('opened', true);
@@ -409,7 +457,7 @@ QUnit.module('integration', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.list()._dataSource.paginate(), false, 'paginate is false');
     });
 
-    QUnit.test('the \'onItemRendered\' option should be proxied to the list', function(assert) {
+    QUnit.test('the onItemRendered option should be proxied to the list', function(assert) {
         const onItemRenderedHandler = sinon.stub();
 
         this.instance.option({
@@ -564,21 +612,20 @@ QUnit.module('widget sizing render', moduleConfig, () => {
         });
 
         QUnit.test('navigation by arrows', function(assert) {
-            assert.expect(4);
-
             this.instance.option('opened', false);
             this.overflowMenu.$button().focusin();
 
             this.keyboard.keyDown('enter');
             assert.ok(this.overflowMenu.popup().option('visible'));
-            this.keyboard.keyDown('down');
-            assert.ok(this.overflowMenu.$items().eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
 
             this.keyboard.keyDown('down');
-            assert.ok(this.overflowMenu.$items().eq(1).hasClass(STATE_FOCUSED_CLASS), 'second item has focus class');
+            assert.ok(this.overflowMenu.$items().attr('id'), 'first item is active');
+
+            this.keyboard.keyDown('down');
+            assert.ok(this.overflowMenu.$items().eq(1).attr('id'), 'second item is active');
 
             this.keyboard.keyDown('up');
-            assert.ok(this.overflowMenu.$items().eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
+            assert.ok(this.overflowMenu.$items().eq(0).attr('id'), 'third item is active');
         });
 
         QUnit.test('hide popup on press tab', function(assert) {
@@ -593,6 +640,115 @@ QUnit.module('widget sizing render', moduleConfig, () => {
 
             assert.ok(!this.overflowMenu.popup().option('visible'));
 
+        });
+
+        QUnit.module('esc on popup', {
+            beforeEach: function() {
+                this.instance.option({
+                    opened: false,
+                    items: [{ template: () => $('<div>').dxCheckBox({ value: false }) }],
+                });
+            },
+            afterEach: function() {
+                this.instance.option('opened', false);
+            }
+        }, () => {
+            QUnit.test('esc on popup overlay should close popup', function(assert) {
+                this.overflowMenu.$button().focusin();
+                this.keyboard.keyDown('enter');
+
+                const popup = this.overflowMenu.popup();
+                assert.equal(popup.option('visible'), true, 'popup is visible');
+
+                const $popupContent = popup.$overlayContent();
+
+                keyboardMock($popupContent).keyDown('esc');
+                assert.equal(popup.option('visible'), false, 'esc on popup overlay closed popup');
+            });
+
+            QUnit.test('esc on nested items should NOT close popup', function(assert) {
+                this.overflowMenu.$button().focusin();
+                this.keyboard.keyDown('enter');
+
+                const popup = this.overflowMenu.popup();
+                assert.equal(popup.option('visible'), true, 'popup is visible');
+
+                const $checkBox = this.overflowMenu.$popupContent().find(`.${CHECK_BOX_CLASS}`).first();
+
+                keyboardMock($checkBox).keyDown('esc');
+                assert.equal(popup.option('visible'), true, 'esc on nested item did not close popup');
+            });
+        });
+
+        QUnit.module('space/enter on list item (T1301705)', {
+            beforeEach: function() {
+                this.instance.option({
+                    closeOnClick: true,
+                    opened: false,
+                    items: [
+                        {
+                            template: () => $('<div>').dxCheckBox({ value: false }),
+                            widget: 'dxCheckBox',
+                        },
+                        {
+                            template: () => $('<div>').dxButton({ text: 'Button' })
+                        },
+                    ]
+                });
+            },
+            afterEach: function() {
+                this.instance.option('opened', false);
+            }
+        }, () => {
+            QUnit.test('space on a not dxButton in nested list item should NOT close popup', function(assert) {
+                this.overflowMenu.$button().focusin();
+                this.keyboard.keyDown('enter');
+
+                const popup = this.overflowMenu.popup();
+                assert.equal(popup.option('visible'), true, 'popup is visible');
+
+                const $checkBox = this.overflowMenu.$popupContent().find(`.${CHECK_BOX_CLASS}`).first();
+
+                keyboardMock($checkBox).keyDown('space');
+                assert.equal(popup.option('visible'), true, 'space on a dxCheckBox did not close popup');
+            });
+
+            QUnit.test('enter on a not dxButton in nested list item should NOT close popup', function(assert) {
+                this.overflowMenu.$button().focusin();
+                this.keyboard.keyDown('enter');
+
+                const popup = this.overflowMenu.popup();
+                assert.equal(popup.option('visible'), true, 'popup is visible');
+
+                const $checkBox = this.overflowMenu.$popupContent().find(`.${CHECK_BOX_CLASS}`).first();
+
+                keyboardMock($checkBox).keyDown('enter');
+                assert.equal(popup.option('visible'), true, 'enter on a dxCheckBox did not close popup');
+            });
+
+            QUnit.test('space on a dxButton in nested list item should close popup', function(assert) {
+                this.overflowMenu.$button().focusin();
+                this.keyboard.keyDown('enter');
+
+                const popup = this.overflowMenu.popup();
+                assert.equal(popup.option('visible'), true, 'popup is visible');
+
+                const $button = this.overflowMenu.$popupContent().find(`.${BUTTON_CLASS}`).first();
+                keyboardMock($button).keyDown('space');
+                assert.equal(popup.option('visible'), false, 'space on a dxButton closed popup');
+            });
+
+            QUnit.test('enter on a dxButton in nested list item should close popup', function(assert) {
+                this.overflowMenu.$button().focusin();
+                this.keyboard.keyDown('enter');
+
+                const popup = this.overflowMenu.popup();
+                assert.equal(popup.option('visible'), true, 'popup is visible');
+
+                const $button = this.overflowMenu.$popupContent().find(`.${BUTTON_CLASS}`).first();
+                keyboardMock($button).keyDown('enter');
+                assert.equal(popup.option('visible'), false, 'enter on a dxButton closed popup');
+            });
         });
 
         QUnit.test('Enter or space press should call onItemClick (T318240)', function(assert) {
@@ -614,7 +770,7 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             assert.equal(itemClicked, 2, 'item was clicked twice');
         });
 
-        QUnit.test('No exceptions on \'tab\' key pressing when popup is not opened', function(assert) {
+        QUnit.test('No exceptions on tab key pressing when popup is not opened', function(assert) {
             assert.expect(0);
 
             this.instance.option({ focusStateEnabled: true });
@@ -626,12 +782,12 @@ QUnit.module('widget sizing render', moduleConfig, () => {
     });
 });
 
-QUnit.module('\'opened\' option', moduleConfig, () => {
+QUnit.module('opened option', moduleConfig, () => {
     QUnit.test('Default option value', function(assert) {
-        assert.strictEqual(this.instance.option('opened'), false, 'Option\'s default value is correct');
+        assert.strictEqual(this.instance.option('opened'), false, 'Option default value is correct');
     });
 
-    QUnit.test('Change menu visibility by option \'opened\' change', function(assert) {
+    QUnit.test('Change menu visibility by option opened change', function(assert) {
         this.instance.option('opened', true);
         assert.ok($(document.body).find('.dx-overlay-wrapper').length, 'Correctly opened by option change');
 

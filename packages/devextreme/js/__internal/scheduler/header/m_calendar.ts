@@ -1,62 +1,65 @@
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import Calendar from '@js/ui/calendar';
 import Popover from '@js/ui/popover/ui.popover';
 import Popup from '@js/ui/popup/ui.popup';
-import type { dxSchedulerOptions } from '@js/ui/scheduler';
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
-import Widget from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { CalendarProperties } from '@ts/ui/calendar/calendar';
+import Calendar from '@ts/ui/calendar/calendar';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
+
+import type { HeaderCalendarOptions } from './types';
 
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
-export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
-  _overlay: any;
+export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
+  private overlay?: Popup | Popover;
 
-  _calendar: any;
+  private calendar?: Calendar;
 
-  show(target) {
-    if (!this._isMobileLayout()) {
-      this._overlay.option('target', target);
+  public async show(target: HTMLElement): Promise<void> {
+    if (!SchedulerCalendar.isMobileLayout()) {
+      this.overlay?.option('target', target);
     }
-    this._overlay.show();
+
+    await this.overlay?.show();
   }
 
-  hide() {
-    this._overlay.hide();
+  public async hide(): Promise<void> {
+    await this.overlay?.hide();
   }
 
-  _keyboardHandler(opts): void {
-    this._calendar?._keyboardHandler(opts);
+  public _keyboardHandler(opts: KeyboardKeyDownEvent): boolean {
+    return this.calendar?._keyboardHandler(opts) ?? false;
   }
 
-  _init(): void {
-    // @ts-expect-error
+  public _init(): void {
     super._init();
     this.$element();
   }
 
-  _render(): void {
-    // @ts-expect-error
+  public _render(): void {
     super._render();
-    this._renderOverlay();
+    this.renderOverlay();
   }
 
-  _renderOverlay(): void {
+  private renderOverlay(): void {
     this.$element().addClass(CALENDAR_POPOVER_CLASS);
 
-    const isMobileLayout = this._isMobileLayout();
+    const isMobileLayout = SchedulerCalendar.isMobileLayout();
 
-    const overlayType = isMobileLayout ? Popup : Popover;
-
-    // @ts-expect-error
-    this._overlay = this._createComponent(this.$element(), overlayType, {
-      contentTemplate: () => this._createOverlayContent(),
-      onShown: () => this._calendar.focus(),
+    const overlayConfig = {
+      contentTemplate: (): dxElementWrapper => this.createOverlayContent(),
+      onShown: (): void => {
+        this.calendar?.focus();
+      },
       defaultOptionsRules: [
         {
-          device: () => isMobileLayout,
+          device: (): boolean => isMobileLayout,
           options: {
             fullScreen: true,
             showCloseButton: false,
@@ -67,24 +70,28 @@ export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
           },
         },
       ],
-    });
+    };
+
+    if (isMobileLayout) {
+      this.overlay = this._createComponent(this.$element(), Popup, overlayConfig);
+    } else {
+      this.overlay = this._createComponent(this.$element(), Popover, overlayConfig);
+    }
   }
 
-  _createOverlayContent() {
+  private createOverlayContent(): dxElementWrapper {
     const result = $('<div>').addClass(CALENDAR_CLASS);
-    // @ts-expect-error
-    this._calendar = this._createComponent(result, Calendar, this._getCalendarOptions());
+    this.calendar = this._createComponent(result, Calendar, this.getCalendarOptions());
 
-    if (this._isMobileLayout()) {
-      const scrollable = this._createScrollable(result);
+    if (SchedulerCalendar.isMobileLayout()) {
+      const scrollable = this.createScrollable(result);
       return scrollable.$element();
     }
 
     return result;
   }
 
-  _createScrollable(content) {
-    // @ts-expect-error
+  private createScrollable(content: dxElementWrapper): Scrollable {
     const result = this._createComponent('<div>', Scrollable, {
       height: 'auto',
       direction: 'both',
@@ -94,33 +101,40 @@ export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
     return result;
   }
 
-  _optionChanged({ name, value }) {
+  public _optionChanged(
+    args: OptionChanged<HeaderCalendarOptions>,
+  ): void {
+    const { name, value } = args;
+
     switch (name) {
       case 'value':
-        this._calendar?.option('value', value);
+        this.calendar?.option('value', value);
         break;
       default:
         break;
     }
   }
 
-  _getCalendarOptions() {
+  private getCalendarOptions(): CalendarProperties {
+    const {
+      value, min, max, firstDayOfWeek, focusStateEnabled, tabIndex, onValueChanged,
+    } = this.option();
     return {
-      value: this.option('value'),
-      min: this.option('min'),
-      max: this.option('max'),
-      firstDayOfWeek: this.option('firstDayOfWeek'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      onValueChanged: this.option('onValueChanged'),
+      value,
+      min,
+      max,
+      firstDayOfWeek,
+      focusStateEnabled,
+      tabIndex,
+      onValueChanged,
+      // @ts-expect-error skipFocusCheck is an internal Calendar property
       skipFocusCheck: true,
-      tabIndex: this.option('tabIndex'),
     };
   }
 
-  _isMobileLayout() {
+  private static isMobileLayout(): boolean {
     return !devices.current().generic;
   }
 }
 
-// @ts-expect-error
 registerComponent('dxSchedulerCalendarPopup', SchedulerCalendar);

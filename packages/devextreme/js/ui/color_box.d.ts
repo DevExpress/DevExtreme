@@ -8,7 +8,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     template,
@@ -209,7 +209,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @docid
      * @public
      */
-    value?: string;
+    value?: string | null;
     /**
      * @docid
      * @type dxPopupOptions
@@ -228,8 +228,9 @@ export default class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:string | null
      */
-    reset(value?: string | null): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

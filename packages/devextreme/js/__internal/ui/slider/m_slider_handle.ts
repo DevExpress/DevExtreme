@@ -2,7 +2,7 @@ import type { TooltipShowMode, VerticalEdge } from '@js/common';
 import $ from '@js/core/renderer';
 import type { Format } from '@js/localization';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties as WidgetProperties } from '@ts/core/widget/widget';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import SliderTooltip from '@ts/ui/slider/m_slider_tooltip';
 
@@ -74,6 +74,7 @@ class SliderHandle extends Widget<SliderHandlerProperties> {
 
   _clean(): void {
     super._clean();
+    this._sliderTooltip?.dispose();
     this._sliderTooltip = null;
   }
 

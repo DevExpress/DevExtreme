@@ -49,29 +49,29 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint-ts
+      run: pnpm exec nx lint-ts
 
     - name: Lint .d.ts
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint-dts
+      run: pnpm exec nx lint-dts
 
     - name: Lint Testcafe tests
       working-directory: ./e2e/testcafe-devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint
+      run: pnpm exec nx lint
 
   JS:
     runs-on: devextreme-shr2
@@ -106,17 +106,17 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpx nx build
+      run: pnpm exec nx build
 
     - name: Lint JS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpx nx lint-js
+      run: pnpm exec nx lint-js
 
   texts:
     runs-on: devextreme-shr2
@@ -151,98 +151,11 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Check texts
       working-directory: ./packages/devextreme
-      run: pnpx nx lint-texts
-
-  CSS:
-    runs-on: devextreme-shr2
-    timeout-minutes: 60
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - uses: pnpm/action-setup@v3
-      with:
-        version: 9
-        run_install: false
-
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
-      with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store
-
-    - name: Install dependencies
-      run: pnpm install
-
-    - name: Lint CSS
-      working-directory: ./packages/devextreme-scss
-      run: pnpx nx lint
-
-  pnpm_lock:
-    runs-on: devextreme-shr2
-    timeout-minutes: 10
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - uses: pnpm/action-setup@v3
-      with:
-        version: 9
-        run_install: false
-
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
-      with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store
-
-    - name: Update lock-file
-      run: |
-        node -v
-        pnpm -v
-        pnpm install
-
-    - name: Upload lock-file
-      uses: actions/upload-artifact@v4
-      with:
-        name: package-lock.json
-        path: ./package-lock.json
-        retention-days: 1
-
-    - name: Check lock-file
-      run: git diff --exit-code pnpm-lock.yaml
+      run: pnpm exec nx lint-texts
 
   component_exports:
     runs-on: devextreme-shr2
@@ -277,7 +190,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Check generated component reexports
       working-directory: ./packages/devextreme
@@ -327,15 +240,15 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Lint wrappers
-      run: pnpx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
+      run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [TS, JS, CSS, texts, pnpm_lock, component_exports]
+    needs: [TS, JS, texts, component_exports]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:

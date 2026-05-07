@@ -1,4 +1,4 @@
-import Gallery from '../__internal/ui/m_gallery';
+import Gallery from '../__internal/ui/gallery';
 
 export default Gallery;
 

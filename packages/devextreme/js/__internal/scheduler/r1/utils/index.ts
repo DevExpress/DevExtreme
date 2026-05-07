@@ -84,9 +84,6 @@ export {
   formatWeekday,
   formatWeekdayAndDay,
 } from './format_weekday';
-export {
-  getAppointmentDataItems,
-} from './get_appointment_data_items';
 
 export const agendaUtils = {
   calculateStartViewDate,

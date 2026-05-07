@@ -21,6 +21,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-number-box-button',
@@ -28,7 +29,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiNumberBoxButtonComponent,
+        }
+    ]
 })
 export class DxiNumberBoxButtonComponent extends CollectionNestedOption {
     @Input()

@@ -12,7 +12,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -27,11 +26,14 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramConnectionPointComponent } from './connection-point-dxi';
 
+import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_connectionPoints,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-diagram-custom-shape',
@@ -39,10 +41,22 @@ import { DxiDiagramConnectionPointComponent } from './connection-point-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_customShapes,
+           useExisting: DxiDiagramCustomShapeComponent,
+        }
+    ]
 })
 export class DxiDiagramCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
+    }
+    
     @Input()
     get allowEditImage(): boolean {
         return this._getOption('allowEditImage');
@@ -352,14 +366,6 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
         return 'customShapes';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramConnectionPointComponent))
-    get connectionPointsChildren(): QueryList<DxiDiagramConnectionPointComponent> {
-        return this._getOption('connectionPoints');
-    }
-    set connectionPointsChildren(value) {
-        this.setChildren('connectionPoints', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

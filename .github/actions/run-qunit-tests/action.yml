@@ -7,9 +7,6 @@ inputs:
     required: true
   constel:
     description: "Name of the test group"
-  browser:
-    description: "Name of the browser"
-    default: "chrome"
   useJQuery:
     description: "Indicates if jQuery should be used"
     default: "false"
@@ -22,15 +19,15 @@ inputs:
   timezone:
     description: "Timezone for the test environment"
     default: ""
-  isPerformance:
-    description: "Indicates if performance testing should be conducted"
-    default: "false"
   headless:
     description: "Specifies if the browser should run in headless mode"
     default: "true"
   useCsp:
     description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
     default: "true"
+  maxWorkers:
+    description: "Maximum number of parallel test workers"
+    default: ""
 
 runs:
   using: composite
@@ -41,44 +38,6 @@ runs:
         MATRIX_ENVS_NAME_SAFE=$(echo -n "${{ inputs.name }}" | sed 's|/|-|g')
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
-
-#    - name: Update apt
-#      run: |
-#        sudo apt-get update
-
-#    - name: Setup utils
-#      run: |
-#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
-    - name: Setup Chrome
-      if: ${{ inputs.browser == 'chrome' }}
-      uses: ./.github/actions/setup-chrome-headless-shell
-      with:
-        chrome-version: '133.0.6943.53'
-
-    - name: Setup Firefox profile
-      if: ${{ inputs.browser == 'firefox' }}
-      shell: bash
-      run: |
-        mkdir -p /tmp/firefox-profile
-        for p in \
-        '"browser.shell.checkDefaultBrowser", false' \
-        '"datareporting.policy.dataSubmissionEnabled", false' \
-        '"font.name-list.monospace.x-western", "Liberation Mono"' \
-        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
-
-    - name: Setup Firefox
-      if: ${{ inputs.browser == 'firefox' }}
-      id: setup-firefox
-      uses: browser-actions/setup-firefox@v1
-      with:
-        firefox-version: '122.0.1'
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
 
     - name: Download artifacts
       uses: actions/download-artifact@v4
@@ -115,38 +74,29 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: pnpm install
-
-    - name: Build dotnet
-      working-directory: ./packages/devextreme
-      shell: bash
-      run: dotnet build build/build-dotnet.sln
+      run: pnpm install --frozen-lockfile
 
     - name: Run QUnit tests
       working-directory: ./packages/devextreme
       shell: bash
       env:
         CONSTEL: ${{ inputs.constel }}
-        BROWSER: ${{ inputs.browser }}
         JQUERY: ${{ inputs.useJQuery }}
-        MOBILE_UA: ${{ inputs.userAgent }}
         SHADOW_DOM: ${{ inputs.useShadowDom }}
         TZ: ${{ inputs.timezone }}
-        PERF: ${{ inputs.isPerformance }}
         NO_HEADLESS: ${{ inputs.headless == 'false' && 'true' || 'false' }}
         NO_CSP: ${{ inputs.useCsp == 'false' && 'true' || 'false' }}
         NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
-        DISPLAY: ":99"
         CHROME_CMD: ${{ env.CHROME_SHELL }}
+        MAX_WORKERS: ${{ inputs.maxWorkers }}
       run: |
-        node ../../tools/scripts/performance_log.js &
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
 
     - name: Copy RawLog.txt
-      if: ${{ failure() }}
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}

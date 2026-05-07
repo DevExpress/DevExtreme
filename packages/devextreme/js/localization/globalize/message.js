@@ -1,1 +1,1 @@
-import '../../common/core/localization/globalize/message';
+import '../../__internal/core/localization/globalize/message';

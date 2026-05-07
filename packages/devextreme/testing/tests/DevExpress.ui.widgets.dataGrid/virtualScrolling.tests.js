@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
@@ -182,26 +182,6 @@ QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig,
         assert.strictEqual(this.scrollController.endPageIndex(), 0);
 
         assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [undefined]);
-    });
-
-    // TODO Check it
-    QUnit.skip('Load when dataSource pageIndex > 0', function(assert) {
-        this.scrollController.viewportSize(12);
-        mockDataSource.pageIndex(5);
-        this.scrollController.load();
-
-
-        assert.strictEqual(mockDataSource.load.callCount, 2);
-        assert.equal(this.externalDataChangedHandler.callCount, 2); // TODO 1
-        // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
-
-        assert.strictEqual(this.scrollController.beginPageIndex(), 5);
-        assert.strictEqual(this.scrollController.endPageIndex(), 6);
-
-        assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-            changeType: 'append',
-            items: []
-        }]);
     });
 
     QUnit.test('setContentItemSizes. No items', function(assert) {

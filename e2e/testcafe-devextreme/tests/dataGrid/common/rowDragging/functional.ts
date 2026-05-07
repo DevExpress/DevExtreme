@@ -1,0 +1,840 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { ClientFunction, Selector } from 'testcafe';
+import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
+import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import { dragWithDisabledMouseUp } from '../../../../helpers/mouseUpEvents';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { isScrollAtEnd, getOffsetToTriggerAutoScroll } from '../../helpers/rowDraggingHelpers';
+
+const CLASS = { ...DataGridClassNames, ...ClassNames };
+
+const isPlaceholderVisible = ClientFunction(() => $(`.${CLASS.sortablePlaceholder}`).is(':visible'), { dependencies: { CLASS } });
+
+const getPlaceholderOffset = ClientFunction(() => $(`.${CLASS.sortablePlaceholder}`).offset(), { dependencies: { CLASS } });
+
+const getRowsViewLeftOffset = ClientFunction(() => $(`#container .${CLASS.dataGridRowsView}`).offset()?.left, { dependencies: { CLASS } });
+
+const getDraggingElementLeftOffset = ClientFunction(() => $(`.${CLASS.sortableDragging}`).offset()?.left, { dependencies: { CLASS } });
+
+const getDraggingElementScrollPosition = ClientFunction(() => {
+  const $dataGrid = $(`.${CLASS.sortableDragging}`).find(`.${CLASS.dataGrid}`).first().parent();
+  const dataGridInstance = $dataGrid.data('dxDataGrid');
+  const scrollableInstance = dataGridInstance.getScrollable();
+
+  return {
+    left: scrollableInstance.scrollLeft(),
+    top: scrollableInstance.scrollTop(),
+  };
+}, { dependencies: { CLASS } });
+
+const getFreeSpaceRowOffset = ClientFunction(() => {
+  const $freeSpaceRow = $('#container').find(`.${CLASS.dataGridRowsView} table .${CLASS.freeSpaceRow}`).first();
+
+  return $freeSpaceRow?.offset();
+}, { dependencies: { CLASS } });
+
+const scrollTo = ClientFunction((x, y) => {
+  window.scrollTo(x, y);
+});
+
+const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
+  const items: Record<string, unknown>[] = [];
+
+  for (let i = 0; i < rowCount; i += 1) {
+    const item = {};
+
+    for (let j = 0; j < columnCount; j += 1) {
+      item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
+    }
+
+    items.push(item);
+  }
+
+  return items;
+};
+
+fixture`Row dragging.Functional`
+  .page(url(__dirname, '../../../container.html'));
+
+// T903351
+test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await scrollTo(0, 10000);
+  await dataGrid.moveRow(6, 500, 0, true);
+  await dataGrid.moveRow(6, 550, 0);
+
+  await t.expect(isPlaceholderVisible()).ok();
+}).before(async (t) => {
+  await t.maximizeWindow();
+  await ClientFunction(() => {
+    $('body').css('display', 'flex');
+    $('#container, #otherContainer').css({
+      display: 'inline-block',
+      'margin-top': '800px',
+      width: '50%',
+    });
+  })();
+
+  return Promise.all([
+    createWidget('dxDataGrid', {
+      width: 400,
+      dataSource: [
+        {
+          id: 1, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, name: 'Name 8', age: 14,
+        },
+      ],
+      columns: ['name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }),
+    createWidget('dxTreeList', {
+      columnAutoWidth: true,
+      dataSource: [
+        {
+          id: 1, parentId: 0, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, parentId: 1, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, parentId: 0, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, parentId: 3, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, parentId: 0, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, parentId: 5, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, parentId: 0, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, parentId: 7, name: 'Name 8', age: 14,
+        },
+      ],
+      autoExpandAll: true,
+      columns: ['name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }, '#otherContainer'),
+  ]);
+}).after(async () => ClientFunction(() => {
+  $('body').css('display', '');
+})());
+
+test('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await dataGrid.moveRow(0, 500, 0, true);
+  await dataGrid.moveRow(0, 550, 0);
+
+  await t
+    .expect(isPlaceholderVisible())
+    .ok();
+
+  const otherDataGrid = new DataGrid('#otherContainer');
+  const dataRow = otherDataGrid.getDataRow(0);
+  const dataRowOffset = await dataRow.getOffset();
+
+  await t
+    .expect(dataRow.element.exists)
+    .ok()
+    .expect(getPlaceholderOffset())
+    .eql(dataRowOffset);
+}).before(async (t) => {
+  await t.maximizeWindow();
+  await ClientFunction(() => {
+    $('body').css('display', 'flex');
+    $('#container, #otherContainer').css({
+      display: 'inline-block',
+      width: '50%',
+    });
+  })();
+
+  return Promise.all([
+    createWidget('dxDataGrid', {
+      width: 400,
+      dataSource: [
+        {
+          id: 1, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, name: 'Name 8', age: 14,
+        },
+      ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
+      columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }),
+    createWidget('dxDataGrid', {
+      width: 400,
+      dataSource: [
+        {
+          id: 1, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, name: 'Name 8', age: 14,
+        },
+      ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
+      columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }, '#otherContainer'),
+  ]);
+}).after(async () => ClientFunction(() => {
+  $('body').css('display', '');
+})());
+
+test('The cross-component drag and drop rows should not block rows', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const otherDataGrid = new DataGrid('#otherContainer');
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(otherDataGrid.isReady())
+    .ok();
+
+  await t.drag(dataGrid.getDataRow(2).element.find('.dx-datagrid-drag-icon'), 500, 0);
+
+  const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
+    $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(0)`).css('pointer-events'),
+    $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(1)`).css('pointer-events'),
+  ], { dependencies: { dataGrid, otherDataGrid, CLASS } })();
+
+  // T1013088
+  await t
+    .expect(fixedPointerEvents)
+    .eql('none')
+    .expect(otherFixedPointerEvents)
+    .eql('none');
+}).before(async (t) => {
+  await t.maximizeWindow();
+  await ClientFunction(() => {
+    $('body').css('display', 'flex');
+    $('#container, #otherContainer').css({
+      display: 'inline-block',
+      width: '50%',
+    });
+  })();
+
+  return Promise.all([
+    createWidget('dxDataGrid', {
+      width: 400,
+      dataSource: [
+        {
+          id: 1, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, name: 'Name 8', age: 14,
+        },
+      ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
+      columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }),
+    createWidget('dxDataGrid', {
+      width: 400,
+      dataSource: [
+        {
+          id: 1, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, name: 'Name 8', age: 15,
+        },
+      ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
+      columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }, '#otherContainer'),
+  ]);
+}).after(async () => ClientFunction(() => {
+  $('body').css('display', '');
+})());
+
+test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 100, { speed: 0.1 });
+
+  const lastRow = dataGrid.getDataRow(9);
+
+  await t
+    .expect(lastRow.element.exists)
+    .ok();
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 200,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    dataSource: [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+      { id: 7 },
+      { id: 8 },
+      { id: 9 },
+      { id: 10 },
+    ],
+    columns: ['id'],
+    rowDragging: {
+      allowReordering: true,
+      scrollSpeed: 300,
+      onDragChange(e) {
+        const visibleRows = e.component.getVisibleRows();
+        const row = visibleRows[e.toIndex];
+        if (!row) {
+          throw new Error('row is null');
+        }
+      },
+    },
+  });
+});
+
+// T1078513
+test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
+
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0).element;
+
+  await t
+    .expect(headerRow.exists)
+    .ok()
+    .expect(headerRow.getStyleProperty('transform'))
+    .eql('none');
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 200,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    paging: {
+      pageSize: 2,
+    },
+    dataSource: [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+      { id: 7 },
+      { id: 8 },
+      { id: 9 },
+      { id: 10 },
+      { id: 11 },
+      { id: 12 },
+      { id: 13 },
+      { id: 14 },
+      { id: 15 },
+    ],
+    columns: ['id'],
+    columnAutoWidth: true,
+    rowDragging: {
+      allowReordering: true,
+      dropFeedbackMode: 'push',
+      onDragEnd(e: any): void {
+        e.cancel = new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 500);
+        });
+      },
+    },
+  });
+});
+
+// T1078513
+test('Footer should not be hidden during auto scrolling when virtual scrolling is specified', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
+
+  const footerRow = dataGrid.getFooterRow();
+
+  await t
+    .expect(footerRow.exists)
+    .ok()
+    .expect(footerRow.getStyleProperty('transform'))
+    .eql('none');
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 250,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    summary: {
+      totalItems: [{
+        column: 'id',
+        summaryType: 'count',
+      }],
+    },
+    paging: {
+      pageSize: 2,
+    },
+    dataSource: [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+      { id: 7 },
+      { id: 8 },
+      { id: 9 },
+      { id: 10 },
+      { id: 11 },
+      { id: 12 },
+      { id: 13 },
+      { id: 14 },
+      { id: 15 },
+    ],
+    columns: ['id'],
+    columnAutoWidth: true,
+    rowDragging: {
+      allowReordering: true,
+      dropFeedbackMode: 'push',
+      onDragEnd(e: any): void {
+        e.cancel = new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 500);
+        });
+      },
+    },
+  });
+});
+
+// T1082538
+test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+  await dataGrid.scrollTo(t, { x: 2500 });
+
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(2500);
+
+  await dataGrid.moveRow(0, 0, 25, true);
+  await dataGrid.moveRow(0, 0, 50, false);
+
+  const rowsViewLeftOffset = await getRowsViewLeftOffset();
+
+  await t
+    .expect(getDraggingElementLeftOffset())
+    .eql(rowsViewLeftOffset)
+    .expect(getDraggingElementScrollPosition())
+    .eql({
+      left: 2500,
+      top: 0,
+    });
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    width: 600,
+    height: 500,
+    dataSource: generateData(10, 50),
+    columnWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+      useNative: false,
+    },
+    rowDragging: {
+      allowReordering: true,
+      showDragIcons: false,
+    },
+  });
+});
+
+test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.scrollBy(t, { top: 10000 });
+
+  await t
+    .expect(dataGrid.getDataRow(99).getDataCell(1).element.textContent)
+    .eql('99')
+    .expect(isScrollAtEnd('vertical'))
+    .ok();
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const scrollTopOffsetByTheme = await getOffsetToTriggerAutoScroll(
+    visibleRows.length - 2,
+    1,
+  );
+
+  await dragWithDisabledMouseUp(
+    t,
+    dataGrid.getDataRow(98).getDragCommand(),
+    { offsetX: 0, offsetY: scrollTopOffsetByTheme, speed: 0.8 },
+  );
+
+  // Wait for autoscrolling
+  await t.wait(2000);
+
+  await t
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
+    .eql('0')
+    .expect(dataGrid.getScrollTop())
+    .eql(0);
+
+  await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    dataSource: [...new Array(100)].map((_, i) => ({
+      value1: i,
+      value2: 1000 + i,
+    })),
+    keyExpr: 'value1',
+    height: 300,
+    scrolling: {
+      mode: 'virtual',
+    },
+    rowDragging: {
+      allowDropInsideItem: true,
+      allowReordering: true,
+      onDragChange(e) {
+        const row = e.component.getVisibleRows()[e.toIndex];
+        if (row.key < 95) {
+          e.cancel = true;
+        }
+      },
+    },
+
+  });
+});
+
+// T1085143
+test('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.moveRow(0, 0, 50, true);
+  await dataGrid.moveRow(0, 0, 550);
+
+  const freeSpaceRowOffset = await getFreeSpaceRowOffset();
+  const placeholderOffset = await getPlaceholderOffset();
+
+  const expectedPlaceholderOffset = freeSpaceRowOffset
+    ? {
+      ...freeSpaceRowOffset,
+      top: freeSpaceRowOffset.top - 2,
+    }
+    : undefined;
+
+  await t.expect(isPlaceholderVisible()).ok();
+
+  if (expectedPlaceholderOffset && placeholderOffset) {
+    await t.expect(placeholderOffset.left).eql(expectedPlaceholderOffset.left);
+    await t.expect(Math.abs(placeholderOffset.top - expectedPlaceholderOffset.top)).lt(0.1);
+  } else {
+    await t.expect(placeholderOffset).eql(expectedPlaceholderOffset);
+  }
+}).before(async () => createWidget('dxDataGrid', {
+  width: 400,
+  height: 600,
+  dataSource: [
+    {
+      id: 1, name: 'Name 1', age: 19,
+    },
+    {
+      id: 2, name: 'Name 2', age: 11,
+    },
+  ],
+  columns: ['name', 'age'],
+  dataRowTemplate(_, { data }) {
+    return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
+  },
+  rowDragging: {
+    allowReordering: true,
+    dragTemplate() {
+      return $('<div>test</div>');
+    },
+    showDragIcons: false,
+  },
+}));
+
+// T1126013
+test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const AUTOSCROLL_WAIT_TIME = 2000;
+  const AUTOSCROLL_SPEED_FACTOR = 0.5;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act - scroll to the bottom to make the last row visible
+  await dataGrid.scrollTo(t, { y: 3000 });
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(49).getDataCell(1).element.textContent)
+    .eql('50-1')
+    .expect(isScrollAtEnd('vertical'))
+    .ok();
+
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+  const draggableRow = visibleRows[1];
+
+  // Calculate offsetY to trigger upward autoscroll when dragging the row.
+  // Using speedFactor 0.5 to ensure medium scrolling speed.
+  const scrollOffsetForFastAutoScroll = await getOffsetToTriggerAutoScroll(
+    draggableRow.rowIndex,
+    AUTOSCROLL_SPEED_FACTOR,
+  );
+
+  // act - drag a row up the grid to start auto-scrolling.
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, 150, true);
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, 100);
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, scrollOffsetForFastAutoScroll);
+
+  // Waiting for autoscrolling
+  await t.wait(AUTOSCROLL_WAIT_TIME);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
+    .eql('1-1')
+    .expect(dataGrid.getScrollTop())
+    .eql(0);
+
+  // act - drag and drop the row to the third position (after row 2-1).
+  const rowHeight = await dataGrid.getDataRow(0).element.offsetHeight;
+
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, rowHeight / 2);
+  await dataGrid.dropRow();
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t
+    .expect(visibleRows[0].key)
+    .eql('1-1')
+    .expect(visibleRows[1].key)
+    .eql('2-1')
+    .expect(visibleRows[2].key)
+    .eql(draggableRow.key);
+}).before(async (t) => {
+  await t.maximizeWindow();
+  const items = generateData(50, 1);
+  return createWidget('dxDataGrid', {
+    height: 260,
+    keyExpr: 'field1',
+    scrolling: {
+      mode: 'virtual',
+    },
+    dataSource: items,
+    rowDragging: {
+      scrollSpeed: 300,
+      allowReordering: true,
+      onReorder: ClientFunction((e) => {
+        const visibleRows = e.component.getVisibleRows();
+        // eslint-disable-next-line max-len
+        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+        const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
+        items.splice(fromIndex, 1);
+        items.splice(toIndex, 0, e.itemData);
+
+        e.component.refresh();
+      }, { dependencies: { items } }),
+    },
+    showBorders: true,
+  });
+});
+
+// T1139685
+test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, 32, { speed: 0.95 });
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const visibleRowKeys: string[] = visibleRows.map((row) => row.key);
+  const expectedSequence = ['5-1', '3-1', '6-1'];
+
+  const startIndex = visibleRowKeys.findIndex(
+    (_, i) => expectedSequence.every((val, j) => visibleRowKeys[i + j] === val),
+  );
+
+  await t.expect(startIndex).gte(0);
+}).before(async () => {
+  const items = generateData(20, 1);
+  return createWidget('dxDataGrid', {
+    height: 250,
+    keyExpr: 'field1',
+    scrolling: {
+      mode: 'virtual',
+    },
+    paging: {
+      pageSize: 4,
+    },
+    dataSource: items,
+    rowDragging: {
+      scrollSpeed: 300,
+      allowReordering: true,
+      onReorder: ClientFunction((e) => {
+        const visibleRows = e.component.getVisibleRows();
+        // eslint-disable-next-line max-len
+        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+        const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
+        items.splice(fromIndex, 1);
+        items.splice(toIndex, 0, e.itemData);
+
+        e.component.refresh();
+      }, { dependencies: { items } }),
+    },
+    showBorders: true,
+  });
+});

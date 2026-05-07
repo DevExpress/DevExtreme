@@ -302,8 +302,10 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _renderInput() {
-    this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
-    this._applyInputAttributes(this.option('inputAttr'));
+    const { inputAttr } = this.option();
+    this._$field = $('<div>');
+    this._applyInputAttributes(inputAttr);
+    this._$field.addClass(LOOKUP_FIELD_CLASS);
 
     const $arrow = $('<div>').addClass(LOOKUP_ARROW_CLASS);
 
@@ -413,8 +415,7 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _scrollToSelectedItem(): void {
-    const selectedIndex = this._list?.option('selectedIndex');
-    const listItems = this._list?.option('items');
+    const { selectedIndex, items: listItems } = this._list?.option() ?? {};
     // @ts-expect-error ts-error
     const itemsCount = listItems.length;
 
@@ -522,6 +523,7 @@ class Lookup extends DropDownList<LookupProperties> {
     const groups = this._list._getItemsContainer().children();
     const items: Element[] = [];
 
+    // @ts-expect-error ts-error
     groups.each((_, group) => {
       items.push($(group).find(`.${GROUP_LIST_HEADER_CLASS}`)[0]);
 
@@ -532,7 +534,6 @@ class Lookup extends DropDownList<LookupProperties> {
       });
     });
 
-    // @ts-expect-error
     return $(items);
   }
 
@@ -572,14 +573,13 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _getPopupHeight() {
-    // @ts-expect-error ts-error
     if (this._list?.itemElements().length) {
       return this._calculateListHeight(this.option('grouped'))
         + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0)
         // @ts-expect-error ts-error
-        + (this._popup._$bottom ? getOuterHeight(this._popup._$bottom) : 0)
+        + (this._popup.bottomToolbar() ? getOuterHeight(this._popup.bottomToolbar()) : 0)
         // @ts-expect-error ts-error
-        + (this._popup._$title ? getOuterHeight(this._popup._$title) : 0);
+        + (this._popup.topToolbar() ? getOuterHeight(this._popup.topToolbar()) : 0);
     }
     return 'auto';
   }
@@ -609,7 +609,7 @@ class Lookup extends DropDownList<LookupProperties> {
     }
 
     this._$popup!.addClass(LOOKUP_POPUP_CLASS);
-    this._popup!.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
+    this._popup!.$wrapper()?.addClass(LOOKUP_POPUP_WRAPPER_CLASS);
   }
 
   _renderPopover() {
@@ -617,7 +617,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
     const options = extend(
       popupConfig,
-      this._options.cache('dropDownOptions'),
+      this.option('_userDropDownOptions'),
       {
         showEvent: null,
         hideEvent: null,
@@ -648,7 +648,12 @@ class Lookup extends DropDownList<LookupProperties> {
       this._popup._$arrow.remove();
     }
 
-    this._setPopupContentId(this._popup.$content());
+    const $content = this._popup.$content();
+
+    if ($content) {
+      this._setPopupContentId($content);
+    }
+
     this._contentReadyHandler();
   }
 
@@ -873,9 +878,7 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _filterDataSource(...args): void {
-    // @ts-expect-error ts-error
     if (this._list && !this._list._dataSource && this._isMinSearchLengthExceeded()) {
-      // @ts-expect-error ts-error
       this._list?._scrollView.startLoading();
     }
     // @ts-expect-error ts-error
@@ -884,7 +887,6 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _dataSourceFiltered(...args) {
     super._dataSourceFiltered(...args);
-    // @ts-expect-error ts-error
     this._list?._scrollView.finishLoading();
   }
 
@@ -908,7 +910,6 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _selectListItemHandler(e) {
-    // @ts-expect-error ts-error
     const { focusedElement } = this._list!.option();
 
     const $itemElement = $(focusedElement);
@@ -932,7 +933,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _toggleSearchClass(isSearchEnabled) {
     if (this._popup) {
-      this._popup.$wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
+      this._popup.$wrapper()?.toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
     }
   }
 
@@ -1154,9 +1155,7 @@ class Lookup extends DropDownList<LookupProperties> {
               fullName,
               value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value,
             });
-            const { dropDownOptions } = this.option();
-            // @ts-expect-error ts-error
-            this._options.cache('dropDownOptions', dropDownOptions);
+            this._cacheUserDropDownOptions(value, fullName);
             break;
           }
           default:

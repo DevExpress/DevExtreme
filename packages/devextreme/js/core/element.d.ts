@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { dxElementWrapper } from './renderer';
 
 export interface Condition {}
@@ -7,12 +6,14 @@ export interface ElementWrapper<T extends Element> { }
 export interface ElementsArrayWrapper<T extends Element> { }
 /**
  * @docid
+ * @hidden
  * @type HTMLElement|SVGElement|JQuery
  */
 export type DxElement<T extends Element = HTMLElement> = {} extends Condition ? T : ElementWrapper<T>;
 
 /**
  * @docid
+ * @hidden
  * @type HTMLElement|SVGElement|JQuery
  */
 export type UserDefinedElement<T extends Element = Element> = {} extends Condition ? T : ElementWrapper<T> | T;

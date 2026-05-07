@@ -2,16 +2,16 @@ import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
 import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, type } from '@js/core/utils/type';
-import { Axis } from '@js/viz/axes/base_axis';
-import { SeriesFamily } from '@js/viz/core/series_family';
+// @ts-expect-error
+import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
+import { Axis } from '@ts/viz/axes/base_axis';
+import { SeriesFamily } from '@ts/viz/core/series_family';
 import {
   convertVisualRangeObject, map as _map,
   mergeMarginOptions, rangesAreEqual, setCanvasValues, unique,
-} from '@js/viz/core/utils';
-import rangeDataCalculator from '@js/viz/series/helpers/range_data_calculator';
-import { Range } from '@js/viz/translators/range';
-// @ts-expect-error
-import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
+} from '@ts/viz/core/utils';
+import rangeDataCalculator from '@ts/viz/series/helpers/range_data_calculator';
+import { Range } from '@ts/viz/translators/range';
 
 import { BaseChart } from './m_base_chart';
 
@@ -624,7 +624,7 @@ export const AdvancedChart = BaseChart.inherit({
       isArgumentAxis: isArgumentAxes,
       getTemplate: (template) => this._getTemplate(template),
     }, this._getAxisRenderingOptions(typeSelector));
-    const axis = new Axis(renderingSettings) as any;
+    const axis = new Axis(renderingSettings);
     axis.updateOptions(options);
     axis.isVirtual = virtual;
 
@@ -711,7 +711,7 @@ export const AdvancedChart = BaseChart.inherit({
 
     index = _isDefined(index) ? parseInt(index[0], 10) : index;
 
-    if (fullName.indexOf('visualRange') > 0) {
+    if (fullName.split('.').indexOf('visualRange') > 0) {
       if (type(value) !== 'object') {
         value = wrapVisualRange(fullName, value) ?? value;
       }
@@ -832,16 +832,17 @@ export const AdvancedChart = BaseChart.inherit({
   _optionChanged(arg) {
     if (!this._optionChangedLocker) {
       const optionName = 'visualRange';
-      let axes;
-      const isDirectOption = arg.fullName.indexOf(optionName) > 0 ? true
+      const isDirectOption = arg.fullName.split('.').indexOf(optionName) > 0 ? true
         : this.getPartialChangeOptionsName(arg).indexOf(optionName) > -1 ? false : undefined;
 
       if (_isDefined(isDirectOption)) {
-        axes = this._getAxesByOptionPath(arg, isDirectOption, optionName);
+        const axes: (typeof Axis)[] = this._getAxesByOptionPath(arg, isDirectOption, optionName);
 
         if (axes) {
           if (axes.length > 1 || isArray(arg.value)) {
-            axes.forEach((a, index) => setAxisVisualRangeByOption(arg, a, isDirectOption, index));
+            axes.forEach((a, index: number) => {
+              setAxisVisualRangeByOption(arg, a, isDirectOption, index);
+            });
           } else if (axes.length === 1) {
             setAxisVisualRangeByOption(arg, axes[0], isDirectOption);
           }

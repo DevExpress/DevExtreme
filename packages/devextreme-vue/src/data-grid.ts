@@ -645,7 +645,7 @@ const DxAsyncRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any)>
   }
 };
 
@@ -1279,7 +1279,7 @@ const DxCustomRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -1642,7 +1642,6 @@ const DxFilterBuilderConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:allowHierarchicalFields": null,
-    "update:bindingOptions": null,
     "update:customOperations": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -1672,7 +1671,6 @@ const DxFilterBuilderConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     customOperations: Array as PropType<Array<dxFilterBuilderCustomOperation>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
@@ -1718,7 +1716,6 @@ const DxFilterBuilderPopupConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -1769,7 +1766,6 @@ const DxFilterBuilderPopupConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -1963,7 +1959,6 @@ const DxFormConfig = {
     "update:activeStateEnabled": null,
     "update:alignItemLabels": null,
     "update:alignItemLabelsInAllGroups": null,
-    "update:bindingOptions": null,
     "update:colCount": null,
     "update:colCountByScreen": null,
     "update:customizeItem": null,
@@ -2006,7 +2001,6 @@ const DxFormConfig = {
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     colCount: [String, Number] as PropType<Mode | number>,
     colCountByScreen: Object as PropType<Record<string, any>>,
     customizeItem: Function as PropType<((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)>,
@@ -2700,7 +2694,7 @@ const DxPagerConfig = {
     label: String,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
-    showPageSizeSelector: Boolean,
+    showPageSizeSelector: [Boolean, String] as PropType<boolean | Mode>,
     visible: [Boolean, String] as PropType<boolean | Mode>
   }
 };
@@ -2765,7 +2759,6 @@ const DxPopupConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -2816,7 +2809,6 @@ const DxPopupConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -3641,7 +3633,7 @@ const DxValidationRuleConfig = {
     reevaluate: Boolean,
     trim: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 

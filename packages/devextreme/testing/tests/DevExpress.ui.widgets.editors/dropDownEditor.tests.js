@@ -14,9 +14,8 @@ import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
 import domAdapter from '__internal/core/m_dom_adapter';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/validator';
 
 QUnit.testStart(function() {
@@ -387,10 +386,6 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             applyValueMode: 'useButtons',
             focusStateEnabled: true
@@ -423,10 +418,6 @@ QUnit.module('focus policy', () => {
     });
 
     QUnit.testInActiveWindow('editor should save focus on clearbutton clicking, fieldTemplate is used', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [{ 'Name': 'one', 'ID': 1 }, { 'Name': 'two', 'ID': 2 }, { 'Name': 'three', 'ID': 3 }],
             displayExpr: 'Name',
@@ -765,10 +756,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Focus policy with field template', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         this.dropDownEditor.option('fieldTemplate', function(data, container) {
             $(container).append($('<div>').dxTextBox({ value: data }));
         });
@@ -1600,29 +1587,6 @@ QUnit.module('Templates', () => {
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
     });
 
-    const isRenovation = !!dxButton.IS_RENOVATED_WIDGET;
-
-    // NOTE: Renovated button rerenders on each property changing
-    if(!isRenovation) {
-        ['readOnly', 'disabled'].forEach((prop) => {
-            [false, true].forEach((propValue) => {
-                QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
-                    const dropDownButtonTemplate = sinon.spy(() => {
-                        return '<div>Template</div>';
-                    });
-
-                    const editor = $('#dropDownEditorLazy').dxDropDownEditor({
-                        dropDownButtonTemplate,
-                        [prop]: propValue
-                    }).dxDropDownEditor('instance');
-
-                    editor.option(prop, !propValue);
-                    assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
-                });
-            });
-        });
-    }
-
     QUnit.test('component with fieldTemplate should trigger _onMarkupRendered correctly (T1230696)', function(assert) {
         const markupRenderedStub = sinon.stub();
 
@@ -1935,6 +1899,64 @@ QUnit.module('popup integration', () => {
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
 
             assert.strictEqual($overlayContent.outerWidth(), $container.outerWidth(), 'width is correct');
+        });
+
+        QUnit.test('dropDownOptions should get options from Popup after render', function(assert) {
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+            }).dxDropDownEditor('instance');
+
+            const { dropDownOptions } = dropDownEditor.option();
+
+
+            assert.strictEqual(dropDownOptions.visible, true, 'dropDownOptions includes visible option from Popup');
+            assert.strictEqual(dropDownOptions.disabled, false, 'dropDownOptions includes disabled option from Popup');
+        });
+
+        QUnit.test('Should cache dropDownOptions from user in _userDropDownOptions on init', function(assert) {
+            const dropDownOptions = { showTitle: true };
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+                dropDownOptions,
+            }).dxDropDownEditor('instance');
+
+            const { _userDropDownOptions } = dropDownEditor.option();
+
+            assert.deepEqual(_userDropDownOptions, dropDownOptions, 'initial dropDownOptions are cached in _userDropDownOptions');
+        });
+
+        QUnit.test('Should cache updated dropDownOptions from user in _userDropDownOptions on runtime change', function(assert) {
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+            }).dxDropDownEditor('instance');
+
+            dropDownEditor.option('dropDownOptions', { width: 123 });
+
+            const { _userDropDownOptions } = dropDownEditor.option();
+
+            assert.deepEqual(_userDropDownOptions, { width: 123, showTitle: false }, 'updated dropDownOptions are cached in _userDropDownOptions');
+        });
+
+        QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+            const dropDownOptions = {
+                showTitle: false,
+                position: {
+                    my: 'left',
+                    at: 'right',
+                    of: '#dropDownEditorLazy',
+                }
+            };
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+                dropDownOptions,
+            }).dxDropDownEditor('instance');
+
+            dropDownEditor.option('dropDownOptions.position.my', 'top');
+
+            const { _userDropDownOptions } = dropDownEditor.option();
+            dropDownOptions.position.my = 'top';
+
+            assert.deepEqual(_userDropDownOptions, dropDownOptions, 'updated part of dropDownOptions is cached in _userDropDownOptions');
         });
     });
 
@@ -2612,6 +2634,58 @@ QUnit.module('aria accessibility', () => {
                 assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
                 assert.ok(hasAttr(), `${attrName} attribute has been set`);
             });
+        });
+    });
+});
+
+QUnit.module('Memory Leaks', {
+    beforeEach: function() {
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+        this.getButton = (instance, name) => instance._buttonCollection.buttons.find(button => button.name === name);
+    },
+    afterEach: function() {
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test('should clear popup and template references on dispose', function(assert) {
+        const instance = this.$element.dxDropDownEditor({
+            opened: true,
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({ value: 'Custom Field' });
+            },
+        }).dxDropDownEditor('instance');
+
+        assert.notStrictEqual(instance._$templateWrapper, undefined, '_$templateWrapper exists before dispose');
+        assert.notStrictEqual(instance.content(), null, 'content() returns popup content before dispose');
+        assert.notStrictEqual(instance._popup, undefined, '_popup instance exists before dispose');
+        assert.notStrictEqual(instance._$popup, undefined, '_$popup element exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance._$templateWrapper, undefined, '_$templateWrapper is undefined after dispose');
+        assert.strictEqual(instance.content(), null, 'content() returns null after dispose');
+        assert.strictEqual(instance._popup, undefined, '_popup is undefined after dispose');
+        assert.strictEqual(instance._$popup, undefined, '_$popup is undefined after dispose');
+    });
+
+    [
+        'editor',
+        '$container',
+        'instance',
+        '$placeMarker',
+    ].forEach((property) => {
+        QUnit.test(`DropDownButton should clear ${property} reference on dispose`, function(assert) {
+            const instance = this.$element.dxDropDownEditor({
+                showDropDownButton: property !== '$placeMarker',
+            }).dxDropDownEditor('instance');
+
+            const dropDownButton = this.getButton(instance, 'dropDown');
+
+            assert.notStrictEqual(dropDownButton[property], property === '$placeMarker' ? null : undefined, `button has ${property} reference before dispose`);
+
+            instance.dispose();
+
+            assert.strictEqual(dropDownButton[property], null, `button.${property} is null after dispose`);
         });
     });
 });

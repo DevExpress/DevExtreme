@@ -5,10 +5,12 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import 'ui/form';
-import { FIELD_ITEM_CLASS,
+import {
     FORM_CLASS,
     FORM_FIELD_ITEM_COL_CLASS,
     FORM_GROUP_CLASS,
+    FIELD_ITEM_CLASS,
+    FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_GROUP_CAPTION_CLASS,
@@ -17,15 +19,16 @@ import { FIELD_ITEM_CLASS,
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
     TOGGLE_CONTROLS_PADDING_CLASS
-} from '__internal/ui/form/components/m_field_item';
+} from '__internal/ui/form/components/field_item';
 
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';
 import 'ui/radio_group';
 import 'ui/switch';
+import 'ui/tag_box';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const FORM_GROUP_CUSTOM_CAPTION_CLASS = 'dx-form-group-custom-caption';
@@ -144,7 +147,7 @@ QUnit.module('Form', () => {
         assert.equal(rootLayoutManager.option('width'), 100, 'Correct width');
     });
 
-    test('Form isn\'t refresh on dimension changed if colCount is auto', function(assert) {
+    test('Form should not refresh on dimension changed if colCount is auto', function(assert) {
         const $formContainer = $('#form').dxForm({
             colCount: 'auto',
             items: [
@@ -159,10 +162,10 @@ QUnit.module('Form', () => {
 
         resizeCallbacks.fire();
 
-        assert.equal(refreshStub.callCount, 0, 'don\'t refresh on resize if colCount is auto');
+        assert.equal(refreshStub.callCount, 0, 'did not refresh on resize if colCount is auto');
     });
 
-    test('Form doesn\'t refresh on dimension changed if colCount is not auto', function(assert) {
+    test('Form should not refresh on dimension changed if colCount is not auto', function(assert) {
         const $formContainer = $('#form').dxForm({
             items: [
                 {
@@ -177,7 +180,7 @@ QUnit.module('Form', () => {
 
         resizeCallbacks.fire();
 
-        assert.equal(refreshStub.callCount, 0, 'do not refresh on resize if colCount isn\'t auto');
+        assert.equal(refreshStub.callCount, 0, 'did not refresh on resize if colCount is not auto');
     });
 
     test('Render read only form', function(assert) {
@@ -219,7 +222,7 @@ QUnit.module('Form', () => {
         assert.equal($fieldItems.length, 5, '4 simple items + 1 group item');
     });
 
-    test('\'readOnly\' is changed in inner components on optionChanged', function(assert) {
+    test('readOnly option is changed in inner components on optionChanged', function(assert) {
         const $formContainer = $('#form').dxForm({
             items: [
                 {
@@ -229,7 +232,7 @@ QUnit.module('Form', () => {
             ]
         });
 
-        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor isn\'t read only');
+        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor is not read only');
 
         $formContainer.dxForm('instance').option('readOnly', true);
 
@@ -252,7 +255,7 @@ QUnit.module('Form', () => {
         assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor is read only');
     });
 
-    test('\'disable\' is changed in inner components on optionChanged', function(assert) {
+    test('disable option is changed in inner components on optionChanged', function(assert) {
         const $formContainer = $('#form').dxForm({
             items: [
                 {
@@ -267,7 +270,7 @@ QUnit.module('Form', () => {
 
         $formContainer.dxForm('instance').option('disabled', false);
 
-        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-disabled'), 'editor isn\'t disabled');
+        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-disabled'), 'editor is not disabled');
     });
 
     test('Customize item event', function(assert) {
@@ -337,7 +340,7 @@ QUnit.module('Form', () => {
         assert.deepEqual($testContainer.find('.dx-layout-manager').dxLayoutManager('instance').option('layoutData'), { FamousPirate: 'John Morgan' }, 'Correct formData');
     });
 
-    test('Check data at render with items and change widget\'s value', function(assert) {
+    test('Check data at render with items and change widget value', function(assert) {
         const $testContainer = $('#form');
 
         $testContainer.dxForm({
@@ -350,7 +353,7 @@ QUnit.module('Form', () => {
         assert.deepEqual($testContainer.dxForm('instance').option('formData'), { FamousPirate: 'John Morgan', FamousDetective: 'Sherlock Holmes' }, 'Correct formData');
     });
 
-    test('Change of editor\'s value changing \'formData\' option', function(assert) {
+    test('Change of editor value changing formData option', function(assert) {
         const $testContainer = $('#form');
 
         $testContainer.dxForm({
@@ -362,7 +365,7 @@ QUnit.module('Form', () => {
         assert.deepEqual($testContainer.dxForm('instance').option('formData'), { FamousPirate: 'Cpt. Jack Sparrow' }, 'Correct formData');
     });
 
-    test('Update of editor\'s value when formOption is changed and items is defined', function(assert) {
+    test('Update of editor value when formOption is changed and items is defined', function(assert) {
         const $testContainer = $('#form');
         const textBoxes = [];
 
@@ -712,7 +715,7 @@ QUnit.module('Form', () => {
         assert.equal($editors.eq(1).dxTextBox('option', 'validationBoundary'), undefined);
     });
 
-    test('button item should have a Form\'s validation group by default', function(assert) {
+    test('button item should have a Form validation group by default', function(assert) {
         const $testContainer = $('#form');
         const form = $testContainer.dxForm({
             items: [{
@@ -792,6 +795,44 @@ QUnit.module('Form', () => {
         });
 
         assert.equal(templateStub.getCall(0).args[0].name, undefined, 'name argument');
+    });
+
+    test('TagBox should not exceed group column width when many items are selected (T1326645)', function(assert) {
+        const $form = $('#form').width(600);
+
+        $form.dxForm({
+            labelLocation: 'left',
+            formData: {
+                tags: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            },
+            items: [
+                {
+                    itemType: 'group',
+                    items: [{
+                        dataField: 'tags',
+                        editorType: 'dxTagBox',
+                        editorOptions: {
+                            items: Array.from({ length: 10 }, (_, i) => ({
+                                id: i + 1,
+                                name: `Long item name ${i + 1}`,
+                            })),
+                            displayExpr: 'name',
+                            valueExpr: 'id',
+                            multiline: false,
+                        },
+                    }],
+                },
+            ],
+        });
+
+        const $group = $form.find(`.${FORM_GROUP_CLASS}`).first();
+        const $label = $group.find(`.${FIELD_ITEM_LABEL_CLASS}`).first();
+        const $content = $group.find(`.${FIELD_ITEM_CONTENT_CLASS}`).first();
+
+        const groupWidth = $group.outerWidth();
+        const totalItemWidth = $label.outerWidth() + $content.outerWidth();
+
+        assert.roughEqual(totalItemWidth, groupWidth, 0.1, `field item content width (${totalItemWidth}) should not exceed group width (${groupWidth})`);
     });
 });
 
@@ -992,7 +1033,7 @@ QUnit.module('Validation group', () => {
 
         assert.equal($validator.length, 1, 'validators count');
         assert.equal(validator.option('validationGroup'), form, 'validation group of the validator');
-        assert.ok(ValidationEngine.getGroupConfig(form), 'form\'s validation group in the validation engine');
+        assert.ok(ValidationEngine.getGroupConfig(form), 'form validation group in the validation engine');
     });
 
     test('Set { items: [{dataField: name, isRequired: true}], showValidationSummary: true }', function(assert) {
@@ -1018,7 +1059,7 @@ QUnit.module('Validation group', () => {
 
         assert.equal($validator.length, 1, 'validators count');
         assert.equal(validator.option('validationGroup'), 'Test', 'validation group of the validator');
-        assert.ok(ValidationEngine.getGroupConfig('Test'), 'form\'s validation group in the validation engine');
+        assert.ok(ValidationEngine.getGroupConfig('Test'), 'form validation group in the validation engine');
     });
 
     test('Set { items: [{dataField: name, isRequired: true}], validationGroup: Test, showValidationSummary: true }', function(assert) {
@@ -1042,7 +1083,7 @@ QUnit.module('Validation group', () => {
         const $validator = $formContainer.find(`.${VALIDATOR_CLASS}`);
 
         assert.equal($validator.length, 0, 'validators count');
-        assert.ok(ValidationEngine.getGroupConfig(form), 'form\'s validation group in the validation engine');
+        assert.ok(ValidationEngine.getGroupConfig(form), 'form validation group in the validation engine');
     });
 
     test('Set { items: [{dataField: name}], showValidationSummary: true }', function(assert) {
@@ -1066,7 +1107,7 @@ QUnit.module('Validation group', () => {
         const $validator = $formContainer.find(`.${VALIDATOR_CLASS}`);
 
         assert.equal($validator.length, 0, 'validators count');
-        assert.ok(ValidationEngine.getGroupConfig('Test'), 'form\'s validation group in the validation engine');
+        assert.ok(ValidationEngine.getGroupConfig('Test'), 'form validation group in the validation engine');
     });
 
     test('Set { items: [{dataField: name}], validationGroup: Test, showValidationSummary: true }', function(assert) {
@@ -1272,7 +1313,7 @@ QUnit.module('Grouping', () => {
         assert.equal($captions.eq(0).text(), 'Personal');
     });
 
-    test('helpText element didn\'t render for group item', function(assert) {
+    test('helpText element should not be rendered for group item', function(assert) {
         const $formContainer = $('#form').dxForm({
             formData: {
                 firstName: 'John'
@@ -1330,7 +1371,7 @@ QUnit.module('Grouping', () => {
 
         assert.equal($groups.length, 2, '2 groups rendered');
         assert.equal($groups.eq(1).find('.template-biography').length, 1, 'We have template content');
-        assert.equal($groups.eq(1).find('.template-biography').text(), 'bla-bla-bla', 'Template\'s content has correct data');
+        assert.equal($groups.eq(1).find('.template-biography').text(), 'bla-bla-bla', 'Template content has correct data');
     });
 
     test('Simple Item labelTemplate', function(assert) {
@@ -1365,7 +1406,7 @@ QUnit.module('Grouping', () => {
 
         assert.strictEqual($groups.length, 2, '2 groups rendered');
         assert.strictEqual($groups.eq(0).find(`.${labelClass}`).length, 1, 'label template content');
-        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).text(), 'First Name: ?', 'Labels\'s content has correct data');
+        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).text(), 'First Name: ?', 'Label content has correct data');
     });
 
     QUnit.module('Caption template', () => {
@@ -1499,7 +1540,7 @@ QUnit.module('Grouping', () => {
             ]
         });
 
-        assert.equal(templateOwnerComponent, 'dxForm', 'Template\'s data.component is \'dxForm\'');
+        assert.equal(templateOwnerComponent, 'dxForm', 'Template data.component is dxForm');
     });
 
     test('Recursive grouping', function(assert) {

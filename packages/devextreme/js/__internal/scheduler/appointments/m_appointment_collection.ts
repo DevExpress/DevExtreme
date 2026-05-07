@@ -5,8 +5,6 @@ import { name as dblclickEvent } from '@js/common/core/events/double_click';
 import { addNamespace, isFakeClickEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
-import { getPublicElement } from '@js/core/element';
-import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 // @ts-expect-error
@@ -21,49 +19,74 @@ import { setOuterHeight, setOuterWidth } from '@js/core/utils/size';
 import {
   isDeferred, isDefined, isPlainObject, isString,
 } from '@js/core/utils/type';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { SupportedKeys } from '@ts/core/widget/widget';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
-import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
-import type { AppointmentViewModel } from '../types';
+import { generateDates } from '../recurrence/generate_dates';
+import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
+import {
+  getTargetedAppointment,
+  getTargetedAppointmentFromInfo,
+} from '../utils/get_targeted_appointment';
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import type {
+  AppointmentAgendaViewModel,
+  AppointmentCollectorViewModel,
+  AppointmentItemViewModel,
+  AppointmentViewModelPlain,
+} from '../view_model/generate_view_model/types';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
-import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
+import { AppointmentsKeyboardNavigation } from './m_appointments_kbn';
 import { getAppointmentDateRange } from './resizing/m_core';
-import { countVisibleAppointments } from './utils/countVisibleAppointments';
+import { countVisibleAppointments } from './utils/count_visible_appointments';
+import { isNeedToAdd } from './utils/get_arrays_diff';
+import { getViewModelDiff } from './utils/get_view_model_diff';
+import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './utils/m_utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
 const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment');
 
 const toMs = dateUtils.dateToMilliseconds;
-const isAllDayAppointment = (
-  appointment: AppointmentViewModel,
-): boolean => Boolean(appointment.settings[0]?.allDay);
 
-// @ts-expect-error
-class SchedulerAppointments extends CollectionWidget {
-  _virtualAppointments: any;
+interface ViewModelDiff {
+  item: AppointmentViewModelPlain;
+  element?: dxElementWrapper;
+  needToAdd?: true;
+  needToRemove?: true;
+}
+
+class SchedulerAppointments extends CollectionWidget<any> {
+  // NOTE: The key of this array is `sortedIndex` of appointment rendered in Element
+  renderedElementsBySortedIndex: dxElementWrapper[] = [];
 
   _appointmentClickTimeout: any;
 
-  _$currentAppointment: any;
-
-  _currentAppointmentSettings: any;
+  _currentAppointmentSettings?: AppointmentViewModelPlain;
 
   _preventSingleAppointmentClick: any;
 
   _initialSize: any;
 
   _initialCoordinates: any;
+
+  private _kbn!: AppointmentsKeyboardNavigation;
+
+  private _isResizing = false;
+
+  public get isResizing(): boolean {
+    return this._isResizing;
+  }
 
   get isAgendaView() {
     return this.invoke('isCurrentViewAgenda');
@@ -73,8 +96,8 @@ class SchedulerAppointments extends CollectionWidget {
     return this.invoke('isVirtualScrolling');
   }
 
-  get appointmentDataProvider() {
-    return this.option('getAppointmentDataProvider')();
+  get appointmentDataSource() {
+    return this.option('getAppointmentDataSource')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {
@@ -85,9 +108,8 @@ class SchedulerAppointments extends CollectionWidget {
     return countVisibleAppointments(this.option('items') ?? []);
   }
 
-  constructor(element, options) {
-    super(element, options);
-    this._virtualAppointments = {};
+  getResourceManager(): ResourceManager {
+    return this.option('getResourceManager')();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -96,18 +118,17 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   notifyObserver(subject, args) {
-    const observer: any = this.option('observer');
-    if (observer) {
-      observer.fire(subject, args);
+    const notifyScheduler: any = this.option('notifyScheduler');
+    if (notifyScheduler) {
+      notifyScheduler.invoke(subject, args);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   invoke(funcName: string, ...args) {
-    const observer: any = this.option('observer');
+    const notifyScheduler: any = this.option('notifyScheduler');
 
-    if (observer) {
-      return observer.fire.apply(observer, arguments);
+    if (notifyScheduler) {
+      return notifyScheduler.invoke(funcName, ...args);
     }
   }
 
@@ -117,92 +138,35 @@ class SchedulerAppointments extends CollectionWidget {
     super._dispose();
   }
 
-  _supportedKeys() {
-    const parent = super._supportedKeys();
+  _supportedKeys(): SupportedKeys {
+    const parentValue = super._supportedKeys();
+    const kbnValue = this._kbn.getSupportedKeys();
 
-    const tabHandler = function (e) {
-      const navigatableItems = this._getNavigatableItems();
-      const focusedItem = navigatableItems.filter('.dx-state-focused');
-      let index = focusedItem.data(APPOINTMENT_SETTINGS_KEY).sortedIndex;
-      const lastIndex = navigatableItems.length - 1;
-
-      if ((index > 0 && e.shiftKey) || (index < lastIndex && !e.shiftKey)) {
-        e.preventDefault();
-
-        e.shiftKey ? index-- : index++;
-
-        const $nextAppointment = this._getNavigatableItemByIndex(index);
-        this._resetTabIndex($nextAppointment);
-        // @ts-expect-error
-        eventsEngine.trigger($nextAppointment, 'focus');
-      }
-    };
-
-    const currentAppointment = this._$currentAppointment;
-
-    return extend(parent, {
-      escape: function () {
-        if (this.resizeOccur) {
-          this.moveAppointmentBack();
-          this.resizeOccur = false;
-          currentAppointment.dxResizable('instance')?._detachEventHandlers();
-          currentAppointment.dxResizable('instance')?._attachEventHandlers();
-          currentAppointment.dxResizable('instance')?._toggleResizingClass(false);
-        }
-      }.bind(this),
-      del: function (e) {
-        if (this.option('allowDelete')) {
-          e.preventDefault();
-          const data = this._getItemData(e.target);
-          this.notifyObserver('onDeleteButtonPress', { data, target: e.target });
-        }
-      }.bind(this),
-      tab: tabHandler,
-    });
+    return extend(parentValue, kbnValue) as SupportedKeys;
   }
 
-  private _getNavigatableItemByIndex(sortedIndex) {
-    const appointments = this._getNavigatableItems();
-    return appointments.filter(
-      // @ts-expect-error
-      (_, $item) => elementData($item, APPOINTMENT_SETTINGS_KEY).sortedIndex === sortedIndex,
-    ).eq(0);
-  }
-
-  private _getNavigatableItems(): dxElementWrapper {
-    // @ts-expect-error
-    const appts = this._itemElements().filter(':visible').not('.dx-state-disabled');
-    // @ts-expect-error
-    const apptCollectors = this.$element().find('.dx-scheduler-appointment-collector');
-    return appts.add(apptCollectors);
-  }
-
-  _resetTabIndex($appointment) {
-    this._focusTarget().attr('tabIndex', -1);
-    $appointment.attr('tabIndex', this.option('tabIndex'));
+  public getAppointmentSettings($item: dxElementWrapper): AppointmentViewModelPlain {
+    return $item.data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain;
   }
 
   _moveFocus() {}
 
   _focusTarget() {
-    return this._getNavigatableItems();
+    return this._kbn.getFocusableItems();
   }
 
   _renderFocusTarget() {
-    const $appointment = this._getNavigatableItemByIndex(0);
-
-    this._resetTabIndex($appointment);
+    const $item = this._kbn.getFocusableItemBySortedIndex(0);
+    this._kbn.resetTabIndex($item);
   }
 
   _focusInHandler(e) {
     super._focusInHandler(e);
-    this._$currentAppointment = $(e.target);
-    this.option('focusedElement', getPublicElement($(e.target)));
+    this._kbn.focusInHandler(e);
   }
 
   _focusOutHandler(e) {
-    const $appointment = this._getNavigatableItemByIndex(0);
-    this.option('focusedElement', getPublicElement($appointment));
+    this._kbn.focusOutHandler();
     super._focusOutHandler(e);
   }
 
@@ -222,20 +186,38 @@ class SchedulerAppointments extends CollectionWidget {
       allowResize: true,
       allowAllDayResize: true,
       onAppointmentDblClick: null,
-      _collectorOffset: 0,
       groups: [],
       resources: [],
     });
+  }
+
+  protected getItemsDiff(
+    previousValue: AppointmentViewModelPlain[] = [],
+    value: AppointmentViewModelPlain[] = [],
+  ): ViewModelDiff[] {
+    const elementsInRenderOrder = previousValue
+      .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
+    const diff = getViewModelDiff(previousValue, value, this.appointmentDataSource);
+    diff
+      .filter((item) => !isNeedToAdd(item))
+      .forEach((item, index) => {
+        (item as ViewModelDiff).element = elementsInRenderOrder[index];
+      });
+
+    return diff;
   }
 
   _optionChanged(args) {
     switch (args.name) {
       case 'items':
         (this as any)._cleanFocusState();
-        this._clearDropDownItems();
-        this._clearDropDownItemsElements();
-        this._repaintAppointments(args.value);
-        this._renderDropDownAppointments();
+
+        if (this.isAgendaView) {
+          this.forceRepaintAllAppointments(args.value || []);
+        } else {
+          const diff = this.getItemsDiff(args.previousValue, args.value);
+          this.repaintAppointments(diff);
+        }
 
         this._attachAppointmentsEvents();
         break;
@@ -246,17 +228,19 @@ class SchedulerAppointments extends CollectionWidget {
       case 'allowDrag':
       case 'allowResize':
       case 'allowAllDayResize':
-        (this as any)._invalidate();
+        (this as any)._cleanFocusState();
+        this.forceRepaintAllAppointments(this.option('items') || []);
+        this._attachAppointmentsEvents();
         break;
       case 'focusedElement':
-        this._resetTabIndex($(args.value));
+        this._kbn.resetTabIndex($(args.value));
         super._optionChanged(args);
         break;
       case 'allowDelete':
         break;
       case 'focusStateEnabled':
         this._clearDropDownItemsElements();
-        this._renderDropDownAppointments();
+        this.renderDropDownAppointments();
 
         super._optionChanged(args);
         break;
@@ -265,39 +249,66 @@ class SchedulerAppointments extends CollectionWidget {
     }
   }
 
-  _isRepaintAll(appointments: AppointmentViewModel[]): boolean {
-    return this.isAgendaView || appointments.every((item) => item.needRepaint);
-  }
-
   _applyFragment(fragment: dxElementWrapper, allDay: boolean): void {
     if (fragment.children().length > 0) {
       this._getAppointmentContainer(allDay).append(fragment);
     }
   }
 
-  _repaintAppointments(appointments: AppointmentViewModel[]): void {
+  protected forceRepaintAllAppointments(items: AppointmentViewModelPlain[]): void {
+    this.renderedElementsBySortedIndex = [];
     this._renderByFragments(($commonFragment, $allDayFragment) => {
-      const isRepaintAll = this._isRepaintAll(appointments);
+      this._getAppointmentContainer(true).html('');
+      this._getAppointmentContainer(false).html('');
+      if (items.length === 0) {
+        this._cleanItemContainer();
+      }
+
+      items.forEach((item, index) => {
+        const container = item.allDay
+          ? $allDayFragment
+          : $commonFragment;
+        this._renderItem(index, item, container);
+      });
+    });
+  }
+
+  protected repaintAppointments(diff: ViewModelDiff[]): void {
+    this.renderedElementsBySortedIndex = [];
+    this._renderByFragments(($commonFragment, $allDayFragment) => {
+      const isRepaintAll = this.isAgendaView
+        || !diff.some((item) => item.needToAdd === undefined && item.needToRemove === undefined);
 
       if (isRepaintAll) {
         this._getAppointmentContainer(true).html('');
         this._getAppointmentContainer(false).html('');
       }
-      if (!appointments.length) {
+      if (diff.length === 0) {
         this._cleanItemContainer();
       }
 
-      appointments.forEach((appointment, index) => {
-        const container = isAllDayAppointment(appointment)
-          ? $allDayFragment
-          : $commonFragment;
+      diff.forEach((item, index) => {
+        if (isRepaintAll && item.needToRemove) {
+          return;
+        }
 
-        if (appointment.needRemove) {
-          this._clearItem(appointment);
-        } else if (isRepaintAll || appointment.needRepaint) {
-          appointment.needRepaint = false;
-          this._clearItem(appointment);
-          this._renderItem(index, appointment, container);
+        if (item.needToRemove) {
+          item.element?.detach();
+          item.element?.remove();
+          return;
+        }
+
+        if (item.needToAdd) {
+          const container = item.item.allDay
+            ? $allDayFragment
+            : $commonFragment;
+          this._renderItem(index, item.item, container);
+          return;
+        }
+
+        if (item.element) {
+          item.element.data(APPOINTMENT_SETTINGS_KEY, item.item);
+          this.renderedElementsBySortedIndex[item.item.sortedIndex] = item.element;
         }
       });
     });
@@ -336,22 +347,6 @@ class SchedulerAppointments extends CollectionWidget {
     (this as any)._renderFocusState();
     (this as any)._attachFeedbackEvents();
     (this as any)._attachHoverEvents();
-  }
-
-  _clearItem(item: AppointmentViewModel): void {
-    const $items = this._findItemElementByItem(item.itemData);
-    if (!$items.length) {
-      return;
-    }
-
-    each($items, (_, $item: any) => {
-      $item.detach();
-      $item.remove();
-    });
-  }
-
-  _clearDropDownItems() {
-    this._virtualAppointments = {};
   }
 
   _clearDropDownItemsElements() {
@@ -395,19 +390,11 @@ class SchedulerAppointments extends CollectionWidget {
     if ($allDayContainer) {
       $allDayContainer.empty();
     }
-
-    this._virtualAppointments = {};
-  }
-
-  _clean() {
-    super._clean();
-    delete this._$currentAppointment;
-    delete this._initialSize;
-    delete this._initialCoordinates;
   }
 
   _init() {
     super._init();
+    this._kbn = new AppointmentsKeyboardNavigation(this);
     (this as any).$element().addClass(COMPONENT_CLASS);
     this._preventSingleAppointmentClick = false;
   }
@@ -422,10 +409,20 @@ class SchedulerAppointments extends CollectionWidget {
         ? appointment.html : undefined,
     };
 
+    let { targetedAppointmentData } = model;
+    if (this._currentAppointmentSettings && 'isAgendaModel' in this._currentAppointmentSettings) {
+      targetedAppointmentData = getTargetedAppointmentFromInfo(
+        this._currentAppointmentSettings.itemData,
+        this._currentAppointmentSettings,
+        this.dataAccessors,
+        this.getResourceManager(),
+      );
+    }
+
     const formatText = this.invoke(
-      'getTextAndFormatDate',
-      model.appointmentData,
-      this._currentAppointmentSettings?.agendaSettings || model.targetedAppointmentData,
+      'createFormattedDateText',
+      appointment,
+      targetedAppointmentData,
       'TIME',
     );
 
@@ -515,23 +512,26 @@ class SchedulerAppointments extends CollectionWidget {
 
   _renderItem(
     index: number,
-    item: AppointmentViewModel,
+    item: AppointmentViewModelPlain,
     container: dxElementWrapper,
-  ): dxElementWrapper[] {
-    const { itemData } = item;
-    const $items: dxElementWrapper[] = [];
-
-    for (let i = 0; i < item.settings.length; i++) {
-      const setting = item.settings[i];
-      this._currentAppointmentSettings = setting;
-      const $item = super._renderItem(index, itemData, container);
-
-      $item.data(APPOINTMENT_SETTINGS_KEY, setting);
-
-      $items.push($item);
+  ): dxElementWrapper {
+    if ('items' in item) {
+      return this.renderDropDownAppointment(container, item);
     }
 
-    return $items;
+    this._currentAppointmentSettings = item;
+    const $item = super._renderItem(index, item.itemData, container);
+
+    $item.data(APPOINTMENT_SETTINGS_KEY, item);
+    if (item.sortedIndex !== -1) {
+      // NOTE: fallback for integration testing
+      if (!this.renderedElementsBySortedIndex) {
+        this.renderedElementsBySortedIndex = [];
+      }
+      this.renderedElementsBySortedIndex[item.sortedIndex] = $item;
+    }
+
+    return $item;
   }
 
   _getItemContent($itemFrame) {
@@ -568,67 +568,89 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   _postprocessRenderItem(args) {
-    this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
+    this.renderAppointment(
+      args.itemElement,
+      this._currentAppointmentSettings as AppointmentAgendaViewModel | AppointmentItemViewModel,
+    );
   }
 
-  _renderAppointment(element, settings) {
+  renderAppointment(
+    element: dxElementWrapper,
+    settings: AppointmentAgendaViewModel | AppointmentItemViewModel,
+  ): void {
     element.data(APPOINTMENT_SETTINGS_KEY, settings);
-
     this._applyResourceDataAttr(element);
-    const rawAppointment = (this as any)._getItemData(element);
-    const geometry = this.invoke('getAppointmentGeometry', settings);
+
+    if (this.isAgendaView) {
+      this.renderAgendaAppointment(element, settings as AppointmentAgendaViewModel);
+      return;
+    }
+
+    this.renderGeneralAppointment(element, settings as AppointmentItemViewModel);
+  }
+
+  renderAgendaAppointment(
+    element: dxElementWrapper,
+    settings: AppointmentAgendaViewModel,
+  ): void {
+    const { groups, groupsLeafs, resourceById } = this.getResourceManager();
+    const config: any = {
+      data: settings.itemData,
+      groupIndex: settings.groupIndex,
+      groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
+      notifyScheduler: this.option('notifyScheduler'),
+      geometry: settings,
+      allowResize: false,
+      allowDrag: false,
+      groups: this.option('groups'),
+
+      dataAccessors: this.option('dataAccessors'),
+      timeZoneCalculator: this.option('timeZoneCalculator'),
+      getResourceManager: this.option('getResourceManager'),
+    };
+
+    (this as any)._createComponent(element, AgendaAppointment, config);
+  }
+
+  renderGeneralAppointment(
+    element: dxElementWrapper,
+    settings: AppointmentItemViewModel,
+  ): void {
     const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
     const allowDrag = this.option('allowDrag');
     const { allDay } = settings;
+    const { groups, groupsLeafs, resourceById } = this.getResourceManager();
+    const config: any = {
+      data: settings.itemData,
+      groupIndex: settings.groupIndex,
+      groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
+      notifyScheduler: this.option('notifyScheduler'),
+      geometry: settings,
+      direction: settings.direction || 'vertical',
+      allowResize,
+      allowDrag,
+      allDay,
+      reduced: settings.reduced,
+      isCompact: settings.isCompact,
+      startDate: new Date(settings.info?.appointment.startDate),
+      cellWidth: this.invoke('getCellWidth'),
+      cellHeight: this.invoke('getCellHeight'),
+      resizableConfig: this._resizableConfig(settings.itemData, settings),
+      groups: this.option('groups'),
+      partIndex: settings.partIndex,
+      partTotalCount: settings.partTotalCount,
 
-    if (settings.virtual) {
-      const appointmentConfig = {
-        itemData: rawAppointment,
-        groupIndex: settings.groupIndex,
-        groups: this.option('groups'),
-      };
+      dataAccessors: this.option('dataAccessors'),
+      timeZoneCalculator: this.option('timeZoneCalculator'),
+      getResizableStep: this.option('getResizableStep'),
+      getResourceManager: this.option('getResourceManager'),
+    };
 
-      const deferredColor = this.option('getAppointmentColor')(appointmentConfig);
-
-      this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
-    } else {
-      const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
-      const config: any = {
-        data: rawAppointment,
-        groupIndex: settings.groupIndex,
-        groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
-        observer: this.option('observer'),
-        geometry,
-        direction: settings.direction || 'vertical',
-        allowResize,
-        allowDrag,
-        allDay,
-        reduced: settings.appointmentReduced,
-        isCompact: settings.isCompact,
-        startDate: new Date(settings.info?.appointment.startDate),
-        cellWidth: this.invoke('getCellWidth'),
-        cellHeight: this.invoke('getCellHeight'),
-        resizableConfig: this._resizableConfig(rawAppointment, settings),
-        groups: this.option('groups'),
-        partIndex: settings.partIndex,
-        partTotalCount: settings.partTotalCount,
-
-        dataAccessors: this.dataAccessors,
-        timeZoneCalculator: this.option('timeZoneCalculator'),
-        getResizableStep: this.option('getResizableStep'),
-        getResourceManager: this.option('getResourceManager'),
-      };
-
-      (this as any)._createComponent(
-        element,
-        this.isAgendaView ? AgendaAppointment : Appointment,
-        config,
-      );
-    }
+    (this as any)._createComponent(element, Appointment, config);
   }
 
   _applyResourceDataAttr($appointment) {
-    const { resources } = this.option('getResourceManager')();
+    const { resources } = this.getResourceManager();
     const rawAppointment = (this as any)._getItemData($appointment);
     const appointmentGroups = getAppointmentGroupValues(rawAppointment, resources);
 
@@ -644,24 +666,29 @@ class SchedulerAppointments extends CollectionWidget {
   _resizableConfig(appointmentData, itemSetting) {
     return {
       area: this._calculateResizableArea(itemSetting, appointmentData),
-      onResizeStart: function (e) {
-        this.resizeOccur = true;
-        this._$currentAppointment = $(e.element);
+      onResizeStart: (e) => {
+        const $appointment = $(e.element);
+
+        this._isResizing = true;
+        this._kbn.$focusedItem = $appointment;
 
         if (this.invoke('needRecalculateResizableArea')) {
-          const updatedArea = this._calculateResizableArea(this._$currentAppointment.data(APPOINTMENT_SETTINGS_KEY), this._$currentAppointment.data('dxItemData'));
+          const updatedArea = this._calculateResizableArea(
+            this.getAppointmentSettings($appointment),
+            $appointment.data('dxItemData'),
+          );
 
           e.component.option('area', updatedArea);
           e.component._renderDragOffsets(e.event);
         }
 
         this._initialSize = { width: e.width, height: e.height };
-        this._initialCoordinates = locate(this._$currentAppointment);
-      }.bind(this),
-      onResizeEnd: function (e) {
-        this.resizeOccur = false;
+        this._initialCoordinates = locate($appointment);
+      },
+      onResizeEnd: (e) => {
+        this._isResizing = false;
         this._resizeEndHandler(e);
-      }.bind(this),
+      },
     };
   }
 
@@ -714,8 +741,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     return getAppointmentDateRange({
       handles: e.handles,
-      appointmentSettings: $element.data(APPOINTMENT_SETTINGS_KEY),
-      isVerticalViewDirection: this.option('isVerticalViewDirection')(),
+      appointmentSettings: $element.data(APPOINTMENT_SETTINGS_KEY) as any,
       isVerticalGroupedWorkSpace: this.option('isVerticalGroupedWorkSpace')(),
       appointmentRect: getBoundingRect($element[0]),
       parentAppointmentRect: getBoundingRect($element.parent()[0]),
@@ -900,71 +926,64 @@ class SchedulerAppointments extends CollectionWidget {
     return result;
   }
 
-  _processVirtualAppointment(appointmentSetting, $appointment, appointmentData, color) {
-    const virtualAppointment = appointmentSetting.virtual;
-    const virtualGroupIndex = virtualAppointment.index;
-
-    if (!isDefined(this._virtualAppointments[virtualGroupIndex])) {
-      this._virtualAppointments[virtualGroupIndex] = {
-        coordinates: {
-          top: virtualAppointment.top,
-          left: virtualAppointment.left,
-        },
-        items: { data: [], colors: [], settings: [] },
-        isAllDay: !!virtualAppointment.isAllDay,
-        buttonColor: color,
-        sortedIndex: appointmentSetting.sortedIndex,
-      };
-    }
-
-    appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment);
-
-    this._virtualAppointments[virtualGroupIndex].items.settings.push(appointmentSetting);
-    this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
-    this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
-
-    $appointment.remove();
-  }
-
-  _renderContentImpl() {
-    super._renderContentImpl();
-    this._renderDropDownAppointments();
-  }
-
-  _renderDropDownAppointments() {
+  protected renderDropDownAppointments(): void {
     this._renderByFragments(($commonFragment, $allDayFragment) => {
-      each(this._virtualAppointments, (groupIndex) => {
-        const virtualGroup = this._virtualAppointments[groupIndex];
-        const virtualItems = virtualGroup.items;
-        const virtualCoordinates = virtualGroup.coordinates;
-        const $fragment = virtualGroup.isAllDay ? $allDayFragment : $commonFragment;
-        const { left } = virtualCoordinates;
-        const buttonWidth = this.invoke('getDropDownAppointmentWidth', virtualGroup.isAllDay);
-        const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-        const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
-
-        this.notifyObserver('renderCompactAppointments', {
-          $container: $fragment,
-          coordinates: {
-            top: virtualCoordinates.top,
-            left: left + rtlOffset,
-          },
-          items: virtualItems,
-          buttonColor: virtualGroup.buttonColor,
-          sortedIndex: virtualGroup.sortedIndex,
-          width: buttonWidth - this.option('_collectorOffset'),
-          height: buttonHeight,
-          onAppointmentClick: this.option('onItemClick'),
-          allowDrag: this.option('allowDrag'),
-          cellWidth: this.invoke('getCellWidth'),
-          isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
-        });
+      const items: AppointmentViewModelPlain[] = this.option('items') || [];
+      items.forEach((item) => {
+        if ('items' in item) {
+          const $fragment = item.allDay ? $allDayFragment : $commonFragment;
+          this.renderDropDownAppointment($fragment, item);
+        }
       });
     });
   }
 
-  _isGroupCompact(virtualGroup) {
-    return !virtualGroup.isAllDay && this.invoke('supportCompactDropDownAppointments');
+  protected renderDropDownAppointment(
+    $fragment: dxElementWrapper,
+    appointment: AppointmentCollectorViewModel,
+  ): dxElementWrapper {
+    const virtualItems = appointment.items;
+    const items: CompactAppointmentOptions['items'] = [];
+    virtualItems.forEach((item) => {
+      const appointmentConfig = {
+        itemData: item.itemData,
+        groupIndex: appointment.groupIndex,
+        groups: this.option('groups'),
+      };
+      const resourceManager = this.getResourceManager();
+
+      items.push({
+        appointment: item.itemData,
+        targetedAppointment: getTargetedAppointment(
+          item.itemData,
+          item,
+          this.dataAccessors,
+          this.option('timeZoneCalculator'),
+          resourceManager,
+        ),
+        color: resourceManager.getAppointmentColor(appointmentConfig),
+        settings: item,
+      });
+    });
+
+    const $item = this.invoke('renderCompactAppointments', {
+      $container: $fragment,
+      coordinates: {
+        top: appointment.top,
+        left: appointment.left,
+      },
+      items,
+      buttonColor: items[0].color,
+      sortedIndex: appointment.sortedIndex,
+      width: appointment.width,
+      height: appointment.height,
+      onAppointmentClick: this.option('onItemClick'),
+      allowDrag: this.option('allowDrag'),
+      isCompact: appointment.isCompact,
+    });
+    this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
+
+    return $item;
   }
 
   _sortAppointmentsByStartDate(appointments) {
@@ -992,7 +1011,7 @@ class SchedulerAppointments extends CollectionWidget {
 
       const timezoneCalculator = this.option('timeZoneCalculator');
 
-      const recurrentDates = getRecurrenceProcessor().generateDates({
+      const recurrentDates = generateDates({
         rule: recurrenceRule,
         exception: recurrenceException,
         start: startDate,
@@ -1082,10 +1101,12 @@ class SchedulerAppointments extends CollectionWidget {
     return obj;
   }
 
-  moveAppointmentBack(dragEvent) {
-    const $appointment = this._$currentAppointment;
+  moveAppointmentBack(dragEvent?) {
+    const $appointment = this._kbn.$focusedItem;
     const size = this._initialSize;
     const coords = this._initialCoordinates;
+
+    this._isResizing = false;
 
     if (dragEvent) {
       this._removeDragSourceClassFromDraggedAppointment();
@@ -1111,12 +1132,7 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   focus() {
-    if (this._$currentAppointment) {
-      const focusedElement = getPublicElement(this._$currentAppointment);
-
-      this.option('focusedElement', focusedElement);
-      (eventsEngine as any).trigger(focusedElement, 'focus');
-    }
+    this._kbn.focus();
   }
 
   splitAppointmentByDay(appointment) {

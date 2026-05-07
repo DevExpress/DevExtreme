@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import dxScheduler from "devextreme/ui/scheduler";
 import { wrapDxWithReact } from "../utils";
 import { assignees } from "./data";

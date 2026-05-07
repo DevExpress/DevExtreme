@@ -1,5 +1,4 @@
 import { getOuterHeight, getWidth, getHeight } from 'core/utils/size';
-import 'generic_light.css!';
 
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -8,8 +7,8 @@ import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceMan
 
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
-import VerticalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
-import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month';
+import VerticalAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_vertical';
+import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_horizontal_month';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
 import eventsEngine from 'common/core/events/core/events_engine';
 import dblclickEvent from 'common/core/events/dblclick';
@@ -21,7 +20,6 @@ import Resizable from 'ui/resizable';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider.js';
 import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
 
 QUnit.testStart(function() {
@@ -84,8 +82,8 @@ const createInstance = (options, subscribesConfig) => {
         subscribesConfig.cellHeight,
     );
 
-    const observer = {
-        fire: function(subject) {
+    const notifyScheduler = {
+        invoke: function(subject) {
             const callback = subscribes[subject];
             const args = Array.prototype.slice.call(arguments);
 
@@ -94,15 +92,16 @@ const createInstance = (options, subscribesConfig) => {
     };
 
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
-        observer,
+        notifyScheduler,
         ...options,
         timeZoneCalculator: createTimeZoneCalculator(),
         getLoadedResources: () => [],
         getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
         dataAccessors,
-        getAppointmentDataProvider: () => new AppointmentDataProvider({
-            getIsVirtualScrolling: () => false
+        getAppointmentDataSource: () => ({
+            getUpdatedAppointment: () => false,
+            getUpdatedAppointmentKeys: () => [],
         })
     }).dxSchedulerAppointments('instance');
 
@@ -158,7 +157,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             items: [
                 {
                     itemData: data,
-                    settings: [{}],
+                    sortedIndex: -1,
                 },
             ],
         }, testConfig);
@@ -177,7 +176,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             items: [
                 {
                     itemData: data,
-                    settings: [],
+                    sortedIndex: -1,
                 }
             ],
         }, testConfig);
@@ -193,14 +192,14 @@ QUnit.module('Appointments', moduleOptions, () => {
                         text: 'Appointment 1',
                         startDate: new Date()
                     },
-                    settings: [{}]
+                    sortedIndex: -1,
                 },
                 {
                     itemData: {
                         text: 'Appointment 2',
                         startDate: new Date()
                     },
-                    settings: [{}]
+                    sortedIndex: -1,
                 }
             ],
         }, testConfig);
@@ -218,7 +217,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(),
                         recurrenceRule: 'FREQ=YEARLY;COUNT=1'
                     },
-                    settings: [{}]
+                    sortedIndex: -1,
                 }
             ],
         }, testConfig);
@@ -236,11 +235,8 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(2015, 1, 9, 8),
                         endDate: new Date(2015, 1, 9, 9)
                     },
-                    settings: [
-                        {
-                            height: 40
-                        }
-                    ]
+                    sortedIndex: -1,
+                    height: 40,
                 }
             ],
         }, testConfig);
@@ -261,9 +257,8 @@ QUnit.module('Appointments', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 9)
                 },
-                settings: [{ height: 30 }],
-                needRepaint: true,
-                needRemove: false,
+                sortedIndex: -1,
+                height: 30,
             }
         ]);
 
@@ -282,13 +277,12 @@ QUnit.module('Appointments', moduleOptions, () => {
         const instance = createInstance({
             items: [
                 {
-                    itemData:
-                    {
+                    itemData: {
                         text: 'Appointment 1',
                         startDate: new Date(2015, 1, 9, 8),
                         endDate: new Date(2015, 1, 9, 9)
                     },
-                    settings: []
+                    sortedIndex: -1,
                 }
             ],
             allowResize: false,
@@ -299,28 +293,6 @@ QUnit.module('Appointments', moduleOptions, () => {
         assert.notOk($appointment.data('dxResizable'), 'Appointment is not dxResizable');
     });
 
-    QUnit.test('All-day appointment should not be resizable if current view is \'day\'', function(assert) {
-        const instance = createInstance({
-            items: [
-                {
-                    itemData:
-                    {
-                        text: 'Appointment 1',
-                        startDate: new Date(2015, 1, 9, 8),
-                        endDate: new Date(2015, 1, 9, 9),
-                        allDay: true
-                    },
-                    settings: []
-                }
-            ],
-            allowAllDayResize: false,
-        }, testConfig);
-
-        const $appointment = instance.$element().find('.dx-scheduler-appointment').first();
-
-        assert.notOk($appointment.hasClass('dx-resizable'), 'Appointment is not resizable');
-    });
-
     QUnit.test('moveAppointmentBack should affect on appointment only first time', async function(assert) {
         const item = {
             itemData: {
@@ -328,10 +300,9 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            settings: [{
-                height: 40,
-                width: 40
-            }]
+            sortedIndex: -1,
+            height: 40,
+            width: 40,
         };
 
         const instance = createInstance({
@@ -366,13 +337,11 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            settings: [{
-                sortedIndex: 0,
-                height: 40,
-                width: 40,
-                left: 0,
-                top: 100
-            }]
+            sortedIndex: 0,
+            height: 40,
+            width: 40,
+            left: 0,
+            top: 100,
         };
 
         const instance = createInstance({
@@ -400,13 +369,11 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            settings: [{
-                sortedIndex: 0,
-                height: 40,
-                width: 40,
-                left: 0,
-                top: 100
-            }]
+            sortedIndex: 0,
+            height: 40,
+            width: 40,
+            left: 0,
+            top: 100,
         };
 
         const instance = createInstance({
@@ -436,9 +403,8 @@ QUnit.module('Appointments', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 9),
                 allDay: true
             },
-            settings: [{ allDay: true }],
-            needRepaint: true,
-            needRemove: false,
+            sortedIndex: -1,
+            allDay: true,
         };
 
         const instance = createInstance({}, testConfig);
@@ -459,22 +425,18 @@ QUnit.module('Appointments', moduleOptions, () => {
     });
 
     QUnit.test('Appointment should be rendered a many times if coordinates array contains a few items', async function(assert) {
-        const item = {
-            itemData: {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 1, 9, 8),
-                endDate: new Date(2015, 1, 9, 10)
-            },
-            settings: [
-                { top: 0, left: 0, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
-                { top: 10, left: 10, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
-                { top: 20, left: 20, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 }
-            ]
+        const itemData = {
+            text: 'Appointment 1',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 10)
         };
+        const items = [
+            { itemData, top: 0, left: 0, height: 10, sortedIndex: 0, width: 10, maxLevel: 1, level: 0 },
+            { itemData, top: 10, left: 10, height: 10, sortedIndex: 1, width: 10, maxLevel: 1, level: 0 },
+            { itemData, top: 20, left: 20, height: 10, sortedIndex: 2, width: 10, maxLevel: 1, level: 0 },
+        ];
 
-        const instance = createInstance({
-            items: [item],
-        }, {
+        const instance = createInstance({ items }, {
             ...testConfig,
             coordinates: [{ top: 0, left: 0 }, { top: 10, left: 10 }, { top: 20, left: 20 }],
         });
@@ -485,36 +447,7 @@ QUnit.module('Appointments', moduleOptions, () => {
         assert.deepEqual(translator.locate($appointment.eq(0)), { top: 0, left: 0 }, 'appointment is rendered in right place');
         assert.deepEqual(translator.locate($appointment.eq(1)), { top: 10, left: 10 }, 'appointment is rendered in right place');
         assert.deepEqual(translator.locate($appointment.eq(2)), { top: 20, left: 20 }, 'appointment is rendered in right place');
-        assert.deepEqual(instance.option('items'), [item], 'items are not affected');
-    });
-
-    QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', async function(assert) {
-        const strategy = new HorizontalMonthAppointmentsStrategy({
-            instance: {
-                notifyObserver: commonUtils.noop,
-                option: commonUtils.noop,
-                fire: commonUtils.noop,
-            },
-            getResizableStep: () => 0
-        });
-        const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
-
-        assert.strictEqual(deltaTime, 0, 'Delta time is 0');
-    });
-
-    QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', async function(assert) {
-        const strategy = new VerticalAppointmentsStrategy({
-            appointmentDataProvider: {
-                appointmentTakesAllDay: commonUtils.noop,
-            },
-            dataAccessors: mockDataAccessor,
-            allDayPanelMode: 'all',
-            cellDurationInMinutes: 30,
-            cellHeight: 50
-        });
-        const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
-
-        assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');
+        assert.deepEqual(instance.option('items'), items, 'items are not affected');
     });
 
     QUnit.test('Scheduler appointment should have aria-role \'button\'', function(assert) {
@@ -524,7 +457,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            settings: [{}]
+            sortedIndex: -1,
         };
 
         const instance = createInstance({
@@ -614,7 +547,7 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            settings: [{}]
+            sortedIndex: -1,
         };
 
         const instance = createInstance({
@@ -641,14 +574,14 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 2, 9, 10),
                 endDate: new Date(2015, 2, 9, 10)
             },
-            settings: [{}]
+            sortedIndex: -1,
         }, {
             itemData: {
                 text: 'Appointment 2',
                 startDate: new Date(2015, 2, 10, 8),
                 endDate: new Date(2015, 2, 10, 9)
             },
-            settings: [{}]
+            sortedIndex: -1,
         }];
 
         createInstance({
@@ -676,7 +609,7 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            settings: [{}]
+            sortedIndex: -1,
         };
 
         const instance = createInstance({
@@ -703,7 +636,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            settings: [{ sortedIndex: 0 }]
+            sortedIndex: 0,
         };
 
         const instance = createInstance({
@@ -733,7 +666,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{}]
+                sortedIndex: -1,
             },
             {
                 itemData: {
@@ -741,7 +674,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 9),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{}]
+                sortedIndex: -1,
             }
         ];
 
@@ -768,9 +701,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 0
-                }]
+                sortedIndex: 0,
             },
             {
                 itemData: {
@@ -778,9 +709,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 9),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 1
-                }]
+                sortedIndex: 1,
             }
         ];
 
@@ -813,9 +742,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 0
-                }]
+                sortedIndex: 0,
             },
             {
                 itemData: {
@@ -823,9 +750,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 9),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 1
-                }]
+                sortedIndex: 1,
             }
         ];
 
@@ -864,9 +789,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 0
-                }]
+                sortedIndex: 0
             },
             {
                 itemData: {
@@ -874,9 +797,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 9),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 1
-                }]
+                sortedIndex: 1
             }
         ];
 
@@ -907,9 +828,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 10, 3, 9),
                     endDate: new Date(2015, 10, 3, 11)
                 },
-                settings: [{
-                    sortedIndex: 0
-                }]
+                sortedIndex: -1
             }
         ];
 
@@ -947,9 +866,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 0
-                }]
+                sortedIndex: 0
             },
             {
                 itemData: {
@@ -957,9 +874,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 9),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                settings: [{
-                    sortedIndex: 1
-                }]
+                sortedIndex: 1
             }
         ];
 
@@ -990,9 +905,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 9, 16, 9),
                     endDate: new Date(2015, 9, 16, 11)
                 },
-                settings: [{
-                    sortedIndex: 0
-                }]
+                sortedIndex: 0
             },
             {
                 itemData: {
@@ -1000,9 +913,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 9, 17, 8),
                     endDate: new Date(2015, 9, 17, 10)
                 },
-                settings: [{
-                    sortedIndex: 1
-                }]
+                sortedIndex: 1
             }
         ];
 

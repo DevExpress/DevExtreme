@@ -1,12 +1,14 @@
 /* global currentTest */
 
-const vizMocks = require('../../helpers/vizMocks.js');
-const linearIndicatorsModule = require('viz/gauges/linear_indicators');
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import {
+    Renderer
+} from '../../helpers/vizMocks.js';
+import * as linearIndicatorsModule from '__internal/viz/gauges/linear_indicators';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('LinearRangeBar', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },

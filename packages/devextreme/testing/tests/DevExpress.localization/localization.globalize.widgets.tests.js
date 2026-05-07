@@ -28,7 +28,7 @@ const dateLocalization = require('common/core/localization/date');
 require('ui/date_box');
 require('viz/chart');
 
-const ExcelExport = require('exporter/exceljs/export_format');
+const ExcelExport = require('__internal/exporter/exceljs/export_format');
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const DATEVIEW_ITEM_SELECTOR = '.dx-dateview-item';
@@ -42,7 +42,7 @@ const CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
 const commonEnvironment = {
     beforeEach: function() {
         const markup =
-                `<div id="dateBox"></div>
+            `<div id="dateBox"></div>
                 <div id="numberBox"></div>
                 <div id="dateBoxWithPicker"></div>
                 <div id="widthRootStyle"></div>

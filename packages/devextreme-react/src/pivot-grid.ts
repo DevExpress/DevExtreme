@@ -43,7 +43,7 @@ const PivotGrid = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onCellClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDisposing","onExporting","onInitialized"]), []);
 

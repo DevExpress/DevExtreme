@@ -1,4 +1,5 @@
 import fx from 'common/core/animation/fx';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
@@ -27,10 +28,10 @@ import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
 import { getCells, generateItems, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import { shouldSkipOnMobile, shouldSkipOnDesktop } from '../../helpers/device.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -68,6 +69,8 @@ $('body').addClass('dx-viewport');
 
 QUnit.module('Editing', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -127,6 +130,7 @@ QUnit.module('Editing', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -1108,10 +1112,6 @@ QUnit.module('Editing', {
 
     // T124946
     QUnit.test('Api method editCell with button', function(assert) {
-        if(shouldSkipOnMobile(assert, 'The problem is fixed for desktop only')) {
-            return;
-        }
-
         const that = this;
         const rowsView = this.rowsView;
         const testElement = $('#container');
@@ -1686,52 +1686,6 @@ QUnit.module('Editing', {
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
     });
 
-    // T749034
-    QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
-        if(shouldSkipOnDesktop(assert)) {
-            return;
-        }
-
-        // arrange
-        const that = this;
-        const rowsView = this.rowsView;
-        let updateArgs;
-        const testElement = $('#container');
-
-        $.extend(that.options.editing, {
-            allowUpdating: true,
-            mode: 'cell',
-            texts: {
-                editRow: 'Edit'
-            }
-        });
-
-        that.dataControllerOptions.store = {
-            key: function() { },
-            update: function(key, values) {
-                updateArgs = [key, values];
-                return $.Deferred().resolve(key, values);
-            }
-        };
-
-        rowsView.render(testElement);
-        testElement.find('td').first().trigger('dxclick'); // Edit
-        this.clock.tick(10);
-
-        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
-
-        // act
-        testElement.find('input').first().val('Test update cell');
-        $(document).trigger('dxpointerdown');
-        testElement.find('input').first().trigger('change');
-        $(document).trigger('dxclick');
-        this.clock.tick(10);
-
-        // assert
-        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
-        assert.deepEqual(updateArgs, ['test1', { 'name': 'Test update cell' }]);
-    });
-
     // T113152
     QUnit.test('Not close Editing Cell in batch mode on click editor popup', function(assert) {
         // arrange
@@ -1767,9 +1721,6 @@ QUnit.module('Editing', {
 
     // T727856
     QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up in another cell', function(assert) {
-        if(shouldSkipOnMobile(assert, 'focus is not actual for mobile devices')) {
-            return;
-        }
         // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -2890,6 +2841,8 @@ QUnit.module('Editing', {
 
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -2953,6 +2906,7 @@ QUnit.module('Editing with real dataController', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -7541,10 +7495,6 @@ QUnit.module('Editing with real dataController', {
 
     // T319885
     QUnit.testInActiveWindow('Focused lookup column with showEditorAlways is enabled', function(assert) {
-        if(shouldSkipOnMobile(assert, 'focus is not actual for mobile devices')) {
-            return;
-        }
-
         // arrange
         const that = this;
         let callCountFocusEditingCell = 0;
@@ -8247,10 +8197,8 @@ QUnit.module('Editing with real dataController', {
     });
 
     // T729713
-    QUnit.skip('Cell mode - The editCellTemplate of the column should not be called when editing another column', function(assert) {
+    QUnit.test('Cell mode - The editCellTemplate of the column should not be called when editing another column', function(assert) {
         // arrange
-        const that = this;
-        const rowsView = that.rowsView;
         const $testElement = $('#container');
         const editCellTemplate = sinon.spy(function(_, options) {
             return $('<div>').dxTextBox({
@@ -8261,31 +8209,34 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        $.extend(that.options.editing, {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
         });
 
-        rowsView.render($testElement);
-        that.columnOption('name', 'editCellTemplate', editCellTemplate);
+        this.rowsView.render($testElement);
+        this.columnOption('name', 'editCellTemplate', editCellTemplate);
 
         // act
-        $(rowsView.getCellElement(0, 0)).trigger('dxclick');
-        that.clock.tick(10);
-
-        const $inputElement = getInputElements($(rowsView.getCellElement(0, 0))).first();
-        $inputElement.val('test');
+        pointerMock($(this.rowsView.getCellElement(0, 0))).click();
 
         // assert
-        assert.strictEqual(editCellTemplate.callCount, 1);
+        assert.strictEqual(editCellTemplate.callCount, 1, 'editCellTemplate is called on cell click');
 
         // act
-        eventsEngine.trigger($inputElement[0], 'change');
-        $(rowsView.getCellElement(0, 1)).trigger('dxclick');
-        that.clock.tick(10);
+        const $inputElement = getInputElements($(this.rowsView.getCellElement(0, 0))).first();
+        keyboardMock($inputElement).type('test').change();
+        this.clock.tick(10);
+        pointerMock($('body')).click();
 
         // assert
-        assert.strictEqual(editCellTemplate.callCount, 1);
+        assert.strictEqual(editCellTemplate.callCount, 2, 'editCellTemplate is called on cell outside click after change');
+
+        // act
+        pointerMock($(this.rowsView.getCellElement(0, 1))).click();
+
+        // assert
+        assert.strictEqual(editCellTemplate.callCount, 2, 'editCellTemplate is not called on cell in another column click');
     });
 
     // T725319
@@ -8969,6 +8920,9 @@ QUnit.module('Editing with real dataController', {
 
     QUnit.module('Editing state', {
         beforeEach: function() {
+            this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+            gridCoreUtils.isElementInCurrentGrid = () => true;
+
             this.options.dataSource = this.options.dataSource.store;
             this.options.keyExpr = 'room';
             this.dataController.init();
@@ -8993,6 +8947,9 @@ QUnit.module('Editing with real dataController', {
                     assert.notOk($editRow.hasClass('dx-datagrid-edit-form'), 'edit form was not shown');
                 }
             };
+        },
+        afterEach: function() {
+            gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         }
     }, () => {
         QUnit.test('editRow should change editRowKey', function(assert) {
@@ -9517,7 +9474,6 @@ QUnit.module('Editing with real dataController', {
             rowsView.render($testElement);
             this.option('onRowRemoving', (e) => {
                 changesInOnRowRemoving = this.option('editing.changes');
-
             });
 
             // act
@@ -9536,8 +9492,7 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        // TODO
-        QUnit.skip('Changes - update row (custom store)', function(assert) {
+        QUnit.test('Changes - update row (custom store)', function(assert) {
             // arrange
             const that = this;
             let countCallOnRowUpdated = 0;
@@ -9887,9 +9842,15 @@ QUnit.module('Editing with real dataController', {
 
     QUnit.module('Save/cancel events', {
         beforeEach: function() {
+            this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+            gridCoreUtils.isElementInCurrentGrid = () => true;
+
             this.options.dataSource = this.options.dataSource.store;
             this.options.keyExpr = 'room';
             this.dataController.init();
+        },
+        afterEach: function() {
+            gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         }
     }, () => {
         QUnit.test('onSaving/onSaved events should be fired after saveEditData call', function(assert) {
@@ -10400,6 +10361,9 @@ QUnit.module('Editing with real dataController', {
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -10455,6 +10419,7 @@ QUnit.module('Refresh modes', {
         };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -10891,6 +10856,9 @@ QUnit.module('Refresh modes', {
 
 QUnit.module('Editing with validation', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -10952,6 +10920,7 @@ QUnit.module('Editing with validation', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -13302,9 +13271,6 @@ QUnit.module('Editing with validation', {
 
     // T497279
     QUnit.testInActiveWindow('Insert row using extern button when edit mode cell', function(assert) {
-        if(shouldSkipOnMobile(assert, 'focus is not actual for mobile devices')) {
-            return;
-        }
         // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -16258,6 +16224,9 @@ QUnit.module('Editing with validation', {
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -16324,6 +16293,7 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
 
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -16580,6 +16550,9 @@ const generateDataSource = function(countItem, countColumn) {
 
 QUnit.module('Editing with scrolling', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -16608,6 +16581,7 @@ QUnit.module('Editing with scrolling', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.clock.restore();
         this.dispose();
     }
@@ -16715,56 +16689,6 @@ QUnit.module('Editing with scrolling', {
         const items = this.dataController.items();
         // assert.equal(this.dataController.pageIndex(), 1, "page index");
         assert.equal(items.length, 9, 'count items');
-        assert.ok(items[0].isNewRow, 'insert item');
-    });
-
-    // T258714
-    QUnit.skip('Change position of the inserted row when virtual scrolling', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        let items;
-
-        this.options.scrolling = {
-            mode: 'virtual',
-            useNative: false
-        };
-
-        this.options.dataSource = generateDataSource(100, 2);
-
-        this.setupDataGrid();
-        this.rowsView.render(testElement);
-        this.rowsView.height(130);
-        this.rowsView.resize();
-
-        // assert
-        assert.equal(this.dataController.pageIndex(), 0, 'page index');
-
-        // arrange
-        this.rowsView.scrollTo({ y: 3500 });
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(this.dataController.pageIndex(), 24, 'page index');
-        assert.equal(items.length, 8, 'count items');
-
-        // act
-        this.addRow();
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(items.length, 9, 'count items');
-        assert.ok(items[4].isNewRow, 'insert item');
-
-        // act
-        this.rowsView.scrollTo({ y: 0 });
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(this.dataController.pageIndex(), 0, 'page index');
-        assert.equal(items.length, 5, 'count items');
         assert.ok(items[0].isNewRow, 'insert item');
     });
 
@@ -17473,6 +17397,9 @@ QUnit.module('Editing with scrolling', {
 
 QUnit.module('Edit Form', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -17540,6 +17467,7 @@ QUnit.module('Edit Form', {
         // };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -19029,6 +18957,9 @@ QUnit.module('Edit Form', {
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -19092,6 +19023,7 @@ QUnit.module('Editing - "popup" mode', {
         };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -19990,6 +19922,9 @@ QUnit.module('Editing - "popup" mode', {
 
 QUnit.module('Promises in callbacks and events', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -20058,6 +19993,7 @@ QUnit.module('Promises in callbacks and events', {
         };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }

@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     const markup =
-    '<!--qunit-fixture-->\
+        '<!--qunit-fixture-->\
         <div id="container">\
             <div id="treeList">\
             </div>\
@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'generic_light.css!';
 import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';

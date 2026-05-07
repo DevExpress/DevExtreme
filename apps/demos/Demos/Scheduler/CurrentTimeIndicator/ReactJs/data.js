@@ -47,7 +47,7 @@ export const moviesData = [
   {
     id: 3,
     text: 'A Star Is Born',
-    image: '../../../../images/movies/AStartIsBorn.jpg',
+    image: '../../../../images/movies/AStarIsBorn.jpg',
   },
   {
     id: 4,

@@ -1,4 +1,7 @@
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockSeries } from '../../helpers/chartMocks.js';
@@ -45,13 +48,11 @@ QUnit.module('Point coordinates translation. Financial', {
                         'stroke-width': 2
                     }
                 }
-
             },
             label: {
                 visible: false
             }
         };
-
     },
     translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550 },
     translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555 },
@@ -219,7 +220,6 @@ QUnit.module('Point coordinates correction. Candlestick', {
                             'stroke-width': 2
                         }
                     }
-
                 },
                 type: 'candlestick',
                 label: { visible: false }
@@ -324,7 +324,6 @@ QUnit.module('Point coordinates correction. Stock', {
                             'stroke-width': 2
                         }
                     }
-
                 },
                 type: 'stock',
                 label: { visible: false }
@@ -462,13 +461,13 @@ QUnit.test('Negative. LowValue', function(assert) {
     assert.strictEqual(result, false);
 });
 
-QUnit.module('Check point in visible area', {
+QUnit.module('Check point in visible area (T1304112)', {
     beforeEach: function() {
         const that = this;
 
         const visibleArea = [0, 100, 1000, 1100];
         const translateXData = { 1: -10, 2: visibleArea[0], 3: 50, 4: visibleArea[1], 5: 110 };
-        const translateYData = { 1: 990, 2: visibleArea[2], 3: 1010, 4: 1040, 5: 1050, 6: 1090, 7: visibleArea[3], 8: 1110 };
+        const translateYData = { 0: 980, 1: 990, 2: visibleArea[2], 3: 1010, 4: 1040, 5: 1050, 6: 1090, 7: visibleArea[3], 8: 1110, 9: 1120 };
 
         this.options = {
             widgetType: 'chart',
@@ -535,38 +534,46 @@ QUnit.test('Point is visible on the right border', function(assert) {
 });
 
 QUnit.test('Point is invisible on the top', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 7, closeValue: 8, highValue: 8, lowValue: 7 }, this.options);
+    this.point = createPoint(this.series, { argument: 3, openValue: 8, closeValue: 9, highValue: 9, lowValue: 8 }, this.options);
     this.point.translate();
 
-    assert.ok(!this.point.isInVisibleArea());
+    assert.strictEqual(this.point.isInVisibleArea(), false);
 });
 
 QUnit.test('Point is visible on the top border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
-    this.point.translate();
+    const point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
+    const point2 = createPoint(this.series, { argument: 3, openValue: 7, closeValue: 8, highValue: 8, lowValue: 7 }, this.options);
 
-    assert.ok(this.point.isInVisibleArea());
+    point.translate();
+    point2.translate();
+
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if lowValue is inside visible area');
 });
 
 QUnit.test('Point is invisible on the bottom', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 2, highValue: 2, lowValue: 1 }, this.options);
+    this.point = createPoint(this.series, { argument: 3, openValue: 0, closeValue: 1, highValue: 1, lowValue: 0 }, this.options);
     this.point.translate();
 
     assert.ok(!this.point.isInVisibleArea());
 });
 
 QUnit.test('Point is visible on the bottom border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
-    this.point.translate();
+    const point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
+    const point2 = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 2, highValue: 2, lowValue: 1 }, this.options);
 
-    assert.ok(this.point.isInVisibleArea());
+    point.translate();
+    point2.translate();
+
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if highValue is inside visible area');
 });
 
-QUnit.module('Check point in visible area. Rotated.', {
+QUnit.module('Check point in visible area (T1304112). Rotated.', {
     beforeEach: function() {
         const that = this;
         const visibleArea = [0, 100, 0, 100];
-        const translateXData = { 1: -10, 2: visibleArea[0], 3: 10, 4: 40, 5: 50, 6: 90, 7: visibleArea[1], 8: 110 };
+        const translateXData = { 0: -20, 1: -10, 2: visibleArea[0], 3: 10, 4: 40, 5: 50, 6: 90, 7: visibleArea[1], 8: 110, 9: 120 };
         const translateYData = { 1: -10, 2: visibleArea[2], 3: 50, 4: visibleArea[3], 5: 110 };
 
         this.options = {
@@ -635,37 +642,45 @@ QUnit.test('Point is visible on the right border', function(assert) {
 });
 
 QUnit.test('Point is invisible on the top', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 7, closeValue: 8, highValue: 8, lowValue: 7 }, this.options);
+    this.point = createPoint(this.series, { argument: 3, openValue: 8, closeValue: 9, highValue: 9, lowValue: 8 }, this.options);
     this.point.translate();
 
-    assert.ok(!this.point.isInVisibleArea());
+    assert.strictEqual(this.point.isInVisibleArea(), false);
 });
 
 QUnit.test('Point is visible on the top border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
-    this.point.translate();
+    const point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
+    const point2 = createPoint(this.series, { argument: 3, openValue: 7, closeValue: 8, highValue: 8, lowValue: 7 }, this.options);
 
-    assert.ok(this.point.isInVisibleArea());
+    point.translate();
+    point2.translate();
+
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if lowValue is inside visible area');
 });
 
 QUnit.test('Point is invisible on the bottom', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 2, highValue: 2, lowValue: 1 }, this.options);
+    this.point = createPoint(this.series, { argument: 3, openValue: 0, closeValue: 1, highValue: 1, lowValue: 0 }, this.options);
     this.point.translate();
 
     assert.ok(!this.point.isInVisibleArea());
 });
 
 QUnit.test('Point is visible on the bottom border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
-    this.point.translate();
+    const point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
+    const point2 = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 2, highValue: 2, lowValue: 1 }, this.options);
 
-    assert.ok(this.point.isInVisibleArea());
+    point.translate();
+    point2.translate();
+
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if highValue is inside visible area');
 });
 
 QUnit.module('Draw point. Candlestick', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = { x: 40, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
@@ -1070,7 +1085,7 @@ QUnit.test('Marker without state', function(assert) {
 QUnit.module('Draw point. Stock', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
         this.group.reductionMarkersGroup = this.renderer.g();
@@ -1333,7 +1348,7 @@ QUnit.module('Tooltip', {
                 failOnWrongData: true
             })
         };
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
         this.group.reductionMarkersGroup = this.renderer.g();
@@ -1372,7 +1387,7 @@ QUnit.module('Tooltip', {
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
             getVisibleArea: function() { return { minX: 10, maxX: 600, minY: 5, maxY: 810 }; }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }
@@ -1669,7 +1684,7 @@ QUnit.module('Styles', {
             getArgumentAxis: function() { return { getTranslator: function() { return new MockTranslator({ translate: {} }); } }; },
             getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 100 }; }
         };
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = {
             defaultMarkersGroup: this.renderer.g(),
             reductionMarkersGroup: this.renderer.g(),
@@ -1752,7 +1767,7 @@ QUnit.module('Draw label', {
             label.getBoundingRect.returns({ height: 10, width: 20 });
             return label;
         });
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
@@ -2065,7 +2080,7 @@ QUnit.test('Draw label, rotated (point.high > maxX area of series)', function(as
 
 QUnit.module('get point radius', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.options = {
             widgetType: 'chart',

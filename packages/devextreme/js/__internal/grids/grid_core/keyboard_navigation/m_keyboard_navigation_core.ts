@@ -1,11 +1,19 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { keyboard } from '@js/common/core/events/short';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { Deferred } from '@js/core/utils/deferred';
+import { getBoundingRect } from '@js/core/utils/position';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
+import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
+import type { DeferredObj } from '../../../../core/utils/deferred';
 import modules from '../m_modules';
-import type { Controllers, OptionChanged } from '../m_types';
+import type { Controllers, OptionChanged, Views } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import { Direction } from './const';
-import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard_navigation_utils';
+import type { NavigationDirection } from './types';
+import { isElementDefined, isFixedColumnIndexOffsetRequired } from './utils';
 
 export class KeyboardNavigationController extends modules.ViewController {
   private keyDownListener: any;
@@ -21,6 +29,8 @@ export class KeyboardNavigationController extends modules.ViewController {
   protected _columnsController!: Controllers['columns'];
 
   protected _resizeController!: Controllers['resizing'];
+
+  protected _rowsView!: Views['rowsView'];
 
   public _focusedCellPosition: any;
 
@@ -50,6 +60,76 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  private unsubscribeFromFocusinEvent(): void {
+    const $focusedView = this.getFocusedViewElement();
+
+    if ($focusedView) {
+      eventsEngine.off($focusedView, 'focusin', this.focusinHandlerContext);
+    }
+  }
+
+  private subscribeToFocusinEvent(): void {
+    const $focusedView = this.getFocusedViewElement();
+    const focusinSelector = this.getFocusinSelector();
+
+    if ($focusedView) {
+      eventsEngine.on($focusedView, 'focusin', focusinSelector, this.focusinHandlerContext);
+    }
+  }
+
+  private getScrollPadding(
+    $container: dxElementWrapper,
+  ): {
+    left: number;
+    right: number;
+  } {
+    const containerRect = getBoundingRect($container.get(0));
+    const containerBoundingRect = this.getContainerBoundingRect($container);
+
+    return {
+      left: containerBoundingRect.left - containerRect.left,
+      right: containerRect.right - containerBoundingRect.right,
+    };
+  }
+
+  private getVirtualCellWidth(): number {
+    const visibleColumns = this._columnsController.getVisibleColumns(undefined, true);
+    const widths = gridCoreUtils.getColumnWidths(visibleColumns);
+    const focusedColumnIndex = this._focusedCellPosition?.columnIndex ?? 0;
+
+    return widths[focusedColumnIndex] ?? 0;
+  }
+
+  private getNextCellLocation(
+    $cell: dxElementWrapper | null,
+    direction?: NavigationDirection,
+  ): number {
+    const scrollable = this.getScrollable();
+    const isVirtualColumnRender = this._isVirtualColumnRender();
+
+    if (!scrollable || ($cell === null && !isVirtualColumnRender)) {
+      return 0;
+    }
+
+    if ($cell === null) {
+      const isLeftDirection = direction === 'previous' || direction === 'previousInRow';
+      const multiplier = isLeftDirection !== this.option('rtlEnabled') ? -1 : 1;
+
+      return scrollable.scrollLeft() + multiplier * this.getVirtualCellWidth();
+    }
+
+    const scrollPadding = this.getScrollPadding($(scrollable.container()));
+
+    return getElementLocationInternal(
+      $cell[0],
+      'horizontal',
+      $(this.getFocusedView()?.getContent())[0],
+      scrollable.scrollOffset(),
+      scrollPadding,
+      this.addWidgetPrefix('table'),
+    );
+  }
+
   protected resizeCompleted() {}
 
   protected getColumnIndexOffset(visibleIndex) {
@@ -75,23 +155,6 @@ export class KeyboardNavigationController extends modules.ViewController {
   protected initKeyDownHandler(): void {
     this.unsubscribeFromKeyDownEvent();
     this.subscribeToKeyDownEvent();
-  }
-
-  private unsubscribeFromFocusinEvent(): void {
-    const $focusedView = this.getFocusedViewElement();
-
-    if ($focusedView) {
-      eventsEngine.off($focusedView, 'focusin', this.focusinHandlerContext);
-    }
-  }
-
-  private subscribeToFocusinEvent(): void {
-    const $focusedView = this.getFocusedViewElement();
-    const focusinSelector = this.getFocusinSelector();
-
-    if ($focusedView) {
-      eventsEngine.on($focusedView, 'focusin', focusinSelector, this.focusinHandlerContext);
-    }
   }
 
   protected getFocusinSelector(): string {
@@ -229,9 +292,69 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.subscribeToFocusinEvent();
   }
 
+  protected getScrollable(): Scrollable {
+    return this._rowsView.getScrollable() as Scrollable;
+  }
+
+  protected scrollLeft(scrollLeft: number): DeferredObj<void> {
+    const scrollable = this.getScrollable();
+
+    if (!scrollable || scrollable.scrollLeft() === scrollLeft) {
+      // @ts-expect-error
+      return Deferred().resolve().promise();
+    }
+
+    const d = Deferred();
+    const scrollHandler = (): void => {
+      scrollable.off('scroll', scrollHandler);
+
+      const normalizeScrollLeft = this._rowsView.normalizeScrollLeft(scrollLeft);
+
+      if (this._columnsController?.isNeedToRenderVirtualColumns(normalizeScrollLeft)) {
+        const renderCompletedHandler = (): void => {
+          this._rowsView.renderCompleted.remove(renderCompletedHandler);
+          d.resolve();
+        };
+
+        this._rowsView.renderCompleted.add(renderCompletedHandler);
+      } else {
+        d.resolve();
+      }
+    };
+
+    scrollable.on('scroll', scrollHandler);
+    scrollable.scrollTo({ left: scrollLeft });
+
+    // @ts-expect-error
+    return d.promise();
+  }
+
+  protected scrollToNextCell(
+    $nextCell: dxElementWrapper | null,
+    direction?: NavigationDirection,
+  ): DeferredObj<void> {
+    const scrollLeft = this.getNextCellLocation($nextCell, direction);
+
+    return this.scrollLeft(scrollLeft);
+  }
+
+  protected _isVirtualColumnRender(): boolean {
+    return this.option('scrolling.columnRenderingMode') === 'virtual';
+  }
+
+  protected getContainerBoundingRect($container: dxElementWrapper) {
+    const containerRect = getBoundingRect($container.get(0));
+
+    return {
+      left: containerRect.left,
+      right: containerRect.right,
+    };
+  }
+
   public init() {
     this._columnsController = this.getController('columns');
     this._resizeController = this.getController('resizing');
+    this._rowsView = this.getView('rowsView');
     this._focusedCellPosition = {};
 
     if (this.isKeyboardEnabled()) {

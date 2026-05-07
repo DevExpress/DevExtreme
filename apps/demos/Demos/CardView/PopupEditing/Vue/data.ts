@@ -18,7 +18,7 @@ export interface Employee {
   departmentID: number;
   department: string;
   status: string;
-  notes: string;
+  notes: string | null;
   pictureName: string;
   picture: string;
 }
@@ -501,7 +501,7 @@ export const employees: Employee[] = [{
   "status": "Salaried",
   "notes": "Amelia (like Taylor) is a member of our hard-working network admin team. She loves to help so don’t hesistate to ask her for assistance.\r\n\r\nIn her spare time, Amelia coaches young tennis players at the park.",
   "pictureName": "Amelia Harper.jpg",
-  "picture": "../../../../images/employees/new/new/Amelia Harper.jpg"
+  "picture": "../../../../images/employees/new/Amelia Harper.jpg"
 },
 {
   "id": 23,

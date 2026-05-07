@@ -9,17 +9,17 @@ import dxTreeList, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, TreeListPredefinedColumnButton, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
+import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, TreeListPredefinedColumnButton, ColumnButtonClickEvent, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
 import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, HeaderFilterSearchConfig, HeaderFilterTexts, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, PositionAlignment, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from "devextreme/common";
-import type { event } from "devextreme/events/events.types";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
+import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
@@ -114,7 +114,7 @@ const TreeList = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","editing.popup.height","editing.popup.position","editing.popup.visible","editing.popup.width","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onNodesInitialized","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
@@ -205,7 +205,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any);
 }>
 const _componentAsyncRule = (props: IAsyncRuleProps) => {
   return React.createElement(NestedOption<IAsyncRuleProps>, {
@@ -270,7 +270,7 @@ type IButtonProps = React.PropsWithChildren<{
   hint?: string;
   icon?: string;
   name?: string | TreeListPredefinedColumnButton;
-  onClick?: ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void);
+  onClick?: ((e: ColumnButtonClickEvent) => void);
   template?: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, key: any, row: dxTreeListRowObject, rowIndex: number, rowType: string }) => string | any) | template;
   text?: string;
   visible?: boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean);
@@ -796,7 +796,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
 }>
 const _componentCustomRule = (props: ICustomRuleProps) => {
   return React.createElement(NestedOption<ICustomRuleProps>, {
@@ -1007,7 +1007,6 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   allowHierarchicalFields?: boolean;
-  bindingOptions?: Record<string, any>;
   customOperations?: Array<dxFilterBuilderCustomOperation>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
@@ -1084,7 +1083,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -1305,7 +1303,6 @@ type IFormProps = React.PropsWithChildren<{
   activeStateEnabled?: boolean;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
-  bindingOptions?: Record<string, any>;
   colCount?: Mode | number;
   colCountByScreen?: Record<string, any> | {
     lg?: number | undefined;
@@ -1829,7 +1826,7 @@ type IPagerProps = React.PropsWithChildren<{
   label?: string;
   showInfo?: boolean;
   showNavigationButtons?: boolean;
-  showPageSizeSelector?: boolean;
+  showPageSizeSelector?: boolean | Mode;
   visible?: boolean | Mode;
 }>
 const _componentPager = (props: IPagerProps) => {
@@ -1907,7 +1904,6 @@ type IPopupProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -2621,7 +2617,7 @@ type IValidationRuleProps = React.PropsWithChildren<{
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;

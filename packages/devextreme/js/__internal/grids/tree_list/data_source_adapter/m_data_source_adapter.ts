@@ -43,7 +43,7 @@ const applySorting = (data: any[], sort: any): any => queryByOptions(
   },
 ).toArray();
 
-class DataSourceAdapterTreeList extends DataSourceAdapter {
+export class DataSourceAdapterTreeList extends DataSourceAdapter {
   private _indexByKey: any;
 
   private _keyGetter: any;
@@ -377,7 +377,21 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     };
   }
 
+  private _isOperationIdOutdated(operationId) {
+    return operationId !== undefined
+      && this._lastOperationId !== undefined
+      && operationId !== this._lastOperationId;
+  }
+
   private _loadParentsOrChildren(data, options, needChildren?) {
+    if (this._isOperationIdOutdated(options.operationId)) {
+      this._dataSource.cancel(options.operationId);
+      // @ts-expect-error
+      const rejectedDeferred = new Deferred();
+      rejectedDeferred.reject();
+      return rejectedDeferred;
+    }
+
     let filter;
     let needLocalFiltering;
     const { keys, keyMap } = this._generateInfoToLoad(data, needChildren);
@@ -434,17 +448,24 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
 
     const store = options.fullData ? new ArrayStore(options.fullData) : this._dataSource.store();
 
-    this.loadFromStore(loadOptions, store).done((loadedData) => {
-      if (loadedData.length) {
-        if (needLocalFiltering) {
-          // @ts-expect-error
-          loadedData = query(loadedData).filter(filter).toArray();
+    this.loadFromStore(loadOptions, store)
+      .done((loadedData) => {
+        if (this._isOperationIdOutdated(options.operationId)) {
+          d.reject();
+          return;
         }
-        this._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
-      } else {
-        d.resolve(data);
-      }
-    }).fail(d.reject);
+
+        if (loadedData.length) {
+          if (needLocalFiltering) {
+            // @ts-expect-error
+            loadedData = query(loadedData).filter(filter).toArray();
+          }
+          this._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
+        } else {
+          d.resolve(data);
+        }
+      })
+      .fail(d.reject);
 
     return d;
   }

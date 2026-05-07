@@ -4,7 +4,6 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import CardView, { Properties } from "devextreme/ui/card_view";
 import  DataSource from "devextreme/data/data_source";
-import  DOMComponent from "devextreme/core/dom_component";
 import {
  CardCover,
  CardHeader,
@@ -19,8 +18,6 @@ import {
  CardPreparedEvent,
  CardRemovedEvent,
  CardRemovingEvent,
- CardSavedEvent,
- CardSavingEvent,
  CardUpdatedEvent,
  CardUpdatingEvent,
  ContextMenuPreparingEvent,
@@ -35,6 +32,9 @@ import {
  FieldValuePreparedEvent,
  FocusedCardChanged,
  InitNewCardEvent,
+ OptionChangedEvent,
+ SavedEvent,
+ SavingEvent,
  SelectionChangedEvent,
  Paging,
  RemoteOperations,
@@ -148,7 +148,7 @@ import {
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
- OptionChangedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
 import {
  FormItemType,
@@ -240,8 +240,6 @@ type AccessibleOptions = Pick<Properties,
   "onCardPrepared" |
   "onCardRemoved" |
   "onCardRemoving" |
-  "onCardSaved" |
-  "onCardSaving" |
   "onCardUpdated" |
   "onCardUpdating" |
   "onContentReady" |
@@ -261,6 +259,8 @@ type AccessibleOptions = Pick<Properties,
   "onInitialized" |
   "onInitNewCard" |
   "onOptionChanged" |
+  "onSaved" |
+  "onSaving" |
   "onSelectionChanged" |
   "pager" |
   "paging" |
@@ -325,8 +325,6 @@ const componentConfig = {
     onCardPrepared: Function as PropType<((e: CardPreparedEvent) => void)>,
     onCardRemoved: Function as PropType<((e: CardRemovedEvent) => void)>,
     onCardRemoving: Function as PropType<((e: CardRemovingEvent) => void)>,
-    onCardSaved: Function as PropType<((e: CardSavedEvent) => void)>,
-    onCardSaving: Function as PropType<((e: CardSavingEvent) => void)>,
     onCardUpdated: Function as PropType<((e: CardUpdatedEvent) => void)>,
     onCardUpdating: Function as PropType<((e: CardUpdatingEvent) => void)>,
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
@@ -345,7 +343,9 @@ const componentConfig = {
     onFocusedCardChanged: Function as PropType<((e: FocusedCardChanged) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onInitNewCard: Function as PropType<((e: InitNewCardEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSaved: Function as PropType<((e: SavedEvent) => void)>,
+    onSaving: Function as PropType<((e: SavingEvent) => void)>,
     onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
     paging: Object as PropType<Paging | Record<string, any>>,
@@ -406,8 +406,6 @@ const componentConfig = {
     "update:onCardPrepared": null,
     "update:onCardRemoved": null,
     "update:onCardRemoving": null,
-    "update:onCardSaved": null,
-    "update:onCardSaving": null,
     "update:onCardUpdated": null,
     "update:onCardUpdating": null,
     "update:onContentReady": null,
@@ -427,6 +425,8 @@ const componentConfig = {
     "update:onInitialized": null,
     "update:onInitNewCard": null,
     "update:onOptionChanged": null,
+    "update:onSaved": null,
+    "update:onSaving": null,
     "update:onSelectionChanged": null,
     "update:pager": null,
     "update:paging": null,
@@ -519,7 +519,7 @@ const DxAsyncRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any)>
   }
 };
 
@@ -617,7 +617,6 @@ const DxButtonOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -644,7 +643,6 @@ const DxButtonOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
@@ -656,7 +654,7 @@ const DxButtonOptionsConfig = {
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
@@ -1274,7 +1272,7 @@ const DxCustomRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -1496,7 +1494,6 @@ const DxFilterBuilderConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:allowHierarchicalFields": null,
-    "update:bindingOptions": null,
     "update:customOperations": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -1526,7 +1523,6 @@ const DxFilterBuilderConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     customOperations: Array as PropType<Array<dxFilterBuilderCustomOperation>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
@@ -1663,7 +1659,6 @@ const DxFormConfig = {
     "update:activeStateEnabled": null,
     "update:alignItemLabels": null,
     "update:alignItemLabelsInAllGroups": null,
-    "update:bindingOptions": null,
     "update:colCount": null,
     "update:colCountByScreen": null,
     "update:customizeItem": null,
@@ -1706,7 +1701,6 @@ const DxFormConfig = {
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     colCount: [String, Number] as PropType<Mode | number>,
     colCountByScreen: Object as PropType<Record<string, any>>,
     customizeItem: Function as PropType<((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)>,
@@ -2192,7 +2186,6 @@ const DxLoadPanelConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:animation": null,
-    "update:bindingOptions": null,
     "update:container": null,
     "update:deferRendering": null,
     "update:delay": null,
@@ -2228,7 +2221,6 @@ const DxLoadPanelConfig = {
   },
   props: {
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
     container: {},
     deferRendering: Boolean,
     delay: Number,
@@ -2380,7 +2372,7 @@ const DxPagerConfig = {
     label: String,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
-    showPageSizeSelector: Boolean,
+    showPageSizeSelector: [Boolean, String] as PropType<boolean | Mode>,
     visible: [Boolean, String] as PropType<boolean | Mode>
   }
 };
@@ -2898,7 +2890,6 @@ const DxTabPanelOptionsConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:animationEnabled": null,
-    "update:bindingOptions": null,
     "update:dataSource": null,
     "update:deferRendering": null,
     "update:disabled": null,
@@ -2912,6 +2903,7 @@ const DxTabPanelOptionsConfig = {
     "update:items": null,
     "update:itemTemplate": null,
     "update:itemTitleTemplate": null,
+    "update:keyExpr": null,
     "update:loop": null,
     "update:noDataText": null,
     "update:onContentReady": null,
@@ -2945,7 +2937,6 @@ const DxTabPanelOptionsConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     dataSource: [Array, Object, String] as PropType<(Array<any | dxTabPanelItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
@@ -2959,6 +2950,7 @@ const DxTabPanelOptionsConfig = {
     items: Array as PropType<Array<any | dxTabPanelItem | string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
     loop: Boolean,
     noDataText: String,
     onContentReady: Function as PropType<((e: TabPanelContentReadyEvent) => void)>,
@@ -3197,7 +3189,7 @@ const DxValidationRuleConfig = {
     reevaluate: Boolean,
     trim: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 

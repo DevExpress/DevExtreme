@@ -39,6 +39,10 @@ class ariaAccessibilityTestHelper {
         return this.$itemContainer.find('.dx-list-items');
     }
 
+    getGroupContainers() {
+        return this.$itemContainer.find('.dx-list-group');
+    }
+
     checkAttributes($target, expectedAttributes, prefix) {
         const element = $target.get(0);
         const skipAttributes = ['class', 'style', 'onclick'];
@@ -84,10 +88,8 @@ class ariaAccessibilityTestHelper {
             expectedAttributes['aria-disabled'] = 'true';
         }
 
-        if(CheckBox.IS_RENOVATED_WIDGET) {
-            expectedAttributes['aria-invalid'] = 'false';
-            expectedAttributes['aria-readonly'] = 'false';
-        }
+        expectedAttributes['aria-invalid'] = 'false';
+        expectedAttributes['aria-readonly'] = 'false';
 
         this.checkAttributes($checkBox, expectedAttributes, `checkbox[${index}]`);
     }

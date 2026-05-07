@@ -2,7 +2,7 @@ import { DesktopTooltipStrategy } from '__internal/scheduler/tooltip_strategies/
 import { FunctionTemplate } from 'core/templates/function_template';
 import { extend } from 'core/utils/extend';
 import Tooltip from 'ui/tooltip';
-import List from '__internal/ui/list/m_list.edit';
+import List from '__internal/ui/list/list.edit';
 import Button from 'ui/button';
 import support from '__internal/core/utils/m_support';
 
@@ -252,7 +252,7 @@ QUnit.test('onItemClick passed to createComponent should work correct, with clic
 QUnit.test('itemTemplate passed to createComponent should work correct', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { appointment: 'data', targetedAppointment: 'currentData', color: { done: sinon.spy() } };
+    const item = { appointment: 'data', targetedAppointment: 'currentData', color: { then: sinon.spy() } };
 
     tooltip.show('target', dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
@@ -283,7 +283,7 @@ QUnit.test('itemTemplate passed to createComponent should work correct', async f
 QUnit.test('Delete button shouldn\'t createed, editing = false', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { appointment: 'appointment', targetedAppointment: 'appointment', color: { done: sinon.spy() } };
+    const item = { appointment: 'appointment', targetedAppointment: 'appointment', color: { then: sinon.spy() } };
 
     tooltip.show('target', dataList, extend(this.extraOptions, { editing: false }));
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
@@ -295,7 +295,7 @@ QUnit.test('Delete button shouldn\'t createed, editing = false', async function(
 QUnit.test('Delete button shouldn\'t created, appointment is disabled', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = [{ data: 'data1', disabled: true }, { data: 'data2', disabled: true }];
-    const item = { appointment: dataList[0], targetedAppointment: 'currentData', color: { done: sinon.spy() } };
+    const item = { appointment: dataList[0], targetedAppointment: 'currentData', color: { then: sinon.spy() } };
 
     tooltip.show('target', dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
@@ -348,7 +348,7 @@ QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
     QUnit.test(`${templateName} equal to "${templateName}"`, async function(assert) {
         const tooltip = this.createSimpleTooltip(this.tooltipOptions);
         const dataList = ['data1', 'data2'];
-        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
+        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { then: sinon.spy() } };
 
         const config = {};
         config[templateName] = templateName;
@@ -364,7 +364,7 @@ QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
     QUnit.test(`${templateName} equal to custom template`, async function(assert) {
         const tooltip = this.createSimpleTooltip(this.tooltipOptions);
         const dataList = ['data1', 'data2'];
-        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
+        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { then: sinon.spy() } };
 
         const config = {};
         config[templateName] = templateName;

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
+import pointerMock from '../../../helpers/pointerMock.js';
 
 const { test } = QUnit;
 
@@ -214,10 +214,6 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -302,4 +298,13 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.notOk(this.wrapper.isThumbnailsItemSelected('..'), 'parent folder is not visually highlited');
     });
 
+    test('Thumbnails view - should focus item only on selection (T1307139)', function(assert) {
+        this.wrapper.getThumbnailsViewPort().trigger('focusin');
+        assert.notOk(this.wrapper.isThumbnailsItemFocused('Folder 1'));
+
+        pointerMock(this.wrapper.findThumbnailsItem('Folder 1')).click();
+        this.clock.tick(400);
+        assert.ok(this.wrapper.isThumbnailsItemSelected('Folder 1'));
+        assert.ok(this.wrapper.isThumbnailsItemFocused('Folder 1'));
+    });
 });

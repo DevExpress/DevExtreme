@@ -1,5 +1,5 @@
 const { test } = QUnit;
-import { getPathParts, getEscapedFileName } from 'file_management/utils';
+import { getPathParts, getEscapedFileName } from '__internal/file_management/utils';
 import FileSystemItem from 'file_management/file_system_item';
 
 QUnit.module('Common tests', () => {

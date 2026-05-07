@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import dateUtils from 'core/utils/date';
-import BaseView from '__internal/ui/calendar/m_calendar.base_view';
-import Views from '__internal/ui/calendar/m_calendar.views';
+import BaseView from '__internal/ui/calendar/calendar.base_view';
+import Views from '__internal/ui/calendar/calendar.views';
 import fx from 'common/core/animation/fx';
 import dateSerialization from 'core/utils/date_serialization';
 

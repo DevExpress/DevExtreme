@@ -4,7 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
@@ -25,22 +25,19 @@
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
+@use 'variables' as *;
+@forward 'variables';
+@use 'layout/cell' as *;
 
 $fluent-grid-base-border-hidden: 1px solid transparent;
 $fluent-grid-base-row-border: 1px solid transparent;
-$fluent-grid-base-border-color: $datagrid-border-color;
 $fluent-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $fluent-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
-$fluent-grid-base-header-cell-vertical-padding: round(math.div($fluent-grid-base-header-height - $fluent-grid-base-header-line-height, 2));
-
-$fluent-grid-base-command-select-column-width: $fluent-grid-base-checkbox-size + 2 * $fluent-grid-base-cell-horizontal-padding;
-
-$fluent-grid-base-cell-vertical-padding: round(math.div($fluent-grid-base-cell-height - $fluent-grid-base-cell-line-height, 2));
-$fluent-grid-base-cell-padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
-$grid-masterdetail-padding: 16px;
 $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-height;
 
 @mixin grid-base($widget-name) {
+  @include fluent-grid-base-cell($widget-name);
+
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
     .dx-bordered-top-view {
@@ -231,10 +228,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     line-height: inherit;
 
     .dx-row-alt {
-      & > td {
-        background-color: $datagrid-row-alternation-bg;
-      }
-
       &.dx-row:not(.dx-row-removed) {
         border-bottom-color: transparent;
       }
@@ -246,15 +239,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-link {
       color: $datagrid-link-color;
-    }
-
-    .dx-row-lines > td {
-      border-bottom: $datagrid-border;
-    }
-
-    .dx-column-lines > td {
-      border-left: $datagrid-border;
-      border-right: $datagrid-border;
     }
 
     .dx-error-row {
@@ -272,53 +256,17 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
     }
 
-    .dx-row {
-      & > td {
-        padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
-        font-size: $fluent-grid-base-cell-font-size;
-        line-height: $fluent-grid-base-cell-line-height;
-      }
-    }
-
-    .dx-#{$widget-name}-table .dx-header-row  > td {
-      padding-top: $fluent-grid-base-header-cell-vertical-padding;
-      padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
-
-      &:first-child {
-        border-top-left-radius: $datagrid-border-radius;
-      }
-
-      &:last-child {
-        border-top-right-radius: $datagrid-border-radius;
-      }
-    }
-
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
       > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
       > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
       > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
-        vertical-align: middle;
-
-        &.dx-command-select {
-          overflow: visible;
-          width: $fluent-grid-base-command-select-column-width;
-          min-width: $fluent-grid-base-command-select-column-width;
-          line-height: 1;
-        }
-
         &.dx-command-edit {
-          width: $fluent-grid-base-command-edit-column-width;
-          min-width: $fluent-grid-base-command-edit-column-width;
-
           .dx-link:not(.dx-link-icon) {
             margin: 0 $fluent-command-edit-text-margin;
             min-width: 20px;
           }
 
           &.dx-command-edit-with-icons {
-            width: $fluent-grid-base-command-edit-column-with-icons-width;
-            min-width: $fluent-grid-base-command-edit-column-with-icons-width;
-
             .dx-link {
               @include dx-icon-sizing($fluent-command-edit-icon-size);
 
@@ -341,20 +289,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
             }
           }
         }
-
-        &.dx-command-expand,
-        .dx-#{$widget-name}-group-space {
-          padding: 0 4px 0 8px;
-          line-height: 0;
-        }
-
-        &.dx-editor-cell:not(.dx-command-select) {
-          padding-right: 0;
-
-          &:not(.dx-#{$widget-name}-cell-expandable) {
-            padding-left: 0;
-          }
-        }
       }
     }
 
@@ -363,9 +297,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     .dx-command-drag {
-      width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
-      min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
-
       .dx-#{$widget-name}-drag-icon {
         @include dx-icon-sizing($fluent-base-icon-size);
       }
@@ -373,9 +304,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-#{$widget-name}-drop-highlight {
       & > td {
-        background-color: $datagrid-drop-highlight-bg;
-        color: $datagrid-drop-highlight-color;
-
         .dx-header-filter {
           color: $datagrid-drop-highlight-color;
         }
@@ -457,9 +385,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-editor-cell {
-    padding-top: 0;
-    padding-bottom: 0;
-
     .dx-numberbox-spin-button {
       background-color: transparent;
     }
@@ -652,23 +577,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
   .dx-data-row.dx-state-hover {
     &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
-      > td {
-        color: $datagrid-row-hovered-color;
-
-        &:not(.dx-focused) {
-          background-color: $datagrid-hover-bg;
-        }
-      }
-
       & > .dx-#{$widget-name}-readonly .dx-texteditor {
         .dx-texteditor-input {
           background-color: $datagrid-hover-bg;
           color: $datagrid-row-hovered-color;
         }
-      }
-
-      & > td.dx-pointer-events-none {
-        background-color: transparent;
       }
     }
   }
@@ -695,16 +608,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
       .dx-row {
         > td {
-          border-bottom: $datagrid-border;
-          line-height: $fluent-grid-base-header-line-height;
-          font-weight: $datagrid-columnchooser-font-weight;
-          font-size: $fluent-grid-base-header-cell-font-size;
-
           .dx-sort {
             color: $header-filter-color-empty;
           }
 
-          &:hover {
+          &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
             .dx-#{$widget-name}-text-content {
               color: $datagrid-base-color;
             }
@@ -713,66 +621,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell):not(.dx-command-edit):not(.dx-#{$widget-name}-group-space) {
             background-color: $datagrid-hover-bg;
           }
-        }
-      }
-    }
-
-    &.dx-header-multi-row {
-      .dx-#{$widget-name}-content {
-        .dx-#{$widget-name}-table {
-          .dx-row {
-            &.dx-header-row {
-              .dx-command-select {
-                padding-bottom: math.div($fluent-grid-base-header-height - $fluent-grid-base-checkbox-size, 2);
-              }
-
-              > td {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                vertical-align: bottom;
-              }
-            }
-          }
-        }
-      }
-
-      .dx-row {
-        &.dx-header-row {
-          > td {
-            border-right: 1px solid $fluent-grid-base-border-color;
-          }
-        }
-      }
-    }
-
-    &.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) {
-      .dx-#{$widget-name}-content {
-        .dx-#{$widget-name}-table {
-          .dx-row {
-            &.dx-header-row {
-              > td {
-                border-left: 1px solid $fluent-grid-base-border-color;
-
-                &:first-child {
-                  border-left: none;
-                }
-
-                &:last-child {
-                  border-right: none;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    &.dx-#{$widget-name}-sticky-columns {
-      .dx-#{$widget-name}-filter-row > td {
-        &.dx-#{$widget-name}-sticky-column,
-        &.dx-#{$widget-name}-sticky-column-left,
-        &.dx-#{$widget-name}-sticky-column-right {
-          background-color: $datagrid-filter-row-background-color;
         }
       }
     }
@@ -811,13 +659,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         $fluent-grid-base-cell-vertical-padding
         $fluent-grid-base-texteditor-input-padding;
     }
-
-    .dx-#{$widget-name} .dx-#{$widget-name}-table & {
-      > td {
-        padding-top: 0;
-        padding-bottom: 0;
-      }
-    }
   }
 
   .dx-#{$widget-name}-filter-range-overlay {
@@ -849,13 +690,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         display: none;
       }
     }
-  }
-
-  .dx-cell-modified,
-  .dx-#{$widget-name}-invalid {
-    padding: $fluent-grid-base-cell-vertical-padding 0 $fluent-grid-base-cell-vertical-padding 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .dx-#{$widget-name}-header-panel {
@@ -938,34 +772,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       &:focus {
         outline: none;
       }
-
-      &.dx-edit-row:first-child > td {
-        border-top-width: 0;
-        border-bottom: $datagrid-border;
-      }
-
-      &.dx-edit-row > td {
-        border-top: $datagrid-border;
-        border-bottom: $datagrid-border;
-      }
-    }
-
-    .dx-master-detail-row {
-      > .dx-master-detail-cell {
-        padding: $grid-masterdetail-padding;
-      }
-      > .dx-#{$widget-name}-group-space,
-      .dx-master-detail-cell:not(.dx-row-lines) {
-        border-top: $datagrid-border;
-        border-bottom: $datagrid-border;
-      }
-    }
-
-    .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) {
-      > .dx-#{$widget-name}-group-space,
-      .dx-master-detail-cell {
-        background-color: $datagrid-master-detail-cell-bg;
-      }
     }
 
     .dx-data-row,
@@ -973,10 +779,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       &,
       &.dx-selection,
       &.dx-selection:hover {
-        &:not(.dx-edit-row) .dx-cell-modified {
-          background-color: $datagrid-cell-modified-border-color;
-        }
-
         .dx-validator {
           &.dx-#{$widget-name}-invalid,
           &.dx-invalid {
@@ -992,20 +794,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         background-color: $validation-message-background-color;
         color: $validation-message-color;
       }
-    }
-
-    .dx-row-removed > td {
-      background-color: $datagrid-row-removed-bg;
-      color: $datagrid-cell-removed-text-color;
-    }
-
-    .dx-row-removed.dx-row-lines > td {
-      border-top: 1px solid $datagrid-cell-removed-border-color;
-      border-bottom: 1px solid $datagrid-cell-removed-border-color;
-    }
-
-    .dx-row-removed:not(.dx-row-lines) > td {
-      border-top: 1px solid $datagrid-hover-bg;
     }
 
     .dx-adaptive-detail-row {
@@ -1045,33 +833,16 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-row-focused {
       &.dx-data-row {
-        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
         & .dx-command-edit .dx-link {
           color: $datagrid-row-focused-color;
+        }
 
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
+        & .dx-command-edit .dx-link {
           & .dx-#{$widget-name}-group-opened,
           & .dx-#{$widget-name}-group-closed {
             color: $datagrid-row-focused-color;
           }
-        }
-
-        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
-          background-color: $datagrid-row-focused-bg;
-        }
-      }
-
-      &:not(.dx-row-lines) {
-        & > td,
-        & > tr:first-child > td {
-          border-bottom: 1px solid $datagrid-row-focused-bg;
-        }
-      }
-
-      &.dx-data-row.dx-edit-row {
-        & > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
-        & > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
-          background-color: $datagrid-base-background-color;
-          color: $datagrid-base-color;
         }
       }
 
@@ -1086,54 +857,12 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
     }
 
-    .dx-selection.dx-row:not(.dx-row-focused),
-    .dx-selection.dx-row:not(.dx-row-focused):hover {
-      & > td,
-      & > tr > td {
-        background-color: $datagrid-selection-bg;
-        color: $datagrid-row-selected-color;
-
-        &.dx-#{$widget-name}-group-space {
-          border-right-color: $datagrid-selection-bg;
-        }
-
-        &.dx-pointer-events-none {
-          border-left-color: $datagrid-row-selected-border-color;
-          border-right-color: $datagrid-row-selected-border-color;
-        }
-      }
-
-      &:not(.dx-row-lines) > td {
-        border-bottom: 1px solid $datagrid-selection-bg;
-        border-top: 1px solid $datagrid-selection-bg;
-      }
-
-      &.dx-row-lines > td {
-        border-bottom-color: $datagrid-row-selected-border-color;
-      }
-    }
-
     &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
       padding-right: 0;
     }
 
     td {
       &.dx-validation-pending {
-        position: relative;
-        padding: 0;
-
-        &.dx-cell-modified,
-        .dx-#{$widget-name}-invalid {
-          padding: $fluent-grid-base-cell-padding;
-          padding-right: $fluent-texteditor-invalid-badge-size;
-
-          @at-root #{selector-append(".dx-rtl", &)},
-          .dx-rtl & {
-            padding-left: $fluent-texteditor-invalid-badge-size;
-            padding-right: $fluent-grid-base-cell-horizontal-padding;
-          }
-        }
-
         > .dx-pending-indicator {
           @include dx-pending-indicator-fluent();
           @include texteditor-validation-icon-offset();
@@ -1150,33 +879,15 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     &.dx-#{$widget-name}-sticky-columns {
-      .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
-        padding-top: $fluent-grid-base-cell-vertical-padding + 1px;
-      }
-
-      .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell),
-      .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
-        padding-bottom: $fluent-grid-base-cell-vertical-padding - 1px;
-      }
-
-      .dx-row.dx-edit-row > td.dx-command-edit {
-        padding-top: $fluent-grid-base-cell-vertical-padding - 1px;
-      }
-
       .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
         height: $fluent-grid-base-cell-height - 2px;
         line-height: $fluent-grid-base-cell-height - 2px;
       }
 
-      .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
-        .dx-row.dx-group-row + &, .dx-row.dx-master-detail-row + & {
-          padding-top: $fluent-grid-base-cell-vertical-padding;
+      .dx-master-detail-row > .dx-master-detail-cell {
+        > .dx-#{$widget-name}-master-detail-container {
+          padding: $grid-masterdetail-padding;
         }
-      }
-
-      .dx-row.dx-row-lines.dx-edit-row > td,
-      .dx-row-removed.dx-row-lines > td {
-        border-top-width: 0;
       }
     }
   }
@@ -1247,17 +958,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-rtl {
-    .dx-data-row.dx-state-hover {
-      &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
-        & > td:not(.dx-focused) {
-          &.dx-#{$widget-name}-group-space {
-            border-left-color: $datagrid-hover-bg;
-            border-right-color: transparent;
-          }
-        }
-      }
-    }
-
     .dx-#{$widget-name},
     .dx-#{$widget-name}-container {
       .dx-menu {
@@ -1270,24 +970,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     .dx-#{$widget-name}-rowsview {
-      .dx-selection.dx-row,
-      .dx-selection.dx-row:hover {
-        & > td,
-        & > tr > td {
-          &:not(.dx-focused) {
-            &.dx-#{$widget-name}-group-space {
-              border-left-color: $datagrid-selection-bg;
-            }
-          }
-
-          border-right-color: $datagrid-row-selected-border-color;
-
-          &.dx-pointer-events-none {
-            border-left-color: $datagrid-row-selected-border-color;
-          }
-        }
-      }
-
       &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
         padding-left: 0;
       }
@@ -1298,11 +980,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     .dx-popup-content {
       padding: 8px 8px 0 8px;
     }
-  }
-
-  .dx-command-adaptive {
-    width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
-    min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
   }
 
   .dx-#{$widget-name}-filter-panel {

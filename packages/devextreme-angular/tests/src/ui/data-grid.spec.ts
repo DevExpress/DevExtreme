@@ -170,9 +170,9 @@ describe('DxDataGrid', () => {
       set: {
         template: `
                 <dx-data-grid>
-                    <dxi-column caption="Test">
-                        <dxi-column dataField="Field"></dxi-column>
-                    </dxi-column>
+                    <dxi-data-grid-column caption="Test">
+                        <dxi-data-grid-column dataField="Field"></dxi-data-grid-column>
+                    </dxi-data-grid-column>
                 </dx-data-grid>
                 `,
       },
@@ -196,9 +196,9 @@ describe('DxDataGrid', () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `<dx-data-grid [dataSource]="[{text: 'text'}]" (onRowPrepared)="onRowPrepared()">
-                    <dxo-editing mode="popup" [allowUpdating]="true"></dxo-editing>
-                    <dxi-column dataField="text"></dxi-column>
-                    <dxi-column [calculateCellValue]="getCellValue"></dxi-column>
+                    <dxo-data-grid-editing mode="popup" [allowUpdating]="true"></dxo-data-grid-editing>
+                    <dxi-data-grid-column dataField="text"></dxi-data-grid-column>
+                    <dxi-data-grid-column [calculateCellValue]="getCellValue"></dxi-data-grid-column>
                 </dx-data-grid>`,
       },
     });
@@ -222,8 +222,8 @@ describe('DxDataGrid', () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `<dx-data-grid [dataSource]="[{text: 'text'}]">
-                    <dxo-column-chooser *ngIf="showComponent" [enabled]="true"></dxo-column-chooser>
-                    <dxi-column dataField="text"></dxi-column>
+                    <dxo-data-grid-column-chooser *ngIf="showComponent" [enabled]="true"></dxo-data-grid-column-chooser>
+                    <dxi-data-grid-column dataField="text"></dxi-data-grid-column>
                 </dx-data-grid>`,
       },
     });
@@ -254,8 +254,8 @@ describe('DxDataGrid', () => {
                     keyExpr="id"
                     [selectedRowKeys]="[2]"
                     (onSelectionChanged)="selectionChanged()">
-                    <dxo-selection mode="single"></dxo-selection>
-                    <dxi-column dataField="text"></dxi-column>
+                    <dxo-data-grid-selection mode="single"></dxo-data-grid-selection>
+                    <dxi-data-grid-column dataField="text"></dxi-data-grid-column>
                 </dx-data-grid>`,
       },
     });
@@ -364,11 +364,11 @@ describe('DxDataGrid', () => {
       set: {
         template: `
                 <dx-data-grid id="gridContainer" [dataSource]="dataSource" [repaintChangesOnly]="true">
-                  <dxo-sorting mode="none"></dxo-sorting>
+                  <dxo-data-grid-sorting mode="none"></dxo-data-grid-sorting>
                 
                   <ng-container *ngFor="let col of columns">
-                    <dxi-column [caption]="col.caption" [dataField]="col.field" [cellTemplate]="col.cellTemplateName">
-                    </dxi-column>
+                    <dxi-data-grid-column [caption]="col.caption" [dataField]="col.field" [cellTemplate]="col.cellTemplateName">
+                    </dxi-data-grid-column>
                 
                     <div *dxTemplate="let cell of col.cellTemplateName">
                       <div *ngIf="col.cellTemplateName === 'templateA'">
@@ -412,7 +412,7 @@ describe('Nested DxDataGrid', () => {
     );
 
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 3000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
   });
 
   afterEach(() => {
@@ -420,7 +420,7 @@ describe('Nested DxDataGrid', () => {
   });
 
   // NOTE: https://github.com/angular/angular/issues/18997
-  it('should not update parent DxDataGrid with 30 dxi-column (T545977)', (done) => {
+  it('should not update parent DxDataGrid with 30 dxi-data-grid-column (T545977)', (done) => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
@@ -430,39 +430,39 @@ describe('Nested DxDataGrid', () => {
                         [masterDetail]="{ enabled: true, template: 'detail' }"
                         (onOptionChanged)="onOptionChanged($event)">
 
-                        <dxi-column dataField="string1"></dxi-column>
-                        <dxi-column dataField="string2"></dxi-column>
-                        <dxi-column dataField="string3"></dxi-column>
-                        <dxi-column dataField="string4"></dxi-column>
-                        <dxi-column dataField="string5"></dxi-column>
-                        <dxi-column dataField="string6"></dxi-column>
-                        <dxi-column dataField="string7"></dxi-column>
-                        <dxi-column dataField="string8"></dxi-column>
-                        <dxi-column dataField="string9"></dxi-column>
-                        <dxi-column dataField="string10"></dxi-column>
-                        <dxi-column dataField="string11"></dxi-column>
-                        <dxi-column dataField="string12"></dxi-column>
-                        <dxi-column dataField="string13"></dxi-column>
-                        <dxi-column dataField="string14"></dxi-column>
-                        <dxi-column dataField="string15"></dxi-column>
+                        <dxi-data-grid-column dataField="string1"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string2"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string3"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string4"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string5"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string6"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string7"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string8"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string9"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string10"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string11"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string12"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string13"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string14"></dxi-data-grid-column>
+                        <dxi-data-grid-column dataField="string15"></dxi-data-grid-column>
 
                         <div *dxTemplate="let data of 'detail'">
                             <dx-data-grid [dataSource]="dataSource">
-                                <dxi-column dataField="number1"></dxi-column>
-                                <dxi-column dataField="number2"></dxi-column>
-                                <dxi-column dataField="number3"></dxi-column>
-                                <dxi-column dataField="number4"></dxi-column>
-                                <dxi-column dataField="number5"></dxi-column>
-                                <dxi-column dataField="number6"></dxi-column>
-                                <dxi-column dataField="number7"></dxi-column>
-                                <dxi-column dataField="number8"></dxi-column>
-                                <dxi-column dataField="number9"></dxi-column>
-                                <dxi-column dataField="number10"></dxi-column>
-                                <dxi-column dataField="number11"></dxi-column>
-                                <dxi-column dataField="number12"></dxi-column>
-                                <dxi-column dataField="number13"></dxi-column>
-                                <dxi-column dataField="number14"></dxi-column>
-                                <dxi-column dataField="number15"></dxi-column>
+                                <dxi-data-grid-column dataField="number1"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number2"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number3"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number4"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number5"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number6"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number7"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number8"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number9"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number10"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number11"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number12"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number13"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number14"></dxi-data-grid-column>
+                                <dxi-data-grid-column dataField="number15"></dxi-data-grid-column>
                             </dx-data-grid>
                         </div>
                     </dx-data-grid>
@@ -500,8 +500,8 @@ describe('Nested DxDataGrid', () => {
                     <dx-data-grid
                         [dataSource]="dataSource"
                         keyExpr="id">
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column dataField="string" cellTemplate="cellTemplate"></dxi-column>
+                        <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
+                        <dxi-data-grid-column dataField="string" cellTemplate="cellTemplate"></dxi-data-grid-column>
 
                         <div *dxTemplate="let data of 'cellTemplate'">
                             <div class="my-template">{{data.value}}</div>
@@ -530,7 +530,7 @@ describe('Nested DxDataGrid', () => {
                         [dataSource]="dataSource"
                         (onOptionChanged)="onOptionChanged($event)"
                         keyExpr="id">
-                        <dxi-column dataField="string" cellTemplate="cellTemplate"></dxi-column>
+                        <dxi-data-grid-column dataField="string" cellTemplate="cellTemplate"></dxi-data-grid-column>
 
                         <ng-container *dxTemplate="let data of 'cellTemplate'">
                             <ng-container *ngIf="true"><div class="my-template">test value</div></ng-container>
@@ -557,5 +557,56 @@ describe('Nested DxDataGrid', () => {
         done();
       }, 1000);
     }, 1000);
+  });
+});
+
+describe('DxDataGrid slow tests', () => {
+  const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+
+  beforeAll(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
+
+    TestBed.configureTestingModule(
+      {
+        declarations: [TestContainerComponent],
+        imports: [DxDataGridModule],
+      },
+    );
+  });
+  afterAll(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
+
+  it('should not memory leak after click if dx-data-grid is on page (T1307313)', async () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: '<dx-data-grid [dataSource]="[]"></dx-data-grid>',
+      },
+    });
+
+    const fixture = TestBed.createComponent(TestContainerComponent);
+
+    fixture.detectChanges();
+
+    for (let i = 0; i < 100; i++) {
+      document.body.click();
+      fixture.detectChanges();
+    }
+
+    globalThis.gc();
+
+    const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
+
+    for (let i = 0; i < 100; i++) {
+      document.body.click();
+      fixture.detectChanges();
+    }
+
+    globalThis.gc();
+
+    const memoryAfter = await (performance as any).measureUserAgentSpecificMemory();
+    const memoryDiff = Math.round((memoryAfter.bytes - memoryBefore.bytes) / 1024);
+
+    expect(memoryDiff).toBeLessThan(100);
   });
 });

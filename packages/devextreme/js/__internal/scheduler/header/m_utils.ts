@@ -1,9 +1,12 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
-import { isFunction } from '@js/core/utils/type';
+import { isFunction, isObject } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
+import type { BaseFormat } from '@ts/core/localization/date';
+import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
-import type { NormalizedView, ViewType } from '@ts/scheduler/utils/options/types';
+import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 
 import type { Direction } from './constants';
 
@@ -60,7 +63,7 @@ const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
   let workDaysCount = 0;
   while (workDaysCount < DAYS_IN_WORK_WEEK) {
     if (!isWeekend(date)) {
-      workDaysCount++;
+      workDaysCount += 1;
     }
 
     date = nextDay(date);
@@ -69,80 +72,45 @@ const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
   return date;
 };
 
-const nextAgendaStart = (date: Date, agendaDuration: number): Date => addDateInterval(date, { days: agendaDuration }, 1);
+const nextAgendaStart = (
+  date: Date,
+  agendaDuration: number,
+): Date => addDateInterval(date, { days: agendaDuration }, 1);
 
-const getIntervalStartDate = (options: IntervalOptions) => {
+const getIntervalStartDate = (options: IntervalOptions): Date => {
   const { date, step, firstDayOfWeek } = options;
 
-  // eslint-disable-next-line default-case
   switch (step) {
     case 'day':
     case 'week':
     case 'month':
-      return getPeriodStart(date, step, false, firstDayOfWeek);
+      return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
     case 'workWeek':
-      // eslint-disable-next-line no-case-declarations
-      const firstWeekDay = getWeekStart(date, firstDayOfWeek);
-      return getWorkWeekStart(firstWeekDay);
+      return getWorkWeekStart(getWeekStart(date, firstDayOfWeek));
     case 'agenda':
+      return new Date(date);
+    default:
       return new Date(date);
   }
 };
 
-const getIntervalEndDate = (startDate: Date, options: IntervalOptions) => {
-  const { intervalCount, step, agendaDuration } = options;
+const getPeriodEndDate = (
+  currentPeriodStartDate: Date,
+  step: Step,
+  agendaDuration: number,
+): Date => {
+  const calculators: Record<Step, () => Date> = {
+    day: () => nextDay(currentPeriodStartDate),
+    week: () => nextWeek(currentPeriodStartDate),
+    month: () => nextMonth(currentPeriodStartDate),
+    workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate),
+    agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration),
+  };
 
-  let periodStartDate;
-  let periodEndDate;
-  let nextPeriodStartDate = new Date(startDate);
-
-  for (let i = 0; i < intervalCount; i++) {
-    periodStartDate = nextPeriodStartDate;
-
-    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration!);
-
-    nextPeriodStartDate = getNextPeriodStartDate(periodEndDate, step);
-  }
-
-  return periodEndDate;
+  return subMS(calculators[step]());
 };
 
-export const getCaptionInterval = (options: IntervalOptions): {
-  startDate: Date;
-  endDate: Date;
-} => {
-  const startDate = getIntervalStartDate(options);
-  const endDate = getIntervalEndDate(startDate, options);
-
-  return { startDate, endDate };
-};
-
-const getPeriodEndDate = (currentPeriodStartDate: Date, step: Step, agendaDuration: number): Date => {
-  let date;
-
-  // eslint-disable-next-line default-case
-  switch (step) {
-    case 'day':
-      date = nextDay(currentPeriodStartDate);
-      break;
-    case 'week':
-      date = nextWeek(currentPeriodStartDate);
-      break;
-    case 'month':
-      date = nextMonth(currentPeriodStartDate);
-      break;
-    case 'workWeek':
-      date = getDateAfterWorkWeek(currentPeriodStartDate);
-      break;
-    case 'agenda':
-      date = nextAgendaStart(currentPeriodStartDate, agendaDuration);
-      break;
-  }
-
-  return subMS(date);
-};
-
-const getNextPeriodStartDate = (currentPeriodEndDate: Date, step): Date => {
+const getNextPeriodStartDate = (currentPeriodEndDate: Date, step: Step): Date => {
   let date = addMS(currentPeriodEndDate);
 
   if (step === 'workWeek') {
@@ -154,29 +122,22 @@ const getNextPeriodStartDate = (currentPeriodEndDate: Date, step): Date => {
   return date;
 };
 
-export const getNextIntervalDate = (options, direction: Direction): Date => {
-  const {
-    date, step, intervalCount, agendaDuration,
-  } = options;
+const getIntervalEndDate = (startDate: Date, options: IntervalOptions): Date => {
+  const { intervalCount, step, agendaDuration } = options;
 
-  let dayDuration;
-  // eslint-disable-next-line default-case
-  switch (step) {
-    case 'day':
-      dayDuration = 1 * intervalCount;
-      break;
-    case 'week':
-    case 'workWeek':
-      dayDuration = 7 * intervalCount;
-      break;
-    case 'agenda':
-      dayDuration = agendaDuration;
-      break;
-    case 'month':
-      return getNextMonthDate(date, intervalCount, direction);
+  let periodStartDate = new Date(startDate);
+  let periodEndDate = new Date(startDate);
+  let nextPeriodStartDate = new Date(startDate);
+
+  for (let i = 0; i < intervalCount; i += 1) {
+    periodStartDate = nextPeriodStartDate;
+
+    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration ?? 0);
+
+    nextPeriodStartDate = getNextPeriodStartDate(periodEndDate, step);
   }
 
-  return addDateInterval(date, { days: dayDuration }, direction);
+  return periodEndDate;
 };
 
 const getNextMonthDate = (date: Date, intervalCount: number, direction: Direction): Date => {
@@ -200,9 +161,34 @@ const getNextMonthDate = (date: Date, intervalCount: number, direction: Directio
   return thatMonthMinDate;
 };
 
+export const getNextIntervalDate = (options: IntervalOptions, direction: Direction): Date => {
+  const {
+    date, step, intervalCount, agendaDuration,
+  } = options;
+
+  let dayDuration = 0;
+  // eslint-disable-next-line default-case
+  switch (step) {
+    case 'day':
+      dayDuration = Number(intervalCount);
+      break;
+    case 'week':
+    case 'workWeek':
+      dayDuration = 7 * intervalCount;
+      break;
+    case 'agenda':
+      dayDuration = agendaDuration ?? 0;
+      break;
+    case 'month':
+      return getNextMonthDate(date, intervalCount, direction);
+  }
+
+  return addDateInterval(date, { days: dayDuration }, direction);
+};
+
 const getDateMonthFormatter = (isShort: boolean) => {
   const monthType = isShort ? 'abbreviated' : 'wide';
-  const months = dateLocalization.getMonthNames(monthType as any);
+  const months = dateLocalization.getMonthNames(monthType as BaseFormat);
 
   return (date: Date): string => {
     const day = formatDate(date, 'day');
@@ -236,6 +222,16 @@ const getDifferentYearCaption = (startDate: Date, endDate: Date): string => {
   const lastDateDateText = formatDate(endDate, getDateMonthYearFormatter(true));
 
   return `${firstDateText}-${lastDateDateText}`;
+};
+
+export const getCaptionInterval = (options: IntervalOptions): {
+  startDate: Date;
+  endDate: Date;
+} => {
+  const startDate = getIntervalStartDate(options);
+  const endDate = getIntervalEndDate(startDate, options);
+
+  return { startDate, endDate };
 };
 
 const getSameYearCaption = (startDate: Date, endDate: Date, isShort: boolean): string => {
@@ -324,9 +320,28 @@ const STEP_MAP: Record<ViewType, Step> = {
   agenda: 'agenda',
 } as const;
 
-export const getStep = (type: ViewType): Step => STEP_MAP[type];
+export const getViewName = (view: RawViewType): string | undefined => {
+  if (isObject(view)) {
+    return view.name ?? view.type;
+  }
 
-export const getViewName = (view: NormalizedView): string | undefined => view.name ?? view.type;
+  return view;
+};
+
+export const getViewText = (
+  view: NormalizedView,
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+): string => view.name || messageLocalization.format(`dxScheduler-switcher${camelize(view.type, true)}`);
+
+export const formatViews = (
+  views: NormalizedView[],
+): NormalizedView[] => views.map((view) => ({
+  ...view,
+  name: getViewName(view),
+  text: getViewText(view),
+}));
+
+export const getStep = (type: ViewType): Step => STEP_MAP[type];
 
 export const isOneView = (
   views: NormalizedView[],

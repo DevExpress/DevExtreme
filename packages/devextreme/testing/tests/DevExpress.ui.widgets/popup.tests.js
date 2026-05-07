@@ -29,9 +29,9 @@ import {
     TEMPLATE_WRAPPER_CLASS,
     POPUP_CONTENT_SCROLLABLE_CLASS,
 } from '__internal/ui/popup/m_popup';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';
 import 'ui/scroll_view';
@@ -40,9 +40,11 @@ import 'ui/date_box';
 const IS_SAFARI = !!browser.safari;
 const IS_IOS_DEVICE = devices.real().platform === 'ios';
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
-const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+const CUSTOM_ITEM_CLASS = 'custom-item-class';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
+const TOOLBAR_CLASS = 'dx-toolbar';
 
 themes.setDefaultTimeout(0);
 
@@ -117,8 +119,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-executeAsyncMock.setup();
-
 const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
@@ -135,17 +135,22 @@ const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-bottom-right';
 const POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-top-left';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const TOOLBAR_ITEM_CONTENT_CLASS = 'dx-toolbar-item-content';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const VIEWPORT_CLASS = 'dx-viewport';
 
-const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
+const viewport = function() { return $(`.${VIEWPORT_CLASS}`); };
 
-const toSelector = (cssClass) => `.${cssClass}`;
-
-
-QUnit.module('basic', () => {
+QUnit.module('basic', {
+    beforeEach: function() {
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
+    }
+}, () => {
     QUnit.test('markup init', function(assert) {
         const $element = $('#popup').dxPopup();
         assert.ok($element.hasClass(POPUP_CLASS));
@@ -218,7 +223,7 @@ QUnit.module('basic', () => {
         assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
-    QUnit.test('popup wrapper should have \'fixed\' or \'absolute\' position in fullscreen', function(assert) {
+    QUnit.test('popup wrapper should have fixed or absolute position in fullscreen', function(assert) {
         $('#popup').dxPopup({ fullScreen: true, visible: true });
 
         const $wrapper = $('.' + POPUP_WRAPPER_CLASS);
@@ -419,7 +424,7 @@ QUnit.module('basic', () => {
         devices.current(devices.real());
     });
 
-    QUnit.test('items should be rendered with toolbarItems.toolbar=\'top\' as default', function(assert) {
+    QUnit.test('items should be rendered with toolbarItems.toolbar=top as default', function(assert) {
         $('#popup').dxPopup({
             visible: true,
             toolbarItems: [{ text: 'sample', location: 'center' }]
@@ -434,7 +439,7 @@ QUnit.module('basic', () => {
         assert.equal($titleToolbar.text(), 'sample', 'top toolbar has correct content');
     });
 
-    QUnit.test('toolbar must receive \'rtlEnabled\' option from dxPopup', function(assert) {
+    QUnit.test('toolbar must receive rtlEnabled option from dxPopup', function(assert) {
         const $popup = $('#popup').dxPopup({
             visible: true,
             rtlEnabled: true,
@@ -447,10 +452,10 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
         const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
-        assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is true');
+        assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar rtlEnabled option is true');
     });
 
-    QUnit.test('toolbar must receive \'rtlEnabled\' from dxPopup after optionChanged', function(assert) {
+    QUnit.test('toolbar must receive rtlEnabled from dxPopup after optionChanged', function(assert) {
         const $popup = $('#popup').dxPopup({
             visible: true,
             rtlEnabled: true,
@@ -466,10 +471,10 @@ QUnit.module('basic', () => {
         instance.option('rtlEnabled', false);
         const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
-        assert.notOk(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is false');
+        assert.notOk(toolbarInstance.option('rtlEnabled'), 'toolbar rtlEnabled option is false');
     });
 
-    QUnit.test('toolbar must render \'default\' type buttons if \'useDefaultToolbarButtons\' is set', function(assert) {
+    QUnit.test('toolbar must render default type buttons if useDefaultToolbarButtons is set', function(assert) {
         const popupInstance = $('#popup').dxPopup({
             visible: true,
             useDefaultToolbarButtons: true,
@@ -488,10 +493,10 @@ QUnit.module('basic', () => {
         const toolbarButtons = popupInstance.$content().parent().find('.dx-popup-bottom .dx-button');
 
         assert.ok(toolbarButtons.eq(0).hasClass('dx-button-danger'), 'button has custom class');
-        assert.ok(toolbarButtons.eq(1).hasClass('dx-button-default'), 'button default class is \'default\', not normal');
+        assert.ok(toolbarButtons.eq(1).hasClass('dx-button-default'), 'button default class is default, not normal');
     });
 
-    QUnit.test('toolbar must render flat buttons and shortcuts if \'useFlatToolbarButtons\' is set', function(assert) {
+    QUnit.test('toolbar must render flat buttons and shortcuts if useFlatToolbarButtons is set', function(assert) {
         devices.current('desktop');
         const popupInstance = $('#popup').dxPopup({
             visible: true,
@@ -509,7 +514,7 @@ QUnit.module('basic', () => {
 
         const toolbarButtons = popupInstance.$content().parent().find('.dx-popup-bottom .dx-button');
 
-        assert.ok(toolbarButtons.eq(0).hasClass('dx-button-mode-text'), 'shortcut has dx-button-mode-text class');
+        assert.ok(toolbarButtons.eq(0).hasClass('dx-button-mode-contained'), 'shortcut has dx-button-mode-text class');
         assert.ok(toolbarButtons.eq(1).hasClass('dx-button-mode-text'), 'button has dx-button-mode-text class');
         devices.current(devices.real());
     });
@@ -651,9 +656,11 @@ QUnit.module('basic', () => {
 QUnit.module('dimensions', {
     beforeEach: function() {
         fx.off = true;
+        executeAsyncMock.setup();
     },
     afterEach: function() {
         fx.off = false;
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('content must not overlap bottom buttons', function(assert) {
@@ -667,7 +674,7 @@ QUnit.module('dimensions', {
         const $popupContent = instance.$content();
         const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
-        assert.roughEqual($popupContent.offset().top + getOuterHeight($popupContent), $popupBottom.offset().top, 0.1, 'content doesn\'t overlap bottom buttons');
+        assert.roughEqual($popupContent.offset().top + getOuterHeight($popupContent), $popupBottom.offset().top, 0.1, 'content does not overlap bottom buttons');
         devices.current(devices.real());
     });
 
@@ -696,7 +703,7 @@ QUnit.module('dimensions', {
             integrationOptions: {
                 templates: {
                     'title': {
-                        render: function(args) {
+                        render: () => {
                             const $element = $('<span>')
                                 .addClass(TEMPLATE_WRAPPER_CLASS)
                                 .text('text');
@@ -708,7 +715,10 @@ QUnit.module('dimensions', {
             }
         }).dxPopup('instance');
 
-        assert.equal(popup.$overlayContent().text(), 'text', 'container is correct');
+        const popupOverlayContent = popup.$overlayContent();
+        const text = popupOverlayContent.text();
+
+        assert.strictEqual(text, 'text', 'container is correct');
     });
 
     QUnit.test('dimensions should be shrunk correctly with floating heights', function(assert) {
@@ -919,17 +929,29 @@ QUnit.module('dimensions', {
 
 QUnit.module('options changed callbacks', {
     beforeEach: function() {
-        this.element = $('#popup').dxPopup();
-        this.instance = this.element.dxPopup('instance');
         devices.current('desktop');
         fx.off = true;
+
         this.clock = sinon.useFakeTimers();
+        this.init = (options = {}) => {
+            this.element = $('#popup').dxPopup(options);
+            this.instance = this.element.dxPopup('instance');
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init(options);
+        };
+        this.init();
+
+        executeAsyncMock.setup();
+
         return new Promise((resolve) => themes.initialized(resolve));
     },
 
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('width/height', function(assert) {
@@ -976,7 +998,7 @@ QUnit.module('options changed callbacks', {
         assert.strictEqual(getOuterHeight($popup), minHeight, 'popup height does not change if autoResizeEnabled = false');
 
         popup.option('autoResizeEnabled', true);
-        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
+        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed after autoResizeEnabled change');
 
         popup.option('width', 'auto');
         $content.empty();
@@ -1228,7 +1250,7 @@ QUnit.module('options changed callbacks', {
         }
     });
 
-    QUnit.test('PopupContent doesn\'t disappear while fullScreen option changing', function(assert) {
+    QUnit.test('PopupContent does not disappear while fullScreen option changing', function(assert) {
         this.instance.option({
             fullScreen: false,
             width: 345,
@@ -1254,7 +1276,7 @@ QUnit.module('options changed callbacks', {
         this.instance.option('fullScreen', true);
         body = iFrameDoc.getElementsByTagName('body')[0];
 
-        assert.equal(body.children.length, 1, 'Content doesn\'t disappear');
+        assert.equal(body.children.length, 1, 'Content does not disappear');
     });
 
     QUnit.test('fullScreen with disabled shading', function(assert) {
@@ -1314,22 +1336,24 @@ QUnit.module('options changed callbacks', {
 
             assert.equal($bottomBar.length, 1, 'Bottom bar rendered');
             assert.ok($(`.${POPUP_WRAPPER_CLASS}`, viewport()).hasClass('dx-popup-' + buttonType + '-visible'), 'popup has according class');
-            assert.ok($bottomBar.hasClass('dx-popup-' + buttonType), 'Bottom bar has class \'dx-popup-' + buttonType + '\'');
+            assert.ok($bottomBar.hasClass('dx-popup-' + buttonType), 'Bottom bar has class dx-popup-' + buttonType);
             assert.equal($button.length, 1, buttonType + ' button rendered');
         });
     });
 
-    QUnit.test('buttons close button', function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true });
-        const instance = $popup.dxPopup('instance');
-        const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
-        const $closeButton = $(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, viewport());
+    QUnit.test('close button', function(assert) {
+        const getTitle = () => $(`.${POPUP_TITLE_CLASS}`, viewport());
 
-        assert.equal($title.find('.dx-button').length, 1, 'title has close button');
-        assert.equal($closeButton.length, 1, 'close button element');
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            showCloseButton: true,
+        }).dxPopup('instance');
+
+        assert.strictEqual(getTitle().find(`.${BUTTON_CLASS}`).length, 1, 'title has close button');
 
         instance.option('toolbarItems', []);
-        assert.equal($title.find('.dx-button').length, 0, 'close button is removed');
+
+        assert.strictEqual(getTitle().find(`.${BUTTON_CLASS}`).length, 1, 'title still has close button');
     });
 
     QUnit.test('close button options', function(assert) {
@@ -1355,7 +1379,7 @@ QUnit.module('options changed callbacks', {
         instance.option('toolbarItems', [{ shortcut: 'close' }]);
         instance.option('showCloseButton', false);
         $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
-        assert.ok(!$closeButton.length, 'Close button is independent from the \'buttons\' option');
+        assert.ok(!$closeButton.length, 'Close button is independent from the buttons option');
     });
 
     QUnit.test('hide popup when close button is clicked', function(assert) {
@@ -1428,23 +1452,28 @@ QUnit.module('options changed callbacks', {
     QUnit.test('buttons aliases change affects container classes', function(assert) {
         const popup = $('#popup').dxPopup({
             visible: true,
-            toolbarItems: [{ shortcut: 'cancel' }]
+            toolbarItems: [
+                { shortcut: 'cancel' },
+            ],
         }).dxPopup('instance');
 
-        let $popupBottom = this.instance.$content().parent().find('.' + POPUP_BOTTOM_CLASS);
-        assert.ok($popupBottom.hasClass('dx-popup-cancel'), 'popup bottom has cancel class');
+        assert.ok(popup.bottomToolbar().hasClass('dx-popup-cancel'), 'bottom toolbar has cancel class');
 
-        popup.option('toolbarItems', [{ shortcut: 'done' }]);
-        $popupBottom = this.instance.$content().parent().find('.dx-popup-bottom');
-        assert.ok($popupBottom.hasClass('dx-popup-done'), 'popup bottom has done class');
-        assert.ok(!$popupBottom.hasClass('dx-popup-cancel'), 'popup bottom has not cancel class');
+        popup.option({
+            toolbarItems: [
+                { shortcut: 'done' },
+            ],
+        });
+
+        assert.ok(popup.bottomToolbar().hasClass('dx-popup-done'), 'bottom toolbar has done class');
+        assert.notOk(popup.bottomToolbar().hasClass('dx-popup-cancel'), 'bottom toolbar has not cancel class');
     });
 
     QUnit.test('empty item should not be rendered in top toolbar', function(assert) {
         $('#popup').dxPopup({
             visible: true,
             showTitle: true,
-            showCloseButton: false
+            showCloseButton: false,
         });
 
         const $toolbarItems = $('.' + POPUP_TITLE_CLASS).find('.dx-item');
@@ -1452,28 +1481,157 @@ QUnit.module('options changed callbacks', {
         assert.equal($toolbarItems.length, 0, 'no items are rendered inside top toolbar');
     });
 
-    QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
-        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+    QUnit.module('T934380, T1245421', {
+        beforeEach() {
+            this.resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+        },
+        afterEach() {
+            this.resizeEventSpy.restore();
+        },
+    }, () => {
+        QUnit.test('resize event is not triggered if visible is false', function(assert) {
+            assert.strictEqual(this.resizeEventSpy.callCount, 0, 'event is not triggered');
+        });
 
-        try {
-            this.instance.option({
+        QUnit.test('resize event is not triggered if toolbar is not rendered', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
                 visible: true,
-                toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+                showTitle: false,
             });
 
-            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
-        } finally {
-            resizeEventSpy.restore();
-        }
+            const topToolbar = this.instance.topToolbar();
+            const bottomToolbar = this.instance.bottomToolbar();
+
+            assert.strictEqual(topToolbar, undefined, 'top toolbar is not rendered');
+            assert.strictEqual(bottomToolbar, undefined, 'bottom toolbar is not rendered');
+
+            // Triggered from overlay visibility changing
+            assert.strictEqual(this.resizeEventSpy.callCount, 1, 'event is triggered once');
+        });
+
+        QUnit.test('resize event is triggered 3 times after toolbar rendering by showCloseButton and showTitle', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: true,
+                showTitle: true,
+                showCloseButton: true,
+            });
+
+            const topToolbar = this.instance.topToolbar();
+
+            assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+        });
+
+        QUnit.test('resize event is triggered 3 times after toolbar rendering by toolbarItems', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: true,
+                showTitle: false,
+                toolbarItems: [{ text: 'text' }],
+            });
+
+            const topToolbar = this.instance.topToolbar();
+
+            assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+        });
+
+        QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is not rendered on init', function(assert) {
+            const getTopToolbar = () => this.instance.topToolbar();
+            this.resizeEventSpy.resetHistory();
+            this.reinit({ visible: true, showTitle: false });
+
+            assert.strictEqual(getTopToolbar(), undefined, 'top toolbar is not rendered');
+            // From overlay visibility changing
+            assert.strictEqual(this.resizeEventSpy.callCount, 1, 'event is triggered once');
+
+            this.instance.option({ toolbarItems: [{ text: 'text' }] });
+
+            assert.strictEqual(getTopToolbar().length, 1, 'top toolbar is rendered');
+            // 2nd and 3rd from optionChanged
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+        });
+
+        QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is rendered on init', function(assert) {
+            const getTopToolbar = () => this.instance.topToolbar();
+            this.resizeEventSpy.resetHistory();
+            this.reinit({ visible: true });
+
+            const $toolbar1 = getTopToolbar();
+
+            assert.strictEqual($toolbar1.length, 1, 'top toolbar is rendered');
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+
+            this.instance.option({ toolbarItems: [{ text: 'text' }] });
+
+            const $toolbar2 = getTopToolbar();
+
+            assert.strictEqual($toolbar2.length, 1, 'top toolbar is rendered');
+            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered additional times');
+
+            assert.strictEqual($toolbar1, $toolbar2, 'toolbar is not rendered twice after toolbarItems update in runtime');
+        });
+
+        QUnit.test('resize event is triggered during animation showing when toolbar is present', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: false,
+                showTitle: true,
+                showCloseButton: true,
+            });
+            const beforeShow = this.resizeEventSpy.callCount;
+
+            this.instance.show();
+
+            const topToolbar = this.instance.topToolbar();
+
+            assert.strictEqual(beforeShow, 0, 'event is not triggered when popup is hidden');
+            assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times during show animation');
+        });
+
+        QUnit.test('additional resize events are triggered only on toolbar elements', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: true,
+                showTitle: true,
+                showCloseButton: true,
+                toolbarItems: [
+                    {
+                        text: 'bottom text',
+                        toolbar: 'bottom',
+                        location: 'center',
+                    },
+                ],
+            });
+
+            const topToolbar = this.instance.topToolbar();
+            const bottomToolbar = this.instance.bottomToolbar();
+            const overlayContent = this.instance.$overlayContent();
+
+            const callsForTopToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === topToolbar[0]);
+            const callsForBottomToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === bottomToolbar[0]);
+            const callsForOverlayContent = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === overlayContent[0]);
+
+            assert.strictEqual(callsForTopToolbar.length, 2, 'additional resize events are triggered on top toolbar');
+            assert.strictEqual(callsForBottomToolbar.length, 2, 'additional resize events are triggered on bottom toolbar');
+            assert.strictEqual(callsForOverlayContent.length, 1, 'resize event is triggered on overlay content for geometry rendering');
+        });
     });
 
     QUnit.test('titleTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
+
         const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
         try {
             this.instance.option({
-                titleTemplate: () => ''
+                titleTemplate: () => '',
             });
 
             assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
@@ -1941,6 +2099,11 @@ QUnit.module('drag', {
         };
 
         this.init();
+
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('class should be added if drag is enabled', function(assert) {
@@ -1963,7 +2126,7 @@ QUnit.module('drag', {
         }, 'popup was moved');
     });
 
-    QUnit.test('popup shouldn\'t be dragged by content', function(assert) {
+    QUnit.test('popup should not be dragged by content', function(assert) {
         const pointer = pointerMock(this.popup.$content());
         const position = this.$overlayContent.position();
 
@@ -2082,7 +2245,7 @@ QUnit.module('drag', {
             assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
         } finally {
             viewPort().removeAttr('style');
-            viewPort(toSelector(VIEWPORT_CLASS));
+            viewPort(`.${VIEWPORT_CLASS}`);
         }
     });
 
@@ -2116,10 +2279,10 @@ QUnit.module('drag', {
         const pointer = pointerMock(this.$title);
         const startEvent = pointer.start().dragStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxTopOffset, 10, 'popup can dragged vertically');
-        assert.strictEqual(startEvent.maxBottomOffset, 10, 'popup can be dragged vertically');
-        assert.strictEqual(startEvent.maxLeftOffset, 10, 'popup can be dragged horizontally');
-        assert.strictEqual(startEvent.maxRightOffset, 10, 'popup can be dragged horizontally');
+        assert.roughEqual(startEvent.maxTopOffset, 10, 0.5, 'popup can dragged vertically');
+        assert.roughEqual(startEvent.maxBottomOffset, 10, 0.5, 'popup can be dragged vertically');
+        assert.roughEqual(startEvent.maxLeftOffset, 10, 0.5, 'popup can be dragged horizontally');
+        assert.roughEqual(startEvent.maxRightOffset, 10, 0.5, 'popup can be dragged horizontally');
     });
 
     QUnit.test('popup should be dragged correctly when position.of and shading (T534551)', function(assert) {
@@ -2158,7 +2321,7 @@ QUnit.module('drag', {
 
         this.popup.option('position.offset', '0 20');
 
-        assert.strictEqual(this.$overlayContent.position().top, 20, 'overlay positioned correctly after change the \'position\' option');
+        assert.strictEqual(this.$overlayContent.position().top, 20, 'overlay positioned correctly after change the position option');
     });
 
     QUnit.test('popup should reposition after dragging if position is outside of drag area', function(assert) {
@@ -2204,7 +2367,7 @@ QUnit.module('resize', {
                 .dxPopup($.extend({}, initialOptions, options))
                 .dxPopup('instance');
             this.$overlayContent = this.popup.$content().parent();
-            this.$handle = this.$overlayContent.find(toSelector(POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS));
+            this.$handle = this.$overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
         };
         this.reinit = (options) => {
             this.popup && this.popup.dispose();
@@ -2213,19 +2376,24 @@ QUnit.module('resize', {
         };
 
         this.init();
+
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('popup should have resizable component on overlay content', function(assert) {
         assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'all', 'direction specified correctly');
     });
 
-    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is false', function(assert) {
+    QUnit.test('popup should not have resizable component on overlay content if resizeEnabled is false', function(assert) {
         this.reinit({ resizeEnabled: false });
 
         assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
     });
 
-    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is changed dynamically', function(assert) {
+    QUnit.test('popup should not have resizable component on overlay content if resizeEnabled is changed dynamically', function(assert) {
         this.popup.option('resizeEnabled', false);
         assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
     });
@@ -2334,7 +2502,7 @@ QUnit.module('resize', {
 
             assert.ok(isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
         } finally {
-            viewPort(toSelector(VIEWPORT_CLASS));
+            viewPort(`.${VIEWPORT_CLASS}`);
         }
     });
 
@@ -2392,7 +2560,7 @@ QUnit.module('resize', {
             setTimeout(() => {
                 pointer.start().dragStart().drag(10);
                 setTimeout(() => {
-                    assert.strictEqual(getWidth(this.$overlayContent), 208, 'width was changed before pointerdown');
+                    assert.strictEqual(getWidth(this.$overlayContent), 210, 'width was changed before pointerdown');
                     resizeOnDraggingDone();
                 }, this.timeToWaitResize);
                 resizeOnOpeningDone();
@@ -2422,6 +2590,10 @@ QUnit.module('keyboard navigation', {
             this.position = this.$overlayContent.position();
             this.keyboard = keyboardMock(this.$overlayContent);
         };
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('arrows handling', function(assert) {
@@ -2465,10 +2637,10 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'popup should not be dragged right of target');
 
         keyboard.keyDown('up');
-        assert.strictEqual($overlayContent.position().top, 0, 'popup should not be dragged above the target');
+        assert.roughEqual($overlayContent.position().top, 0, 0.5, 'popup should not be dragged above the target');
 
         keyboard.keyDown('down');
-        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'popup should not be dragged below than target');
+        assert.roughEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 0.5, 'popup should not be dragged below than target');
     });
 
     QUnit.test('arrows handling for rtl', function(assert) {
@@ -2519,7 +2691,11 @@ QUnit.module('rendering', {
         this.element = $('#popup').dxPopup();
         this.instance = this.element.dxPopup('instance');
         devices.current('desktop');
+        executeAsyncMock.setup();
         return new Promise((resolve) => themes.initialized(resolve));
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('anonymous content template rendering', function(assert) {
@@ -2534,7 +2710,7 @@ QUnit.module('rendering', {
         assert.equal($content.find('.testContent').get(0), $inner[0], 'content should not lost the link');
     });
 
-    QUnit.test('custom content template is applied even if there is \'content\' template in popup', function(assert) {
+    QUnit.test('custom content template is applied even if there is content template in popup', function(assert) {
         const $popup = $('#popupWithCustomAndContentTemplate').dxPopup({
             contentTemplate: 'custom',
             visible: true
@@ -2545,7 +2721,7 @@ QUnit.module('rendering', {
         assert.equal($content.text().trim(), 'TestContent', 'content is correct');
     });
 
-    QUnit.test('title toolbar with buttons when \'showTitle\' is false', function(assert) {
+    QUnit.test('title toolbar with buttons when showTitle is false', function(assert) {
         this.instance.option({
             showTitle: false,
             title: 'Hidden title',
@@ -2579,7 +2755,6 @@ QUnit.module('rendering', {
         });
     });
 
-
     QUnit.test('dx-popup-fullscreen-width class should be attached when width is equal to screen width', function(assert) {
         this.instance.option('width', function() { return getWidth($(window)); });
         this.instance.show();
@@ -2605,6 +2780,39 @@ QUnit.module('rendering', {
         assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbar('instance').option('compactMode'), 'bottom toolbar has the compact option');
     });
 
+    ['top', 'bottom'].forEach((position) => {
+        QUnit.test(`${position} toolbar should be rendered correctly after clearing the toolbarItems (T1305512)`, function(assert) {
+            const popup = $('#popup').dxPopup({
+                showCloseButton: false,
+                showTitle: false,
+            }).dxPopup('instance');
+
+            popup.option({
+                toolbarItems: [
+                    {
+                        text: 'first',
+                        toolbar: position,
+                    },
+                ],
+            });
+            popup.option({ toolbarItems: [] });
+            popup.option({
+                toolbarItems: [
+                    {
+                        text: 'second',
+                        toolbar: position,
+                    },
+                ],
+            });
+
+            popup.show();
+
+            const $toolbarItemContent = popup.$wrapper().find(`.${TOOLBAR_ITEM_CONTENT_CLASS}`);
+
+            assert.strictEqual($toolbarItemContent.text(), 'second', 'toolbar with the correct element rendered after toolbarItems cleaning');
+        });
+    });
+
     QUnit.test('dx-popup-content-scrollable class should be attached when preventScrollEvents is used', function(assert) {
         this.instance.show();
 
@@ -2620,43 +2828,63 @@ QUnit.module('rendering', {
     });
 });
 
-QUnit.module('templates', () => {
-    QUnit.test('titleTemplate test', function(assert) {
+QUnit.module('templates', {
+    beforeEach: function() {
+        executeAsyncMock.setup();
+
+        this.getInstance = () => $('#popup').dxPopup('instance');
+        this.getOverlayContent = () => this.getInstance().$overlayContent();
+        this.getCustomItem = () => this.getOverlayContent().find(`.${CUSTOM_ITEM_CLASS}`);
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
+    }
+}, () => {
+    QUnit.test('titleTemplate', function(assert) {
         assert.expect(6);
 
         const $element = $('#popup').dxPopup({
             visible: true,
-            titleTemplate: function(titleElement) {
-                let result = '<div class=\'test-title-renderer\'>';
-                result += '<h1>Title</h1>';
-                result += '</div>';
+            titleTemplate: (titleElement) => {
+                const markup = `
+                    <div class="test-title-renderer">
+                        <h1>Title</h1>
+                    </div>
+                `;
 
-                assert.equal(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
+                assert.strictEqual(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
 
-                return result;
+                return markup;
             }
         });
+
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
-        assert.equal($popupContent.find(`.${'test-title-renderer'}`).length, 1, 'option \'titleTemplate\'  was set successfully');
+        assert.strictEqual($popupContent.find('.test-title-renderer').length, 1, 'titleTemplate was set successfully');
 
-        instance.option('onTitleRendered', function(e) {
-            assert.equal(e.element, e.component.element(), 'element is correct');
-            assert.ok(true, 'option \'onTitleRendered\' successfully passed to the popup widget raised on titleTemplate');
+        instance.option({
+            onTitleRendered: (e) => {
+                assert.strictEqual(e.element, e.component.element(), 'element is correct');
+                assert.ok(true, 'onTitleRendered successfully passed to the popup widget raised on titleTemplate');
+            },
         });
 
-        instance.option('titleTemplate', function(titleElement) {
-            assert.equal($(titleElement).get(0), $popupContent.find('.' + POPUP_TITLE_CLASS).get(0));
+        instance.option({
+            titleTemplate: (titleElement) => {
+                assert.strictEqual($(titleElement).get(0), $popupContent.find(`.${POPUP_TITLE_CLASS}`).get(0));
 
-            let result = '<div class=\'changed-test-title-renderer\'>';
-            result += '<h1>Title</h1>';
-            result += '</div>';
+                const markup = `
+                    <div class="changed-test-title-renderer">
+                        <h1>Title</h1>
+                    </div>
+                `;
 
-            return result;
+                return markup;
+            },
         });
 
-        assert.equal($popupContent.find(`.${'changed-test-title-renderer'}`).length, 1, 'option \'titleTemplate\' successfully passed to the popup widget');
+        assert.strictEqual($popupContent.find('.changed-test-title-renderer').length, 1, 'titleTemplate successfully passed to the popup widget');
     });
 
     QUnit.test('titleRendered event should be fired if was set thought method', function(assert) {
@@ -2676,37 +2904,44 @@ QUnit.module('templates', () => {
         instance.show();
     });
 
-    QUnit.test('\'bottomTemplate\' options test', function(assert) {
+    QUnit.test('bottomTemplate', function(assert) {
         const $element = $('#popup').dxPopup({
             visible: true,
-            toolbarItems: [{ text: 'bottom text', toolbar: 'bottom', location: 'center' }],
-            bottomTemplate: function(titleElement) {
-                let result = '<div class=\'test-bottom-renderer\'>';
-                result += '<h1>bottom</h1>';
-                result += '</div>';
-
-                return result;
-            }
+            toolbarItems: [
+                {
+                    text: 'bottom text',
+                    toolbar: 'bottom',
+                    location: 'center',
+                },
+            ],
+            bottomTemplate: () => `
+                <div class="test-bottom-renderer">
+                    <h1>bottom</h1>
+                </div>
+            `,
         });
+
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
-        assert.equal($popupContent.find('.test-bottom-renderer').length, 1, 'option \'bottomTemplate\'  was set successfully');
+        assert.strictEqual($popupContent.find('.test-bottom-renderer').length, 1, 'bottomTemplate was set successfully');
 
-        instance.option('bottomTemplate', function(titleElement) {
-            assert.equal($(titleElement).get(0), $popupContent.find('.' + POPUP_BOTTOM_CLASS).get(0));
+        instance.option({
+            bottomTemplate: (bottomElement) => {
+                assert.strictEqual($(bottomElement).get(0), $popupContent.find(`.${POPUP_BOTTOM_CLASS}`).get(0));
 
-            let result = '<div class=\'changed-test-bottom-renderer\'>';
-            result += '<h1>bottom</h1>';
-            result += '</div>';
-
-            return result;
+                return `
+                    <div class="changed-test-bottom-renderer">
+                        <h1>bottom</h1>
+                    </div>
+                `;
+            }
         });
 
-        assert.equal($popupContent.find('.changed-test-bottom-renderer').length, 1, 'option \'bottomTemplate\' successfully passed to the popup widget');
+        assert.strictEqual($popupContent.find('.changed-test-bottom-renderer').length, 1, 'bottomTemplate successfully passed to the popup widget');
     });
 
-    QUnit.test('title should be rendered if custom \'titleTemplate\' is specified and \'title\' is not set', function(assert) {
+    QUnit.test('title should be rendered if custom titleTemplate is specified and title is not set', function(assert) {
         $('#popupWithTitleTemplate').dxPopup({
             visible: true,
             titleTemplate: 'customTitle',
@@ -2719,14 +2954,14 @@ QUnit.module('templates', () => {
         assert.equal($title.text(), 'testTitle', 'title template is rendered correctly');
     });
 
-    QUnit.test('popup title should be rendered before content', function(assert) {
+    QUnit.test('title render should be called after the content is rendered to ensure the correct content sizes', function(assert) {
         let contentIsRendered = false;
 
         $('#popupWithTitleTemplate').dxPopup({
             visible: true,
             titleTemplate: function() {
-                if(!contentIsRendered) {
-                    assert.ok(true, 'Popup title is rendered before content');
+                if(contentIsRendered) {
+                    assert.ok(true, 'the title is rendered after content');
                 }
             },
             contentTemplate: function() {
@@ -2738,6 +2973,7 @@ QUnit.module('templates', () => {
     [true, false].forEach((isDeferRendering) => {
         QUnit.test(`content should be append to the element when render the title with deferRendering=${isDeferRendering}`, function(assert) {
             const $widgetContainer = $('#popupWithTitleTemplate');
+
             $widgetContainer.dxPopup({
                 deferRendering: isDeferRendering,
                 visible: isDeferRendering,
@@ -2813,6 +3049,186 @@ QUnit.module('templates', () => {
         assert.strictEqual(toolbarButtonText, buttonText, 'default content template rendered');
         assert.strictEqual(toolbarTabTitleText, `${titleText}${titleText}`, 'default title template rendered');
     });
+
+    QUnit.test('Popup toolbar should render custom template from integrationOptions after runtime toolbarItems change (T1312079)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true,
+            title: 'Title',
+        }).dxPopup('instance');
+
+        const $customItemOnInit = this.getCustomItem();
+
+        assert.strictEqual($customItemOnInit.length, 0, 'custom template not rendered initially');
+
+        popup.option({
+            integrationOptions: {
+                templates: {
+                    'customToolbarTemplate': {
+                        render(args) {
+                            $('<div>')
+                                .attr('class', CUSTOM_ITEM_CLASS)
+                                .appendTo(args.container);
+                        },
+                    },
+                },
+            },
+            toolbarItems: [
+                {
+                    location: 'after',
+                    toolbar: 'top',
+                    template: 'customToolbarTemplate',
+                },
+            ],
+        });
+
+        const $customItemAfterRuntimeChange = this.getCustomItem();
+
+        assert.strictEqual($customItemAfterRuntimeChange.length, 1, 'custom template rendered after runtime change');
+    });
+
+    QUnit.module('renderByTemplate', {
+        beforeEach: function() {
+            this.popup = $('#popup').dxPopup({
+                visible: true,
+                showTitle: true,
+            }).dxPopup('instance');
+        },
+    }, () => {
+        QUnit.test('toolbar container should not have dx-toolbar class when custom titleTemplate is used', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<div>').addClass('custom-title').text('Custom');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $topToolbarContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.ok($topToolbarContainer.hasClass(POPUP_TITLE_CLASS), 'toolbar container has dx-popup-title class');
+            assert.notOk($topToolbarContainer.hasClass(TOOLBAR_CLASS),
+                'dx-toolbar class is not on the container when custom template is used');
+        });
+
+        QUnit.test('bottom toolbar container should not have dx-toolbar class when custom bottomTemplate is used', function(assert) {
+            this.popup.option({
+                toolbarItems: [
+                    { text: 'bottom text', toolbar: 'bottom', location: 'center' },
+                ],
+                bottomTemplate: () => {
+                    return $('<div>').addClass('custom-bottom').text('Custom Bottom');
+                },
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $bottomToolbarContainer = $overlayContent.find(`.${POPUP_BOTTOM_CLASS}`).first();
+
+            assert.ok($bottomToolbarContainer.hasClass(POPUP_BOTTOM_CLASS), 'toolbar container has dx-popup-bottom class');
+            assert.notOk($bottomToolbarContainer.hasClass(TOOLBAR_CLASS),
+                'dx-toolbar class is not on the container when custom template is used');
+        });
+
+        QUnit.test('titleTemplate result is appended inside container', function(assert) {
+            const customClass = 'my-custom-title';
+
+            this.popup.option('titleTemplate', () => {
+                return $('<div>').addClass(customClass).text('Custom Title');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.strictEqual($titleContainer.find(`.${customClass}`).length, 1, 'custom template content is inside the container');
+            assert.strictEqual($titleContainer.find(`.${customClass}`).text(), 'Custom Title', 'custom template text is correct');
+        });
+
+        QUnit.test('bottomTemplate result is appended inside container', function(assert) {
+            const customClass = 'my-custom-bottom';
+
+            this.popup.option({
+                toolbarItems: [
+                    { text: 'test', toolbar: 'bottom', location: 'center' },
+                ],
+                bottomTemplate: () => {
+                    return $('<div>').addClass(customClass).text('Custom Bottom');
+                },
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $bottomContainer = $overlayContent.find('.' + POPUP_BOTTOM_CLASS).first();
+
+            assert.strictEqual($bottomContainer.find(`.${customClass}`).length, 1, 'custom template content is inside the container');
+        });
+
+        QUnit.test('template result is appended inside container', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<span>')
+                    .addClass(TEMPLATE_WRAPPER_CLASS)
+                    .text('wrapper only');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.strictEqual($titleContainer.text(), 'wrapper only', 'template content is rendered inside the container');
+            assert.ok($titleContainer.hasClass(POPUP_TITLE_CLASS), 'container still has dx-popup-title class');
+        });
+
+        QUnit.test('template result with multiple classes preserves all classes on result element', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<div>')
+                    .addClass(TEMPLATE_WRAPPER_CLASS)
+                    .addClass('user-class-1')
+                    .addClass('user-class-2')
+                    .text('multi-class');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+            const $innerElement = $titleContainer.find('.user-class-1');
+
+            assert.strictEqual($innerElement.length, 1, 'user class element is found');
+            assert.ok($innerElement.hasClass('user-class-2'), 'second user class is preserved');
+            assert.ok($innerElement.hasClass(TEMPLATE_WRAPPER_CLASS), 'dx-template-wrapper class is preserved on result element');
+        });
+
+        QUnit.test('template that renders result directly into container should work correctly (React-like scenario)', function(assert) {
+            this.popup.option('titleTemplate', (container) => {
+                const $container = $(container);
+                $('<p>').addClass('react-like-content').text('React Title').appendTo($container);
+                return $container;
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.strictEqual($titleContainer.find('.react-like-content').length, 1, 'content is rendered inside container');
+            assert.strictEqual($titleContainer.find('.react-like-content').text(), 'React Title', 'content text is correct');
+        });
+
+        QUnit.test('container preserves its original classes after template rendering', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<div>').text('test');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.ok($titleContainer.hasClass(POPUP_TITLE_CLASS), 'container still has dx-popup-title class');
+        });
+
+        QUnit.test('_renderByTemplate returns the original container element', function(assert) {
+            const popup = this.popup;
+
+            popup.option('titleTemplate', () => {
+                return $('<div>').text('return check');
+            });
+
+            const $overlayContent = popup.$overlayContent();
+            const $topToolbar = popup.topToolbar();
+            const $titleInDOM = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.strictEqual($topToolbar.get(0), $titleInDOM.get(0), 'topToolbar reference points to the same DOM element as the title container');
+        });
+    });
 });
 
 QUnit.module('renderGeometry', {
@@ -2834,37 +3250,59 @@ QUnit.module('renderGeometry', {
 
         this.init();
 
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
-    QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
+    QUnit.test('toolbar should update geometry after toolbarItems visibility option change', function(assert) {
         this.popup.option('toolbarItems[0].visible', true);
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for visibility option');
 
-        this.popup.option('toolbarItems', [{
-            widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
-        }]);
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
+        assert.strictEqual(this.renderGeometrySpy.callCount, 1, 'renderGeometry is called for visibility option');
+
+        this.popup.option({
+            toolbarItems: [
+                {
+                    widget: 'dxButton',
+                    options: { text: 'Supprimer', type: 'danger' },
+                },
+            ]
+        });
+
+        assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeometry is called for toolbarItems option fully change');
 
         this.popup.option('toolbarItems[0]', {
             widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
+            options: { text: 'Supprimer', type: 'danger' },
         });
 
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
+        assert.strictEqual(this.renderGeometrySpy.callCount, 3, 'renderGeometry is called for toolbarItems option partial change');
     });
 
-    QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
+    QUnit.test('toolbar should update geometry after partial update of its items', function(assert) {
         this.reinit({
             visible: true,
-            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+            toolbarItems: [
+                {
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: { text: 'test 2 top' },
+                },
+            ],
         });
 
-        this.popup.option('toolbarItems[0].options', { text: 'test', disabled: true });
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called on partial update of a widget');
+        this.popup.option('toolbarItems[0].options', {
+            text: 'test',
+            disabled: true,
+        });
+
+        assert.strictEqual(this.renderGeometrySpy.callCount, 1, 'renderGeometry is called on partial update of a widget');
 
         this.popup.option('toolbarItems[0].toolbar', 'top');
-        assert.ok(this.renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+
+        assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeometry is called on item location changing');
     });
 
     QUnit.test('option change', function(assert) {
@@ -2875,10 +3313,10 @@ QUnit.module('renderGeometry', {
             autoResizeEnabled: !options.autoResizeEnabled,
             showTitle: !options.showTitle,
             title: 'test',
+            useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
+            useFlatToolbarButtons: !options.useFlatToolbarButtons,
             titleTemplate: () => $('<div>').text('title template'),
             bottomTemplate: () => $('<div>').text('bottom template'),
-            useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
-            useFlatToolbarButtons: !options.useFlatToolbarButtons
         };
 
         for(const optionName in newOptions) {
@@ -2931,6 +3369,10 @@ QUnit.module('positioning', {
             this.init(options);
         };
         this.init();
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.module('after fullScreen option change', () => {
@@ -3060,10 +3502,6 @@ QUnit.module('positioning', {
         });
 
         QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const visualPositionChangedStub = sinon.stub();
             this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
@@ -3201,6 +3639,7 @@ QUnit.module('positioning', {
                         });
 
                         this[moveMethodName]();
+
                         const position = this.getPosition();
 
                         $('#content')
@@ -3318,9 +3757,11 @@ QUnit.module('animation', {
             },
             fullScreen: true,
         }).dxPopup('instance');
+        executeAsyncMock.setup();
     },
     afterEach: function() {
         this.animateStub.restore();
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('animation.show.to should have position.of=window if fullScreen=true even if popup position.of is set', function(assert) {
@@ -3354,5 +3795,87 @@ QUnit.module('animation', {
 
         const hideAnimationConfig = this.animateStub.getCall(1).args[1];
         assert.strictEqual(hideAnimationConfig.from.position.of, this.positionOf, 'animation is relative to position.of');
+    });
+});
+
+QUnit.module('Memory Leaks', {
+    beforeEach: function() {
+        executeAsyncMock.setup();
+        this.$element = $('#popup');
+
+        this.getPositionController = (instance) => {
+            return instance._positionController;
+        };
+    },
+    afterEach: function() {
+        this.$element.remove();
+        executeAsyncMock.teardown();
+    }
+}, () => {
+    QUnit.test('should clear topToolbar reference on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            title: 'Test Title'
+        }).dxPopup('instance');
+
+        assert.notStrictEqual(instance.topToolbar(), null, 'topToolbar exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.topToolbar(), null, 'topToolbar() returns null after dispose');
+    });
+
+    QUnit.test('should clear bottomToolbar reference on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            toolbarItems: [{
+                location: 'bottom',
+                widget: 'dxButton',
+                options: { text: 'OK' },
+            }]
+        }).dxPopup('instance');
+
+        assert.notStrictEqual(instance.bottomToolbar(), null, 'bottomToolbar exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.bottomToolbar(), null, 'bottomToolbar() returns null after dispose');
+    });
+
+    QUnit.test('should clear $content reference on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            contentTemplate: function() {
+                return $('<div>').text('Test Content');
+            }
+        }).dxPopup('instance');
+
+        assert.notStrictEqual(instance.$content(), null, 'content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$content(), null, '$content() returns null after dispose');
+    });
+
+    QUnit.test('should clear PopupPositionController references on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            dragEnabled: true,
+        }).dxPopup('instance');
+
+        const positionController = this.getPositionController(instance);
+
+        assert.ok(positionController._$content, 'PositionController._$content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(
+            positionController._$dragResizeContainer,
+            undefined,
+            'PopupPositionController._$dragResizeContainer is undefined after dispose',
+        );
+        assert.strictEqual(positionController._$content, undefined, 'PositionController._$content is undefined after dispose');
+        assert.strictEqual(positionController._$wrapper, undefined, 'PositionController._$wrapper is undefined after dispose');
+        assert.strictEqual(positionController._$root, undefined, 'PositionController._$root is undefined after dispose');
     });
 });

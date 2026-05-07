@@ -1,10 +1,11 @@
 {
   "name": "devextreme-metadata",
-  "version": "1.0.0",
+  "version": "25.1.11",
   "private": true,
   "scripts": {
     "format:check": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint": "pnpm run format:check"
   },
   "devDependencies": {
     "@types/node": "catalog:tools",

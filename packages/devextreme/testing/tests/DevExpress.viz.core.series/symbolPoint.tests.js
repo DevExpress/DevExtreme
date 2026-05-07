@@ -1,10 +1,13 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
 import tooltipModule from 'viz/core/tooltip';
-import { states as statesConsts } from 'viz/components/consts';
+import consts from '__internal/viz/components/consts';
 
 const originalLabel = labelModule.Label;
 
@@ -17,7 +20,7 @@ const createPoint = function(series, data, options) {
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
 
         this.data = {
@@ -217,7 +220,6 @@ QUnit.test('Null value', function(assert) {
 });
 
 QUnit.test('create point with index', function(assert) {
-
     const point = createPoint(this.series, { argument: 'cat5', value: 10, index: 'index' }, this.opt);
 
     assert.strictEqual(point.index, 'index');
@@ -290,9 +292,8 @@ QUnit.test('Point has datetime value - do correction', function(assert) {
 QUnit.test('Reset correction', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
     point.correctValue(12);
-    // act
     point.resetCorrection();
-    // assert
+
     assert.equal(point.value, 10);
     assert.equal(point.properValue, 10);
     assert.equal(point.minValue, 'canvas_position_default');
@@ -501,7 +502,6 @@ QUnit.test('Positive', function(assert) {
     const result = point.hasValue();
 
     assert.strictEqual(result, true);
-
 });
 
 QUnit.test('Negative', function(assert) {
@@ -619,7 +619,7 @@ QUnit.test('Point is on bottom border', function(assert) {
 QUnit.module('Draw point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -998,7 +998,7 @@ QUnit.test('With animation enabled. Rotated', function(assert) {
 QUnit.test('Draw point with selected state', function(assert) {
     this.options.symbol = 'circle';
     const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.fullState = statesConsts.selectedMark;
+    point.fullState = consts.states.selectedMark;
 
     point.draw(this.renderer, this.groups);
 
@@ -1012,7 +1012,7 @@ QUnit.test('Draw point with selected state', function(assert) {
 QUnit.test('Draw point with hover state', function(assert) {
     this.options.symbol = 'circle';
     const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.fullState = statesConsts.hoverMark;
+    point.fullState = consts.states.hoverMark;
 
     point.draw(this.renderer, this.groups);
 
@@ -1060,16 +1060,13 @@ QUnit.test('double drawing without animation', function(assert) {
     point.y = 50,
     point.defaultY = 0;
     point.visible = true;
-    // act
     point.draw(this.renderer, this.groups, false);
-    // assert
 
     assert.ok(point);
     assert.ok(point.graphic);
 
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateX, 20);
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateY, 50);
-
 });
 
 QUnit.test('double drawing with animation', function(assert) {
@@ -1087,16 +1084,13 @@ QUnit.test('double drawing with animation', function(assert) {
     point.y = 50,
     point.defaultY = 0;
     point.visible = true;
-    // act
     point.draw(this.renderer, this.groups, true);
-    // assert
 
     assert.ok(point);
     assert.ok(point.graphic);
 
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateX, undefined);
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateY, undefined);
-
 });
 
 QUnit.test('Animate point', function(assert) {
@@ -1118,7 +1112,6 @@ QUnit.test('Animate point', function(assert) {
 
     assert.ok(!point.graphic.stub('animate').lastCall.args[2]);
     assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
-
 });
 
 QUnit.test('Animate point with complete', function(assert) {
@@ -1135,9 +1128,8 @@ QUnit.test('Animate point with complete', function(assert) {
 
     point.animate(stubComplete, { translate: { x: point.x, y: point.y } });
     const complete = point.graphic.stub('animate').lastCall.args[2];
-    // act
     complete();
-    // assert
+
     assert.ok(stubComplete.calledOnce);
 });
 
@@ -1177,15 +1169,13 @@ QUnit.test('Hide error bar', function(assert) {
         edgeLength: 8,
         opacity: 1,
         color: 'red',
-
     };
     const point = createPoint(this.series, { argument: 1, value: 1, lowError: 3, highError: 4 }, this.options);
 
     point.translate();
     point.draw(this.renderer, this.groups);
-    // act
     point.setInvisibility();
-    // assert
+
     assert.ok(point.graphic);
     assert.strictEqual(this.renderer.path.callCount, 1);
     assert.deepEqual(this.renderer.path.lastCall.returnValue.attr.lastCall.args[0], {
@@ -1254,7 +1244,6 @@ QUnit.test('Draw only low errorBar. Rotated', function(assert) {
 
     assert.ok(point.graphic);
 
-
     assert.strictEqual(this.renderer.path.callCount, 1);
     assert.deepEqual(this.renderer.path.lastCall.args[0], [[24, 11, 22, 11], [24, 7, 24, 15]]);
 });
@@ -1273,7 +1262,6 @@ QUnit.test('Draw only high errorBar when defined only highError', function(asser
 
     assert.ok(point.graphic);
 
-
     assert.strictEqual(this.renderer.path.callCount, 1);
 
     assert.deepEqual(this.renderer.path.lastCall.args[0], [[7, 25, 15, 25], [11, 25, 11, 22]]);
@@ -1287,7 +1275,6 @@ QUnit.test('Draw point with errorBar. odd edgeLength', function(assert) {
         edgeLength: 7,
         opacity: 1,
         color: 'red',
-
     };
     const point = createPoint(this.series, { argument: 1, value: 1, lowError: 3, highError: 4 }, this.options);
 
@@ -1371,7 +1358,6 @@ QUnit.test('No draw errorBar when defined only highError and display low only', 
 
     assert.ok(point.graphic);
     assert.strictEqual(this.renderer.stub('path').callCount, 0);
-
 });
 
 QUnit.test('No draw errorBar when displayMode is \'none\'', function(assert) {
@@ -1518,7 +1504,7 @@ QUnit.test('Draw point with errorBar. Rotated', function(assert) {
 QUnit.module('Update point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -1955,7 +1941,6 @@ QUnit.test('Update errorBars', function(assert) {
         points: [[11, 23, 11, 23], [11, 23, 11, 22], [11, 22, 11, 22]],
         visibility: 'visible'
     });
-
 });
 
 QUnit.test('Update errorBars - hide errorBar', function(assert) {
@@ -1997,7 +1982,7 @@ QUnit.test('Update errorBars - hide errorBar', function(assert) {
 QUnit.module('Point visibility', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.data = {
             argument: 1,
@@ -2222,7 +2207,7 @@ QUnit.test('keep style after redraw', function(assert) {
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         const axis = this.axis = new MockAxis({ renderer: this.renderer });
         this.data = {
@@ -2248,7 +2233,7 @@ QUnit.module('Tooltip', {
             _valueChecker: function() { return true; },
             getStackName: function() { return undefined; }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             },
@@ -3147,7 +3132,7 @@ QUnit.test('Update label location', function(assert) {
 QUnit.module('Calculate tracker size', {
     beforeEach: function() {
         this.realTouchDevice = ('ontouchstart' in window) || (window.navigator.msPointerEnabled && window.navigator.msMaxTouchPoints > 0) || (window.navigator.pointerEnabled && window.navigator.maxTouchPoints > 0);
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.options = {
             widgetType: 'chart',
             styles: { normal: { r: 6 }, hover: { r: 6 } },
@@ -3188,7 +3173,7 @@ QUnit.test('Tracker with point.r > minTrackerSize', function(assert) {
 
 QUnit.module('Tracker size calculation on MS Touch Devices', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             widgetType: 'chart',
@@ -3211,7 +3196,6 @@ QUnit.test('Get navigator', function(assert) {
 
     assert.equal(point.__debug_browserNavigator, window.navigator);
 });
-
 
 QUnit.test('Tracker on ms devices with point.r < minTrackerSize. msPointer', function(assert) {
     const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
@@ -3257,7 +3241,7 @@ QUnit.test('Tracker on ms devices with point.r > minTrackerSize. pointerEnabled'
 
 QUnit.module('get point radius', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -3333,7 +3317,7 @@ QUnit.test('symbol point is triangleUp', function(assert) {
 QUnit.module('API', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             visible: true,

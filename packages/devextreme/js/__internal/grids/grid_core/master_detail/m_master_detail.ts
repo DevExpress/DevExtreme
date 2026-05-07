@@ -15,11 +15,8 @@ import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import gridCoreUtils from '../m_utils';
-
-const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
-const MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-const ROW_LINES_CLASS = 'dx-row-lines';
+import { CLASSES } from './const';
+import { isDetailRow } from './utils';
 
 const columns = (Base: ModuleType<ColumnsController>) => class ColumnsMasterDetailExtender extends Base {
   protected _getExpandColumnsCore() {
@@ -121,6 +118,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
         changeType: 'update',
         rowIndices: that._getRowIndicesForExpand(key),
       });
+      that.resetCachedProcessedItems();
 
       // @ts-expect-error
       result = new Deferred().resolve();
@@ -238,7 +236,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
   }
 
   private _updateParentDataGrids($element) {
-    const $masterDetailRow = $element.closest(`.${MASTER_DETAIL_ROW_CLASS}`);
+    const $masterDetailRow = $element.closest(`.${CLASSES.detailRow}`);
 
     if ($masterDetailRow.length) {
       when(this._updateMasterDataGrid($masterDetailRow, $element)).done(() => {
@@ -312,13 +310,21 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
 
   protected _toggleBestFitMode(isBestFit) {
     super._toggleBestFitMode.apply(this, arguments as any);
-    if (this.option('masterDetail.template')) {
-      const $rowsTable = this._rowsView.getTableElement();
-      if ($rowsTable) {
-        $rowsTable
-          .find('.dx-master-detail-cell')
-          .css('maxWidth', isBestFit ? 0 : '');
-      }
+
+    const hasMasterDetailTemplate = this.option('masterDetail.template');
+
+    if (!hasMasterDetailTemplate) {
+      return;
+    }
+
+    const $rowsTable = this._rowsView.getTableElement();
+
+    if ($rowsTable) {
+      const detailSelector = `.${this.addWidgetPrefix(CLASSES.detailContainer)}, .${CLASSES.detailCell}`;
+
+      $rowsTable
+        .find(detailSelector)
+        .css('maxWidth', isBestFit ? 0 : '');
     }
   }
 };
@@ -340,16 +346,16 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
     return template;
   }
 
-  protected _isDetailRow(row) {
-    return row?.rowType && row.rowType.indexOf('detail') === 0;
-  }
-
   protected _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);
+    const isDetailRowResult = isDetailRow(row);
 
-    if (row && this._isDetailRow(row)) {
-      this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);
-      $row.addClass(MASTER_DETAIL_ROW_CLASS);
+    if (isDetailRowResult) {
+      const showRowLines = this.option('showRowLines');
+
+      $row
+        .addClass(CLASSES.detailRow)
+        .toggleClass(CLASSES.rowLines, showRowLines);
 
       if (isDefined(row.visible)) {
         $row.toggle(row.visible);
@@ -360,8 +366,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
 
   protected _renderCells($row, options) {
     const { row } = options;
+    const isDetailRowResult = isDetailRow(row);
 
-    if (row.rowType && this._isDetailRow(row)) {
+    if (isDetailRowResult) {
       if (this._needRenderCell(0, options.columnIndices)) {
         this._renderMasterDetailCell($row, row, options);
       }
@@ -383,14 +390,14 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
     });
 
     $detailCell
-      .addClass(CELL_FOCUS_DISABLED_CLASS)
-      .addClass(MASTER_DETAIL_CELL_CLASS)
+      .addClass(CLASSES.cellFocusDisabledClass)
+      .addClass(CLASSES.detailCell)
       .attr('colSpan', visibleColumns.length);
 
     const isEditForm = row.isEditing;
 
     if (!isEditForm) {
-      $detailCell.attr('aria-roledescription', messageLocalization.format('dxDataGrid-masterDetail'));
+      this.setAria('roledescription', messageLocalization.format('dxDataGrid-masterDetail'), $detailCell);
     }
 
     return $detailCell;

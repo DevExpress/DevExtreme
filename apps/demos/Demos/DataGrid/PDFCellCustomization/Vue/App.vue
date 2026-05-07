@@ -71,7 +71,7 @@ import {
   DxTotalItem,
   type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { exportDataGrid } from 'devextreme-vue/common/export/pdf';
+import { exportDataGrid, type DataGridCell, type Cell as PdfCell } from 'devextreme-vue/common/export/pdf';
 import { jsPDF } from 'jspdf';
 import { companies } from './data.ts';
 
@@ -83,19 +83,27 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     jsPDFDocument: doc,
     component: e.component,
     columnWidths: [40, 40, 30, 30, 40],
-    customizeCell({ gridCell, pdfCell }) {
-      if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Phone') {
+    customizeCell({ gridCell, pdfCell }: { gridCell?: DataGridCell, pdfCell?: PdfCell }) {
+      if (!(pdfCell?.font && pdfCell.text)) {
+        return
+      }
+      
+      if (gridCell?.rowType === 'data' && gridCell?.column?.dataField === 'Phone') {
         pdfCell.text = pdfCell.text.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-      } else if (gridCell.rowType === 'group') {
+      } else if (gridCell?.rowType === 'group') {
         pdfCell.backgroundColor = '#BEDFE6';
-      } else if (gridCell.rowType === 'totalFooter') {
+      } else if (gridCell?.rowType === 'totalFooter') {
         pdfCell.font.style = 'italic';
       }
     },
     customDrawCell(options) {
       const { gridCell, pdfCell } = options;
 
-      if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Website') {
+      if (options.rect 
+          && pdfCell?.text 
+          && pdfCell.padding?.left 
+          && gridCell?.rowType === 'data' 
+          && gridCell.column?.dataField === 'Website') {
         options.cancel = true;
         doc.setFontSize(11);
         doc.setTextColor('#0000FF');

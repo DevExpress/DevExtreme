@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 import { FieldsArea } from '__internal/grids/pivot_grid/fields_area/m_fields_area';
 import { AreaItem } from '__internal/grids/pivot_grid/area_item/m_area_item';
@@ -178,14 +178,39 @@ QUnit.module('Rendering', {
 
 QUnit.module('Hamburger', {
     beforeEach: function() {
+        const fieldChooserBaseMock = {
+            renderField: function(field) {
+                return $('<div>').addClass('dx-area-field').text(field.dataField);
+            },
+            subscribeToEvents: sinon.stub(),
+            renderSortable: sinon.stub()
+        };
+
         this.component = {
             option: sinon.stub(),
-            element: function() {
-                return $('<div>').dxPivotGridFieldChooserBase();
+            $element: function() {
+                const element = $('<div>');
+                element.dxPivotGridFieldChooserBase = function(method) {
+                    if(method === 'instance') {
+                        return fieldChooserBaseMock;
+                    }
+                    return element;
+                };
+                return element;
             },
 
             _createComponent: function(container, Component, options) {
-                return new Component(container, options);
+                const instance = new Component(container, options);
+
+                if(instance.NAME === 'dxPopup' && instance.content) {
+                    const originalContent = instance.content.bind(instance);
+                    instance.content = function() {
+                        const content = originalContent();
+                        return content && content.jquery ? content : $(content);
+                    };
+                }
+
+                return instance;
             }
         };
 
@@ -195,11 +220,12 @@ QUnit.module('Hamburger', {
         this.component.option.withArgs('rowLayout').returns('tree');
 
         this.fields = [
-            { dataField: 'Field Area 1', allowFiltering: true, allowSorting: true, area: 'row' },
-            { dataField: 'Field2', allowFiltering: true, allowSorting: true, area: 'row' }
+            { dataField: 'Field Area 1', allowFiltering: true, allowSorting: true, area: 'row', visible: true },
+            { dataField: 'Field2', allowFiltering: true, allowSorting: true, area: 'row', visible: true }
         ];
 
         this.area = new FieldsArea(this.component, 'row');
+        this.area._shouldCreateButton = function() { return true; };
         this.$container = $('#container').addClass('dx-pivotgrid');
 
         const that = this;
@@ -207,10 +233,15 @@ QUnit.module('Hamburger', {
         this.renderArea = function() {
             that.area.render(that.$container, that.fields);
         };
+
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 }, () => {
 
-    QUnit.skip('Render hamburger button', function(assert) {
+    QUnit.test('Render hamburger button', function(assert) {
         this.renderArea();
 
         const rows = this.area.tableElement()[0].rows;
@@ -225,17 +256,21 @@ QUnit.module('Hamburger', {
         assert.ok(!popup.option('dragEnabled'));
     });
 
-    QUnit.skip('Show popup with fields', function(assert) {
+    QUnit.test('Show popup with fields', function(assert) {
         this.renderArea();
         const button = $(this.area.tableElement()[0].rows[0].cells[0]).children(0).dxButton('instance');
-
-        button.element().trigger('dxclick');
         const popup = this.area.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
 
-        assert.ok(popup);
-        assert.ok(popup.option('visible'));
-        assert.strictEqual(popup.content().find('.dx-pivotgrid-fields-area-head').length, 1);
-        assert.strictEqual(popup.content().find('.dx-pivotgrid-fields-area-head').find('.dx-area-field').length, 2);
+        assert.ok(popup, 'popup exists');
+        assert.ok(!popup.option('visible'), 'popup is hidden initially');
+
+        $(button.$element()).trigger('dxclick');
+
+        assert.ok(popup.option('visible'), 'popup is visible after click');
+
+        const $content = $(popup.content());
+        assert.strictEqual($content.find('.dx-pivotgrid-fields-area-head').length, 1, 'popup content has fields area head');
+        assert.strictEqual($content.find('.dx-area-field').length, 2, 'popup content has 2 fields');
     });
 
 });

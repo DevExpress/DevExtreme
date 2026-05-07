@@ -40,7 +40,12 @@ export default [
       globals: { },
     },
     external: [],
-    plugins,
+    plugins : [
+      resolve({
+        preferBuiltins: false,
+        browser: true,
+      })
+    ].concat(plugins.slice(1)),
   },
   {
     input: NG_BASE_DIR + `remark-parse/index.js`,

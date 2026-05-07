@@ -2593,7 +2593,11 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
 
         // act
         that.columnsResizerController._generatePointsByColumns();
-        const targetPoint = that.columnsResizerController._getTargetPoint(that.columnsResizerController._pointsByColumns, -9825, 0);
+        const targetPoint = that.columnsResizerController._getTargetPoint(
+            that.columnsResizerController._pointsByColumns,
+            { x: -9825, y: -10000 },
+            0
+        );
 
         // assert
         assert.ok(!targetPoint, 'not has target point');
@@ -2611,7 +2615,11 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
 
         // act
         that.columnsResizerController._generatePointsByColumns();
-        const targetPoint = that.columnsResizerController._getTargetPoint(that.columnsResizerController._pointsByColumns, -9775, 0);
+        const targetPoint = that.columnsResizerController._getTargetPoint(
+            that.columnsResizerController._pointsByColumns,
+            { x: -9775, y: -10000 },
+            0
+        );
 
         // assert
         assert.deepEqual(targetPoint, {

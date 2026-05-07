@@ -1,14 +1,16 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
+import type { ToolbarItem } from '@js/ui/scheduler';
 
 import {
   CLASS, DEFAULT_ITEMS, getDateNavigator, ITEMS_NAME,
 } from './m_date_navigator';
+import type { SchedulerHeader } from './m_header';
 
 describe('getDateNavigator', () => {
   it('should return default options in case of item is empty', () => {
-    expect(getDateNavigator({} as any, {})).toEqual({
+    expect(getDateNavigator({} as SchedulerHeader, {})).toEqual({
       location: 'before',
       name: 'dateNavigator',
       widget: 'dxButtonGroup',
@@ -26,13 +28,13 @@ describe('getDateNavigator', () => {
     });
   });
   it('should return replace items in correct order with custom options', () => {
-    expect(getDateNavigator({} as any, {
+    expect(getDateNavigator({} as SchedulerHeader, {
       customField: 'customField',
       options: {
         customOption: 'customOption',
         items: ['dateInterval', 'next', { key: 'customButton' }],
       },
-    } as any)).toEqual({
+    } as ToolbarItem)).toEqual({
       location: 'before',
       name: 'dateNavigator',
       widget: 'dxButtonGroup',
@@ -54,7 +56,7 @@ describe('getDateNavigator', () => {
   it('should handle default and custom click callback', () => {
     const customClick = jest.fn();
     const event = { itemData: { clickHandler: jest.fn() } };
-    const config = getDateNavigator({} as any, {
+    const config = getDateNavigator({} as SchedulerHeader, {
       options: { onItemClick: customClick },
     });
 

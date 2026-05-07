@@ -10,6 +10,7 @@ import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
+import type { Item } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -32,6 +33,13 @@ const COLUMN_CHOOSER_ICON_NAME = 'column-chooser';
 const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
 const COLUMN_OPTIONS_USED_IN_ITEMS = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
+
+type NodeInternal = Item & {
+  itemData: {
+    id: number;
+  };
+  children: NodeInternal[];
+};
 
 const processItems = function (that: ColumnChooserView, chooserColumns) {
   const items: any = [];
@@ -304,36 +312,60 @@ export class ColumnChooserView extends ColumnsView {
     };
   }
 
+  private _getBandColumnVisibility(columnIndex: number): boolean {
+    const childColumns = this._columnsController.getChildrenByBandColumn(columnIndex, true);
+    return !!childColumns.some((column) => !!column.visible);
+  }
+
+  private _getColumnVisibility(
+    columnIndex: number,
+    isNodeSelected: boolean | undefined,
+  ): boolean | undefined {
+    const column = this._columnsController.columnOption(columnIndex);
+    const selectionOptions = this.option('columnChooser.selection');
+    const recursive = selectionOptions?.recursive;
+
+    if (recursive && column?.hasColumns) {
+      return this._getBandColumnVisibility(columnIndex);
+    }
+
+    return isNodeSelected;
+  }
+
+  private _updateColumnVisibility(nodes: NodeInternal[]): void {
+    nodes.forEach((node) => {
+      const columnIndex = node.itemData.id;
+      const isVisible = this._getColumnVisibility(columnIndex, node.selected);
+
+      this._columnsController.columnOption(columnIndex, 'visible', isVisible);
+    });
+  }
+
+  private _getOrderedFlatNodes(nodes: NodeInternal[]): NodeInternal[] {
+    const getFlattenedNodesRecursive = (
+      sourceNodes: NodeInternal[],
+      flatNodesArray: NodeInternal[],
+    ): NodeInternal[] => sourceNodes.reduce((result, node) => {
+      result.push(node);
+
+      if (node.children.length) {
+        getFlattenedNodesRecursive(node.children, result);
+      }
+
+      return result;
+    }, flatNodesArray);
+
+    // Band columns should be updated after regular columns
+    return getFlattenedNodesRecursive(nodes, []).reverse();
+  }
+
   private _prepareSelectModeConfig() {
-    const that = this;
     const selectionOptions = this.option('columnChooser.selection') ?? {};
-
-    const getFlatNodes = (nodes) => {
-      const addNodesToArray = (nodes, flatNodesArray) => nodes.reduce((result, node) => {
-        result.push(node);
-
-        if (node.children.length) {
-          addNodesToArray(node.children, result);
-        }
-
-        return result;
-      }, flatNodesArray);
-
-      return addNodesToArray(nodes, []);
-    };
 
     const updateSelection = (e, nodes) => {
       nodes
         .filter((node) => node.itemData.allowHiding === false)
         .forEach((node) => e.component.selectItem(node.key));
-    };
-
-    const updateColumnVisibility = (nodes) => {
-      nodes.forEach((node) => {
-        const columnIndex = node.itemData.id;
-        const isVisible = node.selected !== false;
-        that._columnsController.columnOption(columnIndex, 'visible', isVisible);
-      });
     };
 
     let isUpdatingSelection = false;
@@ -343,7 +375,7 @@ export class ColumnChooserView extends ColumnsView {
         return;
       }
 
-      const nodes = getFlatNodes(e.component.getNodes());
+      const nodes = this._getOrderedFlatNodes(e.component.getNodes());
 
       e.component.beginUpdate();
       isUpdatingSelection = true;
@@ -353,12 +385,12 @@ export class ColumnChooserView extends ColumnsView {
       e.component.endUpdate();
       isUpdatingSelection = false;
 
-      that.component.beginUpdate();
+      this.component.beginUpdate();
       this._isUpdatingColumnVisibility = true;
 
-      updateColumnVisibility(nodes);
+      this._updateColumnVisibility(nodes);
 
-      that.component.endUpdate();
+      this.component.endUpdate();
       this._isUpdatingColumnVisibility = false;
     };
 
@@ -392,25 +424,45 @@ export class ColumnChooserView extends ColumnsView {
     this._columnChooserList.endUpdate();
   }
 
-  protected _columnOptionChanged(e) {
-    super._columnOptionChanged(e);
+  protected _columnOptionChanged(changes): void {
+    super._columnOptionChanged(changes);
 
+    const { optionNames } = changes;
     const isSelectMode = this.isSelectMode();
+    const onlyVisibleChanged = this.isColumnVisibilityOnlyUpdated(optionNames);
+    const isOnlyColumnVisibilityUpdated = this._isUpdatingColumnVisibility
+      && onlyVisibleChanged;
 
-    if (isSelectMode && this._columnChooserList && !this._isUpdatingColumnVisibility) {
-      const { optionNames } = e;
-      const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
-      const columnIndices = isDefined(e.columnIndex) ? [e.columnIndex] : e.columnIndices;
-      const needUpdate = COLUMN_OPTIONS_USED_IN_ITEMS.some((optionName) => optionNames[optionName]) || (e.changeTypes.columns && optionNames.all);
-
-      if (needUpdate) {
-        this._updateItemsSelection(columnIndices);
-
-        if (!onlyVisibleChanged) {
-          this._updateItems();
-        }
-      }
+    if (!isSelectMode || !this._columnChooserList || isOnlyColumnVisibilityUpdated) {
+      return;
     }
+
+    const columnIndices = isDefined(changes.columnIndex)
+      ? [changes.columnIndex]
+      : changes.columnIndices;
+    const hasItemsOptionNames = COLUMN_OPTIONS_USED_IN_ITEMS
+      .some((optionName) => optionNames[optionName]);
+    const needUpdate: boolean = hasItemsOptionNames
+      || (changes.changeTypes.columns && optionNames.all);
+
+    if (!needUpdate) {
+      return;
+    }
+
+    this._updateItemsSelection(columnIndices);
+    if (!onlyVisibleChanged) {
+      this._updateItems();
+    }
+  }
+
+  private isColumnVisibilityOnlyUpdated(
+    optionNames: { length: number } & Record<string, unknown>,
+  ): boolean {
+    const optionKeys = Object
+      .keys(optionNames ?? {})
+      .filter((key) => key !== 'length');
+
+    return optionKeys.length === 1 && optionKeys[0] === 'visible';
   }
 
   public getColumnElements() {

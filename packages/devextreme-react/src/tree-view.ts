@@ -55,7 +55,7 @@ const TreeView = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemCollapsed","onItemContextMenu","onItemExpanded","onItemHold","onItemRendered","onSelectAllValueChanged"]), []);
@@ -164,7 +164,6 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -213,7 +212,6 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;

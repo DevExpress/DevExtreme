@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import SchedulerAgenda from '__internal/scheduler/workspaces/m_agenda';
 import dateLocalization from 'common/core/localization/date';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
@@ -31,14 +30,12 @@ module('Agenda', {}, () => {
             rows.push(singleGroup);
         }
 
-        const resources = options && options.groups || [];
-
         const config = {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
             },
-            observer: {
-                fire: (functionName) => {
+            notifyScheduler: {
+                invoke: (functionName) => {
                     if(functionName === 'getLayoutManager') {
                         return {
                             getRenderingStrategyInstance: () => {
@@ -48,11 +45,6 @@ module('Agenda', {}, () => {
                     }
                 }
             },
-            getAppointmentDataProvider: () => new AppointmentDataProvider({
-                getIsVirtualScrolling: () => false,
-                dataAccessors: {},
-                resources,
-            }),
             getResourceManager: getEmptyResourceManager,
         };
 
@@ -79,11 +71,11 @@ module('Agenda', {}, () => {
         assert.deepEqual(firstViewDate, new Date(2016, 1, 17, 2), 'The first view date is OK');
     });
 
-    test('_removeEmptyRows method', async function(assert) {
+    test('removeEmptyRows method', async function(assert) {
         const rows = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [0, 0, 0, 0, 0], [1, 1, 1, 0, 1]];
 
         const instance = createInstance();
-        const resultRows = instance._removeEmptyRows(rows);
+        const resultRows = instance.removeEmptyRows(rows);
 
         assert.deepEqual(resultRows, [[0, 0, 0, 0, 1], [1, 1, 1, 0, 1]], 'The empty rows was removed');
     });
@@ -158,7 +150,7 @@ module('Agenda', {}, () => {
     test('Agenda should be recalculated after rowHeight changed', async function(assert) {
         const instance = createInstance();
 
-        const recalculateStub = sinon.stub(instance, '_recalculateAgenda');
+        const recalculateStub = sinon.stub(instance, 'recalculateAgenda');
 
         instance.option('rowHeight', 100);
 

@@ -11,12 +11,12 @@ export class GroupedDataMapProvider {
 
   completeViewDataMap: any;
 
-  _viewOptions: any;
+  private readonly viewOptions: any;
 
   constructor(viewDataGenerator, viewDataMap, completeViewDataMap, viewOptions) {
     this.groupedDataMap = viewDataGenerator.generateGroupedDataMap(viewDataMap);
     this.completeViewDataMap = completeViewDataMap;
-    this._viewOptions = viewOptions;
+    this.viewOptions = viewOptions;
   }
 
   getGroupStartDate(groupIndex: number): Date | null {
@@ -101,9 +101,9 @@ export class GroupedDataMapProvider {
       allDayPanelGroupedMap,
       dateTableGroupedMap,
     } = this.groupedDataMap;
-    const { viewOffset } = this._viewOptions;
+    const { viewOffset } = this.viewOptions;
 
-    const rows = isAllDay && !this._viewOptions.isVerticalGrouping
+    const rows = isAllDay && !this.viewOptions.isVerticalGrouping
       ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : []
       : dateTableGroupedMap[groupIndex] || [];
 
@@ -124,7 +124,7 @@ export class GroupedDataMapProvider {
           }
           : originCellData;
 
-        if (this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
+        if (this.isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
           if (this.isStartDateInCell(startDate, isAllDay, cellData, originCellData)) {
             return cell.position;
           }
@@ -148,7 +148,7 @@ export class GroupedDataMapProvider {
       endDate: originCellEndDate,
     }: any,
   ): boolean {
-    const { viewType } = this._viewOptions;
+    const { viewType } = this.viewOptions;
 
     const cellSecondIntervalOffset = this.getCellSecondIntervalOffset(
       originCellStartDate,
@@ -210,7 +210,7 @@ export class GroupedDataMapProvider {
     return isInOriginInterval || isInSecondInterval;
   }
 
-  _isSameGroupIndexAndIndex(cellData, groupIndex, index) {
+  private isSameGroupIndexAndIndex(cellData, groupIndex, index) {
     return cellData.groupIndex === groupIndex
             && (index === undefined || cellData.index === index);
   }
@@ -241,7 +241,7 @@ export class GroupedDataMapProvider {
         startDate: this.getGroupStartDate(groupIndex),
         endDate: this.getGroupEndDate(groupIndex),
       };
-    }).filter(({ startDate }) => !!startDate);
+    }).filter(({ startDate }) => Boolean(startDate));
   }
 
   getGroupIndices() {

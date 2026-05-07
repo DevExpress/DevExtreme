@@ -2,7 +2,7 @@ import React from 'react';
 import DataGrid, {
   Column, Export, Selection, GroupPanel, Grouping, type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
 import { employees } from './data.ts';

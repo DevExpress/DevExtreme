@@ -1,5 +1,5 @@
 import { extend } from 'core/utils/extend';
-import FileManagerFileUploader from 'ui/file_manager/ui.file_manager.file_uploader';
+import FileManagerFileUploader from '__internal/ui/file_manager/ui.file_manager.file_uploader';
 
 export default class FileManagerTestFileUploader extends FileManagerFileUploader {
 

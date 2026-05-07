@@ -34,8 +34,6 @@ const TIMELINE_DAY = { class: 'dxSchedulerTimelineDay', name: 'SchedulerTimeline
 const TIMELINE_WEEK = { class: 'dxSchedulerTimelineWeek', name: 'SchedulerTimelineWeek' };
 const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTimelineMonth' };
 
-const toSelector = cssClass => '.' + cssClass;
-
 const checkHeaderCells = function($element, assert, interval, groupCount, viewDuration) {
     interval = interval || 0.5;
     viewDuration = viewDuration || 1;
@@ -354,12 +352,12 @@ QUnit.module('TimelineDay with intervalCount markup', timelineDayModuleConfig, (
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 2, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 2, 'view has right cell count');
 
         this.instance.option('intervalCount', 4);
 
         cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 4, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 4, 'view has right cell count');
     });
 
     QUnit.test('TimelineDay Day view cells have right cellData with view option intervalCount=2', async function(assert) {
@@ -663,12 +661,12 @@ QUnit.module('TimelineWeek with intervalCount markup', timelineWeekModuleConfig,
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 2, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 7 * 2, 'view has right cell count');
 
         this.instance.option('intervalCount', 4);
 
         cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 4, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 7 * 4, 'view has right cell count');
     });
 
     QUnit.test('TimelineWeek view cells have right cellData with view option intervalCount=2', async function(assert) {
@@ -874,12 +872,12 @@ QUnit.module('TimelineWorkWeek with intervalCount markup', timelineWorkWeekModul
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 2, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 5 * 2, 'view has right cell count');
 
         this.instance.option('intervalCount', 4);
 
         cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 4, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 5 * 4, 'view has right cell count');
     });
 
     QUnit.test('TimelineWorkWeek view cells have right cellData with view option intervalCount=2', async function(assert) {
@@ -1223,7 +1221,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                 QUnit.test(`first-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
                     const instance = await this.createInstance(view.class);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function() {
                         assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell has first-group class');
                     });
 
@@ -1241,7 +1239,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Date table');
                     });
 
@@ -1261,7 +1259,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
                     });
 
@@ -1281,7 +1279,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         if(Math.floor(index / columnCountInGroup) % rowCountInGroup === 0) {
                             assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell has first-group class');
                         } else {
@@ -1297,7 +1295,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                 QUnit.test(`last-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
                     const instance = await this.createInstance(view.class);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function() {
                         assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has last-group class');
                     });
 
@@ -1315,7 +1313,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, columnCountInGroup, 'Date table');
                     });
 
@@ -1335,7 +1333,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
                     });
 
@@ -1355,7 +1353,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         if((Math.floor(index / columnCountInGroup) + 1) % rowCountInGroup === 0) {
                             assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has last-group class');
                         } else {

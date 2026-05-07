@@ -19,6 +19,7 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
 })
 export class AppComponent {

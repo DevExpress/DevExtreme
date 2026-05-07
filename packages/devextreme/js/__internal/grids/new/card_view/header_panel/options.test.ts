@@ -2,6 +2,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
+import $ from '@js/core/renderer';
 import { rerender } from 'inferno';
 
 import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
@@ -84,15 +85,15 @@ describe('Options', () => {
     });
 
     describe('itemTemplate', () => {
-      // TODO: fix option controller to enable test
-      it.skip('should override content of headerPanel item', () => {
+      it('should override content of headerPanel item', () => {
         const { rootElement } = setup({
           columns: ['column1'],
           headerPanel: {
             // @ts-expect-error
-            itemTemplate: ({ column }) => $('<div>')
+            itemTemplate: ({ model: { column } }) => $('<div>')
               .addClass('my-class')
-              .text(column.caption),
+              .text(column.caption)
+              .get(0),
           },
         });
 
@@ -115,17 +116,17 @@ describe('Options', () => {
   });
 });
 
-// TODO: update after related column props are extracted from columns_controller
 describe('ColumnProperties', () => {
   describe('headerItemTemplate', () => {
-    it.skip('should override content of headerPanel item', () => {
+    it('should override content of headerPanel item', () => {
       const { rootElement } = setup({
         columns: [{
           dataField: 'column1',
           // @ts-expect-error
-          headerItemTemplate: ({ column }) => $('<div>')
+          headerItemTemplate: ({ model: { column } }) => $('<div>')
             .addClass('my-class')
-            .text(column.caption),
+            .text(column.caption)
+            .get(0),
         }],
       });
 

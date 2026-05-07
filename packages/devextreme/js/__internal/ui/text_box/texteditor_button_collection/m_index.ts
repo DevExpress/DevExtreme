@@ -163,7 +163,7 @@ export default class TextEditorButtonCollection<
     this.buttons = [];
   }
 
-  getButton(buttonName: string): dxButton | null | undefined {
+  getButton(buttonName: string): dxElementWrapper | dxButton | null | undefined {
     const button = this.buttons.find(({ name }) => name === buttonName);
 
     return button?.instance;

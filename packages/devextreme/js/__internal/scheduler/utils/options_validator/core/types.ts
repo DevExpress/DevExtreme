@@ -7,10 +7,12 @@ export type ValidatorRule<TValue> = (value: TValue) => ValidatorRuleResult;
 export type ValidatorErrors = Record<string, ValidatorRuleResult>;
 export type ValidatorResult = true | ValidatorErrors;
 
-export type OptionsValidatorErrors<TValidators extends string> =
-  Partial<Record<TValidators, ValidatorErrors>>;
-export type OptionsValidatorResult<TValidators extends string> =
-  true | OptionsValidatorErrors<TValidators>;
+export type OptionsValidatorErrors<
+  TValidators extends string,
+> = Partial<Record<TValidators, ValidatorErrors>>;
+export type OptionsValidatorResult<
+  TValidators extends string,
+> = true | OptionsValidatorErrors<TValidators>;
 
 export interface GlobalErrorHandler {
   logError: (errorCode: string, ...args: string[]) => void;

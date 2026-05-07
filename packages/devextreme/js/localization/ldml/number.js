@@ -1,1 +1,2 @@
-export * from '../../common/core/localization/ldml/number';
+export * from '../../__internal/core/localization/ldml/number';
+export { FormatterConfig } from '../../__internal/core/localization/number';

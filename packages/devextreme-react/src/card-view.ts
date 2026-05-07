@@ -9,7 +9,7 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, dxCardViewToolbarItem } from "devextreme/ui/card_view";
+import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SavedEvent, SavingEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, dxCardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
@@ -42,8 +42,6 @@ type ICardViewOptionsNarrowedEvents<TCardData = any, TKey = any> = {
   onCardPrepared?: ((e: CardPreparedEvent) => void);
   onCardRemoved?: ((e: CardRemovedEvent<TCardData, TKey>) => void);
   onCardRemoving?: ((e: CardRemovingEvent<TCardData, TKey>) => void);
-  onCardSaved?: ((e: CardSavedEvent) => void);
-  onCardSaving?: ((e: CardSavingEvent) => void);
   onCardUpdated?: ((e: CardUpdatedEvent<TCardData, TKey>) => void);
   onCardUpdating?: ((e: CardUpdatingEvent<TCardData, TKey>) => void);
   onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TCardData>) => void);
@@ -57,6 +55,8 @@ type ICardViewOptionsNarrowedEvents<TCardData = any, TKey = any> = {
   onFieldValueDblClick?: ((e: FieldValueDblClickEvent) => void);
   onFieldValuePrepared?: ((e: FieldValuePreparedEvent) => void);
   onInitNewCard?: ((e: InitNewCardEvent<TCardData>) => void);
+  onSaved?: ((e: SavedEvent) => void);
+  onSaving?: ((e: SavingEvent) => void);
 }
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TCardData, TKey>, ICardViewOptionsNarrowedEvents<TCardData, TKey>> & IHtmlOptions & {
@@ -90,10 +90,10 @@ const CardView = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys","filterBuilder.value","filterPanel.filterEnabled","editing.form.formData","loadPanel.position","loadPanel.visible","paging.pageIndex","paging.pageSize","searchPanel.text"]), []);
-      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard","onSaved","onSaving"]), []);
 
       const defaults = useMemo(() => ({
         defaultFilterValue: "filterValue",
@@ -195,7 +195,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any);
 }>
 const _componentAsyncRule = (props: IAsyncRuleProps) => {
   return React.createElement(NestedOption<IAsyncRuleProps>, {
@@ -290,7 +290,6 @@ const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMet
 type IButtonOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -912,7 +911,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
 }>
 const _componentCustomRule = (props: ICustomRuleProps) => {
   return React.createElement(NestedOption<ICustomRuleProps>, {
@@ -1118,7 +1117,6 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   allowHierarchicalFields?: boolean;
-  bindingOptions?: Record<string, any>;
   customOperations?: Array<dxFilterBuilderCustomOperation>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
@@ -1274,7 +1272,6 @@ type IFormProps = React.PropsWithChildren<{
   activeStateEnabled?: boolean;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
-  bindingOptions?: Record<string, any>;
   colCount?: Mode | number;
   colCountByScreen?: Record<string, any> | {
     lg?: number | undefined;
@@ -1802,7 +1799,6 @@ type ILoadPanelProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   deferRendering?: boolean;
   delay?: number;
@@ -1955,7 +1951,7 @@ type IPagerProps = React.PropsWithChildren<{
   label?: string;
   showInfo?: boolean;
   showNavigationButtons?: boolean;
-  showPageSizeSelector?: boolean;
+  showPageSizeSelector?: boolean | Mode;
   visible?: boolean | Mode;
 }>
 const _componentPager = (props: IPagerProps) => {
@@ -2497,7 +2493,6 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   animationEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   dataSource?: Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string;
   deferRendering?: boolean;
   disabled?: boolean;
@@ -2511,6 +2506,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   itemTitleTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  keyExpr?: (() => void) | string;
   loop?: boolean;
   noDataText?: string;
   onContentReady?: ((e: TabPanelContentReadyEvent) => void);
@@ -2759,7 +2755,7 @@ type IValidationRuleProps = React.PropsWithChildren<{
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;

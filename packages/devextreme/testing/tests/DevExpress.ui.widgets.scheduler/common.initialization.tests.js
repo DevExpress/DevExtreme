@@ -4,10 +4,12 @@ import { CustomStore } from 'common/data/custom_store';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import { isFunction } from 'core/utils/type';
 import $ from 'jquery';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
+import { AppointmentDataSource } from '__internal/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_source';
 
 import { createWrapper, initTestMarkup, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
-import { waitAsync, waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
+import { waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
+
+import 'generic_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -38,8 +40,8 @@ QUnit.module('Initialization', {
 
         const { instance } = await createWrapper({ dataSource: data });
 
-        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataSource instanceof AppointmentDataSource, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataSource.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should work correctly when wrong timeZone was set', async function(assert) {
@@ -50,7 +52,7 @@ QUnit.module('Initialization', {
     QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', async function(assert) {
         const { instance } = await createWrapper({ dataSource: this.tasks });
 
-        assert.notOk(instance.appointmentDataProvider.dataSource.paginate(), 'Paginate is false');
+        assert.notOk(instance.appointmentDataSource.dataSource.paginate(), 'Paginate is false');
     });
 
     QUnit.test('Rendering inside invisible element', async function(assert) {

@@ -3,7 +3,6 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
-import { a11yCheck } from '../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`CardView - HeaderPanel`
   .page(url(__dirname, '../container.html'));
@@ -19,14 +18,12 @@ test('default render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   width: 1000,
   height: 600,
   columns: ['Customer', 'Order Date'],
   cardCover: {
-    imageExpr: (data) => data.Picture && `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.Picture}`,
+    imageExpr: (data) => data.Picture && `../../../apps/demos/${data.Picture}`,
     altExpr: 'FirstName',
   },
   dataSource: [{

@@ -76,7 +76,7 @@ module('Work Space Base', {
             if(viewName === 'Day' || viewName === 'Week') {
                 test('Scheduler workspace scrollables should be updated after allDayExpanded option changed', async function(assert) {
                     this.instance.option('allDayExpanded', false);
-                    const stub = sinon.stub(this.instance, '_updateScrollable');
+                    const stub = sinon.stub(this.instance, 'updateScrollable');
 
                     this.instance.option('allDayExpanded', true);
 
@@ -86,7 +86,7 @@ module('Work Space Base', {
                 test('Scheduler workspace scrollables should be updated after endDayHour option changed if allDayPanel is hided', async function(assert) {
                     this.instance.option('showAllDayPanel', false);
                     this.instance.option('endDayHour', 18);
-                    const stub = sinon.stub(this.instance, '_updateScrollable');
+                    const stub = sinon.stub(this.instance, 'updateScrollable');
 
                     this.instance.option('endDayHour', 24);
 
@@ -106,7 +106,7 @@ module('Work Space Base', {
 
             test('Tables should be rerendered if dimension was changed and horizontal scrolling is enabled', async function(assert) {
                 this.instance.option('crossScrollingEnabled', true);
-                const stub = sinon.stub(this.instance, '_setTableSizes');
+                const stub = sinon.stub(this.instance, 'setTableSizes');
 
                 resizeCallbacks.fire();
 
@@ -115,7 +115,7 @@ module('Work Space Base', {
 
             test('Tables should not be rerendered if dimension was changed and horizontal scrolling isn\'t enabled', async function(assert) {
                 this.instance.option('crossScrollingEnabled', false);
-                const stub = sinon.stub(this.instance, '_setTableSizes');
+                const stub = sinon.stub(this.instance, 'setTableSizes');
 
                 resizeCallbacks.fire();
 
@@ -123,7 +123,7 @@ module('Work Space Base', {
             });
 
             test('Tables should be rerendered if width was changed and horizontal scrolling is enabled', async function(assert) {
-                const stub = sinon.stub(this.instance, '_setTableSizes');
+                const stub = sinon.stub(this.instance, 'setTableSizes');
                 this.instance.option('crossScrollingEnabled', true);
                 this.instance.option('width', 777);
 
@@ -131,7 +131,7 @@ module('Work Space Base', {
             });
 
             test('Tables should not be rerendered if width was changed and horizontal scrolling isn\'t enabled', async function(assert) {
-                const stub = sinon.stub(this.instance, '_setTableSizes');
+                const stub = sinon.stub(this.instance, 'setTableSizes');
                 this.instance.option('crossScrollingEnabled', false);
                 this.instance.option('width', 777);
 
@@ -144,7 +144,7 @@ module('Work Space Base', {
                 const maxDate = new Date('Mon Mar 15 2016 00:00:00 GMT-0400');
 
                 // TODO: use public method instead
-                this.instance._getIntervalBetween(minDate, maxDate, true);
+                this.instance.getIntervalBetween(minDate, maxDate, true);
 
                 assert.ok(stub.calledOnce, 'getTimezonesDifference was called');
 

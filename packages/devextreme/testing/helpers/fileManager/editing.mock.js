@@ -1,5 +1,5 @@
 import { extend } from 'core/utils/extend';
-import FileManagerEditingControl from 'ui/file_manager/ui.file_manager.editing';
+import FileManagerEditingControl from '__internal/ui/file_manager/ui.file_manager.editing';
 
 export default class FileManagerEditingControlMock extends FileManagerEditingControl {
 

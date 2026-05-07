@@ -6,13 +6,13 @@ import { getPrecision } from '@js/core/utils/math';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined as _isDefined, type } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { Crosshair, getMargins } from '@js/viz/chart_components/crosshair';
-import { LayoutManager } from '@js/viz/chart_components/layout_manager';
-import multiAxesSynchronizer from '@js/viz/chart_components/multi_axes_synchronizer';
-import { ScrollBar } from '@js/viz/chart_components/scroll_bar';
-import shutterZoom from '@js/viz/chart_components/shutter_zoom';
-import zoomAndPan from '@js/viz/chart_components/zoom_and_pan';
-import { plugins } from '@js/viz/core/annotations';
+import { Crosshair, getMargins } from '@ts/viz/chart_components/crosshair';
+import { LayoutManager } from '@ts/viz/chart_components/layout_manager';
+import multiAxesSynchronizer from '@ts/viz/chart_components/multi_axes_synchronizer';
+import { ScrollBar } from '@ts/viz/chart_components/scroll_bar';
+import shutterZoom from '@ts/viz/chart_components/shutter_zoom';
+import zoomAndPan from '@ts/viz/chart_components/zoom_and_pan';
+import { plugins } from '@ts/viz/core/annotations';
 import {
   convertVisualRangeObject, extractColor,
   getCategoriesInfo,
@@ -21,11 +21,10 @@ import {
   PANE_PADDING,
   rangesAreEqual,
   updatePanesCanvases,
-} from '@js/viz/core/utils';
-import rangeDataCalculator from '@js/viz/series/helpers/range_data_calculator';
-import { Range } from '@js/viz/translators/range';
-// @ts-expect-error
-import { prepareSegmentRectPoints } from '@js/viz/utils';
+} from '@ts/viz/core/utils';
+import rangeDataCalculator from '@ts/viz/series/helpers/range_data_calculator';
+import { Range } from '@ts/viz/translators/range';
+import { prepareSegmentRectPoints } from '@ts/viz/utils';
 
 import { AdvancedChart } from './chart_components/m_advanced_chart';
 import { overlapping } from './chart_components/m_base_chart';
@@ -569,7 +568,7 @@ const dxChart = AdvancedChart.inherit({
   _checkPaneName(seriesTheme) {
     const paneList = _map(this.panes, (pane) => pane.name);
     seriesTheme.pane = seriesTheme.pane || this.defaultPane;
-
+    // @ts-expect-error
     return paneList.includes(seriesTheme.pane);
   },
 
@@ -853,6 +852,15 @@ const dxChart = AdvancedChart.inherit({
 
   _handleSeriesDataUpdated() {
     const viewport = new Range();
+
+    this._argumentAxes.forEach((axis) => {
+      if (Array.isArray(axis._majorTicks)) {
+        axis._majorTicks.forEach((tick) => tick.removeLabel && tick.removeLabel());
+      }
+      if (Array.isArray(axis._minorTicks)) {
+        axis._minorTicks.forEach((tick) => tick.removeLabel && tick.removeLabel());
+      }
+    });
 
     this.series.forEach((s) => {
       viewport.addRange(s.getArgumentRange());

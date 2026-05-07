@@ -17,6 +17,7 @@ import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
+import 'generic_light.css!';
 
 const {
     module,
@@ -412,7 +413,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
@@ -451,7 +452,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';
@@ -491,10 +492,44 @@ module('Integration: Appointments in Month view', {
                     height: 600
                 });
 
-                const appointments = scheduler.instance._getAppointmentsToRepaint();
-                assert.strictEqual(appointments[0].settings[1].index, 0, 'Long term appointment tail has right index');
-                assert.strictEqual(appointments[1].settings[0].index, 1, 'Appointment next to long term appointment head has right index');
-                assert.strictEqual(appointments[2].settings[0].index, 1, 'Appointment next to long term appointment tail has right index');
+                const appointments = scheduler.instance.getAppointmentsToRepaint();
+                const parts = appointments.map((item) => ({
+                    level: item.level,
+                    maxLevel: item.maxLevel,
+                    partIndex: item.partIndex,
+                    partTotalCount: item.partTotalCount,
+                    reduced: item.reduced,
+                }));
+                assert.deepEqual(parts, [
+                    {
+                        level: 0,
+                        maxLevel: 2,
+                        partIndex: 0,
+                        partTotalCount: 2,
+                        reduced: 'head',
+                    },
+                    {
+                        level: 1,
+                        maxLevel: 2,
+                        partIndex: undefined,
+                        partTotalCount: undefined,
+                        reduced: null,
+                    },
+                    {
+                        level: 0,
+                        maxLevel: 2,
+                        partIndex: 1,
+                        partTotalCount: 2,
+                        reduced: 'tail',
+                    },
+                    {
+                        level: 1,
+                        maxLevel: 2,
+                        partIndex: undefined,
+                        partTotalCount: undefined,
+                        reduced: null,
+                    }
+                ], 'Parts  should be correct');
             });
 
             test('Appointment should be rendered correctly after changing view (T593699)', async function(assert) {
@@ -761,11 +796,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 1, 4]
+                        indices: [0, 2, 3]
                     },
                     {
                         color: '#0000ff',
-                        indices: [2, 3, 5]
+                        indices: [1, 4, 5]
                     }
                 ]
             }, {
@@ -773,11 +808,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 1, 2]
+                        indices: [0, 2, 3]
                     },
                     {
                         color: '#0000ff',
-                        indices: [3, 4, 5]
+                        indices: [1, 4, 5]
                     }
                 ]
             }

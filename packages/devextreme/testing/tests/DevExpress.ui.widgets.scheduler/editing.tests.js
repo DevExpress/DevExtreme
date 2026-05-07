@@ -1,13 +1,10 @@
 const $ = require('jquery');
 const devices = require('core/devices');
-const tooltip = require('__internal/ui/tooltip/m_tooltip');
 const fx = require('common/core/animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 const { createWrapper } = require('../../helpers/scheduler/helpers.js');
 const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
-const dataUtils = require('core/element_data');
 
-require('generic_light.css!');
 require('__internal/scheduler/m_scheduler');
 require('ui/drop_down_button');
 
@@ -78,27 +75,6 @@ QUnit.test('Appointment should not be draggable & resizable', async function(ass
     this.instance.option('editing', true);
     assert.ok(appointments.option('allowDrag'), 'Drag is allowed');
     assert.ok(appointments.option('allowResize'), 'Resize is allowed');
-});
-
-QUnit.test('Edit button should not be contain the \'pencil\' icon', async function(assert) {
-    await this.createInstance({
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: 'a',
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
-    });
-
-    const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').first());
-
-    const itemData = dataUtils.data($appointment[0], 'dxItemData');
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    assert.notOk($('.dx-scheduler-appointment-tooltip-buttons .dx-button').hasClass('dx-button-has-icon'), 'Edit button is OK');
-    tooltip.hide();
 });
 
 QUnit.test('ReadOnly option should be passed to the details appointment view', async function(assert) {

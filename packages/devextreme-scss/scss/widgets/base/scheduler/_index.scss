@@ -38,7 +38,7 @@ $agenda-appointment-recurrence-icon-color: null !default;
 @use "./layout/header" as *;
 @use "./mixins" as *;
 @use "../mixins" as *;
-@use "../icons" as *;
+@use "../icon_fonts" as *;
 @use "./common";
 @use "./tooltip" with (
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,

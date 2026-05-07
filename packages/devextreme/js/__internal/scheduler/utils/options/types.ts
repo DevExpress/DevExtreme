@@ -1,27 +1,22 @@
 import type { template } from '@js/common';
 import type { Properties } from '@js/ui/scheduler';
 
-import type { ResourceLoader } from '../loader/resource_loader';
-
 export type RawViewType = Required<Properties>['views'][number];
 export type ViewType = Extract<RawViewType, string>;
 export type ViewObject = Extract<RawViewType, object>;
 export type View = ViewObject & Required<Pick<ViewObject,
   'groupOrientation'
   | 'intervalCount'
-  | 'name'
   | 'type'
 >>;
 export type AgendaView = ViewObject & Required<Pick<ViewObject,
   'agendaDuration'
   | 'intervalCount'
-  | 'name'
   | 'type'
 >>;
 export type NormalizedView = View | AgendaView;
 
 export interface SchedulerInternalOptions {
-  loadedResources: ResourceLoader[];
   indicatorTime?: Date;
   renovateRender: boolean;
   _draggingMode: 'outlook' | 'default';

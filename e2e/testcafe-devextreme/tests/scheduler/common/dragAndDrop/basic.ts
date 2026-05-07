@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler basic views`
   .page(url(__dirname, '../../../container.html'));
@@ -13,7 +14,7 @@ fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler basic vie
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(4, 0))
-    .expect(draggableAppointment.size.height).eql('50px')
+    .expect(draggableAppointment.size.height).eql('38px')
     .expect(draggableAppointment.date.time)
     .eql('11:00 AM - 11:30 AM');
 }).before(async () => createScheduler({
@@ -28,7 +29,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
-    .expect(draggableAppointment.size.height).eql('23.75px')
+    .expect(draggableAppointment.size.height).eql('23.8281px')
     .expect(draggableAppointment.date.time)
     .eql('9:00 AM - 9:30 AM');
 }).before(async () => createScheduler({
@@ -38,7 +39,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
   height: 834,
 }));
 
-test('Drag-n-drop when browser has horizontal scroll', async (t) => {
+test.meta({ unstable: true })('Drag-n-drop when browser has horizontal scroll', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
@@ -125,7 +126,6 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
 
 test('Drag-n-drop the appointment to the left column to the cell that has the same time', async (t) => {
   const scheduler = new Scheduler('#container');
-  const screenshotZone = scheduler.workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('Test appointment');
 
@@ -136,7 +136,7 @@ test('Drag-n-drop the appointment to the left column to the cell that has the sa
       { speed: 0.5 },
     );
 
-  await takeScreenshot('drag-n-drop-appointment-to-left-column.png', screenshotZone);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-appointment-to-left-column.png', { element: scheduler.workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

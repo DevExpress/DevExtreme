@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { extend } from 'core/utils/extend';
 import { isString } from 'core/utils/type';
-import FileManagerNotificationControl from 'ui/file_manager/ui.file_manager.notification';
+import FileManagerNotificationControl from '__internal/ui/file_manager/ui.file_manager.notification';
 
 export default class FileManagerNotificationControlMock extends FileManagerNotificationControl {
 

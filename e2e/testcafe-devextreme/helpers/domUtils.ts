@@ -106,3 +106,39 @@ export const getPropertyValue = ClientFunction((selector, property) => {
 
   return element.style[property];
 });
+
+export const addCaptionTo = ClientFunction((
+  elementSelector: string,
+  caption: string,
+  where: InsertPosition = 'beforebegin',
+) => {
+  const element = document.querySelector(elementSelector);
+
+  element?.insertAdjacentText(where, caption);
+});
+
+export const addFocusableElementBefore = ClientFunction((
+  targetSelector: string,
+  elementId = 'focusable-start',
+) => {
+  const existing = document.getElementById(elementId);
+  existing?.remove();
+
+  const target = document.querySelector(targetSelector);
+  const button = document.createElement('button');
+  button.id = elementId;
+  button.textContent = 'Start';
+  button.style.position = 'fixed';
+  button.style.top = '0';
+  button.style.left = '0';
+  button.style.zIndex = '-1';
+  button.style.opacity = '0';
+  target?.parentElement?.insertBefore(button, target);
+  return button.id;
+});
+
+export const hasHorizontalScroll = async (container: Selector): Promise<boolean> => {
+  const scrollWidth = await container.scrollWidth;
+  const clientWidth = await container.clientWidth;
+  return scrollWidth > clientWidth;
+};

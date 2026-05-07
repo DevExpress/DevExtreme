@@ -135,7 +135,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
     const editForm = this._editForm;
 
@@ -219,7 +218,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       formTemplate(this._$popupContent, templateOptions, { isPopupForm: true });
       this._rowsView.renderDelayedTemplates();
-      $(container).parent().attr('aria-label', this.localize('dxDataGrid-ariaEditForm'));
+      this.setAria('label', this.localize('dxDataGrid-ariaEditForm'), $(container).parent());
     };
   }
 
@@ -538,7 +537,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     return $cellElements;
   }
 
-  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  protected _getVisibleColumnIndex(
+    $cells: dxElementWrapper,
+    rowIndex: number,
+    columnIdentifier: string | number,
+  ): number {
     const editFormRowIndex = this._editingController.getEditFormRowIndex();
 
     if (editFormRowIndex === rowIndex && isString(columnIdentifier)) {
@@ -546,7 +549,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
       return this._getEditFormEditorVisibleIndex($cells, column);
     }
 
-    return super._getVisibleColumnIndex.apply(this, arguments as any);
+    return super._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
   }
 
   private _getEditFormEditorVisibleIndex($cells, column) {

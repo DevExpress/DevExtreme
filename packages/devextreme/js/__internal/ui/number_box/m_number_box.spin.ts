@@ -9,7 +9,7 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties } from '@ts/core/widget/widget';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 const SPIN_CLASS = 'dx-numberbox-spin';
@@ -21,7 +21,7 @@ const NUMBER_BOX = 'dxNumberBox';
 const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, NUMBER_BOX);
 const POINTERCANCEL_EVENT_NAME = addNamespace(pointerEvents.cancel, NUMBER_BOX);
 
-export interface SpinButtonProperties extends Properties {
+export interface SpinButtonProperties extends WidgetProperties {
   direction?: string;
 
   onChange?: () => void;

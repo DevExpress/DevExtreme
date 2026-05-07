@@ -13,7 +13,7 @@ import dxButton from 'ui/button';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -182,25 +182,6 @@ QUnit.module('Button', function() {
             assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
             assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
         });
-
-        if(!dxButton.IS_RENOVATED_WIDGET) {
-            [
-                { option: 'stylingMode', value: 'text' },
-                { option: 'type', value: 'danger' }
-            ].forEach(({ option, value }) => {
-                QUnit.test(`only className argument is passed when changing the "${option}" option`, function(assert) {
-                    const removeClassSpy = sinon.spy(renderer.fn, 'removeClass');
-
-                    this.instance.option(option, value);
-
-                    removeClassSpy.getCalls().forEach((funcCall) => {
-                        assert.strictEqual(funcCall.args.length, 1, 'only one argument passed to removeClass');
-                    });
-
-                    removeClassSpy.restore();
-                });
-            });
-        }
 
         QUnit.test('readOnly validator should be excluded for the click action', function(assert) {
             const clickHandler = sinon.spy();
@@ -694,7 +675,7 @@ QUnit.module('Button', function() {
             });
             $('#input1').focus();
 
-            assert.equal(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
+            assert.equal(checkStyleHelper.getColor($template[0]), 'rgb(36, 36, 36)', 'color');
             assert.equal(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(255, 255, 255)', 'backgroundColor');
             assert.equal(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
             assert.equal(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
@@ -709,8 +690,8 @@ QUnit.module('Button', function() {
             });
             $button.dxButton('instance').focus();
 
-            assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
-            assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
+            assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(36, 36, 36)', 'color');
+            assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(245, 245, 245)', 'backgroundColor');
             assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'hidden', 'overflowX');
             assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'ellipsis', 'textOverflow');
             assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
@@ -724,8 +705,8 @@ QUnit.module('Button', function() {
             });
             $button.dxButton('instance').focus();
 
-            assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
-            assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
+            assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(36, 36, 36)', 'color');
+            assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(245, 245, 245)', 'backgroundColor');
             assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
             assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
             assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');

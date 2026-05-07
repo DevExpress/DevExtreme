@@ -25,7 +25,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     AdaptiveDetailRowPreparingInfo,
@@ -343,7 +344,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeLi
     /** @docid _ui_tree_list_EditorPreparedEvent.setValue */
     readonly setValue?: any;
     /** @docid _ui_tree_list_EditorPreparedEvent.updateValueTimeout */
-    readonly updateValueTimeout?: number;
+    updateValueTimeout?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.width */
     readonly width?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.disabled */
@@ -435,7 +436,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTr
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, InteractionEvent> & {
     /** @docid _ui_tree_list_FocusedCellChangingEvent.cellElement */
     readonly cellElement: DxElement;
     /** @docid _ui_tree_list_FocusedCellChangingEvent.prevColumnIndex */
@@ -484,7 +485,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, InteractionEvent> & {
     /** @docid _ui_tree_list_FocusedRowChangingEvent.rowElement */
     readonly rowElement: DxElement;
     /** @docid _ui_tree_list_FocusedRowChangingEvent.prevRowIndex */
@@ -824,9 +825,22 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEv
 /** @public */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_ColumnButtonClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
+    /**
+     * @docid _ui_tree_list_ColumnButtonClickEvent.row
+     * @type dxTreeListRowObject
+     */
     row?: Row<TRowData, TKey>;
+    /**
+     * @docid _ui_tree_list_ColumnButtonClickEvent.column
+     * @type dxTreeListColumn
+     */
     column?: Column<TRowData, TKey>;
 };
 
@@ -1604,11 +1618,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
     name?: TreeListPredefinedColumnButton | string;
     /**
      * @docid dxTreeListColumnButton.onClick
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1 e:{ui/tree_list:ColumnButtonClickEvent}
      * @public
      */
     onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);

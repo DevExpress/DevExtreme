@@ -9,8 +9,6 @@ import 'ui/box';
 import eventsEngine from 'common/core/events/core/events_engine';
 import domAdapter from '__internal/core/m_dom_adapter';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         '<div id="responsiveBox"></div>\
@@ -344,7 +342,8 @@ QUnit.module('template rendering', moduleConfig, () => {
 
         this.updateScreenSize(1000);
 
-        registerComponent('dxWidget', Widget.inherit({}));
+        class DxWidget extends Widget {}
+        registerComponent('dxWidget', DxWidget);
 
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
@@ -550,7 +549,8 @@ QUnit.module('option', moduleConfig, () => {
         }
     ].forEach(optionRefreshAction => {
         QUnit.test(`nested component is recreated after item option ${optionRefreshAction.toString()} changed  (T940715)`, function(assert) {
-            registerComponent('dxWidget', Widget.inherit({}));
+            class DxWidget extends Widget {}
+            registerComponent('dxWidget', DxWidget);
 
             let isDisposed = false;
             const $responsiveBox = $('#responsiveBox').dxResponsiveBox({

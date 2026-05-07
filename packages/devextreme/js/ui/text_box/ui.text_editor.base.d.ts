@@ -6,6 +6,7 @@ import dxButton from '../button';
 
 import Editor, {
     EditorOptions,
+    EditorOptionsWithValue,
 } from '../editor/editor';
 
 import {
@@ -232,7 +233,9 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
  * @hidden
  * @namespace DevExpress.ui
  */
-export default class dxTextEditor<TProperties = Properties> extends Editor<TProperties> {
+export default class dxTextEditor<
+    TProperties extends EditorOptionsWithValue = Properties,
+> extends Editor<TProperties> {
     /**
      * @docid
      * @publicName blur()

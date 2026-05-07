@@ -14,7 +14,8 @@ export declare function isExponential(object: any): object is number;
 
 export declare function isDefined<T>(object: T): object is NonNullable<T>;
 
- // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export declare function isEvent(object: unknown): object is Event;
+
 export declare function isObject<T = {}>(object: unknown): object is object;
 
 export declare function isEmptyObject(object: any): boolean;

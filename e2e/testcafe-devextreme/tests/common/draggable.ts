@@ -3,7 +3,7 @@ import Scrollable from 'devextreme-testcafe-models/scrollView/scrollable';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture.disablePageReloads`Draggable`
+fixture`Draggable`
   .page(url(__dirname, '../container.html'));
 
 const init = ClientFunction(() => {

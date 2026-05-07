@@ -25,7 +25,7 @@ export class RollingStock {
 
   private readonly shiftFunction: (
     bBox: BoundingRect,
-    shiftLength: number
+    shiftLength: number,
   ) => { x: number; y: number };
 
   private readonly initialPosition: number;
