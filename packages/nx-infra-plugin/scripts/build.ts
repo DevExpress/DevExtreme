@@ -56,11 +56,7 @@ const compileTypeScript = (configPath: string): CompilationResult => {
     return { success: false, error: formatDiagnostics([configFile.error]) };
   }
 
-  const parsed = ts.parseJsonConfigFileContent(
-    configFile.config,
-    ts.sys,
-    path.dirname(configPath),
-  );
+  const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, path.dirname(configPath));
   if (parsed.errors.length > 0) {
     return { success: false, error: formatDiagnostics(parsed.errors) };
   }
