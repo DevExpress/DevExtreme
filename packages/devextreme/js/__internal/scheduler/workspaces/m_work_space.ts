@@ -309,8 +309,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private $flexContainer: any;
 
-  // TODO: make private once external usages in shaders, m_timeline.ts, m_work_space_indicator.ts are removed
-  _shader: any;
+  protected shader: any;
 
   protected $sidebarTable: any;
 
@@ -2841,7 +2840,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.updateGroupTableHeight();
     this.updateHeaderEmptyCellWidth();
 
-    this._shader = new VerticalShader(this);
+    this.shader = new VerticalShader(this);
   }
 
   updateCellsSelection() {
@@ -2917,7 +2916,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.$sidebarTable?.empty();
     }
 
-    this._shader?.clean();
+    this.shader?.clean();
 
     delete this.interval;
   }

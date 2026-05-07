@@ -73,7 +73,6 @@ const schedulerLegacyMembers = [
     '_getGroupCount',
     '_groupedStrategy',
     '_isHorizontalGroupedWorkSpace',
-    '_shader',
     '_sidebarScrollable',
 
     // m_scheduler.ts

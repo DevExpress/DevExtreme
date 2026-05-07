@@ -174,7 +174,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
   renderCurrentDateTimeLineAndShader(): void {
     this.cleanDateTimeIndicator();
-    this._shader?.clean();
+    this.shader?.clean();
     this.renderDateTimeIndication();
   }
 
@@ -290,7 +290,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     if (this.option('shadeUntilCurrentTime')) {
-      this._shader.render();
+      this.shader.render();
     }
 
     if (!this.isIndicationOnView() || !this.isIndicatorVisible()) {
