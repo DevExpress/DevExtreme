@@ -16,7 +16,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -68,7 +68,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
@@ -167,7 +167,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
