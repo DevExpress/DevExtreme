@@ -259,8 +259,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private contextMenuAction: any;
 
-  // TODO: make private once external usages in m_agenda.ts are removed
-  _$groupTable: any;
+  protected $groupTable: any;
 
   // TODO: make private once external usages in m_timeline.ts are removed
   _$thead: any;
@@ -1108,7 +1107,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected getGroupHeaderContainer() {
     if (this.isVerticalGroupedWorkSpace()) {
-      return this._$groupTable;
+      return this.$groupTable;
     }
 
     return this._$thead;
@@ -1295,7 +1294,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupTableWidth() {
-    return this._$groupTable ? getOuterWidth(this._$groupTable) : 0;
+    return this.$groupTable ? getOuterWidth(this.$groupTable) : 0;
   }
 
   getWorkSpaceLeftOffset() {
@@ -1431,7 +1430,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected setHorizontalGroupHeaderCellsHeight() {
     const { height } = getBoundingRect(this.$dateTable.get(0));
-    setOuterHeight(this._$groupTable, height);
+    setOuterHeight(this.$groupTable, height);
   }
 
   protected getGroupHeaderCells() {
@@ -2582,7 +2581,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$timePanel = $('<table>').addClass(TIME_PANEL_CLASS).attr('aria-hidden', true);
     this.$dateTable = $('<table>').attr('aria-hidden', true);
     this.$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
-    this._$groupTable = $('<div>').addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
+    this.$groupTable = $('<div>').addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
   }
 
   private initAllDayPanelElements() {
@@ -2613,7 +2612,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     if (this.isVerticalGroupedWorkSpace()) {
       this.$dateTableContainer.append(this.$allDayContainer);
       this.$dateTableScrollableContent.append(
-        this._$groupTable,
+        this.$groupTable,
         this.$timePanel,
         this.$dateTableContainer,
       );
@@ -2666,7 +2665,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     if (this.isVerticalGroupedWorkSpace()) {
       this.$dateTableContainer.append(this.$allDayContainer);
-      this.$sidebarScrollableContent.append(this._$groupTable, this.$timePanel);
+      this.$sidebarScrollableContent.append(this.$groupTable, this.$timePanel);
     } else {
       this.headerScrollable.$content().append(this.$allDayPanel);
       this.$allDayPanel?.append(this.$allDayContainer, this.$allDayTable);
@@ -2857,7 +2856,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this._$thead.empty();
       this.$dateTable.empty();
       this.$timePanel.empty();
-      this._$groupTable.empty();
+      this.$groupTable.empty();
 
       this.$allDayTable?.empty();
       this.$sidebarTable?.empty();
