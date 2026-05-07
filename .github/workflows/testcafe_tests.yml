@@ -157,10 +157,10 @@ jobs:
     #   with:
     #     chrome-version: '145.0.7632.67'
 
-    # - name: Use Node.js
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version-file: '.node-version'
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
