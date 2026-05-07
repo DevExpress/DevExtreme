@@ -1,5 +1,8 @@
+import type { DataType, SortOrder } from '@js/common';
 import type { RequestCallbacks } from '@js/common/ai-integration';
+import type { FixedPosition } from '@js/common/grids';
 import type { Message } from '@js/ui/chat';
+import type { SummaryGroupItem, SummaryTotalItem } from '@js/ui/data_grid';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
 import type { JsonSchema7Type } from 'zod-to-json-schema';
@@ -17,8 +20,6 @@ export interface CommandResult {
   status: CommandStatus;
   message: string;
 }
-
-export type CommandResults = CommandResult[];
 
 export interface CommandCallbacks {
   success: (message?: string) => CommandResult;
@@ -56,14 +57,70 @@ export interface CommandMessages {
   failure: string;
 }
 
+// TODO: move to d.ts
 export type CustomizeResponseText = (
   commandName: string,
   commandArgs: Record<string, unknown>,
 ) => Partial<CommandMessages> | undefined;
 
+// TODO: move to d.ts
+export type CustomizeResponseTitle = (
+  status: MessageStatus.Success | MessageStatus.Failure,
+  commandNames: GridCommand['name'][],
+) => string;
+
 export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {
   onAbort?: () => void;
 };
+
+export interface GridColumnContextOptional {
+  groupIndex?: number;
+}
+
+export interface GridColumnContext extends GridColumnContextOptional {
+  dataField: string | undefined;
+  caption: string | undefined;
+  dataType: DataType | undefined;
+  visible: boolean;
+  sortOrder: SortOrder | undefined;
+  sortIndex: number | undefined;
+  filterValue: string | number | boolean | null | undefined;
+  fixed: boolean | undefined;
+  fixedPosition: FixedPosition | undefined;
+  width: number | string | undefined;
+  visibleIndex: number | undefined;
+}
+
+export interface GridContextOptional {
+  summary?: {
+    totalItems: SummaryTotalItem[] | undefined;
+    groupItems: SummaryGroupItem[] | undefined;
+    skipEmptyValues: SummaryGroupItem['skipEmptyValues'] | undefined;
+  };
+}
+
+export interface GridContext extends GridContextOptional {
+  columns: GridColumnContext[];
+  filtering: {
+    filterValue: string | unknown[] | Function | null | undefined;
+  };
+  paging: {
+    pageIndex: number;
+    pageSize: number;
+    totalCount: number;
+  };
+  search: {
+    searchText: string;
+  };
+  selection: {
+    selectedRowKeys: (string | number)[];
+  };
+}
+
+export interface GridExtraContextOption {
+  grid: (keyof GridContextOptional)[];
+  column: (keyof GridColumnContextOptional)[];
+}
 
 export type AIMessage = Message & {
   id: string;
@@ -71,5 +128,5 @@ export type AIMessage = Message & {
   headerText: string;
   prompt: string;
   errorText?: string;
-  commands?: CommandResults;
+  commands?: CommandResult[];
 };

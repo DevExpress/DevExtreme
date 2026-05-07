@@ -22,6 +22,13 @@ import {
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
 import { AIAssistantIntegrationController } from '../ai_assistant_integration_controller';
+import type { GridExtraContextOption, JsonSchema } from '../types';
+
+const STUB_SCHEMA: JsonSchema = { type: 'object' };
+const EXTRA_CONTEXT: GridExtraContextOption = {
+  grid: ['summary'],
+  column: ['groupIndex'],
+};
 
 interface SendRequestResult {
   promise: Promise<string>;
@@ -98,7 +105,7 @@ describe('AIAssistantIntegrationController', () => {
     it('should log E1068', async () => {
       const controller = await createController({});
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
       expect(errors.log).toHaveBeenCalledWith('E1068');
     });
@@ -111,7 +118,7 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
       expect(aiIntegration.executeGridAssistant)
         .toHaveBeenCalledTimes(1);
@@ -126,7 +133,7 @@ describe('AIAssistantIntegrationController', () => {
         aiIntegration,
       });
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
       expect(aiIntegration.executeGridAssistant)
         .toHaveBeenCalledTimes(1);
@@ -143,7 +150,7 @@ describe('AIAssistantIntegrationController', () => {
         aiIntegration: gridAI,
       });
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
       expect(assistantAI.executeGridAssistant)
         .toHaveBeenCalledTimes(1);
@@ -164,10 +171,27 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name ascending');
+      controller.sendRequest('Sort by name ascending', STUB_SCHEMA, EXTRA_CONTEXT);
 
       expect(capturedParams.text).toBe('Sort by name ascending');
       expect(capturedParams.context).toBeDefined();
+    });
+
+    it('should pass responseSchema to executeGridAssistant', async () => {
+      let capturedParams: Record<string, unknown> = {};
+      const aiIntegration = createMockAIIntegration((params) => {
+        capturedParams = params as Record<string, unknown>;
+      });
+
+      const customSchema: JsonSchema = { type: 'object', properties: { action: { type: 'string' } } };
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name', customSchema, EXTRA_CONTEXT);
+
+      expect(capturedParams.responseSchema).toEqual(customSchema);
     });
 
     it('should abort previous request when sending new one', async () => {
@@ -182,11 +206,31 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
       expect(abortSpy).not.toHaveBeenCalled();
 
-      controller.sendRequest('Sort by id');
+      controller.sendRequest('Sort by id', STUB_SCHEMA, EXTRA_CONTEXT);
       expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should allow sending a new request after previous one errored', async () => {
+      let capturedCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
+      const aiIntegration = createMockAIIntegration((_params, callbacks) => {
+        capturedCallbacks = callbacks;
+      });
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
+      capturedCallbacks.onError?.(new Error('Network error'));
+
+      expect(controller.isRequestAwaitingCompletion()).toBe(false);
+
+      controller.sendRequest('Sort by id', STUB_SCHEMA, EXTRA_CONTEXT);
+      expect(controller.isRequestAwaitingCompletion()).toBe(true);
+      expect(aiIntegration.executeGridAssistant).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -203,7 +247,7 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
       expect(controller.isRequestAwaitingCompletion()).toBe(true);
 
       controller.abortRequest();
@@ -221,7 +265,7 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name', {
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT, {
         onComplete: jest.fn(),
         onError: jest.fn(),
         onAbort,
@@ -240,13 +284,13 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name', {
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT, {
         onComplete: jest.fn(),
         onError: jest.fn(),
         onAbort,
       });
 
-      controller.sendRequest('Sort by id');
+      controller.sendRequest('Sort by id', STUB_SCHEMA, EXTRA_CONTEXT);
 
       expect(onAbort).toHaveBeenCalledTimes(1);
     });
@@ -258,7 +302,7 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
       expect(() => {
         controller.abortRequest();
@@ -276,7 +320,7 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name', {
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT, {
         onComplete: jest.fn(),
         onError: jest.fn(),
         onAbort,
@@ -300,7 +344,7 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name', {
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT, {
         onComplete: jest.fn(),
         onError: jest.fn(),
         onAbort,
@@ -309,6 +353,34 @@ describe('AIAssistantIntegrationController', () => {
       capturedCallbacks.onError?.(new Error('Network error'));
 
       expect(onAbort).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onComplete after abort', () => {
+    it('should ignore onComplete callback triggered after abort', async () => {
+      let capturedCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
+      const onComplete = jest.fn();
+      const aiIntegration = createMockAIIntegration((_params, callbacks) => {
+        capturedCallbacks = callbacks;
+      });
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT, {
+        onComplete,
+        onError: jest.fn(),
+      });
+
+      controller.abortRequest();
+      expect(controller.isRequestAwaitingCompletion()).toBe(false);
+
+      capturedCallbacks.onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      } as ExecuteGridAssistantCommandResult);
+
+      expect(onComplete).not.toHaveBeenCalled();
     });
   });
 
@@ -325,7 +397,7 @@ describe('AIAssistantIntegrationController', () => {
         aiAssistant: { enabled: true, aiIntegration },
       });
 
-      controller.sendRequest('Sort by name');
+      controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
       expect(controller.isRequestAwaitingCompletion()).toBe(true);
       expect(abortSpy).not.toHaveBeenCalled();
       controller.dispose();
@@ -351,7 +423,7 @@ describe('AIAssistantIntegrationController', () => {
           onAIAssistantRequestCreating,
         });
 
-        controller.sendRequest('Sort by name');
+        controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
         expect(callOrder).toEqual([
           'onAIAssistantRequestCreating',
@@ -368,7 +440,7 @@ describe('AIAssistantIntegrationController', () => {
           onAIAssistantRequestCreating,
         });
 
-        controller.sendRequest('Sort by name');
+        controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
         expect(onAIAssistantRequestCreating).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -401,7 +473,7 @@ describe('AIAssistantIntegrationController', () => {
           },
         });
 
-        controller.sendRequest('Sort by name');
+        controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
         expect(capturedProviderParams.prompt).toEqual(
           expect.objectContaining({
@@ -431,7 +503,7 @@ describe('AIAssistantIntegrationController', () => {
           },
         });
 
-        controller.sendRequest('Sort by name');
+        controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
         expect(aiIntegration.executeGridAssistant)
           .not.toHaveBeenCalled();
@@ -452,7 +524,7 @@ describe('AIAssistantIntegrationController', () => {
           },
         });
 
-        controller.sendRequest('Sort by name');
+        controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
         const context = capturedParams.context as Record<string, unknown>;
 
@@ -474,7 +546,7 @@ describe('AIAssistantIntegrationController', () => {
           },
         });
 
-        controller.sendRequest('Sort by name');
+        controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
         const additional = capturedParams.additionalInfo as Record<string, unknown>;
 
@@ -488,10 +560,360 @@ describe('AIAssistantIntegrationController', () => {
           onAIAssistantRequestCreating,
         });
 
-        controller.sendRequest('Sort by name');
+        controller.sendRequest('Sort by name', STUB_SCHEMA, EXTRA_CONTEXT);
 
         expect(onAIAssistantRequestCreating).not.toHaveBeenCalled();
         expect(errors.log).toHaveBeenCalledWith('E1068');
+      });
+    });
+  });
+
+  describe('buildContext', () => {
+    it('should return all columns including hidden ones', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        columns: [
+          {
+            dataField: 'id', caption: 'ID', dataType: 'number', visible: true,
+          },
+          {
+            dataField: 'name', caption: 'Name', dataType: 'string', visible: false,
+          },
+        ],
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.columns).toHaveLength(2);
+      expect(context.columns[0].dataField).toBe('id');
+      expect(context.columns[0].visible).toBe(true);
+      expect(context.columns[1].dataField).toBe('name');
+      expect(context.columns[1].visible).toBe(false);
+    });
+
+    it('should include all listed properties for each column', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        columns: [
+          {
+            dataField: 'id',
+            caption: 'ID',
+            dataType: 'number',
+            visible: true,
+            sortOrder: 'asc',
+            sortIndex: 0,
+            fixed: true,
+            fixedPosition: 'left',
+            width: 100,
+          },
+        ],
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+      const column = context.columns[0];
+
+      expect(column).toEqual(expect.objectContaining({
+        dataField: 'id',
+        caption: 'ID',
+        dataType: 'number',
+        visible: true,
+        sortOrder: 'asc',
+        sortIndex: 0,
+        fixed: true,
+        fixedPosition: 'left',
+        width: 100,
+      }));
+      expect('visibleIndex' in column).toBe(true);
+      expect('groupIndex' in column).toBe(true);
+      expect('filterValue' in column).toBe(true);
+    });
+
+    it('should only include the listed column properties', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        columns: [
+          {
+            dataField: 'id',
+            caption: 'ID',
+            dataType: 'number',
+            allowSorting: true,
+          },
+        ],
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+      const columnKeys = Object.keys(context.columns[0]);
+      const expectedKeys = [
+        'dataField', 'caption', 'dataType', 'visible',
+        'sortOrder', 'sortIndex', 'groupIndex', 'filterValue',
+        'fixed', 'fixedPosition', 'width', 'visibleIndex',
+      ];
+
+      expect(columnKeys.sort()).toEqual(expectedKeys.sort());
+    });
+
+    it('should exclude command columns', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        selection: { mode: 'multiple' },
+        columns: [
+          { dataField: 'id', caption: 'ID', dataType: 'number' },
+          { dataField: 'name', caption: 'Name', dataType: 'string' },
+        ],
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      const hasCommandColumn = context.columns.some(
+        (col) => !col.dataField,
+      );
+      expect(hasCommandColumn).toBe(false);
+    });
+
+    it('should reflect current paging state', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        dataSource: [
+          { id: 1, name: 'A' },
+          { id: 2, name: 'B' },
+          { id: 3, name: 'C' },
+        ],
+        paging: { pageSize: 2, pageIndex: 0 },
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.paging.pageIndex).toBe(0);
+      expect(context.paging.pageSize).toBe(2);
+      expect(context.paging.totalCount).toBe(3);
+    });
+
+    it('should return empty string for search text when not set', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.search.searchText).toBe('');
+    });
+
+    it('should reflect current search text', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        searchPanel: { visible: true, text: 'test search' },
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.search.searchText).toBe('test search');
+    });
+
+    it('should return empty array for selection when no rows selected', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        selection: { mode: 'multiple' },
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.selection.selectedRowKeys).toEqual([]);
+    });
+
+    it('should reflect currently selected keys', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        dataSource: [
+          { id: 1, name: 'A' },
+          { id: 2, name: 'B' },
+        ],
+        selection: { mode: 'multiple' },
+        selectedRowKeys: [1, 2],
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.selection.selectedRowKeys).toEqual([1, 2]);
+    });
+
+    it('should return undefined summary items when no summary configured', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+      const { summary } = context;
+
+      expect(summary).toBeDefined();
+      expect(summary?.totalItems).toBeUndefined();
+      expect(summary?.groupItems).toBeUndefined();
+    });
+
+    it('should reflect current summary configuration', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        summary: {
+          totalItems: [
+            { column: 'id', summaryType: 'count' },
+          ],
+          groupItems: [
+            { column: 'name', summaryType: 'count' },
+          ],
+        },
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+      const { summary } = context;
+
+      expect(summary?.totalItems).toEqual([
+        expect.objectContaining({ column: 'id', summaryType: 'count' }),
+      ]);
+      expect(summary?.groupItems).toEqual([
+        expect.objectContaining({ column: 'name', summaryType: 'count' }),
+      ]);
+    });
+
+    it('should return null filterValue when not set', async () => {
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.filtering.filterValue).toBeNull();
+    });
+
+    it('should reflect current filterValue', async () => {
+      const filterExpression = ['name', '=', 'Name 1'];
+      const controller = await createController({
+        aiIntegration: createMockAIIntegration(),
+        filterValue: filterExpression,
+      });
+
+      const context = controller.buildContext(EXTRA_CONTEXT);
+
+      expect(context.filtering.filterValue).toEqual(filterExpression);
+    });
+
+    it('should update context after grid state changes', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'B' },
+          { id: 2, name: 'A' },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID', dataType: 'number' },
+          { dataField: 'name', caption: 'Name', dataType: 'string' },
+        ],
+        aiIntegration: createMockAIIntegration(),
+      } as unknown as Properties);
+
+      const controller = new AIAssistantIntegrationController(instance);
+      controller.init();
+
+      const contextBefore = controller.buildContext(EXTRA_CONTEXT);
+      const nameSortBefore = contextBefore.columns
+        .find((col) => col.dataField === 'name')?.sortOrder;
+      expect(nameSortBefore).toBeUndefined();
+
+      instance.columnOption('name', 'sortOrder', 'asc');
+      jest.runAllTimers();
+
+      const contextAfter = controller.buildContext(EXTRA_CONTEXT);
+      const nameSortAfter = contextAfter.columns
+        .find((col) => col.dataField === 'name')?.sortOrder;
+      expect(nameSortAfter).toBe('asc');
+    });
+
+    describe('without extraContext', () => {
+      it('should not include summary in context when extraContext is null', async () => {
+        const controller = await createController({
+          aiIntegration: createMockAIIntegration(),
+          summary: {
+            totalItems: [{ column: 'id', summaryType: 'count' }],
+          },
+        });
+
+        const context = controller.buildContext(null);
+
+        expect(context.summary).toBeUndefined();
+      });
+
+      it('should not include groupIndex in columns when extraContext is null', async () => {
+        const controller = await createController({
+          aiIntegration: createMockAIIntegration(),
+          columns: [
+            { dataField: 'id', caption: 'ID', dataType: 'number' },
+          ],
+        });
+
+        const context = controller.buildContext(null);
+        const columnKeys = Object.keys(context.columns[0]);
+
+        expect(columnKeys).not.toContain('groupIndex');
+      });
+
+      it('should only include base column properties when extraContext is null', async () => {
+        const controller = await createController({
+          aiIntegration: createMockAIIntegration(),
+          columns: [
+            { dataField: 'id', caption: 'ID', dataType: 'number' },
+          ],
+        });
+
+        const context = controller.buildContext(null);
+        const columnKeys = Object.keys(context.columns[0]);
+        const expectedKeys = [
+          'dataField', 'caption', 'dataType', 'visible',
+          'sortOrder', 'sortIndex', 'filterValue',
+          'fixed', 'fixedPosition', 'width', 'visibleIndex',
+        ];
+
+        expect(columnKeys.sort()).toEqual(expectedKeys.sort());
+      });
+    });
+
+    describe('with partial extraContext', () => {
+      it('should include summary but not groupIndex when only grid extra is provided', async () => {
+        const controller = await createController({
+          aiIntegration: createMockAIIntegration(),
+          summary: {
+            totalItems: [{ column: 'id', summaryType: 'count' }],
+          },
+          columns: [
+            { dataField: 'id', caption: 'ID', dataType: 'number' },
+          ],
+        });
+
+        const context = controller.buildContext({ grid: ['summary'], column: [] });
+        const { summary } = context;
+
+        expect(summary).toBeDefined();
+        expect(summary?.totalItems).toEqual([
+          expect.objectContaining({ column: 'id', summaryType: 'count' }),
+        ]);
+
+        const columnKeys = Object.keys(context.columns[0]);
+        expect(columnKeys).not.toContain('groupIndex');
+      });
+
+      it('should include groupIndex but not summary when only column extra is provided', async () => {
+        const controller = await createController({
+          aiIntegration: createMockAIIntegration(),
+          summary: {
+            totalItems: [{ column: 'id', summaryType: 'count' }],
+          },
+          columns: [
+            { dataField: 'id', caption: 'ID', dataType: 'number' },
+          ],
+        });
+
+        const context = controller.buildContext({ grid: [], column: ['groupIndex'] });
+
+        expect(context.summary).toBeUndefined();
+
+        const columnKeys = Object.keys(context.columns[0]);
+        expect(columnKeys).toContain('groupIndex');
       });
     });
   });

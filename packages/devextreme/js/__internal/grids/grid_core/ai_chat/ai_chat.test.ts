@@ -19,7 +19,7 @@ import {
   CLASSES, CLEAR_CHAT_ICON, DEFAULT_POPUP_OPTIONS,
   ERROR_ITEM_EMOJI, REGENERATE_ICON, SUCCESS_ITEM_EMOJI,
 } from './const';
-import type { AIChatOptions, CommandResults } from './types';
+import type { AIChatOptions, CommandResult } from './types';
 
 const mockWidgetInstance = {
   option: jest.fn(),
@@ -349,7 +349,7 @@ describe('AIChat', () => {
 
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
-        const commands: CommandResults = [
+        const commands: CommandResult[] = [
           { status: 'success', message: 'Sorted Name in ascending order.' },
           { status: 'success', message: 'Page size set to 15.' },
         ];
@@ -373,7 +373,7 @@ describe('AIChat', () => {
 
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
-        const commands: CommandResults = [
+        const commands: CommandResult[] = [
           { status: 'success', message: 'Sorted Name.' },
           { status: 'failure', message: 'Failed to group.' },
           { status: 'aborted', message: 'Aborted filter.' },
