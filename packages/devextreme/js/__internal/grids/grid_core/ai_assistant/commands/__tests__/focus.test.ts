@@ -98,60 +98,63 @@ describe('focusRowByKeyCommand', () => {
   });
 
   describe('execute', () => {
+    const expectFocusedRowKeyNotSet = (optionSpy: jest.Mock): void => {
+      const focusedRowKeySetCalls = optionSpy.mock.calls.filter(
+        (callArgs) => callArgs.length === 2 && callArgs[0] === 'focusedRowKey',
+      );
+      expect(focusedRowKeySetCalls).toHaveLength(0);
+    };
+
     it('returns failure and skips action when focusedRowEnabled is false', async () => {
       const instance = await createGrid({ focusedRowEnabled: false });
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange');
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: 2 });
 
       expect(result.status).toBe('failure');
       expect(callbacks.success).not.toHaveBeenCalled();
-      expect(focusSpy).not.toHaveBeenCalled();
+      expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
     });
 
     it('returns failure when an object key is passed for a single-field keyExpr', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange');
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: { id: 2 } });
 
       expect(result.status).toBe('failure');
-      expect(focusSpy).not.toHaveBeenCalled();
+      expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
     });
 
     it('returns failure when a primitive key is passed for a composite keyExpr', async () => {
       const instance = await createCompositeGrid();
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange');
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: 1 });
 
       expect(result.status).toBe('failure');
-      expect(focusSpy).not.toHaveBeenCalled();
+      expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
     });
 
     it('returns failure when a composite key is missing one of the keyExpr fields', async () => {
       const instance = await createCompositeGrid();
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange');
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: { a: 1 } });
 
       expect(result.status).toBe('failure');
-      expect(focusSpy).not.toHaveBeenCalled();
+      expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
     });
 
     it('returns failure when the grid has no resolvable row key (keyExpr and store key both unset)', async () => {
       const instance = await createGrid();
       // Simulate a grid that exposes neither a keyExpr option nor a store key.
       const realOption = instance.option.bind(instance);
-      jest.spyOn(instance, 'option').mockImplementation(((...callArgs: unknown[]): unknown => {
+      const optionSpy = jest.spyOn(instance, 'option').mockImplementation(((...callArgs: unknown[]): unknown => {
         if (callArgs.length === 1 && callArgs[0] === 'keyExpr') {
           return undefined;
         }
@@ -159,64 +162,47 @@ describe('focusRowByKeyCommand', () => {
       }) as never);
       const dataSource = instance.getDataSource();
       jest.spyOn(dataSource.store(), 'key').mockReturnValue(undefined as never);
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange');
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: 1 });
 
       expect(result.status).toBe('failure');
-      expect(focusSpy).not.toHaveBeenCalled();
+      expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
     });
 
-    it('delegates to focusController.handleFocusedRowKeyChange with a primitive key', async () => {
+    it('sets option("focusedRowKey", key) for a primitive key on success', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange')
-        .mockReturnValue(Promise.resolve(0) as never);
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: 2 });
 
-      expect(focusSpy).toHaveBeenCalledTimes(1);
-      expect(focusSpy).toHaveBeenCalledWith(2);
+      expect(optionSpy).toHaveBeenCalledWith('focusedRowKey', 2);
       expect(result.status).toBe('success');
     });
 
-    it('delegates to focusController.handleFocusedRowKeyChange with a composite key', async () => {
+    it('sets option("focusedRowKey", key) for a composite key on success', async () => {
       const instance = await createCompositeGrid();
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange')
-        .mockReturnValue(Promise.resolve(0) as never);
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({
         key: { a: 1, b: 10 },
       });
 
-      expect(focusSpy).toHaveBeenCalledTimes(1);
-      expect(focusSpy).toHaveBeenCalledWith({ a: 1, b: 10 });
+      expect(optionSpy).toHaveBeenCalledWith('focusedRowKey', { a: 1, b: 10 });
       expect(result.status).toBe('success');
     });
 
-    it('returns failure when handleFocusedRowKeyChange throws', async () => {
+    it('returns failure when option throws', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      jest.spyOn(focusController, 'handleFocusedRowKeyChange').mockImplementation(() => {
-        throw new Error('Error');
-      });
-      const callbacks = createCallbacks();
-
-      const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: 2 });
-
-      expect(result.status).toBe('failure');
-    });
-
-    it('returns failure when handleFocusedRowKeyChange rejects', async () => {
-      const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      jest.spyOn(focusController, 'handleFocusedRowKeyChange')
-        .mockReturnValue(Promise.reject(new Error('Error')) as never);
+      const realOption = instance.option.bind(instance);
+      jest.spyOn(instance, 'option').mockImplementation(((...callArgs: unknown[]): unknown => {
+        if (callArgs[0] === 'focusedRowKey' && callArgs.length === 2) {
+          throw new Error('Error');
+        }
+        return (realOption as (...a: unknown[]) => unknown)(...callArgs);
+      }) as never);
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: 2 });
@@ -228,9 +214,6 @@ describe('focusRowByKeyCommand', () => {
   describe('default message', () => {
     it('uses the literal `Focus row.` on success', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      jest.spyOn(focusController, 'handleFocusedRowKeyChange')
-        .mockReturnValue(Promise.resolve(0) as never);
       const callbacks = createCallbacks();
 
       await focusRowByKeyCommand.execute(instance, callbacks)({ key: 2 });
@@ -284,65 +267,58 @@ describe('focusRowByIndexCommand', () => {
   });
 
   describe('execute', () => {
+    const expectFocusedRowKeyNotSet = (optionSpy: jest.Mock): void => {
+      const focusedRowKeySetCalls = optionSpy.mock.calls.filter(
+        (callArgs) => callArgs.length === 2 && callArgs[0] === 'focusedRowKey',
+      );
+      expect(focusedRowKeySetCalls).toHaveLength(0);
+    };
+
     it('returns failure and skips action when focusedRowEnabled is false', async () => {
       const instance = await createGrid({ focusedRowEnabled: false });
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange');
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });
 
       expect(result.status).toBe('failure');
       expect(callbacks.success).not.toHaveBeenCalled();
-      expect(focusSpy).not.toHaveBeenCalled();
+      expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
     });
 
     it('returns failure when the index has no row on the current page', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange');
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       // Three rows in createGrid; index 99 is past the page's last row.
       const result = await focusRowByIndexCommand.execute(instance, callbacks)({ index: 99 });
 
       expect(result.status).toBe('failure');
-      expect(focusSpy).not.toHaveBeenCalled();
+      expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
     });
 
-    it('delegates to handleFocusedRowKeyChange with the key resolved from the index', async () => {
+    it('sets option("focusedRowKey", key) with the key resolved from the index on success', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      const focusSpy = jest.spyOn(focusController, 'handleFocusedRowKeyChange')
-        .mockReturnValue(Promise.resolve(0) as never);
+      const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       // createGrid rows: id=1, id=2, id=3 with keyExpr='id' → index 1 → key 2.
       const result = await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });
 
-      expect(focusSpy).toHaveBeenCalledTimes(1);
-      expect(focusSpy).toHaveBeenCalledWith(2);
+      expect(optionSpy).toHaveBeenCalledWith('focusedRowKey', 2);
       expect(result.status).toBe('success');
     });
 
-    it('returns failure when handleFocusedRowKeyChange throws', async () => {
+    it('returns failure when option throws', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      jest.spyOn(focusController, 'handleFocusedRowKeyChange').mockImplementation(() => {
-        throw new Error('Error');
-      });
-      const callbacks = createCallbacks();
-
-      const result = await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });
-
-      expect(result.status).toBe('failure');
-    });
-
-    it('returns failure when handleFocusedRowKeyChange rejects', async () => {
-      const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      jest.spyOn(focusController, 'handleFocusedRowKeyChange')
-        .mockReturnValue(Promise.reject(new Error('Error')) as never);
+      const realOption = instance.option.bind(instance);
+      jest.spyOn(instance, 'option').mockImplementation(((...callArgs: unknown[]): unknown => {
+        if (callArgs[0] === 'focusedRowKey' && callArgs.length === 2) {
+          throw new Error('Error');
+        }
+        return (realOption as (...a: unknown[]) => unknown)(...callArgs);
+      }) as never);
       const callbacks = createCallbacks();
 
       const result = await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });
@@ -354,9 +330,6 @@ describe('focusRowByIndexCommand', () => {
   describe('default message', () => {
     it('uses the literal `Focus row.` on success', async () => {
       const instance = await createGrid();
-      const focusController = instance.getController('focus');
-      jest.spyOn(focusController, 'handleFocusedRowKeyChange')
-        .mockReturnValue(Promise.resolve(0) as never);
       const callbacks = createCallbacks();
 
       await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });

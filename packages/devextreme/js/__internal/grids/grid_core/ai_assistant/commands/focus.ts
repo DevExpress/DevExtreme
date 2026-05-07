@@ -1,8 +1,42 @@
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
+import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
 import { isKeyShapeValid } from './utils';
+
+const setFocusedRowKeyAndSettle = async (
+  component: InternalGrid,
+  key: unknown,
+): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let off: (() => void) | undefined;
+  const eventDone = new Promise<void>((resolve) => {
+    const handler = (): void => resolve();
+
+    component.on('focusedRowChanged', handler);
+
+    off = (): void => {
+      component.off('focusedRowChanged', handler);
+    };
+  });
+
+  try {
+    component.option('focusedRowKey', key);
+
+    // The chain may resolve via either path:
+    //   - `focusedRowChanged` event — when the row is focused successfully.
+    //   - `dataController.waitReady()` — resolves once any pending page change /
+    //     reload settles. Covers the cases where the event never fires (key not
+    //     resolved, `_navigateToRow` rejects with `-1`).
+    await Promise.race([
+      eventDone,
+      component.getController('data').waitReady(),
+    ]);
+  } finally {
+    off?.();
+  }
+};
 
 const focusRowByKeyCommandSchema = z.object({
   key: z.union([
@@ -31,7 +65,7 @@ export const focusRowByKeyCommand = defineGridCommand({
     }
 
     try {
-      await component.getController('focus').handleFocusedRowKeyChange(args.key);
+      await setFocusedRowKeyAndSettle(component, args.key);
 
       return success(defaultMessage);
     } catch {
@@ -59,7 +93,7 @@ export const focusRowByIndexCommand = defineGridCommand({
     }
 
     try {
-      await component.getController('focus').handleFocusedRowKeyChange(key);
+      await setFocusedRowKeyAndSettle(component, key);
 
       return success(defaultMessage);
     } catch {
