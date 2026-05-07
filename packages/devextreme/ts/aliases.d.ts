@@ -947,7 +947,7 @@ declare namespace DevExpress.ui {
 }
 
 // 26.1
-declare namespace DevExpress.common {
-  /** @deprecated Use DevExpress.common.DayOfWeek instead */
-  export type FirstDayOfWeek = DayOfWeek;
-}
+// declare namespace DevExpress.common {
+//  /** @deprecated Use DevExpress.common.DayOfWeek instead */
+//  export type FirstDayOfWeek = DayOfWeek;
+// }

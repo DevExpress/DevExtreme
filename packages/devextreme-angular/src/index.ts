@@ -120,6 +120,7 @@ export namespace Common {
     export type EmailRule = import('devextreme/common').EmailRule;
     export type ExportFormat = import('devextreme/common').ExportFormat;
     export type FieldChooserLayout = import('devextreme/common').FieldChooserLayout;
+    export type FirstDayOfWeek = import('devextreme/common').FirstDayOfWeek;
     export type FloatingActionButtonDirection = import('devextreme/common').FloatingActionButtonDirection;
     export type Format = import('devextreme/common').Format;
     export type GlobalConfig = import('devextreme/common').GlobalConfig;

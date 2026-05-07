@@ -14,6 +14,7 @@ import {
 import {
     template,
     DayOfWeek,
+    FirstDayOfWeek,
     DateLike,
 } from '../common';
 
@@ -24,6 +25,7 @@ import Editor, {
 
 export {
     DayOfWeek,
+    FirstDayOfWeek,
     DateLike,
 };
 

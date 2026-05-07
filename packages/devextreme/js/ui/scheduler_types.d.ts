@@ -1,5 +1,6 @@
 export {
   DayOfWeek,
+  FirstDayOfWeek,
   Orientation,
   ScrollMode,
   AllDayPanelMode,

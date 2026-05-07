@@ -262,6 +262,7 @@ export type FieldChooserLayout = 0 | 1 | 2;
 // #region deprecated in v26.1
 
 /**
+ * @public
  * @namespace DevExpress.common
  * @deprecated Use the DayOfWeek type instead
  */

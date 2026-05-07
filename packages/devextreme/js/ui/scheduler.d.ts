@@ -6,6 +6,7 @@ import {
 import {
   template,
   DayOfWeek,
+  FirstDayOfWeek,
   Orientation,
   ScrollMode,
   ToolbarItemLocation,
@@ -67,6 +68,7 @@ export interface TargetedAppointmentInfo {
 
 export {
     DayOfWeek,
+    FirstDayOfWeek,
     Orientation,
     ScrollMode,
 };
