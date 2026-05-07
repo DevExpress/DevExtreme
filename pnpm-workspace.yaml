@@ -27,6 +27,8 @@ catalog:
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
   jquery: 4.0.0
+  zod: 3.24.4
+  zod-to-json-schema: 3.24.6
   "@babel/eslint-parser": 7.28.6
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.5
