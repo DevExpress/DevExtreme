@@ -36,7 +36,6 @@ export type {
     EmailRule,
     ExportFormat,
     FieldChooserLayout,
-    FirstDayOfWeek,
     FloatingActionButtonDirection,
     Format,
     GlobalConfig,

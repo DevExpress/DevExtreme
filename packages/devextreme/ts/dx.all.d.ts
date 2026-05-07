@@ -1334,11 +1334,6 @@ declare module DevExpress.common {
    */
   type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
   export type FieldChooserLayout = 0 | 1 | 2;
-
-  /**
-   * @deprecated Use the DayOfWeek type instead
-   */
-  export type FirstDayOfWeek = DayOfWeek;
   export type Format =
     | 'billions'
     | 'currency'
