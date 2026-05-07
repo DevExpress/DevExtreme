@@ -1,6 +1,7 @@
-import { defineGridCommand } from '@ts/grids/grid_core/ai_assistant/commands/defineGridCommand';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import { z } from 'zod';
+
+import { defineGridCommand } from './defineGridCommand';
 
 const searchingCommandSchema = z.object({
   text: z.string(),

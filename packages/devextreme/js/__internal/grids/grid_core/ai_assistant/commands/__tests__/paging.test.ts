@@ -196,13 +196,13 @@ describe('pageSizeCommand', () => {
   });
 
   describe('default message', () => {
-    it('uses `Show all rows.` for pageSize 0', async () => {
+    it('uses `Display all rows.` for pageSize 0', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
 
       await pageSizeCommand.execute(instance, callbacks)({ pageSize: 0 });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Show all rows.');
+      expect(callbacks.success).toHaveBeenCalledWith('Display all rows.');
     });
 
     it('uses `Change page size to [size].` for pageSize > 0', async () => {
