@@ -273,8 +273,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private headerScrollable: any;
 
-  // TODO: make private once external usages in m_timeline.ts are removed
-  _sidebarScrollable: any;
+  protected $sidebarScrollable: any;
 
   private preventDefaultDragging: any;
 
@@ -1150,7 +1149,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected updateScrollable() {
     this.$dateTableScrollable.update();
     this.headerScrollable?.update();
-    this._sidebarScrollable?.update();
+    this.$sidebarScrollable?.update();
     this.updateHeaderPanelScrollbarPadding();
   }
 
@@ -2719,7 +2718,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.$sidebarScrollableContent.append(this.$timePanel);
     }
 
-    this._sidebarScrollable.$content().append(this.$sidebarScrollableContent);
+    this.$sidebarScrollable.$content().append(this.$sidebarScrollableContent);
   }
 
   private appendHeaderPanelEmptyCellIfNecessary() {
@@ -2742,7 +2741,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       .appendTo(this.$flexContainer);
 
     // @ts-expect-error
-    this._sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
+    this.$sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
       useKeyboard: false,
       showScrollbar: 'never',
       direction: 'vertical',
@@ -2753,7 +2752,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         this.scrollSync.dateTable({ top: event.scrollOffset.top });
       },
     });
-    this.scrollSync.sidebar = getMemoizeScrollTo(() => this._sidebarScrollable);
+    this.scrollSync.sidebar = getMemoizeScrollTo(() => this.$sidebarScrollable);
   }
 
   private attachTableClasses() {

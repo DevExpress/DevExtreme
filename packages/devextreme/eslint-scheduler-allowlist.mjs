@@ -67,8 +67,6 @@ const schedulerR1Overrides = [
 
 const schedulerLegacyMembers = [
     // workspaces/m_work_space.ts
-    '_sidebarScrollable',
-
     // m_scheduler.ts
     '_appointments',
     '_compactAppointmentsHelper',
