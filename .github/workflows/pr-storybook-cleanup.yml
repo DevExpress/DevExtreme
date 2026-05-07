@@ -1,0 +1,57 @@
+name: Storybook PR Preview Cleanup
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'  # Every Monday at 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    name: Delete stale PR preview folders
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout gh-pages (full history)
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+
+      - name: Delete preview folders older than 7 days
+        id: cleanup
+        run: |
+          DELETED=0
+          CUTOFF=$(date -d '7 days ago' +%s)
+
+          for dir in preview/pr-*/; do
+            [ -d "$dir" ] || continue
+
+            LAST_COMMIT_TS=$(git log -1 --format="%ct" -- "$dir")
+
+            if [ -z "$LAST_COMMIT_TS" ]; then
+              echo "Skipping $dir: no commit history found"
+              continue
+            fi
+
+            if [ "$LAST_COMMIT_TS" -lt "$CUTOFF" ]; then
+              echo "Removing $dir (last commit: $(date -d @$LAST_COMMIT_TS))"
+              git rm -rf "$dir"
+              DELETED=$((DELETED + 1))
+            else
+              echo "Keeping $dir (last commit: $(date -d @$LAST_COMMIT_TS))"
+            fi
+          done
+
+          echo "deleted=$DELETED" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push removals
+        if: steps.cleanup.outputs.deleted != '0'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: remove ${{ steps.cleanup.outputs.deleted }} stale PR preview(s) [skip ci]"
+          git push origin gh-pages
