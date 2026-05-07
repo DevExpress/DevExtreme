@@ -72,8 +72,6 @@ const schedulerLegacyMembers = [
     '_$dateTableScrollableContent',
     '_$flexContainer',
     '_$groupTable',
-    '_$headerPanel',
-    '_$headerPanelContainer',
     '_$thead',
     '_dateTableScrollable',
     '_getCellCount',
