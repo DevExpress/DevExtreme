@@ -346,7 +346,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     this.shader = new HorizontalShader(this);
 
-    this.$sidebarTable.appendTo(this._sidebarScrollable.$content());
+    this.$sidebarTable.appendTo(this.$sidebarScrollable.$content());
 
     if (this.isRenovatedRender() && this.isVerticalGroupedWorkSpace()) {
       this.renderRGroupPanel();
