@@ -16,6 +16,12 @@ import {
   AI_ASSISTANT_AUTHOR_ID,
   MessageStatus,
 } from '../const';
+import { GridCommands } from '../grid_commands';
+import type { CommandResult } from '../types';
+
+jest.mock('../grid_commands');
+
+const MockedGridCommands = GridCommands as jest.MockedClass<typeof GridCommands>;
 
 let sendRequestCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
 
@@ -59,6 +65,15 @@ const getStore = (controller: AIAssistantController): ArrayStore<Message, string
 describe('AIAssistantController', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // TODO: Rework the tests using updated GridCommands implementation
+    (MockedGridCommands.mockImplementation as jest.Mock).call(
+      MockedGridCommands,
+      () => ({
+        validate: jest.fn().mockReturnValue(true),
+        executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([{ status: 'success', message: 'sort' }]),
+      }),
+    );
   });
 
   describe('getMessageDataSource', () => {
