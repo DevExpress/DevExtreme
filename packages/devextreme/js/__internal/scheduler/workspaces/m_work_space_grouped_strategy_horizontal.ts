@@ -20,13 +20,13 @@ class HorizontalGroupedStrategy {
     }
     return {
       rowIndex: cellCoordinates.rowIndex,
-      columnIndex: cellCoordinates.columnIndex * this._workSpace._getGroupCount() + groupIndex,
+      columnIndex: cellCoordinates.columnIndex * this._workSpace.getGroupCount() + groupIndex,
     };
   }
 
   getGroupIndex(rowIndex, columnIndex) {
     const groupByDay = this._workSpace.isGroupedByDate();
-    const groupCount = this._workSpace._getGroupCount();
+    const groupCount = this._workSpace.getGroupCount();
 
     if (groupByDay) {
       return columnIndex % groupCount;
@@ -35,7 +35,7 @@ class HorizontalGroupedStrategy {
   }
 
   calculateHeaderCellRepeatCount() {
-    return this._workSpace._getGroupCount() || 1;
+    return this._workSpace.getGroupCount() || 1;
   }
 
   insertAllDayRowsIntoDateTable() {
@@ -149,7 +149,7 @@ class HorizontalGroupedStrategy {
   }
 
   private calculateGroupByDateOffset(groupIndex) {
-    return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getCellWidth() * groupIndex;
+    return this._workSpace.getIndicatorOffset(0) * this._workSpace.getGroupCount() + this._workSpace.getCellWidth() * groupIndex;
   }
 
   getShaderOffset(i, width) {
@@ -197,7 +197,7 @@ class HorizontalGroupedStrategy {
     const groupByDate = this._workSpace.isGroupedByDate();
 
     if (groupByDate) {
-      if (index % this._workSpace._getGroupCount() === 0) {
+      if (index % this._workSpace.getGroupCount() === 0) {
         return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
       }
     } else if (index % this._workSpace.getCellCount() === 0) {
@@ -215,7 +215,7 @@ class HorizontalGroupedStrategy {
     const groupByDate = this._workSpace.isGroupedByDate();
 
     if (groupByDate) {
-      if ((index - 1) % this._workSpace._getGroupCount() === 0) {
+      if ((index - 1) % this._workSpace.getGroupCount() === 0) {
         return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
       }
     } else if ((index - 1) % this._workSpace.getCellCount() === 0) {
