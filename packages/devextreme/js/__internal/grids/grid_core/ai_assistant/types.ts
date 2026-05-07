@@ -1,5 +1,5 @@
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
-import type { ZodObject, ZodRawShape } from 'zod';
+import type { z, ZodObject, ZodRawShape } from 'zod';
 import type { JsonSchema7Type } from 'zod-to-json-schema';
 
 /** JSON Schema draft-07 object sent to the LLM. */
@@ -29,11 +29,22 @@ export type CommandExecutor<TArgs = undefined> = (
   ...args: ArgsTuple<TArgs>
 ) => Promise<CommandResult>;
 
-export interface GridCommand<TArgs = undefined> {
+// Empty schemas (no keys) collapse args to `undefined` so the executor
+// signature becomes `() => Promise<CommandResult>` for no-arg commands.
+type CommandArgs<TSchema extends ZodObject<ZodRawShape>> = keyof z.infer<TSchema> extends never
+  ? undefined
+  : z.infer<TSchema>;
+
+export interface GridCommand<
+  TSchema extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+> {
   name: string;
   description: string;
-  schema: ZodObject<ZodRawShape>;
-  execute: (component: InternalGrid, callbacks: CommandCallbacks) => CommandExecutor<TArgs>;
+  schema: TSchema;
+  execute: (
+    component: InternalGrid,
+    callbacks: CommandCallbacks,
+  ) => CommandExecutor<CommandArgs<TSchema>>;
 }
 
 export interface CommandMessages {
