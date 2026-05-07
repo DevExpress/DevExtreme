@@ -86,8 +86,8 @@
         "vuex": "4.0.0-beta.4",
         "whatwg-fetch": "2.0.4",
         "yargs": "17.7.2",
-        "zod": "catalog:",
-        "zod-to-json-schema": "catalog:",
+        "zod": "3.24.4",
+        "zod-to-json-schema": "3.24.6",
         "zone.js": "0.15.1",
         "express-rate-limit": "^8.3.1"
     },

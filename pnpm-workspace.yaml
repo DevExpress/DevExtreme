@@ -14,8 +14,6 @@ catalog:
   devexpress-gantt: 4.1.68
   devextreme-exceljs-fork: 4.4.9
   devextreme-quill: 1.7.9
-  zod: 3.24.4
-  zod-to-json-schema: 3.24.6
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
   eslint-config-devextreme: 1.1.9
