@@ -86,14 +86,14 @@ class SchedulerAgenda extends WorkSpace {
         break;
       case 'groups':
         if (!value?.length) {
-          if (this._$groupTable) {
-            this._$groupTable.remove();
-            this._$groupTable = null;
+          if (this.$groupTable) {
+            this.$groupTable.remove();
+            this.$groupTable = null;
             this.detachGroupCountClass();
           }
-        } else if (!this._$groupTable) {
+        } else if (!this.$groupTable) {
           this.initGroupTable();
-          this.$dateTableScrollable.$content().prepend(this._$groupTable);
+          this.$dateTableScrollable.$content().prepend(this.$groupTable);
         }
         super._optionChanged(args);
         break;
@@ -147,7 +147,7 @@ class SchedulerAgenda extends WorkSpace {
   private initGroupTable() {
     const groups = this.option('groups');
     if (groups?.length) {
-      this._$groupTable = $('<table>').attr('aria-hidden', true).addClass(GROUP_TABLE_CLASS);
+      this.$groupTable = $('<table>').attr('aria-hidden', true).addClass(GROUP_TABLE_CLASS);
     }
   }
 
@@ -169,7 +169,7 @@ class SchedulerAgenda extends WorkSpace {
     }
     this.rows = rows;
 
-    if (this._$groupTable) {
+    if (this.$groupTable) {
       cellTemplates = this.renderGroupHeader();
       this.setGroupHeaderCellsHeight();
     }
@@ -246,7 +246,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override getGroupHeaderContainer() {
-    return this._$groupTable;
+    return this.$groupTable;
   }
 
   protected override makeGroupRows() {
@@ -309,8 +309,8 @@ class SchedulerAgenda extends WorkSpace {
     this.$dateTable.empty();
     this.$timePanel.empty();
 
-    if (this._$groupTable) {
-      this._$groupTable.empty();
+    if (this.$groupTable) {
+      this.$groupTable.empty();
     }
 
     if (this.$noDataContainer) {
@@ -329,8 +329,8 @@ class SchedulerAgenda extends WorkSpace {
     this.$dateTableContainer.append(this.$dateTable);
     this.$dateTableScrollable.$content().append(this.$dateTableScrollableContent);
 
-    if (this._$groupTable) {
-      this.$dateTableScrollableContent.prepend(this._$groupTable);
+    if (this.$groupTable) {
+      this.$dateTableScrollableContent.prepend(this.$groupTable);
     }
 
     this.$dateTableScrollableContent.append(this.$timePanel, this.$dateTableContainer);
