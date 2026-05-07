@@ -458,7 +458,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         const isRTL = this.isRTL();
         const groupCount = this.getGroupCount();
         const isGroupedByDate = this.isGroupedByDate();
-        const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
+        const isHorizontalGrouping = this.isHorizontalGroupedWorkSpace();
         const focusedCellPosition = this.viewDataProvider.findCellPositionInMap({
           ...focusedCellData,
           isAllDay: focusedCellData.allDay,
@@ -645,8 +645,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return Boolean(this.option('groups')?.length) && this.option('groupOrientation') === 'vertical';
   }
 
-  // TODO: make private once external usages in shaders, m_timeline.ts are removed
-  _isHorizontalGroupedWorkSpace() {
+  isHorizontalGroupedWorkSpace() {
     return Boolean(this.option('groups')?.length) && this.option('groupOrientation') === 'horizontal';
   }
 
@@ -1569,7 +1568,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   isGroupedByDate() {
     return this.option('groupByDate')
-            && this._isHorizontalGroupedWorkSpace()
+            && this.isHorizontalGroupedWorkSpace()
             && this.getGroupCount() > 0;
   }
 
@@ -2095,7 +2094,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
       if (this.isGroupedByDate()) {
         validGroupIndex = Math.floor(columnIndex % this.getGroupCount());
-      } else if (this._isHorizontalGroupedWorkSpace()) {
+      } else if (this.isHorizontalGroupedWorkSpace()) {
         validGroupIndex = Math.floor(columnIndex / this.getCellCount());
       }
 
@@ -3139,7 +3138,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected getGroupsForDateHeaderTemplate(templateIndex, indexMultiplier = 1) {
-    if (this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
+    if (this.isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
       const groupIndex = this.getGroupIndex(0, templateIndex * indexMultiplier);
       const groups = getLeafGroupValues(this.resourceManager.groupsLeafs, groupIndex);
 

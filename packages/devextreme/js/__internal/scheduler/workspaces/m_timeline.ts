@@ -50,7 +50,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getTotalRowCount(groupCount) {
-    if (this._isHorizontalGroupedWorkSpace()) {
+    if (this.isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
     }
     groupCount = groupCount || 1;
@@ -95,7 +95,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getGroupHeaderContainer() {
-    if (this._isHorizontalGroupedWorkSpace()) {
+    if (this.isHorizontalGroupedWorkSpace()) {
       return this.$thead;
     }
     return this.$sidebarTable;
@@ -329,7 +329,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override toggleGroupingDirectionClass() {
-    (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
+    (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this.isHorizontalGroupedWorkSpace());
   }
 
   _getDefaultOptions() {
@@ -390,7 +390,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       return [];
     }
 
-    const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+    const horizontalGroupCount = this.isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
       ? this.getGroupCount()
       : 1;
 
@@ -422,7 +422,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         : cellCountInDay;
       const cellTemplate: any = this.option('dateCellTemplate');
 
-      const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+      const horizontalGroupCount = this.isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
         ? groupCount
         : 1;
       const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * (this.option('intervalCount') as any);
