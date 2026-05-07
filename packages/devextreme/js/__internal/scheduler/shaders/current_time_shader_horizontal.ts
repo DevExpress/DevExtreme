@@ -6,7 +6,7 @@ import CurrentTimeShader from './current_time_shader';
 
 class HorizontalCurrentTimeShader extends CurrentTimeShader {
   renderShader(): void {
-    const groupCount = this.workSpace._isHorizontalGroupedWorkSpace()
+    const groupCount = this.workSpace.isHorizontalGroupedWorkSpace()
       ? this.workSpace.getGroupCount()
       : 1;
 
