@@ -4,15 +4,11 @@ import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
 
-// Runtime source of truth for the filter operators; `satisfies` ensures every
-// entry is a valid `SearchOperation` (compile error if a typo or stale value).
 const FILTER_OPS = [
   '=', '<>', '<', '<=', '>', '>=',
   'contains', 'notcontains', 'startswith', 'endswith',
 ] as const satisfies readonly SearchOperation[];
 
-// Recursive filter expression shape mirroring the public `filterValue` API:
-// basic: [field, op, value]; combine: [expr, 'and'|'or', expr]; negate: ['!', expr].
 type FilterExpr = | [string, SearchOperation, string | number | boolean | null]
   | [FilterExpr, 'and' | 'or', FilterExpr]
   | ['!', FilterExpr];

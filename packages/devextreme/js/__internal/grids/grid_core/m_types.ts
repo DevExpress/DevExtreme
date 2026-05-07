@@ -103,6 +103,7 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'onFocusedRowChanging'
 | 'onEditingStart'
 | 'toolbar'
+| 'summary'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
