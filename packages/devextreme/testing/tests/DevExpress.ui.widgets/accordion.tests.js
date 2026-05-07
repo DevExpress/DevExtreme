@@ -1620,8 +1620,8 @@ QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
         const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
         const $body = $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`);
 
-        assert.strictEqual($item.get(0).style.overflow, 'visible', 'item has overflow:visible');
-        assert.strictEqual($body.get(0).style.overflow, 'visible', 'item body has overflow:visible');
+        assert.strictEqual($item.css('overflow'), 'visible', 'item has overflow:visible');
+        assert.strictEqual($body.css('overflow'), 'visible', 'item body has overflow:visible');
     });
 
     QUnit.test('closed item has no overflow:visible style', function(assert) {
@@ -1632,7 +1632,7 @@ QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
 
         const $closedItem = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
 
-        assert.strictEqual($closedItem.get(0).style.overflow, '', 'closed item has no inline overflow');
+        assert.strictEqual($closedItem.css('overflow'), 'hidden', 'closed item has no overflow:visible');
     });
 
     QUnit.test('only opened items get overflow:visible in multiple mode', function(assert) {
@@ -1645,9 +1645,9 @@ QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
 
         const $items = this.$element.find(`.${ACCORDION_ITEM_CLASS}`);
 
-        assert.strictEqual($items.eq(0).get(0).style.overflow, 'visible', 'opened item has overflow:visible');
-        assert.strictEqual($items.eq(1).get(0).style.overflow, '', 'closed item has no inline overflow');
-        assert.strictEqual($items.eq(2).get(0).style.overflow, '', 'closed item has no inline overflow');
+        assert.strictEqual($items.eq(0).css('overflow'), 'visible', 'opened item has overflow:visible');
+        assert.strictEqual($items.eq(1).css('overflow'), 'hidden', 'closed item has no overflow:visible');
+        assert.strictEqual($items.eq(2).css('overflow'), 'hidden', 'closed item has no overflow:visible');
     });
 
     QUnit.test('overflow resets when item starts closing', function(assert) {
@@ -1659,36 +1659,40 @@ QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
 
         const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
 
-        assert.strictEqual($item.get(0).style.overflow, 'visible', 'item has overflow:visible before closing');
+        assert.strictEqual($item.css('overflow'), 'visible', 'item has overflow:visible before closing');
 
         instance.collapseItem(0);
 
-        assert.strictEqual($item.get(0).style.overflow, '', 'overflow reset when closing starts');
+        assert.strictEqual($item.css('overflow'), 'hidden', 'overflow reset when closing starts');
     });
 
     QUnit.test('overflow:visible is set after opening animation completes', function(assert) {
         fx.off = false;
 
-        this.$element.dxAccordion({
-            items: this.items,
-            selectedIndex: -1,
-            collapsible: true,
-            animationDuration: 100,
-        });
+        try {
+            this.$element.dxAccordion({
+                items: this.items,
+                selectedIndex: -1,
+                collapsible: true,
+                animationDuration: 100,
+            });
 
-        const instance = this.$element.dxAccordion('instance');
-        const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
+            const instance = this.$element.dxAccordion('instance');
+            const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
 
-        instance.expandItem(0);
+            instance.expandItem(0);
 
-        const $body = $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`);
+            const $body = $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`);
 
-        assert.strictEqual($item.get(0).style.overflow, '', 'overflow is not yet visible during animation');
+            assert.strictEqual($item.css('overflow'), 'hidden', 'overflow is not yet visible during animation');
 
-        this.clock.tick(100);
+            this.clock.tick(100);
 
-        assert.strictEqual($item.get(0).style.overflow, 'visible', 'item has overflow:visible after animation');
-        assert.strictEqual($body.get(0).style.overflow, 'visible', 'item body has overflow:visible after animation');
+            assert.strictEqual($item.css('overflow'), 'visible', 'item has overflow:visible after animation');
+            assert.strictEqual($body.css('overflow'), 'visible', 'item body has overflow:visible after animation');
+        } finally {
+            fx.off = true;
+        }
     });
 
     QUnit.test('overflow:visible is restored when item is re-opened after closing', function(assert) {
@@ -1701,10 +1705,10 @@ QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
         instance.collapseItem(0);
 
         const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
-        assert.strictEqual($item.get(0).style.overflow, '', 'overflow is reset after close');
+        assert.strictEqual($item.css('overflow'), 'hidden', 'overflow is reset after close');
 
         instance.expandItem(0);
-        assert.strictEqual($item.get(0).style.overflow, 'visible', 'overflow:visible restored after re-open');
+        assert.strictEqual($item.css('overflow'), 'visible', 'overflow:visible restored after re-open');
     });
 });
 
