@@ -4,7 +4,7 @@ import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
-import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
+import { getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 // NOTE: Renovation component import.
@@ -197,7 +197,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   private getWorkSpaceMinHeight() {
     let minHeight = this.getWorkSpaceHeight();
 
-    const workspaceContainerHeight = getOuterHeight(this._$flexContainer, true);
+    const workspaceContainerHeight = this.getFlexContainerOuterHeight();
 
     if (minHeight < workspaceContainerHeight) {
       minHeight = workspaceContainerHeight;

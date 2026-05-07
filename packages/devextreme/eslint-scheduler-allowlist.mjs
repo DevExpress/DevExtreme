@@ -70,7 +70,6 @@ const schedulerLegacyMembers = [
     '_$allDayPanel',
     '_$dateTable',
     '_$dateTableScrollableContent',
-    '_$flexContainer',
     '_$groupTable',
     '_$thead',
     '_dateTableScrollable',

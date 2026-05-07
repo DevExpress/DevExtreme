@@ -311,8 +311,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private allDayPanels!: any[];
 
-  // TODO: make private once external usages in m_timeline.ts are removed
-  _$flexContainer: any;
+  private $flexContainer: any;
 
   // TODO: make private once external usages in shaders, m_timeline.ts, m_work_space_indicator.ts are removed
   _shader: any;
@@ -953,6 +952,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     return getBoundingRect(this.$headerPanelContainer.get(0) as HTMLElement).height;
+  }
+
+  getFlexContainerOuterHeight(): number {
+    if (!this.$flexContainer) {
+      return 0;
+    }
+
+    return getOuterHeight(this.$flexContainer, true);
   }
 
   private getScrollbarWidth() {
@@ -2688,7 +2695,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected createWorkSpaceScrollableElements() {
     this.$element().append(this.$fixedContainer);
 
-    this._$flexContainer = $('<div>').addClass('dx-scheduler-work-space-flex-container');
+    this.$flexContainer = $('<div>').addClass('dx-scheduler-work-space-flex-container');
 
     this.createHeaderScrollable();
 
@@ -2697,10 +2704,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$headerPanelContainer.append(this.$headerTablesContainer);
 
     this.$element().append(this.$headerPanelContainer);
-    this.$element().append(this._$flexContainer);
+    this.$element().append(this.$flexContainer);
 
     this.createSidebarScrollable();
-    this._$flexContainer.append(this._dateTableScrollable.$element());
+    this.$flexContainer.append(this._dateTableScrollable.$element());
 
     this.$dateTableContainer.append(this._$dateTable);
     this._$dateTableScrollableContent.append(this.$dateTableContainer);
@@ -2736,7 +2743,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private createSidebarScrollable() {
     const $timePanelScrollable = $('<div>')
       .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
-      .appendTo(this._$flexContainer);
+      .appendTo(this.$flexContainer);
 
     // @ts-expect-error
     this._sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
