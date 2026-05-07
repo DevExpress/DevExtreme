@@ -510,6 +510,7 @@ class DropDownList<
   }
 
   _popupConfig(): PopupProperties {
+    this._updateCustomBoundaryContainer();
     const maxHeight = this._getMaxHeight();
 
     return {
@@ -908,6 +909,7 @@ class DropDownList<
 
   _popupShowingHandler(): void {
     this._updatePopupWidth();
+    this._updatePopupMaxHeight();
     this._updateListDimensions();
   }
 
