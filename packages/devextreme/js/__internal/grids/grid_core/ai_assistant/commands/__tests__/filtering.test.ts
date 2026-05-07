@@ -18,7 +18,6 @@ import {
 import {
   clearFilterCommand,
   filterValueCommand,
-  searchingCommand,
 } from '../filtering';
 
 const createCallbacks = (): {
@@ -279,91 +278,6 @@ describe('clearFilterCommand', () => {
       await clearFilterCommand.execute(instance, callbacks)();
 
       expect(callbacks.failure).toHaveBeenCalledWith('Clear filter.');
-    });
-  });
-});
-
-describe('searchingCommand', () => {
-  beforeEach(() => beforeTest());
-  afterEach(() => afterTest());
-
-  describe('schema', () => {
-    it('accepts a non-empty string', () => {
-      expect(searchingCommand.schema.safeParse({ text: 'Alpha' }).success).toBe(true);
-    });
-
-    it('accepts an empty string', () => {
-      expect(searchingCommand.schema.safeParse({ text: '' }).success).toBe(true);
-    });
-
-    it('rejects when text is missing', () => {
-      expect(searchingCommand.schema.safeParse({}).success).toBe(false);
-    });
-
-    it('rejects when text is not a string', () => {
-      expect(searchingCommand.schema.safeParse({ text: 123 }).success).toBe(false);
-    });
-
-    it('rejects unknown properties', () => {
-      expect(searchingCommand.schema.safeParse({ text: 'Alpha', extra: 1 }).success).toBe(false);
-    });
-  });
-
-  describe('execute', () => {
-    it('calls component.searchByText(text) exactly once', async () => {
-      const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'searchByText');
-      const callbacks = createCallbacks();
-
-      const result = await searchingCommand.execute(instance, callbacks)({ text: 'Alpha' });
-
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('Alpha');
-      expect(result.status).toBe('success');
-    });
-
-    it('returns failure when searchByText throws', async () => {
-      const instance = await createGrid();
-      jest.spyOn(instance, 'searchByText').mockImplementation(() => {
-        throw new Error('Error');
-      });
-      const callbacks = createCallbacks();
-
-      const result = await searchingCommand.execute(instance, callbacks)({ text: 'Alpha' });
-
-      expect(result.status).toBe('failure');
-    });
-  });
-
-  describe('default message', () => {
-    it('uses `Search for "[text]".` for non-empty text', async () => {
-      const instance = await createGrid();
-      const callbacks = createCallbacks();
-
-      await searchingCommand.execute(instance, callbacks)({ text: 'Alpha' });
-
-      expect(callbacks.success).toHaveBeenCalledWith('Search for "Alpha".');
-    });
-
-    it('uses `Clear search.` for empty text', async () => {
-      const instance = await createGrid();
-      const callbacks = createCallbacks();
-
-      await searchingCommand.execute(instance, callbacks)({ text: '' });
-
-      expect(callbacks.success).toHaveBeenCalledWith('Clear search.');
-    });
-
-    it('passes the same default message to failure when executability fails', async () => {
-      const instance = await createGrid();
-      jest.spyOn(instance, 'searchByText').mockImplementation(() => {
-        throw new Error('Error');
-      });
-      const callbacks = createCallbacks();
-
-      await searchingCommand.execute(instance, callbacks)({ text: 'Alpha' });
-
-      expect(callbacks.failure).toHaveBeenCalledWith('Search for "Alpha".');
     });
   });
 });

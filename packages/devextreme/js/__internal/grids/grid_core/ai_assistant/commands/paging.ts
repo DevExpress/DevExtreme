@@ -36,7 +36,7 @@ export const pageSizeCommand = defineGridCommand({
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const paging = component.option('paging');
     const defaultMessage = args.pageSize === 0
-      ? 'Show all rows.'
+      ? 'Display all rows.'
       : `Change page size to ${args.pageSize}.`;
 
     if (paging?.enabled === false) {
