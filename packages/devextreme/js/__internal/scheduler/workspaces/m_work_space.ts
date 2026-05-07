@@ -217,8 +217,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private cellsSelectionControllerValue: any;
 
-  // TODO: make private once external usages in shaders, grouped strategies, m_agenda.ts are removed
-  _dateTableScrollable!: Scrollable;
+  protected $dateTableScrollable!: Scrollable;
 
   private selectionChangedAction: any;
 
@@ -565,7 +564,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
       this.setSelectedCellsStateAndUpdateSelection(isNextCellAllDay, nextCellPosition, isMultiSelection, $cell);
 
-      this._dateTableScrollable.scrollToElement($cell);
+      this.$dateTableScrollable.scrollToElement($cell);
     }
   }
 
@@ -968,7 +967,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private getScrollbarWidth() {
-    const containerElement = $(this._dateTableScrollable.container()).get(0) as HTMLElement;
+    const containerElement = $(this.$dateTableScrollable.container()).get(0) as HTMLElement;
     const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
     return scrollbarWidth;
   }
@@ -1155,7 +1154,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected updateScrollable() {
-    this._dateTableScrollable.update();
+    this.$dateTableScrollable.update();
     this.headerScrollable?.update();
     this._sidebarScrollable?.update();
     this.updateHeaderPanelScrollbarPadding();
@@ -1280,7 +1279,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
 
     eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isPointerDown && this._dateTableScrollable) {
+      if (isPointerDown && this.$dateTableScrollable) {
         e.preventDefault();
         e.stopPropagation();
         this.moveToCell($(e.target), true);
@@ -1295,11 +1294,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getScrollable() {
-    return this._dateTableScrollable;
+    return this.$dateTableScrollable;
   }
 
   getScrollableScrollTop() {
-    return this._dateTableScrollable.scrollTop();
+    return this.$dateTableScrollable.scrollTop();
   }
 
   getGroupedScrollableScrollTop(allDay) {
@@ -1307,15 +1306,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getScrollableScrollLeft() {
-    return this._dateTableScrollable.scrollLeft();
+    return this.$dateTableScrollable.scrollLeft();
   }
 
   getScrollableOuterWidth() {
-    return this._dateTableScrollable.scrollWidth();
+    return this.$dateTableScrollable.scrollWidth();
   }
 
   getScrollableContainer() {
-    return $(this._dateTableScrollable.container());
+    return $(this.$dateTableScrollable.container());
   }
 
   getHeaderPanelHeight() {
@@ -1499,7 +1498,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private isOutsideScrollable(target, event) {
-    const $dateTableScrollableElement = this._dateTableScrollable.$element();
+    const $dateTableScrollableElement = this.$dateTableScrollable.$element();
     const scrollableSize = getBoundingRect($dateTableScrollableElement.get(0));
     const window = getWindow();
     const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
@@ -2445,7 +2444,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'crossScrollingEnabled':
         this.toggleHorizontalScrollClass();
-        this._dateTableScrollable.option(this.dateTableScrollableConfig());
+        this.$dateTableScrollable.option(this.dateTableScrollableConfig());
         break;
       case 'allDayPanelMode':
         this.updateShowAllDayPanel();
@@ -2650,8 +2649,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const $dateTableScrollable = $('<div>').addClass(SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS);
 
     // @ts-expect-error
-    this._dateTableScrollable = this._createComponent($dateTableScrollable, Scrollable, this.dateTableScrollableConfig());
-    this.scrollSync.dateTable = getMemoizeScrollTo(() => this._dateTableScrollable);
+    this.$dateTableScrollable = this._createComponent($dateTableScrollable, Scrollable, this.dateTableScrollableConfig());
+    this.scrollSync.dateTable = getMemoizeScrollTo(() => this.$dateTableScrollable);
   }
 
   protected createWorkSpaceElements() {
@@ -2672,7 +2671,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         this.$timePanel,
         this.$dateTableContainer,
       );
-      this._dateTableScrollable.$content().append(
+      this.$dateTableScrollable.$content().append(
         this.$dateTableScrollableContent,
       );
 
@@ -2682,7 +2681,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         this.$timePanel,
         this.$dateTableContainer,
       );
-      this._dateTableScrollable.$content().append(this.$dateTableScrollableContent);
+      this.$dateTableScrollable.$content().append(this.$dateTableScrollableContent);
 
       this.$headerTablesContainer.append(this.$headerPanel, this.$allDayPanel);
       this.$allDayPanel?.append(this.$allDayContainer, this.$allDayTable);
@@ -2694,7 +2693,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$element()
       .append(this.$fixedContainer)
       .append(this.$headerPanelContainer)
-      .append(this._dateTableScrollable.$element());
+      .append(this.$dateTableScrollable.$element());
   }
 
   protected createWorkSpaceScrollableElements() {
@@ -2712,12 +2711,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$element().append(this.$flexContainer);
 
     this.createSidebarScrollable();
-    this.$flexContainer.append(this._dateTableScrollable.$element());
+    this.$flexContainer.append(this.$dateTableScrollable.$element());
 
     this.$dateTableContainer.append(this.$dateTable);
     this.$dateTableScrollableContent.append(this.$dateTableContainer);
 
-    this._dateTableScrollable.$content().append(this.$dateTableScrollableContent);
+    this.$dateTableScrollable.$content().append(this.$dateTableScrollableContent);
 
     if (this.isVerticalGroupedWorkSpace()) {
       this.$dateTableContainer.append(this.$allDayContainer);

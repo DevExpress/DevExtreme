@@ -80,7 +80,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   private getRtlOffset(width) {
-    return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
+    return this.option('rtlEnabled') ? getBoundingRect(this.$dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
   protected setIndicationUpdateInterval() {
@@ -298,7 +298,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     const groupCount = this._getGroupCount() || 1;
-    const $container = this._dateTableScrollable.$content();
+    const $container = this.$dateTableScrollable.$content();
     const height = this.getIndicationHeight();
     const rtlOffset = this.getRtlOffset(this.getCellWidth());
 
