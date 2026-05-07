@@ -1397,6 +1397,38 @@ declare module DevExpress.common {
   export type GlobalConfig = {
     versionAssertions?: VersionAssertion[];
     /**
+     * [descr:GlobalConfig.dateFormat]
+     */
+    dateFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.timeFormat]
+     */
+    timeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.dateTimeFormat]
+     */
+    dateTimeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.numberFormat]
+     */
+    numberFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.dateTimeFormatPresets]
+     */
+    dateTimeFormatPresets?: Record<
+      string,
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>
+    >;
+    /**
      * [descr:GlobalConfig.decimalSeparator]
      * @deprecated [depNote:GlobalConfig.decimalSeparator]
      */
@@ -17020,7 +17052,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxDropDownEditorOptions.onClosed]
      */
@@ -26401,6 +26433,16 @@ declare module DevExpress.ui {
       | 'dateNavigator'
       | 'viewSwitcher';
     export type SchedulerScrollToAlign = 'start' | 'center';
+    /**
+     * [descr:_ui_scheduler_SelectionEndEvent]
+     */
+    export type SelectionEndEvent =
+      DevExpress.common.core.events.EventInfo<dxScheduler> & {
+        /**
+         * [descr:_ui_scheduler_SelectionEndEvent.selectedCellData]
+         */
+        readonly selectedCellData: Array<any>;
+      };
     export type SnapToCellsMode = 'always' | 'auto' | 'never';
     /**
      * [descr:TargetedAppointmentInfo]
@@ -26809,6 +26851,12 @@ declare module DevExpress.ui {
     onCellClick?:
       | ((e: DevExpress.ui.dxScheduler.CellClickEvent) => void)
       | string;
+    /**
+     * [descr:dxSchedulerOptions.onSelectionEnd]
+     */
+    onSelectionEnd?:
+      | ((e: DevExpress.ui.dxScheduler.SelectionEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onCellContextMenu]
      */
@@ -27547,7 +27595,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */

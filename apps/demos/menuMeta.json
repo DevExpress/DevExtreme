@@ -1,5 +1,139 @@
 [
   {
+    "Name": "AI-powered Extensions",
+    "Groups": [
+      {
+        "Name": "Data Grid",
+        "Equivalents": "dxDataGrid, dx-data-grid",
+        "Groups": [
+          {
+            "Name": "AI Columns",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "AI Columns",
+                "Name": "AIColumns",
+                "Widget": "DataGrid",
+                "DemoType": "Web",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Tree List",
+        "Equivalents": "dxTreeList, dx-tree-list",
+        "Groups": [
+          {
+            "Name": "AI Columns",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "AI Columns",
+                "Name": "AIColumns",
+                "Widget": "TreeList",
+                "DemoType": "Web",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Chat",
+        "Equivalents": "dxChat, dx-chat, chat",
+        "Groups": [
+          {
+            "Name": "AI and Chatbot Integration",
+            "Equivalents": "AI, Chatbot, Assistant",
+            "Demos": [
+              {
+                "Title": "AI and Chatbot Integration",
+                "Name": "AIAndChatbotIntegration",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "html-react-parser,openai,unified",
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Message Streaming",
+            "Equivalents": "Response Streaming, Streaming Responses, Streaming AI Responses, Streaming Output, Stop Request, Stop Request Execution, Cancel Request, Stop Response Generation, Cancel AI Request, Stop Streaming, Abort AI Request",
+            "Demos": [
+              {
+                "Title": "Message Streaming",
+                "Name": "MessageStreaming",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "html-react-parser,openai,unified",
+                "DemoType": "Web"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "HTML Editor",
+        "Equivalents": "dxHtmlEditor, dx-htmleditor",
+        "Groups": [
+          {
+            "Name": "AI-powered Text Editing",
+            "Equivalents": "AI, AI text transformation, AI editor",
+            "Demos": [
+              {
+                "Title": "AI-powered Text Editing",
+                "Name": "AITextEditing",
+                "Widget": "HtmlEditor",
+                "Badge": "AI",
+                "TopLevel": true,
+                "DemoType": "Web",
+                "Modules": "openai"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Form",
+        "Equivalents": "dxForm, dx-form",
+        "Groups": [
+          {
+            "Name": "Smart Paste",
+            "Equivalents": "AI paste, AI form filler, AI form paste",
+            "Demos": [
+              {
+                "Title": "Smart Paste",
+                "Name": "SmartPaste",
+                "Equivalents": "AI paste, AI form filler, AI form paste",
+                "DocUrl": "",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Widget": "Form",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [
+                  "/ViewModels/FormViewModel.cs"
+                ],
+                "DemoType": "Web",
+                "Modules": "openai"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Name": "Data Grids / Data Management",
     "Groups": [
       {
@@ -594,6 +728,7 @@
                 "Title": "AI Columns",
                 "Name": "AIColumns",
                 "Widget": "DataGrid",
+                "Badge": "AI",
                 "DemoType": "Web",
                 "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
                 "Modules": "openai"
@@ -1363,6 +1498,7 @@
                 "Title": "AI Columns",
                 "Name": "AIColumns",
                 "Widget": "TreeList",
+                "Badge": "AI",
                 "DemoType": "Web",
                 "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
                 "Modules": "openai"
@@ -3589,6 +3725,7 @@
                 "Title": "Timeline",
                 "Name": "Timelines",
                 "Widget": "Scheduler",
+                "Badge": "Updated",
                 "MvcAdditionalFiles": [
                   "/Models/EmployeeTask.cs",
                   "/Models/SampleData/TimelineTasks.cs"
@@ -3645,9 +3782,17 @@
                 "Title": "Resolve Time Conflicts",
                 "Name": "ResolveTimeConflicts",
                 "Widget": "Scheduler",
+                "Badge": "New",
                 "MvcAdditionalFiles": [
                   "/Models/Scheduler/ResolveTimeConflicts.cs"
                 ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Create from Selection",
+                "Name": "CreateFromSelection",
+                "Widget": "Scheduler",
+                "Badge": "New",
                 "DemoType": "Web"
               }
             ]
@@ -3709,6 +3854,7 @@
                 "Title": "Hidden Week Days",
                 "Name": "HiddenDays",
                 "Widget": "Scheduler",
+                "Badge": "New",
                 "Equivalents": "",
                 "DemoType": "Web"
               }
@@ -4213,7 +4359,7 @@
                 "Title": "AI and Chatbot Integration",
                 "Name": "AIAndChatbotIntegration",
                 "Widget": "Chat",
-                "Badge": "Updated",
+                "Badge": "AI",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }
@@ -4227,7 +4373,7 @@
                 "Title": "Message Streaming",
                 "Name": "MessageStreaming",
                 "Widget": "Chat",
-                "Badge": "New",
+                "Badge": "AI",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }
@@ -4325,6 +4471,7 @@
                 "Title": "AI-powered Text Editing",
                 "Name": "AITextEditing",
                 "Widget": "HtmlEditor",
+                "Badge": "AI",
                 "DemoType": "Web",
                 "Modules": "openai"
               }
@@ -4442,6 +4589,7 @@
             "Name": "SmartPaste",
             "Equivalents": "AI paste, AI form filler, AI form paste",
             "DocUrl": "",
+            "Badge": "AI",
             "Widget": "Form",
             "MvcDescription": "",
             "NetCoreDescription": "",

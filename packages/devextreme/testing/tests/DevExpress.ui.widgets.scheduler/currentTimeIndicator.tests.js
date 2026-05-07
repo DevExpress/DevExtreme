@@ -21,7 +21,6 @@ import '__internal/scheduler/workspaces/m_work_space_day';
 import '__internal/scheduler/workspaces/m_work_space_week';
 import '__internal/scheduler/workspaces/m_timeline_day';
 import '__internal/scheduler/workspaces/m_timeline_week';
-import '__internal/scheduler/workspaces/m_timeline_work_week';
 import '__internal/scheduler/workspaces/m_timeline_month';
 
 QUnit.testStart(function() {

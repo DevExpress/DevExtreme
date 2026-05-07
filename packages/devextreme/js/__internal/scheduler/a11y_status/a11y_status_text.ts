@@ -1,7 +1,7 @@
-import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import type { ViewType } from '@js/ui/scheduler';
 
+import { formatImplicitSchedulerDate, formatImplicitSchedulerMonth } from '../utils/global_formats';
 import type { NormalizedView } from '../utils/options/types';
 
 const KEYS = {
@@ -22,8 +22,8 @@ const viewTypeLocalization: Record<ViewType, string> = {
   timelineWorkWeek: 'dxScheduler-switcherTimelineWorkWeek',
 };
 
-const localizeMonth = (date: Date): string => String(dateLocalization.format(date, 'monthAndYear'));
-const localizeDate = (date: Date): string => `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
+const localizeMonth = (date: Date): string => formatImplicitSchedulerMonth(date);
+const localizeDate = (date: Date): string => formatImplicitSchedulerDate(date);
 const localizeCurrentIndicator = (
   date: Date,
   startDate: Date,

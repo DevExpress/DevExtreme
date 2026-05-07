@@ -53,12 +53,11 @@ QUnit.module('Suggestions', moduleConfig, () => {
             assert.strictEqual(this.getItems().length, 1, 'item rendered correctly');
         });
 
-        QUnit.test('should update items to empty list', function(assert) {
+        QUnit.test('should clean ButtonGroup when items is empty array', function(assert) {
             this.instance.updateOptions({ items: [] });
 
-            const $items = this.getItems();
-
-            assert.strictEqual($items.length, 0, 'all items removed');
+            assert.strictEqual(this.getItems().length, 0, 'all items removed');
+            assert.strictEqual(this.getSuggestions().hasClass(BUTTON_GROUP_CLASS), false, 'ButtonGroup is cleaned');
         });
 
         QUnit.test('should clean ButtonGroup when called with undefined', function(assert) {

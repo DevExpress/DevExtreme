@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Paths to files to compress (relative to project root)"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["minify", "beautify", "strip-only"],
+      "description": "Compression mode"
+    },
+    "removeDebug": {
+      "type": "boolean",
+      "description": "Strip debug blocks before compression",
+      "default": false
+    },
+    "eulaUrl": {
+      "type": "string",
+      "description": "EULA URL to preserve in comments during compression"
+    }
+  },
+  "required": ["files", "mode"]
+}

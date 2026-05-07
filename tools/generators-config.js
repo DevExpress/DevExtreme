@@ -135,6 +135,7 @@ const angularConfig = {
   ...commonConfig()
 }
 angularConfig.variables.genericTypes['CoreComponent'] = {};
+angularConfig.variables.nonExportedNestedComponents = ['DxiToolbarItem', 'DxiMenuItem'];
 
 const vueConfig = {
   ...commonConfig()

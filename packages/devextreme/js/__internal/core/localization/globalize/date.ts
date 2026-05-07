@@ -6,6 +6,7 @@ import 'globalize/date';
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
+import { resolvePresetOverride } from '@ts/core/m_global_format_config';
 import * as iteratorUtils from '@ts/core/utils/m_iterator';
 import { isObject } from '@ts/core/utils/m_type';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -186,6 +187,23 @@ if (Globalize?.formatDate) {
       format = (format as FormatObject).type ?? format;
 
       if (typeof format === 'string') {
+        const presetOverride = resolvePresetOverride(format);
+
+        if (presetOverride !== undefined) {
+          if (typeof presetOverride === 'function') {
+            return (presetOverride as DateFormatter)(date);
+          }
+          if (typeof presetOverride === 'string') {
+            // eslint-disable-next-line no-param-reassign
+            format = presetOverride;
+          } else if (isObject(presetOverride) && this._isAcceptableFormat(presetOverride)) {
+            formatter = Globalize.dateFormatter(presetOverride);
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return this.removeRtlMarks(formatter(date));
+          }
+        }
+
         formatCacheKey = `${Globalize.locale().locale}:${format}`;
         formatter = formattersCache[formatCacheKey];
         if (!formatter) {

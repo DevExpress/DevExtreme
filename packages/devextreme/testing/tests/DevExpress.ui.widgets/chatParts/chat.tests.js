@@ -133,6 +133,7 @@ const moduleConfig = {
         this.getAttachButton = () => Button.getInstance(this.$element.find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`));
         this.getSuggestionsElement = () => this.instance._suggestions._$element;
         this.getSuggestionItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        this.getSuggestionButtonGroup = () => this.instance._suggestions._buttonGroup;
 
         init();
     },
@@ -2850,6 +2851,130 @@ QUnit.module('Chat', () => {
             this.instance.option('suggestions.items', [{ text: clickedText }, { text: 'Item 2' }]);
 
             this.getSuggestionItems().first().trigger('dxclick');
+        });
+
+        QUnit.module('Proxy state options', () => {
+            QUnit.test('buttonGroup should not be created when state options change and suggestions is not set', function(assert) {
+                this.reinit({});
+
+                this.instance.option({
+                    activeStateEnabled: false,
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false,
+                    rtlEnabled: true,
+                });
+
+                assert.strictEqual(this.getSuggestionButtonGroup(), undefined, 'buttonGroup is not created');
+            });
+
+            QUnit.test('buttonGroup should not be created when state options change and suggestions is empty object', function(assert) {
+                this.reinit({ suggestions: {} });
+
+                this.instance.option({
+                    activeStateEnabled: false,
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false,
+                    rtlEnabled: true,
+                });
+
+                assert.strictEqual(this.getSuggestionButtonGroup(), undefined, 'buttonGroup is not created');
+            });
+
+            [true, false].forEach(value => {
+                QUnit.test('state enabled options should be passed to buttonGroup on init', function(assert) {
+                    const options = {
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    };
+
+                    this.reinit(options);
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is passed');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is passed');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is passed');
+                });
+
+                QUnit.test('state enabled options should be updated in buttonGroup when changed at runtime', function(assert) {
+                    this.reinit({
+                        activeStateEnabled: !value,
+                        focusStateEnabled: !value,
+                        hoverStateEnabled: !value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option({
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                    });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is updated');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is updated');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is updated');
+                });
+
+                QUnit.test('state enabled options should be preserved when suggestions are updated at runtime', function(assert) {
+                    this.reinit({
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is preserved');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is preserved');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is preserved');
+                });
+            });
+
+            [true, false].forEach(value => {
+                QUnit.test('rtlEnabled should be passed to buttonGroup on init', function(assert) {
+                    this.reinit({
+                        rtlEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is passed');
+                });
+
+                QUnit.test('rtlEnabled should be updated in buttonGroup when changed at runtime', function(assert) {
+                    this.reinit({
+                        rtlEnabled: !value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('rtlEnabled', value);
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is updated');
+                });
+
+                QUnit.test('rtlEnabled should be preserved when suggestions are updated at runtime', function(assert) {
+                    this.reinit({
+                        rtlEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is preserved');
+                });
+            });
         });
     });
 

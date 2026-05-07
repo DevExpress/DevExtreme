@@ -726,9 +726,12 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
         $element,
         this.addWidgetPrefix.bind(this),
       );
+      const isGroupRow = isGroupRowElement($element);
+      const isGroupFooter = isGroupFooterRow($element);
+      const noExtraWidth = isLastCell || isFixedCell || isGroupRow || isGroupFooter;
 
       return {
-        width: elementRect.right - elementRect.left + (isLastCell || isFixedCell ? 0 : 1),
+        width: elementRect.right - elementRect.left + (noExtraWidth ? 0 : 1),
         height: elementRect.bottom - elementRect.top,
       };
     }

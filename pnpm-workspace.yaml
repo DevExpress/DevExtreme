@@ -12,7 +12,7 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.29
   devexpress-gantt: 4.1.68
-  devextreme-exceljs-fork: 4.4.8
+  devextreme-exceljs-fork: 4.4.9
   devextreme-quill: 1.7.9
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
@@ -65,7 +65,7 @@ catalogs:
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:
-    "devextreme-internal-tools": 20.3.1
+    "devextreme-internal-tools": 20.4.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8

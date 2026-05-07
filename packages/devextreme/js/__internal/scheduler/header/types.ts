@@ -23,7 +23,7 @@ export interface HeaderOptions {
   _useShortDateFormat?: boolean;
 }
 
-export type Step = 'day' | 'week' | 'workWeek' | 'month' | 'agenda';
+export type Step = 'day' | 'week' | 'month' | 'agenda';
 
 export interface IntervalOptions {
   date: Date;

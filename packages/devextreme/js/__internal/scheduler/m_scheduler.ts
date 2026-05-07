@@ -62,8 +62,8 @@ import {
 } from './r1/utils/index';
 import { validateRRule } from './recurrence/validate_rule';
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
-import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
-import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
+import { DesktopTooltipStrategy } from './tooltip_strategies/desktop_tooltip_strategy';
+import { MobileTooltipStrategy } from './tooltip_strategies/mobile_tooltip_strategy';
 import type {
   AppointmentTooltipItem,
   SafeAppointment,
@@ -87,11 +87,9 @@ import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
 import SchedulerTimelineWeek from './workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from './workspaces/m_timeline_work_week';
 import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
-import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -115,7 +113,7 @@ const VIEWS_CONFIG = {
     renderingStrategy: 'vertical',
   },
   workWeek: {
-    workSpace: SchedulerWorkSpaceWorkWeek,
+    workSpace: SchedulerWorkSpaceWeek,
     renderingStrategy: 'vertical',
   },
   month: {
@@ -131,7 +129,7 @@ const VIEWS_CONFIG = {
     renderingStrategy: 'horizontal',
   },
   timelineWorkWeek: {
-    workSpace: SchedulerTimelineWorkWeek,
+    workSpace: SchedulerTimelineWeek,
     renderingStrategy: 'horizontal',
   },
   timelineMonth: {
@@ -421,6 +419,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case StoreEventNames.DELETED:
       case 'onAppointmentFormOpening':
       case 'onAppointmentTooltipShowing':
+      case 'onSelectionEnd':
         this.actions[name] = this._createActionByOption(name);
         break;
       case 'onAppointmentRendered':
@@ -1007,6 +1006,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onAppointmentDeleted: this._createActionByOption(StoreEventNames.DELETED),
       onAppointmentFormOpening: this._createActionByOption('onAppointmentFormOpening'),
       onAppointmentTooltipShowing: this._createActionByOption('onAppointmentTooltipShowing'),
+      onSelectionEnd: this._createActionByOption('onSelectionEnd'),
     };
   }
 
@@ -1061,6 +1061,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._layoutManager = new AppointmentLayoutManager(this);
 
+    this.appointmentTooltip = new (this.option('adaptivityEnabled')
+      ? MobileTooltipStrategy
+      : DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
+
     if (this.option('_newAppointments')) {
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         tabIndex: this.option('tabIndex'),
@@ -1091,10 +1095,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
       this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
     }
-
-    this.appointmentTooltip = new (this.option('adaptivityEnabled')
-      ? MobileTooltipStrategy
-      : DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
 
     this.createAppointmentPopupForm();
 
@@ -1340,6 +1340,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getAppointmentDataSource: () => this.appointmentDataSource,
       getSortedAppointments: () => this._layoutManager.sortedItems,
       scrollTo: this.scrollTo.bind(this),
+      appointmentTooltip: this.appointmentTooltip,
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
       onItemRendered: this.getAppointmentRenderedAction(),
@@ -1467,6 +1468,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       selectedCellData: this.option('selectedCellData'),
       onSelectionChanged: (args) => {
         this.option('selectedCellData', args.selectedCellData);
+      },
+      onSelectionEnd: (args) => {
+        this.actions.onSelectionEnd({
+          component: this,
+          element: this.$element(),
+          selectedCellData: args.selectedCellData,
+        });
       },
       groupByDate: this.getViewOption('groupByDate'),
       skippedDays: this.getViewOption('hiddenWeekDays') as number[],
@@ -2113,7 +2121,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._createActionByOption('onAppointmentTooltipShowing')(arg);
 
-    if (this.appointmentTooltip.isAlreadyShown(target)) {
+    if (this.appointmentTooltip.isShownForTarget(target)) {
       this.hideAppointmentTooltip();
     } else {
       this.processActionResult(arg, (canceled) => {

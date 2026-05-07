@@ -227,6 +227,11 @@ function sendSuggestion(prompt: string): void {
   margin-bottom: 0;
 }
 
+.chat-messagebubble-text pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 .dx-chat-messagebubble-content h1,
 .dx-chat-messagebubble-content h2,
 .dx-chat-messagebubble-content h3,

@@ -166,6 +166,7 @@ pnpm exec nx build:localization devextreme  # Generate localization files
 pnpm exec nx build:transpile devextreme     # Transpile source code
 pnpm exec nx bundle:debug devextreme        # Create debug bundle
 pnpm exec nx bundle:prod devextreme         # Create production bundle
+pnpm exec nx build:vectormap devextreme     # Build vectormap utils + region data
 pnpm exec nx build:npm devextreme           # Prepare NPM packages
 ```
 
@@ -192,6 +193,7 @@ The `packages/nx-infra-plugin` provides custom Nx executors for build automation
 | `build-typescript` | Compiles TypeScript to CJS or ESM modules with configurable output format, tsconfig, and path alias resolution |
 | `bundle` | Bundles JavaScript files using webpack with debug or production mode, supporting multiple entry points and license validation |
 | `clean` | Removes directories and files with support for exclusion patterns |
+| `compress` | Minifies or beautifies JavaScript files, with optional debug block stripping |
 | `concatenate-files` | Concatenates files with optional content extraction via regex, header/footer, and find/replace transforms |
 | `copy-files` | Copies files and directories to specified destinations with glob pattern support |
 | `create-dual-mode-manifest` | Generates package.json files for dual-mode (ESM + CJS) support with main, module, typings, and sideEffects |
@@ -202,6 +204,7 @@ The `packages/nx-infra-plugin` provides custom Nx executors for build automation
 | `pack-npm` | Creates npm packages using `pnpm pack` for distribution |
 | `prepare-package-json` | Creates distribution-ready package.json with cleaned dependencies for npm publishing |
 | `prepare-submodules` | Creates package.json entry points for submodule exports |
+| `vectormap` | Builds vectormap utility UMD bundles (`dx.vectormaputils.*.js`) and geographic region data modules from shapefile sources and JST templates |
 
 **Example executor usage in project.json:**
 ```json

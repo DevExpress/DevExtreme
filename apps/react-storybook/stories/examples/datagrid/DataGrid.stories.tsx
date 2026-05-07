@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { countries, generateData } from './data';
 
 import DataGrid, {
@@ -290,7 +290,6 @@ export const ColumnReordering: Story = {
         rtlEnabled: false,
         columnHidingEnabled: true,
         dataSource: countries,
-        // @ts-expect-error
         columns: 'regularColumns',
         columnFixing: {
             enabled: false
@@ -373,6 +372,102 @@ const aiIntegration = new AIIntegration({
     },
 });
 
+
+const aiResponseOptions = [
+    {
+        text: 'Success with one executed command',
+        response: {
+            actions: [{ name: 'Command executed successfully', args: {} }],
+        },
+    },
+    {
+        text: 'Success with several executed commands',
+        response: {
+            actions: [
+                { name: 'Command executed successfully', args: {} },
+                { name: 'Another command executed successfully', args: {} },
+            ],
+        },
+    },
+    {
+        text: 'Success with one executed command and an error command',
+        response: {
+            actions: [
+                { name: 'Command executed successfully', args: {} },
+                { name: 'Error executing command', args: {} },
+            ],
+        },
+    },
+    {
+        text: 'Error',
+        response: null,
+        error: 'Error from AI service',
+    },
+];
+
+const aiResponseOptionsMap = {
+    'Success with one executed command': aiResponseOptions[0],
+    'Success with several executed commands': aiResponseOptions[1],
+    'Success with one executed command and an error command': aiResponseOptions[2],
+    'Error': aiResponseOptions[3],
+};
+
+export const AIAssistant: Story = {
+    argTypes: {
+        'aiResponse': {
+            control: 'select',
+            options: Object.keys(aiResponseOptionsMap),
+            description: 'Simulated AI response type',
+        },
+    },
+    args: {
+        dataSource: countries,
+        keyExpr: 'ID',
+        showBorders: true,
+        columns: ['Country', 'Area', 'Population_Total', 'GDP_Total'],
+        aiResponse: 'Success with one executed command',
+    },
+    render: ({ aiResponse, ...args }) => {
+        const responseRef = useRef(aiResponseOptions[0]);
+
+        responseRef.current = aiResponseOptionsMap[aiResponse as string] ?? aiResponseOptions[0];
+
+        const aiIntegrationInstance = useMemo(() => new AIIntegration({
+            sendRequest() {
+                let rejectFn: (reason?: unknown) => void;
+                const current = responseRef.current;
+
+                const promise = new Promise<string>((resolve, reject) => {
+                    rejectFn = reject;
+
+                    setTimeout(() => {
+                        if (current.error) {
+                            reject(new Error(current.error));
+                        } else {
+                            resolve(JSON.stringify(current.response));
+                        }
+                    }, 2000);
+                });
+
+                return {
+                    promise,
+                    abort: () => { rejectFn(new Error('Aborted')); },
+                };
+            },
+        }), []);
+
+        return (
+            <DataGrid
+                {...args}
+                // @ts-expect-error --- IGNORE ---
+                aiAssistant={{
+                    enabled: true,
+                    aiIntegration: aiIntegrationInstance,
+                }}
+            />
+        );
+    },
+};
 
 export const AiColumn: Story = {
     args: {

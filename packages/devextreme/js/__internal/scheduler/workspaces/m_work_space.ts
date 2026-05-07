@@ -171,6 +171,7 @@ const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedu
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerDateTable');
+const SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerTable');
 
 const SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME = addNamespace(pointerEvents.move, 'dxSchedulerDateTable');
 
@@ -206,6 +207,7 @@ type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   startDayHour: number;
   endDayHour: number;
   skippedDays?: number[];
+  type?: ViewType;
 };
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;
@@ -220,6 +222,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   _dateTableScrollable!: Scrollable;
 
   private selectionChangedAction: any;
+
+  private selectionEndAction: any;
+
+  private isSelectionStartedOnCell = false;
+
+  private documentPointerUpHandler: (() => void) | undefined;
 
   private isCellClick: any;
 
@@ -986,6 +994,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected attachEvents() {
     this.createSelectionChangedAction();
+    this.createSelectionEndAction();
     this.attachClickEvent();
     this.attachContextMenuEvent();
   }
@@ -1014,6 +1023,17 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const $cell = $(e.target);
       that.cellClickAction({ event: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
     });
+
+    if (this.documentPointerUpHandler) {
+      (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME, this.documentPointerUpHandler);
+    }
+    this.documentPointerUpHandler = () => {
+      if (this.isSelectionStartedOnCell && !this._disposed) {
+        this.fireSelectionEndEvent();
+        this.isSelectionStartedOnCell = false;
+      }
+    };
+    eventsEngine.on(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME, this.documentPointerUpHandler);
   }
 
   private createCellClickAction() {
@@ -1026,10 +1046,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.selectionChangedAction = this._createActionByOption('onSelectionChanged');
   }
 
+  private createSelectionEndAction() {
+    this.selectionEndAction = this._createActionByOption('onSelectionEnd');
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private cellClickHandler(argument?: any) {
     if (this.showPopup) {
       delete this.showPopup;
+      this.isSelectionStartedOnCell = false;
       this.handleSelectedCellsClick();
     }
   }
@@ -1039,13 +1064,16 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     if (!$target.hasClass(DATE_TABLE_CELL_CLASS) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
       this.isCellClick = false;
+      this.isSelectionStartedOnCell = false;
       return;
     }
 
     this.isCellClick = true;
     if ($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
       this.showPopup = true;
+      this.isSelectionStartedOnCell = false;
     } else {
+      this.isSelectionStartedOnCell = true;
       const cellCoordinates = this.getCoordinatesByCell($target);
       const isAllDayCell = this.hasAllDayClass($target);
       this.setSelectedCellsStateAndUpdateSelection(isAllDayCell, cellCoordinates, false, $target);
@@ -1223,7 +1251,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     (eventsEngine.off as any)(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
 
     eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isMouseEvent(e) && e.which === 1) {
+      if ((isMouseEvent(e) || (e.originalEvent && isMouseEvent(e.originalEvent))) && e.which === 1) {
         isPointerDown = true;
         (this.$element() as any).addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
         (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
@@ -1235,7 +1263,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
 
     eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, (e) => {
-      if (isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
+      if (isPointerDown && this._dateTableScrollable) {
         e.preventDefault();
         e.stopPropagation();
         this.moveToCell($(e.target), true);
@@ -1932,6 +1960,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.selectionChangedAction({ selectedCellData });
   }
 
+  private fireSelectionEndEvent() {
+    const selectedCellData = this.option('selectedCellData') ?? [];
+    if (selectedCellData.length > 0 && this.selectionEndAction) {
+      this.selectionEndAction({ selectedCellData });
+    }
+  }
+
   private getCellByData(cellData) {
     const {
       startDate, groupIndex, allDay, index,
@@ -2270,6 +2305,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     // @ts-expect-error
     super._dispose();
 
+    if (this.documentPointerUpHandler) {
+      (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME, this.documentPointerUpHandler);
+      this.documentPointerUpHandler = undefined;
+    }
     this.virtualScrollingDispatcher.dispose();
   }
 
@@ -2369,6 +2408,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'onSelectionChanged':
         this.createSelectionChangedAction();
+        break;
+      case 'onSelectionEnd':
+        this.createSelectionEndAction();
         break;
       case 'onCellClick':
         this.createCellClickAction();

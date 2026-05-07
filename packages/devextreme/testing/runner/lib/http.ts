@@ -28,13 +28,6 @@ export function sendJson(res: ServerResponse, payload: unknown): void {
   res.end(JSON.stringify(payload));
 }
 
-export function sendJsonText(res: ServerResponse, payloadText: string): void {
-  setNoCacheHeaders(res);
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.end(payloadText);
-}
-
 export function sendXml(res: ServerResponse, payload: string): void {
   setNoCacheHeaders(res);
   res.statusCode = 200;
