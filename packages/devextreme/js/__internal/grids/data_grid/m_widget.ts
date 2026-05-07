@@ -34,6 +34,6 @@ import './export/m_export';
 import './focus/m_focus';
 import './module_not_extended/row_dragging';
 import './module_not_extended/toast';
-import './module_not_extended/ai_assistant';
+import './ai_assistant/ai_assistant';
 
 export default DataGrid;

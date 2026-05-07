@@ -11,14 +11,18 @@ import { zodToJsonSchema } from 'zod-to-json-schema';
 
 import type { InternalGrid } from '../m_types';
 import type {
-  CommandCallbacks, CommandResult, CustomizeResponseText, GridCommand, JsonSchema,
+  CommandCallbacks,
+  CommandResult,
+  CustomizeResponseText,
+  GridCommand,
+  JsonSchema,
 } from './types';
 
 export class GridCommands {
   private readonly component: InternalGrid;
 
   // TODO: specify type of command arguments when default commands are implemented
-  private readonly commands: Map<string, GridCommand<Record<string, unknown>>>;
+  private readonly commands: Map<string, GridCommand>;
 
   private executing = false;
 
@@ -139,7 +143,7 @@ export class GridCommands {
 
   private async executeCommand(
     // TODO: specify type when default commands are implemented
-    command: GridCommand<Record<string, unknown>>,
+    command: GridCommand,
     args: Record<string, unknown>,
     callbacks: CommandCallbacks,
   ): Promise<CommandResult> {
