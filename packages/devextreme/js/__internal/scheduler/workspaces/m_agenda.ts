@@ -124,7 +124,7 @@ class SchedulerAgenda extends WorkSpace {
     return this.option('agendaDuration') as number;
   }
 
-  _getCellCount() {
+  getCellCount() {
     return 1;
   }
 

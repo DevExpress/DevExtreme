@@ -188,7 +188,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override getCellCoordinatesByIndex(index) {
     return {
-      columnIndex: index % this._getCellCount(),
+      columnIndex: index % this.getCellCount(),
       rowIndex: 0,
     };
   }
@@ -365,7 +365,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getCurrentTimePanelCellIndices() {
-    const columnCountPerGroup = this._getCellCount();
+    const columnCountPerGroup = this.getCellCount();
     const today = this.getToday();
     const index = this.getCellIndexByDate(today);
     const { columnIndex: currentTimeColumnIndex } = this.getCellCoordinatesByIndex(index);
@@ -462,7 +462,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       $indicator.css('left', rtlOffset ? rtlOffset - width : width);
     } else {
       for (let i = 0; i < groupCount; i++) {
-        const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+        const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this.getCellCount() * this.getCellWidth() * i;
         $indicator = this.createIndicator($container);
         setHeight($indicator, getBoundingRect($container.get(0)).height);
 
@@ -483,7 +483,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         groupHeaderClass: this.getGroupHeaderClass.bind(this),
         groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
       },
-      this._getCellCount() || 1,
+      this.getCellCount() || 1,
       this.option('resourceCellTemplate'),
       this.getTotalRowCount(this._getGroupCount()),
       groupByDate,
