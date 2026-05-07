@@ -241,8 +241,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private $headerPanelEmptyCell: any;
 
-  // TODO: make private once external usages in m_timeline.ts, m_work_space_indicator.ts are removed
-  _groupedStrategy: any;
+  protected groupedStrategy: any;
 
   public virtualScrollingDispatcher: any;
 
@@ -676,7 +675,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       bounceEnabled: false,
       updateManually: true,
       onScroll: () => {
-        this._groupedStrategy.cache?.clear();
+        this.groupedStrategy.cache?.clear();
       },
       // TODO (Scrollable:useKeyboard) -> remove this WA
       //  after ScrollView private option "useKeyboard" will be extended to useNative: true
@@ -795,7 +794,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getWorkSpaceMinWidth() {
-    return this._groupedStrategy.getWorkSpaceMinWidth();
+    return this.groupedStrategy.getWorkSpaceMinWidth();
   }
 
   _dimensionChanged() {
@@ -1146,7 +1145,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private getCalculateHeaderCellRepeatCount() {
-    return this._groupedStrategy.calculateHeaderCellRepeatCount();
+    return this.groupedStrategy.calculateHeaderCellRepeatCount();
   }
 
   protected updateScrollable() {
@@ -1169,11 +1168,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private getTotalCellCount(groupCount) {
-    return this._groupedStrategy.getTotalCellCount(groupCount);
+    return this.groupedStrategy.getTotalCellCount(groupCount);
   }
 
   protected getTotalRowCount(groupCount, includeAllDayPanelRows?: any) {
-    let result = this._groupedStrategy.getTotalRowCount(groupCount);
+    let result = this.groupedStrategy.getTotalRowCount(groupCount);
 
     if (includeAllDayPanelRows && this.isAllDayPanelVisible) {
       result += groupCount;
@@ -1183,7 +1182,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private getGroupIndex(rowIndex, columnIndex) {
-    return this._groupedStrategy.getGroupIndex(rowIndex, columnIndex);
+    return this.groupedStrategy.getGroupIndex(rowIndex, columnIndex);
   }
 
   calculateEndDate(startDate) {
@@ -1297,7 +1296,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupedScrollableScrollTop(allDay) {
-    return this._groupedStrategy.getScrollableScrollTop(allDay);
+    return this.groupedStrategy.getScrollableScrollTop(allDay);
   }
 
   getScrollableScrollLeft() {
@@ -1325,7 +1324,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getWorkSpaceLeftOffset() {
-    return this._groupedStrategy.getLeftOffset();
+    return this.groupedStrategy.getLeftOffset();
   }
 
   protected getCellCoordinatesByIndex(index) {
@@ -1410,7 +1409,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected getCellElementByPosition(cellCoordinates, groupIndex, inAllDayRow) {
-    const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
+    const indexes = this.groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
     return this.domGetDateCell(indexes);
   }
 
@@ -1649,7 +1648,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getAllDayOffset() {
-    return this._groupedStrategy.getAllDayOffset();
+    return this.groupedStrategy.getAllDayOffset();
   }
 
   // NOTE: refactor leftIndex calculation
@@ -1711,7 +1710,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupBounds(coordinates) {
-    const groupBounds = this._groupedStrategy instanceof VerticalGroupedStrategy
+    const groupBounds = this.groupedStrategy instanceof VerticalGroupedStrategy
       ? this.getGroupBoundsVertical(coordinates.groupIndex)
       : this.getGroupBoundsHorizontal(coordinates);
 
@@ -1722,7 +1721,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   getGroupBoundsVertical(groupIndex) {
     const $firstAndLastCells = this.getFirstAndLastDataTableCell();
-    return this._groupedStrategy.getGroupBoundsOffset(groupIndex, $firstAndLastCells);
+    return this.groupedStrategy.getGroupBoundsOffset(groupIndex, $firstAndLastCells);
   }
 
   getGroupBoundsHorizontal(coordinates) {
@@ -1731,7 +1730,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const cellWidth = this.getCellWidth();
 
     const { groupedDataMap } = this.viewDataProvider;
-    return this._groupedStrategy
+    return this.groupedStrategy
       .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
   }
 
@@ -2537,7 +2536,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       viewStartDayHour: this.option('startDayHour'),
       viewEndDayHour: this.option('endDayHour'),
       cellDuration: this.getCellDuration(),
-      _groupedStrategy: this._groupedStrategy,
       isGroupedByDate: this.isGroupedByDate(),
       rtlEnabled: this.option('rtlEnabled'),
       startViewDate: this.getStartViewDate(),
@@ -2567,7 +2565,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       ? VerticalGroupedStrategy
       : HorizontalGroupedStrategy;
 
-    this._groupedStrategy = new Strategy(this);
+    this.groupedStrategy = new Strategy(this);
   }
 
   protected getDefaultGroupStrategy() {
@@ -2597,14 +2595,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getDateTableCellClass(rowIndex?: any, columnIndex?: any) {
     const cellClass = `${DATE_TABLE_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS} ${VERTICAL_SIZES_CLASS}`;
 
-    return this._groupedStrategy
+    return this.groupedStrategy
       .addAdditionalGroupCellClasses(cellClass, columnIndex + 1, rowIndex, columnIndex);
   }
 
   protected getGroupHeaderClass(i?: any) {
     const cellClass = GROUP_HEADER_CLASS;
 
-    return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1);
+    return this.groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1);
   }
 
   protected initWorkSpaceUnits() {
@@ -2864,7 +2862,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected attachGroupCountClass() {
-    const className = this._groupedStrategy.getGroupCountClass(this.option('groups'));
+    const className = this.groupedStrategy.getGroupCountClass(this.option('groups'));
 
     this.$element().addClass(className);
   }
@@ -2949,7 +2947,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupedStrategy() {
-    return this._groupedStrategy;
+    return this.groupedStrategy;
   }
 
   getFixedContainer() {
@@ -3157,7 +3155,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getHeaderPanelCellClass(i) {
     const cellClass = `${HEADER_PANEL_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS}`;
 
-    return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1, undefined, undefined, this.isGroupedByDate());
+    return this.groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1, undefined, undefined, this.isGroupedByDate());
   }
 
   protected renderAllDayPanel(index?: any) {
@@ -3197,11 +3195,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private getAllDayPanelCellClass(i, j) {
     const cellClass = `${ALL_DAY_TABLE_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS}`;
 
-    return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1);
+    return this.groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1);
   }
 
   protected renderTimePanel() {
-    const repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
+    const repeatCount = this.groupedStrategy.calculateTimeCellRepeatCount();
 
     const getTimeCellGroups = (rowIndex) => {
       if (!this.isVerticalGroupedWorkSpace()) {
@@ -3247,7 +3245,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const cellClass = `${TIME_PANEL_CELL_CLASS} ${VERTICAL_SIZES_CLASS}`;
 
     return this.isVerticalGroupedWorkSpace()
-      ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i)
+      ? this.groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i)
       : cellClass;
   }
 
@@ -3286,7 +3284,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected insertAllDayRowsIntoDateTable() {
-    return this._groupedStrategy.insertAllDayRowsIntoDateTable();
+    return this.groupedStrategy.insertAllDayRowsIntoDateTable();
   }
 
   protected renderTableBody(options, delayCellTemplateRendering?: any): any {

@@ -214,7 +214,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getCellElementByPosition(cellCoordinates, groupIndex) {
-    const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+    const indexes = this.groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
     return this.$dateTable
       .find('tr')

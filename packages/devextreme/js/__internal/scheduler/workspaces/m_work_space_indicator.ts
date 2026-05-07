@@ -68,7 +68,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         $indicator,
         groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth(),
       );
-      this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
+      this.groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
     }
   }
 
