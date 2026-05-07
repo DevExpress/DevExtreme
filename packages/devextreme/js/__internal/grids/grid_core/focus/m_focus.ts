@@ -54,9 +54,7 @@ export class FocusController extends core.ViewController {
           return;
         }
 
-        this._focusRowByKey(value).done(() => {
-          this.getKeyboardController()._fireFocusedRowChanged();
-        });
+        this.handleFocusedRowKeyChange(value);
         args.handled = true;
         break;
 
@@ -164,6 +162,16 @@ export class FocusController extends core.ViewController {
       return Deferred().resolve();
     }
     return this._navigateToRow(key, true);
+  }
+
+  public handleFocusedRowKeyChange(key: Key): DeferredObj<number | unknown> {
+    const result = this._focusRowByKey(key);
+
+    result.done(() => {
+      this.getKeyboardController()._fireFocusedRowChanged();
+    });
+
+    return result;
   }
 
   public _resetFocusedRow() {
