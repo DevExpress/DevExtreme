@@ -249,3 +249,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./apps/demos/publish-demos
+          destination_dir: demos
+          keep_files: true

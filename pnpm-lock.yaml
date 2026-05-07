@@ -142,6 +142,12 @@ catalogs:
     vue-eslint-parser:
       specifier: 10.0.0
       version: 10.0.0
+    zod:
+      specifier: 3.24.4
+      version: 3.24.4
+    zod-to-json-schema:
+      specifier: 3.24.6
+      version: 3.24.6
   eslint8:
     '@babel/eslint-parser':
       specifier: 7.28.6
@@ -532,7 +538,7 @@ importers:
         version: 4.2.0
       openai:
         specifier: 4.73.1
-        version: 4.73.1(zod@4.3.5)
+        version: 4.73.1(zod@3.24.4)
       plugin-typescript:
         specifier: 8.0.0
         version: 8.0.0(typescript@5.9.3)
@@ -611,6 +617,12 @@ importers:
       yargs:
         specifier: 17.7.2
         version: 17.7.2
+      zod:
+        specifier: 'catalog:'
+        version: 3.24.4
+      zod-to-json-schema:
+        specifier: 'catalog:'
+        version: 3.24.6(zod@3.24.4)
       zone.js:
         specifier: 0.15.1
         version: 0.15.1
@@ -1276,10 +1288,10 @@ importers:
         specifier: ^4.3.0
         version: 4.6.4(vue@3.5.32(typescript@5.8.3))
       zod:
-        specifier: 3.24.4
+        specifier: 'catalog:'
         version: 3.24.4
       zod-to-json-schema:
-        specifier: 3.24.6
+        specifier: 'catalog:'
         version: 3.24.6(zod@3.24.4)
       zone.js:
         specifier: ~0.15.0
@@ -1391,10 +1403,10 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       zod:
-        specifier: 3.24.4
+        specifier: 'catalog:'
         version: 3.24.4
       zod-to-json-schema:
-        specifier: 3.24.6
+        specifier: 'catalog:'
         version: 3.24.6(zod@3.24.4)
     devDependencies:
       '@babel/core':
@@ -36201,20 +36213,6 @@ snapshots:
       node-fetch: 2.7.0
     optionalDependencies:
       zod: 3.24.4
-    transitivePeerDependencies:
-      - encoding
-
-  openai@4.73.1(zod@4.3.5):
-    dependencies:
-      '@types/node': 18.19.130
-      '@types/node-fetch': 2.6.13
-      abort-controller: 3.0.0
-      agentkeepalive: 4.6.0
-      form-data-encoder: 1.7.2
-      formdata-node: 4.4.1
-      node-fetch: 2.7.0
-    optionalDependencies:
-      zod: 4.3.5
     transitivePeerDependencies:
       - encoding
 
