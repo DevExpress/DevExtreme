@@ -71,7 +71,7 @@ import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import VerticalShader, { VERTICAL_DATE_TIME_SHADER_ALL_DAY_CLASS } from '../shaders/current_time_shader_vertical';
+import VerticalShader, { DATE_TIME_SHADER_ALL_DAY_CLASS } from '../shaders/current_time_shader_vertical';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import {
   getAppointmentGroupIndex,
@@ -956,7 +956,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   removeAllDayShaderIndicator(): void {
-    this.$allDayPanel?.find(`.${VERTICAL_DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
+    this.$allDayPanel?.find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
   }
 
   private getScrollbarWidth() {
