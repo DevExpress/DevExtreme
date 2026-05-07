@@ -135,7 +135,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   renderRDateTable() {
     utils.renovation.renderComponent(
       this,
-      this._$dateTable,
+      this.$dateTable,
       DateTableMonthComponent,
       'renovatedDateTable',
       this.getRDateTableProps(),
