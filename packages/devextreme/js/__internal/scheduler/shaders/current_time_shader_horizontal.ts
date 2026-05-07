@@ -34,7 +34,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
     if (groupIndex >= 1) {
       const { workSpace } = this;
-      const indicationWidth = workSpace._getCellCount() * workSpace.getCellWidth();
+      const indicationWidth = workSpace.getCellCount() * workSpace.getCellWidth();
       $shader.css('left', indicationWidth);
     } else {
       $shader.css('left', 0);
@@ -64,7 +64,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     this.applyShaderWidth($shader, shaderWidth);
 
     if (isFirstShaderPart) {
-      shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;
+      shaderLeft = workSpace.getCellCount() * workSpace.getCellWidth() * groupIndex;
     } else {
       shaderLeft = workSpace.getCellWidth() * integerPart * workSpace._getGroupCount()
         + groupIndex * workSpace.getCellWidth();

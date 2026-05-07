@@ -833,8 +833,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  // TODO: make private once external usages in grouped strategies, shaders, m_timeline.ts are removed
-  _getCellCount() {
+  getCellCount() {
     return this.viewDataProvider.getCellCount({
       intervalCount: this.option('intervalCount'),
       currentDate: this.option('currentDate'),
@@ -1728,7 +1727,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupBoundsHorizontal(coordinates) {
-    const cellCount = this._getCellCount();
+    const cellCount = this.getCellCount();
     const $cells = this.getCells();
     const cellWidth = this.getCellWidth();
 
@@ -2084,7 +2083,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // TODO: remove along with old render
   private oldRenderGetAllDayCellData(groupIndex) {
     return (cell, rowIndex, columnIndex) => {
-      const validColumnIndex = columnIndex % this._getCellCount();
+      const validColumnIndex = columnIndex % this.getCellCount();
       const options = this.getDateGenerationOptions(true);
       let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(
         options as any,
@@ -2099,7 +2098,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       if (this.isGroupedByDate()) {
         validGroupIndex = Math.floor(columnIndex % this._getGroupCount());
       } else if (this._isHorizontalGroupedWorkSpace()) {
-        validGroupIndex = Math.floor(columnIndex / this._getCellCount());
+        validGroupIndex = Math.floor(columnIndex / this.getCellCount());
       }
 
       const data: any = {
@@ -3069,7 +3068,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         groupHeaderClass: this.getGroupHeaderClass.bind(this),
         groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
       },
-      this._getCellCount() || 1,
+      this.getCellCount() || 1,
       this.option('resourceCellTemplate'),
       this._getGroupCount(),
       groupByDate,
@@ -3079,7 +3078,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected renderDateHeader(): any {
     const container = this.getDateHeaderContainer();
     const $headerRow = $('<tr>').addClass(HEADER_ROW_CLASS);
-    const count = this._getCellCount();
+    const count = this.getCellCount();
     const cellTemplate = this.getDateHeaderTemplate();
     const repeatCount = this.getCalculateHeaderCellRepeatCount();
     const templateCallbacks = [];
@@ -3163,7 +3162,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected renderAllDayPanel(index?: any) {
-    let cellCount = this._getCellCount();
+    let cellCount = this.getCellCount();
 
     if (!this.isVerticalGroupedWorkSpace()) {
       cellCount *= this._getGroupCount() || 1;
@@ -3239,7 +3238,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       cellTemplate: this.option('timeCellTemplate'),
       getCellText: (rowIndex) => getData(rowIndex, 'text'),
       getCellDate: (rowIndex) => getData(rowIndex, 'startDate'),
-      groupCount: this._getCellCount(),
+      groupCount: this.getCellCount(),
       allDayElements: this.insertAllDayRowsIntoDateTable() ? this.allDayTitles : undefined,
       getTemplateData: getTimeCellGroups.bind(this),
     });
