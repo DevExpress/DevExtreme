@@ -25,6 +25,7 @@ export type {
     DataStructure,
     DataType,
     DateLike,
+    DayOfWeek,
     DefaultOptionsRule,
     Direction,
     DisplayMode,

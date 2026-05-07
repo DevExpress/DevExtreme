@@ -109,6 +109,7 @@ export namespace Common {
     export type DataStructure = import('devextreme/common').DataStructure;
     export type DataType = import('devextreme/common').DataType;
     export type DateLike = import('devextreme/common').DateLike;
+    export type DayOfWeek = import('devextreme/common').DayOfWeek;
     export type DefaultOptionsRule<T> = import('devextreme/common').DefaultOptionsRule<T>;
     export type Direction = import('devextreme/common').Direction;
     export type DisplayMode = import('devextreme/common').DisplayMode;

@@ -1,5 +1,5 @@
 export {
-  FirstDayOfWeek,
+  DayOfWeek,
   DateLike,
   CalendarZoomLevel,
   CalendarSelectionMode,
