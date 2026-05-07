@@ -15,3 +15,7 @@ export enum MessageStatus {
   Success = 'success',
   Failure = 'failure',
 }
+
+export const DEFAULT_SUCCESS_MESSAGE = 'dxDataGrid-aiAssistantSuccessMessage';
+export const DEFAULT_FAILURE_MESSAGE = 'dxDataGrid-aiAssistantErrorMessage';
+export const EXECUTION_ABORT_MESSAGE = 'dxDataGrid-aiAssistantExecutionAbortMessage';
