@@ -50,11 +50,11 @@ class VerticalGroupedStrategy {
   }
 
   getTotalRowCount() {
-    return this._workSpace.getRowCount() * this._workSpace._getGroupCount();
+    return this._workSpace.getRowCount() * this._workSpace.getGroupCount();
   }
 
   calculateTimeCellRepeatCount() {
-    return this._workSpace._getGroupCount() || 1;
+    return this._workSpace.getGroupCount() || 1;
   }
 
   getWorkSpaceMinWidth() {

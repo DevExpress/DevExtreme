@@ -151,7 +151,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       const integerPart = Math.floor(cellCount);
       const fractionPart = cellCount - integerPart;
 
-      return this.getCellWidth() * (integerPart * this._getGroupCount() + fractionPart);
+      return this.getCellWidth() * (integerPart * this.getGroupCount() + fractionPart);
     }
     return this.getIndicationCellCount() * this.getCellWidth();
   }
@@ -375,7 +375,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-      ? this._getGroupCount()
+      ? this.getGroupCount()
       : 1;
 
     return [...new Array(horizontalGroupCount)]
@@ -399,7 +399,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       let currentDate = new Date(firstViewDate);
 
       const $cells: any[] = [];
-      const groupCount = this._getGroupCount();
+      const groupCount = this.getGroupCount();
       const cellCountInDay = this.getCellCountInDay();
       const colSpan = this.isGroupedByDate()
         ? cellCountInDay * groupCount
@@ -485,7 +485,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       },
       this.getCellCount() || 1,
       this.option('resourceCellTemplate'),
-      this.getTotalRowCount(this._getGroupCount()),
+      this.getTotalRowCount(this.getGroupCount()),
       groupByDate,
     );
   }
