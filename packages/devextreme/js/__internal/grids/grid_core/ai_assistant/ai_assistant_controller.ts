@@ -1,4 +1,5 @@
 import type { ExecuteGridAssistantCommandResult } from '@js/common/ai-integration';
+import messageLocalization from '@js/common/core/localization/message';
 import { ArrayStore } from '@js/common/data';
 import Guid from '@js/core/guid';
 import { isString } from '@js/core/utils/type';
@@ -21,6 +22,11 @@ export class AIAssistantController extends Controller {
   private messageStore?: ArrayStore<Message, string>;
 
   private aiAssistantIntegrationController?: AIAssistantIntegrationController;
+
+  // TODO: need to implement method for getting customized response title
+  private getCustomizedResponseTitle(): string {
+    return '';
+  }
 
   private updateAIMessage(messageId: string, data: Partial<Message>): void {
     this.messageStore?.push([
@@ -62,7 +68,7 @@ export class AIAssistantController extends Controller {
           id: aiMessageId,
           timestamp: parsedTimestamp,
           author: AI_ASSISTANT_AUTHOR,
-          text: message.text,
+          text: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
           status: MessageStatus.Pending,
         },
       },
@@ -78,6 +84,7 @@ export class AIAssistantController extends Controller {
 
     this.updateAIMessage(messageId, {
       status: messageStatus,
+      text: this.getCustomizedResponseTitle(),
       commands,
     });
   }
@@ -85,7 +92,8 @@ export class AIAssistantController extends Controller {
   private failAIMessage(messageId: string, error: Error): void {
     this.updateAIMessage(messageId, {
       status: MessageStatus.Failure,
-      text: error.message,
+      text: messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader'),
+      errorText: error.message,
     });
   }
 
@@ -102,7 +110,6 @@ export class AIAssistantController extends Controller {
   public getMessageDataSource(): DataSourceLike<Message> {
     return {
       store: this.messageStore,
-      reshapeOnPush: true,
     };
   }
 

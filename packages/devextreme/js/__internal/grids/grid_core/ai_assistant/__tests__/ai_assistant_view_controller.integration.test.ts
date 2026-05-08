@@ -6,13 +6,28 @@ import {
   it,
   jest,
 } from '@jest/globals';
+import type {
+  ExecuteGridAssistantCommandParams,
+  ExecuteGridAssistantCommandResult,
+  RequestCallbacks,
+  Response as SendRequestResult,
+} from '@js/common/ai-integration';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
+import type { Message } from '@js/ui/chat';
+import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 
 import {
   afterTest,
   beforeTest,
   createDataGrid,
   type DataGridInstance,
+  flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
+import { CLASSES } from '../../ai_chat/const';
+import { MessageStatus } from '../const';
+import { GridCommands } from '../grid_commands';
+import type { CommandResult } from '../types';
 
 const AI_ASSISTANT_BUTTON_SELECTOR = '.dx-datagrid-ai-assistant-button';
 const HIDDEN_CLASS = 'dx-hidden';
@@ -31,6 +46,44 @@ const isAiAssistantButtonVisible = (instance: DataGridInstance): boolean => {
   }
 
   return !button.closest(`.${HIDDEN_CLASS}`);
+};
+
+const createMockAIIntegration = (): {
+  aiIntegration: AIIntegration;
+  getLastCallbacks: () => RequestCallbacks<ExecuteGridAssistantCommandResult>;
+} => {
+  let lastCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
+
+  const aiIntegration = new AIIntegration({
+    sendRequest(): SendRequestResult {
+      return {
+        promise: Promise.resolve('{}'),
+        abort: jest.fn(),
+      };
+    },
+  });
+
+  aiIntegration.executeGridAssistant = jest.fn((
+    params: ExecuteGridAssistantCommandParams,
+    callbacks: RequestCallbacks<ExecuteGridAssistantCommandResult>,
+  ): (() => void) => {
+    lastCallbacks = callbacks;
+    return jest.fn();
+  });
+
+  return {
+    aiIntegration,
+    getLastCallbacks: () => lastCallbacks,
+  };
+};
+
+const findMessageElements = (): dxElementWrapper => $(`.${CLASSES.aiChat}`).find(`.${CLASSES.message}`);
+
+const getMessageStatusClass = ($message: dxElementWrapper): string => {
+  if ($message.hasClass(CLASSES.messagePending)) return MessageStatus.Pending;
+  if ($message.hasClass(CLASSES.messageSuccess)) return MessageStatus.Success;
+  if ($message.hasClass(CLASSES.messageError)) return MessageStatus.Failure;
+  return '';
 };
 
 describe('AIAssistantViewController', () => {
@@ -126,6 +179,183 @@ describe('AIAssistantViewController', () => {
       const button = getAiAssistantButton(instance);
 
       expect(button?.getAttribute('title')).toBe('My Custom Title');
+    });
+  });
+
+  describe('message rendering', () => {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let validateSpy;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let executeCommandsSpy;
+
+    beforeEach(() => {
+      validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
+        .mockReturnValue(true);
+      executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
+        .mockResolvedValue([
+          { status: 'success', message: 'Sorted by Name ascending' },
+        ] as CommandResult[]);
+    });
+
+    afterEach(() => {
+      validateSpy.mockRestore();
+      executeCommandsSpy.mockRestore();
+    });
+
+    const createDataGridWithAIAssistant = async (): Promise<{
+      instance: DataGridInstance;
+      getLastCallbacks: () => RequestCallbacks<ExecuteGridAssistantCommandResult>;
+    }> => {
+      const { aiIntegration, getLastCallbacks } = createMockAIIntegration();
+
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1' },
+          { id: 2, name: 'Name 2' },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID', dataType: 'number' },
+          { dataField: 'name', caption: 'Name', dataType: 'string' },
+        ],
+        aiAssistant: { enabled: true, aiIntegration, title: 'AI Assistant' },
+      });
+
+      // Open the AI assistant popup so Chat renders into the DOM
+      const viewController = instance.getController('aiAssistantViewController');
+
+      await viewController.toggle();
+      jest.runAllTimers();
+
+      return { instance, getLastCallbacks };
+    };
+
+    const sendAIRequest = (
+      instance: DataGridInstance,
+      text: string,
+    ): void => {
+      const controller = instance.getController('aiAssistant');
+
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text,
+        timestamp: new Date().toISOString(),
+      } as Message).catch(() => {});
+      jest.runAllTimers();
+    };
+
+    it('should render pending message after sendRequestToAI', async () => {
+      const { instance } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      const $messages = findMessageElements();
+
+      expect($messages.length).toBe(1);
+      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Pending);
+    });
+
+    it('should render success message with command list after AI completes', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      getLastCallbacks().onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      });
+      await flushAsync();
+      await flushAsync();
+
+      const $messages = findMessageElements();
+
+      expect($messages.length).toBe(1);
+      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+
+      const $commandItems = $messages.eq(0).find(`.${CLASSES.actionListItem}`);
+
+      expect($commandItems.length).toBe(1);
+      expect($commandItems.find(`.${CLASSES.actionListItemText}`).text())
+        .toBe('Sorted by Name ascending');
+    });
+
+    it('should render failure message with error text after AI errors', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      getLastCallbacks().onError?.(new Error('Network error'));
+      await flushAsync();
+
+      const $messages = findMessageElements();
+
+      expect($messages.length).toBe(1);
+      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
+        .toBe('Network error');
+    });
+
+    it('should render multiple messages with correct statuses after sequential requests', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      // First request
+      sendAIRequest(instance, 'Sort by Name');
+
+      const firstCallbacks = getLastCallbacks();
+
+      firstCallbacks.onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      });
+      await flushAsync();
+      await flushAsync();
+
+      // Second request
+      sendAIRequest(instance, 'Filter by Status');
+
+      const $messages = findMessageElements();
+
+      expect($messages.length).toBe(2);
+      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+      expect($messages.eq(0).find(`.${CLASSES.actionListItem}`).length).toBe(1);
+      expect(getMessageStatusClass($messages.eq(1))).toBe(MessageStatus.Pending);
+    });
+
+    it('should only re-render the updated message', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      // First request — complete it
+      sendAIRequest(instance, 'Sort by Name');
+
+      const firstCallbacks = getLastCallbacks();
+
+      firstCallbacks.onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      });
+      await flushAsync();
+      await flushAsync();
+
+      // Second request — pending
+      sendAIRequest(instance, 'Filter by Status');
+
+      const $messagesBefore = findMessageElements();
+
+      expect($messagesBefore.length).toBe(2);
+
+      const firstMessageNode = $messagesBefore.get(0);
+
+      // Complete second request — only message 2 should re-render
+      const secondCallbacks = getLastCallbacks();
+
+      secondCallbacks.onComplete?.({
+        actions: [{ name: 'filter', args: { column: 'Status' } }],
+      });
+      await flushAsync();
+      await flushAsync();
+
+      const $messagesAfter = findMessageElements();
+
+      expect($messagesAfter.length).toBe(2);
+      expect($messagesAfter.get(0)).toBe(firstMessageNode);
+      expect(getMessageStatusClass($messagesAfter.eq(1)))
+        .toBe(MessageStatus.Success);
     });
   });
 });
