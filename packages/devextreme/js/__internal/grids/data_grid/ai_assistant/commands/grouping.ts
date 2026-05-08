@@ -1,10 +1,8 @@
-import type { Column as DataGridColumn } from '@js/ui/data_grid';
 import { defineGridCommand } from '@ts/grids/grid_core/ai_assistant/commands/defineGridCommand';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { Column as GridCoreColumn } from '@ts/grids/grid_core/columns_controller/types';
 import { z } from 'zod';
 
-type Column = GridCoreColumn & DataGridColumn;
+import type { Column } from './types';
 
 const groupingCommandSchema = z.object({
   dataField: z.string(),

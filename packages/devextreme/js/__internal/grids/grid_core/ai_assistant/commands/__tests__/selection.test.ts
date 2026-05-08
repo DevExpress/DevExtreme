@@ -276,6 +276,10 @@ describe('selectByIndexesCommand', () => {
       expect(selectByIndexesCommand.schema.safeParse({}).success).toBe(false);
     });
 
+    it('rejects when indexes is an empty array', () => {
+      expect(selectByIndexesCommand.schema.safeParse({ indexes: [] }).success).toBe(false);
+    });
+
     it('rejects negative indexes', () => {
       expect(selectByIndexesCommand.schema.safeParse({ indexes: [-1] }).success).toBe(false);
     });
@@ -372,14 +376,14 @@ describe('selectByIndexesCommand', () => {
   });
 
   describe('default message', () => {
-    it('uses literal `Select row(s).`', async () => {
+    it('reports the 1-based row numbers on the current page on success', async () => {
       const instance = await createGrid();
       jest.spyOn(instance, 'selectRowsByIndexes').mockReturnValue(Promise.resolve([]) as never);
       const callbacks = createCallbacks();
 
       await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [0, 2] });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Select row(s).');
+      expect(callbacks.success).toHaveBeenCalledWith('Select row(s) number 1, 3 on the current page.');
     });
 
     it('passes the same default message to failure', async () => {
@@ -388,7 +392,7 @@ describe('selectByIndexesCommand', () => {
 
       await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [0] });
 
-      expect(callbacks.failure).toHaveBeenCalledWith('Select row(s).');
+      expect(callbacks.failure).toHaveBeenCalledWith('Select row(s) number 1 on the current page.');
     });
   });
 });
