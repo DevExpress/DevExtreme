@@ -1,5 +1,4 @@
 import { getBoundingRect } from '@js/core/utils/position';
-import { hasWindow } from '@js/core/utils/window';
 import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
 import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
@@ -93,10 +92,7 @@ class VerticalGroupedStrategy {
 
       const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
       const scrollTop = this.getScrollableScrollTop();
-      let headerRowHeight = 0;
-      if (hasWindow() && this._workSpace.$headerPanelContainer) {
-        headerRowHeight = getBoundingRect(this._workSpace.$headerPanelContainer.get(0) as HTMLElement).height;
-      }
+      const headerRowHeight = getBoundingRect(this._workSpace.$headerPanelContainer.get(0)).height;
 
       let topOffset = groupIndex * dayHeight + headerRowHeight + this._workSpace.option('getHeaderHeight')() - scrollTop;
 
