@@ -19,14 +19,14 @@
   "devDependencies": {
     "@types/react": "18.0.0",
     "@types/react-dom": "18.0.0",
-    "@storybook/addon-docs": "10.1.9",
-    "@storybook/addon-links": "10.1.9",
+    "@storybook/addon-docs": "10.2.10",
+    "@storybook/addon-links": "10.2.10",
     "@storybook/addon-webpack5-compiler-swc": "^4.0.2",
-    "@storybook/react-webpack5": "10.1.9",
+    "@storybook/react-webpack5": "10.2.10",
     "prop-types": "15.8.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "storybook": "10.1.9",
+    "storybook": "10.2.10",
     "typescript": "^5.9.3"
   }
 }
