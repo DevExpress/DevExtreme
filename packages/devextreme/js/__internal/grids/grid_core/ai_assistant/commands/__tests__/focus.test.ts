@@ -328,13 +328,13 @@ describe('focusRowByIndexCommand', () => {
   });
 
   describe('default message', () => {
-    it('uses the literal `Focus row.` on success', async () => {
+    it('reports the 1-based row number on the current page on success', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
 
       await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Focus row.');
+      expect(callbacks.success).toHaveBeenCalledWith('Focus row number 2 on the current page.');
     });
 
     it('passes the same default message to failure when executability fails', async () => {
@@ -343,7 +343,7 @@ describe('focusRowByIndexCommand', () => {
 
       await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });
 
-      expect(callbacks.failure).toHaveBeenCalledWith('Focus row.');
+      expect(callbacks.failure).toHaveBeenCalledWith('Focus row number 2 on the current page.');
     });
   });
 });

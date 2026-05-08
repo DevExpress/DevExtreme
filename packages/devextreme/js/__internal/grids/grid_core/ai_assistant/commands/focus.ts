@@ -84,7 +84,7 @@ export const focusRowByIndexCommand = defineGridCommand({
   description: 'Focus a specific row by its 0-based index within the current page. Index 0 is the first row on the visible page. To focus a row that is not on the current page, use focusRowByKey or call pageIndex first. Requires focusedRowEnabled to be true on the grid.',
   schema: focusRowByIndexCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
-    const defaultMessage = 'Focus row.';
+    const defaultMessage = `Focus row number ${args.index + 1} on the current page.`;
     const dataController = component.getController('data');
     const key = dataController.getKeyByRowIndex(args.index);
 

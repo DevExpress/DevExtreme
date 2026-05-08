@@ -51,7 +51,8 @@ export const selectByIndexesCommand = defineGridCommand({
   description: 'Select rows by their 0-based indexes within the current page. Index 0 is the first row on the visible page; group/header rows are not selectable. To select rows that are not on the current page, use selectByKeys, or call pageIndex first to switch the page.',
   schema: selectByIndexesCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
-    const defaultMessage = 'Select row(s).';
+    const rowIndexes = args.indexes.map((index) => index + 1).join(', ');
+    const defaultMessage = `Select row(s) number ${rowIndexes} on the current page.`;
 
     if (component.option('selection.mode') === 'none') {
       return failure(defaultMessage);
