@@ -154,10 +154,7 @@ export class AIChat {
     const $row = $('<div>')
       .addClass(CLASSES.messageHeaderRow)
       .appendTo($parent);
-    // NOTE: dxChat does not support partial re-render for custom message fields.
-    // We use the built-in `text` field as the message header because dxChat
-    // triggers partial re-render when `text` changes via DataSource push updates.
-    const headerText = message.text ?? '';
+    const headerText = message.headerText ?? '';
 
     $('<div>')
       .addClass(CLASSES.messageHeader)

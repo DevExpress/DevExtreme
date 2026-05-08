@@ -251,7 +251,8 @@ describe('AIChat', () => {
 
         renderMessageTemplate(chatConfig, {
           author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Request in progress',
+          headerText: 'Request in progress',
+          text: 'pending',
           status: 'pending',
         }, container);
 
@@ -316,7 +317,8 @@ describe('AIChat', () => {
 
         renderMessageTemplate(chatConfig, {
           author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Sorting and Page Size',
+          headerText: 'Sorting and Page Size',
+          text: 'success',
           status: 'success',
           commands: [{ status: 'success', message: 'OK' }],
         }, container);
@@ -466,7 +468,8 @@ describe('AIChat', () => {
 
         renderMessageTemplate(chatConfig, {
           author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Failed to process request',
+          headerText: 'Failed to process request',
+          text: 'failure',
           errorText: 'Invalid prompt. Please try again.',
           status: 'failure',
         }, container);
@@ -614,7 +617,8 @@ describe('AIChat', () => {
       const freshMessage = {
         id: 'msg-1',
         author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-        text: 'Completed successfully',
+        headerText: 'Completed successfully',
+        text: 'success',
         status: 'success',
         commands: [{ status: 'success', message: 'Done' }],
       };
@@ -627,7 +631,7 @@ describe('AIChat', () => {
         message: {
           id: 'msg-1',
           author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Processing...',
+          text: 'pending',
           status: 'pending',
         },
         component: mockComponent,

@@ -109,7 +109,8 @@ describe('AIAssistantController', () => {
           id: expect.stringContaining(AI_ASSISTANT_AUTHOR_ID),
           timestamp: expectedTimestamp,
           author: AI_ASSISTANT_AUTHOR,
-          text: 'Request in progress',
+          headerText: 'Request in progress',
+          text: MessageStatus.Pending,
           status: MessageStatus.Pending,
         }),
       ]);
@@ -183,7 +184,8 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          text: 'Failed to process request',
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
           errorText: 'Network error',
         }),
       ]);
@@ -214,7 +216,8 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          text: 'Failed to process request',
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
           errorText: 'Default error message',
         }),
       ]);

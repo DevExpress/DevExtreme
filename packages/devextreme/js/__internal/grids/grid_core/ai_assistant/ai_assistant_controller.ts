@@ -68,8 +68,13 @@ export class AIAssistantController extends Controller {
           id: aiMessageId,
           timestamp: parsedTimestamp,
           author: AI_ASSISTANT_AUTHOR,
-          text: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
+          headerText: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
           status: MessageStatus.Pending,
+          // The text field is currently used as a workaround to trigger a status update.
+          // We have to update this built-in property to force the message to re-render.
+          // If dxChat supports updating custom fields via the Store Push API in the future,
+          // we will be able to remove this text update workaround.
+          text: MessageStatus.Pending,
         },
       },
     ]);
@@ -83,17 +88,27 @@ export class AIAssistantController extends Controller {
       : MessageStatus.Success;
 
     this.updateAIMessage(messageId, {
-      status: messageStatus,
-      text: this.getCustomizedResponseTitle(),
+      headerText: this.getCustomizedResponseTitle(),
       commands,
+      status: messageStatus,
+      // The text field is currently used as a workaround to trigger a status update.
+      // We have to update this built-in property to force the message to re-render.
+      // If dxChat supports updating custom fields via the Store Push API in the future,
+      // we will be able to remove this text update workaround.
+      text: messageStatus,
     });
   }
 
   private failAIMessage(messageId: string, error: Error): void {
     this.updateAIMessage(messageId, {
-      status: MessageStatus.Failure,
-      text: messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader'),
+      headerText: messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader'),
       errorText: error.message,
+      status: MessageStatus.Failure,
+      // The text field is currently used as a workaround to trigger a status update.
+      // We have to update this built-in property to force the message to re-render.
+      // If dxChat supports updating custom fields via the Store Push API in the future,
+      // we will be able to remove this text update workaround.
+      text: MessageStatus.Failure,
     });
   }
 
