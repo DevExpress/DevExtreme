@@ -1298,6 +1298,8 @@ declare module DevExpress.common {
     | 'object'
     | 'datetime';
   export type DateLike = Date | number | string | null;
+
+  export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
@@ -1332,7 +1334,11 @@ declare module DevExpress.common {
    */
   type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
   export type FieldChooserLayout = 0 | 1 | 2;
-  export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+  /**
+   * @deprecated Use the DayOfWeek type instead
+   */
+  export type FirstDayOfWeek = DayOfWeek;
   export type Format =
     | 'billions'
     | 'currency'
@@ -10241,7 +10247,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
      */
@@ -21116,7 +21122,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxGanttOptions.tasks]
      */
@@ -26388,7 +26394,6 @@ declare module DevExpress.ui {
       readonly endDate: Date;
       readonly text: string;
     };
-    export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * [descr:_ui_scheduler_DisposingEvent]
      */
@@ -26733,11 +26738,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxSchedulerOptions.hiddenWeekDays]
      */
-    hiddenWeekDays?: Array<DevExpress.ui.dxScheduler.DayOfWeek>;
+    hiddenWeekDays?: Array<DevExpress.common.DayOfWeek> | undefined;
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
@@ -27074,11 +27079,11 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.firstDayOfWeek]
            */
-          firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+          firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
           /**
            * [descr:dxSchedulerOptions.views.hiddenWeekDays]
            */
-          hiddenWeekDays?: Array<DevExpress.ui.dxScheduler.DayOfWeek>;
+          hiddenWeekDays?: Array<DevExpress.common.DayOfWeek> | undefined;
           /**
            * [descr:dxSchedulerOptions.views.groupByDate]
            */
