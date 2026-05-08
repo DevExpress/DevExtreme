@@ -510,13 +510,15 @@ class DropDownList<
   }
 
   _popupConfig(): PopupProperties {
+    this._updateCustomBoundaryContainer();
+    const maxHeight = this._getMaxHeight();
+
     return {
       ...super._popupConfig(),
       templatesRenderAsynchronously: false,
       autoResizeEnabled: false,
-      // @ts-expect-error ts-error
-      maxHeight: this._getMaxHeight.bind(this),
-    };
+      maxHeight,
+    } as PopupProperties;
   }
 
   _renderPopupContent(): void {
@@ -907,13 +909,24 @@ class DropDownList<
 
   _popupShowingHandler(): void {
     this._updatePopupWidth();
+    this._updatePopupMaxHeight();
     this._updateListDimensions();
+  }
+
+  _updatePopupMaxHeight(): void {
+    const cachedMaxHeight = this._options.cache('dropDownOptions')?.maxHeight;
+
+    if (cachedMaxHeight === undefined) {
+      const maxHeight = this._getMaxHeight();
+      this._setPopupOption('maxHeight', maxHeight);
+    }
   }
 
   _dimensionChanged(): void {
     super._dimensionChanged();
 
     this._updateListDimensions();
+    this._updatePopupMaxHeight();
   }
 
   _needPopupRepaint(): boolean {

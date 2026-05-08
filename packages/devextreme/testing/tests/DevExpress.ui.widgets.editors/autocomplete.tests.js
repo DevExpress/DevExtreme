@@ -176,7 +176,7 @@ QUnit.module('dxAutocomplete', {
 
         assert.strictEqual(initialWidth, setUpWidth, 'Width was set up successfully');
         assert.strictEqual(initialHeight, setUpHeight, 'Height was set up successfully');
-        assert.strictEqual(typeof popup.option('width'), 'function', 'Popup was set up successfully');
+        assert.strictEqual(typeof popup.option('width'), 'number', 'Popup was set up successfully');
         assert.strictEqual(initialPopupWidth, initialWidth, 'overlay content has correct width');
 
         autocomplete.option('height', initialHeight + increment);
