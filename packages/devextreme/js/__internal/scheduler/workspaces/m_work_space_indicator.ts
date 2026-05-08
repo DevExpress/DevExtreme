@@ -290,7 +290,11 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     if (this.option('shadeUntilCurrentTime')) {
-      this.shader.render();
+      this.shader.render(
+        this.isHorizontalGroupedWorkSpace(),
+        this.getGroupCount() || 1,
+        this.getCellCount(),
+      );
     }
 
     if (!this.isIndicationOnView() || !this.isIndicatorVisible()) {
