@@ -1,6 +1,7 @@
 {
     "extends": [
-        "config:js-lib"
+        "config:js-lib",
+        "github>DevExpress/devextreme-renovate-config"
     ],
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
