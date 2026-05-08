@@ -427,14 +427,17 @@ describe('clearSummaryCommand', () => {
   });
 
   describe('execute', () => {
-    it('calls component.option("summary", undefined) on success', async () => {
+    it('calls component.option("summary", { groupItems: undefined, totalItems: undefined }) on success', async () => {
       const instance = await createGrid();
       const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await clearSummaryCommand.execute(instance, callbacks)();
 
-      expect(optionSpy).toHaveBeenCalledWith('summary', undefined);
+      expect(optionSpy).toHaveBeenCalledWith('summary', {
+        groupItems: undefined,
+        totalItems: undefined,
+      });
       expect(result.status).toBe('success');
     });
 

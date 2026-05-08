@@ -128,7 +128,10 @@ export const clearSummaryCommand = defineGridCommand({
     const defaultMessage = 'Clear column summaries.';
 
     try {
-      component.option('summary', undefined);
+      component.option('summary', {
+        groupItems: undefined,
+        totalItems: undefined,
+      });
 
       return Promise.resolve(success(defaultMessage));
     } catch {
