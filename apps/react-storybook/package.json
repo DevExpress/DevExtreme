@@ -1,6 +1,6 @@
 {
   "name": "devextreme-react-storybook",
-  "version": "26.1.2",
+  "version": "26.1.2-beta",
   "description": "",
   "main": "index.js",
   "scripts": {
