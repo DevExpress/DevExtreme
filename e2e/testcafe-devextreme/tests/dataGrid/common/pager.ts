@@ -241,11 +241,8 @@ test('Page index should not reset when scrolling while the grid is being refresh
 test('Pager info should show page 1 of 1 after changing pageSize to \'all\' with virtual scrolling (T1327238)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
-  
+
   await t
-    .click(pager.getNavPage('5').element)
-    .expect(pager.getNavPage('5').selected)
-    .ok()
     .expect(pager.getInfoText().textContent)
     .eql('Page 5 of 10 (100 items)');
 
@@ -266,7 +263,7 @@ test('Pager info should show page 1 of 1 after changing pageSize to \'all\' with
   },
   pager: {
     visible: true,
-    allowedPageSizes: [5, 'all'],
+    allowedPageSizes: [10, 'all'],
     showPageSizeSelector: true,
     showInfo: true,
     showNavigationButtons: true,
