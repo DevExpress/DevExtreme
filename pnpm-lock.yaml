@@ -182,7 +182,6 @@ overrides:
   sha.js@<=2.4.11: ^2.4.12
   socket.io-parser@>=4.0.0 <4.2.6: ^4.2.6
   tar@<=7.5.9: ^7.5.10
-  terser@<=3.8.1: ^4.8.1
   tmp@<=0.2.3: ^0.2.4
   tough-cookie@<4.1.3: ^4.1.3
   underscore@<=1.13.7: ^1.13.8
@@ -9166,6 +9165,9 @@ packages:
   commander@2.11.0:
     resolution: {integrity: sha512-b0553uYA5YAEGgyYIGYROzKQ7X5RAqedkfjiZxwi0kL1g3bOaBNNZfYkzt/CL0umgD5wc9Jec2FbB98CjkMRvQ==}
 
+  commander@2.16.0:
+    resolution: {integrity: sha512-sVXqklSaotK9at437sFlFpyOcJonxe0yST/AG9DkQKUdIE6IqGIMv4SfAQSKaJbSdVEJYItASCrBiVQHq1HQew==}
+
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
 
@@ -17058,9 +17060,14 @@ packages:
       uglify-js:
         optional: true
 
-  terser@4.8.1:
-    resolution: {integrity: sha512-4GnLC0x667eJG0ewJTa6z/yXrbLGv80D9Ru6HIpCQmO+Q4PfEtBFi0ObSckqwL6VyQv/7ENJieXHo2ANmdQwgw==}
+  terser@3.17.0:
+    resolution: {integrity: sha512-/FQzzPJmCpjAH9Xvk2paiWrFq+5M6aVOf+2KRbwhByISDX/EujxsK+BAvrhb6H+2rtrLCHK9N01wO014vrIwVQ==}
     engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  terser@3.8.1:
+    resolution: {integrity: sha512-FRin3gKQ0vm0xPPLuxw1FqpVgv1b2pBpYCaFb5qe6A7sD749Fnq1VbDiX3CEFM0BV0fqDzFtBfgmxhxCdzKQIg==}
+    engines: {node: '>=0.8.0'}
     hasBin: true
 
   terser@5.29.1:
@@ -29235,6 +29242,8 @@ snapshots:
 
   commander@2.11.0: {}
 
+  commander@2.16.0: {}
+
   commander@2.20.3: {}
 
   commander@2.9.0:
@@ -32953,7 +32962,7 @@ snapshots:
       ansi-colors: 1.1.0
       minimatch: 3.1.5
       plugin-error: 0.1.2
-      terser: 4.8.1
+      terser: 3.17.0
       through2: 2.0.5
       vinyl: 2.2.1
 
@@ -40245,7 +40254,7 @@ snapshots:
       rollup: 4.59.0
       source-map: 0.5.7
       systemjs: 0.19.47
-      terser: 4.8.1
+      terser: 3.8.1
       traceur: 0.0.105
     transitivePeerDependencies:
       - supports-color
@@ -40417,10 +40426,17 @@ snapshots:
     optionalDependencies:
       '@swc/core': 1.15.30(@swc/helpers@0.5.21)
 
-  terser@4.8.1:
+  terser@3.17.0:
     dependencies:
       acorn: 8.16.0
       commander: 2.20.3
+      source-map: 0.6.1
+      source-map-support: 0.5.21
+
+  terser@3.8.1:
+    dependencies:
+      acorn: 8.16.0
+      commander: 2.16.0
       source-map: 0.6.1
       source-map-support: 0.5.21
 
