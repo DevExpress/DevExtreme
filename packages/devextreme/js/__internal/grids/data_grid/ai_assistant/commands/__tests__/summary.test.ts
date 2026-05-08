@@ -104,6 +104,74 @@ describe('summaryCommand', () => {
         totalItems: [{ column: 'amount', summaryType: 'sum', extra: 1 }],
       }).success).toBe(false);
     });
+
+    it('accepts showInColumn and displayFormat on totalItems', () => {
+      expect(summaryCommand.schema.safeParse({
+        totalItems: [{
+          column: 'amount',
+          summaryType: 'sum',
+          showInColumn: 'name',
+          displayFormat: 'Sum: {0}',
+        }],
+      }).success).toBe(true);
+    });
+
+    it('accepts showInColumn, displayFormat, showInGroupFooter, alignByColumn on groupItems', () => {
+      expect(summaryCommand.schema.safeParse({
+        groupItems: [{
+          column: 'amount',
+          summaryType: 'avg',
+          showInColumn: 'name',
+          displayFormat: '{1}: {0}',
+          showInGroupFooter: true,
+          alignByColumn: true,
+        }],
+      }).success).toBe(true);
+    });
+
+    it('rejects showInGroupFooter on totalItems (group-only field)', () => {
+      expect(summaryCommand.schema.safeParse({
+        totalItems: [{
+          column: 'amount',
+          summaryType: 'sum',
+          showInGroupFooter: true,
+        }],
+      }).success).toBe(false);
+    });
+
+    it('rejects alignByColumn on totalItems (group-only field)', () => {
+      expect(summaryCommand.schema.safeParse({
+        totalItems: [{
+          column: 'amount',
+          summaryType: 'sum',
+          alignByColumn: true,
+        }],
+      }).success).toBe(false);
+    });
+
+    it('rejects when showInColumn is not a string', () => {
+      expect(summaryCommand.schema.safeParse({
+        totalItems: [{ column: 'amount', summaryType: 'sum', showInColumn: 1 }],
+      }).success).toBe(false);
+    });
+
+    it('rejects when displayFormat is not a string', () => {
+      expect(summaryCommand.schema.safeParse({
+        totalItems: [{ column: 'amount', summaryType: 'sum', displayFormat: 5 }],
+      }).success).toBe(false);
+    });
+
+    it('rejects when showInGroupFooter is not a boolean', () => {
+      expect(summaryCommand.schema.safeParse({
+        groupItems: [{ column: 'amount', summaryType: 'sum', showInGroupFooter: 'yes' }],
+      }).success).toBe(false);
+    });
+
+    it('rejects when alignByColumn is not a boolean', () => {
+      expect(summaryCommand.schema.safeParse({
+        groupItems: [{ column: 'amount', summaryType: 'sum', alignByColumn: 1 }],
+      }).success).toBe(false);
+    });
   });
 
   describe('execute', () => {
@@ -155,6 +223,23 @@ describe('summaryCommand', () => {
 
       const result = await summaryCommand.execute(instance, callbacks)({
         groupItems: [{ column: 'unknown', summaryType: 'sum' }],
+      });
+
+      expect(result.status).toBe('failure');
+      expect(optionSpy).not.toHaveBeenCalledWith('summary', expect.anything());
+    });
+
+    it('returns failure when showInColumn does not resolve to an existing column', async () => {
+      const instance = await createGrid();
+      const optionSpy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await summaryCommand.execute(instance, callbacks)({
+        totalItems: [{
+          column: 'amount',
+          summaryType: 'sum',
+          showInColumn: 'unknown',
+        }],
       });
 
       expect(result.status).toBe('failure');
