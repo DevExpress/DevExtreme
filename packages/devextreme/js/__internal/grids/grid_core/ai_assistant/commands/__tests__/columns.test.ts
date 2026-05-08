@@ -45,6 +45,7 @@ const createGrid = async (
     allowColumnReordering: true,
     allowColumnResizing: true,
     columnFixing: { enabled: true },
+    columnChooser: { enabled: true },
     ...options,
   } as unknown as Properties);
   return instance as unknown as InternalGrid;
@@ -83,6 +84,24 @@ describe('columnsVisibilityCommand', () => {
   });
 
   describe('execute', () => {
+    it('returns failure when columnChooser.enabled is not true', async () => {
+      const instance = await createGrid({ columnChooser: { enabled: false } });
+      const columnsController = instance.getController('columns');
+      const spy = jest.spyOn(columnsController, 'columnOption');
+      const callbacks = createCallbacks();
+
+      const result = await columnsVisibilityCommand.execute(instance, callbacks)({
+        dataField: 'name',
+        visible: false,
+      });
+
+      expect(result.status).toBe('failure');
+      const setCalls = spy.mock.calls.filter(
+        (callArgs) => callArgs.length === 3 && callArgs[1] === 'visible',
+      );
+      expect(setCalls).toHaveLength(0);
+    });
+
     it('returns failure when dataField does not match any column', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
@@ -259,6 +278,24 @@ describe('columnsReorderCommand', () => {
   });
 
   describe('execute', () => {
+    it('returns failure when allowColumnReordering is not true on the grid', async () => {
+      const instance = await createGrid({ allowColumnReordering: false });
+      const columnsController = instance.getController('columns');
+      const spy = jest.spyOn(columnsController, 'columnOption');
+      const callbacks = createCallbacks();
+
+      const result = await columnsReorderCommand.execute(instance, callbacks)({
+        dataField: 'name',
+        visibleIndex: 0,
+      });
+
+      expect(result.status).toBe('failure');
+      const setCalls = spy.mock.calls.filter(
+        (callArgs) => callArgs.length === 3 && callArgs[1] === 'visibleIndex',
+      );
+      expect(setCalls).toHaveLength(0);
+    });
+
     it('returns failure when dataField does not match', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
@@ -425,6 +462,25 @@ describe('columnsPinningCommand', () => {
   });
 
   describe('execute', () => {
+    it('returns failure when columnFixing.enabled is not true', async () => {
+      const instance = await createGrid({ columnFixing: { enabled: false } });
+      const columnsController = instance.getController('columns');
+      const spy = jest.spyOn(columnsController, 'columnOption');
+      const callbacks = createCallbacks();
+
+      const result = await columnsPinningCommand.execute(instance, callbacks)({
+        dataField: 'name',
+        fixed: true,
+        fixedPosition: 'left',
+      });
+
+      expect(result.status).toBe('failure');
+      const setCalls = spy.mock.calls.filter(
+        (callArgs) => callArgs.length === 2 && typeof callArgs[1] === 'object',
+      );
+      expect(setCalls).toHaveLength(0);
+    });
+
     it('returns failure when dataField does not match', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
@@ -632,6 +688,24 @@ describe('columnsResizeCommand', () => {
   });
 
   describe('execute', () => {
+    it('returns failure when allowColumnResizing is not true on the grid', async () => {
+      const instance = await createGrid({ allowColumnResizing: false });
+      const columnsController = instance.getController('columns');
+      const spy = jest.spyOn(columnsController, 'columnOption');
+      const callbacks = createCallbacks();
+
+      const result = await columnsResizeCommand.execute(instance, callbacks)({
+        dataField: 'name',
+        width: 120,
+      });
+
+      expect(result.status).toBe('failure');
+      const setCalls = spy.mock.calls.filter(
+        (callArgs) => callArgs.length === 3 && callArgs[1] === 'width',
+      );
+      expect(setCalls).toHaveLength(0);
+    });
+
     it('returns failure when dataField does not match', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();

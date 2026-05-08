@@ -11,7 +11,7 @@ const columnsVisibilityCommandSchema = z.object({
 
 export const columnsVisibilityCommand = defineGridCommand({
   name: 'columnsVisibility',
-  description: 'Show or hide a column.',
+  description: 'Show or hide a column. Requires columnChooser.enabled to be true on the grid.',
   schema: columnsVisibilityCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
@@ -21,6 +21,10 @@ export const columnsVisibilityCommand = defineGridCommand({
     const defaultMessage = args.visible
       ? `Display the column "${caption}".`
       : `Hide the column "${caption}".`;
+
+    if (!component.option('columnChooser.enabled')) {
+      return Promise.resolve(failure(defaultMessage));
+    }
 
     if (!column || (!args.visible && column.allowHiding === false)) {
       return Promise.resolve(failure(defaultMessage));
@@ -44,7 +48,7 @@ const columnsReorderCommandSchema = z.object({
 
 export const columnsReorderCommand = defineGridCommand({
   name: 'columnsReorder',
-  description: 'Move a column to a new visible position. visibleIndex is the 0-based target slot among visible columns.',
+  description: 'Move a column to a new visible position. visibleIndex is the 0-based target slot among visible columns. Requires allowColumnReordering to be true on the grid.',
   schema: columnsReorderCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
@@ -54,7 +58,9 @@ export const columnsReorderCommand = defineGridCommand({
     // Render position as 1-based for the user-facing message
     const defaultMessage = `Move the column "${caption}" to position ${args.visibleIndex + 1}.`;
 
-    if (!column || column.allowReordering === false) {
+    const reorderingAllowed = !!component.option('allowColumnReordering') && !!column?.allowReordering;
+
+    if (!reorderingAllowed) {
       return Promise.resolve(failure(defaultMessage));
     }
 
@@ -76,7 +82,7 @@ const columnsPinningCommandSchema = z.object({
 
 export const columnsPinningCommand = defineGridCommand({
   name: 'columnsPinning',
-  description: 'Pin a column to the left or right edge, or unpin it. fixedPosition is required when fixed=true and ignored when fixed=false.',
+  description: 'Pin a column to the left or right edge, or unpin it. fixedPosition is optional: when omitted with fixed=true, the grid resolves it to "left" for LTR layouts and "right" for RTL. Ignored when fixed=false. Requires columnFixing.enabled to be true on the grid.',
   schema: columnsPinningCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
@@ -87,7 +93,9 @@ export const columnsPinningCommand = defineGridCommand({
       ? `Fix the column "${caption}".`
       : `Unfix the column "${caption}".`;
 
-    if (!column || column.allowFixing === false) {
+    const fixingAllowed = !!component.option('columnFixing.enabled') && !!column?.allowFixing;
+
+    if (!fixingAllowed) {
       return Promise.resolve(failure(defaultMessage));
     }
 
@@ -111,7 +119,7 @@ const columnsResizeCommandSchema = z.object({
 
 export const columnsResizeCommand = defineGridCommand({
   name: 'columnsResize',
-  description: 'Resize a column. Pass a number for pixel width, or a string for CSS dimensions ("auto", "50%", "120px").',
+  description: 'Resize a column. Pass a number for pixel width, or a string for CSS dimensions ("auto", "50%", "120px"). Requires allowColumnResizing to be true on the grid.',
   schema: columnsResizeCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
@@ -120,7 +128,9 @@ export const columnsResizeCommand = defineGridCommand({
     const caption = column?.caption ?? args.dataField;
     const defaultMessage = `Change the "${caption}" column width to ${args.width}.`;
 
-    if (!column || column.allowResizing === false) {
+    const resizingAllowed = !!component.option('allowColumnResizing') && !!column?.allowResizing;
+
+    if (!resizingAllowed) {
       return Promise.resolve(failure(defaultMessage));
     }
 
