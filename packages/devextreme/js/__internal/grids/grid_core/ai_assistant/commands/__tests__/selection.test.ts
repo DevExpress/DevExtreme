@@ -276,6 +276,10 @@ describe('selectByIndexesCommand', () => {
       expect(selectByIndexesCommand.schema.safeParse({}).success).toBe(false);
     });
 
+    it('rejects when indexes is an empty array', () => {
+      expect(selectByIndexesCommand.schema.safeParse({ indexes: [] }).success).toBe(false);
+    });
+
     it('rejects negative indexes', () => {
       expect(selectByIndexesCommand.schema.safeParse({ indexes: [-1] }).success).toBe(false);
     });
