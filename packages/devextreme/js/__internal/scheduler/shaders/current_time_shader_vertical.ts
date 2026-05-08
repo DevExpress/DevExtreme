@@ -3,7 +3,7 @@ import { setHeight, setWidth } from '@js/core/utils/size';
 
 import CurrentTimeShader from './current_time_shader';
 
-export const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
+const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
 
 const ALL_DAY_PANEL_CLASS = 'dx-scheduler-all-day-panel';
 
