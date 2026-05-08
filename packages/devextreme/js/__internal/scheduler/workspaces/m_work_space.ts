@@ -71,7 +71,7 @@ import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import VerticalShader, { DATE_TIME_SHADER_ALL_DAY_CLASS } from '../shaders/current_time_shader_vertical';
+import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import {
   getAppointmentGroupIndex,
@@ -226,7 +226,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected getToday?(): Date;
 
-  private $allDayPanel: any;
+  protected $allDayPanel: any;
 
   private $allDayTitle: any;
 
@@ -276,7 +276,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   positionHelper!: PositionHelper;
 
-  private $headerPanelContainer: any;
+  protected $headerPanelContainer: any;
 
   private $headerTablesContainer: any;
 
@@ -294,7 +294,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private allDayPanels!: any[];
 
-  private $flexContainer: any;
+  protected $flexContainer: any;
 
   protected shader: any;
 
@@ -923,30 +923,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const scrollbarWidth = this.getScrollbarWidth();
       this.$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
     }
-  }
-
-  getHeaderPanelContainerHeight(): number {
-    if (!hasWindow() || !this.$headerPanelContainer) {
-      return 0;
-    }
-
-    return getBoundingRect(this.$headerPanelContainer.get(0) as HTMLElement).height;
-  }
-
-  getFlexContainerOuterHeight(): number {
-    if (!this.$flexContainer) {
-      return 0;
-    }
-
-    return getOuterHeight(this.$flexContainer, true);
-  }
-
-  addAllDayShaderIndicator($indicator: any): void {
-    this.$allDayPanel?.prepend($indicator);
-  }
-
-  removeAllDayShaderIndicator(): void {
-    this.$allDayPanel?.find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
   }
 
   private getScrollbarWidth() {
