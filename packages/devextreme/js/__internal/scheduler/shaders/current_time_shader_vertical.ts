@@ -15,7 +15,8 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
 
   private $allDayIndicator!: dxElementWrapper;
 
-  renderShader(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  renderShader(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {
     let shaderHeight = this.getShaderHeight();
     const maxHeight = this.getShaderMaxHeight();
     const isSolidShader = shaderHeight > maxHeight;
@@ -25,7 +26,6 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     }
 
     setHeight(this.$shader, shaderHeight);
-    const groupCount = this.workSpace.getGroupCount() || 1;
 
     if (this.workSpace.isGroupedByDate()) {
       this.renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
