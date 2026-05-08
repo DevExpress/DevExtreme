@@ -5,6 +5,8 @@ import CurrentTimeShader from './current_time_shader';
 
 export const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
 
+const ALL_DAY_PANEL_CLASS = 'dx-scheduler-all-day-panel';
+
 const DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
 const DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
 
@@ -126,7 +128,10 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
       setWidth(this.$allDayIndicator, shaderWidth);
       this.$allDayIndicator.css('left', this.getShaderOffset(i, shaderWidth));
 
-      this.workSpace.addAllDayShaderIndicator(this.$allDayIndicator);
+      const $allDayPanel = this.workSpace.$element().find(`.${ALL_DAY_PANEL_CLASS}`);
+      if ($allDayPanel.length) {
+        $allDayPanel.first().prepend(this.$allDayIndicator);
+      }
     }
   }
 
@@ -153,7 +158,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   clean(): void {
     super.clean();
 
-    this.workSpace?.removeAllDayShaderIndicator();
+    this.workSpace?.$element().find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
   }
 }
 
