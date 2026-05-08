@@ -1,4 +1,5 @@
 import type { ExecuteGridAssistantCommandResult } from '@js/common/ai-integration';
+import messageLocalization from '@js/common/core/localization/message';
 import { ArrayStore } from '@js/common/data';
 import Guid from '@js/core/guid';
 import { isString } from '@js/core/utils/type';
@@ -21,6 +22,11 @@ export class AIAssistantController extends Controller {
   private messageStore?: ArrayStore<Message, string>;
 
   private aiAssistantIntegrationController?: AIAssistantIntegrationController;
+
+  // TODO: need to implement method for getting customized response title
+  private getCustomizedResponseTitle(): string {
+    return '';
+  }
 
   private updateAIMessage(messageId: string, data: Partial<Message>): void {
     this.messageStore?.push([
@@ -62,8 +68,13 @@ export class AIAssistantController extends Controller {
           id: aiMessageId,
           timestamp: parsedTimestamp,
           author: AI_ASSISTANT_AUTHOR,
-          text: message.text,
+          headerText: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
           status: MessageStatus.Pending,
+          // The text field is currently used as a workaround to trigger a status update.
+          // We have to update this built-in property to force the message to re-render.
+          // If dxChat supports updating custom fields via the Store Push API in the future,
+          // we will be able to remove this text update workaround.
+          text: MessageStatus.Pending,
         },
       },
     ]);
@@ -77,15 +88,27 @@ export class AIAssistantController extends Controller {
       : MessageStatus.Success;
 
     this.updateAIMessage(messageId, {
-      status: messageStatus,
+      headerText: this.getCustomizedResponseTitle(),
       commands,
+      status: messageStatus,
+      // The text field is currently used as a workaround to trigger a status update.
+      // We have to update this built-in property to force the message to re-render.
+      // If dxChat supports updating custom fields via the Store Push API in the future,
+      // we will be able to remove this text update workaround.
+      text: messageStatus,
     });
   }
 
   private failAIMessage(messageId: string, error: Error): void {
     this.updateAIMessage(messageId, {
+      headerText: messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader'),
+      errorText: error.message,
       status: MessageStatus.Failure,
-      text: error.message,
+      // The text field is currently used as a workaround to trigger a status update.
+      // We have to update this built-in property to force the message to re-render.
+      // If dxChat supports updating custom fields via the Store Push API in the future,
+      // we will be able to remove this text update workaround.
+      text: MessageStatus.Failure,
     });
   }
 
@@ -102,7 +125,6 @@ export class AIAssistantController extends Controller {
   public getMessageDataSource(): DataSourceLike<Message> {
     return {
       store: this.messageStore,
-      reshapeOnPush: true,
     };
   }
 
