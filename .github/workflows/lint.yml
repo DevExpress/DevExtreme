@@ -54,6 +54,7 @@ jobs:
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
+        NODE_OPTIONS: --max-old-space-size=4096
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint-ts
 
