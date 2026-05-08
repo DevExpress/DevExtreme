@@ -197,7 +197,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   private getWorkSpaceMinHeight() {
     let minHeight = this.getWorkSpaceHeight();
 
-    const workspaceContainerHeight = this.$flexContainer ? getOuterHeight(this.$flexContainer, true) : 0;
+    const workspaceContainerHeight = getOuterHeight(this.$flexContainer, true);
 
     if (minHeight < workspaceContainerHeight) {
       minHeight = workspaceContainerHeight;
