@@ -39,9 +39,15 @@ const mockPopupInstance = {
 
 const mockChatElement = $('<div>');
 
+const mockDataSource = {
+  store: jest.fn(),
+  reload: jest.fn(),
+};
+
 const mockChatInstance = {
   option: jest.fn(),
   $element: jest.fn(() => mockChatElement),
+  getDataSource: jest.fn(() => mockDataSource),
 };
 
 const mockClearChatButtonInstance = {
@@ -130,6 +136,7 @@ const beforeTest = (): void => {
   mockChatElement.empty();
   mockWidgetInstance.option.mockClear();
   mockClearChatButtonInstance.option.mockClear();
+  mockChatInstance.getDataSource.mockReturnValue(mockDataSource);
 };
 
 const afterTest = (): void => {
@@ -917,6 +924,42 @@ describe('AIChat', () => {
 
         expect(onRegenerate).toHaveBeenCalledTimes(1);
       });
+    });
+  });
+
+  describe('clear', () => {
+    it('should clear store and reload dataSource', () => {
+      const mockStore = { clear: jest.fn() };
+      mockDataSource.store.mockReturnValue(mockStore);
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      aiChat.clear();
+
+      expect(mockChatInstance.getDataSource).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.store).toHaveBeenCalledTimes(1);
+      expect(mockStore.clear).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw when dataSource is undefined', () => {
+      mockChatInstance.getDataSource.mockReturnValue(undefined as any);
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      expect(() => {
+        aiChat.clear();
+      }).not.toThrow();
+    });
+
+    it('should not throw when chatInstance is not initialized', () => {
+      const { aiChat } = createAIChat();
+
+      expect(() => {
+        aiChat.clear();
+      }).not.toThrow();
     });
   });
 });

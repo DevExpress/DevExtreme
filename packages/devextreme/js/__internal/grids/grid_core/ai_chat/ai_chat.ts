@@ -1,6 +1,7 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
+import type { ArrayStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
@@ -332,5 +333,14 @@ export class AIChat {
 
     this.renderMessageHeader($content, message);
     this.renderMessageStateContent($content, message);
+  }
+
+  public clear(): void {
+    const dataSource = this.chatInstance?.getDataSource();
+    const store = dataSource?.store() as ArrayStore<Message, string>;
+
+    store?.clear();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    dataSource?.reload();
   }
 }
