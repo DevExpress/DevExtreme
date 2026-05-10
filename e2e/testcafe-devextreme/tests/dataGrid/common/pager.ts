@@ -312,7 +312,7 @@ test('Pager info should show page 1 of 1 after changing pageSize to \'all\' and 
         e.component.option('scrolling.mode', targetRenderingMode);
         e.component.repaint();
         e.component.endUpdate();
-      }        
+      }
     }
   },
 }));
