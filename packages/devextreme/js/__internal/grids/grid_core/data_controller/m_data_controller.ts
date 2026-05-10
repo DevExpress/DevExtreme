@@ -42,7 +42,7 @@ const changePaging = function (that, optionName, value) {
 
         that._skipProcessingPagingChange = true;
         that.option(`paging.${optionName}`, value);
-        if (optionName === 'pageSize') {
+        if (optionName === 'pageSize' && value === 0) {
           that.option('paging.pageIndex', 0);
         }
         that._skipProcessingPagingChange = false;
