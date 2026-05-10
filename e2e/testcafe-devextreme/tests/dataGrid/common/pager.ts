@@ -302,16 +302,16 @@ test('Pager info should show page 1 of 1 after changing pageSize to \'all\' and 
     showNavigationButtons: true,
   },
   height: 400,
-  onOptionChanged(e){
-    if (e.fullName === "paging.pageSize") {
+  onOptionChanged: (e) => {
+    if (e.fullName === 'paging.pageSize') {
       const setVirtual = e.value === 0;
-      const targetRenderingMode = setVirtual ? "virtual" : "standard";
-      const currentRenderingMode = e.component.option("scrolling.mode");
+      const targetRenderingMode = setVirtual ? 'virtual' : 'standard';
+      const currentRenderingMode = e.component.option('scrolling.mode');
       if (currentRenderingMode !== targetRenderingMode) {
-          e.component.beginUpdate();
-          e.component.option("scrolling.mode", targetRenderingMode);
-          e.component.repaint();
-          e.component.endUpdate();
+        e.component.beginUpdate();
+        e.component.option('scrolling.mode', targetRenderingMode);
+        e.component.repaint();
+        e.component.endUpdate();
       }        
     }
   },
