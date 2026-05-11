@@ -9,4 +9,9 @@ on:
 jobs:
   invoke:
     name: Invoke
-    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check
+    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check-next
+    with:
+      config: |
+        {
+          ignoredAdvisories: ['GHSA-67hx-6x53-jw92'] // babel-traverse
+        }
