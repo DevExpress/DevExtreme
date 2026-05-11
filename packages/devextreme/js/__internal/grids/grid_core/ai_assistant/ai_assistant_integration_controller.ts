@@ -6,6 +6,7 @@ import type {
 import errors from '@js/ui/widget/ui.errors';
 
 import { Controller } from '../m_modules';
+import type { AIAssistantRequestCallbacks } from './types';
 
 export class AIAssistantIntegrationController extends Controller {
   private abort?: () => void;
@@ -31,7 +32,7 @@ export class AIAssistantIntegrationController extends Controller {
 
   public sendRequest(
     text: string,
-    callbacks?: RequestCallbacks<ExecuteGridAssistantCommandResult>,
+    callbacks?: AIAssistantRequestCallbacks<ExecuteGridAssistantCommandResult>,
   ): void {
     if (this.isRequestAwaitingCompletion()) {
       this.abortRequest();
@@ -57,7 +58,7 @@ export class AIAssistantIntegrationController extends Controller {
       return;
     }
 
-    this.abort = aiIntegration.executeGridAssistant(
+    const abortRequest = aiIntegration.executeGridAssistant(
       {
         text,
         context: args.context,
@@ -66,6 +67,11 @@ export class AIAssistantIntegrationController extends Controller {
       },
       this.getAICommandCallbacks(callbacks),
     );
+
+    this.abort = (): void => {
+      abortRequest();
+      callbacks?.onAbort?.();
+    };
   }
 
   public isRequestAwaitingCompletion(): boolean {
@@ -101,11 +107,11 @@ export class AIAssistantIntegrationController extends Controller {
   }
 
   private processCommandCompletion(): void {
-    this.abortRequest();
+    this.abort = undefined;
   }
 
   // TODO: implement buildContext with grid commands
-  // eslint-disable-next-line class-methods-use-this
+
   private buildContext(): Record<string, unknown> {
     return {};
   }

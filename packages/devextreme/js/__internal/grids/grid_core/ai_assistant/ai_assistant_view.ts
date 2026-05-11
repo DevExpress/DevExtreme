@@ -47,6 +47,9 @@ export class AIAssistantView extends View {
       onChatCleared: (): void => {
         this.aiChatInstance.clear();
       },
+      onClosed: (): void => {
+        this.aiAssistantController.abortRequest();
+      },
       onRegenerate: (): void => {},
       popupOptions,
       chatOptions,
@@ -93,7 +96,7 @@ export class AIAssistantView extends View {
       dataSource: this.aiAssistantController.getMessageDataSource(),
       reloadOnChange: true,
       onMessageEntered: (e): void => {
-        if (this.aiChatInstance?.isDisabled()) {
+        if (this.aiAssistantController.isProcessing()) {
           return;
         }
 

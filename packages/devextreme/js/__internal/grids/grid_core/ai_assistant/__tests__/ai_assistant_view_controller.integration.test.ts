@@ -379,5 +379,33 @@ describe('AIAssistantViewController', () => {
 
       expect(findMessageElements().length).toBe(0);
     });
+
+    it('should render abort message after closing and reopening AI chat', async () => {
+      const { instance } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      expect(findMessageElements().length).toBe(1);
+      expect(getMessageStatusClass(findMessageElements().eq(0))).toBe(MessageStatus.Pending);
+
+      const viewController = instance.getController('aiAssistantViewController');
+
+      // Close the AI assistant popup
+      await viewController.toggle();
+      jest.runAllTimers();
+      await flushAsync();
+
+      // Reopen the AI assistant popup
+      await viewController.toggle();
+      jest.runAllTimers();
+      await flushAsync();
+
+      const $messages = findMessageElements();
+
+      expect($messages.length).toBe(1);
+      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
+        .toBe('Request stopped.');
+    });
   });
 });

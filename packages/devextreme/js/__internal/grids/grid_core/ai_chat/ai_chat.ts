@@ -104,6 +104,9 @@ export class AIChat {
       ...DEFAULT_POPUP_OPTIONS,
       wrapperAttr: { class: `${CLASSES.aiChat} ${CLASSES.aiDialog}` },
       toolbarItems: clearChatButton ? [clearChatButton] : undefined,
+      onHiding: (): void => {
+        this.options.onClosed?.();
+      },
       contentTemplate: ($container): void => {
         const $editorContainer = $('<div>')
           .addClass(CLASSES.aiChatContent)
@@ -314,10 +317,6 @@ export class AIChat {
     this.setTextAreaDisabled(disabled);
     this.setSpeechToTextDisabled(disabled);
     this.setClearChatButtonDisabled(disabled);
-  }
-
-  public isDisabled(): boolean {
-    return this.disabled;
   }
 
   public renderAIMessage(message: Message, container: HTMLElement): void {

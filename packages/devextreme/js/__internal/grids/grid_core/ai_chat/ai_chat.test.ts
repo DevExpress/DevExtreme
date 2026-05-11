@@ -201,6 +201,28 @@ describe('AIChat', () => {
     });
   });
 
+  describe('onClosed', () => {
+    it('should call onClosed callback when popup is hiding', () => {
+      const onClosed = jest.fn();
+      createAIChat({ onClosed });
+
+      const popupConfig = getPopupConfig();
+      popupConfig.onHiding();
+
+      expect(onClosed).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw when onClosed is not provided', () => {
+      createAIChat();
+
+      const popupConfig = getPopupConfig();
+
+      expect(() => {
+        popupConfig.onHiding();
+      }).not.toThrow();
+    });
+  });
+
   describe('isShown', () => {
     it('should return true when popup is visible', () => {
       const { aiChat } = createAIChat();
@@ -832,31 +854,6 @@ describe('AIChat', () => {
         expect(() => {
           aiChat.setDisabled(true);
         }).not.toThrow();
-      });
-    });
-
-    describe('isDisabled', () => {
-      it('should return false by default', () => {
-        const { aiChat } = createAIChat();
-
-        expect(aiChat.isDisabled()).toBe(false);
-      });
-
-      it('should return true after setDisabled(true)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-
-        expect(aiChat.isDisabled()).toBe(true);
-      });
-
-      it('should return false after setDisabled(false)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-        aiChat.setDisabled(false);
-
-        expect(aiChat.isDisabled()).toBe(false);
       });
     });
 

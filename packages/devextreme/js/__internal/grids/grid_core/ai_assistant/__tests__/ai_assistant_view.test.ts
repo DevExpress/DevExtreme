@@ -39,6 +39,8 @@ const mockMessageDataSource = { store: new ArrayStore({ key: 'id' }), reshapeOnP
 const mockAIAssistantController = {
   getMessageDataSource: jest.fn().mockReturnValue(mockMessageDataSource),
   sendRequestToAI: jest.fn(),
+  isProcessing: jest.fn().mockReturnValue(false),
+  abortRequest: jest.fn(),
 };
 
 const createAIAssistantView = ({
@@ -295,6 +297,17 @@ describe('AIAssistantView', () => {
       });
     });
 
+    describe('onClosed', () => {
+      it('should call abortRequest on controller when chat is closed', () => {
+        createAIAssistantView();
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        aiChatConfig.onClosed?.();
+
+        expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
+      });
+    });
+
     describe('onMessageEntered', () => {
       it('should send request to AI with the entered message', () => {
         mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
@@ -312,12 +325,10 @@ describe('AIAssistantView', () => {
         expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledWith(message);
       });
 
-      it('should not send request when chat is disabled', () => {
+      it('should not send request when request is already processing', () => {
         createAIAssistantView();
 
-        const aiChatInstance = (AIChat as jest.Mock)
-          .mock.results[0].value as { isDisabled: jest.Mock; setDisabled: jest.Mock };
-        aiChatInstance.isDisabled.mockReturnValue(true);
+        mockAIAssistantController.isProcessing.mockReturnValue(true);
 
         const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
         const message = {
