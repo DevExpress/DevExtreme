@@ -74,7 +74,7 @@ const TEMPLATES = Object.freeze({
     ].join(' '),
 
     oldDevExtremeKey: (version) =>
-        `A DevExtreme key (v25_2 or earlier) has been detected. Use DevExpress license key (v${version}+) instead.`,
+        `A DevExtreme key (v25.2 or earlier) has been detected. Use DevExpress license key (v${version}+) instead.`,
 
     licenseId: (id) => `License ID: ${id}`,
 });
