@@ -371,8 +371,7 @@ describe('AIAssistantViewController', () => {
 
       expect(findMessageElements().length).toBe(1);
 
-      const clearButtonEl = document.querySelector(`.${CLASSES.clearChatButton} .dx-button`) as HTMLElement
-        ?? document.querySelector(`.${CLASSES.clearChatButton}`) as HTMLElement;
+      const clearButtonEl = document.querySelector(`.${CLASSES.clearChatButton} .dx-button`) as HTMLElement;
 
       clearButtonEl.click();
       await flushAsync();
