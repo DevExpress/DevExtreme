@@ -14,26 +14,26 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type { NormalizedView, SafeSchedulerOptions } from '@ts/scheduler/utils/options/types';
 
+import SchedulerCalendar from './calendar';
 import type { Direction } from './constants';
-import SchedulerCalendar from './m_calendar';
 import {
   getDateNavigator,
   getTodayButtonOptions,
-} from './m_date_navigator';
+} from './date_navigator';
+import type {
+  EventMapHandler,
+  HeaderOptions, IntervalOptions,
+} from './types';
 import {
   getCaption,
   getNextIntervalDate,
   getStep,
   nextWeek,
-} from './m_utils';
+} from './utils';
 import {
   getDropDownViewSwitcher,
   getTabViewSwitcher,
-} from './m_view_switcher';
-import type {
-  EventMapHandler,
-  HeaderOptions, IntervalOptions,
-} from './types';
+} from './view_switcher';
 
 const CLASSES = {
   component: 'dx-scheduler-header',

@@ -5,8 +5,8 @@ import type { ToolbarItem } from '@js/ui/scheduler';
 
 import {
   CLASS, DEFAULT_ITEMS, getDateNavigator, ITEMS_NAME,
-} from './m_date_navigator';
-import type { SchedulerHeader } from './m_header';
+} from './date_navigator';
+import type { SchedulerHeader } from './header';
 
 describe('getDateNavigator', () => {
   it('should return default options in case of item is empty', () => {
