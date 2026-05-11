@@ -281,6 +281,20 @@ describe('AIAssistantView', () => {
   });
 
   describe('chat event handlers', () => {
+    describe('onChatCleared', () => {
+      it('should call clear on aiChatInstance when triggered', () => {
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { clear: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        aiChatConfig.onChatCleared?.();
+
+        expect(aiChatInstance.clear).toHaveBeenCalledTimes(1);
+      });
+    });
+
     describe('onMessageEntered', () => {
       it('should send request to AI with the entered message', () => {
         mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
