@@ -328,7 +328,7 @@ describe('AIAssistantView', () => {
       it('should not send request when request is already processing', () => {
         createAIAssistantView();
 
-        mockAIAssistantController.isProcessing.mockReturnValue(true);
+        mockAIAssistantController.isProcessing.mockReturnValueOnce(true);
 
         const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
         const message = {
@@ -379,8 +379,8 @@ describe('AIAssistantView', () => {
       });
 
       it('should call setDisabled(false) after request fails', async () => {
-        mockAIAssistantController.sendRequestToAI.mockReturnValue(
-          Promise.reject(new Error('Network error')),
+        mockAIAssistantController.sendRequestToAI.mockImplementation(
+          () => Promise.reject(new Error('Network error')),
         );
         createAIAssistantView();
 
