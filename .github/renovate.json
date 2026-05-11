@@ -141,7 +141,6 @@
                 "gulp-jsbeautifier",
                 "gulp-multi-process",
                 "gulp-notify",
-                "gulp-remote-src",
                 "gulp-rename",
                 "gulp-tap",
                 "gulp-uglify-es",
