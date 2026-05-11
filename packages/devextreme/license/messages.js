@@ -55,7 +55,7 @@ const TEMPLATES = Object.freeze({
                 'Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).',
             ].join(' ');
         }
-        return 'License key verification has failed.';
+        return '';
     },
 
     warningCodeByType: (type) => WARNING_CODES[type] || WARNING_CODES.general,
