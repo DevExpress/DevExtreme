@@ -78,12 +78,16 @@ const pipeSource = async (
   }));
 };
 
-// eslint-disable-next-line require-await
-const execTsc = async (directory: string, args: string): Promise<string> => new Promise((resolve, reject) => {
-  cps.exec(`tsc ${args}`, (error, stdout, stderr) => {
-    if (error != null) {
+const execTsc = async (directory: string, args: string[]): Promise<string> => new Promise((resolve, reject) => {
+  const proc = cps.spawn('tsc', args);
+  let stdout = '';
+  let stderr = '';
+  proc.stdout.on('data', (data: Buffer) => { stdout += data.toString(); });
+  proc.stderr.on('data', (data: Buffer) => { stderr += data.toString(); });
+  proc.on('close', (code: number) => {
+    if (code !== 0) {
       // eslint-disable-next-line prefer-promise-reject-errors
-      return reject(`${error}\n${stderr}\n${stdout}`);
+      return reject(`Exit code ${code}\n${stderr}\n${stdout}`);
     }
     return resolve(stdout);
   });
@@ -110,7 +114,7 @@ const compile = async (resolve: PathResolvers, log: Logger) => {
     ),
   );
 
-  await execTsc(resolve.source('./'), `--build ${tsconfigFile}`);
+  await execTsc(resolve.source('./'), ['--build', tsconfigFile]);
 };
 
 const copyAssets = async (resolve: PathResolvers, log: Logger) => {
