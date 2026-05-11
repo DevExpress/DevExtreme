@@ -77,15 +77,13 @@ describe('AIAssistantController', () => {
   });
 
   describe('getMessageDataSource', () => {
-    it('should return dataSource with store and reshapeOnPush', () => {
+    it('should return dataSource with store', () => {
       const controller = createController();
       const dataSource = controller.getMessageDataSource() as {
         store: ArrayStore<Message, string>;
-        reshapeOnPush: boolean;
       };
 
       expect(dataSource.store).toBeDefined();
-      expect(dataSource.reshapeOnPush).toBe(true);
     });
   });
 
@@ -111,7 +109,8 @@ describe('AIAssistantController', () => {
           id: expect.stringContaining(AI_ASSISTANT_AUTHOR_ID),
           timestamp: expectedTimestamp,
           author: AI_ASSISTANT_AUTHOR,
-          text: 'Generate values',
+          headerText: 'Request in progress',
+          text: MessageStatus.Pending,
           status: MessageStatus.Pending,
         }),
       ]);
@@ -176,6 +175,7 @@ describe('AIAssistantController', () => {
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
+      promise.catch(() => {});
 
       sendRequestCallbacks.onError?.(new Error('Network error'));
 
@@ -184,7 +184,9 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          text: 'Network error',
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
+          errorText: 'Network error',
         }),
       ]);
 
@@ -201,6 +203,7 @@ describe('AIAssistantController', () => {
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
+      promise.catch(() => {});
 
       const response = {} as ExecuteGridAssistantCommandResult;
 
@@ -213,7 +216,9 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          text: 'Default error message',
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
+          errorText: 'Default error message',
         }),
       ]);
 

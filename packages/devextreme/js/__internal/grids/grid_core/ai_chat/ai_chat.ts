@@ -1,6 +1,7 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
+import type { ArrayStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
@@ -29,6 +30,7 @@ import type {
   AIChatOptions, CommandResult, CommandResults,
 } from './types';
 import {
+  findMessageById,
   getMessageIconName, getMessageStateClass, hasCommandErrors, isAIChatMessage,
   needToShowRegenerateButton,
 } from './utils';
@@ -70,17 +72,24 @@ export class AIChat {
           .append($message)
           .append($prompt);
       },
-      messageTemplate: (data, container): void => {
-        const { message } = data;
-
+      messageTemplate: ({
+        message,
+        component,
+      }: {
+        message: Message,
+        component: Chat,
+      }, container): void => {
         if (!message) {
           return;
         }
 
-        if (isAIChatMessage(message)) {
-          this.renderAIMessage(message, container);
+        const items = component.option('items') as Message[];
+        const actualMessage = findMessageById(items, message.id) ?? message;
+
+        if (isAIChatMessage(actualMessage)) {
+          this.renderAIMessage(actualMessage, container);
         } else {
-          $(container).text(message?.text ?? '');
+          $(container).text(actualMessage?.text ?? '');
         }
       },
       showUserName: false,
@@ -139,17 +148,6 @@ export class AIChat {
       .appendTo($parent);
   }
 
-  private getHeaderText(message: Message): string {
-    switch (message.status) {
-      case MessageStatus.Failure:
-        return messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader');
-      case MessageStatus.Pending:
-        return messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader');
-      default:
-        return message.text as string ?? '';
-    }
-  }
-
   private renderMessageHeader(
     $parent: dxElementWrapper,
     message: Message,
@@ -157,7 +155,7 @@ export class AIChat {
     const $row = $('<div>')
       .addClass(CLASSES.messageHeaderRow)
       .appendTo($parent);
-    const headerText = this.getHeaderText(message);
+    const headerText = message.headerText ?? '';
 
     $('<div>')
       .addClass(CLASSES.messageHeader)
@@ -257,7 +255,7 @@ export class AIChat {
   ): void {
     $('<div>')
       .addClass(CLASSES.messageErrorText)
-      .text(message.text ?? '')
+      .text(message.errorText ?? '')
       .appendTo($container);
   }
 
@@ -335,5 +333,14 @@ export class AIChat {
 
     this.renderMessageHeader($content, message);
     this.renderMessageStateContent($content, message);
+  }
+
+  public clear(): void {
+    const dataSource = this.chatInstance?.getDataSource();
+    const store = dataSource?.store() as ArrayStore<Message, string>;
+
+    store?.clear();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    dataSource?.reload();
   }
 }

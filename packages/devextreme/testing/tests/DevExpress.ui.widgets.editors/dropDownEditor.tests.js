@@ -1944,13 +1944,14 @@ QUnit.module('popup integration', () => {
 
         QUnit.test('should be equal to the editor width when dropDownOptions.width in not defined after editor width runtime change', function(assert) {
             const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-                opened: true
+                opened: true,
             });
             const instance = $dropDownEditor.dxDropDownEditor('instance');
 
             instance.option('width', 153);
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
             assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'overlay content width is correct');
         });
 
@@ -2172,6 +2173,35 @@ QUnit.module('popup integration', () => {
             dropDownOptions.position.my = 'top';
 
             assert.deepEqual(_cached_dropDownOptions, dropDownOptions, 'updated part of dropDownOptions is cached in _cached_dropDownOptions');
+        });
+
+        QUnit.test('should be updated on window resize to match current editor width when dropDownOptions.width is not defined', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                width: 500,
+                opened: true,
+            });
+
+            $dropDownEditor.css('width', '300px');
+            resizeCallbacks.fire();
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'popup width matches editor width after resize');
+        });
+
+        QUnit.test('should not be overridden on window resize when dropDownOptions.width is specified', function(assert) {
+            const overlayContentWidth = 500;
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                width: 300,
+                dropDownOptions: {
+                    width: overlayContentWidth
+                },
+                opened: true,
+            });
+
+            resizeCallbacks.fire();
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerWidth(), overlayContentWidth, 'popup width is preserved after resize');
         });
     });
 
@@ -2494,10 +2524,14 @@ QUnit.module('popup integration', () => {
         const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true }).dxDropDownEditor('instance');
         const logStub = sinon.stub(errors, 'log');
 
-        dropDownEditor.option('dropDownOptions', { showTitle: true });
-        dropDownEditor._renderPopup();
+        try {
+            dropDownEditor.option('dropDownOptions', { showTitle: true });
+            dropDownEditor._renderPopup();
 
-        assert.strictEqual(logStub.callCount, 0);
+            assert.strictEqual(logStub.callCount, 0);
+        } finally {
+            logStub.restore();
+        }
     });
 });
 

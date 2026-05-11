@@ -32,7 +32,7 @@ import {
 
 import {
     template,
-    FirstDayOfWeek,
+    DayOfWeek,
     SingleMultipleOrNone,
     ToolbarItemLocation,
 } from '../common';
@@ -978,7 +978,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DayOfWeek | undefined;
     /**
      * @docid
      * @default null

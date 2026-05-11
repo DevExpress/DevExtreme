@@ -36,6 +36,11 @@ export const getMessageIconName = (message: Message): string => {
   return 'sparkle';
 };
 
+export const findMessageById = (
+  items: Message[],
+  id: Message['id'],
+): Message | undefined => items.find((item) => item.id === id);
+
 export const needToShowRegenerateButton = (message: Message): boolean => {
   const isError = message.status === MessageStatus.Failure;
 

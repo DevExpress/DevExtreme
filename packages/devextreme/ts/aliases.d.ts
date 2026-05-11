@@ -945,3 +945,9 @@ declare namespace DevExpress.utils {
 declare namespace DevExpress.ui {
   export type Format = common.core.localization.Format;
 }
+
+// 26.1
+// declare namespace DevExpress.common {
+//  /** @deprecated Use DevExpress.common.DayOfWeek instead */
+//  export type FirstDayOfWeek = DayOfWeek;
+// }
