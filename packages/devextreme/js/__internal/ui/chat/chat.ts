@@ -114,7 +114,6 @@ class Chat extends Widget<Properties> {
 
   _init(): void {
     super._init();
-
     // @ts-expect-error
     this._initDataController();
     // @ts-expect-error
