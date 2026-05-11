@@ -13,5 +13,7 @@ jobs:
     with:
       config: |
         {
-          ignoredAdvisories: ['GHSA-67hx-6x53-jw92'] // babel-traverse
+          ignoredAdvisories: [
+            'GHSA-67hx-6x53-jw92', // babel-traverse
+          ]
         }
