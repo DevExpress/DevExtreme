@@ -3,6 +3,7 @@ import '../module_not_extended/editor_factory';
 
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
+import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
@@ -51,17 +52,29 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _getLoadedRowIndex(items, change) {
+    const { data, insertAfterKey, insertBeforeKey } = change;
     const dataSourceAdapter = this._dataController.dataSource();
-    const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
+    const parentKey = dataSourceAdapter?.parentKeyOf(data);
+    const isParentNotRoot = parentKey !== undefined && parentKey !== this.option('rootValue');
 
-    if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
-      const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
+    if (isParentNotRoot) {
+      const parentRowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
+      const isParentInPage = parentRowIndex >= 0;
       // @ts-expect-error
-      if (rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
-        // @ts-expect-error
-        return super._getLoadedRowIndex.apply(this, arguments);
+      const isParentCollapsed = !this._dataController.isRowExpanded(parentKey);
+
+      if (isParentInPage && isParentCollapsed) {
+        const nextParent = items[parentRowIndex + 1];
+        const siblingKeys = dataSourceAdapter.getChildNodeKeys(parentKey);
+        const isAfterParent = insertAfterKey === parentKey;
+        const isBeforeNextParent = insertBeforeKey && insertBeforeKey === nextParent?.key;
+        const isBeforeOrAfterSibling = siblingKeys.some((key) => equalByValue(key, insertAfterKey ?? insertBeforeKey));
+        const isItemInsideParent = isAfterParent || isBeforeNextParent || isBeforeOrAfterSibling;
+
+        if (isItemInsideParent) {
+          return -1;
+        }
       }
-      return -1;
     }
     // @ts-expect-error
     return super._getLoadedRowIndex.apply(this, arguments);
