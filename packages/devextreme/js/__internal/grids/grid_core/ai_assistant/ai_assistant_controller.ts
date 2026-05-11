@@ -140,6 +140,7 @@ export class AIAssistantController extends Controller {
 
   public sendRequestToAI(message: Message): Promise<void> {
     const aiMessageId = this.createPendingAIMessage(message);
+
     this.setProcessing(true);
 
     return new Promise((resolve, reject) => {
