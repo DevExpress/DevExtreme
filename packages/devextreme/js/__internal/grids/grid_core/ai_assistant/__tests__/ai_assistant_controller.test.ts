@@ -72,6 +72,7 @@ describe('AIAssistantController', () => {
       () => ({
         validate: jest.fn().mockReturnValue(true),
         executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([{ status: 'success', message: 'sort' }]),
+        abort: jest.fn(),
       }),
     );
   });
@@ -272,6 +273,160 @@ describe('AIAssistantController', () => {
       sendRequestCallbacks.onComplete?.({} as ExecuteGridAssistantCommandResult);
 
       await expect(promise).rejects.toThrow('Default error message');
+    });
+  });
+
+  describe('isProcessing', () => {
+    it('should return false by default', () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+
+    it('should return true after sendRequestToAI is called', () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      expect(controller.isProcessing()).toBe(true);
+    });
+
+    it('should return false after successful command completion', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+
+      await promise;
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+
+    it('should return false after onError callback', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      sendRequestCallbacks.onError?.(new Error('Network error'));
+
+      await expect(promise).rejects.toThrow('Network error');
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+
+    it('should return false after failed command processing', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      sendRequestCallbacks.onComplete?.({} as ExecuteGridAssistantCommandResult);
+
+      await expect(promise).rejects.toThrow('Default error message');
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+  });
+
+  describe('abortRequest', () => {
+    it('should fail message with abort error when request is aborted', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      controller.abortRequest();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
+          errorText: 'Request stopped.',
+        }),
+      ]);
+
+      await expect(promise).rejects.toThrow('Request stopped.');
+    });
+
+    it('should set isProcessing to false when request is aborted', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      expect(controller.isProcessing()).toBe(true);
+
+      controller.abortRequest();
+
+      await expect(promise).rejects.toThrow();
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+
+    it('should call gridCommands.abort when request is aborted', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      const gridCommandsInstance = MockedGridCommands.mock.results[0].value as { abort: jest.Mock };
+
+      controller.abortRequest();
+
+      await expect(promise).rejects.toThrow();
+
+      expect(gridCommandsInstance.abort).toHaveBeenCalledTimes(1);
     });
   });
 });

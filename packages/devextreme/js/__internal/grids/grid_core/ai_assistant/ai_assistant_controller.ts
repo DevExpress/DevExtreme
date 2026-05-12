@@ -23,6 +23,8 @@ export class AIAssistantController extends Controller {
 
   private aiAssistantIntegrationController?: AIAssistantIntegrationController;
 
+  private processing = false;
+
   // TODO: need to implement method for getting customized response title
   private getCustomizedResponseTitle(): string {
     return '';
@@ -112,6 +114,10 @@ export class AIAssistantController extends Controller {
     });
   }
 
+  private setProcessing(value: boolean): void {
+    this.processing = value;
+  }
+
   public init(): void {
     // TODO: initialize default commands list when they are ready
     this.gridCommands = new GridCommands(this.component, []);
@@ -128,8 +134,13 @@ export class AIAssistantController extends Controller {
     };
   }
 
+  public isProcessing(): boolean {
+    return this.processing;
+  }
+
   public sendRequestToAI(message: Message): Promise<void> {
     const aiMessageId = this.createPendingAIMessage(message);
+    this.setProcessing(true);
 
     return new Promise((resolve, reject) => {
       this.aiAssistantIntegrationController?.sendRequest(message.text, {
@@ -137,6 +148,7 @@ export class AIAssistantController extends Controller {
           fromPromise(this.processResponse(response))
             .done((commands: CommandResults) => {
               this.completeAIMessage(aiMessageId, commands);
+              this.setProcessing(false);
               resolve();
             })
             .fail((errorMessage) => {
@@ -145,15 +157,29 @@ export class AIAssistantController extends Controller {
                 : new Error(String(errorMessage));
 
               this.failAIMessage(aiMessageId, error);
+              this.setProcessing(false);
               reject(error);
             });
         },
         onError: (error: Error): void => {
           this.failAIMessage(aiMessageId, error);
+          this.setProcessing(false);
+          reject(error);
+        },
+        onAbort: (): void => {
+          const error = new Error(messageLocalization.format('dxDataGrid-aiAssistantAbortMessage'));
+
+          this.failAIMessage(aiMessageId, error);
+          this.setProcessing(false);
           reject(error);
         },
       });
     });
+  }
+
+  public abortRequest(): void {
+    this.aiAssistantIntegrationController?.abortRequest();
+    this.gridCommands?.abort();
   }
 
   public dispose(): void {
