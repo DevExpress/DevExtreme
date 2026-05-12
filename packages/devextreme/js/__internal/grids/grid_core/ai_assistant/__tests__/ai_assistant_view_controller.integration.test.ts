@@ -357,5 +357,27 @@ describe('AIAssistantViewController', () => {
       expect(getMessageStatusClass($messagesAfter.eq(1)))
         .toBe(MessageStatus.Success);
     });
+
+    it('should clear all messages when clear chat button is clicked', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      getLastCallbacks().onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      });
+      await flushAsync();
+      await flushAsync();
+
+      expect(findMessageElements().length).toBe(1);
+
+      const clearButtonEl = document.querySelector(`.${CLASSES.clearChatButton} .dx-button`) as HTMLElement;
+
+      clearButtonEl.click();
+      await flushAsync();
+      await flushAsync();
+
+      expect(findMessageElements().length).toBe(0);
+    });
   });
 });
