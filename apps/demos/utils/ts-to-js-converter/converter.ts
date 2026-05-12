@@ -79,15 +79,23 @@ const pipeSource = async (
 };
 
 const execTsc = async (directory: string, args: string[]): Promise<string> => new Promise((resolve, reject) => {
-  const proc = cps.spawn('tsc', args);
+  const proc = cps.spawn('tsc', args, { cwd: directory });
   let stdout = '';
   let stderr = '';
   proc.stdout.on('data', (data: Buffer) => { stdout += data.toString(); });
   proc.stderr.on('data', (data: Buffer) => { stderr += data.toString(); });
-  proc.on('close', (code: number) => {
+  proc.on('error', (err: Error) => {
+    // eslint-disable-next-line prefer-promise-reject-errors
+    reject(`tsc failed to spawn: ${err.message}`);
+  });
+  proc.on('close', (code: number | null, signal: NodeJS.Signals | null) => {
+    if (signal !== null) {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return reject(`tsc killed by signal ${signal}\n${stderr}\n${stdout}`);
+    }
     if (code !== 0) {
       // eslint-disable-next-line prefer-promise-reject-errors
-      return reject(`Exit code ${code}\n${stderr}\n${stdout}`);
+      return reject(`tsc exited with code ${code}\n${stderr}\n${stdout}`);
     }
     return resolve(stdout);
   });
