@@ -58,3 +58,50 @@ test('TreeList - Insertafterkey doesn\'t work on children nodes', async (t) => {
     }
   },
 }));
+
+test('Editing the parentIdExpr column causes the row to disappear if the column has setCellValue (T1307499)', async (t) => {
+  // arrange
+  const treeList = new TreeList('#container');
+  const addRowButton = treeList.getHeaderPanel().getAddRowButton();
+
+  // assert
+  await t.expect(treeList.isReady()).ok();
+
+  // act
+  await t.click(addRowButton);
+
+  const newRow = treeList.getDataRow(0);
+  const parentIdCellEditor = newRow.getDataCell(1).getEditor();
+
+  // assert
+  await t
+    .expect(newRow.isInserted)
+    .ok()
+    .expect(parentIdCellEditor.element.value)
+    .eql('0')
+    .expect(treeList.dataRows.count)
+    .eql(2);
+
+  // act
+  await t
+    .typeText(parentIdCellEditor.element, '1', { replace: true })
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(parentIdCellEditor.element.value)
+    .eql('1')
+    .expect(treeList.dataRows.count)
+    .eql(2);
+}).before(async () => createWidget('dxTreeList', {
+  dataSource: [{ id: 1, parentId: 0, text: 'item 1' }],
+  editing: {
+    allowAdding: true,
+  },
+  columns: ['id', {
+    dataField: 'parentId',
+    setCellValue(newData, value) {
+      newData.parentId = value;
+    },
+  }, 'text'],
+}));
