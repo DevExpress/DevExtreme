@@ -4,6 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@cyclonedx/cdxgen@<12.3.3': '>=12.3.3'
+  fast-uri@<3.1.2: '>=3.1.2'
+
 importers:
 
   .:
@@ -125,8 +129,8 @@ packages:
     resolution: {integrity: sha512-7izr5+a/rfHzlhQiqPTvdMtDYHcv0w57I/1sxha4uutdHiSjc63bc4smFgN4fLv1hpyXUgSL7SSJr7Oqo5eEoA==}
     cpu: [x64]
 
-  '@cyclonedx/cdxgen@12.3.0':
-    resolution: {integrity: sha512-xGCp81p9aRG8k0vmq7kR/XbHxQq+SMY7/awtz4JoVoKkS7igNbk3O/bf92rlU0TKvWMYUEMGFiwkhj7PFEJQbQ==}
+  '@cyclonedx/cdxgen@12.3.3':
+    resolution: {integrity: sha512-CE+fW6npO9PkiRIiegSgj5N/bHkvJXOalZoF5jtS89YZ9Xzbwk55j+lKZGCyDrfA6kkrX7UEW77LfYs7eB4ZNw==}
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
@@ -423,8 +427,8 @@ packages:
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
-  fast-uri@3.1.0:
-    resolution: {integrity: sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==}
+  fast-uri@3.1.2:
+    resolution: {integrity: sha512-rVjf7ArG3LTk+FS6Yw81V1DLuZl1bRbNrev6Tmd/9RaroeeRRJhAt7jg/6YFxbvAQXUCavSoZhPPj6oOx+5KjQ==}
 
   finalhandler@1.1.2:
     resolution: {integrity: sha512-aAWcW57uxVNrQZqFXjITpW3sIUQmHGG3qSb9mUah9MgMC4NeWhNOlNjXEYq3HjRAvL6arUviZGGJsBg6z0zsWA==}
@@ -1029,7 +1033,7 @@ snapshots:
   '@cdxgen/cdxgen-plugins-bin@2.0.3':
     optional: true
 
-  '@cyclonedx/cdxgen@12.3.0':
+  '@cyclonedx/cdxgen@12.3.3':
     dependencies:
       '@babel/parser': 7.29.2
       '@babel/traverse': 7.29.0
@@ -1092,7 +1096,7 @@ snapshots:
 
   '@devexpress/sbom-toolkit@0.6.1':
     dependencies:
-      '@cyclonedx/cdxgen': 12.3.0
+      '@cyclonedx/cdxgen': 12.3.3
     transitivePeerDependencies:
       - supports-color
 
@@ -1179,7 +1183,7 @@ snapshots:
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.0
+      fast-uri: 3.1.2
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -1429,7 +1433,7 @@ snapshots:
 
   fast-deep-equal@3.1.3: {}
 
-  fast-uri@3.1.0: {}
+  fast-uri@3.1.2: {}
 
   finalhandler@1.1.2:
     dependencies:
