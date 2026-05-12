@@ -42,7 +42,8 @@ export default class AngularBundler implements Bundler {
 
     createDemoLayout(demo, this.framework);
 
-    const ngBuildProcess = spawn('npm', ['run', 'build-angular', '--', getProjectNameByDemo(demo)], { shell: process.platform === 'win32' });
+    const npmExecutable = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+    const ngBuildProcess = spawn(npmExecutable, ['run', 'build-angular', '--', getProjectNameByDemo(demo)], { shell: false });
     ngBuildProcess.stdout.on('data', (data) => {
       console.log(`stdout: ${data}`);
     });
