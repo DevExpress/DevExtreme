@@ -1776,8 +1776,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1
       qunit:
-        specifier: 2.24.1
-        version: 2.24.1
+        specifier: 2.25.0
+        version: 2.25.0
       react:
         specifier: 16.14.0
         version: 16.14.0
@@ -14981,8 +14981,8 @@ packages:
     resolution: {integrity: sha512-X74oCeRI4/p0ucjb5Ma8adTXd9Scumz367kkMK5V/IatcX6A0vlgLgKbzXWy5nZmCGeNJm2oQX0d2Eqj+ZIlCA==}
     engines: {node: '>= 12.0.0'}
 
-  qunit@2.24.1:
-    resolution: {integrity: sha512-Eu0k/5JDjx0QnqxsE1WavnDNDgL1zgMZKsMw/AoAxnsl9p4RgyLODyo2N7abZY7CEAnvl5YUqFZdkImzbgXzSg==}
+  qunit@2.25.0:
+    resolution: {integrity: sha512-MONPKgjavgTqArCwZOEz8nEMbA19zNXIp5ZOW9rPYj5cbgQp0fiI36c9dPTSzTRRzx+KcfB5eggYB/ENqxi0+w==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -36705,7 +36705,7 @@ snapshots:
       lodash.clonedeep: 4.5.0
       lodash.isequal: 4.5.0
 
-  qunit@2.24.1:
+  qunit@2.25.0:
     dependencies:
       commander: 7.2.0
       node-watch: 0.7.3
