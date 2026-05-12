@@ -71,10 +71,8 @@ export class AIAssistantController extends Controller {
       prompt: message.text,
       headerText: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
       status: MessageStatus.Pending,
-      // The text field is currently used as a workaround to trigger a status update.
-      // We have to update this built-in property to force the message to re-render.
-      // If dxChat supports updating custom fields via the Store Push API in the future,
-      // we will be able to remove this text update workaround.
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
       text: MessageStatus.Pending,
     };
 
@@ -95,10 +93,8 @@ export class AIAssistantController extends Controller {
       headerText: this.getCustomizedResponseTitle(),
       commands,
       status: messageStatus,
-      // The text field is currently used as a workaround to trigger a status update.
-      // We have to update this built-in property to force the message to re-render.
-      // If dxChat supports updating custom fields via the Store Push API in the future,
-      // we will be able to remove this text update workaround.
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
       text: messageStatus,
     });
   }
@@ -108,10 +104,8 @@ export class AIAssistantController extends Controller {
       headerText: messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader'),
       errorText: error.message,
       status: MessageStatus.Failure,
-      // The text field is currently used as a workaround to trigger a status update.
-      // We have to update this built-in property to force the message to re-render.
-      // If dxChat supports updating custom fields via the Store Push API in the future,
-      // we will be able to remove this text update workaround.
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
       text: MessageStatus.Failure,
     });
   }
@@ -126,10 +120,8 @@ export class AIAssistantController extends Controller {
       errorText: undefined,
       commands: undefined,
       status: MessageStatus.Pending,
-      // The text field is currently used as a workaround to trigger a status update.
-      // We have to update this built-in property to force the message to re-render.
-      // If dxChat supports updating custom fields via the Store Push API in the future,
-      // we will be able to remove this text update workaround.
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
       text: MessageStatus.Pending,
     });
   }
@@ -191,7 +183,7 @@ export class AIAssistantController extends Controller {
   public sendRequestToAI(message: Message | AIMessage): Promise<void> {
     if (this.processing) {
       // TODO: need to add localization message when a request is already processing
-      return Promise.resolve();
+      return Promise.reject();
     }
 
     if (isAIMessage(message)) {

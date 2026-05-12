@@ -287,12 +287,11 @@ describe('AIAssistantController', () => {
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Second request',
         timestamp: '2026-04-16T10:00:01.000Z',
-      } as Message);
+      } as Message).catch(() => {});
 
       const messages = await getStore(controller).load();
 

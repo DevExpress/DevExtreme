@@ -33,7 +33,9 @@ import type {
 } from './types';
 import {
   findMessageById,
-  getMessageIconName, getMessageStateClass, hasCommandErrors,
+  getMessageIconName,
+  getMessageStateClass,
+  hasCommandErrors,
   needToShowRegenerateButton,
 } from './utils';
 
@@ -85,7 +87,7 @@ export class AIChat {
           return;
         }
 
-        const items = component.option('items') as AIMessage[];
+        const items = component.option('items');
         const actualMessage = findMessageById(items, message.id) ?? message;
 
         if (isAIMessage(actualMessage)) {
@@ -106,9 +108,6 @@ export class AIChat {
       ...DEFAULT_POPUP_OPTIONS,
       wrapperAttr: { class: `${CLASSES.aiChat} ${CLASSES.aiDialog}` },
       toolbarItems: clearChatButton ? [clearChatButton] : undefined,
-      onHiding: (): void => {
-        this.options.onClosed?.();
-      },
       contentTemplate: ($container): void => {
         const $editorContainer = $('<div>')
           .addClass(CLASSES.aiChatContent)

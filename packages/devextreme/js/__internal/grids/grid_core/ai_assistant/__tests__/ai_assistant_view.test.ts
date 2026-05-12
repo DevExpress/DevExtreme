@@ -307,17 +307,6 @@ describe('AIAssistantView', () => {
       });
     });
 
-    describe('onClosed', () => {
-      it('should call abortRequest on controller when chat is closed', () => {
-        createAIAssistantView();
-
-        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
-        aiChatConfig.onClosed?.();
-
-        expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
-      });
-    });
-
     describe('onRegenerate', () => {
       it('should send request to AI with the AI message', () => {
         mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());

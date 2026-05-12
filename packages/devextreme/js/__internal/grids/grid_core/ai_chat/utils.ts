@@ -33,9 +33,9 @@ export const getMessageIconName = (message: Message): string => {
 };
 
 export const findMessageById = (
-  items: Message[],
+  items: Message[] | undefined,
   id: Message['id'],
-): Message | undefined => items.find((item) => item.id === id);
+): Message | undefined => items?.find((item) => item.id === id);
 
 export const needToShowRegenerateButton = (message: Message): boolean => {
   const isError = message.status === MessageStatus.Failure;
