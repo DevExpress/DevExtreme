@@ -4,4 +4,5 @@ export interface BundleExecutorSchema {
   outDir: string;
   mode: 'debug' | 'production';
   webpackConfigPath?: string;
+  sourceMap?: boolean;
 }
