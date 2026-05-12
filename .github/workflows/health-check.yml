@@ -1,0 +1,12 @@
+name: Health Check
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 25_2
+
+jobs:
+  invoke:
+    name: Invoke
+    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check

@@ -8,7 +8,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { EditorProperties } from '@ts/ui/editor/editor';
+import type { EditorProperties, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
@@ -24,11 +24,10 @@ class RadioButton extends Editor {
 
   _clickAction?: (event?: Record<string, unknown>) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void | boolean> {
-    const click = function (e) {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+    const click = (e: KeyboardEvent): void => {
       e.preventDefault();
-      this._clickAction({ event: e });
+      this._clickAction?.({ event: e });
     };
     return {
       ...super._supportedKeys(),
@@ -45,7 +44,6 @@ class RadioButton extends Editor {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _canValueBeChangedByClick(): boolean {
     return true;
   }
@@ -70,10 +68,12 @@ class RadioButton extends Editor {
   }
 
   _initMarkup(): void {
+    const { value } = this.option();
+
     super._initMarkup();
 
     this._renderIcon();
-    this._renderCheckedState(this.option('value'));
+    this._renderCheckedState(value);
     this._renderClick();
     this.setAria('role', 'radio');
   }
@@ -85,7 +85,7 @@ class RadioButton extends Editor {
     this.$element().append(this._$icon);
   }
 
-  _renderCheckedState(checked): void {
+  _renderCheckedState(checked: boolean): void {
     this.$element()
       .toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked)
       .find(`.${RADIO_BUTTON_ICON_CLASS}`)
@@ -94,10 +94,9 @@ class RadioButton extends Editor {
   }
 
   _renderClick(): void {
-    // @ts-expect-error ts-error
-    const eventName = addNamespace(clickEventName, this.NAME);
+    const eventName = addNamespace(clickEventName, this.NAME ?? '');
 
-    this._clickAction = this._createAction((args): void => {
+    this._clickAction = this._createAction((args: { event: ValueChangedEvent }): void => {
       this._clickHandler(args.event);
     });
 
@@ -107,7 +106,7 @@ class RadioButton extends Editor {
     });
   }
 
-  _clickHandler(e): void {
+  _clickHandler(e: ValueChangedEvent): void {
     this._saveValueChangeEvent(e);
     this.option('value', true);
     this._saveValueChangeEvent(undefined);
