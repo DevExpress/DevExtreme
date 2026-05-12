@@ -70,10 +70,12 @@ export function logLicenseWarning(
 
   const pushToLastGroup = (...items: string[]): void => {
     const lastGroup = warnings[warnings.length - 1];
+    const notEmptyItems = items.filter((item) => !!item);
+
     if (lastGroup.length === 1) {
-      lastGroup.push('', ...items);
+      lastGroup.push('', ...notEmptyItems);
     } else {
-      lastGroup.push(...items);
+      lastGroup.push(...notEmptyItems);
     }
   };
 
