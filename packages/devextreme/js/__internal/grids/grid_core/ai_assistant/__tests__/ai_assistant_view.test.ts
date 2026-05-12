@@ -140,7 +140,7 @@ describe('AIAssistantView', () => {
       expect(AIChat).toHaveBeenCalledTimes(1);
     });
 
-    it('should pass container, createComponent, popupOptions, chatOptions, onChatCleared, and onRegenerate to AIChat', () => {
+    it('should pass container, createComponent, popupOptions, chatOptions, and onRegenerate to AIChat', () => {
       const { aiAssistantView } = createAIAssistantView();
 
       expect(AIChat).toHaveBeenCalledWith(
@@ -149,7 +149,6 @@ describe('AIAssistantView', () => {
           createComponent: expect.any(Function),
           popupOptions: expect.any(Object),
           chatOptions: expect.any(Object),
-          onChatCleared: expect.any(Function),
           onRegenerate: expect.any(Function),
         }),
       );
@@ -293,20 +292,6 @@ describe('AIAssistantView', () => {
   });
 
   describe('chat event handlers', () => {
-    describe('onChatCleared', () => {
-      it('should call clear on aiChatInstance when triggered', () => {
-        createAIAssistantView();
-
-        const aiChatInstance = (AIChat as jest.Mock)
-          .mock.results[0].value as { clear: jest.Mock };
-
-        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
-        aiChatConfig.onChatCleared?.();
-
-        expect(aiChatInstance.clear).toHaveBeenCalledTimes(1);
-      });
-    });
-
     describe('onRegenerate', () => {
       it('should send request to AI with the AI message', () => {
         mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());

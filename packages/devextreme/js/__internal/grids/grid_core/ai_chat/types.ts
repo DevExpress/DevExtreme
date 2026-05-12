@@ -13,6 +13,5 @@ export interface AIChatOptions {
   createComponent: CreateComponent<any>;
   popupOptions?: PopupProperties;
   chatOptions?: ChatProperties;
-  onChatCleared?: () => void;
   onRegenerate?: (aiMessage: AIMessage) => void;
 }

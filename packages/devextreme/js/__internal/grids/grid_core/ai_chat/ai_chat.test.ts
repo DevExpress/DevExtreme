@@ -219,9 +219,8 @@ describe('AIChat', () => {
   });
 
   describe('clearChatButton', () => {
-    it('should include toolbarItems with clear chat button when onChatCleared is provided', () => {
-      const onChatCleared = jest.fn();
-      createAIChat({ onChatCleared });
+    it('should include toolbarItems with clear chat button', () => {
+      createAIChat();
 
       const popupConfig = getPopupConfig();
 
@@ -232,18 +231,25 @@ describe('AIChat', () => {
           location: 'after',
           options: expect.objectContaining({
             icon: CLEAR_CHAT_ICON,
-            onClick: onChatCleared,
+            onClick: expect.any(Function),
           }),
         }),
       ]);
     });
 
-    it('should not include toolbarItems when onChatCleared is not provided', () => {
+    it('should call clear when clear chat button is clicked', () => {
+      const mockStore = { clear: jest.fn() };
+      mockDataSource.store.mockReturnValue(mockStore);
+
       createAIChat();
+      triggerContentTemplate();
 
       const popupConfig = getPopupConfig();
+      const clearButton = popupConfig.toolbarItems[0];
+      clearButton.options.onClick();
 
-      expect(popupConfig.toolbarItems).toBeUndefined();
+      expect(mockStore.clear).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -780,8 +786,7 @@ describe('AIChat', () => {
       });
 
       it('should disable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
@@ -790,26 +795,13 @@ describe('AIChat', () => {
       });
 
       it('should enable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
         aiChat.setDisabled(false);
 
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
-      });
-
-      it('should not update popup toolbarItems when onChatCleared is not provided', () => {
-        const { aiChat } = createAIChat();
-        triggerContentTemplate();
-
-        aiChat.setDisabled(true);
-
-        expect(mockClearChatButtonInstance.option).not.toHaveBeenCalledWith(
-          'disabled',
-          expect.anything(),
-        );
       });
 
       it('should not update when setting same disabled value', () => {
