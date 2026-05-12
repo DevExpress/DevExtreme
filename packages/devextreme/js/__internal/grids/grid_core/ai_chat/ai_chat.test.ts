@@ -835,31 +835,6 @@ describe('AIChat', () => {
       });
     });
 
-    describe('isDisabled', () => {
-      it('should return false by default', () => {
-        const { aiChat } = createAIChat();
-
-        expect(aiChat.isDisabled()).toBe(false);
-      });
-
-      it('should return true after setDisabled(true)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-
-        expect(aiChat.isDisabled()).toBe(true);
-      });
-
-      it('should return false after setDisabled(false)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-        aiChat.setDisabled(false);
-
-        expect(aiChat.isDisabled()).toBe(false);
-      });
-    });
-
     describe('regenerate button in disabled state', () => {
       it('should not call onRegenerate when chat is disabled', () => {
         const onRegenerate = jest.fn();

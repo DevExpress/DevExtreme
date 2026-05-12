@@ -83,6 +83,7 @@ export class AIAssistantView extends View {
       },
       onHidden: (): void => {
         this.visibilityChanged?.fire(false);
+        this.aiAssistantController.abortRequest();
       },
       ...this.option('aiAssistant.popup'),
     };
@@ -93,7 +94,7 @@ export class AIAssistantView extends View {
       dataSource: this.aiAssistantController.getMessageDataSource(),
       reloadOnChange: true,
       onMessageEntered: (e): void => {
-        if (this.aiChatInstance?.isDisabled()) {
+        if (this.aiAssistantController.isProcessing()) {
           return;
         }
 

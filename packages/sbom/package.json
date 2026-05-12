@@ -5,5 +5,10 @@
   "devDependencies": {
     "@devexpress/sbom-toolkit": "0.6.1"
   },
+  "pnpm": {
+    "overrides": {
+      "fast-uri@<3.1.2": ">=3.1.2"
+    }
+  },
   "packageManager": "pnpm@9.15.9"
 }
