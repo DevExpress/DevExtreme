@@ -6,7 +6,7 @@ import { compareSignatures } from '../rsa_bigint';
 import { sha1 } from '../sha1';
 import { DECODE_MAP } from './const';
 
-export const bit = (shift: number): bigint => 1n << BigInt(shift);
+export const bit = (shift: number): bigint => BigInt(1) << BigInt(shift);
 
 export const parseRsaXml = (xml: string): { modulus: Uint8Array; exponent: number } => {
   const modulusMatch = /<Modulus>([^<]+)<\/Modulus>/.exec(xml);
@@ -51,9 +51,9 @@ export const shiftText = (text: string, map: string): string => {
 
 export const shiftDecodeText = (text: string): string => shiftText(text, DECODE_MAP);
 
-const DOT_NET_TICKS_EPOCH_OFFSET = 621355968000000000n;
-const DOT_NET_TICKS_PER_MS = 10000n;
-const DOT_NET_MAX_VALUE_TICKS = 3155378975999999999n;
+const DOT_NET_TICKS_EPOCH_OFFSET = BigInt('621355968000000000');
+const DOT_NET_TICKS_PER_MS = BigInt(10000);
+const DOT_NET_MAX_VALUE_TICKS = BigInt('3155378975999999999');
 
 export function dotNetTicksToMs(ticksStr: string): number {
   const ticks = BigInt(ticksStr);
