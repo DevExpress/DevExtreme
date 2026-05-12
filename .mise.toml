@@ -1,0 +1,6 @@
+[tools]
+node = "24.15.0"
+
+[hooks]
+enter = "mise install"
+
