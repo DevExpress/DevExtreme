@@ -1,12 +1,8 @@
 import type { Message } from '@js/ui/chat';
 
-import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from '../ai_assistant/const';
+import { MessageStatus } from '../ai_assistant/const';
 import { CLASSES } from './const';
 import type { CommandResults } from './types';
-
-export const isAIChatMessage = (
-  message: Message,
-): boolean => message.author?.id === AI_ASSISTANT_AUTHOR_ID;
 
 export const getMessageStateClass = (status: MessageStatus): string => {
   switch (status) {
@@ -21,7 +17,7 @@ export const getMessageStateClass = (status: MessageStatus): string => {
 };
 
 export const hasCommandErrors = (
-  commands: CommandResults,
+  commands: CommandResults | undefined,
 ): boolean => !!commands?.some(({ status }) => status === MessageStatus.Failure);
 
 export const getMessageIconName = (message: Message): string => {
