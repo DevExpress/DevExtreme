@@ -158,7 +158,6 @@
     "gulp-multi-process": "1.4.0",
     "gulp-notify": "4.0.0",
     "gulp-plumber": "1.2.1",
-    "gulp-remote-src": "0.4.4",
     "gulp-rename": "1.4.0",
     "gulp-replace": "0.6.1",
     "gulp-sass": "6.0.1",
