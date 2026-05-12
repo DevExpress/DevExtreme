@@ -2,7 +2,7 @@
 import { bit } from './utils';
 
 const productKind = {
-  Default: 0n,
+  Default: BigInt(0),
   DXperienceWin: bit(0),
   XtraReports: bit(4),
   XPO: bit(15),
