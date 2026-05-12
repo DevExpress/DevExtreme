@@ -78,7 +78,7 @@ const pipeSource = async (
   }));
 };
 
-const execTsc = async (directory: string, args: string[]): Promise<string> => new Promise((resolve, reject) => {
+const execTsc = (directory: string, args: string[]): Promise<string> => new Promise((resolve, reject) => {
   const proc = cps.spawn('tsc', args, { cwd: directory, shell: isWindows() });
   let stdout = '';
   let stderr = '';
@@ -88,7 +88,7 @@ const execTsc = async (directory: string, args: string[]): Promise<string> => ne
     // eslint-disable-next-line prefer-promise-reject-errors
     reject(`tsc failed to spawn: ${err.message}`);
   });
-  proc.on('close', (code: number | null, signal: NodeJS.Signals | null) => {
+  proc.on('close', (code: number | null, signal: string | null) => {
     if (signal !== null) {
       // eslint-disable-next-line prefer-promise-reject-errors
       return reject(`tsc killed by signal ${signal}\n${stderr}\n${stdout}`);
