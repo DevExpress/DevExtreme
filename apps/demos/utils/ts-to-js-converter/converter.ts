@@ -79,8 +79,7 @@ const pipeSource = async (
 };
 
 const execTsc = async (directory: string, args: string[]): Promise<string> => new Promise((resolve, reject) => {
-  const tscExecutable = isWindows() ? 'tsc.cmd' : 'tsc';
-  const proc = cps.spawn(tscExecutable, args, { cwd: directory, shell: false });
+  const proc = cps.spawn('tsc', args, { cwd: directory, shell: isWindows() });
   let stdout = '';
   let stderr = '';
   proc.stdout.on('data', (data: Buffer) => { stdout += data.toString(); });
