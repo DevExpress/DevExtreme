@@ -40,7 +40,7 @@
         "devexpress-diagram": "catalog:",
         "devexpress-gantt": "catalog:",
         "devextreme-aspnet-data": "5.0.0",
-        "devextreme-aspnet-data-nojquery": "5.0.0",
+        "devextreme-aspnet-data-nojquery": "5.1.0",
         "devextreme-cldr-data": "1.0.3",
         "devextreme-exceljs-fork": "catalog:",
         "devextreme-quill": "catalog:",
