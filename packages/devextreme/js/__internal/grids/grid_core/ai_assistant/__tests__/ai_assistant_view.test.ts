@@ -39,6 +39,8 @@ const mockMessageDataSource = { store: new ArrayStore({ key: 'id' }), reshapeOnP
 const mockAIAssistantController = {
   getMessageDataSource: jest.fn().mockReturnValue(mockMessageDataSource),
   sendRequestToAI: jest.fn(),
+  isProcessing: jest.fn().mockReturnValue(false),
+  abortRequest: jest.fn(),
 };
 
 const createAIAssistantView = ({
@@ -280,6 +282,17 @@ describe('AIAssistantView', () => {
     });
   });
 
+  describe('onHidden', () => {
+    it('should call abortRequest on controller when popup onHidden is triggered', () => {
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      aiChatConfig.popupOptions?.onHidden?.({} as any);
+
+      expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('chat event handlers', () => {
     describe('onChatCleared', () => {
       it('should call clear on aiChatInstance when triggered', () => {
@@ -312,12 +325,10 @@ describe('AIAssistantView', () => {
         expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledWith(message);
       });
 
-      it('should not send request when chat is disabled', () => {
+      it('should not send request when request is already processing', () => {
         createAIAssistantView();
 
-        const aiChatInstance = (AIChat as jest.Mock)
-          .mock.results[0].value as { isDisabled: jest.Mock; setDisabled: jest.Mock };
-        aiChatInstance.isDisabled.mockReturnValue(true);
+        mockAIAssistantController.isProcessing.mockReturnValueOnce(true);
 
         const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
         const message = {
@@ -368,8 +379,8 @@ describe('AIAssistantView', () => {
       });
 
       it('should call setDisabled(false) after request fails', async () => {
-        mockAIAssistantController.sendRequestToAI.mockReturnValue(
-          Promise.reject(new Error('Network error')),
+        mockAIAssistantController.sendRequestToAI.mockImplementation(
+          () => Promise.reject(new Error('Network error')),
         );
         createAIAssistantView();
 

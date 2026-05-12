@@ -1,3 +1,4 @@
+import type { RequestCallbacks } from '@js/common/ai-integration';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
 import type { JsonSchema7Type } from 'zod-to-json-schema';
@@ -56,3 +57,7 @@ export type CustomizeResponseText = (
   commandName: string,
   commandArgs: Record<string, unknown>,
 ) => Partial<CommandMessages> | undefined;
+
+export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {
+  onAbort?: () => void;
+};
