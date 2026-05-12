@@ -52,7 +52,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _getLoadedRowIndex(items, change) {
-    const { data, insertAfterKey, insertBeforeKey } = change;
+    const { data, insertAfterKey } = change;
     const dataSourceAdapter = this._dataController.dataSource();
     const parentKey = dataSourceAdapter?.parentKeyOf(data);
     const isParentNotRoot = parentKey !== undefined && parentKey !== this.option('rootValue');
@@ -62,18 +62,10 @@ class EditingController extends editingModule.controllers.editing {
       const isParentInPage = parentRowIndex >= 0;
       // @ts-expect-error
       const isParentCollapsed = !this._dataController.isRowExpanded(parentKey);
+      const isChangeAfterParent = equalByValue(insertAfterKey, parentKey);
 
-      if (isParentInPage && isParentCollapsed) {
-        const nextParent = items[parentRowIndex + 1];
-        const siblingKeys = dataSourceAdapter.getChildNodeKeys(parentKey);
-        const isAfterParent = insertAfterKey === parentKey;
-        const isBeforeNextParent = insertBeforeKey && insertBeforeKey === nextParent?.key;
-        const isBeforeOrAfterSibling = siblingKeys.some((key) => equalByValue(key, insertAfterKey ?? insertBeforeKey));
-        const isItemInsideParent = isAfterParent || isBeforeNextParent || isBeforeOrAfterSibling;
-
-        if (isItemInsideParent) {
-          return -1;
-        }
+      if (isParentInPage && isParentCollapsed && isChangeAfterParent) {
+        return -1;
       }
     }
     // @ts-expect-error
