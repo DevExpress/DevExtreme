@@ -44,6 +44,7 @@ function createWebpackConfig(
   outDir: string,
   mode: 'debug' | 'production',
   projectRoot: string,
+  sourceMap: boolean,
 ): Configuration {
   const config: Configuration = {
     ...baseConfig,
@@ -66,7 +67,9 @@ function createWebpackConfig(
       ...(config.output || {}),
       pathinfo: true,
     };
-    config.devtool = 'eval-source-map';
+    if (sourceMap) {
+      config.devtool = 'eval-source-map';
+    }
   }
 
   const isInternalBuild =
@@ -113,7 +116,14 @@ function runWebpack(webpack: typeof import('webpack'), config: Configuration): P
 
 const runExecutor: PromiseExecutor<BundleExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const { entries, sourceDir, outDir, mode, webpackConfigPath = './webpack.config.js' } = options;
+  const {
+    entries,
+    sourceDir,
+    outDir,
+    mode,
+    webpackConfigPath = './webpack.config.js',
+    sourceMap = true,
+  } = options;
 
   if (!entries?.length) {
     logger.error(ERROR_MESSAGES.ENTRIES_EMPTY);
@@ -155,6 +165,7 @@ const runExecutor: PromiseExecutor<BundleExecutorSchema> = async (options, conte
     resolvedOutDir,
     mode,
     projectRoot,
+    sourceMap,
   );
 
   logger.verbose(`Bundling ${entries.length} entries in ${mode} mode`);

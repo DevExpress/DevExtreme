@@ -8,18 +8,37 @@
       "description": "Paths to files to compress (relative to project root)"
     },
     "mode": {
-      "type": "string",
-      "enum": ["minify", "beautify", "strip-only"],
-      "description": "Compression mode"
+      "description": "Compression mode. Use a string for the simple cases or an object to attach mode-specific options (e.g., eulaUrl for minify/beautify, trailingNewline for any mode).",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["minify", "beautify", "strip-debug", "normalize"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "enum": ["minify", "beautify"] },
+            "eulaUrl": { "type": "string" },
+            "trailingNewline": { "type": "boolean", "default": true }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "enum": ["strip-debug", "normalize"] },
+            "trailingNewline": { "type": "boolean", "default": true }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        }
+      ]
     },
-    "removeDebug": {
-      "type": "boolean",
-      "description": "Strip debug blocks before compression",
-      "default": false
-    },
-    "eulaUrl": {
-      "type": "string",
-      "description": "EULA URL to preserve in comments during compression"
+    "exclude": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns for files to exclude from compression (relative to project root)"
     }
   },
   "required": ["files", "mode"]
