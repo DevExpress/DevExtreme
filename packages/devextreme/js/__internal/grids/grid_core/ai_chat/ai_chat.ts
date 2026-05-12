@@ -316,10 +316,6 @@ export class AIChat {
     this.setClearChatButtonDisabled(disabled);
   }
 
-  public isDisabled(): boolean {
-    return this.disabled;
-  }
-
   public renderAIMessage(message: Message, container: HTMLElement): void {
     const $message = $('<div>')
       .addClass(`${CLASSES.message} ${getMessageStateClass(message.status)}`)
