@@ -111,7 +111,6 @@ export class AIAssistantIntegrationController extends Controller {
   }
 
   // TODO: implement buildContext with grid commands
-
   private buildContext(): Record<string, unknown> {
     return {};
   }

@@ -114,6 +114,10 @@ export class AIAssistantController extends Controller {
     });
   }
 
+  private setProcessing(value: boolean): void {
+    this.processing = value;
+  }
+
   public init(): void {
     // TODO: initialize default commands list when they are ready
     this.gridCommands = new GridCommands(this.component, []);
@@ -136,7 +140,7 @@ export class AIAssistantController extends Controller {
 
   public sendRequestToAI(message: Message): Promise<void> {
     const aiMessageId = this.createPendingAIMessage(message);
-    this.processing = true;
+    this.setProcessing(true);
 
     return new Promise((resolve, reject) => {
       this.aiAssistantIntegrationController?.sendRequest(message.text, {
@@ -144,7 +148,7 @@ export class AIAssistantController extends Controller {
           fromPromise(this.processResponse(response))
             .done((commands: CommandResults) => {
               this.completeAIMessage(aiMessageId, commands);
-              this.processing = false;
+              this.setProcessing(false);
               resolve();
             })
             .fail((errorMessage) => {
@@ -153,20 +157,20 @@ export class AIAssistantController extends Controller {
                 : new Error(String(errorMessage));
 
               this.failAIMessage(aiMessageId, error);
-              this.processing = false;
+              this.setProcessing(false);
               reject(error);
             });
         },
         onError: (error: Error): void => {
           this.failAIMessage(aiMessageId, error);
-          this.processing = false;
+          this.setProcessing(false);
           reject(error);
         },
         onAbort: (): void => {
           const error = new Error(messageLocalization.format('dxDataGrid-aiAssistantAbortMessage'));
 
           this.failAIMessage(aiMessageId, error);
-          this.processing = false;
+          this.setProcessing(false);
           reject(error);
         },
       });

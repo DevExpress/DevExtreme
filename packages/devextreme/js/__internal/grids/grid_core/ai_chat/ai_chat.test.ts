@@ -201,28 +201,6 @@ describe('AIChat', () => {
     });
   });
 
-  describe('onClosed', () => {
-    it('should call onClosed callback when popup is hiding', () => {
-      const onClosed = jest.fn();
-      createAIChat({ onClosed });
-
-      const popupConfig = getPopupConfig();
-      popupConfig.onHiding();
-
-      expect(onClosed).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not throw when onClosed is not provided', () => {
-      createAIChat();
-
-      const popupConfig = getPopupConfig();
-
-      expect(() => {
-        popupConfig.onHiding();
-      }).not.toThrow();
-    });
-  });
-
   describe('isShown', () => {
     it('should return true when popup is visible', () => {
       const { aiChat } = createAIChat();

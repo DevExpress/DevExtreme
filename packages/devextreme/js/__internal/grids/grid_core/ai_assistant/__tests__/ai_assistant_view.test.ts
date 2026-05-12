@@ -282,6 +282,17 @@ describe('AIAssistantView', () => {
     });
   });
 
+  describe('onHidden', () => {
+    it('should call abortRequest on controller when popup onHidden is triggered', () => {
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      aiChatConfig.popupOptions?.onHidden?.({} as any);
+
+      expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('chat event handlers', () => {
     describe('onChatCleared', () => {
       it('should call clear on aiChatInstance when triggered', () => {
@@ -294,17 +305,6 @@ describe('AIAssistantView', () => {
         aiChatConfig.onChatCleared?.();
 
         expect(aiChatInstance.clear).toHaveBeenCalledTimes(1);
-      });
-    });
-
-    describe('onClosed', () => {
-      it('should call abortRequest on controller when chat is closed', () => {
-        createAIAssistantView();
-
-        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
-        aiChatConfig.onClosed?.();
-
-        expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
       });
     });
 

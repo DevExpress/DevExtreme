@@ -104,9 +104,6 @@ export class AIChat {
       ...DEFAULT_POPUP_OPTIONS,
       wrapperAttr: { class: `${CLASSES.aiChat} ${CLASSES.aiDialog}` },
       toolbarItems: clearChatButton ? [clearChatButton] : undefined,
-      onHiding: (): void => {
-        this.options.onClosed?.();
-      },
       contentTemplate: ($container): void => {
         const $editorContainer = $('<div>')
           .addClass(CLASSES.aiChatContent)

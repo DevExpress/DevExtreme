@@ -47,9 +47,6 @@ export class AIAssistantView extends View {
       onChatCleared: (): void => {
         this.aiChatInstance.clear();
       },
-      onClosed: (): void => {
-        this.aiAssistantController.abortRequest();
-      },
       onRegenerate: (): void => {},
       popupOptions,
       chatOptions,
@@ -86,6 +83,7 @@ export class AIAssistantView extends View {
       },
       onHidden: (): void => {
         this.visibilityChanged?.fire(false);
+        this.aiAssistantController.abortRequest();
       },
       ...this.option('aiAssistant.popup'),
     };

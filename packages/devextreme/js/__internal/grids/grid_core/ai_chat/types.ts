@@ -14,7 +14,6 @@ export interface AIChatOptions {
   popupOptions?: PopupProperties;
   chatOptions?: ChatProperties;
   onChatCleared?: () => void;
-  onClosed?: () => void;
   onRegenerate?: () => void;
 }
 
