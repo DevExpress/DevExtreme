@@ -148,7 +148,7 @@ $(() => {
             {
               text: '🧩 Group by Product',
               prompt: 'Group by Product',
-              width: 175,
+              width: 170,
             },
           ],
           onItemClick(e) {
@@ -173,7 +173,6 @@ $(() => {
     columns: [
       {
         dataField: 'Product',
-        width: 120,
       },
       {
         dataField: 'Amount',
@@ -196,7 +195,6 @@ $(() => {
       {
         dataField: 'Customer',
         dataType: 'string',
-        width: 150,
       },
     ],
   });
