@@ -18,7 +18,7 @@ interface UpdatedAppointmentKey {
 export class AppointmentDataSource {
   protected updatedAppointmentKeys: UpdatedAppointmentKey[] = [];
 
-  protected dataSource: DataSource | null = null;
+  protected dataSource!: DataSource;
 
   protected updatedAppointment: SafeAppointment | null = null;
 
@@ -28,7 +28,7 @@ export class AppointmentDataSource {
   }
 
   get keyName(): string {
-    const store = this.dataSource?.store();
+    const store = this.dataSource.store();
     return store?.key() as string;
   }
 
@@ -37,7 +37,7 @@ export class AppointmentDataSource {
   }
 
   private getStoreKey(target: SafeAppointment): unknown {
-    const store = this.dataSource?.store();
+    const store = this.dataSource.store();
 
     return store?.keyOf(target);
   }
@@ -51,7 +51,7 @@ export class AppointmentDataSource {
 
   private initStoreChangeHandlers(): void {
     const { dataSource } = this;
-    const store = dataSource?.store();
+    const store = dataSource.store();
 
     if (store) {
       store.on(STORE_EVENTS.updating, (key) => {
@@ -67,7 +67,7 @@ export class AppointmentDataSource {
       });
 
       store.on(STORE_EVENTS.push, (pushItems) => {
-        const items = dataSource?.items() ?? [];
+        const items = dataSource.items();
         const keyName = store.key() as string;
 
         pushItems.forEach((pushItem) => {
@@ -87,7 +87,7 @@ export class AppointmentDataSource {
         });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        dataSource?.load();
+        dataSource.load();
       });
     }
   }
@@ -107,7 +107,7 @@ export class AppointmentDataSource {
 
   add(rawAppointment: SafeAppointment): DeferredObj<SafeAppointment> {
     // @eslint-disable-next-line
-    return this.dataSource?.store().insert(rawAppointment)
+    return this.dataSource.store().insert(rawAppointment)
     // @ts-expect-error
       .done(() => this.dataSource.load());
   }
@@ -117,9 +117,9 @@ export class AppointmentDataSource {
     // @ts-expect-error
     const d = new Deferred();
 
-    this.dataSource?.store().update(key, data)
+    this.dataSource.store().update(key, data)
     // @ts-expect-error
-      .done((result) => this.dataSource?.load()
+      .done((result) => this.dataSource.load()
         // @ts-expect-error
         .done(() => d.resolve(result))
         .fail(d.reject))
@@ -130,13 +130,13 @@ export class AppointmentDataSource {
 
   remove(rawAppointment: SafeAppointment): DeferredObj<SafeAppointment | undefined> {
     const key = this.getStoreKey(rawAppointment);
-    return this.dataSource?.store().remove(key)
+    return this.dataSource.store().remove(key)
     // @ts-expect-error
-      .done(() => this.dataSource?.load());
+      .done(() => this.dataSource.load());
   }
 
   destroy(): void {
-    const store = this.dataSource?.store();
+    const store = this.dataSource.store();
 
     if (store) {
       store.off(STORE_EVENTS.updating);
