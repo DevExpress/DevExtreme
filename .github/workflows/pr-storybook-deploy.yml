@@ -9,7 +9,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+  actions: read
 
 env:
   SOURCE_DIR: dist/static
@@ -60,6 +60,9 @@ jobs:
       cancel-in-progress: true
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Download static artifact
         if: needs.prepare.outputs.action == 'deploy'
         uses: dawidd6/action-download-artifact@v6
@@ -68,9 +71,6 @@ jobs:
           name: preview-static
           path: ${{ env.SOURCE_DIR }}
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Deploy/remove PR preview
         uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
         with:
@@ -78,6 +78,6 @@ jobs:
           pr-number: ${{ needs.prepare.outputs.pr_number }}
           source-dir: ${{ env.SOURCE_DIR }}
           preview-branch: gh-pages
-          umbrella-dir: storybook
+          umbrella-dir: preview
           comment: false
           token: ${{ github.token }}
