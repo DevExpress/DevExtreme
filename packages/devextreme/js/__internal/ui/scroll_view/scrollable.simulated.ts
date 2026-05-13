@@ -19,7 +19,6 @@ import {
   // @ts-expect-error ts-error
   deferUpdater,
 } from '@js/core/utils/common';
-import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -30,6 +29,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
+import errors from '@js/ui/widget/ui.errors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import Animator from '@ts/ui/scroll_view/animator';
 import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
@@ -1098,7 +1098,8 @@ export class SimulatedStrategy<
       try {
         actionHandler(extend(this._createActionArgs(), args));
       } catch (e) {
-        logger.error(e);
+        const error = e instanceof Error ? e : new Error(String(e));
+        errors.log('E1069', optionName, error.message);
       }
     };
   }
