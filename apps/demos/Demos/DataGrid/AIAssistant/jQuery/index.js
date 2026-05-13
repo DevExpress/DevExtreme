@@ -20,16 +20,14 @@ $(() => {
       temperature: 0.7,
     };
 
-    if (responseSchema) {
-      params.response_format = {
-        type: 'json_schema',
-        json_schema: {
-          name: 'grid_assistant_response',
-          strict: true,
-          schema: responseSchema,
-        },
-      };
-    }
+    params.response_format = {
+      type: 'json_schema',
+      json_schema: {
+        name: 'grid_assistant_response',
+        strict: true,
+        schema: responseSchema,
+      },
+    };
 
     const response = await aiService.chat.completions
       .create(params, { signal });
