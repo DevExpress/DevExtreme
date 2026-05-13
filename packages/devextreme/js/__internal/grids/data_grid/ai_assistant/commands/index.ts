@@ -1,21 +1,12 @@
-import commands, { commandsCore } from '@ts/grids/grid_core/ai_assistant/commands';
 import type { GridCommand } from '@ts/grids/grid_core/ai_assistant/types';
 
 import { clearGroupingCommand, groupingCommand } from './grouping';
 import { clearSummaryCommand, summaryCommand } from './summary';
 
 export const dataGridCommands = [
-  ...commandsCore,
   groupingCommand,
   clearGroupingCommand,
   summaryCommand,
   clearSummaryCommand,
+  // TODO: try to remove "as GridCommand[]"
 ] as GridCommand[];
-
-export default {
-  ...commands,
-  groupingCommand,
-  clearGroupingCommand,
-  summaryCommand,
-  clearSummaryCommand,
-};

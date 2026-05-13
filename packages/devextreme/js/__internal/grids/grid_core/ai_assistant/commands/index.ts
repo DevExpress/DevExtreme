@@ -33,7 +33,7 @@ import {
   sortingCommand,
 } from './sorting';
 
-export const commandsCore = [
+export const coreCommands = [
   columnsPinningCommand,
   columnsReorderCommand,
   columnsResizeCommand,
@@ -53,26 +53,5 @@ export const commandsCore = [
   selectByKeysCommand,
   clearSortingCommand,
   sortingCommand,
+  // TODO: try to remove "as GridCommand[]"
 ] as GridCommand[];
-
-export default {
-  columnsPinningCommand,
-  columnsReorderCommand,
-  columnsResizeCommand,
-  columnsVisibilityCommand,
-  clearFilterCommand,
-  filterValueCommand,
-  focusRowByIndexCommand,
-  focusRowByKeyCommand,
-  pageIndexCommand,
-  pageSizeCommand,
-  pagingCommand,
-  searchingCommand,
-  clearSelectionCommand,
-  deselectAllCommand,
-  selectAllCommand,
-  selectByIndexesCommand,
-  selectByKeysCommand,
-  clearSortingCommand,
-  sortingCommand,
-};

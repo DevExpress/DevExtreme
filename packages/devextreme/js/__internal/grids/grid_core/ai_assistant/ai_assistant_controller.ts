@@ -13,7 +13,7 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 
 import { Controller } from '../m_modules';
 import { AIAssistantIntegrationController } from './ai_assistant_integration_controller';
-import { commandsCore } from './commands';
+import { coreCommands } from './commands/index';
 import { AI_ASSISTANT_AUTHOR, AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
 import { GridCommands } from './grid_commands';
 import type {
@@ -22,7 +22,6 @@ import type {
   CustomizeResponseText,
   CustomizeResponseTitle,
   GridCommand,
-  GridExtraContextOption,
 } from './types';
 import { getMessageStatus, isAIMessage } from './utils';
 
@@ -31,18 +30,17 @@ export class AIAssistantController extends Controller {
 
   private messageStore?: ArrayStore<Message, string>;
 
-  private aiAssistantIntegrationController?: AIAssistantIntegrationController;
+  protected aiAssistantIntegrationController?: AIAssistantIntegrationController;
 
   private processing = false;
 
   private getCustomizedResponseTitle(
     status: MessageStatus.Success | MessageStatus.Failure,
-    commandNames: GridCommand['name'][],
+    commandNames: string[],
   ): string {
     // TODO: remove type description, it should be got from d.ts
     const customizeResponseTitle = this.option('aiAssistant.customizeResponseTitle') as CustomizeResponseTitle | undefined;
 
-    // There shouldn't be an empty array here, but we need to handle it anyway.
     if (!commandNames.length) {
       return messageLocalization.format('dxDataGrid-aiAssistantErrorMessage');
     }
@@ -62,7 +60,7 @@ export class AIAssistantController extends Controller {
     ].join(' and ');
   }
 
-  private getCommandNames(actions: ExecuteGridAssistantAction[]): GridCommand['name'][] {
+  private getCommandNames(actions: ExecuteGridAssistantAction[]): string[] {
     const commandNames = actions.map(({ name }) => name);
     const uniqueCommandNameSet = new Set(commandNames);
 
@@ -130,7 +128,7 @@ export class AIAssistantController extends Controller {
   private completeAIMessage(
     messageId: string,
     commands: CommandResult[],
-    commandNames: GridCommand['name'][],
+    commandNames: string[],
   ): void {
     const messageStatus = getMessageStatus(commands);
 
@@ -171,19 +169,23 @@ export class AIAssistantController extends Controller {
     });
   }
 
-  private sendRequestToAICore(aiMessage: AIMessage): Promise<void> {
+  private withProcessing(promise: Promise<void>): Promise<void> {
     this.setProcessing(true);
 
-    return new Promise((resolve, reject) => {
+    return promise.finally(() => {
+      this.setProcessing(false);
+    });
+  }
+
+  private sendRequestToAICore(aiMessage: AIMessage): Promise<void> {
+    return this.withProcessing(new Promise<void>((resolve, reject) => {
       const responseSchema = this.gridCommands?.buildResponseSchema();
-      const extraContext = this.getGridExtraContext();
 
       if (!responseSchema) {
         // TODO: Change error message
         const error = new Error('Grid commands not initialized');
 
         this.failAIMessage(aiMessage.id, error);
-        this.setProcessing(false);
         reject(error);
         return;
       }
@@ -191,7 +193,6 @@ export class AIAssistantController extends Controller {
       this.aiAssistantIntegrationController?.sendRequest(
         aiMessage.prompt,
         responseSchema,
-        extraContext,
         {
           onComplete: (response: ExecuteGridAssistantCommandResult): void => {
             fromPromise(this.processResponse(response))
@@ -199,52 +200,41 @@ export class AIAssistantController extends Controller {
                 const commandNames = this.getCommandNames(response.actions);
 
                 this.completeAIMessage(aiMessage.id, commands, commandNames);
-                this.setProcessing(false);
                 resolve();
               })
               .fail((errorMessage) => {
-              // TODO: Change error message
+                // TODO: Change error message
                 const error = errorMessage instanceof Error
                   ? errorMessage
                   : new Error(String(errorMessage));
 
                 this.failAIMessage(aiMessage.id, error);
-                this.setProcessing(false);
                 reject(error);
               });
           },
           onError: (error: Error): void => {
-          // TODO: Change error message
+            // TODO: Change error message
             this.failAIMessage(aiMessage.id, error);
-            this.setProcessing(false);
             reject(error);
           },
           onAbort: (): void => {
             const error = new Error(messageLocalization.format('dxDataGrid-aiAssistantAbortMessage'));
 
             this.failAIMessage(aiMessage.id, error);
-            this.setProcessing(false);
             reject(error);
           },
         },
       );
-    });
+    }));
   }
 
   protected getGridCommandList(): GridCommand[] {
-    return commandsCore;
-  }
-
-  protected getGridExtraContext(): GridExtraContextOption | null {
-    return null;
+    return [...coreCommands];
   }
 
   public init(): void {
-    // TODO: initialize default commands list when they are ready
     this.gridCommands = new GridCommands(this.component, this.getGridCommandList());
-    this.messageStore = new ArrayStore<Message, string>({
-      key: 'id',
-    });
+    this.messageStore = new ArrayStore<Message, string>({ key: 'id' });
     this.aiAssistantIntegrationController = new AIAssistantIntegrationController(this.component);
     this.aiAssistantIntegrationController.init();
   }

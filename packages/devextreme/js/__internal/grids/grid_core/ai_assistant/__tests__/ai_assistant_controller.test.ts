@@ -5,35 +5,29 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { ExecuteGridAssistantCommandResult, RequestCallbacks } from '@js/common/ai-integration';
+import type { ExecuteGridAssistantCommandResult } from '@js/common/ai-integration';
 import type { ArrayStore } from '@js/common/data';
 import type { Message } from '@js/ui/chat';
 
 import type { InternalGrid } from '../../m_types';
 import { AIAssistantController } from '../ai_assistant_controller';
+import { AIAssistantIntegrationController } from '../ai_assistant_integration_controller';
 import {
   AI_ASSISTANT_AUTHOR,
   AI_ASSISTANT_AUTHOR_ID,
   MessageStatus,
 } from '../const';
 import { GridCommands } from '../grid_commands';
-import type { AIMessage, CommandResult } from '../types';
+import type { AIAssistantRequestCallbacks, AIMessage, CommandResult } from '../types';
 
 jest.mock('../grid_commands');
+jest.mock('../ai_assistant_integration_controller');
 
 const MockedGridCommands = GridCommands as jest.MockedClass<typeof GridCommands>;
+const MockedAIAssistantIntegrationController = AIAssistantIntegrationController as
+  jest.MockedClass<typeof AIAssistantIntegrationController>;
 
-let sendRequestCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
-
-const mockAIIntegration = {
-  executeGridAssistant: jest.fn((
-    _params: unknown,
-    callbacks: RequestCallbacks<ExecuteGridAssistantCommandResult>,
-  ) => {
-    sendRequestCallbacks = callbacks;
-    return jest.fn();
-  }),
-};
+let sendRequestCallbacks: AIAssistantRequestCallbacks<ExecuteGridAssistantCommandResult> = {};
 
 const createController = (
   options: Record<string, unknown> = {},
@@ -66,13 +60,33 @@ describe('AIAssistantController', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // TODO: Rework the tests using updated GridCommands implementation
     (MockedGridCommands.mockImplementation as jest.Mock).call(
       MockedGridCommands,
       () => ({
         validate: jest.fn().mockReturnValue(true),
         executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([{ status: 'success', message: 'sort' }]),
         abort: jest.fn(),
+        buildResponseSchema: jest.fn().mockReturnValue({ type: 'object' }),
+        isExecuting: jest.fn().mockReturnValue(false),
+      }),
+    );
+
+    (MockedAIAssistantIntegrationController.mockImplementation as jest.Mock).call(
+      MockedAIAssistantIntegrationController,
+      () => ({
+        init: jest.fn(),
+        dispose: jest.fn(),
+        sendRequest: jest.fn((
+          _text: string,
+          _responseSchema: unknown,
+          callbacks?: AIAssistantRequestCallbacks<ExecuteGridAssistantCommandResult>,
+        ) => {
+          sendRequestCallbacks = callbacks ?? {};
+        }),
+        abortRequest: jest.fn(() => {
+          sendRequestCallbacks.onAbort?.();
+        }),
+        isRequestAwaitingCompletion: jest.fn().mockReturnValue(false),
       }),
     );
   });
@@ -90,9 +104,7 @@ describe('AIAssistantController', () => {
 
   describe('sendRequestToAI', () => {
     it('should create pending message in store', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
       const timestamp = '2026-04-16T10:00:00.000Z';
       const expectedTimestamp = Date.parse(timestamp);
 
@@ -118,6 +130,13 @@ describe('AIAssistantController', () => {
     });
 
     it('should keep message as pending when AI integration is not configured', async () => {
+      // Make sendRequest not call any callbacks (simulating no AI integration)
+      const integrationInstance = MockedAIAssistantIntegrationController
+        .mock.results[0]?.value as { sendRequest: jest.Mock } | undefined;
+      if (integrationInstance) {
+        integrationInstance.sendRequest = jest.fn();
+      }
+
       const controller = createController();
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -137,9 +156,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should complete message as success when command succeed', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI({
@@ -211,9 +228,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should fail message when onError callback is called', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -239,9 +254,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should fail message when response has no actions', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -271,9 +284,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should resolve promise when command succeeds', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -288,9 +299,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should reject promise when onError is called', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -304,9 +313,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should reject promise when response has no actions', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -320,9 +327,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should ignore second request while first request is still processing', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI({
@@ -340,13 +345,15 @@ describe('AIAssistantController', () => {
       const messages = await getStore(controller).load();
 
       expect(messages).toHaveLength(1);
-      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(1);
+
+      const integrationInstance = MockedAIAssistantIntegrationController.mock.results[0].value as {
+        sendRequest: jest.Mock;
+      };
+      expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(1);
     });
 
     it('should accept new request after previous request completes successfully', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const firstPromise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -368,13 +375,15 @@ describe('AIAssistantController', () => {
       const messages = await getStore(controller).load();
 
       expect(messages).toHaveLength(2);
-      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(2);
+
+      const integrationInstance = MockedAIAssistantIntegrationController.mock.results[0].value as {
+        sendRequest: jest.Mock;
+      };
+      expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(2);
     });
 
     it('should accept new request after previous request fails with error', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const firstPromise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -396,13 +405,15 @@ describe('AIAssistantController', () => {
       const messages = await getStore(controller).load();
 
       expect(messages).toHaveLength(2);
-      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(2);
+
+      const integrationInstance = MockedAIAssistantIntegrationController.mock.results[0].value as {
+        sendRequest: jest.Mock;
+      };
+      expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(2);
     });
 
     it('should accept new request after previous request is aborted', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const firstPromise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -424,15 +435,17 @@ describe('AIAssistantController', () => {
       const messages = await getStore(controller).load();
 
       expect(messages).toHaveLength(2);
-      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(2);
+
+      const integrationInstance = MockedAIAssistantIntegrationController.mock.results[0].value as {
+        sendRequest: jest.Mock;
+      };
+      expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(2);
     });
   });
 
   describe('abortRequest', () => {
     it('should fail message with abort error when request is aborted', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -458,9 +471,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should call gridCommands.abort when request is aborted', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const promise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -481,9 +492,7 @@ describe('AIAssistantController', () => {
 
   describe('sendRequestToAI with AIMessage (regenerate)', () => {
     it('should reset message status to pending when AIMessage is passed', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const aiMessage: AIMessage = {
         id: 'assistant-123',
@@ -515,9 +524,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should not create new message when AIMessage is passed', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const aiMessage: AIMessage = {
         id: 'assistant-123',
@@ -541,9 +548,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should send request with original prompt from AIMessage', () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const aiMessage: AIMessage = {
         id: 'assistant-123',
@@ -558,18 +563,19 @@ describe('AIAssistantController', () => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI(aiMessage);
 
-      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledWith(
-        expect.objectContaining({
-          text: 'Sort by Name column',
-        }),
+      const integrationInstance = MockedAIAssistantIntegrationController.mock.results[0].value as {
+        sendRequest: jest.Mock;
+      };
+
+      expect(integrationInstance.sendRequest).toHaveBeenCalledWith(
+        'Sort by Name column',
+        expect.any(Object),
         expect.any(Object),
       );
     });
 
     it('should clear errorText and commands when regenerating', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const aiMessage: AIMessage = {
         id: 'assistant-123',
@@ -599,9 +605,7 @@ describe('AIAssistantController', () => {
     });
 
     it('should complete regenerated message as success when command succeed', async () => {
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       const aiMessage: AIMessage = {
         id: 'assistant-123',
