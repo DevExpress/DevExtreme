@@ -8,6 +8,8 @@ export const DEFAULT_POPUP_OPTIONS = {
   visible: false,
   shading: false,
   showCloseButton: true,
+  useFlatToolbarButtons: true,
+  useDefaultToolbarButtons: false,
 };
 
 export const DEFAULT_CHAT_OPTIONS = {
