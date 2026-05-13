@@ -10,88 +10,13 @@ import {
 import {
   getCommandItemStyle,
   getMessageIconName,
-  hasAbortedCommands,
-  hasCommandErrors,
   needToRenderCommandList,
   needToShowRegenerateButton,
 } from './utils';
 
-describe('hasCommandErrors', () => {
-  it('should return true when commands contain failure status', () => {
-    const commands = [
-      { status: 'success' as const, message: 'OK' },
-      { status: 'failure' as const, message: 'Failed' },
-    ];
-
-    expect(hasCommandErrors(commands)).toBe(true);
-  });
-
-  it('should return false when all commands are successful', () => {
-    const commands = [
-      { status: 'success' as const, message: 'OK' },
-    ];
-
-    expect(hasCommandErrors(commands)).toBe(false);
-  });
-
-  it('should return false when commands is undefined', () => {
-    expect(hasCommandErrors(undefined)).toBe(false);
-  });
-
-  it('should return false when commands contain only aborted status', () => {
-    const commands = [
-      { status: 'aborted' as const, message: 'Aborted' },
-    ];
-
-    expect(hasCommandErrors(commands)).toBe(false);
-  });
-});
-
-describe('hasAbortedCommands', () => {
-  it('should return true when commands contain aborted status', () => {
-    const commands = [
-      { status: 'success' as const, message: 'OK' },
-      { status: 'aborted' as const, message: 'Aborted' },
-    ];
-
-    expect(hasAbortedCommands(commands)).toBe(true);
-  });
-
-  it('should return false when no commands are aborted', () => {
-    const commands = [
-      { status: 'success' as const, message: 'OK' },
-      { status: 'failure' as const, message: 'Failed' },
-    ];
-
-    expect(hasAbortedCommands(commands)).toBe(false);
-  });
-
-  it('should return false when commands is undefined', () => {
-    expect(hasAbortedCommands(undefined)).toBe(false);
-  });
-});
-
 describe('getMessageIconName', () => {
   it('should return errorcircle when message status is failure', () => {
     const message = { status: MessageStatus.Failure } as Message;
-
-    expect(getMessageIconName(message)).toBe('errorcircle');
-  });
-
-  it('should return errorcircle when commands contain errors', () => {
-    const message = {
-      status: MessageStatus.Success,
-      commands: [{ status: 'failure', message: 'Failed' }],
-    } as Message;
-
-    expect(getMessageIconName(message)).toBe('errorcircle');
-  });
-
-  it('should return errorcircle when commands contain aborted items', () => {
-    const message = {
-      status: MessageStatus.Success,
-      commands: [{ status: 'aborted', message: 'Aborted' }],
-    } as Message;
 
     expect(getMessageIconName(message)).toBe('errorcircle');
   });
@@ -110,31 +35,22 @@ describe('getMessageIconName', () => {
 });
 
 describe('needToShowRegenerateButton', () => {
-  it('should return true when message status is failure', () => {
+  it('should return true when message status is failure and has no commands', () => {
     const message = { status: MessageStatus.Failure } as Message;
 
     expect(needToShowRegenerateButton(message)).toBe(true);
   });
 
-  it('should return true when commands contain errors', () => {
+  it('should return false when message status is failure and has commands', () => {
     const message = {
-      status: MessageStatus.Success,
+      status: MessageStatus.Failure,
       commands: [{ status: 'failure', message: 'Failed' }],
     } as Message;
 
-    expect(needToShowRegenerateButton(message)).toBe(true);
+    expect(needToShowRegenerateButton(message)).toBe(false);
   });
 
-  it('should return true when commands contain aborted items', () => {
-    const message = {
-      status: MessageStatus.Success,
-      commands: [{ status: 'aborted', message: 'Aborted' }],
-    } as Message;
-
-    expect(needToShowRegenerateButton(message)).toBe(true);
-  });
-
-  it('should return false when message is successful without errors', () => {
+  it('should return false when message is successful', () => {
     const message = {
       status: MessageStatus.Success,
       commands: [{ status: 'success', message: 'OK' }],
@@ -174,13 +90,16 @@ describe('getCommandItemStyle', () => {
 });
 
 describe('needToRenderCommandList', () => {
-  it('should return true when message status is success', () => {
-    const message = { status: MessageStatus.Success } as Message;
+  it('should return true when message has commands', () => {
+    const message = {
+      status: MessageStatus.Success,
+      commands: [{ status: 'success', message: 'OK' }],
+    } as Message;
 
     expect(needToRenderCommandList(message)).toBe(true);
   });
 
-  it('should return true when commands contain errors', () => {
+  it('should return true when message has failed commands', () => {
     const message = {
       status: MessageStatus.Failure,
       commands: [{ status: 'failure', message: 'Failed' }],
@@ -189,23 +108,17 @@ describe('needToRenderCommandList', () => {
     expect(needToRenderCommandList(message)).toBe(true);
   });
 
-  it('should return true when commands contain aborted items', () => {
-    const message = {
-      status: MessageStatus.Failure,
-      commands: [{ status: 'aborted', message: 'Aborted' }],
-    } as Message;
-
-    expect(needToRenderCommandList(message)).toBe(true);
-  });
-
-  it('should return false when message is pending without commands', () => {
-    const message = { status: MessageStatus.Pending } as Message;
+  it('should return false when message has no commands', () => {
+    const message = { status: MessageStatus.Success } as Message;
 
     expect(needToRenderCommandList(message)).toBe(false);
   });
 
-  it('should return false when message is failure without commands', () => {
-    const message = { status: MessageStatus.Failure } as Message;
+  it('should return false when commands is empty array', () => {
+    const message = {
+      status: MessageStatus.Success,
+      commands: [],
+    } as unknown as Message;
 
     expect(needToRenderCommandList(message)).toBe(false);
   });

@@ -1,7 +1,6 @@
 import { isObject } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 
-import { hasAbortedCommands, hasCommandErrors } from '../ai_chat/utils';
 import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
 import type { AIMessage, CommandResults } from './types';
 
@@ -20,6 +19,14 @@ export const isPopupOptions = (optionName: string, value: unknown): boolean => o
 
 export const isChatOptions = (optionName: string, value: unknown): boolean => optionName.startsWith('aiAssistant.chat')
   || (optionName === 'aiAssistant' && isObject(value) && 'chat' in value);
+
+export const hasCommandErrors = (
+  commands: CommandResults | undefined,
+): boolean => !!commands?.some(({ status }) => status === 'failure');
+
+export const hasAbortedCommands = (
+  commands: CommandResults | undefined,
+): boolean => !!commands?.some(({ status }) => status === 'aborted');
 
 export const getMessageStatus = (commands: CommandResults): MessageStatus => {
   if (hasCommandErrors(commands) || hasAbortedCommands(commands)) {
