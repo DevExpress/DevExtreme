@@ -37,7 +37,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
-import { AppointmentForm, type AppointmentFormConfig } from './appointment_popup/form';
+import type { AppointmentFormConfig } from './appointment_popup/form';
+import { AppointmentForm } from './appointment_popup/form';
 import { AppointmentPopup } from './appointment_popup/popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
@@ -1125,7 +1126,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dataAccessors: this._dataAccessors,
       editing: this.editing,
       resourceManager: this.resourceManager,
-      firstDayOfWeek: this.option('firstDayOfWeek'),
+      firstDayOfWeek: this.getFirstDayOfWeek(),
       startDayHour: this.option('startDayHour') ?? 0,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
