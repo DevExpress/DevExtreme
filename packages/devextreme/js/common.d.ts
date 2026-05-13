@@ -259,11 +259,22 @@ export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
  */
 export type FieldChooserLayout = 0 | 1 | 2;
 
+// #region deprecated in v26.1
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ * @deprecated Use the DayOfWeek type instead
+ */
+export type FirstDayOfWeek = DayOfWeek;
+
+// #endregion
+
 /**
  * @public
  * @namespace DevExpress.common
  */
-export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 /**
  * @public

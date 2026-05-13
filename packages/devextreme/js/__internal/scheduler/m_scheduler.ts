@@ -29,7 +29,7 @@ import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
 import type {
-  Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek, Occurrence,
+  Appointment, AppointmentTooltipShowingEvent, DayOfWeek, Occurrence,
   Properties as SchedulerProperties,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
@@ -43,7 +43,7 @@ import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
-import { SchedulerHeader } from './header/m_header';
+import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { hide as hideLoading, show as showLoading } from './m_loading';
@@ -2279,10 +2279,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._layoutManager.getOccurrences(startDate, endDate, rawAppointments);
   }
 
-  getFirstDayOfWeek(): FirstDayOfWeek {
+  getFirstDayOfWeek(): DayOfWeek {
     return isDefined(this.getViewOption('firstDayOfWeek'))
-      ? this.getViewOption('firstDayOfWeek') as FirstDayOfWeek
-      : dateLocalization.firstDayOfWeekIndex() as FirstDayOfWeek;
+      ? this.getViewOption('firstDayOfWeek') as DayOfWeek
+      : dateLocalization.firstDayOfWeekIndex() as DayOfWeek;
   }
 
   private validateKeyFieldIfAgendaExist() {

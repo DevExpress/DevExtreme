@@ -1,12 +1,24 @@
+import type { RequestCallbacks } from '@js/common/ai-integration';
+import type { Message } from '@js/ui/chat';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
-import type { ZodObject, ZodRawShape } from 'zod';
+import type { z, ZodObject, ZodRawShape } from 'zod';
+import type { JsonSchema7Type } from 'zod-to-json-schema';
 
-type CommandStatus = 'success' | 'failure' | 'aborted';
+import type { MessageStatus } from './const';
+
+/** JSON Schema draft-07 object sent to the LLM. */
+export type JsonSchema = JsonSchema7Type & {
+  $schema?: string;
+};
+
+export type CommandStatus = 'success' | 'failure' | 'aborted';
 
 export interface CommandResult {
   status: CommandStatus;
   message: string;
 }
+
+export type CommandResults = CommandResult[];
 
 export interface CommandCallbacks {
   success: (message?: string) => CommandResult;
@@ -21,20 +33,43 @@ export type CommandExecutor<TArgs = undefined> = (
   ...args: ArgsTuple<TArgs>
 ) => Promise<CommandResult>;
 
-export interface GridCommand<TArgs = undefined> {
+// Empty schemas (no keys) collapse args to `undefined` so the executor
+// signature becomes `() => Promise<CommandResult>` for no-arg commands.
+type CommandArgs<TSchema extends ZodObject<ZodRawShape>> = keyof z.infer<TSchema> extends never
+  ? undefined
+  : z.infer<TSchema>;
+
+export interface GridCommand<
+  TSchema extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+> {
   name: string;
   description: string;
-  schema: ZodObject<ZodRawShape>;
-  execute: (component: InternalGrid, callbacks: CommandCallbacks) => CommandExecutor<TArgs>;
+  schema: TSchema;
+  execute: (
+    component: InternalGrid,
+    callbacks: CommandCallbacks,
+  ) => CommandExecutor<CommandArgs<TSchema>>;
 }
 
-export interface Command {
-  command: string;
-  args: Record<string, unknown>;
-}
-export interface CommandResponse {
-  commands: Command[];
-  explanation: string;
+export interface CommandMessages {
+  success: string;
+  failure: string;
 }
 
-export type CommandResults = CommandResult[];
+export type CustomizeResponseText = (
+  commandName: string,
+  commandArgs: Record<string, unknown>,
+) => Partial<CommandMessages> | undefined;
+
+export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {
+  onAbort?: () => void;
+};
+
+export type AIMessage = Message & {
+  id: string;
+  status: MessageStatus;
+  headerText: string;
+  prompt: string;
+  errorText?: string;
+  commands?: CommandResults;
+};

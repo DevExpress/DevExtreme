@@ -134,5 +134,27 @@ export default [
     },
     external: [],
     plugins,
-  }
+  },
+  {
+    input: NG_BASE_DIR + `zod/lib/index.js`,
+    output: {
+      file: OUTPUT_DIR + `zod.bundle.js`,
+      format: 'umd',
+      name: 'zod',
+      globals: { },
+    },
+    external: [],
+    plugins,
+  },
+  {
+    input: NG_BASE_DIR + `zod-to-json-schema/dist/cjs/index.js`,
+    output: {
+      file: OUTPUT_DIR + `zod-to-json-schema.bundle.js`,
+      format: 'umd',
+      name: 'zodToJsonSchema',
+      globals: { zod: 'zod' },
+    },
+    external: ['zod'],
+    plugins,
+  },
 ];

@@ -34,6 +34,7 @@
 ) {
   .dx-ai-chat__message--error .dx-ai-chat__message-icon,
   .dx-ai-chat__action-list-item--error,
+  .dx-ai-chat__action-list-item--aborted,
   .dx-ai-chat__message-error-text {
     color: $error-message-color;
   }

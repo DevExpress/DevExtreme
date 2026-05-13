@@ -17,7 +17,7 @@ import {
 
 
 import type { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
-import type { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { DayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -91,10 +91,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): DayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 

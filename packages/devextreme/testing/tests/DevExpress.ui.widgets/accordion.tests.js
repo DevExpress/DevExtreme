@@ -1610,3 +1610,105 @@ QUnit.module('optionChanged', moduleSetup, () => {
     });
 });
 
+QUnit.module('item overflow behavior (T1327641)', moduleSetup, () => {
+    QUnit.test('opened item has overflow:visible', function(assert) {
+        this.$element.dxAccordion({
+            items: this.items,
+            selectedIndex: 0,
+        });
+
+        const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
+        const $body = $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`);
+
+        assert.strictEqual($item.css('overflow'), 'visible', 'item has overflow:visible');
+        assert.strictEqual($body.css('overflow'), 'visible', 'item body has overflow:visible');
+    });
+
+    QUnit.test('closed item has no overflow:visible style', function(assert) {
+        this.$element.dxAccordion({
+            items: this.items,
+            selectedIndex: 0,
+        });
+
+        const $closedItem = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+
+        assert.strictEqual($closedItem.css('overflow'), 'hidden', 'closed item has no overflow:visible');
+    });
+
+    QUnit.test('only opened items get overflow:visible in multiple mode', function(assert) {
+        this.$element.dxAccordion({
+            items: this.items,
+            selectedIndex: 0,
+            multiple: true,
+            collapsible: true,
+        });
+
+        const $items = this.$element.find(`.${ACCORDION_ITEM_CLASS}`);
+
+        assert.strictEqual($items.eq(0).css('overflow'), 'visible', 'opened item has overflow:visible');
+        assert.strictEqual($items.eq(1).css('overflow'), 'hidden', 'closed item has no overflow:visible');
+        assert.strictEqual($items.eq(2).css('overflow'), 'hidden', 'closed item has no overflow:visible');
+    });
+
+    QUnit.test('overflow resets when item starts closing', function(assert) {
+        const instance = this.$element.dxAccordion({
+            items: this.items,
+            selectedIndex: 0,
+            collapsible: true,
+        }).dxAccordion('instance');
+
+        const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
+
+        assert.strictEqual($item.css('overflow'), 'visible', 'item has overflow:visible before closing');
+
+        instance.collapseItem(0);
+
+        assert.strictEqual($item.css('overflow'), 'hidden', 'overflow reset when closing starts');
+    });
+
+    QUnit.test('overflow:visible is set after opening animation completes', function(assert) {
+        fx.off = false;
+
+        try {
+            this.$element.dxAccordion({
+                items: this.items,
+                selectedIndex: -1,
+                collapsible: true,
+                animationDuration: 100,
+            });
+
+            const instance = this.$element.dxAccordion('instance');
+            const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
+
+            instance.expandItem(0);
+
+            const $body = $item.children(`.${ACCORDION_ITEM_BODY_CLASS}`);
+
+            assert.strictEqual($item.css('overflow'), 'hidden', 'overflow is not yet visible during animation');
+
+            this.clock.tick(100);
+
+            assert.strictEqual($item.css('overflow'), 'visible', 'item has overflow:visible after animation');
+            assert.strictEqual($body.css('overflow'), 'visible', 'item body has overflow:visible after animation');
+        } finally {
+            fx.off = true;
+        }
+    });
+
+    QUnit.test('overflow:visible is restored when item is re-opened after closing', function(assert) {
+        const instance = this.$element.dxAccordion({
+            items: this.items,
+            selectedIndex: 0,
+            collapsible: true,
+        }).dxAccordion('instance');
+
+        instance.collapseItem(0);
+
+        const $item = this.$element.find(`.${ACCORDION_ITEM_CLASS}`).eq(0);
+        assert.strictEqual($item.css('overflow'), 'hidden', 'overflow is reset after close');
+
+        instance.expandItem(0);
+        assert.strictEqual($item.css('overflow'), 'visible', 'overflow:visible restored after re-open');
+    });
+});
+
