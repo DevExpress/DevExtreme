@@ -13,7 +13,7 @@
     "jquery": "3.7.1",
     "minimist": "1.2.8",
     "@parcel/watcher-linux-x64-glibc": "2.5.0",
-    "parcel": "2.16.1",
+    "parcel": "2.16.4",
     "rimraf": "3.0.2",
     "rollup": "4.22.4",
     "vite": "5.4.19",
