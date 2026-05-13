@@ -282,11 +282,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
 
     /**
-    * @name ErrorsUIWidgets.E1069
-    */
-    E1069: 'The \'{0}\' action callback threw an error: {1}',
-
-    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',

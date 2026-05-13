@@ -29,7 +29,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
-import errors from '@js/ui/widget/ui.errors';
+import { logger } from '@ts/core/utils/m_console';
 import type { ActionConfig } from '@ts/core/widget/component';
 import Animator from '@ts/ui/scroll_view/animator';
 import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
@@ -1098,8 +1098,7 @@ export class SimulatedStrategy<
       try {
         actionHandler(extend(this._createActionArgs(), args));
       } catch (e) {
-        const error = e instanceof Error ? e : new Error(String(e));
-        errors.log('E1069', optionName, error.message);
+        logger.error(e);
       }
     };
   }
