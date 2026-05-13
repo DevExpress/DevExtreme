@@ -37,8 +37,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
-import { AppointmentForm, type AppointmentFormConfig } from './appointment_popup/m_form';
-import { AppointmentPopup } from './appointment_popup/m_popup';
+import { AppointmentForm, type AppointmentFormConfig } from './appointment_popup/form';
+import { AppointmentPopup } from './appointment_popup/popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
@@ -396,7 +396,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.postponeDataSourceLoading();
         this.createAppointmentPopupForm();
         break;
-        // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
+      // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
       case 'offset':
 
         this.updateAppointmentDataSource();
@@ -1416,13 +1416,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling
-            && (
-              !isDefined(scrolling.orientation)
-                || ['horizontal', 'both'].includes(scrolling.orientation)
-            );
+      && (
+        !isDefined(scrolling.orientation)
+        || ['horizontal', 'both'].includes(scrolling.orientation)
+      );
     const crossScrollingEnabled = this.option('crossScrollingEnabled')
-            || horizontalVirtualScrollingAllowed
-            || isTimelineView(currentViewOptions.type);
+      || horizontalVirtualScrollingAllowed
+      || isTimelineView(currentViewOptions.type);
 
     const result = extend({
       resources: this.option('resources'),
@@ -1739,8 +1739,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
     const isKeepAppointmentHours = this._workSpace.keepOriginalHours()
-            && dateUtilsTs.isValidDate(appointment.startDate)
-            && dateUtilsTs.isValidDate(cellStartDate);
+      && dateUtilsTs.isValidDate(appointment.startDate)
+      && dateUtilsTs.isValidDate(cellStartDate);
 
     if (isKeepAppointmentHours) {
       const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, 'toGrid');
@@ -2144,7 +2144,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const isVirtualScrolling = mode === 'virtual';
 
     return isVirtualScrolling
-            && (orientation === 'horizontal' || orientation === 'both');
+      && (orientation === 'horizontal' || orientation === 'both');
   }
 
   addAppointment(rawAppointment) {
@@ -2223,7 +2223,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
     this.checkRecurringAppointment(
       appointment,
-      { },
+      {},
       date,
       () => {
         this.processDeleteAppointment(

@@ -4,12 +4,12 @@ import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 
 import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
-import { AppointmentForm } from '../../appointment_popup/m_form';
+import { AppointmentForm } from '../../appointment_popup/form';
 import {
   APPOINTMENT_POPUP_CLASS,
   AppointmentPopup,
   type AppointmentPopupConfig,
-} from '../../appointment_popup/m_popup';
+} from '../../appointment_popup/popup';
 import {
   AppointmentDataAccessor,
 } from '../../utils/data_accessor/appointment_data_accessor';
@@ -130,7 +130,7 @@ export const createAppointmentPopup = async (
 
   const form = new AppointmentForm(formConfig);
 
-  const noop = (): void => {};
+  const noop = (): void => { };
 
   const popupSchedulerProxy = {
     getElement: (): ReturnType<typeof $> => $(container),
