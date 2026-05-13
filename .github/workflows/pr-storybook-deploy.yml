@@ -1,0 +1,83 @@
+name: PR Storybook - Deploy
+
+on:
+  workflow_run:
+    workflows:
+      - PR Storybook - Build
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  SOURCE_DIR: dist/static
+
+jobs:
+  prepare:
+    name: Read build meta
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      action: ${{ steps.meta.outputs.action }}
+      pr_number: ${{ steps.meta.outputs.pr_number }}
+
+    steps:
+      - name: Download meta artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: preview-meta
+          path: artifacts
+
+      - name: Read meta
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          META="artifacts/meta.json"
+          echo "Meta:"
+          cat "$META"
+
+          PR_NUMBER="$(jq -r '.pr_number' "$META")"
+          ACTION="$(jq -r '.action' "$META")"
+
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "action=$ACTION" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: Deploy/remove preview
+    needs: prepare
+    if: needs.prepare.outputs.action != 'none'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: preview
+
+    concurrency:
+      group: preview-deploy-${{ needs.prepare.outputs.pr_number }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Download static artifact
+        if: needs.prepare.outputs.action == 'deploy'
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: preview-static
+          path: ${{ env.SOURCE_DIR }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy/remove PR preview
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
+        with:
+          action: ${{ needs.prepare.outputs.action }}
+          pr-number: ${{ needs.prepare.outputs.pr_number }}
+          source-dir: ${{ env.SOURCE_DIR }}
+          preview-branch: gh-pages
+          umbrella-dir: storybook
+          comment: false
+          token: ${{ github.token }}

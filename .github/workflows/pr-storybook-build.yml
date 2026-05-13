@@ -1,0 +1,126 @@
+name: PR Storybook - Build
+
+on:
+  pull_request:
+    branches:
+      - 26_1
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+      - closed
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-build-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  SOURCE_DIR: ./apps/react-storybook/storybook-static
+
+jobs:
+  build:
+    name: Build preview artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Decide action (deploy/remove/none)
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          EVENT_ACTION="${{ github.event.action }}"
+          CHANGED_LABEL="${{ github.event.label.name || '' }}"
+          HAS_LABEL="${{ contains(github.event.pull_request.labels.*.name, 'storybook') }}"
+
+          ACTION="none"
+
+          # Cleanup cases
+          if [[ "$EVENT_ACTION" == "closed" ]]; then
+            ACTION="remove"
+          elif [[ "$EVENT_ACTION" == "unlabeled" && "$CHANGED_LABEL" == "storybook" ]]; then
+            ACTION="remove"
+          # Deploy cases
+          elif [[ "$EVENT_ACTION" == "labeled" && "$CHANGED_LABEL" == "storybook" ]]; then
+            ACTION="deploy"
+          elif [[ "$EVENT_ACTION" == "opened" || "$EVENT_ACTION" == "reopened" || "$EVENT_ACTION" == "synchronize" ]]; then
+            if [[ "$HAS_LABEL" == "true" ]]; then
+              ACTION="deploy"
+            fi
+          fi
+
+          mkdir -p preview_meta
+          cat > preview_meta/meta.json <<EOF
+          { "pr_number": ${PR_NUMBER}, "action": "${ACTION}" }
+          EOF
+
+          echo "action=$ACTION" >> "$GITHUB_OUTPUT"
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout repository
+        if: steps.meta.outputs.action == 'deploy'
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 1
+
+      - name: Use Node.js
+        if: steps.meta.outputs.action == 'deploy'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        if: steps.meta.outputs.action == 'deploy'
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        if: steps.meta.outputs.action == 'deploy'
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm + nx cache
+        if: steps.meta.outputs.action == 'deploy'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        if: steps.meta.outputs.action == 'deploy'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook preview (static)
+        if: steps.meta.outputs.action == 'deploy'
+        run: |
+          pnpm nx build devextreme-react-storybook
+
+      - name: Upload meta artifact (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-meta
+          path: preview_meta/meta.json
+          retention-days: 1
+
+      - name: Upload static artifact (deploy only)
+        if: steps.meta.outputs.action == 'deploy'
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-static
+          path: ${{ env.SOURCE_DIR }}
+          retention-days: 1
