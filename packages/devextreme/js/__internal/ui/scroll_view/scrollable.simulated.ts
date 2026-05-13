@@ -19,6 +19,7 @@ import {
   // @ts-expect-error ts-error
   deferUpdater,
 } from '@js/core/utils/common';
+import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -1097,8 +1098,7 @@ export class SimulatedStrategy<
       try {
         actionHandler(extend(this._createActionArgs(), args));
       } catch (e) {
-        // eslint-disable-next-line spellcheck/spell-checker
-        queueMicrotask(() => { throw e; });
+        logger.error(e);
       }
     };
   }
