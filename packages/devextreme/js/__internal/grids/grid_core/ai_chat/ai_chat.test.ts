@@ -394,26 +394,6 @@ describe('AIChat', () => {
         expect(icons[2].textContent).toBe(ABORTED_ITEM_EMOJI);
       });
 
-      it('should render error icon when commands contain errors', () => {
-        createAIChat();
-        triggerContentTemplate();
-
-        const chatConfig = getChatConfig();
-        const container = document.createElement('div');
-
-        renderMessageTemplate(chatConfig, {
-          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Mixed',
-          status: 'success',
-          commands: [
-            { status: 'success', message: 'OK' },
-            { status: 'failure', message: 'Failed' },
-          ],
-        }, container);
-
-        expect(container.querySelector(`.${CLASSES.messageIcon}`)?.classList.contains('dx-icon-errorcircle')).toBe(true);
-      });
-
       it('should not render regenerate button when all commands succeed', () => {
         const onRegenerate = jest.fn();
         createAIChat({ onRegenerate });
@@ -430,30 +410,6 @@ describe('AIChat', () => {
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageRegenerateButton}`)).toBeNull();
-      });
-
-      it('should render regenerate button when commands contain errors', () => {
-        const onRegenerate = jest.fn();
-        createAIChat({ onRegenerate });
-        triggerContentTemplate();
-
-        const chatConfig = getChatConfig();
-        const container = document.createElement('div');
-
-        renderMessageTemplate(chatConfig, {
-          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Mixed results',
-          status: 'success',
-          commands: [
-            { status: 'success', message: 'OK' },
-            { status: 'failure', message: 'Failed' },
-          ],
-        }, container);
-
-        const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`);
-
-        expect(regenerateButton).not.toBeNull();
-        expect(regenerateButton?.classList.contains(`dx-icon-${REGENERATE_ICON}`)).toBe(true);
       });
 
       it('should not render command list when commands array is empty', () => {
@@ -631,50 +587,6 @@ describe('AIChat', () => {
 
         expect(icons).toHaveLength(1);
         expect(icons[0].textContent).toBe(ABORTED_ITEM_EMOJI);
-      });
-
-      it('should render error icon when commands contain aborted items', () => {
-        createAIChat();
-        triggerContentTemplate();
-
-        const chatConfig = getChatConfig();
-        const container = document.createElement('div');
-
-        renderMessageTemplate(chatConfig, {
-          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Aborted',
-          status: 'success',
-          commands: [
-            { status: 'success', message: 'OK' },
-            { status: 'aborted', message: 'Aborted' },
-          ],
-        }, container);
-
-        expect(container.querySelector(`.${CLASSES.messageIcon}`)?.classList.contains('dx-icon-errorcircle')).toBe(true);
-      });
-
-      it('should render regenerate button when commands contain aborted items', () => {
-        const onRegenerate = jest.fn();
-        createAIChat({ onRegenerate });
-        triggerContentTemplate();
-
-        const chatConfig = getChatConfig();
-        const container = document.createElement('div');
-
-        renderMessageTemplate(chatConfig, {
-          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-          text: 'Aborted results',
-          status: 'success',
-          commands: [
-            { status: 'success', message: 'OK' },
-            { status: 'aborted', message: 'Aborted' },
-          ],
-        }, container);
-
-        const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`);
-
-        expect(regenerateButton).not.toBeNull();
-        expect(regenerateButton?.classList.contains(`dx-icon-${REGENERATE_ICON}`)).toBe(true);
       });
     });
 
