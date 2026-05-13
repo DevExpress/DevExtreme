@@ -4,11 +4,12 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { ArrayStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { InitializedEvent } from '@js/ui/button';
+import type dxButton from '@js/ui/button';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
-import type Button from '@ts/ui/button';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -44,7 +45,7 @@ export class AIChat {
 
   private chatInstance?: Chat;
 
-  private clearChatButtonInstance?: Button;
+  private clearChatButtonInstance?: dxButton;
 
   private disabled = false;
 
@@ -124,12 +125,6 @@ export class AIChat {
   }
 
   private getClearChatButton(): ToolbarItem | undefined {
-    const { onChatCleared } = this.options;
-
-    if (!onChatCleared) {
-      return undefined;
-    }
-
     return {
       widget: 'dxButton',
       toolbar: 'top',
@@ -138,8 +133,10 @@ export class AIChat {
       options: {
         icon: CLEAR_CHAT_ICON,
         hint: messageLocalization.format('dxDataGrid-aiAssistantClearButtonText'),
-        onClick: onChatCleared,
-        onInitialized: (e): void => {
+        onClick: (): void => {
+          this.clear();
+        },
+        onInitialized: (e: InitializedEvent): void => {
           this.clearChatButtonInstance = e.component;
         },
       },

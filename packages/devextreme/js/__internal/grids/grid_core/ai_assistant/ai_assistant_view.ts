@@ -45,9 +45,6 @@ export class AIAssistantView extends View {
     return {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
-      onChatCleared: (): void => {
-        this.aiChatInstance.clear();
-      },
       onRegenerate: (aiMessage: AIMessage): void => {
         this.executeRequest(aiMessage);
       },
