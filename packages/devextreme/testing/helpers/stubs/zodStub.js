@@ -1,41 +1,47 @@
 /**
  * Minimal zod stub for QUnit / SystemJS tests.
  *
- * Uses System.register format which works with both regular SystemJS
- * and CSP-production mode (no eval required).
+ * Uses AMD define() when available (CSP mode) and falls back
+ * to global assignment for regular SystemJS (NoCsp mode).
  */
 
-System.register([], (exports) => ({
-    execute() {
-        const z = {
-            // top-level constructors
-            object: () => z,
-            string: () => z,
-            boolean: () => z,
-            number: () => z,
-            null: () => z,
-            enum: () => z,
-            union: () => z,
-            array: () => z,
-            tuple: () => z,
-            literal: () => z,
-            record: () => z,
-            lazy: () => z,
-            // chain modifiers
-            optional: () => z,
-            nullable: () => z,
-            strict: () => z,
-            int: () => z,
-            // eslint-disable-next-line spellcheck/spell-checker
-            nonnegative: () => z,
-            min: () => z,
-            max: () => z,
-            // validation
-            safeParse: () => ({ success: true, data: {} }),
-        };
+(function() {
+    const z = {
+        // top-level constructors
+        object: function() { return z; },
+        string: function() { return z; },
+        boolean: function() { return z; },
+        number: function() { return z; },
+        null: function() { return z; },
+        enum: function() { return z; },
+        union: function() { return z; },
+        array: function() { return z; },
+        tuple: function() { return z; },
+        literal: function() { return z; },
+        record: function() { return z; },
+        lazy: function() { return z; },
+        // chain modifiers
+        optional: function() { return z; },
+        nullable: function() { return z; },
+        strict: function() { return z; },
+        int: function() { return z; },
+        // eslint-disable-next-line spellcheck/spell-checker
+        nonnegative: function() { return z; },
+        min: function() { return z; },
+        max: function() { return z; },
+        // validation
+        safeParse: function() { return { success: true, data: {} }; },
+    };
 
-        exports('z', z);
-        exports('default', z);
-        exports('__esModule', true);
-    },
-}));
+    if(typeof define === 'function') {
+        define(function(require, exports) {
+            Object.defineProperty(exports, '__esModule', { value: true });
+            exports.z = z;
+            exports.default = z;
+        });
+    } else {
+        const root = typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : globalThis;
+        root.z = z;
+        root.zod = z;
+    }
+})();
