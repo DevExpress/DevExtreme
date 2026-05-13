@@ -5,7 +5,7 @@ export const TEMPLATES = Object.freeze({
     let warningDescription = '';
     switch (code) {
       case 'W0019':
-        warningDescription = 'DevExtreme: You are using a trial (evaluation) version of DevExtreme.';
+        warningDescription = 'DevExtreme: You are using a trial (evaluation) version.';
         break;
       case 'W0020':
         warningDescription = 'DevExtreme: License Key Has Expired.';
@@ -40,7 +40,7 @@ export const TEMPLATES = Object.freeze({
       case 'incompatibleVersion':
         return `Incompatible DevExpress license key version (v${keyVersion}). Download and register an updated DevExpress license key (v${requiredVersion}+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).`;
       default:
-        return 'License key verification has failed.';
+        return '';
     }
   },
 
@@ -70,10 +70,12 @@ export function logLicenseWarning(
 
   const pushToLastGroup = (...items: string[]): void => {
     const lastGroup = warnings[warnings.length - 1];
+    const notEmptyItems = items.filter((item) => !!item);
+
     if (lastGroup.length === 1) {
-      lastGroup.push('', ...items);
+      lastGroup.push('', ...notEmptyItems);
     } else {
-      lastGroup.push(...items);
+      lastGroup.push(...notEmptyItems);
     }
   };
 

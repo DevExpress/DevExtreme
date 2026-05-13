@@ -406,7 +406,7 @@ describe('license check', () => {
   ])('License verification warning should be logged if license is corrupted/invalid [%#]', ({ token, version }) => {
     validateLicense(token, version);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('License key verification has failed'));
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('W0021'));
   });
 
   test.each([
@@ -497,7 +497,7 @@ describe('DevExpress license check', () => {
     const token = 'LCPtherestofthekey';
     validateLicense(token, '25.1.3');
     expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('License key verification has failed'));
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('W0021'));
     expect(trialPanelSpy).toHaveBeenCalled();
   });
 });

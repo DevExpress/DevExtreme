@@ -13,8 +13,10 @@ import { AIAssistantIntegrationController } from './ai_assistant_integration_con
 import { AI_ASSISTANT_AUTHOR, AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
 import { GridCommands } from './grid_commands';
 import type {
+  AIMessage,
   CommandResults,
 } from './types';
+import { isAIMessage } from './utils';
 
 export class AIAssistantController extends Controller {
   private gridCommands?: GridCommands;
@@ -22,6 +24,8 @@ export class AIAssistantController extends Controller {
   private messageStore?: ArrayStore<Message, string>;
 
   private aiAssistantIntegrationController?: AIAssistantIntegrationController;
+
+  private processing = false;
 
   // TODO: need to implement method for getting customized response title
   private getCustomizedResponseTitle(): string {
@@ -55,31 +59,29 @@ export class AIAssistantController extends Controller {
       ?? Promise.reject(new Error('Grid commands not initialized'));
   }
 
-  private createPendingAIMessage(message: Message): string {
+  private createPendingAIMessage(message: Message): AIMessage {
     const parsedTimestamp = isString(message.timestamp)
       ? Date.parse(message.timestamp)
       : message.timestamp ?? new Date().getTime();
     const aiMessageId = `${AI_ASSISTANT_AUTHOR_ID}-${String(new Guid())}`;
+    const aiMessage: AIMessage = {
+      id: aiMessageId,
+      timestamp: parsedTimestamp,
+      author: AI_ASSISTANT_AUTHOR,
+      prompt: message.text,
+      headerText: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
+      status: MessageStatus.Pending,
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
+      text: MessageStatus.Pending,
+    };
 
-    this.messageStore?.push([
-      {
-        type: 'insert',
-        data: {
-          id: aiMessageId,
-          timestamp: parsedTimestamp,
-          author: AI_ASSISTANT_AUTHOR,
-          headerText: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
-          status: MessageStatus.Pending,
-          // The text field is currently used as a workaround to trigger a status update.
-          // We have to update this built-in property to force the message to re-render.
-          // If dxChat supports updating custom fields via the Store Push API in the future,
-          // we will be able to remove this text update workaround.
-          text: MessageStatus.Pending,
-        },
-      },
-    ]);
+    this.messageStore?.push([{
+      type: 'insert',
+      data: aiMessage,
+    }]);
 
-    return aiMessageId;
+    return aiMessage;
   }
 
   private completeAIMessage(messageId: string, commands: CommandResults): void {
@@ -91,10 +93,8 @@ export class AIAssistantController extends Controller {
       headerText: this.getCustomizedResponseTitle(),
       commands,
       status: messageStatus,
-      // The text field is currently used as a workaround to trigger a status update.
-      // We have to update this built-in property to force the message to re-render.
-      // If dxChat supports updating custom fields via the Store Push API in the future,
-      // we will be able to remove this text update workaround.
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
       text: messageStatus,
     });
   }
@@ -104,11 +104,63 @@ export class AIAssistantController extends Controller {
       headerText: messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader'),
       errorText: error.message,
       status: MessageStatus.Failure,
-      // The text field is currently used as a workaround to trigger a status update.
-      // We have to update this built-in property to force the message to re-render.
-      // If dxChat supports updating custom fields via the Store Push API in the future,
-      // we will be able to remove this text update workaround.
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
       text: MessageStatus.Failure,
+    });
+  }
+
+  private setProcessing(value: boolean): void {
+    this.processing = value;
+  }
+
+  private setAIMessageStatusToPending(aiMessage: AIMessage): void {
+    this.updateAIMessage(aiMessage.id, {
+      headerText: messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader'),
+      errorText: undefined,
+      commands: undefined,
+      status: MessageStatus.Pending,
+      // WA to trigger status update, remove when dxChat supports
+      // updating custom fields via the Store Push API
+      text: MessageStatus.Pending,
+    });
+  }
+
+  private sendRequestToAICore(aiMessage: AIMessage): Promise<void> {
+    this.setProcessing(true);
+
+    return new Promise((resolve, reject) => {
+      this.aiAssistantIntegrationController?.sendRequest(aiMessage.prompt, {
+        onComplete: (response: ExecuteGridAssistantCommandResult): void => {
+          fromPromise(this.processResponse(response))
+            .done((commands: CommandResults) => {
+              this.completeAIMessage(aiMessage.id, commands);
+              this.setProcessing(false);
+              resolve();
+            })
+            .fail((errorMessage) => {
+              const error = errorMessage instanceof Error
+                ? errorMessage
+                : new Error(String(errorMessage));
+
+              this.failAIMessage(aiMessage.id, error);
+              this.setProcessing(false);
+              reject(error);
+            });
+        },
+        onError: (error: Error): void => {
+          this.failAIMessage(aiMessage.id, error);
+          this.setProcessing(false);
+          reject(error);
+        },
+        onAbort: (): void => {
+          const error = new Error(messageLocalization.format('dxDataGrid-aiAssistantAbortMessage'));
+
+          this.failAIMessage(aiMessage.id, error);
+          this.setProcessing(false);
+          reject(error);
+        },
+      });
     });
   }
 
@@ -128,32 +180,26 @@ export class AIAssistantController extends Controller {
     };
   }
 
-  public sendRequestToAI(message: Message): Promise<void> {
-    const aiMessageId = this.createPendingAIMessage(message);
+  public sendRequestToAI(message: Message | AIMessage): Promise<void> {
+    if (this.processing) {
+      // TODO: need to add localization message when a request is already processing
+      return Promise.reject();
+    }
 
-    return new Promise((resolve, reject) => {
-      this.aiAssistantIntegrationController?.sendRequest(message.text, {
-        onComplete: (response: ExecuteGridAssistantCommandResult): void => {
-          fromPromise(this.processResponse(response))
-            .done((commands: CommandResults) => {
-              this.completeAIMessage(aiMessageId, commands);
-              resolve();
-            })
-            .fail((errorMessage) => {
-              const error = errorMessage instanceof Error
-                ? errorMessage
-                : new Error(String(errorMessage));
+    if (isAIMessage(message)) {
+      this.setAIMessageStatusToPending(message);
 
-              this.failAIMessage(aiMessageId, error);
-              reject(error);
-            });
-        },
-        onError: (error: Error): void => {
-          this.failAIMessage(aiMessageId, error);
-          reject(error);
-        },
-      });
-    });
+      return this.sendRequestToAICore(message);
+    }
+
+    const aiMessage = this.createPendingAIMessage(message);
+
+    return this.sendRequestToAICore(aiMessage);
+  }
+
+  public abortRequest(): void {
+    this.aiAssistantIntegrationController?.abortRequest();
+    this.gridCommands?.abort();
   }
 
   public dispose(): void {

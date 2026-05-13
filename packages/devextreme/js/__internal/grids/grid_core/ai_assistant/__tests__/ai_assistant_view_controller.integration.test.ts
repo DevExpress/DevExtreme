@@ -357,5 +357,110 @@ describe('AIAssistantViewController', () => {
       expect(getMessageStatusClass($messagesAfter.eq(1)))
         .toBe(MessageStatus.Success);
     });
+
+    it('should clear all messages when clear chat button is clicked', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      getLastCallbacks().onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      });
+      await flushAsync();
+      await flushAsync();
+
+      expect(findMessageElements().length).toBe(1);
+
+      const clearButtonEl = document.querySelector(`.${CLASSES.clearChatButton} .dx-button`) as HTMLElement;
+
+      clearButtonEl.click();
+      await flushAsync();
+      await flushAsync();
+
+      expect(findMessageElements().length).toBe(0);
+    });
+
+    it('should render abort message after closing and reopening AI chat', async () => {
+      const { instance } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      expect(findMessageElements().length).toBe(1);
+      expect(getMessageStatusClass(findMessageElements().eq(0))).toBe(MessageStatus.Pending);
+
+      const viewController = instance.getController('aiAssistantViewController');
+
+      // Close the AI assistant popup
+      await viewController.toggle();
+      jest.runAllTimers();
+      await flushAsync();
+
+      // Reopen the AI assistant popup
+      await viewController.toggle();
+      jest.runAllTimers();
+      await flushAsync();
+
+      const $messages = findMessageElements();
+
+      expect($messages.length).toBe(1);
+      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
+        .toBe('Request stopped.');
+    });
+
+    it('should reset message to pending state when regenerate button is clicked', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      getLastCallbacks().onError?.(new Error('Network error'));
+      await flushAsync();
+
+      const $messagesBefore = findMessageElements();
+
+      expect($messagesBefore.length).toBe(1);
+      expect(getMessageStatusClass($messagesBefore.eq(0))).toBe(MessageStatus.Failure);
+
+      const regenerateButton = $messagesBefore.eq(0)
+        .find(`.${CLASSES.messageRegenerateButton}`).get(0) as HTMLElement;
+
+      expect(regenerateButton).toBeTruthy();
+
+      regenerateButton.click();
+      jest.runAllTimers();
+      await flushAsync();
+
+      const $messagesAfter = findMessageElements();
+
+      expect($messagesAfter.length).toBe(1);
+      expect(getMessageStatusClass($messagesAfter.eq(0))).toBe(MessageStatus.Pending);
+    });
+
+    it('should complete regenerated message as success after regenerate and AI response', async () => {
+      const { instance, getLastCallbacks } = await createDataGridWithAIAssistant();
+
+      sendAIRequest(instance, 'Sort by Name');
+
+      getLastCallbacks().onError?.(new Error('Network error'));
+      await flushAsync();
+
+      const regenerateButton = findMessageElements().eq(0)
+        .find(`.${CLASSES.messageRegenerateButton}`).get(0) as HTMLElement;
+
+      regenerateButton.click();
+      jest.runAllTimers();
+      await flushAsync();
+
+      getLastCallbacks().onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      });
+      await flushAsync();
+      await flushAsync();
+
+      const $messages = findMessageElements();
+
+      expect($messages.length).toBe(1);
+      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+    });
   });
 });

@@ -39,9 +39,15 @@ const mockPopupInstance = {
 
 const mockChatElement = $('<div>');
 
+const mockDataSource = {
+  store: jest.fn(),
+  reload: jest.fn(),
+};
+
 const mockChatInstance = {
   option: jest.fn(),
   $element: jest.fn(() => mockChatElement),
+  getDataSource: jest.fn(() => mockDataSource),
 };
 
 const mockClearChatButtonInstance = {
@@ -130,6 +136,7 @@ const beforeTest = (): void => {
   mockChatElement.empty();
   mockWidgetInstance.option.mockClear();
   mockClearChatButtonInstance.option.mockClear();
+  mockChatInstance.getDataSource.mockReturnValue(mockDataSource);
 };
 
 const afterTest = (): void => {
@@ -212,9 +219,8 @@ describe('AIChat', () => {
   });
 
   describe('clearChatButton', () => {
-    it('should include toolbarItems with clear chat button when onChatCleared is provided', () => {
-      const onChatCleared = jest.fn();
-      createAIChat({ onChatCleared });
+    it('should include toolbarItems with clear chat button', () => {
+      createAIChat();
 
       const popupConfig = getPopupConfig();
 
@@ -225,18 +231,25 @@ describe('AIChat', () => {
           location: 'after',
           options: expect.objectContaining({
             icon: CLEAR_CHAT_ICON,
-            onClick: onChatCleared,
+            onClick: expect.any(Function),
           }),
         }),
       ]);
     });
 
-    it('should not include toolbarItems when onChatCleared is not provided', () => {
+    it('should call clear when clear chat button is clicked', () => {
+      const mockStore = { clear: jest.fn() };
+      mockDataSource.store.mockReturnValue(mockStore);
+
       createAIChat();
+      triggerContentTemplate();
 
       const popupConfig = getPopupConfig();
+      const clearButton = popupConfig.toolbarItems[0];
+      clearButton.options.onClick();
 
-      expect(popupConfig.toolbarItems).toBeUndefined();
+      expect(mockStore.clear).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -773,8 +786,7 @@ describe('AIChat', () => {
       });
 
       it('should disable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
@@ -783,26 +795,13 @@ describe('AIChat', () => {
       });
 
       it('should enable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
         aiChat.setDisabled(false);
 
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
-      });
-
-      it('should not update popup toolbarItems when onChatCleared is not provided', () => {
-        const { aiChat } = createAIChat();
-        triggerContentTemplate();
-
-        aiChat.setDisabled(true);
-
-        expect(mockClearChatButtonInstance.option).not.toHaveBeenCalledWith(
-          'disabled',
-          expect.anything(),
-        );
       });
 
       it('should not update when setting same disabled value', () => {
@@ -825,31 +824,6 @@ describe('AIChat', () => {
         expect(() => {
           aiChat.setDisabled(true);
         }).not.toThrow();
-      });
-    });
-
-    describe('isDisabled', () => {
-      it('should return false by default', () => {
-        const { aiChat } = createAIChat();
-
-        expect(aiChat.isDisabled()).toBe(false);
-      });
-
-      it('should return true after setDisabled(true)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-
-        expect(aiChat.isDisabled()).toBe(true);
-      });
-
-      it('should return false after setDisabled(false)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-        aiChat.setDisabled(false);
-
-        expect(aiChat.isDisabled()).toBe(false);
       });
     });
 
@@ -917,6 +891,42 @@ describe('AIChat', () => {
 
         expect(onRegenerate).toHaveBeenCalledTimes(1);
       });
+    });
+  });
+
+  describe('clear', () => {
+    it('should clear store and reload dataSource', () => {
+      const mockStore = { clear: jest.fn() };
+      mockDataSource.store.mockReturnValue(mockStore);
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      aiChat.clear();
+
+      expect(mockChatInstance.getDataSource).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.store).toHaveBeenCalledTimes(1);
+      expect(mockStore.clear).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw when dataSource is undefined', () => {
+      mockChatInstance.getDataSource.mockReturnValue(undefined as any);
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      expect(() => {
+        aiChat.clear();
+      }).not.toThrow();
+    });
+
+    it('should not throw when chatInstance is not initialized', () => {
+      const { aiChat } = createAIChat();
+
+      expect(() => {
+        aiChat.clear();
+      }).not.toThrow();
     });
   });
 });

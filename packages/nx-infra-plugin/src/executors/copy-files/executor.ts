@@ -4,7 +4,7 @@ import { stat } from 'fs/promises';
 import { glob } from 'glob';
 import { CopyFilesExecutorSchema } from './schema';
 import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS } from '../../utils/common';
+import { isWindowsOS, containsGlobPattern } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { copyFile, copyRecursive, exists, ensureDir } from '../../utils/file-operations';
 
@@ -14,10 +14,6 @@ const ERROR_MESSAGES = {
   NO_FILES_MATCH_PATTERN: (pattern: string) => `No files found matching pattern: ${pattern}`,
   SOURCE_NOT_FOUND: (source: string) => `Source file not found: ${source}`,
 } as const;
-
-function containsGlobPattern(pattern: string): boolean {
-  return /[*?[\]{}]/.test(pattern);
-}
 
 async function copyGlobPatternFiles(
   sourcePath: string,
