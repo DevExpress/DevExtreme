@@ -1,12 +1,11 @@
 import type { Message } from '@js/ui/chat';
 
-import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from '../ai_assistant/const';
-import { CLASSES } from './const';
+import { MessageStatus } from '../ai_assistant/const';
+import type { CommandStatus } from '../ai_assistant/types';
+import {
+  ABORTED_ITEM_EMOJI, CLASSES, ERROR_ITEM_EMOJI, SUCCESS_ITEM_EMOJI,
+} from './const';
 import type { CommandResults } from './types';
-
-export const isAIChatMessage = (
-  message: Message,
-): boolean => message.author?.id === AI_ASSISTANT_AUTHOR_ID;
 
 export const getMessageStateClass = (status: MessageStatus): string => {
   switch (status) {
@@ -21,11 +20,17 @@ export const getMessageStateClass = (status: MessageStatus): string => {
 };
 
 export const hasCommandErrors = (
-  commands: CommandResults,
+  commands: CommandResults | undefined,
 ): boolean => !!commands?.some(({ status }) => status === MessageStatus.Failure);
 
+export const hasAbortedCommands = (
+  commands: CommandResults | undefined,
+): boolean => !!commands?.some(({ status }) => status === 'aborted');
+
 export const getMessageIconName = (message: Message): string => {
-  if (message.status === MessageStatus.Failure || hasCommandErrors(message.commands)) {
+  if (message.status === MessageStatus.Failure
+    || hasCommandErrors(message.commands)
+    || hasAbortedCommands(message.commands)) {
     return 'errorcircle';
   }
 
@@ -37,9 +42,9 @@ export const getMessageIconName = (message: Message): string => {
 };
 
 export const findMessageById = (
-  items: Message[],
+  items: Message[] | undefined,
   id: Message['id'],
-): Message | undefined => items.find((item) => item.id === id);
+): Message | undefined => items?.find((item) => item.id === id);
 
 export const needToShowRegenerateButton = (message: Message): boolean => {
   const isError = message.status === MessageStatus.Failure;
@@ -48,5 +53,26 @@ export const needToShowRegenerateButton = (message: Message): boolean => {
     return true;
   }
 
-  return hasCommandErrors(message.commands);
+  return hasCommandErrors(message.commands) || hasAbortedCommands(message.commands);
 };
+
+export const getCommandItemStyle = (status: CommandStatus): {
+  stateClass: string;
+  emoji: string;
+} => {
+  switch (status) {
+    case 'failure':
+      return { stateClass: CLASSES.actionListItemError, emoji: ERROR_ITEM_EMOJI };
+    case 'aborted':
+      return { stateClass: CLASSES.actionListItemAborted, emoji: ABORTED_ITEM_EMOJI };
+    case 'success':
+    default:
+      return { stateClass: CLASSES.actionListItemSuccess, emoji: SUCCESS_ITEM_EMOJI };
+  }
+};
+
+export const needToRenderCommandList = (
+  message: Message,
+): boolean => message.status === MessageStatus.Success
+    || hasCommandErrors(message.commands)
+    || hasAbortedCommands(message.commands);

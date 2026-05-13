@@ -1,13 +1,45 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
+import type { Message } from '@js/ui/chat';
 
+import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from '../const';
 import {
+  getMessageStatus,
+  isAIMessage,
   isChatOptions,
   isEnabledOption,
   isPopupOptions,
   isTitleOption,
 } from '../utils';
+
+describe('isAIMessage', () => {
+  it('should return true for message with assistant author id', () => {
+    const message = {
+      author: { id: AI_ASSISTANT_AUTHOR_ID },
+      text: 'response',
+    } as Message;
+
+    expect(isAIMessage(message)).toBe(true);
+  });
+
+  it('should return false for message with user author id', () => {
+    const message = {
+      author: { id: 'user', name: 'User' },
+      text: 'request',
+    } as Message;
+
+    expect(isAIMessage(message)).toBe(false);
+  });
+
+  it('should return false for message without author', () => {
+    const message = {
+      text: 'request',
+    } as Message;
+
+    expect(isAIMessage(message)).toBe(false);
+  });
+});
 
 describe('isEnabledOption', () => {
   it('should return true for enabled option names', () => {
@@ -84,5 +116,47 @@ describe('isChatOptions', () => {
       popup: { width: 400 },
       title: 'AI Assistant',
     })).toBe(false);
+  });
+});
+
+describe('getMessageStatus', () => {
+  it('should return Success when all commands are successful', () => {
+    const commands = [
+      { status: 'success' as const, message: 'Sorted' },
+      { status: 'success' as const, message: 'Filtered' },
+    ];
+
+    expect(getMessageStatus(commands)).toBe(MessageStatus.Success);
+  });
+
+  it('should return Failure when commands contain errors', () => {
+    const commands = [
+      { status: 'success' as const, message: 'Sorted' },
+      { status: 'failure' as const, message: 'Failed to filter' },
+    ];
+
+    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+  });
+
+  it('should return Failure when commands contain aborted items', () => {
+    const commands = [
+      { status: 'success' as const, message: 'Sorted' },
+      { status: 'aborted' as const, message: 'Filter was aborted' },
+    ];
+
+    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+  });
+
+  it('should return Failure when commands contain both errors and aborted items', () => {
+    const commands = [
+      { status: 'failure' as const, message: 'Failed' },
+      { status: 'aborted' as const, message: 'Aborted' },
+    ];
+
+    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+  });
+
+  it('should return Success when commands array is empty', () => {
+    expect(getMessageStatus([])).toBe(MessageStatus.Success);
   });
 });

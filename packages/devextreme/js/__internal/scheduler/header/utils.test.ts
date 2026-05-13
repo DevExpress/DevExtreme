@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { getCaptionInterval, getNextIntervalDate } from './m_utils';
+import { getCaptionInterval, getNextIntervalDate } from './utils';
 
 describe('agenda hiddenWeekDays support in header utils', () => {
   const skippedDays: number[] = [0, 6];

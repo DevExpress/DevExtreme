@@ -3,7 +3,7 @@ import * as path from 'path';
 import { glob } from 'glob';
 import { ConcatenateFilesExecutorSchema, TransformRule } from './schema';
 import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
-import { isWindowsOS } from '../../utils/common';
+import { isWindowsOS, containsGlobPattern } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { readFileText, writeFileText, exists } from '../../utils/file-operations';
 
@@ -14,10 +14,6 @@ const ERROR_MESSAGES = {
   NO_FILES_RESOLVED: 'No source files found after resolving patterns',
   FAILED_TO_CONCATENATE: 'Failed to concatenate files',
 } as const;
-
-function containsGlobPattern(pattern: string): boolean {
-  return /[*?[\]{}]/.test(pattern);
-}
 
 function extractContent(content: string, pattern: string, flags: string): string {
   try {

@@ -551,6 +551,11 @@
         "mode": "debug",
         "webpackConfigPath": "./webpack.config.js"
       },
+      "configurations": {
+        "production": {
+          "sourceMap": false
+        }
+      },
       "inputs": [
         {
           "env": "BUILD_TEST_INTERNAL_PACKAGE"
@@ -602,9 +607,19 @@
       "options": {
         "commands": [
           "pnpm nx bundle:debug:build devextreme",
-          "pnpm nx bundle:headers devextreme"
+          "pnpm nx bundle:headers devextreme",
+          "pnpm nx compress:bundles:debug devextreme"
         ],
         "parallel": false
+      },
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx bundle:debug:build devextreme -c production",
+            "pnpm nx bundle:headers devextreme",
+            "pnpm nx compress:bundles:debug devextreme -c production"
+          ]
+        }
       },
       "inputs": [
         {
@@ -615,11 +630,7 @@
         "{projectRoot}/build/gulp/license-header.txt"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.all.debug.js",
-        "{projectRoot}/artifacts/js/dx.web.debug.js",
-        "{projectRoot}/artifacts/js/dx.viz.debug.js",
-        "{projectRoot}/artifacts/js/dx.ai-integration.debug.js",
-        "{projectRoot}/artifacts/js/dx.custom.debug.js"
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
       ]
     },
     "bundle:prod:build": {
@@ -645,10 +656,7 @@
         "{projectRoot}/webpack.config.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.all.js",
-        "{projectRoot}/artifacts/js/dx.web.js",
-        "{projectRoot}/artifacts/js/dx.viz.js",
-        "{projectRoot}/artifacts/js/dx.ai-integration.js"
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
       ]
     },
     "bundle:prod": {
@@ -656,9 +664,19 @@
       "options": {
         "commands": [
           "pnpm nx bundle:prod:build devextreme",
-          "pnpm nx bundle:headers devextreme -c prod"
+          "pnpm nx bundle:headers devextreme -c prod",
+          "pnpm nx compress:bundles:prod devextreme"
         ],
         "parallel": false
+      },
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx bundle:prod:build devextreme",
+            "pnpm nx bundle:headers devextreme -c prod",
+            "pnpm nx compress:bundles:prod devextreme -c production"
+          ]
+        }
       },
       "inputs": [
         {
@@ -669,10 +687,60 @@
         "{projectRoot}/build/gulp/license-header.txt"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.all.js",
-        "{projectRoot}/artifacts/js/dx.web.js",
-        "{projectRoot}/artifacts/js/dx.viz.js",
-        "{projectRoot}/artifacts/js/dx.ai-integration.js"
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
+      ]
+    },
+    "compress:bundles:prod": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/dx.all.js",
+          "./artifacts/js/dx.web.js",
+          "./artifacts/js/dx.viz.js",
+          "./artifacts/js/dx.ai-integration.js"
+        ],
+        "mode": { "name": "strip-debug", "trailingNewline": false }
+      },
+      "configurations": {
+        "production": {
+          "mode": {
+            "name": "minify",
+            "eulaUrl": "https://js.devexpress.com/Licensing/"
+          }
+        }
+      },
+      "inputs": [
+        "prodBundles"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration}.js"
+      ]
+    },
+    "compress:bundles:debug": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": [
+          "./artifacts/js/dx.all.debug.js",
+          "./artifacts/js/dx.web.debug.js",
+          "./artifacts/js/dx.viz.debug.js",
+          "./artifacts/js/dx.ai-integration.debug.js",
+          "./artifacts/js/dx.custom.debug.js"
+        ],
+        "mode": { "name": "normalize", "trailingNewline": false }
+      },
+      "configurations": {
+        "production": {
+          "mode": {
+            "name": "beautify",
+            "eulaUrl": "https://js.devexpress.com/Licensing/"
+          }
+        }
+      },
+      "inputs": [
+        "debugBundles"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
       ]
     },
     "build:vectormap:generate": {
@@ -721,7 +789,7 @@
         "files": [
           "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
         ],
-        "mode": "strip-only"
+        "mode": "strip-debug"
       }
     },
     "compress:vectormap:beautify": {
@@ -730,8 +798,7 @@
         "files": [
           "./artifacts/js/vectormap-utils/dx.vectormaputils.debug.js"
         ],
-        "mode": "beautify",
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
       }
     },
     "compress:vectormap:minify": {
@@ -740,9 +807,7 @@
         "files": [
           "./artifacts/js/vectormap-utils/dx.vectormaputils.js"
         ],
-        "mode": "minify",
-        "removeDebug": true,
-        "eulaUrl": "https://js.devexpress.com/Licensing/"
+        "mode": { "name": "minify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
       }
     },
     "build:vectormap": {
@@ -777,18 +842,65 @@
         }
       }
     },
+    "build:aspnet:copy": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "./js/aspnet.js", "to": "./artifacts/js/dx.aspnet.mvc.js" }
+        ]
+      },
+      "inputs": ["{projectRoot}/js/aspnet.js"],
+      "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
+    },
+    "compress:aspnet:normalize": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/js/dx.aspnet.mvc.js"],
+        "mode": "normalize"
+      }
+    },
+    "compress:aspnet": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/js/dx.aspnet.mvc.js"],
+        "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+      }
+    },
+    "build:aspnet:headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "options": {
+        "targetDirectory": "./artifacts/js",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/",
+        "includePatterns": ["dx.aspnet.mvc.js"],
+        "separatorBetweenBannerAndContent": ""
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/js/dx.aspnet.mvc.js",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
+    },
     "build:aspnet": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gulp aspnet",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "pnpm nx build:aspnet:copy devextreme",
+          "pnpm nx compress:aspnet:normalize devextreme",
+          "pnpm nx build:aspnet:headers devextreme"
+        ],
+        "parallel": false
       },
-      "inputs": [
-        "{projectRoot}/build/gulp/aspnet.js"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/js/aspnet"
-      ]
+      "configurations": {
+        "production": {
+          "commands": [
+            "pnpm nx build:aspnet:copy devextreme",
+            "pnpm nx compress:aspnet devextreme",
+            "pnpm nx build:aspnet:headers devextreme"
+          ]
+        }
+      },
+      "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
     },
     "build:declarations": {
       "executor": "nx:run-commands",
@@ -804,6 +916,49 @@
         "{projectRoot}/artifacts/ts"
       ]
     },
+    "compress:ts-modules": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/npm/devextreme/**/*.d.ts"],
+        "exclude": ["./artifacts/npm/devextreme/bundles/**"],
+        "mode": { "name": "strip-debug", "trailingNewline": false }
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
+      ]
+    },
+    "compress:npm-sources": {
+      "executor": "devextreme-nx-infra-plugin:compress",
+      "options": {
+        "files": ["./artifacts/npm/devextreme/**/*.js"],
+        "exclude": [
+          "./artifacts/npm/devextreme/bundles/*.js",
+          "./artifacts/npm/devextreme/cjs/bundles/**",
+          "./artifacts/npm/devextreme/esm/bundles/**",
+          "./artifacts/npm/devextreme/bundles/modules/parts/*.js",
+          "./artifacts/npm/devextreme/viz/vector_map.utils/*.js",
+          "./artifacts/npm/devextreme/viz/docs/*.js",
+          "./artifacts/npm/devextreme/dist/**",
+          "./artifacts/npm/devextreme/bin/**",
+          "./artifacts/npm/devextreme/license/**"
+        ],
+        "mode": "normalize"
+      },
+      "configurations": {
+        "production": {
+          "mode": { "name": "beautify", "eulaUrl": "https://js.devexpress.com/Licensing/" }
+        }
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/*.js"
+      ]
+    },
     "verify:licenses": {
       "executor": "nx:run-commands",
       "options": {
@@ -811,17 +966,115 @@
         "cwd": "{projectRoot}"
       }
     },
+    "copy:vendor:js": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "./node_modules/devextreme-exceljs-fork/dist/dx-exceljs-fork.js", "to": "./artifacts/js/dx-exceljs-fork.js" },
+          { "from": "./node_modules/devextreme-exceljs-fork/dist/dx-exceljs-fork.min.js", "to": "./artifacts/js/dx-exceljs-fork.min.js" },
+          { "from": "./node_modules/file-saver/dist/FileSaver.js", "to": "./artifacts/js/FileSaver.js" },
+          { "from": "./node_modules/file-saver/dist/FileSaver.min.js", "to": "./artifacts/js/FileSaver.min.js" },
+          { "from": "./node_modules/jquery/dist/jquery.js", "to": "./artifacts/js/jquery.js" },
+          { "from": "./node_modules/jquery/dist/jquery.min.js", "to": "./artifacts/js/jquery.min.js" },
+          { "from": "./node_modules/jspdf/dist/jspdf.umd.js", "to": "./artifacts/js/jspdf.umd.js" },
+          { "from": "./node_modules/jspdf/dist/jspdf.umd.min.js", "to": "./artifacts/js/jspdf.umd.min.js" },
+          { "from": "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js", "to": "./artifacts/js/jspdf.plugin.autotable.js" },
+          { "from": "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.min.js", "to": "./artifacts/js/jspdf.plugin.autotable.min.js" },
+          { "from": "./node_modules/jszip/dist/jszip.js", "to": "./artifacts/js/jszip.js" },
+          { "from": "./node_modules/jszip/dist/jszip.min.js", "to": "./artifacts/js/jszip.min.js" },
+          { "from": "./node_modules/knockout/build/output/knockout-latest.js", "to": "./artifacts/js/knockout-latest.js" },
+          { "from": "./node_modules/knockout/build/output/knockout-latest.debug.js", "to": "./artifacts/js/knockout-latest.debug.js" },
+          { "from": "./node_modules/devexpress-diagram/dist/dx-diagram.js", "to": "./artifacts/js/dx-diagram.js" },
+          { "from": "./node_modules/devexpress-diagram/dist/dx-diagram.min.js", "to": "./artifacts/js/dx-diagram.min.js" },
+          { "from": "./node_modules/devexpress-gantt/dist/dx-gantt.js", "to": "./artifacts/js/dx-gantt.js" },
+          { "from": "./node_modules/devexpress-gantt/dist/dx-gantt.min.js", "to": "./artifacts/js/dx-gantt.min.js" },
+          { "from": "./node_modules/devextreme-quill/dist/dx-quill.js", "to": "./artifacts/js/dx-quill.js" },
+          { "from": "./node_modules/devextreme-quill/dist/dx-quill.min.js", "to": "./artifacts/js/dx-quill.min.js" },
+          { "from": "./node_modules/devextreme-aspnet-data/js/dx.aspnet.data.js", "to": "./artifacts/js/dx.aspnet.data.js" }
+        ]
+      },
+      "inputs": [
+        "{projectRoot}/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.js",
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.min.js",
+        "{projectRoot}/artifacts/js/FileSaver.js",
+        "{projectRoot}/artifacts/js/FileSaver.min.js",
+        "{projectRoot}/artifacts/js/jquery.js",
+        "{projectRoot}/artifacts/js/jquery.min.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.min.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.min.js",
+        "{projectRoot}/artifacts/js/jszip.js",
+        "{projectRoot}/artifacts/js/jszip.min.js",
+        "{projectRoot}/artifacts/js/knockout-latest.js",
+        "{projectRoot}/artifacts/js/knockout-latest.debug.js",
+        "{projectRoot}/artifacts/js/dx-diagram.js",
+        "{projectRoot}/artifacts/js/dx-diagram.min.js",
+        "{projectRoot}/artifacts/js/dx-gantt.js",
+        "{projectRoot}/artifacts/js/dx-gantt.min.js",
+        "{projectRoot}/artifacts/js/dx-quill.js",
+        "{projectRoot}/artifacts/js/dx-quill.min.js",
+        "{projectRoot}/artifacts/js/dx.aspnet.data.js"
+      ]
+    },
+    "copy:vendor:css": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "./node_modules/devexpress-diagram/dist/dx-{diagram,diagram.min}.css", "to": "./artifacts/css" },
+          { "from": "./node_modules/devexpress-gantt/dist/dx-{gantt,gantt.min}.css", "to": "./artifacts/css" }
+        ]
+      },
+      "inputs": [
+        "{projectRoot}/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/css/dx-diagram.css",
+        "{projectRoot}/artifacts/css/dx-diagram.min.css",
+        "{projectRoot}/artifacts/css/dx-gantt.css",
+        "{projectRoot}/artifacts/css/dx-gantt.min.css"
+      ]
+    },
     "copy:vendor": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gulp vendor",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "pnpm nx copy:vendor:js devextreme",
+          "pnpm nx copy:vendor:css devextreme"
+        ],
+        "parallel": true
       },
-      "inputs": [
-        "{projectRoot}/build/gulp/vendor.js"
-      ],
       "outputs": [
-        "{projectRoot}/artifacts/js/cldr"
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.js",
+        "{projectRoot}/artifacts/js/dx-exceljs-fork.min.js",
+        "{projectRoot}/artifacts/js/FileSaver.js",
+        "{projectRoot}/artifacts/js/FileSaver.min.js",
+        "{projectRoot}/artifacts/js/jquery.js",
+        "{projectRoot}/artifacts/js/jquery.min.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.js",
+        "{projectRoot}/artifacts/js/jspdf.umd.min.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.js",
+        "{projectRoot}/artifacts/js/jspdf.plugin.autotable.min.js",
+        "{projectRoot}/artifacts/js/jszip.js",
+        "{projectRoot}/artifacts/js/jszip.min.js",
+        "{projectRoot}/artifacts/js/knockout-latest.js",
+        "{projectRoot}/artifacts/js/knockout-latest.debug.js",
+        "{projectRoot}/artifacts/js/dx-diagram.js",
+        "{projectRoot}/artifacts/js/dx-diagram.min.js",
+        "{projectRoot}/artifacts/js/dx-gantt.js",
+        "{projectRoot}/artifacts/js/dx-gantt.min.js",
+        "{projectRoot}/artifacts/js/dx-quill.js",
+        "{projectRoot}/artifacts/js/dx-quill.min.js",
+        "{projectRoot}/artifacts/js/dx.aspnet.data.js",
+        "{projectRoot}/artifacts/css/dx-diagram.css",
+        "{projectRoot}/artifacts/css/dx-diagram.min.css",
+        "{projectRoot}/artifacts/css/dx-gantt.css",
+        "{projectRoot}/artifacts/css/dx-gantt.min.css"
       ]
     },
     "pack:devextreme-npm": {
@@ -1033,6 +1286,19 @@
       "!{projectRoot}/testing/*.txt",
       "!{projectRoot}/testing/*.xml",
       "{projectRoot}/*.js"
+    ],
+    "prodBundles": [
+      "{projectRoot}/artifacts/js/dx.all.js",
+      "{projectRoot}/artifacts/js/dx.web.js",
+      "{projectRoot}/artifacts/js/dx.viz.js",
+      "{projectRoot}/artifacts/js/dx.ai-integration.js"
+    ],
+    "debugBundles": [
+      "{projectRoot}/artifacts/js/dx.all.debug.js",
+      "{projectRoot}/artifacts/js/dx.web.debug.js",
+      "{projectRoot}/artifacts/js/dx.viz.debug.js",
+      "{projectRoot}/artifacts/js/dx.ai-integration.debug.js",
+      "{projectRoot}/artifacts/js/dx.custom.debug.js"
     ]
   },
   "tags": []
