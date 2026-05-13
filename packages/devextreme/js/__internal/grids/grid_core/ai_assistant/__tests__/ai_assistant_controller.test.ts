@@ -166,6 +166,50 @@ describe('AIAssistantController', () => {
       ]);
     });
 
+    it('should complete message as failure when commands contain aborted items', async () => {
+      (MockedGridCommands.mockImplementation as jest.Mock).call(
+        MockedGridCommands,
+        () => ({
+          validate: jest.fn().mockReturnValue(true),
+          executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([
+            { status: 'success', message: 'sort' },
+            { status: 'aborted', message: 'filter aborted' },
+          ]),
+          abort: jest.fn(),
+        }),
+      );
+
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort and filter',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [
+        { name: 'sort', args: { column: 'Name' } },
+        { name: 'filter', args: { column: 'Age' } },
+      ];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          commands: [
+            { status: 'success', message: 'sort' },
+            { status: 'aborted', message: 'filter aborted' },
+          ],
+        }),
+      ]);
+    });
+
     it('should fail message when onError callback is called', async () => {
       const controller = createController({
         'aiAssistant.aiIntegration': mockAIIntegration,

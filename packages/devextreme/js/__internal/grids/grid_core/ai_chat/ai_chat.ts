@@ -25,18 +25,17 @@ import {
   CLASSES, CLEAR_CHAT_ICON,
   DEFAULT_CHAT_OPTIONS,
   DEFAULT_POPUP_OPTIONS,
-  ERROR_ITEM_EMOJI,
   REGENERATE_ICON,
-  SUCCESS_ITEM_EMOJI,
 } from './const';
 import type {
   AIChatOptions, CommandResult, CommandResults,
 } from './types';
 import {
   findMessageById,
+  getCommandItemStyle,
   getMessageIconName,
   getMessageStateClass,
-  hasCommandErrors,
+  needToRenderCommandList,
   needToShowRegenerateButton,
 } from './utils';
 
@@ -178,7 +177,7 @@ export class AIChat {
 
   private renderMessageStateContent($parent: dxElementWrapper, message: AIMessage): void {
     switch (true) {
-      case (message.status === MessageStatus.Success || hasCommandErrors(message.commands)):
+      case (needToRenderCommandList(message)):
         this.renderCommandList($parent, message.commands);
         break;
       case message.status === MessageStatus.Failure:
@@ -212,15 +211,11 @@ export class AIChat {
     $parent: dxElementWrapper,
     command: CommandResult,
   ): void {
-    const commandStateClass = command.status === MessageStatus.Failure
-      ? CLASSES.actionListItemError
-      : CLASSES.actionListItemSuccess;
+    const { stateClass, emoji } = getCommandItemStyle(command.status);
 
     const $item = $('<li>')
-      .addClass(`${CLASSES.actionListItem} ${commandStateClass}`)
+      .addClass(`${CLASSES.actionListItem} ${stateClass}`)
       .appendTo($parent);
-
-    const emoji = command.status === MessageStatus.Failure ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
 
     $('<span>')
       .addClass(CLASSES.actionListItemIcon)
