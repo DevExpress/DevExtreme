@@ -21,7 +21,7 @@ import {
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
-import { AIAssistantIntegrationController } from '../m_ai_assistant_integration_controller';
+import { AIAssistantIntegrationController } from '../ai_assistant_integration_controller';
 
 interface SendRequestResult {
   promise: Promise<string>;
@@ -209,6 +209,106 @@ describe('AIAssistantIntegrationController', () => {
       controller.abortRequest();
       expect(abortSpy).toHaveBeenCalledTimes(1);
       expect(controller.isRequestAwaitingCompletion()).toBe(false);
+    });
+  });
+
+  describe('onAbort callback', () => {
+    it('should call onAbort callback when request is aborted', async () => {
+      const onAbort = jest.fn();
+      const aiIntegration = createMockAIIntegration();
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name', {
+        onComplete: jest.fn(),
+        onError: jest.fn(),
+        onAbort,
+      });
+
+      controller.abortRequest();
+
+      expect(onAbort).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onAbort callback when new request aborts previous one', async () => {
+      const onAbort = jest.fn();
+      const aiIntegration = createMockAIIntegration();
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name', {
+        onComplete: jest.fn(),
+        onError: jest.fn(),
+        onAbort,
+      });
+
+      controller.sendRequest('Sort by id');
+
+      expect(onAbort).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call onAbort when no callback is provided', async () => {
+      const aiIntegration = createMockAIIntegration();
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name');
+
+      expect(() => {
+        controller.abortRequest();
+      }).not.toThrow();
+    });
+
+    it('should not call onAbort when request completes via onComplete', async () => {
+      let capturedCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
+      const onAbort = jest.fn();
+      const aiIntegration = createMockAIIntegration((_params, callbacks) => {
+        capturedCallbacks = callbacks;
+      });
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name', {
+        onComplete: jest.fn(),
+        onError: jest.fn(),
+        onAbort,
+      });
+
+      capturedCallbacks.onComplete?.({
+        actions: [{ name: 'sort', args: { column: 'Name' } }],
+      } as ExecuteGridAssistantCommandResult);
+
+      expect(onAbort).not.toHaveBeenCalled();
+    });
+
+    it('should not call onAbort when request completes via onError', async () => {
+      let capturedCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
+      const onAbort = jest.fn();
+      const aiIntegration = createMockAIIntegration((_params, callbacks) => {
+        capturedCallbacks = callbacks;
+      });
+
+      const controller = await createController({
+        aiAssistant: { enabled: true, aiIntegration },
+      });
+
+      controller.sendRequest('Sort by name', {
+        onComplete: jest.fn(),
+        onError: jest.fn(),
+        onAbort,
+      });
+
+      capturedCallbacks.onError?.(new Error('Network error'));
+
+      expect(onAbort).not.toHaveBeenCalled();
     });
   });
 

@@ -39,9 +39,15 @@ const mockPopupInstance = {
 
 const mockChatElement = $('<div>');
 
+const mockDataSource = {
+  store: jest.fn(),
+  reload: jest.fn(),
+};
+
 const mockChatInstance = {
   option: jest.fn(),
   $element: jest.fn(() => mockChatElement),
+  getDataSource: jest.fn(() => mockDataSource),
 };
 
 const mockClearChatButtonInstance = {
@@ -113,12 +119,24 @@ const getChatConfig = (): any => {
   return (call as any)[2];
 };
 
+const createMockComponent = (message: any): any => ({
+  option: jest.fn().mockReturnValue([message]),
+});
+
+const renderMessageTemplate = (chatConfig: any, message: any, container: HTMLElement): void => {
+  chatConfig.messageTemplate({
+    message,
+    component: createMockComponent(message),
+  }, container);
+};
+
 const beforeTest = (): void => {
   jest.clearAllMocks();
   mockChatElement.removeClass(CLASSES.disabled);
   mockChatElement.empty();
   mockWidgetInstance.option.mockClear();
   mockClearChatButtonInstance.option.mockClear();
+  mockChatInstance.getDataSource.mockReturnValue(mockDataSource);
 };
 
 const afterTest = (): void => {
@@ -201,9 +219,8 @@ describe('AIChat', () => {
   });
 
   describe('clearChatButton', () => {
-    it('should include toolbarItems with clear chat button when onChatCleared is provided', () => {
-      const onChatCleared = jest.fn();
-      createAIChat({ onChatCleared });
+    it('should include toolbarItems with clear chat button', () => {
+      createAIChat();
 
       const popupConfig = getPopupConfig();
 
@@ -214,18 +231,25 @@ describe('AIChat', () => {
           location: 'after',
           options: expect.objectContaining({
             icon: CLEAR_CHAT_ICON,
-            onClick: onChatCleared,
+            onClick: expect.any(Function),
           }),
         }),
       ]);
     });
 
-    it('should not include toolbarItems when onChatCleared is not provided', () => {
+    it('should call clear when clear chat button is clicked', () => {
+      const mockStore = { clear: jest.fn() };
+      mockDataSource.store.mockReturnValue(mockStore);
+
       createAIChat();
+      triggerContentTemplate();
 
       const popupConfig = getPopupConfig();
+      const clearButton = popupConfig.toolbarItems[0];
+      clearButton.options.onClick();
 
-      expect(popupConfig.toolbarItems).toBeUndefined();
+      expect(mockStore.clear).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -238,12 +262,11 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Build summary',
-            status: 'pending',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          headerText: 'Request in progress',
+          text: 'pending',
+          status: 'pending',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.message}`)?.classList.contains(CLASSES.messagePending)).toBe(true);
@@ -260,12 +283,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Build summary',
-            status: 'pending',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Build summary',
+          status: 'pending',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageProgressBar}`)).not.toBeNull();
@@ -289,12 +310,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Processing',
-            status: 'pending',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Processing',
+          status: 'pending',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageRegenerateButton}`)).toBeNull();
@@ -309,13 +328,12 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Sorting and Page Size',
-            status: 'success',
-            commands: [{ status: 'success', message: 'OK' }],
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          headerText: 'Sorting and Page Size',
+          text: 'success',
+          status: 'success',
+          commands: [{ status: 'success', message: 'OK' }],
         }, container);
 
         expect(container.querySelector(`.${CLASSES.message}`)?.classList.contains(CLASSES.messageSuccess)).toBe(true);
@@ -335,13 +353,11 @@ describe('AIChat', () => {
           { status: 'success', message: 'Page size set to 15.' },
         ];
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Sorting, Grouping, and Page Size',
-            status: 'success',
-            commands,
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Sorting, Grouping, and Page Size',
+          status: 'success',
+          commands,
         }, container);
 
         expect(container.querySelector(`.${CLASSES.actionList}`)).not.toBeNull();
@@ -361,13 +377,11 @@ describe('AIChat', () => {
           { status: 'failure', message: 'Failed to group.' },
         ];
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Actions',
-            status: 'success',
-            commands,
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Actions',
+          status: 'success',
+          commands,
         }, container);
 
         const icons = container.querySelectorAll(`.${CLASSES.actionListItemIcon}`);
@@ -384,16 +398,14 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Mixed',
-            status: 'success',
-            commands: [
-              { status: 'success', message: 'OK' },
-              { status: 'failure', message: 'Failed' },
-            ],
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Mixed',
+          status: 'success',
+          commands: [
+            { status: 'success', message: 'OK' },
+            { status: 'failure', message: 'Failed' },
+          ],
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageIcon}`)?.classList.contains('dx-icon-errorcircle')).toBe(true);
@@ -407,13 +419,11 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Done',
-            status: 'success',
-            commands: [{ status: 'success', message: 'OK' }],
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Done',
+          status: 'success',
+          commands: [{ status: 'success', message: 'OK' }],
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageRegenerateButton}`)).toBeNull();
@@ -427,16 +437,14 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Mixed results',
-            status: 'success',
-            commands: [
-              { status: 'success', message: 'OK' },
-              { status: 'failure', message: 'Failed' },
-            ],
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Mixed results',
+          status: 'success',
+          commands: [
+            { status: 'success', message: 'OK' },
+            { status: 'failure', message: 'Failed' },
+          ],
         }, container);
 
         const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`);
@@ -452,13 +460,11 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Done',
-            status: 'success',
-            commands: [],
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Done',
+          status: 'success',
+          commands: [],
         }, container);
 
         expect(container.querySelector(`.${CLASSES.actionList}`)).toBeNull();
@@ -473,12 +479,12 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Invalid prompt. Please try again.',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          headerText: 'Failed to process request',
+          text: 'failure',
+          errorText: 'Invalid prompt. Please try again.',
+          status: 'failure',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.message}`)?.classList.contains(CLASSES.messageError)).toBe(true);
@@ -494,11 +500,9 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          status: 'failure',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageErrorText}`)?.textContent).toBe('');
@@ -511,12 +515,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Error occurred',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.actionList}`)).toBeNull();
@@ -531,12 +533,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Error occurred',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
         }, container);
 
         const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`);
@@ -552,12 +552,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Error occurred',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageRegenerateButton}`)).toBeNull();
@@ -571,12 +569,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Error occurred',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
         }, container);
 
         const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`) as HTMLElement;
@@ -608,11 +604,9 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: 'user', name: 'User' },
-            text: 'User message',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: 'user', name: 'User' },
+          text: 'User message',
         }, container);
 
         expect(container.textContent).toBe('User message');
@@ -624,6 +618,40 @@ describe('AIChat', () => {
 
         expect(hasProgressBarCreation).toBe(false);
       });
+    });
+
+    it('should render header from fresh item data even when template message has stale text', () => {
+      createAIChat();
+      triggerContentTemplate();
+
+      const chatConfig = getChatConfig();
+      const container = document.createElement('div');
+
+      const freshMessage = {
+        id: 'msg-1',
+        author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+        headerText: 'Completed successfully',
+        text: 'success',
+        status: 'success',
+        commands: [{ status: 'success', message: 'Done' }],
+      };
+
+      const mockComponent = {
+        option: jest.fn().mockReturnValue([freshMessage]),
+      };
+
+      chatConfig.messageTemplate({
+        message: {
+          id: 'msg-1',
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'pending',
+          status: 'pending',
+        },
+        component: mockComponent,
+      }, container);
+
+      expect(container.querySelector(`.${CLASSES.messageHeader}`)?.textContent).toBe('Completed successfully');
+      expect(container.querySelector(`.${CLASSES.message}`)?.classList.contains(CLASSES.messageSuccess)).toBe(true);
     });
   });
 
@@ -758,8 +786,7 @@ describe('AIChat', () => {
       });
 
       it('should disable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
@@ -768,26 +795,13 @@ describe('AIChat', () => {
       });
 
       it('should enable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
         aiChat.setDisabled(false);
 
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
-      });
-
-      it('should not update popup toolbarItems when onChatCleared is not provided', () => {
-        const { aiChat } = createAIChat();
-        triggerContentTemplate();
-
-        aiChat.setDisabled(true);
-
-        expect(mockClearChatButtonInstance.option).not.toHaveBeenCalledWith(
-          'disabled',
-          expect.anything(),
-        );
       });
 
       it('should not update when setting same disabled value', () => {
@@ -813,31 +827,6 @@ describe('AIChat', () => {
       });
     });
 
-    describe('isDisabled', () => {
-      it('should return false by default', () => {
-        const { aiChat } = createAIChat();
-
-        expect(aiChat.isDisabled()).toBe(false);
-      });
-
-      it('should return true after setDisabled(true)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-
-        expect(aiChat.isDisabled()).toBe(true);
-      });
-
-      it('should return false after setDisabled(false)', () => {
-        const { aiChat } = createAIChat();
-
-        aiChat.setDisabled(true);
-        aiChat.setDisabled(false);
-
-        expect(aiChat.isDisabled()).toBe(false);
-      });
-    });
-
     describe('regenerate button in disabled state', () => {
       it('should not call onRegenerate when chat is disabled', () => {
         const onRegenerate = jest.fn();
@@ -849,12 +838,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Error occurred',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
         }, container);
 
         const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`) as HTMLElement;
@@ -873,12 +860,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Error occurred',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
         }, container);
 
         expect(container.querySelector(`.${CLASSES.messageRegenerateButton}`)).not.toBeNull();
@@ -895,12 +880,10 @@ describe('AIChat', () => {
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
 
-        chatConfig.messageTemplate({
-          message: {
-            author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
-            text: 'Error occurred',
-            status: 'failure',
-          },
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
         }, container);
 
         const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`) as HTMLElement;
@@ -908,6 +891,42 @@ describe('AIChat', () => {
 
         expect(onRegenerate).toHaveBeenCalledTimes(1);
       });
+    });
+  });
+
+  describe('clear', () => {
+    it('should clear store and reload dataSource', () => {
+      const mockStore = { clear: jest.fn() };
+      mockDataSource.store.mockReturnValue(mockStore);
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      aiChat.clear();
+
+      expect(mockChatInstance.getDataSource).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.store).toHaveBeenCalledTimes(1);
+      expect(mockStore.clear).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw when dataSource is undefined', () => {
+      mockChatInstance.getDataSource.mockReturnValue(undefined as any);
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      expect(() => {
+        aiChat.clear();
+      }).not.toThrow();
+    });
+
+    it('should not throw when chatInstance is not initialized', () => {
+      const { aiChat } = createAIChat();
+
+      expect(() => {
+        aiChat.clear();
+      }).not.toThrow();
     });
   });
 });

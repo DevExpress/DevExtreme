@@ -1,13 +1,15 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
+import type { ArrayStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { InitializedEvent } from '@js/ui/button';
+import type dxButton from '@js/ui/button';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
-import type Button from '@ts/ui/button';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -16,6 +18,8 @@ import {
 import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/m_popup';
 
+import type { AIMessage } from '../ai_assistant/types';
+import { isAIMessage } from '../ai_assistant/utils';
 import gridCoreUtils from '../m_utils';
 import {
   CLASSES, CLEAR_CHAT_ICON,
@@ -29,7 +33,10 @@ import type {
   AIChatOptions, CommandResult, CommandResults,
 } from './types';
 import {
-  getMessageIconName, getMessageStateClass, hasCommandErrors, isAIChatMessage,
+  findMessageById,
+  getMessageIconName,
+  getMessageStateClass,
+  hasCommandErrors,
   needToShowRegenerateButton,
 } from './utils';
 
@@ -38,7 +45,7 @@ export class AIChat {
 
   private chatInstance?: Chat;
 
-  private clearChatButtonInstance?: Button;
+  private clearChatButtonInstance?: dxButton;
 
   private disabled = false;
 
@@ -70,17 +77,24 @@ export class AIChat {
           .append($message)
           .append($prompt);
       },
-      messageTemplate: (data, container): void => {
-        const { message } = data;
-
+      messageTemplate: ({
+        message,
+        component,
+      }: {
+        message: Message,
+        component: Chat,
+      }, container): void => {
         if (!message) {
           return;
         }
 
-        if (isAIChatMessage(message)) {
-          this.renderAIMessage(message, container);
+        const items = component.option('items');
+        const actualMessage = findMessageById(items, message.id) ?? message;
+
+        if (isAIMessage(actualMessage)) {
+          this.renderAIMessage(actualMessage, container);
         } else {
-          $(container).text(message?.text ?? '');
+          $(container).text(actualMessage?.text ?? '');
         }
       },
       showUserName: false,
@@ -111,12 +125,6 @@ export class AIChat {
   }
 
   private getClearChatButton(): ToolbarItem | undefined {
-    const { onChatCleared } = this.options;
-
-    if (!onChatCleared) {
-      return undefined;
-    }
-
     return {
       widget: 'dxButton',
       toolbar: 'top',
@@ -125,39 +133,30 @@ export class AIChat {
       options: {
         icon: CLEAR_CHAT_ICON,
         hint: messageLocalization.format('dxDataGrid-aiAssistantClearButtonText'),
-        onClick: onChatCleared,
-        onInitialized: (e): void => {
+        onClick: (): void => {
+          this.clear();
+        },
+        onInitialized: (e: InitializedEvent): void => {
           this.clearChatButtonInstance = e.component;
         },
       },
     };
   }
 
-  private renderMessageIcon($parent: dxElementWrapper, message: Message): void {
+  private renderMessageIcon($parent: dxElementWrapper, message: AIMessage): void {
     $('<i>')
       .addClass(`dx-icon dx-icon-${getMessageIconName(message)} ${CLASSES.messageIcon}`)
       .appendTo($parent);
   }
 
-  private getHeaderText(message: Message): string {
-    switch (message.status) {
-      case MessageStatus.Failure:
-        return messageLocalization.format('dxDataGrid-aiAssistantErrorMessageHeader');
-      case MessageStatus.Pending:
-        return messageLocalization.format('dxDataGrid-aiAssistantProcessingMessageHeader');
-      default:
-        return message.text as string ?? '';
-    }
-  }
-
   private renderMessageHeader(
     $parent: dxElementWrapper,
-    message: Message,
+    message: AIMessage,
   ): void {
     const $row = $('<div>')
       .addClass(CLASSES.messageHeaderRow)
       .appendTo($parent);
-    const headerText = this.getHeaderText(message);
+    const headerText = message.headerText ?? '';
 
     $('<div>')
       .addClass(CLASSES.messageHeader)
@@ -171,13 +170,13 @@ export class AIChat {
 
       eventsEngine.on($button, clickEventName, () => {
         if (!this.disabled) {
-          this.options.onRegenerate?.();
+          this.options.onRegenerate?.(message);
         }
       });
     }
   }
 
-  private renderMessageStateContent($parent: dxElementWrapper, message: Message): void {
+  private renderMessageStateContent($parent: dxElementWrapper, message: AIMessage): void {
     switch (true) {
       case (message.status === MessageStatus.Success || hasCommandErrors(message.commands)):
         this.renderCommandList($parent, message.commands);
@@ -253,11 +252,11 @@ export class AIChat {
 
   private renderErrorState(
     $container: dxElementWrapper,
-    message: Message,
+    message: AIMessage,
   ): void {
     $('<div>')
       .addClass(CLASSES.messageErrorText)
-      .text(message.text ?? '')
+      .text(message.errorText ?? '')
       .appendTo($container);
   }
 
@@ -318,11 +317,7 @@ export class AIChat {
     this.setClearChatButtonDisabled(disabled);
   }
 
-  public isDisabled(): boolean {
-    return this.disabled;
-  }
-
-  public renderAIMessage(message: Message, container: HTMLElement): void {
+  public renderAIMessage(message: AIMessage, container: HTMLElement): void {
     const $message = $('<div>')
       .addClass(`${CLASSES.message} ${getMessageStateClass(message.status)}`)
       .appendTo(container);
@@ -335,5 +330,14 @@ export class AIChat {
 
     this.renderMessageHeader($content, message);
     this.renderMessageStateContent($content, message);
+  }
+
+  public clear(): void {
+    const dataSource = this.chatInstance?.getDataSource();
+    const store = dataSource?.store() as ArrayStore<Message, string>;
+
+    store?.clear();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    dataSource?.reload();
   }
 }

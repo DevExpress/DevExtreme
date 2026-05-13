@@ -1,13 +1,44 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
+import type { Message } from '@js/ui/chat';
 
+import { AI_ASSISTANT_AUTHOR_ID } from '../const';
 import {
+  isAIMessage,
   isChatOptions,
   isEnabledOption,
   isPopupOptions,
   isTitleOption,
 } from '../utils';
+
+describe('isAIMessage', () => {
+  it('should return true for message with assistant author id', () => {
+    const message = {
+      author: { id: AI_ASSISTANT_AUTHOR_ID },
+      text: 'response',
+    } as Message;
+
+    expect(isAIMessage(message)).toBe(true);
+  });
+
+  it('should return false for message with user author id', () => {
+    const message = {
+      author: { id: 'user', name: 'User' },
+      text: 'request',
+    } as Message;
+
+    expect(isAIMessage(message)).toBe(false);
+  });
+
+  it('should return false for message without author', () => {
+    const message = {
+      text: 'request',
+    } as Message;
+
+    expect(isAIMessage(message)).toBe(false);
+  });
+});
 
 describe('isEnabledOption', () => {
   it('should return true for enabled option names', () => {

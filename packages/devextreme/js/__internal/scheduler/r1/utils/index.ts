@@ -35,9 +35,6 @@ import {
   getIntervalDuration,
   getTimePanelCellText,
 } from './week';
-import {
-  calculateStartViewDate as workWeekCalculateStartViewDate,
-} from './work_week';
 
 export {
   calculateCellIndex,
@@ -102,10 +99,6 @@ export const weekUtils = {
   getTimePanelCellText,
   calculateStartViewDate: weekCalculateStartViewDate,
   calculateViewStartDate: weekCalculateViewStartDate,
-};
-
-export const workWeekUtils = {
-  calculateStartViewDate: workWeekCalculateStartViewDate,
 };
 
 export const monthUtils = {

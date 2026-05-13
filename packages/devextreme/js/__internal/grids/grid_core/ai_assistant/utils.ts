@@ -1,4 +1,12 @@
 import { isObject } from '@js/core/utils/type';
+import type { Message } from '@js/ui/chat';
+
+import { AI_ASSISTANT_AUTHOR_ID } from './const';
+import type { AIMessage } from './types';
+
+export const isAIMessage = (
+  message: Message,
+): message is AIMessage => message.author?.id === AI_ASSISTANT_AUTHOR_ID;
 
 export const isEnabledOption = (optionName: string, value: unknown): boolean => optionName.startsWith('aiAssistant.enabled')
   || (optionName === 'aiAssistant' && isObject(value) && 'enabled' in value);

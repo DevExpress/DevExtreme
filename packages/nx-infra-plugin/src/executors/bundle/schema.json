@@ -24,6 +24,11 @@
       "type": "string",
       "description": "Path to webpack.config.js relative to project root",
       "default": "./webpack.config.js"
+    },
+    "sourceMap": {
+      "type": "boolean",
+      "description": "Enable eval-source-map devtool in debug mode",
+      "default": true
     }
   },
   "required": ["entries", "sourceDir", "outDir", "mode"],

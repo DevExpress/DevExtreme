@@ -2,6 +2,11 @@ import {
   BaseRunProps, RunAllModel, RunSuiteModel, TemplateVars,
 } from './types';
 
+interface SystemPackage {
+  main?: string;
+  defaultExtension?: string;
+}
+
 interface PagesRendererDeps {
   contentWithCacheBuster: (contentPath: string, cacheBuster: string) => string;
   getCacheBuster: (searchParams: URLSearchParams) => string;
@@ -178,10 +183,13 @@ export function createPagesRenderer({
       json: '/packages/devextreme/node_modules/systemjs-plugin-json/json.js',
       'plugin-babel': '/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': '/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
+      // QUnit doesn't execute DataGrid AI assistant
+      zod: '@empty',
+      'zod-to-json-schema': '@empty',
       ...cspMap,
     };
 
-    const systemPackages: Record<string, { defaultExtension?: string; main?: string }> = {
+    const systemPackages: Record<string, SystemPackage> = {
       '': {
         defaultExtension: 'js',
       },

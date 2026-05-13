@@ -297,12 +297,15 @@ class DropDownBox<
         of: this.$element(),
       }),
       _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error ts-error
-      maxHeight: function () {
+      // @ts-expect-error maxHeight must remain a function because the overlay reevaluates
+      // it whenever it recalculates content dimensions, and it depends
+      // on this._popupPosition?.v.location, which is updated after each repositioning.
+      maxHeight: (): number | undefined => {
+        // @ts-expect-error typificatipn of this._popupPosition
         const popupLocation = this._popupPosition?.v.location;
 
         return getElementMaxHeightByWindow(this.$element(), popupLocation);
-      }.bind(this),
+      },
     };
   }
 

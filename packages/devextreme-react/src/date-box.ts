@@ -12,7 +12,7 @@ import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, 
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, OptionChangedEvent as ButtonOptionChangedEvent, ClickEvent } from "devextreme/ui/button";
 import type { DisposingEvent as CalendarDisposingEvent, InitializedEvent as CalendarInitializedEvent, ValueChangedEvent as CalendarValueChangedEvent, DisabledDate, CalendarZoomLevel, OptionChangedEvent, CalendarSelectionMode, WeekNumberRule } from "devextreme/ui/calendar";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { HorizontalAlignment, VerticalAlignment, TextEditorButtonLocation, template, FirstDayOfWeek, ValidationMessageMode, Position as CommonPosition, ValidationStatus, Format, PositionAlignment, Direction, ButtonStyle, ButtonType, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
+import type { HorizontalAlignment, VerticalAlignment, TextEditorButtonLocation, template, DayOfWeek, ValidationMessageMode, Position as CommonPosition, ValidationStatus, Format, PositionAlignment, Direction, ButtonStyle, ButtonType, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
@@ -209,7 +209,7 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
   elementAttr?: Record<string, any>;
-  firstDayOfWeek?: FirstDayOfWeek | undefined;
+  firstDayOfWeek?: DayOfWeek | undefined;
   focusStateEnabled?: boolean;
   height?: number | string | undefined;
   hint?: string | undefined;

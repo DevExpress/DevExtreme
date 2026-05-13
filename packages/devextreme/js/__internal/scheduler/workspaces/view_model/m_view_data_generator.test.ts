@@ -5,7 +5,6 @@ import { ViewDataGeneratorDay } from './m_view_data_generator_day';
 import { ViewDataGeneratorMonth } from './m_view_data_generator_month';
 import { ViewDataGeneratorTimelineMonth } from './m_view_data_generator_timeline_month';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
-import { ViewDataGeneratorWorkWeek } from './m_view_data_generator_work_week';
 
 describe('ViewDataGenerator hiddenWeekDays support', () => {
   describe('daysInInterval getter', () => {
@@ -15,14 +14,14 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(gen.daysInInterval).toBe(6);
     });
 
-    it('workWeek view: 5 with default skippedDays [0,6]', () => {
-      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+    it('week view: 5 with skippedDays [0,6]', () => {
+      const gen = new ViewDataGeneratorWeek('week' as ViewType);
       gen.skippedDays = [0, 6];
       expect(gen.daysInInterval).toBe(5);
     });
 
-    it('workWeek view: 7 with empty skippedDays override', () => {
-      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+    it('week view: 7 with empty skippedDays override', () => {
+      const gen = new ViewDataGeneratorWeek('week' as ViewType);
       gen.skippedDays = [];
       expect(gen.daysInInterval).toBe(7);
     });
@@ -99,33 +98,33 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(callGetVisibleDayOffset(gen, 0, 4, 0, 1)).toBe(3);
     });
 
-    it('timelineWorkWeek with multiple cells in day uses day index', () => {
-      const timelineWorkWeekGen = new ViewDataGeneratorWorkWeek('timelineWorkWeek' as ViewType);
-      timelineWorkWeekGen.skippedDays = [0, 6];
+    it('timelineWeek with hidden days and multiple cells in day uses day index', () => {
+      const timelineWeekGen = new ViewDataGeneratorWeek('timelineWeek' as ViewType);
+      timelineWeekGen.skippedDays = [0, 6];
 
-      const timelineWorkWeek = timelineWorkWeekGen as unknown as ViewDataGeneratorWeek;
+      const timelineWeek = timelineWeekGen as unknown as ViewDataGeneratorWeek;
 
       // 2 cells per day, first visible week day is Monday (firstDayOfWeek=1)
       // Both cells of the first day must have the same offset.
-      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 0, 1, 2)).toBe(0);
-      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 1, 1, 2)).toBe(0);
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 0, 1, 2)).toBe(0);
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 1, 1, 2)).toBe(0);
       // The first cell of next visible day still has zero offset.
-      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 2, 1, 2)).toBe(0);
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 2, 1, 2)).toBe(0);
       // After 5 visible days (10 cells), the next day jumps over weekend (+2 days).
-      expect(callGetVisibleDayOffset(timelineWorkWeek, 0, 10, 1, 2)).toBe(2);
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 10, 1, 2)).toBe(2);
     });
 
-    it('vertical workWeek layout uses column index as day index', () => {
-      const workWeekGen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
-      workWeekGen.skippedDays = [0, 6];
+    it('vertical week layout with hidden days uses column index as day index', () => {
+      const weekGen = new ViewDataGeneratorWeek('week' as ViewType);
+      weekGen.skippedDays = [0, 6];
 
-      const verticalWorkWeek = workWeekGen as unknown as ViewDataGeneratorWeek;
+      const verticalWeek = weekGen as unknown as ViewDataGeneratorWeek;
 
-      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 0, 3, 24)).toBe(0);
-      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 1, 3, 24)).toBe(0);
-      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 2, 3, 24)).toBe(0);
-      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 3, 3, 24)).toBe(2);
-      expect(callGetVisibleDayOffset(verticalWorkWeek, 0, 4, 3, 24)).toBe(2);
+      expect(callGetVisibleDayOffset(verticalWeek, 0, 0, 3, 24)).toBe(0);
+      expect(callGetVisibleDayOffset(verticalWeek, 0, 1, 3, 24)).toBe(0);
+      expect(callGetVisibleDayOffset(verticalWeek, 0, 2, 3, 24)).toBe(0);
+      expect(callGetVisibleDayOffset(verticalWeek, 0, 3, 3, 24)).toBe(2);
+      expect(callGetVisibleDayOffset(verticalWeek, 0, 4, 3, 24)).toBe(2);
     });
   });
 
@@ -209,9 +208,9 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
     });
   });
 
-  describe('WorkWeek hiddenWeekDays support', () => {
+  describe('Week hiddenWeekDays start date support', () => {
     it('uses week start when skippedDays override is empty', () => {
-      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      const gen = new ViewDataGeneratorWeek('week' as ViewType);
       gen.skippedDays = [];
 
       const startViewDate = gen.getStartViewDate({
@@ -226,9 +225,9 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(startViewDate.getDate()).toBe(29);
     });
 
-    it('uses first visible day of week for custom skippedDays', () => {
-      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
-      gen.skippedDays = [1, 2];
+    it('uses first visible day of week for hidden weekends', () => {
+      const gen = new ViewDataGeneratorWeek('week' as ViewType);
+      gen.skippedDays = [0, 6];
 
       const startViewDate = gen.getStartViewDate({
         currentDate: new Date(2026, 3, 1), // Wednesday
@@ -238,12 +237,12 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
         firstDayOfWeek: 0, // Sunday
       });
 
-      expect(startViewDate.getDay()).toBe(0);
-      expect(startViewDate.getDate()).toBe(29);
+      expect(startViewDate.getDay()).toBe(1);
+      expect(startViewDate.getDate()).toBe(30);
     });
 
     it('keeps first visible column on Monday when startViewDate is already Monday', () => {
-      const gen = new ViewDataGeneratorWorkWeek('workWeek' as ViewType);
+      const gen = new ViewDataGeneratorWeek('week' as ViewType);
       gen.skippedDays = [0, 6];
 
       const options = {
@@ -256,7 +255,7 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
         intervalCount: 1,
         viewOffset: 0,
         currentDate: new Date(2026, 3, 1),
-        viewType: 'workWeek' as ViewType,
+        viewType: 'week' as ViewType,
       };
 
       const date = gen.getDateByCellIndices(options, 0, 0);

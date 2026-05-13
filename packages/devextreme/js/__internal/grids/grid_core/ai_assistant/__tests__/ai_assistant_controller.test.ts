@@ -16,6 +16,12 @@ import {
   AI_ASSISTANT_AUTHOR_ID,
   MessageStatus,
 } from '../const';
+import { GridCommands } from '../grid_commands';
+import type { AIMessage, CommandResult } from '../types';
+
+jest.mock('../grid_commands');
+
+const MockedGridCommands = GridCommands as jest.MockedClass<typeof GridCommands>;
 
 let sendRequestCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
 
@@ -59,18 +65,26 @@ const getStore = (controller: AIAssistantController): ArrayStore<Message, string
 describe('AIAssistantController', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // TODO: Rework the tests using updated GridCommands implementation
+    (MockedGridCommands.mockImplementation as jest.Mock).call(
+      MockedGridCommands,
+      () => ({
+        validate: jest.fn().mockReturnValue(true),
+        executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([{ status: 'success', message: 'sort' }]),
+        abort: jest.fn(),
+      }),
+    );
   });
 
   describe('getMessageDataSource', () => {
-    it('should return dataSource with store and reshapeOnPush', () => {
+    it('should return dataSource with store', () => {
       const controller = createController();
       const dataSource = controller.getMessageDataSource() as {
         store: ArrayStore<Message, string>;
-        reshapeOnPush: boolean;
       };
 
       expect(dataSource.store).toBeDefined();
-      expect(dataSource.reshapeOnPush).toBe(true);
     });
   });
 
@@ -96,7 +110,8 @@ describe('AIAssistantController', () => {
           id: expect.stringContaining(AI_ASSISTANT_AUTHOR_ID),
           timestamp: expectedTimestamp,
           author: AI_ASSISTANT_AUTHOR,
-          text: 'Generate values',
+          headerText: 'Request in progress',
+          text: MessageStatus.Pending,
           status: MessageStatus.Pending,
         }),
       ]);
@@ -161,6 +176,7 @@ describe('AIAssistantController', () => {
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
+      promise.catch(() => {});
 
       sendRequestCallbacks.onError?.(new Error('Network error'));
 
@@ -169,7 +185,9 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          text: 'Network error',
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
+          errorText: 'Network error',
         }),
       ]);
 
@@ -186,6 +204,7 @@ describe('AIAssistantController', () => {
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
+      promise.catch(() => {});
 
       const response = {} as ExecuteGridAssistantCommandResult;
 
@@ -198,7 +217,9 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          text: 'Default error message',
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
+          errorText: 'Default error message',
         }),
       ]);
 
@@ -252,6 +273,321 @@ describe('AIAssistantController', () => {
       sendRequestCallbacks.onComplete?.({} as ExecuteGridAssistantCommandResult);
 
       await expect(promise).rejects.toThrow('Default error message');
+    });
+
+    it('should ignore second request while first request is still processing', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'First request',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Second request',
+        timestamp: '2026-04-16T10:00:01.000Z',
+      } as Message).catch(() => {});
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toHaveLength(1);
+      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(1);
+    });
+
+    it('should accept new request after previous request completes successfully', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const firstPromise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'First request',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await firstPromise;
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Second request',
+        timestamp: '2026-04-16T10:00:01.000Z',
+      } as Message);
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toHaveLength(2);
+      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(2);
+    });
+
+    it('should accept new request after previous request fails with error', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const firstPromise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'First request',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      firstPromise.catch(() => {});
+
+      sendRequestCallbacks.onError?.(new Error('Network error'));
+      await expect(firstPromise).rejects.toThrow('Network error');
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Second request',
+        timestamp: '2026-04-16T10:00:01.000Z',
+      } as Message);
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toHaveLength(2);
+      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(2);
+    });
+
+    it('should accept new request after previous request is aborted', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const firstPromise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'First request',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      firstPromise.catch(() => {});
+
+      controller.abortRequest();
+      await expect(firstPromise).rejects.toThrow();
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Second request',
+        timestamp: '2026-04-16T10:00:01.000Z',
+      } as Message);
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toHaveLength(2);
+      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('abortRequest', () => {
+    it('should fail message with abort error when request is aborted', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      controller.abortRequest();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          headerText: 'Failed to process request',
+          text: MessageStatus.Failure,
+          errorText: 'Request stopped.',
+        }),
+      ]);
+
+      await expect(promise).rejects.toThrow('Request stopped.');
+    });
+
+    it('should call gridCommands.abort when request is aborted', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      const gridCommandsInstance = MockedGridCommands.mock.results[0].value as { abort: jest.Mock };
+
+      controller.abortRequest();
+
+      await expect(promise).rejects.toThrow();
+
+      expect(gridCommandsInstance.abort).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('sendRequestToAI with AIMessage (regenerate)', () => {
+    it('should reset message status to pending when AIMessage is passed', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const aiMessage: AIMessage = {
+        id: 'assistant-123',
+        author: AI_ASSISTANT_AUTHOR,
+        text: MessageStatus.Failure,
+        prompt: 'Generate values',
+        status: MessageStatus.Failure,
+        headerText: 'Failed to process request',
+        errorText: 'Network error',
+      };
+
+      const store = getStore(controller);
+      await store.insert(aiMessage);
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI(aiMessage);
+
+      const messages = await store.load();
+
+      expect(messages).toHaveLength(1);
+      expect(messages).toEqual([
+        expect.objectContaining({
+          id: 'assistant-123',
+          status: MessageStatus.Pending,
+          headerText: 'Request in progress',
+          text: MessageStatus.Pending,
+        }),
+      ]);
+    });
+
+    it('should not create new message when AIMessage is passed', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const aiMessage: AIMessage = {
+        id: 'assistant-123',
+        author: AI_ASSISTANT_AUTHOR,
+        text: MessageStatus.Failure,
+        prompt: 'Generate values',
+        status: MessageStatus.Failure,
+        headerText: 'Failed to process request',
+        errorText: 'Network error',
+      };
+
+      const store = getStore(controller);
+      await store.insert(aiMessage);
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI(aiMessage);
+
+      const messages = await store.load();
+
+      expect(messages).toHaveLength(1);
+    });
+
+    it('should send request with original prompt from AIMessage', () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const aiMessage: AIMessage = {
+        id: 'assistant-123',
+        author: AI_ASSISTANT_AUTHOR,
+        text: MessageStatus.Failure,
+        prompt: 'Sort by Name column',
+        status: MessageStatus.Failure,
+        headerText: 'Failed to process request',
+        errorText: 'Network error',
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI(aiMessage);
+
+      expect(mockAIIntegration.executeGridAssistant).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text: 'Sort by Name column',
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it('should clear errorText and commands when regenerating', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const aiMessage: AIMessage = {
+        id: 'assistant-123',
+        author: AI_ASSISTANT_AUTHOR,
+        text: MessageStatus.Failure,
+        prompt: 'Generate values',
+        status: MessageStatus.Failure,
+        headerText: 'Failed to process request',
+        errorText: 'Network error',
+        commands: [{ status: 'failure', message: 'sort failed' }],
+      };
+
+      const store = getStore(controller);
+      await store.insert(aiMessage);
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI(aiMessage);
+
+      const messages = await store.load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          errorText: undefined,
+          commands: undefined,
+        }),
+      ]);
+    });
+
+    it('should complete regenerated message as success when command succeed', async () => {
+      const controller = createController({
+        'aiAssistant.aiIntegration': mockAIIntegration,
+      });
+
+      const aiMessage: AIMessage = {
+        id: 'assistant-123',
+        author: AI_ASSISTANT_AUTHOR,
+        text: MessageStatus.Failure,
+        prompt: 'Generate values',
+        status: MessageStatus.Failure,
+        headerText: 'Failed to process request',
+        errorText: 'Network error',
+      };
+
+      const store = getStore(controller);
+      await store.insert(aiMessage);
+
+      const promise = controller.sendRequestToAI(aiMessage);
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+
+      await promise;
+
+      const messages = await store.load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          id: 'assistant-123',
+          status: MessageStatus.Success,
+          commands: [{ status: 'success', message: 'sort' }],
+        }),
+      ]);
     });
   });
 });

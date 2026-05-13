@@ -53,13 +53,6 @@ export class ViewDataGenerator {
       : 1;
   }
 
-  public isWorkWeekView(): boolean {
-    return [
-      VIEWS.WORK_WEEK,
-      VIEWS.TIMELINE_WORK_WEEK,
-    ].includes(this.viewType);
-  }
-
   protected usesMonthDayLayout(): boolean {
     return false;
   }

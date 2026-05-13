@@ -1,6 +1,6 @@
 {
   "name": "wrappers-testing",
-  "version": "26.1.0",
+  "version": "26.1.2",
   "description": "DevExtreme wrappers for e2e tests in components & frameworks",
   "scripts": {
     "dev:react19": "vite builders/react19",
@@ -49,6 +49,8 @@
     "tslib": "^2.3.0",
     "vue": "^3.5.13",
     "vue-router": "^4.3.0",
+    "zod": "catalog:",
+    "zod-to-json-schema": "catalog:",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
