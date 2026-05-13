@@ -4,11 +4,12 @@ import '@js/ui/tag_box';
 import '@js/ui/switch';
 import '@js/ui/select_box';
 
-import type { TextEditorButton } from '@js/common';
+import type { DayOfWeek, TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isBoolean } from '@js/core/utils/type';
@@ -27,30 +28,26 @@ import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type Popup from '@ts/ui/popup/m_popup';
 
 import timeZoneUtils from '../m_utils_time_zone';
-import type { SafeAppointment } from '../types';
+import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
+import type { CreateComponentFn, SafeAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import { customizeFormItems } from './customize_form_items';
 import { getRepeatSelectItems, REPEAT_NEVER_VALUE } from './localized_items';
-import { customizeFormItems } from './m_customize_form_items';
-import { RecurrenceForm } from './m_recurrence_form';
+import type { AppointmentPopupContext } from './popup';
+import { RecurrenceForm } from './recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 type SchedulerEditingObject = Exclude<NonNullable<SchedulerProperties['editing']>, boolean>;
-
-export type CreateComponentFn = (
-  element: string | HTMLElement | dxElementWrapper | Element,
-  Component: any,
-  options: any,
-) => any;
 
 export interface AppointmentFormConfig {
   dataAccessors: AppointmentDataAccessor;
   editing: SchedulerProperties['editing'];
   resourceManager: ResourceManager;
-  firstDayOfWeek: number | undefined;
+  firstDayOfWeek: DayOfWeek;
   startDayHour: number;
   createComponent: CreateComponentFn;
   getCalculatedEndDate: (startDate: Date) => Date;
@@ -136,6 +133,18 @@ const REPEAT_ICON_NAME = 'repeatIcon';
 const RESOURCES_GROUP_ICON_NAME = 'resourcesGroupIcon';
 const DESCRIPTION_ICON_NAME = 'descriptionIcon';
 
+export interface AppointmentFormScheduler {
+  getResourceById: () => ResourceManager['resourceById'];
+  getDataAccessors: () => AppointmentDataAccessor;
+  createComponent: <T>(element: dxElementWrapper, component: unknown, options: unknown) => T;
+  getEditingConfig: () => SchedulerProperties['editing'];
+  getResourceManager: () => ResourceManager;
+  getFirstDayOfWeek: () => DayOfWeek;
+  getStartDayHour: () => number;
+  getCalculatedEndDate: (startDate: Date) => Date;
+  getTimeZoneCalculator: () => TimeZoneCalculator;
+}
+
 export class AppointmentForm {
   private readonly config: AppointmentFormConfig;
 
@@ -143,7 +152,7 @@ export class AppointmentForm {
 
   private recurrenceForm!: RecurrenceForm;
 
-  private _popup!: any;
+  private _popup!: AppointmentPopupContext;
 
   private $mainGroup?: dxElementWrapper;
 
@@ -158,7 +167,7 @@ export class AppointmentForm {
   }
 
   private get dxPopup(): Popup {
-    return this._popup.dxPopup as Popup;
+    return this._popup.dxPopup;
   }
 
   get readOnly(): boolean {
@@ -170,11 +179,11 @@ export class AppointmentForm {
     this.recurrenceForm.setReadOnly(value);
   }
 
-  get formData(): Record<string, any> {
-    return this.dxForm.option('formData') as Record<string, any>;
+  get formData(): Record<string, unknown> {
+    return this.dxForm.option('formData') as Record<string, unknown>;
   }
 
-  set formData(formData: Record<string, any>) {
+  set formData(formData: Record<string, unknown>) {
     this.dxForm.option('formData', formData);
   }
 
@@ -203,7 +212,7 @@ export class AppointmentForm {
     this.config = config;
   }
 
-  private getFormDataField(field: string): any {
+  private getFormDataField(field: string): unknown {
     return this.dxForm.option(`formData.${field}`);
   }
 
@@ -215,7 +224,7 @@ export class AppointmentForm {
     }
   }
 
-  create(popup: any): void {
+  create(popup: AppointmentPopupContext): void {
     this._popup = popup;
 
     const mainGroup = this.createMainFormGroup();
@@ -289,7 +298,8 @@ export class AppointmentForm {
 
         const isDateRangeChanged = [startDateExpr, endDateExpr].includes(dataField);
         const isRecurrenceRuleChanged = dataField === recurrenceRuleExpr;
-        const isResourceChanged = Object.keys(this.config.resourceManager.resourceById).includes(dataField);
+        const isResourceChanged = Object.keys(this.config.resourceManager.resourceById)
+          .includes(dataField);
 
         if (isDateRangeChanged) {
           this.updateDateEditorsValues();
@@ -307,7 +317,7 @@ export class AppointmentForm {
         }
 
         if (isResourceChanged) {
-          this.updateSubjectIconColor();
+          this.updateSubjectIconColor().catch(noop);
         }
       },
       onInitialized: (e): void => {
@@ -328,7 +338,7 @@ export class AppointmentForm {
     } as FormProperties;
 
     const formOptions = extend(true, defaultOptions, customFormOptions);
-    return this.config.createComponent(element, dxForm, formOptions) as dxForm;
+    return this.config.createComponent(element, dxForm, formOptions);
   }
 
   private createMainFormGroup(): GroupItem {
@@ -599,7 +609,11 @@ export class AppointmentForm {
                 editorOptions: {
                   onValueChanged: (e) => {
                     dateValueChanged(e, (date: Date): void => {
-                      date.setFullYear(e.value.getFullYear(), e.value.getMonth(), e.value.getDate());
+                      date.setFullYear(
+                        e.value.getFullYear(),
+                        e.value.getMonth(),
+                        e.value.getDate(),
+                      );
                     });
                   },
                   onContentReady: (e): void => {
@@ -736,7 +750,8 @@ export class AppointmentForm {
   }
 
   private createResourcesGroup(): GroupItem {
-    const resourcesLoaders: ResourceLoader[] = Object.values(this.config.resourceManager.resourceById);
+    const resourceById = Object.values(this.config.resourceManager.resourceById);
+    const resourcesLoaders: ResourceLoader[] = resourceById;
 
     let resourcesItems: FormItem[] = resourcesLoaders.map((resourceLoader) => {
       const { dataSource, dataAccessor } = resourceLoader;
