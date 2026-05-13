@@ -1,25 +1,41 @@
 /**
  * Minimal zod stub for QUnit / SystemJS tests.
  *
- * Wrapped in AMD define() so SystemJS CSP-production mode can load it.
+ * Uses System.register format which works with both regular SystemJS
+ * and CSP-production mode (no eval required).
  */
 
-define((require, exports) => {
-    const z = {};
+System.register([], (exports) => ({
+    execute() {
+        const z = {
+            // top-level constructors
+            object: () => z,
+            string: () => z,
+            boolean: () => z,
+            number: () => z,
+            null: () => z,
+            enum: () => z,
+            union: () => z,
+            array: () => z,
+            tuple: () => z,
+            literal: () => z,
+            record: () => z,
+            lazy: () => z,
+            // chain modifiers
+            optional: () => z,
+            nullable: () => z,
+            strict: () => z,
+            int: () => z,
+            // eslint-disable-next-line spellcheck/spell-checker
+            nonnegative: () => z,
+            min: () => z,
+            max: () => z,
+            // validation
+            safeParse: () => ({ success: true, data: {} }),
+        };
 
-    [
-        // top-level constructors
-        'object', 'string', 'boolean', 'number', 'null',
-        'enum', 'union', 'array', 'tuple', 'literal', 'record', 'lazy',
-        // chain modifiers
-        'optional', 'nullable', 'strict',
-        'int', 'nonnegative',
-        'min', 'max',
-        // validation
-        'safeParse',
-    ].forEach((name) => { z[name] = () => z; });
-
-    Object.defineProperty(exports, '__esModule', { value: true });
-    exports.z = z;
-    exports.default = z;
-});
+        exports('z', z);
+        exports('default', z);
+        exports('__esModule', true);
+    },
+}));

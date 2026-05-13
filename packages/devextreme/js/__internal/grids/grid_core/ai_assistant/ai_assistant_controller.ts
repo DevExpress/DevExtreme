@@ -35,7 +35,7 @@ export class AIAssistantController extends Controller {
   private processing = false;
 
   private getCustomizedResponseTitle(
-    status: MessageStatus.Success | MessageStatus.Failure,
+    status: MessageStatus,
     commandNames: string[],
   ): string {
     // TODO: remove type description, it should be got from d.ts
@@ -232,10 +232,14 @@ export class AIAssistantController extends Controller {
     return [...coreCommands];
   }
 
+  protected getAiAssistantIntegrationController(): AIAssistantIntegrationController {
+    return new AIAssistantIntegrationController(this.component);
+  }
+
   public init(): void {
     this.gridCommands = new GridCommands(this.component, this.getGridCommandList());
     this.messageStore = new ArrayStore<Message, string>({ key: 'id' });
-    this.aiAssistantIntegrationController = new AIAssistantIntegrationController(this.component);
+    this.aiAssistantIntegrationController = this.getAiAssistantIntegrationController();
     this.aiAssistantIntegrationController.init();
   }
 

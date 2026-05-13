@@ -1,13 +1,16 @@
 /**
  * Minimal zod-to-json-schema stub for QUnit / SystemJS tests.
  *
- * Wrapped in AMD define() so SystemJS CSP-production mode can load it.
+ * Uses System.register format which works with both regular SystemJS
+ * and CSP-production mode (no eval required).
  */
 
-define((require, exports) => {
-    const zodToJsonSchema = () => ({ type: 'object' });
+System.register([], (exports) => ({
+    execute() {
+        const zodToJsonSchema = () => ({ type: 'object' });
 
-    Object.defineProperty(exports, '__esModule', { value: true });
-    exports.zodToJsonSchema = zodToJsonSchema;
-    exports.default = zodToJsonSchema;
-});
+        exports('zodToJsonSchema', zodToJsonSchema);
+        exports('default', zodToJsonSchema);
+        exports('__esModule', true);
+    },
+}));

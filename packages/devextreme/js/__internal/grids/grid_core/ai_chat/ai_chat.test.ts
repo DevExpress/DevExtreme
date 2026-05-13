@@ -548,7 +548,7 @@ describe('AIChat', () => {
 
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
-        const commands: CommandResults = [
+        const commands: CommandResult[] = [
           { status: 'success', message: 'Sorted Name.' },
           { status: 'aborted', message: 'Filter was aborted.' },
         ];
@@ -572,7 +572,7 @@ describe('AIChat', () => {
 
         const chatConfig = getChatConfig();
         const container = document.createElement('div');
-        const commands: CommandResults = [
+        const commands: CommandResult[] = [
           { status: 'aborted', message: 'Filter was aborted.' },
         ];
 

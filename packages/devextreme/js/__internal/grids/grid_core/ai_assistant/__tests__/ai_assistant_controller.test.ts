@@ -193,12 +193,12 @@ describe('AIAssistantController', () => {
             { status: 'aborted', message: 'filter aborted' },
           ]),
           abort: jest.fn(),
+          buildResponseSchema: jest.fn().mockReturnValue({ type: 'object' }),
+          isExecuting: jest.fn().mockReturnValue(false),
         }),
       );
 
-      const controller = createController({
-        'aiAssistant.aiIntegration': mockAIIntegration,
-      });
+      const controller = createController();
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       controller.sendRequestToAI({

@@ -62,7 +62,7 @@ export type CustomizeResponseText = (
 
 // TODO: move to d.ts
 export type CustomizeResponseTitle = (
-  status: MessageStatus.Success | MessageStatus.Failure,
+  status: MessageStatus,
   commandNames: string[],
 ) => string;
 
