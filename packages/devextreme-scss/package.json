@@ -10,10 +10,10 @@
     "ts-jest": "29.1.2"
   },
   "scripts": {
-    "build": "pnpm --workspace-root nx build devextreme-scss",
+    "build": "pnpm nx build devextreme-scss",
     "lint": "stylelint scss/widgets",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
-    "watch": "pnpm --workspace-root nx run devextreme-scss --target=watch"
+    "watch": "pnpm nx run devextreme-scss --target=watch"
   },
   "version": "26.1.2"
 }
