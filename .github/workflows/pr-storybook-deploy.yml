@@ -53,7 +53,7 @@ jobs:
     if: needs.prepare.outputs.action != 'none'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: preview
+    environment: github-pages
 
     concurrency:
       group: preview-deploy-${{ needs.prepare.outputs.pr_number }}
