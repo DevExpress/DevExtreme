@@ -125,7 +125,7 @@ $(() => {
         suggestions: {
           items: [
             {
-              text: 'Help',
+              text: '💡 Help',
               prompt: `💡 The DataGrid AI Assistant allows you to control the component using natural language. You can execute commands such as the following:
   • Sort records
   • Apply a filter
@@ -138,22 +138,23 @@ $(() => {
   • Pick a suggestion or enter a custom request to get started.`,
             },
             {
-              text: 'Sort by Region',
-              prompt: 'Sort by Region',
-            },
-            {
-              text: 'Filter Sector by Health',
+              text: '🔍 Filter Sector by Health',
               prompt: 'Filter Sector by Health',
             },
             {
-              text: 'Group by Product',
+              text: '↕️ Sort by Region',
+              prompt: 'Sort by Region',
+            },
+            {
+              text: '🧩 Group by Product',
               prompt: 'Group by Product',
+              width: 175,
             },
           ],
           onItemClick(e) {
             const { prompt, text } = e.itemData;
 
-            if (text === 'Help') {
+            if (text === '💡 Help') {
               const message = {
                 id: Date.now(),
                 timestamp: new Date(),
