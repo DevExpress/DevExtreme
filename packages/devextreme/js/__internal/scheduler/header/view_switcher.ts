@@ -2,11 +2,11 @@ import { current, isFluent } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 
 import type { NormalizedView } from '../utils/options/types';
-import type { SchedulerHeader } from './m_header';
+import type { SchedulerHeader } from './header';
 import {
   formatViews,
   getViewName,
-} from './m_utils';
+} from './utils';
 
 const ClASS = {
   container: 'dx-scheduler-view-switcher',

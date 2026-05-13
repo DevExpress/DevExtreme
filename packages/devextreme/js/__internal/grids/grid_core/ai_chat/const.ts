@@ -37,6 +37,7 @@ export const CLASSES = {
   actionListItem: 'dx-ai-chat__action-list-item',
   actionListItemSuccess: 'dx-ai-chat__action-list-item--success',
   actionListItemError: 'dx-ai-chat__action-list-item--error',
+  actionListItemAborted: 'dx-ai-chat__action-list-item--aborted',
   actionListItemIcon: 'dx-ai-chat__action-list-item-icon',
   actionListItemText: 'dx-ai-chat__action-list-item-text',
   messageErrorText: 'dx-ai-chat__message-error-text',
@@ -54,3 +55,4 @@ export const REGENERATE_ICON = 'restore';
 
 export const SUCCESS_ITEM_EMOJI = '✅';
 export const ERROR_ITEM_EMOJI = '❌';
+export const ABORTED_ITEM_EMOJI = '⚠️';
