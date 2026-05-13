@@ -81,3 +81,4 @@ jobs:
           umbrella-dir: preview
           comment: false
           token: ${{ github.token }}
+          wait-for-pages-deployment: true

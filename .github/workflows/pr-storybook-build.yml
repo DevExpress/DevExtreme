@@ -27,6 +27,7 @@ jobs:
     name: Build preview artifacts
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: github-pages
 
     steps:
       - name: Decide action (deploy/remove/none)
