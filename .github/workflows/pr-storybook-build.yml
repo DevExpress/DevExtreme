@@ -56,11 +56,6 @@ jobs:
             fi
           fi
 
-          mkdir -p preview_meta
-          cat > preview_meta/meta.json <<EOF
-          { "pr_number": ${PR_NUMBER}, "action": "${ACTION}" }
-          EOF
-
           echo "action=$ACTION" >> "$GITHUB_OUTPUT"
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
@@ -70,6 +65,15 @@ jobs:
         with:
           submodules: true
           fetch-depth: 1
+
+      - name: Write meta artifact
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p preview_meta
+          printf '{ "pr_number": %s, "action": "%s" }\n' \
+            '${{ steps.meta.outputs.pr_number }}' \
+            '${{ steps.meta.outputs.action }}' > preview_meta/meta.json
 
       - name: Use Node.js
         if: steps.meta.outputs.action == 'deploy'
