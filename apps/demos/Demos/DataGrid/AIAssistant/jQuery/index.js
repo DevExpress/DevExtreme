@@ -125,35 +125,35 @@ $(() => {
         suggestions: {
           items: [
             {
-              text: '💡 Help',
-              prompt: `The DataGrid AI Assistant allows you to control the component using natural language. You can execute commands such as the following:
-  - Sort records
-  - Apply a filter
-  - Search for a specific value
-  - Group records by a field
-  - Focus and select rows
-  - Modify paging settings
-  - Pin, resize, and reorder columns
-  - Configure data summaries
-  - Pick a suggestion or enter a custom request to get started.`,
+              text: 'Help',
+              prompt: `💡 The DataGrid AI Assistant allows you to control the component using natural language. You can execute commands such as the following:
+  • Sort records
+  • Apply a filter
+  • Search for a specific value
+  • Group records by a field
+  • Focus and select rows
+  • Modify paging settings
+  • Pin, resize, and reorder columns
+  • Configure data summaries
+  • Pick a suggestion or enter a custom request to get started.`,
             },
             {
-              text: '🔤 Sort by Region',
-              prompt: 'Sort by Region ascending',
+              text: 'Sort by Region',
+              prompt: 'Sort by Region',
             },
             {
-              text: '🔍 Filter by Health Sales',
-              prompt: 'Filter by Sector equals Health',
+              text: 'Filter Sector by Health',
+              prompt: 'Filter Sector by Health',
             },
             {
-              text: '📁 Group by Product',
+              text: 'Group by Product',
               prompt: 'Group by Product',
             },
           ],
           onItemClick(e) {
             const { prompt, text } = e.itemData;
 
-            if (text === '💡 Help') {
+            if (text === 'Help') {
               const message = {
                 id: Date.now(),
                 timestamp: new Date(),
@@ -161,7 +161,7 @@ $(() => {
                 text: prompt,
               };
 
-              chatInstance.option('dataSource').store.push([{ type: 'insert', data: message }]);
+              chatInstance.getDataSource().store().push([{ type: 'insert', data: message }]);
             } else {
               chatInstance.option('inputFieldText', prompt);
             }
