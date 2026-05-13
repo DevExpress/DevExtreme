@@ -38,7 +38,7 @@ import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
-import { SchedulerHeader } from './header/m_header';
+import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { hide as hideLoading, show as showLoading } from './m_loading';

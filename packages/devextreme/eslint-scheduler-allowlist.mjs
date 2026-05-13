@@ -113,10 +113,10 @@ const schedulerLegacyMembers = [
     // appointment_popup/m_legacy_popup.ts
     '_ignorePreventScrollEventsDeprecation',
 
-    // header/m_header.ts
+    // header/header.ts
     '_useShortDateFormat',
 
-    // header/m_view_switcher.ts
+    // header/view_switcher.ts
     '_wrapperClassExternal',
 
     // utils/options/constants.ts, utils/options/types.ts
