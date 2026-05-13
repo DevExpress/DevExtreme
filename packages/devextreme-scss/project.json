@@ -20,8 +20,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm --workspace-root nx clean:artifacts devextreme-scss",
-          "pnpm --workspace-root nx clean:bundles devextreme-scss"
+          "pnpm nx clean:artifacts devextreme-scss",
+          "pnpm nx clean:bundles devextreme-scss"
         ],
         "parallel": false
       }
@@ -52,6 +52,8 @@
       },
       "inputs": [
         "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
         "{projectRoot}/scss/**/*"
       ],
@@ -68,6 +70,8 @@
       },
       "inputs": [
         "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
         "{projectRoot}/scss/**/*"
       ],
@@ -81,9 +85,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm --workspace-root nx clean devextreme-scss",
-          "pnpm --workspace-root nx build:themes devextreme-scss",
-          "pnpm --workspace-root nx copy:assets devextreme-scss"
+          "pnpm nx clean devextreme-scss",
+          "pnpm nx run-many --targets=build:themes,copy:assets --projects=devextreme-scss --parallel"
         ],
         "parallel": false
       },
@@ -106,9 +109,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm --workspace-root nx clean devextreme-scss",
-          "pnpm --workspace-root nx build:themes-dev devextreme-scss",
-          "pnpm --workspace-root nx copy:assets devextreme-scss"
+          "pnpm nx clean devextreme-scss",
+          "pnpm nx run-many --targets=build:themes-dev,copy:assets --projects=devextreme-scss --parallel"
         ],
         "parallel": false
       },
