@@ -1094,7 +1094,12 @@ export class SimulatedStrategy<
     const actionHandler = this._createActionByOption(optionName);
 
     return (...args: unknown[]) => {
-      actionHandler(extend(this._createActionArgs(), args));
+      try {
+        actionHandler(extend(this._createActionArgs(), args));
+      } catch (e) {
+        // eslint-disable-next-line spellcheck/spell-checker
+        queueMicrotask(() => { throw e; });
+      }
     };
   }
 
