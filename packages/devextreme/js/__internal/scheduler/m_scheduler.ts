@@ -42,7 +42,7 @@ import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
-import NotifyScheduler from './base/m_widget_notify_scheduler';
+import NotifyScheduler from './base/widget_notify_scheduler';
 import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
