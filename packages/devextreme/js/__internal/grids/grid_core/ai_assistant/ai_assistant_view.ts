@@ -29,6 +29,8 @@ export class AIAssistantView extends View {
 
   private aiAssistantController!: AIAssistantController;
 
+  private messageStore?: ArrayStore<Message, string>;
+
   private columnHeadersView!: ColumnHeadersView;
 
   private rowsView!: RowsView;
@@ -41,7 +43,11 @@ export class AIAssistantView extends View {
     this.columnHeadersView = this.getView('columnHeadersView');
     this.rowsView = this.getView('rowsView');
     this.aiAssistantController = this.getController('aiAssistant');
+    this.messageStore = this.aiAssistantController.getMessageStore();
     this.handleMessageStorePushContext = this.handleMessageStorePush.bind(this);
+
+    this.unsubscribeMessageStorePush();
+    this.subscribeMessageStorePush();
   }
 
   private getAIChatConfig(): AIChatOptions {
@@ -113,20 +119,17 @@ export class AIAssistantView extends View {
     });
   }
 
-  private subscribeMessageStorePush(messageStore: ArrayStore<Message, string>): void {
-    messageStore.off('push', this.handleMessageStorePushContext);
-    messageStore.on('push', this.handleMessageStorePushContext);
+  private unsubscribeMessageStorePush(): void {
+    this.messageStore?.off('push', this.handleMessageStorePushContext);
+  }
+
+  private subscribeMessageStorePush(): void {
+    this.messageStore?.on('push', this.handleMessageStorePushContext);
   }
 
   private getAIChatOptions(): ChatProperties {
-    const messageStore = this.aiAssistantController.getMessageStore();
-
-    this.subscribeMessageStorePush(messageStore);
-
     return {
-      dataSource: {
-        store: messageStore,
-      },
+      dataSource: this.messageStore,
       reloadOnChange: true,
       onMessageEntered: (e): void => {
         this.executeRequest(e.message);
@@ -141,6 +144,12 @@ export class AIAssistantView extends View {
 
       this.aiChatInstance = new AIChat(config);
     }
+  }
+
+  public dispose(): void {
+    this.unsubscribeMessageStorePush();
+    this.messageStore = undefined;
+    super.dispose();
   }
 
   public optionChanged(args: OptionChanged): void {

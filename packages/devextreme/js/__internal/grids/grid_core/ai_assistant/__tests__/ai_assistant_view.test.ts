@@ -162,7 +162,7 @@ describe('AIAssistantView', () => {
 
       expect(mockAIAssistantController.getMessageStore).toHaveBeenCalledTimes(1);
       expect(aiChatConfig.chatOptions).toEqual(expect.objectContaining({
-        dataSource: expect.objectContaining({ store: mockMessageStore }),
+        dataSource: mockMessageStore,
         reloadOnChange: true,
         onMessageEntered: expect.any(Function),
       }));
@@ -231,6 +231,26 @@ describe('AIAssistantView', () => {
       const { aiAssistantView } = createAIAssistantView({ render: false });
 
       return expect(aiAssistantView.hide()).resolves.toBe(false);
+    });
+  });
+
+  describe('dispose', () => {
+    it('should unsubscribe from store push event', () => {
+      const onSpy = jest.spyOn(mockMessageStore, 'on');
+      const { aiAssistantView } = createAIAssistantView();
+      const offSpy = jest.spyOn(mockMessageStore, 'off');
+
+      aiAssistantView.dispose();
+
+      const onPushCall = (onSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+      const offPushCall = (offSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+
+      expect(onPushCall).toBeDefined();
+      expect(offPushCall).toBeDefined();
+      expect((offPushCall as any[])[1]).toBe((onPushCall as any[])[1]);
+
+      offSpy.mockRestore();
+      onSpy.mockRestore();
     });
   });
 
@@ -483,9 +503,9 @@ describe('AIAssistantView', () => {
         return pushCall[1] as (changes: any[]) => void;
       };
 
-      it('should subscribe to store push event during render', () => {
+      it('should subscribe to store push event during init', () => {
         const onSpy = jest.spyOn(mockMessageStore, 'on');
-        createAIAssistantView();
+        createAIAssistantView({ render: false });
 
         expect(onSpy).toHaveBeenCalledWith('push', expect.any(Function));
         onSpy.mockRestore();
