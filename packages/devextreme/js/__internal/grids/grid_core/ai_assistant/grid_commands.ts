@@ -16,8 +16,9 @@ import type {
   CustomizeResponseText,
   GridCommand,
   JsonSchema,
+  ResponseSchemaBranch,
 } from './types';
-import { expandTypeArraysToAnyOf } from './utils';
+import { expandTypeArraysToAnyOf, hoistSchemaRefs } from './utils';
 
 export class GridCommands {
   private readonly component: InternalGrid;
@@ -80,8 +81,10 @@ export class GridCommands {
     return this.executing;
   }
 
-  public buildResponseSchema(): JsonSchema {
-    const branches = [...this.commands.values()].map((command) => {
+  private buildResponseSchemaBranches(): ResponseSchemaBranch[] {
+    const commands = [...this.commands.values()];
+
+    return commands.map((command) => {
       const argsSchema = zodToJsonSchema(command.schema, { target: 'openAi' }) as JsonSchema;
 
       // Remove $schema from nested schemas since it's only necessary at root
@@ -90,21 +93,45 @@ export class GridCommands {
       const expandedArgsSchema = expandTypeArraysToAnyOf(argsSchema);
 
       return {
-        type: 'object',
-        description: command.description,
-        required: ['name', 'args'],
-        additionalProperties: false,
-        properties: {
-          name: {
-            type: 'string',
-            enum: [command.name],
+        commandName: command.name,
+        branch: {
+          type: 'object',
+          description: command.description,
+          required: ['name', 'args'],
+          additionalProperties: false,
+          properties: {
+            name: {
+              type: 'string',
+              enum: [command.name],
+            },
+            args: expandedArgsSchema,
           },
-          args: expandedArgsSchema,
         },
       };
     });
+  }
 
-    return {
+  private enrichSchemaWithDefs(
+    schema: JsonSchema,
+    branches: ResponseSchemaBranch[],
+  ): void {
+    // Hoist $ref targets to root-level $defs (required by OpenAI)
+    const defsInputs = branches.map(({ commandName, branch }) => ({
+      prefix: commandName,
+      schema: branch.properties.args as JsonSchema,
+    }));
+    const mergedDefs = hoistSchemaRefs(defsInputs);
+
+    if (Object.keys(mergedDefs).length > 0) {
+      schema.$defs = mergedDefs;
+    }
+  }
+
+  public buildResponseSchema(): JsonSchema {
+    const branches = this.buildResponseSchemaBranches();
+    const itemsAnyOfSchema = branches.map(({ branch }) => branch);
+
+    const schema: JsonSchema = {
       type: 'object',
       required: ['actions'],
       additionalProperties: false,
@@ -113,11 +140,15 @@ export class GridCommands {
           type: 'array',
           description: 'The list of grid commands and corresponding arguments to execute',
           items: {
-            anyOf: branches,
+            anyOf: itemsAnyOfSchema,
           },
         },
       },
     };
+
+    this.enrichSchemaWithDefs(schema, branches);
+
+    return schema;
   }
 
   public validate(actions: ExecuteGridAssistantAction[]): boolean {

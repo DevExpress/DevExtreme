@@ -10,6 +10,7 @@ import {
   getMessageStatus,
   hasAbortedCommands,
   hasCommandErrors,
+  hoistSchemaRefs,
   isAIMessage,
   isChatOptions,
   isEnabledOption,
@@ -428,5 +429,308 @@ describe('expandTypeArraysToAnyOf', () => {
     const original = JSON.parse(JSON.stringify(schema));
     expandTypeArraysToAnyOf(schema);
     expect(schema).toEqual(original);
+  });
+});
+
+describe('hoistSchemaRefs', () => {
+  it('returns empty object when no schemas have $ref', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: { x: { type: 'string' } },
+    };
+
+    const result = hoistSchemaRefs([{ prefix: 'test', schema }]);
+
+    expect(result).toEqual({});
+    expect(schema.$defs).toBeUndefined();
+  });
+
+  it('returns empty object for empty input array', () => {
+    expect(hoistSchemaRefs([])).toEqual({});
+  });
+
+  describe('$defs-based refs', () => {
+    it('hoists $defs and removes them from the sub-schema', () => {
+      const schema: JsonSchema = {
+        type: 'object',
+        $defs: {
+          MyType: { type: 'string' },
+        },
+        properties: {
+          value: { $ref: '#/$defs/MyType' },
+        },
+      };
+
+      const result = hoistSchemaRefs([
+        { prefix: 'test', schema },
+      ]);
+
+      expect(result).toEqual({
+        test_MyType: { type: 'string' },
+      });
+      expect(schema.$defs).toBeUndefined();
+      const props = schema.properties as JsonSchema;
+      expect(props.value).toEqual({
+        $ref: '#/$defs/test_MyType',
+      });
+    });
+
+    it('rewrites $ref inside $defs themselves', () => {
+      const schema: JsonSchema = {
+        type: 'object',
+        $defs: {
+          Expr: {
+            anyOf: [
+              { type: 'string' },
+              {
+                type: 'object',
+                properties: {
+                  child: { $ref: '#/$defs/Expr' },
+                },
+              },
+            ],
+          },
+        },
+        properties: {
+          root: { $ref: '#/$defs/Expr' },
+        },
+      };
+
+      const result = hoistSchemaRefs([
+        { prefix: 'filter', schema },
+      ]);
+
+      expect(result).toEqual({
+        filter_Expr: {
+          anyOf: [
+            { type: 'string' },
+            {
+              type: 'object',
+              properties: {
+                child: { $ref: '#/$defs/filter_Expr' },
+              },
+            },
+          ],
+        },
+      });
+      const props = schema.properties as JsonSchema;
+      expect(props.root).toEqual({
+        $ref: '#/$defs/filter_Expr',
+      });
+    });
+
+    it('avoids collisions via prefix', () => {
+      const schemaA: JsonSchema = {
+        type: 'object',
+        $defs: { Shared: { type: 'number' } },
+        properties: { a: { $ref: '#/$defs/Shared' } },
+      };
+      const schemaB: JsonSchema = {
+        type: 'object',
+        $defs: { Shared: { type: 'string' } },
+        properties: { b: { $ref: '#/$defs/Shared' } },
+      };
+
+      const result = hoistSchemaRefs([
+        { prefix: 'sortA', schema: schemaA },
+        { prefix: 'sortB', schema: schemaB },
+      ]);
+
+      expect(result).toEqual({
+        sortA_Shared: { type: 'number' },
+        sortB_Shared: { type: 'string' },
+      });
+      const propsA = schemaA.properties as JsonSchema;
+      const propsB = schemaB.properties as JsonSchema;
+      expect(propsA.a).toEqual({
+        $ref: '#/$defs/sortA_Shared',
+      });
+      expect(propsB.b).toEqual({
+        $ref: '#/$defs/sortB_Shared',
+      });
+    });
+
+    it('handles schemas with multiple $defs entries', () => {
+      const schema: JsonSchema = {
+        type: 'object',
+        $defs: {
+          TypeA: { type: 'string' },
+          TypeB: { type: 'number' },
+        },
+        properties: {
+          a: { $ref: '#/$defs/TypeA' },
+          b: { $ref: '#/$defs/TypeB' },
+        },
+      };
+
+      const result = hoistSchemaRefs([
+        { prefix: 'sort', schema },
+      ]);
+
+      expect(result).toEqual({
+        sort_TypeA: { type: 'string' },
+        sort_TypeB: { type: 'number' },
+      });
+      const props = schema.properties as JsonSchema;
+      expect(props.a).toEqual({
+        $ref: '#/$defs/sort_TypeA',
+      });
+      expect(props.b).toEqual({
+        $ref: '#/$defs/sort_TypeB',
+      });
+    });
+  });
+
+  describe('inline-path refs', () => {
+    it('hoists an inline $ref to root-level $defs', () => {
+      const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+          expr: {
+            anyOf: [
+              { type: 'string' },
+              {
+                type: 'object',
+                properties: {
+                  child: { $ref: '#/properties/expr' },
+                },
+              },
+            ],
+          },
+        },
+      };
+
+      const result = hoistSchemaRefs([
+        { prefix: 'test', schema },
+      ]);
+
+      expect(result.test_properties_expr).toBeDefined();
+
+      const props = schema.properties as JsonSchema;
+      const exprNode = props.expr as JsonSchema;
+      const branches = exprNode.anyOf as JsonSchema[];
+      expect(branches[1].properties).toEqual({
+        child: { $ref: '#/$defs/test_properties_expr' },
+      });
+    });
+
+    it('handles recursive inline $ref', () => {
+      const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+          expression: {
+            anyOf: [
+              {
+                anyOf: [
+                  {
+                    type: 'object',
+                    properties: {
+                      type: { type: 'string', const: 'basic' },
+                      field: { type: 'string' },
+                    },
+                    additionalProperties: false,
+                  },
+                  {
+                    type: 'object',
+                    properties: {
+                      type: { type: 'string', const: 'combined' },
+                      left: { $ref: '#/properties/expression/anyOf/0' },
+                      right: { $ref: '#/properties/expression/anyOf/0' },
+                    },
+                    additionalProperties: false,
+                  },
+                ],
+              },
+              { type: 'null' },
+            ],
+          },
+        },
+      };
+
+      const result = hoistSchemaRefs([
+        { prefix: 'filter', schema },
+      ]);
+
+      const defName = 'filter_properties_expression_anyOf_0';
+      expect(result[defName]).toBeDefined();
+
+      const props = schema.properties as JsonSchema;
+      const exprNode = props.expression as JsonSchema;
+      const exprAnyOf = exprNode.anyOf as JsonSchema[];
+      const innerAnyOf = exprAnyOf[0].anyOf as JsonSchema[];
+      expect(innerAnyOf[1].properties).toEqual(
+        expect.objectContaining({
+          left: { $ref: `#/$defs/${defName}` },
+          right: { $ref: `#/$defs/${defName}` },
+        }),
+      );
+
+      const hoistedDef = result[defName] as JsonSchema;
+      const hoistedInner = hoistedDef.anyOf as JsonSchema[];
+      const hoistedProps = hoistedInner[1].properties as JsonSchema;
+      expect(hoistedProps.left).toEqual({
+        $ref: `#/$defs/${defName}`,
+      });
+      expect(hoistedProps.right).toEqual({
+        $ref: `#/$defs/${defName}`,
+      });
+    });
+  });
+
+  it('skips schemas without $ref', () => {
+    const schemaWithRefs: JsonSchema = {
+      type: 'object',
+      $defs: { Foo: { type: 'boolean' } },
+      properties: { x: { $ref: '#/$defs/Foo' } },
+    };
+    const schemaWithout: JsonSchema = {
+      type: 'object',
+      properties: { y: { type: 'string' } },
+    };
+
+    const result = hoistSchemaRefs([
+      { prefix: 'a', schema: schemaWithRefs },
+      { prefix: 'b', schema: schemaWithout },
+    ]);
+
+    expect(result).toEqual({
+      a_Foo: { type: 'boolean' },
+    });
+    expect(schemaWithout).toEqual({
+      type: 'object',
+      properties: { y: { type: 'string' } },
+    });
+  });
+
+  it('rewrites deeply nested $ref in arrays', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      $defs: {
+        Item: { type: 'string' },
+      },
+      properties: {
+        list: {
+          type: 'array',
+          items: {
+            anyOf: [
+              { $ref: '#/$defs/Item' },
+              { type: 'null' },
+            ],
+          },
+        },
+      },
+    };
+
+    const result = hoistSchemaRefs([
+      { prefix: 'p', schema },
+    ]);
+
+    expect(result).toEqual({ p_Item: { type: 'string' } });
+
+    const props = schema.properties as JsonSchema;
+    const listNode = props.list as JsonSchema;
+    const items = listNode.items as JsonSchema;
+    const itemsAnyOf = items.anyOf as JsonSchema[];
+    expect(itemsAnyOf[0]).toEqual({ $ref: '#/$defs/p_Item' });
   });
 });

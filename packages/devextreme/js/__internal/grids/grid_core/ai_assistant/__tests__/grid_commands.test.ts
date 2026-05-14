@@ -12,18 +12,9 @@ import type {
   CommandResult,
   CustomizeResponseText,
   GridCommand,
+  JsonSchema,
+  ResponseSchemaBranch,
 } from '../types';
-
-interface Branch {
-  type: string;
-  description: string;
-  required: string[];
-  additionalProperties: boolean;
-  properties: {
-    name: { type: string; enum: string[] };
-    args: Record<string, unknown>;
-  };
-}
 
 interface SchemaShape {
   $schema?: string;
@@ -34,7 +25,7 @@ interface SchemaShape {
     actions: {
       type: string;
       description: string;
-      items: { anyOf: Branch[] };
+      items: { anyOf: ResponseSchemaBranch['branch'][] };
     };
   };
 }
@@ -243,7 +234,7 @@ describe('GridCommands', () => {
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
       const schema = gridCommands.buildResponseSchema() as unknown as SchemaShape;
-      const { args } = schema.properties.actions.items.anyOf[0].properties;
+      const args = schema.properties.actions.items.anyOf[0].properties.args as JsonSchema;
 
       expect(args.type).toBe('object');
       expect(args.additionalProperties).toBe(false);
@@ -263,7 +254,7 @@ describe('GridCommands', () => {
       const branch = schema.properties.actions.items.anyOf[0];
       expect(branch.additionalProperties).toBe(false);
       // Args level
-      expect(branch.properties.args.additionalProperties).toBe(false);
+      expect((branch.properties.args as JsonSchema).additionalProperties).toBe(false);
     });
 
     it('should not have anyOf at root schema level', () => {
@@ -291,7 +282,7 @@ describe('GridCommands', () => {
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
       const schema = gridCommands.buildResponseSchema() as unknown as SchemaShape;
-      const { args } = schema.properties.actions.items.anyOf[0].properties;
+      const args = schema.properties.actions.items.anyOf[0].properties.args as JsonSchema;
 
       expect(args.type).toBe('object');
       expect(args.additionalProperties).toBe(false);
@@ -330,9 +321,105 @@ describe('GridCommands', () => {
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
       const schema = gridCommands.buildResponseSchema() as unknown as SchemaShape;
-      const { args } = schema.properties.actions.items.anyOf[0].properties;
+      const args = schema.properties.actions.items.anyOf[0].properties.args as JsonSchema;
 
-      expect(args.required).toEqual(['field1']);
+      // openai target makes all fields required (optional becomes nullable)
+      expect(args.required).toEqual(['field1', 'field2']);
+    });
+
+    it('should hoist $defs to root level for commands with recursive schemas (z.lazy)', () => {
+      const recursiveSchema: z.ZodType<{ child: unknown } | string> = z.lazy(() => z.union([
+        z.string(),
+        z.object({ child: recursiveSchema }).strict(),
+      ]));
+
+      const command = createMockCommand('recursive', {
+        schema: z.object({ expr: recursiveSchema }),
+      });
+      const gridCommands = new GridCommands(createMockComponent(), [command]);
+
+      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+
+      // $defs should exist at root level
+      expect(schema.$defs).toBeDefined();
+      expect(typeof schema.$defs).toBe('object');
+
+      // No $defs should remain nested inside the branch args
+      const props = schema.properties as Record<string, unknown>;
+      const actions = props.actions as Record<string, unknown>;
+      const items = actions.items as Record<string, unknown>;
+      const branches = items.anyOf as Record<string, unknown>[];
+      const branchProps = branches[0].properties as Record<string, unknown>;
+      const args = branchProps.args as Record<string, unknown>;
+      expect(args.$defs).toBeUndefined();
+
+      // All $ref values in the schema should resolve to keys in root $defs
+      const defs = schema.$defs as Record<string, unknown>;
+      const allRefs: string[] = [];
+      const collectRefs = (obj: unknown): void => {
+        if (!obj || typeof obj !== 'object') return;
+        if (Array.isArray(obj)) { obj.forEach(collectRefs); return; }
+        const record = obj as Record<string, unknown>;
+        if (typeof record.$ref === 'string') allRefs.push(record.$ref);
+        Object.values(record).forEach(collectRefs);
+      };
+      collectRefs(schema);
+
+      for (const ref of allRefs) {
+        const match = /^#\/\$defs\/(.+)$/.exec(ref);
+        expect(match).not.toBeNull();
+        if (match) {
+          expect(defs[match[1]]).toBeDefined();
+        }
+      }
+    });
+
+    it('should not add $defs to root when no command uses $ref', () => {
+      const command = createMockCommand('simple', {
+        schema: z.object({ value: z.string() }),
+      });
+      const gridCommands = new GridCommands(createMockComponent(), [command]);
+
+      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+
+      expect(schema.$defs).toBeUndefined();
+    });
+
+    it('should rewrite all inline $ref to #/$defs/ for recursive schemas', () => {
+      const filterOps = z.enum(['=', '<>', 'contains']);
+      const basicExpr = z.object({
+        type: z.literal('basic'),
+        field: z.string(),
+        op: filterOps,
+        value: z.union([z.string(), z.number(), z.null()]),
+      }).strict();
+      const exprSchema: z.ZodType<unknown> = z.lazy(() => z.union([
+        basicExpr,
+        z.object({
+          type: z.literal('combined'),
+          left: exprSchema,
+          combiner: z.enum(['and', 'or']),
+          right: exprSchema,
+        }).strict(),
+      ]));
+      const filterCommand = createMockCommand('filterValue', {
+        schema: z.object({
+          expression: exprSchema.nullable(),
+        }).strict(),
+      });
+      const gridCommands = new GridCommands(
+        createMockComponent(),
+        [filterCommand],
+      );
+
+      const schema = gridCommands.buildResponseSchema();
+      const json = JSON.stringify(schema);
+
+      // No $ref should contain inline paths
+      expect(json).not.toMatch(/"\$ref"\s*:\s*"#\/properties\//);
+
+      // $defs should be at root
+      expect(schema.$defs).toBeDefined();
     });
   });
 

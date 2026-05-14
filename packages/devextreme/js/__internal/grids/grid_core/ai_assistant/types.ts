@@ -8,6 +8,20 @@ import type { MessageStatus } from './const';
 /** JSON Schema object sent to the LLM. */
 export type JsonSchema = Record<string, unknown>;
 
+export interface ResponseSchemaBranch {
+  commandName: string;
+  branch: {
+    type: string;
+    description: string;
+    required: string[];
+    additionalProperties: boolean;
+    properties: {
+      name: { type: string; enum: string[] };
+      args: JsonSchema | undefined;
+    };
+  };
+}
+
 export type CommandStatus = 'success' | 'failure' | 'aborted';
 
 export interface CommandResult {

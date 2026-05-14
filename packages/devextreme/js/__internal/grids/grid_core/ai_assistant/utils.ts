@@ -102,3 +102,159 @@ export const expandTypeArraysToAnyOf = (
 
   return result;
 };
+
+/** Resolves a JSON Pointer (e.g. `#/properties/expr/anyOf/0`) within a schema. */
+const resolveJsonPointer = (
+  schema: JsonSchema,
+  pointer: string,
+): unknown => {
+  if (!pointer.startsWith('#/')) {
+    return undefined;
+  }
+
+  const segments = pointer.slice(2).split('/');
+  let current: unknown = schema;
+
+  for (const segment of segments) {
+    if (!current || typeof current !== 'object') {
+      return undefined;
+    }
+
+    current = (current as Record<string, unknown>)[segment];
+  }
+
+  return current;
+};
+
+/** Recursively collects all `$ref` string values from a schema node. */
+const collectAllRefs = (node: unknown, refs: Set<string>): void => {
+  if (!node || typeof node !== 'object') {
+    return;
+  }
+
+  if (Array.isArray(node)) {
+    for (const item of node) {
+      collectAllRefs(item, refs);
+    }
+    return;
+  }
+
+  const obj = node as Record<string, unknown>;
+
+  if (typeof obj.$ref === 'string') {
+    refs.add(obj.$ref);
+  }
+
+  for (const value of Object.values(obj)) {
+    collectAllRefs(value, refs);
+  }
+};
+
+/** Recursively rewrites `$ref` values using an `oldRef → newRef` mapping. Mutates in place. */
+const rewriteRefs = (
+  node: unknown,
+  refMap: Map<string, string>,
+): void => {
+  if (!node || typeof node !== 'object') {
+    return;
+  }
+
+  if (Array.isArray(node)) {
+    for (const item of node) {
+      rewriteRefs(item, refMap);
+    }
+    return;
+  }
+
+  const obj = node as Record<string, unknown>;
+
+  if (typeof obj.$ref === 'string') {
+    const newRef = refMap.get(obj.$ref);
+
+    if (newRef) {
+      obj.$ref = newRef;
+    }
+  }
+
+  for (const value of Object.values(obj)) {
+    rewriteRefs(value, refMap);
+  }
+};
+
+/**
+ * Derives a definition name from a `$ref` path.
+ *
+ * `#/$defs/MyType` → `"MyType"`,
+ * `#/properties/expression/anyOf/0` → `"properties_expression_anyOf_0"`
+ */
+const defNameFromRef = (ref: string): string => {
+  if (ref.startsWith('#/$defs/')) {
+    return ref.slice(8);
+  }
+
+  return ref.slice(2).replace(/\//g, '_');
+};
+
+/**
+ * Extracts all `$ref` targets from each sub-schema, moves them into a
+ * merged top-level `$defs` map, and rewrites every `$ref` to point to
+ * `#/$defs/<prefix>_<name>`.
+ *
+ * Handles both `$defs`-based (`$ref: "#/$defs/Foo"`) and inline-path
+ * (`$ref: "#/properties/expression/anyOf/0"`) references that
+ * `zodToJsonSchema` may produce.
+ *
+ * OpenAI Structured Outputs requires every `$ref` to resolve against
+ * `$defs` at the **root** of the schema. This utility rewrites local
+ * references so the combined schema stays valid.
+ *
+ * **Mutates** the input items in place and returns the merged `$defs`.
+ */
+export const hoistSchemaRefs = (
+  items: { prefix: string; schema: JsonSchema }[],
+): JsonSchema => {
+  const mergedDefs: JsonSchema = {};
+
+  for (const { prefix, schema } of items) {
+    const refs = new Set<string>();
+    collectAllRefs(schema, refs);
+
+    if (refs.size === 0) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const refMap = new Map<string, string>();
+
+    for (const ref of refs) {
+      const baseName = defNameFromRef(ref);
+      const prefixedName = `${prefix}_${baseName}`;
+      const newRef = `#/$defs/${prefixedName}`;
+
+      refMap.set(ref, newRef);
+
+      const resolved = ref.startsWith('#/$defs/')
+        ? (schema.$defs as JsonSchema | undefined)?.[baseName]
+        : resolveJsonPointer(schema, ref);
+
+      if (resolved && typeof resolved === 'object') {
+        mergedDefs[prefixedName] = JSON.parse(
+          JSON.stringify(resolved),
+        );
+      }
+    }
+
+    if (schema.$defs) {
+      delete schema.$defs;
+    }
+
+    rewriteRefs(schema, refMap);
+
+    for (const prefixedName of new Set(refMap.values())) {
+      const defName = prefixedName.slice('#/$defs/'.length);
+      rewriteRefs(mergedDefs[defName], refMap);
+    }
+  }
+
+  return mergedDefs;
+};
