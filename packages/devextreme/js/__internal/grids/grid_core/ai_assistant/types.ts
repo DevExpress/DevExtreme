@@ -1,5 +1,5 @@
 import type { RequestCallbacks } from '@js/common/ai-integration';
-import type { CustomizeResponseText } from '@js/common/grids';
+import type { AIAssistant } from '@js/common/grids';
 import type { Message } from '@js/ui/chat';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
@@ -66,7 +66,7 @@ export interface CommandMessages {
   failure: string;
 }
 
-export { CustomizeResponseText };
+export type CustomizeResponseText = AIAssistant['customizeResponseText'];
 
 // TODO: move to d.ts
 export type CustomizeResponseTitle = (

@@ -100,30 +100,38 @@ export type ResponseStatusTexts = {
 };
 
 /**
- * @docid
+ * @docid GridBasePredefinedCommands
  * @public
  * @namespace DevExpress.common.grids
  */
-export interface PredefinedCommands {
+export type PredefinedCommands = {
   sorting: {
     dataField: string;
     sortOrder: SortOrder | 'none';
   };
   clearSorting: {};
-}
+};
 
+/**
+ * @docid
+ * @namespace DevExpress.common.grids
+ */
 export type CommandInfo<
   TCommands extends PredefinedCommands = PredefinedCommands,
 > = { [K in keyof TCommands]: { name: K; args: TCommands[K] } }[keyof TCommands]
     | { name: string; args: Record<string, unknown> };
 
-export type CustomizeResponseText<
-  TCommands extends PredefinedCommands = PredefinedCommands,
-> = (command: CommandInfo<TCommands>) => ResponseStatusTexts;
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type PredefinedCommandNames = keyof PredefinedCommands;
 
 /**
  * @docid
  * @public
+ * @type object
  * @namespace DevExpress.common.grids
  */
 export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommands> = {
@@ -152,11 +160,13 @@ export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommand
   /**
    * @docid
    */
-  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands | string)[]) => string;
+  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands)[]) => string;
   /**
    * @docid
+   * @type_function_param1 command:CommandInfo
+   * @type_function_return ResponseStatusTexts
    */
-  customizeResponseText?: CustomizeResponseText<TCommands>;
+  customizeResponseText?: (command: CommandInfo<TCommands>) => ResponseStatusTexts;
 };
 
 /**

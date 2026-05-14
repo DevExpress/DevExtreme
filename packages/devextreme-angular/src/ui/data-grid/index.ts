@@ -344,7 +344,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
 
 
+    /**
+     * [descr:dxDataGridOptions.aiAssistant]
     
+     */
     @Input()
     get aiAssistant(): AIAssistant {
         return this._getOption('aiAssistant');

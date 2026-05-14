@@ -15,7 +15,7 @@ import {
 
 
 import type { AIIntegration } from 'devextreme/common/ai-integration';
-import type { ResponseStatus } from 'devextreme/common/grids';
+import type { CommandInfo, ResponseStatusTexts, ResponseStatus } from 'devextreme/common/grids';
 import type { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
@@ -50,10 +50,10 @@ export class DxoTreeListAIAssistantComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get customizeResponseText(): any {
+    get customizeResponseText(): ((command: CommandInfo) => ResponseStatusTexts) {
         return this._getOption('customizeResponseText');
     }
-    set customizeResponseText(value: any) {
+    set customizeResponseText(value: ((command: CommandInfo) => ResponseStatusTexts)) {
         this._setOption('customizeResponseText', value);
     }
 

@@ -296,6 +296,7 @@ export namespace Grids {
     export type ColumnHeaderFilterSearchConfig = GridsModule.ColumnHeaderFilterSearchConfig;
     export type ColumnLookup = GridsModule.ColumnLookup;
     export type ColumnResizeMode = GridsModule.ColumnResizeMode;
+    export type CommandInfo<TCommands extends PredefinedCommands = PredefinedCommands> = GridsModule.CommandInfo<TCommands>;
     export type DataChange<TRowData = any, TKey = any> = GridsModule.DataChange<TRowData, TKey>;
     export type DataChangeInfo<TRowData = any, TKey = any> = GridsModule.DataChangeInfo<TRowData, TKey>;
     export type DataChangeType = GridsModule.DataChangeType;
@@ -330,6 +331,7 @@ export namespace Grids {
     export type Pager = GridsModule.Pager;
     export type PagerPageSize = GridsModule.PagerPageSize;
     export type PagingBase = GridsModule.PagingBase;
+    export type PredefinedCommandNames = GridsModule.PredefinedCommandNames;
     export type PredefinedCommands = GridsModule.PredefinedCommands;
     export type ResponseStatus = GridsModule.ResponseStatus;
     export type ResponseStatusTexts = GridsModule.ResponseStatusTexts;
