@@ -13,6 +13,7 @@ import {
   isEnabledOption,
   isPopupOptions,
   isTitleOption,
+  isUserMessage,
 } from '../utils';
 
 describe('isAIMessage', () => {
@@ -40,6 +41,43 @@ describe('isAIMessage', () => {
     } as Message;
 
     expect(isAIMessage(message)).toBe(false);
+  });
+});
+
+describe('isUserMessage', () => {
+  it('should return true when message author id matches userId', () => {
+    const message = {
+      author: { id: 'user-1', name: 'User' },
+      text: 'request',
+    } as Message;
+
+    expect(isUserMessage(message, 'user-1')).toBe(true);
+  });
+
+  it('should return false when message author id does not match userId', () => {
+    const message = {
+      author: { id: 'user-1', name: 'User' },
+      text: 'request',
+    } as Message;
+
+    expect(isUserMessage(message, 'user-2')).toBe(false);
+  });
+
+  it('should return false for AI message', () => {
+    const message = {
+      author: { id: AI_ASSISTANT_AUTHOR_ID },
+      text: 'response',
+    } as Message;
+
+    expect(isUserMessage(message, 'user-1')).toBe(false);
+  });
+
+  it('should return false for message without author', () => {
+    const message = {
+      text: 'request',
+    } as Message;
+
+    expect(isUserMessage(message, 'user-1')).toBe(false);
   });
 });
 
