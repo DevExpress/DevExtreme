@@ -4653,7 +4653,7 @@ declare module DevExpress.common.grids {
      */
     customizeResponseTitle?: (
       status: ResponseStatus,
-      commandNames: (keyof TCommands | string)[]
+      commandNames: (keyof TCommands)[]
     ) => string;
     /**
      * [descr:AIAssistant.customizeResponseText]
@@ -5247,11 +5247,9 @@ declare module DevExpress.common.grids {
    */
   export type CommandInfo<
     TCommands extends PredefinedCommands = PredefinedCommands
-  > =
-    | {
-        [K in keyof TCommands]: { name: K; args: TCommands[K] };
-      }[keyof TCommands]
-    | { name: string; args: Record<string, unknown> };
+  > = {
+    [K in keyof TCommands]: { name: K; args: TCommands[K] };
+  }[keyof TCommands];
   /**
    * [descr:DataChange]
    */

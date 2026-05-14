@@ -61,12 +61,7 @@ export interface GridCommand<
   ) => CommandExecutor<CommandArgs<TSchema>>;
 }
 
-export interface CommandMessages {
-  success: string;
-  failure: string;
-}
-
-export type CustomizeResponseText = AIAssistant['customizeResponseText'];
+export type CustomizeResponseText = NonNullable<AIAssistant['customizeResponseText']>;
 export type CustomizeResponseTitle = AIAssistant['customizeResponseTitle'];
 
 export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {

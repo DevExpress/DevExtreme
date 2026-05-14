@@ -118,8 +118,7 @@ export type PredefinedCommands = {
  */
 export type CommandInfo<
   TCommands extends PredefinedCommands = PredefinedCommands,
-> = { [K in keyof TCommands]: { name: K; args: TCommands[K] } }[keyof TCommands]
-    | { name: string; args: Record<string, unknown> };
+> = { [K in keyof TCommands]: { name: K; args: TCommands[K] } }[keyof TCommands];
 
 /**
  * @docid
@@ -160,7 +159,7 @@ export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommand
   /**
    * @docid
    */
-  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands | string)[]) => string;
+  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands)[]) => string;
   /**
    * @docid
    * @type_function_param1 command:CommandInfo
