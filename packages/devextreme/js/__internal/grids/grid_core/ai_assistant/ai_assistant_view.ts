@@ -78,6 +78,7 @@ export class AIAssistantView extends View {
       // (re-evaluated automatically on show and window resize).
       // @ts-expect-error type declaration
       height: () => this.getPopupHeight(),
+      _ignoreFunctionValueDeprecation: true,
       onShowing: (): void => {
         this.visibilityChanged?.fire(true);
       },
