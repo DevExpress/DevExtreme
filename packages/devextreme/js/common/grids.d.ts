@@ -128,6 +128,11 @@ export type AIAssistantRequestCreatingInfo = {
    * @type object
    */
   responseSchema: Record<string, any>;
+  /**
+   * @docid
+   * @type object
+   */
+  additionalInfo?: Record<string, any>;
 };
 
 /**

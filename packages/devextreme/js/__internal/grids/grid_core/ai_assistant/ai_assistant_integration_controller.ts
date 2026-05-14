@@ -4,12 +4,101 @@ import type {
   RequestCallbacks,
 } from '@js/common/ai-integration';
 import errors from '@js/ui/widget/ui.errors';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { Controller } from '../m_modules';
-import type { AIAssistantRequestCallbacks } from './types';
+import type {
+  AIAssistantRequestCallbacks,
+  GridContext,
+  JsonSchema,
+} from './types';
 
 export class AIAssistantIntegrationController extends Controller {
   private abort?: () => void;
+
+  private getAICommandCallbacks(
+    callbacks?: RequestCallbacks<ExecuteGridAssistantCommandResult>,
+  ): RequestCallbacks<ExecuteGridAssistantCommandResult> {
+    return {
+      onComplete: (finalResponse: ExecuteGridAssistantCommandResult): void => {
+        if (!this.isRequestAwaitingCompletion()) {
+          return;
+        }
+        this.processCommandCompletion();
+        callbacks?.onComplete?.(finalResponse);
+      },
+      onError: (error: Error): void => {
+        this.processCommandCompletion();
+        callbacks?.onError?.(error);
+      },
+    };
+  }
+
+  private processCommandCompletion(): void {
+    this.abort = undefined;
+  }
+
+  private buildContext(): GridContext {
+    const dataController = this.getController('data');
+    const gridExtraContext = this.getGridExtraContext();
+    const keyExpr = this.option('keyExpr') ?? dataController.getDataSource()?.store()?.key();
+
+    return {
+      keyExpr,
+      columns: this.buildColumnsContext(),
+      filtering: {
+        filterValue: this.option('filterValue'),
+      },
+      paging: {
+        pageIndex: dataController.pageIndex(),
+        pageSize: dataController.pageSize(),
+        totalCount: dataController.totalCount(),
+      },
+      search: {
+        searchText: this.option('searchPanel.text') ?? '',
+      },
+      selection: {
+        selectedRowKeys: this.option('selectedRowKeys') ?? [],
+        mode: this.option('selection.mode'),
+        selectAllMode: this.option('selection.selectAllMode'),
+      },
+      ...gridExtraContext,
+    } as GridContext;
+  }
+
+  private buildColumnsContext(): GridContext[] {
+    const columnsController = this.getController('columns');
+    const allColumns: Column[] = columnsController.getColumns();
+
+    return allColumns
+      .filter((column) => !column.command)
+      .map((column) => {
+        const gridColumnExtraContext = this.getGridColumnExtraContext(column);
+
+        return ({
+          dataField: column.dataField,
+          caption: column.caption,
+          dataType: column.dataType,
+          visible: column.visible !== false,
+          sortOrder: column.sortOrder,
+          sortIndex: column.sortIndex,
+          fixed: column.fixed,
+          fixedPosition: column.fixedPosition,
+          width: column.width,
+          visibleIndex: column.visibleIndex,
+          ...gridColumnExtraContext,
+        });
+      });
+  }
+
+  protected getGridExtraContext(): GridContext {
+    return {};
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getGridColumnExtraContext(column: Column): GridContext {
+    return {};
+  }
 
   public init(): void {
     this.createAction('onAIAssistantRequestCreating');
@@ -26,12 +115,12 @@ export class AIAssistantIntegrationController extends Controller {
       return gridAIIntegration;
     }
 
-    errors.log('E1068');
     return null;
   }
 
   public sendRequest(
     text: string,
+    responseSchema: JsonSchema,
     callbacks?: AIAssistantRequestCallbacks<ExecuteGridAssistantCommandResult>,
   ): void {
     if (this.isRequestAwaitingCompletion()) {
@@ -39,22 +128,24 @@ export class AIAssistantIntegrationController extends Controller {
     }
 
     const aiIntegration = this.getAIIntegration();
-    if (!aiIntegration) {
+
+    if (aiIntegration === null) {
+      errors.log('E1068');
+      callbacks?.onError?.(errors.Error('E1068'));
       return;
     }
 
-    const context = this.buildContext();
-    const responseSchema = AIAssistantIntegrationController.buildResponseSchema();
-
     const args = {
-      context,
       responseSchema,
+      context: this.buildContext(),
       cancel: false,
-      additionalInfo: {} as Record<string, unknown>,
+      additionalInfo: {},
     };
+
     this.executeAction('onAIAssistantRequestCreating', args);
 
     if (args.cancel) {
+      callbacks?.onAbort?.();
       return;
     }
 
@@ -86,37 +177,5 @@ export class AIAssistantIntegrationController extends Controller {
   public dispose(): void {
     super.dispose();
     this.abortRequest();
-  }
-
-  private getAICommandCallbacks(
-    callbacks?: RequestCallbacks<ExecuteGridAssistantCommandResult>,
-  ): RequestCallbacks<ExecuteGridAssistantCommandResult> {
-    return {
-      onComplete: (finalResponse: ExecuteGridAssistantCommandResult): void => {
-        if (!this.isRequestAwaitingCompletion()) {
-          return;
-        }
-        this.processCommandCompletion();
-        callbacks?.onComplete?.(finalResponse);
-      },
-      onError: (error: Error): void => {
-        this.processCommandCompletion();
-        callbacks?.onError?.(error);
-      },
-    };
-  }
-
-  private processCommandCompletion(): void {
-    this.abort = undefined;
-  }
-
-  // TODO: implement buildContext with grid commands
-  private buildContext(): Record<string, unknown> {
-    return {};
-  }
-
-  // TODO: implement buildResponseSchema with grid commands
-  private static buildResponseSchema(): Record<string, unknown> {
-    return {};
   }
 }
