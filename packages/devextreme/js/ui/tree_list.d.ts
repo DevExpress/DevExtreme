@@ -907,6 +907,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
     readonly watch?: Function;
 };
 
+/** @public */
 export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
     readonly columnIndex: number;
@@ -1536,6 +1537,7 @@ export type dxTreeListToolbarItem = ToolbarItem;
  * @docid dxTreeListToolbarItem
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxTreeList
+ * @public
  */
 export interface ToolbarItem extends dxToolbarItem {
     /**
