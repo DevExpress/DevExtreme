@@ -283,6 +283,141 @@ describe('AIAssistantController', () => {
       await expect(promise).rejects.toThrow('Default error message');
     });
 
+    it('should fail message when response has empty actions array', async () => {
+      const controller = createController();
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      sendRequestCallbacks.onComplete?.({ actions: [] });
+      await Promise.resolve();
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          errorText: 'Default error message',
+        }),
+      ]);
+
+      await expect(promise).rejects.toThrow('Default error message');
+    });
+
+    it('should fail message when validation fails', async () => {
+      (MockedGridCommands.mockImplementation as jest.Mock).call(
+        MockedGridCommands,
+        () => ({
+          validate: jest.fn().mockReturnValue(false),
+          executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([]),
+          abort: jest.fn(),
+          buildResponseSchema: jest.fn().mockReturnValue({ type: 'object' }),
+          isExecuting: jest.fn().mockReturnValue(false),
+        }),
+      );
+
+      const controller = createController();
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await Promise.resolve();
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          errorText: 'Received invalid commands',
+        }),
+      ]);
+
+      await expect(promise).rejects.toThrow('Received invalid commands');
+    });
+
+    it('should fail message when commands are already executing', async () => {
+      (MockedGridCommands.mockImplementation as jest.Mock).call(
+        MockedGridCommands,
+        () => ({
+          validate: jest.fn().mockReturnValue(true),
+          executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([]),
+          abort: jest.fn(),
+          buildResponseSchema: jest.fn().mockReturnValue({ type: 'object' }),
+          isExecuting: jest.fn().mockReturnValue(true),
+        }),
+      );
+
+      const controller = createController();
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await Promise.resolve();
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          errorText: 'Unexpected error',
+        }),
+      ]);
+
+      await expect(promise).rejects.toThrow('Unexpected error');
+    });
+
+    it('should fail message when buildResponseSchema returns falsy', async () => {
+      (MockedGridCommands.mockImplementation as jest.Mock).call(
+        MockedGridCommands,
+        () => ({
+          validate: jest.fn().mockReturnValue(true),
+          executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([]),
+          abort: jest.fn(),
+          buildResponseSchema: jest.fn().mockReturnValue(undefined),
+          isExecuting: jest.fn().mockReturnValue(false),
+        }),
+      );
+
+      const controller = createController();
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Generate values',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          errorText: 'Grid commands not initialized',
+        }),
+      ]);
+
+      await expect(promise).rejects.toThrow('Grid commands not initialized');
+    });
+
     it('should resolve promise when command succeeds', async () => {
       const controller = createController();
 
@@ -326,7 +461,7 @@ describe('AIAssistantController', () => {
       await expect(promise).rejects.toThrow('Default error message');
     });
 
-    it('should ignore second request while first request is still processing', async () => {
+    it('should reject second request while first request is still processing', async () => {
       const controller = createController();
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -336,11 +471,12 @@ describe('AIAssistantController', () => {
         timestamp: '2026-04-16T10:00:00.000Z',
       } as Message);
 
-      controller.sendRequestToAI({
+      const secondPromise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Second request',
         timestamp: '2026-04-16T10:00:01.000Z',
-      } as Message).catch(() => {});
+      } as Message);
+      secondPromise.catch(() => {});
 
       const messages = await getStore(controller).load();
 
@@ -350,6 +486,8 @@ describe('AIAssistantController', () => {
         sendRequest: jest.Mock;
       };
       expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(1);
+
+      await expect(secondPromise).rejects.toBeUndefined();
     });
 
     it('should accept new request after previous request completes successfully', async () => {
@@ -441,6 +579,131 @@ describe('AIAssistantController', () => {
       };
       expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(2);
     });
+
+    it('should use customizeResponseTitle when provided', async () => {
+      const customizeResponseTitle = jest.fn().mockReturnValue('Custom Title');
+
+      const controller = createController({
+        'aiAssistant.customizeResponseTitle': customizeResponseTitle,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort by name',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(customizeResponseTitle).toHaveBeenCalledWith(
+        MessageStatus.Success,
+        ['sort'],
+      );
+      expect(messages).toEqual([
+        expect.objectContaining({
+          headerText: 'Custom Title',
+        }),
+      ]);
+    });
+
+    it('should format headerText with "and" for multiple unique command names', async () => {
+      const controller = createController();
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort and filter',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [
+        { name: 'sorting', args: { column: 'Name' } },
+        { name: 'filtering', args: { column: 'Age' } },
+      ];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          headerText: 'Sorting and Filtering',
+        }),
+      ]);
+    });
+
+    it('should captionize single command name for headerText', async () => {
+      const controller = createController();
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort by name',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [{ name: 'sorting', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          headerText: 'Sorting',
+        }),
+      ]);
+    });
+
+    it('should deduplicate command names in headerText', async () => {
+      const controller = createController();
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort multiple columns',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [
+        { name: 'sorting', args: { column: 'Name' } },
+        { name: 'sorting', args: { column: 'Age' } },
+      ];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await Promise.resolve();
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          headerText: 'Sorting',
+        }),
+      ]);
+    });
+
+    it('should store prompt from user message', async () => {
+      const controller = createController();
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort by Name column',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const messages = await getStore(controller).load();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          prompt: 'Sort by Name column',
+        }),
+      ]);
+    });
   });
 
   describe('abortRequest', () => {
@@ -487,6 +750,19 @@ describe('AIAssistantController', () => {
       await expect(promise).rejects.toThrow();
 
       expect(gridCommandsInstance.abort).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('dispose', () => {
+    it('should call aiAssistantIntegrationController.dispose', () => {
+      const controller = createController();
+
+      const integrationInstance = MockedAIAssistantIntegrationController
+        .mock.results[0].value as { dispose: jest.Mock };
+
+      controller.dispose();
+
+      expect(integrationInstance.dispose).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -636,6 +912,32 @@ describe('AIAssistantController', () => {
           commands: [{ status: 'success', message: 'sort' }],
         }),
       ]);
+    });
+
+    it('should reject regeneration while another request is processing', async () => {
+      const controller = createController();
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'First request',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const aiMessage: AIMessage = {
+        id: 'assistant-old',
+        author: AI_ASSISTANT_AUTHOR,
+        text: MessageStatus.Failure,
+        prompt: 'Old request',
+        status: MessageStatus.Failure,
+        headerText: 'Failed to process request',
+        errorText: 'Network error',
+      };
+
+      const regeneratePromise = controller.sendRequestToAI(aiMessage);
+      regeneratePromise.catch(() => {});
+
+      await expect(regeneratePromise).rejects.toBeUndefined();
     });
   });
 });
