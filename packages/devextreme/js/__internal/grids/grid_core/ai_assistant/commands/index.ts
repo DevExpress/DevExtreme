@@ -53,5 +53,4 @@ export const coreCommands = [
   selectByKeysCommand,
   clearSortingCommand,
   sortingCommand,
-  // TODO: try to remove "as GridCommand[]"
 ] as GridCommand[];

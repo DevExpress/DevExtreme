@@ -8,5 +8,4 @@ export const dataGridCommands = [
   clearGroupingCommand,
   summaryCommand,
   clearSummaryCommand,
-  // TODO: try to remove "as GridCommand[]"
 ] as GridCommand[];
