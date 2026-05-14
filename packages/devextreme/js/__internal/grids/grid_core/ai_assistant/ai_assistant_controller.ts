@@ -1,19 +1,27 @@
-import type { ExecuteGridAssistantCommandResult } from '@js/common/ai-integration';
+import type {
+  ExecuteGridAssistantAction,
+  ExecuteGridAssistantCommandResult,
+} from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
 import { ArrayStore } from '@js/common/data';
 import Guid from '@js/core/guid';
-import { isString } from '@js/core/utils/type';
+import { captionize } from '@js/core/utils/inflector';
+import { isFunction, isString } from '@js/core/utils/type';
 import type { DataSourceLike } from '@js/data/data_source';
 import type { Message } from '@js/ui/chat';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 
 import { Controller } from '../m_modules';
 import { AIAssistantIntegrationController } from './ai_assistant_integration_controller';
+import { coreCommands } from './commands/index';
 import { AI_ASSISTANT_AUTHOR, AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
 import { GridCommands } from './grid_commands';
 import type {
   AIMessage,
-  CommandResults,
+  CommandResult,
+  CustomizeResponseText,
+  CustomizeResponseTitle,
+  GridCommand,
 } from './types';
 import { getMessageStatus, isAIMessage } from './utils';
 
@@ -22,13 +30,41 @@ export class AIAssistantController extends Controller {
 
   private messageStore?: ArrayStore<Message, string>;
 
-  private aiAssistantIntegrationController?: AIAssistantIntegrationController;
+  protected aiAssistantIntegrationController?: AIAssistantIntegrationController;
 
   private processing = false;
 
-  // TODO: need to implement method for getting customized response title
-  private getCustomizedResponseTitle(): string {
-    return '';
+  private getCustomizedResponseTitle(
+    status: MessageStatus,
+    commandNames: string[],
+  ): string {
+    // TODO: remove type description, it should be got from d.ts
+    const customizeResponseTitle = this.option('aiAssistant.customizeResponseTitle') as CustomizeResponseTitle | undefined;
+
+    if (!commandNames.length) {
+      return messageLocalization.format('dxDataGrid-aiAssistantErrorMessage');
+    }
+
+    if (customizeResponseTitle && isFunction(customizeResponseTitle)) {
+      // TODO: add type description to d.ts
+      return customizeResponseTitle(status, commandNames);
+    }
+
+    if (commandNames.length === 1) {
+      return captionize(commandNames[0]);
+    }
+
+    return [
+      commandNames.slice(0, -1).map(captionize).join(', '),
+      captionize(commandNames.at(-1)),
+    ].join(' and ');
+  }
+
+  private getCommandNames(actions: ExecuteGridAssistantAction[]): string[] {
+    const commandNames = actions.map(({ name }) => name);
+    const uniqueCommandNameSet = new Set(commandNames);
+
+    return Array.from(uniqueCommandNameSet);
   }
 
   private updateAIMessage(messageId: string, data: Partial<Message>): void {
@@ -41,8 +77,13 @@ export class AIAssistantController extends Controller {
     ]);
   }
 
-  private processResponse(response: ExecuteGridAssistantCommandResult): Promise<CommandResults> {
-    if (!response?.actions || !Array.isArray(response.actions)) {
+  private processResponse(response: ExecuteGridAssistantCommandResult): Promise<CommandResult[]> {
+    if (this.gridCommands?.isExecuting()) {
+      // TODO: need to localize default error message if execution is in progress
+      return Promise.reject(new Error('Unexpected error'));
+    }
+
+    if (!response?.actions || !Array.isArray(response.actions) || !response.actions.length) {
       // TODO: need to localize default error message when there are no commands
       return Promise.reject(new Error('Default error message'));
     }
@@ -52,7 +93,8 @@ export class AIAssistantController extends Controller {
       return Promise.reject(new Error('Received invalid commands'));
     }
 
-    const customizeResponseText = this.option('aiAssistant.customizeResponseText');
+    // TODO: add type description to d.ts
+    const customizeResponseText = this.option('aiAssistant.customizeResponseText') as CustomizeResponseText | undefined;
 
     return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
       ?? Promise.reject(new Error('Grid commands not initialized'));
@@ -83,11 +125,15 @@ export class AIAssistantController extends Controller {
     return aiMessage;
   }
 
-  private completeAIMessage(messageId: string, commands: CommandResults): void {
+  private completeAIMessage(
+    messageId: string,
+    commands: CommandResult[],
+    commandNames: string[],
+  ): void {
     const messageStatus = getMessageStatus(commands);
 
     this.updateAIMessage(messageId, {
-      headerText: this.getCustomizedResponseTitle(),
+      headerText: this.getCustomizedResponseTitle(messageStatus, commandNames),
       commands,
       status: messageStatus,
       // WA to trigger status update, remove when dxChat supports
@@ -123,51 +169,77 @@ export class AIAssistantController extends Controller {
     });
   }
 
-  private sendRequestToAICore(aiMessage: AIMessage): Promise<void> {
+  private withProcessing(promise: Promise<void>): Promise<void> {
     this.setProcessing(true);
 
-    return new Promise((resolve, reject) => {
-      this.aiAssistantIntegrationController?.sendRequest(aiMessage.prompt, {
-        onComplete: (response: ExecuteGridAssistantCommandResult): void => {
-          fromPromise(this.processResponse(response))
-            .done((commands: CommandResults) => {
-              this.completeAIMessage(aiMessage.id, commands);
-              this.setProcessing(false);
-              resolve();
-            })
-            .fail((errorMessage) => {
-              const error = errorMessage instanceof Error
-                ? errorMessage
-                : new Error(String(errorMessage));
-
-              this.failAIMessage(aiMessage.id, error);
-              this.setProcessing(false);
-              reject(error);
-            });
-        },
-        onError: (error: Error): void => {
-          this.failAIMessage(aiMessage.id, error);
-          this.setProcessing(false);
-          reject(error);
-        },
-        onAbort: (): void => {
-          const error = new Error(messageLocalization.format('dxDataGrid-aiAssistantAbortMessage'));
-
-          this.failAIMessage(aiMessage.id, error);
-          this.setProcessing(false);
-          reject(error);
-        },
-      });
+    return promise.finally(() => {
+      this.setProcessing(false);
     });
   }
 
+  private sendRequestToAICore(aiMessage: AIMessage): Promise<void> {
+    return this.withProcessing(new Promise<void>((resolve, reject) => {
+      const responseSchema = this.gridCommands?.buildResponseSchema();
+
+      if (!responseSchema) {
+        // TODO: Change error message
+        const error = new Error('Grid commands not initialized');
+
+        this.failAIMessage(aiMessage.id, error);
+        reject(error);
+        return;
+      }
+
+      this.aiAssistantIntegrationController?.sendRequest(
+        aiMessage.prompt,
+        responseSchema,
+        {
+          onComplete: (response: ExecuteGridAssistantCommandResult): void => {
+            fromPromise(this.processResponse(response))
+              .done((commands: CommandResult[]) => {
+                const commandNames = this.getCommandNames(response.actions);
+
+                this.completeAIMessage(aiMessage.id, commands, commandNames);
+                resolve();
+              })
+              .fail((errorMessage) => {
+                // TODO: Change error message
+                const error = errorMessage instanceof Error
+                  ? errorMessage
+                  : new Error(String(errorMessage));
+
+                this.failAIMessage(aiMessage.id, error);
+                reject(error);
+              });
+          },
+          onError: (error: Error): void => {
+            // TODO: Change error message
+            this.failAIMessage(aiMessage.id, error);
+            reject(error);
+          },
+          onAbort: (): void => {
+            const error = new Error(messageLocalization.format('dxDataGrid-aiAssistantAbortMessage'));
+
+            this.failAIMessage(aiMessage.id, error);
+            reject(error);
+          },
+        },
+      );
+    }));
+  }
+
+  protected getGridCommandList(): GridCommand[] {
+    return [...coreCommands];
+  }
+
+  protected getAiAssistantIntegrationController(): AIAssistantIntegrationController {
+    return new AIAssistantIntegrationController(this.component);
+  }
+
   public init(): void {
-    // TODO: initialize default commands list when they are ready
-    this.gridCommands = new GridCommands(this.component, []);
-    this.messageStore = new ArrayStore<Message, string>({
-      key: 'id',
-    });
-    this.aiAssistantIntegrationController = new AIAssistantIntegrationController(this.component);
+    this.gridCommands = new GridCommands(this.component, this.getGridCommandList());
+    this.messageStore = new ArrayStore<Message, string>({ key: 'id' });
+    this.aiAssistantIntegrationController = this.getAiAssistantIntegrationController();
     this.aiAssistantIntegrationController.init();
   }
 

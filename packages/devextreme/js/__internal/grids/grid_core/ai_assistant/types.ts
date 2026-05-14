@@ -18,8 +18,6 @@ export interface CommandResult {
   message: string;
 }
 
-export type CommandResults = CommandResult[];
-
 export interface CommandCallbacks {
   success: (message?: string) => CommandResult;
   failure: (message?: string) => CommandResult;
@@ -56,14 +54,23 @@ export interface CommandMessages {
   failure: string;
 }
 
+// TODO: move to d.ts
 export type CustomizeResponseText = (
   commandName: string,
   commandArgs: Record<string, unknown>,
 ) => Partial<CommandMessages> | undefined;
 
+// TODO: move to d.ts
+export type CustomizeResponseTitle = (
+  status: MessageStatus,
+  commandNames: string[],
+) => string;
+
 export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {
   onAbort?: () => void;
 };
+
+export type GridContext = Record<string, unknown>;
 
 export type AIMessage = Message & {
   id: string;
@@ -71,5 +78,5 @@ export type AIMessage = Message & {
   headerText: string;
   prompt: string;
   errorText?: string;
-  commands?: CommandResults;
+  commands?: CommandResult[];
 };

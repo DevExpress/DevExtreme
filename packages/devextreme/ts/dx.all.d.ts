@@ -4660,6 +4660,10 @@ declare module DevExpress.common.grids {
      * [descr:AIAssistantRequestCreatingInfo.responseSchema]
      */
     responseSchema: Record<string, any>;
+    /**
+     * [descr:AIAssistantRequestCreatingInfo.additionalInfo]
+     */
+    additionalInfo?: Record<string, any>;
   };
   export type AIColumnMode = 'auto' | 'manual';
   /**

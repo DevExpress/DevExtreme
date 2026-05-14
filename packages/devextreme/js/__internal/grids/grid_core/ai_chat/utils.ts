@@ -1,11 +1,10 @@
 import type { Message } from '@js/ui/chat';
+import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
+import type { CommandStatus } from '@ts/grids/grid_core/ai_assistant/types';
 
-import { MessageStatus } from '../ai_assistant/const';
-import type { CommandStatus } from '../ai_assistant/types';
 import {
   ABORTED_ITEM_EMOJI, CLASSES, ERROR_ITEM_EMOJI, SUCCESS_ITEM_EMOJI,
 } from './const';
-import type { CommandResults } from './types';
 
 export const getMessageStateClass = (status: MessageStatus): string => {
   switch (status) {
@@ -19,26 +18,16 @@ export const getMessageStateClass = (status: MessageStatus): string => {
   }
 };
 
-export const hasCommandErrors = (
-  commands: CommandResults | undefined,
-): boolean => !!commands?.some(({ status }) => status === MessageStatus.Failure);
-
-export const hasAbortedCommands = (
-  commands: CommandResults | undefined,
-): boolean => !!commands?.some(({ status }) => status === 'aborted');
-
 export const getMessageIconName = (message: Message): string => {
-  if (message.status === MessageStatus.Failure
-    || hasCommandErrors(message.commands)
-    || hasAbortedCommands(message.commands)) {
-    return 'errorcircle';
+  switch (message.status) {
+    case MessageStatus.Failure:
+      return 'errorcircle';
+    case MessageStatus.Success:
+      return 'checkmarkcirclefilled';
+    case MessageStatus.Pending:
+    default:
+      return 'sparkle';
   }
-
-  if (message.status === MessageStatus.Success) {
-    return 'checkmarkcirclefilled';
-  }
-
-  return 'sparkle';
 };
 
 export const findMessageById = (
@@ -49,11 +38,7 @@ export const findMessageById = (
 export const needToShowRegenerateButton = (message: Message): boolean => {
   const isError = message.status === MessageStatus.Failure;
 
-  if (isError) {
-    return true;
-  }
-
-  return hasCommandErrors(message.commands) || hasAbortedCommands(message.commands);
+  return isError && !message.commands?.length;
 };
 
 export const getCommandItemStyle = (status: CommandStatus): {
@@ -73,6 +58,4 @@ export const getCommandItemStyle = (status: CommandStatus): {
 
 export const needToRenderCommandList = (
   message: Message,
-): boolean => message.status === MessageStatus.Success
-    || hasCommandErrors(message.commands)
-    || hasAbortedCommands(message.commands);
+): boolean => !!message.commands?.length;
