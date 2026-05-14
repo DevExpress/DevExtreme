@@ -812,25 +812,23 @@ describe('AIChat', () => {
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
       });
 
-      it('should disable chat suggestions widget', () => {
+      it('should disable chat suggestions via chatInstance option', () => {
         const { aiChat } = createAIChat();
         triggerContentTemplate();
-        mockChatElement.append($('<div>').addClass(CLASSES.chatSuggestions));
 
         aiChat.setDisabled(true);
 
-        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', true);
+        expect(mockChatInstance.option).toHaveBeenCalledWith({ suggestions: { disabled: true } });
       });
 
-      it('should enable chat suggestions widget when set to false', () => {
+      it('should enable chat suggestions via chatInstance option when set to false', () => {
         const { aiChat } = createAIChat();
         triggerContentTemplate();
-        mockChatElement.append($('<div>').addClass(CLASSES.chatSuggestions));
 
         aiChat.setDisabled(true);
         aiChat.setDisabled(false);
 
-        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', false);
+        expect(mockChatInstance.option).toHaveBeenCalledWith({ suggestions: { disabled: false } });
       });
 
       it('should not update when setting same disabled value', () => {

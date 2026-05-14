@@ -274,11 +274,7 @@ export class AIChat {
   }
 
   private setChatSuggestionsDisabled(disabled: boolean): void {
-    const $chatSuggestions = this.chatInstance?.$element().find(`.${CLASSES.chatSuggestions}`);
-
-    if ($chatSuggestions?.length) {
-      gridCoreUtils.getWidgetInstance($chatSuggestions)?.option('disabled', disabled);
-    }
+    this.chatInstance?.option({ suggestions: { disabled } });
   }
 
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
