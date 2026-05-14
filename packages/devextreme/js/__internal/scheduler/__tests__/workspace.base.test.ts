@@ -7,12 +7,10 @@ import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import SchedulerTimelineDay from '../workspaces/m_timeline_day';
 import SchedulerTimelineMonth from '../workspaces/m_timeline_month';
 import SchedulerTimelineWeek from '../workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from '../workspaces/m_timeline_work_week';
 import type SchedulerWorkSpace from '../workspaces/m_work_space';
 import SchedulerWorkSpaceDay from '../workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from '../workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from '../workspaces/m_work_space_week';
-import SchedulerWorkSpaceWorkWeek from '../workspaces/m_work_space_work_week';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 jest.mock('@ts/core/m_devices', () => {
@@ -67,11 +65,11 @@ const workSpaces: {
 }[] = [
   { currentView: 'day', WorkSpace: SchedulerWorkSpaceDay },
   { currentView: 'week', WorkSpace: SchedulerWorkSpaceWeek },
-  { currentView: 'workWeek', WorkSpace: SchedulerWorkSpaceWorkWeek },
+  { currentView: 'workWeek', WorkSpace: SchedulerWorkSpaceWeek },
   { currentView: 'month', WorkSpace: SchedulerWorkSpaceMonth },
   { currentView: 'timelineDay', WorkSpace: SchedulerTimelineDay },
   { currentView: 'timelineWeek', WorkSpace: SchedulerTimelineWeek },
-  { currentView: 'timelineWorkWeek', WorkSpace: SchedulerTimelineWorkWeek },
+  { currentView: 'timelineWorkWeek', WorkSpace: SchedulerTimelineWeek },
   { currentView: 'timelineMonth', WorkSpace: SchedulerTimelineMonth },
 ];
 
@@ -210,7 +208,7 @@ describe('scheduler workspace skipped days support', () => {
   });
 
   it('should use full week layout for work week when skippedDays override is empty', () => {
-    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWeek, 'workWeek', {
       currentDate: new Date(2026, 3, 1), // Wednesday
       firstDayOfWeek: 0, // Sunday
       skippedDays: [],
@@ -221,7 +219,7 @@ describe('scheduler workspace skipped days support', () => {
   });
 
   it('should use custom skippedDays in work week runtime layout', () => {
-    const { workspace } = createWorkspace(SchedulerWorkSpaceWorkWeek, 'workWeek', {
+    const { workspace } = createWorkspace(SchedulerWorkSpaceWeek, 'workWeek', {
       currentDate: new Date(2026, 3, 1), // Wednesday
       firstDayOfWeek: 0, // Sunday
       skippedDays: [3], // Wednesday

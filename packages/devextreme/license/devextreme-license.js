@@ -184,7 +184,6 @@ function main() {
     if(lcx && lcx.trimStart().startsWith('ewog')) {
         logStderr(
             prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
-            TEMPLATES.keyVerificationFailed(),
             TEMPLATES.oldDevExtremeKey(currentVersion),
             TEMPLATES.keyWasFound(source.type, source.path),
             prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}`),
@@ -217,9 +216,6 @@ function main() {
                         prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion)}`),
                     );
                 } else {
-                    lines.push(
-                        TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion),
-                    );
                     lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
                 }
             }

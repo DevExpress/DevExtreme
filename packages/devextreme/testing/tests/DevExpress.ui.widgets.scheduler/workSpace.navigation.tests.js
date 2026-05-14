@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_day';
 import '__internal/scheduler/workspaces/m_work_space_month';
-import '__internal/scheduler/workspaces/m_work_space_work_week';
+import '__internal/scheduler/workspaces/m_work_space_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';

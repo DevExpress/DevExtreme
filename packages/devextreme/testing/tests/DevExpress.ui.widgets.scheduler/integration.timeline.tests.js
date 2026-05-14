@@ -76,7 +76,7 @@ QUnit.test('Scheduler should have a right timeline work space', async function(a
 
     scheduler.instance.option('currentView', 'timelineWorkWeek');
     await waitAsync(0);
-    assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWorkWeek('instance'), 'Work space is timelineWorkWeek after change option ');
+    assert.strictEqual(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance').option('type'), 'timelineWorkWeek', 'Work space is timelineWorkWeek after change option ');
 
     scheduler.instance.option('currentView', 'timelineMonth');
     await waitAsync(0);

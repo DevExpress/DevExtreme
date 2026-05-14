@@ -21,6 +21,22 @@
                 "Modules": "openai"
               }
             ]
+          },
+          {
+            "Name": "AI Assistant",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "AI Assistant",
+                "Name": "AIAssistant",
+                "Widget": "DataGrid",
+                "Badge": "AI",
+                "DemoType": "Web",
+                "TopLevel": true,
+                "Equivalents": "Smart DataGrid Assistant, Natural Language DataGrid Assistant, Natural Language Data Queries, AI-Powered DataGrid Assistant, AI Copilot for DataGrid, Conversational DataGrid, AI DataGrid Helper, AI-Assisted Data Manipulation",
+                "Modules": "openai"
+              }
+            ]
           }
         ]
       },
@@ -743,9 +759,10 @@
                 "Title": "AI Assistant",
                 "Name": "AIAssistant",
                 "Widget": "DataGrid",
-                "Badge": "Roadmap",
+                "Badge": "AI",
                 "DemoType": "Web",
-                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-ai-assistant.xml"
+                "Equivalents": "Smart DataGrid Assistant, Natural Language DataGrid Assistant, Natural Language Data Queries, AI-Powered DataGrid Assistant, AI Copilot for DataGrid, Conversational DataGrid, AI DataGrid Helper, AI-Assisted Data Manipulation",
+                "Modules": "openai"
               }
             ]
           },

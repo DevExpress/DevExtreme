@@ -41,7 +41,7 @@ import TextBox from '@ts/ui/text_box/m_text_box';
 import type Popover from '../popover/m_popover';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
 import DropDownButton from './m_drop_down_button';
-import { getElementWidth, getSizeValue } from './m_utils';
+import { getElementWidth } from './m_utils';
 
 export const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -794,7 +794,9 @@ class DropDownEditor<
   _renderPopupContent(): void {}
 
   _renderPopup(): void {
-    const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
+    const defaultOptions = this._popupConfig();
+    const cachedOptions = this._options.cache('dropDownOptions');
+    const popupConfig = extend(defaultOptions, cachedOptions);
 
     // @ts-expect-error ts-error
     this._popup = this._createComponent(this._$popup, Popup, popupConfig);
@@ -808,11 +810,8 @@ class DropDownEditor<
     });
 
     this._attachPopupKeyHandler();
-
     this._contentReadyHandler();
-
     this._setPopupContentId(this._popup.$content());
-
     this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
   }
 
@@ -860,16 +859,14 @@ class DropDownEditor<
   _contentReadyHandler(): void {}
 
   _popupConfig(): PopupProperties {
-    return {
+    const config: PopupProperties = {
       onInitialized: this._getPopupInitializedHandler(),
       position: extend(this.option('popupPosition'), {
         of: this.$element(),
       }),
       // @ts-expect-error ts-error
       showTitle: this.option('dropDownOptions.showTitle'),
-      _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error ts-error
-      width: (): number => getElementWidth(this.$element()),
+      width: getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
       hideOnParentScroll: true,
@@ -897,6 +894,8 @@ class DropDownEditor<
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
       _ignorePreventScrollEventsDeprecation: true,
     };
+
+    return config;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -926,10 +925,10 @@ class DropDownEditor<
   }
 
   _updatePopupWidth(): void {
-    const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+    const width = this._options.cache('dropDownOptions')?.width;
 
-    if (popupWidth === undefined) {
-      this._setPopupOption('width', () => getElementWidth(this.$element()));
+    if (width === undefined) {
+      this._setPopupOption('width', getElementWidth(this.$element()));
     }
   }
 
@@ -1117,6 +1116,7 @@ class DropDownEditor<
     this._setPopupOption(options);
 
     const optionsKeys = Object.keys(options);
+
     if (optionsKeys.includes('width') || optionsKeys.includes('height')) {
       this._dimensionChanged();
     }
@@ -1169,6 +1169,7 @@ class DropDownEditor<
       case 'width':
       case 'height':
         super._optionChanged(args);
+        this._updatePopupWidth();
         this._popup?.repaint();
         break;
       case 'opened':

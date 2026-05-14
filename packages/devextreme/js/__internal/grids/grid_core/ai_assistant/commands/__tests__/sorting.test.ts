@@ -287,7 +287,7 @@ describe('clearSortingCommand', () => {
     it('returns failure when clearSorting throws', async () => {
       const instance = await createGrid();
       jest.spyOn(instance, 'clearSorting').mockImplementation(() => {
-        throw new Error('boom');
+        throw new Error('Error');
       });
       const callbacks = createCallbacks();
 

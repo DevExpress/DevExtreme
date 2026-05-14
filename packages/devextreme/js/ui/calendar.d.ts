@@ -13,6 +13,7 @@ import {
 
 import {
     template,
+    DayOfWeek,
     FirstDayOfWeek,
     DateLike,
 } from '../common';
@@ -23,6 +24,7 @@ import Editor, {
 } from './editor/editor';
 
 export {
+    DayOfWeek,
     FirstDayOfWeek,
     DateLike,
 };
@@ -129,7 +131,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DayOfWeek | undefined;
     /**
      * @docid
      * @default true &for(desktop)
