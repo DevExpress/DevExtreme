@@ -62,7 +62,6 @@ export interface GridCommand<
 }
 
 export type CustomizeResponseText = NonNullable<AIAssistant['customizeResponseText']>;
-export type CustomizeResponseTitle = AIAssistant['customizeResponseTitle'];
 
 export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {
   onAbort?: () => void;
