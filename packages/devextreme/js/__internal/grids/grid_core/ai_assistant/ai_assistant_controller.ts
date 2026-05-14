@@ -4,6 +4,7 @@ import type {
 } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
 import { ArrayStore } from '@js/common/data';
+import type { ResponseStatus } from '@js/common/grids';
 import Guid from '@js/core/guid';
 import { captionize } from '@js/core/utils/inflector';
 import { isFunction, isString } from '@js/core/utils/type';
@@ -18,8 +19,6 @@ import { GridCommands } from './grid_commands';
 import type {
   AIMessage,
   CommandResult,
-  CustomizeResponseText,
-  CustomizeResponseTitle,
   GridCommand,
 } from './types';
 import { getMessageStatus, isAIMessage } from './utils';
@@ -38,7 +37,7 @@ export class AIAssistantController extends Controller {
     commandNames: string[],
   ): string {
     // TODO: remove type description, it should be got from d.ts
-    const customizeResponseTitle = this.option('aiAssistant.customizeResponseTitle') as CustomizeResponseTitle | undefined;
+    const customizeResponseTitle = this.option('aiAssistant.customizeResponseTitle');
 
     if (!commandNames.length) {
       return messageLocalization.format('dxDataGrid-aiAssistantErrorMessage');
@@ -46,7 +45,7 @@ export class AIAssistantController extends Controller {
 
     if (customizeResponseTitle && isFunction(customizeResponseTitle)) {
       // TODO: add type description to d.ts
-      return customizeResponseTitle(status, commandNames);
+      return customizeResponseTitle(status as ResponseStatus, commandNames);
     }
 
     if (commandNames.length === 1) {
@@ -93,7 +92,7 @@ export class AIAssistantController extends Controller {
     }
 
     // TODO: add type description to d.ts
-    const customizeResponseText = this.option('aiAssistant.customizeResponseText') as CustomizeResponseText | undefined;
+    const customizeResponseText = this.option('aiAssistant.customizeResponseText');
 
     return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
       ?? Promise.reject(new Error('Grid commands not initialized'));

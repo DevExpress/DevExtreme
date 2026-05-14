@@ -4653,7 +4653,7 @@ declare module DevExpress.common.grids {
      */
     customizeResponseTitle?: (
       status: ResponseStatus,
-      commandNames: (keyof TCommands)[]
+      commandNames: (keyof TCommands | string)[]
     ) => string;
     /**
      * [descr:AIAssistant.customizeResponseText]
@@ -4668,7 +4668,7 @@ declare module DevExpress.common.grids {
    */
   export type AIAssistantRequestCreatingInfo = Pick<
     DevExpress.aiIntegration.ExecuteGridAssistantCommandParams,
-    'context' | 'responseSchema'
+    'context' | 'responseSchema' | 'additionalInfo'
   >;
   export type AIColumnMode = 'auto' | 'manual';
   /**

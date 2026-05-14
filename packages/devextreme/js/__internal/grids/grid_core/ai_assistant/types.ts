@@ -67,12 +67,7 @@ export interface CommandMessages {
 }
 
 export type CustomizeResponseText = AIAssistant['customizeResponseText'];
-
-// TODO: move to d.ts
-export type CustomizeResponseTitle = (
-  status: MessageStatus,
-  commandNames: string[],
-) => string;
+export type CustomizeResponseTitle = AIAssistant['customizeResponseTitle'];
 
 export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {
   onAbort?: () => void;

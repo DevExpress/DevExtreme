@@ -160,7 +160,7 @@ export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommand
   /**
    * @docid
    */
-  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands)[]) => string;
+  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands | string)[]) => string;
   /**
    * @docid
    * @type_function_param1 command:CommandInfo
