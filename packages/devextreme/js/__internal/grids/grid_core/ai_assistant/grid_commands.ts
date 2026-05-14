@@ -17,6 +17,7 @@ import type {
   GridCommand,
   JsonSchema,
 } from './types';
+import { expandTypeArraysToAnyOf } from './utils';
 
 export class GridCommands {
   private readonly component: InternalGrid;
@@ -81,10 +82,12 @@ export class GridCommands {
 
   public buildResponseSchema(): JsonSchema {
     const branches = [...this.commands.values()].map((command) => {
-      const argsSchema = zodToJsonSchema(command.schema, { target: 'jsonSchema7' });
+      const argsSchema = zodToJsonSchema(command.schema, { target: 'openAi' }) as JsonSchema;
 
       // Remove $schema from nested schemas since it's only necessary at root
       delete argsSchema.$schema;
+
+      const expandedArgsSchema = expandTypeArraysToAnyOf(argsSchema);
 
       return {
         type: 'object',
@@ -96,13 +99,12 @@ export class GridCommands {
             type: 'string',
             enum: [command.name],
           },
-          args: argsSchema,
+          args: expandedArgsSchema,
         },
       };
     });
 
     return {
-      $schema: 'http://json-schema.org/draft-07/schema#',
       type: 'object',
       required: ['actions'],
       additionalProperties: false,

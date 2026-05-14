@@ -2,14 +2,11 @@ import type { RequestCallbacks } from '@js/common/ai-integration';
 import type { Message } from '@js/ui/chat';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
-import type { JsonSchema7Type } from 'zod-to-json-schema';
 
 import type { MessageStatus } from './const';
 
-/** JSON Schema draft-07 object sent to the LLM. */
-export type JsonSchema = JsonSchema7Type & {
-  $schema?: string;
-};
+/** JSON Schema object sent to the LLM. */
+export type JsonSchema = Record<string, unknown>;
 
 export type CommandStatus = 'success' | 'failure' | 'aborted';
 

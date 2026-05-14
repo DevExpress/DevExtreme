@@ -4,7 +4,9 @@ import {
 import type { Message } from '@js/ui/chat';
 
 import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from '../const';
+import type { JsonSchema } from '../types';
 import {
+  expandTypeArraysToAnyOf,
   getMessageStatus,
   hasAbortedCommands,
   hasCommandErrors,
@@ -253,5 +255,178 @@ describe('getMessageStatus', () => {
 
   it('should return Success when commands array is empty', () => {
     expect(getMessageStatus([])).toBe(MessageStatus.Success);
+  });
+});
+
+describe('expandTypeArraysToAnyOf', () => {
+  it('returns undefined for undefined input', () => {
+    expect(expandTypeArraysToAnyOf(undefined)).toBeUndefined();
+  });
+
+  it('returns schema unchanged when type is a plain string', () => {
+    const schema: JsonSchema = { type: 'string' };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({ type: 'string' });
+  });
+
+  it('returns schema unchanged when there is no type field', () => {
+    const schema: JsonSchema = { enum: ['a', 'b'] };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({ enum: ['a', 'b'] });
+  });
+
+  it('converts array-style type to anyOf', () => {
+    const schema: JsonSchema = { type: ['string', 'number'] };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      anyOf: [{ type: 'string' }, { type: 'number' }],
+    });
+  });
+
+  it('preserves sibling fields when converting type array', () => {
+    const schema: JsonSchema = {
+      type: ['string', 'null'],
+      description: 'A value',
+    };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      anyOf: [{ type: 'string' }, { type: 'null' }],
+      description: 'A value',
+    });
+  });
+
+  it('converts type array with a single element', () => {
+    const schema: JsonSchema = { type: ['string'] };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      anyOf: [{ type: 'string' }],
+    });
+  });
+
+  it('recurses into properties', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        value: { type: ['string', 'number', 'boolean', 'null'] },
+      },
+    };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      type: 'object',
+      properties: {
+        value: {
+          anyOf: [
+            { type: 'string' },
+            { type: 'number' },
+            { type: 'boolean' },
+            { type: 'null' },
+          ],
+        },
+      },
+    });
+  });
+
+  it('recurses into anyOf array', () => {
+    const schema: JsonSchema = {
+      anyOf: [
+        { type: ['string', 'null'] },
+        { type: 'number' },
+      ],
+    };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      anyOf: [
+        { anyOf: [{ type: 'string' }, { type: 'null' }] },
+        { type: 'number' },
+      ],
+    });
+  });
+
+  it('recurses into items (object)', () => {
+    const schema: JsonSchema = {
+      type: 'array',
+      items: { type: ['string', 'number'] },
+    };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      type: 'array',
+      items: { anyOf: [{ type: 'string' }, { type: 'number' }] },
+    });
+  });
+
+  it('recurses into items (array of schemas)', () => {
+    const schema: JsonSchema = {
+      type: 'array',
+      items: [
+        { type: ['string', 'number'] },
+        { type: 'boolean' },
+      ],
+    };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      type: 'array',
+      items: [
+        { anyOf: [{ type: 'string' }, { type: 'number' }] },
+        { type: 'boolean' },
+      ],
+    });
+  });
+
+  it('recurses into $defs', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      $defs: {
+        myType: { type: ['string', 'null'] },
+      },
+    };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      type: 'object',
+      $defs: {
+        myType: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+      },
+    });
+  });
+
+  it('handles deeply nested structures', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        filter: {
+          anyOf: [
+            {
+              type: 'object',
+              properties: {
+                value: { type: ['string', 'number', 'boolean', 'null'] },
+              },
+            },
+          ],
+        },
+      },
+    };
+    expect(expandTypeArraysToAnyOf(schema)).toEqual({
+      type: 'object',
+      properties: {
+        filter: {
+          anyOf: [
+            {
+              type: 'object',
+              properties: {
+                value: {
+                  anyOf: [
+                    { type: 'string' },
+                    { type: 'number' },
+                    { type: 'boolean' },
+                    { type: 'null' },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+  });
+
+  it('does not mutate the original schema', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        x: { type: ['string', 'number'] },
+      },
+    };
+    const original = JSON.parse(JSON.stringify(schema));
+    expandTypeArraysToAnyOf(schema);
+    expect(schema).toEqual(original);
   });
 });
