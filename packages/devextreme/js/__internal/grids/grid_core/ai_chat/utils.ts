@@ -1,7 +1,7 @@
 import type { Message } from '@js/ui/chat';
+import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
+import type { CommandStatus } from '@ts/grids/grid_core/ai_assistant/types';
 
-import { MessageStatus } from '../ai_assistant/const';
-import type { CommandStatus } from '../ai_assistant/types';
 import {
   ABORTED_ITEM_EMOJI, CLASSES, ERROR_ITEM_EMOJI, SUCCESS_ITEM_EMOJI,
 } from './const';
