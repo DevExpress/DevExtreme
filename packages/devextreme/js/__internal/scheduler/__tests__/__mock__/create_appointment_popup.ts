@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+import type { DayOfWeek } from '@js/common';
 import $ from '@js/core/renderer';
 // eslint-disable-next-line devextreme-custom/no-deferred
 import { Deferred } from '@js/core/utils/deferred';
@@ -118,7 +119,7 @@ export const createAppointmentPopup = async (
     dataAccessors,
     editing,
     resourceManager,
-    firstDayOfWeek: options.firstDayOfWeek ?? 0,
+    firstDayOfWeek: (options.firstDayOfWeek ?? 0) as DayOfWeek,
     startDayHour: options.startDayHour ?? 0,
     createComponent,
     getCalculatedEndDate: (startDate: Date): Date => {
