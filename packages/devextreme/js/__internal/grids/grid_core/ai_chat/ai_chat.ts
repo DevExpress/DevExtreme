@@ -27,9 +27,7 @@ import {
   DEFAULT_POPUP_OPTIONS,
   REGENERATE_ICON,
 } from './const';
-import type {
-  AIChatOptions, CommandResult, CommandResults,
-} from './types';
+import type { AIChatOptions, CommandResult } from './types';
 import {
   findMessageById,
   getCommandItemStyle,
@@ -230,7 +228,7 @@ export class AIChat {
 
   private renderCommandList(
     $container: dxElementWrapper,
-    commands?: CommandResults,
+    commands?: CommandResult[],
   ): void {
     if (!commands?.length) {
       return;
