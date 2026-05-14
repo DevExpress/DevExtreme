@@ -236,6 +236,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(appointment);
       POM.popup.setInputValue('subjectEditor', 'Updated subject');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const items = (scheduler as any).getDataSource().items();
 
@@ -266,6 +267,7 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue('endTimeEditor', new Date(2017, 4, 25, 10, 0));
       POM.popup.setInputValue('descriptionEditor', 'New appointment description');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const items = (scheduler as any).getDataSource().items();
 
@@ -325,6 +327,7 @@ describe('Appointment Form', () => {
       POM.popup.editAppointmentButton.click();
       POM.popup.setInputValue('subjectEditor', 'single appointment');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       expect(dataSource.items()).toHaveLength(2);
       expect(dataSource.items()[0]).toEqual({
@@ -486,6 +489,7 @@ describe('Appointment Form', () => {
 
       scheduler.showAppointmentPopup({ ...commonAppointment }, true);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const item = dataSource.items()[0];
 
@@ -674,6 +678,7 @@ describe('Appointment Form', () => {
 
       POM.popup.setInputValue(editorName, value);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -704,6 +709,7 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue(dateEditorName, value);
       POM.popup.setInputValue(timeEditorName, value);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -728,6 +734,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup();
       POM.popup.selectRepeatValue('daily');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -760,6 +767,7 @@ describe('Appointment Form', () => {
 
       POM.popup.setInputValue(exprValue, 2);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -2134,6 +2142,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(item);
       POM.popup.setInputValue('subjectEditor', 'New Subject');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({ ...commonAppointment, text: 'New Subject' });
     });
@@ -2150,6 +2159,7 @@ describe('Appointment Form', () => {
       POM.popup.selectRepeatValue('weekly');
       POM.popup.setInputValue('recurrenceStartDateEditor', new Date(2024, 4, 25));
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({
         ...commonAppointment,

@@ -568,6 +568,7 @@ module('All day appointments common', config, () => {
 
                 scheduler.instance.showAppointmentPopup(newItem, true);
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                await Promise.resolve();
 
                 const $addedAppointment = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointment').eq(0);
                 const $allDayCell = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0);
@@ -585,6 +586,7 @@ module('All day appointments common', config, () => {
                 scheduler.instance.showAppointmentPopup(newItem);
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                await Promise.resolve();
 
                 const workspace = $(scheduler.instance.$element()).find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance');
 
@@ -613,6 +615,7 @@ module('All day appointments common', config, () => {
 
                 scheduler.instance.showAppointmentPopup(newItem, true);
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                await Promise.resolve();
 
                 assert.notOk($workspace.hasClass('dx-scheduler-work-space-all-day-collapsed'), 'Work space has not specific class');
             });
