@@ -1227,6 +1227,16 @@ declare module DevExpress.common {
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type CommandInfo<
+    TCommands extends DevExpress.common.grids.PredefinedCommands = DevExpress.common.grids.PredefinedCommands
+  > =
+    | {
+        [K in keyof TCommands]: { name: K; args: TCommands[K] };
+      }[keyof TCommands]
+    | { name: string; args: Record<string, unknown> };
+  /**
    * [descr:CompareRule]
    */
   export type CompareRule = {
@@ -1260,6 +1270,14 @@ declare module DevExpress.common {
     | '==='
     | '>'
     | '>=';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type CustomizeResponseText<
+    TCommands extends DevExpress.common.grids.PredefinedCommands = DevExpress.common.grids.PredefinedCommands
+  > = (
+    command: CommandInfo<TCommands>
+  ) => DevExpress.common.grids.ResponseStatusTexts;
   /**
    * [descr:CustomRule]
    */
@@ -4625,7 +4643,9 @@ declare module DevExpress.common.grids {
   /**
    * [descr:AIAssistant]
    */
-  export type AIAssistant = {
+  export type AIAssistant<
+    TCommands extends PredefinedCommands = PredefinedCommands
+  > = {
     /**
      * [descr:AIAssistant.aiIntegration]
      */
@@ -4646,25 +4666,26 @@ declare module DevExpress.common.grids {
      * [descr:AIAssistant.title]
      */
     title?: string;
+    /**
+     * [descr:AIAssistant.customizeResponseTitle]
+     */
+    customizeResponseTitle?: (
+      status: ResponseStatus,
+      commandNames: (keyof TCommands | string)[]
+    ) => string;
+    /**
+     * [descr:AIAssistant.customizeResponseText]
+     */
+    customizeResponseText?: CustomizeResponseText<TCommands>;
   };
   /**
    * [descr:AIAssistantRequestCreatingInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type AIAssistantRequestCreatingInfo = {
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.context]
-     */
-    context: Record<string, any>;
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.responseSchema]
-     */
-    responseSchema: Record<string, any>;
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.additionalInfo]
-     */
-    additionalInfo?: Record<string, any>;
-  };
+  export type AIAssistantRequestCreatingInfo = Pick<
+    DevExpress.aiIntegration.ExecuteGridAssistantCommandParams,
+    'context' | 'responseSchema'
+  >;
   export type AIColumnMode = 'auto' | 'manual';
   /**
    * [descr:AIColumnRequestCreatingInfo]
@@ -6489,6 +6510,27 @@ declare module DevExpress.common.grids {
      */
     pageSize?: number;
   }
+  /**
+   * [descr:PredefinedCommands]
+   */
+  export interface PredefinedCommands {
+    sorting: {
+      dataField: string;
+      sortOrder: SortOrder | 'none';
+    };
+    clearSorting: {};
+  }
+  /**
+   * [descr:ResponseStatus]
+   */
+  export type ResponseStatus = 'success' | 'failure';
+  /**
+   * [descr:ResponseStatusTexts]
+   */
+  export type ResponseStatusTexts = {
+    success?: string;
+    failure?: string;
+  };
   /**
    * [descr:RowDragging]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

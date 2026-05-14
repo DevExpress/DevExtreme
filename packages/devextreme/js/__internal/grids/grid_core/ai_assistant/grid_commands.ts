@@ -61,7 +61,7 @@ export class GridCommands {
     args: Record<string, unknown>,
     customizeResponseText?: CustomizeResponseText,
   ): void {
-    const customMessages = customizeResponseText?.(name, args);
+    const customMessages = customizeResponseText?.({ name, args });
     const customMessage = customMessages?.[result.status];
 
     if (isDefined(customMessage)) {

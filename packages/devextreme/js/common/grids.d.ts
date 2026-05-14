@@ -80,14 +80,53 @@ import {
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from './core/animation';
 import { PagerBase } from '../ui/pagination';
-import { AIIntegration } from './ai-integration';
+import { AIIntegration, ExecuteGridAssistantCommandParams } from './ai-integration';
 
 /**
  * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
-export type AIAssistant = {
+export type ResponseStatus = 'success' | 'failure';
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type ResponseStatusTexts = {
+  success?: string;
+  failure?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export interface PredefinedCommands {
+  sorting: {
+    dataField: string;
+    sortOrder: SortOrder | 'none';
+  };
+  clearSorting: {};
+}
+
+export type CommandInfo<
+  TCommands extends PredefinedCommands = PredefinedCommands,
+> = { [K in keyof TCommands]: { name: K; args: TCommands[K] } }[keyof TCommands]
+    | { name: string; args: Record<string, unknown> };
+
+export type CustomizeResponseText<
+  TCommands extends PredefinedCommands = PredefinedCommands,
+> = (command: CommandInfo<TCommands>) => ResponseStatusTexts;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommands> = {
   /** @docid */
   aiIntegration?: AIIntegration;
   /**
@@ -110,6 +149,14 @@ export type AIAssistant = {
    * @default 'AI Assistant'
    */
   title?: string;
+  /**
+   * @docid
+   */
+  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands | string)[]) => string;
+  /**
+   * @docid
+   */
+  customizeResponseText?: CustomizeResponseText<TCommands>;
 };
 
 /**
@@ -117,23 +164,7 @@ export type AIAssistant = {
  * @hidden
  * @namespace DevExpress.common.grids
  */
-export type AIAssistantRequestCreatingInfo = {
-  /**
-   * @docid
-   * @type object
-   */
-  context: Record<string, any>;
-  /**
-   * @docid
-   * @type object
-   */
-  responseSchema: Record<string, any>;
-  /**
-   * @docid
-   * @type object
-   */
-  additionalInfo?: Record<string, any>;
-};
+export type AIAssistantRequestCreatingInfo = Pick<ExecuteGridAssistantCommandParams, 'context' | 'responseSchema' | 'additionalInfo'>;
 
 /**
  * @docid

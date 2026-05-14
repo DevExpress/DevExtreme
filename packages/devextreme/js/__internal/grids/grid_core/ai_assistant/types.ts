@@ -1,4 +1,5 @@
 import type { RequestCallbacks } from '@js/common/ai-integration';
+import type { CustomizeResponseText } from '@js/common/grids';
 import type { Message } from '@js/ui/chat';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
@@ -65,11 +66,7 @@ export interface CommandMessages {
   failure: string;
 }
 
-// TODO: move to d.ts
-export type CustomizeResponseText = (
-  commandName: string,
-  commandArgs: Record<string, unknown>,
-) => Partial<CommandMessages> | undefined;
+export { CustomizeResponseText };
 
 // TODO: move to d.ts
 export type CustomizeResponseTitle = (

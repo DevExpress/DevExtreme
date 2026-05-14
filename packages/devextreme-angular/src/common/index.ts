@@ -275,7 +275,7 @@ export namespace Export {
 export function Grids(): void {}
 export namespace Grids {
     export type AdaptiveDetailRowPreparingInfo = GridsModule.AdaptiveDetailRowPreparingInfo;
-    export type AIAssistant = GridsModule.AIAssistant;
+    export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommands> = GridsModule.AIAssistant<TCommands>;
     export type AIAssistantRequestCreatingInfo = GridsModule.AIAssistantRequestCreatingInfo;
     export type AIColumnMode = GridsModule.AIColumnMode;
     export type AIColumnRequestCreatingInfo<TRowData = any> = GridsModule.AIColumnRequestCreatingInfo<TRowData>;
@@ -330,6 +330,9 @@ export namespace Grids {
     export type Pager = GridsModule.Pager;
     export type PagerPageSize = GridsModule.PagerPageSize;
     export type PagingBase = GridsModule.PagingBase;
+    export type PredefinedCommands = GridsModule.PredefinedCommands;
+    export type ResponseStatus = GridsModule.ResponseStatus;
+    export type ResponseStatusTexts = GridsModule.ResponseStatusTexts;
     export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = GridsModule.RowDragging<TComponent, TRowData, TKey>;
     export type RowDraggingTemplateData<TRowData = any> = GridsModule.RowDraggingTemplateData<TRowData>;
     export type RowInsertedInfo<TRowData = any, TKey = any> = GridsModule.RowInsertedInfo<TRowData, TKey>;
