@@ -35,9 +35,9 @@ const createComponentMock = jest.fn((
   options: any,
 ): any => new Widget(el, options));
 
-const mockMessageDataSource = { store: new ArrayStore({ key: 'id' }), reshapeOnPush: true };
+const mockMessageStore = new ArrayStore({ key: 'id' });
 const mockAIAssistantController = {
-  getMessageDataSource: jest.fn().mockReturnValue(mockMessageDataSource),
+  getMessageStore: jest.fn().mockReturnValue(mockMessageStore),
   sendRequestToAI: jest.fn(),
   abortRequest: jest.fn(),
 };
@@ -110,6 +110,7 @@ const beforeTest = (): void => {
 };
 
 const afterTest = (): void => {
+  mockMessageStore.off('push');
   document.body.innerHTML = '';
   fx.off = false;
   jest.useRealTimers();
@@ -159,9 +160,9 @@ describe('AIAssistantView', () => {
 
       const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
 
-      expect(mockAIAssistantController.getMessageDataSource).toHaveBeenCalledTimes(1);
+      expect(mockAIAssistantController.getMessageStore).toHaveBeenCalledTimes(1);
       expect(aiChatConfig.chatOptions).toEqual(expect.objectContaining({
-        dataSource: mockMessageDataSource,
+        dataSource: mockMessageStore,
         reloadOnChange: true,
         onMessageEntered: expect.any(Function),
       }));
@@ -230,6 +231,26 @@ describe('AIAssistantView', () => {
       const { aiAssistantView } = createAIAssistantView({ render: false });
 
       return expect(aiAssistantView.hide()).resolves.toBe(false);
+    });
+  });
+
+  describe('dispose', () => {
+    it('should unsubscribe from store push event', () => {
+      const onSpy = jest.spyOn(mockMessageStore, 'on');
+      const { aiAssistantView } = createAIAssistantView();
+      const offSpy = jest.spyOn(mockMessageStore, 'off');
+
+      aiAssistantView.dispose();
+
+      const onPushCall = (onSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+      const offPushCall = (offSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+
+      expect(onPushCall).toBeDefined();
+      expect(offPushCall).toBeDefined();
+      expect((offPushCall as any[])[1]).toBe((onPushCall as any[])[1]);
+
+      offSpy.mockRestore();
+      onSpy.mockRestore();
     });
   });
 
@@ -458,6 +479,119 @@ describe('AIAssistantView', () => {
         await Promise.resolve();
 
         expect(aiChatInstance.setDisabled).toHaveBeenLastCalledWith(false);
+      });
+    });
+
+    describe('handleMessageStorePush', () => {
+      const USER_ID = 'user';
+
+      const getPushHandler = (): (changes: any[]) => void => {
+        const onSpy = jest.spyOn(mockMessageStore, 'on');
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { getUserId: jest.Mock };
+        aiChatInstance.getUserId.mockReturnValue(USER_ID);
+
+        const pushCall = (onSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+        onSpy.mockRestore();
+
+        if (!pushCall?.[1]) {
+          throw new Error('Push handler not found');
+        }
+
+        return pushCall[1] as (changes: any[]) => void;
+      };
+
+      it('should subscribe to store push event during init', () => {
+        const onSpy = jest.spyOn(mockMessageStore, 'on');
+        createAIAssistantView({ render: false });
+
+        expect(onSpy).toHaveBeenCalledWith('push', expect.any(Function));
+        onSpy.mockRestore();
+      });
+
+      it('should unsubscribe from previous push handler before subscribing', () => {
+        const offSpy = jest.spyOn(mockMessageStore, 'off');
+        const onSpy = jest.spyOn(mockMessageStore, 'on');
+        createAIAssistantView();
+
+        const onPushCall = (onSpy.mock.calls as any[][]).find((call) => call[0] === 'push') as any[];
+        const offPushCall = (offSpy.mock.calls as any[][]).find((call) => call[0] === 'push') as any[];
+
+        expect(offPushCall).toBeDefined();
+        expect(onPushCall).toBeDefined();
+        expect(offPushCall[1]).toBe(onPushCall[1]);
+
+        offSpy.mockRestore();
+        onSpy.mockRestore();
+      });
+
+      it('should call sendRequestToAI when user message is inserted via store push', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        const pushHandler = getPushHandler();
+
+        const userMessage = {
+          id: 'user-msg-1',
+          author: { id: USER_ID, name: 'User' },
+          text: 'Sort by name',
+        };
+
+        pushHandler([{ type: 'insert', data: userMessage }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledTimes(1);
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledWith(userMessage);
+      });
+
+      it('should not call sendRequestToAI when AI message is inserted via store push', () => {
+        const pushHandler = getPushHandler();
+
+        const aiMessage = {
+          id: 'assistant-msg-1',
+          author: { id: 'assistant' },
+          text: 'Done',
+          prompt: 'Sort by name',
+          status: 'success',
+          headerText: 'Sort',
+        };
+
+        pushHandler([{ type: 'insert', data: aiMessage }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
+
+      it('should not call sendRequestToAI when message from another user is inserted via store push', () => {
+        const pushHandler = getPushHandler();
+
+        const otherUserMessage = {
+          id: 'other-msg-1',
+          author: { id: 'other-user', name: 'Other' },
+          text: 'Hello',
+        };
+
+        pushHandler([{ type: 'insert', data: otherUserMessage }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
+
+      it('should not call sendRequestToAI when message is updated via store push', () => {
+        const pushHandler = getPushHandler();
+
+        pushHandler([{
+          type: 'update',
+          key: 'msg-1',
+          data: { text: 'updated' },
+        }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
+
+      it('should not call sendRequestToAI when message is removed via store push', () => {
+        const pushHandler = getPushHandler();
+
+        pushHandler([{ type: 'delete', key: 'msg-1' }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
       });
     });
   });

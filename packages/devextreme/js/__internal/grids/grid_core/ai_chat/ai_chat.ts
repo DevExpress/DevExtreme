@@ -333,4 +333,8 @@ export class AIChat {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dataSource?.reload();
   }
+
+  public getUserId(): string {
+    return this.chatInstance?.option('user.id') as string ?? '';
+  }
 }
