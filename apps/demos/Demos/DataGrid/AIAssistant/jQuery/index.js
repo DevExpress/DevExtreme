@@ -24,7 +24,7 @@ $(() => {
       type: 'json_schema',
       json_schema: {
         name: 'grid_assistant_response',
-        strict: true,
+        strict: false,
         schema: responseSchema,
       },
     };
@@ -120,6 +120,9 @@ $(() => {
         onInitialized(e) {
           chatInstance = e.component;
         },
+        user: {
+          id: 'user',
+        },
         suggestions: {
           items: [
             {
@@ -151,19 +154,19 @@ $(() => {
           ],
           onItemClick(e) {
             const { prompt, text } = e.itemData;
+            const userId = text === '💡 Help' ? 'help' : 'user';
 
-            if (text === '💡 Help') {
-              const message = {
-                id: Date.now(),
-                timestamp: new Date(),
-                author: { id: 'user' },
-                text: prompt,
-              };
+            const message = {
+              id: Date.now(),
+              timestamp: new Date(),
+              author: { id: userId },
+              text: prompt,
+            };
 
-              chatInstance.getDataSource().store().push([{ type: 'insert', data: message }]);
-            } else {
-              chatInstance.option('inputFieldText', prompt);
-            }
+            chatInstance.getDataSource().store().push([{
+              type: 'insert',
+              data: message,
+            }]);
           },
         },
       },
