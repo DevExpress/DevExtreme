@@ -18,7 +18,7 @@ interface UpdatedAppointmentKey {
 export class AppointmentDataSource {
   protected updatedAppointmentKeys: UpdatedAppointmentKey[] = [];
 
-  protected dataSource!: DataSource;
+  protected dataSource?: DataSource;
 
   protected updatedAppointment: SafeAppointment | null = null;
 
@@ -28,7 +28,7 @@ export class AppointmentDataSource {
   }
 
   get keyName(): string {
-    const store = this.dataSource.store();
+    const store = this.dataSource?.store();
     return store?.key() as string;
   }
 
@@ -37,7 +37,7 @@ export class AppointmentDataSource {
   }
 
   private getStoreKey(target: SafeAppointment): unknown {
-    const store = this.dataSource.store();
+    const store = this.dataSource?.store();
 
     return store?.keyOf(target);
   }
@@ -51,9 +51,9 @@ export class AppointmentDataSource {
 
   private initStoreChangeHandlers(): void {
     const { dataSource } = this;
-    const store = dataSource.store();
+    const store = dataSource?.store();
 
-    if (store) {
+    if (dataSource && store) {
       store.on(STORE_EVENTS.updating, (key) => {
         const keyName = store.key() as string;
         if (keyName) {
@@ -107,7 +107,7 @@ export class AppointmentDataSource {
 
   add(rawAppointment: SafeAppointment): DeferredObj<SafeAppointment> {
     // @eslint-disable-next-line
-    return this.dataSource.store().insert(rawAppointment)
+    return this.dataSource!.store().insert(rawAppointment)
     // @ts-expect-error
       .done(() => this.dataSource.load());
   }
@@ -117,7 +117,7 @@ export class AppointmentDataSource {
     // @ts-expect-error
     const d = new Deferred();
 
-    this.dataSource.store().update(key, data)
+    this.dataSource!.store().update(key, data)
     // @ts-expect-error
       .done((result) => this.dataSource.load()
         // @ts-expect-error
@@ -130,13 +130,13 @@ export class AppointmentDataSource {
 
   remove(rawAppointment: SafeAppointment): DeferredObj<SafeAppointment | undefined> {
     const key = this.getStoreKey(rawAppointment);
-    return this.dataSource.store().remove(key)
+    return this.dataSource!.store().remove(key)
     // @ts-expect-error
       .done(() => this.dataSource.load());
   }
 
   destroy(): void {
-    const store = this.dataSource.store();
+    const store = this.dataSource?.store();
 
     if (store) {
       store.off(STORE_EVENTS.updating);
