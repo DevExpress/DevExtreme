@@ -7,7 +7,6 @@ import { ArrayStore } from '@js/common/data';
 import Guid from '@js/core/guid';
 import { captionize } from '@js/core/utils/inflector';
 import { isFunction, isString } from '@js/core/utils/type';
-import type { DataSourceLike } from '@js/data/data_source';
 import type { Message } from '@js/ui/chat';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 
@@ -243,10 +242,8 @@ export class AIAssistantController extends Controller {
     this.aiAssistantIntegrationController.init();
   }
 
-  public getMessageDataSource(): DataSourceLike<Message> {
-    return {
-      store: this.messageStore,
-    };
+  public getMessageStore(): ArrayStore<Message, string> {
+    return this.messageStore ?? new ArrayStore({ key: 'id' });
   }
 
   public sendRequestToAI(message: Message | AIMessage): Promise<void> {

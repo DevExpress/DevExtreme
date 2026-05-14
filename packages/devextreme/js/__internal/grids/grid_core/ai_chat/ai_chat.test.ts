@@ -937,4 +937,33 @@ describe('AIChat', () => {
       }).not.toThrow();
     });
   });
+
+  describe('getUserId', () => {
+    it('should return user id from chat instance', () => {
+      mockChatInstance.option.mockImplementation((name: string) => {
+        if (name === 'user.id') return 'user-123';
+        return undefined;
+      });
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      expect(aiChat.getUserId()).toBe('user-123');
+    });
+
+    it('should return empty string when chatInstance is not initialized', () => {
+      const { aiChat } = createAIChat();
+
+      expect(aiChat.getUserId()).toBe('');
+    });
+
+    it('should return empty string when user.id is not set', () => {
+      mockChatInstance.option.mockReturnValue(undefined);
+
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      expect(aiChat.getUserId()).toBe('');
+    });
+  });
 });

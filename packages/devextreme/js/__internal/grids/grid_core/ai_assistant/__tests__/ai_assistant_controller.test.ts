@@ -51,10 +51,9 @@ const createController = (
   return controller;
 };
 
-const getStore = (controller: AIAssistantController): ArrayStore<Message, string> => {
-  const dataSource = controller.getMessageDataSource() as { store: ArrayStore<Message, string> };
-  return dataSource.store;
-};
+const getStore = (
+  controller: AIAssistantController,
+): ArrayStore<Message, string> => controller.getMessageStore();
 
 describe('AIAssistantController', () => {
   beforeEach(() => {
@@ -91,14 +90,12 @@ describe('AIAssistantController', () => {
     );
   });
 
-  describe('getMessageDataSource', () => {
-    it('should return dataSource with store', () => {
+  describe('getMessageStore', () => {
+    it('should return message store', () => {
       const controller = createController();
-      const dataSource = controller.getMessageDataSource() as {
-        store: ArrayStore<Message, string>;
-      };
+      const store = controller.getMessageStore();
 
-      expect(dataSource.store).toBeDefined();
+      expect(store).toBeDefined();
     });
   });
 
