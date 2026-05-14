@@ -6,7 +6,7 @@ import type SchedulerWorkSpace from '../workspaces/m_work_space';
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
 class CurrentTimeShader {
-  protected $container = this.workSpace._dateTableScrollable.$content();
+  protected $container = this.workSpace.getScrollable().$content();
 
   protected shader!: dxElementWrapper[];
 
@@ -15,10 +15,10 @@ class CurrentTimeShader {
   constructor(protected workSpace: SchedulerWorkSpace) {
   }
 
-  render(): void {
+  render(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {
     this.initShaderElements();
 
-    this.renderShader();
+    this.renderShader(isHorizontalGroupedWorkSpace, groupCount, cellCount);
 
     this.shader.forEach((shader) => {
       this.$container.append(shader);
@@ -31,7 +31,8 @@ class CurrentTimeShader {
     this.shader.push(this.$shader);
   }
 
-  renderShader(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  renderShader(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number):void {}
 
   createShader(): dxElementWrapper {
     return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
