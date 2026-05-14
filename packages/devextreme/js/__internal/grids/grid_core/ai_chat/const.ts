@@ -48,6 +48,7 @@ export const CLASSES = {
   disabled: 'dx-ai-chat--disabled',
   textArea: TEXTAREA_CLASS,
   speechToTextButton: SPEECH_TO_TEXT_CLASS,
+  chatSuggestions: 'dx-chat-suggestions',
 };
 
 export const CLEAR_CHAT_ICON = 'clearhistory';

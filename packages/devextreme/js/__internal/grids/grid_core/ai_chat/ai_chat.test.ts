@@ -812,6 +812,27 @@ describe('AIChat', () => {
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
       });
 
+      it('should disable chat suggestions widget', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+        mockChatElement.append($('<div>').addClass(CLASSES.chatSuggestions));
+
+        aiChat.setDisabled(true);
+
+        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', true);
+      });
+
+      it('should enable chat suggestions widget when set to false', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+        mockChatElement.append($('<div>').addClass(CLASSES.chatSuggestions));
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        expect(mockWidgetInstance.option).toHaveBeenCalledWith('disabled', false);
+      });
+
       it('should not update when setting same disabled value', () => {
         const { aiChat } = createAIChat();
         triggerContentTemplate();
