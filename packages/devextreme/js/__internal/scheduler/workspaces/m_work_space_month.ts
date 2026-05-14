@@ -69,8 +69,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override getCellCoordinatesByIndex(index) {
-    const rowIndex = Math.floor(index / this._getCellCount());
-    const columnIndex = index - this._getCellCount() * rowIndex;
+    const rowIndex = Math.floor(index / this.getCellCount());
+    const columnIndex = index - this.getCellCount() * rowIndex;
 
     return {
       rowIndex,
@@ -135,7 +135,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   renderRDateTable() {
     utils.renovation.renderComponent(
       this,
-      this._$dateTable,
+      this.$dateTable,
       DateTableMonthComponent,
       'renovatedDateTable',
       this.getRDateTableProps(),
