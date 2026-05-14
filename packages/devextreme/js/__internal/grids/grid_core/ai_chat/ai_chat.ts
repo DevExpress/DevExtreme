@@ -4,11 +4,12 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { ArrayStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { InitializedEvent } from '@js/ui/button';
+import type dxButton from '@js/ui/button';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
-import type Button from '@ts/ui/button';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -17,21 +18,24 @@ import {
 import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/m_popup';
 
+import type { AIMessage } from '../ai_assistant/types';
+import { isAIMessage } from '../ai_assistant/utils';
 import gridCoreUtils from '../m_utils';
 import {
   CLASSES, CLEAR_CHAT_ICON,
   DEFAULT_CHAT_OPTIONS,
   DEFAULT_POPUP_OPTIONS,
-  ERROR_ITEM_EMOJI,
   REGENERATE_ICON,
-  SUCCESS_ITEM_EMOJI,
 } from './const';
 import type {
   AIChatOptions, CommandResult, CommandResults,
 } from './types';
 import {
   findMessageById,
-  getMessageIconName, getMessageStateClass, hasCommandErrors, isAIChatMessage,
+  getCommandItemStyle,
+  getMessageIconName,
+  getMessageStateClass,
+  needToRenderCommandList,
   needToShowRegenerateButton,
 } from './utils';
 
@@ -40,7 +44,7 @@ export class AIChat {
 
   private chatInstance?: Chat;
 
-  private clearChatButtonInstance?: Button;
+  private clearChatButtonInstance?: dxButton;
 
   private disabled = false;
 
@@ -83,10 +87,10 @@ export class AIChat {
           return;
         }
 
-        const items = component.option('items') as Message[];
+        const items = component.option('items');
         const actualMessage = findMessageById(items, message.id) ?? message;
 
-        if (isAIChatMessage(actualMessage)) {
+        if (isAIMessage(actualMessage)) {
           this.renderAIMessage(actualMessage, container);
         } else {
           $(container).text(actualMessage?.text ?? '');
@@ -120,12 +124,6 @@ export class AIChat {
   }
 
   private getClearChatButton(): ToolbarItem | undefined {
-    const { onChatCleared } = this.options;
-
-    if (!onChatCleared) {
-      return undefined;
-    }
-
     return {
       widget: 'dxButton',
       toolbar: 'top',
@@ -134,15 +132,17 @@ export class AIChat {
       options: {
         icon: CLEAR_CHAT_ICON,
         hint: messageLocalization.format('dxDataGrid-aiAssistantClearButtonText'),
-        onClick: onChatCleared,
-        onInitialized: (e): void => {
+        onClick: (): void => {
+          this.clear();
+        },
+        onInitialized: (e: InitializedEvent): void => {
           this.clearChatButtonInstance = e.component;
         },
       },
     };
   }
 
-  private renderMessageIcon($parent: dxElementWrapper, message: Message): void {
+  private renderMessageIcon($parent: dxElementWrapper, message: AIMessage): void {
     $('<i>')
       .addClass(`dx-icon dx-icon-${getMessageIconName(message)} ${CLASSES.messageIcon}`)
       .appendTo($parent);
@@ -150,7 +150,7 @@ export class AIChat {
 
   private renderMessageHeader(
     $parent: dxElementWrapper,
-    message: Message,
+    message: AIMessage,
   ): void {
     const $row = $('<div>')
       .addClass(CLASSES.messageHeaderRow)
@@ -169,15 +169,15 @@ export class AIChat {
 
       eventsEngine.on($button, clickEventName, () => {
         if (!this.disabled) {
-          this.options.onRegenerate?.();
+          this.options.onRegenerate?.(message);
         }
       });
     }
   }
 
-  private renderMessageStateContent($parent: dxElementWrapper, message: Message): void {
+  private renderMessageStateContent($parent: dxElementWrapper, message: AIMessage): void {
     switch (true) {
-      case (message.status === MessageStatus.Success || hasCommandErrors(message.commands)):
+      case (needToRenderCommandList(message)):
         this.renderCommandList($parent, message.commands);
         break;
       case message.status === MessageStatus.Failure:
@@ -211,15 +211,11 @@ export class AIChat {
     $parent: dxElementWrapper,
     command: CommandResult,
   ): void {
-    const commandStateClass = command.status === MessageStatus.Failure
-      ? CLASSES.actionListItemError
-      : CLASSES.actionListItemSuccess;
+    const { stateClass, emoji } = getCommandItemStyle(command.status);
 
     const $item = $('<li>')
-      .addClass(`${CLASSES.actionListItem} ${commandStateClass}`)
+      .addClass(`${CLASSES.actionListItem} ${stateClass}`)
       .appendTo($parent);
-
-    const emoji = command.status === MessageStatus.Failure ? ERROR_ITEM_EMOJI : SUCCESS_ITEM_EMOJI;
 
     $('<span>')
       .addClass(CLASSES.actionListItemIcon)
@@ -251,7 +247,7 @@ export class AIChat {
 
   private renderErrorState(
     $container: dxElementWrapper,
-    message: Message,
+    message: AIMessage,
   ): void {
     $('<div>')
       .addClass(CLASSES.messageErrorText)
@@ -316,7 +312,7 @@ export class AIChat {
     this.setClearChatButtonDisabled(disabled);
   }
 
-  public renderAIMessage(message: Message, container: HTMLElement): void {
+  public renderAIMessage(message: AIMessage, container: HTMLElement): void {
     const $message = $('<div>')
       .addClass(`${CLASSES.message} ${getMessageStateClass(message.status)}`)
       .appendTo(container);

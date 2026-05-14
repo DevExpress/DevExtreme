@@ -1,7 +1,7 @@
 import type { PositionConfig } from '@js/common/core/animation';
 import type { Callback } from '@js/core/utils/callbacks';
 import { getHeight } from '@js/core/utils/size';
-import type { Properties as ChatProperties } from '@js/ui/chat';
+import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
@@ -19,6 +19,7 @@ import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
 import { View } from '../m_modules';
 import type { AIAssistantController } from './ai_assistant_controller';
+import type { AIMessage } from './types';
 
 export class AIAssistantView extends View {
   private aiChatInstance!: AIChat;
@@ -44,10 +45,9 @@ export class AIAssistantView extends View {
     return {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
-      onChatCleared: (): void => {
-        this.aiChatInstance.clear();
+      onRegenerate: (aiMessage: AIMessage): void => {
+        this.executeRequest(aiMessage);
       },
-      onRegenerate: (): void => {},
       popupOptions,
       chatOptions,
     };
@@ -89,19 +89,19 @@ export class AIAssistantView extends View {
     };
   }
 
+  private executeRequest(message: Message | AIMessage): void {
+    this.aiChatInstance?.setDisabled(true);
+    fromPromise(this.aiAssistantController.sendRequestToAI(message)).always(() => {
+      this.aiChatInstance?.setDisabled(false);
+    });
+  }
+
   private getAIChatOptions(): ChatProperties {
     return {
       dataSource: this.aiAssistantController.getMessageDataSource(),
       reloadOnChange: true,
       onMessageEntered: (e): void => {
-        if (this.aiAssistantController.isProcessing()) {
-          return;
-        }
-
-        this.aiChatInstance?.setDisabled(true);
-        fromPromise(this.aiAssistantController.sendRequestToAI(e.message)).always(() => {
-          this.aiChatInstance?.setDisabled(false);
-        });
+        this.executeRequest(e.message);
       },
       ...this.option('aiAssistant.chat'),
     };

@@ -15,6 +15,7 @@ import Popup from '@ts/ui/popup/m_popup';
 
 import { AIChat } from './ai_chat';
 import {
+  ABORTED_ITEM_EMOJI,
   CLASSES, CLEAR_CHAT_ICON, DEFAULT_POPUP_OPTIONS,
   ERROR_ITEM_EMOJI, REGENERATE_ICON, SUCCESS_ITEM_EMOJI,
 } from './const';
@@ -219,9 +220,8 @@ describe('AIChat', () => {
   });
 
   describe('clearChatButton', () => {
-    it('should include toolbarItems with clear chat button when onChatCleared is provided', () => {
-      const onChatCleared = jest.fn();
-      createAIChat({ onChatCleared });
+    it('should include toolbarItems with clear chat button', () => {
+      createAIChat();
 
       const popupConfig = getPopupConfig();
 
@@ -232,18 +232,25 @@ describe('AIChat', () => {
           location: 'after',
           options: expect.objectContaining({
             icon: CLEAR_CHAT_ICON,
-            onClick: onChatCleared,
+            onClick: expect.any(Function),
           }),
         }),
       ]);
     });
 
-    it('should not include toolbarItems when onChatCleared is not provided', () => {
+    it('should call clear when clear chat button is clicked', () => {
+      const mockStore = { clear: jest.fn() };
+      mockDataSource.store.mockReturnValue(mockStore);
+
       createAIChat();
+      triggerContentTemplate();
 
       const popupConfig = getPopupConfig();
+      const clearButton = popupConfig.toolbarItems[0];
+      clearButton.options.onClick();
 
-      expect(popupConfig.toolbarItems).toBeUndefined();
+      expect(mockStore.clear).toHaveBeenCalledTimes(1);
+      expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -369,6 +376,7 @@ describe('AIChat', () => {
         const commands: CommandResults = [
           { status: 'success', message: 'Sorted Name.' },
           { status: 'failure', message: 'Failed to group.' },
+          { status: 'aborted', message: 'Aborted filter.' },
         ];
 
         renderMessageTemplate(chatConfig, {
@@ -380,9 +388,10 @@ describe('AIChat', () => {
 
         const icons = container.querySelectorAll(`.${CLASSES.actionListItemIcon}`);
 
-        expect(icons).toHaveLength(2);
+        expect(icons).toHaveLength(3);
         expect(icons[0].textContent).toBe(SUCCESS_ITEM_EMOJI);
         expect(icons[1].textContent).toBe(ERROR_ITEM_EMOJI);
+        expect(icons[2].textContent).toBe(ABORTED_ITEM_EMOJI);
       });
 
       it('should render error icon when commands contain errors', () => {
@@ -573,6 +582,99 @@ describe('AIChat', () => {
         regenerateButton.click();
 
         expect(onRegenerate).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('aborted state', () => {
+      it('should render command list with aborted class for aborted command items', () => {
+        createAIChat();
+        triggerContentTemplate();
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+        const commands: CommandResults = [
+          { status: 'success', message: 'Sorted Name.' },
+          { status: 'aborted', message: 'Filter was aborted.' },
+        ];
+
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Sorting and Filtering',
+          status: 'success',
+          commands,
+        }, container);
+
+        expect(container.querySelector(`.${CLASSES.actionList}`)).not.toBeNull();
+        expect(container.querySelectorAll(`.${CLASSES.actionListItem}`)).toHaveLength(2);
+        expect(container.querySelectorAll(`.${CLASSES.actionListItemSuccess}`)).toHaveLength(1);
+        expect(container.querySelectorAll(`.${CLASSES.actionListItemAborted}`)).toHaveLength(1);
+      });
+
+      it('should render aborted emoji for aborted command items', () => {
+        createAIChat();
+        triggerContentTemplate();
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+        const commands: CommandResults = [
+          { status: 'aborted', message: 'Filter was aborted.' },
+        ];
+
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Filtering',
+          status: 'success',
+          commands,
+        }, container);
+
+        const icons = container.querySelectorAll(`.${CLASSES.actionListItemIcon}`);
+
+        expect(icons).toHaveLength(1);
+        expect(icons[0].textContent).toBe(ABORTED_ITEM_EMOJI);
+      });
+
+      it('should render error icon when commands contain aborted items', () => {
+        createAIChat();
+        triggerContentTemplate();
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Aborted',
+          status: 'success',
+          commands: [
+            { status: 'success', message: 'OK' },
+            { status: 'aborted', message: 'Aborted' },
+          ],
+        }, container);
+
+        expect(container.querySelector(`.${CLASSES.messageIcon}`)?.classList.contains('dx-icon-errorcircle')).toBe(true);
+      });
+
+      it('should render regenerate button when commands contain aborted items', () => {
+        const onRegenerate = jest.fn();
+        createAIChat({ onRegenerate });
+        triggerContentTemplate();
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Aborted results',
+          status: 'success',
+          commands: [
+            { status: 'success', message: 'OK' },
+            { status: 'aborted', message: 'Aborted' },
+          ],
+        }, container);
+
+        const regenerateButton = container.querySelector(`.${CLASSES.messageRegenerateButton}`);
+
+        expect(regenerateButton).not.toBeNull();
+        expect(regenerateButton?.classList.contains(`dx-icon-${REGENERATE_ICON}`)).toBe(true);
       });
     });
 
@@ -780,8 +882,7 @@ describe('AIChat', () => {
       });
 
       it('should disable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
@@ -790,26 +891,13 @@ describe('AIChat', () => {
       });
 
       it('should enable clear button via popup toolbarItems option', () => {
-        const onChatCleared = jest.fn();
-        const { aiChat } = createAIChat({ onChatCleared });
+        const { aiChat } = createAIChat();
         triggerContentTemplate();
 
         aiChat.setDisabled(true);
         aiChat.setDisabled(false);
 
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
-      });
-
-      it('should not update popup toolbarItems when onChatCleared is not provided', () => {
-        const { aiChat } = createAIChat();
-        triggerContentTemplate();
-
-        aiChat.setDisabled(true);
-
-        expect(mockClearChatButtonInstance.option).not.toHaveBeenCalledWith(
-          'disabled',
-          expect.anything(),
-        );
       });
 
       it('should not update when setting same disabled value', () => {

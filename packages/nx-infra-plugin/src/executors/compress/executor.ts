@@ -2,8 +2,11 @@ import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
 import * as terser from 'terser';
 import { js as jsBeautify } from 'js-beautify';
-import { CompressExecutorSchema } from './schema';
-import { resolveProjectPath } from '../../utils/path-resolver';
+import { glob } from 'glob';
+import { minimatch } from 'minimatch';
+import { CompressExecutorSchema, CompressMode, CompressModeName } from './schema';
+import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import { isWindowsOS, containsGlobPattern } from '../../utils/common';
 import {
   readFileText,
   writeFileText,
@@ -31,7 +34,7 @@ function createCommentFilter(eulaUrl?: string) {
   };
 }
 
-async function minify(content: string, eulaUrl?: string): Promise<string> {
+async function runMinify(content: string, eulaUrl?: string): Promise<string> {
   const result = await terser.minify(content, {
     output: {
       ascii_only: true,
@@ -46,7 +49,7 @@ async function minify(content: string, eulaUrl?: string): Promise<string> {
   return result.code;
 }
 
-async function beautify(content: string, eulaUrl?: string): Promise<string> {
+async function runBeautify(content: string, eulaUrl?: string): Promise<string> {
   const uglifyResult = await terser.minify(content, {
     mangle: false,
     compress: {
@@ -87,48 +90,88 @@ function stripDebugBlocks(content: string): string {
   return content.replace(REMOVE_DEBUG_REGEXP, '');
 }
 
-async function stripOnly(content: string): Promise<string> {
-  return content;
+function normalizeOutput(content: string, trailingNewline: boolean): string {
+  const eolNormalized = normalizeEol(content);
+  return trailingNewline ? ensureTrailingNewline(eolNormalized) : eolNormalized;
 }
 
-type CompressMode = CompressExecutorSchema['mode'];
-type CompressStrategy = (content: string, eulaUrl?: string) => Promise<string>;
-
-const COMPRESS_STRATEGIES: Record<CompressMode, CompressStrategy> = {
-  minify,
-  beautify,
-  'strip-only': stripOnly,
+type ResolvedMode = {
+  name: CompressModeName;
+  eulaUrl?: string;
+  trailingNewline: boolean;
 };
 
-async function compressFile(
-  filePath: string,
-  mode: CompressMode,
-  removeDebug: boolean,
-  eulaUrl?: string,
-): Promise<void> {
-  const strategy = COMPRESS_STRATEGIES[mode];
-  if (!strategy) {
-    throw new Error(`Unknown compress mode: ${mode}`);
+function resolveMode(mode: CompressMode): ResolvedMode {
+  if (typeof mode === 'string') {
+    return { name: mode, trailingNewline: true };
+  }
+  const trailingNewline = mode.trailingNewline ?? true;
+  if (mode.name === 'minify' || mode.name === 'beautify') {
+    return { name: mode.name, eulaUrl: mode.eulaUrl, trailingNewline };
+  }
+  return { name: mode.name, trailingNewline };
+}
+
+type CompressStrategy = (content: string, mode: ResolvedMode) => Promise<string>;
+
+const STRATEGIES: Record<CompressModeName, CompressStrategy> = {
+  minify: async (content, { eulaUrl, trailingNewline }) =>
+    normalizeOutput(await runMinify(stripDebugBlocks(content), eulaUrl), trailingNewline),
+  beautify: async (content, { eulaUrl, trailingNewline }) =>
+    normalizeOutput(await runBeautify(content, eulaUrl), trailingNewline),
+  'strip-debug': async (content) => stripDebugBlocks(content),
+  normalize: async (content, { trailingNewline }) => normalizeOutput(content, trailingNewline),
+};
+
+async function compressFile(filePath: string, mode: CompressMode): Promise<void> {
+  const resolved = resolveMode(mode);
+  const runStrategy = STRATEGIES[resolved.name];
+  if (!runStrategy) {
+    throw new Error(`Unknown compress mode: ${resolved.name}`);
   }
 
-  let content = await readFileText(filePath);
-  if (removeDebug || mode === 'strip-only') {
-    content = stripDebugBlocks(content);
+  const raw = await readFileText(filePath);
+  await writeFileText(filePath, await runStrategy(raw, resolved));
+}
+
+async function expandFileList(
+  files: string[],
+  exclude: string[] | undefined,
+  projectRoot: string,
+): Promise<string[]> {
+  const toPosixIfWindows = (p: string) => (isWindowsOS() ? normalizeGlobPathForWindows(p) : p);
+
+  const ignorePatterns = exclude?.map((p) => toPosixIfWindows(path.resolve(projectRoot, p)));
+
+  const isExcluded = (absolutePath: string): boolean =>
+    !!ignorePatterns?.some((pattern) =>
+      minimatch(toPosixIfWindows(absolutePath), pattern, { dot: true }),
+    );
+
+  const resolved: string[] = [];
+  for (const entry of files) {
+    const absolute = path.resolve(projectRoot, entry);
+    if (containsGlobPattern(entry)) {
+      const pattern = toPosixIfWindows(absolute);
+      const matches = await glob(pattern, { nodir: true, ignore: ignorePatterns });
+      resolved.push(...matches);
+    } else if (!isExcluded(absolute)) {
+      resolved.push(absolute);
+    }
   }
-  content = await strategy(content, eulaUrl);
-  content = ensureTrailingNewline(normalizeEol(content));
-  await writeFileText(filePath, content);
+  return [...new Set(resolved)];
 }
 
 const runExecutor: PromiseExecutor<CompressExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
-  const { files, mode, removeDebug, eulaUrl } = options;
+  const { files, mode, exclude } = options;
+  const modeName = typeof mode === 'string' ? mode : mode.name;
 
   try {
-    for (const file of files) {
-      const filePath = path.resolve(projectRoot, file);
-      await compressFile(filePath, mode, removeDebug ?? false, eulaUrl);
-      logger.verbose(`Compressed ${file} (${mode}${removeDebug ? ', removeDebug' : ''})`);
+    const expanded = await expandFileList(files, exclude, projectRoot);
+    for (const filePath of expanded) {
+      await compressFile(filePath, mode);
+      logger.verbose(`Compressed ${path.relative(projectRoot, filePath)} (${modeName})`);
     }
 
     return { success: true };
