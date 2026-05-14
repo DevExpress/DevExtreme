@@ -48,7 +48,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getTotalRowCount(groupCount) {
-    if (this._isHorizontalGroupedWorkSpace()) {
+    if (this.isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
     }
     groupCount = groupCount || 1;
@@ -61,7 +61,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   private getWorkSpaceHeight() {
     if (this.option('crossScrollingEnabled') && hasWindow()) {
-      return getBoundingRect(this._$dateTable.get(0)).height;
+      return getBoundingRect(this.$dateTable.get(0)).height;
     }
 
     return getBoundingRect((this.$element() as any).get(0)).height;
@@ -93,8 +93,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getGroupHeaderContainer() {
-    if (this._isHorizontalGroupedWorkSpace()) {
-      return this._$thead;
+    if (this.isHorizontalGroupedWorkSpace()) {
+      return this.$thead;
     }
     return this.$sidebarTable;
   }
@@ -151,7 +151,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       const integerPart = Math.floor(cellCount);
       const fractionPart = cellCount - integerPart;
 
-      return this.getCellWidth() * (integerPart * this._getGroupCount() + fractionPart);
+      return this.getCellWidth() * (integerPart * this.getGroupCount() + fractionPart);
     }
     return this.getIndicationCellCount() * this.getCellWidth();
   }
@@ -169,7 +169,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     const minHeight = this.getWorkSpaceMinHeight();
     setHeight(this.$sidebarTable, minHeight);
-    setHeight(this._$dateTable, minHeight);
+    setHeight(this.$dateTable, minHeight);
 
     this.virtualScrollingDispatcher.updateDimensions();
   }
@@ -177,7 +177,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   private getWorkSpaceMinHeight() {
     let minHeight = this.getWorkSpaceHeight();
 
-    const workspaceContainerHeight = getOuterHeight(this._$flexContainer, true);
+    const workspaceContainerHeight = getOuterHeight(this.$flexContainer, true);
 
     if (minHeight < workspaceContainerHeight) {
       minHeight = workspaceContainerHeight;
@@ -188,15 +188,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override getCellCoordinatesByIndex(index) {
     return {
-      columnIndex: index % this._getCellCount(),
+      columnIndex: index % this.getCellCount(),
       rowIndex: 0,
     };
   }
 
   protected override getCellElementByPosition(cellCoordinates, groupIndex) {
-    const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+    const indexes = this.groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
-    return this._$dateTable
+    return this.$dateTable
       .find('tr')
       .eq(indexes.rowIndex)
       .find('td')
@@ -204,7 +204,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getWorkSpaceWidth() {
-    return getOuterWidth(this._$dateTable, true);
+    return getOuterWidth(this.$dateTable, true);
   }
 
   private getIndicationFirstViewDate() {
@@ -313,7 +313,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override toggleGroupingDirectionClass() {
-    (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
+    (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this.isHorizontalGroupedWorkSpace());
   }
 
   _getDefaultOptions() {
@@ -344,9 +344,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       this.virtualScrollingDispatcher.updateDimensions();
     }
 
-    this._shader = new HorizontalShader(this);
+    this.shader = new HorizontalShader(this);
 
-    this.$sidebarTable.appendTo(this._sidebarScrollable.$content());
+    this.$sidebarTable.appendTo(this.$sidebarScrollable.$content());
 
     if (this.isRenovatedRender() && this.isVerticalGroupedWorkSpace()) {
       this.renderRGroupPanel();
@@ -365,7 +365,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getCurrentTimePanelCellIndices() {
-    const columnCountPerGroup = this._getCellCount();
+    const columnCountPerGroup = this.getCellCount();
     const today = this.getToday();
     const index = this.getCellIndexByDate(today);
     const { columnIndex: currentTimeColumnIndex } = this.getCellCoordinatesByIndex(index);
@@ -374,8 +374,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       return [];
     }
 
-    const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-      ? this._getGroupCount()
+    const horizontalGroupCount = this.isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+      ? this.getGroupCount()
       : 1;
 
     return [...new Array(horizontalGroupCount)]
@@ -399,14 +399,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       let currentDate = new Date(firstViewDate);
 
       const $cells: any[] = [];
-      const groupCount = this._getGroupCount();
+      const groupCount = this.getGroupCount();
       const cellCountInDay = this.getCellCountInDay();
       const colSpan = this.isGroupedByDate()
         ? cellCountInDay * groupCount
         : cellCountInDay;
       const cellTemplate: any = this.option('dateCellTemplate');
 
-      const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+      const horizontalGroupCount = this.isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
         ? groupCount
         : 1;
       const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * (this.option('intervalCount') as any);
@@ -462,7 +462,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       $indicator.css('left', rtlOffset ? rtlOffset - width : width);
     } else {
       for (let i = 0; i < groupCount; i++) {
-        const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+        const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this.getCellCount() * this.getCellWidth() * i;
         $indicator = this.createIndicator($container);
         setHeight($indicator, getBoundingRect($container.get(0)).height);
 
@@ -483,9 +483,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         groupHeaderClass: this.getGroupHeaderClass.bind(this),
         groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
       },
-      this._getCellCount() || 1,
+      this.getCellCount() || 1,
       this.option('resourceCellTemplate'),
-      this.getTotalRowCount(this._getGroupCount()),
+      this.getTotalRowCount(this.getGroupCount()),
       groupByDate,
     );
   }
