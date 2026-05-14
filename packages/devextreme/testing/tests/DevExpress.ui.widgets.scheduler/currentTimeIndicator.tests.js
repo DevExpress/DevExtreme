@@ -366,7 +366,7 @@ QUnit.module('DateTime indicator on Day View', () => {
             const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS).eq(i);
             const $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(i);
 
-            assert.roughEqual($topShader.position().top, i > 0 ? getOuterHeight(instance._dateTableScrollable.$content()) : 0, 2.5, 'Shader has correct position');
+            assert.roughEqual($topShader.position().top, i > 0 ? getOuterHeight(instance.$dateTableScrollable.$content()) : 0, 2.5, 'Shader has correct position');
 
             assert.roughEqual(getOuterHeight($topShader), 9.5 * cellHeight, 2.5, 'Top shader has correct height');
             assert.roughEqual(getOuterHeight($bottomShader), 22.5 * cellHeight, 2.5, 'Bottom shader has correct height');
