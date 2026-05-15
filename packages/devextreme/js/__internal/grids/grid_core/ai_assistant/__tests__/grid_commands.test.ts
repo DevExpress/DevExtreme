@@ -261,7 +261,7 @@ describe('GridCommands', () => {
       const command = createMockCommand('test');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+      const schema = gridCommands.buildResponseSchema();
 
       expect(schema.anyOf).toBeUndefined();
       expect(schema.oneOf).toBeUndefined();
@@ -338,7 +338,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+      const schema = gridCommands.buildResponseSchema();
 
       // $defs should exist at root level
       expect(schema.$defs).toBeDefined();
@@ -380,7 +380,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+      const schema = gridCommands.buildResponseSchema();
 
       expect(schema.$defs).toBeUndefined();
     });
@@ -1128,7 +1128,7 @@ describe('GridCommands', () => {
       expect(results[0].message).toBe('default success');
     });
 
-    it('should leave default message when customizeResponseText returns undefined', async () => {
+    it('should leave default message when customizeResponseText returns empty object', async () => {
       const customizeResponseText: CustomizeResponseText = () => ({});
 
       const command = createMockCommand('test', {

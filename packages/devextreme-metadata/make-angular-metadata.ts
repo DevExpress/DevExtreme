@@ -3,7 +3,6 @@ import { cleanArtifacts, types } from './common';
 import { commonSmdCollectionItems } from './common/smd';
 import { NG_SMD_FILE, PATHS } from './common/paths';
 import { replaceTypesMutations } from './common-smd-mutations';
-import { dxDataGridOptions } from 'devextreme/js/ui/data_grid';
 
 cleanArtifacts(NG_SMD_FILE, 'NgSmdGenerator.cfg.json');
 
