@@ -1,4 +1,5 @@
 import type { PositionConfig } from '@js/common/core/animation';
+import type { ArrayStore } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { getHeight } from '@js/core/utils/size';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
@@ -10,10 +11,12 @@ import {
   isEnabledOption,
   isPopupOptions,
   isTitleOption,
+  isUserMessage,
 } from '@ts/grids/grid_core/ai_assistant/utils';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
@@ -26,9 +29,13 @@ export class AIAssistantView extends View {
 
   private aiAssistantController!: AIAssistantController;
 
+  private messageStore?: ArrayStore<Message, string>;
+
   private columnHeadersView!: ColumnHeadersView;
 
   private rowsView!: RowsView;
+
+  private handleMessageStorePushContext!: (changes: DataChange<Message, string>[]) => void;
 
   public visibilityChanged?: Callback;
 
@@ -36,6 +43,11 @@ export class AIAssistantView extends View {
     this.columnHeadersView = this.getView('columnHeadersView');
     this.rowsView = this.getView('rowsView');
     this.aiAssistantController = this.getController('aiAssistant');
+    this.messageStore = this.aiAssistantController.getMessageStore();
+    this.handleMessageStorePushContext = this.handleMessageStorePush.bind(this);
+
+    this.unsubscribeMessageStorePush();
+    this.subscribeMessageStorePush();
   }
 
   private getAIChatConfig(): AIChatOptions {
@@ -97,9 +109,27 @@ export class AIAssistantView extends View {
     });
   }
 
+  private handleMessageStorePush(changes: DataChange<Message, string>[]): void {
+    const userId = this.aiChatInstance.getUserId();
+
+    changes.forEach(({ type, data }) => {
+      if (type === 'insert' && data && isUserMessage(data, userId)) {
+        this.executeRequest(data);
+      }
+    });
+  }
+
+  private unsubscribeMessageStorePush(): void {
+    this.messageStore?.off('push', this.handleMessageStorePushContext);
+  }
+
+  private subscribeMessageStorePush(): void {
+    this.messageStore?.on('push', this.handleMessageStorePushContext);
+  }
+
   private getAIChatOptions(): ChatProperties {
     return {
-      dataSource: this.aiAssistantController.getMessageDataSource(),
+      dataSource: this.messageStore,
       reloadOnChange: true,
       onMessageEntered: (e): void => {
         this.executeRequest(e.message);
@@ -114,6 +144,12 @@ export class AIAssistantView extends View {
 
       this.aiChatInstance = new AIChat(config);
     }
+  }
+
+  public dispose(): void {
+    this.unsubscribeMessageStorePush();
+    this.messageStore = undefined;
+    super.dispose();
   }
 
   public optionChanged(args: OptionChanged): void {

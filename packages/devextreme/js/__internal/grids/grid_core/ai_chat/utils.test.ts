@@ -1,9 +1,7 @@
-import {
-  describe, expect, it,
-} from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import type { Message } from '@js/ui/chat';
+import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 
-import { MessageStatus } from '../ai_assistant/const';
 import {
   ABORTED_ITEM_EMOJI, CLASSES, ERROR_ITEM_EMOJI, SUCCESS_ITEM_EMOJI,
 } from './const';

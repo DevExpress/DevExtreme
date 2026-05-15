@@ -8,6 +8,11 @@ export const isAIMessage = (
   message: Message,
 ): message is AIMessage => message.author?.id === AI_ASSISTANT_AUTHOR_ID;
 
+export const isUserMessage = (
+  message: Message,
+  userId: string,
+): boolean => message.author?.id === userId;
+
 export const isEnabledOption = (optionName: string, value: unknown): boolean => optionName.startsWith('aiAssistant.enabled')
   || (optionName === 'aiAssistant' && isObject(value) && 'enabled' in value);
 

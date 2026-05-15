@@ -21,7 +21,6 @@ import type {
 export class GridCommands {
   private readonly component: InternalGrid;
 
-  // TODO: specify type of command arguments when default commands are implemented
   private readonly commands: Map<string, GridCommand>;
 
   private executing = false;
@@ -142,7 +141,6 @@ export class GridCommands {
   }
 
   private async executeCommand(
-    // TODO: specify type when default commands are implemented
     command: GridCommand,
     args: Record<string, unknown>,
     callbacks: CommandCallbacks,
