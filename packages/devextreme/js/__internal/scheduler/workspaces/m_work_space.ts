@@ -52,7 +52,7 @@ import {
 import type { ViewType } from '@ts/scheduler/types';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
-import type NotifyScheduler from '../base/m_widget_notify_scheduler';
+import type NotifyScheduler from '../base/widget_notify_scheduler';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { Cache } from '../global_cache';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
