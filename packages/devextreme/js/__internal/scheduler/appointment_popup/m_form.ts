@@ -28,6 +28,7 @@ import type Popup from '@ts/ui/popup/m_popup';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { SafeAppointment } from '../types';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
@@ -36,6 +37,24 @@ import { getRepeatSelectItems, REPEAT_NEVER_VALUE } from './localized_items';
 import { customizeFormItems } from './m_customize_form_items';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
+
+type SchedulerEditingObject = Exclude<NonNullable<SchedulerProperties['editing']>, boolean>;
+
+export type CreateComponentFn = (
+  element: string | HTMLElement | dxElementWrapper | Element,
+  Component: any,
+  options: any,
+) => any;
+
+export interface AppointmentFormConfig {
+  dataAccessors: AppointmentDataAccessor;
+  editing: SchedulerProperties['editing'];
+  resourceManager: ResourceManager;
+  firstDayOfWeek: number | undefined;
+  startDayHour: number;
+  createComponent: CreateComponentFn;
+  getCalculatedEndDate: (startDate: Date) => Date;
+}
 
 const CLASSES = {
   form: 'dx-scheduler-form',
@@ -118,9 +137,7 @@ const RESOURCES_GROUP_ICON_NAME = 'resourcesGroupIcon';
 const DESCRIPTION_ICON_NAME = 'descriptionIcon';
 
 export class AppointmentForm {
-  private readonly scheduler: any;
-
-  private readonly resourceManager!: ResourceManager;
+  private readonly config: AppointmentFormConfig;
 
   private dxFormInstance?: dxForm;
 
@@ -131,6 +148,10 @@ export class AppointmentForm {
   private $mainGroup?: dxElementWrapper;
 
   private $recurrenceGroup?: dxElementWrapper;
+
+  private get resourceManager(): ResourceManager {
+    return this.config.resourceManager;
+  }
 
   get dxForm(): dxForm {
     return this.dxFormInstance as dxForm;
@@ -158,29 +179,28 @@ export class AppointmentForm {
   }
 
   get startDate(): Date | null {
-    const { startDateExpr } = this.scheduler.getDataAccessors().expr;
+    const { startDateExpr } = this.config.dataAccessors.expr;
     const value = this.getFormDataField(startDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
   get endDate(): Date | null {
-    const { endDateExpr } = this.scheduler.getDataAccessors().expr;
+    const { endDateExpr } = this.config.dataAccessors.expr;
     const value = this.getFormDataField(endDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
   get recurrenceRuleRaw(): string | null {
-    const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+    const { recurrenceRuleExpr } = this.config.dataAccessors.expr;
     const value = this.getFormDataField(recurrenceRuleExpr) as string | undefined;
 
     return value ?? null;
   }
 
-  constructor(scheduler: any) {
-    this.scheduler = scheduler;
-    this.resourceManager = scheduler.getResourceManager();
+  constructor(config: AppointmentFormConfig) {
+    this.config = config;
   }
 
   private getFormDataField(field: string): any {
@@ -200,7 +220,10 @@ export class AppointmentForm {
 
     const mainGroup = this.createMainFormGroup();
 
-    this.recurrenceForm = new RecurrenceForm(this.scheduler);
+    this.recurrenceForm = new RecurrenceForm({
+      firstDayOfWeek: this.config.firstDayOfWeek,
+      createComponent: this.config.createComponent,
+    });
     const recurrenceGroup = this.recurrenceForm.createRecurrenceFormGroup();
 
     const items = [mainGroup, recurrenceGroup];
@@ -212,28 +235,33 @@ export class AppointmentForm {
     this.applyFormItemDefaults(mainGroup, showMainGroupIcons);
     this.applyFormItemDefaults(recurrenceGroup, showRecurrenceGroupIcons);
 
-    const editingConfig = this.scheduler.getEditingConfig();
-    const customizedItems = customizeFormItems(items, editingConfig?.form?.items);
+    const customizedItems = customizeFormItems(items, this.getEditingForm()?.items);
 
     this.createForm(customizedItems);
   }
 
-  private getIconsShowMode(): AppointmentFormIconsShowMode {
-    const editingConfig = this.scheduler.getEditingConfig() as SchedulerProperties['editing'];
+  private getEditingForm(): SchedulerEditingObject['form'] {
+    const editing = this.getEditingObject();
+    return editing?.form;
+  }
 
-    if (isBoolean(editingConfig)) {
-      return DEFAULT_ICONS_SHOW_MODE;
+  private getEditingObject(): SchedulerEditingObject | undefined {
+    const { editing } = this.config;
+    if (isBoolean(editing) || !editing) {
+      return undefined;
     }
+    return editing;
+  }
 
-    return editingConfig?.form?.iconsShowMode ?? DEFAULT_ICONS_SHOW_MODE;
+  private getIconsShowMode(): AppointmentFormIconsShowMode {
+    return this.getEditingForm()?.iconsShowMode ?? DEFAULT_ICONS_SHOW_MODE;
   }
 
   private createForm(items: FormProperties['items']): dxForm {
     const element = $('<div>');
-    const editingConfig = this.scheduler.getEditingConfig();
     const {
       items: formItems, onContentReady, onInitialized, ...customFormOptions
-    } = editingConfig?.form ?? {};
+    } = this.getEditingForm() ?? {};
 
     const defaultOptions: FormProperties = {
       items,
@@ -251,7 +279,7 @@ export class AppointmentForm {
       onFieldDataChanged: (e) => {
         const {
           startDateExpr, endDateExpr, recurrenceRuleExpr,
-        } = this.scheduler.getDataAccessors().expr;
+        } = this.config.dataAccessors.expr;
 
         const { dataField } = e;
 
@@ -261,7 +289,7 @@ export class AppointmentForm {
 
         const isDateRangeChanged = [startDateExpr, endDateExpr].includes(dataField);
         const isRecurrenceRuleChanged = dataField === recurrenceRuleExpr;
-        const isResourceChanged = Object.keys(this.scheduler.getResourceById()).includes(dataField);
+        const isResourceChanged = Object.keys(this.config.resourceManager.resourceById).includes(dataField);
 
         if (isDateRangeChanged) {
           this.updateDateEditorsValues();
@@ -300,7 +328,7 @@ export class AppointmentForm {
     } as FormProperties;
 
     const formOptions = extend(true, defaultOptions, customFormOptions);
-    return this.scheduler.createComponent(element, dxForm, formOptions) as dxForm;
+    return this.config.createComponent(element, dxForm, formOptions) as dxForm;
   }
 
   private createMainFormGroup(): GroupItem {
@@ -320,7 +348,7 @@ export class AppointmentForm {
   }
 
   private createSubjectGroup(): GroupItem {
-    const { textExpr } = this.scheduler.getDataAccessors().expr;
+    const { textExpr } = this.config.dataAccessors.expr;
 
     return {
       name: SUBJECT_GROUP_NAME,
@@ -375,7 +403,7 @@ export class AppointmentForm {
   }
 
   private createAllDaySwitch(): SimpleItem {
-    const { allDayExpr, startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
+    const { allDayExpr, startDateExpr, endDateExpr } = this.config.dataAccessors.expr;
 
     return {
       name: ALL_DAY_EDITOR_NAME,
@@ -403,10 +431,9 @@ export class AppointmentForm {
             this.dxForm.updateData(startDateExpr, allDayStartDate);
             this.dxForm.updateData(endDateExpr, allDayStartDate);
           } else {
-            const startHour = this.scheduler.getStartDayHour();
-            startDate.setHours(startHour);
+            startDate.setHours(this.config.startDayHour);
 
-            const calculatedEndDate = this.scheduler.getCalculatedEndDate(startDate);
+            const calculatedEndDate = this.config.getCalculatedEndDate(startDate);
 
             this.dxForm.updateData(startDateExpr, startDate);
             this.dxForm.updateData(endDateExpr, calculatedEndDate);
@@ -419,7 +446,7 @@ export class AppointmentForm {
   private createStartDateGroup(): GroupItem {
     const {
       startDateExpr, startDateTimeZoneExpr, endDateTimeZoneExpr,
-    } = this.scheduler.getDataAccessors().expr;
+    } = this.config.dataAccessors.expr;
 
     return this.createDateGroup(
       startDateExpr,
@@ -459,7 +486,7 @@ export class AppointmentForm {
   }
 
   private createEndDateGroup(): GroupItem {
-    const { endDateExpr, endDateTimeZoneExpr } = this.scheduler.getDataAccessors().expr;
+    const { endDateExpr, endDateTimeZoneExpr } = this.config.dataAccessors.expr;
 
     return this.createDateGroup(
       endDateExpr,
@@ -498,8 +525,8 @@ export class AppointmentForm {
     timeItemOptions?: SimpleItem,
     timezoneItemOptions?: SimpleItem,
   ): GroupItem {
-    const { allowTimeZoneEditing } = this.scheduler.getEditingConfig();
-    const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
+    const allowTimeZoneEditing = this.getEditingObject()?.allowTimeZoneEditing;
+    const { startDateExpr, endDateExpr } = this.config.dataAccessors.expr;
     const isStartDateEditor = dateExpr === startDateExpr;
 
     const getEditorsDate = (): Date | null => (isStartDateEditor ? this.startDate : this.endDate);
@@ -567,7 +594,7 @@ export class AppointmentForm {
           items: [
             extend(
               true,
-              getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
+              getStartDateCommonConfig(this.config.firstDayOfWeek),
               {
                 editorOptions: {
                   onValueChanged: (e) => {
@@ -593,7 +620,7 @@ export class AppointmentForm {
                 type: 'time',
                 useMaskBehavior: true,
                 calendarOptions: {
-                  firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
+                  firstDayOfWeek: this.config.firstDayOfWeek,
                 },
                 onValueChanged: (e) => {
                   dateValueChanged(e, (date: Date): void => {
@@ -625,7 +652,7 @@ export class AppointmentForm {
   }
 
   private createRepeatGroup(): GroupItem {
-    const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+    const { recurrenceRuleExpr } = this.config.dataAccessors.expr;
 
     return {
       name: REPEAT_GROUP_NAME,
@@ -677,7 +704,7 @@ export class AppointmentForm {
   }
 
   private createDescriptionGroup(): GroupItem {
-    const { descriptionExpr } = this.scheduler.getDataAccessors().expr;
+    const { descriptionExpr } = this.config.dataAccessors.expr;
 
     return {
       name: DESCRIPTION_GROUP_NAME,
@@ -709,7 +736,7 @@ export class AppointmentForm {
   }
 
   private createResourcesGroup(): GroupItem {
-    const resourcesLoaders: ResourceLoader[] = Object.values(this.scheduler.getResourceById());
+    const resourcesLoaders: ResourceLoader[] = Object.values(this.config.resourceManager.resourceById);
 
     let resourcesItems: FormItem[] = resourcesLoaders.map((resourceLoader) => {
       const { dataSource, dataAccessor } = resourceLoader;
@@ -854,8 +881,7 @@ export class AppointmentForm {
 
   showMainGroup(): void {
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
-    const editingConfig = this.scheduler.getEditingConfig();
-    const configuredHeight = editingConfig?.popup?.height ?? 'auto';
+    const configuredHeight = this.getEditingObject()?.popup?.height ?? 'auto';
 
     if (typeof currentHeight === 'number') {
       this.dxPopup.option('height', configuredHeight);
@@ -908,7 +934,7 @@ export class AppointmentForm {
 
   saveRecurrenceValue(): void {
     const { recurrenceRule } = this.recurrenceForm;
-    const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+    const { recurrenceRuleExpr } = this.config.dataAccessors.expr;
 
     const recurrenceRuleSerialized = recurrenceRule.toString() ?? '';
 
@@ -1003,7 +1029,7 @@ export class AppointmentForm {
   }
 
   private updateDateTimeEditorsVisibility(): void {
-    const { allDayExpr } = this.scheduler.getDataAccessors().expr;
+    const { allDayExpr } = this.config.dataAccessors.expr;
     const visible = !this.getFormDataField(allDayExpr);
 
     const dateOptionsGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${DATE_OPTIONS_GROUP_NAME}`;
