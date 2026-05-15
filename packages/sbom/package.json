@@ -7,7 +7,8 @@
   },
   "pnpm": {
     "overrides": {
-      "fast-uri@<3.1.2": ">=3.1.2"
+      "fast-uri@<3.1.2": ">=3.1.2",
+      "@cyclonedx/cdxgen@>=9.9.5 <12.3.3": ">=12.3.3"
     }
   },
   "packageManager": "pnpm@9.15.9"

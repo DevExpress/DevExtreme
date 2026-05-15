@@ -273,6 +273,10 @@ export class AIChat {
     this.clearChatButtonInstance?.option('disabled', disabled);
   }
 
+  private setChatSuggestionsDisabled(disabled: boolean): void {
+    this.chatInstance?.option({ suggestions: { disabled } });
+  }
+
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
     this.options = options;
 
@@ -308,6 +312,7 @@ export class AIChat {
     this.setTextAreaDisabled(disabled);
     this.setSpeechToTextDisabled(disabled);
     this.setClearChatButtonDisabled(disabled);
+    this.setChatSuggestionsDisabled(disabled);
   }
 
   public renderAIMessage(message: AIMessage, container: HTMLElement): void {

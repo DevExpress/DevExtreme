@@ -3,7 +3,7 @@ import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
-import { isKeyShapeValid } from './utils';
+import { compositeKeyPairSchema, isKeyShapeValid, normalizeKey } from './utils';
 
 const setFocusedRowKeyAndSettle = async (
   component: InternalGrid,
@@ -42,13 +42,13 @@ const focusRowByKeyCommandSchema = z.object({
   key: z.union([
     z.string(),
     z.number(),
-    z.record(z.union([z.string(), z.number()])),
+    z.array(compositeKeyPairSchema),
   ]),
 }).strict();
 
 export const focusRowByKeyCommand = defineGridCommand({
   name: 'focusRowByKey',
-  description: 'Focus a specific row by its key value. The key matches the grid\'s keyExpr or the underlying store\'s key — pass a string or number for a single-field key, or an object whose property names match each keyExpr field for a composite key. Requires focusedRowEnabled to be true on the grid.',
+  description: 'Focus a specific row by its key value. The key matches the grid\'s keyExpr or the underlying store\'s key — pass a string or number for a single-field key, or an array of {field, value} pairs for a composite key. Requires focusedRowEnabled to be true on the grid.',
   schema: focusRowByKeyCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const defaultMessage = 'Focus row.';
@@ -60,12 +60,14 @@ export const focusRowByKeyCommand = defineGridCommand({
     const keyExpr = component.option('keyExpr')
       ?? component.getDataSource()?.store()?.key();
 
-    if (!keyExpr || !isKeyShapeValid(keyExpr, args.key)) {
+    const key = normalizeKey(args.key);
+
+    if (!keyExpr || !isKeyShapeValid(keyExpr, key)) {
       return failure(defaultMessage);
     }
 
     try {
-      await setFocusedRowKeyAndSettle(component, args.key);
+      await setFocusedRowKeyAndSettle(component, key);
 
       return success(defaultMessage);
     } catch {

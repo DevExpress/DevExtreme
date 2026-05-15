@@ -6,6 +6,7 @@ settings:
 
 overrides:
   fast-uri@<3.1.2: '>=3.1.2'
+  '@cyclonedx/cdxgen@>=9.9.5 <12.3.3': '>=12.3.3'
 
 importers:
 
@@ -128,8 +129,8 @@ packages:
     resolution: {integrity: sha512-7izr5+a/rfHzlhQiqPTvdMtDYHcv0w57I/1sxha4uutdHiSjc63bc4smFgN4fLv1hpyXUgSL7SSJr7Oqo5eEoA==}
     cpu: [x64]
 
-  '@cyclonedx/cdxgen@12.3.0':
-    resolution: {integrity: sha512-xGCp81p9aRG8k0vmq7kR/XbHxQq+SMY7/awtz4JoVoKkS7igNbk3O/bf92rlU0TKvWMYUEMGFiwkhj7PFEJQbQ==}
+  '@cyclonedx/cdxgen@12.3.3':
+    resolution: {integrity: sha512-CE+fW6npO9PkiRIiegSgj5N/bHkvJXOalZoF5jtS89YZ9Xzbwk55j+lKZGCyDrfA6kkrX7UEW77LfYs7eB4ZNw==}
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
@@ -1032,7 +1033,7 @@ snapshots:
   '@cdxgen/cdxgen-plugins-bin@2.0.3':
     optional: true
 
-  '@cyclonedx/cdxgen@12.3.0':
+  '@cyclonedx/cdxgen@12.3.3':
     dependencies:
       '@babel/parser': 7.29.2
       '@babel/traverse': 7.29.0
@@ -1095,7 +1096,7 @@ snapshots:
 
   '@devexpress/sbom-toolkit@0.6.1':
     dependencies:
-      '@cyclonedx/cdxgen': 12.3.0
+      '@cyclonedx/cdxgen': 12.3.3
     transitivePeerDependencies:
       - supports-color
 
