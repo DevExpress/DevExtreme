@@ -15,5 +15,6 @@ jobs:
         {
           ignoredAdvisories: [
             'GHSA-67hx-6x53-jw92', // babel-traverse
+            'GHSA-4wf5-vphf-c2xc', // terser
           ]
         }
