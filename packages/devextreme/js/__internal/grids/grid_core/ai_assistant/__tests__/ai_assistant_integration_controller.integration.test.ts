@@ -78,8 +78,7 @@ const createController = async (
       { dataField: 'name', caption: 'Name', dataType: 'string' },
     ],
     ...options,
-    // TODO: remove when d.ts is ready
-  } as unknown as Properties);
+  } as Properties);
 
   const controller = new AIAssistantIntegrationController(instance);
   controller.init();
