@@ -10,7 +10,6 @@ import type { Properties as NumberBoxProperties } from '@js/ui/number_box';
 import type { Properties as RadioGroupProperties } from '@js/ui/radio_group';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 
-import type Scheduler from '../m_scheduler';
 import {
   getRecurrenceFrequencyItems,
   getRecurrenceMonthItems,
@@ -18,6 +17,15 @@ import {
   ICAL_WEEK_DAYS,
 } from './localized_items';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
+
+export interface RecurrenceFormConfig {
+  firstDayOfWeek: number | undefined;
+  createComponent: (
+    element: string | HTMLElement | dxElementWrapper | Element,
+    Component: any,
+    options: any,
+  ) => any;
+}
 
 const CLASSES = {
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
@@ -84,7 +92,7 @@ const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 export class RecurrenceForm {
   recurrenceRule: RecurrenceRule = new RecurrenceRule('', new Date());
 
-  private readonly scheduler: any;
+  private readonly config: RecurrenceFormConfig;
 
   private dxFormInstance?: dxForm;
 
@@ -92,8 +100,8 @@ export class RecurrenceForm {
 
   private readOnly = false;
 
-  constructor(scheduler: Scheduler) {
-    this.scheduler = scheduler;
+  constructor(config: RecurrenceFormConfig) {
+    this.config = config;
   }
 
   private createByMonthDayNumberBoxItem(
@@ -166,7 +174,7 @@ export class RecurrenceForm {
         },
         extend(
           true,
-          getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
+          getStartDateCommonConfig(this.config.firstDayOfWeek),
           {
             name: EDITOR_NAMES.recurrenceStartDateEditor,
             cssClass: CLASSES.recurrenceStartDateEditor,
@@ -307,13 +315,13 @@ export class RecurrenceForm {
       },
       template: (): dxElementWrapper => {
         const $container = $('<div>').addClass(CLASSES.daysOfWeekButtons);
-        const weekDayItems = getRecurrenceWeekDayItems(this.scheduler.getFirstDayOfWeek());
+        const weekDayItems = getRecurrenceWeekDayItems(this.config.firstDayOfWeek);
 
         weekDayItems.forEach((item) => {
           const buttonContainer = $('<div>').appendTo($container);
 
           this.weekDayButtons[item.key]?.dispose();
-          this.weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
+          this.weekDayButtons[item.key] = this.config.createComponent(buttonContainer, Button, {
             text: item.text,
             disabled: this.readOnly,
             onContentReady: (e): void => {
@@ -472,7 +480,7 @@ export class RecurrenceForm {
             type: 'date',
             useMaskBehavior: true,
             calendarOptions: {
-              firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
+              firstDayOfWeek: this.config.firstDayOfWeek,
             },
             inputAttr: {
               'aria-label': messageLocalization.format('dxScheduler-recurrenceUntilDateLabel'),
@@ -546,7 +554,7 @@ export class RecurrenceForm {
 
     if (recurrenceRule.byDay.length === 0) {
       const defaultByDay = [
-        ICAL_WEEK_DAYS[startDate?.getDay() ?? this.scheduler.getFirstDayOfWeek()],
+        ICAL_WEEK_DAYS[startDate?.getDay() ?? this.config.firstDayOfWeek ?? 0],
       ];
 
       recurrenceRule.byDay = defaultByDay;
