@@ -21,7 +21,7 @@ import {
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 export interface RecurrenceFormConfig {
-  firstDayOfWeek: DayOfWeek | undefined;
+  firstDayOfWeek: DayOfWeek;
   createComponent: CreateComponentFn
 }
 
