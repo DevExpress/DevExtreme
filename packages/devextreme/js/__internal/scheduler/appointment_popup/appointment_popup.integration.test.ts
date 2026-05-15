@@ -1719,6 +1719,14 @@ describe('Appointment Form', () => {
   });
 
   describe('firstDayOfWeek', () => {
+    beforeEach(() => {
+      jest.spyOn(dateLocalization, 'firstDayOfWeekIndex').mockReturnValue(3);
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
     it('should apply firstDayOfWeek to week day buttons', async () => {
       const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
@@ -1794,7 +1802,7 @@ describe('Appointment Form', () => {
       expect(endDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
     });
 
-    it('should pass undefined firstDayOfWeek to calendars when option is not set', async () => {
+    it('should pass value from localization firstDayOfWeek to calendars when option is not set', async () => {
       const { POM, scheduler } = await createScheduler({
         ...getDefaultConfig(),
         firstDayOfWeek: undefined,
@@ -1804,7 +1812,7 @@ describe('Appointment Form', () => {
 
       const startDateEditor = POM.popup.dxForm.getEditor('startDateEditor');
       expect(startDateEditor).toBeDefined();
-      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBeUndefined();
+      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(3);
     });
   });
 
