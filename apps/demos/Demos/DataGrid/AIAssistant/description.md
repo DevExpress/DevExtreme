@@ -1,18 +1,23 @@
-With our v26.1 release, we will extend the AI-powered capabilities of both the DevExtreme [DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Overview/) and [TreeList](https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/Overview/). We plan to introduce a DevExtreme Chat-based AI assistant that will allow you to use natural language to interact with DataGrid/TreeList. The DataGrid/TreeList AI assistant will be able to complete the following actions:
-* Sort, filter, search, and group data.
-* Resize, reorder, fix/unfix, and show/hide columns.
-* Change pagination settings.
+The DevExtreme [DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Overview/) component ships with our AI Assistant feature. This capability allows you to interact with the component using natural language. In this demo, the AI Assistant is enabled for a DataGrid that displays mock sale data with over 1500 records.
 <!--split-->
 
-This feature is particularly well suited for the following usage scenarios:
+[note]
 
-* **Large Datasets**: Use the power of AI to browse large data sets. Apply complex filter values with natural language.
+AI services used for this demo have been rate and data limited. As such, you may experience performance-related delays when exploring the capabilities of the DataGrid AI Assistant.
 
+When connected to your own AI model/service without rate and data limits, the AI Assistant will perform seamlessly, without artificial delays. Note that DevExtreme does not offer an AI REST API and does not ship any built-in LLMs/SLMs.
 
-* **Complex Grid Configurations**: Allow users to specify complex display preferences quickly.
+[/note]
 
+The AI Assistant supports DataGrid features such as the following:
 
-* **Accessibility-first Applications**: Allow users to interact with your application in a manner that is most appropriate for each specific situation: while at their desk, or on the go (when their hands are busy and they require voice commands to interact with your app).
+- [Filtering and Searching](/Documentation/Guide/UI_Components/DataGrid/Filtering_and_Searching/)
+- [Sorting](/Documentation/Guide/UI_Components/DataGrid/Sorting/)
+- [Grouping](/Documentation/Guide/UI_Components/DataGrid/Grouping/)
+- [Paging](/Documentation/Guide/UI_Components/DataGrid/Paging/)
 
+These capabilities are enabled in this demo. You can use/configure these features in the AI Assistant chat.
 
-* **Replicable Configurations**: Apply the same prompt to recreate complex grid configurations across sessions. Reduce time spent on tedious layout adjustments.
+This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant chat. These buttons allow you to interact with the assistant in one click using pre-defined prompts. For additional information about suggestions, refer to the following technical demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
+
+The AI Assistant capability is also available for the DevExtreme [TreeList](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#aiAssistant) component.
