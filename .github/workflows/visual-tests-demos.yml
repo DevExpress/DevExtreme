@@ -117,7 +117,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - uses: pnpm/action-setup@v4
         with:
@@ -204,7 +204,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - name: Download devextreme sources
         uses: actions/download-artifact@v4
@@ -281,7 +281,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - uses: pnpm/action-setup@v4
         with:
@@ -351,7 +351,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -442,7 +442,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
@@ -533,7 +533,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
@@ -636,7 +636,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -805,7 +805,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
@@ -868,6 +868,8 @@ jobs:
       run: |
         if [[ "${{ matrix.CONSTEL }}" == react* ]]; then
           echo "concurrency=4" >> $GITHUB_OUTPUT
+        elif [[ "${{ matrix.CONSTEL }}" == vue* ]]; then
+          echo "concurrency=1" >> $GITHUB_OUTPUT
         elif [[ "${{ matrix.CONSTEL }}" == angular* ]]; then
           echo "concurrency=2" >> $GITHUB_OUTPUT
         else
@@ -933,7 +935,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - name: Download devextreme sources
         uses: actions/download-artifact@v4
@@ -1113,7 +1115,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -1185,7 +1187,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -1242,7 +1244,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - name: Download all CSP reports
         uses: actions/download-artifact@v4
