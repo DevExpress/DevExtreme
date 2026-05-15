@@ -162,7 +162,10 @@ describe('AIAssistantView', () => {
 
       expect(mockAIAssistantController.getMessageStore).toHaveBeenCalledTimes(1);
       expect(aiChatConfig.chatOptions).toEqual(expect.objectContaining({
-        dataSource: mockMessageStore,
+        dataSource: expect.objectContaining({
+          store: mockMessageStore,
+          pushAggregationTimeout: 0,
+        }),
         reloadOnChange: true,
         onMessageEntered: expect.any(Function),
       }));

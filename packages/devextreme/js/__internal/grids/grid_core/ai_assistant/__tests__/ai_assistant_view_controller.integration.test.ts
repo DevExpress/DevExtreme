@@ -463,4 +463,73 @@ describe('AIAssistantViewController', () => {
       expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
     });
   });
+
+  describe('manual store push', () => {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let validateSpy;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let executeCommandsSpy;
+
+    beforeEach(() => {
+      validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
+        .mockReturnValue(true);
+      executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
+        .mockResolvedValue([
+          { status: 'success', message: 'Done' },
+        ] as CommandResult[]);
+    });
+
+    afterEach(() => {
+      validateSpy.mockRestore();
+      executeCommandsSpy.mockRestore();
+    });
+
+    it('should not throw error when user message is manually pushed to the message store', async () => {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let chatStore;
+      const { aiIntegration } = createMockAIIntegration();
+
+      await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1' },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID', dataType: 'number' },
+          { dataField: 'name', caption: 'Name', dataType: 'string' },
+        ],
+        aiAssistant: {
+          enabled: true,
+          aiIntegration,
+          chat: {
+            user: { id: 'user' },
+            onInitialized: (e) => {
+              chatStore = e.component?.getDataSource().store();
+            },
+          },
+          popup: {
+            visible: true,
+          },
+        },
+      });
+
+      try {
+        chatStore.push([{
+          type: 'insert',
+          data: {
+            id: 'manual-msg-1',
+            author: { id: 'user', name: 'User' },
+            text: 'Sort by name',
+            timestamp: new Date().toISOString(),
+          },
+        }]);
+
+        await flushAsync();
+        await flushAsync();
+      } catch (error) {
+        expect(error).toBeUndefined(); // Force fail if error is thrown
+      }
+
+      expect(true).toBe(true);
+    });
+  });
 });
