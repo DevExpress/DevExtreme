@@ -3,8 +3,8 @@ import type { GridContext } from '@ts/grids/grid_core/ai_assistant/types';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 export class DataGridAIAssistantIntegrationController extends AIAssistantIntegrationController {
-  protected getGridExtraContext(): GridContext {
-    const context = super.getGridExtraContext();
+  protected buildContext(): GridContext {
+    const context = super.buildContext();
 
     context.summary = {
       totalItems: this.option('summary.totalItems'),
@@ -14,8 +14,8 @@ export class DataGridAIAssistantIntegrationController extends AIAssistantIntegra
     return context;
   }
 
-  protected getGridColumnExtraContext(column: Column): GridContext {
-    const context = super.getGridColumnExtraContext(column);
+  protected buildColumnContext(column: Column): GridContext {
+    const context = super.buildColumnContext(column);
 
     context.summary = {
       groupIndex: column.groupIndex,
