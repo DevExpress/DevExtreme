@@ -52,7 +52,12 @@ runs:
         rm -rf artifacts/npm
         7z x artifacts.zip
 
-    - uses: pnpm/action-setup@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v4
       with:
         version: 9
         run_install: false
