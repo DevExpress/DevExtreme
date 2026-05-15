@@ -12,6 +12,7 @@ class NotifyScheduler {
     funcName: Subject,
     ...args: Parameters<SubscribeMethods[Subject]>
   ): ReturnType<SubscribeMethods[Subject]> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.scheduler.fire(funcName, ...args);
   }
 }
