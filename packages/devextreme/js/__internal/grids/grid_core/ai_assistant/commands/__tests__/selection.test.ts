@@ -80,8 +80,8 @@ describe('selectByKeysCommand', () => {
       expect(selectByKeysCommand.schema.safeParse({ keys, preserve: false }).success).toBe(true);
     });
 
-    it('accepts object keys for composite keyExpr', () => {
-      const keys = [{ a: 1, b: 10 }];
+    it('accepts array-of-pairs keys for composite keyExpr', () => {
+      const keys = [[{ field: 'a', value: 1 }, { field: 'b', value: 10 }]];
 
       expect(selectByKeysCommand.schema.safeParse({ keys, preserve: true }).success).toBe(true);
     });
@@ -141,13 +141,13 @@ describe('selectByKeysCommand', () => {
       expect(selectSpy).not.toHaveBeenCalled();
     });
 
-    it('returns failure when an object key is passed for a single-field keyExpr', async () => {
+    it('returns failure when a composite key is passed for a single-field keyExpr', async () => {
       const instance = await createGrid();
       const selectSpy = jest.spyOn(instance, 'selectRows');
       const callbacks = createCallbacks();
 
       const result = await selectByKeysCommand.execute(instance, callbacks)({
-        keys: [{ id: 1 }],
+        keys: [[{ field: 'id', value: 1 }]],
         preserve: false,
       });
 
@@ -175,7 +175,7 @@ describe('selectByKeysCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByKeysCommand.execute(instance, callbacks)({
-        keys: [{ a: 1 }],
+        keys: [[{ field: 'a', value: 1 }]],
         preserve: false,
       });
 
@@ -190,7 +190,10 @@ describe('selectByKeysCommand', () => {
 
       // First key is valid, second is missing field 'b'
       const result = await selectByKeysCommand.execute(instance, callbacks)({
-        keys: [{ a: 1, b: 10 }, { a: 2 }],
+        keys: [
+          [{ field: 'a', value: 1 }, { field: 'b', value: 10 }],
+          [{ field: 'a', value: 2 }],
+        ],
         preserve: false,
       });
 

@@ -812,6 +812,25 @@ describe('AIChat', () => {
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
       });
 
+      it('should disable chat suggestions via chatInstance option', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+
+        expect(mockChatInstance.option).toHaveBeenCalledWith({ suggestions: { disabled: true } });
+      });
+
+      it('should enable chat suggestions via chatInstance option when set to false', () => {
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+        aiChat.setDisabled(false);
+
+        expect(mockChatInstance.option).toHaveBeenCalledWith({ suggestions: { disabled: false } });
+      });
+
       it('should not update when setting same disabled value', () => {
         const { aiChat } = createAIChat();
         triggerContentTemplate();
@@ -940,8 +959,8 @@ describe('AIChat', () => {
 
   describe('getUserId', () => {
     it('should return user id from chat instance', () => {
-      mockChatInstance.option.mockImplementation((name: string) => {
-        if (name === 'user.id') return 'user-123';
+      mockChatInstance.option.mockImplementation((...args: unknown[]) => {
+        if (args[0] === 'user.id') return 'user-123';
         return undefined;
       });
 
