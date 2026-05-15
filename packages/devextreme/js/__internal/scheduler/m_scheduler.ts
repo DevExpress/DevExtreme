@@ -1126,7 +1126,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dataAccessors: this._dataAccessors,
       editing: this.editing,
       resourceManager: this.resourceManager,
-      firstDayOfWeek: this.option('firstDayOfWeek'),
+      firstDayOfWeek: this.getFirstDayOfWeek(),
       startDayHour: this.option('startDayHour') ?? 0,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
