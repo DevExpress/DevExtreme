@@ -114,23 +114,21 @@ export const createAppointmentPopup = async (
   const onSave = options.onSave
     ?? jest.fn<(appointment: Record<string, unknown>) => PromiseLike<unknown>>(resolvedDeferred);
 
-  const formSchedulerProxy = {
-    getResourceById: (): Record<string, unknown> => resourceManager.resourceById,
-    getDataAccessors: (): AppointmentDataAccessor => dataAccessors,
+  const formConfig = {
+    dataAccessors,
+    editing,
+    resourceManager,
+    firstDayOfWeek: options.firstDayOfWeek ?? 0,
+    startDayHour: options.startDayHour ?? 0,
     createComponent,
-    getEditingConfig: (): typeof editing => editing,
-    getResourceManager: (): ResourceManager => resourceManager,
-    getFirstDayOfWeek: (): number => options.firstDayOfWeek ?? 0,
-    getStartDayHour: (): number => options.startDayHour ?? 0,
     getCalculatedEndDate: (startDate: Date): Date => {
       const endDate = new Date(startDate);
       endDate.setHours(endDate.getHours() + 1);
       return endDate;
     },
-    getTimeZoneCalculator: (): typeof timeZoneCalculator => timeZoneCalculator,
   };
 
-  const form = new AppointmentForm(formSchedulerProxy);
+  const form = new AppointmentForm(formConfig);
 
   const noop = (): void => {};
 
