@@ -1943,6 +1943,24 @@ export type Toolbar = {
 /**
  * @docid
  * @public
+ */
+export type SummaryCommandTotalItem = Pick<SummaryTotalItem, 'showInColumn' | 'displayFormat'> & {
+  column: string;
+  summaryType: SummaryType;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type SummaryCommandGroupItem = Pick<SummaryGroupItem, 'showInColumn' | 'displayFormat' | 'showInGroupFooter' | 'alignByColumn'> & {
+  column: string;
+  summaryType: SummaryType;
+};
+
+/**
+ * @docid
+ * @public
  * @inherits PredefinedCommands
  */
 export type DataGridPredefinedCommands = PredefinedCommands & {
@@ -1951,6 +1969,12 @@ export type DataGridPredefinedCommands = PredefinedCommands & {
     groupIndex: number;
   };
   clearGrouping: {};
+  summary: {
+    totalItems: Array<SummaryCommandTotalItem>;
+    groupItems: Array<SummaryCommandGroupItem>;
+
+  };
+  clearSummary: {};
 };
 
 /**

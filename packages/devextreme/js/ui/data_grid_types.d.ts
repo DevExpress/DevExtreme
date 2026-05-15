@@ -142,6 +142,8 @@ export {
   SummaryTexts,
   ToolbarItem,
   Toolbar,
+  SummaryCommandTotalItem,
+  SummaryCommandGroupItem,
   DataGridPredefinedCommands,
   DataGridCommandInfo,
   DataGridPredefinedCommandNames,

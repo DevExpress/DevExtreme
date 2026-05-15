@@ -29,6 +29,7 @@ import {
 import {
   DataSource,
   DataSourceOptions,
+  SearchOperation,
 } from './data';
 
 import { DataSourceLike } from '../data/data_source';
@@ -104,7 +105,107 @@ export type ResponseStatusTexts = {
  * @public
  * @namespace DevExpress.common.grids
  */
+export type BasicFilterExprObj = {
+  type: 'basic';
+  field: string;
+  operator: SearchOperation;
+  value: string | number | boolean | null;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type CombinedFilterExprObj = {
+  type: 'combined';
+  left: FilterExprObj;
+  combiner: 'and' | 'or';
+  right: FilterExprObj;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type NegatedFilterExprObj = {
+  type: 'negated';
+  expression: FilterExprObj;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type FilterExprObj = BasicFilterExprObj | CombinedFilterExprObj | NegatedFilterExprObj;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type CompositeKeyPair = {
+  field: string;
+  value: string | number;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export type PredefinedCommands = {
+  columnsVisibility: {
+    dataField: string;
+    visible: boolean;
+  };
+  columnsReorder: {
+    dataField: string;
+    visibleIndex: boolean;
+  };
+  columnsPinning: {
+    dataField: string;
+    fixed: boolean;
+    fixedPosition?: 'left' | 'right';
+  };
+  columnsResize: {
+    dataField: string;
+    width: number | string;
+  };
+  filterValue: {
+    expression: FilterExprObj | null;
+  };
+  clearFilter: {};
+  focusRowByKey: {
+    key: string | number | Array<CompositeKeyPair>;
+  };
+  focusRowByIndex: {
+    index: number;
+  };
+  paging: {
+    enabled: boolean;
+  };
+  pageSize: {
+    pageSize: number;
+  };
+  pageIndex: {
+    pageIndex: number;
+  };
+  searching: {
+    text: string;
+  };
+  selectByKeys: {
+    keys: Array<string | number | Array<CompositeKeyPair>>;
+    preserve: boolean;
+  };
+  selectByIndexes: {
+    indexes: number[]
+  };
+  selectAll: {};
+  deselectAll: {};
+  clearSelection: {};
   sorting: {
     dataField: string;
     sortOrder: SortOrder | 'none';

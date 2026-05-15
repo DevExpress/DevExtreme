@@ -4700,6 +4700,15 @@ declare module DevExpress.common.grids {
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
   /**
+   * [descr:BasicFilterExprObj]
+   */
+  export type BasicFilterExprObj = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.SearchOperation;
+    value: string | number | boolean | null;
+  };
+  /**
    * [descr:ColumnAIOptions]
    */
   export type ColumnAIOptions = {
@@ -5242,6 +5251,15 @@ declare module DevExpress.common.grids {
   };
   export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**
+   * [descr:CombinedFilterExprObj]
+   */
+  export type CombinedFilterExprObj = {
+    type: 'combined';
+    left: FilterExprObj;
+    combiner: 'and' | 'or';
+    right: FilterExprObj;
+  };
+  /**
    * [descr:CommandInfo]
    */
   export type CommandInfo<
@@ -5249,6 +5267,13 @@ declare module DevExpress.common.grids {
   > = {
     [K in keyof TCommands]: { name: K; args: TCommands[K] };
   }[keyof TCommands];
+  /**
+   * [descr:CompositeKeyPair]
+   */
+  export type CompositeKeyPair = {
+    field: string;
+    value: string | number;
+  };
   /**
    * [descr:DataChange]
    */
@@ -5424,6 +5449,13 @@ declare module DevExpress.common.grids {
   }
   export type EnterKeyAction = 'startEdit' | 'moveFocus';
   export type EnterKeyDirection = 'none' | 'column' | 'row';
+  /**
+   * [descr:FilterExprObj]
+   */
+  export type FilterExprObj =
+    | BasicFilterExprObj
+    | CombinedFilterExprObj
+    | NegatedFilterExprObj;
   export type FilterOperation =
     | '='
     | '<>'
@@ -6449,6 +6481,13 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
+   * [descr:NegatedFilterExprObj]
+   */
+  export type NegatedFilterExprObj = {
+    type: 'negated';
+    expression: FilterExprObj;
+  };
+  /**
    * [descr:NewRowInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6510,6 +6549,55 @@ declare module DevExpress.common.grids {
    * [descr:PredefinedCommands]
    */
   export type PredefinedCommands = {
+    columnsVisibility: {
+      dataField: string;
+      visible: boolean;
+    };
+    columnsReorder: {
+      dataField: string;
+      visibleIndex: boolean;
+    };
+    columnsPinning: {
+      dataField: string;
+      fixed: boolean;
+      fixedPosition?: 'left' | 'right';
+    };
+    columnsResize: {
+      dataField: string;
+      width: number | string;
+    };
+    filterValue: {
+      expression: FilterExprObj | null;
+    };
+    clearFilter: {};
+    focusRowByKey: {
+      key: string | number | Array<CompositeKeyPair>;
+    };
+    focusRowByIndex: {
+      index: number;
+    };
+    paging: {
+      enabled: boolean;
+    };
+    pageSize: {
+      pageSize: number;
+    };
+    pageIndex: {
+      pageIndex: number;
+    };
+    searching: {
+      text: string;
+    };
+    selectByKeys: {
+      keys: Array<string | number | Array<CompositeKeyPair>>;
+      preserve: boolean;
+    };
+    selectByIndexes: {
+      indexes: number[];
+    };
+    selectAll: {};
+    deselectAll: {};
+    clearSelection: {};
     sorting: {
       dataField: string;
       sortOrder: SortOrder | 'none';
@@ -12874,6 +12962,11 @@ declare module DevExpress.ui {
           groupIndex: number;
         };
         clearGrouping: {};
+        summary: {
+          totalItems: Array<SummaryCommandTotalItem>;
+          groupItems: Array<SummaryCommandGroupItem>;
+        };
+        clearSummary: {};
       };
     export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
@@ -14062,6 +14155,26 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.totalItems]
        */
       totalItems?: Array<SummaryTotalItem> | undefined;
+    };
+    /**
+     * [descr:SummaryCommandGroupItem]
+     */
+    export type SummaryCommandGroupItem = Pick<
+      SummaryGroupItem,
+      'showInColumn' | 'displayFormat' | 'showInGroupFooter' | 'alignByColumn'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
+    };
+    /**
+     * [descr:SummaryCommandTotalItem]
+     */
+    export type SummaryCommandTotalItem = Pick<
+      SummaryTotalItem,
+      'showInColumn' | 'displayFormat'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
     };
     /**
      * [descr:SummaryGroupItem]
