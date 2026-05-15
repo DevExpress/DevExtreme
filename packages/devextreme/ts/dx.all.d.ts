@@ -5243,7 +5243,6 @@ declare module DevExpress.common.grids {
   export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**
    * [descr:CommandInfo]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type CommandInfo<
     TCommands extends PredefinedCommands = PredefinedCommands
@@ -6508,7 +6507,7 @@ declare module DevExpress.common.grids {
    */
   export type PredefinedCommandNames = keyof PredefinedCommands;
   /**
-   * [descr:GridBasePredefinedCommands]
+   * [descr:PredefinedCommands]
    */
   export type PredefinedCommands = {
     sorting: {
@@ -12430,7 +12429,7 @@ declare module DevExpress.ui {
      * [descr:AIAssistant]
      */
     export type AIAssistant =
-      DevExpress.common.grids.AIAssistant<PredefinedCommands>;
+      DevExpress.common.grids.AIAssistant<DataGridPredefinedCommands>;
     /**
      * [descr:_ui_data_grid_AIAssistantRequestCreatingEvent]
      */
@@ -12848,6 +12847,11 @@ declare module DevExpress.ui {
       | 'groupExpand'
       | 'selection'
       | 'drag';
+    /**
+     * [descr:DataGridCommandInfo]
+     */
+    export type DataGridCommandInfo =
+      DevExpress.common.grids.CommandInfo<DataGridPredefinedCommands>;
     export type DataGridExportFormat = 'pdf' | 'xlsx';
     export type DataGridPredefinedColumnButton =
       | 'cancel'
@@ -12855,6 +12859,22 @@ declare module DevExpress.ui {
       | 'edit'
       | 'save'
       | 'undelete';
+    /**
+     * [descr:DataGridPredefinedCommandNames]
+     */
+    export type DataGridPredefinedCommandNames =
+      keyof DataGridPredefinedCommands;
+    /**
+     * [descr:DataGridPredefinedCommands]
+     */
+    export type DataGridPredefinedCommands =
+      DevExpress.common.grids.PredefinedCommands & {
+        grouping: {
+          dataField: string;
+          groupIndex: number;
+        };
+        clearGrouping: {};
+      };
     export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
       | 'applyFilterButton'
@@ -13369,12 +13389,6 @@ declare module DevExpress.ui {
         readonly rows: Array<Row<TRowData, TKey>>;
       };
     /**
-     * [descr:GridCommandInfo]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type GridCommandInfo =
-      DevExpress.common.grids.CommandInfo<PredefinedCommands>;
-    /**
      * [descr:GroupData]
      */
     export type GroupData<TRowData> = {
@@ -13539,6 +13553,7 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     type OverriddenKeys =
+      | 'aiAssistant'
       | 'columns'
       | 'customizeColumns'
       | 'dataRowTemplate'
@@ -13571,24 +13586,8 @@ declare module DevExpress.ui {
       | 'selectionFilter'
       | 'sortByGroupSummaryInfo'
       | 'summary'
-      | 'toolbar'
-      | 'aiAssistant';
+      | 'toolbar';
     export type Paging = DevExpress.common.grids.PagingBase;
-    /**
-     * [descr:PredefinedCommandNames]
-     */
-    export type PredefinedCommandNames = keyof PredefinedCommands;
-    /**
-     * [descr:PredefinedCommands]
-     */
-    export type PredefinedCommands =
-      DevExpress.common.grids.PredefinedCommands & {
-        grouping: {
-          dataField: string;
-          groupIndex: number;
-        };
-        clearGrouping: {};
-      };
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey

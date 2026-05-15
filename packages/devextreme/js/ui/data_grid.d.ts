@@ -83,9 +83,8 @@ import {
   AIColumnRequestCreatingInfo,
   AIAssistantRequestCreatingInfo,
   AIAssistant as BaseAIAssistant,
-  PredefinedCommands as BasePredefinedCommands,
-  CommandInfo as BaseCommandInfo,
-  ResponseStatusTexts,
+  PredefinedCommands,
+  CommandInfo,
 } from '../common/grids';
 
 export {
@@ -1174,7 +1173,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
   readonly isExpanded?: boolean;
 };
 
-type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar' | 'aiAssistant';
+type OverriddenKeys = 'aiAssistant' | 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
 
 /**
  * @deprecated use Properties instead
@@ -1944,9 +1943,9 @@ export type Toolbar = {
 /**
  * @docid
  * @public
- * @inherits GridBasePredefinedCommands
+ * @inherits PredefinedCommands
  */
-export type PredefinedCommands = BasePredefinedCommands & {
+export type DataGridPredefinedCommands = PredefinedCommands & {
   grouping: {
     dataField: string;
     groupIndex: number;
@@ -1956,21 +1955,21 @@ export type PredefinedCommands = BasePredefinedCommands & {
 
 /**
  * @docid
- * @hidden
+ * @public
  */
-export type GridCommandInfo = BaseCommandInfo<PredefinedCommands>;
+export type DataGridCommandInfo = CommandInfo<DataGridPredefinedCommands>;
 
 /**
  * @docid
  * @public
  */
-export type PredefinedCommandNames = keyof PredefinedCommands;
+export type DataGridPredefinedCommandNames = keyof DataGridPredefinedCommands;
 
 /**
  * @docid
  * @public
  */
-export type AIAssistant = BaseAIAssistant<PredefinedCommands>;
+export type AIAssistant = BaseAIAssistant<DataGridPredefinedCommands>;
 
 /**
  * @namespace DevExpress.ui

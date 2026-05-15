@@ -100,7 +100,7 @@ export type ResponseStatusTexts = {
 };
 
 /**
- * @docid GridBasePredefinedCommands
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -114,6 +114,7 @@ export type PredefinedCommands = {
 
 /**
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type CommandInfo<
@@ -130,7 +131,6 @@ export type PredefinedCommandNames = keyof PredefinedCommands;
 /**
  * @docid
  * @public
- * @type object
  * @namespace DevExpress.common.grids
  */
 export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommands> = {
@@ -162,8 +162,6 @@ export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommand
   customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands)[]) => string;
   /**
    * @docid
-   * @type_function_param1 command:CommandInfo
-   * @type_function_return ResponseStatusTexts
    */
   customizeResponseText?: (command: CommandInfo<TCommands>) => ResponseStatusTexts;
 };
