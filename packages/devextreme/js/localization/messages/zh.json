@@ -117,6 +117,7 @@
         "dxDataGrid-aiAssistantExecutionAbortMessage": "Execution Interrupted",
         "dxDataGrid-aiAssistantClearButtonText": "Clear",
         "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerate",
+        "dxDataGrid-aiAssistantAbortConfirmText": "Closing the AI Assistant chat aborts requests in progress. Would you like to close the chat?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat is Empty",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI Assistant is ready to answer your questions.",
         "dxDataGrid-aiPromptEditorTitle": "AI 提示编辑器",

@@ -390,8 +390,17 @@ describe('AIAssistantViewController', () => {
 
       const viewController = instance.getController('aiAssistantViewController');
 
-      // Close the AI assistant popup
-      await viewController.toggle();
+      // Close the AI assistant popup — triggers confirm dialog because request is processing.
+      // toggle() rejects with undefined when onHiding cancels the hide.
+      await viewController.toggle().catch(() => {});
+      jest.runAllTimers();
+      await flushAsync();
+
+      // Confirm abort by clicking "Yes" in the confirmation dialog
+      const confirmDialogSelector = '.dx-datagrid-ai-assistant-confirm-dialog';
+      const yesButton = document.querySelectorAll(`${confirmDialogSelector} .dx-button`)[1] as HTMLElement;
+
+      yesButton.click();
       jest.runAllTimers();
       await flushAsync();
 
