@@ -165,7 +165,7 @@ describe('filterValueCommand', () => {
 
     it('rejects an object value (non-scalar)', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: basicExpr('name', '=', { foo: 1 } as unknown as string),
+        expression: basicExpr('name', '=', { foo: 1 }),
       }).success).toBe(false);
     });
 
