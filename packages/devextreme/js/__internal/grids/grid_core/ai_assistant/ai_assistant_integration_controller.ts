@@ -4,7 +4,9 @@ import type {
   RequestCallbacks,
 } from '@js/common/ai-integration';
 import errors from '@js/ui/widget/ui.errors';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 
 import { Controller } from '../m_modules';
 import type {
@@ -15,6 +17,10 @@ import type {
 
 export class AIAssistantIntegrationController extends Controller {
   private abort?: () => void;
+
+  private columnsController!: ColumnsController;
+
+  private dataController!: DataController;
 
   private getAICommandCallbacks(
     callbacks?: RequestCallbacks<ExecuteGridAssistantCommandResult>,
@@ -38,21 +44,17 @@ export class AIAssistantIntegrationController extends Controller {
     this.abort = undefined;
   }
 
-  private buildContext(): GridContext {
-    const dataController = this.getController('data');
-    const gridExtraContext = this.getGridExtraContext();
-    const keyExpr = this.option('keyExpr') ?? dataController.getDataSource()?.store()?.key();
-
+  protected buildContext(): GridContext {
     return {
-      keyExpr,
+      keyExpr: this.option('keyExpr') ?? this.dataController.getDataSource()?.store()?.key(),
       columns: this.buildColumnsContext(),
       filtering: {
         filterValue: this.option('filterValue'),
       },
       paging: {
-        pageIndex: dataController.pageIndex(),
-        pageSize: dataController.pageSize(),
-        totalCount: dataController.totalCount(),
+        pageIndex: this.dataController.pageIndex(),
+        pageSize: this.dataController.pageSize(),
+        totalCount: this.dataController.totalCount(),
       },
       search: {
         searchText: this.option('searchPanel.text') ?? '',
@@ -62,46 +64,36 @@ export class AIAssistantIntegrationController extends Controller {
         mode: this.option('selection.mode'),
         selectAllMode: this.option('selection.selectAllMode'),
       },
-      ...gridExtraContext,
-    } as GridContext;
+    };
   }
 
   private buildColumnsContext(): GridContext[] {
-    const columnsController = this.getController('columns');
-    const allColumns: Column[] = columnsController.getColumns();
+    const allColumns: Column[] = this.columnsController.getColumns();
 
     return allColumns
       .filter((column) => !column.command)
-      .map((column) => {
-        const gridColumnExtraContext = this.getGridColumnExtraContext(column);
-
-        return ({
-          dataField: column.dataField,
-          caption: column.caption,
-          dataType: column.dataType,
-          visible: column.visible !== false,
-          sortOrder: column.sortOrder,
-          sortIndex: column.sortIndex,
-          fixed: column.fixed,
-          fixedPosition: column.fixedPosition,
-          width: column.width,
-          visibleIndex: column.visibleIndex,
-          ...gridColumnExtraContext,
-        });
-      });
+      .map((column) => this.buildColumnContext(column));
   }
 
-  protected getGridExtraContext(): GridContext {
-    return {};
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getGridColumnExtraContext(column: Column): GridContext {
-    return {};
+  protected buildColumnContext(column: Column): GridContext {
+    return ({
+      dataField: column.dataField,
+      caption: column.caption,
+      dataType: column.dataType,
+      visible: column.visible !== false,
+      sortOrder: column.sortOrder,
+      sortIndex: column.sortIndex,
+      fixed: column.fixed,
+      fixedPosition: column.fixedPosition,
+      width: column.width,
+      visibleIndex: column.visibleIndex,
+    });
   }
 
   public init(): void {
     this.createAction('onAIAssistantRequestCreating');
+    this.dataController = this.getController('data');
+    this.columnsController = this.getController('columns');
   }
 
   private getAIIntegration(): AIIntegration | null {
