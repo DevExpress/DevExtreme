@@ -2,20 +2,20 @@ import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
-import { isKeyShapeValid } from './utils';
+import { compositeKeyPairSchema, isKeyShapeValid, normalizeKey } from './utils';
 
 const selectByKeysCommandSchema = z.object({
   keys: z.array(z.union([
     z.string(),
     z.number(),
-    z.record(z.union([z.string(), z.number()])),
+    z.array(compositeKeyPairSchema),
   ])),
   preserve: z.boolean(),
 }).strict();
 
 export const selectByKeysCommand = defineGridCommand({
   name: 'selectByKeys',
-  description: 'Select rows by their key values. Each key matches the grid\'s keyExpr or the underlying store\'s key — pass a string or number for a single-field key, or an object whose property names match each keyExpr field for a composite key. Set preserve to true to keep existing selection, or false to replace it.',
+  description: 'Select rows by their key values. Each key matches the grid\'s keyExpr or the underlying store\'s key — pass a string or number for a single-field key, or an array of {field, value} pairs for a composite key. Set preserve to true to keep existing selection, or false to replace it.',
   schema: selectByKeysCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const defaultMessage = 'Select row(s).';
@@ -27,12 +27,14 @@ export const selectByKeysCommand = defineGridCommand({
     const keyExpr = component.option('keyExpr')
       ?? component.getDataSource()?.store()?.key();
 
-    if (!keyExpr || args.keys.some((key) => !isKeyShapeValid(keyExpr, key))) {
+    const keys = args.keys.map(normalizeKey);
+
+    if (!keyExpr || keys.some((key) => !isKeyShapeValid(keyExpr, key))) {
       return failure(defaultMessage);
     }
 
     try {
-      await component.selectRows(args.keys, args.preserve);
+      await component.selectRows(keys, args.preserve);
 
       return success(defaultMessage);
     } catch {
