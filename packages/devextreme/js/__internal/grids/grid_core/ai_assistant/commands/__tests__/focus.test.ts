@@ -75,8 +75,8 @@ describe('focusRowByKeyCommand', () => {
       expect(focusRowByKeyCommand.schema.safeParse({ key }).success).toBe(true);
     });
 
-    it('accepts an object key with string/number values', () => {
-      expect(focusRowByKeyCommand.schema.safeParse({ key: { a: 1, b: 'two' } }).success).toBe(true);
+    it('accepts an array-of-pairs key for composite keyExpr', () => {
+      expect(focusRowByKeyCommand.schema.safeParse({ key: [{ field: 'a', value: 1 }, { field: 'b', value: 'two' }] }).success).toBe(true);
     });
 
     it('rejects when key is missing', () => {
@@ -88,6 +88,7 @@ describe('focusRowByKeyCommand', () => {
       [null],
       [{ a: true }],
       [{ a: null }],
+      [{ a: 1, b: 'two' }],
     ])('rejects unsupported key value %p', (key) => {
       expect(focusRowByKeyCommand.schema.safeParse({ key }).success).toBe(false);
     });
@@ -122,7 +123,7 @@ describe('focusRowByKeyCommand', () => {
       const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
-      const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: { id: 2 } });
+      const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: [{ field: 'id', value: 2 }] });
 
       expect(result.status).toBe('failure');
       expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
@@ -144,7 +145,7 @@ describe('focusRowByKeyCommand', () => {
       const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
-      const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: { a: 1 } });
+      const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: [{ field: 'a', value: 1 }] });
 
       expect(result.status).toBe('failure');
       expectFocusedRowKeyNotSet(optionSpy as unknown as jest.Mock);
@@ -187,7 +188,7 @@ describe('focusRowByKeyCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({
-        key: { a: 1, b: 10 },
+        key: [{ field: 'a', value: 1 }, { field: 'b', value: 10 }],
       });
 
       expect(optionSpy).toHaveBeenCalledWith('focusedRowKey', { a: 1, b: 10 });

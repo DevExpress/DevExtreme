@@ -9,27 +9,80 @@ const FILTER_OPS = [
   'contains', 'notcontains', 'startswith', 'endswith',
 ] as const satisfies readonly SearchOperation[];
 
-type FilterExpr = | [string, SearchOperation, string | number | boolean | null]
-  | [FilterExpr, 'and' | 'or', FilterExpr]
-  | ['!', FilterExpr];
+interface BasicFilterExpr {
+  type: 'basic';
+  field: string;
+  operator: typeof FILTER_OPS[number];
+  value: string | number | boolean | null;
+}
+
+interface CombinedFilterExpr {
+  type: 'combined';
+  left: FilterExprObj;
+  combiner: 'and' | 'or';
+  right: FilterExprObj;
+}
+
+interface NegatedFilterExpr {
+  type: 'negated';
+  expression: FilterExprObj;
+}
+
+type FilterExprObj = BasicFilterExpr | CombinedFilterExpr | NegatedFilterExpr;
+
+type FilterExprArray = | [string, SearchOperation, string | number | boolean | null]
+  | [FilterExprArray, 'and' | 'or', FilterExprArray]
+  | ['!', FilterExprArray];
 
 const filterOpSchema = z.enum(FILTER_OPS);
 
 const filterValueScalarSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
 
-const filterExprSchema: z.ZodType<FilterExpr> = z.lazy(() => z.union([
-  z.tuple([z.string(), filterOpSchema, filterValueScalarSchema]),
-  z.tuple([filterExprSchema, z.enum(['and', 'or']), filterExprSchema]),
-  z.tuple([z.literal('!'), filterExprSchema]),
+const basicFilterExprSchema = z.object({
+  type: z.literal('basic'),
+  field: z.string(),
+  operator: filterOpSchema,
+  value: filterValueScalarSchema,
+}).strict();
+
+const filterExprSchema: z.ZodType<FilterExprObj> = z.lazy(() => z.union([
+  basicFilterExprSchema,
+  z.object({
+    type: z.literal('combined'),
+    left: filterExprSchema,
+    combiner: z.enum(['and', 'or']),
+    right: filterExprSchema,
+  }).strict(),
+  z.object({
+    type: z.literal('negated'),
+    expression: filterExprSchema,
+  }).strict(),
 ]));
 
 const filterValueCommandSchema = z.object({
   expression: filterExprSchema.nullable(),
 }).strict();
 
+function convertFilterExprToArray(expr: FilterExprObj): FilterExprArray {
+  switch (expr.type) {
+    case 'basic':
+      return [expr.field, expr.operator, expr.value];
+    case 'combined':
+      return [
+        convertFilterExprToArray(expr.left),
+        expr.combiner,
+        convertFilterExprToArray(expr.right),
+      ];
+    case 'negated':
+      return ['!', convertFilterExprToArray(expr.expression)];
+    default:
+      throw new Error('Unknown filter expression type');
+  }
+}
+
 export const filterValueCommand = defineGridCommand({
   name: 'filterValue',
-  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. Expression forms: basic [dataField, op, value], combined [expr, "and"|"or", expr], negated ["!", expr]. The first element of a basic expression is the column dataField (not the caption). Supported ops: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". To express "not and" / "not or", wrap the group in negation: ["!", [a, "and", b]].',
+  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. Expression forms: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","left":expr,"combiner":"and"|"or","right":expr}, negated {"type":"negated","expression":expr}. The "field" is the column dataField (not the caption). Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". To express "not and" / "not or", wrap the group in negation: {"type":"negated","expression":{"type":"combined",...}}.',
   schema: filterValueCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const defaultMessage = args.expression === null
@@ -37,8 +90,12 @@ export const filterValueCommand = defineGridCommand({
       : 'Apply a filter.';
 
     try {
+      const filterValue = args.expression === null
+        ? undefined
+        : convertFilterExprToArray(args.expression);
+
       // Handles remote operations via data controller listening for the `filtering` change
-      component.option('filterValue', args.expression ?? undefined);
+      component.option('filterValue', filterValue);
 
       return Promise.resolve(success(defaultMessage));
     } catch {

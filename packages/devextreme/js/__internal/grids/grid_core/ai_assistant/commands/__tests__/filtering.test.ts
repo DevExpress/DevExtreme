@@ -20,6 +20,18 @@ import {
   filterValueCommand,
 } from '../filtering';
 
+const basicExpr = (
+  field: string,
+  operator: string,
+  value: unknown,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any => ({
+  type: 'basic',
+  field,
+  operator,
+  value,
+});
+
 const createCallbacks = (): {
   success: jest.Mock<(message?: string) => CommandResult>;
   failure: jest.Mock<(message?: string) => CommandResult>;
@@ -52,9 +64,9 @@ describe('filterValueCommand', () => {
   afterEach(() => afterTest());
 
   describe('schema', () => {
-    it('accepts a basic [field, op, value] expression', () => {
+    it('accepts a basic expression', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: ['name', '=', 'Alpha'],
+        expression: basicExpr('name', '=', 'Alpha'),
       }).success).toBe(true);
     });
 
@@ -63,44 +75,66 @@ describe('filterValueCommand', () => {
       ['contains'], ['notcontains'], ['startswith'], ['endswith'],
     ])('accepts op "%s"', (op) => {
       expect(filterValueCommand.schema.safeParse({
-        expression: ['name', op, 'Alpha'],
+        expression: basicExpr('name', op, 'Alpha'),
       }).success).toBe(true);
     });
 
     it.each([
-      [['name', '=', 'Alpha']],
-      [['name', '=', 1]],
-      [['name', '=', true]],
-      [['name', '=', null]],
+      [basicExpr('name', '=', 'Alpha')],
+      [basicExpr('name', '=', 1)],
+      [basicExpr('name', '=', true)],
+      [basicExpr('name', '=', null)],
     ])('accepts scalar value %p', (expression) => {
       expect(filterValueCommand.schema.safeParse({ expression }).success).toBe(true);
     });
 
-    it('accepts a combined [expr, "and", expr] expression', () => {
+    it('accepts a combined expression with "and"', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: [['name', '=', 'Alpha'], 'and', ['age', '>', 10]],
+        expression: {
+          type: 'combined',
+          left: basicExpr('name', '=', 'Alpha'),
+          combiner: 'and',
+          right: basicExpr('age', '>', 10),
+        },
       }).success).toBe(true);
     });
 
-    it('accepts a combined [expr, "or", expr] expression', () => {
+    it('accepts a combined expression with "or"', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: [['name', '=', 'Alpha'], 'or', ['name', '=', 'Beta']],
+        expression: {
+          type: 'combined',
+          left: basicExpr('name', '=', 'Alpha'),
+          combiner: 'or',
+          right: basicExpr('name', '=', 'Beta'),
+        },
       }).success).toBe(true);
     });
 
-    it('accepts a negated ["!", expr] expression', () => {
+    it('accepts a negated expression', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: ['!', ['name', '=', 'Alpha']],
+        expression: {
+          type: 'negated',
+          expression: basicExpr('name', '=', 'Alpha'),
+        },
       }).success).toBe(true);
     });
 
     it('accepts deeply nested expressions', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: [
-          ['!', ['name', '=', 'Alpha']],
-          'and',
-          [['age', '>', 10], 'or', ['age', '<', 30]],
-        ],
+        expression: {
+          type: 'combined',
+          left: {
+            type: 'negated',
+            expression: basicExpr('name', '=', 'Alpha'),
+          },
+          combiner: 'and',
+          right: {
+            type: 'combined',
+            left: basicExpr('age', '>', 10),
+            combiner: 'or',
+            right: basicExpr('age', '<', 30),
+          },
+        },
       }).success).toBe(true);
     });
 
@@ -114,38 +148,43 @@ describe('filterValueCommand', () => {
 
     it('rejects an unknown op', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: ['name', 'like', 'Alpha'],
+        expression: basicExpr('name', 'like', 'Alpha'),
       }).success).toBe(false);
     });
 
     it('rejects an unknown combiner', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: [['name', '=', 'Alpha'], 'xor', ['age', '>', 10]],
+        expression: {
+          type: 'combined',
+          left: basicExpr('name', '=', 'Alpha'),
+          combiner: 'xor',
+          right: basicExpr('age', '>', 10),
+        },
       }).success).toBe(false);
     });
 
     it('rejects an object value (non-scalar)', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: ['name', '=', { foo: 1 }],
+        expression: basicExpr('name', '=', { foo: 1 }),
       }).success).toBe(false);
     });
 
     it('rejects unknown properties', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: ['name', '=', 'Alpha'],
+        expression: basicExpr('name', '=', 'Alpha'),
         extra: 1,
       }).success).toBe(false);
     });
   });
 
   describe('execute', () => {
-    it('calls component.option("filterValue", expression) exactly once', async () => {
+    it('calls component.option("filterValue", expression) with array format', async () => {
       const instance = await createGrid();
       const spy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
-        expression: ['name', '=', 'Alpha'],
+        expression: basicExpr('name', '=', 'Alpha'),
       });
 
       expect(spy).toHaveBeenCalledWith('filterValue', ['name', '=', 'Alpha']);
@@ -173,7 +212,7 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
-        expression: ['name', '=', 'Alpha'],
+        expression: basicExpr('name', '=', 'Alpha'),
       });
 
       expect(result.status).toBe('failure');
@@ -186,7 +225,7 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       await filterValueCommand.execute(instance, callbacks)({
-        expression: ['name', '=', 'Alpha'],
+        expression: basicExpr('name', '=', 'Alpha'),
       });
 
       expect(callbacks.success).toHaveBeenCalledWith('Apply a filter.');
@@ -211,7 +250,7 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       await filterValueCommand.execute(instance, callbacks)({
-        expression: ['name', '=', 'Alpha'],
+        expression: basicExpr('name', '=', 'Alpha'),
       });
 
       expect(callbacks.failure).toHaveBeenCalledWith('Apply a filter.');
