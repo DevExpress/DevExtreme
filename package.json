@@ -124,5 +124,8 @@
       "@babel/plugin-transform-modules-systemjs@>=7.12.0 <7.29.4": "^7.29.4"
     }
   },
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": "24.15.0"
+  }
 }

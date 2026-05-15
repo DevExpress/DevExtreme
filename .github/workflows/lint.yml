@@ -25,7 +25,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -55,6 +55,7 @@ jobs:
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
+        NODE_OPTIONS: --max-old-space-size=4096
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint-ts
 
@@ -80,7 +81,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -123,7 +124,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -160,7 +161,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -208,7 +209,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - uses: pnpm/action-setup@v4
       with:
