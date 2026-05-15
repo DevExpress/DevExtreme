@@ -125,7 +125,8 @@
       "stylelint-config-recommended-vue@1.6.1>stylelint-config-recommended": "^16.0.0",
       "uuid@<14.0.0": "~14.0.0",
       "postcss@<8.5.10": "8.5.10",
-      "ip-address@<=10.1.0": ">=10.1.1"
+      "ip-address@<=10.1.0": ">=10.1.1",
+      "@babel/plugin-transform-modules-systemjs@>=7.12.0 <7.29.4": "^7.29.4"
     }
   },
   "packageManager": "pnpm@9.15.9"
