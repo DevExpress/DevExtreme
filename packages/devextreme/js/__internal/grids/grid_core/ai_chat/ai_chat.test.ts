@@ -940,8 +940,8 @@ describe('AIChat', () => {
 
   describe('getUserId', () => {
     it('should return user id from chat instance', () => {
-      mockChatInstance.option.mockImplementation((name: string) => {
-        if (name === 'user.id') return 'user-123';
+      mockChatInstance.option.mockImplementation((...args: unknown[]) => {
+        if (args[0] === 'user.id') return 'user-123';
         return undefined;
       });
 
