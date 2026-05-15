@@ -529,7 +529,12 @@ class XmlaStore {
         || dimension.hierarchyName !== options[headerName][index + 1]
           .hierarchyName
       ) {
-        slices.push(`${dimension.dataField}.${this.preparePathValue(value, dimension.dataField)}`);
+        const { hierarchyName } = dimension;
+        if (hierarchyName && isString(value) && value.startsWith(`${hierarchyName}.`)) {
+          slices.push(value);
+        } else {
+          slices.push(`${dimension.dataField}.${this.preparePathValue(value, dimension.dataField)}`);
+        }
       }
     });
   }
