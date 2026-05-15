@@ -14,7 +14,7 @@ import type { Rule } from '../recurrence/types';
 
 export const createFormIconTemplate = (iconName: string): () => dxElementWrapper => (): dxElementWrapper => getImageContainer(iconName) ?? $('<div>').addClass('dx-scheduler-form-icon-sized-gap');
 
-export const getStartDateCommonConfig = (firstDayOfWeek: DayOfWeek): SimpleItem => ({
+export const getStartDateCommonConfig = (firstDayOfWeek: DayOfWeek | undefined): SimpleItem => ({
   colSpan: 1,
   itemType: 'simple',
   editorType: 'dxDateBox',
