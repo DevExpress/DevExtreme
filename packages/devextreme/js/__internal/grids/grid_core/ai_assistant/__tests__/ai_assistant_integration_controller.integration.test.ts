@@ -873,7 +873,7 @@ describe('AIAssistantIntegrationController', () => {
           { dataField: 'name', caption: 'Name', dataType: 'string' },
         ],
         aiIntegration,
-      } as unknown as Properties);
+      } as Properties);
 
       const controller = new AIAssistantIntegrationController(instance);
       controller.init();
