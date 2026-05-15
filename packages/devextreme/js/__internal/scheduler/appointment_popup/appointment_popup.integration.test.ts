@@ -1179,6 +1179,27 @@ describe('Appointment Form', () => {
       expect(loadSpy).toHaveBeenCalledTimes(1);
       expect(byKeySpy).toHaveBeenCalledTimes(0);
     });
+
+    it('should recreate appointment form synchronously when resources option changes', async () => {
+      const { scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        resources: [{
+          fieldExpr: 'roomId',
+          dataSource: [{ id: 1, text: 'Room 1' }],
+        }],
+      });
+      const formBefore = (scheduler as any).appointmentForm;
+
+      scheduler.option('resources', [{
+        fieldExpr: 'ownerId',
+        dataSource: [{ id: 1, text: 'Owner 1' }],
+      }]);
+
+      const formAfter = (scheduler as any).appointmentForm;
+      expect(formAfter).not.toBe(formBefore);
+      expect(formAfter.config.resourceManager)
+        .toBe((scheduler as any).resourceManager);
+    });
   });
 
   describe('Recurrence Form', () => {
@@ -1754,6 +1775,19 @@ describe('Appointment Form', () => {
       const endDateEditorAfter = POM.popup.dxForm.getEditor('endDateEditor');
       expect(endDateEditorAfter).toBeDefined();
       expect(endDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+    });
+
+    it('should pass undefined firstDayOfWeek to calendars when option is not set', async () => {
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        firstDayOfWeek: undefined,
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const startDateEditor = POM.popup.dxForm.getEditor('startDateEditor');
+      expect(startDateEditor).toBeDefined();
+      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBeUndefined();
     });
   });
 
