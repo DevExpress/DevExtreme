@@ -47,7 +47,7 @@ export interface AppointmentFormConfig {
   dataAccessors: AppointmentDataAccessor;
   editing: SchedulerProperties['editing'];
   resourceManager: ResourceManager;
-  firstDayOfWeek: DayOfWeek;
+  firstDayOfWeek: DayOfWeek | undefined;
   startDayHour: number;
   createComponent: CreateComponentFn;
   getCalculatedEndDate: (startDate: Date) => Date;
