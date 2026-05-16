@@ -1,14 +1,15 @@
 import { jest } from '@jest/globals';
+import type { DayOfWeek } from '@js/common';
 import $ from '@js/core/renderer';
 // eslint-disable-next-line devextreme-custom/no-deferred
 import { Deferred } from '@js/core/utils/deferred';
 
 import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
-import { AppointmentForm } from '../../appointment_popup/m_form';
+import { AppointmentForm } from '../../appointment_popup/form';
 import {
   APPOINTMENT_POPUP_CLASS,
   AppointmentPopup,
-} from '../../appointment_popup/m_popup';
+} from '../../appointment_popup/popup';
 import {
   AppointmentDataAccessor,
 } from '../../utils/data_accessor/appointment_data_accessor';
@@ -118,7 +119,7 @@ export const createAppointmentPopup = async (
     dataAccessors,
     editing,
     resourceManager,
-    firstDayOfWeek: options.firstDayOfWeek ?? 0,
+    firstDayOfWeek: (options.firstDayOfWeek ?? 0) as DayOfWeek,
     startDayHour: options.startDayHour ?? 0,
     createComponent,
     getCalculatedEndDate: (startDate: Date): Date => {
@@ -130,7 +131,7 @@ export const createAppointmentPopup = async (
 
   const form = new AppointmentForm(formConfig);
 
-  const noop = (): void => {};
+  const noop = (): void => { };
 
   const popupSchedulerProxy = {
     getElement: (): ReturnType<typeof $> => $(container),

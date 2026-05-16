@@ -101,6 +101,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
@@ -132,6 +133,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
@@ -162,6 +164,7 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
     } finally {
@@ -206,6 +209,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
@@ -236,6 +240,7 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
     } finally {

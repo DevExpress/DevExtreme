@@ -85,6 +85,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(item);
       POM.popup.setInputValue('subjectEditor', 'New Subject');
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({
         ...commonAppointment,
@@ -121,6 +122,7 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue('subjectEditor', 'New Subject');
       POM.popup.recurrenceSettingsButton.click();
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({
         ...recurringAppointment,
@@ -156,6 +158,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(item);
       POM.popup.selectRepeatValue('daily');
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({
         ...commonAppointment,
@@ -190,6 +193,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(item);
       POM.popup.editSeriesButton.click();
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject(recurringAppointment);
     });
@@ -207,6 +211,7 @@ describe('Appointment Form', () => {
       POM.popup.editSeriesButton.click();
       POM.popup.selectRepeatValue('never');
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({
         ...recurringAppointment,
@@ -231,6 +236,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(appointment);
       POM.popup.setInputValue('subjectEditor', 'Updated subject');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const items = (scheduler as any).getDataSource().items();
 
@@ -261,6 +267,7 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue('endTimeEditor', new Date(2017, 4, 25, 10, 0));
       POM.popup.setInputValue('descriptionEditor', 'New appointment description');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const items = (scheduler as any).getDataSource().items();
 
@@ -297,6 +304,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(item);
       POM.popup.setInputValue('roomId', 2);
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(dataSource.items()[0].roomId).toBe(2);
     });
@@ -319,6 +327,7 @@ describe('Appointment Form', () => {
       POM.popup.editAppointmentButton.click();
       POM.popup.setInputValue('subjectEditor', 'single appointment');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       expect(dataSource.items()).toHaveLength(2);
       expect(dataSource.items()[0]).toEqual({
@@ -344,6 +353,7 @@ describe('Appointment Form', () => {
 
       POM.popup.setInputValue(editorName, null);
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(POM.isPopupVisible()).toBe(true);
     });
@@ -358,6 +368,7 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue(editorName, null);
       POM.popup.selectRepeatValue('daily');
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(POM.isPopupVisible()).toBe(true);
     });
@@ -373,6 +384,7 @@ describe('Appointment Form', () => {
       expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/9/2017');
 
       POM.popup.saveButton.click();
+      await Promise.resolve();
 
       expect(POM.isPopupVisible()).toBe(false);
     });
@@ -477,6 +489,7 @@ describe('Appointment Form', () => {
 
       scheduler.showAppointmentPopup({ ...commonAppointment }, true);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const item = dataSource.items()[0];
 
@@ -665,6 +678,7 @@ describe('Appointment Form', () => {
 
       POM.popup.setInputValue(editorName, value);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -695,6 +709,7 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue(dateEditorName, value);
       POM.popup.setInputValue(timeEditorName, value);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -719,6 +734,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup();
       POM.popup.selectRepeatValue('daily');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -751,6 +767,7 @@ describe('Appointment Form', () => {
 
       POM.popup.setInputValue(exprValue, 2);
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
       const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
@@ -1702,6 +1719,14 @@ describe('Appointment Form', () => {
   });
 
   describe('firstDayOfWeek', () => {
+    beforeEach(() => {
+      jest.spyOn(dateLocalization, 'firstDayOfWeekIndex').mockReturnValue(3);
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
     it('should apply firstDayOfWeek to week day buttons', async () => {
       const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
@@ -1777,7 +1802,7 @@ describe('Appointment Form', () => {
       expect(endDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
     });
 
-    it('should pass undefined firstDayOfWeek to calendars when option is not set', async () => {
+    it('should pass value from localization firstDayOfWeek to calendars when option is not set', async () => {
       const { POM, scheduler } = await createScheduler({
         ...getDefaultConfig(),
         firstDayOfWeek: undefined,
@@ -1787,7 +1812,7 @@ describe('Appointment Form', () => {
 
       const startDateEditor = POM.popup.dxForm.getEditor('startDateEditor');
       expect(startDateEditor).toBeDefined();
-      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBeUndefined();
+      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(3);
     });
   });
 
@@ -1922,6 +1947,7 @@ describe('Appointment Form', () => {
 
         scheduler.showAppointmentPopup({ ...commonAppointment }, true);
         POM.popup.saveButton.click();
+        await Promise.resolve();
 
         expect(addAppointmentSpy).toHaveBeenCalledTimes(1);
         expect(addAppointmentSpy).toHaveBeenCalledWith(
@@ -1937,6 +1963,7 @@ describe('Appointment Form', () => {
 
         scheduler.showAppointmentPopup({ ...commonAppointment }, true);
         POM.popup.saveButton.click();
+        await Promise.resolve();
 
         const dataSource = (scheduler as any).getDataSource();
         expect(dataSource.items().length).toBe(0);
@@ -1950,6 +1977,7 @@ describe('Appointment Form', () => {
 
         scheduler.showAppointmentPopup({ ...commonAppointment }, true);
         POM.popup.saveButton.click();
+        await Promise.resolve();
 
         const dataSource = (scheduler as any).getDataSource();
         expect(dataSource.items().length).toBe(1);
@@ -1970,6 +1998,7 @@ describe('Appointment Form', () => {
         scheduler.showAppointmentPopup(updatedItem);
         POM.popup.setInputValue('subjectEditor', 'Updated Subject');
         POM.popup.saveButton.click();
+        await Promise.resolve();
 
         expect(updateAppointmentSpy).toHaveBeenCalledTimes(1);
         expect(updateAppointmentSpy).toHaveBeenCalledWith(updatedItem, updatedItem);
@@ -1987,6 +2016,7 @@ describe('Appointment Form', () => {
         scheduler.showAppointmentPopup(updatedItem);
         POM.popup.setInputValue('subjectEditor', 'Updated Subject');
         POM.popup.saveButton.click();
+        await Promise.resolve();
 
         expect(dataSource.items()[0]).toEqual(commonAppointment);
       });
@@ -2003,6 +2033,7 @@ describe('Appointment Form', () => {
         scheduler.showAppointmentPopup(updatedItem);
         POM.popup.setInputValue('subjectEditor', 'New Subject');
         POM.popup.saveButton.click();
+        await Promise.resolve();
 
         expect(dataSource.items()[0]).toEqual({
           allDay: false,
@@ -2119,6 +2150,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(item);
       POM.popup.setInputValue('subjectEditor', 'New Subject');
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({ ...commonAppointment, text: 'New Subject' });
     });
@@ -2135,6 +2167,7 @@ describe('Appointment Form', () => {
       POM.popup.selectRepeatValue('weekly');
       POM.popup.setInputValue('recurrenceStartDateEditor', new Date(2024, 4, 25));
       scheduler.hideAppointmentPopup(true);
+      await Promise.resolve();
 
       expect(dataSource.items()[0]).toMatchObject({
         ...commonAppointment,

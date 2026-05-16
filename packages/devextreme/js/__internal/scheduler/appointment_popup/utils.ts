@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import type { DayOfWeek } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
@@ -13,7 +14,7 @@ import type { Rule } from '../recurrence/types';
 
 export const createFormIconTemplate = (iconName: string): () => dxElementWrapper => (): dxElementWrapper => getImageContainer(iconName) ?? $('<div>').addClass('dx-scheduler-form-icon-sized-gap');
 
-export const getStartDateCommonConfig = (firstDayOfWeek: number | undefined): SimpleItem => ({
+export const getStartDateCommonConfig = (firstDayOfWeek: DayOfWeek): SimpleItem => ({
   colSpan: 1,
   itemType: 'simple',
   editorType: 'dxDateBox',
