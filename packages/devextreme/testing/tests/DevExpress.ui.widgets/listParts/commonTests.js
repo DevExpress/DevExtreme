@@ -5299,26 +5299,26 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('SelectAll checkbox aria-label should reflect selectAllText option on init (T1328637)', function(assert) {
-        $('#list').dxList({
+        const instance = $('#list').dxList({
             selectionMode: 'all',
             showSelectionControls: true,
             selectAllText: 'custom-select-all',
-        });
+        }).dxList('instance');
 
-        const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+        const $selectAllCheckBox = instance.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
         assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'custom-select-all',
             'checkbox aria-label uses selectAllText');
     });
 
     QUnit.test('Select all container aria-label should reflect selectAllText option on init (T1328637)', function(assert) {
-        $('#list').dxList({
+        const instance = $('#list').dxList({
             selectionMode: 'all',
             showSelectionControls: true,
             selectAllText: 'custom-select-all',
-        });
+        }).dxList('instance');
 
-        const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
+        const $selectAll = instance.$element().find(`.${LIST_SELECT_ALL_CLASS}`);
 
         assert.strictEqual($selectAll.attr('aria-label'), 'custom-select-all, Not checked',
             'container aria-label uses selectAllText');
@@ -5333,8 +5333,8 @@ QUnit.module('Accessibility', () => {
 
         instance.option('selectAllText', 'custom-select-all');
 
-        const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
-        const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+        const $selectAll = instance.$element().find(`.${LIST_SELECT_ALL_CLASS}`);
+        const $selectAllCheckBox = instance.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
         assert.strictEqual($selectAll.attr('aria-label'), 'custom-select-all, Not checked',
             'container aria-label updated after runtime change');
