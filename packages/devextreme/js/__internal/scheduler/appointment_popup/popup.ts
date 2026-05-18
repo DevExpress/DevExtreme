@@ -2,21 +2,31 @@ import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
+import { isBoolean } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import type {
+  Properties as PopupProperties,
+  ShowingEvent,
+  ToolbarItem,
+} from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
+import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { current, isFluent } from '@js/ui/themes';
+import errors from '@js/ui/widget/ui.errors';
 
 import { hide as hideLoading, show as showLoading } from '../m_loading';
+import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
 import type { SafeAppointment } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
-import type { AppointmentForm } from './m_form';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import type { AppointmentForm } from './form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
@@ -28,17 +38,56 @@ export interface AppointmentPopupConfig {
   readOnly: boolean;
 }
 
+export interface AppointmentPopupState {
+  saveChangesLocker: boolean;
+  appointment: {
+    data: SafeAppointment | null;
+  };
+}
+
+interface AppointmentFormOpeningArgs {
+  form: AppointmentForm['dxForm'];
+  popup: dxPopup;
+  appointmentData: SafeAppointment | null;
+  cancel: boolean;
+}
+
+export interface AppointmentPopupContext {
+  dxPopup: Popup;
+  updateToolbarForMainGroup: () => void;
+  updateToolbarForRecurrenceGroup: () => void;
+}
+
+interface AppointmentPopupScheduler {
+  getElement: () => dxElementWrapper;
+  createComponent: (
+    element: dxElementWrapper,
+    component: unknown,
+    options: unknown,
+  ) => unknown;
+  focus: () => void;
+  getResourceManager: () => ResourceManager;
+  getEditingConfig: () => SchedulerProperties['editing'];
+  getTimeZoneCalculator: () => TimeZoneCalculator;
+  getDataAccessors: () => AppointmentDataAccessor;
+  getAppointmentFormOpening: () => (args: AppointmentFormOpeningArgs) => void;
+  processActionResult: (
+    args: AppointmentFormOpeningArgs,
+    callback: (canceled: boolean) => void,
+  ) => void;
+}
+
 export class AppointmentPopup {
-  scheduler: any;
+  scheduler: AppointmentPopupScheduler;
 
   form: AppointmentForm;
 
   // TODO: backing field for popup getter, cannot rename due to name conflict
-  private _popup?: dxPopup;
+  private popupInstance?: Popup;
 
   private customPopupOptions?: PopupProperties;
 
-  state: any;
+  state: AppointmentPopupState;
 
   private config: AppointmentPopupConfig = {
     onSave: () => Promise.resolve(),
@@ -46,15 +95,15 @@ export class AppointmentPopup {
     readOnly: false,
   };
 
-  get popup(): dxPopup {
-    return this._popup as dxPopup;
+  get popup(): Popup {
+    return this.popupInstance as Popup;
   }
 
   get visible(): boolean {
-    return Boolean(this._popup?.option('visible'));
+    return Boolean(this.popupInstance?.option('visible'));
   }
 
-  constructor(scheduler: any, form: AppointmentForm) {
+  constructor(scheduler: AppointmentPopupScheduler, form: AppointmentForm) {
     this.scheduler = scheduler;
     this.form = form;
 
@@ -66,7 +115,7 @@ export class AppointmentPopup {
     };
   }
 
-  show(appointment, config: AppointmentPopupConfig) {
+  show(appointment: SafeAppointment, config: AppointmentPopupConfig): void {
     this.state.appointment.data = appointment;
     this.config = config;
 
@@ -75,28 +124,36 @@ export class AppointmentPopup {
     const popupConfig = this.createPopupConfig();
     this.createPopup(popupConfig);
 
-    this._popup!.show();
+    if (this.popupInstance) {
+      this.popupInstance.show().catch(noop);
+    } else {
+      throw errors.Error('E1033');
+    }
   }
 
-  hide() {
-    this._popup?.hide();
+  hide(): void {
+    if (this.popupInstance) {
+      this.popupInstance.hide().catch(noop);
+    } else {
+      throw errors.Error('E1033');
+    }
   }
 
-  dispose() {
+  dispose(): void {
     this.disposePopup();
   }
 
   private disposePopup(): void {
-    if (this._popup) {
-      const $element = this._popup.$element();
+    if (this.popupInstance) {
+      const $element = this.popupInstance.$element();
       this.form.dispose();
-      this._popup.dispose();
+      this.popupInstance.dispose();
       $element.remove();
-      this._popup = undefined;
+      this.popupInstance = undefined;
     }
   }
 
-  private createPopup(options): void {
+  private createPopup(options: PopupProperties): void {
     const popupElement = $('<div>')
       .addClass(APPOINTMENT_POPUP_CLASS)
       .appendTo(this.scheduler.getElement());
@@ -106,7 +163,8 @@ export class AppointmentPopup {
 
   private createPopupConfig(): PopupProperties {
     const editingConfig = this.scheduler.getEditingConfig();
-    const customPopupOptions = editingConfig?.popup ?? {};
+    const popupConfig = !isBoolean(editingConfig) ? editingConfig?.popup : undefined;
+    const customPopupOptions = popupConfig ?? {};
 
     this.customPopupOptions = customPopupOptions;
 
@@ -119,7 +177,7 @@ export class AppointmentPopup {
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
       onInitialized: (e): void => {
-        this._popup = e.component;
+        this.popupInstance = e.component;
         customPopupOptions?.onInitialized?.(e);
       },
       onHiding: (e): void => {
@@ -135,7 +193,7 @@ export class AppointmentPopup {
 
         return this.form.dxForm.$element();
       },
-      onShowing: (e): void => {
+      onShowing: (e: ShowingEvent): void => {
         this.onShowing(e);
         customPopupOptions?.onShowing?.(e);
       },
@@ -149,13 +207,15 @@ export class AppointmentPopup {
     }) as PopupProperties;
   }
 
-  private onShowing(e) {
+  private onShowing(e): void {
     this.updateForm();
 
-    e.component.$overlayContent().attr(
-      'aria-label',
-      messageLocalization.format('dxScheduler-ariaEditForm'),
-    );
+    e.component
+      .$overlayContent()
+      .attr(
+        'aria-label',
+        messageLocalization.format('dxScheduler-ariaEditForm'),
+      );
 
     const arg = {
       form: this.form.dxForm,
@@ -195,7 +255,9 @@ export class AppointmentPopup {
     this.form.showMainGroup();
   }
 
-  private createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
+  private createFormData(
+    appointmentAdapter: AppointmentAdapter,
+  ): Record<string, unknown> {
     const { resources } = this.scheduler.getResourceManager();
     const groupValues = getRawAppointmentGroupValues(
       appointmentAdapter.source as SafeAppointment,
@@ -230,7 +292,7 @@ export class AppointmentPopup {
 
   updatePopupFullScreenMode(): void {
     if (this.visible) {
-      const isPopupFullScreenNeeded = () => {
+      const isPopupFullScreenNeeded = (): boolean => {
         const window = getWindow();
         const width = window && getWidth(window);
 
@@ -250,62 +312,52 @@ export class AppointmentPopup {
     }
   }
 
-  saveChangesAsync(isShowLoadPanel) {
+  saveChangesAsync(isShowLoadPanel = false): Promise<void> {
     this.form.saveRecurrenceValue();
 
-    // @ts-expect-error
-    const deferred = new Deferred();
     const validation = this.form.dxForm.validate();
 
-    isShowLoadPanel && this.showLoadPanel();
-
-    when(validation?.complete ?? validation).done((validation) => {
-      if (validation && !(validation as any).isValid) {
-        hideLoading();
-        deferred.resolve(false);
-        return;
-      }
-
-      const adapter = this.createAppointmentAdapter(this.form.formData);
-      const clonedAdapter = adapter
-        .clone()
-        .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
-
-      this.addMissingDSTTime(adapter, clonedAdapter);
-
-      const appointment = clonedAdapter.source;
-
-      when(this.config.onSave(appointment)).done(deferred.resolve);
-
-      deferred.done(() => {
-        hideLoading();
-      });
-    });
-
-    return deferred.promise();
-  }
-
-  private saveButtonClickHandler(e) {
-    e.cancel = true;
-    this.saveEditDataAsync();
-  }
-
-  saveEditDataAsync() {
-    // @ts-expect-error
-    const deferred = new Deferred();
-
-    if (this.tryLockSaveChanges()) {
-      when(this.saveChangesAsync(true)).done(() => {
-        this.unlockSaveChanges();
-        deferred.resolve();
-      });
+    if (isShowLoadPanel) {
+      this.showLoadPanel();
     }
 
-    return deferred.promise();
+    return Promise.resolve(validation?.complete ?? validation)
+      .then((validationResult) => {
+        if (!validationResult?.isValid) {
+          return undefined;
+        }
+
+        const adapter = this.createAppointmentAdapter(this.form.formData);
+        const clonedAdapter = adapter
+          .clone()
+          .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
+
+        this.addMissingDSTTime(adapter, clonedAdapter);
+
+        const appointment = clonedAdapter.source;
+
+        return this.config.onSave(appointment);
+      })
+      .then(() => { hideLoading(); })
+      .catch(noop);
   }
 
-  private showLoadPanel() {
-    const container = (this.popup as any).$overlayContent();
+  private saveButtonClickHandler(e): void {
+    e.cancel = true;
+    this.saveEditDataAsync().catch(noop);
+  }
+
+  private saveEditDataAsync(): Promise<void> {
+    if (this.tryLockSaveChanges()) {
+      return this.saveChangesAsync(true).then(() => {
+        this.unlockSaveChanges();
+      });
+    }
+    return Promise.resolve();
+  }
+
+  private showLoadPanel(): void {
+    const container = this.popupInstance?.$overlayContent();
 
     showLoading({
       container,
@@ -315,19 +367,22 @@ export class AppointmentPopup {
     });
   }
 
-  private tryLockSaveChanges() {
-    if (this.state.saveChangesLocker === false) {
+  private tryLockSaveChanges(): boolean {
+    if (!this.state.saveChangesLocker) {
       this.state.saveChangesLocker = true;
       return true;
     }
     return false;
   }
 
-  private unlockSaveChanges() {
+  private unlockSaveChanges(): void {
     this.state.saveChangesLocker = false;
   }
 
-  private addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
+  private addMissingDSTTime(
+    formAppointmentAdapter: AppointmentAdapter,
+    clonedAppointmentAdapter: AppointmentAdapter,
+  ): void {
     const timeZoneCalculator = this.scheduler.getTimeZoneCalculator();
 
     clonedAppointmentAdapter.startDate = this.addMissingDSTShiftToDate(
@@ -345,13 +400,26 @@ export class AppointmentPopup {
     }
   }
 
-  private addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
-    const originTimezoneShift = timeZoneCalculator.getOffsets(originFormDate)?.common;
-    const clonedTimezoneShift = timeZoneCalculator.getOffsets(clonedDate)?.common;
+  private addMissingDSTShiftToDate(
+    timeZoneCalculator: TimeZoneCalculator,
+    originFormDate: Date,
+    clonedDate: Date,
+  ): Date {
+    const originTimezoneShift = timeZoneCalculator.getOffsets(
+      originFormDate,
+      undefined,
+    ).common;
+    const clonedTimezoneShift = timeZoneCalculator.getOffsets(
+      clonedDate,
+      undefined,
+    ).common;
     const shiftDifference = originTimezoneShift - clonedTimezoneShift;
 
     return shiftDifference
-      ? new Date(clonedDate.getTime() + shiftDifference * dateUtils.dateToMilliseconds('hour'))
+      ? new Date(
+        clonedDate.getTime()
+            + shiftDifference * dateUtils.dateToMilliseconds('hour'),
+      )
       : clonedDate;
   }
 
@@ -368,28 +436,30 @@ export class AppointmentPopup {
       return;
     }
 
-    const toolbarItems: ToolbarItem[] = [{
-      toolbar: 'top',
-      location: 'before',
-      text: this.config.title,
-      cssClass: 'dx-toolbar-label',
-    }];
+    const toolbarItems: ToolbarItem[] = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        text: this.config.title,
+        cssClass: 'dx-toolbar-label',
+      },
+    ];
 
     const canSave = !this.form.readOnly;
     if (canSave) {
-      toolbarItems.push(
-        {
-          toolbar: 'top',
-          location: 'after',
-          options: {
-            onClick: (e) => this.saveButtonClickHandler(e),
-            stylingMode: 'contained',
-            type: 'default',
-            text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
-          },
-          shortcut: 'done',
-        } as ToolbarItem,
-      );
+      toolbarItems.push({
+        toolbar: 'top',
+        location: 'after',
+        options: {
+          onClick: (e) => this.saveButtonClickHandler(e),
+          stylingMode: 'contained',
+          type: 'default',
+          text: messageLocalization.format(
+            'dxScheduler-editPopupSaveButtonText',
+          ),
+        },
+        shortcut: 'done',
+      } as ToolbarItem);
     }
 
     toolbarItems.push({
@@ -443,7 +513,9 @@ export class AppointmentPopup {
           onClick: (e) => this.saveButtonClickHandler(e),
           stylingMode: 'contained',
           type: 'default',
-          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+          text: messageLocalization.format(
+            'dxScheduler-editPopupSaveButtonText',
+          ),
         },
         shortcut: 'done',
       } as ToolbarItem);
