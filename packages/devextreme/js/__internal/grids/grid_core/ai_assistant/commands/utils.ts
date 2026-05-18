@@ -1,9 +1,8 @@
+import type { CompositeKeyPair } from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
 import { z } from 'zod';
 
 type RowKey = string | number | Record<string, string | number>;
-
-interface CompositeKeyPair { field: string; value: string | number }
 
 export const compositeKeyPairSchema = z.object({
   field: z.string(),
