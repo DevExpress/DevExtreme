@@ -13,7 +13,6 @@ import {
   AI_ASSISTANT_AUTHOR_ID,
   AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH,
   AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
-  MessageStatus,
 } from '../const';
 import type { JsonSchema } from '../types';
 import {
@@ -249,7 +248,7 @@ describe('getMessageStatus', () => {
       { status: 'success' as const, message: 'Filtered' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Success);
+    expect(getMessageStatus(commands)).toBe('success');
   });
 
   it('should return Failure when commands contain errors', () => {
@@ -258,7 +257,7 @@ describe('getMessageStatus', () => {
       { status: 'failure' as const, message: 'Failed to filter' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+    expect(getMessageStatus(commands)).toBe('failure');
   });
 
   it('should return Failure when commands contain aborted items', () => {
@@ -267,7 +266,7 @@ describe('getMessageStatus', () => {
       { status: 'aborted' as const, message: 'Filter was aborted' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+    expect(getMessageStatus(commands)).toBe('failure');
   });
 
   it('should return Failure when commands contain both errors and aborted items', () => {
@@ -276,11 +275,11 @@ describe('getMessageStatus', () => {
       { status: 'aborted' as const, message: 'Aborted' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+    expect(getMessageStatus(commands)).toBe('failure');
   });
 
   it('should return Success when commands array is empty', () => {
-    expect(getMessageStatus([])).toBe(MessageStatus.Success);
+    expect(getMessageStatus([])).toBe('success');
   });
 });
 

@@ -1,5 +1,6 @@
 import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
+import type { CommandInfo } from '@js/common/grids';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { logger } from '@ts/core/utils/m_console';
 import {
@@ -57,11 +58,10 @@ export class GridCommands {
 
   private static applyCustomizedResponseText(
     result: CommandResult,
-    name: string,
-    args: Record<string, unknown>,
+    command: CommandInfo,
     customizeResponseText?: CustomizeResponseText,
   ): void {
-    const customMessages = customizeResponseText?.(name, args);
+    const customMessages = customizeResponseText?.(command);
     const customMessage = customMessages?.[result.status];
 
     if (isDefined(customMessage)) {
@@ -224,7 +224,11 @@ export class GridCommands {
         // eslint-disable-next-line no-await-in-loop
         const result = await this.executeCommand(command, args, callbacks);
 
-        GridCommands.applyCustomizedResponseText(result, name, args, customizeResponseText);
+        GridCommands.applyCustomizedResponseText(
+          result,
+          { name, args } as CommandInfo,
+          customizeResponseText,
+        );
         results.push(result);
       }
     } finally {

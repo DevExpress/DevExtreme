@@ -1,4 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
+import type { ResponseStatus } from '@js/common/grids';
 import { isObject } from '@js/core/utils/type';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Message } from '@js/ui/chat';
@@ -9,7 +10,7 @@ import type { BaseDialog, DialogParams } from '@ts/ui/dialog';
 import {
   AI_ASSISTANT_AUTHOR_ID,
   AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH,
-  AI_ASSISTANT_CONFIRM_DIALOG_WIDTH, MessageStatus,
+  AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
 } from './const';
 import type { AIMessage, CommandResult, JsonSchema } from './types';
 
@@ -42,12 +43,12 @@ export const hasAbortedCommands = (
   commands: CommandResult[] | undefined,
 ): boolean => !!commands?.some(({ status }) => status === 'aborted');
 
-export const getMessageStatus = (commands: CommandResult[]): MessageStatus => {
+export const getMessageStatus = (commands: CommandResult[]): ResponseStatus => {
   if (hasCommandErrors(commands) || hasAbortedCommands(commands)) {
-    return MessageStatus.Failure;
+    return 'failure';
   }
 
-  return MessageStatus.Success;
+  return 'success';
 };
 
 /**

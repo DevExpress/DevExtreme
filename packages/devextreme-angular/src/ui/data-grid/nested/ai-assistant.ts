@@ -15,6 +15,7 @@ import {
 
 
 import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { CommandInfo, ResponseStatusTexts, ResponseStatus } from 'devextreme/common/grids';
 import type { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
@@ -46,6 +47,22 @@ export class DxoDataGridAIAssistantComponent extends NestedOption implements OnD
     }
     set chat(value: Record<string, any>) {
         this._setOption('chat', value);
+    }
+
+    @Input()
+    get customizeResponseText(): ((command: CommandInfo) => ResponseStatusTexts) {
+        return this._getOption('customizeResponseText');
+    }
+    set customizeResponseText(value: ((command: CommandInfo) => ResponseStatusTexts)) {
+        this._setOption('customizeResponseText', value);
+    }
+
+    @Input()
+    get customizeResponseTitle(): ((status: ResponseStatus, commandNames: Array<string>) => string) {
+        return this._getOption('customizeResponseTitle');
+    }
+    set customizeResponseTitle(value: ((status: ResponseStatus, commandNames: Array<string>) => string)) {
+        this._setOption('customizeResponseTitle', value);
     }
 
     @Input()
