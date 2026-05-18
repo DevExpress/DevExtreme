@@ -116,6 +116,9 @@ export {
 
 export {
     AIAssistant,
+    PredefinedCommands,
+    PredefinedCommandNames,
+    ResponseStatusTexts,
     ApplyFilterMode,
     ColumnChooser,
     ColumnChooserMode,
