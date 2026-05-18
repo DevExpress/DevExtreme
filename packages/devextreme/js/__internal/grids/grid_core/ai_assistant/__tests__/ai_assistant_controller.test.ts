@@ -99,6 +99,75 @@ describe('AIAssistantController', () => {
     });
   });
 
+  describe('isProcessing', () => {
+    it('should return false initially', () => {
+      const controller = createController();
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+
+    it('should return true while request is processing', () => {
+      const controller = createController();
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort by name',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      expect(controller.isProcessing()).toBe(true);
+    });
+
+    it('should return false after request completes successfully', async () => {
+      const controller = createController();
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort by name',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+
+      const actions = [{ name: 'sort', args: { column: 'Name' } }];
+      sendRequestCallbacks.onComplete?.({ actions });
+      await promise;
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+
+    it('should return false after request fails', async () => {
+      const controller = createController();
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort by name',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      sendRequestCallbacks.onError?.(new Error('Network error'));
+      await expect(promise).rejects.toThrow('Network error');
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+
+    it('should return false after request is aborted', async () => {
+      const controller = createController();
+
+      const promise = controller.sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text: 'Sort by name',
+        timestamp: '2026-04-16T10:00:00.000Z',
+      } as Message);
+      promise.catch(() => {});
+
+      controller.abortRequest();
+      await expect(promise).rejects.toThrow();
+
+      expect(controller.isProcessing()).toBe(false);
+    });
+  });
+
   describe('sendRequestToAI', () => {
     it('should create pending message in store', async () => {
       const controller = createController();
