@@ -9,7 +9,7 @@ export const compositeKeyPairSchema = z.object({
   value: z.union([z.string(), z.number()]),
 }).strict();
 
-export const compositeKeyToObject = (
+const compositeKeyToObject = (
   pairs: CompositeKeyPair[],
 ): Record<string, string | number> => {
   const result: Record<string, string | number> = {};
