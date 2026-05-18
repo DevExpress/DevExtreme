@@ -261,7 +261,7 @@ describe('GridCommands', () => {
       const command = createMockCommand('test');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+      const schema = gridCommands.buildResponseSchema();
 
       expect(schema.anyOf).toBeUndefined();
       expect(schema.oneOf).toBeUndefined();
@@ -338,7 +338,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+      const schema = gridCommands.buildResponseSchema();
 
       // $defs should exist at root level
       expect(schema.$defs).toBeDefined();
@@ -380,7 +380,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const schema = gridCommands.buildResponseSchema() as Record<string, unknown>;
+      const schema = gridCommands.buildResponseSchema();
 
       expect(schema.$defs).toBeUndefined();
     });
@@ -1046,7 +1046,7 @@ describe('GridCommands', () => {
     });
 
     it('should call customizeResponseText once per executed command with correct args', async () => {
-      const customizeSpy = jest.fn<CustomizeResponseText>(() => undefined);
+      const customizeSpy = jest.fn<CustomizeResponseText>(() => ({}));
       const command = createMockCommand('test');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
@@ -1059,8 +1059,8 @@ describe('GridCommands', () => {
       );
 
       expect(customizeSpy).toHaveBeenCalledTimes(2);
-      expect(customizeSpy).toHaveBeenNthCalledWith(1, 'test', { key: 'val1' });
-      expect(customizeSpy).toHaveBeenNthCalledWith(2, 'test', { key: 'val2' });
+      expect(customizeSpy).toHaveBeenNthCalledWith(1, { name: 'test', args: { key: 'val1' } });
+      expect(customizeSpy).toHaveBeenNthCalledWith(2, { name: 'test', args: { key: 'val2' } });
     });
 
     it('should replace both messages when returning { success, failure }', async () => {
@@ -1128,8 +1128,8 @@ describe('GridCommands', () => {
       expect(results[0].message).toBe('default success');
     });
 
-    it('should leave default message when customizeResponseText returns undefined', async () => {
-      const customizeResponseText: CustomizeResponseText = () => undefined;
+    it('should leave default message when customizeResponseText returns empty object', async () => {
+      const customizeResponseText: CustomizeResponseText = () => ({});
 
       const command = createMockCommand('test', {
         execute: (_comp, { success }) => (): Promise<CommandResult> => Promise.resolve(success('original')),
@@ -1171,12 +1171,12 @@ describe('GridCommands', () => {
       );
 
       expect(customizeSpy).toHaveBeenCalledTimes(1);
-      expect(customizeSpy).toHaveBeenCalledWith('abort', {});
+      expect(customizeSpy).toHaveBeenCalledWith({ name: 'abort', args: {} });
       expect(results[1].status).toBe('aborted');
     });
 
     it('should not call customizeResponseText when no commands are executed', async () => {
-      const customizeSpy = jest.fn<CustomizeResponseText>(() => undefined);
+      const customizeSpy = jest.fn<CustomizeResponseText>(() => ({}));
       const gridCommands = new GridCommands(createMockComponent(), []);
 
       await gridCommands.executeCommands([], customizeSpy);

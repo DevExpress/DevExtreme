@@ -48,6 +48,7 @@ Ng.makeMetadata({
 
     removeMembers(/\/grids:ColumnBase.ai/),
     removeMembers(/\/grids:GridBaseOptions.aiAssistant/),
+    removeMembers(/\/grids:AIAssistant/),
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
     removeMembers(/\/chat:TextMessage.attachments/),

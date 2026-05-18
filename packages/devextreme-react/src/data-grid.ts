@@ -10,7 +10,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, AIAssistantRequestCreatingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridPredefinedToolbarItem, DataGridExportFormat, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
-import type { DataChange, AIColumnMode, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
+import type { DataChange, AIColumnMode, CommandInfo, ResponseStatusTexts, ResponseStatus, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, TextEditorButtonLocation, ButtonStyle, ButtonType, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, ToolbarItemLocation, ToolbarItemComponent, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Direction, DisplayMode, DragDirection, DragHighlight, ScrollbarMode, TabsIconPosition, TabsStyle } from "devextreme/common";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, KeyDownEvent as TextBoxKeyDownEvent, dxTextBoxOptions, OptionChangedEvent as TextBoxOptionChangedEvent, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
@@ -131,7 +131,7 @@ const DataGrid = memo(
         }
       ), []);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","editing.popup.height","aIAssistant.popup.height","editing.popup.position","aIAssistant.popup.position","editing.popup.visible","aIAssistant.popup.visible","editing.popup.width","aIAssistant.popup.width","searchPanel.text"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","aIAssistant.popup.height","editing.popup.height","aIAssistant.popup.position","editing.popup.position","aIAssistant.popup.visible","editing.popup.visible","aIAssistant.popup.width","editing.popup.width","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onAIAssistantRequestCreating","onAIColumnRequestCreating","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
@@ -244,6 +244,8 @@ const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI,
 type IAIAssistantProps = React.PropsWithChildren<{
   aiIntegration?: AIIntegration;
   chat?: Record<string, any>;
+  customizeResponseText?: ((command: CommandInfo) => ResponseStatusTexts);
+  customizeResponseTitle?: ((status: ResponseStatus, commandNames: Array<string>) => string);
   enabled?: boolean;
   popup?: dxPopupOptions<any>;
   title?: string;
@@ -2845,8 +2847,8 @@ const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentM
 });
 
 // owners:
-// Editing
 // AIAssistant
+// Editing
 type IPopupProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   animation?: Record<string, any> | {
