@@ -109,6 +109,7 @@ describe('Scheduler scrollTo', () => {
     const item = (scheduler as any).getDataSource().items()[0];
     scheduler.showAppointmentPopup(item);
     POM.popup.saveButton.click();
+    await Promise.resolve();
 
     expect(scrollLeftBeforeSave).toBe(0);
     expect(scrollableContainer.scrollLeft).toBeGreaterThan(0);
