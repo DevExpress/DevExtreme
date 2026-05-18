@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { DayOfWeek } from '@js/common';
+import type { FirstDayOfWeek as DayOfWeek } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';

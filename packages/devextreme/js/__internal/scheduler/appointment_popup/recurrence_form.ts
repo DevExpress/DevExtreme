@@ -8,7 +8,7 @@ import type { GroupItem, SimpleItem } from '@js/ui/form';
 import type dxForm from '@js/ui/form';
 import type { Properties as NumberBoxProperties } from '@js/ui/number_box';
 import type { Properties as RadioGroupProperties } from '@js/ui/radio_group';
-import type { DayOfWeek } from '@js/ui/scheduler';
+import type { FirstDayOfWeek as DayOfWeek } from '@js/ui/scheduler';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 
 import type { CreateComponentFn } from '../types';

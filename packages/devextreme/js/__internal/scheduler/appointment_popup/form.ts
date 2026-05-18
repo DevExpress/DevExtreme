@@ -4,7 +4,7 @@ import '@js/ui/tag_box';
 import '@js/ui/switch';
 import '@js/ui/select_box';
 
-import type { DayOfWeek, TextEditorButton } from '@js/common';
+import type { FirstDayOfWeek as DayOfWeek, TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
