@@ -13,7 +13,7 @@ When connected to your own AI model/service without rate and data limits, the AI
 
 To enable the AI Assistant, configure [aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#aiIntegration) or **aiAssistant**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#aiIntegration) and set **aiAssistant**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#enabled) to `true`.
 
-When this feature is enabled, DataGrid adds a predefined item (*"aiAssistantButton"*) to the component's toolbar. This button opens the AI Assistant chat. The assistant is displayed in popup that users can move around the screen as needed.
+When this feature is enabled, DataGrid adds a predefined item (*"aiAssistantButton"*) to the component's toolbar. This button opens the AI Assistant chat. The assistant is displayed in a popup that users can move around the screen as needed.
 
 Our AI Assistant capability supports DataGrid features such as:
 
