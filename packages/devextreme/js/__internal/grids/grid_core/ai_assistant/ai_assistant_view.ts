@@ -129,7 +129,10 @@ export class AIAssistantView extends View {
 
   private getAIChatOptions(): ChatProperties {
     return {
-      dataSource: this.messageStore,
+      dataSource: {
+        store: this.messageStore,
+        pushAggregationTimeout: 0,
+      },
       reloadOnChange: true,
       onMessageEntered: (e): void => {
         this.executeRequest(e.message);
