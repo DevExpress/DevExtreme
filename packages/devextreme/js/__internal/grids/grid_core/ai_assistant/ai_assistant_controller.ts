@@ -268,6 +268,10 @@ export class AIAssistantController extends Controller {
     this.gridCommands?.abort();
   }
 
+  public isProcessing(): boolean {
+    return this.processing;
+  }
+
   public dispose(): void {
     super.dispose();
     this.aiAssistantIntegrationController?.dispose();
