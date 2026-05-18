@@ -190,9 +190,6 @@ const CSP_DEMO_ALLOWLIST = {
   'HtmlEditor/MarkdownSupport': {
     'script-src': ["'unsafe-inline'"],
   },
-  // TODO: fix inline style attribute
-  'DataGrid/RowSelection': {
-  },
   // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'Chat/AIAndChatbotIntegration': {
     'script-src': ["'unsafe-inline'"],
