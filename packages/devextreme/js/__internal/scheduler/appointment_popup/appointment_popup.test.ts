@@ -54,6 +54,7 @@ describe('Isolated AppointmentPopup environment', () => {
     });
 
     POM.saveButton.click();
+    await new Promise(process.nextTick);
 
     expect(callbacks.onSave).toHaveBeenCalledTimes(1);
     expect(callbacks.onSave).toHaveBeenCalledWith(
@@ -75,6 +76,7 @@ describe('Isolated AppointmentPopup environment', () => {
     });
 
     POM.saveButton.click();
+    await new Promise(process.nextTick);
 
     expect(callbacks.addAppointment).not.toHaveBeenCalled();
     expect(callbacks.updateAppointment).not.toHaveBeenCalled();
@@ -139,6 +141,7 @@ describe('Isolated AppointmentPopup environment', () => {
     });
 
     POM.saveButton.click();
+    await new Promise(process.nextTick);
 
     expect(onSave).toHaveBeenCalledTimes(1);
     expect(updateAppointment).toHaveBeenCalledWith(sourceAppointment, updatedAppointment);

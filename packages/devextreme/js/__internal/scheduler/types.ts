@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
@@ -19,6 +20,15 @@ export interface TargetedAppointment extends Appointment {
   displayStartDate: Date;
   displayEndDate: Date;
 }
+
+export type CreateComponentFn = <TTComponent, IProperties = Record<string, unknown>>(
+  element: string | HTMLElement | dxElementWrapper | Element,
+  component: string | (new (...args) => TTComponent),
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  componentConfiguration: TTComponent extends Component<any, infer TTProperties>
+    ? TTProperties
+    : IProperties,
+) => TTComponent;
 
 export interface AppointmentDataItem {
   startDate: Date;
