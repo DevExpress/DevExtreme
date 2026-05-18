@@ -43,7 +43,7 @@ $(() => {
         const currentEmployee = options.data.Task_Assigned_Employee;
         if (currentEmployee) {
           container
-            .append($('<img>', { class: 'img', src: currentEmployee.Picture }))
+            .append($('<img>', { class: 'img', src: currentEmployee.Picture, alt: '' }))
             .append('\n')
             .append($('<span>', { class: 'name', text: currentEmployee.Name }));
         }

@@ -3,6 +3,7 @@
     <img
       v-if="cellData.Task_Assigned_Employee"
       :src="cellData.Task_Assigned_Employee.Picture"
+      alt=""
       class="img"
     />
     <span

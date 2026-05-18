@@ -10,6 +10,7 @@ const EmployeeCell = (props) => {
       <img
         className="img"
         src={employee.Picture}
+        alt=""
       />
       &nbsp;
       <span className="name">{employee.Name}</span>
