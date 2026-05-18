@@ -26,13 +26,6 @@ Our AI Assistant capability supports DataGrid features such as:
 - [Summaries](/Documentation/Guide/UI_Components/DataGrid/Summaries/Predefined_Aggregate_Functions/)
 - [Column Fixing](/Documentation/Guide/UI_Components/DataGrid/Columns/Column_Fixing/), [Resizing](/Documentation/Guide/UI_Components/DataGrid/Columns/Column_Sizing/), and [Reordering](/Documentation/Guide/UI_Components/DataGrid/Columns/Column_Reordering/)
 
-The DevExtreme DataGrid within this demo implements the following capabilities:
-
-- Filtering and Searching
-- Sorting
-- Grouping
-- Paging
-
 Users can utilize/configure these features in the AI Assistant chat using written prompts. The AI Assistant chat also supports [speech-to-text input](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled), ideal for hands-free interactions or entering longer prompts.
 
 This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant chat. These buttons allow you to interact with the assistant in one click using pre-defined prompts. For additional information about suggestions, refer to the following technical demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
