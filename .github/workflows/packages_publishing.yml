@@ -42,6 +42,11 @@ jobs:
         with:
           run_install: false
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
       - name: Get pnpm store directory
         shell: bash
         run: |
