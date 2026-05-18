@@ -153,10 +153,13 @@ jobs:
         working-directory: ${{ steps.scopedPackage.outputs.packageDir }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
           PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm publish --no-git-checks --quiet --ignore-scripts --tag $PACKAGE_VERSION_MAJOR-${{ inputs.tag }} --registry https://npm.pkg.github.com;
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
 
   notify:
     runs-on: devextreme-shr2
