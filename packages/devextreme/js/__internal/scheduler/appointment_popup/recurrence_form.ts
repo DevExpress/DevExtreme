@@ -8,8 +8,10 @@ import type { GroupItem, SimpleItem } from '@js/ui/form';
 import type dxForm from '@js/ui/form';
 import type { Properties as NumberBoxProperties } from '@js/ui/number_box';
 import type { Properties as RadioGroupProperties } from '@js/ui/radio_group';
+import type { DayOfWeek } from '@js/ui/scheduler';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 
+import type { CreateComponentFn } from '../types';
 import {
   getRecurrenceFrequencyItems,
   getRecurrenceMonthItems,
@@ -19,12 +21,8 @@ import {
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 export interface RecurrenceFormConfig {
-  firstDayOfWeek: number | undefined;
-  createComponent: (
-    element: string | HTMLElement | dxElementWrapper | Element,
-    Component: any,
-    options: any,
-  ) => any;
+  firstDayOfWeek: DayOfWeek;
+  createComponent: CreateComponentFn
 }
 
 const CLASSES = {
@@ -279,6 +277,7 @@ export class RecurrenceForm {
               e.component.option('value', this.recurrenceRule.frequency);
 
               if (needRestoreFrequencyEditorFocus) {
+                // eslint-disable-next-line no-restricted-globals
                 setTimeout(() => {
                   e.component.focus();
                   needRestoreFrequencyEditorFocus = false;
