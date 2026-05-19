@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { logger } from '@nx/devkit';
 import { createExecutor } from '../../utils/create-executor';
+import { escapeRegExpLiteral } from '../../utils/common';
 import { readFileText } from '../../utils/file-operations';
 import { LicenseCheckExecutorSchema, LicenseEntry } from './schema';
 
@@ -20,12 +21,18 @@ const ERROR_HEADER_SINGLE = 'issue';
 const ERROR_HEADER_PLURAL = 'issues';
 
 export function buildLicenseRegex(entry: LicenseEntry): RegExp {
+  const name = escapeRegExpLiteral(entry.name);
+  const homepageUrl = escapeRegExpLiteral(entry.homepageUrl);
+  const copyright = escapeRegExpLiteral(entry.copyright);
+  const licenseType = escapeRegExpLiteral(entry.licenseType);
+  const licenseUrl = escapeRegExpLiteral(entry.licenseUrl);
+
   const pattern =
-    `\\* !\\s*.*${entry.name}${LICENSE_FIELD_SEPARATOR}`
-    + `${entry.homepageUrl}${LICENSE_FIELD_SEPARATOR}*\\*\\s`
-    + `${entry.copyright}${LICENSE_FIELD_SEPARATOR}`
-    + `${entry.licenseType}${LICENSE_FIELD_SEPARATOR}`
-    + `${entry.licenseUrl}`;
+    `\\* !\\s*.*${name}${LICENSE_FIELD_SEPARATOR}`
+    + `${homepageUrl}${LICENSE_FIELD_SEPARATOR}*\\*\\s`
+    + `${copyright}${LICENSE_FIELD_SEPARATOR}`
+    + `${licenseType}${LICENSE_FIELD_SEPARATOR}`
+    + `${licenseUrl}`;
   return new RegExp(pattern);
 }
 

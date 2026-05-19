@@ -13,7 +13,7 @@
     "licenses": {
       "type": "array",
       "minItems": 1,
-      "description": "License entries to verify; each entry is converted to a regex and searched in every file",
+      "description": "License entries to verify; field values are matched verbatim (regex metacharacters are escaped automatically)",
       "items": {
         "type": "object",
         "properties": {
