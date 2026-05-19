@@ -52,6 +52,8 @@ export class AppointmentsFocusController {
   public onViewItemKeyDown(viewItem: ViewItem, e: KeyboardKeyDownEvent): void {
     if (e.key === 'Tab') {
       this.handleTabKeyDown(e, viewItem.option().sortedIndex);
+    } else if (e.key === 'Delete') {
+      this.handleDeleteKeyDown(viewItem.option().sortedIndex);
     }
   }
 
@@ -90,6 +92,15 @@ export class AppointmentsFocusController {
 
     e.originalEvent.preventDefault();
     this.focusByItemData(nextItemData);
+  }
+
+  private handleDeleteKeyDown(sortedIndex: number): void {
+    const { allowDelete, onDeleteKeyPress } = this.appointments.option();
+    if (!allowDelete) { return; }
+
+    const itemData = this.sortedAppointments.find((s) => s.sortedIndex === sortedIndex)?.itemData;
+    if (!itemData) { return; }
+    onDeleteKeyPress({ data: itemData, target: null });
   }
 
   private focusByItemData(itemData: SortedEntity): void {
