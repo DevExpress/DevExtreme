@@ -6,23 +6,16 @@ import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
 import { readFileText, writeFileText, ensureDir } from '../../utils/file-operations';
 import { copyDirectory } from '../copy-files/copy-files.impl';
+import {
+  DATA_URI_SCSS_REGEX,
+  encodeDataUriForCssUrl,
+} from '../../utils/scss-data-uri';
 import { ScssAssembleExecutorSchema } from './schema';
-
-const DATA_URI_REGEX = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
 
 const SCSS_EXTENSIONS = new Set(['.scss', '.css']);
 
-function encodeSvg(buffer: Buffer, svgEncoding?: string): string {
-  const encoding = svgEncoding ?? 'image/svg+xml;charset=UTF-8';
-  return `"data:${encoding},${encodeURIComponent(buffer.toString())}"`;
-}
-
-function encodeImage(buffer: Buffer, ext: string): string {
-  return `"data:image/${ext};base64,${buffer.toString('base64')}"`;
-}
-
 async function inlineDataUri(content: string, scssRoot: string): Promise<string> {
-  const matches = [...content.matchAll(DATA_URI_REGEX)];
+  const matches = [...content.matchAll(DATA_URI_SCSS_REGEX)];
   if (matches.length === 0) return content;
 
   const replacements = new Map<string, string>();
@@ -35,15 +28,13 @@ async function inlineDataUri(content: string, scssRoot: string): Promise<string>
       const svgEncoding = match[1];
       const fileName = match[2];
       const filePath = path.resolve(scssRoot, fileName);
-      const ext = path.extname(filePath).slice(1);
       const buffer = await fs.readFile(filePath);
-      const escapedString =
-        ext === 'svg' ? encodeSvg(buffer, svgEncoding) : encodeImage(buffer, ext);
+      const escapedString = encodeDataUriForCssUrl(buffer, filePath, svgEncoding);
       replacements.set(matchStr, `url(${escapedString})`);
     }),
   );
 
-  return content.replace(DATA_URI_REGEX, (match) => replacements.get(match) ?? match);
+  return content.replace(DATA_URI_SCSS_REGEX, (match) => replacements.get(match) ?? match);
 }
 
 async function copyScssWithInlineDataUri(
