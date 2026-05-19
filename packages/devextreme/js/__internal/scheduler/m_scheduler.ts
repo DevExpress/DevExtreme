@@ -1074,12 +1074,16 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         tabIndex: this.option('tabIndex'),
         currentView: this.option('currentView') as ViewType,
+        allowDelete: this.editing.allowUpdating && this.editing.allowDeleting,
         appointmentTemplate: this.getViewOption('appointmentTemplate'),
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
 
         onAppointmentRendered: (...args) => this.actions.onAppointmentRendered(...args),
         onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
         onAppointmentDblClick: (...args) => this.actions.onAppointmentDblClick(...args),
+        onDeleteKeyPress: (e) => {
+          this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
+        },
 
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,

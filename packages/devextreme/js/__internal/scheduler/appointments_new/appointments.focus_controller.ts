@@ -50,10 +50,27 @@ export class AppointmentsFocusController {
   }
 
   public onViewItemKeyDown(viewItem: ViewItem, e: KeyboardKeyDownEvent): void {
-    if (e.key === 'Tab') {
-      this.handleTabKeyDown(e, viewItem.option().sortedIndex);
-    } else if (e.key === 'Delete') {
-      this.handleDeleteKeyDown(viewItem.option().sortedIndex);
+    switch (true) {
+      case e.key === 'Tab':
+        this.handleTabKeyDown(e, viewItem.option().sortedIndex);
+        break;
+      case e.key === 'Delete':
+        this.handleDeleteKeyDown(viewItem.option().sortedIndex);
+        break;
+      case e.key === 'Home':
+        this.handleHomeKeyDown();
+        break;
+      case e.key === 'End':
+        this.handleEndKeyDown();
+        break;
+      case e.key === 'Enter':
+        this.handleEnterKeyDown(viewItem.option().sortedIndex);
+        break;
+      case e.key === ' ':
+        this.handleEnterKeyDown(viewItem.option().sortedIndex);
+        break;
+      default:
+        break;
     }
   }
 
@@ -95,12 +112,32 @@ export class AppointmentsFocusController {
   }
 
   private handleDeleteKeyDown(sortedIndex: number): void {
-    const { allowDelete, onDeleteKeyPress } = this.appointments.option();
+    const { allowDelete, onDeleteKeyPress, getDataAccessor } = this.appointments.option();
     if (!allowDelete) { return; }
 
-    const itemData = this.sortedAppointments.find((s) => s.sortedIndex === sortedIndex)?.itemData;
-    if (!itemData) { return; }
-    onDeleteKeyPress({ data: itemData, target: null });
+    const entity = this.sortedAppointments[sortedIndex];
+    if (!entity) { return; }
+
+    const occurrence = { ...entity.itemData };
+    getDataAccessor().set('startDate', occurrence, new Date(entity.source.startDate));
+
+    onDeleteKeyPress({ appointment: entity.itemData, occurrence });
+  }
+
+  private handleHomeKeyDown(): void {
+    const firstAppointment = this.sortedAppointments[0];
+    if (firstAppointment) { this.focusByItemData(firstAppointment); }
+  }
+
+  private handleEndKeyDown(): void {
+    const lastAppointment = this.sortedAppointments[this.sortedAppointments.length - 1];
+    if (lastAppointment) { this.focusByItemData(lastAppointment); }
+  }
+
+  private handleEnterKeyDown(sortedIndex: number): void {
+    const { onItemActivate } = this.appointments.option();
+    const entity = this.sortedAppointments[sortedIndex];
+    onItemActivate({ data: entity?.itemData, target: null });
   }
 
   private focusByItemData(itemData: SortedEntity): void {
