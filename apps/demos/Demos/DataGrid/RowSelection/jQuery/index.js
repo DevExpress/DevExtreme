@@ -27,7 +27,10 @@ $(() => {
       const data = selectedItems.selectedRowsData[0];
       if (data) {
         $('.employeeNotes').text(data.Notes);
-        $('.employeePhoto').attr('src', data.Picture).attr('style', null);
+        $('.employeePhoto').attr('src', data.Picture).removeClass('hidden');
+      } else {
+        $('.employeeNotes').text('');
+        $('.employeePhoto').addClass('hidden');
       }
     },
   });
