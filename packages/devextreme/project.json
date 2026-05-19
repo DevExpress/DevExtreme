@@ -83,6 +83,12 @@
       "dependsOn": [
         "build:dev"
       ],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled-systemjs",
+        "{projectRoot}/artifacts/transpiled-testing",
+        "{projectRoot}/artifacts/js-systemjs",
+        "{projectRoot}/artifacts/css-systemjs"
+      ],
       "cache": true
     },
     "lint-css": {
