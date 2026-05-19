@@ -78,15 +78,14 @@ const pipeSource = async (
   }));
 };
 
-const execTsc = async (directory: string, args: string): Promise<string> => new Promise((resolve, reject) => {
-  cps.exec(`tsc ${args}`, (error, stdout, stderr) => {
-    if (error != null) {
-      // eslint-disable-next-line prefer-promise-reject-errors
-      return reject(`${error}\n${stderr}\n${stdout}`);
-    }
-    return resolve(stdout);
-  });
-});
+const execFilePromise = promisify(cps.execFile);
+
+const execTsc = (directory: string, args: string[]): Promise<string> => {
+  const [cmd, cmdArgs] = isWindows()
+    ? ['cmd', ['/c', 'tsc.cmd', ...args]]
+    : ['tsc', args];
+  return execFilePromise(cmd, cmdArgs, { cwd: directory }).then(({ stdout }) => stdout);
+};
 
 const compile = async (resolve: PathResolvers, log: Logger) => {
   log.debug('compiling sources and unit tests');
@@ -109,7 +108,7 @@ const compile = async (resolve: PathResolvers, log: Logger) => {
     ),
   );
 
-  await execTsc(resolve.source('./'), `--build ${tsconfigFile}`);
+  await execTsc(resolve.source('./'), ['--build', tsconfigFile]);
 };
 
 const copyAssets = async (resolve: PathResolvers, log: Logger) => {
@@ -140,6 +139,7 @@ const strip = async (resolve: PathResolvers, log: Logger) => {
   });
 };
 
+// eslint-disable-next-line require-await
 const replaceInFiles = async (filenamePatterns: string[], replacementCallback: (string) => string, resolvePath: (string) => string, log: Logger) => (
   Promise.all(
     filenamePatterns.map(async (pattern) => {
