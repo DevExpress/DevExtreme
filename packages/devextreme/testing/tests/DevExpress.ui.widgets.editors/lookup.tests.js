@@ -3903,6 +3903,27 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes($itemsContainer, { });
             });
         });
+
+        QUnit.test('should use localization variable for search input aria-label (T1328842)', function(assert) {
+            const originalAriaLabel = messageLocalization.format('Search');
+            const customAriaLabel = 'Test aria label';
+
+            messageLocalization.load({ en: { 'Search': customAriaLabel } });
+
+            try {
+                helper.createWidget({
+                    opened: true,
+                    searchEnabled: true,
+                });
+
+                const $searchInput = helper.widget._popup.$content().find(`.${LOOKUP_SEARCH_CLASS} input`);
+                const searchInputAriaLabel = $searchInput.attr('aria-label');
+
+                assert.strictEqual(searchInputAriaLabel, customAriaLabel, 'search input aria-label uses the value from localization key');
+            } finally {
+                messageLocalization.load({ en: { 'Search': originalAriaLabel } });
+            }
+        });
     });
 }
 
