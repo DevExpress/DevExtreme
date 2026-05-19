@@ -39,6 +39,8 @@ const getProperties = (options: {
   appointmentCollectorTemplate: 'appointmentCollector',
 
   onAppointmentRendered: (): void => {},
+  onAppointmentClick: (): void => {},
+  onAppointmentDblClick: (): void => {},
 
   getStartViewDate: () => new Date(2024, 0, 1),
   getSortedAppointments: () => [],
@@ -48,6 +50,10 @@ const getProperties = (options: {
   getAppointmentDataSource: mockAppointmentDataSource,
   getResourceManager: () => getResourceManagerMock(options.resources ?? []),
   getDataAccessor: () => mockAppointmentDataAccessor,
+
+  showAppointmentTooltip: (): void => {},
+  showAppointmentTooltipCore: (): void => {},
+  showEditAppointmentPopup: (): void => {},
 });
 
 const createAppointments = (
