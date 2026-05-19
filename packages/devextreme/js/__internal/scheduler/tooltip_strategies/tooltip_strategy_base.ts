@@ -328,13 +328,15 @@ export abstract class TooltipStrategyBase {
     this.hide();
 
     if (this._options.newAppointments) {
-      // @ts-expect-error 'component' and 'element' are set by action
-      this._options.onAppointmentClick({
-        appointmentElement: e.itemElement,
-        appointmentData: e.itemData.appointment,
-        targetedAppointmentData: e.itemData.targetedAppointment,
-        event: e.event,
-      });
+      if (this.extraOptions?.isButtonClick) {
+        // @ts-expect-error 'component' and 'element' are set by action
+        this._options.onAppointmentClick({
+          appointmentElement: e.itemElement,
+          appointmentData: e.itemData.appointment,
+          targetedAppointmentData: e.itemData.targetedAppointment,
+          event: e.event,
+        });
+      }
     } else {
       this.extraOptions?.clickEvent?.(e);
     }
