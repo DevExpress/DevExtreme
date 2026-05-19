@@ -55,6 +55,9 @@ const getProperties = (options: {
   showTooltipForAppointment: (): void => {},
   showTooltipForCollector: (): void => {},
   showEditAppointmentPopup: (): void => {},
+  allowDelete: false,
+  onDeleteKeyPress: (): void => {},
+  onItemActivate: (): void => {},
 });
 
 const createAppointments = (
@@ -889,6 +892,54 @@ describe('Appointments', () => {
         const lastViewItem = instance.getViewItemBySortedIndex(2);
         expect(document.activeElement).toBe(lastViewItem?.$element().get(0));
         expect(lastViewItem?.$element().attr('tabindex')).toBe('0');
+      });
+    });
+
+    describe('Keyboard actions', () => {
+      it('should call onDeleteKeyPress when Delete is pressed and allowDelete is true', () => {
+        const onDeleteKeyPress = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          allowDelete: true,
+          onDeleteKeyPress,
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Delete' });
+
+        expect(onDeleteKeyPress).toHaveBeenCalledTimes(1);
+        expect(onDeleteKeyPress).toHaveBeenCalledWith(
+          expect.objectContaining({ data: defaultAppointmentData }),
+        );
+      });
+
+      it('should not call onDeleteKeyPress when Delete is pressed and allowDelete is false', () => {
+        const onDeleteKeyPress = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          allowDelete: false,
+          onDeleteKeyPress,
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Delete' });
+
+        expect(onDeleteKeyPress).not.toHaveBeenCalled();
       });
     });
   });
