@@ -15,6 +15,7 @@ import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './op
 import type { Column, ColumnsConfigurationFromData, VisibleColumn } from './types';
 import {
   columnOptionUpdate,
+  getColumnByIndexOrName,
   getColumnIndexByName,
   getColumnOptionsFromDataItem,
   normalizeColumns,
@@ -155,13 +156,15 @@ export class ColumnsController {
 
     const newColumns = this.columns.peek();
     newColumns.forEach((newColumn, columnIdx) => {
-      const prevColumn = prevColumns[columnIdx];
-      const options = new Set([...Object.keys(prevColumn), ...Object.keys(newColumn)]);
-      for (const option of options) {
-        if (!IGNORE_COLUMN_OPTION_NAMES[option]) {
-          const prevValue = prevColumn[option];
-          const newValue = newColumn[option];
-          this.fireOptionChanged(columnIdx, option, newValue, prevValue);
+      const prevColumn = getColumnByIndexOrName(prevColumns, newColumn.name);
+      if (prevColumn) {
+        const options = new Set([...Object.keys(prevColumn), ...Object.keys(newColumn)]);
+        for (const option of options) {
+          if (!IGNORE_COLUMN_OPTION_NAMES[option]) {
+            const prevValue = prevColumn[option];
+            const newValue = newColumn[option];
+            this.fireOptionChanged(columnIdx, option, newValue, prevValue);
+          }
         }
       }
     });
