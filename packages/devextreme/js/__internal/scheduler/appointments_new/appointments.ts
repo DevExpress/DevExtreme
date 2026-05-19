@@ -127,6 +127,14 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     }
   }
 
+  override _dispose(): void {
+    super._dispose();
+
+    if (this.appointmentClickTimeout) {
+      clearTimeout(this.appointmentClickTimeout);
+    }
+  }
+
   override _initMarkup(): void {
     super._initMarkup();
 
