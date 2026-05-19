@@ -1078,6 +1078,52 @@ QUnit.module('multi tag support', {
         assert.deepEqual(this.getTexts($tagBox.find('.' + TAGBOX_TAG_CLASS)), ['1', '2'], 'tags have correct text');
     });
 
+    QUnit.test('TagBox should preserve direct click order in leading tag when showMultiTagOnly is false', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            showSelectionControls: true,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+            opened: true
+        });
+
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = getListItems(tagBox);
+
+        $listItems.first().trigger('dxclick');
+        $listItems.eq(7).trigger('dxclick');
+        $listItems.eq(6).trigger('dxclick');
+
+
+        assert.strictEqual($tagBox.find('.' + TAGBOX_TAG_CLASS).first().text(), '1', 'leading tag has correct text');
+    });
+
+    QUnit.test('TagBox should preserve reverse click order in leading tag when showMultiTagOnly is false', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            showSelectionControls: true,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+            opened: true
+        });
+
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = getListItems(tagBox);
+
+        $listItems.last().trigger('dxclick');
+        $listItems.eq(7).trigger('dxclick');
+        $listItems.eq(6).trigger('dxclick');
+
+
+        assert.strictEqual($tagBox.find('.' + TAGBOX_TAG_CLASS).first().text(), '10', 'leading tag has correct text');
+    });
+
     QUnit.test('only one multi tag should be rendered when selectAll checked and value changind on runtime', function(assert) {
         let suppressSelectionChanged = false;
 

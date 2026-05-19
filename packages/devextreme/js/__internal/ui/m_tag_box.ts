@@ -1046,7 +1046,10 @@ class TagBox<
       this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
       if (this._selectedItems.length === this._valuesToUpdate.length) {
-        this._tagsToRender = this._selectedItems;
+        this._tagsToRender = this._sortSelectedItemsByValues(
+          this._selectedItems,
+          this._valuesToUpdate,
+        );
         this._renderTagsImpl();
         isPlainDataUsed = true;
         d.resolve();
@@ -1111,6 +1114,38 @@ class TagBox<
     }
 
     return selectedItems;
+  }
+
+  _shouldUseClickOrderForTags(values): boolean {
+    return !this.option('showMultiTagOnly')
+      && this.option('maxDisplayedTags')
+      && values.length > this.option('maxDisplayedTags');
+  }
+
+  _sortSelectedItemsByValues(plainItems, values) {
+    if (!this._shouldUseClickOrderForTags(values)) {
+      return this._selectedItems;
+    }
+
+    const selectedByOrderItems = values.reduce((selectedItems, currentValue) => {
+      const selectedItem = plainItems.find((dataItem) => {
+        if (isObject(currentValue)) {
+          // @ts-expect-error ts-error
+          return this._isValueEquals(dataItem, currentValue);
+        }
+
+        // @ts-expect-error ts-error
+        return this._isValueEquals(this._valueGetter(dataItem), currentValue);
+      });
+
+      if (isDefined(selectedItem)) {
+        selectedItems.push(selectedItem);
+      }
+
+      return selectedItems;
+    }, []);
+
+    return selectedByOrderItems;
   }
 
   _filterSelectedItems(plainItems, values) {
