@@ -30,7 +30,6 @@ import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
 import type {
   Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek,
-  Properties as SchedulerProperties,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
@@ -232,8 +231,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private timeZonesPromise!: Promise<TimezoneLabel[]>;
 
-  private appointmentRenderedAction!: SchedulerProperties['onAppointmentRendered'];
-
   get timeZoneCalculator() {
     if (!this.timeZoneCalculatorInstance) {
       this.timeZoneCalculatorInstance = createTimeZoneCalculator(this.option('timeZone'));
@@ -424,16 +421,24 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'onAppointmentRendered':
         if (this.option('_newAppointments')) {
-          this.createAppointmentRenderedAction();
+          this.actions.onAppointmentRendered = this._createActionByOption('onAppointmentRendered');
         } else {
           this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
         }
         break;
       case 'onAppointmentClick':
-        this._appointments.option('onItemClick', this._createActionByOption(name));
+        if (this.option('_newAppointments')) {
+          this.actions.onAppointmentClick = this._createActionByOption('onAppointmentClick');
+        } else {
+          this._appointments.option('onItemClick', this._createActionByOption(name));
+        }
         break;
       case 'onAppointmentDblClick':
-        this._appointments.option(name, this._createActionByOption(name));
+        if (this.option('_newAppointments')) {
+          this.actions.onAppointmentDblClick = this._createActionByOption('onAppointmentDblClick');
+        } else {
+          this._appointments.option(name, this._createActionByOption(name));
+        }
         break;
       case 'onAppointmentContextMenu':
         this._appointments.option('onItemContextMenu', this._createActionByOption(name));
@@ -804,12 +809,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.resourceManager = new ResourceManager(this.option('resources'));
 
     this.notifyScheduler = new NotifyScheduler({ scheduler: this });
-
-    this.createAppointmentRenderedAction();
-  }
-
-  private createAppointmentRenderedAction() {
-    this.appointmentRenderedAction = this._createActionByOption('onAppointmentRendered');
   }
 
   createAppointmentDataSource() {
@@ -997,6 +996,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onAppointmentDeleted: this._createActionByOption(StoreEventNames.DELETED),
       onAppointmentFormOpening: this._createActionByOption('onAppointmentFormOpening'),
       onAppointmentTooltipShowing: this._createActionByOption('onAppointmentTooltipShowing'),
+      onAppointmentRendered: this._createActionByOption('onAppointmentRendered'),
+      onAppointmentClick: this._createActionByOption('onAppointmentClick'),
+      onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
     };
   }
 
@@ -1061,22 +1063,27 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         currentView: this.option('currentView') as ViewType,
         appointmentTemplate: this.getViewOption('appointmentTemplate'),
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
-        onAppointmentRendered: (e) => {
-          // @ts-expect-error 'component' property is set by action
-          this.appointmentRenderedAction({
-            appointmentElement: e.element,
-            appointmentData: e.appointmentData,
-            targetedAppointmentData: e.targetedAppointmentData,
-          });
-        },
+
+        onAppointmentRendered: (...args) => this.actions.onAppointmentRendered(...args),
+        onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
+        onAppointmentDblClick: (...args) => this.actions.onAppointmentDblClick(...args),
+
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
         getDataAccessor: () => this._dataAccessors,
         getStartViewDate: () => this.getStartViewDate(),
         getSortedAppointments: () => this._layoutManager.sortedItems,
-
         isVirtualScrolling: () => this.isVirtualScrolling(),
+
         scrollTo: this.scrollTo.bind(this),
+        showAppointmentTooltip: this.showAppointmentTooltip.bind(this),
+        showAppointmentTooltipCore: this.showAppointmentTooltipCore.bind(this),
+        showEditAppointmentPopup: (
+          appointmentData: SafeAppointment,
+          targetedAppointmentData: TargetedAppointment,
+        ) => {
+          this.showAppointmentPopup(appointmentData, false, targetedAppointmentData);
+        },
       };
       // @ts-expect-error
       this._appointments = this._createComponent('<div>', Appointments, appointmentsConfig);
@@ -1197,6 +1204,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
       onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
       createEventArgs: that._createEventArgs.bind(that),
+      newAppointments: Boolean(this.option('_newAppointments')),
+      onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
     };
   }
 

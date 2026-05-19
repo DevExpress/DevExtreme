@@ -13,7 +13,6 @@ export interface ViewItemProperties
   sortedIndex: number;
   onFocusIn: (sortedIndex: number) => void;
   onFocusOut: (e: DxEvent, sortedIndex: number) => void;
-  onClick: (viewItem: ViewItem) => void;
   onKeyDown: (viewItem: ViewItem, e: KeyboardKeyDownEvent) => void;
 }
 
@@ -70,10 +69,6 @@ export class ViewItem<
 
   protected onFocusOut(e: DxEvent): void {
     this.option().onFocusOut(e, this.option().sortedIndex);
-  }
-
-  protected onClick(): void {
-    this.option().onClick(this);
   }
 
   private onKeyDown(e: KeyboardKeyDownEvent): void {

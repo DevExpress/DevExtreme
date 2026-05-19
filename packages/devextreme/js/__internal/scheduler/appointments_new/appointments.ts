@@ -1,14 +1,23 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
+import type { DxEvent } from '@js/events';
+import type {
+  AppointmentClickEvent,
+  AppointmentDblClickEvent,
+  AppointmentRenderedEvent,
+  Properties as SchedulerProperties,
+} from '@js/ui/scheduler';
 import { domAdapter } from '@ts/core/m_dom_adapter';
+import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
+import { isElementInDom } from '@ts/core/utils/m_dom';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 import type {
+  AppointmentTooltipItem,
   SafeAppointment, ScrollToOptions, TargetedAppointment, ViewType,
 } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -23,7 +32,7 @@ import type {
   SortedEntity,
 } from '../view_model/types';
 import { AgendaAppointmentView } from './appointment/agenda_appointment';
-import type { BaseAppointmentViewProperties } from './appointment/base_appointment';
+import type { BaseAppointmentView, BaseAppointmentViewProperties } from './appointment/base_appointment';
 import { GridAppointmentView } from './appointment/grid_appointment';
 import { AppointmentCollector } from './appointment_collector';
 import { AppointmentsFocusController } from './appointments.focus_controller';
@@ -33,6 +42,8 @@ import type { DiffItem } from './utils/get_view_model_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
 import { isAgendaAppointmentViewModel, isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils/type_helpers';
 import type { ViewItem } from './view_item';
+
+const SHOW_TOOLTIP_TIMEOUT = 300;
 
 export interface AppointmentsProperties extends DOMComponentProperties<Appointments> {
   currentView: ViewType;
@@ -44,7 +55,9 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
 
-  onAppointmentRendered: BaseAppointmentViewProperties['onRendered'];
+  onAppointmentRendered: (e: AppointmentRenderedEvent) => void;
+  onAppointmentClick: (e: AppointmentClickEvent) => void;
+  onAppointmentDblClick: (e: AppointmentDblClickEvent) => void;
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
@@ -52,11 +65,31 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   getStartViewDate: () => Date;
   getSortedAppointments: () => SortedEntity[];
   isVirtualScrolling: () => boolean;
+
   scrollTo: (date: Date, options?: ScrollToOptions) => void;
+  showAppointmentTooltip: (
+    appointment: SafeAppointment,
+    $element: dxElementWrapper,
+    targetedAppointment?: SafeAppointment,
+  ) => void;
+  showAppointmentTooltipCore: (
+    target: dxElementWrapper,
+    data: AppointmentTooltipItem[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    options?: any,
+  ) => void;
+  showEditAppointmentPopup: (
+    appointmentData: SafeAppointment,
+    targetedAppointmentData: TargetedAppointment,
+  ) => void;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
   private focusController!: AppointmentsFocusController;
+
+  private appointmentClickTimeout: number | null = null;
+
+  private preventSingleAppointmentClick = false;
 
   private viewItemBySortedIndex: Record<number, ViewItem> = {};
 
@@ -101,6 +134,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 
   override _getDefaultOptions(): AppointmentsProperties {
+    const noop = (): void => {};
+
     return {
       ...super._getDefaultOptions(),
       tabIndex: 0,
@@ -108,7 +143,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       $allDayContainer: null,
       appointmentTemplate: 'appointment',
       appointmentCollectorTemplate: 'appointmentCollector',
-      onAppointmentRendered: (): void => {},
+      onAppointmentRendered: noop,
+      onAppointmentClick: noop,
+      onAppointmentDblClick: noop,
     };
   }
 
@@ -279,14 +316,13 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       sortedIndex: appointmentViewModel.sortedIndex,
       onFocusIn: this.focusController.onViewItemFocusIn.bind(this.focusController),
       onFocusOut: this.focusController.onViewItemFocusOut.bind(this.focusController),
-      onClick: this.focusController.onViewItemClick.bind(this.focusController),
       onKeyDown: this.focusController.onViewItemKeyDown.bind(this.focusController),
     };
 
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
         ...baseViewItemConfig,
-        appointmentsData: appointmentViewModel.items.map((item) => item.itemData),
+        items: appointmentViewModel.items,
         isCompact: appointmentViewModel.isCompact,
         geometry: {
           height: appointmentViewModel.height,
@@ -296,6 +332,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         },
         targetedAppointmentData,
         appointmentCollectorTemplate: this._getTemplateByOption('appointmentCollectorTemplate'),
+        onClick: this.onCollectorClick.bind(this),
       });
     }
 
@@ -308,6 +345,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       onRendered: this.option().onAppointmentRendered,
       getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
       getDataAccessor: this.option().getDataAccessor,
+      onClick: this.onAppointmentClick.bind(this),
+      onDblClick: this.onAppointmentDblClick.bind(this),
     };
 
     if (isGridAppointmentViewModel(appointmentViewModel)) {
@@ -377,6 +416,93 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     const resourceManager = this.option().getResourceManager();
 
     return resourceManager.getAppointmentResourcesValues(appointmentData);
+  }
+
+  private onAppointmentClick(
+    appointmentView: BaseAppointmentView,
+    event: DxEvent,
+  ): void {
+    this.focusController.onViewItemClick(appointmentView);
+
+    const $target = appointmentView.$element();
+    const e = {
+      appointmentElement: getPublicElement($target),
+      appointmentData: appointmentView.appointmentData,
+      targetedAppointmentData: appointmentView.targetedAppointmentData,
+      event,
+    };
+
+    // @ts-expect-error 'component' and 'element' are set by action
+    this.option().onAppointmentClick(e);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((e as any).cancel) {
+      return;
+    }
+
+    // setTimeout is used to prevent showing tooltip on double click
+    this.appointmentClickTimeout = window.setTimeout(() => {
+      if (isElementInDom($target) && !this.preventSingleAppointmentClick) {
+        this.option().showAppointmentTooltip(
+          appointmentView.appointmentData,
+          $target,
+          appointmentView.targetedAppointmentData,
+        );
+      }
+
+      this.preventSingleAppointmentClick = false;
+    }, SHOW_TOOLTIP_TIMEOUT);
+  }
+
+  private onAppointmentDblClick(
+    appointmentView: BaseAppointmentView,
+    event: DxEvent,
+  ): void {
+    const e = {
+      appointmentElement: getPublicElement(appointmentView.$element()),
+      appointmentData: appointmentView.appointmentData,
+      targetedAppointmentData: appointmentView.targetedAppointmentData,
+      event,
+    };
+
+    // @ts-expect-error 'component' and 'element' are set by action
+    this.option().onAppointmentDblClick(e);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((e as any).cancel) {
+      return;
+    }
+
+    if (this.appointmentClickTimeout) {
+      clearTimeout(this.appointmentClickTimeout);
+      this.preventSingleAppointmentClick = true;
+    }
+
+    this.option().showEditAppointmentPopup(
+      appointmentView.appointmentData,
+      appointmentView.targetedAppointmentData,
+    );
+  }
+
+  private onCollectorClick(collector: AppointmentCollector): void {
+    this.focusController.onViewItemClick(collector);
+
+    const collectorTooltipItems = collector.option().items.map((appointmentViewModel) => ({
+      appointment: appointmentViewModel.itemData,
+      targetedAppointment: this.getTargetedAppointmentData(appointmentViewModel),
+      color: this.getResourceColor(appointmentViewModel),
+      settings: appointmentViewModel,
+    }));
+
+    this.option().showAppointmentTooltipCore(
+      collector.$element(),
+      collectorTooltipItems,
+      {
+        dragBehavior: undefined, // TODO
+        isButtonClick: true,
+        tabFocusLoopEnabled: true,
+      },
+    );
   }
 }
 
