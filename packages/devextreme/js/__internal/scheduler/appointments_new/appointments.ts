@@ -508,7 +508,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       {
         dragBehavior: undefined, // TODO
         isButtonClick: true,
-        tabFocusLoopEnabled: true,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        _loopFocus: true,
       },
     );
   }

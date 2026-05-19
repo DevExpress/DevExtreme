@@ -62,6 +62,7 @@ export class CompactAppointmentsHelper {
         ? this.createTooltipDragBehavior($appointmentCollector).bind(this)
         : undefined,
       isButtonClick: true,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _loopFocus: true,
     };
   }

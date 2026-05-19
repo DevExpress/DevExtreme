@@ -57,7 +57,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: { class: APPOINTMENT_TOOLTIP_WRAPPER_CLASS },
-      // @ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _loopFocus: this.extraOptions?._loopFocus,
     }) as Tooltip;
 

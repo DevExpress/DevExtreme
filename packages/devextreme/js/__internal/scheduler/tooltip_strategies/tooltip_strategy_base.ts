@@ -75,7 +75,8 @@ interface AppointmentTooltipExtraOptions {
   isButtonClick?: boolean;
   offset?: unknown;
   rtlEnabled?: boolean;
-  tabFocusLoopEnabled?: boolean;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _loopFocus?: boolean;
 }
 
 export abstract class TooltipStrategyBase {
@@ -247,6 +248,7 @@ export abstract class TooltipStrategyBase {
         item.color,
       ),
       // @ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
     };
