@@ -488,6 +488,29 @@ describe('New Appointments', () => {
       expect(onAppointmentClick).not.toHaveBeenCalled();
     });
 
+    it('should not call onAppointmentClick on tooltip item inside single appointment', async () => {
+      const onAppointmentClick = jest.fn();
+
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentClick,
+      });
+
+      jest.useFakeTimers();
+      POM.getAppointments()[0].element.click();
+      jest.runAllTimers();
+
+      onAppointmentClick.mockClear();
+      POM.tooltip.getAppointmentItem(0).click();
+      expect(onAppointmentClick).toHaveBeenCalledTimes(0);
+    });
+
     it('should call onAppointmentClick on tooltip item click', async () => {
       const onAppointmentClick = jest.fn();
 
@@ -510,7 +533,7 @@ describe('New Appointments', () => {
       expect(onAppointmentClick).toHaveBeenCalledTimes(1);
     });
 
-    it('should call onAppointmentClick on tooltip item click after .option() change', async () => {
+    it('should call onAppointmentClick on tooltip item inside collector click after .option() change', async () => {
       const { POM, scheduler } = await createScheduler({
         dataSource: [
           { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },

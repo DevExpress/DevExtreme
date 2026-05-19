@@ -1209,6 +1209,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     };
   }
 
+  // TODO<Appointments>: delete this method when old impl is removed
   _createEventArgs(e) {
     const config = {
       itemData: e.itemData.appointment,
