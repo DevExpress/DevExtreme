@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import { BuildOptions } from 'esbuild';
 import { existsSync, mkdirSync, removeSync } from 'fs-extra';
 import { Demo, Framework } from '../helper/types';
@@ -42,8 +42,11 @@ export default class AngularBundler implements Bundler {
 
     createDemoLayout(demo, this.framework);
 
-    const ngBuildCommand = `npm run build-angular -- ${getProjectNameByDemo(demo)}`;
-    const ngBuildProcess = exec(ngBuildCommand);
+    const isWin = process.platform === 'win32';
+    const [npmCmd, npmArgs] = isWin
+      ? ['cmd', ['/c', 'npm.cmd', 'run', 'build-angular', '--', getProjectNameByDemo(demo)]]
+      : ['npm', ['run', 'build-angular', '--', getProjectNameByDemo(demo)]];
+    const ngBuildProcess = spawn(npmCmd, npmArgs);
     ngBuildProcess.stdout.on('data', (data) => {
       console.log(`stdout: ${data}`);
     });
