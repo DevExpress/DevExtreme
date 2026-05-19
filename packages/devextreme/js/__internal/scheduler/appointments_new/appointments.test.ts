@@ -4,7 +4,6 @@ import {
 import $ from '@js/core/renderer';
 import { fireEvent } from '@testing-library/dom';
 
-import fx from '../../../common/core/animation/fx';
 import { mockAppointmentDataAccessor } from '../__mock__/appointment_data_accessor.mock';
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import type { ResourceConfig } from '../utils/loader/types';
@@ -83,8 +82,6 @@ const dblClick = (element: HTMLElement): void => {
 
 describe('Appointments', () => {
   beforeEach(() => {
-    fx.off = true;
-
     const $container = $('<div>')
       .addClass('container')
       .appendTo(document.body);
@@ -100,8 +97,6 @@ describe('Appointments', () => {
 
   afterEach(() => {
     $('.container').remove();
-    fx.off = false;
-    jest.useRealTimers();
   });
 
   describe('Classes', () => {
@@ -895,6 +890,56 @@ describe('Appointments', () => {
       });
     });
 
+    describe('Home/End navigation', () => {
+      it('should move focus to first appointment on Home key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        const viewItem2 = instance.getViewItemBySortedIndex(2);
+
+        (viewItem2?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem2?.$element().get(0) as HTMLElement, { key: 'Home' });
+
+        expect(viewItem0?.$element().attr('tabindex')).toBe('0');
+        expect(viewItem2?.$element().attr('tabindex')).toBe('-1');
+        expect(document.activeElement).toBe(viewItem0?.$element().get(0));
+      });
+
+      it('should move focus to last appointment on End key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        const viewItem2 = instance.getViewItemBySortedIndex(2);
+
+        (viewItem0?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'End' });
+
+        expect(viewItem2?.$element().attr('tabindex')).toBe('0');
+        expect(viewItem0?.$element().attr('tabindex')).toBe('-1');
+        expect(document.activeElement).toBe(viewItem2?.$element().get(0));
+      });
+    });
+
     describe('Keyboard actions', () => {
       it('should call onDeleteKeyPress when Delete is pressed and allowDelete is true', () => {
         const onDeleteKeyPress = jest.fn();
@@ -907,7 +952,11 @@ describe('Appointments', () => {
           ...getProperties(),
           allowDelete: true,
           onDeleteKeyPress,
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedAppointments: () => [{
+            sortedIndex: 0,
+            itemData: defaultAppointmentData,
+            source: { startDate: 0 },
+          }] as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -917,7 +966,7 @@ describe('Appointments', () => {
 
         expect(onDeleteKeyPress).toHaveBeenCalledTimes(1);
         expect(onDeleteKeyPress).toHaveBeenCalledWith(
-          expect.objectContaining({ data: defaultAppointmentData }),
+          expect.objectContaining({ appointment: defaultAppointmentData }),
         );
       });
 
@@ -940,6 +989,51 @@ describe('Appointments', () => {
         fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Delete' });
 
         expect(onDeleteKeyPress).not.toHaveBeenCalled();
+      });
+
+      it('should call onItemActivate when Enter is pressed', () => {
+        const onItemActivate = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          onItemActivate,
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Enter' });
+
+        expect(onItemActivate).toHaveBeenCalledTimes(1);
+        expect(onItemActivate).toHaveBeenCalledWith(
+          expect.objectContaining({ data: defaultAppointmentData }),
+        );
+      });
+      it('should call onItemActivate when Space is pressed', () => {
+        const onItemActivate = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          onItemActivate,
+          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: ' ' });
+
+        expect(onItemActivate).toHaveBeenCalledTimes(1);
+        expect(onItemActivate).toHaveBeenCalledWith(
+          expect.objectContaining({ data: defaultAppointmentData }),
+        );
       });
     });
   });
