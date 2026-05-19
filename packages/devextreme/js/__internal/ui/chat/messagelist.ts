@@ -768,17 +768,17 @@ class MessageList extends Widget<Properties> {
     this.setAria(aria);
   }
 
-_setIsReachedBottom(): void {
-  if (!this._isContentOverflowing()) {
-    this._isBottomReached = true;
+  _setIsReachedBottom(): void {
+    if (!this._isContentOverflowing()) {
+      this._isBottomReached = true;
 
-    return;
+      return;
+    }
+
+    const container = this._scrollableContainer();
+    const maxScroll = getScrollTopMax(container);
+    this._isBottomReached = Math.round(maxScroll - Math.ceil(container.scrollTop)) <= 1;
   }
-
-  const container = this._scrollableContainer();
-  const maxScroll = getScrollTopMax(container);
-  this._isBottomReached = Math.round(maxScroll - Math.ceil(container.scrollTop)) <= 1;
-}
 
   _isContentOverflowing(): boolean {
     return getHeight(this._scrollView.content()) > getHeight(this._scrollView.container());
