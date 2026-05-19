@@ -867,7 +867,7 @@ class Lookup extends DropDownList<LookupProperties> {
         mode: searchMode,
         showClearButton: true,
         valueChangeEvent: searchStartEvent,
-        inputAttr: { 'aria-label': 'Search' },
+        inputAttr: { 'aria-label': messageLocalization.format('Search') },
         // eslint-disable-next-line no-return-assign
         onDisposing: () => isKeyboardListeningEnabled = false,
         // eslint-disable-next-line no-return-assign
