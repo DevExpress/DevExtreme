@@ -52,10 +52,6 @@ export const getMessageStatus = (commands: CommandResult[]): ResponseStatus => {
 };
 
 /**
- * Recursively converts JSON Schema array-style `type`
- * (e.g. `{"type": ["string", "number"]}`) to the equivalent `anyOf` form
- * (e.g. `{"anyOf": [{"type": "string"}, {"type": "number"}]}`).
- *
  * Some structured-output APIs do not support array-style `type` fields
  * and require explicit `anyOf` instead.
  */
