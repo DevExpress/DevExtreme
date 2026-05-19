@@ -5,8 +5,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 import type { DxEvent } from '@js/events';
+import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { ButtonClickEvent } from '@js/ui/drop_down_button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
@@ -46,7 +46,7 @@ export class AppointmentCollector
   override _setOptionsByReference(): void {
     super._setOptionsByReference();
 
-    // Note: appointmentData object is used as a key in dataSource
+    // Note: items have appointmentData, which is used as a key in dataSource
     this._optionsByReference = {
       ...this._optionsByReference,
       // @ts-expect-error
