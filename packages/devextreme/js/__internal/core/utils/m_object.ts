@@ -10,6 +10,10 @@ const clone = (function () {
   };
 })();
 
+const isBlobLike = function (value: unknown): boolean {
+  return typeof Blob !== 'undefined' && value instanceof Blob;
+};
+
 const orderEach = function (map, func) {
   const keys: string[] = [];
   let key;
@@ -92,6 +96,10 @@ const deepExtendArraySafe = function (target, changes, extendComplexObject?, ass
   let prevValue;
   let newValue;
   const assignFunc = useNewAssign ? newAssign : legacyAssign;
+
+  if (isBlobLike(changes)) {
+    return changes;
+  }
 
   for (const name in changes) {
     prevValue = target[name];
