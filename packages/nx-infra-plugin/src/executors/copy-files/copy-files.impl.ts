@@ -43,6 +43,7 @@ export async function copyDirectory(
     const matches = await glob(pattern, {
       cwd,
       nodir: true,
+      dot: true,
       ignore: excludePatterns,
     });
     matches.forEach((m) => relPaths.add(m));
