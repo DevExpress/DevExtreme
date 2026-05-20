@@ -516,7 +516,7 @@ describe('ColumnsController', () => {
         onOptionChanged,
       });
 
-      let sortIndex = 0;
+      let sortIndex = -1;
       columnsController.updateColumns((columns) => columns.map((col, idx) => {
         if (idx === 1) {
           return col;
