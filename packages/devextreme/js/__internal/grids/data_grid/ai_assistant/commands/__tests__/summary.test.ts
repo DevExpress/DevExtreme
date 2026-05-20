@@ -57,6 +57,7 @@ describe('summaryCommand', () => {
     ])('accepts summaryType "%s"', (summaryType) => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount', summaryType }],
+        groupItems: [],
       }).success).toBe(true);
     });
 
@@ -67,34 +68,51 @@ describe('summaryCommand', () => {
       }).success).toBe(true);
     });
 
-    it('accepts empty object (executability layer rejects it)', () => {
-      expect(summaryCommand.schema.safeParse({}).success).toBe(true);
+    it('rejects empty object (totalItems and groupItems are required)', () => {
+      expect(summaryCommand.schema.safeParse({}).success).toBe(false);
+    });
+
+    it('rejects when totalItems is omitted', () => {
+      expect(summaryCommand.schema.safeParse({
+        groupItems: [{ column: 'amount', summaryType: 'avg' }],
+      }).success).toBe(false);
+    });
+
+    it('rejects when groupItems is omitted', () => {
+      expect(summaryCommand.schema.safeParse({
+        totalItems: [{ column: 'amount', summaryType: 'sum' }],
+      }).success).toBe(false);
     });
 
     it('rejects an unknown summaryType (including "custom")', () => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount', summaryType: 'custom' }],
+        groupItems: [],
       }).success).toBe(false);
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount', summaryType: 'median' }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
     it('rejects when an item is missing column', () => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ summaryType: 'sum' }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
     it('rejects when an item is missing summaryType', () => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount' }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
     it('rejects unknown properties on the root', () => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount', summaryType: 'sum' }],
+        groupItems: [],
         extra: 1,
       }).success).toBe(false);
     });
@@ -102,6 +120,7 @@ describe('summaryCommand', () => {
     it('rejects unknown properties on the item', () => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount', summaryType: 'sum', extra: 1 }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
@@ -113,11 +132,13 @@ describe('summaryCommand', () => {
           showInColumn: 'name',
           displayFormat: 'Sum: {0}',
         }],
+        groupItems: [],
       }).success).toBe(true);
     });
 
     it('accepts showInColumn, displayFormat, showInGroupFooter, alignByColumn on groupItems', () => {
       expect(summaryCommand.schema.safeParse({
+        totalItems: [],
         groupItems: [{
           column: 'amount',
           summaryType: 'avg',
@@ -136,6 +157,7 @@ describe('summaryCommand', () => {
           summaryType: 'sum',
           showInGroupFooter: true,
         }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
@@ -146,47 +168,41 @@ describe('summaryCommand', () => {
           summaryType: 'sum',
           alignByColumn: true,
         }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
     it('rejects when showInColumn is not a string', () => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount', summaryType: 'sum', showInColumn: 1 }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
     it('rejects when displayFormat is not a string', () => {
       expect(summaryCommand.schema.safeParse({
         totalItems: [{ column: 'amount', summaryType: 'sum', displayFormat: 5 }],
+        groupItems: [],
       }).success).toBe(false);
     });
 
     it('rejects when showInGroupFooter is not a boolean', () => {
       expect(summaryCommand.schema.safeParse({
+        totalItems: [],
         groupItems: [{ column: 'amount', summaryType: 'sum', showInGroupFooter: 'yes' }],
       }).success).toBe(false);
     });
 
     it('rejects when alignByColumn is not a boolean', () => {
       expect(summaryCommand.schema.safeParse({
+        totalItems: [],
         groupItems: [{ column: 'amount', summaryType: 'sum', alignByColumn: 1 }],
       }).success).toBe(false);
     });
   });
 
   describe('execute', () => {
-    it('returns failure when both totalItems and groupItems are empty/omitted', async () => {
-      const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
-      const callbacks = createCallbacks();
-
-      const result = await summaryCommand.execute(instance, callbacks)({});
-
-      expect(result.status).toBe('failure');
-      expect(optionSpy).not.toHaveBeenCalledWith('summary', expect.anything());
-    });
-
-    it('returns failure when both arrays are explicitly empty', async () => {
+    it('returns failure when both arrays are empty', async () => {
       const instance = await createGrid();
       const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
@@ -210,6 +226,7 @@ describe('summaryCommand', () => {
           { column: 'amount', summaryType: 'sum' },
           { column: 'unknown', summaryType: 'avg' },
         ],
+        groupItems: [],
       });
 
       expect(result.status).toBe('failure');
@@ -222,6 +239,7 @@ describe('summaryCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await summaryCommand.execute(instance, callbacks)({
+        totalItems: [],
         groupItems: [{ column: 'unknown', summaryType: 'sum' }],
       });
 
@@ -240,6 +258,7 @@ describe('summaryCommand', () => {
           summaryType: 'sum',
           showInColumn: 'unknown',
         }],
+        groupItems: [],
       });
 
       expect(result.status).toBe('failure');
@@ -263,21 +282,6 @@ describe('summaryCommand', () => {
       expect(result.status).toBe('success');
     });
 
-    it('passes empty arrays when one of the inputs is omitted', async () => {
-      const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
-      const callbacks = createCallbacks();
-
-      await summaryCommand.execute(instance, callbacks)({
-        totalItems: [{ column: 'amount', summaryType: 'sum' }],
-      });
-
-      expect(optionSpy).toHaveBeenCalledWith('summary', {
-        totalItems: [{ column: 'amount', summaryType: 'sum' }],
-        groupItems: [],
-      });
-    });
-
     it('returns failure when option throws', async () => {
       const instance = await createGrid();
       const realOption = instance.option.bind(instance);
@@ -291,6 +295,7 @@ describe('summaryCommand', () => {
 
       const result = await summaryCommand.execute(instance, callbacks)({
         totalItems: [{ column: 'amount', summaryType: 'sum' }],
+        groupItems: [],
       });
 
       expect(result.status).toBe('failure');
@@ -304,6 +309,7 @@ describe('summaryCommand', () => {
 
       await summaryCommand.execute(instance, callbacks)({
         totalItems: [{ column: 'amount', summaryType: 'sum' }],
+        groupItems: [],
       });
 
       expect(callbacks.success).toHaveBeenCalledWith(
@@ -316,6 +322,7 @@ describe('summaryCommand', () => {
       const callbacks = createCallbacks();
 
       await summaryCommand.execute(instance, callbacks)({
+        totalItems: [],
         groupItems: [{ column: 'amount', summaryType: 'avg' }],
       });
 
@@ -336,6 +343,7 @@ describe('summaryCommand', () => {
 
       await summaryCommand.execute(instance, callbacks)({
         totalItems: [{ column: 'amount', summaryType: summaryType as 'sum' | 'min' | 'max' | 'avg' | 'count' }],
+        groupItems: [],
       });
 
       expect(callbacks.success).toHaveBeenCalledWith(
@@ -349,6 +357,7 @@ describe('summaryCommand', () => {
 
       await summaryCommand.execute(instance, callbacks)({
         totalItems: [{ column: 'name', summaryType: 'count' }],
+        groupItems: [],
       });
 
       // 'name' has no explicit caption — DevExtreme auto-derives "Name"
@@ -366,6 +375,7 @@ describe('summaryCommand', () => {
           { column: 'amount', summaryType: 'sum' },
           { column: 'amount', summaryType: 'avg' },
         ],
+        groupItems: [],
       });
 
       expect(callbacks.success).toHaveBeenCalledWith(
@@ -391,7 +401,10 @@ describe('summaryCommand', () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
 
-      await summaryCommand.execute(instance, callbacks)({});
+      await summaryCommand.execute(instance, callbacks)({
+        totalItems: [],
+        groupItems: [],
+      });
 
       expect(callbacks.failure).toHaveBeenCalledWith('Display data summaries.');
     });
@@ -403,6 +416,7 @@ describe('summaryCommand', () => {
       // Single item with unresolved column → failure path, item-list message
       await summaryCommand.execute(instance, callbacks)({
         totalItems: [{ column: 'unknown', summaryType: 'sum' }],
+        groupItems: [],
       });
 
       expect(callbacks.failure).toHaveBeenCalledWith(
@@ -427,7 +441,7 @@ describe('clearSummaryCommand', () => {
   });
 
   describe('execute', () => {
-    it('calls component.option("summary", { groupItems: undefined, totalItems: undefined }) on success', async () => {
+    it('calls component.option("summary", { groupItems: [], totalItems: [] }) on success', async () => {
       const instance = await createGrid();
       const optionSpy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
@@ -435,8 +449,8 @@ describe('clearSummaryCommand', () => {
       const result = await clearSummaryCommand.execute(instance, callbacks)();
 
       expect(optionSpy).toHaveBeenCalledWith('summary', {
-        groupItems: undefined,
-        totalItems: undefined,
+        groupItems: [],
+        totalItems: [],
       });
       expect(result.status).toBe('success');
     });

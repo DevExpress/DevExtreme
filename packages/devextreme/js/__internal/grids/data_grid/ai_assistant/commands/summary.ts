@@ -23,8 +23,8 @@ const groupItemSchema = z.object({
 }).strict();
 
 const summaryCommandSchema = z.object({
-  totalItems: z.array(totalItemSchema).optional(),
-  groupItems: z.array(groupItemSchema).optional(),
+  totalItems: z.array(totalItemSchema),
+  groupItems: z.array(groupItemSchema),
 }).strict();
 
 type TotalItem = z.infer<typeof totalItemSchema>;
@@ -69,20 +69,19 @@ const buildDefaultMessage = (
 
 export const summaryCommand = defineGridCommand({
   name: 'summary',
-  description: 'Configure column summaries. totalItems aggregate the entire data set; groupItems aggregate within each group. Provide at least one item across the two arrays — use clearSummary to remove all summaries. Replaces existing summaries entirely; pre-merge with the grid\'s current summary items if you intend to add rather than replace.\n'
+  description: 'Configure column summaries. totalItems aggregate the entire data set; groupItems aggregate within each group. Replaces the configuration entirely — both kinds are written every call. ALWAYS provide BOTH totalItems and groupItems; pass an explicit empty array [] for a kind to clear it. To keep one kind unchanged, copy its current items from the grid context into your args. To ADD items, pre-merge with the kind\'s current items. To REMOVE a specific item, pass the kind\'s remaining items (and copy the other kind unchanged). At least one kind must be non-empty. Use clearSummary only when EVERY summary should be removed.\n'
     + 'Each item supports:\n'
-    + '- column (required): dataField of the column to aggregate.\n'
+    + '- column (required): dataField of the column whose VALUES are aggregated. Phrases like "sum of X", "average X", "total X", "summary for X" → column="X" (X is what gets aggregated).\n'
     + '- summaryType (required): one of "sum", "min", "max", "avg", "count".\n'
-    + '- showInColumn (optional): dataField of the column under which the summary value is rendered. For totalItems, controls which column\'s footer cell shows the value. For groupItems, used when showInGroupFooter=true or alignByColumn=true to pick the column the value is shown under. Must match an existing column.\n'
+    + '- showInColumn (optional): dataField of the column where the value is DISPLAYED (not aggregated). OMIT unless the user explicitly names a second column with a phrase like "show in Y", "display under Y", "in the Y column" → showInColumn="Y". Example: "sum of Amount in the SaleDate column" → column="Amount", showInColumn="SaleDate". One column mentioned → OMIT. For totalItems, controls which footer cell shows the value. For groupItems, showInColumn has effect ONLY when paired with showInGroupFooter=true OR alignByColumn=true — so whenever you set showInColumn on a group item, you MUST also set alignByColumn=true (the default pairing), unless the user explicitly asked for footer placement (then set showInGroupFooter=true instead).\n'
     + '- displayFormat (optional): format template for the rendered value. Placeholders: "{0}" — the formatted summary value; "{1}" — the parent column\'s caption (for group items only resolvable when showInColumn is specified). Example: "Sum: {0}" or "{1}: {0}".\n'
     + 'Group items additionally support:\n'
-    + '- showInGroupFooter (optional, default false): render in the group footer instead of the group row.\n'
-    + '- alignByColumn (optional, default false): when false, group summary items are listed in parentheses after the group row header. When true, items are aligned by their columns within the group row.',
+    + '- showInGroupFooter (optional): OMIT this field unless the user explicitly requests the group footer area. Default behavior renders the summary in the group row (the header that displays the group value). Set to true ONLY when the user explicitly says "group footer", "below the group", or "in the footer". Requests like "in the header", "in the group row", "next to the group name", or no placement mention at all → OMIT (do not set to false either; just omit the field).\n'
+    + '- alignByColumn (optional): OMIT this field unless the user explicitly requests column-aligned layout. Default behavior lists items in parentheses after the group row caption (e.g. "Category: Bikes (Sum: 100, Count: 5)"). Set to true ONLY when the user explicitly asks to "align by column", "show under each column", or "align with the column". Otherwise OMIT.',
   schema: summaryCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
-    const totalItems = args.totalItems ?? [];
-    const groupItems = args.groupItems ?? [];
+    const { totalItems, groupItems } = args;
     const allItems: SummaryItem[] = [...totalItems, ...groupItems];
 
     const defaultMessage = buildDefaultMessage(totalItems, groupItems, columnsController);
@@ -108,10 +107,7 @@ export const summaryCommand = defineGridCommand({
     }
 
     try {
-      component.option('summary', {
-        totalItems: args.totalItems ?? [],
-        groupItems: args.groupItems ?? [],
-      });
+      component.option('summary', { totalItems, groupItems });
 
       return Promise.resolve(success(defaultMessage));
     } catch {
@@ -122,15 +118,15 @@ export const summaryCommand = defineGridCommand({
 
 export const clearSummaryCommand = defineGridCommand({
   name: 'clearSummary',
-  description: 'Remove all summary items.',
+  description: 'Remove ALL summary items. Do NOT call this for partial removals. Use only when every summary should be cleared (both totalItems and groupItems). To remove a subset — e.g., clear only totalItems while keeping groupItems (or vice versa), or drop a specific item — call the summary command with the items that should remain, since summary replaces existing summaries entirely.',
   schema: z.object({}).strict(),
   execute: (component, { success, failure }) => (): Promise<CommandResult> => {
     const defaultMessage = 'Clear column summaries.';
 
     try {
       component.option('summary', {
-        groupItems: undefined,
-        totalItems: undefined,
+        groupItems: [],
+        totalItems: [],
       });
 
       return Promise.resolve(success(defaultMessage));
