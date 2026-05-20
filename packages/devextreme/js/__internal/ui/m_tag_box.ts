@@ -1122,27 +1122,28 @@ class TagBox<
       && values.length > this.option('maxDisplayedTags');
   }
 
-  _sortSelectedItemsByValues(plainItems, values) {
+  _sortSelectedItemsByValues(selectedItems, values) {
     if (!this._shouldUseClickOrderForTags(values)) {
-      return this._selectedItems;
+      return selectedItems;
     }
+    // @ts-expect-error ts-error
+    const isValueExprDefault = this._valueGetterExpr() === 'this';
 
-    const selectedByOrderItems = values.reduce((selectedItems, currentValue) => {
-      const selectedItem = plainItems.find((dataItem) => {
-        if (isObject(currentValue)) {
-          // @ts-expect-error ts-error
-          return this._isValueEquals(dataItem, currentValue);
-        }
+    const mappedSelectedItems = selectedItems.reduce((result, item) => {
+      // @ts-expect-error ts-error
+      const itemValue = isValueExprDefault ? JSON.stringify(item) : this._valueGetter(item);
+      result[itemValue] = item;
 
-        // @ts-expect-error ts-error
-        return this._isValueEquals(this._valueGetter(dataItem), currentValue);
-      });
+      return result;
+    }, {});
 
-      if (isDefined(selectedItem)) {
-        selectedItems.push(selectedItem);
+    const selectedByOrderItems = values.reduce((result, currentValue) => {
+      const item = mappedSelectedItems[JSON.stringify(currentValue)];
+      if (isDefined(item)) {
+        result.push(item);
       }
 
-      return selectedItems;
+      return result;
     }, []);
 
     return selectedByOrderItems;
