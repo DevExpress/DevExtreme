@@ -1116,20 +1116,25 @@ class TagBox<
     return selectedItems;
   }
 
-  _shouldUseClickOrderForTags(values): boolean {
+  _shouldUseClickOrderForTags(values: TagBox['_valuesToUpdate']): boolean {
+    const maxDisplayedTags = this.option('maxDisplayedTags');
+
     return !this.option('showMultiTagOnly')
-      && this.option('maxDisplayedTags')
-      && values.length > this.option('maxDisplayedTags');
+      && isDefined(maxDisplayedTags)
+      && values.length > maxDisplayedTags;
   }
 
-  _sortSelectedItemsByValues(selectedItems, values) {
+  _sortSelectedItemsByValues(
+    selectedItems: TagBox['_selectedItems'],
+    values: TagBox['_valuesToUpdate'],
+  ): TagBox['_selectedItems'] {
     if (!this._shouldUseClickOrderForTags(values)) {
       return selectedItems;
     }
     // @ts-expect-error ts-error
     const isValueExprDefault = this._valueGetterExpr() === 'this';
 
-    const mappedSelectedItems = selectedItems.reduce((result, item) => {
+    const mappedSelectedItems = selectedItems?.reduce((result, item) => {
       // @ts-expect-error ts-error
       const itemValue = isValueExprDefault ? JSON.stringify(item) : this._valueGetter(item);
       result[itemValue] = item;
@@ -1138,7 +1143,8 @@ class TagBox<
     }, {});
 
     const selectedByOrderItems = values.reduce((result, currentValue) => {
-      const item = mappedSelectedItems[JSON.stringify(currentValue)];
+      const normalizedValue = isValueExprDefault ? JSON.stringify(currentValue) : currentValue;
+      const item = mappedSelectedItems[normalizedValue];
       if (isDefined(item)) {
         result.push(item);
       }
