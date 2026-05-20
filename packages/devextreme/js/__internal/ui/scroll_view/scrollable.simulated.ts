@@ -29,6 +29,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
+import { logger } from '@ts/core/utils/m_console';
 import type { ActionConfig } from '@ts/core/widget/component';
 import Animator from '@ts/ui/scroll_view/animator';
 import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
@@ -1094,7 +1095,11 @@ export class SimulatedStrategy<
     const actionHandler = this._createActionByOption(optionName);
 
     return (...args: unknown[]) => {
-      actionHandler(extend(this._createActionArgs(), args));
+      try {
+        actionHandler(extend(this._createActionArgs(), args));
+      } catch (e) {
+        logger.error(e);
+      }
     };
   }
 

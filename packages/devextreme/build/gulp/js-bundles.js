@@ -7,10 +7,10 @@ const named = require('vinyl-named');
 const notify = require('gulp-notify');
 const path = require('path');
 const plumber = require('gulp-plumber');
+const shell = require('gulp-shell');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 
-const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const webpackConfig = require('../../webpack.config.js');
@@ -42,26 +42,11 @@ const getWebpackConfig = () => {
     return Object.assign(webpackConfig, { plugins });
 };
 
-const bundleProdPipe = lazyPipe()
-    .pipe(named)
-    .pipe(() => webpackStream(getWebpackConfig(), webpack, muteWebPack))
-    .pipe(headerPipes.useStrict)
-    .pipe(headerPipes.bangLicense)
-    .pipe(compressionPipes.minify);
-
-const jsBundlesProd = (src, dist, bundles) => (() =>
-    gulp.src(processBundles(bundles, src))
-        .pipe(bundleProdPipe())
-        .pipe(gulp.dest(dist))
-);
-
-gulp.task('js-bundles-prod',
-    jsBundlesProd(
-        ctx.TRANSPILED_PROD_RENOVATION_PATH,
-        ctx.RESULT_JS_PATH,
-        BUNDLES,
-    )
-);
+gulp.task('js-bundles-prod', shell.task(
+    ctx.uglify
+        ? 'pnpm nx run devextreme:bundle:prod -c production'
+        : 'pnpm nx run devextreme:bundle:prod'
+));
 
 function prepareDebugMeta(watch) {
     const debugConfig = Object.assign({ watch }, getWebpackConfig());
@@ -94,7 +79,6 @@ function createDebugBundlesStream(watch, displayName) {
         .pipe(webpackStream(debugConfig, webpack, muteWebPack))
         .pipe(headerPipes.useStrict())
         .pipe(headerPipes.bangLicense())
-        .pipe(gulpIf(!watch, compressionPipes.beautify()))
         .pipe(gulp.dest(destination));
 
     task.displayName = `${displayName}-worker`;
@@ -102,8 +86,10 @@ function createDebugBundlesStream(watch, displayName) {
     return task;
 }
 
-gulp.task('js-bundles-debug', gulp.series(
-    createDebugBundlesStream(false, 'js-bundles-debug')
+gulp.task('js-bundles-debug', shell.task(
+    ctx.uglify
+        ? 'pnpm nx run devextreme:bundle:debug -c production'
+        : 'pnpm nx run devextreme:bundle:debug'
 ));
 
 gulp.task('js-bundles-watch', gulp.parallel(

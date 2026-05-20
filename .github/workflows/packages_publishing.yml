@@ -20,8 +20,6 @@ env:
   NX_SKIP_NX_CACHE: true
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
-  MOVE_DAILY_TAG: ${{ inputs.tag == 'daily' }}
-  MOVE_STABLE_TAG: ${{ inputs.tag == 'stable' }}
 
 jobs:
   build:
@@ -36,7 +34,7 @@ jobs:
       - name: Set up nodejs
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - uses: pnpm/action-setup@v4
         with:
@@ -46,14 +44,6 @@ jobs:
         shell: bash
         run: |
           echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.PNPM_STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -134,24 +124,11 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - uses: pnpm/action-setup@v4
         with:
           run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.PNPM_STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -176,32 +153,13 @@ jobs:
         working-directory: ${{ steps.scopedPackage.outputs.packageDir }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
+          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
-          pnpm publish --no-git-checks --quiet --ignore-scripts --registry https://npm.pkg.github.com;
-
-      - name: Move 'daily' tag
-        if: ${{ env.MOVE_DAILY_TAG == 'true' }}
-        env:
-          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
-          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
-          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily --registry=https://npm.pkg.github.com
-
-      - name: Move 'stable' tag
-        if: ${{ env.MOVE_STABLE_TAG == 'true' }}
-        env:
-          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
-          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
-          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable --registry=https://npm.pkg.github.com
-
+          pnpm publish --no-git-checks --quiet --ignore-scripts --tag $PACKAGE_VERSION_MAJOR-${{ inputs.tag }} --registry https://npm.pkg.github.com;
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
 
   notify:
     runs-on: devextreme-shr2

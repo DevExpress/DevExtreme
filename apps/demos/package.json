@@ -1,6 +1,6 @@
 {
     "name": "devextreme-demos",
-    "version": "26.1.0",
+    "version": "26.1.2",
     "description": "",
     "repository": {
         "type": "git",
@@ -40,7 +40,7 @@
         "devexpress-diagram": "catalog:",
         "devexpress-gantt": "catalog:",
         "devextreme-aspnet-data": "5.0.0",
-        "devextreme-aspnet-data-nojquery": "5.0.0",
+        "devextreme-aspnet-data-nojquery": "5.1.0",
         "devextreme-cldr-data": "1.0.3",
         "devextreme-exceljs-fork": "catalog:",
         "devextreme-quill": "catalog:",
@@ -86,6 +86,8 @@
         "vuex": "4.0.0-beta.4",
         "whatwg-fetch": "2.0.4",
         "yargs": "17.7.2",
+        "zod": "catalog:",
+        "zod-to-json-schema": "catalog:",
         "zone.js": "0.15.1",
         "express-rate-limit": "^8.3.1"
     },

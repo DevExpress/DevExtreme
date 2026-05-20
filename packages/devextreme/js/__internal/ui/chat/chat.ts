@@ -23,6 +23,7 @@ import type {
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -92,7 +93,7 @@ class Chat extends Widget<ChatProperties> {
       activeStateEnabled: true,
       alerts: [],
       dataSource: null,
-      dayHeaderFormat: 'shortdate',
+      dayHeaderFormat: getGlobalFormatByDataType('date') ?? 'shortdate',
       editing: {
         allowUpdating: false,
         allowDeleting: false,
@@ -104,7 +105,7 @@ class Chat extends Widget<ChatProperties> {
       inputFieldText: '',
       items: [],
       messageTemplate: null,
-      messageTimestampFormat: 'shorttime',
+      messageTimestampFormat: getGlobalFormatByDataType('time') ?? 'shorttime',
       reloadOnChange: true,
       showAvatar: true,
       showDayHeaders: true,

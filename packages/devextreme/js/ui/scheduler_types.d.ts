@@ -1,4 +1,5 @@
 export {
+  DayOfWeek,
   FirstDayOfWeek,
   Orientation,
   ScrollMode,
@@ -7,7 +8,6 @@ export {
   SnapToCellsMode,
   RecurrenceEditMode,
   AppointmentFormIconsShowMode,
-  DayOfWeek,
   AppointmentFormProperties,
   ViewType,
   SchedulerScrollToAlign,

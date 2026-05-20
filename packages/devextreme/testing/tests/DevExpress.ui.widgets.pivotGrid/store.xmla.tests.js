@@ -465,6 +465,95 @@ QUnit.module('Hierarchies', stubsEnvironment, () => {
         assert.equal(query, 'with set [DX_columns] as NonEmpty({[Product].[Product Categories].[All],[Product].[Product Categories].[Category]}, {[Measures].[Customer Count]}) set [DX_rows] as NonEmpty({Descendants({[Ship Date].[Calendar].[Month].&[2003]&[8]}, [Ship Date].[Calendar].[Date], SELF_AND_BEFORE)}, {[Measures].[Customer Count]}) SELECT CrossJoin([DX_columns],{[Measures].[Customer Count]}) DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON columns,[DX_rows] DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON rows FROM [Adventure Works]  CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS');
     });
 
+    QUnit.test('T1283598. Hierarchy slice should not duplicate hierarchy prefix when path value is a full unique name', function(assert) {
+        this.store.load({
+            columns: [{ dataField: '[Active Month].[Active Month]' }],
+            rows: [
+                { dataField: '[Product].[Product Purchaser Type].[Purchaser Type]', hierarchyName: '[Product].[Product Purchaser Type]' },
+                { dataField: '[Product].[Product Purchaser Type].[Purchaser Sub Type]', hierarchyName: '[Product].[Product Purchaser Type]' },
+                { dataField: '[Product].[Product Nbr]' }
+            ],
+            values: [{ dataField: '[Measures].[Members]', caption: 'Members' }],
+            headerName: 'rows',
+            path: [
+                '[Product].[Product Purchaser Type].[Purchaser Type].&[Commercial]',
+                '[Product].[Product Purchaser Type].[Purchaser Type].&[Commercial].&[Group]'
+            ]
+        });
+        const query = this.getQuery();
+
+        assert.notStrictEqual(
+            query.indexOf('WHERE ([Product].[Product Purchaser Type].[Purchaser Type].&[Commercial].&[Group])'),
+            -1,
+            'WHERE slice contains the full unique name once'
+        );
+        assert.strictEqual(
+            query.indexOf('[Product].[Product Purchaser Type].[Purchaser Sub Type].[Product].[Product Purchaser Type]'),
+            -1,
+            'WHERE slice does not duplicate the hierarchy prefix'
+        );
+    });
+
+    QUnit.test('T1283598. Axis SET should not duplicate hierarchy prefix when expanded path value is a full unique name', function(assert) {
+        this.store.load({
+            columns: [{ dataField: '[Active Month].[Active Month]' }],
+            rows: [
+                { dataField: '[Product].[Product Purchaser Type].[Purchaser Type]', hierarchyName: '[Product].[Product Purchaser Type]' },
+                { dataField: '[Product].[Product Purchaser Type].[Purchaser Sub Type]', hierarchyName: '[Product].[Product Purchaser Type]' },
+                { dataField: '[Product].[Product Nbr]' }
+            ],
+            values: [{ dataField: '[Measures].[Members]', caption: 'Members' }],
+            rowExpandedPaths: [
+                ['[Product].[Product Purchaser Type].[Purchaser Type].&[Commercial]'],
+                ['[Product].[Product Purchaser Type].[Purchaser Type].&[Commercial]', '[Product].[Product Purchaser Type].[Purchaser Type].&[Commercial].&[Group]']
+            ]
+        });
+        const query = this.getQuery();
+
+        assert.notStrictEqual(
+            query.indexOf('([Product].[Product Purchaser Type].[Purchaser Type].&[Commercial].&[Group])'),
+            -1,
+            'axis SET contains the full unique name once'
+        );
+        assert.strictEqual(
+            query.indexOf('[Product].[Product Purchaser Type].[Purchaser Sub Type].[Product].[Product Purchaser Type]'),
+            -1,
+            'axis SET does not duplicate the hierarchy prefix'
+        );
+    });
+
+    QUnit.test('T1283598. Drill-down WHERE slice should not duplicate hierarchy prefix when path value is a full unique name', function(assert) {
+        this.store.getDrillDownItems({
+            columns: [{ dataField: '[Active Month].[Active Month]' }],
+            rows: [
+                { dataField: '[Product].[Product Purchaser Type].[Purchaser Type]', hierarchyName: '[Product].[Product Purchaser Type]' },
+                { dataField: '[Product].[Product Purchaser Type].[Purchaser Sub Type]', hierarchyName: '[Product].[Product Purchaser Type]' },
+                { dataField: '[Product].[Product Nbr]' }
+            ],
+            values: [{ dataField: '[Measures].[Members]', caption: 'Members' }]
+        }, {
+            columnPath: [],
+            rowPath: [
+                '[Product].[Product Purchaser Type].[Purchaser Type].&[Commercial]',
+                '[Product].[Product Purchaser Type].[Purchaser Type].&[Commercial].&[Group]'
+            ],
+            dataIndex: 0,
+            maxRowCount: 100
+        });
+        const query = this.getQuery();
+
+        assert.notStrictEqual(
+            query.indexOf('WHERE ([Product].[Product Purchaser Type].[Purchaser Type].&[Commercial].&[Group])'),
+            -1,
+            'drill-down WHERE slice contains the full unique name once'
+        );
+        assert.strictEqual(
+            query.indexOf('[Product].[Product Purchaser Type].[Purchaser Sub Type].[Product].[Product Purchaser Type]'),
+            -1,
+            'drill-down WHERE slice does not duplicate the hierarchy prefix'
+        );
+    });
+
     QUnit.test('Hierarchy. Expand child when opposite axis expanded on several levels', function(assert) {
         this.store.load({
             columns: [{
