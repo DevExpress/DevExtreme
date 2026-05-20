@@ -57,6 +57,9 @@ describe('CompressExecutor E2E', () => {
     expect(output).toContain('/*!');
     expect(output).toContain('DevExtreme');
 
+    expect(output).not.toContain('#DEBUG');
+    expect(output).not.toContain('debug only');
+
     expect(output.length).toBeLessThan(SAMPLE_CODE.length);
   });
 
