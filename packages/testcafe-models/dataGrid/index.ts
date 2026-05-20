@@ -973,8 +973,10 @@ export default class DataGrid extends GridCore {
       const isElementInRowsView = (element) => {
         const rowsViewRect = rowsViewElement[0].getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
+        const tolerance = 1;
 
-        return elementRect.top >= rowsViewRect.top && elementRect.bottom <= rowsViewRect.bottom;
+        return elementRect.top >= rowsViewRect.top - tolerance
+          && elementRect.bottom <= rowsViewRect.bottom + tolerance;
       };
       const rowElement = rowsViewElement.find('.dx-row-focused');
 
