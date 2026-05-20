@@ -33,6 +33,9 @@ function xor(a: boolean, b: boolean): boolean {
   return (a || b) && !(a && b);
 }
 
+type TagBoxItem = string | number | any;
+type SelectedItemsMap = Record<string, TagBoxItem>;
+
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
 const TAGBOX_TAG_DISPLAY_VALUE = 'dxTagDisplayValue';
 
@@ -94,10 +97,6 @@ class TagBox<
   _selectedItems?: any[];
 
   _tagsToRender?: any[];
-
-  declare _valueGetterExpr: () => string | Function;
-
-  declare _valueGetter: (item: any) => any;
 
   _supportedKeys(): Record<
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -864,6 +863,7 @@ class TagBox<
     // @ts-expect-error ts-error
     const isListItemsLoaded = !!listSelectedItems && this._list._dataController.isLoaded();
     const selectedItems = listSelectedItems || this.option('selectedItems');
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
     // @ts-expect-error ts-error
     const filteredItems = selectedItems.filter(clientFilterFunction);
@@ -910,11 +910,13 @@ class TagBox<
   _createTagsData(values, filteredItems) {
     const items = [];
     const cache = {};
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     const isValueExprSpecified = this._valueGetterExpr() === 'this';
     const { acceptCustomValue } = this.option();
     const filteredValues = {};
 
     filteredItems.forEach((filteredItem) => {
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
 
       filteredValues[filteredItemValue] = filteredItem;
@@ -968,6 +970,7 @@ class TagBox<
       return item;
     }
     const selectedItem = this.option('selectedItem');
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
 
     return customItem;
@@ -1125,22 +1128,24 @@ class TagBox<
   }
 
   _sortSelectedItemsByValues(
-    selectedItems: TagBox['_selectedItems'],
-    values: TagBox['_valuesToUpdate'],
-  ): TagBox['_selectedItems'] {
-    if (!this._shouldUseClickOrderForTags(values)) {
+    selectedItems: TagBoxItem[],
+    values: TagBoxItem[],
+  ): TagBoxItem[] {
+    if (!this._shouldUseClickOrderForTags(values) || !selectedItems.length) {
       return selectedItems;
     }
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     const isValueExprDefault = this._valueGetterExpr() === 'this';
 
-    const mappedSelectedItems = selectedItems?.reduce((result, item) => {
+    const mappedSelectedItems = selectedItems.reduce<SelectedItemsMap>((result, item) => {
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const itemValue = isValueExprDefault ? JSON.stringify(item) : this._valueGetter(item);
       result[itemValue] = item;
 
       return result;
     }, {});
 
-    const selectedByOrderItems = values.reduce((result, currentValue) => {
+    const selectedByOrderItems: TagBoxItem[] = values.reduce((result, currentValue) => {
       const normalizedValue = isValueExprDefault ? JSON.stringify(currentValue) : currentValue;
       const item = mappedSelectedItems[normalizedValue];
       if (isDefined(item)) {
@@ -1163,6 +1168,7 @@ class TagBox<
           if (this._isValueEquals(dataItem, currentValue)) {
             return true;
           }
+          // @ts-expect-error ts-error
         } else if (this._isValueEquals(this._valueGetter(dataItem), currentValue)) {
           return true;
         }
@@ -1244,7 +1250,7 @@ class TagBox<
       const $tags = this._tagElements();
 
       const selectedItems = this.option('selectedItems') ?? [];
-      // @ts-expect-error ts-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const values = selectedItems.map((item) => this._valueGetter(item));
 
       each($tags, (_, tag) => {
@@ -1290,6 +1296,7 @@ class TagBox<
   }
 
   _renderTag(item, $input): void {
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const value = this._valueGetter(item);
 
     if (!isDefined(value)) {
@@ -1436,10 +1443,12 @@ class TagBox<
     const value = this._getValue().slice();
 
     each(e.removedItems || [], (_, removedItem) => {
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       this._removeTag(value, this._valueGetter(removedItem));
     });
 
     each(e.addedItems || [], (_, addedItem) => {
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       this._addTag(value, this._valueGetter(addedItem));
     });
 
@@ -1597,6 +1606,7 @@ class TagBox<
     }
 
     const dataController = this._dataController;
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     const valueGetterExpr = this._valueGetterExpr();
 
     if (isString(valueGetterExpr) && valueGetterExpr !== 'this') {
@@ -1618,13 +1628,14 @@ class TagBox<
 
   _dataSourceFilterExpr() {
     const filter = [];
-    // @ts-expect-error
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]]));
 
     return filter;
   }
 
   _dataSourceFilterFunction(itemData) {
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const itemValue = this._valueGetter(itemData);
     let result = true;
 
@@ -1673,6 +1684,7 @@ class TagBox<
 
     return this
       ._getPlainItems(this._list.option('selectedItems'))
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       .map((item) => this._valueGetter(item));
   }
 
@@ -1731,6 +1743,7 @@ class TagBox<
     }
 
     const previousItemsValuesMap = previousItems.reduce((map, item) => {
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const value = this._valueGetter(item);
       map[value] = item;
       return map;
@@ -1738,6 +1751,7 @@ class TagBox<
 
     const addedItems = [];
     newItems.forEach((item) => {
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const value = this._valueGetter(item);
       if (!previousItemsValuesMap[value]) {
         addedItems.push(item as never);
