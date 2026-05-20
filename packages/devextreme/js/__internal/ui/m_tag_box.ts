@@ -51,13 +51,13 @@ const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
-export interface TagBoxProperties extends Omit<Properties,
-'onCustomItemCreating'
-| 'onItemClick' | 'onSelectionChanged'
-| 'onOpened' | 'onClosed'
-| 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
-
+export interface TagBoxProperties extends Omit<
+  Properties,
+  'onCustomItemCreating'
+  | 'onItemClick' | 'onSelectionChanged'
+  | 'onOpened' | 'onClosed'
+  | 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+  | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
 }
 
 class TagBox<
@@ -94,6 +94,10 @@ class TagBox<
   _selectedItems?: any[];
 
   _tagsToRender?: any[];
+
+  declare _valueGetterExpr: () => string;
+
+  declare _valueGetter: (item: any) => any;
 
   _supportedKeys(): Record<
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -860,7 +864,6 @@ class TagBox<
     // @ts-expect-error ts-error
     const isListItemsLoaded = !!listSelectedItems && this._list._dataController.isLoaded();
     const selectedItems = listSelectedItems || this.option('selectedItems');
-    // @ts-expect-error ts-error
     const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
     // @ts-expect-error ts-error
     const filteredItems = selectedItems.filter(clientFilterFunction);
@@ -907,13 +910,11 @@ class TagBox<
   _createTagsData(values, filteredItems) {
     const items = [];
     const cache = {};
-    // @ts-expect-error ts-error
     const isValueExprSpecified = this._valueGetterExpr() === 'this';
     const { acceptCustomValue } = this.option();
     const filteredValues = {};
 
     filteredItems.forEach((filteredItem) => {
-      // @ts-expect-error
       const filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
 
       filteredValues[filteredItemValue] = filteredItem;
@@ -967,7 +968,6 @@ class TagBox<
       return item;
     }
     const selectedItem = this.option('selectedItem');
-    // @ts-expect-error
     const customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
 
     return customItem;
@@ -1131,11 +1131,9 @@ class TagBox<
     if (!this._shouldUseClickOrderForTags(values)) {
       return selectedItems;
     }
-    // @ts-expect-error ts-error
     const isValueExprDefault = this._valueGetterExpr() === 'this';
 
     const mappedSelectedItems = selectedItems?.reduce((result, item) => {
-      // @ts-expect-error ts-error
       const itemValue = isValueExprDefault ? JSON.stringify(item) : this._valueGetter(item);
       result[itemValue] = item;
 
@@ -1165,7 +1163,6 @@ class TagBox<
           if (this._isValueEquals(dataItem, currentValue)) {
             return true;
           }
-          // @ts-expect-error ts-error
         } else if (this._isValueEquals(this._valueGetter(dataItem), currentValue)) {
           return true;
         }
@@ -1294,7 +1291,6 @@ class TagBox<
   }
 
   _renderTag(item, $input): void {
-    // @ts-expect-error ts-error
     const value = this._valueGetter(item);
 
     if (!isDefined(value)) {
@@ -1441,12 +1437,10 @@ class TagBox<
     const value = this._getValue().slice();
 
     each(e.removedItems || [], (_, removedItem) => {
-      // @ts-expect-error ts-error
       this._removeTag(value, this._valueGetter(removedItem));
     });
 
     each(e.addedItems || [], (_, addedItem) => {
-      // @ts-expect-error ts-error
       this._addTag(value, this._valueGetter(addedItem));
     });
 
@@ -1604,7 +1598,6 @@ class TagBox<
     }
 
     const dataController = this._dataController;
-    // @ts-expect-error ts-error
     const valueGetterExpr = this._valueGetterExpr();
 
     if (isString(valueGetterExpr) && valueGetterExpr !== 'this') {
@@ -1633,7 +1626,6 @@ class TagBox<
   }
 
   _dataSourceFilterFunction(itemData) {
-    // @ts-expect-error ts-error
     const itemValue = this._valueGetter(itemData);
     let result = true;
 
@@ -1682,7 +1674,6 @@ class TagBox<
 
     return this
       ._getPlainItems(this._list.option('selectedItems'))
-      // @ts-expect-error
       .map((item) => this._valueGetter(item));
   }
 
@@ -1741,7 +1732,6 @@ class TagBox<
     }
 
     const previousItemsValuesMap = previousItems.reduce((map, item) => {
-      // @ts-expect-error ts-error
       const value = this._valueGetter(item);
       map[value] = item;
       return map;
@@ -1749,7 +1739,6 @@ class TagBox<
 
     const addedItems = [];
     newItems.forEach((item) => {
-      // @ts-expect-error ts-error
       const value = this._valueGetter(item);
       if (!previousItemsValuesMap[value]) {
         addedItems.push(item as never);
