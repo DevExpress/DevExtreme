@@ -30,9 +30,9 @@ export function createExecutor<TOptions, TResolved>(
   definition: ExecutorDefinition<TOptions, TResolved>,
 ): PromiseExecutor<TOptions> {
   return async (options, context) => {
-    const projectRoot = resolveProjectPath(context);
-    const runtime: ExecutorRuntime = { projectRoot, context };
     try {
+      const projectRoot = resolveProjectPath(context);
+      const runtime: ExecutorRuntime = { projectRoot, context };
       const resolved = await definition.resolve(options, runtime);
       await definition.run(resolved, options, runtime);
       return { success: true };

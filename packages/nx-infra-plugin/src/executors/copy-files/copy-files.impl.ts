@@ -1,6 +1,5 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import { stat } from 'fs/promises';
 import { logger } from '@nx/devkit';
 import { glob } from 'glob';
 import { createExecutor } from '../../utils/create-executor';
@@ -87,7 +86,7 @@ async function copyDirectPath(sourcePath: string, destPath: string): Promise<voi
     throw new Error(ERROR_SOURCE_NOT_FOUND(sourcePath));
   }
 
-  const sourceStat = await stat(sourcePath);
+  const sourceStat = await fs.stat(sourcePath);
 
   if (sourceStat.isDirectory()) {
     await copyRecursive(sourcePath, destPath);
