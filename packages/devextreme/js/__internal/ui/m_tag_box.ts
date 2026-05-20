@@ -95,7 +95,7 @@ class TagBox<
 
   _tagsToRender?: any[];
 
-  declare _valueGetterExpr: () => string;
+  declare _valueGetterExpr: () => string | Function;
 
   declare _valueGetter: (item: any) => any;
 
