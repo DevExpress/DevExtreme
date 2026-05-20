@@ -4,6 +4,9 @@ import { setHeight, setWidth } from '@js/core/utils/size';
 import CurrentTimeShader from './current_time_shader';
 
 const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
+
+const ALL_DAY_PANEL_CLASS = 'dx-scheduler-all-day-panel';
+
 const DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
 const DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
 
@@ -14,7 +17,8 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
 
   private $allDayIndicator!: dxElementWrapper;
 
-  renderShader(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  renderShader(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {
     let shaderHeight = this.getShaderHeight();
     const maxHeight = this.getShaderMaxHeight();
     const isSolidShader = shaderHeight > maxHeight;
@@ -24,7 +28,6 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     }
 
     setHeight(this.$shader, shaderHeight);
-    const groupCount = this.workSpace._getGroupCount() || 1;
 
     if (this.workSpace.isGroupedByDate()) {
       this.renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
@@ -125,7 +128,10 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
       setWidth(this.$allDayIndicator, shaderWidth);
       this.$allDayIndicator.css('left', this.getShaderOffset(i, shaderWidth));
 
-      this.workSpace._$allDayPanel.prepend(this.$allDayIndicator);
+      const $allDayPanel = this.workSpace.$element().find(`.${ALL_DAY_PANEL_CLASS}`);
+      if ($allDayPanel.length) {
+        $allDayPanel.first().prepend(this.$allDayIndicator);
+      }
     }
   }
 
@@ -152,9 +158,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   clean(): void {
     super.clean();
 
-    if (this.workSpace?._$allDayPanel) {
-      this.workSpace._$allDayPanel.find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
-    }
+    this.workSpace?.$element().find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
   }
 }
 

@@ -81,5 +81,24 @@ describe('BundleExecutor E2E', () => {
     const content = await readFileText(allDebug);
     expect(content).toContain('greet');
     expect(content.split('\n').length).toBeGreaterThan(3);
+    expect(content).toContain('eval(');
+  }, 60000);
+
+  it('should omit eval-source-map in debug mode when sourceMap is false', async () => {
+    const options: BundleExecutorSchema = {
+      entries: ['bundles/dx.all.js'],
+      sourceDir: './artifacts/transpiled-renovation-npm',
+      outDir: './artifacts/js',
+      mode: 'debug',
+      webpackConfigPath: './webpack.config.js',
+      sourceMap: false,
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const content = await readFileText(path.join(projectDir, 'artifacts', 'js', 'dx.all.debug.js'));
+    expect(content).toContain('greet');
+    expect(content).not.toContain('eval(');
   }, 60000);
 });

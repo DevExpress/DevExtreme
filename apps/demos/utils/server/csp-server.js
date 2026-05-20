@@ -173,8 +173,6 @@ const CSP_DEMO_ALLOWLIST = {
   },
   'TreeList/Overview': {
     'img-src': ['data:'],
-    // TODO: fix inline style in cellTemplate (background-image)
-    'style-src': ["'unsafe-inline'"],
   },
   // globalize/message.js uses new Function() internally
   'Localization/UsingGlobalize': {
@@ -191,10 +189,6 @@ const CSP_DEMO_ALLOWLIST = {
   // Inline <script type="module"> to import remark/rehype from esm.sh
   'HtmlEditor/MarkdownSupport': {
     'script-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attribute
-  'DataGrid/RowSelection': {
-    'style-src': ["'unsafe-inline'"],
   },
   // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'Chat/AIAndChatbotIntegration': {

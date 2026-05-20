@@ -29,7 +29,7 @@ import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
 import type {
-  Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek, Occurrence,
+  Appointment, AppointmentTooltipShowingEvent, DayOfWeek, Occurrence,
   Properties as SchedulerProperties,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
@@ -37,13 +37,14 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
-import { AppointmentForm } from './appointment_popup/m_form';
-import { AppointmentPopup } from './appointment_popup/m_popup';
+import type { AppointmentFormConfig } from './appointment_popup/form';
+import { AppointmentForm } from './appointment_popup/form';
+import { AppointmentPopup } from './appointment_popup/popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
-import NotifyScheduler from './base/m_widget_notify_scheduler';
-import { SchedulerHeader } from './header/m_header';
+import NotifyScheduler from './base/widget_notify_scheduler';
+import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { hide as hideLoading, show as showLoading } from './m_loading';
@@ -274,7 +275,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'firstDayOfWeek':
         this.updateOption('workSpace', name, value);
         this.updateOption('header', name, value);
-        this.cleanPopup();
+        this.createAppointmentPopupForm();
         break;
       case 'currentDate': {
         const dateValue = this.getViewOption(name);
@@ -374,12 +375,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.resourceManager?.dispose();
         this.resourceManager = new ResourceManager(this.option('resources'));
         this.updateAppointmentDataSource();
+        this.createAppointmentPopupForm();
 
         this.postponeResourceLoading().done(() => {
           this._appointments.option('items', []);
           this.refreshWorkSpace();
           this.setRemoteFilterIfNeeded();
-          this.createAppointmentPopupForm();
         });
         break;
       case 'startDayHour':
@@ -395,8 +396,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.setRemoteFilterIfNeeded();
 
         this.postponeDataSourceLoading();
+        this.createAppointmentPopupForm();
         break;
-        // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
+      // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
       case 'offset':
 
         this.updateAppointmentDataSource();
@@ -504,7 +506,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.bringEditingModeToAppointments(editing);
 
         this.hideAppointmentTooltip();
-        this.cleanPopup();
+        this.createAppointmentPopupForm();
         break;
       }
       case 'showAllDayPanel':
@@ -1132,22 +1134,18 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   createAppointmentForm() {
-    const scheduler = {
-      getResourceById: () => this.resourceManager.resourceById,
-      getDataAccessors: () => this._dataAccessors,
+    const config: AppointmentFormConfig = {
+      dataAccessors: this._dataAccessors,
+      editing: this.editing,
+      resourceManager: this.resourceManager,
+      firstDayOfWeek: this.getFirstDayOfWeek(),
+      startDayHour: this.option('startDayHour') ?? 0,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
-
-      getEditingConfig: () => this.editing,
-      getResourceManager: () => this.resourceManager,
-
-      getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
-      getStartDayHour: () => this.option('startDayHour'),
       getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
-      getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
-    return new AppointmentForm(scheduler);
+    return new AppointmentForm(config);
   }
 
   createAppointmentPopup(form) {
@@ -1432,13 +1430,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling
-            && (
-              !isDefined(scrolling.orientation)
-                || ['horizontal', 'both'].includes(scrolling.orientation)
-            );
+      && (
+        !isDefined(scrolling.orientation)
+        || ['horizontal', 'both'].includes(scrolling.orientation)
+      );
     const crossScrollingEnabled = this.option('crossScrollingEnabled')
-            || horizontalVirtualScrollingAllowed
-            || isTimelineView(currentViewOptions.type);
+      || horizontalVirtualScrollingAllowed
+      || isTimelineView(currentViewOptions.type);
 
     const result = extend({
       resources: this.option('resources'),
@@ -1764,8 +1762,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
     const isKeepAppointmentHours = this._workSpace.keepOriginalHours()
-            && dateUtilsTs.isValidDate(appointment.startDate)
-            && dateUtilsTs.isValidDate(cellStartDate);
+      && dateUtilsTs.isValidDate(appointment.startDate)
+      && dateUtilsTs.isValidDate(cellStartDate);
 
     if (isKeepAppointmentHours) {
       const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, 'toGrid');
@@ -2173,7 +2171,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const isVirtualScrolling = mode === 'virtual';
 
     return isVirtualScrolling
-            && (orientation === 'horizontal' || orientation === 'both');
+      && (orientation === 'horizontal' || orientation === 'both');
   }
 
   addAppointment(rawAppointment) {
@@ -2252,7 +2250,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
     this.checkRecurringAppointment(
       appointment,
-      { },
+      {},
       date,
       () => {
         this.processDeleteAppointment(
@@ -2279,10 +2277,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._layoutManager.getOccurrences(startDate, endDate, rawAppointments);
   }
 
-  getFirstDayOfWeek(): FirstDayOfWeek {
+  getFirstDayOfWeek(): DayOfWeek {
     return isDefined(this.getViewOption('firstDayOfWeek'))
-      ? this.getViewOption('firstDayOfWeek') as FirstDayOfWeek
-      : dateLocalization.firstDayOfWeekIndex() as FirstDayOfWeek;
+      ? this.getViewOption('firstDayOfWeek') as DayOfWeek
+      : dateLocalization.firstDayOfWeekIndex() as DayOfWeek;
   }
 
   private validateKeyFieldIfAgendaExist() {

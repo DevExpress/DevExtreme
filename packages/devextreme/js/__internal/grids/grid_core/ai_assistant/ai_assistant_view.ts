@@ -1,33 +1,42 @@
 import type { PositionConfig } from '@js/common/core/animation';
+import type { ArrayStore } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { getHeight } from '@js/core/utils/size';
-import type { Properties as ChatProperties } from '@js/ui/chat';
-import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { Message, Properties as ChatProperties } from '@js/ui/chat';
+import type { HidingEvent, Properties as PopupProperties } from '@js/ui/popup';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
-import {
-  isChatOptions,
-  isEnabledOption,
-  isPopupOptions,
-  isTitleOption,
-} from '@ts/grids/grid_core/ai_assistant/utils';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
 import { View } from '../m_modules';
 import type { AIAssistantController } from './ai_assistant_controller';
+import { AI_ASSISTANT_POPUP_OFFSET, CLASSES } from './const';
+import type { AIMessage } from './types';
+import {
+  createConfirmDialog,
+  isChatOptions,
+  isEnabledOption,
+  isPopupOptions,
+  isTitleOption,
+  isUserMessage,
+} from './utils';
 
 export class AIAssistantView extends View {
   private aiChatInstance!: AIChat;
 
   private aiAssistantController!: AIAssistantController;
 
+  private messageStore?: ArrayStore<Message, string>;
+
   private columnHeadersView!: ColumnHeadersView;
 
   private rowsView!: RowsView;
+
+  private handleMessageStorePushContext!: (changes: DataChange<Message, string>[]) => void;
 
   public visibilityChanged?: Callback;
 
@@ -35,6 +44,11 @@ export class AIAssistantView extends View {
     this.columnHeadersView = this.getView('columnHeadersView');
     this.rowsView = this.getView('rowsView');
     this.aiAssistantController = this.getController('aiAssistant');
+    this.messageStore = this.aiAssistantController.getMessageStore();
+    this.handleMessageStorePushContext = this.handleMessageStorePush.bind(this);
+
+    this.unsubscribeMessageStorePush();
+    this.subscribeMessageStorePush();
   }
 
   private getAIChatConfig(): AIChatOptions {
@@ -44,8 +58,9 @@ export class AIAssistantView extends View {
     return {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
-      onChatCleared: (): void => {},
-      onRegenerate: (): void => {},
+      onRegenerate: (aiMessage: AIMessage): void => {
+        this.executeRequest(aiMessage);
+      },
       popupOptions,
       chatOptions,
     };
@@ -76,29 +91,71 @@ export class AIAssistantView extends View {
       // (re-evaluated automatically on show and window resize).
       // @ts-expect-error type declaration
       height: () => this.getPopupHeight(),
+      _ignoreFunctionValueDeprecation: true,
       onShowing: (): void => {
         this.visibilityChanged?.fire(true);
       },
       onHidden: (): void => {
         this.visibilityChanged?.fire(false);
       },
+      onHiding: (e: HidingEvent): void => {
+        if (this.aiAssistantController.isProcessing()) {
+          e.cancel = true;
+
+          const confirmDialog = createConfirmDialog({
+            popupOptions: {
+              elementAttr: { class: this.addWidgetPrefix(CLASSES.aiAssistantConfirmDialog) },
+            },
+          });
+
+          // @ts-expect-error
+          confirmDialog.show().done((confirmResult) => {
+            if (confirmResult) {
+              this.aiAssistantController.abortRequest();
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              e.component.hide();
+            }
+          });
+        }
+      },
       ...this.option('aiAssistant.popup'),
     };
   }
 
+  private executeRequest(message: Message | AIMessage): void {
+    this.aiChatInstance?.setDisabled(true);
+    fromPromise(this.aiAssistantController.sendRequestToAI(message)).always(() => {
+      this.aiChatInstance?.setDisabled(false);
+    });
+  }
+
+  private handleMessageStorePush(changes: DataChange<Message, string>[]): void {
+    const userId = this.aiChatInstance.getUserId();
+
+    changes.forEach(({ type, data }) => {
+      if (type === 'insert' && data && isUserMessage(data, userId)) {
+        this.executeRequest(data);
+      }
+    });
+  }
+
+  private unsubscribeMessageStorePush(): void {
+    this.messageStore?.off('push', this.handleMessageStorePushContext);
+  }
+
+  private subscribeMessageStorePush(): void {
+    this.messageStore?.on('push', this.handleMessageStorePushContext);
+  }
+
   private getAIChatOptions(): ChatProperties {
     return {
-      dataSource: this.aiAssistantController.getMessageDataSource(),
+      dataSource: {
+        store: this.messageStore,
+        pushAggregationTimeout: 0,
+      },
       reloadOnChange: true,
       onMessageEntered: (e): void => {
-        if (this.aiChatInstance?.isDisabled()) {
-          return;
-        }
-
-        this.aiChatInstance?.setDisabled(true);
-        fromPromise(this.aiAssistantController.sendRequestToAI(e.message)).always(() => {
-          this.aiChatInstance?.setDisabled(false);
-        });
+        this.executeRequest(e.message);
       },
       ...this.option('aiAssistant.chat'),
     };
@@ -110,6 +167,12 @@ export class AIAssistantView extends View {
 
       this.aiChatInstance = new AIChat(config);
     }
+  }
+
+  public dispose(): void {
+    this.unsubscribeMessageStorePush();
+    this.messageStore = undefined;
+    super.dispose();
   }
 
   public optionChanged(args: OptionChanged): void {

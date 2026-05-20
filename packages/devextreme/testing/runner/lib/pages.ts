@@ -183,10 +183,9 @@ export function createPagesRenderer({
       json: '/packages/devextreme/node_modules/systemjs-plugin-json/json.js',
       'plugin-babel': '/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': '/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
-      // QUnit doesn't execute DataGrid AI assistant
-      // eslint-disable-next-line spellcheck/spell-checker
-      zod: '@empty',
-      'zod-to-json-schema': '@empty',
+      // Provide minimal stubs as those packages aren't used in QUnit tests
+      zod: '/packages/devextreme/testing/helpers/stubs/zodStub.js',
+      'zod-to-json-schema': '/packages/devextreme/testing/helpers/stubs/zodToJsonSchemaStub.js',
       ...cspMap,
     };
 

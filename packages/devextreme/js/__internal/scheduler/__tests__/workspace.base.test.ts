@@ -215,7 +215,7 @@ describe('scheduler workspace skipped days support', () => {
     });
 
     expect(workspace.getStartViewDate()).toEqual(new Date(2026, 2, 29));
-    expect((workspace as any)._getCellCount()).toBe(7);
+    expect((workspace as any).getCellCount()).toBe(7);
   });
 
   it('should use custom skippedDays in work week runtime layout', () => {
@@ -226,7 +226,7 @@ describe('scheduler workspace skipped days support', () => {
     });
 
     expect(workspace.getStartViewDate()).toEqual(new Date(2026, 2, 29));
-    expect((workspace as any)._getCellCount()).toBe(6);
+    expect((workspace as any).getCellCount()).toBe(6);
   });
 
   it('should skip configured hidden days when incrementing timeline header dates', () => {

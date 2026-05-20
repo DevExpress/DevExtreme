@@ -1,11 +1,26 @@
+import type { ExecuteGridAssistantCommandParams, RequestCallbacks } from '@js/common/ai-integration';
+import type { AIAssistant } from '@js/common/grids';
+import type { Message } from '@js/ui/chat';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
-import type { JsonSchema7Type } from 'zod-to-json-schema';
 
-/** JSON Schema draft-07 object sent to the LLM. */
-export type JsonSchema = JsonSchema7Type & {
-  $schema?: string;
-};
+import type { MessageStatus } from './const';
+
+export type JsonSchema = ExecuteGridAssistantCommandParams['responseSchema'];
+
+export interface ResponseSchemaBranch {
+  commandName: string;
+  branch: {
+    type: string;
+    description: string;
+    required: string[];
+    additionalProperties: boolean;
+    properties: {
+      name: { type: string; enum: string[] };
+      args: JsonSchema | undefined;
+    };
+  };
+}
 
 export type CommandStatus = 'success' | 'failure' | 'aborted';
 
@@ -13,8 +28,6 @@ export interface CommandResult {
   status: CommandStatus;
   message: string;
 }
-
-export type CommandResults = CommandResult[];
 
 export interface CommandCallbacks {
   success: (message?: string) => CommandResult;
@@ -47,12 +60,19 @@ export interface GridCommand<
   ) => CommandExecutor<CommandArgs<TSchema>>;
 }
 
-export interface CommandMessages {
-  success: string;
-  failure: string;
-}
+export type CustomizeResponseText = NonNullable<AIAssistant['customizeResponseText']>;
 
-export type CustomizeResponseText = (
-  commandName: string,
-  commandArgs: Record<string, unknown>,
-) => Partial<CommandMessages> | undefined;
+export type AIAssistantRequestCallbacks<T> = RequestCallbacks<T> & {
+  onAbort?: () => void;
+};
+
+export type GridContext = Record<string, unknown>;
+
+export type AIMessage = Message & {
+  id: string;
+  status: MessageStatus;
+  headerText: string;
+  prompt: string;
+  errorText?: string;
+  commands?: CommandResult[];
+};

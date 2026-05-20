@@ -1,5 +1,6 @@
 import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
+import type { CommandInfo } from '@js/common/grids';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { logger } from '@ts/core/utils/m_console';
 import {
@@ -16,12 +17,13 @@ import type {
   CustomizeResponseText,
   GridCommand,
   JsonSchema,
+  ResponseSchemaBranch,
 } from './types';
+import { expandTypeArraysToAnyOf, hoistSchemaRefs } from './utils';
 
 export class GridCommands {
   private readonly component: InternalGrid;
 
-  // TODO: specify type of command arguments when default commands are implemented
   private readonly commands: Map<string, GridCommand>;
 
   private executing = false;
@@ -56,11 +58,10 @@ export class GridCommands {
 
   private static applyCustomizedResponseText(
     result: CommandResult,
-    name: string,
-    args: Record<string, unknown>,
+    command: CommandInfo,
     customizeResponseText?: CustomizeResponseText,
   ): void {
-    const customMessages = customizeResponseText?.(name, args);
+    const customMessages = customizeResponseText?.(command);
     const customMessage = customMessages?.[result.status];
 
     if (isDefined(customMessage)) {
@@ -80,30 +81,57 @@ export class GridCommands {
     return this.executing;
   }
 
-  public buildResponseSchema(): JsonSchema {
-    const branches = [...this.commands.values()].map((command) => {
-      const argsSchema = zodToJsonSchema(command.schema, { target: 'jsonSchema7' });
+  private buildResponseSchemaBranches(): ResponseSchemaBranch[] {
+    const commands = [...this.commands.values()];
+
+    return commands.map((command) => {
+      const argsSchema = zodToJsonSchema(command.schema, { target: 'openAi' }) as JsonSchema;
 
       // Remove $schema from nested schemas since it's only necessary at root
       delete argsSchema.$schema;
 
+      const expandedArgsSchema = expandTypeArraysToAnyOf(argsSchema);
+
       return {
-        type: 'object',
-        description: command.description,
-        required: ['name', 'args'],
-        additionalProperties: false,
-        properties: {
-          name: {
-            type: 'string',
-            enum: [command.name],
+        commandName: command.name,
+        branch: {
+          type: 'object',
+          description: command.description,
+          required: ['name', 'args'],
+          additionalProperties: false,
+          properties: {
+            name: {
+              type: 'string',
+              enum: [command.name],
+            },
+            args: expandedArgsSchema,
           },
-          args: argsSchema,
         },
       };
     });
+  }
 
-    return {
-      $schema: 'http://json-schema.org/draft-07/schema#',
+  private enrichSchemaWithDefs(
+    schema: JsonSchema,
+    branches: ResponseSchemaBranch[],
+  ): void {
+    // Hoist $ref targets to root-level $defs (required by OpenAI)
+    const defsInputs = branches.map(({ commandName, branch }) => ({
+      prefix: commandName,
+      schema: branch.properties.args as JsonSchema,
+    }));
+    const mergedDefs = hoistSchemaRefs(defsInputs);
+
+    if (Object.keys(mergedDefs).length > 0) {
+      schema.$defs = mergedDefs;
+    }
+  }
+
+  public buildResponseSchema(): JsonSchema {
+    const branches = this.buildResponseSchemaBranches();
+    const itemsAnyOfSchema = branches.map(({ branch }) => branch);
+
+    const schema: JsonSchema = {
       type: 'object',
       required: ['actions'],
       additionalProperties: false,
@@ -112,11 +140,15 @@ export class GridCommands {
           type: 'array',
           description: 'The list of grid commands and corresponding arguments to execute',
           items: {
-            anyOf: branches,
+            anyOf: itemsAnyOfSchema,
           },
         },
       },
     };
+
+    this.enrichSchemaWithDefs(schema, branches);
+
+    return schema;
   }
 
   public validate(actions: ExecuteGridAssistantAction[]): boolean {
@@ -142,7 +174,6 @@ export class GridCommands {
   }
 
   private async executeCommand(
-    // TODO: specify type when default commands are implemented
     command: GridCommand,
     args: Record<string, unknown>,
     callbacks: CommandCallbacks,
@@ -193,7 +224,11 @@ export class GridCommands {
         // eslint-disable-next-line no-await-in-loop
         const result = await this.executeCommand(command, args, callbacks);
 
-        GridCommands.applyCustomizedResponseText(result, name, args, customizeResponseText);
+        GridCommands.applyCustomizedResponseText(
+          result,
+          { name, args } as CommandInfo,
+          customizeResponseText,
+        );
         results.push(result);
       }
     } finally {

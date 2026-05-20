@@ -10,3 +10,11 @@ jobs:
   invoke:
     name: Invoke
     uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check
+    with:
+      config: |
+        {
+          ignoredAdvisories: [
+            'GHSA-67hx-6x53-jw92', // babel-traverse
+            'GHSA-4wf5-vphf-c2xc', // terser
+          ]
+        }

@@ -233,7 +233,7 @@ const subscribes = {
   },
 
   getGroupCount() {
-    return this._workSpace._getGroupCount();
+    return this._workSpace.getGroupCount();
   },
 
   // TODO<Appointments>: delete this method when old impl is removed
