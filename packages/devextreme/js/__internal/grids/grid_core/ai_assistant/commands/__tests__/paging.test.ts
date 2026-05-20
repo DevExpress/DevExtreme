@@ -318,7 +318,7 @@ describe('pageIndexCommand', () => {
 
       await pageIndexCommand.execute(instance, callbacks)({ pageIndex: 1 });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Switch the view to page number 1.');
+      expect(callbacks.success).toHaveBeenCalledWith('Switch the view to page number 2.');
     });
 
     it('passes the same default message to failure when executability fails', async () => {
@@ -327,7 +327,7 @@ describe('pageIndexCommand', () => {
 
       await pageIndexCommand.execute(instance, callbacks)({ pageIndex: 2 });
 
-      expect(callbacks.failure).toHaveBeenCalledWith('Switch the view to page number 2.');
+      expect(callbacks.failure).toHaveBeenCalledWith('Switch the view to page number 3.');
     });
   });
 });

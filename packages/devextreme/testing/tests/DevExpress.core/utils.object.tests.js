@@ -221,3 +221,18 @@ QUnit.test('deepExtendArraySafe preserves custom object instances in arrays', fu
     assert.ok(result.items[0] instanceof CustomClass, 'First item preserves custom type');
     assert.ok(result.items[1] instanceof CustomClass, 'Second item preserves custom type');
 });
+
+QUnit.test('deepExtendArraySafe assigns Blob/File by reference without throwing (nested newAssign)', function(assert) {
+    const file = new File(['x'], 'test.txt', { type: 'text/plain' });
+    const blob = new Blob(['y']);
+
+    const target = { id: 1, file: null, data: null };
+
+    objectUtils.deepExtendArraySafe(target, { file: file, data: blob }, true, false, true, objectUtils.newAssign);
+
+    assert.strictEqual(target.file, file);
+    assert.strictEqual(target.data, blob);
+
+    const merged = objectUtils.deepExtendArraySafe({}, file, true, false, true, objectUtils.newAssign);
+    assert.strictEqual(merged, file);
+});
