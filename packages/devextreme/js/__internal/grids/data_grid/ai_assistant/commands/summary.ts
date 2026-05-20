@@ -69,7 +69,7 @@ const buildDefaultMessage = (
 
 export const summaryCommand = defineGridCommand({
   name: 'summary',
-  description: 'Configure column summaries. totalItems aggregate the entire data set; groupItems aggregate within each group. Replaces the configuration entirely — both kinds are written every call, and any kind you OMIT (or pass as []) is cleared. ALWAYS provide BOTH totalItems and groupItems. To keep one kind unchanged, copy its current items from the grid context into your args. To ADD items, pre-merge with the kind\'s current items. To REMOVE a specific item, pass the kind\'s remaining items (and copy the other kind unchanged). At least one kind must be non-empty. Use clearSummary only when EVERY summary should be removed.\n'
+  description: 'Configure column summaries. totalItems aggregate the entire data set; groupItems aggregate within each group. Replaces the configuration entirely — both kinds are written every call. ALWAYS provide BOTH totalItems and groupItems; pass an explicit empty array [] for a kind to clear it. To keep one kind unchanged, copy its current items from the grid context into your args. To ADD items, pre-merge with the kind\'s current items. To REMOVE a specific item, pass the kind\'s remaining items (and copy the other kind unchanged). At least one kind must be non-empty. Use clearSummary only when EVERY summary should be removed.\n'
     + 'Each item supports:\n'
     + '- column (required): dataField of the column whose VALUES are aggregated. Phrases like "sum of X", "average X", "total X", "summary for X" → column="X" (X is what gets aggregated).\n'
     + '- summaryType (required): one of "sum", "min", "max", "avg", "count".\n'

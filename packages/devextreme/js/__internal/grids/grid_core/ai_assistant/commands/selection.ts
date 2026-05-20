@@ -44,8 +44,7 @@ export const selectByKeysCommand = defineGridCommand({
 });
 
 const selectByIndexesCommandSchema = z.object({
-  // eslint-disable-next-line spellcheck/spell-checker
-  indexes: z.array(z.number().int().nonnegative()).min(1),
+  indexes: z.array(z.number().int().positive()).min(1),
 }).strict();
 
 export const selectByIndexesCommand = defineGridCommand({
