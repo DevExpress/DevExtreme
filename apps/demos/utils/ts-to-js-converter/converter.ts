@@ -79,10 +79,12 @@ const pipeSource = async (
 };
 
 const execTsc = async (directory: string, args: string[]): Promise<string> => {
-  const [cmd, cmdArgs] = isWindows()
-    ? ['cmd', ['/c', 'tsc.cmd', ...args]]
-    : ['tsc', args];
-  const { stdout } = await promisify(cps.execFile)(cmd, cmdArgs, { cwd: directory });
+  const tscScript = require.resolve('typescript/bin/tsc');
+  const { stdout } = await promisify(cps.execFile)(
+    process.execPath,
+    [tscScript, ...args],
+    { cwd: directory },
+  );
   return stdout;
 };
 
