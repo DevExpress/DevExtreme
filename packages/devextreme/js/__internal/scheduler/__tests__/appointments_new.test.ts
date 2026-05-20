@@ -784,6 +784,7 @@ describe('New Appointments', () => {
           recurrenceRule: 'FREQ=DAILY;COUNT=3',
         }],
         currentDate: new Date(2015, 1, 9),
+        currentView: 'week',
         recurrenceEditMode: 'occurrence',
       });
 
