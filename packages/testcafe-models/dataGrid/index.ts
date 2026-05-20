@@ -193,8 +193,16 @@ export default class DataGrid extends GridCore {
     return this.getRowsView().find(`.${CLASS.row}`);
   }
 
+  getDataRows(): Selector {
+    return this.getRows().filter(`.${CLASS.dataRow}`);
+  }
+
   getCells(): Selector {
     return this.getRowsView().find('td');
+  }
+
+  getDataCells(rowIndex:number): Selector {
+    return this.getDataRows().nth(rowIndex).find('td');
   }
 
   getDataRow(index: number): DataRow {
