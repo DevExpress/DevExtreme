@@ -1,4 +1,4 @@
-/*!
+/*<%= commentType %>
  * <%= pkg.name %>
  * Version: <%= version %>
  * Build date: <%= date %>
