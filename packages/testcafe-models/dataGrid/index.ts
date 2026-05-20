@@ -201,7 +201,7 @@ export default class DataGrid extends GridCore {
     return this.getRowsView().find('td');
   }
 
-  getDataCells(rowIndex:number): Selector {
+  getDataCells(rowIndex: number): Selector {
     return this.getDataRows().nth(rowIndex).find('td');
   }
 
