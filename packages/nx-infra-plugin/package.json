@@ -1,6 +1,6 @@
 {
   "name": "devextreme-nx-infra-plugin",
-  "version": "26.1.0",
+  "version": "26.1.2",
   "type": "commonjs",
   "private": true,
   "executors": "./dist/executors.json",
@@ -14,10 +14,12 @@
   "dependencies": {
     "fs-extra": "11.2.0",
     "glob": "11.1.0",
+    "js-beautify": "1.15.4",
     "minimatch": "10.2.4",
     "lodash": "4.18.1",
     "normalize-path": "3.0.0",
     "rimraf": "3.0.2",
+    "terser": "5.46.2",
     "tsc-alias": "1.8.16"
   },
   "peerDependencies": {

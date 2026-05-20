@@ -82,6 +82,9 @@ import {
   ToolbarPreparingInfo,
   AIColumnRequestCreatingInfo,
   AIAssistantRequestCreatingInfo,
+  AIAssistant as BaseAIAssistant,
+  PredefinedCommands,
+  CommandInfo,
 } from '../common/grids';
 
 export {
@@ -101,7 +104,6 @@ export {
 } from '../common';
 
 export {
-    AIAssistant,
     ApplyFilterMode,
     ColumnChooser,
     ColumnChooserMode,
@@ -146,6 +148,7 @@ export {
     StateStoreType,
     StateStoring,
     SummaryType,
+    ResponseStatusTexts,
 } from '../common/grids';
 
 export {
@@ -1170,7 +1173,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
   readonly isExpanded?: boolean;
 };
 
-type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
+type OverriddenKeys = 'aiAssistant' | 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
 
 /**
  * @deprecated use Properties instead
@@ -1180,6 +1183,11 @@ type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'edit
  * @type object
  */
 export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
+    /**
+     * @docid
+     * @public
+     */
+    aiAssistant?: AIAssistant;
     /**
      * @docid
      * @type Array<dxDataGridColumn|string>
@@ -1931,6 +1939,61 @@ export type Toolbar = {
    */
   disabled?: boolean;
 };
+
+/**
+ * @docid
+ * @public
+ */
+export type SummaryCommandTotalItem = Pick<SummaryTotalItem, 'showInColumn' | 'displayFormat'> & {
+  column: string;
+  summaryType: SummaryType;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type SummaryCommandGroupItem = Pick<SummaryGroupItem, 'showInColumn' | 'displayFormat' | 'showInGroupFooter' | 'alignByColumn'> & {
+  column: string;
+  summaryType: SummaryType;
+};
+
+/**
+ * @docid
+ * @public
+ * @inherits PredefinedCommands
+ */
+export type DataGridPredefinedCommands = PredefinedCommands & {
+  grouping: {
+    dataField: string;
+    groupIndex: number;
+  };
+  clearGrouping: {};
+  summary: {
+    totalItems: Array<SummaryCommandTotalItem>;
+    groupItems: Array<SummaryCommandGroupItem>;
+
+  };
+  clearSummary: {};
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type DataGridCommandInfo = CommandInfo<DataGridPredefinedCommands>;
+
+/**
+ * @docid
+ * @public
+ */
+export type DataGridPredefinedCommandNames = keyof DataGridPredefinedCommands;
+
+/**
+ * @docid
+ * @public
+ */
+export type AIAssistant = BaseAIAssistant<DataGridPredefinedCommands>;
 
 /**
  * @namespace DevExpress.ui

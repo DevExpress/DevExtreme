@@ -12,7 +12,7 @@ import {
 
 
 
-import type { FirstDayOfWeek, Orientation } from 'devextreme/common';
+import type { DayOfWeek, Orientation } from 'devextreme/common';
 import type { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
 
 import {
@@ -110,10 +110,10 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): DayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 

@@ -48,9 +48,9 @@ const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
 const useCompositionEvents = devices.real().platform !== 'android';
 
 interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList>,
-'onOpened' | 'onClosed'
-| 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+  'onOpened' | 'onClosed'
+  | 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+  | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
   encodeNoDataText?: boolean;
 }
 
@@ -510,13 +510,15 @@ class DropDownList<
   }
 
   _popupConfig(): PopupProperties {
+    this._updateCustomBoundaryContainer();
+    const maxHeight = this._getMaxHeight();
+
     return {
       ...super._popupConfig(),
       templatesRenderAsynchronously: false,
       autoResizeEnabled: false,
-      // @ts-expect-error ts-error
-      maxHeight: this._getMaxHeight.bind(this),
-    };
+      maxHeight,
+    } as PopupProperties;
   }
 
   _renderPopupContent(): void {
@@ -624,7 +626,7 @@ class DropDownList<
       dataSource: this._getDataSource(),
       _dataController: this._dataController,
       hoverStateEnabled: this._isDesktopDevice() ? hoverStateEnabled : false,
-      focusStateEnabled: this._isDesktopDevice() ? focusStateEnabled : false,
+      focusStateEnabled,
       _onItemsRendered: (): void => {
         // @ts-expect-error ts-error
         this._popup.repaint();
@@ -699,7 +701,7 @@ class DropDownList<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _listItemClickHandler(e?): void {}
+  _listItemClickHandler(e?): void { }
 
   _setListDataSource(): void {
     if (!this._list) {
@@ -733,10 +735,10 @@ class DropDownList<
   _canKeepDataSource(): boolean {
     const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
     return this._dataController.isLoaded()
-            && this.option('showDataBeforeSearch')
-            && this.option('minSearchLength')
-            && !isMinSearchLengthExceeded
-            && !this._isLastMinSearchLengthExceeded;
+      && this.option('showDataBeforeSearch')
+      && this.option('minSearchLength')
+      && !isMinSearchLengthExceeded
+      && !this._isLastMinSearchLengthExceeded;
   }
 
   _searchValue() {
@@ -907,13 +909,24 @@ class DropDownList<
 
   _popupShowingHandler(): void {
     this._updatePopupWidth();
+    this._updatePopupMaxHeight();
     this._updateListDimensions();
+  }
+
+  _updatePopupMaxHeight(): void {
+    const cachedMaxHeight = this._options.cache('dropDownOptions')?.maxHeight;
+
+    if (cachedMaxHeight === undefined) {
+      const maxHeight = this._getMaxHeight();
+      this._setPopupOption('maxHeight', maxHeight);
+    }
   }
 
   _dimensionChanged(): void {
     super._dimensionChanged();
 
     this._updateListDimensions();
+    this._updatePopupMaxHeight();
   }
 
   _needPopupRepaint(): boolean {
@@ -992,8 +1005,11 @@ class DropDownList<
     this._dataExpressionOptionChanged(args);
     switch (args.name) {
       case 'hoverStateEnabled':
-      case 'focusStateEnabled':
         this._isDesktopDevice() && this._setListOption(args.name, args.value);
+        super._optionChanged(args);
+        break;
+      case 'focusStateEnabled':
+        this._setListOption(args.name, args.value);
         super._optionChanged(args);
         break;
       case 'items':

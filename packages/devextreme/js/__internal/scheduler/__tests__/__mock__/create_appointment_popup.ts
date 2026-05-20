@@ -1,14 +1,15 @@
 import { jest } from '@jest/globals';
+import type { DayOfWeek } from '@js/common';
 import $ from '@js/core/renderer';
 // eslint-disable-next-line devextreme-custom/no-deferred
 import { Deferred } from '@js/core/utils/deferred';
 
 import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
-import { AppointmentForm } from '../../appointment_popup/m_form';
+import { AppointmentForm } from '../../appointment_popup/form';
 import {
   APPOINTMENT_POPUP_CLASS,
   AppointmentPopup,
-} from '../../appointment_popup/m_popup';
+} from '../../appointment_popup/popup';
 import {
   AppointmentDataAccessor,
 } from '../../utils/data_accessor/appointment_data_accessor';
@@ -114,25 +115,23 @@ export const createAppointmentPopup = async (
   const onSave = options.onSave
     ?? jest.fn<(appointment: Record<string, unknown>) => PromiseLike<unknown>>(resolvedDeferred);
 
-  const formSchedulerProxy = {
-    getResourceById: (): Record<string, unknown> => resourceManager.resourceById,
-    getDataAccessors: (): AppointmentDataAccessor => dataAccessors,
+  const formConfig = {
+    dataAccessors,
+    editing,
+    resourceManager,
+    firstDayOfWeek: (options.firstDayOfWeek ?? 0) as DayOfWeek,
+    startDayHour: options.startDayHour ?? 0,
     createComponent,
-    getEditingConfig: (): typeof editing => editing,
-    getResourceManager: (): ResourceManager => resourceManager,
-    getFirstDayOfWeek: (): number => options.firstDayOfWeek ?? 0,
-    getStartDayHour: (): number => options.startDayHour ?? 0,
     getCalculatedEndDate: (startDate: Date): Date => {
       const endDate = new Date(startDate);
       endDate.setHours(endDate.getHours() + 1);
       return endDate;
     },
-    getTimeZoneCalculator: (): typeof timeZoneCalculator => timeZoneCalculator,
   };
 
-  const form = new AppointmentForm(formSchedulerProxy);
+  const form = new AppointmentForm(formConfig);
 
-  const noop = (): void => {};
+  const noop = (): void => { };
 
   const popupSchedulerProxy = {
     getElement: (): ReturnType<typeof $> => $(container),

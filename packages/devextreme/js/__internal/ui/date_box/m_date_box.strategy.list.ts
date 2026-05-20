@@ -10,6 +10,7 @@ import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ItemClickEvent } from '@js/ui/list';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 import List from '@ts/ui/list/list.edit.search';
 
@@ -59,8 +60,9 @@ class ListStrategy extends DateBoxStrategy {
   }
 
   getDisplayFormat(displayFormat?: Format): Format {
+    const globalTimeFormat = getGlobalFormatByDataType('time');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || 'shorttime';
+    return displayFormat || globalTimeFormat || 'shorttime';
   }
 
   popupConfig(popupConfig: PopupProperties): PopupProperties {

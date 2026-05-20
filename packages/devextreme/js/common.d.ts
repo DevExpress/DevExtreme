@@ -1,4 +1,5 @@
 import { PositionConfig } from './common/core/animation';
+import type { Format as LocalizationFormat } from './common/core/localization';
 import type {
   OmitInternal,
 } from './core';
@@ -258,11 +259,22 @@ export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
  */
 export type FieldChooserLayout = 0 | 1 | 2;
 
+// #region deprecated in v26.1
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ * @deprecated Use the DayOfWeek type instead
+ */
+export type FirstDayOfWeek = DayOfWeek;
+
+// #endregion
+
 /**
  * @public
  * @namespace DevExpress.common
  */
-export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 /**
  * @public
@@ -284,6 +296,36 @@ export type VersionAssertion = {
  */
 export type GlobalConfig = {
   versionAssertions?: VersionAssertion[];
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  dateFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  timeFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  dateTimeFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  numberFormat?: LocalizationFormat | Record<string, LocalizationFormat>;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  dateTimeFormatPresets?: Record<string, LocalizationFormat | Record<string, LocalizationFormat>>;
   /**
    * @docid
    * @default "."

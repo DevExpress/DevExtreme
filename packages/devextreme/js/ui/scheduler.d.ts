@@ -5,6 +5,7 @@ import {
 
 import {
   template,
+  DayOfWeek,
   FirstDayOfWeek,
   Orientation,
   ScrollMode,
@@ -66,6 +67,7 @@ export interface TargetedAppointmentInfo {
 }
 
 export {
+    DayOfWeek,
     FirstDayOfWeek,
     Orientation,
     ScrollMode,
@@ -81,8 +83,6 @@ export type SnapToCellsMode = 'always' | 'auto' | 'never';
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
-/** @public */
-export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 /**
  * @docid
@@ -375,6 +375,7 @@ export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
  * @inherits EventInfo
  */
 export type SelectionEndEvent = EventInfo<dxScheduler> & {
+  /** @docid _ui_scheduler_SelectionEndEvent.selectedCellData */
   readonly selectedCellData: Array<any>;
 };
 
@@ -696,13 +697,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DayOfWeek | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    hiddenWeekDays?: Array<DayOfWeek>;
+    hiddenWeekDays?: Array<DayOfWeek> | undefined;
     /**
      * @docid
      * @default true &for(desktop)
@@ -1112,12 +1113,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      firstDayOfWeek?: FirstDayOfWeek | undefined;
+      firstDayOfWeek?: DayOfWeek | undefined;
       /**
        * @docid
        * @default undefined
        */
-      hiddenWeekDays?: Array<DayOfWeek>;
+      hiddenWeekDays?: Array<DayOfWeek> | undefined;
       /**
        * @docid
        * @default false

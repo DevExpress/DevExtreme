@@ -253,9 +253,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       preventScrollEvents: false,
       _ignorePreventScrollEventsDeprecation: true,
       contentTemplate: (contentElement) => this._renderList(contentElement),
-      _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error
-      maxHeight: () => this._getMaxHeight(),
+      maxHeight: this._getMaxHeight(),
       position: {
         // @ts-expect-error
         my: `top ${rtlEnabled ? 'left' : 'right'}`,
@@ -322,6 +320,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       windowHeight,
       maxHeight - POPUP_VERTICAL_OFFSET - POPUP_BOUNDARY_VERTICAL_OFFSET,
     );
+  }
+
+  _dimensionChanged(): void {
+    this._popup?.option('maxHeight', this._getMaxHeight());
   }
 
   _closeOutsideDropDownHandler(

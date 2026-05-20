@@ -4,7 +4,7 @@ import ButtonGroup, { type Properties as ButtonGroupProperties } from '@js/ui/bu
 
 const CHAT_SUGGESTIONS_CLASS = 'dx-chat-suggestions';
 
-type SuggestionsOptions = Omit<ButtonGroupProperties, 'selectionMode'>;
+export type SuggestionsOptions = Omit<ButtonGroupProperties, 'selectionMode'>;
 
 class Suggestions {
   private readonly _$container?: dxElementWrapper;
@@ -40,18 +40,18 @@ class Suggestions {
   }
 
   private _initButtonGroup(options: SuggestionsOptions = {}): void {
-    if (this._hasOptions(options) && this._$element) {
+    if (this._hasItems(options) && this._$element) {
       this._$element.addClass(CHAT_SUGGESTIONS_CLASS);
       this._buttonGroup = new ButtonGroup(this._$element.get(0), this._getConfiguration(options));
     }
   }
 
-  private _hasOptions(options: SuggestionsOptions | undefined): boolean {
-    return Boolean(Object.keys(options ?? {}).length);
+  private _hasItems(options: SuggestionsOptions | undefined): boolean {
+    return Boolean(options?.items?.length);
   }
 
   updateOptions(options: SuggestionsOptions | undefined): void {
-    if (!this._hasOptions(options)) {
+    if (!this._hasItems(options)) {
       this.clean();
       return;
     }

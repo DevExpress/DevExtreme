@@ -66,23 +66,6 @@ const schedulerR1Overrides = [
 ];
 
 const schedulerLegacyMembers = [
-    // workspaces/m_work_space.ts
-    '_$allDayPanel',
-    '_$dateTable',
-    '_$dateTableScrollableContent',
-    '_$flexContainer',
-    '_$groupTable',
-    '_$headerPanel',
-    '_$headerPanelContainer',
-    '_$thead',
-    '_dateTableScrollable',
-    '_getCellCount',
-    '_getGroupCount',
-    '_groupedStrategy',
-    '_isHorizontalGroupedWorkSpace',
-    '_shader',
-    '_sidebarScrollable',
-
     // m_scheduler.ts
     '_appointments',
     '_compactAppointmentsHelper',
@@ -107,10 +90,10 @@ const schedulerLegacyMembers = [
     // appointment_popup/m_legacy_popup.ts
     '_ignorePreventScrollEventsDeprecation',
 
-    // header/m_header.ts
+    // header/header.ts
     '_useShortDateFormat',
 
-    // header/m_view_switcher.ts
+    // header/view_switcher.ts
     '_wrapperClassExternal',
 
     // utils/options/constants.ts, utils/options/types.ts

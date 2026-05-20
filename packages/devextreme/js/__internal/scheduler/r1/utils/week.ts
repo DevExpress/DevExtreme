@@ -2,6 +2,8 @@ import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
 
 import type { CalculateStartViewDate } from '../../types';
+import { formatImplicitSchedulerTime } from '../../utils/global_formats';
+import { getFirstVisibleDate } from '../../utils/skipped_days';
 import {
   getCalculatedFirstDayOfWeek,
   getValidCellDateForLocalTimeFormat,
@@ -29,7 +31,7 @@ export const getTimePanelCellText = (
     viewOffset,
   });
 
-  return dateLocalization.format(validTimeDate, 'shorttime') as string;
+  return formatImplicitSchedulerTime(validTimeDate);
 };
 
 export const getIntervalDuration = (
@@ -49,6 +51,7 @@ export const calculateStartViewDate: CalculateStartViewDate = (
   startDate,
   intervalDuration,
   firstDayOfWeekOption,
+  skippedDays = [],
 ) => {
   const firstDayOfWeek = getCalculatedFirstDayOfWeek(firstDayOfWeekOption);
   const viewStart = getViewStartByOptions(
@@ -58,7 +61,12 @@ export const calculateStartViewDate: CalculateStartViewDate = (
     getValidStartDate(startDate, firstDayOfWeek),
   );
 
-  const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
+  const weekStartDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
+  const firstViewDate = getFirstVisibleDate(
+    weekStartDate,
+    skippedDays,
+    (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+  );
 
   return setOptionHour(firstViewDate, startDayHour);
 };

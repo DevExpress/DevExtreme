@@ -20,7 +20,7 @@ export const employees = [
   {
     key: 'Mr. Robert Reagan',
     items: [
-      'Deliver R&D Plans for 2013',
+      'Deliver R&D Plans for 2026',
       'Decide on Mobile Devices to Use in the Field',
       'Try New Touch-Enabled WinForms Apps',
       'Approval on Converting to New HDMI Specification',
@@ -37,9 +37,9 @@ export const employees = [
   {
     key: 'Mr. Brett Wade',
     items: [
-      'Prepare 3013 Marketing Plan',
+      'Prepare 2026 Marketing Plan',
       'Rollout of New Website and Marketing Brochures',
-      'Review 2012 Sales Report and Approve 2013 Plans',
+      'Review 2022 Sales Report and Approve 2026 Plans',
       'Review Site Up-Time Report',
     ],
   },
@@ -63,7 +63,7 @@ export const employees = [
   {
     key: 'Ms. Cynthia Stanwick',
     items: [
-      'Prepare 2013 Financial',
+      'Prepare 2026 Financial',
       'Update Revenue Projections',
       'Submit D&B Number to ISP for Credit Approval',
     ],

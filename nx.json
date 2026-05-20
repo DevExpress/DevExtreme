@@ -45,5 +45,6 @@
   "defaultBase": "master",
   "tui": {
     "enabled": false
-  }
+  },
+  "analytics": false
 }

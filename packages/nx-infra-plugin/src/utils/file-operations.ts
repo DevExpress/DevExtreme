@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises';
 import * as fse from 'fs-extra';
 import * as path from 'path';
+import * as os from 'os';
 import { glob } from 'glob';
 
 const ENCODING_UTF8 = 'utf-8';
@@ -63,4 +64,12 @@ export async function writeFileText(filePath: string, content: string): Promise<
 
 export async function copyRecursive(from: string, to: string): Promise<void> {
   await fse.copy(from, to);
+}
+
+export function normalizeEol(content: string): string {
+  return content.replace(/\r?\n/g, os.EOL);
+}
+
+export function ensureTrailingNewline(content: string): string {
+  return content.endsWith(os.EOL) ? content : content + os.EOL;
 }
