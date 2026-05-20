@@ -11,10 +11,10 @@ The DevExtreme [DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Compo
 
 The chat also supports [speech-to-text input](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled), ideal for hands-free interactions or entering longer prompts.
 
-This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant chat. These buttons allow you to interact with the assistant in one click using pre-defined prompts. For additional information about suggestions, refer to the following technical demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
-
 The AI Assistant feature is also available for the DevExtreme [TreeList](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#aiAssistant) component.
 <!--split-->
+
+In this demo, the AI Assistant is enabled for a DataGrid that displays mock sale data with over 1500 records.
 
 [note]
 
@@ -24,8 +24,8 @@ When connected to your own AI model/service without rate and data limits, the AI
 
 [/note]
 
-In this demo, the AI Assistant is enabled for a DataGrid that displays mock sale data with over 1500 records.
-
 To enable the AI Assistant, configure [aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#aiIntegration) or **aiAssistant**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#aiIntegration) and set **aiAssistant**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#enabled) to `true`.
 
 When this feature is enabled, DataGrid adds a predefined item (*"aiAssistantButton"*) to the component's toolbar. This button opens the AI Assistant chat. The assistant is displayed in a popup that users can move around the screen as needed.
+
+This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant chat. These buttons allow you to interact with the assistant in one click using pre-defined prompts. For additional information about suggestions, refer to the following technical demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
