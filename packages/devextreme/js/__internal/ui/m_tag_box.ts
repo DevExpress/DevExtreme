@@ -1117,9 +1117,9 @@ class TagBox<
   }
 
   _shouldUseClickOrderForTags(values: TagBox['_valuesToUpdate']): boolean {
-    const { maxDisplayedTags } = this.option();
+    const { maxDisplayedTags, showMultiTagOnly } = this.option();
 
-    return !this.option('showMultiTagOnly')
+    return !showMultiTagOnly
       && isDefined(maxDisplayedTags)
       && values.length > maxDisplayedTags;
   }

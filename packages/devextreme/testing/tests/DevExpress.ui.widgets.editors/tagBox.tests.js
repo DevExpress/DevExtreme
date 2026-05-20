@@ -1102,7 +1102,7 @@ QUnit.module('multi tag support', {
         assert.strictEqual($tagBox.find('.' + TAGBOX_TAG_CLASS).first().text(), '10', 'leading tag has correct text');
     });
 
-    QUnit.test('TagBox should work correct with string ID\'s in item when valueExpr is used', function(assert) {
+    QUnit.test('TagBox should work correctly with string ID\'s in item when valueExpr is used', function(assert) {
         const items = [
             { ID: 'a', Name: 'HD Video Player' },
             { ID: 'b', Name: 'SuperHD Video Player' },
@@ -1126,8 +1126,8 @@ QUnit.module('multi tag support', {
         const $listItems = getListItems(tagBox);
 
         $listItems.last().trigger('dxclick');
-        $listItems.eq(7).trigger('dxclick');
-        $listItems.eq(6).trigger('dxclick');
+        $listItems.eq(2).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
 
 
         assert.strictEqual($tagBox.find('.' + TAGBOX_TAG_CLASS).first().text(), items[items.length - 1].Name, 'leading tag has correct text');
