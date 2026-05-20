@@ -1,11 +1,22 @@
 import {
-  describe, expect, it,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
 } from '@jest/globals';
 import type { Message } from '@js/ui/chat';
+import { custom } from '@js/ui/dialog';
+import * as themes from '@js/ui/themes';
 
-import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from '../const';
+import {
+  AI_ASSISTANT_AUTHOR_ID,
+  AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH,
+  AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
+} from '../const';
 import type { JsonSchema } from '../types';
 import {
+  createConfirmDialog,
   expandTypeArraysToAnyOf,
   getMessageStatus,
   hasAbortedCommands,
@@ -18,6 +29,19 @@ import {
   isTitleOption,
   isUserMessage,
 } from '../utils';
+
+jest.mock('@js/ui/dialog', () => ({
+  custom: jest.fn().mockReturnValue({
+    show: jest.fn(),
+    hide: jest.fn(),
+  }),
+}));
+
+jest.mock('@js/ui/themes', () => ({
+  current: jest.fn().mockReturnValue('generic.light'),
+  isFluent: jest.fn().mockReturnValue(false),
+  isCompact: jest.fn().mockReturnValue(false),
+}));
 
 describe('isAIMessage', () => {
   it('should return true for message with assistant author id', () => {
@@ -224,7 +248,7 @@ describe('getMessageStatus', () => {
       { status: 'success' as const, message: 'Filtered' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Success);
+    expect(getMessageStatus(commands)).toBe('success');
   });
 
   it('should return Failure when commands contain errors', () => {
@@ -233,7 +257,7 @@ describe('getMessageStatus', () => {
       { status: 'failure' as const, message: 'Failed to filter' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+    expect(getMessageStatus(commands)).toBe('failure');
   });
 
   it('should return Failure when commands contain aborted items', () => {
@@ -242,7 +266,7 @@ describe('getMessageStatus', () => {
       { status: 'aborted' as const, message: 'Filter was aborted' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+    expect(getMessageStatus(commands)).toBe('failure');
   });
 
   it('should return Failure when commands contain both errors and aborted items', () => {
@@ -251,11 +275,11 @@ describe('getMessageStatus', () => {
       { status: 'aborted' as const, message: 'Aborted' },
     ];
 
-    expect(getMessageStatus(commands)).toBe(MessageStatus.Failure);
+    expect(getMessageStatus(commands)).toBe('failure');
   });
 
   it('should return Success when commands array is empty', () => {
-    expect(getMessageStatus([])).toBe(MessageStatus.Success);
+    expect(getMessageStatus([])).toBe('success');
   });
 });
 
@@ -732,5 +756,120 @@ describe('hoistSchemaRefs', () => {
     const items = listNode.items as JsonSchema;
     const itemsAnyOf = items.anyOf as JsonSchema[];
     expect(itemsAnyOf[0]).toEqual({ $ref: '#/$defs/p_Item' });
+  });
+});
+
+describe('createConfirmDialog', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (themes.isFluent as jest.Mock).mockReturnValue(false);
+    (themes.isCompact as jest.Mock).mockReturnValue(false);
+  });
+
+  it('should call custom dialog with correct default options', () => {
+    createConfirmDialog();
+
+    expect(custom).toHaveBeenCalledTimes(1);
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        showTitle: false,
+        dragEnabled: false,
+        width: AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
+        buttons: expect.arrayContaining([
+          expect.objectContaining({ onClick: expect.any(Function) }),
+          expect.objectContaining({ onClick: expect.any(Function) }),
+        ]),
+      }),
+    );
+  });
+
+  it('should use compact width when compact theme is active', () => {
+    (themes.isCompact as jest.Mock).mockReturnValue(true);
+
+    createConfirmDialog();
+
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH,
+      }),
+    );
+  });
+
+  it('should use default width when non-compact theme is active', () => {
+    (themes.isCompact as jest.Mock).mockReturnValue(false);
+
+    createConfirmDialog();
+
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
+      }),
+    );
+  });
+
+  it('should apply fluent styling to buttons when fluent theme is active', () => {
+    (themes.isFluent as jest.Mock).mockReturnValue(true);
+
+    createConfirmDialog();
+
+    const callArgs = (custom as jest.Mock).mock.calls[0][0] as any;
+    const [cancelButton, applyButton] = callArgs.buttons;
+
+    expect(cancelButton).toEqual(expect.objectContaining({
+      stylingMode: 'contained',
+      type: 'default',
+    }));
+    expect(applyButton).toEqual(expect.objectContaining({
+      stylingMode: 'outlined',
+      type: 'normal',
+    }));
+  });
+
+  it('should not apply fluent styling to buttons when non-fluent theme is active', () => {
+    (themes.isFluent as jest.Mock).mockReturnValue(false);
+
+    createConfirmDialog();
+
+    const callArgs = (custom as jest.Mock).mock.calls[0][0] as any;
+    const [cancelButton, applyButton] = callArgs.buttons;
+
+    expect(cancelButton.stylingMode).toBeUndefined();
+    expect(cancelButton.type).toBeUndefined();
+    expect(applyButton.stylingMode).toBeUndefined();
+    expect(applyButton.type).toBeUndefined();
+  });
+
+  it('should merge custom options', () => {
+    createConfirmDialog({
+      popupOptions: {
+        elementAttr: { class: 'custom-class' },
+      },
+    });
+
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        popupOptions: expect.objectContaining({
+          elementAttr: { class: 'custom-class' },
+        }),
+      }),
+    );
+  });
+
+  it('should have No button that returns false', () => {
+    createConfirmDialog();
+
+    const callArgs = (custom as jest.Mock).mock.calls[0][0] as any;
+    const noButton = callArgs.buttons[0];
+
+    expect(noButton.onClick()).toBe(false);
+  });
+
+  it('should have Yes button that returns true', () => {
+    createConfirmDialog();
+
+    const callArgs = (custom as jest.Mock).mock.calls[0][0] as any;
+    const yesButton = callArgs.buttons[1];
+
+    expect(yesButton.onClick()).toBe(true);
   });
 });

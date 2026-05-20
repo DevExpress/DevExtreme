@@ -4625,7 +4625,9 @@ declare module DevExpress.common.grids {
   /**
    * [descr:AIAssistant]
    */
-  export type AIAssistant = {
+  export type AIAssistant<
+    TCommands extends PredefinedCommands = PredefinedCommands
+  > = {
     /**
      * [descr:AIAssistant.aiIntegration]
      */
@@ -4646,25 +4648,28 @@ declare module DevExpress.common.grids {
      * [descr:AIAssistant.title]
      */
     title?: string;
+    /**
+     * [descr:AIAssistant.customizeResponseTitle]
+     */
+    customizeResponseTitle?: (
+      status: ResponseStatus,
+      commandNames: (keyof TCommands)[]
+    ) => string;
+    /**
+     * [descr:AIAssistant.customizeResponseText]
+     */
+    customizeResponseText?: (
+      command: CommandInfo<TCommands>
+    ) => ResponseStatusTexts;
   };
   /**
    * [descr:AIAssistantRequestCreatingInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type AIAssistantRequestCreatingInfo = {
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.context]
-     */
-    context: Record<string, any>;
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.responseSchema]
-     */
-    responseSchema: Record<string, any>;
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.additionalInfo]
-     */
-    additionalInfo?: Record<string, any>;
-  };
+  export type AIAssistantRequestCreatingInfo = Pick<
+    DevExpress.aiIntegration.ExecuteGridAssistantCommandParams,
+    'context' | 'responseSchema' | 'additionalInfo'
+  >;
   export type AIColumnMode = 'auto' | 'manual';
   /**
    * [descr:AIColumnRequestCreatingInfo]
@@ -4694,6 +4699,15 @@ declare module DevExpress.common.grids {
   };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * [descr:BasicFilterExprObj]
+   */
+  export type BasicFilterExprObj = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.SearchOperation;
+    value: string | number | boolean | null;
+  };
   /**
    * [descr:ColumnAIOptions]
    */
@@ -5237,6 +5251,30 @@ declare module DevExpress.common.grids {
   };
   export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**
+   * [descr:CombinedFilterExprObj]
+   */
+  export type CombinedFilterExprObj = {
+    type: 'combined';
+    left: FilterExprObj;
+    combiner: 'and' | 'or';
+    right: FilterExprObj;
+  };
+  /**
+   * [descr:CommandInfo]
+   */
+  export type CommandInfo<
+    TCommands extends PredefinedCommands = PredefinedCommands
+  > = {
+    [K in keyof TCommands]: { name: K; args: TCommands[K] };
+  }[keyof TCommands];
+  /**
+   * [descr:CompositeKeyPair]
+   */
+  export type CompositeKeyPair = {
+    field: string;
+    value: string | number;
+  };
+  /**
    * [descr:DataChange]
    */
   export type DataChange<TRowData = any, TKey = any> = {
@@ -5411,6 +5449,13 @@ declare module DevExpress.common.grids {
   }
   export type EnterKeyAction = 'startEdit' | 'moveFocus';
   export type EnterKeyDirection = 'none' | 'column' | 'row';
+  /**
+   * [descr:FilterExprObj]
+   */
+  export type FilterExprObj =
+    | BasicFilterExprObj
+    | CombinedFilterExprObj
+    | NegatedFilterExprObj;
   export type FilterOperation =
     | '='
     | '<>'
@@ -6436,6 +6481,13 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
+   * [descr:NegatedFilterExprObj]
+   */
+  export type NegatedFilterExprObj = {
+    type: 'negated';
+    expression: FilterExprObj;
+  };
+  /**
    * [descr:NewRowInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6489,6 +6541,80 @@ declare module DevExpress.common.grids {
      */
     pageSize?: number;
   }
+  /**
+   * [descr:PredefinedCommandNames]
+   */
+  export type PredefinedCommandNames = keyof PredefinedCommands;
+  /**
+   * [descr:PredefinedCommands]
+   */
+  export type PredefinedCommands = {
+    columnsVisibility: {
+      dataField: string;
+      visible: boolean;
+    };
+    columnsReorder: {
+      dataField: string;
+      visibleIndex: boolean;
+    };
+    columnsPinning: {
+      dataField: string;
+      fixed: boolean;
+      fixedPosition?: 'left' | 'right';
+    };
+    columnsResize: {
+      dataField: string;
+      width: number | string;
+    };
+    filterValue: {
+      expression: FilterExprObj | null;
+    };
+    clearFilter: {};
+    focusRowByKey: {
+      key: string | number | Array<CompositeKeyPair>;
+    };
+    focusRowByIndex: {
+      index: number;
+    };
+    paging: {
+      enabled: boolean;
+    };
+    pageSize: {
+      pageSize: number;
+    };
+    pageIndex: {
+      pageIndex: number;
+    };
+    searching: {
+      text: string;
+    };
+    selectByKeys: {
+      keys: Array<string | number | Array<CompositeKeyPair>>;
+      preserve: boolean;
+    };
+    selectByIndexes: {
+      indexes: number[];
+    };
+    selectAll: {};
+    deselectAll: {};
+    clearSelection: {};
+    sorting: {
+      dataField: string;
+      sortOrder: SortOrder | 'none';
+    };
+    clearSorting: {};
+  };
+  /**
+   * [descr:ResponseStatus]
+   */
+  export type ResponseStatus = 'success' | 'failure';
+  /**
+   * [descr:ResponseStatusTexts]
+   */
+  export type ResponseStatusTexts = {
+    success?: string;
+    failure?: string;
+  };
   /**
    * [descr:RowDragging]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -12388,6 +12514,11 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:AIAssistant]
+     */
+    export type AIAssistant =
+      DevExpress.common.grids.AIAssistant<DataGridPredefinedCommands>;
+    /**
      * [descr:_ui_data_grid_AIAssistantRequestCreatingEvent]
      */
     export type AIAssistantRequestCreatingEvent<
@@ -12804,6 +12935,11 @@ declare module DevExpress.ui {
       | 'groupExpand'
       | 'selection'
       | 'drag';
+    /**
+     * [descr:DataGridCommandInfo]
+     */
+    export type DataGridCommandInfo =
+      DevExpress.common.grids.CommandInfo<DataGridPredefinedCommands>;
     export type DataGridExportFormat = 'pdf' | 'xlsx';
     export type DataGridPredefinedColumnButton =
       | 'cancel'
@@ -12811,6 +12947,27 @@ declare module DevExpress.ui {
       | 'edit'
       | 'save'
       | 'undelete';
+    /**
+     * [descr:DataGridPredefinedCommandNames]
+     */
+    export type DataGridPredefinedCommandNames =
+      keyof DataGridPredefinedCommands;
+    /**
+     * [descr:DataGridPredefinedCommands]
+     */
+    export type DataGridPredefinedCommands =
+      DevExpress.common.grids.PredefinedCommands & {
+        grouping: {
+          dataField: string;
+          groupIndex: number;
+        };
+        clearGrouping: {};
+        summary: {
+          totalItems: Array<SummaryCommandTotalItem>;
+          groupItems: Array<SummaryCommandGroupItem>;
+        };
+        clearSummary: {};
+      };
     export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
       | 'applyFilterButton'
@@ -13489,6 +13646,7 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     type OverriddenKeys =
+      | 'aiAssistant'
       | 'columns'
       | 'customizeColumns'
       | 'dataRowTemplate'
@@ -13999,6 +14157,26 @@ declare module DevExpress.ui {
       totalItems?: Array<SummaryTotalItem> | undefined;
     };
     /**
+     * [descr:SummaryCommandGroupItem]
+     */
+    export type SummaryCommandGroupItem = Pick<
+      SummaryGroupItem,
+      'showInColumn' | 'displayFormat' | 'showInGroupFooter' | 'alignByColumn'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
+    };
+    /**
+     * [descr:SummaryCommandTotalItem]
+     */
+    export type SummaryCommandTotalItem = Pick<
+      SummaryTotalItem,
+      'showInColumn' | 'displayFormat'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
+    };
+    /**
      * [descr:SummaryGroupItem]
      */
     export type SummaryGroupItem = {
@@ -14301,6 +14479,10 @@ declare module DevExpress.ui {
     >,
     DevExpress.ui.dxDataGrid.OverriddenKeys
   > & {
+    /**
+     * [descr:dxDataGridOptions.aiAssistant]
+     */
+    aiAssistant?: DevExpress.ui.dxDataGrid.AIAssistant;
     /**
      * [descr:dxDataGridOptions.columns]
      */

@@ -136,11 +136,12 @@ export default [
     plugins,
   },
   {
-    input: NG_BASE_DIR + `zod/lib/index.js`,
+    input: NG_BASE_DIR + `zod/lib/index.mjs`,
     output: {
       file: OUTPUT_DIR + `zod.bundle.js`,
       format: 'umd',
       name: 'zod',
+      exports: 'named',
       globals: { },
     },
     external: [],

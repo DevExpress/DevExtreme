@@ -390,8 +390,17 @@ describe('AIAssistantViewController', () => {
 
       const viewController = instance.getController('aiAssistantViewController');
 
-      // Close the AI assistant popup
-      await viewController.toggle();
+      // Close the AI assistant popup — triggers confirm dialog because request is processing.
+      // toggle() rejects with undefined when onHiding cancels the hide.
+      await viewController.toggle().catch(() => {});
+      jest.runAllTimers();
+      await flushAsync();
+
+      // Confirm abort by clicking "Yes" in the confirmation dialog
+      const confirmDialogSelector = '.dx-datagrid-ai-assistant-confirm-dialog';
+      const yesButton = document.querySelectorAll(`${confirmDialogSelector} .dx-button`)[1] as HTMLElement;
+
+      yesButton.click();
       jest.runAllTimers();
       await flushAsync();
 
@@ -461,6 +470,75 @@ describe('AIAssistantViewController', () => {
 
       expect($messages.length).toBe(1);
       expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+    });
+  });
+
+  describe('manual store push', () => {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let validateSpy;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let executeCommandsSpy;
+
+    beforeEach(() => {
+      validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
+        .mockReturnValue(true);
+      executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
+        .mockResolvedValue([
+          { status: 'success', message: 'Done' },
+        ] as CommandResult[]);
+    });
+
+    afterEach(() => {
+      validateSpy.mockRestore();
+      executeCommandsSpy.mockRestore();
+    });
+
+    it('should not throw error when user message is manually pushed to the message store', async () => {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let chatStore;
+      const { aiIntegration } = createMockAIIntegration();
+
+      await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1' },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID', dataType: 'number' },
+          { dataField: 'name', caption: 'Name', dataType: 'string' },
+        ],
+        aiAssistant: {
+          enabled: true,
+          aiIntegration,
+          chat: {
+            user: { id: 'user' },
+            onInitialized: (e) => {
+              chatStore = e.component?.getDataSource().store();
+            },
+          },
+          popup: {
+            visible: true,
+          },
+        },
+      });
+
+      try {
+        chatStore.push([{
+          type: 'insert',
+          data: {
+            id: 'manual-msg-1',
+            author: { id: 'user', name: 'User' },
+            text: 'Sort by name',
+            timestamp: new Date().toISOString(),
+          },
+        }]);
+
+        await flushAsync();
+        await flushAsync();
+      } catch (error) {
+        expect(error).toBeUndefined(); // Force fail if error is thrown
+      }
+
+      expect(true).toBe(true);
     });
   });
 });
