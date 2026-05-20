@@ -60,7 +60,7 @@ const pageIndexCommandSchema = z.object({
 
 export const pageIndexCommand = defineGridCommand({
   name: 'pageIndex',
-  description: 'Navigate to a specific page (0-based: page 0 is first; pageIndex must be less than the total page count).',
+  description: 'Navigate to a specific page. If the user asks to set pageIndex, it is 0-based: page 0 is the first; pageIndex must be less than the total page count. But if the user asks to change the page number, it is 1-based. So the first page has pageIndex=0, the fifth page has pageIndex=4.',
   schema: pageIndexCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const paging = component.option('paging');
