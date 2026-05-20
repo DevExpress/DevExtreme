@@ -1,18 +1,29 @@
-With our v26.1 release, we will extend the AI-powered capabilities of both the DevExtreme [DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Overview/) and [TreeList](https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/Overview/). We plan to introduce a DevExtreme Chat-based AI assistant that will allow you to use natural language to interact with DataGrid/TreeList. The DataGrid/TreeList AI assistant will be able to complete the following actions:
-* Sort, filter, search, and group data.
-* Resize, reorder, fix/unfix, and show/hide columns.
-* Change pagination settings.
+The AI Assistant for the DevExtreme [DataGrid](/Documentation/Guide/UI_Components/DataGrid/Overview/) allows you to interact with the component using natural language. The Chat also supports [speech-to-text input](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled), ideal for hands-free interactions or entering longer prompts.
+
+You can use/configure the following DataGrid features in the AI Assistant Chat prompts:
+
+- [Filtering and Searching](/Documentation/Guide/UI_Components/DataGrid/Filtering_and_Searching/)
+- [Sorting](/Documentation/Guide/UI_Components/DataGrid/Sorting/)
+- [Grouping](/Documentation/Guide/UI_Components/DataGrid/Grouping/)
+- [Paging](/Documentation/Guide/UI_Components/DataGrid/Paging/)
+- [Focused Row](/Documentation/Guide/UI_Components/DataGrid/Focused_Row/)
+- [Selection](/Documentation/Guide/UI_Components/DataGrid/Selection/)
+- [Summaries](/Documentation/Guide/UI_Components/DataGrid/Summaries/Predefined_Aggregate_Functions/)
+- [Column Fixing](/Documentation/Guide/UI_Components/DataGrid/Columns/Column_Fixing/), [Resizing](/Documentation/Guide/UI_Components/DataGrid/Columns/Column_Sizing/), and [Reordering](/Documentation/Guide/UI_Components/DataGrid/Columns/Column_Reordering/)
+
+The AI Assistant feature is also available for the DevExtreme [TreeList](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#aiAssistant) component.
 <!--split-->
 
-This feature is particularly well suited for the following usage scenarios:
+In this demo, the AI Assistant is enabled for a DataGrid that displays mock sales data with over 1500 records.
 
-* **Large Datasets**: Use the power of AI to browse large data sets. Apply complex filter values with natural language.
+[note]
 
+AI services used for this demo have been rate and data limited. As such, you may experience performance-related delays when exploring the capabilities of the DataGrid AI Assistant.
 
-* **Complex Grid Configurations**: Allow users to specify complex display preferences quickly.
+When connected to your own AI model/service without rate and data limits, the AI Assistant will perform seamlessly, without artificial delays. Note that DevExtreme does not offer an AI REST API and does not ship any built-in LLMs/SLMs.
 
+[/note]
 
-* **Accessibility-first Applications**: Allow users to interact with your application in a manner that is most appropriate for each specific situation: while at their desk, or on the go (when their hands are busy and they require voice commands to interact with your app).
+To enable the AI Assistant, configure the [aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#aiIntegration) or **aiAssistant**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#aiIntegration) object and set the **aiAssistant**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#enabled) property to `true`. Once activated, the DataGrid adds a predefined item (*"aiAssistantButton"*) to the toolbar. This button opens the AI Assistant Chat in a draggable pop-up window.
 
-
-* **Replicable Configurations**: Apply the same prompt to recreate complex grid configurations across sessions. Reduce time spent on tedious layout adjustments.
+This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant Chat. These buttons allow you to interact with the assistant in one click using predefined prompts. For additional information about suggestions, refer to the following demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
