@@ -468,4 +468,32 @@ export const value = 42;
     const firstLine = content.split('\n')[0];
     expect(firstLine).toMatch(/^\/\*-CUSTOM-/);
   });
+
+  it('should not require repository when licenseTemplateFile overrides mode=mit', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const buildDir = path.join(projectDir, 'build');
+    fs.mkdirSync(buildDir, { recursive: true });
+    await writeFileText(
+      path.join(buildDir, 'custom-template.txt'),
+      `/*-CUSTOM-<%= pkg.name %>-CUSTOM-*/\n`,
+    );
+    await writeJson(path.join(projectDir, 'package.json'), {
+      name: 'test-pkg',
+      version: '1.0.0',
+    });
+
+    const options: AddLicenseHeadersExecutorSchema = {
+      targetDirectory: './npm',
+      packageJsonPath: './package.json',
+      licenseTemplateFile: './build/custom-template.txt',
+      mode: 'mit',
+      includePatterns: ['**/*.js'],
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const content = await readFileText(path.join(projectDir, 'npm', 'index.js'));
+    expect(content.split('\n')[0]).toMatch(/^\/\*-CUSTOM-test-pkg-CUSTOM-/);
+  });
 });

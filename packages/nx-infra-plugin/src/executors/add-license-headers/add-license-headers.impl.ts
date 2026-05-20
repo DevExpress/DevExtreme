@@ -64,7 +64,7 @@ function computeFilename(
 
 async function buildBannerRenderer(inputs: BannerInputs): Promise<RenderBannerFn> {
   const githubUrl =
-    inputs.templatePath === DEFAULT_LICENSE_TEMPLATE_MIT || inputs.mode === 'mit'
+    inputs.templatePath === DEFAULT_LICENSE_TEMPLATE_MIT
       ? extractGitHubUrl(inputs.pkg.repository, inputs.packageJsonPath ?? UNKNOWN_PACKAGE_JSON)
       : '';
 
