@@ -42,21 +42,26 @@ const changePaging = function (that, optionName, value) {
         dataSource[optionName](value);
 
         that._skipProcessingPagingChange = true;
-        that.option(`paging.${optionName}`, value);
-        if (optionName === 'pageSize' && value === 0) {
+
+        if (optionName === 'pageSize') {
           that.option('paging.pageIndex', 0);
         }
+        that.option(`paging.${optionName}`, value);
+
         that._skipProcessingPagingChange = false;
         const pageIndex = dataSource.pageIndex();
         that._isPaging = optionName === 'pageIndex';
+
         return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
           .done(() => {
             that._isPaging = false;
             that.pageChanged.fire(pageIndex);
           });
       }
+
       return Deferred().resolve().promise();
     }
+
     return dataSource[optionName]();
   }
 
