@@ -4,31 +4,24 @@ import { logger } from '@nx/devkit';
 import { createExecutor } from '../../utils/create-executor';
 import { PackNpmExecutorSchema } from './schema';
 
-const DEFAULT_DIST_DIR = './npm';
-
 const MSG_PACK_SUCCESS = 'pnpm pack completed successfully';
 const ERROR_PROJECT_NAME_MISSING = 'Project name is not defined in context';
 
 interface ResolvedPackNpm {
-  projectRoot: string;
   projectPath: string;
-  distDirectory: string;
 }
 
 export default createExecutor<PackNpmExecutorSchema, ResolvedPackNpm>({
   name: 'PackNpm',
-  resolve: (options, { projectRoot, context }) => {
+  resolve: (_options, { context }) => {
     if (!context.projectName) {
       throw new Error(ERROR_PROJECT_NAME_MISSING);
     }
-    const distDirectory = options.workingDirectory || DEFAULT_DIST_DIR;
     const projectPath = path.join(context.root, 'packages', context.projectName);
-    return { projectRoot, projectPath, distDirectory };
+    return { projectPath };
   },
   run: async (resolved) => {
-    logger.verbose(
-      `Running pnpm pack from ${resolved.projectRoot} (packaging ${resolved.distDirectory})...`,
-    );
+    logger.verbose(`Running pnpm pack from ${resolved.projectPath}...`);
 
     execSync(`pnpm pack`, {
       cwd: resolved.projectPath,

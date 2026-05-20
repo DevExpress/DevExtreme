@@ -81,15 +81,13 @@ describe('PackNpmExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  it('should create tarball inside npm directory', async () => {
+  it('should create tarball in project directory', async () => {
     if (!pnpmAvailable) {
       console.log('Skipping test: pnpm not available');
       return;
     }
 
-    const options: PackNpmExecutorSchema = {
-      workingDirectory: `./${NPM_DIR_NAME}`,
-    };
+    const options: PackNpmExecutorSchema = {};
 
     const result = await executor(options, context);
 
