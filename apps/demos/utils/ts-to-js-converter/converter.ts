@@ -78,13 +78,11 @@ const pipeSource = async (
   }));
 };
 
-const execFilePromise = promisify(cps.execFile);
-
 const execTsc = async (directory: string, args: string[]): Promise<string> => {
   const [cmd, cmdArgs] = isWindows()
     ? ['cmd', ['/c', 'tsc.cmd', ...args]]
     : ['tsc', args];
-  const { stdout } = await execFilePromise(cmd, cmdArgs, { cwd: directory });
+  const { stdout } = await promisify(cps.execFile)(cmd, cmdArgs, { cwd: directory });
   return stdout;
 };
 
