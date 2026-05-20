@@ -85,7 +85,7 @@ const execTsc = async (directory: string, args: string[]): Promise<string> => {
     ? ['cmd', ['/c', 'tsc.cmd', ...args]]
     : ['tsc', args];
   const { stdout } = await execFilePromise(cmd, cmdArgs, { cwd: directory });
-    return stdout;
+  return stdout;
 };
 
 const compile = async (resolve: PathResolvers, log: Logger) => {
