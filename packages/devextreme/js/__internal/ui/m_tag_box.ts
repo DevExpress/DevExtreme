@@ -1117,7 +1117,7 @@ class TagBox<
   }
 
   _shouldUseClickOrderForTags(values: TagBox['_valuesToUpdate']): boolean {
-    const maxDisplayedTags = this.option('maxDisplayedTags');
+    const { maxDisplayedTags } = this.option();
 
     return !this.option('showMultiTagOnly')
       && isDefined(maxDisplayedTags)
@@ -1219,8 +1219,7 @@ class TagBox<
 
   _renderTagsElements(items): void {
     const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
-    const showMultiTagOnly = this.option('showMultiTagOnly');
-    const maxDisplayedTags = this.option('maxDisplayedTags');
+    const { showMultiTagOnly, maxDisplayedTags } = this.option();
 
     items.forEach((item, index) => {
       // @ts-expect-error ts-error
