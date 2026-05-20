@@ -558,9 +558,7 @@ describe('Appointments', () => {
         const viewItem1 = instance.getViewItemBySortedIndex(1);
 
         (viewItem0?.$element().get(0) as HTMLElement).click();
-        viewItem0?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(viewItem0?.$element().attr('tabindex')).toBe('-1');
         expect(viewItem1?.$element().attr('tabindex')).toBe('0');
@@ -584,9 +582,7 @@ describe('Appointments', () => {
         const viewItem1 = instance.getViewItemBySortedIndex(1);
 
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab', shiftKey: true });
 
         expect(viewItem0?.$element().attr('tabindex')).toBe('0');
         expect(viewItem1?.$element().attr('tabindex')).toBe('-1');
@@ -658,9 +654,7 @@ describe('Appointments', () => {
 
         const viewItem1 = instance.getViewItemBySortedIndex(0);
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(scrollTo).toHaveBeenCalled();
       });
@@ -683,9 +677,7 @@ describe('Appointments', () => {
         const viewItem2 = instance.getViewItemBySortedIndex(2);
 
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(document.activeElement).toBe(viewItem2?.$element().get(0));
       });
@@ -708,9 +700,7 @@ describe('Appointments', () => {
 
         const viewItem1 = instance.getViewItemBySortedIndex(1);
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         // item2 is not rendered yet, so focus cannot move yet
         expect(instance.getViewItemBySortedIndex(2)).toBeUndefined();
@@ -744,9 +734,7 @@ describe('Appointments', () => {
 
         const viewItem0 = instance.getViewItemBySortedIndex(0);
         (viewItem0?.$element().get(0) as HTMLElement).click();
-        viewItem0?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(scrollTo).toHaveBeenCalledWith(appointmentStartDate, expect.anything());
       });
@@ -770,9 +758,7 @@ describe('Appointments', () => {
 
         const viewItem0 = instance.getViewItemBySortedIndex(0);
         (viewItem0?.$element().get(0) as HTMLElement).click();
-        viewItem0?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(scrollTo).toHaveBeenCalledWith(startViewDate, expect.anything());
       });
@@ -781,9 +767,7 @@ describe('Appointments', () => {
     describe('Navigation after partial render', () => {
       const pressTab = (): void => {
         const activeElement = document.activeElement as HTMLElement;
-        activeElement.dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(activeElement, { key: 'Tab' });
       };
 
       it('should navigate to the last appointment correctly after an appointment is added', () => {
