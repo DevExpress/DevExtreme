@@ -10,7 +10,7 @@
 - **Languages:** TypeScript, JavaScript, SCSS
 - **Package Manager:** pnpm 9.15.4 (specified in package.json)
 - **Node Version:** 20.x (required by CI)
-- **Build System:** Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
+- **Build System:** Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`) + package-specific Gulp tasks
 - **Test Frameworks:** QUnit, Jest, TestCafe, Karma (Angular)
 
 ## Critical Setup Requirements

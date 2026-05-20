@@ -48,24 +48,11 @@
         "{projectRoot}/testing/artifacts"
       ]
     },
-    "copy:bundles-to-cjs": {
-      "executor": "devextreme-nx-infra-plugin:copy-files",
-      "options": {
-        "files": [
-          { "from": "./node_modules/devextreme/bundles", "to": "./node_modules/devextreme/cjs/bundles" }
-        ]
-      },
-      "inputs": [
-        "{workspaceRoot}/pnpm-lock.yaml"
-      ],
-      "outputs": []
-    },
     "prepare-bundles": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
           "pnpm run generate-devextreme-angular-umd",
-          "pnpm nx copy:bundles-to-cjs devextreme-demos",
           "node scripts/build-bundles.js",
           "node scripts/update-config.js"
         ],
