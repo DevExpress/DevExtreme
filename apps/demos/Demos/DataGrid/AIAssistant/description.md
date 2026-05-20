@@ -1,6 +1,6 @@
-The AI Assistant for the DevExtreme [DataGrid](/Documentation/Guide/UI_Components/DataGrid/Overview/) allows you to interact with the component using natural language. The chat also supports [speech-to-text input](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled), ideal for hands-free interactions or entering longer prompts.
+The AI Assistant for the DevExtreme [DataGrid](/Documentation/Guide/UI_Components/DataGrid/Overview/) allows you to interact with the component using natural language. The Chat also supports [speech-to-text input](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled), ideal for hands-free interactions or entering longer prompts.
 
-You can use/configure the following DataGrid features in the AI Assistant chat prompts:
+You can use/configure the following DataGrid features in the AI Assistant Chat prompts:
 
 - [Filtering and Searching](/Documentation/Guide/UI_Components/DataGrid/Filtering_and_Searching/)
 - [Sorting](/Documentation/Guide/UI_Components/DataGrid/Sorting/)
@@ -24,6 +24,6 @@ When connected to your own AI model/service without rate and data limits, the AI
 
 [/note]
 
-To enable the AI Assistant, configure the [aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#aiIntegration) or **aiAssistant**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#aiIntegration) object and set the **aiAssistant**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#enabled) property to `true`. Once activated, the DataGrid adds a predefined item (*"aiAssistantButton"*) to the toolbar. This button opens the AI Assistant chat in a draggable pop-up window.
+To enable the AI Assistant, configure the [aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#aiIntegration) or **aiAssistant**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#aiIntegration) object and set the **aiAssistant**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/aiAssistant/#enabled) property to `true`. Once activated, the DataGrid adds a predefined item (*"aiAssistantButton"*) to the toolbar. This button opens the AI Assistant Chat in a draggable pop-up window.
 
-This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant chat. These buttons allow you to interact with the assistant in one click using predefined prompts. For additional information about suggestions, refer to the following demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
+This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant Chat. These buttons allow you to interact with the assistant in one click using predefined prompts. For additional information about suggestions, refer to the following demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
