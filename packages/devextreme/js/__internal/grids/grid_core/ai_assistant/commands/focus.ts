@@ -48,7 +48,7 @@ const focusRowByKeyCommandSchema = z.object({
 
 export const focusRowByKeyCommand = defineGridCommand({
   name: 'focusRowByKey',
-  description: 'Focus a specific row by its key value. The key matches the grid\'s keyExpr or the underlying store\'s key — pass a string or number for a single-field key, or an array of {field, value} pairs for a composite key. Requires focusedRowEnabled to be true on the grid.',
+  description: 'Focus a specific row by its key value. The key matches the grid\'s keyExpr or the underlying store\'s key — pass a string or number for a single-field key, or an array of {field, value} pairs for a composite key.',
   schema: focusRowByKeyCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const defaultMessage = 'Focus row.';
