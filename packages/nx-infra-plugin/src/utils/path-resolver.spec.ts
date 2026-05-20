@@ -5,11 +5,10 @@ describe('resolveOptionPaths', () => {
   const projectRoot = path.resolve('/workspace/packages/my-project');
 
   it('resolves each listed key from options', () => {
-    const result = resolveOptionPaths(
-      { outDir: './dist', cacheDir: './.cache' },
-      projectRoot,
-      ['outDir', 'cacheDir'] as const,
-    );
+    const result = resolveOptionPaths({ outDir: './dist', cacheDir: './.cache' }, projectRoot, [
+      'outDir',
+      'cacheDir',
+    ] as const);
 
     expect(result).toEqual({
       outDir: path.resolve(projectRoot, './dist'),
