@@ -39,11 +39,15 @@ test('Full size pager', async (t) => {
     .eql('Page 6 of 20 (100 items)')
     .expect(dataGrid.getDataCell(29, 2).element.textContent)
     .eql('29');
-  // set page sige to 10
+
+  // set page size to 10
   await t
     .click(pager.getPageSize(1).element)
-    .expect(dataGrid.getDataCell(10 * 6 - 1, 2).element.textContent)
-    .eql('59');
+    .expect(dataGrid.getDataCell(9, 2).element.textContent)
+    .eql('9')
+    .expect(pager.getInfoText().textContent)
+    .eql('Page 1 of 10 (100 items)');
+
   // set page index 7
   await t
     .click(pager.getNavPage('7').element)
@@ -51,11 +55,13 @@ test('Full size pager', async (t) => {
     .eql('69')
     .expect(pager.getInfoText().textContent)
     .eql('Page 7 of 10 (100 items)');
+
   // navigate to prev page (6)
   await t
     .click(pager.getPrevNavButton().element)
     .expect(pager.getInfoText().textContent)
     .eql('Page 6 of 10 (100 items)');
+
   // navigate to next page (7)
   await t
     .click(pager.getNextNavButton().element)
@@ -75,12 +81,13 @@ test.meta({ browserSize: [350, 600] })('Compact pager', async (t) => {
   const pageIndexWidget = new TextBox(pager.getPageIndexWidget() as any);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .typeText(pageIndexWidget.input, '7', { replace: true })
     .click(pageSizeWidget.dropDownButton)
     .pressKey('down')
     .pressKey('enter')
     .expect(pageSizeWidget.input.value)
     .eql('10')
+    .typeText(pageIndexWidget.input, '7', { replace: true })
+    .pressKey('enter')
     .expect(dataGrid.getDataCell(10 * 7 - 1, 2).element.textContent)
     .eql('69');
 
@@ -267,6 +274,7 @@ test('Pager info should show page 1 of 1 after changing pageSize to \'all\' with
     showPageSizeSelector: true,
     showInfo: true,
     showNavigationButtons: true,
+    displayMode: 'full',
   },
   height: 400,
 }));
@@ -300,6 +308,7 @@ test('Pager info should show page 1 of 1 after changing pageSize to \'all\' and 
     showPageSizeSelector: true,
     showInfo: true,
     showNavigationButtons: true,
+    displayMode: 'full',
   },
   height: 400,
   onOptionChanged: (e) => {
