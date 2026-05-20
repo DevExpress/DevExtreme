@@ -1,7 +1,3 @@
-/**
- * Replaces `gulp update-config` task.
- * Creates demo config files with bundle mode enabled.
- */
 const { join } = require('path');
 const createConfig = require('../utils/internal/create-config');
 

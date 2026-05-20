@@ -1,8 +1,3 @@
-/**
- * Replaces `gulp js` task.
- * Initializes repository config, copies JS shared resources,
- * and creates demo config files (without bundles).
- */
 const { join } = require('path');
 const { init } = require('../utils/shared/config-helper');
 const createConfig = require('../utils/internal/create-config');

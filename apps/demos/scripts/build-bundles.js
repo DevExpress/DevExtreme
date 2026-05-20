@@ -1,13 +1,6 @@
-/**
- * Replaces `gulp bundles` task.
- * Copies devextreme bundles and builds framework bundles in parallel.
- */
-const { copyBundlesFolder, build } = require('../utils/bundle');
+const { build } = require('../utils/bundle');
 
 async function main() {
-  copyBundlesFolder();
-  console.log('copy-bundles: done');
-
   const frameworks = ['vue', 'angular', 'react'];
   await Promise.all(frameworks.map(async (framework) => {
     console.log(`bundle-${framework}: starting...`);
