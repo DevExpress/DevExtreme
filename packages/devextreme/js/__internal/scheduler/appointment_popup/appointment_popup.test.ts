@@ -248,4 +248,92 @@ describe('Isolated AppointmentPopup environment', () => {
       expect(POM.isInputVisible('endTimeEditor')).toBeFalsy();
     });
   });
+
+  describe('startDate/endDate editors behavior', () => {
+    const testAppointment = {
+      text: 'test app',
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+    };
+
+    it('should update endDate when startDate is changed to a value greater than endDate', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('startDateEditor', new Date(2017, 4, 10));
+
+      expect(POM.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.getInputValue('endDateEditor')).toEqual('5/10/2017');
+      expect(POM.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should update endDate when startTime is changed to a value greater than endDate time', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('startTimeEditor', new Date(2017, 4, 9, 12));
+
+      expect(POM.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('endDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('endTimeEditor')).toEqual('1:30 PM');
+    });
+
+    it('should update startDate when endDate is changed to a value less than startDate', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('endDateEditor', new Date(2017, 4, 8));
+
+      expect(POM.getInputValue('startDateEditor')).toEqual('5/8/2017');
+      expect(POM.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should update startDate when endTime is changed to a value less than startDate time', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('endTimeEditor', new Date(2017, 4, 9, 9, 0));
+
+      expect(POM.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('startTimeEditor')).toEqual('7:30 AM');
+      expect(POM.getInputValue('endDateEditor')).toEqual('5/9/2017');
+    });
+
+    it('should not update endDate when startDate is changed to a value less than endDate', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('startDateEditor', new Date(2017, 4, 8));
+
+      expect(POM.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.getInputValue('endDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should not update endDate when startTime is changed to a value less than endDate time', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('startTimeEditor', new Date(2017, 4, 9, 10, 0));
+
+      expect(POM.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('endDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should not update startDate when endDate is changed to a value greater than startDate', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('endDateEditor', new Date(2017, 4, 10));
+
+      expect(POM.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should not update startDate when endTime is changed to a value greater than startDate time', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: testAppointment });
+
+      POM.setInputValue('endTimeEditor', new Date(2017, 4, 9, 12));
+
+      expect(POM.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.getInputValue('endDateEditor')).toEqual('5/9/2017');
+    });
+  });
 });

@@ -4,12 +4,12 @@ import $ from '@js/core/renderer';
 // eslint-disable-next-line devextreme-custom/no-deferred
 import { Deferred } from '@js/core/utils/deferred';
 
-import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
 import { AppointmentForm } from '../../appointment_popup/form';
 import {
   APPOINTMENT_POPUP_CLASS,
   AppointmentPopup,
 } from '../../appointment_popup/popup';
+import { createTimeZoneCalculator } from '../../r1/timezone_calculator/utils';
 import {
   AppointmentDataAccessor,
 } from '../../utils/data_accessor/appointment_data_accessor';
@@ -61,6 +61,7 @@ interface CreateAppointmentPopupOptions {
   editing?: Record<string, unknown>;
   firstDayOfWeek?: number;
   startDayHour?: number;
+  timeZone?: string;
   onAppointmentFormOpening?: (...args: unknown[]) => void;
   onSave?: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   title?: string;
@@ -110,7 +111,7 @@ export const createAppointmentPopup = async (
 
   const dataAccessors = new AppointmentDataAccessor(DEFAULT_FIELDS, false);
   const resourceManager = new ResourceManager([]);
-  const timeZoneCalculator = mockTimeZoneCalculator;
+  const timeZoneCalculator = createTimeZoneCalculator(options.timeZone ?? '');
   const editing = { ...DEFAULT_EDITING, ...options.editing };
 
   const addAppointment = options.addAppointment
