@@ -1,10 +1,9 @@
-import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as ts from 'typescript';
 
 const DIST_DIR_NAME = 'dist';
 const SRC_DIR_NAME = 'src';
-const TEMP_TSCONFIG_NAME = 'tsconfig.bootstrap.json';
 const TSCONFIG_LIB_NAME = 'tsconfig.lib.json';
 const EXECUTORS_JSON_NAME = 'executors.json';
 const JSON_EXTENSION = '.json';
@@ -15,13 +14,6 @@ interface PathConfig {
   distDir: string;
   srcDir: string;
   tsconfig: string;
-}
-
-interface TsConfig {
-  extends?: string;
-  compilerOptions?: Record<string, unknown>;
-  include?: string[];
-  exclude?: string[];
 }
 
 interface CompilationResult {
@@ -49,38 +41,39 @@ const checkDistExists = (distPath: string): boolean => {
   return files.length > 0;
 };
 
-const readTsConfig = (configPath: string): TsConfig => {
-  const content = fs.readFileSync(configPath, 'utf8');
-  return JSON.parse(content);
+const formatDiagnostics = (diagnostics: readonly ts.Diagnostic[]): string => {
+  const host: ts.FormatDiagnosticsHost = {
+    getCanonicalFileName: (f) => f,
+    getCurrentDirectory: ts.sys.getCurrentDirectory,
+    getNewLine: () => ts.sys.newLine,
+  };
+  return ts.formatDiagnosticsWithColorAndContext(diagnostics, host);
 };
 
-const createBootstrapConfig = (original: TsConfig): TsConfig => ({
-  ...original,
-  compilerOptions: {
-    ...original.compilerOptions,
-    rootDir: undefined,
-    outDir: `./${DIST_DIR_NAME}`,
-  },
-});
-
-const writeTsConfig = (configPath: string, config: TsConfig): void => {
-  fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-};
-
-const compileTypeScript = (pluginDir: string, configPath: string): CompilationResult => {
-  try {
-    execSync(`pnpm exec tsc -p ${configPath}`, {
-      cwd: pluginDir,
-      stdio: 'inherit',
-      env: { ...process.env, NODE_ENV: 'production' },
-    });
-    return { success: true };
-  } catch (error) {
-    return {
-      success: false,
-      error: (error as Error).message,
-    };
+const compileTypeScript = (configPath: string): CompilationResult => {
+  const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
+  if (configFile.error) {
+    return { success: false, error: formatDiagnostics([configFile.error]) };
   }
+
+  const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, path.dirname(configPath));
+  if (parsed.errors.length > 0) {
+    return { success: false, error: formatDiagnostics(parsed.errors) };
+  }
+
+  const program = ts.createProgram({
+    rootNames: parsed.fileNames,
+    options: parsed.options,
+    projectReferences: parsed.projectReferences,
+  });
+
+  const emitResult = program.emit();
+  const diagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+
+  if (emitResult.emitSkipped || diagnostics.length > 0) {
+    return { success: false, error: formatDiagnostics(diagnostics) };
+  }
+  return { success: true };
 };
 
 const isJsonAsset = (filename: string): boolean =>
@@ -144,12 +137,6 @@ const copyExecutorsJson = (pluginDir: string, distDir: string): boolean => {
   return true;
 };
 
-const cleanupTempConfig = (configPath: string): void => {
-  if (fs.existsSync(configPath)) {
-    fs.unlinkSync(configPath);
-  }
-};
-
 const shouldSkipBuild = (distPath: string, forceRebuild: boolean): boolean => {
   if (forceRebuild) return false;
   return checkDistExists(distPath);
@@ -162,28 +149,16 @@ const buildPlugin = (paths: PathConfig, forceRebuild = false): void => {
   }
 
   console.log('  Compiling TypeScript...');
-
-  const tempConfigPath = path.join(paths.pluginDir, TEMP_TSCONFIG_NAME);
-  const originalConfig = readTsConfig(paths.tsconfig);
-  const bootstrapConfig = createBootstrapConfig(originalConfig);
-
-  writeTsConfig(tempConfigPath, bootstrapConfig);
-
-  try {
-    const result = compileTypeScript(paths.pluginDir, tempConfigPath);
-    if (!result.success) {
-      throw new Error(result.error);
-    }
-
-    console.log('  Copying assets...');
-    copyJsonAssets(paths.srcDir, paths.distDir);
-
-    copyExecutorsJson(paths.pluginDir, paths.distDir);
-
-    console.log('✓ Plugin built successfully!');
-  } finally {
-    cleanupTempConfig(tempConfigPath);
+  const result = compileTypeScript(paths.tsconfig);
+  if (!result.success) {
+    throw new Error(result.error);
   }
+
+  console.log('  Copying assets...');
+  copyJsonAssets(paths.srcDir, paths.distDir);
+  copyExecutorsJson(paths.pluginDir, paths.distDir);
+
+  console.log('✓ Plugin built successfully!');
 };
 
 const parseArgs = (): { forceRebuild: boolean } => {
