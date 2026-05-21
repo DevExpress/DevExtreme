@@ -1,3 +1,7 @@
+import type { ApplyLicenseHeadersOption } from '../add-license-headers/schema';
+
+export type { ApplyLicenseHeadersOption };
+
 export interface LocalizationExecutorSchema {
   messagesDir?: string;
   messageTemplate?: string;
@@ -8,4 +12,5 @@ export interface LocalizationExecutorSchema {
   lintGeneratedFiles?: boolean;
   skipCldrGeneration?: boolean;
   skipMessageGeneration?: boolean;
+  applyLicenseHeaders?: ApplyLicenseHeadersOption;
 }

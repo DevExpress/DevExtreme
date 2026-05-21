@@ -1,8 +1,8 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Create Dual Mode Manifest Executor Schema",
+  "description": "Generate package.json files for dual-mode (ESM + CJS) package support",
   "type": "object",
-  "title": "Create Dual-Mode Manifest Executor",
-  "description": "Generate package.json files for dual-mode (ESM + CJS) package support with main, module, typings, and sideEffects fields",
   "properties": {
     "esmDir": {
       "type": "string",
@@ -35,6 +35,10 @@
       "description": "List of generated .d.ts files that don't exist in srcDir but are generated during build (paths relative to srcDir)"
     }
   },
-  "required": ["esmDir", "cjsDir", "outputDir", "srcDir"],
-  "additionalProperties": false
+  "required": [
+    "esmDir",
+    "cjsDir",
+    "outputDir",
+    "srcDir"
+  ]
 }
