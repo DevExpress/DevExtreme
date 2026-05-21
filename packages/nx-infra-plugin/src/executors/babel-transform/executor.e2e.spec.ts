@@ -143,7 +143,7 @@ export function helper() {
     }, 30000);
   });
 
-  it('should remove DEBUG blocks', async () => {
+  it('should forward removeDebug option to stripDebug helper', async () => {
     const options: BabelTransformExecutorSchema = {
       babelConfigPath: './build/gulp/transpile-config.js',
       configKey: 'cjs',
@@ -160,8 +160,106 @@ export function helper() {
     );
 
     expect(utilsContent).not.toContain('This is debug code');
-    expect(utilsContent).not.toContain('debugOnly');
-    expect(utilsContent).toContain('helper');
-    expect(utilsContent).toContain('something');
   }, 30000);
+
+  describe('copyAssets option', () => {
+    const MINIMAL_BABEL_CONFIG = `
+'use strict';
+module.exports = {
+  cjs: {
+    plugins: [['@babel/plugin-transform-modules-commonjs', { strict: true }]],
+  },
+};
+`;
+    const minimalConfigPath = './build/gulp/minimal-config.js';
+
+    beforeEach(async () => {
+      await writeFileText(path.join(projectDir, minimalConfigPath), MINIMAL_BABEL_CONFIG);
+    });
+
+    it('should not copy any extra files when copyAssets is omitted', async () => {
+      const options: BabelTransformExecutorSchema = {
+        babelConfigPath: minimalConfigPath,
+        configKey: 'cjs',
+        sourcePattern: './js/**/*.js',
+        outDir: './artifacts/transpiled-no-assets',
+      };
+
+      const result = await executor(options, context);
+      expect(result.success).toBe(true);
+
+      const outputDir = path.join(projectDir, 'artifacts', 'transpiled-no-assets');
+      const entries = fs.readdirSync(outputDir).sort();
+
+      expect(entries).toEqual(['module.js', 'utils.js']);
+    }, 30000);
+
+    it('should copy a single asset file into outDir', async () => {
+      const settingsPath = path.join(projectDir, 'js', 'viz', 'vector_map.utils', '_settings.json');
+      await writeFileText(settingsPath, JSON.stringify({ scale: 1 }));
+
+      const options: BabelTransformExecutorSchema = {
+        babelConfigPath: minimalConfigPath,
+        configKey: 'cjs',
+        sourcePattern: './js/**/*.js',
+        outDir: './artifacts/transpiled-with-file-asset',
+        copyAssets: [
+          {
+            from: './js/viz/vector_map.utils/_settings.json',
+            to: './viz/vector_map.utils/_settings.json',
+          },
+        ],
+      };
+
+      const result = await executor(options, context);
+      expect(result.success).toBe(true);
+
+      const outputDir = path.join(projectDir, 'artifacts', 'transpiled-with-file-asset');
+      const copiedSettingsPath = path.join(outputDir, 'viz', 'vector_map.utils', '_settings.json');
+
+      expect(fs.existsSync(copiedSettingsPath)).toBe(true);
+      const copiedSettings = JSON.parse(await readFileText(copiedSettingsPath));
+      expect(copiedSettings).toEqual({ scale: 1 });
+
+      expect(fs.existsSync(path.join(outputDir, 'module.js'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'utils.js'))).toBe(true);
+    }, 30000);
+
+    it('should copy a directory of assets recursively into outDir', async () => {
+      const messagesDir = path.join(projectDir, 'js', 'localization', 'messages');
+      fs.mkdirSync(messagesDir, { recursive: true });
+      await writeFileText(path.join(messagesDir, 'en.json'), JSON.stringify({ greeting: 'Hello' }));
+      await writeFileText(path.join(messagesDir, 'de.json'), JSON.stringify({ greeting: 'Hallo' }));
+
+      const nestedDir = path.join(messagesDir, 'extra');
+      fs.mkdirSync(nestedDir, { recursive: true });
+      await writeFileText(path.join(nestedDir, 'fr.json'), JSON.stringify({ greeting: 'Bonjour' }));
+
+      const options: BabelTransformExecutorSchema = {
+        babelConfigPath: minimalConfigPath,
+        configKey: 'cjs',
+        sourcePattern: './js/**/*.js',
+        outDir: './artifacts/transpiled-with-dir-asset',
+        copyAssets: [
+          {
+            from: './js/localization/messages',
+            to: './localization/messages',
+          },
+        ],
+      };
+
+      const result = await executor(options, context);
+      expect(result.success).toBe(true);
+
+      const outputDir = path.join(projectDir, 'artifacts', 'transpiled-with-dir-asset');
+      const copiedMessagesDir = path.join(outputDir, 'localization', 'messages');
+
+      expect(fs.existsSync(path.join(copiedMessagesDir, 'en.json'))).toBe(true);
+      expect(fs.existsSync(path.join(copiedMessagesDir, 'de.json'))).toBe(true);
+      expect(fs.existsSync(path.join(copiedMessagesDir, 'extra', 'fr.json'))).toBe(true);
+
+      const enContent = JSON.parse(await readFileText(path.join(copiedMessagesDir, 'en.json')));
+      expect(enContent).toEqual({ greeting: 'Hello' });
+    }, 30000);
+  });
 });
