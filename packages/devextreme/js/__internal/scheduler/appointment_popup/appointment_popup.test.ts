@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 
 import fx from '../../../common/core/animation/fx';
+import $ from '../../../core/renderer';
 import {
   createAppointmentPopup,
   disposeAppointmentPopups,
@@ -334,6 +335,80 @@ describe('Isolated AppointmentPopup environment', () => {
       expect(POM.getInputValue('startDateEditor')).toEqual('5/9/2017');
       expect(POM.getInputValue('startTimeEditor')).toEqual('9:30 AM');
       expect(POM.getInputValue('endDateEditor')).toEqual('5/9/2017');
+    });
+  });
+
+  describe('firstDayOfWeek', () => {
+    const commonAppointment = {
+      text: 'common-app',
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+    };
+
+    it('should apply firstDayOfWeek to week day buttons', async () => {
+      const { POM, reopen } = await createAppointmentPopup({
+        appointmentData: commonAppointment,
+        firstDayOfWeek: 1,
+      });
+
+      POM.selectRepeatValue('weekly');
+      const dayButtonsMonday = $(POM.recurrenceWeekDayButtons).find('.dx-button');
+      expect(dayButtonsMonday.text()).toBe('MTWTFSS');
+
+      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
+      POM2.selectRepeatValue('weekly');
+      const dayButtonsSunday = $(POM2.recurrenceWeekDayButtons).find('.dx-button');
+      expect(dayButtonsSunday.text()).toBe('SMTWTFS');
+    });
+
+    it('should apply firstDayOfWeek to recurrence form startDate calendar', async () => {
+      const { POM, reopen } = await createAppointmentPopup({
+        appointmentData: commonAppointment,
+        firstDayOfWeek: 1,
+      });
+
+      POM.selectRepeatValue('weekly');
+      const recurrenceStartDateEditor = POM.dxForm.getEditor('recurrenceStartDateEditor');
+      expect(recurrenceStartDateEditor).toBeDefined();
+      expect(recurrenceStartDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
+
+      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
+      POM2.selectRepeatValue('weekly');
+      const recurrenceStartDateEditorAfter = POM2.dxForm.getEditor('recurrenceStartDateEditor');
+      expect(recurrenceStartDateEditorAfter).toBeDefined();
+      expect(recurrenceStartDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+    });
+
+    it('should apply firstDayOfWeek to startDate calendar', async () => {
+      const { POM, reopen } = await createAppointmentPopup({
+        appointmentData: commonAppointment,
+        firstDayOfWeek: 1,
+      });
+
+      const startDateEditor = POM.dxForm.getEditor('startDateEditor');
+      expect(startDateEditor).toBeDefined();
+      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
+
+      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
+      const startDateEditorAfter = POM2.dxForm.getEditor('startDateEditor');
+      expect(startDateEditorAfter).toBeDefined();
+      expect(startDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+    });
+
+    it('should apply firstDayOfWeek to endDate calendar', async () => {
+      const { POM, reopen } = await createAppointmentPopup({
+        appointmentData: commonAppointment,
+        firstDayOfWeek: 1,
+      });
+
+      const endDateEditor = POM.dxForm.getEditor('endDateEditor');
+      expect(endDateEditor).toBeDefined();
+      expect(endDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
+
+      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
+      const endDateEditorAfter = POM2.dxForm.getEditor('endDateEditor');
+      expect(endDateEditorAfter).toBeDefined();
+      expect(endDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
     });
   });
 });
