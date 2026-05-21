@@ -58,7 +58,7 @@ const ITEM_INDEX_KEY = 'dxItemIndex';
 const ITEM_TEMPLATE_ID_PREFIX = 'tmpl-';
 const ITEMS_OPTIONS_NAME = 'dxItem';
 const ITEM_RESPONSE_WAIT_CLASS = 'dx-item-response-wait';
-const EMPTY_COLLECTION = 'dx-empty-collection';
+export const EMPTY_COLLECTION = 'dx-empty-collection';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w.]+)$/;

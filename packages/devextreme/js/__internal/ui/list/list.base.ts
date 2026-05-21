@@ -54,6 +54,7 @@ import type {
   InkRippleEvent,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import { EMPTY_COLLECTION as EMPTY_COLLECTION_CLASS } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
@@ -1036,7 +1037,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _updateFocusTargetAriaOnEmptyState(): void {
     const { noDataText } = this.option();
-    const isListEmpty = this.$element().hasClass('dx-empty-collection');
+    const isListEmpty = this.$element().hasClass(EMPTY_COLLECTION_CLASS);
     this.setAria({ label: isListEmpty ? noDataText : undefined }, this._focusTarget());
   }
 
