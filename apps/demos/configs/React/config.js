@@ -41,6 +41,12 @@ window.config = {
     'openai': {
       'esModule': true,
     },
+    'zod': {
+      'esModule': true,
+    },
+    'zod-to-json-schema': {
+      'esModule': true,
+    },
   },
   paths: {
     'npm:': '../../../../node_modules/',
@@ -197,12 +203,6 @@ window.config = {
     }/**/,
     'es6-object-assign': {
       main: './index.js',
-      defaultExtension: 'js',
-    },
-    'npm:zod/lib': {
-      defaultExtension: 'js',
-    },
-    'npm:zod-to-json-schema/dist/cjs': {
       defaultExtension: 'js',
     },
   },
