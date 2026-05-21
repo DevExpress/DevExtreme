@@ -68,9 +68,7 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/Cell': {
     'img-src': ['data:'],
   },
-  // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'DataGrid/AIColumns': {
-    'script-src': ["'unsafe-inline'"],
     'connect-src': ['https://public-api.devexpress.com'],
   },
   'DataGrid/ExcelJSExportImages': {
@@ -145,10 +143,8 @@ const CSP_DEMO_ALLOWLIST = {
   'TagBox/Grouping': {
     'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
-  // AI demos use inline <script type="module"> to import OpenAI SDK from esm.sh
   'TreeList/AIColumns': {
     'connect-src': ['https://public-api.devexpress.com'],
-    'script-src': ["'unsafe-inline'"],
   },
   'TreeList/BatchEditing': {
     'img-src': ['data:'],

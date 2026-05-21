@@ -89,6 +89,36 @@
       "implementation": "./src/executors/compress/executor",
       "schema": "./src/executors/compress/schema.json",
       "description": "Compress JavaScript files"
+    },
+    "dts-modules": {
+      "implementation": "./src/executors/dts-modules/executor",
+      "schema": "./src/executors/dts-modules/schema.json",
+      "description": "Assemble TypeScript declaration modules: copy, stamp with license, and strip debug blocks"
+    },
+    "dts-bundle": {
+      "implementation": "./src/executors/dts-bundle/executor",
+      "schema": "./src/executors/dts-bundle/schema.json",
+      "description": "Assemble TypeScript declaration bundle files from source"
+    },
+    "npm-assemble": {
+      "implementation": "./src/executors/npm-assemble/executor",
+      "schema": "./src/executors/npm-assemble/schema.json",
+      "description": "Assemble npm package from transpiled sources, bin, license, dist files and meta"
+    },
+    "scss-assemble": {
+      "implementation": "./src/executors/scss-assemble/executor",
+      "schema": "./src/executors/scss-assemble/schema.json",
+      "description": "Assemble SCSS package: copy files with data-uri inlining, fonts, and icons"
+    },
+    "license-check": {
+      "implementation": "./src/executors/license-check/executor",
+      "schema": "./src/executors/license-check/schema.json",
+      "description": "Verify embedded license notices in built artifacts"
+    },
+    "state-manager-optimize": {
+      "implementation": "./src/executors/state-manager-optimize/executor",
+      "schema": "./src/executors/state-manager-optimize/schema.json",
+      "description": "Optimize state_manager modules for production builds"
     }
   }
 }

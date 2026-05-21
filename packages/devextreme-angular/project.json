@@ -70,7 +70,8 @@
         "packageJsonPath": "./package.json",
         "includePatterns": [
           "**/*.ts"
-        ]
+        ],
+        "mode": "mit"
       }
     },
     "build:ngc": {
@@ -117,9 +118,6 @@
     },
     "npm:pack-npm-dist": {
       "executor": "devextreme-nx-infra-plugin:pack-npm",
-      "options": {
-        "workingDirectory": "./npm/dist"
-      },
       "outputs": [
         "{projectRoot}/npm/dist/*.tgz"
       ],

@@ -31,12 +31,9 @@ gulp.task('clean', function(callback) {
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
-require('./build/gulp/npm');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
-require('./build/gulp/check_licenses');
 require('./build/gulp/systemjs');
-require('./build/gulp/state_manager');
 
 function getTranspileConfig() {
     if(env.TEST_CI) {
@@ -72,6 +69,36 @@ gulp.task('aspnet', shell.task(
 
 gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
 
+gulp.task('check-license-notices', shell.task('pnpm nx run devextreme:verify:licenses'));
+
+gulp.task('state-manager-optimize', shell.task('pnpm nx run devextreme:state-manager:optimize'));
+
+function getNpmConfiguration() {
+    if(context.uglify && env.BUILD_INTERNAL_PACKAGE) {
+        return 'production-internal';
+    }
+    if(env.BUILD_INTERNAL_PACKAGE) {
+        return 'internal';
+    }
+    if(context.uglify && env.BUILD_TEST_INTERNAL_PACKAGE) {
+        return 'production-test-internal';
+    }
+    if(env.BUILD_TEST_INTERNAL_PACKAGE) {
+        return 'test-internal';
+    }
+    if(context.uglify) {
+        return 'production';
+    }
+    return '';
+}
+
+gulp.task('npm', shell.task((function() {
+    const config = getNpmConfiguration();
+    return config
+        ? `pnpm nx run devextreme:build:npm -c ${config}`
+        : 'pnpm nx run devextreme:build:npm';
+})()));
+
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
 }
@@ -102,11 +129,7 @@ function createDefaultBatch(dev) {
     tasks.push('transpile');
 
     if(REMOVE_NON_PRODUCTION_MODULE) {
-        tasks.push('state-manager-replace-production-modules-transpiled-prod-renovation');
-        tasks.push('state-manager-replace-production-modules-transpiled-prod-esm');
-
-        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-renovation');
-        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-esm');
+        tasks.push('state-manager-optimize');
     }
 
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');

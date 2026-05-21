@@ -1,4 +1,7 @@
 {
+  "$schema": "https://json-schema.org/schema",
+  "title": "Prepare Package Json Executor Schema",
+  "description": "Create npm distribution package.json",
   "type": "object",
   "properties": {
     "sourcePackageJson": {
@@ -10,7 +13,45 @@
       "type": "string",
       "description": "Distribution directory",
       "default": "./npm"
+    },
+    "outputFileName": {
+      "type": "string",
+      "description": "Output filename inside distDirectory",
+      "default": "package.json"
+    },
+    "setName": {
+      "type": "string",
+      "description": "Override the name field in the output package.json"
+    },
+    "setVersion": {
+      "type": "string",
+      "description": "Override the version field in the output package.json with a literal value"
+    },
+    "versionFrom": {
+      "type": "string",
+      "description": "Path relative to project root of a package.json-shaped file whose version field is used"
+    },
+    "removeFields": {
+      "type": "array",
+      "description": "Fields to delete from the output package.json (default: [publishConfig])",
+      "items": {
+        "type": "string"
+      }
+    },
+    "renameInternalPattern": {
+      "type": "object",
+      "description": "Regex pattern applied to pkg.name to produce an internal package name",
+      "properties": {
+        "find": {
+          "type": "string",
+          "description": "Regex pattern string"
+        },
+        "replace": {
+          "type": "string",
+          "description": "Replacement string (supports $1, $2, etc.)"
+        }
+      },
+      "required": ["find", "replace"]
     }
-  },
-  "required": []
+  }
 }
