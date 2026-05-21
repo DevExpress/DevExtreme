@@ -131,8 +131,8 @@ window.config = {
     'openai': 'externals:openai.bundle.js',
     /**/
 
-    'zod': 'npm:zod/lib/index.js',
-    'zod-to-json-schema': 'npm:zod-to-json-schema/dist/cjs/index.js',
+    'zod': 'externals:zod.bundle.js',
+    'zod-to-json-schema': 'externals:zod-to-json-schema.bundle.js',
 
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
