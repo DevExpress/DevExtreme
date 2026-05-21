@@ -1002,7 +1002,7 @@ describe('Appointments', () => {
 
       element.click();
 
-      expect(onAppointmentClick).not.toHaveBeenCalledTimes(1);
+      expect(onAppointmentClick).not.toHaveBeenCalled();
     });
 
     it('should prevent tooltip showing when onAppointmentClick callback sets e.cancel = true', () => {
