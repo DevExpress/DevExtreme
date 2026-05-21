@@ -372,16 +372,13 @@ describe('AI Assistant error handling', () => {
       model.sendAiRequest('First request');
       jest.runAllTimers();
 
-      const controller = model.getAiAssistantController();
-
-      const secondPromise = controller.sendRequestToAI({
+      const message = {
         author: { id: 'user', name: 'User' },
         text: 'Second request',
         timestamp: new Date().toISOString(),
-      } as Message);
-      secondPromise.catch(() => {});
+      } as Message;
 
-      await expect(secondPromise)
+      await expect(model.sendAiRequestWithResponse(message))
         .rejects.toThrow('Request already in progress. Please wait.');
 
       const messages = await model.loadMessages();
@@ -691,10 +688,7 @@ describe('AI Assistant error handling', () => {
 
       await store.insert(aiMessage);
 
-      const regeneratePromise = controller.sendRequestToAI(aiMessage);
-      regeneratePromise.catch(() => {});
-
-      await expect(regeneratePromise)
+      await expect(model.sendAiRequestWithResponse(aiMessage))
         .rejects.toThrow('Request already in progress. Please wait.');
     });
   });

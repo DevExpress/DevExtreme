@@ -5,6 +5,7 @@ import type { Message } from '@js/ui/chat';
 import type { AIAssistantController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_controller';
 import type { AIAssistantViewController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view_controller';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
+import type { AIMessage } from '@ts/grids/grid_core/ai_assistant/types';
 import { CLASSES } from '@ts/grids/grid_core/ai_chat/const';
 
 import { DataGridModel } from './data_grid';
@@ -21,11 +22,21 @@ export class AIAssistantDataGridModel extends DataGridModel {
   public sendAiRequest(text: string): void {
     const controller = this.getAiAssistantController();
 
-    controller.sendRequestToAI({
-      author: { id: 'user', name: 'User' },
-      text,
-      timestamp: new Date().toISOString(),
-    } as Message).catch(() => {});
+    controller
+      .sendRequestToAI({
+        author: { id: 'user', name: 'User' },
+        text,
+        timestamp: new Date().toISOString(),
+      } as Message)
+      .catch(() => {});
+  }
+
+  public sendAiRequestWithResponse(message: Message | AIMessage): Promise<void> {
+    const controller = this.getAiAssistantController();
+
+    return controller
+      .sendRequestToAI(message)
+      .catch(() => {});
   }
 
   public getMessageStore(): ArrayStore<Message, string> {
