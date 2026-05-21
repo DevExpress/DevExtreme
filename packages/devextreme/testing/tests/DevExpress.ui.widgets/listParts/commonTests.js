@@ -22,6 +22,7 @@ import { setScrollView } from '__internal/ui/list/list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
+import { SCROLLVIEW_CONTENT_CLASS } from '__internal/ui/scroll_view/consts';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
@@ -43,7 +44,6 @@ const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
-const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ROW_GAP = 2;
@@ -68,7 +68,7 @@ class ScrollViewMock extends DOMComponent {
             this._$scrollViewContent = container.children();
         } else {
             this._$scrollViewContainer = $('<div />').addClass('scroll-view-container').height(this.containerHeight);
-            this._$scrollViewContent = $('<div />').addClass('scroll-view-content').height(this._contentHeight).appendTo(this._$scrollViewContainer);
+            this._$scrollViewContent = $('<div />').addClass(SCROLLVIEW_CONTENT_CLASS).height(this._contentHeight).appendTo(this._$scrollViewContainer);
             this.$element().append(this._$scrollViewContainer);
         }
 
@@ -5340,6 +5340,61 @@ QUnit.module('Accessibility', () => {
             'container aria-label updated after runtime change');
         assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'custom-select-all',
             'checkbox aria-label updated after runtime change');
+    });
+
+    QUnit.module('Empty list aria-label on scrollview content (T1328875)', () => {
+        const DEFAULT_NO_DATA_TEXT = 'No data to display';
+        const POPULATED_ITEMS = ['Item 1'];
+
+        const createList = (options) => $('#list').dxList(options).dxList('instance');
+
+        const getScrollViewContent = (instance) =>
+            instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0);
+
+        const getScrollViewContentAriaLabel = (instance) =>
+            getScrollViewContent(instance).getAttribute('aria-label');
+
+        QUnit.test('scrollview-content should have aria-label equal to noDataText when list is empty on init', function(assert) {
+            const instance = createList({ items: [], noDataText: DEFAULT_NO_DATA_TEXT });
+
+            assert.strictEqual(getScrollViewContentAriaLabel(instance), DEFAULT_NO_DATA_TEXT);
+        });
+
+        QUnit.test('scrollview-content should not have aria-label when list has items', function(assert) {
+            const instance = createList({ items: POPULATED_ITEMS });
+
+            assert.strictEqual(getScrollViewContentAriaLabel(instance), null);
+        });
+
+        QUnit.test('scrollview-content aria-label should be set when items change from populated to empty', function(assert) {
+            const instance = createList({ items: POPULATED_ITEMS, noDataText: DEFAULT_NO_DATA_TEXT });
+
+            instance.option('items', []);
+
+            assert.strictEqual(getScrollViewContentAriaLabel(instance), DEFAULT_NO_DATA_TEXT);
+        });
+
+        QUnit.test('scrollview-content aria-label should be cleared when items change from empty to populated', function(assert) {
+            const instance = createList({ items: [] });
+
+            instance.option('items', POPULATED_ITEMS);
+
+            assert.strictEqual(getScrollViewContentAriaLabel(instance), null);
+        });
+
+        QUnit.test('scrollview-content aria-label should update when noDataText option changes while list is empty', function(assert) {
+            const instance = createList({ items: [] });
+
+            instance.option('noDataText', 'Custom empty message');
+
+            assert.strictEqual(getScrollViewContentAriaLabel(instance), 'Custom empty message');
+        });
+
+        QUnit.test('scrollview-content should not have aria-label when noDataText is empty string and list is empty', function(assert) {
+            const instance = createList({ items: [], noDataText: '' });
+
+            assert.strictEqual(getScrollViewContentAriaLabel(instance), null);
+        });
     });
 
 });

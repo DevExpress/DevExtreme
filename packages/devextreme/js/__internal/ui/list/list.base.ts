@@ -1029,6 +1029,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     return this._itemContainer();
   }
 
+  _renderEmptyMessage(rootNodes?: Item[]): void {
+    super._renderEmptyMessage(rootNodes);
+    this._updateFocusTargetAriaOnEmptyState();
+  }
+
+  _updateFocusTargetAriaOnEmptyState(): void {
+    const { noDataText } = this.option();
+    const isListEmpty = this.$element().hasClass('dx-empty-collection');
+    this.setAria({ label: isListEmpty ? noDataText : undefined }, this._focusTarget());
+  }
+
   _renderInkRipple(): void {
     this._inkRipple = render();
   }
