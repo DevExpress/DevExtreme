@@ -9,7 +9,7 @@ import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
+import type { TargetedAppointment } from '@ts/scheduler/types';
 
 import type { AppointmentItemViewModel } from '../view_model/types';
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
@@ -33,8 +33,6 @@ export interface AppointmentCollectorProperties
 
 export class AppointmentCollector
   extends ViewItem<AppointmentCollectorProperties> {
-  private appointmentsData!: SafeAppointment[];
-
   private defaultAppointmentCollectorTemplate!: FunctionTemplate;
 
   private buttonInstance?: Button;
@@ -49,9 +47,9 @@ export class AppointmentCollector
     // Note: items have appointmentData, which is used as a key in dataSource
     this._optionsByReference = {
       ...this._optionsByReference,
-      // @ts-expect-error
+      // @ts-expect-error Component class has wrong type for _optionsByReference
       items: true,
-      // @ts-expect-error
+      // @ts-expect-error Component class has wrong type for _optionsByReference
       targetedAppointmentData: true,
     };
   }
@@ -62,8 +60,6 @@ export class AppointmentCollector
     this.defaultAppointmentCollectorTemplate = new FunctionTemplate((options) => {
       this.defaultAppointmentCollectorContent($(options.container));
     });
-
-    this.appointmentsData = this.option().items.map((item) => item.itemData);
   }
 
   override _initMarkup(): void {
@@ -136,7 +132,7 @@ export class AppointmentCollector
         model: {
           appointmentCount: this.appointmentsCount,
           isCompact: this.option().isCompact,
-          items: this.appointmentsData,
+          items: this.option().items.map((item) => item.itemData),
         },
       })),
       onClick: (e: ButtonClickEvent) => {

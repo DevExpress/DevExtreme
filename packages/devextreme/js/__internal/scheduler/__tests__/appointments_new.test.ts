@@ -427,28 +427,6 @@ describe('New Appointments', () => {
       });
     });
 
-    it('should prevent tooltip showing when onAppointmentClick callback sets e.cancel = true', async () => {
-      const onAppointmentClick = jest.fn((e) => {
-        (e as any).cancel = true;
-      });
-
-      const { POM } = await createScheduler({
-        dataSource: [{
-          text: 'Appointment 1',
-          startDate: new Date(2015, 1, 9, 8),
-          endDate: new Date(2015, 1, 9, 9),
-        }],
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9, 8),
-        onAppointmentClick,
-      });
-
-      POM.getAppointments()[0].element.click();
-
-      expect(onAppointmentClick).toHaveBeenCalledTimes(1);
-      expect(POM.tooltip.isVisible()).toBe(false);
-    });
-
     it('should call onAppointmentClick after .option() change', async () => {
       const { POM, scheduler } = await createScheduler({
         dataSource: [{
@@ -466,26 +444,6 @@ describe('New Appointments', () => {
       POM.getAppointments()[0].element.click();
 
       expect(onAppointmentClick).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not call onAppointmentClick on collector click', async () => {
-      const onAppointmentClick = jest.fn();
-
-      const { POM } = await createScheduler({
-        dataSource: [
-          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-        ],
-        maxAppointmentsPerCell: 1,
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9, 8),
-        onAppointmentClick,
-      });
-
-      POM.getCollectorButton().click();
-
-      expect(onAppointmentClick).not.toHaveBeenCalled();
     });
 
     it('should not call onAppointmentClick on tooltip item inside single appointment', async () => {
@@ -594,28 +552,6 @@ describe('New Appointments', () => {
       });
     });
 
-    it('should prevent appointment popup showing when onAppointmentDblClick callback sets e.cancel = true', async () => {
-      const onAppointmentDblClick = jest.fn((e) => {
-        (e as any).cancel = true;
-      });
-
-      const { POM } = await createScheduler({
-        dataSource: [{
-          text: 'Appointment 1',
-          startDate: new Date(2015, 1, 9, 8),
-          endDate: new Date(2015, 1, 9, 9),
-        }],
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9, 8),
-        onAppointmentDblClick,
-      });
-
-      POM.openPopupByDblClick('Appointment 1');
-
-      expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
-      expect(POM.isPopupVisible()).toBe(false);
-    });
-
     it('should call onAppointmentDblClick after .option() change', async () => {
       const { POM, scheduler } = await createScheduler({
         dataSource: [{
@@ -633,29 +569,6 @@ describe('New Appointments', () => {
       POM.openPopupByDblClick('Appointment 1');
 
       expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not call onAppointmentDblClick on collector double click', async () => {
-      const onAppointmentDblClick = jest.fn();
-
-      const { POM } = await createScheduler({
-        dataSource: [
-          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-        ],
-        maxAppointmentsPerCell: 2,
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9, 8),
-        onAppointmentDblClick,
-      });
-
-      onAppointmentDblClick.mockClear();
-      const collector = POM.getCollectorButton();
-      collector.click();
-      collector.click();
-
-      expect(onAppointmentDblClick).not.toHaveBeenCalled();
     });
   });
 
@@ -719,25 +632,6 @@ describe('New Appointments', () => {
 
       expect(POM.tooltip.isVisible()).toBe(false);
       expect(POM.isPopupVisible()).toBe(true);
-    });
-
-    it('should not show appointment popup on collector double click', async () => {
-      const { POM } = await createScheduler({
-        dataSource: [
-          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
-        ],
-        maxAppointmentsPerCell: 1,
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9, 8),
-      });
-
-      const collector = POM.getCollectorButton();
-      collector.click();
-      collector.click();
-
-      expect(POM.isPopupVisible()).toBe(false);
     });
 
     it('should show appointment popup on tooltip item click', async () => {

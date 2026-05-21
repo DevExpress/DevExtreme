@@ -67,7 +67,7 @@ interface AppointmentTooltipOptions {
   onAppointmentClick: (e: AppointmentClickEvent) => void;
 }
 
-interface AppointmentTooltipExtraOptions {
+export interface AppointmentTooltipExtraOptions {
   clickEvent?: (e: ItemClickEvent<AppointmentTooltipItem>) => void;
   dragBehavior?: (e: ContentReadyEvent<AppointmentTooltipItem>) => void;
   editing?: SchedulerProperties['editing'];
