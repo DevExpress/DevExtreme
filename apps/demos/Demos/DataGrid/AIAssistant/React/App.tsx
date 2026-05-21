@@ -55,7 +55,7 @@ export default function App() {
   const chatRef = useRef<dxChat | null>(null);
 
   const onChatInitialized = useCallback((e: InitializedEvent) => {
-    chatRef.current = e.component;
+    chatRef.current = e.component ?? null;
   }, []);
 
   const onSuggestionItemClick = useCallback((e: ItemClickEvent) => {
