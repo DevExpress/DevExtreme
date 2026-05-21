@@ -247,7 +247,7 @@
     "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|palette|set_template_engine|splitter_control|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "update-ts-bundle": "dx-tools generate-ts-bundle --sources ./js --output-path ./ts/dx.all.d.ts",
     "regenerate": "pnpm run update-ts-bundle && pnpm run update-ts-reexports",
-    "validate-ts": "gulp validate-ts",
+    "validate-ts": "pnpm nx run devextreme:validate:ts",
     "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",

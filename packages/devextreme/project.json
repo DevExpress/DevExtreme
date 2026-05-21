@@ -786,18 +786,76 @@
       },
       "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
     },
+    "verify:ts-modules": {
+      "executor": "devextreme-nx-infra-plugin:check-declarations",
+      "options": {
+        "mode": "modules",
+        "typescriptModule": "typescript-min"
+      },
+      "inputs": [
+        "{projectRoot}/js/**/*.d.ts",
+        "{projectRoot}/build/gulp/modules_metadata.json"
+      ]
+    },
+    "verify:ts-bundle": {
+      "executor": "devextreme-nx-infra-plugin:check-declarations",
+      "options": {
+        "mode": "bundle",
+        "typescriptModule": "typescript-min"
+      },
+      "dependsOn": ["build:npm:dts-bundle"],
+      "inputs": [
+        "{projectRoot}/artifacts/ts/dx.all.d.ts",
+        "{projectRoot}/ts/dx.all.d.ts",
+        "{projectRoot}/ts/aliases.d.ts",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ]
+    },
+    "verify:ts-jquery": {
+      "executor": "devextreme-nx-infra-plugin:check-declarations",
+      "options": {
+        "mode": "jquery",
+        "typescriptModule": "typescript-min"
+      },
+      "inputs": [
+        "{projectRoot}/ts/dx.all.d.ts",
+        "{projectRoot}/ts/aliases.d.ts",
+        "{projectRoot}/build/gulp/modules_metadata.json"
+      ],
+      "outputs": ["{projectRoot}/artifacts/globals.ts"]
+    },
+    "copy:ts-vendor": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "./ts/vendor/*", "to": "./artifacts/ts" }
+        ]
+      },
+      "inputs": ["{projectRoot}/ts/vendor/**/*"],
+      "outputs": ["{projectRoot}/artifacts/ts/**/*"]
+    },
     "build:declarations": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gulp ts",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "pnpm nx run devextreme:copy:ts-vendor",
+          "pnpm nx run devextreme:build:npm:dts-bundle",
+          "pnpm nx run devextreme:verify:ts-jquery",
+          "pnpm nx run devextreme:verify:ts-bundle"
+        ],
+        "parallel": false
       },
       "inputs": [
         "{projectRoot}/ts/**/*.d.ts",
-        "{projectRoot}/build/gulp/ts.js"
+        "{projectRoot}/ts/vendor/**/*",
+        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{projectRoot}/build/gulp/license-header.txt"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/ts"
+        "{projectRoot}/artifacts/ts",
+        "{projectRoot}/artifacts/ts/dx.all.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts",
+        "{projectRoot}/artifacts/globals.ts"
       ]
     },
     "compress:ts-modules": {
@@ -1235,14 +1293,43 @@
       }
     },
     "verify:public-modules": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:check-declarations",
       "options": {
-        "command": "cross-env BUILD_ESM_PACKAGE=true gulp ts-check-public-modules",
-        "cwd": "{projectRoot}"
+        "mode": "public-modules",
+        "typescriptModule": "typescript-min"
       },
+      "dependsOn": ["build:npm:dts-modules"],
       "inputs": [
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
         "{projectRoot}/build/gulp/modules_metadata.json"
+      ],
+      "outputs": ["{projectRoot}/artifacts/modules.ts"],
+      "configurations": {
+        "internal": {
+          "internalPackage": true,
+          "npmPackageDir": "devextreme-internal"
+        }
+      }
+    },
+    "validate:ts": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx run devextreme:verify:ts-modules",
+          "pnpm nx run devextreme:build:npm:dts-bundle",
+          "pnpm nx run devextreme:verify:ts-bundle",
+          "pnpm nx run devextreme:verify:ts-jquery",
+          "pnpm nx run devextreme:verify:public-modules"
+        ],
+        "parallel": false,
+        "cwd": "{workspaceRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/js/**/*.d.ts",
+        "{projectRoot}/ts/dx.all.d.ts",
+        "{projectRoot}/ts/aliases.d.ts",
+        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
       ]
     },
     "build:npm": {

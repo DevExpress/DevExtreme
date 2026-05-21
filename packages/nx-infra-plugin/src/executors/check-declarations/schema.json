@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Check Declarations Executor Schema",
+  "description": "Type-check DevExtreme declaration files (gulp validate-ts parity)",
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["jquery", "bundle", "modules", "public-modules"],
+      "description": "Which declaration check to run."
+    },
+    "modulesMetadataFile": {
+      "type": "string",
+      "description": "Path to modules_metadata.json (relative to project root)."
+    },
+    "tsBundleFile": {
+      "type": "string",
+      "description": "Source bundle .d.ts for jquery check (relative to project root)."
+    },
+    "bundleArtifactPath": {
+      "type": "string",
+      "description": "Built bundle .d.ts for bundle check (relative to project root)."
+    },
+    "modulesPattern": {
+      "type": "string",
+      "description": "Glob for module .d.ts files (relative to project root)."
+    },
+    "entryOutputDir": {
+      "type": "string",
+      "description": "Directory for generated check entry files (relative to project root)."
+    },
+    "npmPackageDir": {
+      "type": "string",
+      "description": "Npm package folder name under artifacts/npm (e.g. devextreme)."
+    },
+    "internalPackage": {
+      "type": "boolean",
+      "description": "Use devextreme-internal package dir for public-modules imports."
+    },
+    "typescriptModule": {
+      "type": "string",
+      "description": "TypeScript package to load (e.g. typescript-min), resolved from project root."
+    },
+    "compilerOptions": {
+      "type": "object",
+      "description": "Extra compiler options merged into the default check profile."
+    }
+  },
+  "required": ["mode"]
+}

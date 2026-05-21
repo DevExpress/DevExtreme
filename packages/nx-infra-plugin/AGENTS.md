@@ -23,7 +23,9 @@ Each executor lives at `src/executors/<name>/`:
 - `<name>.impl.ts` — business logic via `createExecutor` + named exports for cross-executor reuse
 - `schema.ts`, `schema.json`, `executor.e2e.spec.ts`, optional `defaults.ts`
 
-Each cross-executor concern (license banner, glob-aware copy, file concatenation, debug-block stripping, etc.) is owned by exactly ONE executor and exposed via named exports from its `*.impl.ts`. Discover what is available by reading the named exports of the relevant executor; do not re-implement. The full executor catalogue is in `executors.json`; generic primitives live in `src/utils/`.
+Each cross-executor concern (license banner, glob-aware copy, file concatenation, debug-block stripping, declaration type-check entry generation, etc.) is owned by exactly ONE executor and exposed via named exports from its `*.impl.ts`. Discover what is available by reading the named exports of the relevant executor; do not re-implement. The full executor catalogue is in `executors.json`; generic primitives live in `src/utils/`.
+
+- **`check-declarations`** — noEmit TypeScript checks for `.d.ts` (modes: `jquery`, `bundle`, `modules`, `public-modules`). Replaces gulp `ts-check-*`. Use **`dts-modules`** / **`dts-bundle`** to produce files; this executor only validates.
 
 ## Conventions
 
