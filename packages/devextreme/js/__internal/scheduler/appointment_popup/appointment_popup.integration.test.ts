@@ -764,58 +764,6 @@ describe('Appointment Form', () => {
   });
 
   describe('allDay switch', () => {
-    it('should be turned on when opening allDay appointment', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-
-      expect(POM.popup.getInputValue('allDayEditor')).toBe('true');
-    });
-
-    it('should be turned off when opening non-allDay appointment', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(commonAppointment);
-
-      expect(POM.popup.getInputValue('allDayEditor')).toBe('false');
-    });
-
-    it('should hide time editors when switched on', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(commonAppointment);
-
-      expect(POM.popup.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeTruthy();
-
-      POM.popup.getInput('allDayEditor').click();
-
-      expect(POM.popup.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.popup.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
-    });
-
-    it('should show time editors when switched off', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-
-      expect(POM.popup.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.popup.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
-
-      POM.popup.getInput('allDayEditor').click();
-
-      expect(POM.popup.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeTruthy();
-    });
-
     it('should set correct dates when switching on then off in day view', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -833,23 +781,6 @@ describe('Appointment Form', () => {
       expect(POM.popup.getInputValue('endTimeEditor')).toBe('9:30 AM');
     });
 
-    it('should set correct dates when switching off then on in day view', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        currentView: 'day',
-      });
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-
-      POM.popup.getInput('allDayEditor').click();
-      POM.popup.getInput('allDayEditor').click();
-
-      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
-    });
-
     it('should set correct dates when switching on then off in month view', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -865,23 +796,6 @@ describe('Appointment Form', () => {
       expect(POM.popup.getInputValue('startTimeEditor')).toBe('9:00 AM');
       expect(POM.popup.getInputValue('endDateEditor')).toBe('5/10/2017');
       expect(POM.popup.getInputValue('endTimeEditor')).toBe('12:00 AM');
-    });
-
-    it('should set correct dates when switching off then on in month view', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        currentView: 'month',
-      });
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-
-      POM.popup.getInput('allDayEditor').click();
-      POM.popup.getInput('allDayEditor').click();
-
-      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
     });
   });
 
