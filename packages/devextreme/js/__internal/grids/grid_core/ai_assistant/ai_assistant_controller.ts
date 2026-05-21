@@ -178,8 +178,8 @@ export class AIAssistantController extends Controller {
       const responseSchema = this.gridCommands?.buildResponseSchema();
 
       if (!responseSchema) {
-        const notInitializedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
-        const error = new Error(notInitializedErrorMsg);
+        const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
+        const error = new Error(localizedErrorMsg);
 
         this.failAIMessage(aiMessage.id, error);
         reject(error);

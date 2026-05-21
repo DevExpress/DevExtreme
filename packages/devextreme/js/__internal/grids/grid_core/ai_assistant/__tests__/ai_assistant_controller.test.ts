@@ -444,11 +444,11 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          errorText: 'Execution is already in progress.',
+          errorText: 'Execution already in progress. Please wait.',
         }),
       ]);
 
-      await expect(promise).rejects.toThrow('Execution is already in progress.');
+      await expect(promise).rejects.toThrow('Execution already in progress. Please wait.');
     });
 
     it('should fail message when buildResponseSchema returns falsy', async () => {
@@ -553,7 +553,7 @@ describe('AIAssistantController', () => {
       };
       expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(1);
 
-      await expect(secondPromise).rejects.toThrow('Request is already in progress.');
+      await expect(secondPromise).rejects.toThrow('Request already in progress. Please wait.');
     });
 
     it('should accept new request after previous request completes successfully', async () => {
@@ -1003,7 +1003,7 @@ describe('AIAssistantController', () => {
       const regeneratePromise = controller.sendRequestToAI(aiMessage);
       regeneratePromise.catch(() => {});
 
-      await expect(regeneratePromise).rejects.toThrow('Request is already in progress.');
+      await expect(regeneratePromise).rejects.toThrow('Request already in progress. Please wait.');
     });
   });
 });
