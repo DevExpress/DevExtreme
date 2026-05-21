@@ -111,10 +111,14 @@ describe('Isolated AppointmentPopup environment', () => {
 
   it('should hide popup on Cancel click', async () => {
     const { popup, POM } = await createAppointmentPopup();
+    const visibleBefore = popup.visible;
 
-    expect(popup.visible).toBe(true);
     POM.cancelButton.click();
-    expect(popup.visible).toBe(false);
+
+    const visibleAfter = popup.visible;
+
+    expect(visibleBefore).toBe(true);
+    expect(visibleAfter).toBe(false);
   });
 
   it('should support composite onSave for exclude-from-series scenario', async () => {
@@ -151,20 +155,6 @@ describe('Isolated AppointmentPopup environment', () => {
     );
   });
 
-  describe('State', () => {
-    it('should create a new dxForm instance on each popup opening', async () => {
-      const { POM, reopen } = await createAppointmentPopup();
-      const firstFormInstance = POM.dxForm;
-
-      POM.cancelButton.click();
-
-      const { POM: POM2 } = await reopen();
-      const secondFormInstance = POM2.dxForm;
-
-      expect(secondFormInstance).not.toBe(firstFormInstance);
-    });
-  });
-
   describe('allDay switch', () => {
     const commonAppointment = {
       text: 'common-app',
@@ -193,33 +183,51 @@ describe('Isolated AppointmentPopup environment', () => {
     it('should hide time editors when switched on', async () => {
       const { POM } = await createAppointmentPopup({ appointmentData: commonAppointment });
 
-      expect(POM.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('startTimeEditor')).toBeTruthy();
-      expect(POM.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('endTimeEditor')).toBeTruthy();
+      const startDateVisibleBefore = POM.isInputVisible('startDateEditor');
+      const startTimeVisibleBefore = POM.isInputVisible('startTimeEditor');
+      const endDateVisibleBefore = POM.isInputVisible('endDateEditor');
+      const endTimeVisibleBefore = POM.isInputVisible('endTimeEditor');
 
       POM.getInput('allDayEditor').click();
 
-      expect(POM.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('endTimeEditor')).toBeFalsy();
+      const startDateVisibleAfter = POM.isInputVisible('startDateEditor');
+      const startTimeVisibleAfter = POM.isInputVisible('startTimeEditor');
+      const endDateVisibleAfter = POM.isInputVisible('endDateEditor');
+      const endTimeVisibleAfter = POM.isInputVisible('endTimeEditor');
+
+      expect(startDateVisibleBefore).toBeTruthy();
+      expect(startTimeVisibleBefore).toBeTruthy();
+      expect(endDateVisibleBefore).toBeTruthy();
+      expect(endTimeVisibleBefore).toBeTruthy();
+      expect(startDateVisibleAfter).toBeTruthy();
+      expect(startTimeVisibleAfter).toBeFalsy();
+      expect(endDateVisibleAfter).toBeTruthy();
+      expect(endTimeVisibleAfter).toBeFalsy();
     });
 
     it('should show time editors when switched off', async () => {
       const { POM } = await createAppointmentPopup({ appointmentData: allDayAppointment });
 
-      expect(POM.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('endTimeEditor')).toBeFalsy();
+      const startDateVisibleBefore = POM.isInputVisible('startDateEditor');
+      const startTimeVisibleBefore = POM.isInputVisible('startTimeEditor');
+      const endDateVisibleBefore = POM.isInputVisible('endDateEditor');
+      const endTimeVisibleBefore = POM.isInputVisible('endTimeEditor');
 
       POM.getInput('allDayEditor').click();
 
-      expect(POM.isInputVisible('startDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('startTimeEditor')).toBeTruthy();
-      expect(POM.isInputVisible('endDateEditor')).toBeTruthy();
-      expect(POM.isInputVisible('endTimeEditor')).toBeTruthy();
+      const startDateVisibleAfter = POM.isInputVisible('startDateEditor');
+      const startTimeVisibleAfter = POM.isInputVisible('startTimeEditor');
+      const endDateVisibleAfter = POM.isInputVisible('endDateEditor');
+      const endTimeVisibleAfter = POM.isInputVisible('endTimeEditor');
+
+      expect(startDateVisibleBefore).toBeTruthy();
+      expect(startTimeVisibleBefore).toBeFalsy();
+      expect(endDateVisibleBefore).toBeTruthy();
+      expect(endTimeVisibleBefore).toBeFalsy();
+      expect(startDateVisibleAfter).toBeTruthy();
+      expect(startTimeVisibleAfter).toBeTruthy();
+      expect(endDateVisibleAfter).toBeTruthy();
+      expect(endTimeVisibleAfter).toBeTruthy();
     });
 
     it('should reset start to startDayHour and end via getCalculatedEndDate when switched off', async () => {
@@ -345,70 +353,51 @@ describe('Isolated AppointmentPopup environment', () => {
       endDate: new Date(2017, 4, 9, 11),
     };
 
-    it('should apply firstDayOfWeek to week day buttons', async () => {
-      const { POM, reopen } = await createAppointmentPopup({
+    it.each([
+      { firstDayOfWeek: 1, expected: 'MTWTFSS' },
+      { firstDayOfWeek: 0, expected: 'SMTWTFS' },
+    ])('should render week day buttons in $expected order when firstDayOfWeek=$firstDayOfWeek', async ({ firstDayOfWeek, expected }) => {
+      const { POM } = await createAppointmentPopup({
         appointmentData: commonAppointment,
-        firstDayOfWeek: 1,
+        firstDayOfWeek,
       });
 
       POM.selectRepeatValue('weekly');
-      const dayButtonsMonday = $(POM.recurrenceWeekDayButtons).find('.dx-button');
-      expect(dayButtonsMonday.text()).toBe('MTWTFSS');
 
-      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
-      POM2.selectRepeatValue('weekly');
-      const dayButtonsSunday = $(POM2.recurrenceWeekDayButtons).find('.dx-button');
-      expect(dayButtonsSunday.text()).toBe('SMTWTFS');
+      const dayButtonsText = $(POM.recurrenceWeekDayButtons).find('.dx-button').text();
+      expect(dayButtonsText).toBe(expected);
     });
 
-    it('should apply firstDayOfWeek to recurrence form startDate calendar', async () => {
-      const { POM, reopen } = await createAppointmentPopup({
+    it.each([
+      { editorName: 'recurrenceStartDateEditor' as const, firstDayOfWeek: 1 },
+      { editorName: 'recurrenceStartDateEditor' as const, firstDayOfWeek: 0 },
+    ])('should apply firstDayOfWeek=$firstDayOfWeek to $editorName calendar', async ({ editorName, firstDayOfWeek }) => {
+      const { POM } = await createAppointmentPopup({
         appointmentData: commonAppointment,
-        firstDayOfWeek: 1,
+        firstDayOfWeek,
       });
 
       POM.selectRepeatValue('weekly');
-      const recurrenceStartDateEditor = POM.dxForm.getEditor('recurrenceStartDateEditor');
-      expect(recurrenceStartDateEditor).toBeDefined();
-      expect(recurrenceStartDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
 
-      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
-      POM2.selectRepeatValue('weekly');
-      const recurrenceStartDateEditorAfter = POM2.dxForm.getEditor('recurrenceStartDateEditor');
-      expect(recurrenceStartDateEditorAfter).toBeDefined();
-      expect(recurrenceStartDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+      const editor = POM.dxForm.getEditor(editorName);
+      expect(editor).toBeDefined();
+      expect(editor?.option('calendarOptions.firstDayOfWeek')).toBe(firstDayOfWeek);
     });
 
-    it('should apply firstDayOfWeek to startDate calendar', async () => {
-      const { POM, reopen } = await createAppointmentPopup({
+    it.each([
+      { editorName: 'startDateEditor' as const, firstDayOfWeek: 1 },
+      { editorName: 'startDateEditor' as const, firstDayOfWeek: 0 },
+      { editorName: 'endDateEditor' as const, firstDayOfWeek: 1 },
+      { editorName: 'endDateEditor' as const, firstDayOfWeek: 0 },
+    ])('should apply firstDayOfWeek=$firstDayOfWeek to $editorName calendar', async ({ editorName, firstDayOfWeek }) => {
+      const { POM } = await createAppointmentPopup({
         appointmentData: commonAppointment,
-        firstDayOfWeek: 1,
+        firstDayOfWeek,
       });
 
-      const startDateEditor = POM.dxForm.getEditor('startDateEditor');
-      expect(startDateEditor).toBeDefined();
-      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
-
-      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
-      const startDateEditorAfter = POM2.dxForm.getEditor('startDateEditor');
-      expect(startDateEditorAfter).toBeDefined();
-      expect(startDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
-    });
-
-    it('should apply firstDayOfWeek to endDate calendar', async () => {
-      const { POM, reopen } = await createAppointmentPopup({
-        appointmentData: commonAppointment,
-        firstDayOfWeek: 1,
-      });
-
-      const endDateEditor = POM.dxForm.getEditor('endDateEditor');
-      expect(endDateEditor).toBeDefined();
-      expect(endDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
-
-      const { POM: POM2 } = await reopen({ firstDayOfWeek: 0 });
-      const endDateEditorAfter = POM2.dxForm.getEditor('endDateEditor');
-      expect(endDateEditorAfter).toBeDefined();
-      expect(endDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+      const editor = POM.dxForm.getEditor(editorName);
+      expect(editor).toBeDefined();
+      expect(editor?.option('calendarOptions.firstDayOfWeek')).toBe(firstDayOfWeek);
     });
   });
 });

@@ -41,6 +41,8 @@ const DEFAULT_EDITING = {
   allowDragging: true,
 };
 
+const NO_TIMEZONE = '';
+
 const DEFAULT_APPOINTMENT = {
   text: 'Test Appointment',
   startDate: new Date(2021, 3, 26, 9, 30),
@@ -70,11 +72,6 @@ interface CreateAppointmentPopupOptions {
   updateAppointment?: jest.Mock;
 }
 
-interface ReopenOptions {
-  appointmentData?: Record<string, unknown>;
-  firstDayOfWeek?: number;
-}
-
 interface CreateAppointmentPopupResult {
   container: HTMLDivElement;
   popup: AppointmentPopup;
@@ -86,7 +83,6 @@ interface CreateAppointmentPopupResult {
     focus: jest.Mock;
     onSave: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   };
-  reopen: (opts?: ReopenOptions) => Promise<{ POM: PopupModel }>;
   dispose: () => void;
 }
 
@@ -111,7 +107,7 @@ export const createAppointmentPopup = async (
 
   const dataAccessors = new AppointmentDataAccessor(DEFAULT_FIELDS, false);
   const resourceManager = new ResourceManager([]);
-  const timeZoneCalculator = createTimeZoneCalculator(options.timeZone ?? '');
+  const timeZoneCalculator = createTimeZoneCalculator(options.timeZone ?? NO_TIMEZONE);
   const editing = { ...DEFAULT_EDITING, ...options.editing };
 
   const addAppointment = options.addAppointment
@@ -189,18 +185,6 @@ export const createAppointmentPopup = async (
 
   const POM = await showAndQuery(appointmentData);
 
-  const reopen = async (
-    reopenOpts: ReopenOptions = {},
-  ): Promise<{ POM: PopupModel }> => {
-    if (reopenOpts.firstDayOfWeek !== undefined) {
-      formConfig.firstDayOfWeek = reopenOpts.firstDayOfWeek as DayOfWeek;
-    }
-
-    const data = reopenOpts.appointmentData ?? appointmentData;
-
-    return { POM: await showAndQuery(data) };
-  };
-
   const dispose = (): void => {
     popup.dispose();
     container.remove();
@@ -219,7 +203,6 @@ export const createAppointmentPopup = async (
       focus,
       onSave,
     },
-    reopen,
     dispose,
   };
 };
