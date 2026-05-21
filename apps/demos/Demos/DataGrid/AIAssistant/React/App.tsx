@@ -88,6 +88,7 @@ export default function App() {
 
   return (
     <DataGrid
+      id="gridContainer"
       dataSource={sales}
       showBorders={true}
       keyExpr="Id"

@@ -46,7 +46,7 @@ const suggestions = {
 export default function App() {
   const chatRef = useRef(null);
   const onChatInitialized = useCallback((e) => {
-    chatRef.current = e.component;
+    chatRef.current = e.component ?? null;
   }, []);
   const onSuggestionItemClick = useCallback((e) => {
     const { prompt, text } = e.itemData;
@@ -79,6 +79,7 @@ export default function App() {
   };
   return (
     <DataGrid
+      id="gridContainer"
       dataSource={sales}
       showBorders={true}
       keyExpr="Id"
