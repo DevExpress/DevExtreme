@@ -182,9 +182,10 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      expect(model.getMessages().length).toBe(1);
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Failure);
-      expect(model.getErrorMessage(0).text())
+      const aiChat = model.getAiChatModel();
+      expect(aiChat.getMessages().length).toBe(1);
+      expect(aiChat.getMessageStatus(0)).toBe(MessageStatus.Failure);
+      expect(aiChat.getErrorMessage(0).text())
         .toBe('Invalid response from the AI service. Please try again.');
     });
   });
@@ -358,9 +359,10 @@ describe('AI Assistant error handling', () => {
       model.getAiAssistantController().abortRequest();
       await flushAsync();
 
-      expect(model.getMessages().length).toBe(1);
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Failure);
-      expect(model.getErrorMessage(0).text())
+      const aiChat = model.getAiChatModel();
+      expect(aiChat.getMessages().length).toBe(1);
+      expect(aiChat.getMessageStatus(0)).toBe(MessageStatus.Failure);
+      expect(aiChat.getErrorMessage(0).text())
         .toBe('Request stopped.');
     });
   });
@@ -442,7 +444,8 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Failure);
+      expect(model.getAiChatModel().getMessageStatus(0))
+        .toBe(MessageStatus.Failure);
     });
 
     it('should set failure status when commands contain aborted items', async () => {
@@ -504,8 +507,9 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Success);
-      expect(model.getActionList(0).text())
+      const aiChat = model.getAiChatModel();
+      expect(aiChat.getMessageStatus(0)).toBe(MessageStatus.Success);
+      expect(aiChat.getActionList(0).text())
         .toBe('Sorted by Name ascending');
     });
 
@@ -554,7 +558,8 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Pending);
+      expect(model.getAiChatModel().getMessageStatus(0))
+        .toBe(MessageStatus.Pending);
     });
 
     it('should transition from pending to success after delayed response', async () => {
@@ -608,8 +613,9 @@ describe('AI Assistant error handling', () => {
       model.sendAiRequest('Sort by name');
       jest.runAllTimers();
 
-      expect(model.getMessages().length).toBe(1);
-      expect(model.getMessageStatus(0))
+      const aiChat = model.getAiChatModel();
+      expect(aiChat.getMessages().length).toBe(1);
+      expect(aiChat.getMessageStatus(0))
         .toBe(MessageStatus.Pending);
 
       await model.togglePopup().catch(() => {});
@@ -628,9 +634,10 @@ describe('AI Assistant error handling', () => {
       jest.runAllTimers();
       await flushAsync();
 
-      expect(model.getMessages().length).toBe(1);
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Failure);
-      expect(model.getErrorMessage(0).text())
+      const aiChatAfter = model.getAiChatModel();
+      expect(aiChatAfter.getMessages().length).toBe(1);
+      expect(aiChatAfter.getMessageStatus(0)).toBe(MessageStatus.Failure);
+      expect(aiChatAfter.getErrorMessage(0).text())
         .toBe('Request stopped.');
     });
   });
@@ -644,18 +651,20 @@ describe('AI Assistant error handling', () => {
       getLastCallbacks().onError?.(new Error('Network error'));
       await flushAsync();
 
-      expect(model.getMessages().length).toBe(1);
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Failure);
+      expect(model.getAiChatModel().getMessages().length).toBe(1);
+      expect(model.getAiChatModel().getMessageStatus(0))
+        .toBe(MessageStatus.Failure);
 
-      const regenerateButton = model.getRegenerateButton(0);
+      const regenerateButton = model.getAiChatModel().getRegenerateButton(0);
       expect(regenerateButton).toBeTruthy();
 
       regenerateButton.click();
       jest.runAllTimers();
       await flushAsync();
 
-      expect(model.getMessages().length).toBe(1);
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Pending);
+      expect(model.getAiChatModel().getMessages().length).toBe(1);
+      expect(model.getAiChatModel().getMessageStatus(0))
+        .toBe(MessageStatus.Pending);
 
       getLastCallbacks().onComplete?.({
         actions: [{ name: 'sorting', args: { column: 'Name' } }],
@@ -663,8 +672,9 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      expect(model.getMessages().length).toBe(1);
-      expect(model.getMessageStatus(0)).toBe(MessageStatus.Success);
+      expect(model.getAiChatModel().getMessages().length).toBe(1);
+      expect(model.getAiChatModel().getMessageStatus(0))
+        .toBe(MessageStatus.Success);
     });
 
     it('should reject regeneration while another request is processing', async () => {

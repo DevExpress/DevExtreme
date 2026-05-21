@@ -1,12 +1,9 @@
 import type { ArrayStore } from '@js/common/data';
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
 import type { Message } from '@js/ui/chat';
+import { AIChatModel } from '@ts/grids/data_grid/__tests__/__mock__/model/ai_chat';
 import type { AIAssistantController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_controller';
 import type { AIAssistantViewController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view_controller';
-import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import type { AIMessage } from '@ts/grids/grid_core/ai_assistant/types';
-import { CLASSES } from '@ts/grids/grid_core/ai_chat/const';
 
 import { DataGridModel } from './data_grid';
 
@@ -47,43 +44,8 @@ export class AIAssistantDataGridModel extends DataGridModel {
     return this.getMessageStore().load() as Promise<Message[]>;
   }
 
-  public getMessages(): dxElementWrapper {
-    return $(`.${CLASSES.aiChat}`).find(`.${CLASSES.message}`);
-  }
-
-  public getMessage(messageIndex: number): dxElementWrapper {
-    return this.getMessages().eq(messageIndex);
-  }
-
-  public getMessageStatus(messageIndex: number): MessageStatus {
-    const $message = this.getMessage(messageIndex);
-
-    if ($message.hasClass(CLASSES.messagePending)) {
-      return MessageStatus.Pending;
-    }
-    if ($message.hasClass(CLASSES.messageSuccess)) {
-      return MessageStatus.Success;
-    }
-    if ($message.hasClass(CLASSES.messageError)) {
-      return MessageStatus.Failure;
-    }
-    return '' as never;
-  }
-
-  public getErrorMessage(messageIndex: number): dxElementWrapper {
-    return this.getMessage(messageIndex)
-      .find(`.${CLASSES.messageErrorText}`);
-  }
-
-  public getActionList(messageIndex: number): dxElementWrapper {
-    return this.getMessage(messageIndex)
-      .find(`.${CLASSES.actionListItemText}`);
-  }
-
-  public getRegenerateButton(messageIndex: number): HTMLElement {
-    return this.getMessage(messageIndex)
-      .find(`.${CLASSES.messageRegenerateButton}`)
-      .get(0) as HTMLElement;
+  public getAiChatModel(): AIChatModel {
+    return new AIChatModel();
   }
 
   public async togglePopup(): Promise<void> {
