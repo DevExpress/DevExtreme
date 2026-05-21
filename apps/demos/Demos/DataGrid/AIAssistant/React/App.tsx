@@ -52,7 +52,7 @@ const suggestions = {
 };
 
 export default function App() {
-  const chatRef = useRef<dxChat>(null);
+  const chatRef = useRef<dxChat | null>(null);
 
   const onChatInitialized = useCallback((e: InitializedEvent) => {
     chatRef.current = e.component;
