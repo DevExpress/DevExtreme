@@ -41,12 +41,6 @@ window.config = {
     'openai': {
       'esModule': true,
     },
-    'zod': {
-      'esModule': true,
-    },
-    'zod-to-json-schema': {
-      'esModule': true,
-    },
   },
   paths: {
     'npm:': '../../../../node_modules/',
@@ -137,8 +131,8 @@ window.config = {
     'openai': 'externals:openai.bundle.js',
     /**/
 
-    'zod': 'externals:zod.bundle.js',
-    'zod-to-json-schema': 'externals:zod-to-json-schema.bundle.js',
+    'zod': 'npm:zod/lib/index.js',
+    'zod-to-json-schema': 'npm:zod-to-json-schema/dist/cjs/index.js',
 
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
@@ -203,6 +197,12 @@ window.config = {
     }/**/,
     'es6-object-assign': {
       main: './index.js',
+      defaultExtension: 'js',
+    },
+    'npm:zod/lib': {
+      defaultExtension: 'js',
+    },
+    'npm:zod-to-json-schema/dist/cjs': {
       defaultExtension: 'js',
     },
   },
