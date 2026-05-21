@@ -12,18 +12,15 @@ import type {
   RequestCallbacks,
   Response as SendRequestResult,
 } from '@js/common/ai-integration';
-import type { ArrayStore } from '@js/common/data';
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
 import type { Message } from '@js/ui/chat';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import CustomStore from '@ts/data/m_custom_store';
+import { AIAssistantDataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/ai_assistant';
 import {
   afterTest,
   beforeTest,
   createDataGrid,
-  type DataGridInstance,
   flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
@@ -36,6 +33,16 @@ interface MockAIIntegrationResult {
   getLastCallbacks: () => RequestCallbacks<ExecuteGridAssistantCommandResult>;
   getAbortSpy: () => jest.Mock;
 }
+
+const LOCAL_DATA = [
+  { id: 1, name: 'Alpha' },
+  { id: 2, name: 'Beta' },
+];
+
+const DEFAULT_COLUMNS = [
+  { dataField: 'id', caption: 'ID', dataType: 'number' as const },
+  { dataField: 'name', caption: 'Name', dataType: 'string' as const },
+];
 
 const createMockAIIntegration = (): MockAIIntegrationResult => {
   let lastCallbacks: RequestCallbacks<ExecuteGridAssistantCommandResult> = {};
@@ -65,83 +72,42 @@ const createMockAIIntegration = (): MockAIIntegrationResult => {
   };
 };
 
-const LOCAL_DATA = [
-  { id: 1, name: 'Alpha' },
-  { id: 2, name: 'Beta' },
-];
-
-const DEFAULT_COLUMNS = [
-  { dataField: 'id', caption: 'ID', dataType: 'number' as const },
-  { dataField: 'name', caption: 'Name', dataType: 'string' as const },
-];
-
 const createDataGridWithAi = async (
   overrides: Record<string, unknown> = {},
 ): Promise<{
-  instance: DataGridInstance;
+  model: AIAssistantDataGridModel;
   getLastCallbacks: () => RequestCallbacks<ExecuteGridAssistantCommandResult>;
   getAbortSpy: () => jest.Mock;
 }> => {
   const { aiIntegration, getLastCallbacks, getAbortSpy } = createMockAIIntegration();
 
-  const { instance } = await createDataGrid({
+  await createDataGrid({
     dataSource: LOCAL_DATA,
     columns: DEFAULT_COLUMNS,
     aiAssistant: { enabled: true, aiIntegration, title: 'AI Assistant' },
     ...overrides,
   });
 
-  return { instance, getLastCallbacks, getAbortSpy };
+  const model = new AIAssistantDataGridModel(
+    document.getElementById('gridContainer') as HTMLElement,
+  );
+
+  return { model, getLastCallbacks, getAbortSpy };
 };
 
 const createDataGridWithAiAndPopup = async (
   overrides: Record<string, unknown> = {},
 ): Promise<{
-  instance: DataGridInstance;
+  model: AIAssistantDataGridModel;
   getLastCallbacks: () => RequestCallbacks<ExecuteGridAssistantCommandResult>;
   getAbortSpy: () => jest.Mock;
 }> => {
   const result = await createDataGridWithAi(overrides);
 
-  const viewController = result.instance.getController('aiAssistantViewController');
-  await viewController.toggle();
+  await result.model.togglePopup();
   jest.runAllTimers();
 
   return result;
-};
-
-const sendAiRequest = (
-  instance: DataGridInstance,
-  text: string,
-): void => {
-  const controller = instance.getController('aiAssistant');
-
-  controller.sendRequestToAI({
-    author: { id: 'user', name: 'User' },
-    text,
-    timestamp: new Date().toISOString(),
-  } as Message).catch(() => {});
-  jest.runAllTimers();
-};
-
-const getMessageStore = (
-  instance: DataGridInstance,
-): ArrayStore<Message, string> => {
-  const controller = instance.getController('aiAssistant');
-  return controller.getMessageStore();
-};
-
-const loadMessages = (
-  instance: DataGridInstance,
-): Promise<Message[]> => getMessageStore(instance).load() as Promise<Message[]>;
-
-const findMessageElements = (): dxElementWrapper => $(`.${CLASSES.aiChat}`).find(`.${CLASSES.message}`);
-
-const getMessageStatusClass = ($message: dxElementWrapper): string => {
-  if ($message.hasClass(CLASSES.messagePending)) return MessageStatus.Pending;
-  if ($message.hasClass(CLASSES.messageSuccess)) return MessageStatus.Success;
-  if ($message.hasClass(CLASSES.messageError)) return MessageStatus.Failure;
-  return '';
 };
 
 describe('AI Assistant error handling', () => {
@@ -175,13 +141,14 @@ describe('AI Assistant error handling', () => {
 
   describe('no aiIntegration configured', () => {
     it('should fail message and log E1068 when aiIntegration is missing', async () => {
-      const { instance } = await createDataGridWithAiAndPopup({
+      const { model } = await createDataGridWithAiAndPopup({
         aiAssistant: { enabled: true, title: 'AI Assistant' },
       });
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toHaveLength(1);
       expect(messages).toEqual([
@@ -196,14 +163,15 @@ describe('AI Assistant error handling', () => {
 
   describe('network / API error', () => {
     it('should render failure message with correct headerText and errorText', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       getLastCallbacks().onError?.(new Error('Network error'));
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -214,10 +182,10 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = findMessageElements();
+      const $messages = model.findMessageElements();
 
       expect($messages.length).toBe(1);
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
       expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
         .toBe('Invalid response from the AI service. Please try again.');
     });
@@ -225,15 +193,16 @@ describe('AI Assistant error handling', () => {
 
   describe('invalid response', () => {
     it('should fail when response has no actions property', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       getLastCallbacks().onComplete?.({} as ExecuteGridAssistantCommandResult);
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -245,15 +214,16 @@ describe('AI Assistant error handling', () => {
     });
 
     it('should fail when response has empty actions array', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       getLastCallbacks().onComplete?.({ actions: [] });
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -264,9 +234,10 @@ describe('AI Assistant error handling', () => {
     });
 
     it('should fail when response actions is not an array', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       getLastCallbacks().onComplete?.(
         { actions: 'invalid' } as unknown as ExecuteGridAssistantCommandResult,
@@ -274,7 +245,7 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -289,16 +260,17 @@ describe('AI Assistant error handling', () => {
     it('should fail when command validation returns false', async () => {
       validateSpy.mockReturnValue(false);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
       getLastCallbacks().onComplete?.({ actions });
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -314,16 +286,17 @@ describe('AI Assistant error handling', () => {
       const isExecutingSpy = jest.spyOn(GridCommands.prototype, 'isExecuting')
         .mockReturnValue(true);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
       getLastCallbacks().onComplete?.({ actions });
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -340,12 +313,13 @@ describe('AI Assistant error handling', () => {
     it('should fail when buildResponseSchema returns undefined', async () => {
       buildResponseSchemaSpy.mockReturnValue(undefined as never);
 
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -358,15 +332,15 @@ describe('AI Assistant error handling', () => {
 
   describe('request abort', () => {
     it('should fail message with abort text when request is aborted', async () => {
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      const controller = instance.getController('aiAssistant');
-      controller.abortRequest();
+      model.getAiAssistantController().abortRequest();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -378,18 +352,18 @@ describe('AI Assistant error handling', () => {
     });
 
     it('should render abort message in the DOM', async () => {
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      const controller = instance.getController('aiAssistant');
-      controller.abortRequest();
+      model.getAiAssistantController().abortRequest();
       await flushAsync();
 
-      const $messages = findMessageElements();
+      const $messages = model.findMessageElements();
 
       expect($messages.length).toBe(1);
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
       expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
         .toBe('Request stopped.');
     });
@@ -397,11 +371,12 @@ describe('AI Assistant error handling', () => {
 
   describe('concurrent request rejection', () => {
     it('should reject second request while first is processing', async () => {
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'First request');
+      model.sendAiRequest('First request');
+      jest.runAllTimers();
 
-      const controller = instance.getController('aiAssistant');
+      const controller = model.getAiAssistantController();
 
       const secondPromise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
@@ -413,7 +388,7 @@ describe('AI Assistant error handling', () => {
       await expect(secondPromise)
         .rejects.toThrow('Request already in progress. Please wait.');
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toHaveLength(1);
     });
@@ -421,16 +396,17 @@ describe('AI Assistant error handling', () => {
 
   describe('request cancelled via onAIAssistantRequestCreating', () => {
     it('should fail message when cancel is set to true', async () => {
-      const { instance } = await createDataGridWithAiAndPopup({
+      const { model } = await createDataGridWithAiAndPopup({
         onAIAssistantRequestCreating: (e: { cancel: boolean }): void => {
           e.cancel = true;
         },
       });
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -448,9 +424,10 @@ describe('AI Assistant error handling', () => {
         { status: 'failure', message: 'Failed to filter' },
       ] as CommandResult[]);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort and filter');
+      model.sendAiRequest('Sort and filter');
+      jest.runAllTimers();
 
       const actions = [
         { name: 'sorting', args: { column: 'Name' } },
@@ -460,7 +437,7 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -472,8 +449,8 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = findMessageElements();
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      const $messages = model.findMessageElements();
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
     });
 
     it('should set failure status when commands contain aborted items', async () => {
@@ -482,9 +459,10 @@ describe('AI Assistant error handling', () => {
         { status: 'aborted', message: 'Execution Interrupted' },
       ] as CommandResult[]);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort and group');
+      model.sendAiRequest('Sort and group');
+      jest.runAllTimers();
 
       const actions = [
         { name: 'sorting', args: { column: 'Name' } },
@@ -494,7 +472,7 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -514,16 +492,17 @@ describe('AI Assistant error handling', () => {
         { status: 'success', message: 'Sorted by Name ascending' },
       ] as CommandResult[]);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by Name');
+      model.sendAiRequest('Sort by Name');
+      jest.runAllTimers();
 
       const actions = [{ name: 'sorting', args: { column: 'Name' } }];
       getLastCallbacks().onComplete?.({ actions });
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -533,8 +512,8 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = findMessageElements();
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+      const $messages = model.findMessageElements();
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
       expect($messages.eq(0).find(`.${CLASSES.actionListItemText}`).text())
         .toBe('Sorted by Name ascending');
     });
@@ -545,9 +524,10 @@ describe('AI Assistant error handling', () => {
         { status: 'success', message: 'Filtered' },
       ] as CommandResult[]);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort and filter');
+      model.sendAiRequest('Sort and filter');
+      jest.runAllTimers();
 
       const actions = [
         { name: 'sorting', args: { column: 'Name' } },
@@ -557,7 +537,7 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -569,11 +549,12 @@ describe('AI Assistant error handling', () => {
 
   describe('delayed response', () => {
     it('should show pending status before response arrives', async () => {
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      const messagesBefore = await loadMessages(instance);
+      const messagesBefore = await model.loadMessages();
 
       expect(messagesBefore).toEqual([
         expect.objectContaining({
@@ -582,16 +563,17 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = findMessageElements();
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Pending);
+      const $messages = model.findMessageElements();
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Pending);
     });
 
     it('should transition from pending to success after delayed response', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      let messages = await loadMessages(instance);
+      let messages = await model.loadMessages();
       expect(messages[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Pending,
       }));
@@ -602,18 +584,19 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      messages = await loadMessages(instance);
+      messages = await model.loadMessages();
       expect(messages[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Success,
       }));
     });
 
     it('should transition from pending to failure after delayed error', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      let messages = await loadMessages(instance);
+      let messages = await model.loadMessages();
       expect(messages[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Pending,
       }));
@@ -621,7 +604,7 @@ describe('AI Assistant error handling', () => {
       getLastCallbacks().onError?.(new Error('Timeout'));
       await flushAsync();
 
-      messages = await loadMessages(instance);
+      messages = await model.loadMessages();
       expect(messages[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Failure,
       }));
@@ -630,16 +613,16 @@ describe('AI Assistant error handling', () => {
 
   describe('chat closed during processing', () => {
     it('should abort request and show failure after closing chat with confirm', async () => {
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      expect(findMessageElements().length).toBe(1);
-      expect(getMessageStatusClass(findMessageElements().eq(0))).toBe(MessageStatus.Pending);
+      expect(model.findMessageElements().length).toBe(1);
+      expect(model.getMessageStatusClass(model.findMessageElements().eq(0)))
+        .toBe(MessageStatus.Pending);
 
-      const viewController = instance.getController('aiAssistantViewController');
-
-      await viewController.toggle().catch(() => {});
+      await model.togglePopup().catch(() => {});
       jest.runAllTimers();
       await flushAsync();
 
@@ -651,14 +634,14 @@ describe('AI Assistant error handling', () => {
       jest.runAllTimers();
       await flushAsync();
 
-      await viewController.toggle();
+      await model.togglePopup();
       jest.runAllTimers();
       await flushAsync();
 
-      const $messages = findMessageElements();
+      const $messages = model.findMessageElements();
 
       expect($messages.length).toBe(1);
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
       expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
         .toBe('Request stopped.');
     });
@@ -666,15 +649,16 @@ describe('AI Assistant error handling', () => {
 
   describe('regeneration after failure', () => {
     it('should reset to pending and then succeed after regeneration', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'Sort by Name');
+      model.sendAiRequest('Sort by Name');
+      jest.runAllTimers();
       getLastCallbacks().onError?.(new Error('Network error'));
       await flushAsync();
 
-      let $messages = findMessageElements();
+      let $messages = model.findMessageElements();
       expect($messages.length).toBe(1);
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
 
       const regenerateButton = $messages.eq(0)
         .find(`.${CLASSES.messageRegenerateButton}`).get(0) as HTMLElement;
@@ -684,9 +668,9 @@ describe('AI Assistant error handling', () => {
       jest.runAllTimers();
       await flushAsync();
 
-      $messages = findMessageElements();
+      $messages = model.findMessageElements();
       expect($messages.length).toBe(1);
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Pending);
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Pending);
 
       getLastCallbacks().onComplete?.({
         actions: [{ name: 'sorting', args: { column: 'Name' } }],
@@ -694,17 +678,18 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      $messages = findMessageElements();
+      $messages = model.findMessageElements();
       expect($messages.length).toBe(1);
-      expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
     });
 
     it('should reject regeneration while another request is processing', async () => {
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      sendAiRequest(instance, 'First request');
+      model.sendAiRequest('First request');
+      jest.runAllTimers();
 
-      const controller = instance.getController('aiAssistant');
+      const controller = model.getAiAssistantController();
       const store = controller.getMessageStore();
 
       const aiMessage: AIMessage = {
@@ -731,7 +716,7 @@ describe('AI Assistant error handling', () => {
     it('should handle customizeResponseTitle returning empty string', async () => {
       const mockIntegration = createMockAIIntegration();
 
-      const { instance } = await createDataGridWithAiAndPopup({
+      const { model } = await createDataGridWithAiAndPopup({
         aiAssistant: {
           enabled: true,
           aiIntegration: mockIntegration.aiIntegration,
@@ -740,14 +725,15 @@ describe('AI Assistant error handling', () => {
         },
       });
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       const actions = [{ name: 'sorting', args: { column: 'Name' } }];
       mockIntegration.getLastCallbacks().onComplete?.({ actions });
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -760,13 +746,14 @@ describe('AI Assistant error handling', () => {
 
   describe('dispose during processing', () => {
     it('should abort request and mark message as failure on dispose', async () => {
-      const { instance } = await createDataGridWithAiAndPopup();
+      const { model } = await createDataGridWithAiAndPopup();
 
-      const controller = instance.getController('aiAssistant');
+      const controller = model.getAiAssistantController();
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      const messagesBefore = await loadMessages(instance);
+      const messagesBefore = await model.loadMessages();
       expect(messagesBefore[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Pending,
       }));
@@ -774,7 +761,7 @@ describe('AI Assistant error handling', () => {
       controller.dispose();
       await flushAsync();
 
-      const messagesAfter = await loadMessages(instance);
+      const messagesAfter = await model.loadMessages();
       expect(messagesAfter[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Failure,
         errorText: 'Request stopped.',
@@ -784,30 +771,34 @@ describe('AI Assistant error handling', () => {
 
   describe('resilience after consecutive failures', () => {
     it('should process request successfully after multiple prior failures', async () => {
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup();
-      const controller = instance.getController('aiAssistant');
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
+      const controller = model.getAiAssistantController();
 
-      sendAiRequest(instance, 'Request 1');
+      model.sendAiRequest('Request 1');
+      jest.runAllTimers();
       getLastCallbacks().onError?.(new Error('error 1'));
       await flushAsync();
 
-      sendAiRequest(instance, 'Request 2');
+      model.sendAiRequest('Request 2');
+      jest.runAllTimers();
       getLastCallbacks().onComplete?.({} as ExecuteGridAssistantCommandResult);
       await flushAsync();
       await flushAsync();
 
-      sendAiRequest(instance, 'Request 3');
+      model.sendAiRequest('Request 3');
+      jest.runAllTimers();
       controller.abortRequest();
       await flushAsync();
 
-      sendAiRequest(instance, 'Request 4');
+      model.sendAiRequest('Request 4');
+      jest.runAllTimers();
       getLastCallbacks().onComplete?.({
         actions: [{ name: 'sorting', args: { column: 'Name' } }],
       });
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toHaveLength(4);
 
@@ -843,16 +834,17 @@ describe('AI Assistant error handling', () => {
     it('should handle error response identically with remote data', async () => {
       const remoteStore = createRemoteDataSource(LOCAL_DATA);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup({
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup({
         dataSource: remoteStore,
       });
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       getLastCallbacks().onError?.(new Error('Remote network error'));
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -866,11 +858,12 @@ describe('AI Assistant error handling', () => {
     it('should handle success response identically with remote data', async () => {
       const remoteStore = createRemoteDataSource(LOCAL_DATA);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup({
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup({
         dataSource: remoteStore,
       });
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
       getLastCallbacks().onComplete?.({
         actions: [{ name: 'sorting', args: { column: 'Name' } }],
@@ -878,7 +871,7 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      const messages = await loadMessages(instance);
+      const messages = await model.loadMessages();
 
       expect(messages).toEqual([
         expect.objectContaining({
@@ -890,13 +883,14 @@ describe('AI Assistant error handling', () => {
     it('should handle delayed remote data load with error response', async () => {
       const remoteStore = createRemoteDataSource(LOCAL_DATA, 100);
 
-      const { instance, getLastCallbacks } = await createDataGridWithAiAndPopup({
+      const { model, getLastCallbacks } = await createDataGridWithAiAndPopup({
         dataSource: remoteStore,
       });
 
-      sendAiRequest(instance, 'Sort by name');
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
 
-      let messages = await loadMessages(instance);
+      let messages = await model.loadMessages();
       expect(messages[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Pending,
       }));
@@ -905,7 +899,7 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      messages = await loadMessages(instance);
+      messages = await model.loadMessages();
 
       expect(messages[0]).toEqual(expect.objectContaining({
         status: MessageStatus.Failure,
