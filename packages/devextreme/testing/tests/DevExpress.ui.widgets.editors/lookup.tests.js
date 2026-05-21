@@ -3720,6 +3720,8 @@ if(devices.real().deviceType === 'desktop') {
                     searchEnabled,
                 });
 
+                const expectedNoDataText = helper.widget._list.option('noDataText');
+
                 const localizedRoleDescription = messageLocalization.format('dxList-ariaRoleDescription');
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
@@ -3735,6 +3737,7 @@ if(devices.real().deviceType === 'desktop') {
                 const listItemContainerAttributes = {
                     tabindex: searchEnabled ? '-1' : '0',
                     role: 'application',
+                    'aria-label': expectedNoDataText
                 };
 
                 let fieldAttributes = {
@@ -3891,7 +3894,9 @@ if(devices.real().deviceType === 'desktop') {
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
                 const $itemsContainer = $list.find(`.${LIST_ITEMS_CLASS}`);
 
-                helper.checkAttributes($scrollView, { tabindex: '-1', role: 'application' });
+                const expectedNoDataText = helper.widget._list.option('noDataText');
+
+                helper.checkAttributes($scrollView, { tabindex: '-1', role: 'application', 'aria-label': expectedNoDataText });
                 helper.checkAttributes($itemsContainer, { });
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
@@ -3899,7 +3904,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes($itemsContainer, { 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($scrollView, { tabindex: '-1', role: 'application' });
+                helper.checkAttributes($scrollView, { tabindex: '-1', role: 'application', 'aria-label': expectedNoDataText });
                 helper.checkAttributes($itemsContainer, { });
             });
         });
