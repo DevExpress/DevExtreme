@@ -312,7 +312,7 @@ describe('AIAssistantController', () => {
           status: MessageStatus.Failure,
           headerText: 'Failed to process request',
           text: MessageStatus.Failure,
-          errorText: 'Network error',
+          errorText: 'Invalid response from the AI service. Please try again.',
         }),
       ]);
 
@@ -342,11 +342,11 @@ describe('AIAssistantController', () => {
           status: MessageStatus.Failure,
           headerText: 'Failed to process request',
           text: MessageStatus.Failure,
-          errorText: 'Default error message',
+          errorText: 'Invalid response from the AI service. Please try again.',
         }),
       ]);
 
-      await expect(promise).rejects.toThrow('Default error message');
+      await expect(promise).rejects.toThrow('Invalid response from the AI service. Please try again.');
     });
 
     it('should fail message when response has empty actions array', async () => {
@@ -368,11 +368,11 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          errorText: 'Default error message',
+          errorText: 'Invalid response from the AI service. Please try again.',
         }),
       ]);
 
-      await expect(promise).rejects.toThrow('Default error message');
+      await expect(promise).rejects.toThrow('Invalid response from the AI service. Please try again.');
     });
 
     it('should fail message when validation fails', async () => {
@@ -406,11 +406,11 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          errorText: 'Received invalid commands',
+          errorText: 'Invalid response from the AI service. Please try again.',
         }),
       ]);
 
-      await expect(promise).rejects.toThrow('Received invalid commands');
+      await expect(promise).rejects.toThrow('Invalid response from the AI service. Please try again.');
     });
 
     it('should fail message when commands are already executing', async () => {
@@ -444,11 +444,11 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          errorText: 'Unexpected error',
+          errorText: 'Execution already in progress. Please wait.',
         }),
       ]);
 
-      await expect(promise).rejects.toThrow('Unexpected error');
+      await expect(promise).rejects.toThrow('Execution already in progress. Please wait.');
     });
 
     it('should fail message when buildResponseSchema returns falsy', async () => {
@@ -477,11 +477,11 @@ describe('AIAssistantController', () => {
       expect(messages).toEqual([
         expect.objectContaining({
           status: MessageStatus.Failure,
-          errorText: 'Grid commands not initialized',
+          errorText: 'An unexpected error occurred. Please try again.',
         }),
       ]);
 
-      await expect(promise).rejects.toThrow('Grid commands not initialized');
+      await expect(promise).rejects.toThrow('An unexpected error occurred. Please try again.');
     });
 
     it('should resolve promise when command succeeds', async () => {
@@ -524,7 +524,7 @@ describe('AIAssistantController', () => {
 
       sendRequestCallbacks.onComplete?.({} as ExecuteGridAssistantCommandResult);
 
-      await expect(promise).rejects.toThrow('Default error message');
+      await expect(promise).rejects.toThrow('Invalid response from the AI service. Please try again.');
     });
 
     it('should reject second request while first request is still processing', async () => {
@@ -553,7 +553,7 @@ describe('AIAssistantController', () => {
       };
       expect(integrationInstance.sendRequest).toHaveBeenCalledTimes(1);
 
-      await expect(secondPromise).rejects.toBeUndefined();
+      await expect(secondPromise).rejects.toThrow('Request already in progress. Please wait.');
     });
 
     it('should accept new request after previous request completes successfully', async () => {
@@ -1003,7 +1003,7 @@ describe('AIAssistantController', () => {
       const regeneratePromise = controller.sendRequestToAI(aiMessage);
       regeneratePromise.catch(() => {});
 
-      await expect(regeneratePromise).rejects.toBeUndefined();
+      await expect(regeneratePromise).rejects.toThrow('Request already in progress. Please wait.');
     });
   });
 });
