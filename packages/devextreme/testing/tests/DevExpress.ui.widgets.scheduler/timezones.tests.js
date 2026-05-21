@@ -265,6 +265,7 @@ module('API', moduleConfig, () => {
 
         scheduler.instance.showAppointmentPopup(appointment, true);
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+        await Promise.resolve();
 
         const $appointment = scheduler.instance.$element().find(CLASSES.appointment);
         const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
@@ -294,6 +295,7 @@ module('API', moduleConfig, () => {
             scheduler.instance.showAppointmentPopup(updatedItem);
 
             $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+            await Promise.resolve();
 
             hide();
 
@@ -1422,6 +1424,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
 
             scheduler.instance.showAppointmentPopup(appointment);
             $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+            await Promise.resolve();
 
             assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
         } finally {
@@ -1451,6 +1454,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         try {
             scheduler.instance.showAppointmentPopup(appointment);
             $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+            await Promise.resolve();
 
             assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
         } finally {
@@ -1714,6 +1718,7 @@ module('Appointment popup', moduleConfig, () => {
             scheduler.instance.showAppointmentPopup(updatedItem);
 
             $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+            await Promise.resolve();
 
             assert.ok(updateAppointment.calledOnce, 'Update method is called');
             assert.deepEqual(updateAppointment.getCall(0).args[0], updatedItem, 'Target item is correct');
@@ -1975,6 +1980,7 @@ module('Fixed client time zone offset', () => {
             const initialPosition = $appointment.position();
 
             $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+            await Promise.resolve();
             const updatedPosition = $(scheduler.getElement()).find(CLASSES.appointment).not('.dx-scheduler-appointment-recurrence').position();
 
             assert.equal(updatedPosition.top, initialPosition.top, 'Top is updated correctly');

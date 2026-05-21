@@ -21,12 +21,12 @@
 @use "../button/sizes" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
-@use "../../base/gridBase/mixins" as *;
 
 // adduse
 @use "variables" as *;
 @forward "variables";
 @use 'layout/cell' as *;
+@use "layout/aiChat" as *;
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
@@ -1033,9 +1033,4 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     height: $material-grid-base-ai-prompt-editor-progressbar-height;
     border-radius: 0;
   }
-
-  @include ai-chat-messagelist-empty(
-    $button-default-bg,
-    $button-default-outlined-hover-bg,
-  );
 }

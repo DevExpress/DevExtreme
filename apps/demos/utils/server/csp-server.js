@@ -68,9 +68,7 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/Cell': {
     'img-src': ['data:'],
   },
-  // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'DataGrid/AIColumns': {
-    'script-src': ["'unsafe-inline'"],
     'connect-src': ['https://public-api.devexpress.com'],
   },
   'DataGrid/ExcelJSExportImages': {
@@ -105,10 +103,6 @@ const CSP_DEMO_ALLOWLIST = {
   },
   Gantt: {
     'img-src': ['data:'],
-  },
-  // TODO: fix inline style in taskTemplate
-  'Gantt/TaskTemplate': {
-    'style-src': ["'unsafe-inline'"],
   },
   Diagram: {
     'img-src': ['data:'],
@@ -149,10 +143,8 @@ const CSP_DEMO_ALLOWLIST = {
   'TagBox/Grouping': {
     'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
-  // AI demos use inline <script type="module"> to import OpenAI SDK from esm.sh
   'TreeList/AIColumns': {
     'connect-src': ['https://public-api.devexpress.com'],
-    'script-src': ["'unsafe-inline'"],
   },
   'TreeList/BatchEditing': {
     'img-src': ['data:'],
@@ -177,8 +169,6 @@ const CSP_DEMO_ALLOWLIST = {
   },
   'TreeList/Overview': {
     'img-src': ['data:'],
-    // TODO: fix inline style in cellTemplate (background-image)
-    'style-src': ["'unsafe-inline'"],
   },
   // globalize/message.js uses new Function() internally
   'Localization/UsingGlobalize': {
@@ -195,10 +185,6 @@ const CSP_DEMO_ALLOWLIST = {
   // Inline <script type="module"> to import remark/rehype from esm.sh
   'HtmlEditor/MarkdownSupport': {
     'script-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attribute
-  'DataGrid/RowSelection': {
-    'style-src': ["'unsafe-inline'"],
   },
   // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'Chat/AIAndChatbotIntegration': {

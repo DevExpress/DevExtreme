@@ -1,4 +1,5 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
+import config from 'core/config';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
@@ -8,7 +9,6 @@ import '__internal/scheduler/workspaces/m_timeline';
 import '__internal/scheduler/workspaces/m_timeline_day';
 import '__internal/scheduler/workspaces/m_timeline_month';
 import '__internal/scheduler/workspaces/m_timeline_week';
-import '__internal/scheduler/workspaces/m_timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import {
@@ -60,6 +60,28 @@ QUnit.test('Header scrollable should have right scrolloByContent (T708008)', asy
     const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
 
     assert.strictEqual(headerScrollable.option('scrollByContent'), true, 'scrolloByContent is OK');
+});
+
+QUnit.test('Timeline header uses global timeFormat when format is implicit', function(assert) {
+    const savedConfig = { ...config() };
+
+    try {
+        config({
+            ...config(),
+            timeFormat: 'HH:mm',
+        });
+
+        this.instance.option({
+            startDayHour: 8,
+            endDayHour: 10,
+            hoursInterval: 1,
+        });
+
+        const $firstHeaderCell = this.instance.$element().find('.dx-scheduler-header-panel-cell').first();
+        assert.strictEqual($firstHeaderCell.text().trim(), '08:00', 'header cell text uses global timeFormat');
+    } finally {
+        config(savedConfig);
+    }
 });
 
 
@@ -662,10 +684,12 @@ QUnit.module('Mouse Interaction', () => {
 
 QUnit.module('TimelineWorkWeek with intervalCount', {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            type: 'timelineWorkWeek',
+            skippedDays: [0, 6],
             currentDate: new Date(2015, 9, 16),
             getResourceManager: getEmptyResourceManager,
-        }).dxSchedulerTimelineWorkWeek('instance');
+        }).dxSchedulerTimelineWeek('instance');
     }
 });
 

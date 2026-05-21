@@ -116,6 +116,9 @@ export {
 
 export {
     AIAssistant,
+    PredefinedCommands,
+    PredefinedCommandNames,
+    ResponseStatusTexts,
     ApplyFilterMode,
     ColumnChooser,
     ColumnChooserMode,
@@ -174,7 +177,7 @@ export {
 /** @public */
 export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 /** @public */
-export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type TreeListPredefinedToolbarItem = 'addRowButton' | 'aiAssistantButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 /** @public */
 export type TreeListCommandColumnType = 'adaptive' | 'ai' | 'buttons' | 'drag';
 /** @public */
@@ -907,6 +910,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
     readonly watch?: Function;
 };
 
+/** @public */
 export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
     readonly columnIndex: number;
@@ -1528,7 +1532,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     updateDimensions(): void;
 }
 
-type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+type DefaultToolbarItemName = 'addRowButton' | 'aiAssistantButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 export type dxTreeListToolbar = Toolbar;
 export type dxTreeListToolbarItem = ToolbarItem;
 
@@ -1536,6 +1540,7 @@ export type dxTreeListToolbarItem = ToolbarItem;
  * @docid dxTreeListToolbarItem
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxTreeList
+ * @public
  */
 export interface ToolbarItem extends dxToolbarItem {
     /**

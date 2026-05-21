@@ -14,7 +14,7 @@ import type Editor from '@ts/ui/editor/editor';
 import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
 import EditDecorator from '@ts/ui/list/list.edit.decorator';
 import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
-import RadioButton from '@ts/ui/radio_group/m_radio_button';
+import RadioButton from '@ts/ui/radio_group/radio_button';
 
 const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
 
@@ -162,19 +162,19 @@ class EditDecoratorSelection extends EditDecorator {
       .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
       .appendTo(this._$selectAll);
 
+    const { selectAllText = messageLocalization.format('dxList-selectAll') } = this._list.option();
+
     this._selectAllCheckBox = this._list._createComponent(
       selectAllCheckBoxElement,
       CheckBox,
       {
-        elementAttr: { 'aria-label': messageLocalization.format('dxList-selectAll') },
+        elementAttr: { 'aria-label': selectAllText },
         focusStateEnabled: false,
         hoverStateEnabled: false,
       },
     );
 
     this._selectAllCheckBox.registerKeyHandler('downArrow', downArrowHandler);
-
-    const { selectAllText = '' } = this._list.option();
 
     $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_LABEL_CLASS)
       .text(selectAllText)
@@ -213,13 +213,14 @@ class EditDecoratorSelection extends EditDecorator {
     }
 
     const { value } = this._selectAllCheckBox?.option() ?? {};
+    const { selectAllText = messageLocalization.format('dxList-selectAll') } = this._list.option();
 
     const indeterminate = value === undefined;
     const checkedState = value ? 'checked' : 'notChecked';
 
     const stateVariableName = indeterminate ? 'indeterminate' : checkedState;
 
-    const label = `${messageLocalization.format('dxList-selectAll')}, ${messageLocalization.format(`dxList-selectAll-${stateVariableName}`)}`;
+    const label = `${selectAllText}, ${messageLocalization.format(`dxList-selectAll-${stateVariableName}`)}`;
     // @ts-expect-error ts-error
     this._$selectAll.attr({ 'aria-label': label });
   }

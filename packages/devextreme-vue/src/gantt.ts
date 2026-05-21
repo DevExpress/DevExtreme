@@ -52,7 +52,7 @@ import {
  dxGanttToolbarItem,
 } from "devextreme/ui/gantt";
 import {
- FirstDayOfWeek,
+ DayOfWeek,
  HorizontalAlignment,
  DataType,
  Format as CommonFormat,
@@ -181,7 +181,7 @@ const componentConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     endDateRange: Date,
     filterRow: Object as PropType<dxGanttFilterRow | Record<string, any>>,
-    firstDayOfWeek: Number as PropType<FirstDayOfWeek>,
+    firstDayOfWeek: Number as PropType<DayOfWeek>,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<dxGanttHeaderFilter | Record<string, any>>,
     height: [Number, String],

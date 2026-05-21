@@ -6,6 +6,7 @@ import '@ts/ui/list/modules/deleting';
 
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import Form from '@ts/ui/form/form';
 import Popup from '@ts/ui/popup/m_popup';
 
@@ -335,7 +336,9 @@ class TaskEditDialogInfo extends DialogInfoBase {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getFormattedDateText(date) {
-    return date ? dateLocalization.format(date, 'shortDateShortTime') : '';
+    if (!date) return '';
+    const globalFormat = getGlobalFormatByDataType('datetime');
+    return dateLocalization.format(date, globalFormat ?? 'shortDateShortTime');
   }
 
   _isReadOnlyField(field): boolean {

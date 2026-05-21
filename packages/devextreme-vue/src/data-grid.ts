@@ -20,6 +20,9 @@ import {
  SearchPanel,
  Sorting,
  AIColumnMode,
+ CommandInfo,
+ ResponseStatusTexts,
+ ResponseStatus,
  DataChangeType,
  ColumnAIOptions,
  FilterOperation,
@@ -734,6 +737,8 @@ const DxAIAssistantConfig = {
     "update:hoveredElement": null,
     "update:aiIntegration": null,
     "update:chat": null,
+    "update:customizeResponseText": null,
+    "update:customizeResponseTitle": null,
     "update:enabled": null,
     "update:popup": null,
     "update:title": null,
@@ -741,6 +746,8 @@ const DxAIAssistantConfig = {
   props: {
     aiIntegration: Object as PropType<AIIntegration>,
     chat: Object as PropType<Record<string, any>>,
+    customizeResponseText: Function as PropType<((command: CommandInfo) => ResponseStatusTexts)>,
+    customizeResponseTitle: Function as PropType<((status: ResponseStatus, commandNames: Array<string>) => string)>,
     enabled: Boolean,
     popup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     title: String

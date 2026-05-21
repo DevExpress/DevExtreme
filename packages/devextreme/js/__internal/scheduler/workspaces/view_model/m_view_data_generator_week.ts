@@ -13,6 +13,16 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
       options.startDate,
       this._getIntervalDuration(options.intervalCount),
       this.getFirstDayOfWeek(options.firstDayOfWeek),
+      options.skippedDays ?? this.skippedDays,
     );
+  }
+
+  protected override getSkippedDaysAnchorDay(
+    firstDayOfWeekOption: number | undefined,
+    startViewDate: Date,
+  ): number {
+    return this.skippedDays.length > 0
+      ? startViewDate.getDay()
+      : this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
   }
 }

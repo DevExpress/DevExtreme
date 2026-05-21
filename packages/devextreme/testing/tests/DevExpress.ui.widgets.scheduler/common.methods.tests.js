@@ -636,7 +636,7 @@ QUnit.module('Methods', {
 
     QUnit.test('showAppointmentTooltipCore, should call show tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
+        scheduler.instance.appointmentTooltip.isShownForTarget = sinon.stub().returns(false);
         scheduler.instance.appointmentTooltip.show = sinon.stub();
         scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltipCore('target', [], 'options');
@@ -647,7 +647,7 @@ QUnit.module('Methods', {
 
     QUnit.test('showAppointmentTooltipCore, should call hide tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
+        scheduler.instance.appointmentTooltip.isShownForTarget = sinon.stub().returns(true);
         scheduler.instance.appointmentTooltip.show = sinon.stub();
         scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltipCore('target', [], 'options');
@@ -658,7 +658,7 @@ QUnit.module('Methods', {
 
     QUnit.test('showAppointmentTooltip, should call show tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
+        scheduler.instance.appointmentTooltip.isShownForTarget = sinon.stub().returns(false);
         scheduler.instance.appointmentTooltip.show = sinon.stub();
         scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');
@@ -669,7 +669,7 @@ QUnit.module('Methods', {
 
     QUnit.test('showAppointmentTooltip, should call hide tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
+        scheduler.instance.appointmentTooltip.isShownForTarget = sinon.stub().returns(true);
         scheduler.instance.appointmentTooltip.show = sinon.stub();
         scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');

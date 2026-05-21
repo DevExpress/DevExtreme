@@ -1,13 +1,16 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Build Typescript Executor Schema",
+  "description": "Build TypeScript modules (CJS or ESM) with configurable output format",
   "type": "object",
-  "title": "Build TypeScript Executor",
-  "description": "Compile TypeScript code to CommonJS or ESM modules",
   "properties": {
     "module": {
       "type": "string",
       "description": "Target module format",
-      "enum": ["cjs", "esm"],
+      "enum": [
+        "cjs",
+        "esm"
+      ],
       "default": "esm"
     },
     "srcPattern": {
@@ -41,7 +44,5 @@
       "type": "string",
       "description": "Base directory for path alias resolution (used as aliasRoot for tsc-alias). Relative to project root. Required when resolvePaths is true. Example: './js' for DevExtreme's __internal TypeScript compilation."
     }
-  },
-  "required": [],
-  "additionalProperties": false
+  }
 }

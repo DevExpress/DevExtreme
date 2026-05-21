@@ -2,7 +2,7 @@
 @use "../mixins" as *;
 @use 'variables' as *;
 @use 'layout/cell' as *;
-@use "layout/ai-chat" as *;
+@use "layout/aiChat" as *;
 
 // adduse
 
@@ -1040,5 +1040,9 @@
     top: 50%;
     left: 0;
     transform: translateY(-50%);
+  }
+
+  .dx-#{$widget-name}-ai-assistant-confirm-dialog .dx-dialog-button {
+    width: $grid-ai-assistant-confirm-dialog-button-width;
   }
 }

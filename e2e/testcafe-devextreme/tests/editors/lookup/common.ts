@@ -7,11 +7,16 @@ import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/th
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
-  appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
+  appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const OVERLAY_CLASS = 'dx-overlay-content';
+
+const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];
@@ -98,7 +103,7 @@ test.meta({ browserSize: [300, 400] })('Check popup height with no found data op
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
 
-test.meta({ browserSize: [300, 400], unstable: true })('Check popup height in loading state', async (t) => {
+test.meta({ browserSize: [300, 400] })('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
@@ -109,19 +114,30 @@ test.meta({ browserSize: [300, 400], unstable: true })('Check popup height in lo
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxLookup', {
-  dataSource: {
-    load() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([1, 2, 3]);
-        }, 5000);
-      });
+}).before(async () => {
+  await insertStylesheetRulesToPage(`
+    .${LOADINDICATOR_SEGMENT_CLASS},
+    .${LOADINDICATOR_CONTENT_CLASS},
+    .${LOADINDICATOR_ICON_CLASS},
+    .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
+      animation: none !important;
+    }
+  `);
+
+  return createWidget('dxLookup', {
+    dataSource: {
+      load() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve([1, 2, 3]);
+          }, 5000);
+        });
+      },
     },
-  },
-  valueExpr: 'id',
-  displayExpr: 'text',
-}));
+    valueExpr: 'id',
+    displayExpr: 'text',
+  });
+}).after(async () => removeStylesheetRulesFromPage());
 
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

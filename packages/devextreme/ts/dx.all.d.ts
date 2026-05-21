@@ -1298,6 +1298,8 @@ declare module DevExpress.common {
     | 'object'
     | 'datetime';
   export type DateLike = Date | number | string | null;
+
+  export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
@@ -1332,7 +1334,11 @@ declare module DevExpress.common {
    */
   type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
   export type FieldChooserLayout = 0 | 1 | 2;
-  export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+  /**
+   * @deprecated Use the DayOfWeek type instead
+   */
+  export type FirstDayOfWeek = DayOfWeek;
   export type Format =
     | 'billions'
     | 'currency'
@@ -1396,6 +1402,38 @@ declare module DevExpress.common {
    */
   export type GlobalConfig = {
     versionAssertions?: VersionAssertion[];
+    /**
+     * [descr:GlobalConfig.dateFormat]
+     */
+    dateFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.timeFormat]
+     */
+    timeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.dateTimeFormat]
+     */
+    dateTimeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.numberFormat]
+     */
+    numberFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.dateTimeFormatPresets]
+     */
+    dateTimeFormatPresets?: Record<
+      string,
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>
+    >;
     /**
      * [descr:GlobalConfig.decimalSeparator]
      * @deprecated [depNote:GlobalConfig.decimalSeparator]
@@ -4587,7 +4625,9 @@ declare module DevExpress.common.grids {
   /**
    * [descr:AIAssistant]
    */
-  export type AIAssistant = {
+  export type AIAssistant<
+    TCommands extends PredefinedCommands = PredefinedCommands
+  > = {
     /**
      * [descr:AIAssistant.aiIntegration]
      */
@@ -4608,21 +4648,28 @@ declare module DevExpress.common.grids {
      * [descr:AIAssistant.title]
      */
     title?: string;
+    /**
+     * [descr:AIAssistant.customizeResponseTitle]
+     */
+    customizeResponseTitle?: (
+      status: ResponseStatus,
+      commandNames: (keyof TCommands)[]
+    ) => string;
+    /**
+     * [descr:AIAssistant.customizeResponseText]
+     */
+    customizeResponseText?: (
+      command: CommandInfo<TCommands>
+    ) => ResponseStatusTexts;
   };
   /**
    * [descr:AIAssistantRequestCreatingInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type AIAssistantRequestCreatingInfo = {
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.context]
-     */
-    context: Record<string, any>;
-    /**
-     * [descr:AIAssistantRequestCreatingInfo.responseSchema]
-     */
-    responseSchema: Record<string, any>;
-  };
+  export type AIAssistantRequestCreatingInfo = Pick<
+    DevExpress.aiIntegration.ExecuteGridAssistantCommandParams,
+    'context' | 'responseSchema' | 'additionalInfo'
+  >;
   export type AIColumnMode = 'auto' | 'manual';
   /**
    * [descr:AIColumnRequestCreatingInfo]
@@ -4652,6 +4699,15 @@ declare module DevExpress.common.grids {
   };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * [descr:BasicFilterExprObj]
+   */
+  export type BasicFilterExprObj = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.SearchOperation;
+    value: string | number | boolean | null;
+  };
   /**
    * [descr:ColumnAIOptions]
    */
@@ -5195,6 +5251,30 @@ declare module DevExpress.common.grids {
   };
   export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**
+   * [descr:CombinedFilterExprObj]
+   */
+  export type CombinedFilterExprObj = {
+    type: 'combined';
+    left: FilterExprObj;
+    combiner: 'and' | 'or';
+    right: FilterExprObj;
+  };
+  /**
+   * [descr:CommandInfo]
+   */
+  export type CommandInfo<
+    TCommands extends PredefinedCommands = PredefinedCommands
+  > = {
+    [K in keyof TCommands]: { name: K; args: TCommands[K] };
+  }[keyof TCommands];
+  /**
+   * [descr:CompositeKeyPair]
+   */
+  export type CompositeKeyPair = {
+    field: string;
+    value: string | number;
+  };
+  /**
    * [descr:DataChange]
    */
   export type DataChange<TRowData = any, TKey = any> = {
@@ -5369,6 +5449,13 @@ declare module DevExpress.common.grids {
   }
   export type EnterKeyAction = 'startEdit' | 'moveFocus';
   export type EnterKeyDirection = 'none' | 'column' | 'row';
+  /**
+   * [descr:FilterExprObj]
+   */
+  export type FilterExprObj =
+    | BasicFilterExprObj
+    | CombinedFilterExprObj
+    | NegatedFilterExprObj;
   export type FilterOperation =
     | '='
     | '<>'
@@ -6394,6 +6481,13 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
+   * [descr:NegatedFilterExprObj]
+   */
+  export type NegatedFilterExprObj = {
+    type: 'negated';
+    expression: FilterExprObj;
+  };
+  /**
    * [descr:NewRowInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6447,6 +6541,80 @@ declare module DevExpress.common.grids {
      */
     pageSize?: number;
   }
+  /**
+   * [descr:PredefinedCommandNames]
+   */
+  export type PredefinedCommandNames = keyof PredefinedCommands;
+  /**
+   * [descr:PredefinedCommands]
+   */
+  export type PredefinedCommands = {
+    columnsVisibility: {
+      dataField: string;
+      visible: boolean;
+    };
+    columnsReorder: {
+      dataField: string;
+      visibleIndex: number;
+    };
+    columnsPinning: {
+      dataField: string;
+      fixed: boolean;
+      fixedPosition?: 'left' | 'right';
+    };
+    columnsResize: {
+      dataField: string;
+      width: number | string;
+    };
+    filterValue: {
+      expression: FilterExprObj | null;
+    };
+    clearFilter: {};
+    focusRowByKey: {
+      key: string | number | Array<CompositeKeyPair>;
+    };
+    focusRowByIndex: {
+      index: number;
+    };
+    paging: {
+      enabled: boolean;
+    };
+    pageSize: {
+      pageSize: number;
+    };
+    pageIndex: {
+      pageIndex: number;
+    };
+    searching: {
+      text: string;
+    };
+    selectByKeys: {
+      keys: Array<string | number | Array<CompositeKeyPair>>;
+      preserve: boolean;
+    };
+    selectByIndexes: {
+      indexes: number[];
+    };
+    selectAll: {};
+    deselectAll: {};
+    clearSelection: {};
+    sorting: {
+      dataField: string;
+      sortOrder: SortOrder | 'none';
+    };
+    clearSorting: {};
+  };
+  /**
+   * [descr:ResponseStatus]
+   */
+  export type ResponseStatus = 'success' | 'failure';
+  /**
+   * [descr:ResponseStatusTexts]
+   */
+  export type ResponseStatusTexts = {
+    success?: string;
+    failure?: string;
+  };
   /**
    * [descr:RowDragging]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -10209,7 +10377,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
      */
@@ -12346,6 +12514,11 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:AIAssistant]
+     */
+    export type AIAssistant =
+      DevExpress.common.grids.AIAssistant<DataGridPredefinedCommands>;
+    /**
      * [descr:_ui_data_grid_AIAssistantRequestCreatingEvent]
      */
     export type AIAssistantRequestCreatingEvent<
@@ -12762,6 +12935,11 @@ declare module DevExpress.ui {
       | 'groupExpand'
       | 'selection'
       | 'drag';
+    /**
+     * [descr:DataGridCommandInfo]
+     */
+    export type DataGridCommandInfo =
+      DevExpress.common.grids.CommandInfo<DataGridPredefinedCommands>;
     export type DataGridExportFormat = 'pdf' | 'xlsx';
     export type DataGridPredefinedColumnButton =
       | 'cancel'
@@ -12769,8 +12947,30 @@ declare module DevExpress.ui {
       | 'edit'
       | 'save'
       | 'undelete';
+    /**
+     * [descr:DataGridPredefinedCommandNames]
+     */
+    export type DataGridPredefinedCommandNames =
+      keyof DataGridPredefinedCommands;
+    /**
+     * [descr:DataGridPredefinedCommands]
+     */
+    export type DataGridPredefinedCommands =
+      DevExpress.common.grids.PredefinedCommands & {
+        grouping: {
+          dataField: string;
+          groupIndex: number;
+        };
+        clearGrouping: {};
+        summary: {
+          totalItems: Array<SummaryCommandTotalItem>;
+          groupItems: Array<SummaryCommandGroupItem>;
+        };
+        clearSummary: {};
+      };
     export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
+      | 'aiAssistantButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
       | 'exportButton'
@@ -13447,6 +13647,7 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     type OverriddenKeys =
+      | 'aiAssistant'
       | 'columns'
       | 'customizeColumns'
       | 'dataRowTemplate'
@@ -13957,6 +14158,26 @@ declare module DevExpress.ui {
       totalItems?: Array<SummaryTotalItem> | undefined;
     };
     /**
+     * [descr:SummaryCommandGroupItem]
+     */
+    export type SummaryCommandGroupItem = Pick<
+      SummaryGroupItem,
+      'showInColumn' | 'displayFormat' | 'showInGroupFooter' | 'alignByColumn'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
+    };
+    /**
+     * [descr:SummaryCommandTotalItem]
+     */
+    export type SummaryCommandTotalItem = Pick<
+      SummaryTotalItem,
+      'showInColumn' | 'displayFormat'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
+    };
+    /**
      * [descr:SummaryGroupItem]
      */
     export type SummaryGroupItem = {
@@ -14259,6 +14480,10 @@ declare module DevExpress.ui {
     >,
     DevExpress.ui.dxDataGrid.OverriddenKeys
   > & {
+    /**
+     * [descr:dxDataGridOptions.aiAssistant]
+     */
+    aiAssistant?: DevExpress.ui.dxDataGrid.AIAssistant;
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -17020,7 +17245,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxDropDownEditorOptions.onClosed]
      */
@@ -21084,7 +21309,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxGanttOptions.tasks]
      */
@@ -26356,7 +26581,6 @@ declare module DevExpress.ui {
       readonly endDate: Date;
       readonly text: string;
     };
-    export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * [descr:_ui_scheduler_DisposingEvent]
      */
@@ -26406,6 +26630,9 @@ declare module DevExpress.ui {
      */
     export type SelectionEndEvent =
       DevExpress.common.core.events.EventInfo<dxScheduler> & {
+        /**
+         * [descr:_ui_scheduler_SelectionEndEvent.selectedCellData]
+         */
         readonly selectedCellData: Array<any>;
       };
     export type SnapToCellsMode = 'always' | 'auto' | 'never';
@@ -26698,11 +26925,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxSchedulerOptions.hiddenWeekDays]
      */
-    hiddenWeekDays?: Array<DevExpress.ui.dxScheduler.DayOfWeek>;
+    hiddenWeekDays?: Array<DevExpress.common.DayOfWeek> | undefined;
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
@@ -27039,11 +27266,11 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.firstDayOfWeek]
            */
-          firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+          firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
           /**
            * [descr:dxSchedulerOptions.views.hiddenWeekDays]
            */
-          hiddenWeekDays?: Array<DevExpress.ui.dxScheduler.DayOfWeek>;
+          hiddenWeekDays?: Array<DevExpress.common.DayOfWeek> | undefined;
           /**
            * [descr:dxSchedulerOptions.views.groupByDate]
            */
@@ -27560,7 +27787,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
@@ -31000,9 +31227,6 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
     export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
       readonly component: dxTreeList<TRowData, TKey>;
       readonly columnIndex: number;
@@ -32022,6 +32246,7 @@ declare module DevExpress.ui {
       | 'undelete';
     export type TreeListPredefinedToolbarItem =
       | 'addRowButton'
+      | 'aiAssistantButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
       | 'revertButton'
@@ -34846,7 +35071,6 @@ declare module DevExpress.ui.dxTreeList {
   };
   /**
    * [descr:dxTreeListToolbarItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ToolbarItem extends dxToolbarItem {
     /**

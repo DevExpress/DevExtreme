@@ -304,10 +304,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get fieldAddons(): FieldAddons {
+    get fieldAddons(): FieldAddons | null {
         return this._getOption('fieldAddons');
     }
-    set fieldAddons(value: FieldAddons) {
+    set fieldAddons(value: FieldAddons | null) {
         this._setOption('fieldAddons', value);
     }
 
@@ -966,7 +966,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldAddonsChange: EventEmitter<FieldAddons>;
+    @Output() fieldAddonsChange: EventEmitter<FieldAddons | null>;
 
     /**
     

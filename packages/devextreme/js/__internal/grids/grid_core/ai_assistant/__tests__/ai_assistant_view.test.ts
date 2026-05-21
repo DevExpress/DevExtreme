@@ -8,6 +8,7 @@ import {
   jest,
 } from '@jest/globals';
 import fx from '@js/common/core/animation/fx';
+import { ArrayStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helpers/wrapInstance';
@@ -15,6 +16,16 @@ import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helper
 import { AIChat } from '../../ai_chat/ai_chat';
 import type { AIChatOptions } from '../../ai_chat/types';
 import { AIAssistantView } from '../ai_assistant_view';
+import { createConfirmDialog } from '../utils';
+
+jest.mock('../utils', (): any => {
+  const original = jest.requireActual<any>('../utils');
+
+  return {
+    ...original,
+    createConfirmDialog: jest.fn(),
+  };
+});
 
 jest.mock('../../ai_chat/ai_chat', (): any => {
   const original = jest.requireActual<any>('../../ai_chat/ai_chat');
@@ -33,6 +44,14 @@ const createComponentMock = jest.fn((
   Widget: any,
   options: any,
 ): any => new Widget(el, options));
+
+const mockMessageStore = new ArrayStore({ key: 'id' });
+const mockAIAssistantController = {
+  getMessageStore: jest.fn().mockReturnValue(mockMessageStore),
+  sendRequestToAI: jest.fn(),
+  abortRequest: jest.fn(),
+  isProcessing: jest.fn().mockReturnValue(false),
+};
 
 const createAIAssistantView = ({
   initialEnabled = true,
@@ -67,9 +86,12 @@ const createAIAssistantView = ({
   };
 
   const mockComponent = {
+    NAME: 'dxDataGrid',
     element: (): any => $container.get(0),
     _createComponent: createComponentMock,
-    _controllers: {},
+    _controllers: {
+      aiAssistant: mockAIAssistantController,
+    },
     _views: {
       columnHeadersView: mockColumnHeadersView,
       rowsView: mockRowsView,
@@ -100,6 +122,7 @@ const beforeTest = (): void => {
 };
 
 const afterTest = (): void => {
+  mockMessageStore.off('push');
   document.body.innerHTML = '';
   fx.off = false;
   jest.useRealTimers();
@@ -130,7 +153,7 @@ describe('AIAssistantView', () => {
       expect(AIChat).toHaveBeenCalledTimes(1);
     });
 
-    it('should pass container, createComponent, popupOptions, chatOptions, and onChatCleared to AIChat', () => {
+    it('should pass container, createComponent, popupOptions, chatOptions, and onRegenerate to AIChat', () => {
       const { aiAssistantView } = createAIAssistantView();
 
       expect(AIChat).toHaveBeenCalledWith(
@@ -139,9 +162,25 @@ describe('AIAssistantView', () => {
           createComponent: expect.any(Function),
           popupOptions: expect.any(Object),
           chatOptions: expect.any(Object),
-          onChatCleared: expect.any(Function),
+          onRegenerate: expect.any(Function),
         }),
       );
+    });
+
+    it('should configure chatOptions with controller message data source and reloadOnChange', () => {
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+
+      expect(mockAIAssistantController.getMessageStore).toHaveBeenCalledTimes(1);
+      expect(aiChatConfig.chatOptions).toEqual(expect.objectContaining({
+        dataSource: expect.objectContaining({
+          store: mockMessageStore,
+          pushAggregationTimeout: 0,
+        }),
+        reloadOnChange: true,
+        onMessageEntered: expect.any(Function),
+      }));
     });
 
     it('should not create a new AIChat instance on subsequent renders', () => {
@@ -210,6 +249,26 @@ describe('AIAssistantView', () => {
     });
   });
 
+  describe('dispose', () => {
+    it('should unsubscribe from store push event', () => {
+      const onSpy = jest.spyOn(mockMessageStore, 'on');
+      const { aiAssistantView } = createAIAssistantView();
+      const offSpy = jest.spyOn(mockMessageStore, 'off');
+
+      aiAssistantView.dispose();
+
+      const onPushCall = (onSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+      const offPushCall = (offSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+
+      expect(onPushCall).toBeDefined();
+      expect(offPushCall).toBeDefined();
+      expect((offPushCall as any[])[1]).toBe((onPushCall as any[])[1]);
+
+      offSpy.mockRestore();
+      onSpy.mockRestore();
+    });
+  });
+
   describe('isShown', () => {
     it('should delegate to AIChat isShown method', () => {
       const { aiAssistantView } = createAIAssistantView();
@@ -254,6 +313,385 @@ describe('AIAssistantView', () => {
       aiChatConfig.popupOptions?.onHidden?.({} as any);
 
       expect(callback).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe('onHiding', () => {
+    it('should not cancel hiding when controller is not processing', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(false);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const event = { cancel: false, component: { hide: jest.fn() } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+
+      expect(event.cancel).toBe(false);
+      expect(createConfirmDialog).not.toHaveBeenCalled();
+    });
+
+    it('should cancel hiding and show confirm dialog when controller is processing', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(true);
+
+      const mockDialog = {
+        show: jest.fn().mockReturnValue({
+          done: jest.fn(),
+        }),
+      };
+      (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const event = { cancel: false, component: { hide: jest.fn() } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+
+      expect(event.cancel).toBe(true);
+      expect(createConfirmDialog).toHaveBeenCalledTimes(1);
+      expect(createConfirmDialog).toHaveBeenCalledWith(
+        expect.objectContaining({
+          popupOptions: expect.objectContaining({
+            elementAttr: expect.objectContaining({
+              class: expect.stringContaining('ai-assistant-confirm-dialog'),
+            }),
+          }),
+        }),
+      );
+      expect(mockDialog.show).toHaveBeenCalledTimes(1);
+    });
+
+    it('should abort request and hide popup when confirm result is true', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(true);
+
+      let doneCallback: (result: boolean) => void = () => {};
+      const mockDialog = {
+        show: jest.fn().mockReturnValue({
+          done: jest.fn((cb: (result: boolean) => void) => {
+            doneCallback = cb;
+          }),
+        }),
+      };
+      (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const hideMock = jest.fn();
+      const event = { cancel: false, component: { hide: hideMock } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+      doneCallback(true);
+
+      expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not abort request when confirm result is false', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(true);
+
+      let doneCallback: (result: boolean) => void = () => {};
+      const mockDialog = {
+        show: jest.fn().mockReturnValue({
+          done: jest.fn((cb: (result: boolean) => void) => {
+            doneCallback = cb;
+          }),
+        }),
+      };
+      (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const hideMock = jest.fn();
+      const event = { cancel: false, component: { hide: hideMock } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+      doneCallback(false);
+
+      expect(mockAIAssistantController.abortRequest).not.toHaveBeenCalled();
+      expect(hideMock).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('chat event handlers', () => {
+    describe('onRegenerate', () => {
+      it('should send request to AI with the AI message', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const aiMessage = {
+          id: 'assistant-123',
+          author: { id: 'assistant' },
+          text: 'failure',
+          prompt: 'Generate summary',
+          status: 'failure',
+          headerText: 'Failed to process request',
+          errorText: 'Network error',
+        };
+
+        aiChatConfig.onRegenerate?.(aiMessage as any);
+
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledTimes(1);
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledWith(aiMessage);
+      });
+
+      it('should call setDisabled(true) before sending request', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const aiMessage = {
+          id: 'assistant-123',
+          author: { id: 'assistant' },
+          text: 'failure',
+          prompt: 'Generate summary',
+          status: 'failure',
+          headerText: 'Failed to process request',
+        };
+
+        aiChatConfig.onRegenerate?.(aiMessage as any);
+
+        expect(aiChatInstance.setDisabled).toHaveBeenCalledWith(true);
+      });
+
+      it('should call setDisabled(false) after request completes successfully', async () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const aiMessage = {
+          id: 'assistant-123',
+          author: { id: 'assistant' },
+          text: 'failure',
+          prompt: 'Generate summary',
+          status: 'failure',
+          headerText: 'Failed to process request',
+        };
+
+        aiChatConfig.onRegenerate?.(aiMessage as any);
+        await Promise.resolve();
+
+        expect(aiChatInstance.setDisabled).toHaveBeenLastCalledWith(false);
+      });
+
+      it('should call setDisabled(false) after request fails', async () => {
+        mockAIAssistantController.sendRequestToAI.mockImplementation(
+          () => Promise.reject(new Error('Network error')),
+        );
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const aiMessage = {
+          id: 'assistant-123',
+          author: { id: 'assistant' },
+          text: 'failure',
+          prompt: 'Generate summary',
+          status: 'failure',
+          headerText: 'Failed to process request',
+        };
+
+        aiChatConfig.onRegenerate?.(aiMessage as any);
+        await Promise.resolve();
+
+        expect(aiChatInstance.setDisabled).toHaveBeenLastCalledWith(false);
+      });
+    });
+
+    describe('onMessageEntered', () => {
+      it('should send request to AI with the entered message', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledTimes(1);
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledWith(message);
+      });
+
+      it('should call setDisabled(true) before sending request', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+
+        expect(aiChatInstance.setDisabled).toHaveBeenCalledWith(true);
+      });
+
+      it('should call setDisabled(false) after request completes successfully', async () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+        await Promise.resolve();
+
+        expect(aiChatInstance.setDisabled).toHaveBeenLastCalledWith(false);
+      });
+
+      it('should call setDisabled(false) after request fails', async () => {
+        mockAIAssistantController.sendRequestToAI.mockImplementation(
+          () => Promise.reject(new Error('Network error')),
+        );
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { setDisabled: jest.Mock };
+
+        const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+        const message = {
+          author: { id: 'user', name: 'User' },
+          text: 'Generate summary',
+        };
+
+        aiChatConfig.chatOptions?.onMessageEntered?.({ message } as any);
+        await Promise.resolve();
+
+        expect(aiChatInstance.setDisabled).toHaveBeenLastCalledWith(false);
+      });
+    });
+
+    describe('handleMessageStorePush', () => {
+      const USER_ID = 'user';
+
+      const getPushHandler = (): (changes: any[]) => void => {
+        const onSpy = jest.spyOn(mockMessageStore, 'on');
+        createAIAssistantView();
+
+        const aiChatInstance = (AIChat as jest.Mock)
+          .mock.results[0].value as { getUserId: jest.Mock };
+        aiChatInstance.getUserId.mockReturnValue(USER_ID);
+
+        const pushCall = (onSpy.mock.calls as any[][]).find((call) => call[0] === 'push');
+        onSpy.mockRestore();
+
+        if (!pushCall?.[1]) {
+          throw new Error('Push handler not found');
+        }
+
+        return pushCall[1] as (changes: any[]) => void;
+      };
+
+      it('should subscribe to store push event during init', () => {
+        const onSpy = jest.spyOn(mockMessageStore, 'on');
+        createAIAssistantView({ render: false });
+
+        expect(onSpy).toHaveBeenCalledWith('push', expect.any(Function));
+        onSpy.mockRestore();
+      });
+
+      it('should unsubscribe from previous push handler before subscribing', () => {
+        const offSpy = jest.spyOn(mockMessageStore, 'off');
+        const onSpy = jest.spyOn(mockMessageStore, 'on');
+        createAIAssistantView();
+
+        const onPushCall = (onSpy.mock.calls as any[][]).find((call) => call[0] === 'push') as any[];
+        const offPushCall = (offSpy.mock.calls as any[][]).find((call) => call[0] === 'push') as any[];
+
+        expect(offPushCall).toBeDefined();
+        expect(onPushCall).toBeDefined();
+        expect(offPushCall[1]).toBe(onPushCall[1]);
+
+        offSpy.mockRestore();
+        onSpy.mockRestore();
+      });
+
+      it('should call sendRequestToAI when user message is inserted via store push', () => {
+        mockAIAssistantController.sendRequestToAI.mockReturnValue(Promise.resolve());
+        const pushHandler = getPushHandler();
+
+        const userMessage = {
+          id: 'user-msg-1',
+          author: { id: USER_ID, name: 'User' },
+          text: 'Sort by name',
+        };
+
+        pushHandler([{ type: 'insert', data: userMessage }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledTimes(1);
+        expect(mockAIAssistantController.sendRequestToAI).toHaveBeenCalledWith(userMessage);
+      });
+
+      it('should not call sendRequestToAI when AI message is inserted via store push', () => {
+        const pushHandler = getPushHandler();
+
+        const aiMessage = {
+          id: 'assistant-msg-1',
+          author: { id: 'assistant' },
+          text: 'Done',
+          prompt: 'Sort by name',
+          status: 'success',
+          headerText: 'Sort',
+        };
+
+        pushHandler([{ type: 'insert', data: aiMessage }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
+
+      it('should not call sendRequestToAI when message from another user is inserted via store push', () => {
+        const pushHandler = getPushHandler();
+
+        const otherUserMessage = {
+          id: 'other-msg-1',
+          author: { id: 'other-user', name: 'Other' },
+          text: 'Hello',
+        };
+
+        pushHandler([{ type: 'insert', data: otherUserMessage }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
+
+      it('should not call sendRequestToAI when message is updated via store push', () => {
+        const pushHandler = getPushHandler();
+
+        pushHandler([{
+          type: 'update',
+          key: 'msg-1',
+          data: { text: 'updated' },
+        }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
+
+      it('should not call sendRequestToAI when message is removed via store push', () => {
+        const pushHandler = getPushHandler();
+
+        pushHandler([{ type: 'delete', key: 'msg-1' }]);
+
+        expect(mockAIAssistantController.sendRequestToAI).not.toHaveBeenCalled();
+      });
     });
   });
 

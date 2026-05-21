@@ -34,7 +34,6 @@ const KEY_SOURCES = Object.freeze({
 const WARNING_CODES = Object.freeze({
     general: 1001,
     incompatibleVersion: 1002,
-    trialExpired: 1003,
 });
 
 const TEMPLATES = Object.freeze({
@@ -56,13 +55,7 @@ const TEMPLATES = Object.freeze({
                 'Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).',
             ].join(' ');
         }
-        if(type === 'trialExpired') {
-            return [
-                'Your DevExpress trial period has expired.',
-                'Purchase a license to continue using DevExpress product libraries.',
-            ].join(' ');
-        }
-        return 'License key verification has failed.';
+        return '';
     },
 
     warningCodeByType: (type) => WARNING_CODES[type] || WARNING_CODES.general,
@@ -81,7 +74,7 @@ const TEMPLATES = Object.freeze({
     ].join(' '),
 
     oldDevExtremeKey: (version) =>
-        `A DevExtreme key (v25_2 or earlier) has been detected. Use DevExpress license key (v${version}+) instead.`,
+        `A DevExtreme key (v25.2 or earlier) has been detected. Use DevExpress license key (v${version}+) instead.`,
 
     licenseId: (id) => `License ID: ${id}`,
 });

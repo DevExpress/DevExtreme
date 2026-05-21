@@ -2,7 +2,6 @@ import $ from 'jquery';
 import SchedulerTimeline from '__internal/scheduler/workspaces/m_timeline';
 import SchedulerTimelineDay from '__internal/scheduler/workspaces/m_timeline_day';
 import SchedulerTimelineWeek from '__internal/scheduler/workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from '__internal/scheduler/workspaces/m_timeline_work_week';
 import SchedulerTimelineMonth from '__internal/scheduler/workspaces/m_timeline_month';
 import dateLocalization from 'common/core/localization/date';
 import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/m_work_space_grouped_strategy_vertical';
@@ -62,7 +61,7 @@ QUnit.module('Timeline markup', moduleConfig, () => {
     });
 
     QUnit.test('Scheduler timeline should have right groupedStrategy by default', async function(assert) {
-        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
+        assert.ok(this.instance.groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
     });
 
     QUnit.test('Two scrollable elements should be rendered', async function(assert) {
@@ -430,7 +429,7 @@ timelineDayModuleConfig = {
 
 QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleConfig, () => {
     QUnit.test('Scheduler timeline day should have right groupedStrategy, groupOrientation = horizontal', async function(assert) {
-        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, 'Grouped strategy is right');
+        assert.ok(this.instance.groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, 'Grouped strategy is right');
     });
 
     QUnit.test('Scheduler timeline day should have a right css class, groupOrientation = horizontal', async function(assert) {
@@ -774,21 +773,23 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
 
 let timelineWorkWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            type: 'timelineWorkWeek',
+            skippedDays: [0, 6],
             getResourceManager: getEmptyResourceManager,
-        }).dxSchedulerTimelineWorkWeek('instance');
+        }).dxSchedulerTimelineWeek('instance');
     }
 };
 
 QUnit.module('TimelineWorkWeek markup', timelineWorkWeekModuleConfig, () => {
     QUnit.test('Scheduler timeline work week should be initialized', async function(assert) {
-        assert.ok(this.instance instanceof SchedulerTimelineWorkWeek, 'dxSchedulerTimeLineWorkWeek was initialized');
+        assert.ok(this.instance instanceof SchedulerTimelineWeek, 'timelineWorkWeek uses SchedulerTimelineWeek');
     });
 
     QUnit.test('Scheduler timeline work week should have a right css class', async function(assert) {
         const $element = this.instance.$element();
-        assert.ok($element.hasClass('dx-scheduler-timeline'), 'dxSchedulerTimelineWorkWeek has \'dx-scheduler-timeline\' css class');
-        assert.ok($element.hasClass('dx-scheduler-timeline-work-week'), 'dxSchedulerTimelineWorkWeek has \'dx-scheduler-timeline-work-week\' css class');
+        assert.ok($element.hasClass('dx-scheduler-timeline'), 'timelineWorkWeek has \'dx-scheduler-timeline\' css class');
+        assert.ok($element.hasClass('dx-scheduler-timeline-work-week'), 'timelineWorkWeek has \'dx-scheduler-timeline-work-week\' css class');
     });
 
     QUnit.test('Scheduler timeline work week view should have right cell & row count', async function(assert) {
@@ -844,10 +845,12 @@ QUnit.module('TimelineWorkWeek markup', timelineWorkWeekModuleConfig, () => {
 
 timelineWorkWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            type: 'timelineWorkWeek',
+            skippedDays: [0, 6],
             currentDate: new Date(2015, 9, 16),
             getResourceManager: getEmptyResourceManager,
-        }).dxSchedulerTimelineWorkWeek('instance');
+        }).dxSchedulerTimelineWeek('instance');
     }
 };
 

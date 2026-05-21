@@ -2,7 +2,10 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Properties as ChatProperties } from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 
+import type { AIMessage, CommandResult } from '../ai_assistant/types';
 import type { CreateComponent } from '../m_types';
+
+export type { CommandResult };
 
 export interface AIChatOptions {
   container: dxElementWrapper;
@@ -10,6 +13,5 @@ export interface AIChatOptions {
   createComponent: CreateComponent<any>;
   popupOptions?: PopupProperties;
   chatOptions?: ChatProperties;
-  onChatCleared?: () => void;
-  onRegenerate?: () => void;
+  onRegenerate?: (aiMessage: AIMessage) => void;
 }

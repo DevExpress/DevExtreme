@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Vectormap Executor Schema",
+  "description": "Build vectormap utility bundles and geographic region data modules",
+  "type": "object",
+  "properties": {
+    "sourceDir": {
+      "type": "string",
+      "description": "Path to vector_map.utils source directory"
+    },
+    "settingsFile": {
+      "type": "string",
+      "description": "Relative path to the settings JSON file, joined with sourceDir (e.g. './_settings.json')"
+    },
+    "sourcesDir": {
+      "type": "string",
+      "description": "Path to vectormap shapefile sources directory"
+    },
+    "sourcesSettingsFile": {
+      "type": "string",
+      "description": "Relative path to the sources settings JS file, joined with sourcesDir (e.g. './_settings.js')"
+    },
+    "utilsOutDir": {
+      "type": "string",
+      "description": "Output directory for vectormap utility bundles"
+    },
+    "dataOutDir": {
+      "type": "string",
+      "description": "Output directory for vectormap region data files"
+    },
+    "utilsTemplatePath": {
+      "type": "string",
+      "description": "Path to vectormaputils UMD template file"
+    },
+    "dataTemplatePath": {
+      "type": "string",
+      "description": "Path to vectormapdata UMD template file"
+    },
+    "applyLicenseHeaders": {
+      "type": "object",
+      "description": "When provided, applies DevExtreme license headers to the executor output. Defaults the target directory to utilsOutDir; override via targetSubdir.",
+      "properties": {
+        "licenseTemplateFile": { "type": "string" },
+        "mode": { "type": "string", "enum": ["eula", "mit"] },
+        "eulaUrl": { "type": "string" },
+        "version": { "type": "string" },
+        "commentType": { "type": "string", "enum": ["!", "*"] },
+        "separator": { "type": "string" },
+        "prependAfterLicense": { "type": "string" },
+        "filenameMode": { "type": "string", "enum": ["relative", "basename"] },
+        "includePatterns": { "type": "array", "items": { "type": "string" } },
+        "excludePatterns": { "type": "array", "items": { "type": "string" } },
+        "targetSubdir": { "type": "string" }
+      }
+    }
+  },
+  "required": [
+    "sourceDir",
+    "settingsFile",
+    "sourcesDir",
+    "sourcesSettingsFile",
+    "utilsOutDir",
+    "dataOutDir",
+    "utilsTemplatePath",
+    "dataTemplatePath"
+  ]
+}

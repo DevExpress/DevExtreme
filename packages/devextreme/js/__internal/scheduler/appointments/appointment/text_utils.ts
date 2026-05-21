@@ -1,12 +1,11 @@
-import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
 
+import { formatImplicitSchedulerDate, formatImplicitSchedulerTime } from '../../utils/global_formats';
 import type { AppointmentProperties } from './m_types';
 
-const localizeDate = (date: Date): string => `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
-
-const localizeTime = (date: Date): string => `${dateLocalization.format(date, 'shorttime')}`;
+const localizeDate = (date: Date): string => formatImplicitSchedulerDate(date);
+const localizeTime = (date: Date): string => formatImplicitSchedulerTime(date);
 
 const getDate = (options: AppointmentProperties, propName: 'endDate' | 'startDate'): Date => {
   const result = options.dataAccessors.get(propName, options.data);
