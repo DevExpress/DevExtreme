@@ -67,10 +67,12 @@
         "{projectRoot}/scripts/**/*",
         "{projectRoot}/utils/bundle/**/*",
         "{projectRoot}/utils/internal/create-config.js",
+        "{projectRoot}/menuMeta.json",
         "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
       ],
       "outputs": [
-        "{projectRoot}/bundles"
+        "{projectRoot}/bundles",
+        "{projectRoot}/Demos/**/config.js"
       ]
     },
     "lint-js": {
@@ -126,7 +128,10 @@
         "{projectRoot}/utils/shared/config-helper.js",
         "{projectRoot}/utils/internal/create-config.js",
         "{projectRoot}/utils/copy-shared-resources/**/*",
-        "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
+        "{projectRoot}/menuMeta.json",
+        "{projectRoot}/rollup.ng.umd.config.mjs",
+        "{projectRoot}/rollup.devextreme-angular.umd.config.mjs",
+        "{projectRoot}/rollup.external.bundles.config.mjs"
       ],
       "outputs": [
         "{projectRoot}/Demos/**/config.js"
