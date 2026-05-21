@@ -1,7 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { DxEvent } from '@js/events';
+import type { Cancelable, DxEvent } from '@js/events';
 import type {
   AppointmentClickEvent,
   AppointmentDblClickEvent,
@@ -16,6 +16,7 @@ import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
+import type { AppointmentTooltipExtraOptions } from '../tooltip_strategies/tooltip_strategy_base';
 import type {
   AppointmentTooltipItem,
   SafeAppointment, ScrollToOptions, TargetedAppointment, ViewType,
@@ -67,16 +68,15 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   isVirtualScrolling: () => boolean;
 
   scrollTo: (date: Date, options?: ScrollToOptions) => void;
-  showAppointmentTooltip: (
+  showTooltipForAppointment: (
     appointment: SafeAppointment,
     $element: dxElementWrapper,
     targetedAppointment?: SafeAppointment,
   ) => void;
-  showAppointmentTooltipCore: (
+  showTooltipForCollector: (
     target: dxElementWrapper,
     data: AppointmentTooltipItem[],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    options?: any,
+    options?: AppointmentTooltipExtraOptions,
   ) => void;
   showEditAppointmentPopup: (
     appointmentData: SafeAppointment,
@@ -88,8 +88,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   private focusController!: AppointmentsFocusController;
 
   private appointmentClickTimeout: number | null = null;
-
-  private preventSingleAppointmentClick = false;
 
   private viewItemBySortedIndex: Record<number, ViewItem> = {};
 
@@ -443,22 +441,25 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     // @ts-expect-error 'component' and 'element' are set by action
     this.option().onAppointmentClick(e);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((e as any).cancel) {
+    if ((e as Cancelable).cancel) {
       return;
+    }
+
+    if (this.appointmentClickTimeout != null) {
+      clearTimeout(this.appointmentClickTimeout);
     }
 
     // setTimeout is used to prevent showing tooltip on double click
     this.appointmentClickTimeout = window.setTimeout(() => {
-      if (isElementInDom($target) && !this.preventSingleAppointmentClick) {
-        this.option().showAppointmentTooltip(
+      this.appointmentClickTimeout = null;
+
+      if (isElementInDom($target)) {
+        this.option().showTooltipForAppointment(
           appointmentView.appointmentData,
           $target,
           appointmentView.targetedAppointmentData,
         );
       }
-
-      this.preventSingleAppointmentClick = false;
     }, SHOW_TOOLTIP_TIMEOUT);
   }
 
@@ -473,17 +474,16 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       event,
     };
 
+    if (this.appointmentClickTimeout) {
+      clearTimeout(this.appointmentClickTimeout);
+      this.appointmentClickTimeout = null;
+    }
+
     // @ts-expect-error 'component' and 'element' are set by action
     this.option().onAppointmentDblClick(e);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((e as any).cancel) {
+    if ((e as Cancelable).cancel) {
       return;
-    }
-
-    if (this.appointmentClickTimeout) {
-      clearTimeout(this.appointmentClickTimeout);
-      this.preventSingleAppointmentClick = true;
     }
 
     this.option().showEditAppointmentPopup(
@@ -502,7 +502,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       settings: appointmentViewModel,
     }));
 
-    this.option().showAppointmentTooltipCore(
+    this.option().showTooltipForCollector(
       collector.$element(),
       collectorTooltipItems,
       {

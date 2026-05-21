@@ -64,6 +64,7 @@ import { validateRRule } from './recurrence/validate_rule';
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobile_tooltip_strategy';
+import type { AppointmentTooltipExtraOptions } from './tooltip_strategies/tooltip_strategy_base';
 import type {
   AppointmentTooltipItem,
   SafeAppointment,
@@ -1076,8 +1077,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         isVirtualScrolling: () => this.isVirtualScrolling(),
 
         scrollTo: this.scrollTo.bind(this),
-        showAppointmentTooltip: this.showAppointmentTooltip.bind(this),
-        showAppointmentTooltipCore: this.showAppointmentTooltipCore.bind(this),
+        showTooltipForAppointment: this.showAppointmentTooltip.bind(this),
+        showTooltipForCollector: this.showAppointmentTooltipCore.bind(this),
         showEditAppointmentPopup: (
           appointmentData: SafeAppointment,
           targetedAppointmentData: TargetedAppointment,
@@ -2094,7 +2095,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  showAppointmentTooltipCore(target: dxElementWrapper, data: AppointmentTooltipItem[], options?: any) {
+  showAppointmentTooltipCore(
+    target: dxElementWrapper,
+    data: AppointmentTooltipItem[],
+    options?: AppointmentTooltipExtraOptions,
+  ) {
     const arg: Omit<AppointmentTooltipShowingEvent, 'component' | 'element'> = {
       cancel: false,
       appointments: data.map((item) => ({
