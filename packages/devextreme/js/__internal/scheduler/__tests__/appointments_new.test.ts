@@ -771,6 +771,7 @@ describe('New Appointments', () => {
       const appointment = POM.getAppointments()[0];
       appointment.element.focus();
       fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
 
       expect(POM.getAppointments().length).toBe(0);
     });
@@ -792,8 +793,52 @@ describe('New Appointments', () => {
       const appointment = POM.getAppointments()[0];
       appointment.element.focus();
       fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
 
       expect(POM.getAppointments().length).toBe(2);
+    });
+
+    it.each([
+      { editing: true },
+      { editing: { allowDeleting: true } },
+      { editing: { allowDeleting: true, allowUpdating: false } },
+    ])('should delete appointment when editing=$editing', async ({ editing }) => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+        editing,
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(0);
+    });
+
+    it.each([
+      { editing: { allowDeleting: false } },
+      { editing: false },
+    ])('should NOT delete appointment when editing=$editing', async ({ editing }) => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+        editing,
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(1);
     });
   });
 });

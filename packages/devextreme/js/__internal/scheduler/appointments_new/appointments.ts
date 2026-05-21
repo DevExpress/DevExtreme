@@ -64,7 +64,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
   getStartViewDate: () => Date;
-  getSortedAppointments: () => SortedEntity[];
+  getSortedItems: () => SortedEntity[];
   isVirtualScrolling: () => boolean;
 
   scrollTo: (date: Date, options?: ScrollToOptions) => void;
@@ -85,8 +85,11 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
 
   allowDelete: boolean;
   onDeleteKeyPress: (options:
-  { appointment: SafeAppointment; occurrence: SafeAppointment }) => void;
-  onItemActivate: (options: { data: SafeAppointment; target: EventTarget | null }) => void;
+  { appointmentData: SafeAppointment; targetedAppointmentData: TargetedAppointment }) => void;
+  onItemActivate: (options: {
+    data: SafeAppointment;
+    targetedAppointmentData: TargetedAppointment;
+  }) => void;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {

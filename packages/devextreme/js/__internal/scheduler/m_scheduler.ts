@@ -501,7 +501,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.initEditing();
         const { editing } = this;
 
-        this.bringEditingModeToAppointments(editing);
+        if (this.option('_newAppointments')) {
+          this._appointments.option('allowDelete', this.editing.allowDeleting);
+        } else {
+          this.bringEditingModeToAppointments(editing);
+        }
 
         this.hideAppointmentTooltip();
         this.createAppointmentPopupForm();
@@ -1062,7 +1066,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         tabIndex: this.option('tabIndex'),
         currentView: this.option('currentView') as ViewType,
-        allowDelete: this.editing.allowUpdating && this.editing.allowDeleting,
+        allowDelete: this.editing.allowDeleting,
         appointmentTemplate: this.getViewOption('appointmentTemplate'),
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
 
@@ -1070,15 +1074,18 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
         onAppointmentDblClick: (...args) => this.actions.onAppointmentDblClick(...args),
         onDeleteKeyPress: (e) => {
-          this.checkAndDeleteAppointment(e.appointment, e.occurrence);
+          this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
         },
-        onItemActivate: ({ data }) => { this.showAppointmentPopup(data); },
+        onItemActivate: ({ data, targetedAppointmentData }) => {
+          this.showAppointmentPopup(data, undefined, targetedAppointmentData);
+        },
 
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
         getDataAccessor: () => this._dataAccessors,
         getStartViewDate: () => this.getStartViewDate(),
-        getSortedAppointments: () => this._layoutManager.sortedItems,
+        getSortedItems: () => this._layoutManager.sortedItems,
+
         isVirtualScrolling: () => this.isVirtualScrolling(),
 
         scrollTo: this.scrollTo.bind(this),
@@ -1235,7 +1242,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       targetedAppointment,
       this._dataAccessors,
     );
-
     const deletingOptions = this.fireOnAppointmentDeleting(appointment, targetedAdapter);
     this.checkRecurringAppointment(
       appointment,
