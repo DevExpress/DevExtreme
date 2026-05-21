@@ -44,16 +44,15 @@ export const selectByKeysCommand = defineGridCommand({
 });
 
 const selectByIndexesCommandSchema = z.object({
-  // eslint-disable-next-line spellcheck/spell-checker
-  indexes: z.array(z.number().int().nonnegative()).min(1),
+  indexes: z.array(z.number().int().min(1)).min(1),
 }).strict();
 
 export const selectByIndexesCommand = defineGridCommand({
   name: 'selectByIndexes',
-  description: 'Select rows by their 0-based indexes within the current page. Index 0 is the first row on the visible page; group/header rows are not selectable. To select rows that are not on the current page, use selectByKeys, or call pageIndex first to switch the page.',
+  description: 'Select rows by their 1-based indexes within the current page. Index 1 is the first row on the visible page; group/header rows are not selectable. To select rows that are not on the current page, use selectByKeys, or call pageIndex first to switch the page.',
   schema: selectByIndexesCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
-    const rowIndexes = args.indexes.map((index) => index + 1).join(', ');
+    const rowIndexes = args.indexes.join(', ');
     const defaultMessage = `Select row(s) number ${rowIndexes} on the current page.`;
 
     if (component.option('selection.mode') === 'none') {
@@ -61,7 +60,8 @@ export const selectByIndexesCommand = defineGridCommand({
     }
 
     const items = component.getController('data').items();
-    const allIndexesValid = args.indexes.every(
+    const normalizedRowIndexes = args.indexes.map((index) => index - 1);
+    const allIndexesValid = normalizedRowIndexes.every(
       (index) => items[index]?.rowType === 'data',
     );
 
@@ -70,7 +70,7 @@ export const selectByIndexesCommand = defineGridCommand({
     }
 
     try {
-      await component.selectRowsByIndexes(args.indexes);
+      await component.selectRowsByIndexes(normalizedRowIndexes);
 
       return success(defaultMessage);
     } catch {
@@ -123,7 +123,7 @@ export const deselectAllCommand = defineGridCommand({
 
 export const clearSelectionCommand = defineGridCommand({
   name: 'clearSelection',
-  description: 'Clear selection of all rows on all pages.',
+  description: 'Clear selection of all rows across all pages, regardless of selection.selectAllMode. To clear selection only on the current page, use deselectAll instead (it respects selection.selectAllMode = "page").',
   schema: z.object({}).strict(),
   execute: (component, { success, failure }) => async (): Promise<CommandResult> => {
     const defaultMessage = 'Clear selection.';

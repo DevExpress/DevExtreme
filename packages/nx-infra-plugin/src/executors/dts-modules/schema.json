@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Dts Modules Executor Schema",
+  "description": "Assemble TypeScript declaration modules: copy, stamp with license, and strip debug blocks",
+  "type": "object",
+  "properties": {
+    "sourceDir": {
+      "type": "string",
+      "description": "Directory containing source .d.ts files (relative to project root)."
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "Output directory for assembled modules (relative to project root)."
+    },
+    "templatesDir": {
+      "type": "string",
+      "description": "Directory containing static template files to overlay on the output (relative to project root)."
+    },
+    "licenseTemplateFile": {
+      "type": "string",
+      "description": "Path to the license header template file (relative to project root)."
+    },
+    "eulaUrl": {
+      "type": "string",
+      "description": "EULA URL embedded in the license header."
+    }
+  },
+  "required": ["sourceDir", "outputDir", "templatesDir"]
+}

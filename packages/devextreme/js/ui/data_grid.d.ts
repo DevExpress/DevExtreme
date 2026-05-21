@@ -198,7 +198,7 @@ export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
 /** @public */
 export type DataGridPredefinedColumnButton = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 /** @public */
-export type DataGridPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type DataGridPredefinedToolbarItem = 'addRowButton' | 'aiAssistantButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 type GroupKey = any[];
 

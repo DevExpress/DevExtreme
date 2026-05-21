@@ -1,3 +1,5 @@
+import type { ApplyLicenseHeadersOption } from '../add-license-headers/schema';
+
 export type CompressModeName = 'minify' | 'beautify' | 'strip-debug' | 'normalize';
 
 export type CompressMode =
@@ -16,4 +18,5 @@ export interface CompressExecutorSchema {
   files: string[];
   mode: CompressMode;
   exclude?: string[];
+  applyLicenseHeaders?: ApplyLicenseHeadersOption;
 }

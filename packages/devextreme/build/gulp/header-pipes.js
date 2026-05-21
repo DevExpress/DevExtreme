@@ -7,7 +7,7 @@ const path = require('path');
 
 const context = require('./context.js');
 
-const licenseTemplate = fs.readFileSync(path.join(__dirname, './license-header.txt'), 'utf8');
+const licenseTemplate = fs.readFileSync(path.join(__dirname, 'license-header.txt'), 'utf8');
 
 const useStrict = lazyPipe().pipe(function() {
     return header('"use strict";\n\n');
