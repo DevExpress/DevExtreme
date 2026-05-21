@@ -83,8 +83,8 @@ catalogs:
       specifier: 2.2.29
       version: 2.2.29
     devexpress-gantt:
-      specifier: 4.1.68
-      version: 4.1.68
+      specifier: 4.1.69
+      version: 4.1.69
     devextreme-exceljs-fork:
       specifier: 4.4.9
       version: 4.4.9
@@ -461,7 +461,7 @@ importers:
         version: 2.2.29
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.68
+        version: 4.1.69
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1230,7 +1230,7 @@ importers:
         version: 2.2.29
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.68
+        version: 4.1.69
       devextreme:
         specifier: workspace:~
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1384,7 +1384,7 @@ importers:
         version: 2.2.29
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.68
+        version: 4.1.69
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.9
@@ -9804,8 +9804,8 @@ packages:
   devexpress-diagram@2.2.29:
     resolution: {integrity: sha512-6QS1zKP736QlIU6lMeZdq52Fe85BSa6vh1TwDIxSAKNwT6gHnGKm5paI71epRJ9H6GC4SLtv/zhlH8QCjwNnXQ==}
 
-  devexpress-gantt@4.1.68:
-    resolution: {integrity: sha512-pilTDWwCv1EthcCV9uFj5krbSkA3MdjiKCgJdCmGaTA+lDNiWP5Xc2JzNK1sOOTMUmzN+3h7kAtcLxzTfjWTRg==}
+  devexpress-gantt@4.1.69:
+    resolution: {integrity: sha512-UPrVT/U7voNRYLP1Kk5DEM7OB7WT2XwDiJi6zzAZOqhFu6sCuAViwth+WVQ7HmgWDNIyCxc/+cB13qq1p244lg==}
 
   devextreme-aspnet-data-nojquery@5.1.0:
     resolution: {integrity: sha512-YJ7HxOLJTzz6bmpp1uOjXdhUL71THR6IidVONjJRF1R1loTyNVesa6s86gU+mUeNN044UnJKQhtCADc0+TmARQ==}
@@ -29213,7 +29213,7 @@ snapshots:
       '@devexpress/utils': 2.1.1
       es6-object-assign: 1.1.0
 
-  devexpress-gantt@4.1.68:
+  devexpress-gantt@4.1.69:
     dependencies:
       '@devexpress/utils': 2.1.1
       tslib: 2.3.1
