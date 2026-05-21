@@ -6555,7 +6555,7 @@ declare module DevExpress.common.grids {
     };
     columnsReorder: {
       dataField: string;
-      visibleIndex: boolean;
+      visibleIndex: number;
     };
     columnsPinning: {
       dataField: string;
