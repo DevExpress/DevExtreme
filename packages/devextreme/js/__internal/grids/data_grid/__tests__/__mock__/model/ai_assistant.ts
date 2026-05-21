@@ -36,11 +36,17 @@ export class AIAssistantDataGridModel extends DataGridModel {
     return this.getMessageStore().load() as Promise<Message[]>;
   }
 
-  public findMessages(): dxElementWrapper {
+  public getMessages(): dxElementWrapper {
     return $(`.${CLASSES.aiChat}`).find(`.${CLASSES.message}`);
   }
 
-  public getMessageStatus($message: dxElementWrapper): MessageStatus {
+  public getMessage(messageIndex: number): dxElementWrapper {
+    return this.getMessages().eq(messageIndex);
+  }
+
+  public getMessageStatus(messageIndex: number): MessageStatus {
+    const $message = this.getMessage(messageIndex);
+
     if ($message.hasClass(CLASSES.messagePending)) {
       return MessageStatus.Pending;
     }
@@ -54,20 +60,17 @@ export class AIAssistantDataGridModel extends DataGridModel {
   }
 
   public getErrorMessage(messageIndex: number): dxElementWrapper {
-    return this.findMessages()
-      .eq(messageIndex)
+    return this.getMessage(messageIndex)
       .find(`.${CLASSES.messageErrorText}`);
   }
 
   public getActionList(messageIndex: number): dxElementWrapper {
-    return this.findMessages()
-      .eq(messageIndex)
+    return this.getMessage(messageIndex)
       .find(`.${CLASSES.actionListItemText}`);
   }
 
   public getRegenerateButton(messageIndex: number): HTMLElement {
-    return this.findMessages()
-      .eq(messageIndex)
+    return this.getMessage(messageIndex)
       .find(`.${CLASSES.messageRegenerateButton}`)
       .get(0) as HTMLElement;
   }
