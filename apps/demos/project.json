@@ -72,7 +72,8 @@
       ],
       "outputs": [
         "{projectRoot}/bundles",
-        "{projectRoot}/Demos/**/config.js"
+        "{projectRoot}/Demos/**/config.js",
+        "{projectRoot}/Demos/**/tsconfig.json"
       ]
     },
     "lint-js": {
