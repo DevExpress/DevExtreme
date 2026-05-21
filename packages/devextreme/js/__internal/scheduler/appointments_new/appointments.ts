@@ -64,7 +64,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
   getStartViewDate: () => Date;
-  getSortedAppointments: () => SortedEntity[];
+  getSortedItems: () => SortedEntity[];
   isVirtualScrolling: () => boolean;
 
   scrollTo: (date: Date, options?: ScrollToOptions) => void;

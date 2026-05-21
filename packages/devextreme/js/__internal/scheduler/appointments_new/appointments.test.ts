@@ -43,7 +43,7 @@ const getProperties = (options: {
   onAppointmentDblClick: (): void => {},
 
   getStartViewDate: () => new Date(2024, 0, 1),
-  getSortedAppointments: () => [],
+  getSortedItems: () => [],
   isVirtualScrolling: () => false,
   scrollTo: (): void => {},
 
@@ -550,7 +550,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -574,7 +574,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -643,7 +643,7 @@ describe('Appointments', () => {
           ...getProperties(),
           isVirtualScrolling: () => true,
           scrollTo,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(1),
           ],
         });
@@ -663,7 +663,7 @@ describe('Appointments', () => {
         const instance = createAppointments({
           ...getProperties(),
           isVirtualScrolling: () => true,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(2),
           ],
         });
@@ -690,7 +690,7 @@ describe('Appointments', () => {
         const instance = createAppointments({
           ...getProperties(),
           isVirtualScrolling: () => true,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(2),
           ],
         });
@@ -724,7 +724,7 @@ describe('Appointments', () => {
           isVirtualScrolling: () => true,
           scrollTo,
           getStartViewDate: () => startViewDate,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1, appointmentStartDate),
           ],
         });
@@ -752,7 +752,7 @@ describe('Appointments', () => {
           isVirtualScrolling: () => true,
           scrollTo,
           getStartViewDate: () => startViewDate,
-          getSortedAppointments: () => sortedEntities,
+          getSortedItems: () => sortedEntities,
         });
         instance.option('viewModel', viewModel);
 
@@ -783,7 +783,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -819,7 +819,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -851,7 +851,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -883,7 +883,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -898,6 +898,52 @@ describe('Appointments', () => {
         expect(document.activeElement).toBe(viewItem0?.$element().get(0));
       });
 
+      it('should prevent default browser behavior on Home key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem1 = instance.getViewItemBySortedIndex(1);
+        (viewItem1?.$element().get(0) as HTMLElement).click();
+
+        const wasDefaultPrevented = !fireEvent.keyDown(
+          viewItem1?.$element().get(0) as HTMLElement,
+          { key: 'Home' },
+        );
+
+        expect(wasDefaultPrevented).toBe(true);
+      });
+
+      it('should prevent default browser behavior on End key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        (viewItem0?.$element().get(0) as HTMLElement).click();
+
+        const wasDefaultPrevented = !fireEvent.keyDown(
+          viewItem0?.$element().get(0) as HTMLElement,
+          { key: 'End' },
+        );
+
+        expect(wasDefaultPrevented).toBe(true);
+      });
+
       it('should move focus to last appointment on End key', () => {
         const viewModel = [
           mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
@@ -907,7 +953,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -935,7 +981,7 @@ describe('Appointments', () => {
           ...getProperties(),
           allowDelete: true,
           onDeleteKeyPress,
-          getSortedAppointments: () => [{
+          getSortedItems: () => [{
             sortedIndex: 0,
             itemData: defaultAppointmentData,
             source: { startDate: 0 },
@@ -949,7 +995,7 @@ describe('Appointments', () => {
 
         expect(onDeleteKeyPress).toHaveBeenCalledTimes(1);
         expect(onDeleteKeyPress).toHaveBeenCalledWith(
-          expect.objectContaining({ appointment: defaultAppointmentData }),
+          expect.objectContaining({ appointmentData: defaultAppointmentData }),
         );
       });
 
@@ -963,7 +1009,28 @@ describe('Appointments', () => {
           ...getProperties(),
           allowDelete: false,
           onDeleteKeyPress,
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Delete' });
+
+        expect(onDeleteKeyPress).not.toHaveBeenCalled();
+      });
+
+      it('should not call onDeleteKeyPress when Delete is pressed on appointment collector', () => {
+        const onDeleteKeyPress = jest.fn();
+        const viewModel = [
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          allowDelete: true,
+          onDeleteKeyPress,
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -983,7 +1050,7 @@ describe('Appointments', () => {
         const instance = createAppointments({
           ...getProperties(),
           onItemActivate,
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -1005,7 +1072,7 @@ describe('Appointments', () => {
         const instance = createAppointments({
           ...getProperties(),
           onItemActivate,
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
