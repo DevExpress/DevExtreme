@@ -28,12 +28,8 @@ export class AIAssistantDataGridModel extends DataGridModel {
       .catch(() => {});
   }
 
-  public sendAiRequestWithResponse(message: Message | AIMessage): Promise<void> {
-    const controller = this.getAiAssistantController();
-
-    return controller
-      .sendRequestToAI(message)
-      .catch(() => {});
+  public sendAiRequestRaw(message: Message | AIMessage): Promise<void> {
+    return this.getAiAssistantController().sendRequestToAI(message);
   }
 
   public getMessageStore(): ArrayStore<Message, string> {

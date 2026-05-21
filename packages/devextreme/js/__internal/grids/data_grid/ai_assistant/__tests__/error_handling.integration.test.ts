@@ -380,7 +380,7 @@ describe('AI Assistant error handling', () => {
         timestamp: new Date().toISOString(),
       } as Message;
 
-      await expect(model.sendAiRequestWithResponse(message))
+      await expect(model.sendAiRequestRaw(message))
         .rejects.toThrow('Request already in progress. Please wait.');
 
       const messages = await model.loadMessages();
@@ -698,7 +698,7 @@ describe('AI Assistant error handling', () => {
 
       await store.insert(aiMessage);
 
-      await expect(model.sendAiRequestWithResponse(aiMessage))
+      await expect(model.sendAiRequestRaw(aiMessage))
         .rejects.toThrow('Request already in progress. Please wait.');
     });
   });
