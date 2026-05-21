@@ -26,7 +26,6 @@ import {
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import { GridCommands } from '@ts/grids/grid_core/ai_assistant/grid_commands';
 import type { AIMessage, CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import { CLASSES } from '@ts/grids/grid_core/ai_chat/const';
 
 interface MockAIIntegrationResult {
   aiIntegration: AIIntegration;
@@ -186,7 +185,7 @@ describe('AI Assistant error handling', () => {
 
       expect($messages.length).toBe(1);
       expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
-      expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
+      expect(model.getErrorMessage(0).text())
         .toBe('Invalid response from the AI service. Please try again.');
     });
   });
@@ -364,7 +363,7 @@ describe('AI Assistant error handling', () => {
 
       expect($messages.length).toBe(1);
       expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
-      expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
+      expect(model.getErrorMessage(0).text())
         .toBe('Request stopped.');
     });
   });
@@ -514,7 +513,7 @@ describe('AI Assistant error handling', () => {
 
       const $messages = model.findMessages();
       expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Success);
-      expect($messages.eq(0).find(`.${CLASSES.actionListItemText}`).text())
+      expect(model.getActionList(0).text())
         .toBe('Sorted by Name ascending');
     });
 
@@ -642,7 +641,7 @@ describe('AI Assistant error handling', () => {
 
       expect($messages.length).toBe(1);
       expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
-      expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
+      expect(model.getErrorMessage(0).text())
         .toBe('Request stopped.');
     });
   });
@@ -660,8 +659,7 @@ describe('AI Assistant error handling', () => {
       expect($messages.length).toBe(1);
       expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
 
-      const regenerateButton = $messages.eq(0)
-        .find(`.${CLASSES.messageRegenerateButton}`).get(0) as HTMLElement;
+      const regenerateButton = model.getRegenerateButton(0);
       expect(regenerateButton).toBeTruthy();
 
       regenerateButton.click();

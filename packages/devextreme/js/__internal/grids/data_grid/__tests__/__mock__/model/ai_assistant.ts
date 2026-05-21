@@ -53,6 +53,25 @@ export class AIAssistantDataGridModel extends DataGridModel {
     return '' as never;
   }
 
+  public getErrorMessage(messageIndex: number): dxElementWrapper {
+    return this.findMessages()
+      .eq(messageIndex)
+      .find(`.${CLASSES.messageErrorText}`);
+  }
+
+  public getActionList(messageIndex: number): dxElementWrapper {
+    return this.findMessages()
+      .eq(messageIndex)
+      .find(`.${CLASSES.actionListItemText}`);
+  }
+
+  public getRegenerateButton(messageIndex: number): HTMLElement {
+    return this.findMessages()
+      .eq(messageIndex)
+      .find(`.${CLASSES.messageRegenerateButton}`)
+      .get(0) as HTMLElement;
+  }
+
   public async togglePopup(): Promise<void> {
     await this.getAiAssistantViewController().toggle();
   }
