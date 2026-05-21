@@ -149,4 +149,18 @@ describe('Isolated AppointmentPopup environment', () => {
       expect.objectContaining({ text: 'Single occurrence' }),
     );
   });
+
+  describe('State', () => {
+    it('should create a new dxForm instance on each popup opening', async () => {
+      const { POM, reopen } = await createAppointmentPopup();
+      const firstFormInstance = POM.dxForm;
+
+      POM.cancelButton.click();
+
+      const { POM: POM2 } = await reopen();
+      const secondFormInstance = POM2.dxForm;
+
+      expect(secondFormInstance).not.toBe(firstFormInstance);
+    });
+  });
 });

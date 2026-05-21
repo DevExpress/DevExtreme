@@ -391,20 +391,6 @@ describe('Appointment Form', () => {
   });
 
   describe('State', () => {
-    it('should create a new form instance on each popup opening', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(commonAppointment);
-      const firstFormInstance = POM.popup.dxForm;
-
-      POM.popup.cancelButton.click();
-
-      scheduler.showAppointmentPopup(commonAppointment);
-      const secondFormInstance = POM.popup.dxForm;
-
-      expect(secondFormInstance).not.toBe(firstFormInstance);
-    });
-
     it('should have correct editor values when opening for empty date cell - 1', async () => {
       const { POM } = await createScheduler({
         ...getDefaultConfig(),
