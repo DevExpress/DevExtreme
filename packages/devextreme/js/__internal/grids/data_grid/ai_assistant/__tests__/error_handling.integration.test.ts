@@ -182,10 +182,10 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = model.findMessageElements();
+      const $messages = model.findMessages();
 
       expect($messages.length).toBe(1);
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
       expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
         .toBe('Invalid response from the AI service. Please try again.');
     });
@@ -360,10 +360,10 @@ describe('AI Assistant error handling', () => {
       model.getAiAssistantController().abortRequest();
       await flushAsync();
 
-      const $messages = model.findMessageElements();
+      const $messages = model.findMessages();
 
       expect($messages.length).toBe(1);
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
       expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
         .toBe('Request stopped.');
     });
@@ -449,8 +449,8 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = model.findMessageElements();
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      const $messages = model.findMessages();
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
     });
 
     it('should set failure status when commands contain aborted items', async () => {
@@ -512,8 +512,8 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = model.findMessageElements();
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+      const $messages = model.findMessages();
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Success);
       expect($messages.eq(0).find(`.${CLASSES.actionListItemText}`).text())
         .toBe('Sorted by Name ascending');
     });
@@ -563,8 +563,8 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
 
-      const $messages = model.findMessageElements();
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Pending);
+      const $messages = model.findMessages();
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Pending);
     });
 
     it('should transition from pending to success after delayed response', async () => {
@@ -618,8 +618,8 @@ describe('AI Assistant error handling', () => {
       model.sendAiRequest('Sort by name');
       jest.runAllTimers();
 
-      expect(model.findMessageElements().length).toBe(1);
-      expect(model.getMessageStatusClass(model.findMessageElements().eq(0)))
+      expect(model.findMessages().length).toBe(1);
+      expect(model.getMessageStatus(model.findMessages().eq(0)))
         .toBe(MessageStatus.Pending);
 
       await model.togglePopup().catch(() => {});
@@ -638,10 +638,10 @@ describe('AI Assistant error handling', () => {
       jest.runAllTimers();
       await flushAsync();
 
-      const $messages = model.findMessageElements();
+      const $messages = model.findMessages();
 
       expect($messages.length).toBe(1);
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
       expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
         .toBe('Request stopped.');
     });
@@ -656,9 +656,9 @@ describe('AI Assistant error handling', () => {
       getLastCallbacks().onError?.(new Error('Network error'));
       await flushAsync();
 
-      let $messages = model.findMessageElements();
+      let $messages = model.findMessages();
       expect($messages.length).toBe(1);
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Failure);
 
       const regenerateButton = $messages.eq(0)
         .find(`.${CLASSES.messageRegenerateButton}`).get(0) as HTMLElement;
@@ -668,9 +668,9 @@ describe('AI Assistant error handling', () => {
       jest.runAllTimers();
       await flushAsync();
 
-      $messages = model.findMessageElements();
+      $messages = model.findMessages();
       expect($messages.length).toBe(1);
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Pending);
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Pending);
 
       getLastCallbacks().onComplete?.({
         actions: [{ name: 'sorting', args: { column: 'Name' } }],
@@ -678,9 +678,9 @@ describe('AI Assistant error handling', () => {
       await flushAsync();
       await flushAsync();
 
-      $messages = model.findMessageElements();
+      $messages = model.findMessages();
       expect($messages.length).toBe(1);
-      expect(model.getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Success);
+      expect(model.getMessageStatus($messages.eq(0))).toBe(MessageStatus.Success);
     });
 
     it('should reject regeneration while another request is processing', async () => {

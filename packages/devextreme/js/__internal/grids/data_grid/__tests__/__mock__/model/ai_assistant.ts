@@ -36,15 +36,21 @@ export class AIAssistantDataGridModel extends DataGridModel {
     return this.getMessageStore().load() as Promise<Message[]>;
   }
 
-  public findMessageElements(): dxElementWrapper {
+  public findMessages(): dxElementWrapper {
     return $(`.${CLASSES.aiChat}`).find(`.${CLASSES.message}`);
   }
 
-  public getMessageStatusClass($message: dxElementWrapper): string {
-    if ($message.hasClass(CLASSES.messagePending)) return MessageStatus.Pending;
-    if ($message.hasClass(CLASSES.messageSuccess)) return MessageStatus.Success;
-    if ($message.hasClass(CLASSES.messageError)) return MessageStatus.Failure;
-    return '';
+  public getMessageStatus($message: dxElementWrapper): MessageStatus {
+    if ($message.hasClass(CLASSES.messagePending)) {
+      return MessageStatus.Pending;
+    }
+    if ($message.hasClass(CLASSES.messageSuccess)) {
+      return MessageStatus.Success;
+    }
+    if ($message.hasClass(CLASSES.messageError)) {
+      return MessageStatus.Failure;
+    }
+    return '' as never;
   }
 
   public async togglePopup(): Promise<void> {
