@@ -328,4 +328,24 @@ describe('Isolated AppointmentPopup environment', () => {
       expect(POM.getInputValue('endDateEditor')).toEqual('5/9/2017');
     });
   });
+
+  it('should propagate firstDayOfWeek to editor calendars', async () => {
+    const { POM } = await createAppointmentPopup({
+      appointmentData: {
+        text: 'common-app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      },
+      firstDayOfWeek: 1,
+    });
+    POM.selectRepeatValue('weekly');
+
+    const startDateFDOW = POM.dxForm.getEditor('startDateEditor')?.option('calendarOptions.firstDayOfWeek');
+    const endDateFDOW = POM.dxForm.getEditor('endDateEditor')?.option('calendarOptions.firstDayOfWeek');
+    const recurrenceStartFDOW = POM.dxForm.getEditor('recurrenceStartDateEditor')?.option('calendarOptions.firstDayOfWeek');
+
+    expect(startDateFDOW).toBe(1);
+    expect(endDateFDOW).toBe(1);
+    expect(recurrenceStartFDOW).toBe(1);
+  });
 });
