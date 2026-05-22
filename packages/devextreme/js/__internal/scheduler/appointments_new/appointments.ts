@@ -120,7 +120,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   override _init(): void {
     super._init();
 
-    this.focusController = new AppointmentsFocusController(this);
+    this.focusController = new AppointmentsFocusController(this, {
+      onAppointmentEnterKeyDown: this.onAppointmentDblClick.bind(this),
+    });
 
     this._templateManager.addDefaultTemplates({
       appointment: new EmptyTemplate(),

@@ -10,6 +10,10 @@ import { AppointmentCollector } from './appointment_collector';
 import type { Appointments } from './appointments';
 import type { ViewItem } from './view_item';
 
+interface AppointmentsFocusControllerHandlers {
+  onAppointmentEnterKeyDown: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
+}
+
 export class AppointmentsFocusController {
   private focusableSortedIndex = 0;
 
@@ -27,7 +31,10 @@ export class AppointmentsFocusController {
     return this.appointments.option().tabIndex;
   }
 
-  constructor(private readonly appointments: Appointments) { }
+  constructor(
+    private readonly appointments: Appointments,
+    private readonly handlers: AppointmentsFocusControllerHandlers,
+  ) { }
 
   public onViewItemClick(viewItem: ViewItem): void {
     this.focusViewItem(viewItem);
@@ -119,12 +126,9 @@ export class AppointmentsFocusController {
     const { allowDelete, onDeleteKeyPress } = this.appointments.option();
     if (!allowDelete) { return; }
 
-    const sortedItem = this.sortedAppointments[viewItem.option().sortedIndex];
-    if (!sortedItem) { return; }
-
     const appointmentViewItem = viewItem as BaseAppointmentView;
     onDeleteKeyPress({
-      appointmentData: sortedItem.itemData,
+      appointmentData: appointmentViewItem.appointmentData,
       targetedAppointmentData: appointmentViewItem.targetedAppointmentData,
     });
   }
@@ -146,15 +150,16 @@ export class AppointmentsFocusController {
   }
 
   private handleEnterKeyDown(viewItem: ViewItem, e: KeyboardKeyDownEvent): void {
-    const { onItemActivate } = this.appointments.option();
-    const sortedItem = this.sortedAppointments[viewItem.option().sortedIndex];
-    if (!sortedItem) { return; }
     e.originalEvent.preventDefault();
-    const appointmentViewItem = viewItem as BaseAppointmentView;
-    onItemActivate({
-      data: sortedItem.itemData,
-      targetedAppointmentData: appointmentViewItem.targetedAppointmentData,
-    });
+
+    if (viewItem instanceof AppointmentCollector) {
+      return;
+    }
+
+    this.handlers.onAppointmentEnterKeyDown(
+      viewItem as BaseAppointmentView,
+      e.originalEvent as DxEvent,
+    );
   }
 
   private focusBySortedItem(sortedItem: SortedEntity): void {
