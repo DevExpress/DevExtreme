@@ -150,7 +150,7 @@ QUnit.test('Tooltip should not hide if in the canvas with margins', function(ass
     assert.strictEqual(tooltipHidden.callCount, 0);
 });
 
-QUnit.test('No errors after dispose and manual _hideTooltip call', function(assert) {
+QUnit.test('No errors after dispose and manual _hideTooltip call (T1328375)', function(assert) {
     const bullet = this.createWidget({
         startScaleValue: 0,
         endScaleValue: 35,
