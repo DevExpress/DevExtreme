@@ -47,7 +47,7 @@ export class HeaderPanelController {
       const columnsCount = this.columnsController.columns.peek().length;
 
       this.columnsController.columnOption(column, 'visible', true);
-      this.columnsController.columnOption(column, 'visibleIndex', columnsCount);
+      this.columnsController.columnOption(column, 'visibleIndex', columnsCount - 1);
 
       return;
     }
