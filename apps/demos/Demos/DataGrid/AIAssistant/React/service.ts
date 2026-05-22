@@ -1,7 +1,6 @@
 import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import type { RequestParams, Response } from 'devextreme-react/common/ai-integration';
-import { AzureOpenAI } from 'openai';
-import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
+import OpenAI, { AzureOpenAI } from 'openai';
 import notify from 'devextreme/ui/notify';
 import type { AIMessage } from './types';
 
@@ -16,7 +15,7 @@ const AzureOpenAIConfig = {
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
 async function getAIResponse(messages: AIMessage[], signal: AbortSignal, responseSchema?: Record<string, unknown>) {
-  const params: ChatCompletionCreateParamsNonStreaming = {
+  const params: OpenAI.ChatCompletionCreateParamsNonStreaming = {
     messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
