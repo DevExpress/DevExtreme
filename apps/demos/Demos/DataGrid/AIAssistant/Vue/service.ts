@@ -1,5 +1,4 @@
 import { AzureOpenAI, OpenAI } from 'openai';
-import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
 import {
   AIIntegration,
   type RequestParams,
@@ -25,7 +24,7 @@ const MAX_PROMPT_SIZE = 5000;
 const service = new AzureOpenAI(AzureOpenAIConfig);
 
 async function getAIResponse(messages: AIMessage[], signal: AbortSignal, responseSchema?: Record<string, unknown>) {
-  const params: ChatCompletionCreateParamsNonStreaming = {
+  const params: OpenAI.ChatCompletionCreateParamsNonStreaming = {
     messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
