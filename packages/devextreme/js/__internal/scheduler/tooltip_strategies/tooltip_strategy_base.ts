@@ -1,4 +1,4 @@
-import type { DxElement } from '@js/core/element';
+import { type DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
@@ -13,7 +13,7 @@ import type {
 } from '@js/ui/list';
 import type dxOverlay from '@js/ui/overlay';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
-import type { Appointment, Properties as SchedulerProperties } from '@js/ui/scheduler';
+import type { Appointment, AppointmentClickEvent, Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
 import type Tooltip from '@ts/ui/m_tooltip';
@@ -63,9 +63,11 @@ interface AppointmentTooltipOptions {
   getAppointmentDisabled: (appointment: Appointment) => boolean | undefined;
   onItemContextMenu: (eventArgs: unknown) => void;
   createEventArgs: (e: ItemContextMenuEvent<AppointmentTooltipItem>) => unknown;
+  newAppointments?: boolean; // TODO<Appointments>
+  onAppointmentClick: (e: AppointmentClickEvent) => void;
 }
 
-interface AppointmentTooltipExtraOptions {
+export interface AppointmentTooltipExtraOptions {
   clickEvent?: (e: ItemClickEvent<AppointmentTooltipItem>) => void;
   dragBehavior?: (e: ContentReadyEvent<AppointmentTooltipItem>) => void;
   editing?: SchedulerProperties['editing'];
@@ -73,7 +75,8 @@ interface AppointmentTooltipExtraOptions {
   isButtonClick?: boolean;
   offset?: unknown;
   rtlEnabled?: boolean;
-  tabFocusLoopEnabled?: boolean;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _loopFocus?: boolean;
 }
 
 export abstract class TooltipStrategyBase {
@@ -245,6 +248,7 @@ export abstract class TooltipStrategyBase {
         item.color,
       ),
       // @ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
     };
@@ -326,7 +330,21 @@ export abstract class TooltipStrategyBase {
     }
 
     this.hide();
-    this.extraOptions?.clickEvent?.(e);
+
+    if (this._options.newAppointments) {
+      if (this.extraOptions?.isButtonClick) {
+        // @ts-expect-error 'component' and 'element' are set by action
+        this._options.onAppointmentClick({
+          appointmentElement: e.itemElement,
+          appointmentData: e.itemData.appointment,
+          targetedAppointmentData: e.itemData.targetedAppointment,
+          event: e.event,
+        });
+      }
+    } else {
+      this.extraOptions?.clickEvent?.(e);
+    }
+
     this._options.showAppointmentPopup(
       e.itemData.appointment,
       false,

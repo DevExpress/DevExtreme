@@ -626,7 +626,10 @@ QUnit.module('Events', {
             'onAppointmentDeleting': function() { return true; },
             'onAppointmentDeleted': function() { return true; },
             'onAppointmentFormOpening': function() { return true; },
-            'onAppointmentTooltipShowing': function() { return true; }
+            'onAppointmentTooltipShowing': function() { return true; },
+            'onAppointmentRendered': function() { return true; },
+            'onAppointmentClick': function() { return true; },
+            'onAppointmentDblClick': function() { return true; },
         });
 
         $.each(scheduler.instance.getActions(), function(name, action) {
