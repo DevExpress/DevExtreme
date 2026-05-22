@@ -19,7 +19,7 @@ export class AppointmentsFocusController {
 
   private needRestoreFocusIndex = -1;
 
-  private get sortedAppointments(): SortedEntity[] {
+  private get sortedItems(): SortedEntity[] {
     return this.appointments.option().getSortedItems();
   }
 
@@ -110,7 +110,7 @@ export class AppointmentsFocusController {
 
   private handleTabKeyDown(e: KeyboardKeyDownEvent, sortedIndex: number): void {
     const nextIndex = sortedIndex + (e.shift ? -1 : 1);
-    const nextItemData = this.sortedAppointments[nextIndex];
+    const nextItemData = this.sortedItems[nextIndex];
 
     if (!nextItemData) {
       return;
@@ -134,7 +134,7 @@ export class AppointmentsFocusController {
   }
 
   private handleHomeKeyDown(e: KeyboardKeyDownEvent): void {
-    const firstSortedItem = this.sortedAppointments[0];
+    const firstSortedItem = this.sortedItems[0];
     if (firstSortedItem) {
       e.originalEvent.preventDefault();
       this.focusBySortedItem(firstSortedItem);
@@ -142,7 +142,7 @@ export class AppointmentsFocusController {
   }
 
   private handleEndKeyDown(e: KeyboardKeyDownEvent): void {
-    const lastSortedItem = this.sortedAppointments[this.sortedAppointments.length - 1];
+    const lastSortedItem = this.sortedItems[this.sortedItems.length - 1];
     if (lastSortedItem) {
       e.originalEvent.preventDefault();
       this.focusBySortedItem(lastSortedItem);
