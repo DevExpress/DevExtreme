@@ -41,3 +41,5 @@ nx-cloud.env
 /.copilot
 /.playwright-mcp
 /.zencoder
+
+# diagnostic test trigger
