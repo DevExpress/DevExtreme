@@ -1,0 +1,8 @@
+/*<%= commentType %>
+* DevExtreme (<%= file.relative.replace(/\\/g, '/') %>)
+* Version: <%= version %>
+* Build date: <%= (new Date()).toDateString() %>
+*
+* Copyright (c) 2012 - <%= (new Date()).getFullYear() %> Developer Express Inc. ALL RIGHTS RESERVED
+* Read about DevExtreme licensing here: <%= eula %>
+*/

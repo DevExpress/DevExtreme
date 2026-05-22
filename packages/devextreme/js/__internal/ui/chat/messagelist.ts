@@ -769,7 +769,15 @@ class MessageList extends Widget<Properties> {
   }
 
   _setIsReachedBottom(): void {
-    this._isBottomReached = !this._isContentOverflowing() || this._scrollView.isBottomReached();
+    if (!this._isContentOverflowing()) {
+      this._isBottomReached = true;
+
+      return;
+    }
+
+    const container = this._scrollableContainer();
+    const maxScroll = getScrollTopMax(container);
+    this._isBottomReached = Math.round(maxScroll - Math.ceil(container.scrollTop)) <= 1;
   }
 
   _isContentOverflowing(): boolean {

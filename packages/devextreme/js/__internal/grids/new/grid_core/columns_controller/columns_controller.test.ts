@@ -1,4 +1,6 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
 import config from '@js/core/config';
 
 import { DataController } from '../data_controller';
@@ -469,6 +471,88 @@ describe('ColumnsController', () => {
       expect(resultThird.dataField).toBe('b');
       expect(resultThird.sortOrder).toBe('asc');
       expect(resultThird.sortIndex).toBeUndefined();
+    });
+  });
+
+  describe('onOptionChanged', () => {
+    it('should be called when a column option changes', () => {
+      const onOptionChanged = jest.fn();
+      const { columnsController } = setup({
+        columns: ['a', 'b'],
+        onOptionChanged,
+      });
+
+      const [col] = columnsController.columns.peek();
+      columnsController.columnOption(col, 'visible', false);
+
+      expect(onOptionChanged).toHaveBeenCalledTimes(1);
+      expect(onOptionChanged).toHaveBeenCalledWith(
+        expect.objectContaining({
+          fullName: 'columns[0].visible',
+          name: 'columns',
+          previousValue: true,
+          value: false,
+        }),
+      );
+    });
+
+    it('should not be called when value is unchanged', () => {
+      const onOptionChanged = jest.fn();
+      const { columnsController } = setup({
+        columns: ['a', 'b'],
+        onOptionChanged,
+      });
+
+      const [col] = columnsController.columns.peek();
+      columnsController.columnOption(col, 'visible', true);
+
+      expect(onOptionChanged).not.toHaveBeenCalled();
+    });
+
+    it('should be called for each changed column in updateColumns', () => {
+      const onOptionChanged = jest.fn();
+      const { columnsController } = setup({
+        columns: ['a', 'b', 'c'],
+        onOptionChanged,
+      });
+
+      let sortIndex = -1;
+      columnsController.updateColumns((columns) => columns.map((col, idx) => {
+        if (idx === 1) {
+          return col;
+        }
+
+        sortIndex += 1;
+
+        return {
+          ...col,
+          sortOrder: 'asc',
+          sortIndex,
+        };
+      }));
+
+      const optionChangeCalls = onOptionChanged.mock.calls;
+      expect(optionChangeCalls).toHaveLength(4);
+      expect(optionChangeCalls[0][0]).toMatchObject({
+        fullName: 'columns[0].sortOrder',
+        name: 'columns',
+        value: 'asc',
+      });
+      expect(optionChangeCalls[1][0]).toMatchObject({
+        fullName: 'columns[0].sortIndex',
+        name: 'columns',
+        value: 0,
+      });
+      expect(optionChangeCalls[2][0]).toMatchObject({
+        fullName: 'columns[2].sortOrder',
+        name: 'columns',
+        value: 'asc',
+      });
+      expect(optionChangeCalls[3][0]).toMatchObject({
+        fullName: 'columns[2].sortIndex',
+        name: 'columns',
+        value: 1,
+      });
     });
   });
 });

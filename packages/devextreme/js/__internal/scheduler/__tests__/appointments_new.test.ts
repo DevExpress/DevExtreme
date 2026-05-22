@@ -25,6 +25,7 @@ describe('New Appointments', () => {
     // @ts-expect-error
     $scheduler.dxScheduler('dispose');
     document.body.innerHTML = '';
+    jest.useRealTimers();
   });
 
   describe('Options', () => {
@@ -341,19 +342,33 @@ describe('New Appointments', () => {
   describe('onAppointmentRendered', () => {
     it('should call onAppointmentRendered callback', async () => {
       const onAppointmentRendered = jest.fn();
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
 
-      await createScheduler({
-        dataSource: [{
-          text: 'Appointment 1',
-          startDate: new Date(2015, 1, 9, 8),
-          endDate: new Date(2015, 1, 9, 9),
-        }],
+      const { POM, scheduler } = await createScheduler({
+        dataSource: [appointment],
         currentView: 'day',
         currentDate: new Date(2015, 1, 9, 8),
         onAppointmentRendered,
       });
 
       expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
+      const callArg = onAppointmentRendered.mock.calls[0][0] as any;
+      expect(Object.keys(callArg).sort()).toEqual([
+        'appointmentData', 'appointmentElement', 'component', 'element', 'targetedAppointmentData',
+      ]);
+      expect(callArg.component).toBe(scheduler);
+      expect(callArg.element).toBe(scheduler.$element().get(0));
+      expect(callArg.appointmentElement).toBe(POM.getAppointments()[0].element);
+      expect(callArg.appointmentData).toEqual(appointment);
+      expect(callArg.targetedAppointmentData).toEqual({
+        ...appointment,
+        displayStartDate: new Date(2015, 1, 9, 8),
+        displayEndDate: new Date(2015, 1, 9, 9),
+      });
     });
 
     it('should call onAppointmentRendered after .option() change', async () => {
@@ -373,6 +388,372 @@ describe('New Appointments', () => {
       await new Promise(process.nextTick);
 
       expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('onAppointmentClick', () => {
+    it('should call onAppointmentClick callback', async () => {
+      const onAppointmentClick = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
+
+      const { POM, scheduler } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentClick,
+      });
+
+      POM.getAppointments()[0].element.click();
+
+      expect(onAppointmentClick).toHaveBeenCalledTimes(1);
+      const callArg = onAppointmentClick.mock.calls[0][0] as any;
+      expect(Object.keys(callArg).sort()).toEqual([
+        'appointmentData', 'appointmentElement', 'component', 'element', 'event', 'targetedAppointmentData',
+      ]);
+      expect(callArg.component).toBe(scheduler);
+      expect(callArg.element).toBe(scheduler.$element().get(0));
+      expect(callArg.event.type).toBe('dxclick');
+      expect(callArg.appointmentElement).toBe(POM.getAppointments()[0].element);
+      expect(callArg.appointmentData).toEqual(appointment);
+      expect(callArg.targetedAppointmentData).toEqual({
+        ...appointment,
+        displayStartDate: new Date(2015, 1, 9, 8),
+        displayEndDate: new Date(2015, 1, 9, 9),
+      });
+    });
+
+    it('should call onAppointmentClick after .option() change', async () => {
+      const { POM, scheduler } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      const onAppointmentClick = jest.fn();
+      scheduler.option('onAppointmentClick', onAppointmentClick);
+
+      POM.getAppointments()[0].element.click();
+
+      expect(onAppointmentClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call onAppointmentClick on tooltip item inside single appointment', async () => {
+      const onAppointmentClick = jest.fn();
+
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentClick,
+      });
+
+      jest.useFakeTimers();
+      POM.getAppointments()[0].element.click();
+      jest.runAllTimers();
+
+      onAppointmentClick.mockClear();
+      POM.tooltip.getAppointmentItem(0).click();
+      expect(onAppointmentClick).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call onAppointmentClick on tooltip item click', async () => {
+      const onAppointmentClick = jest.fn();
+
+      const { POM } = await createScheduler({
+        dataSource: [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ],
+        maxAppointmentsPerCell: 1,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentClick,
+      });
+
+      POM.getCollectorButton().click();
+
+      POM.tooltip.getAppointmentItem(0).click();
+
+      expect(onAppointmentClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onAppointmentClick on tooltip item inside collector click after .option() change', async () => {
+      const { POM, scheduler } = await createScheduler({
+        dataSource: [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ],
+        maxAppointmentsPerCell: 1,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      const onAppointmentClick = jest.fn();
+      scheduler.option('onAppointmentClick', onAppointmentClick);
+
+      jest.useFakeTimers();
+      POM.getCollectorButton().click();
+      jest.runAllTimers();
+
+      POM.tooltip.getAppointmentItem(0).click();
+
+      expect(onAppointmentClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('onAppointmentDblClick', () => {
+    it('should call onAppointmentDblClick callback', async () => {
+      const onAppointmentDblClick = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
+
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentDblClick,
+      });
+
+      POM.openPopupByDblClick('Appointment 1');
+
+      expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
+      const callArg = onAppointmentDblClick.mock.calls[0][0] as any;
+      expect(Object.keys(callArg).sort()).toEqual([
+        'appointmentData', 'appointmentElement', 'component', 'element', 'event', 'targetedAppointmentData',
+      ]);
+      expect(callArg.component).toBe(scheduler);
+      expect(callArg.element).toBe(scheduler.$element().get(0));
+      expect(callArg.event.type).toBe('dxdblclick');
+      expect(callArg.appointmentElement).toBe(POM.getAppointments()[0].element);
+      expect(callArg.appointmentData).toEqual(appointment);
+      expect(callArg.targetedAppointmentData).toEqual({
+        ...appointment,
+        displayStartDate: new Date(2015, 1, 9, 8),
+        displayEndDate: new Date(2015, 1, 9, 9),
+      });
+    });
+
+    it('should call onAppointmentDblClick after .option() change', async () => {
+      const { POM, scheduler } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      const onAppointmentDblClick = jest.fn();
+      scheduler.option('onAppointmentDblClick', onAppointmentDblClick);
+
+      POM.openPopupByDblClick('Appointment 1');
+
+      expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Tooltip', () => {
+    it('should show tooltip on appointment click', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      jest.useFakeTimers();
+      POM.getAppointments()[0].element.click();
+      jest.runAllTimers();
+
+      expect(POM.tooltip.isVisible()).toBe(true);
+      expect(POM.tooltip.getAppointmentItems().length).toBe(1);
+      expect(POM.tooltip.getAppointmentItem(0).textContent).toContain('Appointment 1');
+    });
+
+    it('should show tooltip on collector click', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ],
+        maxAppointmentsPerCell: 1,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      jest.useFakeTimers();
+      POM.getCollectorButton().click();
+      jest.runAllTimers();
+
+      expect(POM.tooltip.isVisible()).toBe(true);
+      expect(POM.tooltip.getAppointmentItems().length).toBe(2);
+      expect(POM.tooltip.getAppointmentItem(0).textContent).toContain('Appointment 2');
+      expect(POM.tooltip.getAppointmentItem(1).textContent).toContain('Appointment 3');
+    });
+  });
+
+  describe('Appointment Popup', () => {
+    it('should show appointment popup on appointment double click', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      POM.openPopupByDblClick('Appointment 1');
+
+      expect(POM.tooltip.isVisible()).toBe(false);
+      expect(POM.isPopupVisible()).toBe(true);
+    });
+
+    it('should show appointment popup on tooltip item click', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ],
+        maxAppointmentsPerCell: 2,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      jest.useFakeTimers();
+      POM.getCollectorButton().click();
+      jest.runAllTimers();
+
+      POM.tooltip.getAppointmentItem(0).click();
+
+      expect(POM.isPopupVisible()).toBe(true);
+    });
+
+    it('should show recurrence dialog on recurrence appointment double click', async () => {
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+        recurrenceRule: 'FREQ=DAILY',
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      POM.openPopupByDblClick('Appointment 1');
+
+      expect(POM.isRecurrenceDialogVisible()).toBe(true);
+    });
+
+    it('should have correct data in appointment popup', async () => {
+      const appointmentData = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [appointmentData],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      POM.openPopupByDblClick('Appointment 1');
+
+      expect(POM.isPopupVisible()).toBe(true);
+      expect(POM.popup.getInputValue('subjectEditor')).toBe('Appointment 1');
+    });
+
+    it('should save new appointment data after saving changes', async () => {
+      const onAppointmentUpdated = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentUpdated,
+      });
+
+      POM.openPopupByDblClick('Appointment 1');
+
+      POM.popup.setInputValue('subjectEditor', 'Updated Appointment');
+      POM.popup.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
+      expect((onAppointmentUpdated.mock.calls[0][0] as any).appointmentData).toBe(appointment);
+      expect(appointment.text).toBe('Updated Appointment');
+    });
+
+    it('should save appointment data after saving changes from tooltip', async () => {
+      const onAppointmentUpdated = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 2',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          appointment,
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ],
+        maxAppointmentsPerCell: 1,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentUpdated,
+      });
+
+      jest.useFakeTimers();
+      POM.getCollectorButton().click();
+      jest.runAllTimers();
+      jest.useRealTimers();
+
+      POM.tooltip.getAppointmentItem(0).click();
+      POM.popup.setInputValue('subjectEditor', 'Updated Appointment');
+      POM.popup.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
+      expect((onAppointmentUpdated.mock.calls[0][0] as any).appointmentData).toBe(appointment);
+      expect(appointment.text).toBe('Updated Appointment');
     });
   });
 });

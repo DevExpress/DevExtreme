@@ -1,11 +1,6 @@
 {
-  "type": "object",
-  "properties": {
-    "workingDirectory": {
-      "type": "string",
-      "description": "Working directory for pnpm pack",
-      "default": "./"
-    }
-  },
-  "required": []
+  "$schema": "https://json-schema.org/schema",
+  "title": "Pack Npm Executor Schema",
+  "description": "Run pnpm pack for npm distribution",
+  "type": "object"
 }

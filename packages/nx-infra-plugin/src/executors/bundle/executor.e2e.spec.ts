@@ -3,7 +3,7 @@ import * as path from 'path';
 import executor from './executor';
 import { BundleExecutorSchema } from './schema';
 import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
-import { writeFileText, readFileText } from '../../utils';
+import { writeFileText, writeJson, readFileText } from '../../utils';
 
 const MINIMAL_WEBPACK_CONFIG = `
 module.exports = {
@@ -100,5 +100,39 @@ describe('BundleExecutor E2E', () => {
     const content = await readFileText(path.join(projectDir, 'artifacts', 'js', 'dx.all.debug.js'));
     expect(content).toContain('greet');
     expect(content).not.toContain('eval(');
+  }, 60000);
+
+  it('should forward applyLicenseHeaders option to license header pipeline', async () => {
+    await writeJson(path.join(projectDir, 'package.json'), {
+      name: 'test-bundle-pkg',
+      version: '7.8.9',
+    });
+
+    const buildDir = path.join(projectDir, 'build', 'gulp');
+    fs.mkdirSync(buildDir, { recursive: true });
+    await writeFileText(
+      path.join(buildDir, 'license-header.txt'),
+      `/*<%= commentType %>\n* DevExtreme (<%= file.relative %>)\n*/\n`,
+    );
+
+    const options: BundleExecutorSchema = {
+      entries: ['bundles/dx.all.js'],
+      sourceDir: './artifacts/transpiled-renovation-npm',
+      outDir: './artifacts/js',
+      mode: 'production',
+      webpackConfigPath: './webpack.config.js',
+      applyLicenseHeaders: {
+        licenseTemplateFile: './build/gulp/license-header.txt',
+        separator: '',
+        includePatterns: ['dx.*.js'],
+      },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const bundleContent = await readFileText(path.join(projectDir, 'artifacts', 'js', 'dx.all.js'));
+    expect(bundleContent).toMatch(/^\/\*!/);
+    expect(bundleContent).toContain('DevExtreme (dx.all.js)');
   }, 60000);
 });

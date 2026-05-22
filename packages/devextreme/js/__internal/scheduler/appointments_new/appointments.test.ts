@@ -2,6 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import { fireEvent } from '@testing-library/dom';
 
 import fx from '../../../common/core/animation/fx';
 import { mockAppointmentDataAccessor } from '../__mock__/appointment_data_accessor.mock';
@@ -39,6 +40,8 @@ const getProperties = (options: {
   appointmentCollectorTemplate: 'appointmentCollector',
 
   onAppointmentRendered: (): void => {},
+  onAppointmentClick: (): void => {},
+  onAppointmentDblClick: (): void => {},
 
   getStartViewDate: () => new Date(2024, 0, 1),
   getSortedAppointments: () => [],
@@ -48,6 +51,10 @@ const getProperties = (options: {
   getAppointmentDataSource: mockAppointmentDataSource,
   getResourceManager: () => getResourceManagerMock(options.resources ?? []),
   getDataAccessor: () => mockAppointmentDataAccessor,
+
+  showTooltipForAppointment: (): void => {},
+  showTooltipForCollector: (): void => {},
+  showEditAppointmentPopup: (): void => {},
 });
 
 const createAppointments = (
@@ -63,6 +70,12 @@ const defaultAppointmentData = {
   text: 'Test appointment',
   startDate: new Date(2024, 0, 1, 9, 0),
   endDate: new Date(2024, 0, 1, 10, 0),
+};
+
+const dblClick = (element: HTMLElement): void => {
+  element.click();
+  element.click();
+  fireEvent(element, new Event('dxdblclick', { bubbles: true }));
 };
 
 describe('Appointments', () => {
@@ -891,12 +904,15 @@ describe('Appointments', () => {
         mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
 
+      const element = instance.getViewItemBySortedIndex(0)?.$element().get(0);
+
       expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
       expect(onAppointmentRendered).toHaveBeenCalledWith(
         expect.objectContaining({
+          appointmentElement: element,
           appointmentData: defaultAppointmentData,
           targetedAppointmentData: expect.objectContaining({
-            text: defaultAppointmentData.text,
+            ...defaultAppointmentData,
           }),
         }),
       );
@@ -912,12 +928,15 @@ describe('Appointments', () => {
         mockAgendaViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
 
+      const element = instance.getViewItemBySortedIndex(0)?.$element().get(0);
+
       expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
       expect(onAppointmentRendered).toHaveBeenCalledWith(
         expect.objectContaining({
+          appointmentElement: element,
           appointmentData: defaultAppointmentData,
           targetedAppointmentData: expect.objectContaining({
-            text: defaultAppointmentData.text,
+            ...defaultAppointmentData,
           }),
         }),
       );
@@ -964,6 +983,219 @@ describe('Appointments', () => {
           }),
         }),
       );
+    });
+  });
+
+  describe('onAppointmentClick', () => {
+    it('should not call onAppointmentClick on collector click', () => {
+      const onAppointmentClick = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentClick,
+      });
+      instance.option('viewModel', [
+        mockAppointmentCollectorViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      element.click();
+
+      expect(onAppointmentClick).not.toHaveBeenCalled();
+    });
+
+    it('should prevent tooltip showing when onAppointmentClick callback sets e.cancel = true', () => {
+      const onAppointmentClick = jest.fn((e) => { (e as any).cancel = true; });
+      const showTooltipForAppointment = jest.fn();
+      const showTooltipForCollector = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentClick,
+        showTooltipForAppointment,
+        showTooltipForCollector,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      jest.useFakeTimers();
+      element.click();
+      jest.runAllTimers();
+
+      expect(onAppointmentClick).toHaveBeenCalledTimes(1);
+      expect(showTooltipForAppointment).not.toHaveBeenCalled();
+      expect(showTooltipForCollector).not.toHaveBeenCalled();
+    });
+
+    it('should show tooltip correctly when two appointments are clicked one after another quickly', () => {
+      const showTooltipForAppointment = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        showTooltipForAppointment,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel({ ...defaultAppointmentData, text: 'Appointment 1' }, { sortedIndex: 0 }),
+        mockGridViewModel({ ...defaultAppointmentData, text: 'Appointment 2' }, { sortedIndex: 1 }),
+      ]);
+
+      const viewItem1 = instance.getViewItemBySortedIndex(0);
+      const element1 = viewItem1?.$element().get(0) as HTMLElement;
+
+      const viewItem2 = instance.getViewItemBySortedIndex(1);
+      const element2 = viewItem2?.$element().get(0) as HTMLElement;
+
+      jest.useFakeTimers();
+      element1.click();
+      element2.click();
+      jest.runAllTimers();
+
+      expect(showTooltipForAppointment).toHaveBeenCalledTimes(1);
+      expect(showTooltipForAppointment).toHaveBeenCalledWith(
+        expect.objectContaining({ text: 'Appointment 2' }),
+        $(element2),
+        expect.objectContaining({ text: 'Appointment 2' }),
+      );
+    });
+  });
+
+  describe('onAppointmentDblClick', () => {
+    it('should call onAppointmentDblClick on appointment double click', () => {
+      const onAppointmentDblClick = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentDblClick,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      jest.useFakeTimers();
+      dblClick(element);
+      jest.runAllTimers();
+
+      expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
+      expect(onAppointmentDblClick).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appointmentElement: element,
+          appointmentData: defaultAppointmentData,
+          targetedAppointmentData: expect.objectContaining({
+            ...defaultAppointmentData,
+          }),
+          event: expect.objectContaining({ type: 'dxdblclick' }),
+        }),
+      );
+    });
+
+    it('should not call onAppointmentDblClick on collector double click', () => {
+      const onAppointmentDblClick = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentDblClick,
+      });
+      instance.option('viewModel', [
+        mockAppointmentCollectorViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      jest.useFakeTimers();
+      dblClick(element);
+      jest.runAllTimers();
+
+      expect(onAppointmentDblClick).not.toHaveBeenCalled();
+    });
+
+    it('should show appointment popup on appointment double click', () => {
+      const showEditAppointmentPopup = jest.fn();
+      const showTooltipForAppointment = jest.fn();
+      const showTooltipForCollector = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        showEditAppointmentPopup,
+        showTooltipForAppointment,
+        showTooltipForCollector,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      jest.useFakeTimers();
+      dblClick(element);
+      jest.runAllTimers();
+
+      expect(showEditAppointmentPopup).toHaveBeenCalledTimes(1);
+      expect(showEditAppointmentPopup).toHaveBeenCalledWith(
+        defaultAppointmentData,
+        expect.objectContaining({
+          ...defaultAppointmentData,
+        }),
+      );
+      expect(showTooltipForAppointment).not.toHaveBeenCalled();
+      expect(showTooltipForCollector).not.toHaveBeenCalled();
+    });
+
+    it('should not show appointment popup on collector double click', () => {
+      const showEditAppointmentPopup = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        showEditAppointmentPopup,
+      });
+      instance.option('viewModel', [
+        mockAppointmentCollectorViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      jest.useFakeTimers();
+      dblClick(element);
+      jest.runAllTimers();
+
+      expect(showEditAppointmentPopup).not.toHaveBeenCalled();
+    });
+
+    it('should not show tooltip or appointment popup if onAppointmentDblClick sets e.cancel', () => {
+      const onAppointmentDblClick = jest.fn((e) => { (e as any).cancel = true; });
+      const showEditAppointmentPopup = jest.fn();
+      const showTooltipForAppointment = jest.fn();
+      const showTooltipForCollector = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentDblClick,
+        showEditAppointmentPopup,
+        showTooltipForAppointment,
+        showTooltipForCollector,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      jest.useFakeTimers();
+      dblClick(element);
+      jest.runAllTimers();
+
+      expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
+      expect(showEditAppointmentPopup).not.toHaveBeenCalled();
+      expect(showTooltipForAppointment).not.toHaveBeenCalled();
+      expect(showTooltipForCollector).not.toHaveBeenCalled();
     });
   });
 });
