@@ -683,8 +683,7 @@ describe('AI Assistant error handling', () => {
       model.sendAiRequest('First request');
       jest.runAllTimers();
 
-      const controller = model.getAiAssistantController();
-      const store = controller.getMessageStore();
+      const messageStore = model.getMessageStore();
 
       const aiMessage: AIMessage = {
         id: 'assistant-old',
@@ -696,7 +695,7 @@ describe('AI Assistant error handling', () => {
         errorText: 'Network error',
       };
 
-      await store.insert(aiMessage);
+      await messageStore.insert(aiMessage);
 
       await expect(model.sendAiRequestRaw(aiMessage))
         .rejects.toThrow('Request already in progress. Please wait.');
