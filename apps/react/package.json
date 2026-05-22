@@ -24,7 +24,7 @@
     "tsconfig-paths-webpack-plugin": "4.1.0",
     "webpack": "5.105.4",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "5.2.3"
+    "webpack-dev-server": "5.2.4"
   },
   "scripts": {
     "test": "node runner.js",
