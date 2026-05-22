@@ -16,13 +16,13 @@ import type { Message } from '@js/ui/chat';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import CustomStore from '@ts/data/m_custom_store';
-import { AIAssistantDataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/ai_assistant';
 import {
   afterTest,
   beforeTest,
   createDataGrid,
   flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
+import { AIAssistantDataGridModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_assistant';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import { GridCommands } from '@ts/grids/grid_core/ai_assistant/grid_commands';
 import type { AIMessage, CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
