@@ -1076,9 +1076,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         onDeleteKeyPress: (e) => {
           this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
         },
-        onItemActivate: ({ data, targetedAppointmentData }) => {
-          this.showAppointmentPopup(data, undefined, targetedAppointmentData);
-        },
 
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
