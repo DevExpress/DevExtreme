@@ -384,7 +384,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
       return;
     }
 
-    // @ts-expect-error dxElementWrapper should be extdened
     const fileName = this._$fileInput.val().replace(/^.*\\/, '');
     // @ts-expect-error dxElementWrapper should be extdened
     const files = this._$fileInput.prop('files');
