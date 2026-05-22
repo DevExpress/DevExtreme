@@ -4,6 +4,7 @@ import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 
 import type { AppointmentCollectorProperties } from '../appointment_collector';
 import { AppointmentCollector } from '../appointment_collector';
+import { mockGridViewModel } from './appointment_view_model';
 
 export const getAppointmentCollectorProperties = (
   appointmentsData: SafeAppointment[],
@@ -17,7 +18,7 @@ export const getAppointmentCollectorProperties = (
   const config: AppointmentCollectorProperties = {
     tabIndex: 0,
     sortedIndex: 0,
-    appointmentsData,
+    items: appointmentsData.map((item) => mockGridViewModel(item)),
     isCompact: false,
     geometry: {
       height: 30,

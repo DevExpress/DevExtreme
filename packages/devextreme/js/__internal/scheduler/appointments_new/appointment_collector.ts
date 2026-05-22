@@ -4,18 +4,21 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
+import type { DxEvent } from '@js/events';
+import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
+import type { TargetedAppointment } from '@ts/scheduler/types';
 
+import type { AppointmentItemViewModel } from '../view_model/types';
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
 import type { ViewItemProperties } from './view_item';
 import { ViewItem } from './view_item';
 
 export interface AppointmentCollectorProperties
   extends ViewItemProperties {
-  appointmentsData: SafeAppointment[];
+  items: AppointmentItemViewModel[],
   isCompact: boolean;
   geometry: {
     height: number;
@@ -25,6 +28,7 @@ export interface AppointmentCollectorProperties
   };
   targetedAppointmentData: TargetedAppointment;
   appointmentCollectorTemplate: TemplateBase;
+  onClick: (viewItem: AppointmentCollector, e: DxEvent) => void;
 }
 
 export class AppointmentCollector
@@ -34,7 +38,20 @@ export class AppointmentCollector
   private buttonInstance?: Button;
 
   private get appointmentsCount(): number {
-    return this.option().appointmentsData.length;
+    return this.option().items.length;
+  }
+
+  override _setOptionsByReference(): void {
+    super._setOptionsByReference();
+
+    // Note: items have appointmentData, which is used as a key in dataSource
+    this._optionsByReference = {
+      ...this._optionsByReference,
+      // @ts-expect-error Component class has wrong type for _optionsByReference
+      items: true,
+      // @ts-expect-error Component class has wrong type for _optionsByReference
+      targetedAppointmentData: true,
+    };
   }
 
   override _init(): void {
@@ -115,10 +132,12 @@ export class AppointmentCollector
         model: {
           appointmentCount: this.appointmentsCount,
           isCompact: this.option().isCompact,
-          items: this.option().appointmentsData,
+          items: this.option().items.map((item) => item.itemData),
         },
       })),
-      onClick: this.onClick.bind(this),
+      onClick: (e: ButtonClickEvent) => {
+        this.option().onClick(this, e.event as DxEvent);
+      },
     });
   }
 
