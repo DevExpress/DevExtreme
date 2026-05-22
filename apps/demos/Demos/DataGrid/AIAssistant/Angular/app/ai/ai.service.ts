@@ -1,4 +1,5 @@
 import { AzureOpenAI, OpenAI } from 'openai';
+import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
 import { Injectable } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import {
@@ -25,7 +26,7 @@ const MAX_PROMPT_SIZE = 5000;
 const service = new AzureOpenAI(AzureOpenAIConfig);
 
 async function getAIResponse(messages: AIMessage[], signal: AbortSignal, responseSchema?: Record<string, unknown>) {
-  const params: Record<string, unknown> = {
+  const params: ChatCompletionCreateParamsNonStreaming = {
     messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
@@ -40,7 +41,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal, respons
     },
   };
 
-  const response = await service.chat.completions.create(params as any, { signal });
+  const response = await service.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
   if (!result) {
