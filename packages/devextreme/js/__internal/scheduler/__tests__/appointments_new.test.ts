@@ -4,6 +4,7 @@ import {
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/scheduler';
+import { fireEvent } from '@testing-library/dom';
 
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
@@ -754,6 +755,90 @@ describe('New Appointments', () => {
       expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
       expect((onAppointmentUpdated.mock.calls[0][0] as any).appointmentData).toBe(appointment);
       expect(appointment.text).toBe('Updated Appointment');
+    });
+  });
+
+  describe('Keyboard navigation', () => {
+    it('should delete appointment by delete key', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(0);
+    });
+
+    it('should delete recurring appointment occurrence by delete key', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+          recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        }],
+        currentDate: new Date(2015, 1, 9),
+        currentView: 'week',
+        recurrenceEditMode: 'occurrence',
+      });
+
+      expect(POM.getAppointments().length).toBe(3);
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(2);
+    });
+
+    it.each([
+      { editing: true },
+      { editing: { allowDeleting: true } },
+      { editing: { allowDeleting: true, allowUpdating: false } },
+    ])('should delete appointment when editing=$editing', async ({ editing }) => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+        editing,
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(0);
+    });
+
+    it.each([
+      { editing: { allowDeleting: false } },
+      { editing: false },
+    ])('should NOT delete appointment when editing=$editing', async ({ editing }) => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+        editing,
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(1);
     });
   });
 });
