@@ -64,7 +64,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
   getStartViewDate: () => Date;
-  getSortedAppointments: () => SortedEntity[];
+  getSortedItems: () => SortedEntity[];
   isVirtualScrolling: () => boolean;
 
   scrollTo: (date: Date, options?: ScrollToOptions) => void;
@@ -82,6 +82,12 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
     appointmentData: SafeAppointment,
     targetedAppointmentData: TargetedAppointment,
   ) => void;
+
+  allowDelete: boolean;
+  onDeleteKeyPress: (options: {
+    appointmentData: SafeAppointment;
+    targetedAppointmentData: TargetedAppointment;
+  }) => void;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
@@ -112,7 +118,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   override _init(): void {
     super._init();
 
-    this.focusController = new AppointmentsFocusController(this);
+    this.focusController = new AppointmentsFocusController(this, {
+      onAppointmentEnterKeyDown: this.onAppointmentDblClick.bind(this),
+    });
 
     this._templateManager.addDefaultTemplates({
       appointment: new EmptyTemplate(),
@@ -152,6 +160,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       onAppointmentRendered: noop,
       onAppointmentClick: noop,
       onAppointmentDblClick: noop,
+      allowDelete: false,
+      onDeleteKeyPress: noop,
     };
   }
 

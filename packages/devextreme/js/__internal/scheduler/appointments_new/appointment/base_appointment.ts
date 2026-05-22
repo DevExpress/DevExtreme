@@ -38,11 +38,11 @@ export interface BaseAppointmentViewProperties
 export class BaseAppointmentView<
   TProperties extends BaseAppointmentViewProperties = BaseAppointmentViewProperties,
 > extends ViewItem<TProperties> {
-  get targetedAppointmentData(): TargetedAppointment {
+  public get targetedAppointmentData(): TargetedAppointment {
     return this.option().targetedAppointmentData;
   }
 
-  get appointmentData(): SafeAppointment {
+  public get appointmentData(): SafeAppointment {
     return this.option().appointmentData;
   }
 
