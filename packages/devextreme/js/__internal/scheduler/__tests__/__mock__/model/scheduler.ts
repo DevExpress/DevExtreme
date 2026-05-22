@@ -68,7 +68,7 @@ export class SchedulerModel {
     const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
     const collectors = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment-collector'));
 
-    if (collectors.length === 0) {
+    if (collectors && collectors.length === 0) {
       throw new Error('Collector button not found');
     }
 
