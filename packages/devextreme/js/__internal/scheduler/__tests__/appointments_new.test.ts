@@ -392,7 +392,6 @@ describe('New Appointments', () => {
     });
   });
 
-<<<<<<< HEAD
   describe('onAppointmentClick', () => {
     it('should call onAppointmentClick callback', async () => {
       const onAppointmentClick = jest.fn();

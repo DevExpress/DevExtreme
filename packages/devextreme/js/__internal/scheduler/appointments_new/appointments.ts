@@ -84,8 +84,10 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   ) => void;
 
   allowDelete: boolean;
-  onDeleteKeyPress: (options:
-  { appointmentData: SafeAppointment; targetedAppointmentData: TargetedAppointment }) => void;
+  onDeleteKeyPress: (options: {
+    appointmentData: SafeAppointment;
+    targetedAppointmentData: TargetedAppointment;
+  }) => void;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
