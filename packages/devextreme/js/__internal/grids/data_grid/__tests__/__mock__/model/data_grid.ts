@@ -1,12 +1,13 @@
 import type { Column } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
+import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import { DataGridBaseModel } from '@ts/grids/grid_core/__tests__/__mock__/model/data_grid_base';
 
 export class DataGridModel extends DataGridBaseModel<DataGrid> {
   protected NAME = 'dxDataGrid';
 
-  public getInstance(): DataGrid {
-    return DataGrid.getInstance(this.root) as DataGrid;
+  public getInstance(): DataGridInstance {
+    return DataGrid.getInstance(this.root) as DataGridInstance;
   }
 
   public apiGetVisibleColumns(headerLevel?: number): Column[] {
