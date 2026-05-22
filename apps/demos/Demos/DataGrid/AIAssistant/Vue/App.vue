@@ -69,11 +69,11 @@ import {
 } from 'devextreme-vue/data-grid';
 import type dxChat from 'devextreme/ui/chat';
 import { type DxChatTypes } from 'devextreme-vue/chat';
-import type { DxButtonGroupTypes } from 'devextreme-vue/ui/button-group';
+import type { DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { sales } from './data.ts';
 import { aiIntegration } from './service.ts';
 
-let chatInstance: dxChat | null = null;
+let chatInstance: dxChat | undefined;
 
 const suggestionItems = [
   {
