@@ -1,4 +1,5 @@
 import { AzureOpenAI, OpenAI } from 'openai';
+import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
 import {
   AIIntegration,
   type RequestParams,
@@ -23,8 +24,8 @@ const MAX_PROMPT_SIZE = 5000;
 
 const service = new AzureOpenAI(AzureOpenAIConfig);
 
-async function getAIResponse(messages: AIMessage[], signal: AbortSignal, responseSchema?: object) {
-  const params: Record<string, unknown> = {
+async function getAIResponse(messages: AIMessage[], signal: AbortSignal, responseSchema?: Record<string, unknown>) {
+  const params: ChatCompletionCreateParamsNonStreaming = {
     messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
@@ -39,7 +40,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal, respons
     },
   };
 
-  const response = await service.chat.completions.create(params as never, { signal });
+  const response = await service.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
   if (!result) {
@@ -52,7 +53,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal, respons
 function getAIResponseRecursive(
   messages: AIMessage[],
   signal: AbortSignal,
-  responseSchema?: object,
+  responseSchema?: Record<string, unknown>,
 ): Promise<string> {
   return getAIResponse(messages, signal, responseSchema)
     .catch(async (error) => {
