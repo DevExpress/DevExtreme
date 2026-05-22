@@ -2317,8 +2317,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'groupOrientation':
         this.initGroupedStrategy();
-        this.createRAllDayPanelElements();
         this.removeAllDayElements();
+        this.createRAllDayPanelElements();
         this.cleanWorkSpace();
         this.toggleGroupByDateClass();
         break;
@@ -2798,6 +2798,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private removeAllDayElements() {
+    this.$allDayPanel?.remove();
     this.$allDayTable?.remove();
     this.$allDayTitle?.remove();
   }

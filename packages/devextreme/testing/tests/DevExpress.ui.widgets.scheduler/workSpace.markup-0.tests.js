@@ -111,6 +111,26 @@ const VERTICAL_SIZES_CLASS = 'dx-scheduler-cell-sizes-vertical';
                 assert.equal($element.find(`.${DATE_TABLE_CLASS}`).length, 1, 'Workspace contains date table');
             });
 
+            QUnit.test('All day panel should not be duplicated after groupOrientation change', async function(assert) {
+                const $element = this.instance.$element();
+
+                await applyWorkspaceGroups(this.instance, [{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
+
+                this.instance.option('groupOrientation', 'vertical');
+
+                assert.equal($element.find(`.${ALL_DAY_PANEL_CLASS}`).length, 1, 'Single all day panel after switching to vertical');
+                assert.equal($element.find(`.${ALL_DAY_TITLE_CLASS}`).length, 1, 'Single all day title after switching to vertical');
+
+                this.instance.option('groupOrientation', 'horizontal');
+
+                assert.equal($element.find(`.${ALL_DAY_PANEL_CLASS}`).length, 1, 'Single all day panel after switching back to horizontal');
+                assert.equal($element.find(`.${ALL_DAY_TITLE_CLASS}`).length, 1, 'Single all day title after switching back to horizontal');
+            });
+
             QUnit.test('Time panel cells and rows should have special css classes', async function(assert) {
                 const $element = this.instance.$element();
                 const $row = $element.find('.dx-scheduler-time-panel tr').first();
