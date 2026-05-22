@@ -47,6 +47,8 @@ export class OptionsController<
 
   private isControlledMode = false;
 
+  private _skipProcessingColumnsChange: string | false = false;
+
   private readonly internalOptions: Signal<InternalOptionsState<TProps>>;
 
   // @ts-expect-error Component type doesn't have fields from widget.ts
@@ -75,6 +77,10 @@ export class OptionsController<
 
   private onOptionChangedHandler(optionChanges: ChangedOptionInfo): void {
     const { fullName } = optionChanges;
+
+    if (this._skipProcessingColumnsChange === fullName) {
+      return;
+    }
 
     this.updateIsControlledMode();
     this.updateInternalOptionsState(fullName, optionChanges);
@@ -220,5 +226,16 @@ export class OptionsController<
         },
       );
     });
+  }
+
+  public notifyColumnOptionChanged(
+    fullOptionPath: string,
+    newValue: unknown,
+    prevValue: unknown,
+  ): void {
+    this._skipProcessingColumnsChange = fullOptionPath;
+    // @ts-expect-error
+    this.component._notifyOptionChanged(fullOptionPath, newValue, prevValue);
+    this._skipProcessingColumnsChange = false;
   }
 }
