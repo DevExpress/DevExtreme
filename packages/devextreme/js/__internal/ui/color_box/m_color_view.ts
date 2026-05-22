@@ -1001,7 +1001,7 @@ class ColorView extends Editor<ColorViewProperties> {
         break;
       case 'editAlphaChannel':
         if (this._$colorPickerContainer) {
-          this._renderHtmlRows('editAlphaChannel');
+          this._renderHtmlRows();
           this._renderAlphaChannelElements();
         }
         break;
