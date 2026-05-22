@@ -290,7 +290,7 @@ describe('AIAssistantViewController', () => {
       expect($messages.length).toBe(1);
       expect(getMessageStatusClass($messages.eq(0))).toBe(MessageStatus.Failure);
       expect($messages.eq(0).find(`.${CLASSES.messageErrorText}`).text())
-        .toBe('Network error');
+        .toBe('Invalid response from the AI service. Please try again.');
     });
 
     it('should render multiple messages with correct statuses after sequential requests', async () => {

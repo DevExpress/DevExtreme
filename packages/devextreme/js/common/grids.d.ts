@@ -163,7 +163,7 @@ export type PredefinedCommands = {
   };
   columnsReorder: {
     dataField: string;
-    visibleIndex: boolean;
+    visibleIndex: number;
   };
   columnsPinning: {
     dataField: string;

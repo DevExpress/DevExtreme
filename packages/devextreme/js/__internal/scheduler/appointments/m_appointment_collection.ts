@@ -1058,7 +1058,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
       const appointmentConfig = {
         itemData: item.itemData,
         groupIndex: appointment.groupIndex,
-        groups: this.option('groups'),
       };
 
       return {

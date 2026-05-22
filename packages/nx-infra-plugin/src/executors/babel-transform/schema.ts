@@ -1,3 +1,8 @@
+export interface BabelTransformAsset {
+  from: string;
+  to: string;
+}
+
 export interface BabelTransformExecutorSchema {
   babelConfigPath: string;
   configKey: string;
@@ -6,4 +11,5 @@ export interface BabelTransformExecutorSchema {
   outDir: string;
   removeDebug?: boolean;
   renameExtensions?: Record<string, string>;
+  copyAssets?: BabelTransformAsset[];
 }

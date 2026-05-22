@@ -6555,7 +6555,7 @@ declare module DevExpress.common.grids {
     };
     columnsReorder: {
       dataField: string;
-      visibleIndex: boolean;
+      visibleIndex: number;
     };
     columnsPinning: {
       dataField: string;
@@ -12970,6 +12970,7 @@ declare module DevExpress.ui {
       };
     export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
+      | 'aiAssistantButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
       | 'exportButton'
@@ -32245,6 +32246,7 @@ declare module DevExpress.ui {
       | 'undelete';
     export type TreeListPredefinedToolbarItem =
       | 'addRowButton'
+      | 'aiAssistantButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
       | 'revertButton'
