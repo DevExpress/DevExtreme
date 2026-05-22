@@ -329,7 +329,7 @@ describe('Isolated AppointmentPopup environment', () => {
     });
   });
 
-  it('should propagate firstDayOfWeek to editor calendars', async () => {
+  it('should propagate firstDayOfWeek to editor calendars and recurrence week day buttons', async () => {
     const { POM } = await createAppointmentPopup({
       appointmentData: {
         text: 'common-app',
@@ -343,9 +343,11 @@ describe('Isolated AppointmentPopup environment', () => {
     const startDateFDOW = POM.dxForm.getEditor('startDateEditor')?.option('calendarOptions.firstDayOfWeek');
     const endDateFDOW = POM.dxForm.getEditor('endDateEditor')?.option('calendarOptions.firstDayOfWeek');
     const recurrenceStartFDOW = POM.dxForm.getEditor('recurrenceStartDateEditor')?.option('calendarOptions.firstDayOfWeek');
+    const weekDayButtonsText = POM.recurrenceWeekDayButtons.textContent;
 
     expect(startDateFDOW).toBe(1);
     expect(endDateFDOW).toBe(1);
     expect(recurrenceStartFDOW).toBe(1);
+    expect(weekDayButtonsText).toBe('MTWTFSS');
   });
 });
