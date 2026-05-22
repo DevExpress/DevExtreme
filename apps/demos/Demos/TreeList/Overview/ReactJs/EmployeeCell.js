@@ -7,10 +7,9 @@ const EmployeeCell = (props) => {
   }
   return (
     <>
-      <img
+      <div
         className="img"
-        src={employee.Picture}
-        alt=""
+        style={{ backgroundImage: `url(${employee.Picture})` }}
       />
       &nbsp;
       <span className="name">{employee.Name}</span>

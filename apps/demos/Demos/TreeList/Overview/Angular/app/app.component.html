@@ -70,11 +70,12 @@
   ></dxi-tree-list-column>
   <div *dxTemplate="let options of 'employeeTemplate'">
     @if(options.data.Task_Assigned_Employee) {
-    <img
+    <div
       class="img"
-      [src]="options.data.Task_Assigned_Employee.Picture"
-      alt=""
-    />
+      style.background-image="url('{{
+        options.data.Task_Assigned_Employee.Picture
+      }}')"
+    ></div>
     } @if(options.data.Task_Assigned_Employee) {
     <span class="name">{{ options.data.Task_Assigned_Employee.Name }}</span>
     }

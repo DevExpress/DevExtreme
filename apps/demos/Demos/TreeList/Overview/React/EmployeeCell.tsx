@@ -10,11 +10,7 @@ const EmployeeCell = (props: TreeListTypes.ColumnCellTemplateData) => {
 
   return (
     <>
-      <img
-        className="img"
-        src={employee.Picture}
-        alt=""
-      />
+      <div className="img" style={{ backgroundImage: `url(${employee.Picture})` }} />
       &nbsp;
       <span className="name">{employee.Name}</span>
     </>
