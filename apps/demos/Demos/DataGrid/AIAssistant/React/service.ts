@@ -1,6 +1,7 @@
 import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import type { RequestParams, Response } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI } from 'openai';
+import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
 import notify from 'devextreme/ui/notify';
 import type { AIMessage } from './types';
 
@@ -14,8 +15,8 @@ const AzureOpenAIConfig = {
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
-async function getAIResponse(messages: AIMessage[], signal: AbortSignal, responseSchema?: object) {
-  const params: Record<string, unknown> = {
+async function getAIResponse(messages: AIMessage[], signal: AbortSignal, responseSchema?: Record<string, unknown>) {
+  const params: ChatCompletionCreateParamsNonStreaming = {
     messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
@@ -30,13 +31,13 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal, respons
     },
   };
 
-  const response = await aiService.chat.completions.create(params as any, { signal });
+  const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
   return result ?? '';
 }
 
-function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal, responseSchema?: object): Promise<string> {
+function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal, responseSchema?: Record<string, unknown>): Promise<string> {
   return getAIResponse(messages, signal, responseSchema)
     .catch(async (error) => {
       if (!error.message.includes('Connection error')) {

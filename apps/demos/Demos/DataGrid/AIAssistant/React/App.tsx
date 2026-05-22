@@ -90,26 +90,26 @@ export default function App() {
     <DataGrid
       id="gridContainer"
       dataSource={sales}
-      showBorders={true}
+      showBorders
       keyExpr="Id"
-      filterSyncEnabled={true}
+      filterSyncEnabled
     >
       <SearchPanel
-        visible={true}
+        visible
         width={240}
         placeholder="Search..."
       />
-      <GroupPanel visible={true} />
-      <HeaderFilter visible={true} />
-      <FilterRow visible={true} />
+      <GroupPanel visible />
+      <HeaderFilter visible />
+      <FilterRow visible />
       <Paging pageSize={10} />
       <Pager
-        visible={true}
+        visible
         allowedPageSizes={allowedPageSizes}
-        showPageSizeSelector={true}
+        showPageSizeSelector
       />
       <AIAssistant
-        enabled={true}
+        enabled
         aiIntegration={aiIntegration}
         chat={chatOptions}
       />
