@@ -976,6 +976,10 @@ describe('Appointment Form', () => {
   });
 
   describe('Resources', () => {
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
     it('should have correct resource editor value', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -1195,6 +1199,41 @@ describe('Appointment Form', () => {
 
       expect(loadSpy).toHaveBeenCalledTimes(1);
       expect(byKeySpy).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not trigger extra CustomStore load on second popup open', async () => {
+      const loadFn = jest.fn().mockImplementation(() => Promise.resolve([
+        { text: 'Owner 1', id: 1 },
+        { text: 'Owner 2', id: 2 },
+      ]));
+      const resourceDataSource = new CustomStore({
+        load: loadFn as any,
+        byKey: () => {},
+      });
+
+      const { scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          ownerId: 1,
+        }],
+        resources: [{
+          fieldExpr: 'ownerId',
+          dataSource: resourceDataSource,
+        }],
+      });
+
+      jest.useFakeTimers();
+
+      const appointment = (scheduler as any).getDataSource().items()[0];
+      scheduler.showAppointmentPopup(appointment);
+      scheduler.hideAppointmentPopup(false);
+      scheduler.showAppointmentPopup(appointment);
+      await jest.runAllTimersAsync();
+
+      expect(loadFn).toHaveBeenCalledTimes(1);
     });
 
     it('should recreate appointment form synchronously when resources option changes', async () => {
