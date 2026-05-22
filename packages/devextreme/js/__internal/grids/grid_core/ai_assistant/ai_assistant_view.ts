@@ -3,16 +3,8 @@ import type { ArrayStore } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { getHeight } from '@js/core/utils/size';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
-import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { HidingEvent, Properties as PopupProperties } from '@js/ui/popup';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import { AI_ASSISTANT_POPUP_OFFSET } from '@ts/grids/grid_core/ai_assistant/const';
-import {
-  isChatOptions,
-  isEnabledOption,
-  isPopupOptions,
-  isTitleOption,
-  isUserMessage,
-} from '@ts/grids/grid_core/ai_assistant/utils';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -22,7 +14,16 @@ import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
 import { View } from '../m_modules';
 import type { AIAssistantController } from './ai_assistant_controller';
+import { AI_ASSISTANT_POPUP_OFFSET, CLASSES } from './const';
 import type { AIMessage } from './types';
+import {
+  createConfirmDialog,
+  isChatOptions,
+  isEnabledOption,
+  isPopupOptions,
+  isTitleOption,
+  isUserMessage,
+} from './utils';
 
 export class AIAssistantView extends View {
   private aiChatInstance!: AIChat;
@@ -96,7 +97,26 @@ export class AIAssistantView extends View {
       },
       onHidden: (): void => {
         this.visibilityChanged?.fire(false);
-        this.aiAssistantController.abortRequest();
+      },
+      onHiding: (e: HidingEvent): void => {
+        if (this.aiAssistantController.isProcessing()) {
+          e.cancel = true;
+
+          const confirmDialog = createConfirmDialog({
+            popupOptions: {
+              elementAttr: { class: this.addWidgetPrefix(CLASSES.aiAssistantConfirmDialog) },
+            },
+          });
+
+          // @ts-expect-error
+          confirmDialog.show().done((confirmResult) => {
+            if (confirmResult) {
+              this.aiAssistantController.abortRequest();
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              e.component.hide();
+            }
+          });
+        }
       },
       ...this.option('aiAssistant.popup'),
     };
@@ -129,7 +149,10 @@ export class AIAssistantView extends View {
 
   private getAIChatOptions(): ChatProperties {
     return {
-      dataSource: this.messageStore,
+      dataSource: {
+        store: this.messageStore,
+        pushAggregationTimeout: 0,
+      },
       reloadOnChange: true,
       onMessageEntered: (e): void => {
         this.executeRequest(e.message);

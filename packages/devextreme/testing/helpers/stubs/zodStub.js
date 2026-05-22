@@ -27,6 +27,7 @@
         int: function() { return z; },
         // eslint-disable-next-line spellcheck/spell-checker
         nonnegative: function() { return z; },
+        positive: function() { return z; },
         min: function() { return z; },
         max: function() { return z; },
         // validation

@@ -1,5 +1,7 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Compress Executor Schema",
+  "description": "Compress JavaScript files",
   "type": "object",
   "properties": {
     "files": {
@@ -39,6 +41,24 @@
       "type": "array",
       "items": { "type": "string" },
       "description": "Glob patterns for files to exclude from compression (relative to project root)"
+    },
+    "applyLicenseHeaders": {
+      "type": "object",
+      "description": "When provided, applies DevExtreme license headers after compression. The targetSubdir field is required and resolves relative to the project root.",
+      "properties": {
+        "licenseTemplateFile": { "type": "string" },
+        "mode": { "type": "string", "enum": ["eula", "mit"] },
+        "eulaUrl": { "type": "string" },
+        "version": { "type": "string" },
+        "commentType": { "type": "string", "enum": ["!", "*"] },
+        "separator": { "type": "string" },
+        "prependAfterLicense": { "type": "string" },
+        "filenameMode": { "type": "string", "enum": ["relative", "basename"] },
+        "includePatterns": { "type": "array", "items": { "type": "string" } },
+        "excludePatterns": { "type": "array", "items": { "type": "string" } },
+        "targetSubdir": { "type": "string" }
+      },
+      "required": ["targetSubdir"]
     }
   },
   "required": ["files", "mode"]

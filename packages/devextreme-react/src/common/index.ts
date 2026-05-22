@@ -275,12 +275,13 @@ export namespace Export {
 export function Grids(): void {}
 export namespace Grids {
     export type AdaptiveDetailRowPreparingInfo = GridsModule.AdaptiveDetailRowPreparingInfo;
-    export type AIAssistant = GridsModule.AIAssistant;
+    export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommands> = GridsModule.AIAssistant<TCommands>;
     export type AIAssistantRequestCreatingInfo = GridsModule.AIAssistantRequestCreatingInfo;
     export type AIColumnMode = GridsModule.AIColumnMode;
     export type AIColumnRequestCreatingInfo<TRowData = any> = GridsModule.AIColumnRequestCreatingInfo<TRowData>;
     export type ApplyChangesMode = GridsModule.ApplyChangesMode;
     export type ApplyFilterMode = GridsModule.ApplyFilterMode;
+    export type BasicFilterExprObj = GridsModule.BasicFilterExprObj;
     export type ColumnAIOptions = GridsModule.ColumnAIOptions;
     export type ColumnBase<TRowData = any> = GridsModule.ColumnBase<TRowData>;
     export type ColumnButtonBase = GridsModule.ColumnButtonBase;
@@ -296,6 +297,9 @@ export namespace Grids {
     export type ColumnHeaderFilterSearchConfig = GridsModule.ColumnHeaderFilterSearchConfig;
     export type ColumnLookup = GridsModule.ColumnLookup;
     export type ColumnResizeMode = GridsModule.ColumnResizeMode;
+    export type CombinedFilterExprObj = GridsModule.CombinedFilterExprObj;
+    export type CommandInfo<TCommands extends PredefinedCommands = PredefinedCommands> = GridsModule.CommandInfo<TCommands>;
+    export type CompositeKeyPair = GridsModule.CompositeKeyPair;
     export type DataChange<TRowData = any, TKey = any> = GridsModule.DataChange<TRowData, TKey>;
     export type DataChangeInfo<TRowData = any, TKey = any> = GridsModule.DataChangeInfo<TRowData, TKey>;
     export type DataChangeType = GridsModule.DataChangeType;
@@ -305,6 +309,7 @@ export namespace Grids {
     export type EditingTextsBase = GridsModule.EditingTextsBase;
     export type EnterKeyAction = GridsModule.EnterKeyAction;
     export type EnterKeyDirection = GridsModule.EnterKeyDirection;
+    export type FilterExprObj = GridsModule.FilterExprObj;
     export type FilterOperation = GridsModule.FilterOperation;
     export type FilterPanel<TComponent = any, TRowData = any, TKey = any> = GridsModule.FilterPanel<TComponent, TRowData, TKey>;
     export type FilterPanelTexts = GridsModule.FilterPanelTexts;
@@ -325,11 +330,16 @@ export namespace Grids {
     export type KeyboardNavigation = GridsModule.KeyboardNavigation;
     export type KeyDownInfo = GridsModule.KeyDownInfo;
     export type LoadPanel = GridsModule.LoadPanel;
+    export type NegatedFilterExprObj = GridsModule.NegatedFilterExprObj;
     export type NewRowInfo<TRowData = any> = GridsModule.NewRowInfo<TRowData>;
     export type NewRowPosition = GridsModule.NewRowPosition;
     export type Pager = GridsModule.Pager;
     export type PagerPageSize = GridsModule.PagerPageSize;
     export type PagingBase = GridsModule.PagingBase;
+    export type PredefinedCommandNames = GridsModule.PredefinedCommandNames;
+    export type PredefinedCommands = GridsModule.PredefinedCommands;
+    export type ResponseStatus = GridsModule.ResponseStatus;
+    export type ResponseStatusTexts = GridsModule.ResponseStatusTexts;
     export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = GridsModule.RowDragging<TComponent, TRowData, TKey>;
     export type RowDraggingTemplateData<TRowData = any> = GridsModule.RowDraggingTemplateData<TRowData>;
     export type RowInsertedInfo<TRowData = any, TKey = any> = GridsModule.RowInsertedInfo<TRowData, TKey>;

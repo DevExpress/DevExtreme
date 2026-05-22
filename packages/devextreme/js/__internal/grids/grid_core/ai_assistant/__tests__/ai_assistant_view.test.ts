@@ -16,6 +16,16 @@ import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helper
 import { AIChat } from '../../ai_chat/ai_chat';
 import type { AIChatOptions } from '../../ai_chat/types';
 import { AIAssistantView } from '../ai_assistant_view';
+import { createConfirmDialog } from '../utils';
+
+jest.mock('../utils', (): any => {
+  const original = jest.requireActual<any>('../utils');
+
+  return {
+    ...original,
+    createConfirmDialog: jest.fn(),
+  };
+});
 
 jest.mock('../../ai_chat/ai_chat', (): any => {
   const original = jest.requireActual<any>('../../ai_chat/ai_chat');
@@ -40,6 +50,7 @@ const mockAIAssistantController = {
   getMessageStore: jest.fn().mockReturnValue(mockMessageStore),
   sendRequestToAI: jest.fn(),
   abortRequest: jest.fn(),
+  isProcessing: jest.fn().mockReturnValue(false),
 };
 
 const createAIAssistantView = ({
@@ -75,6 +86,7 @@ const createAIAssistantView = ({
   };
 
   const mockComponent = {
+    NAME: 'dxDataGrid',
     element: (): any => $container.get(0),
     _createComponent: createComponentMock,
     _controllers: {
@@ -162,7 +174,10 @@ describe('AIAssistantView', () => {
 
       expect(mockAIAssistantController.getMessageStore).toHaveBeenCalledTimes(1);
       expect(aiChatConfig.chatOptions).toEqual(expect.objectContaining({
-        dataSource: mockMessageStore,
+        dataSource: expect.objectContaining({
+          store: mockMessageStore,
+          pushAggregationTimeout: 0,
+        }),
         reloadOnChange: true,
         onMessageEntered: expect.any(Function),
       }));
@@ -301,14 +316,98 @@ describe('AIAssistantView', () => {
     });
   });
 
-  describe('onHidden', () => {
-    it('should call abortRequest on controller when popup onHidden is triggered', () => {
+  describe('onHiding', () => {
+    it('should not cancel hiding when controller is not processing', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(false);
       createAIAssistantView();
 
       const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
-      aiChatConfig.popupOptions?.onHidden?.({} as any);
+      const event = { cancel: false, component: { hide: jest.fn() } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+
+      expect(event.cancel).toBe(false);
+      expect(createConfirmDialog).not.toHaveBeenCalled();
+    });
+
+    it('should cancel hiding and show confirm dialog when controller is processing', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(true);
+
+      const mockDialog = {
+        show: jest.fn().mockReturnValue({
+          done: jest.fn(),
+        }),
+      };
+      (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const event = { cancel: false, component: { hide: jest.fn() } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+
+      expect(event.cancel).toBe(true);
+      expect(createConfirmDialog).toHaveBeenCalledTimes(1);
+      expect(createConfirmDialog).toHaveBeenCalledWith(
+        expect.objectContaining({
+          popupOptions: expect.objectContaining({
+            elementAttr: expect.objectContaining({
+              class: expect.stringContaining('ai-assistant-confirm-dialog'),
+            }),
+          }),
+        }),
+      );
+      expect(mockDialog.show).toHaveBeenCalledTimes(1);
+    });
+
+    it('should abort request and hide popup when confirm result is true', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(true);
+
+      let doneCallback: (result: boolean) => void = () => {};
+      const mockDialog = {
+        show: jest.fn().mockReturnValue({
+          done: jest.fn((cb: (result: boolean) => void) => {
+            doneCallback = cb;
+          }),
+        }),
+      };
+      (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const hideMock = jest.fn();
+      const event = { cancel: false, component: { hide: hideMock } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+      doneCallback(true);
 
       expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not abort request when confirm result is false', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(true);
+
+      let doneCallback: (result: boolean) => void = () => {};
+      const mockDialog = {
+        show: jest.fn().mockReturnValue({
+          done: jest.fn((cb: (result: boolean) => void) => {
+            doneCallback = cb;
+          }),
+        }),
+      };
+      (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const hideMock = jest.fn();
+      const event = { cancel: false, component: { hide: hideMock } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+      doneCallback(false);
+
+      expect(mockAIAssistantController.abortRequest).not.toHaveBeenCalled();
+      expect(hideMock).not.toHaveBeenCalled();
     });
   });
 

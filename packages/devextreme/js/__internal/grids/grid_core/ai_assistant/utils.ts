@@ -1,7 +1,17 @@
+import messageLocalization from '@js/common/core/localization/message';
+import type { ResponseStatus } from '@js/common/grids';
 import { isObject } from '@js/core/utils/type';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Message } from '@js/ui/chat';
+import { custom } from '@js/ui/dialog';
+import { current, isCompact, isFluent } from '@js/ui/themes';
+import type { BaseDialog, DialogParams } from '@ts/ui/dialog';
 
-import { AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';
+import {
+  AI_ASSISTANT_AUTHOR_ID,
+  AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH,
+  AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
+} from './const';
 import type { AIMessage, CommandResult, JsonSchema } from './types';
 
 export const isAIMessage = (
@@ -33,19 +43,15 @@ export const hasAbortedCommands = (
   commands: CommandResult[] | undefined,
 ): boolean => !!commands?.some(({ status }) => status === 'aborted');
 
-export const getMessageStatus = (commands: CommandResult[]): MessageStatus => {
+export const getMessageStatus = (commands: CommandResult[]): ResponseStatus => {
   if (hasCommandErrors(commands) || hasAbortedCommands(commands)) {
-    return MessageStatus.Failure;
+    return 'failure';
   }
 
-  return MessageStatus.Success;
+  return 'success';
 };
 
 /**
- * Recursively converts JSON Schema array-style `type`
- * (e.g. `{"type": ["string", "number"]}`) to the equivalent `anyOf` form
- * (e.g. `{"anyOf": [{"type": "string"}, {"type": "number"}]}`).
- *
  * Some structured-output APIs do not support array-style `type` fields
  * and require explicit `anyOf` instead.
  */
@@ -113,17 +119,17 @@ const resolveJsonPointer = (
   }
 
   const segments = pointer.slice(2).split('/');
-  let current: unknown = schema;
+  let currentNode: unknown = schema;
 
   for (const segment of segments) {
-    if (!current || typeof current !== 'object') {
+    if (!currentNode || typeof currentNode !== 'object') {
       return undefined;
     }
 
-    current = (current as Record<string, unknown>)[segment];
+    currentNode = (currentNode as Record<string, unknown>)[segment];
   }
 
-  return current;
+  return currentNode;
 };
 
 /** Recursively collects all `$ref` string values from a schema node. */
@@ -258,3 +264,53 @@ export const hoistSchemaRefs = (
 
   return mergedDefs;
 };
+
+const getApplyButtonConfig = (): ButtonProperties => {
+  if (isFluent(current())) {
+    return {
+      stylingMode: 'outlined',
+      type: 'normal',
+    };
+  }
+
+  return {};
+};
+
+const getCancelButtonConfig = (): ButtonProperties => {
+  if (isFluent(current())) {
+    return {
+      stylingMode: 'contained',
+      type: 'default',
+    };
+  }
+
+  return {};
+};
+
+const getConfirmDialogWidth = (): number => {
+  if (isCompact(current())) {
+    return AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH;
+  }
+
+  return AI_ASSISTANT_CONFIRM_DIALOG_WIDTH;
+};
+
+export const createConfirmDialog = (options?: DialogParams): BaseDialog => custom({
+  messageHtml: messageLocalization.format('dxDataGrid-aiAssistantAbortConfirmText'),
+  showTitle: false,
+  dragEnabled: false,
+  width: getConfirmDialogWidth(),
+  buttons: [
+    {
+      text: messageLocalization.format('No'),
+      onClick: (): boolean => false,
+      ...getCancelButtonConfig(),
+    },
+    {
+      text: messageLocalization.format('Yes'),
+      onClick: (): boolean => true,
+      ...getApplyButtonConfig(),
+    },
+  ],
+  ...options,
+}) as BaseDialog;

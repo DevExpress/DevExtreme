@@ -4,7 +4,34 @@ import {
   it,
 } from '@jest/globals';
 
-import { isKeyShapeValid } from '../utils';
+import { isKeyShapeValid, normalizeKey } from '../utils';
+
+describe('normalizeKey', () => {
+  it('returns a string key as-is', () => {
+    expect(normalizeKey('abc')).toBe('abc');
+  });
+
+  it('returns a number key as-is', () => {
+    expect(normalizeKey(42)).toBe(42);
+  });
+
+  it('converts a single-element CompositeKeyPair array to an object', () => {
+    expect(normalizeKey([{ field: 'id', value: 1 }])).toEqual({ id: 1 });
+  });
+
+  it('converts a multi-element CompositeKeyPair array to an object', () => {
+    const pairs = [
+      { field: 'region', value: 'us' },
+      { field: 'code', value: 100 },
+    ];
+
+    expect(normalizeKey(pairs)).toEqual({ region: 'us', code: 100 });
+  });
+
+  it('returns an empty object for an empty array', () => {
+    expect(normalizeKey([])).toEqual({});
+  });
+});
 
 describe('isKeyShapeValid', () => {
   describe('single-field keyExpr (string)', () => {
