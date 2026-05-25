@@ -33,7 +33,7 @@ import type {
   SortedEntity,
 } from '../view_model/types';
 import { AgendaAppointmentView } from './appointment/agenda_appointment';
-import type { BaseAppointmentView, BaseAppointmentViewProperties } from './appointment/base_appointment';
+import { BaseAppointmentView, type BaseAppointmentViewProperties } from './appointment/base_appointment';
 import { GridAppointmentView } from './appointment/grid_appointment';
 import { AppointmentCollector } from './appointment_collector';
 import { AppointmentsFocusController } from './appointments.focus_controller';
@@ -68,12 +68,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   isVirtualScrolling: () => boolean;
 
   scrollTo: (date: Date, options?: ScrollToOptions) => void;
-  showTooltipForAppointment: (
-    appointment: SafeAppointment,
-    $element: dxElementWrapper,
-    targetedAppointment?: SafeAppointment,
-  ) => void;
-  showTooltipForCollector: (
+  showAppointmentTooltip: (
     target: dxElementWrapper,
     data: AppointmentTooltipItem[],
     options?: AppointmentTooltipExtraOptions,
@@ -105,6 +100,22 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
   public getViewItemBySortedIndex(sortedIndex: number): ViewItem | undefined {
     return this.viewItemBySortedIndex[sortedIndex];
+  }
+
+  public getViewModelBySortedIndex(sortedIndex: number): AppointmentViewModelPlain {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const result = this.option().viewModel.find(
+      (viewModel) => viewModel.sortedIndex === sortedIndex,
+    )!;
+    return result;
+  }
+
+  public getAppointmentData($element: dxElementWrapper): SafeAppointment {
+    const viewItem = this.viewItems.find(
+      (item: ViewItem) => item.$element().is($element),
+    );
+
+    return (viewItem as BaseAppointmentView).appointmentData;
   }
 
   public get $allDayContainer(): dxElementWrapper | null {
@@ -181,6 +192,16 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
           args.previousValue ?? [],
           (args.value ?? []) as AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
         );
+
+        const isRepaintAll = diff.every(
+          (item) => Boolean(item.needToAdd ?? item.needToRemove),
+        );
+
+        if (isRepaintAll) {
+          this.renderViewModel(args.value);
+          break;
+        }
+
         this.renderViewModelDiff(diff);
         break;
       }
@@ -238,12 +259,13 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     this.$commonContainer.empty();
 
     viewModel.forEach((viewModelItem, index) => {
+      const viewItem = this.renderViewItem(viewModelItem, index);
+      this.viewItemBySortedIndex[viewModelItem.sortedIndex] = viewItem;
+
       const container = this.option().currentView === 'agenda' || !viewModelItem.allDay
         ? commonFragment
         : allDayFragment;
-
-      const viewItem = this.renderViewItem(container, viewModelItem, index);
-      this.viewItemBySortedIndex[viewModelItem.sortedIndex] = viewItem;
+      container.appendChild(viewItem.$element().get(0));
     });
 
     this.viewItems = Object.values(this.viewItemBySortedIndex);
@@ -260,16 +282,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     const newViewItemBySortedIndex: Record<number, ViewItem> = {};
 
-    const isRepaintAll = viewModelDiff.every(
-      (item) => Boolean(item.needToAdd ?? item.needToRemove),
-    );
-
-    if (isRepaintAll) {
-      this.$allDayContainer?.empty();
-      this.$commonContainer.empty();
-    }
-
-    // TODO: remove passing index to appointmentTemplate, need only to avoid BC
     viewModelDiff.forEach((diffItem, index) => {
       const { allDay, sortedIndex } = diffItem.item;
       const lookupIndex = diffItem.oldSortedIndex ?? sortedIndex;
@@ -277,18 +289,15 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
       switch (true) {
         case diffItem.needToRemove: {
-          if (isRepaintAll) {
-            break;
-          }
-
           viewItem.$element().remove();
           break;
         }
         case diffItem.needToAdd: {
-          const fragment = allDay ? allDayFragment : commonFragment;
-          const newViewItem = this.renderViewItem(fragment, diffItem.item, index);
-
+          const newViewItem = this.renderViewItem(diffItem.item, index);
           newViewItemBySortedIndex[sortedIndex] = newViewItem;
+
+          const fragment = allDay ? allDayFragment : commonFragment;
+          fragment.appendChild(newViewItem.$element().get(0));
           break;
         }
         default:
@@ -316,17 +325,13 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     this.focusController.resetTabIndex();
   }
 
+  // TODO: remove passing index to appointmentTemplate, need only to avoid BC
   private renderViewItem(
-    fragment: DocumentFragment,
     appointmentViewModel: AppointmentViewModelPlain,
     index: number,
   ): ViewItem {
     const $element = $('<div>');
-
-    fragment.appendChild($element.get(0));
-
     const targetedAppointmentData = this.getTargetedAppointmentData(appointmentViewModel);
-
     const baseViewItemConfig = {
       tabIndex: -1,
       sortedIndex: appointmentViewModel.sortedIndex,
@@ -401,6 +406,10 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     );
   }
 
+  public renderDragClone(appointmentViewModel: AppointmentViewModelPlain): dxElementWrapper {
+    return this.renderViewItem(appointmentViewModel, this.viewItems.length).$element();
+  }
+
   private getTargetedAppointmentData(
     appointmentViewModel: AppointmentViewModelPlain,
   ): TargetedAppointment {
@@ -464,10 +473,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       this.appointmentClickTimeout = null;
 
       if (isElementInDom($target)) {
-        this.option().showTooltipForAppointment(
-          appointmentView.appointmentData,
+        this.option().showAppointmentTooltip(
           $target,
-          appointmentView.targetedAppointmentData,
+          this.getTooltipItems(appointmentView),
         );
       }
     }, SHOW_TOOLTIP_TIMEOUT);
@@ -505,22 +513,44 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   private onCollectorClick(collector: AppointmentCollector): void {
     this.focusController.onViewItemClick(collector);
 
-    const collectorTooltipItems = collector.option().items.map((appointmentViewModel) => ({
-      appointment: appointmentViewModel.itemData,
-      targetedAppointment: this.getTargetedAppointmentData(appointmentViewModel),
-      color: this.getResourceColor(appointmentViewModel),
-      settings: appointmentViewModel,
-    }));
-
-    this.option().showTooltipForCollector(
+    this.option().showAppointmentTooltip(
       collector.$element(),
-      collectorTooltipItems,
+      this.getTooltipItems(collector),
       {
-        dragBehavior: undefined, // TODO
         isButtonClick: true,
         tabFocusLoopEnabled: true,
       },
     );
+  }
+
+  private getTooltipItems(viewItem: ViewItem): AppointmentTooltipItem[] {
+    if (viewItem instanceof AppointmentCollector) {
+      const tooltipItems: AppointmentTooltipItem[] = viewItem.option().items.map(
+        (appointmentViewModel) => ({
+          appointment: appointmentViewModel.itemData,
+          targetedAppointment: this.getTargetedAppointmentData(appointmentViewModel),
+          color: this.getResourceColor(appointmentViewModel),
+          settings: appointmentViewModel,
+        }),
+      );
+
+      return tooltipItems;
+    }
+
+    if (viewItem instanceof BaseAppointmentView) {
+      const viewModel = this.getViewModelBySortedIndex(
+        viewItem.option().sortedIndex,
+      ) as AppointmentItemViewModel;
+
+      return [{
+        appointment: viewItem.appointmentData,
+        targetedAppointment: viewItem.targetedAppointmentData,
+        color: this.getResourceColor(viewItem.option()),
+        settings: viewModel,
+      }];
+    }
+
+    return [];
   }
 }
 

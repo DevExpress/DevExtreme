@@ -7,6 +7,7 @@ import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   ContentReadyEvent,
+  InitializedEvent,
   ItemClickEvent,
   ItemContextMenuEvent,
   Properties as ListProperties,
@@ -65,6 +66,8 @@ interface AppointmentTooltipOptions {
   createEventArgs: (e: ItemContextMenuEvent<AppointmentTooltipItem>) => unknown;
   newAppointments?: boolean; // TODO<Appointments>
   onAppointmentClick: (e: AppointmentClickEvent) => void;
+  onListInitialized: (e: InitializedEvent) => void;
+  onListDisposing: () => void;
 }
 
 export interface AppointmentTooltipExtraOptions {
@@ -233,6 +236,8 @@ export abstract class TooltipStrategyBase {
     return {
       dataSource: dataList,
       onContentReady: this.onListRender.bind(this),
+      onInitialized: this.onListInitialized.bind(this),
+      onDisposing: this._options.onListDisposing,
       onItemClick: (
         e: ItemClickEvent<AppointmentTooltipItem>,
       ): void => this.onListItemClick(e),
@@ -249,6 +254,9 @@ export abstract class TooltipStrategyBase {
       pageLoadMode: 'scrollBottom',
     };
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onListInitialized(e: InitializedEvent): void { }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onListRender(e: ContentReadyEvent<AppointmentTooltipItem>): void { }

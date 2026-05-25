@@ -28,6 +28,7 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
+import type { DragEndEvent } from '@js/ui/draggable';
 import type {
   Appointment, AppointmentTooltipShowingEvent, DayOfWeek, Occurrence,
 } from '@js/ui/scheduler';
@@ -36,6 +37,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
+import { AppointmentDragController } from './appointment_drag_controller';
 import type { AppointmentFormConfig } from './appointment_popup/form';
 import { AppointmentForm } from './appointment_popup/form';
 import { AppointmentPopup } from './appointment_popup/popup';
@@ -177,6 +179,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/m_work_space.ts
   _appointments: any;
 
+  private appointmentDragController!: AppointmentDragController;
+
   appointmentDataSource!: AppointmentDataSource;
 
   _dataSource: any;
@@ -221,6 +225,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private appointmentForm: any;
 
   private mainContainer: any;
+
+  private $draggableContainer?: dxElementWrapper;
 
   private readonly all: any;
 
@@ -625,8 +631,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.currentView.type === 'agenda';
   }
 
-  private allowDragging() {
+  private allowDragging(): boolean {
     return this.editing.allowDragging && !this.isAgenda();
+  }
+
+  private canDragAppointment(appointmentData: Appointment): boolean {
+    return this.allowDragging() && !this._isAppointmentBeingUpdated(appointmentData);
   }
 
   private allowResizing() {
@@ -824,6 +834,19 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.resourceManager = new ResourceManager(this.option('resources'));
 
     this.notifyScheduler = new NotifyScheduler({ scheduler: this });
+
+    this.appointmentDragController = new AppointmentDragController({
+      component: this,
+      $draggableContainer: () => this.$draggableContainer!,
+      canDragAppointment: this.canDragAppointment.bind(this),
+      getCellFromDragTarget: ($dragTarget) => this._workSpace.getCellFromDragTarget($dragTarget),
+
+      // @ts-expect-error _createComponent is not defined in ts
+      createComponent: this._createComponent.bind(this),
+      hideAppointmentTooltip: this.hideAppointmentTooltip.bind(this),
+
+      updateAppointmentOnDrop: this.updateAppointmentOnDrop.bind(this),
+    });
   }
 
   createAppointmentDataSource() {
@@ -1098,8 +1121,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         isVirtualScrolling: () => this.isVirtualScrolling(),
 
         scrollTo: this.scrollTo.bind(this),
-        showTooltipForAppointment: this.showAppointmentTooltip.bind(this),
-        showTooltipForCollector: this.showAppointmentTooltipCore.bind(this),
+        showAppointmentTooltip: this.showAppointmentTooltipCore.bind(this),
         showEditAppointmentPopup: (
           appointmentData: SafeAppointment,
           targetedAppointmentData: TargetedAppointment,
@@ -1146,6 +1168,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private renderMainContainer() {
     this.mainContainer = $('<div>').addClass('dx-scheduler-container');
+    this.$draggableContainer = $('<div>')
+      .addClass('dx-scheduler-draggable-container')
+      .appendTo(this.mainContainer);
 
     this.$element().append(this.mainContainer);
   }
@@ -1226,8 +1251,22 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
       onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
       createEventArgs: that._createEventArgs.bind(that),
+
       newAppointments: Boolean(this.option('_newAppointments')),
       onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
+      onListInitialized: (e) => {
+        if (this.option('_newAppointments')) {
+          this.appointmentDragController.createTooltipDraggable(
+            e.element,
+            {
+              dragTemplate: this._appointments.renderDragClone.bind(this._appointments),
+            },
+          );
+        }
+      },
+      onListDisposing: () => {
+        this.appointmentDragController.disposeTooltipDraggable();
+      },
     };
   }
 
@@ -1422,7 +1461,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
-    this.allowDragging() && this._workSpace.initDragBehavior(this, this.all);
+    if (!this.option('_newAppointments')) {
+      this.allowDragging() && this._workSpace.initDragBehavior(this, this.all);
+    }
     this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
@@ -1458,6 +1499,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       || isTimelineView(currentViewOptions.type);
 
     const result = extend({
+      newAppointments: Boolean(this.option('_newAppointments')),
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
       getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
@@ -1506,6 +1548,21 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
       getHeaderHeight: () => utils.DOM.getHeaderHeight(this.header),
       onScrollEnd: () => this._appointments.updateResizableArea(),
+      onInitialized: (e) => {
+        if (this.option('_newAppointments')) {
+          this.appointmentDragController.createWorkSpaceDraggable(
+            e.element,
+            {
+              getAppointmentData: this._appointments.getAppointmentData.bind(this._appointments),
+            },
+          );
+        }
+      },
+      onDisposing: () => {
+        if (this.option('_newAppointments')) {
+          this.appointmentDragController.disposeWorkSpaceDraggable();
+        }
+      },
 
       // TODO: SSR does not work correctly with renovated render
       renovateRender: this.isRenovatedRender(isVirtualScrolling),
@@ -1607,6 +1664,41 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private cleanPopup() {
     this.appointmentPopup?.dispose();
+  }
+
+  private updateAppointmentOnDrop(
+    appointmentData: Appointment,
+    $cell: dxElementWrapper,
+    dragEvent: DragEndEvent,
+  ): void {
+    const updatedData = this.getUpdatedData(appointmentData, $cell);
+    const newAppointmentData = extend({}, appointmentData, updatedData);
+    const startDate = this._dataAccessors.get('startDate', newAppointmentData);
+
+    this.checkRecurringAppointment(
+      appointmentData,
+      newAppointmentData,
+      startDate,
+      () => {
+        this.updateAppointmentCore(
+          appointmentData,
+          newAppointmentData,
+          (): void => {
+            if (isDeferred(dragEvent.cancel)) {
+              (dragEvent.cancel as any).resolve?.();
+            } else {
+              dragEvent.cancel = true;
+            }
+
+            this.appointmentDragController.removeDraggingClasses($(dragEvent.itemElement));
+          },
+          dragEvent,
+        );
+      },
+      undefined,
+      undefined,
+      dragEvent,
+    );
   }
 
   checkRecurringAppointment(
@@ -1743,7 +1835,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.recurrenceDialog.show();
   }
 
-  getUpdatedData(rawAppointment) {
+  getUpdatedData(rawAppointment, $cell?) {
     const viewOffset = this.getViewOffsetMs();
 
     const getConvertedFromGrid = (date: any): Date | undefined => {
@@ -1755,7 +1847,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       return dateUtilsTs.addOffsets(result, -viewOffset);
     };
 
-    const targetCell = this.getTargetCellData();
+    const targetCell = $cell
+      ? this._workSpace.getCellData($cell)
+      : this.getTargetCellData();
     const appointment = new AppointmentAdapter(
       rawAppointment,
       this._dataAccessors,
@@ -2119,6 +2213,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         appointment,
         targetedAppointment,
         color: this.resourceManager.getAppointmentColor(appointmentConfig),
+        settings,
       };
 
       this.showAppointmentTooltipCore(element, [info]);
