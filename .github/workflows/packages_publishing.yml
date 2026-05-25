@@ -20,6 +20,7 @@ env:
   NX_SKIP_NX_CACHE: true
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
+  CYCLONEDX_CLI_VERSION: 0.32.0
 
 jobs:
   build:
@@ -81,10 +82,35 @@ jobs:
           pnpm set "//npm.pkg.github.com/:_authToken" "$env:NODE_AUTH_TOKEN"
           pnpm nx build sbom;
 
+      - name: Install CycloneDX CLI
+        shell: bash
+        run: |
+          tool_dir="$RUNNER_TEMP/cyclonedx-cli"
+          mkdir -p "$tool_dir"
+          curl -fsSL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v${{ env.CYCLONEDX_CLI_VERSION }}/cyclonedx-win-x64.exe" -o "$tool_dir/cyclonedx.exe"
+          chmod +x "$tool_dir/cyclonedx.exe" || true
+          echo "$tool_dir" >> "$GITHUB_PATH"
+
+      - name: Validate SBOMs
+        shell: bash
+        run: |
+          shopt -s nullglob
+          sbom_files=(packages/sbom/dist/*.sbom.json)
+
+          if [ ${#sbom_files[@]} -eq 0 ]; then
+            echo "No SBOM files found in packages/sbom/dist"
+            exit 1
+          fi
+
+          for file in "${sbom_files[@]}"; do
+            echo "Validating $file"
+            cyclonedx validate --input-file "$file" --input-format json --fail-on-errors
+          done
+
       - name: Build artifacts package
         run: pnpm run make-artifacts-package
 
-      - name: Upload SBOM artifact
+      - name: Upload SBOMs
         uses: actions/upload-artifact@v7
         with:
           name: sbom

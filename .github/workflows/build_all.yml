@@ -17,6 +17,7 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ github.ref_name == github.event.repository.default_branch && secrets.NX_CLOUD_ACCESS_TOKEN || '' }}
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
+  CYCLONEDX_CLI_VERSION: 0.32.0
 
 jobs:
   build:
@@ -70,7 +71,34 @@ jobs:
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm nx build sbom;
 
-      - name: Upload SBOM artifacts
+      - name: Install CycloneDX CLI
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
+        shell: bash
+        run: |
+          tool_dir="$RUNNER_TEMP/cyclonedx-cli"
+          mkdir -p "$tool_dir"
+          curl -fsSL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v${{ env.CYCLONEDX_CLI_VERSION }}/cyclonedx-linux-x64" -o "$tool_dir/cyclonedx"
+          chmod +x "$tool_dir/cyclonedx"
+          echo "$tool_dir" >> "$GITHUB_PATH"
+
+      - name: Validate SBOMs
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
+        shell: bash
+        run: |
+          shopt -s nullglob
+          sbom_files=(packages/sbom/dist/*.sbom.json)
+
+          if [ ${#sbom_files[@]} -eq 0 ]; then
+            echo "No SBOM files found in packages/sbom/dist"
+            exit 1
+          fi
+
+          for file in "${sbom_files[@]}"; do
+            echo "Validating $file"
+            cyclonedx validate --input-file "$file" --input-format json --fail-on-errors
+          done
+
+      - name: Upload SBOMs
         if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
         uses: actions/upload-artifact@v7
         with:
