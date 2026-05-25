@@ -490,6 +490,16 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     return super._isClearButtonVisible() && !this._isNativeType();
   }
 
+  _toggleEmptinessEventHandler(): void {
+    if (this._isNativeType()) {
+      this._toggleEmptiness(false);
+
+      return;
+    }
+
+    super._toggleEmptinessEventHandler();
+  }
+
   _renderValue(): DeferredObj<unknown> {
     const value = this.getDateOption('value');
 
