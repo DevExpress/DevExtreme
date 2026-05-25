@@ -1,22 +1,22 @@
-import Color from '@js/color';
 import type { ApplyValueMode } from '@js/common';
-import { locate, move } from '@js/common/core/animation/translator';
-import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
-import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import devices from '@js/core/devices';
-import Guid from '@js/core/guid';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
-import { getHeight, getOuterHeight, getWidth } from '@js/core/utils/size';
-import Draggable from '@js/ui/draggable';
+import { locate, move } from '@ts/common/core/animation/translator';
+import messageLocalization from '@ts/core/localization/message';
+import devices from '@ts/core/m_devices';
+import { Guid } from '@ts/core/m_guid';
+import { extend } from '@ts/core/utils/m_extend';
+import { getHeight, getOuterHeight, getWidth } from '@ts/core/utils/m_size';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { EditorProperties } from '@ts/ui/editor/editor';
+import eventsEngine from '@ts/events/core/m_events_engine';
+import { name as clickEventName } from '@ts/events/m_click';
+import { isCommandKeyPressed } from '@ts/events/utils/index';
+import Color from '@ts/m_color';
+import Draggable from '@ts/m_draggable';
+import type { EditorProperties, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 import NumberBox from '@ts/ui/number_box/m_number_box';
 import TextBox from '@ts/ui/text_box/m_text_box';
@@ -67,6 +67,8 @@ const BLACK_COLOR = '#000000';
 export interface ColorViewProperties extends EditorProperties {
   keyStep?: number;
 
+  value?: string | null;
+
   matchValue?: string | null;
 
   editAlphaChannel?: boolean;
@@ -93,6 +95,7 @@ class ColorView extends Editor<ColorViewProperties> {
 
   _updateByDrag?: boolean;
 
+  // need typings and correct class in m_color.ts
   _currentColor!: any;
 
   _isTopColorHue?: boolean;
@@ -140,7 +143,7 @@ class ColorView extends Editor<ColorViewProperties> {
   _supportedKeys(): SupportedKeys {
     const { rtlEnabled: isRTL } = this.option();
 
-    const getHorizontalPaletteStep = (e) => {
+    const getHorizontalPaletteStep = (e: KeyboardEvent): number => {
       let step = 100 / this._paletteWidth;
       if (e.shiftKey) {
         const { keyStep } = this.option();
@@ -150,7 +153,17 @@ class ColorView extends Editor<ColorViewProperties> {
       step = step > 1 ? step : 1;
       return Math.round(step);
     };
-    const updateHorizontalPaletteValue = (step) => {
+
+    const updatePaletteValue = (): void => {
+      this._placePaletteHandle();
+      this._updateColorFromHsv(
+        this._currentColor.hsv.h,
+        this._currentColor.hsv.s,
+        this._currentColor.hsv.v,
+      );
+    };
+
+    const updateHorizontalPaletteValue = (step: number): void => {
       let value = this._currentColor.hsv.s + step;
 
       if (value > 100) {
@@ -162,7 +175,7 @@ class ColorView extends Editor<ColorViewProperties> {
       this._currentColor.hsv.s = value;
       updatePaletteValue();
     };
-    const getVerticalPaletteStep = (e) => {
+    const getVerticalPaletteStep = (e: KeyboardEvent): number => {
       let step = 100 / this._paletteHeight;
       if (e.shiftKey) {
         const { keyStep } = this.option();
@@ -172,7 +185,7 @@ class ColorView extends Editor<ColorViewProperties> {
       step = step > 1 ? step : 1;
       return Math.round(step);
     };
-    const updateVerticalPaletteValue = (step) => {
+    const updateVerticalPaletteValue = (step: number): void => {
       let value = this._currentColor.hsv.v + step;
 
       if (value > 100) {
@@ -184,15 +197,7 @@ class ColorView extends Editor<ColorViewProperties> {
       this._currentColor.hsv.v = value;
       updatePaletteValue();
     };
-    const updatePaletteValue = (): void => {
-      this._placePaletteHandle();
-      this._updateColorFromHsv(
-        this._currentColor.hsv.h,
-        this._currentColor.hsv.s,
-        this._currentColor.hsv.v,
-      );
-    };
-    const getHueScaleStep = (e): number => {
+    const getHueScaleStep = (e: KeyboardEvent): number => {
       let step = 360 / (this._hueScaleWrapperHeight - this._hueScaleHandleHeight);
       if (e.shiftKey) {
         const { keyStep } = this.option();
@@ -202,13 +207,13 @@ class ColorView extends Editor<ColorViewProperties> {
       step = step > 1 ? step : 1;
       return step;
     };
-    const updateHueScaleValue = (step) => {
+    const updateHueScaleValue = (step: number): void => {
       this._currentColor.hsv.h += step;
       this._placeHueScaleHandle();
       const handleLocation = locate(this._$hueScaleHandle);
       this._updateColorHue(handleLocation.top + this._hueScaleHandleHeight / 2);
     };
-    const getAlphaScaleStep = (e) => {
+    const getAlphaScaleStep = (e: KeyboardEvent): number => {
       let step = 1 / this._alphaChannelScaleWorkWidth;
       if (e.shiftKey) {
         const { keyStep } = this.option();
@@ -219,7 +224,7 @@ class ColorView extends Editor<ColorViewProperties> {
       step = isRTL ? -step : step;
       return step;
     };
-    const updateAlphaScaleValue = (step) => {
+    const updateAlphaScaleValue = (step: number): void => {
       this._currentColor.a += step;
       this._placeAlphaChannelHandle();
       const handleLocation = locate(this._$alphaChannelHandle);
@@ -329,7 +334,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this._onEnterKeyPressedAction = this._createActionByOption('onEnterKeyPressed');
   }
 
-  _fireEnterKeyPressed = (e): void => {
+  _fireEnterKeyPressed = (e: KeyboardEvent): void => {
     if (!this._onEnterKeyPressedAction) return;
     this._onEnterKeyPressedAction({
       event: e,
@@ -341,8 +346,8 @@ class ColorView extends Editor<ColorViewProperties> {
     this._setCurrentColor(value);
   }
 
-  _setCurrentColor(value): void {
-    value = value || BLACK_COLOR;
+  _setCurrentColor(currentValue: string | null | undefined): void {
+    const value = currentValue ?? BLACK_COLOR;
     const newColor = new Color(value);
     if (!newColor.colorIsInvalid) {
       if (!this._currentColor || this._makeRgba(this._currentColor) !== this._makeRgba(newColor)) {
@@ -359,8 +364,8 @@ class ColorView extends Editor<ColorViewProperties> {
     }
   }
 
-  _setBaseColor(value): void {
-    const color = value || BLACK_COLOR;
+  _setBaseColor(baseValue: string | null | undefined): void {
+    const color = baseValue ?? BLACK_COLOR;
     const newColor = new Color(color);
 
     if (!newColor.colorIsInvalid) {
@@ -391,7 +396,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this._renderAlphaChannelElements();
   }
 
-  _makeTransparentBackground($el, color): void {
+  _makeTransparentBackground($el: dxElementWrapper, color: any): void {
     if (!(color instanceof Color)) {
       color = new Color(color);
     }
@@ -399,7 +404,7 @@ class ColorView extends Editor<ColorViewProperties> {
     $el.css('backgroundColor', this._makeRgba(color));
   }
 
-  _makeRgba(color): string {
+  _makeRgba(color: any): string {
     if (!(color instanceof Color)) {
       color = new Color(color);
     }
@@ -407,7 +412,7 @@ class ColorView extends Editor<ColorViewProperties> {
     return `rgba(${[color.r, color.g, color.b, color.a].join(', ')})`;
   }
 
-  _renderColorPickerContainer() {
+  _renderColorPickerContainer(): void {
     const $parent = this.$element();
     this._$colorPickerContainer = $('<div>').addClass(COLOR_VIEW_CONTAINER_CLASS)
       .appendTo($parent);
@@ -443,15 +448,23 @@ class ColorView extends Editor<ColorViewProperties> {
     }
   }
 
-  _renderHtmlCellInsideRow(index, $rowParent, additionalClass?): dxElementWrapper {
+  _renderHtmlCellInsideRow(
+    index: number,
+    $rowParent: dxElementWrapper,
+    additionalClass?: string,
+  ): dxElementWrapper {
     return $('<div>')
       .addClass(COLOR_VIEW_CELL_CLASS)
-      .addClass(additionalClass)
+      .addClass(additionalClass ?? '')
       .appendTo($rowParent.find(`.${COLOR_VIEW_ROW_CLASS}`).eq(index));
   }
 
   _renderPalette(): void {
-    const $paletteCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer, COLOR_VIEW_PALETTE_CELL_CLASS);
+    const $paletteCell = this._renderHtmlCellInsideRow(
+      0,
+      this._$colorPickerContainer,
+      COLOR_VIEW_PALETTE_CELL_CLASS,
+    );
     const $paletteGradientWhite = $('<div>').addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_WHITE_CLASS].join(' '));
     const $paletteGradientBlack = $('<div>').addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_BLACK_CLASS].join(' '));
 
@@ -484,13 +497,14 @@ class ColorView extends Editor<ColorViewProperties> {
 
     this._createComponent(this._$paletteHandle, Draggable, {
       contentTemplate: null,
+      // @ts-expect-error need to fix type for Draggable boundary option
       boundary: this._$palette,
       allowMoveByClick: true,
       boundOffset: () => -this._paletteHandleHeight / 2,
       onDragMove: ({ event }) => {
         const paletteHandlePosition = locate(this._$paletteHandle);
         this._updateByDrag = true;
-        this._saveValueChangeEvent(event);
+        this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
         this._updateColorFromHsv(
           this._currentColor.hsv.h,
           this._calculateColorSaturation(paletteHandlePosition),
@@ -518,17 +532,17 @@ class ColorView extends Editor<ColorViewProperties> {
     });
   }
 
-  _calculateColorValue(paletteHandlePosition): number {
+  _calculateColorValue(paletteHandlePosition: { top: number; left: number }): number {
     const value = Math.floor(paletteHandlePosition.top + this._paletteHandleHeight / 2);
     return 100 - Math.round(value * 100 / this._paletteHeight);
   }
 
-  _calculateColorSaturation(paletteHandlePosition): number {
+  _calculateColorSaturation(paletteHandlePosition: { top: number; left: number }): number {
     const saturation = Math.floor(paletteHandlePosition.left + this._paletteHandleWidth / 2);
     return Math.round(saturation * 100 / this._paletteWidth);
   }
 
-  _updateColorFromHsv(hue, saturation, value): void {
+  _updateColorFromHsv(hue: number, saturation: number, value: number): void {
     const { a } = this._currentColor;
     this._currentColor = new Color(`hsv(${[hue, saturation, value].join(',')})`);
     this._currentColor.a = a;
@@ -564,12 +578,13 @@ class ColorView extends Editor<ColorViewProperties> {
         .appendTo(this._$hueScaleWrapper);
       this._createComponent(this._$hueScaleHandle, Draggable, {
         contentTemplate: null,
+        // @ts-expect-error need to fix type for Draggable boundary option
         boundary: this._$hueScaleWrapper,
         allowMoveByClick: true,
         dragDirection: 'vertical',
         onDragMove: ({ event }) => {
           this._updateByDrag = true;
-          this._saveValueChangeEvent(event);
+          this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
           this._updateColorHue(locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
         },
       });
@@ -648,7 +663,7 @@ class ColorView extends Editor<ColorViewProperties> {
     $colorsPreviewContainerInner.append([this._$baseColor, this._$currentColor]);
   }
 
-  _renderAlphaChannelElements() {
+  _renderAlphaChannelElements():void {
     const { editAlphaChannel } = this.option();
     if (editAlphaChannel) {
       this._$colorPickerContainer
@@ -787,7 +802,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this._renderAlphaChannelHandle($alphaChannelScaleCell);
   }
 
-  _makeCSSLinearGradient($el): void {
+  _makeCSSLinearGradient($el: dxElementWrapper): void {
     const { rtlEnabled } = this.option();
     const color = this._currentColor;
     const colorAsRgb = `${color.r},${color.g},${color.b}`;
@@ -799,7 +814,6 @@ class ColorView extends Editor<ColorViewProperties> {
   }
 
   _renderAlphaChannelInput(): void {
-    // const that = this;
     const $alphaChannelInputCell = this._renderHtmlCellInsideRow(1, this._$colorPickerContainer);
 
     const editorWithLabel = this._renderEditorWithLabel({
@@ -828,12 +842,13 @@ class ColorView extends Editor<ColorViewProperties> {
     this.applyColor();
   }
 
-  _renderAlphaChannelHandle($parent): void {
+  _renderAlphaChannelHandle($parent: dxElementWrapper): void {
     this._$alphaChannelHandle = $('<div>')
       .addClass(COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS)
       .appendTo($parent);
     this._createComponent(this._$alphaChannelHandle, Draggable, {
       contentTemplate: null,
+      // @ts-expect-error need to fix type for Draggable
       boundary: $parent,
       allowMoveByClick: true,
       dragDirection: 'horizontal',
@@ -841,7 +856,7 @@ class ColorView extends Editor<ColorViewProperties> {
         this._updateByDrag = true;
         const $alphaChannelHandle = this._$alphaChannelHandle;
         const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
-        this._saveValueChangeEvent(event);
+        this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
         this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
       },
     });
@@ -853,7 +868,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this._placeAlphaChannelHandle();
   }
 
-  _calculateColorTransparencyByScaleWidth(handlePosition) {
+  _calculateColorTransparencyByScaleWidth(handlePosition: number): void {
     let transparency = (handlePosition - this._alphaChannelHandleWidth / 2)
        / this._alphaChannelScaleWorkWidth;
     const { rtlEnabled } = this.option();
@@ -897,7 +912,9 @@ class ColorView extends Editor<ColorViewProperties> {
     const { value: previousValue, editAlphaChannel } = this.option();
     const colorValue = editAlphaChannel
       ? this._makeRgba(this._currentColor) : this._currentColor.toHex();
-    this._makeTransparentBackground(this._$currentColor, this._currentColor);
+    if (this._$currentColor) {
+      this._makeTransparentBackground(this._$currentColor, this._currentColor);
+    }
 
     if (colorValue === previousValue) {
       this._updateByDrag = false;
@@ -911,13 +928,12 @@ class ColorView extends Editor<ColorViewProperties> {
     this._refreshMarkup();
   }
 
-  _updateColor(isHex, args): void {
+  _updateColor(isHex: boolean, args: ValueChangedEvent): void {
     let rgba;
-    let newColor;
+    let newColor = '';
 
     if (isHex) {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      newColor = this._validateHex(`#${this._hexInput.option('value')}`);
+      newColor = this._validateHex(`#${this._hexInput.option('value') as string}`);
     } else {
       rgba = this._validateRgb();
       if (this._alphaChannelInput) {
@@ -930,14 +946,14 @@ class ColorView extends Editor<ColorViewProperties> {
 
     if (!this._suppressEditorsValueUpdating) {
       this._currentColor = new Color(newColor);
-      this._saveValueChangeEvent(args.event);
+      this._saveValueChangeEvent(args.event as unknown as ValueChangedEvent);
       this.applyColor();
       this._refreshMarkup();
     }
   }
 
-  _validateHex(hex) {
-    return this._currentColor.isValidHex(hex) ? hex : this._currentColor.toHex();
+  _validateHex(hex: string): string {
+    return this._currentColor.isValidHex(hex) ? hex : this._currentColor.toHex() as string;
   }
 
   _validateRgb(): number[] {
@@ -975,7 +991,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this._suppressEditorsValueUpdating = false;
 
     if (editAlphaChannel && this._$alphaChannelScale) {
-      this._makeCSSLinearGradient.call(this, this._$alphaChannelScale);
+      this._makeCSSLinearGradient(this._$alphaChannelScale);
       this._alphaChannelInput.option('value', this._currentColor.a);
     }
   }
@@ -991,7 +1007,7 @@ class ColorView extends Editor<ColorViewProperties> {
         }
 
         this._updateByDrag = false;
-        super._optionChanged({ ...args, value: this.option('value') });
+        super._optionChanged({ ...args, value: this.option('value') as string });
         break;
       case 'matchValue':
         this._setBaseColor(value);

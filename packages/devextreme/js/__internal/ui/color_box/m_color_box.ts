@@ -1,10 +1,10 @@
-import Color from '@js/color';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties } from '@js/ui/color_box';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Color from '@ts/m_color';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 
@@ -266,8 +266,8 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     return false;
   };
 
-  _applyButtonHandler(e): void {
-    this._saveValueChangeEvent(e.event);
+  _applyButtonHandler(e: ValueChangedEvent): void {
+    this._saveValueChangeEvent(e.event as unknown as ValueChangedEvent);
     const { value } = this._colorView.option();
     this._applyNewColor(value);
 
@@ -280,6 +280,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     super._cancelButtonHandler();
   }
 
+  // needed to be typed in widget.ts
   _getKeyboardListeners():any[] {
     return super._getKeyboardListeners().concat([this._colorView]);
   }
@@ -356,7 +357,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     this._updateColorViewValue(value);
   }
 
-  _updateColorViewValue(value): void {
+  _updateColorViewValue(value: string | null | undefined): void {
     if (this._colorView) {
       this._colorView.option({
         value,
@@ -365,7 +366,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     }
   }
 
-  _valueChangeEventHandler(e): void {
+  _valueChangeEventHandler(e: ValueChangedEvent): void {
     let value = this._input().val();
 
     if (value) {
