@@ -116,6 +116,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       editAlphaChannel: false,
       applyValueMode: 'useButtons',
       keyStep: 1,
+      // @ts-expect-error fieldTemplate is deprecated --- IGNORE ---
       fieldTemplate: null,
       buttonsLocation: 'bottom after',
     };
@@ -203,11 +204,12 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       focusStateEnabled,
       stylingMode,
       target: this._input(),
-      onEnterKeyPressed: ({ event }: ValueChangedEvent): void => {
+      onEnterKeyPressed: (e: ValueChangedEvent<KeyboardEvent>): void => {
+        const { event } = e;
         const { value: optionValue } = this.option();
         this._colorViewEnterKeyPressed = true;
         if (this._colorView.option('value') !== optionValue) {
-          this._saveValueChangeEvent(event as ValueChangedEvent | undefined);
+          this._saveValueChangeEvent(event);
           const { value: colorViewValue } = this._colorView.option();
           this._applyNewColor(colorViewValue);
           this.close();
@@ -216,24 +218,24 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
 
       onValueChanged: ({ event, value: changedValue, previousValue }): void => {
         const { applyValueMode: currentValueMode } = this.option();
-        const instantlyMode = currentValueMode === 'instantly';
+        const isInstantlyMode = currentValueMode === 'instantly';
         const isOldValue = colorUtils.makeRgba(changedValue) === previousValue;
-        const changesApplied = instantlyMode || this._colorViewEnterKeyPressed;
-        const valueCleared = this._shouldSaveEmptyValue;
+        const isChangesApplied = isInstantlyMode || this._colorViewEnterKeyPressed;
+        const isValueCleared = this._shouldSaveEmptyValue;
 
-        if (isOldValue || !changesApplied || valueCleared) {
+        if (isOldValue || !isChangesApplied || isValueCleared) {
           return;
         }
 
         if (event) {
-          this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
+          this._saveValueChangeEvent(event);
         }
         this._applyNewColor(changedValue);
       },
     };
   }
 
-  _enterKeyHandler = (e: KeyboardEvent): boolean | undefined => {
+  _enterKeyHandler(e: KeyboardEvent): boolean | undefined {
     const newValue = this._input().val();
     const { value, editAlphaChannel } = this.option();
     const oldValue = value && editAlphaChannel ? colorUtils.makeRgba(value) : value;
@@ -248,8 +250,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     }
     if (newValue !== oldValue) {
       this._applyColorFromInput(newValue);
-      // TODO: _saveValueChangeEvent should accept DxEvent, not ValueChangedEvent
-      this._saveValueChangeEvent(e as unknown as ValueChangedEvent);
+      this._saveValueChangeEvent(e);
       this.option('value', editAlphaChannel ? colorUtils.makeRgba(newValue) : newValue);
     }
 
@@ -257,17 +258,17 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       const { value: colorViewValue } = this._colorView.option();
 
       if (value !== colorViewValue) {
-        this._saveValueChangeEvent(e as unknown as ValueChangedEvent);
+        this._saveValueChangeEvent(e);
         this.option('value', colorViewValue);
       }
     }
 
     this.close();
     return false;
-  };
+  }
 
   _applyButtonHandler(e: ValueChangedEvent): void {
-    this._saveValueChangeEvent(e.event as unknown as ValueChangedEvent);
+    this._saveValueChangeEvent(e.event);
     const { value } = this._colorView.option();
     this._applyNewColor(value);
 
@@ -281,7 +282,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   }
 
   // needed to be typed in widget.ts
-  _getKeyboardListeners():any[] {
+  _getKeyboardListeners(): any[] {
     return super._getKeyboardListeners().concat([this._colorView]);
   }
 
@@ -383,7 +384,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
 
     if (newColor.colorIsInvalid) {
       this._resetInputValue();
-      return optionValue as string;
+      return optionValue ?? '';
     }
 
     if (editAlphaChannel) {

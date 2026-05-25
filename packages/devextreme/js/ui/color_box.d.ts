@@ -199,7 +199,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @public
      * @deprecated dxDropDownEditorOptions.fieldAddons
      */
-    fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement) | null;
+    fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 1

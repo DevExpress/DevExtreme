@@ -334,12 +334,12 @@ class ColorView extends Editor<ColorViewProperties> {
     this._onEnterKeyPressedAction = this._createActionByOption('onEnterKeyPressed');
   }
 
-  _fireEnterKeyPressed = (e: KeyboardEvent): void => {
+  _fireEnterKeyPressed(e: KeyboardEvent): void {
     if (!this._onEnterKeyPressedAction) return;
     this._onEnterKeyPressedAction({
       event: e,
     });
-  };
+  }
 
   _initColorAndOpacity(): void {
     const { value } = this.option();
@@ -504,7 +504,7 @@ class ColorView extends Editor<ColorViewProperties> {
       onDragMove: ({ event }) => {
         const paletteHandlePosition = locate(this._$paletteHandle);
         this._updateByDrag = true;
-        this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
+        this._saveValueChangeEvent(event);
         this._updateColorFromHsv(
           this._currentColor.hsv.h,
           this._calculateColorSaturation(paletteHandlePosition),
@@ -584,7 +584,7 @@ class ColorView extends Editor<ColorViewProperties> {
         dragDirection: 'vertical',
         onDragMove: ({ event }) => {
           this._updateByDrag = true;
-          this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
+          this._saveValueChangeEvent(event);
           this._updateColorHue(locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
         },
       });
@@ -856,7 +856,7 @@ class ColorView extends Editor<ColorViewProperties> {
         this._updateByDrag = true;
         const $alphaChannelHandle = this._$alphaChannelHandle;
         const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
-        this._saveValueChangeEvent(event as unknown as ValueChangedEvent);
+        this._saveValueChangeEvent(event);
         this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
       },
     });
@@ -946,7 +946,7 @@ class ColorView extends Editor<ColorViewProperties> {
 
     if (!this._suppressEditorsValueUpdating) {
       this._currentColor = new Color(newColor);
-      this._saveValueChangeEvent(args.event as unknown as ValueChangedEvent);
+      this._saveValueChangeEvent(args.event);
       this.applyColor();
       this._refreshMarkup();
     }
