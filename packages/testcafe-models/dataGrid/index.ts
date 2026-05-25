@@ -1039,7 +1039,7 @@ export default class DataGrid extends GridCore {
   }
 
   getAIAssistantChat(): AIAssistantChat {
-    return new AIAssistantChat(this.body.find(`.${CLASS.aiAssistantChat}`));
+    return new AIAssistantChat(this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`));
   }
 
   getAIAssistantButton(): Selector {

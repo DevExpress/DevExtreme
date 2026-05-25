@@ -4,11 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
-// TODO: There’s an issue with taking screenshots in CI.
-// To avoid blocking this pull request (https://github.com/DevExpress/DevExtreme/pull/33265),
-// we decided to skip these tests.
-// We’ll need to unskip them in a separate task.
-fixture.skip`Ai Assistant.Visual`
+fixture`Ai Assistant.Visual`
   .page(url(__dirname, '../../../container-ai-integration.html'));
 
 const DATA_GRID_SELECTOR = '#container';
@@ -21,7 +17,7 @@ test('AI Assistant popup - empty state', async (t) => {
 
   await t.click(dataGrid.getAIAssistantButton());
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-empty-state.png', { element: dataGrid.getAIAssistantChat().element });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-empty-state.png', { element: dataGrid.getAIAssistantChat().content });
 
   await t
     .expect(compareResults.isValid())
@@ -66,7 +62,7 @@ test('AI Assistant popup - pending state', async (t) => {
 
   await t.expect(aiChat.getPendingMessages().exists).ok();
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-pending-state.png', { element: aiChat.element });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-pending-state.png', { element: aiChat.content });
 
   await t
     .expect(compareResults.isValid())
@@ -111,7 +107,7 @@ test('AI Assistant popup - success state', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().exists).ok();
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-state.png', { element: aiChat.element });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-state.png', { element: aiChat.content });
 
   await t
     .expect(compareResults.isValid())
@@ -133,7 +129,7 @@ test('AI Assistant popup - success state', async (t) => {
         return {
           promise: Promise.resolve(JSON.stringify({
             actions: [
-              { name: 'Column sorted successfully', args: {} },
+              { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
             ],
           })),
           abort: (): void => {},
@@ -160,7 +156,7 @@ test('AI Assistant popup - success state with multiple commands', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().exists).ok();
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-multiple-commands.png', { element: aiChat.element });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-multiple-commands.png', { element: aiChat.content });
 
   await t
     .expect(compareResults.isValid())
@@ -182,8 +178,15 @@ test('AI Assistant popup - success state with multiple commands', async (t) => {
         return {
           promise: Promise.resolve(JSON.stringify({
             actions: [
-              { name: 'Column sorted successfully', args: {} },
-              { name: 'Filter applied successfully', args: {} },
+              { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
+              {
+                name: 'filterValue',
+                args: {
+                  expression: {
+                    type: 'basic', field: 'value', operator: '>', value: 10,
+                  },
+                },
+              },
             ],
           })),
           abort: (): void => {},
@@ -210,7 +213,7 @@ test('AI Assistant popup - success with error command', async (t) => {
 
   await t.expect(aiChat.getErrorMessages().exists).ok();
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-with-error-command.png', { element: aiChat.element });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-with-error-command.png', { element: aiChat.content });
 
   await t
     .expect(compareResults.isValid())
@@ -260,7 +263,7 @@ test('AI Assistant popup - error state', async (t) => {
 
   await t.expect(aiChat.getErrorMessages().exists).ok();
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-error-state.png', { element: aiChat.element });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-error-state.png', { element: aiChat.content });
 
   await t
     .expect(compareResults.isValid())
@@ -311,7 +314,7 @@ test('AI Assistant popup - multiple messages', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-multiple-messages.png', { element: aiChat.element });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-multiple-messages.png', { element: aiChat.content });
 
   await t
     .expect(compareResults.isValid())
