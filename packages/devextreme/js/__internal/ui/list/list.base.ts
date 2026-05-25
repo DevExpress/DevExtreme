@@ -996,9 +996,16 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     };
 
     this.setAria(elementAria, this.$element());
-    this.setAria({ role: 'application' }, this._focusTarget());
 
     this._setListAria();
+  }
+
+  _renderEmptyMessage(rootNodes?: Item[]): boolean {
+    const isEmpty = super._renderEmptyMessage(rootNodes);
+
+    this.setAria({ role: isEmpty ? undefined : 'application' }, this._focusTarget());
+
+    return isEmpty;
   }
 
   _isMultiSelectMode(): boolean {
