@@ -53,7 +53,16 @@ test('AI Assistant popup - pending state', async (t) => {
 
   await t.click(dataGrid.getAIAssistantButton());
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-pending-state.png', { element: dataGrid.getAIAssistantChat().content });
+  const aiChat = dataGrid.getAIAssistantChat();
+  const chat = aiChat.getChat();
+
+  await t
+    .typeText(chat.getInput(), 'Sort by name')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getPendingMessages().exists).ok();
+
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-pending-state.png', { element: aiChat.content });
 
   await t
     .expect(compareResults.isValid())
@@ -80,25 +89,6 @@ test('AI Assistant popup - pending state', async (t) => {
         };
       },
     }),
-
-    chat: {
-      // Stub messages for AIChat message state testing
-      dataSource: [
-        {
-          id: 1,
-          author: { id: 'user' },
-          text: 'Sort by Region',
-        },
-        {
-          id: 2,
-          author: { id: 'assistant' },
-          headerText: 'Request in progress',
-          status: 'pending',
-          text: 'pending',
-        },
-      ],
-      user: { id: 'user' },
-    },
   },
 })));
 
