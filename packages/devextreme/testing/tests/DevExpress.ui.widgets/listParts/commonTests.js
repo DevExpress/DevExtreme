@@ -5276,4 +5276,35 @@ QUnit.module('Accessibility', () => {
             'checkbox aria-label updated after runtime change');
     });
 
+    [true, false].forEach(repaintChangesOnly => {
+        ['items', 'dataSource'].forEach(source => {
+            QUnit.test(`scrollview-content should not have role when ${source} is empty on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+                const instance = $('#list').dxList({ [source]: [], repaintChangesOnly }).dxList('instance');
+
+                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), null);
+            });
+
+            QUnit.test(`scrollview-content should have role="application" when ${source} has items on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+                const instance = $('#list').dxList({ [source]: ['Item 1'], repaintChangesOnly }).dxList('instance');
+
+                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), 'application');
+            });
+
+            QUnit.test(`scrollview-content role should be removed when ${source} are removed in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+                const instance = $('#list').dxList({ [source]: ['Item 1'], repaintChangesOnly }).dxList('instance');
+
+                instance.option(source, []);
+
+                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), null);
+            });
+
+            QUnit.test(`scrollview-content role should be restored when ${source} are added in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+                const instance = $('#list').dxList({ [source]: [], repaintChangesOnly }).dxList('instance');
+
+                instance.option(source, ['Item 1']);
+
+                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), 'application');
+            });
+        });
+    });
 });
