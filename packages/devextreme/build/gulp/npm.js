@@ -1,7 +1,5 @@
 'use strict';
 
-require('./ts');
-
 const eol = require('gulp-eol');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
@@ -156,7 +154,8 @@ const packagePath = `${resultPath}/${packageDir}`;
 const distPath = `${resultPath}/${packageDistDir}`;
 
 gulp.task('npm-sources', gulp.series(
-    'ts-sources',
+    shell.task('pnpm nx run devextreme:build:npm:dts-modules'),
+    shell.task('pnpm nx run devextreme:build:npm:dts-bundle'),
     () => gulp
         .src(devextremeDistWorkspacePackageJsonPath)
         .pipe(
@@ -212,4 +211,4 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass'));
+gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'npm-sass'));

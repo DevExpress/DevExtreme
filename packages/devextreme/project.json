@@ -821,8 +821,7 @@
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",
         "{projectRoot}/build/gulp/modules_metadata.json"
-      ],
-      "outputs": ["{projectRoot}/artifacts/globals.ts"]
+      ]
     },
     "copy:ts-vendor": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
@@ -854,8 +853,7 @@
       "outputs": [
         "{projectRoot}/artifacts/ts",
         "{projectRoot}/artifacts/ts/dx.all.d.ts",
-        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts",
-        "{projectRoot}/artifacts/globals.ts"
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts"
       ]
     },
     "compress:ts-modules": {
@@ -1303,7 +1301,6 @@
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
         "{projectRoot}/build/gulp/modules_metadata.json"
       ],
-      "outputs": ["{projectRoot}/artifacts/modules.ts"],
       "configurations": {
         "internal": {
           "internalPackage": true,

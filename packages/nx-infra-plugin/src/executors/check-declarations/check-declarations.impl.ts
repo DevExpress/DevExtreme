@@ -179,6 +179,28 @@ async function writeCheckEntryFile(
   return entryPath;
 }
 
+async function removeCheckEntryFile(entryPath: string): Promise<void> {
+  try {
+    await fs.promises.unlink(entryPath);
+    logger.verbose(`Removed check entry file: ${entryPath}`);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+      throw error;
+    }
+  }
+}
+
+async function runTypeCheckWithTemporaryEntry(
+  entryPath: string,
+  typeCheck: () => Promise<void>,
+): Promise<void> {
+  try {
+    await typeCheck();
+  } finally {
+    await removeCheckEntryFile(entryPath);
+  }
+}
+
 async function runModeCheck(resolved: ResolvedCheckDeclarations): Promise<void> {
   const { projectRoot, mode } = resolved;
 
@@ -191,12 +213,14 @@ async function runModeCheck(resolved: ResolvedCheckDeclarations): Promise<void> 
         'globals.ts',
         content,
       );
-      await runDeclarationsTypeCheck({
-        projectRoot,
-        rootNames: [entryPath],
-        typescriptModule: resolved.typescriptModule,
-        compilerOptions: resolved.extraCompilerOptions,
-      });
+      await runTypeCheckWithTemporaryEntry(entryPath, () =>
+        runDeclarationsTypeCheck({
+          projectRoot,
+          rootNames: [entryPath],
+          typescriptModule: resolved.typescriptModule,
+          compilerOptions: resolved.extraCompilerOptions,
+        }),
+      );
       break;
     }
     case 'bundle': {
@@ -230,15 +254,17 @@ async function runModeCheck(resolved: ResolvedCheckDeclarations): Promise<void> 
         'modules.ts',
         content,
       );
-      await runDeclarationsTypeCheck({
-        projectRoot,
-        rootNames: [entryPath],
-        typescriptModule: resolved.typescriptModule,
-        compilerOptions: {
-          allowSyntheticDefaultImports: true,
-          ...resolved.extraCompilerOptions,
-        },
-      });
+      await runTypeCheckWithTemporaryEntry(entryPath, () =>
+        runDeclarationsTypeCheck({
+          projectRoot,
+          rootNames: [entryPath],
+          typescriptModule: resolved.typescriptModule,
+          compilerOptions: {
+            allowSyntheticDefaultImports: true,
+            ...resolved.extraCompilerOptions,
+          },
+        }),
+      );
       break;
     }
     default: {

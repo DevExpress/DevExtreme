@@ -31,7 +31,6 @@ gulp.task('clean', function(callback) {
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
-require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/systemjs');
 
@@ -68,6 +67,8 @@ gulp.task('aspnet', shell.task(
 ));
 
 gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
+
+gulp.task('ts', shell.task('pnpm nx run devextreme:build:declarations'));
 
 gulp.task('check-license-notices', shell.task('pnpm nx run devextreme:verify:licenses'));
 
