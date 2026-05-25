@@ -842,7 +842,7 @@ jobs:
 
     - name: Update bundles config
       working-directory: apps/demos
-      run: pnpm exec gulp update-config
+      run: pnpm run update-config
 
     - name: Create bundles dir
       run: mkdir -p apps/demos/bundles
@@ -979,7 +979,7 @@ jobs:
 
       - name: Update bundles config
         working-directory: apps/demos
-        run: pnpm exec gulp update-config
+        run: pnpm run update-config
 
       - name: Create bundles dir
         run: mkdir -p apps/demos/bundles
