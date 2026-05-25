@@ -4,29 +4,11 @@
 const gulp = require('gulp');
 const multiProcess = require('gulp-multi-process');
 const env = require('./build/gulp/env-variables');
-const cache = require('gulp-cache');
 const shell = require('gulp-shell');
 const context = require('./build/gulp/context');
 const { REMOVE_NON_PRODUCTION_MODULE } = context;
 
-gulp.task('clean', function(callback) {
-    require('del').sync([
-        'artifacts/**',
-        '!artifacts',
-        '!artifacts/css',
-        '!artifacts/css/*',
-        '!artifacts/css/fonts',
-        '!artifacts/css/fonts/*',
-        '!artifacts/css/icons',
-        '!artifacts/css/icons/*',
-        '!artifacts/npm',
-        '!artifacts/npm/devextreme',
-        '!artifacts/npm/devextreme/*.json',
-        '!artifacts/npm/devextreme-dist',
-    ]);
-    cache.clearAll();
-    callback();
-});
+gulp.task('clean', shell.task('pnpm nx clean:artifacts devextreme'));
 
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');

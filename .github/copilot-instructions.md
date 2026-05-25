@@ -64,7 +64,7 @@ For the full executor catalogue, conventions, and refactoring guidance, see @pac
 
 ## Build Pipeline
 
-localization → component generation (Renovation) → transpile (`babel-transform` for JS, `build-typescript` for TS) → bundle (Webpack via `devextreme-nx-infra-plugin:bundle`, debug + prod targets) → TypeScript declarations → SCSS compile (`devextreme-scss`) → npm package preparation. Task orchestration goes through Nx; cross-package builds (`all:build-dev`, `all:build`) live in the `workflows` package. Pre-commit hook runs `lint-staged` (stylelint + eslint --quiet).
+clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → localization → component generation (Renovation) → transpile (`babel-transform` for JS, `build-typescript` for TS) → bundle (Webpack via `devextreme-nx-infra-plugin:bundle`, debug + prod targets) → TypeScript declarations → SCSS compile (`devextreme-scss`) → npm package preparation. Task orchestration goes through Nx; cross-package builds (`all:build-dev`, `all:build`) live in the `workflows` package. The `gulpfile.js` clean task is a thin delegate to `pnpm nx clean:artifacts devextreme`. Pre-commit hook runs `lint-staged` (stylelint + eslint --quiet).
 
 ## Conventions
 
