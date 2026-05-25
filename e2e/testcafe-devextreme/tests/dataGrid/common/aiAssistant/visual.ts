@@ -294,6 +294,71 @@ test('AI Assistant popup - failure with error command', async (t) => {
   },
 })));
 
+test('AI Assistant popup - failure with aborted command', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-with-aborted-command.png', { element: dataGrid.getAIAssistantChat().content });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', () => ({
+  dataSource: [
+    { id: 1, name: 'Name 1', value: 10 },
+    { id: 2, name: 'Name 2', value: 20 },
+    { id: 3, name: 'Name 3', value: 30 },
+  ],
+  keyExpr: 'id',
+  columns: ['id', 'name', 'value'],
+  showBorders: true,
+  aiAssistant: {
+    enabled: true,
+
+    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+      sendRequest() {
+        return {
+          promise: new Promise(() => {}),
+          abort: (): void => {},
+        };
+      },
+    }),
+
+    chat: {
+      // Stub messages for AIChat message state testing
+      dataSource: [
+        {
+          id: 1,
+          author: { id: 'user' },
+          text: 'Sort by name and filter',
+        },
+        {
+          id: 2,
+          author: { id: 'assistant' },
+          headerText: 'Sorting and Filtering',
+          status: 'failure',
+          text: 'failure',
+          commands: [
+            {
+              status: 'success',
+              message: 'Sort data against "Name" in ascending order.',
+            },
+            {
+              status: 'aborted',
+              message: 'Execution Interrupted',
+            },
+          ],
+        },
+      ],
+      user: { id: 'user' },
+    },
+  },
+})));
+
 test('AI Assistant popup - error state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
