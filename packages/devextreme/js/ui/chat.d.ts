@@ -397,6 +397,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @default true
      * @public
      */
+    a1?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
     activeStateEnabled?: boolean;
     /**
      * @docid

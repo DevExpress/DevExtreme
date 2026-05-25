@@ -119,6 +119,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     instance: DxChat = null;
 
     /**
+     * [descr:dxChatOptions.a1]
+    
+     */
+    @Input()
+    get a1(): boolean {
+        return this._getOption('a1');
+    }
+    set a1(value: boolean) {
+        this._setOption('a1', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.accessKey]
     
      */
@@ -635,6 +648,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() a1Change: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
@@ -881,6 +901,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'typingEnd', emit: 'onTypingEnd' },
             { subscribe: 'typingStart', emit: 'onTypingStart' },
+            { emit: 'a1Change' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'alertsChange' },

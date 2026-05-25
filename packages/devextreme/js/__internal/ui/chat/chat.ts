@@ -184,6 +184,7 @@ class Chat extends Widget<ChatProperties> {
   }
 
   _initMarkup(): void {
+    // test comment
     $(this.element()).addClass(CHAT_CLASS);
 
     super._initMarkup();
