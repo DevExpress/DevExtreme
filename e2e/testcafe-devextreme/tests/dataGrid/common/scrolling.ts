@@ -2115,3 +2115,82 @@ test('Horizontal scrollbar should not appear when columnHidingEnabled is true an
     useNative: true,
   },
 }));
+
+test('navigateToRow should scroll to the correct row with virtual scrolling (T1220800)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const targetKey = 901;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await dataGrid.apiNavigateToRow(targetKey);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.getDataCells(0).nth(0).textContent)
+    .eql(String(targetKey));
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t.expect(visibleRows[0].key).eql(targetKey, `Row with key ${targetKey} should be the first visible row after navigation`);
+}).before(async (t) => {
+  const initStore = ClientFunction(() => {
+    const getItems = (): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < 1000000; i += 1) {
+        items.push({
+          ID: i + 1,
+          Name: `Name ${i + 1}`,
+          Description: `Text text text text text text text text text text ${i + 1}`,
+        });
+      }
+      return items;
+    };
+
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'ID',
+      data: getItems(),
+    });
+  });
+
+  await initStore.with({ boundTestRun: t })();
+
+  return createWidget('dxDataGrid', () => ({
+    dataSource: new (window as any).DevExpress.data.CustomStore({
+      key: 'ID',
+      loadMode: 'raw',
+      load(loadOptions) {
+        return new Promise((resolve) => {
+          (window as any).myStore.load(loadOptions).done((data) => {
+            resolve(data);
+          });
+        });
+      },
+      totalCount() {
+        return (window as any).myStore.totalCount();
+      },
+    }),
+    width: 900,
+    height: 250,
+    wordWrapEnabled: true,
+    showBorders: true,
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      useNative: false,
+    },
+    paging: {
+      pageSize: 20,
+    },
+    columns: [
+      {
+        dataField: 'ID',
+        width: 90,
+      },
+      'Name',
+      'Description',
+    ],
+  }));
+});

@@ -190,8 +190,16 @@ export default class DataGrid extends GridCore {
     return this.getRowsView().find(`.${CLASS.row}`);
   }
 
+  getDataRows(): Selector {
+    return this.getRows().filter(`.${CLASS.dataRow}`);
+  }
+
   getCells(): Selector {
     return this.getRowsView().find('td');
+  }
+
+  getDataCells(rowIndex: number): Selector {
+    return this.getDataRows().nth(rowIndex).find('td');
   }
 
   getDataRow(index: number): DataRow {
@@ -962,8 +970,10 @@ export default class DataGrid extends GridCore {
       const isElementInRowsView = (element) => {
         const rowsViewRect = rowsViewElement[0].getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
+        const tolerance = 1;
 
-        return elementRect.top >= rowsViewRect.top && elementRect.bottom <= rowsViewRect.bottom;
+        return elementRect.top >= rowsViewRect.top - tolerance
+          && elementRect.bottom <= rowsViewRect.bottom + tolerance;
       };
       const rowElement = rowsViewElement.find('.dx-row-focused');
 
