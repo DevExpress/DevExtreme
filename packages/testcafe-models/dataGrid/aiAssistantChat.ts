@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import Popup from '../popup';
 import Button from '../button';
 import Chat from '../chat';
@@ -28,32 +29,36 @@ const CLASS = {
 };
 
 export class AIAssistantChat extends Popup {
+  getWrapper(): Selector {
+    return this.element;
+  }
+
   getChat(): Chat {
-    return new Chat(this.getWrapper().find(`.${CLASS.aiChatContent}`));
+    return new Chat(this.element.find(`.${CLASS.aiChatContent}`));
   }
 
   getCloseButton(): Button {
-    return new Button(this.getWrapper().find(`.${CLASS.closeButton}`));
+    return new Button(this.element.find(`.${CLASS.closeButton}`));
   }
 
   getClearChatButton(): Selector {
-    return this.getWrapper().find(`.${CLASS.clearChatButton}`);
+    return this.element.find(`.${CLASS.clearChatButton}`);
   }
 
   getMessages(): Selector {
-    return this.getWrapper().find(`.${CLASS.message}`);
+    return this.element.find(`.${CLASS.message}`);
   }
 
   getPendingMessages(): Selector {
-    return this.getWrapper().find(`.${CLASS.messagePending}`);
+    return this.element.find(`.${CLASS.messagePending}`);
   }
 
   getSuccessMessages(): Selector {
-    return this.getWrapper().find(`.${CLASS.messageSuccess}`);
+    return this.element.find(`.${CLASS.messageSuccess}`);
   }
 
   getErrorMessages(): Selector {
-    return this.getWrapper().find(`.${CLASS.messageError}`);
+    return this.element.find(`.${CLASS.messageError}`);
   }
 
   getMessage(index: number): Selector {
