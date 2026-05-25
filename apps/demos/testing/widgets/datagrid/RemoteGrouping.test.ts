@@ -13,8 +13,7 @@ const scroll = ClientFunction((pixels) => {
 });
 
 runManualTest('DataGrid', 'RemoteGrouping', (test) => {
-  // Remote WidgetsGalleryDataService is unstable
-  test.skip('RemoteGrouping', async (t) => {
+  test('RemoteGrouping', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await $('.dx-scrollable-container')();
