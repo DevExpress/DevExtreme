@@ -7,7 +7,7 @@ jobs:
   auto-approve:
     runs-on: devextreme-shr2
     steps:
-    - uses: hmarr/auto-approve-action@v2
+    - uses: hmarr/auto-approve-action@v4.0.0
       if: github.actor == 'renovate-bot' || github.actor == 'renovate[bot]'
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
