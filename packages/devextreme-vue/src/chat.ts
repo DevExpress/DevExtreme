@@ -90,7 +90,6 @@ import {
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
-  "a1" |
   "accessKey" |
   "activeStateEnabled" |
   "alerts" |
@@ -145,7 +144,6 @@ interface DxChat extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    a1: Boolean,
     accessKey: String,
     activeStateEnabled: Boolean,
     alerts: Array as PropType<Array<Alert>>,
@@ -196,7 +194,6 @@ const componentConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:a1": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:alerts": null,

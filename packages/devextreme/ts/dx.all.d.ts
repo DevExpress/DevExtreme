@@ -11622,10 +11622,6 @@ declare module DevExpress.ui {
    */
   export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
-     * [descr:dxChatOptions.a1]
-     */
-    a1?: boolean;
-    /**
      * [descr:dxChatOptions.activeStateEnabled]
      */
     activeStateEnabled?: boolean;
