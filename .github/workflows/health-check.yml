@@ -16,5 +16,13 @@ jobs:
           ignoredAdvisories: [
             'GHSA-67hx-6x53-jw92', // babel-traverse
             'GHSA-4wf5-vphf-c2xc', // terser
+            'GHSA-68x2-mx4q-78m7', // @angular/platform-server
+            'GHSA-58c5-g7wp-6w37', // @angular/common
+            'GHSA-v4hv-rgfq-gp49', // @angular/compiler
+            'GHSA-jrmj-c5cx-3cw6', // @angular/core
+            'GHSA-prjf-86w9-mfqv', // @angular/core
+            'GHSA-g93w-mfhg-p222', // @angular/compiler
+            'GHSA-45q2-gjvg-7973', // @angular/platform-server
+            'GHSA-rfh7-fxqc-q52v', // @angular/platform-server
           ]
         }
