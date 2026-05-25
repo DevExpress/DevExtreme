@@ -321,7 +321,7 @@ class VirtualScrollController {
       }
     });
 
-    return Math.floor(offset + itemCount * this._viewportItemSize * this._sizeRatio);
+    return offset + itemCount * this._viewportItemSize * this._sizeRatio;
   }
 
   private getContentOffset(type) {
