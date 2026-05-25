@@ -227,7 +227,7 @@ test('AI Assistant popup - failure with error command', async (t) => {
 
   await t.click(dataGrid.getAIAssistantButton());
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-with-error-command.png', { element: dataGrid.getAIAssistantChat().content });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-failure-with-error-command.png', { element: dataGrid.getAIAssistantChat().content });
 
   await t
     .expect(compareResults.isValid())
@@ -292,7 +292,7 @@ test('AI Assistant popup - failure with aborted command', async (t) => {
 
   await t.click(dataGrid.getAIAssistantButton());
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-success-with-aborted-command.png', { element: dataGrid.getAIAssistantChat().content });
+  await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-failure-with-aborted-command.png', { element: dataGrid.getAIAssistantChat().content });
 
   await t
     .expect(compareResults.isValid())
