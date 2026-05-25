@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Test Timezones Executor Schema",
+  "description": "Fetch the latest moment-timezone data and verify the bundled timezone list contains only valid IANA timezone identifiers",
+  "type": "object",
+  "properties": {
+    "timezoneListFile": {
+      "type": "string",
+      "description": "Path to the TypeScript file exporting the timezone list (relative to project root)"
+    },
+    "momentTimezoneUrl": {
+      "type": "string",
+      "description": "URL to fetch the latest moment-timezone unpacked data JSON",
+      "default": "https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/latest.json"
+    }
+  },
+  "required": ["timezoneListFile"]
+}

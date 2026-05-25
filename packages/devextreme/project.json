@@ -1109,6 +1109,16 @@
         ]
       }
     },
+    "test:timezones": {
+      "executor": "devextreme-nx-infra-plugin:test-timezones",
+      "options": {
+        "timezoneListFile": "./js/__internal/scheduler/timezones/timezone_list.ts",
+        "momentTimezoneUrl": "https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/latest.json"
+      },
+      "inputs": [
+        "{projectRoot}/js/__internal/scheduler/timezones/timezone_list.ts"
+      ]
+    },
     "copy:vendor:js": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
       "options": {

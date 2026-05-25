@@ -55,6 +55,13 @@ Each behavior is owned by exactly ONE executor's canonical tests; consumers must
 2. Register in `executors.json`: `implementation: ./src/executors/<new-name>/executor`, `schema: ./src/executors/<new-name>/schema.json`.
 3. Validate: tsc → jest → lint. All tests must still pass.
 
+## Notable executors
+
+| Executor | Target example | Purpose |
+|----------|---------------|---------|
+| `license-check` | `verify:licenses` | Verify embedded license notices in built artifacts |
+| `test-timezones` | `test:timezones` | Fetch latest moment-timezone data and verify the bundled timezone list contains only valid IANA identifiers |
+
 ## Refactor an existing executor
 
 1. Run `grep -rn "<idiom>" src/executors/`. If 3+ executors share a pattern, it is a centralization candidate.

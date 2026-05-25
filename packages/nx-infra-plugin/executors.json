@@ -119,6 +119,11 @@
       "implementation": "./src/executors/state-manager-optimize/executor",
       "schema": "./src/executors/state-manager-optimize/schema.json",
       "description": "Optimize state_manager modules for production builds"
+    },
+    "test-timezones": {
+      "implementation": "./src/executors/test-timezones/executor",
+      "schema": "./src/executors/test-timezones/schema.json",
+      "description": "Verify bundled timezone list against latest moment-timezone data"
     }
   }
 }

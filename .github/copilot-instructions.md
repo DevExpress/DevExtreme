@@ -25,6 +25,7 @@ pnpm run test-jest                        # jest jsdom (from packages/devextreme
 pnpm run test-jest:all                    # jest jsdom + node
 pnpm nx test devextreme-testcafe-tests    # TestCafe e2e
 pnpm nx test devextreme-angular           # wrapper tests (also -react, -vue)
+pnpm nx test:timezones devextreme         # verify timezone list against moment-timezone
 
 # Lint
 pnpm nx run-many -t lint                  # all packages
