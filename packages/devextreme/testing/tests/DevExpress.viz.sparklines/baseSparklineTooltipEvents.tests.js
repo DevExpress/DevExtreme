@@ -149,3 +149,31 @@ QUnit.test('Tooltip should not hide if in the canvas with margins', function(ass
     assert.strictEqual(tooltipShown.callCount, 1);
     assert.strictEqual(tooltipHidden.callCount, 0);
 });
+
+QUnit.test('No errors after dispose and manual _hideTooltip call (T1328375)', function(assert) {
+    const bullet = this.createWidget({
+        startScaleValue: 0,
+        endScaleValue: 35,
+        value: 20,
+        tooltip: {
+            enabled: true
+        }
+    });
+
+    const consoleErrorStub = sinon.stub(console, 'error');
+    let caughtError;
+
+    bullet._showTooltip();
+    bullet.dispose();
+
+    try {
+        bullet._hideTooltip();
+    } catch(error) {
+        caughtError = error;
+    } finally {
+        consoleErrorStub.restore();
+    }
+
+    assert.strictEqual(caughtError, undefined, '_hideTooltip should not throw after dispose');
+    assert.strictEqual(consoleErrorStub.callCount, 0, 'console should not contain runtime errors');
+});
