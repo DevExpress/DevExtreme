@@ -350,4 +350,60 @@ describe('Isolated AppointmentPopup environment', () => {
     expect(recurrenceStartFDOW).toBe(1);
     expect(weekDayButtonsText).toBe('MTWTFSS');
   });
+
+  describe('Validation', () => {
+    const commonAppointment = {
+      text: 'common-app',
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+    };
+
+    it.each([
+      'startDateEditor', 'startTimeEditor', 'endDateEditor', 'endTimeEditor',
+    ])('should not close popup on save button click when %s is empty', async (editorName) => {
+      const { popup, POM } = await createAppointmentPopup({
+        appointmentData:
+        { ...commonAppointment },
+      });
+
+      POM.setInputValue(editorName, null);
+      POM.saveButton.click();
+      await Promise.resolve();
+
+      expect(popup.visible).toBe(true);
+    });
+
+    it.each([
+      'startTimeEditor', 'endDateEditor', 'endTimeEditor',
+    ])('should not close popup on save button click in recurrence form when %s editor is empty', async (editorName) => {
+      const { popup, POM } = await createAppointmentPopup({
+        appointmentData:
+        { ...commonAppointment },
+      });
+
+      POM.setInputValue(editorName, null);
+      POM.selectRepeatValue('daily');
+      POM.saveButton.click();
+      await Promise.resolve();
+
+      expect(popup.visible).toBe(true);
+    });
+
+    it('should not block save in recurrence form when startDateEditor is empty', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData:
+        { ...commonAppointment },
+      });
+
+      POM.setInputValue('startDateEditor', null);
+      POM.selectRepeatValue('daily');
+
+      expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/9/2017');
+
+      POM.saveButton.click();
+      await Promise.resolve();
+
+      expect(callbacks.onSave).toHaveBeenCalledTimes(1);
+    });
+  });
 });
