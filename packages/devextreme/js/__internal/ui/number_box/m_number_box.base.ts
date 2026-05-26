@@ -27,7 +27,7 @@ import SpinButtons from './m_number_box.spins';
 
 const math = Math;
 
-const WIDGET_CLASS = 'dx-numberbox';
+export const WIDGET_CLASS = 'dx-numberbox';
 const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
 const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';

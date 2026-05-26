@@ -834,7 +834,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const isValueChanged = this._isValueChanged(value);
 
     if (isValueChanged && dxEvent) {
-      // @ts-expect-error editor's ValueChangedEvent should be extended
       this._saveValueChangeEvent(dxEvent);
     }
 
