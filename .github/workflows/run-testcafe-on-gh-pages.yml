@@ -24,12 +24,12 @@ jobs:
 
         steps:
             - name: Use Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                 node-version-file: '.node-version'
 
             - name: Checkout gh-pages branch
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                 ref: gh-pages
                 path: gh-pages
@@ -43,7 +43,7 @@ jobs:
                 python -m http.server 8083 &
 
             - name: Checkout main branch
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                 ref: ${{ env.TARGET_BRANCH }}
                 path: devextreme
@@ -56,12 +56,12 @@ jobs:
               with:
                 chrome-version: '145.0.7632.67'
 
-            - uses: pnpm/action-setup@v3
+            - uses: pnpm/action-setup@v6
               with:
                 version: 9
                 run_install: false
 
-            - uses: actions/cache@v4
+            - uses: actions/cache@v5
               name: Setup pnpm cache
               with:
                 path: |
@@ -76,7 +76,7 @@ jobs:
               run: |
                 corepack enable
                 pnpm install --frozen-lockfile
-            
+
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos
               env:
@@ -96,7 +96,7 @@ jobs:
 
             - name: Copy screenshots artifacts
               if: ${{ failure() }}
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                 name: screenshots
                 path: ${{ github.workspace }}/devextreme/apps/demos/testing/artifacts/compared-screenshots/**/*

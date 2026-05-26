@@ -39,14 +39,14 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v6
       with:
         version: 9
         run_install: false
@@ -56,7 +56,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -81,7 +81,7 @@ jobs:
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: devextreme-artifacts
         path: ./packages/devextreme/artifacts.zip
@@ -135,10 +135,10 @@ jobs:
         date
 
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-artifacts
         path: ./packages/devextreme
@@ -153,11 +153,11 @@ jobs:
     #     chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v6
       with:
         version: 9
         run_install: false
@@ -167,7 +167,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -208,7 +208,7 @@ jobs:
 
     - name: Copy compared screenshot artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: compared-screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/compared-screenshots/**/*
@@ -216,7 +216,7 @@ jobs:
 
     - name: Copy failed test artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: failed-tests-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
@@ -229,7 +229,7 @@ jobs:
 
     steps:
     - name: Merge screenshot artifacts
-      uses: actions/upload-artifact/merge@v4
+      uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
         name: compared-screenshots
@@ -237,7 +237,7 @@ jobs:
         delete-merged: true
 
     - name: Merge failed test artifacts
-      uses: actions/upload-artifact/merge@v4
+      uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
         name: failed-tests
@@ -251,7 +251,7 @@ jobs:
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: DevExpress/github-actions/send-teams-notification@v1
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}

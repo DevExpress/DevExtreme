@@ -25,14 +25,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
           run_install: false
@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: |
@@ -70,7 +70,7 @@ jobs:
           7z a -tzip -mx3 -mmt2 builds-artifacts/angular19-build.zip ./builders/angular19/dist/*
 
       - name: Upload wrappers builds
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wrappers-builds
           path: e2e/wrappers/builds-artifacts
@@ -88,10 +88,10 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download wrappers builds
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: wrappers-builds
           path: ./wrappers-builds
@@ -106,11 +106,11 @@ jobs:
           chrome-version: '145.0.7632.67'
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
           run_install: false
@@ -120,7 +120,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: |
@@ -145,8 +145,8 @@ jobs:
 
       - name: Upload test artifacts on failure
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: test-fails-${{matrix.framework}} 
+          name: test-fails-${{matrix.framework}}
           path: e2e/wrappers/screenshots
-          if-no-files-found: ignore 
+          if-no-files-found: ignore
