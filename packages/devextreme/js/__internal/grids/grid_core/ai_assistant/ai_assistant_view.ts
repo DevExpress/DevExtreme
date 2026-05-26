@@ -38,6 +38,8 @@ export class AIAssistantView extends View {
 
   private handleMessageStorePushContext!: (changes: DataChange<Message, string>[]) => void;
 
+  private isHidingAfterConfirm = false;
+
   public visibilityChanged?: Callback;
 
   public init(): void {
@@ -99,6 +101,11 @@ export class AIAssistantView extends View {
         this.visibilityChanged?.fire(false);
       },
       onHiding: (e: HidingEvent): void => {
+        if (this.isHidingAfterConfirm) {
+          this.isHidingAfterConfirm = false;
+          return;
+        }
+
         if (this.aiAssistantController.isProcessing()) {
           e.cancel = true;
 
@@ -112,6 +119,7 @@ export class AIAssistantView extends View {
           confirmDialog.show().done((confirmResult) => {
             if (confirmResult) {
               this.aiAssistantController.abortRequest();
+              this.isHidingAfterConfirm = true;
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
               e.component.hide();
             }

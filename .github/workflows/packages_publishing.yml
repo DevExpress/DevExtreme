@@ -29,14 +29,14 @@ jobs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up nodejs
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -58,7 +58,7 @@ jobs:
         run: pnpm run all:build
 
       - name: Clone deps scanner
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: DevExpress/npmdeps-scanner
           token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
@@ -85,14 +85,14 @@ jobs:
         run: pnpm run make-artifacts-package
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom
           path: packages/sbom/dist
           retention-days: 7
 
       - name: Upload packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: packages
           path: artifacts/npm/*.tgz
@@ -114,19 +114,19 @@ jobs:
         package: ${{ fromJSON(needs.build.outputs.packages) }}
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: packages
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -168,7 +168,7 @@ jobs:
     if: failure()
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: DevExpress/github-actions/send-teams-notification@v1
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}

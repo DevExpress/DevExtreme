@@ -1444,7 +1444,7 @@ class CollectionWidget<
     return this._itemContainer();
   }
 
-  _renderEmptyMessage(rootNodes?: TItem[]): void {
+  _renderEmptyMessage(rootNodes?: TItem[]): boolean {
     const { items: userItems = [], noDataText } = this.option();
 
     const items = rootNodes ?? userItems;
@@ -1455,7 +1455,6 @@ class CollectionWidget<
       this._$noData.remove();
       // @ts-expect-error ts-error
       this._$noData = null;
-      this.setAria('label', undefined);
     }
 
     if (!hideNoData) {
@@ -1471,6 +1470,8 @@ class CollectionWidget<
       }
     }
     this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
+
+    return !hideNoData;
   }
 
   _itemDXEventHandler(

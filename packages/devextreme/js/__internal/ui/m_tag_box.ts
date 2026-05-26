@@ -496,7 +496,6 @@ class TagBox<
 
     this._getSubmitElement()
       .empty()
-      // @ts-expect-error ts-error
       .append($options);
   }
 

@@ -1,6 +1,6 @@
 import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import type { RequestParams, Response } from 'devextreme-react/common/ai-integration';
-import OpenAI, { AzureOpenAI } from 'openai';
+import { AzureOpenAI, OpenAI } from 'openai';
 import notify from 'devextreme/ui/notify';
 import type { AIMessage } from './types';
 
