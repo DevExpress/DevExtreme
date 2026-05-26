@@ -281,10 +281,19 @@ describe('AI Assistant error handling', () => {
   });
 
   describe('execution already in progress', () => {
-    it('should fail when commands are already executing', async () => {
-      const isExecutingSpy = jest.spyOn(GridCommands.prototype, 'isExecuting')
-        .mockReturnValue(true);
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let isExecutingSpy: ReturnType<typeof jest.spyOn>;
 
+    beforeEach(() => {
+      isExecutingSpy = jest.spyOn(GridCommands.prototype, 'isExecuting')
+        .mockReturnValue(true);
+    });
+
+    afterEach(() => {
+      isExecutingSpy.mockRestore();
+    });
+
+    it('should fail when commands are already executing', async () => {
       const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
       model.sendAiRequest('Sort by name');
@@ -303,8 +312,6 @@ describe('AI Assistant error handling', () => {
           errorText: 'Execution already in progress. Please wait.',
         }),
       ]);
-
-      isExecutingSpy.mockRestore();
     });
   });
 
