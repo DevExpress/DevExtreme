@@ -424,7 +424,7 @@ describe('GridCommands', () => {
   });
 
   describe('validateResponse', () => {
-    it('should return true for valid response with known command names and correct args', () => {
+    it('should return parsed actions for valid response with known command names and correct args', () => {
       const command = createMockCommand('test', {
         schema: z.object({ value: z.string() }),
       });
@@ -434,10 +434,10 @@ describe('GridCommands', () => {
         [{ name: 'test', args: { value: 'hello' } }],
       );
 
-      expect(result).toBe(true);
+      expect(result).toEqual([{ name: 'test', args: { value: 'hello' } }]);
     });
 
-    it('should return false if any action has an unknown name', () => {
+    it('should return null if any action has an unknown name', () => {
       const command = createMockCommand('known');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
@@ -445,24 +445,24 @@ describe('GridCommands', () => {
         [{ name: 'unknown', args: {} }],
       );
 
-      expect(result).toBe(false);
+      expect(result).toBeNull();
     });
 
-    it('should return false if any action name is not a string', () => {
+    it('should return null if any action name is not a string', () => {
       const gridCommands = new GridCommands(createMockComponent(), [
         createMockCommand('test'),
       ]);
 
       expect(gridCommands.validate(
         [{ name: 123 as unknown as string, args: {} }],
-      )).toBe(false);
+      )).toBeNull();
 
       expect(gridCommands.validate(
         [{ name: true as unknown as string, args: {} }],
-      )).toBe(false);
+      )).toBeNull();
     });
 
-    it('should return false if any action name is an empty string', () => {
+    it('should return null if any action name is an empty string', () => {
       const gridCommands = new GridCommands(createMockComponent(), [
         createMockCommand('test'),
       ]);
@@ -471,24 +471,24 @@ describe('GridCommands', () => {
         [{ name: '', args: {} }],
       );
 
-      expect(result).toBe(false);
+      expect(result).toBeNull();
     });
 
-    it('should return false if any action is missing name or args', () => {
+    it('should return null if any action is missing name or args', () => {
       const gridCommands = new GridCommands(createMockComponent(), [
         createMockCommand('test'),
       ]);
 
       expect(gridCommands.validate(
         [{ args: {} }] as unknown as ExecuteGridAssistantAction[],
-      )).toBe(false);
+      )).toBeNull();
 
       expect(gridCommands.validate(
         [{ name: 'test' }] as unknown as ExecuteGridAssistantAction[],
-      )).toBe(false);
+      )).toBeNull();
     });
 
-    it('should return false if any action args is null', () => {
+    it('should return null if any action args is null', () => {
       const gridCommands = new GridCommands(createMockComponent(), [
         createMockCommand('test'),
       ]);
@@ -497,10 +497,10 @@ describe('GridCommands', () => {
         [{ name: 'test', args: null as unknown as Record<string, unknown> }],
       );
 
-      expect(result).toBe(false);
+      expect(result).toBeNull();
     });
 
-    it('should return false if any action args has wrong types for required properties', () => {
+    it('should return null if any action args has wrong types for required properties', () => {
       const command = createMockCommand('test', {
         schema: z.object({ value: z.string() }),
       });
@@ -510,10 +510,10 @@ describe('GridCommands', () => {
         [{ name: 'test', args: { value: 123 } }],
       );
 
-      expect(result).toBe(false);
+      expect(result).toBeNull();
     });
 
-    it('should return false if any action args is missing required properties', () => {
+    it('should return null if any action args is missing required properties', () => {
       const command = createMockCommand('test', {
         schema: z.object({ value: z.string() }),
       });
@@ -523,12 +523,12 @@ describe('GridCommands', () => {
         [{ name: 'test', args: {} }],
       );
 
-      expect(result).toBe(false);
+      expect(result).toBeNull();
     });
 
-    it('should return false if any action args contains extra properties', () => {
+    it('should return null if any action args contains extra properties', () => {
       const command = createMockCommand('test', {
-        schema: z.object({ value: z.string() }),
+        schema: z.object({ value: z.string().optional() }).strict(),
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
@@ -536,18 +536,18 @@ describe('GridCommands', () => {
         [{ name: 'test', args: { value: 'ok', extra: true } }],
       );
 
-      expect(result).toBe(false);
+      expect(result).toBeNull();
     });
 
-    it('should return true for an empty actions array', () => {
+    it('should return an empty array for an empty actions array', () => {
       const gridCommands = new GridCommands(createMockComponent(), []);
 
       const result = gridCommands.validate([]);
 
-      expect(result).toBe(true);
+      expect(result).toEqual([]);
     });
 
-    it('should return true for no-arg commands when args is empty object', () => {
+    it('should return parsed actions for no-arg commands when args is empty object', () => {
       const command = createMockCommand('clearFilter');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
@@ -555,7 +555,7 @@ describe('GridCommands', () => {
         [{ name: 'clearFilter', args: {} }],
       );
 
-      expect(result).toBe(true);
+      expect(result).toEqual([{ name: 'clearFilter', args: {} }]);
     });
 
     it('should reject entire response on first mismatch', () => {
@@ -569,7 +569,26 @@ describe('GridCommands', () => {
         ],
       );
 
-      expect(result).toBe(false);
+      expect(result).toBeNull();
+    });
+
+    it('should apply zod transforms in the returned actions (null on optional → undefined)', () => {
+      const command = createMockCommand('test', {
+        schema: z.object({
+          required: z.string(),
+          // eslint-disable-next-line spellcheck/spell-checker
+          optional: z.string().nullish().transform((v) => v ?? undefined),
+        }).strict(),
+      });
+      const gridCommands = new GridCommands(createMockComponent(), [command]);
+
+      const result = gridCommands.validate(
+        [{ name: 'test', args: { required: 'r', optional: null } }],
+      );
+
+      expect(result).toEqual([
+        { name: 'test', args: { required: 'r', optional: undefined } },
+      ]);
     });
   });
 

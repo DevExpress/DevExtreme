@@ -190,7 +190,7 @@ describe('AIAssistantViewController', () => {
 
     beforeEach(() => {
       validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
-        .mockReturnValue(true);
+        .mockImplementation((actions) => actions);
       executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
         .mockResolvedValue([
           { status: 'success', message: 'Sorted by Name ascending' },
@@ -481,7 +481,7 @@ describe('AIAssistantViewController', () => {
 
     beforeEach(() => {
       validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
-        .mockReturnValue(true);
+        .mockImplementation((actions) => actions);
       executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
         .mockResolvedValue([
           { status: 'success', message: 'Done' },
