@@ -5363,7 +5363,7 @@ QUnit.module('Accessibility', () => {
             assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), undefined);
         });
 
-        QUnit.test(`scrollview-content role should be restored when dataSource are added in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+        QUnit.test(`scrollview-content role should be restored when dataSource is set at runtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
             const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
 
             instance.option('dataSource', ['Item 1']);
