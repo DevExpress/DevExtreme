@@ -828,3 +828,21 @@ describe('oneWayWithChanges', () => {
     });
   });
 });
+
+describe('notifyColumnOptionChanged', () => {
+  it('should not update the internal state', () => {
+    const publicOptions = { columns: [{ visible: true }] };
+    const { optionsController } = setup<{ columns?: { visible?: boolean }[] }>(publicOptions, {});
+
+    const columnVisible = optionsController.oneWay('columns[0].visible');
+    const columnVisibleWithChanges = optionsController.oneWayWithChanges('columns[0].visible');
+
+    optionsController.notifyColumnOptionChanged('columns[0].visible', false, true);
+
+    expect(columnVisible.peek()).toBe(true);
+    expect(columnVisibleWithChanges.peek()).toStrictEqual({
+      changes: null,
+      value: true,
+    });
+  });
+});
