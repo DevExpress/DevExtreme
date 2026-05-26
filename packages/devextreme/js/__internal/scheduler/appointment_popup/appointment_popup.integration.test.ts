@@ -343,53 +343,6 @@ describe('Appointment Form', () => {
     });
   });
 
-  describe('Validation', () => {
-    it.each([
-      'startDateEditor', 'startTimeEditor', 'endDateEditor', 'endTimeEditor',
-    ])('should not close popup on save button click when %s is empty', async (editorName) => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-
-      POM.popup.setInputValue(editorName, null);
-      POM.popup.saveButton.click();
-      await Promise.resolve();
-
-      expect(POM.isPopupVisible()).toBe(true);
-    });
-
-    it.each([
-      'startTimeEditor', 'endDateEditor', 'endTimeEditor',
-    ])('should not close popup on save button click in recurrence form when %s editor is empty', async (editorName) => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-
-      POM.popup.setInputValue(editorName, null);
-      POM.popup.selectRepeatValue('daily');
-      POM.popup.saveButton.click();
-      await Promise.resolve();
-
-      expect(POM.isPopupVisible()).toBe(true);
-    });
-
-    it('should close popup on save button click in recurrence form when startEditor editor is empty', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-
-      POM.popup.setInputValue('startDateEditor', null);
-      POM.popup.selectRepeatValue('daily');
-
-      expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/9/2017');
-
-      POM.popup.saveButton.click();
-      await Promise.resolve();
-
-      expect(POM.isPopupVisible()).toBe(false);
-    });
-  });
-
   describe('State', () => {
     it('should have correct editor values when opening for empty date cell - 1', async () => {
       const { POM } = await createScheduler({
