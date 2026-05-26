@@ -494,7 +494,6 @@ class TextEditorBase<
 
     this.option({ text: textValue });
 
-    // @ts-expect-error @ts-error
     const inputElementValue = this._input().val() as string | undefined;
 
     // fallback to empty string is required to support WebKit native date picker in some basic
@@ -894,8 +893,7 @@ class TextEditorBase<
   }
 
   _toggleEmptinessEventHandler(): void {
-    // @ts-expect-error dxElementWrapper.val() typification
-    const text = this._input().val() as string;
+    const text = this._input().val();
 
     const isEmpty = (text === '' || text === null) && this._isValueValid();
 
