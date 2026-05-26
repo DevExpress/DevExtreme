@@ -12,6 +12,7 @@ export interface dxElementWrapper {
   after(element: Element | dxElementWrapper): this;
 
   append(element: Element | dxElementWrapper | string): this;
+  append(element: Element[] | dxElementWrapper[] | string[]): this;
 
   appendTo(element: Element | dxElementWrapper): this;
 
@@ -122,6 +123,7 @@ export interface dxElementWrapper {
 
   trim(): this;
 
+  val(): string;
   val(value?: string | string[] | number): this;
 
   wrap(wrappingElement: this | Element | string): this;
