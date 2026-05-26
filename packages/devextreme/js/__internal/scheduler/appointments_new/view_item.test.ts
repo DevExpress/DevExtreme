@@ -46,7 +46,6 @@ describe.each([
       sortedIndex: 0,
       onFocusIn: () => {},
       onFocusOut: () => {},
-      onClick: () => {},
       onKeyDown: () => {},
     };
 

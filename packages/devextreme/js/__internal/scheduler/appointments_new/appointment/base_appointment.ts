@@ -1,20 +1,24 @@
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils';
+import type { AppointmentRenderedEvent } from '@js/ui/scheduler';
 import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import { click } from '@ts/events/m_short';
+import { dxClick } from '@ts/events/m_short';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, FOCUSED_STATE_CLASS } from '../const';
 import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
 import { EVENTS_NAMESPACE, ViewItem, type ViewItemProperties } from '../view_item';
+
+const DOUBLE_CLICK_EVENT_NAME = addNamespace('dxdblclick', EVENTS_NAMESPACE.namespace);
 
 export interface BaseAppointmentViewProperties
   extends ViewItemProperties {
@@ -23,11 +27,9 @@ export interface BaseAppointmentViewProperties
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
 
-  onRendered: (e: {
-    element: DxElement;
-    appointmentData: SafeAppointment;
-    targetedAppointmentData: TargetedAppointment;
-  }) => void;
+  onRendered: (e: AppointmentRenderedEvent) => void;
+  onClick: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
+  onDblClick: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
 
   getDataAccessor: () => AppointmentDataAccessor;
   getResourceColor: () => Promise<string | undefined>;
@@ -36,15 +38,26 @@ export interface BaseAppointmentViewProperties
 export class BaseAppointmentView<
   TProperties extends BaseAppointmentViewProperties = BaseAppointmentViewProperties,
 > extends ViewItem<TProperties> {
-  protected get targetedAppointmentData(): TargetedAppointment {
+  public get targetedAppointmentData(): TargetedAppointment {
     return this.option().targetedAppointmentData;
   }
 
-  protected get appointmentData(): SafeAppointment {
+  public get appointmentData(): SafeAppointment {
     return this.option().appointmentData;
   }
 
   private defaultAppointmentTemplate!: FunctionTemplate;
+
+  override _setOptionsByReference(): void {
+    super._setOptionsByReference();
+
+    // Note: appointmentData object is used as a key in dataSource
+    this._optionsByReference = {
+      ...this._optionsByReference,
+      appointmentData: true,
+      targetedAppointmentData: true,
+    };
+  }
 
   override _init(): void {
     super._init();
@@ -62,6 +75,7 @@ export class BaseAppointmentView<
     this.applyAria();
     this.attachFocusEvents();
     this.attachClickEvent();
+    this.attachDblClickEvent();
     this.attachKeydownEvents();
     this.renderContentTemplate();
   }
@@ -69,7 +83,8 @@ export class BaseAppointmentView<
   override _dispose(): void {
     super._dispose();
 
-    click.off(this.$element(), EVENTS_NAMESPACE);
+    dxClick.off(this.$element(), EVENTS_NAMESPACE);
+    eventsEngine.off(this.$element(), DOUBLE_CLICK_EVENT_NAME);
   }
 
   protected applyElementClasses(): void {
@@ -86,11 +101,20 @@ export class BaseAppointmentView<
   }
 
   private attachClickEvent(): void {
-    click.off(this.$element(), EVENTS_NAMESPACE);
-    click.on(
+    dxClick.off(this.$element(), EVENTS_NAMESPACE);
+    dxClick.on(
       this.$element(),
-      this.onClick.bind(this),
+      (event: DxEvent<MouseEvent>) => this.option().onClick(this, event),
       EVENTS_NAMESPACE,
+    );
+  }
+
+  private attachDblClickEvent(): void {
+    eventsEngine.off(this.$element(), DOUBLE_CLICK_EVENT_NAME);
+    eventsEngine.on(
+      this.$element(),
+      DOUBLE_CLICK_EVENT_NAME,
+      (event: DxEvent<MouseEvent>) => this.option().onDblClick(this, event),
     );
   }
 
@@ -163,8 +187,9 @@ export class BaseAppointmentView<
       },
       index: this.option().index,
       onRendered: () => {
+        // @ts-expect-error 'component' and 'element' are set by action
         this.option().onRendered({
-          element: getPublicElement(this.$element()),
+          appointmentElement: getPublicElement(this.$element()),
           appointmentData: this.appointmentData,
           targetedAppointmentData: this.targetedAppointmentData,
         });

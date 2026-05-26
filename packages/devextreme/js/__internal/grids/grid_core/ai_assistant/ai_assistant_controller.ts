@@ -90,10 +90,10 @@ export class AIAssistantController extends Controller {
     }
 
     const customizeResponseText = this.option('aiAssistant.customizeResponseText');
-    const notInitializedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
+    const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
 
     return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
-      ?? Promise.reject(new Error(notInitializedErrorMsg));
+      ?? Promise.reject(new Error(localizedErrorMsg));
   }
 
   private createPendingAIMessage(message: Message): AIMessage {

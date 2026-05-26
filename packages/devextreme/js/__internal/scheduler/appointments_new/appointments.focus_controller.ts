@@ -5,16 +5,22 @@ import { focus } from '@ts/events/m_short';
 
 import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { SortedEntity } from '../view_model/types';
+import type { BaseAppointmentView } from './appointment/base_appointment';
+import { AppointmentCollector } from './appointment_collector';
 import type { Appointments } from './appointments';
 import type { ViewItem } from './view_item';
+
+interface AppointmentsFocusControllerHandlers {
+  onAppointmentEnterKeyDown: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
+}
 
 export class AppointmentsFocusController {
   private focusableSortedIndex = 0;
 
   private needRestoreFocusIndex = -1;
 
-  private get sortedAppointments(): SortedEntity[] {
-    return this.appointments.option().getSortedAppointments();
+  private get sortedItems(): SortedEntity[] {
+    return this.appointments.option().getSortedItems();
   }
 
   private get isVirtualScrolling(): boolean {
@@ -25,7 +31,10 @@ export class AppointmentsFocusController {
     return this.appointments.option().tabIndex;
   }
 
-  constructor(private readonly appointments: Appointments) { }
+  constructor(
+    private readonly appointments: Appointments,
+    private readonly handlers: AppointmentsFocusControllerHandlers,
+  ) { }
 
   public onViewItemClick(viewItem: ViewItem): void {
     this.focusViewItem(viewItem);
@@ -50,8 +59,27 @@ export class AppointmentsFocusController {
   }
 
   public onViewItemKeyDown(viewItem: ViewItem, e: KeyboardKeyDownEvent): void {
-    if (e.key === 'Tab') {
-      this.handleTabKeyDown(e, viewItem.option().sortedIndex);
+    switch (true) {
+      case e.key === 'Tab':
+        this.handleTabKeyDown(e, viewItem.option().sortedIndex);
+        break;
+      case e.key === 'Delete':
+        this.handleDeleteKeyDown(viewItem);
+        break;
+      case e.key === 'Home':
+        this.handleHomeKeyDown(e);
+        break;
+      case e.key === 'End':
+        this.handleEndKeyDown(e);
+        break;
+      case e.key === 'Enter':
+        this.handleEnterKeyDown(viewItem, e);
+        break;
+      case e.key === ' ':
+        this.handleEnterKeyDown(viewItem, e);
+        break;
+      default:
+        break;
     }
   }
 
@@ -82,27 +110,69 @@ export class AppointmentsFocusController {
 
   private handleTabKeyDown(e: KeyboardKeyDownEvent, sortedIndex: number): void {
     const nextIndex = sortedIndex + (e.shift ? -1 : 1);
-    const nextItemData = this.sortedAppointments[nextIndex];
+    const nextItemData = this.sortedItems[nextIndex];
 
     if (!nextItemData) {
       return;
     }
 
     e.originalEvent.preventDefault();
-    this.focusByItemData(nextItemData);
+    this.focusBySortedItem(nextItemData);
   }
 
-  private focusByItemData(itemData: SortedEntity): void {
-    if (this.isVirtualScrolling) {
-      this.scrollToItem(itemData);
+  private handleDeleteKeyDown(viewItem: ViewItem): void {
+    if (viewItem instanceof AppointmentCollector) { return; }
+
+    const { allowDelete, onDeleteKeyPress } = this.appointments.option();
+    if (!allowDelete) { return; }
+
+    const appointmentViewItem = viewItem as BaseAppointmentView;
+    onDeleteKeyPress({
+      appointmentData: appointmentViewItem.appointmentData,
+      targetedAppointmentData: appointmentViewItem.targetedAppointmentData,
+    });
+  }
+
+  private handleHomeKeyDown(e: KeyboardKeyDownEvent): void {
+    const firstSortedItem = this.sortedItems[0];
+    if (firstSortedItem) {
+      e.originalEvent.preventDefault();
+      this.focusBySortedItem(firstSortedItem);
+    }
+  }
+
+  private handleEndKeyDown(e: KeyboardKeyDownEvent): void {
+    const lastSortedItem = this.sortedItems[this.sortedItems.length - 1];
+    if (lastSortedItem) {
+      e.originalEvent.preventDefault();
+      this.focusBySortedItem(lastSortedItem);
+    }
+  }
+
+  private handleEnterKeyDown(viewItem: ViewItem, e: KeyboardKeyDownEvent): void {
+    e.originalEvent.preventDefault();
+
+    if (viewItem instanceof AppointmentCollector) {
+      return;
     }
 
-    const viewItem = this.appointments.getViewItemBySortedIndex(itemData.sortedIndex);
+    this.handlers.onAppointmentEnterKeyDown(
+      viewItem as BaseAppointmentView,
+      e.originalEvent as DxEvent,
+    );
+  }
+
+  private focusBySortedItem(sortedItem: SortedEntity): void {
+    if (this.isVirtualScrolling) {
+      this.scrollToItem(sortedItem);
+    }
+
+    const viewItem = this.appointments.getViewItemBySortedIndex(sortedItem.sortedIndex);
 
     if (viewItem) {
       this.focusViewItem(viewItem);
     } else if (this.isVirtualScrolling) {
-      this.needRestoreFocusIndex = itemData.sortedIndex;
+      this.needRestoreFocusIndex = sortedItem.sortedIndex;
     }
   }
 
@@ -111,19 +181,19 @@ export class AppointmentsFocusController {
     focus.trigger(viewItem?.$element());
   }
 
-  private scrollToItem(itemData: SortedEntity): void {
+  private scrollToItem(sortedItem: SortedEntity): void {
     const { getStartViewDate, getResourceManager, scrollTo } = this.appointments.option();
 
     const date = new Date(Math.max(
       getStartViewDate().getTime(),
-      itemData.source.startDate,
+      sortedItem.source.startDate,
     ));
 
     const group = getRawAppointmentGroupValues(
-      itemData.itemData,
+      sortedItem.itemData,
       getResourceManager().resources,
     );
 
-    scrollTo(date, { group, allDay: itemData.allDay });
+    scrollTo(date, { group, allDay: sortedItem.allDay });
   }
 }
