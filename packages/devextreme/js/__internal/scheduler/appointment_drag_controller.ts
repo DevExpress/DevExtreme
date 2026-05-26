@@ -183,8 +183,8 @@ export class AppointmentDragController {
     }
 
     this.options.updateAppointmentOnDrop(e.itemData, this.$highlightedCell)
-      .then(() => { this.removeDraggingClasses($(e.itemElement)); })
-      .catch(() => { });
+      .finally(() => { this.removeDraggingClasses($(e.itemElement)); })
+      .catch((err) => { throw err; });
 
     this.removeCellHighlight();
   }

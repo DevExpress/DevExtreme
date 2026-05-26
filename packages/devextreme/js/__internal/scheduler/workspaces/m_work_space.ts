@@ -2184,7 +2184,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     const point = this.getPointFromDragTarget($dragTarget);
-    const elements = document.elementsFromPoint(point.x, point.y);
+    const elements = (domAdapter as any).elementsFromPoint(point.x, point.y);
 
     const cell = elements.find((element) => element.classList.contains('dx-scheduler-date-table-cell')
         || element.classList.contains('dx-scheduler-all-day-table-cell'));
