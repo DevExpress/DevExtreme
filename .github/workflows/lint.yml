@@ -20,14 +20,14 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -36,7 +36,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -76,14 +76,14 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -92,7 +92,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -119,14 +119,14 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -135,7 +135,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -156,14 +156,14 @@ jobs:
     timeout-minutes: 10
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -172,7 +172,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -204,14 +204,14 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -220,7 +220,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -242,7 +242,7 @@ jobs:
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: DevExpress/github-actions/send-teams-notification@v1
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}

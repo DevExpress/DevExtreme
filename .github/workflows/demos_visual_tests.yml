@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get changed files
         uses: DevExpress/github-actions/get-changed-files@v1
@@ -67,7 +67,7 @@ jobs:
           echo "has-changed-demos=${HAS_CHANGED}" >> $GITHUB_OUTPUT
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: changed-demos
           path: apps/demos/changed-files.json
@@ -113,14 +113,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -128,7 +128,7 @@ jobs:
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -158,7 +158,7 @@ jobs:
           7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
       - name: Upload build artifacts (for jQuery tests)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-artifacts-jquery
           path: ./packages/devextreme/artifacts.zip
@@ -175,7 +175,7 @@ jobs:
 
       - name: Copy build artifacts
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-sources
           path: |
@@ -202,19 +202,19 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
       - name: Download devextreme sources
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -223,7 +223,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -253,7 +253,7 @@ jobs:
         run: pnpm exec tsc --noEmit
 
       - name: Copy build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-bundles
           path: |
@@ -274,19 +274,19 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download devextreme packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -295,7 +295,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -336,27 +336,27 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
       if: github.event_name == 'pull_request'
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: changed-demos
         path: apps/demos
       continue-on-error: true
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -365,7 +365,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -429,26 +429,26 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download changed demos
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: changed-demos
         path: apps/demos
       continue-on-error: true
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
@@ -457,7 +457,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -527,19 +527,19 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
@@ -548,7 +548,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -615,10 +615,10 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-artifacts-jquery
         path: ./packages/devextreme
@@ -634,11 +634,11 @@ jobs:
         runner-type: 'github-hosted'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -647,7 +647,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -665,7 +665,7 @@ jobs:
     - name: Cache Roboto font
       if: contains(matrix.THEME, 'material')
       id: cache-roboto
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ env.ROBOTO_FONT_DIR }}
         key: roboto-font-${{ runner.os }}-8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
@@ -737,7 +737,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: failure() && matrix.STRATEGY == 'screenshots'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -745,7 +745,7 @@ jobs:
 
     - name: Copy accessibility report
       if: matrix.STRATEGY == 'accessibility'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}
         path: apps/demos/testing/artifacts/axe-reports/*
@@ -790,7 +790,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
@@ -799,16 +799,16 @@ jobs:
         runner-type: 'github-hosted'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -817,7 +817,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -844,7 +844,7 @@ jobs:
       run: mkdir -p apps/demos/bundles
 
     - name: Download bundles artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles
         path: apps/demos/bundles
@@ -895,7 +895,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -921,7 +921,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
@@ -930,23 +930,23 @@ jobs:
           runner-type: 'github-hosted'
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
       - name: Download devextreme sources
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
       - name: Download changed demos
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: changed-demos
           path: apps/demos
         continue-on-error: true
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -955,7 +955,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -982,13 +982,13 @@ jobs:
         run: mkdir -p apps/demos/bundles
 
       - name: Download bundles artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles
           path: apps/demos/bundles
 
       - name: Download changes artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: changed-demos
           path: apps/demos
@@ -1023,7 +1023,7 @@ jobs:
 
       - name: Copy screenshots artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: screenshots-${{ env.JOB_NAME }}
           path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -1037,7 +1037,7 @@ jobs:
     steps:
       - name: Merge jQuery screenshot artifacts
         if: needs.testcafe-jquery.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-jquery
@@ -1046,7 +1046,7 @@ jobs:
 
       - name: Merge React screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-react
@@ -1055,7 +1055,7 @@ jobs:
 
       - name: Merge Vue screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-vue
@@ -1064,7 +1064,7 @@ jobs:
 
       - name: Merge Angular screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-angular
@@ -1073,7 +1073,7 @@ jobs:
 
       - name: Merge jQuery accessibility reports
         if: needs.testcafe-jquery.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: accessibility-reports-jquery
