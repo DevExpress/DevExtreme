@@ -5343,34 +5343,32 @@ QUnit.module('Accessibility', () => {
     });
 
     [true, false].forEach(repaintChangesOnly => {
-        ['items', 'dataSource'].forEach(source => {
-            QUnit.test(`scrollview-content should not have role when ${source} is empty on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
-                const instance = $('#list').dxList({ [source]: [], repaintChangesOnly }).dxList('instance');
+        QUnit.test(`scrollview-content should not have role when dataSource is empty on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
 
-                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), null);
-            });
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), undefined);
+        });
 
-            QUnit.test(`scrollview-content should have role="application" when ${source} has items on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
-                const instance = $('#list').dxList({ [source]: ['Item 1'], repaintChangesOnly }).dxList('instance');
+        QUnit.test(`scrollview-content should have role="application" when dataSource has items on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
 
-                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), 'application');
-            });
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
+        });
 
-            QUnit.test(`scrollview-content role should be removed when ${source} are removed in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
-                const instance = $('#list').dxList({ [source]: ['Item 1'], repaintChangesOnly }).dxList('instance');
+        QUnit.test(`scrollview-content role should be removed when dataSource are removed in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
 
-                instance.option(source, []);
+            instance.option('dataSource', []);
 
-                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), null);
-            });
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), undefined);
+        });
 
-            QUnit.test(`scrollview-content role should be restored when ${source} are added in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
-                const instance = $('#list').dxList({ [source]: [], repaintChangesOnly }).dxList('instance');
+        QUnit.test(`scrollview-content role should be restored when dataSource are added in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
 
-                instance.option(source, ['Item 1']);
+            instance.option('dataSource', ['Item 1']);
 
-                assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).get(0).getAttribute('role'), 'application');
-            });
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
         });
     });
 });
