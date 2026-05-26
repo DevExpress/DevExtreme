@@ -58,7 +58,6 @@ jobs:
 
             - uses: pnpm/action-setup@v6
               with:
-                version: 9
                 run_install: false
 
             - uses: actions/cache@v5
