@@ -54,6 +54,13 @@ export class SchedulerModel {
     return appointments.map((element) => createAppointmentModel(element as HTMLDivElement));
   }
 
+  getDraggedAppointment(): AppointmentModel | null {
+    const draggableContainer = this.container.querySelector('.dx-scheduler-draggable-container');
+    const dragClone = draggableContainer?.querySelector('.dx-scheduler-appointment');
+
+    return dragClone ? createAppointmentModel(dragClone as HTMLDivElement) : null;
+  }
+
   getCollectorTexts(): string[] {
     const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
     const collectors = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment-collector'));

@@ -32,8 +32,7 @@ export interface AppointmentDragControllerOptions {
   updateAppointmentOnDrop: (
     appointmentData: Appointment,
     $cell: dxElementWrapper,
-    event: DragEndEvent,
-  ) => void;
+  ) => Promise<void>;
 }
 
 export interface WorkSpaceDraggableOptions {
@@ -162,7 +161,7 @@ export class AppointmentDragController {
     const $cell = this.options.getCellFromDragTarget($(this.$dragClone));
 
     if (!$cell) {
-      this.removeHighlight();
+      this.removeCellHighlight();
       return;
     }
 
@@ -178,11 +177,16 @@ export class AppointmentDragController {
     const isSameCell = this.$initialCell?.is(this.$highlightedCell) ?? false;
     const isSameScheduler = this.$highlightedCell.closest(e.fromComponent.$element()).length > 0;
 
-    if (!isSameCell && isSameScheduler) {
-      this.options.updateAppointmentOnDrop(e.itemData, this.$highlightedCell, e);
+    if (isSameCell || !isSameScheduler) {
+      this.removeDraggingClasses($(e.itemElement));
+      return;
     }
 
-    this.removeDraggingClasses($(e.itemElement));
+    this.options.updateAppointmentOnDrop(e.itemData, this.$highlightedCell)
+      .then(() => { this.removeDraggingClasses($(e.itemElement)); })
+      .catch(() => { });
+
+    this.removeCellHighlight();
   }
 
   private onDragCancel(e): void {
@@ -191,17 +195,16 @@ export class AppointmentDragController {
 
   public removeDraggingClasses($dragSource: dxElementWrapper): void {
     $dragSource.removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
-    this.$dragClone = null;
-    this.removeHighlight();
+    this.removeCellHighlight();
   }
 
   private highlightCell($cell: dxElementWrapper): void {
-    this.removeHighlight();
+    this.removeCellHighlight();
     $cell.addClass(HIGHLIGHTED_CELL_CLASS);
     this.$highlightedCell = $cell;
   }
 
-  private removeHighlight(): void {
+  private removeCellHighlight(): void {
     this.$highlightedCell?.removeClass(HIGHLIGHTED_CELL_CLASS);
     this.$highlightedCell = null;
   }
