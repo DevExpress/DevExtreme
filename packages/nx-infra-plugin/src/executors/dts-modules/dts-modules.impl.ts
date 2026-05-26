@@ -78,8 +78,7 @@ export default createExecutor<DtsModulesExecutorSchema, ResolvedDtsModules>({
     );
 
     const dtsFilesForLicense = dtsFiles.filter(
-      (filePath) =>
-        !isExcludedFromModuleLicense(toRelativePosix(resolved.outputDir, filePath)),
+      (filePath) => !isExcludedFromModuleLicense(toRelativePosix(resolved.outputDir, filePath)),
     );
 
     const bannerInputs = {

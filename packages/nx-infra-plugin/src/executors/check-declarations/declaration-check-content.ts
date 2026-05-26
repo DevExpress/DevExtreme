@@ -41,7 +41,9 @@ export function buildJqueryCheckContent(tsBundleFile: string, modules: ModuleMet
             return '';
           }
 
-          return `$().${widgetName}();\n` + `<DevExpress.${globalPath}>$().${widgetName}('instance');\n`;
+          return (
+            `$().${widgetName}();\n` + `<DevExpress.${globalPath}>$().${widgetName}('instance');\n`
+          );
         })
         .join(''),
     )
