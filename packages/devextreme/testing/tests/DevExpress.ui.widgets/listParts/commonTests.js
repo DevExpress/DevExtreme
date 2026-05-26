@@ -5289,7 +5289,7 @@ QUnit.module('Accessibility', () => {
             assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
         });
 
-        QUnit.test(`scrollview-content role should be removed when dataSource are removed in realtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+        QUnit.test(`scrollview-content role should be removed when dataSource is cleared at runtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
             const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
 
             instance.option('dataSource', []);
