@@ -1682,7 +1682,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.updateAppointmentCore(
             appointmentData,
             newAppointmentData,
-          ).done(() => resolve());
+          ).always(resolve);
         },
         false,
       );
