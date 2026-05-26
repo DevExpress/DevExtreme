@@ -32,7 +32,7 @@ jobs:
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -105,7 +105,7 @@ jobs:
       working-directory: ./packages/devextreme
       run: 7z x artifacts.zip -aoa
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 

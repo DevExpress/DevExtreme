@@ -57,7 +57,7 @@ jobs:
 
       - name: Setup pnpm
         if: inputs.action == 'deploy'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           run_install: false
 
