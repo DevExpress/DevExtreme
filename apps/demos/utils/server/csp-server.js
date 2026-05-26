@@ -171,6 +171,9 @@ const CSP_DEMO_ALLOWLIST = {
   'TreeList/WebAPIService': {
     'img-src': ['data:'],
   },
+  'TreeList/Overview': {
+    'img-src': ['data:'],
+  },
   // globalize/message.js uses new Function() internally
   'Localization/UsingGlobalize': {
     'script-src': ["'unsafe-eval'"],
