@@ -1399,7 +1399,8 @@ class TagBox<
     const { showMultiTagOnly, maxDisplayedTags } = this.option();
     if ($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
       if (!showMultiTagOnly && isDefined(maxDisplayedTags)) {
-        this.option('value', this._getValue().slice(0, maxDisplayedTags - 1));
+        const tagsCountToBeRemoved = Math.max(0, maxDisplayedTags - 1);
+        this.option('value', this._getValue().slice(0, tagsCountToBeRemoved));
       } else {
         this.clear();
       }
