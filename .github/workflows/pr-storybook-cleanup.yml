@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout gh-pages (full history)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: gh-pages
           fetch-depth: 0

@@ -6150,7 +6150,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._list.$element(), listAttributes, localizedRoleDescription);
 
                 const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
-                helper.checkAttributes($listItemContainer, { role: 'application' }, 'scrollview content');
+                helper.checkAttributes($listItemContainer, { }, 'scrollview content');
 
                 const inputAttributes = {
                     autocomplete: 'off',
@@ -6183,7 +6183,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 listAttributes.id = helper.widget._listId;
                 helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
-                helper.checkAttributes($listItemContainer, { role: 'application' }, 'scrollview content');
+                helper.checkAttributes($listItemContainer, { }, 'scrollview content');
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;

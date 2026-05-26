@@ -105,6 +105,7 @@ $(() => {
     filterRow: {
       visible: true,
     },
+    filterSyncEnabled: true,
     paging: {
       pageSize: 10,
     },
