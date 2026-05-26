@@ -947,10 +947,11 @@ importers:
         version: 5.2.1(tslib@2.8.1)(webpack-cli@5.1.4)(webpack@5.105.4)
 
   e2e/bundlers:
-    devDependencies:
+    optionalDependencies:
       '@parcel/watcher-linux-x64-glibc':
         specifier: 2.5.0
         version: 2.5.0
+    devDependencies:
       '@rollup/plugin-alias':
         specifier: 3.1.9
         version: 3.1.9(rollup@4.59.0)
@@ -5837,6 +5838,7 @@ packages:
   '@parcel/watcher-linux-x64-glibc@2.5.0':
     resolution: {integrity: sha512-d9AOkusyXARkFD66S6zlGXyzx5RvY+chTP9Jp0ypSTC9d4lzyRs9ovGf/80VCxjKddcUvnsGwCHWuF2EoPgWjw==}
     engines: {node: '>= 10.0.0'}
+    cpu: [x64]
     os: [linux]
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
@@ -24458,7 +24460,8 @@ snapshots:
   '@parcel/watcher-linux-arm64-musl@2.5.0':
     optional: true
 
-  '@parcel/watcher-linux-x64-glibc@2.5.0': {}
+  '@parcel/watcher-linux-x64-glibc@2.5.0':
+    optional: true
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
     optional: true
