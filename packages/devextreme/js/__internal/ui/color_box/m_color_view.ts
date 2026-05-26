@@ -19,6 +19,7 @@ import Draggable from '@ts/m_draggable';
 import type { EditorProperties, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 import NumberBox from '@ts/ui/number_box/m_number_box';
+import { WIDGET_CLASS as NUMBERBOX_CLASS } from '@ts/ui/number_box/m_number_box.base';
 import TextBox from '@ts/ui/text_box/m_text_box';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
@@ -63,6 +64,10 @@ const COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW = 'dx-colorview-color-preview-color-new
 const TEXT_EDITOR_INPUT = 'dx-texteditor-input';
 
 const BLACK_COLOR = '#000000';
+
+interface PaletteHandlePosition {
+  top: number; left: number;
+}
 
 export interface ColorViewProperties extends EditorProperties {
   keyStep?: number;
@@ -293,7 +298,7 @@ class ColorView extends Editor<ColorViewProperties> {
           updateHorizontalPaletteValue(-getHorizontalPaletteStep(e));
         }
       },
-      enter: (e): void => {
+      enter: (e: KeyboardEvent): void => {
         this._fireEnterKeyPressed(e);
       },
     };
@@ -532,12 +537,12 @@ class ColorView extends Editor<ColorViewProperties> {
     });
   }
 
-  _calculateColorValue(paletteHandlePosition: { top: number; left: number }): number {
+  _calculateColorValue(paletteHandlePosition: PaletteHandlePosition): number {
     const value = Math.floor(paletteHandlePosition.top + this._paletteHandleHeight / 2);
     return 100 - Math.round(value * 100 / this._paletteHeight);
   }
 
-  _calculateColorSaturation(paletteHandlePosition: { top: number; left: number }): number {
+  _calculateColorSaturation(paletteHandlePosition: PaletteHandlePosition): number {
     const saturation = Math.floor(paletteHandlePosition.left + this._paletteHandleWidth / 2);
     return Math.round(saturation * 100 / this._paletteWidth);
   }
@@ -707,9 +712,9 @@ class ColorView extends Editor<ColorViewProperties> {
     this._$controlsContainer.append(this._rgbInputsWithLabels);
 
     this._rgbInputs = [
-      NumberBox.getInstance(this._rgbInputsWithLabels[0].find('.dx-numberbox')),
-      NumberBox.getInstance(this._rgbInputsWithLabels[1].find('.dx-numberbox')),
-      NumberBox.getInstance(this._rgbInputsWithLabels[2].find('.dx-numberbox')),
+      NumberBox.getInstance(this._rgbInputsWithLabels[0].find(`.${NUMBERBOX_CLASS}`)),
+      NumberBox.getInstance(this._rgbInputsWithLabels[1].find(`.${NUMBERBOX_CLASS}`)),
+      NumberBox.getInstance(this._rgbInputsWithLabels[2].find(`.${NUMBERBOX_CLASS}`)),
     ];
   }
 
@@ -834,7 +839,7 @@ class ColorView extends Editor<ColorViewProperties> {
     })
       .appendTo($alphaChannelInputCell);
 
-    this._alphaChannelInput = NumberBox.getInstance(editorWithLabel.find('.dx-numberbox'));
+    this._alphaChannelInput = NumberBox.getInstance(editorWithLabel.find(`.${NUMBERBOX_CLASS}`));
   }
 
   _updateColorTransparency(transparency: number): void {
@@ -1007,7 +1012,7 @@ class ColorView extends Editor<ColorViewProperties> {
         }
 
         this._updateByDrag = false;
-        super._optionChanged({ ...args, value: this.option('value') as string });
+        super._optionChanged({ ...args, value: this.option('value') as string | null });
         break;
       case 'matchValue':
         this._setBaseColor(value);
