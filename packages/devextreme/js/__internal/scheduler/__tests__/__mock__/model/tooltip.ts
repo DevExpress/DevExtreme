@@ -7,7 +7,8 @@ const TOOLTIP_WIDGET_SELECTOR = `
   .dx-scheduler-appointment-tooltip-wrapper.dx-tooltip.dx-widget
 `;
 const TOOLTIP_WRAPPER_SELECTOR = `
-  .dx-scheduler-appointment-tooltip-wrapper.dx-tooltip-wrapper
+  .dx-scheduler-appointment-tooltip-wrapper.dx-tooltip-wrapper,
+  .dx-scheduler-overlay-panel.dx-overlay-wrapper
 `;
 
 export class TooltipModel {
