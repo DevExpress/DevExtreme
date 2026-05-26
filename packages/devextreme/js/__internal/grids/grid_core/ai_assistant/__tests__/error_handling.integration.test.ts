@@ -122,7 +122,7 @@ describe('AI Assistant error handling', () => {
     beforeTest();
     jest.spyOn(errors, 'log').mockImplementation(jest.fn());
 
-    validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
+    validateSpy = jest.spyOn(GridCommands.prototype, 'parse')
       .mockImplementation((actions) => actions);
     executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
       .mockResolvedValue([

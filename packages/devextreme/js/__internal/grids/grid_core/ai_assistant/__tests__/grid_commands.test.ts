@@ -423,14 +423,14 @@ describe('GridCommands', () => {
     });
   });
 
-  describe('validateResponse', () => {
+  describe('parseResponse', () => {
     it('should return parsed actions for valid response with known command names and correct args', () => {
       const command = createMockCommand('test', {
         schema: z.object({ value: z.string() }),
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'test', args: { value: 'hello' } }],
       );
 
@@ -441,7 +441,7 @@ describe('GridCommands', () => {
       const command = createMockCommand('known');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'unknown', args: {} }],
       );
 
@@ -453,11 +453,11 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      expect(gridCommands.validate(
+      expect(gridCommands.parse(
         [{ name: 123 as unknown as string, args: {} }],
       )).toBeNull();
 
-      expect(gridCommands.validate(
+      expect(gridCommands.parse(
         [{ name: true as unknown as string, args: {} }],
       )).toBeNull();
     });
@@ -467,7 +467,7 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: '', args: {} }],
       );
 
@@ -479,11 +479,11 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      expect(gridCommands.validate(
+      expect(gridCommands.parse(
         [{ args: {} }] as unknown as ExecuteGridAssistantAction[],
       )).toBeNull();
 
-      expect(gridCommands.validate(
+      expect(gridCommands.parse(
         [{ name: 'test' }] as unknown as ExecuteGridAssistantAction[],
       )).toBeNull();
     });
@@ -493,7 +493,7 @@ describe('GridCommands', () => {
         createMockCommand('test'),
       ]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'test', args: null as unknown as Record<string, unknown> }],
       );
 
@@ -506,7 +506,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'test', args: { value: 123 } }],
       );
 
@@ -519,7 +519,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'test', args: {} }],
       );
 
@@ -532,7 +532,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'test', args: { value: 'ok', extra: true } }],
       );
 
@@ -542,7 +542,7 @@ describe('GridCommands', () => {
     it('should return an empty array for an empty actions array', () => {
       const gridCommands = new GridCommands(createMockComponent(), []);
 
-      const result = gridCommands.validate([]);
+      const result = gridCommands.parse([]);
 
       expect(result).toEqual([]);
     });
@@ -551,7 +551,7 @@ describe('GridCommands', () => {
       const command = createMockCommand('clearFilter');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'clearFilter', args: {} }],
       );
 
@@ -562,7 +562,7 @@ describe('GridCommands', () => {
       const command = createMockCommand('valid');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [
           { name: 'valid', args: {} },
           { name: 'invalid', args: {} },
@@ -582,7 +582,7 @@ describe('GridCommands', () => {
       });
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
-      const result = gridCommands.validate(
+      const result = gridCommands.parse(
         [{ name: 'test', args: { required: 'r', optional: null } }],
       );
 

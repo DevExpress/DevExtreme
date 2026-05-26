@@ -151,8 +151,8 @@ export class GridCommands {
     return schema;
   }
 
-  public validate(actions: ExecuteGridAssistantAction[]): ExecuteGridAssistantAction[] | null {
-    const validatedActions: ExecuteGridAssistantAction[] = [];
+  public parse(actions: ExecuteGridAssistantAction[]): ExecuteGridAssistantAction[] | null {
+    const parsedActions: ExecuteGridAssistantAction[] = [];
 
     for (const action of actions as Record<string, unknown>[]) {
       if (!action || typeof action.name !== 'string' || action.name === '') {
@@ -171,13 +171,13 @@ export class GridCommands {
         return null;
       }
 
-      validatedActions.push({
+      parsedActions.push({
         name: action.name,
         args: parseResult.data as Record<string, unknown>,
       });
     }
 
-    return validatedActions;
+    return parsedActions;
   }
 
   private async executeCommand(
