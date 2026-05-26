@@ -62,7 +62,7 @@ describe('AIAssistantController', () => {
     (MockedGridCommands.mockImplementation as jest.Mock).call(
       MockedGridCommands,
       () => ({
-        validate: jest.fn().mockReturnValue(true),
+        parse: jest.fn((actions) => actions),
         executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([{ status: 'success', message: 'sort' }]),
         abort: jest.fn(),
         buildResponseSchema: jest.fn().mockReturnValue({ type: 'object' }),
@@ -253,7 +253,7 @@ describe('AIAssistantController', () => {
       (MockedGridCommands.mockImplementation as jest.Mock).call(
         MockedGridCommands,
         () => ({
-          validate: jest.fn().mockReturnValue(true),
+          parse: jest.fn((actions) => actions),
           executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([
             { status: 'success', message: 'sort' },
             { status: 'aborted', message: 'filter aborted' },
@@ -375,11 +375,11 @@ describe('AIAssistantController', () => {
       await expect(promise).rejects.toThrow('Invalid response from the AI service. Please try again.');
     });
 
-    it('should fail message when validation fails', async () => {
+    it('should fail message when parse returns null', async () => {
       (MockedGridCommands.mockImplementation as jest.Mock).call(
         MockedGridCommands,
         () => ({
-          validate: jest.fn().mockReturnValue(false),
+          parse: jest.fn().mockReturnValue(null),
           executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([]),
           abort: jest.fn(),
           buildResponseSchema: jest.fn().mockReturnValue({ type: 'object' }),
@@ -417,7 +417,7 @@ describe('AIAssistantController', () => {
       (MockedGridCommands.mockImplementation as jest.Mock).call(
         MockedGridCommands,
         () => ({
-          validate: jest.fn().mockReturnValue(true),
+          parse: jest.fn((actions) => actions),
           executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([]),
           abort: jest.fn(),
           buildResponseSchema: jest.fn().mockReturnValue({ type: 'object' }),
@@ -455,7 +455,7 @@ describe('AIAssistantController', () => {
       (MockedGridCommands.mockImplementation as jest.Mock).call(
         MockedGridCommands,
         () => ({
-          validate: jest.fn().mockReturnValue(true),
+          parse: jest.fn((actions) => actions),
           executeCommands: jest.fn<() => Promise<CommandResult[]>>().mockResolvedValue([]),
           abort: jest.fn(),
           buildResponseSchema: jest.fn().mockReturnValue(undefined),
