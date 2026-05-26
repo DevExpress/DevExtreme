@@ -6974,6 +6974,7 @@ declare module DevExpress.core {
     after(element: Element | dxElementWrapper): this;
 
     append(element: Element | dxElementWrapper | string): this;
+    append(element: Element[] | dxElementWrapper[] | string[]): this;
 
     appendTo(element: Element | dxElementWrapper): this;
 
@@ -7086,6 +7087,7 @@ declare module DevExpress.core {
 
     trim(): this;
 
+    val(): string;
     val(value?: string | string[] | number): this;
 
     wrap(wrappingElement: this | Element | string): this;
