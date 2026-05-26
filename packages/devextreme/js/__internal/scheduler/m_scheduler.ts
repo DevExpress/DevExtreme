@@ -28,7 +28,6 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { DragEndEvent } from '@js/ui/draggable';
 import type {
   Appointment, AppointmentTooltipShowingEvent, DayOfWeek, Occurrence,
 } from '@js/ui/scheduler';
@@ -1669,36 +1668,25 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private updateAppointmentOnDrop(
     appointmentData: Appointment,
     $cell: dxElementWrapper,
-    dragEvent: DragEndEvent,
-  ): void {
+  ): Promise<void> {
     const updatedData = this.getUpdatedData(appointmentData, $cell);
     const newAppointmentData = extend({}, appointmentData, updatedData);
     const startDate = this._dataAccessors.get('startDate', newAppointmentData);
 
-    this.checkRecurringAppointment(
-      appointmentData,
-      newAppointmentData,
-      startDate,
-      () => {
-        this.updateAppointmentCore(
-          appointmentData,
-          newAppointmentData,
-          (): void => {
-            if (isDeferred(dragEvent.cancel)) {
-              (dragEvent.cancel as any).resolve?.();
-            } else {
-              dragEvent.cancel = true;
-            }
-
-            this.appointmentDragController.removeDraggingClasses($(dragEvent.itemElement));
-          },
-          dragEvent,
-        );
-      },
-      undefined,
-      undefined,
-      dragEvent,
-    );
+    return new Promise((resolve) => {
+      this.checkRecurringAppointment(
+        appointmentData,
+        newAppointmentData,
+        startDate,
+        () => {
+          this.updateAppointmentCore(
+            appointmentData,
+            newAppointmentData,
+          ).done(() => resolve());
+        },
+        false,
+      );
+    });
   }
 
   checkRecurringAppointment(
@@ -1979,7 +1967,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dragEvent.cancel = new Deferred();
     }
 
-    if (isPromise(updatingOptions.cancel) && dragEvent) {
+    if (isPromise(updatingOptions.cancel) && (dragEvent || this.option('_newAppointments'))) {
       this.updatingAppointments.add(target);
     }
 
