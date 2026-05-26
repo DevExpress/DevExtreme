@@ -1,12 +1,15 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import { loadMessages, locale } from '@js/localization';
+import { fireEvent } from '@testing-library/dom';
 
 import fx from '../../../common/core/animation/fx';
 import {
   createAppointmentPopup,
   disposeAppointmentPopups,
 } from '../__tests__/__mock__/create_appointment_popup';
+import { setupSchedulerTestEnvironment } from '../__tests__/__mock__/m_mock_scheduler';
 
 describe('Isolated AppointmentPopup environment', () => {
   beforeEach(() => {
@@ -360,8 +363,7 @@ describe('Isolated AppointmentPopup environment', () => {
       'startDateEditor', 'startTimeEditor', 'endDateEditor', 'endTimeEditor',
     ])('should not close popup on save button click when %s is empty', async (editorName) => {
       const { popup, POM } = await createAppointmentPopup({
-        appointmentData:
-        { ...commonAppointment },
+        appointmentData: { ...commonAppointment },
       });
 
       POM.setInputValue(editorName, null);
@@ -375,8 +377,7 @@ describe('Isolated AppointmentPopup environment', () => {
       'startTimeEditor', 'endDateEditor', 'endTimeEditor',
     ])('should not close popup on save button click in recurrence form when %s editor is empty', async (editorName) => {
       const { popup, POM } = await createAppointmentPopup({
-        appointmentData:
-        { ...commonAppointment },
+        appointmentData: { ...commonAppointment },
       });
 
       POM.setInputValue(editorName, null);
@@ -389,8 +390,7 @@ describe('Isolated AppointmentPopup environment', () => {
 
     it('should not block save in recurrence form when startDateEditor is empty', async () => {
       const { POM, callbacks } = await createAppointmentPopup({
-        appointmentData:
-        { ...commonAppointment },
+        appointmentData: { ...commonAppointment },
       });
 
       POM.setInputValue('startDateEditor', null);
@@ -402,6 +402,396 @@ describe('Isolated AppointmentPopup environment', () => {
       await Promise.resolve();
 
       expect(callbacks.onSave).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Recurrence Form', () => {
+    const recurringAppointment = {
+      text: 'recurring-app',
+      startDate: new Date(2017, 4, 1, 9, 30),
+      endDate: new Date(2017, 4, 1, 11),
+      recurrenceRule: 'FREQ=DAILY;COUNT=5',
+    };
+
+    const baseAppointment = {
+      text: 'Meeting',
+      startDate: new Date(2017, 4, 1, 10, 30),
+      endDate: new Date(2017, 4, 1, 11),
+    };
+
+    it('should allow opening recurrence settings when allowUpdating is false', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...recurringAppointment },
+        editing: { allowUpdating: false },
+        readOnly: true,
+      });
+
+      expect(POM.isRecurrenceGroupVisible()).toBe(false);
+
+      POM.recurrenceSettingsButton.click();
+
+      expect(POM.isRecurrenceGroupVisible()).toBe(true);
+    });
+
+    it('should close repeat selectbox popup when navigating to recurrence group via settings button', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...recurringAppointment },
+      });
+
+      const repeatEditor = POM.dxForm.getEditor('repeatEditor');
+      POM.getInput('repeatEditor').click();
+
+      expect(repeatEditor?.option('opened')).toBe(true);
+
+      POM.recurrenceSettingsButton.click();
+
+      expect(repeatEditor?.option('opened')).toBe(false);
+    });
+
+    it('should have disabled week day buttons when allowUpdating is false', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...recurringAppointment, recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE,TU,TH,FR,SA' },
+        editing: { allowUpdating: false },
+        readOnly: true,
+      });
+
+      POM.recurrenceSettingsButton.click();
+
+      const disabledButtons = POM.recurrenceWeekDayButtons.querySelectorAll('.dx-button.dx-state-disabled');
+
+      expect(disabledButtons.length).toBe(7);
+    });
+
+    it('should show recurrence group when repeat value is selected', async () => {
+      const { POM } = await createAppointmentPopup();
+
+      POM.selectRepeatValue('weekly');
+
+      expect(POM.isMainGroupVisible()).toBe(false);
+      expect(POM.isRecurrenceGroupVisible()).toBe(true);
+    });
+
+    it('should restore main group when back button is clicked', async () => {
+      const { POM } = await createAppointmentPopup();
+      POM.selectRepeatValue('weekly');
+
+      POM.backButton.click();
+
+      expect(POM.isMainGroupVisible()).toBe(true);
+      expect(POM.isRecurrenceGroupVisible()).toBe(false);
+    });
+
+    it('should set inert attribute on hidden group when switching forms', async () => {
+      const { POM } = await createAppointmentPopup();
+
+      POM.selectRepeatValue('weekly');
+
+      expect(POM.mainGroup.getAttribute('inert')).toBe('true');
+      expect(POM.recurrenceGroup.getAttribute('inert')).toBeNull();
+    });
+
+    it('should adjust popup height when switching to recurrence form', async () => {
+      const { POM } = await createAppointmentPopup();
+
+      POM.selectRepeatValue('weekly');
+
+      expect(typeof POM.component.option('height')).toBe('number');
+    });
+
+    it('should reset popup height to auto when returning to main form', async () => {
+      const { POM } = await createAppointmentPopup();
+      POM.selectRepeatValue('weekly');
+
+      POM.backButton.click();
+
+      expect(POM.component.option('height')).toBe('auto');
+    });
+
+    it('should open main form when opening recurring appointment', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData:
+        { ...recurringAppointment },
+      });
+
+      expect(POM.isMainGroupVisible()).toBe(true);
+      expect(POM.isRecurrenceGroupVisible()).toBe(false);
+    });
+
+    describe('State', () => {
+      it('should have correct input values for appointment with hour frequency', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=HOURLY;INTERVAL=2;COUNT=10' },
+        });
+
+        expect(POM.getInputValue('repeatEditor')).toBe('Hourly');
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.getInputValue('recurrencePeriodEditor')).toBe('Hour(s)');
+        expect(POM.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with daily frequency', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=DAILY;INTERVAL=2;COUNT=10' },
+        });
+
+        expect(POM.getInputValue('repeatEditor')).toBe('Daily');
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.getInputValue('recurrencePeriodEditor')).toBe('Day(s)');
+        expect(POM.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with week frequency', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE,FR;COUNT=10' },
+        });
+
+        expect(POM.getInputValue('repeatEditor')).toBe('Weekly');
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.getInputValue('recurrencePeriodEditor')).toBe('Week(s)');
+        // [Sun, Mon, Tue, Wed, Thu, Fri, Sat] — MO,WE,FR → positions 1,3,5
+        expect(POM.getWeekDaysSelection()).toEqual([false, true, false, true, false, true, false]);
+        expect(POM.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with monthly frequency', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=MONTHLY;INTERVAL=2;BYMONTHDAY=1;COUNT=10' },
+        });
+
+        expect(POM.getInputValue('repeatEditor')).toBe('Monthly');
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.getInputValue('recurrencePeriodEditor')).toBe('Month(s)');
+        expect(POM.getInputValue('recurrenceDayOfMonthEditor')).toBe('1');
+        expect(POM.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with yearly frequency', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=YEARLY;INTERVAL=2;BYMONTHDAY=1;BYMONTH=5;COUNT=10' },
+        });
+
+        expect(POM.getInputValue('repeatEditor')).toBe('Yearly');
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.getInputValue('recurrencePeriodEditor')).toBe('Year(s)');
+        expect(POM.getInputValue('recurrenceDayOfYearDayEditor')).toBe('1');
+        expect(POM.getInputValue('recurrenceDayOfYearMonthEditor')).toBe('May');
+        expect(POM.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('T1325870: should use current locale for recurrence editors after locale change', async () => {
+        const currentLocale = locale();
+
+        loadMessages({
+          de: {
+            'dxScheduler-recurrenceYearly': 'custom yearly',
+            'dxScheduler-recurrenceRepeatYearly': 'custom repeat yearly',
+          },
+        });
+        locale('de');
+
+        try {
+          const { POM } = await createAppointmentPopup({
+            appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=YEARLY;INTERVAL=2;BYMONTHDAY=1;BYMONTH=5;COUNT=10' },
+          });
+
+          expect(POM.getInputValue('repeatEditor')).toBe('custom yearly');
+
+          POM.recurrenceSettingsButton.click();
+
+          expect(POM.getInputValue('recurrencePeriodEditor')).toBe('Custom repeat yearly');
+          expect(POM.getInputValue('recurrenceDayOfYearMonthEditor')).toBe('Mai');
+        } finally {
+          locale(currentLocale);
+        }
+      });
+
+      it('should have correct input values for appointment with no end', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=DAILY;INTERVAL=2' },
+        });
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceRepeatEndEditor')).toBe('never');
+      });
+
+      it('should have correct input values for appointment with end by date', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=DAILY;INTERVAL=2;UNTIL=20170601T000000Z' },
+        });
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceRepeatEndEditor')).toBe('until');
+        expect(POM.getInputValue('recurrenceEndUntilEditor')).toBe('6/1/2017');
+      });
+
+      it('should have correct input values for appointment with end by count', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=DAILY;INTERVAL=2;COUNT=10' },
+        });
+
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceRepeatEndEditor')).toBe('count');
+        expect(POM.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
+      });
+    });
+
+    describe('Repeat End Values Preservation', () => {
+      it('should preserve count value when switching between recurrence types', async () => {
+        const testCount = 15;
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment },
+        });
+
+        POM.selectRepeatValue('daily');
+
+        POM.setInputValue('recurrenceRepeatEndEditor', 'count');
+        POM.setInputValue('recurrenceEndCountEditor', testCount);
+
+        POM.backButton.click();
+
+        POM.selectRepeatValue('weekly');
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceEndCountEditor')).toBe(`${testCount} occurrence(s)`);
+      });
+
+      it('should preserve until value when switching between recurrence types', async () => {
+        const testUntilDate = new Date(2017, 5, 16);
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...baseAppointment },
+        });
+
+        POM.selectRepeatValue('daily');
+
+        POM.setInputValue('recurrenceRepeatEndEditor', 'until');
+        POM.setInputValue('recurrenceEndUntilEditor', testUntilDate);
+
+        POM.backButton.click();
+
+        POM.selectRepeatValue('weekly');
+        POM.recurrenceSettingsButton.click();
+
+        expect(POM.getInputValue('recurrenceEndUntilEditor')).toBe('6/16/2017');
+      });
+    });
+
+    describe('Repeat End Editors Disabled State', () => {
+      it.each([
+        ['never', 'FREQ=DAILY'],
+        ['until', 'FREQ=DAILY;UNTIL=20170615T000000Z'],
+        ['count', 'FREQ=DAILY;COUNT=10'],
+      ] as ['never' | 'until' | 'count', string][])(
+        'should set correct disabled state when repeatEnd is %s',
+        async (repeatEndValue, recurrenceRule) => {
+          const { POM } = await createAppointmentPopup({
+            appointmentData: { ...baseAppointment, recurrenceRule },
+          });
+
+          POM.recurrenceSettingsButton.click();
+
+          const untilEditor = POM.dxForm.getEditor('recurrenceEndUntilEditor');
+          const countEditor = POM.dxForm.getEditor('recurrenceEndCountEditor');
+
+          expect(untilEditor?.option('disabled')).toBe(repeatEndValue !== 'until');
+          expect(countEditor?.option('disabled')).toBe(repeatEndValue !== 'count');
+        },
+      );
+    });
+
+    describe('FrequencyEditor focus', () => {
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      it('should not be focused when value is changed via API', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData:
+          { ...recurringAppointment },
+        });
+        POM.recurrenceSettingsButton.click();
+
+        const frequencyEditor = POM.dxForm.getEditor('recurrencePeriodEditor');
+        const frequencyEditorInputElement = POM.getInput('recurrencePeriodEditor');
+
+        frequencyEditor?.option('value', 'yearly');
+
+        expect(document.activeElement).not.toBe(frequencyEditorInputElement);
+      });
+
+      it('should be focused when value is changed via keyboard', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData:
+          { ...recurringAppointment },
+        });
+        POM.recurrenceSettingsButton.click();
+
+        const frequencyEditorInputElement = POM.getInput('recurrencePeriodEditor');
+
+        frequencyEditorInputElement.click();
+        jest.useFakeTimers();
+        fireEvent.keyDown(frequencyEditorInputElement, { key: 'ArrowDown' });
+        jest.runAllTimers();
+
+        expect(document.activeElement).toBe(frequencyEditorInputElement);
+      });
+    });
+
+    it('should set animation offset CSS variable when switching to recurrence form', async () => {
+      setupSchedulerTestEnvironment({
+        height: 600,
+        classRects: {
+          'dx-form': { top: 10 },
+          'dx-scheduler-form-main-group': { top: 60 },
+        },
+      });
+
+      const { POM } = await createAppointmentPopup();
+      POM.selectRepeatValue('weekly');
+
+      const animationTop = POM.dxForm.$element()[0].style.getPropertyValue('--dx-scheduler-animation-top');
+      expect(animationTop).toBe('50px');
+    });
+
+    it('T1318550: editors with hidden outer label must have labelMode: hidden', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=YEARLY;BYMONTHDAY=1;BYMONTH=5' },
+      });
+      POM.recurrenceSettingsButton.click();
+
+      const editorsWithHiddenLabel = [
+        'recurrencePeriodEditor',
+        'recurrenceRepeatEndEditor',
+        'recurrenceEndUntilEditor',
+        'recurrenceEndCountEditor',
+        'recurrenceDayOfYearDayEditor',
+      ];
+
+      editorsWithHiddenLabel.forEach((name) => {
+        expect(POM.dxForm.getEditor(name)?.option('labelMode')).toBe('hidden');
+      });
     });
   });
 });
