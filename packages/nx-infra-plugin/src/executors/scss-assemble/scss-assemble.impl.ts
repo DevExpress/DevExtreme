@@ -6,10 +6,7 @@ import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
 import { readFileText, writeFileText, ensureDir } from '../../utils/file-operations';
 import { copyDirectory } from '../copy-files/copy-files.impl';
-import {
-  DATA_URI_SCSS_REGEX,
-  encodeDataUriForCssUrl,
-} from '../../utils/scss-data-uri';
+import { DATA_URI_SCSS_REGEX, encodeDataUriForCssUrl } from '../../utils/scss-data-uri';
 import { ScssAssembleExecutorSchema } from './schema';
 
 const SCSS_EXTENSIONS = new Set(['.scss', '.css']);

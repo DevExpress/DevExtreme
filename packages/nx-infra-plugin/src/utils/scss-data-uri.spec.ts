@@ -10,9 +10,7 @@ describe('scss-data-uri', () => {
 
   it('encodes raster images as base64', () => {
     const buffer = Buffer.from('png-bytes');
-    expect(encodeDataUriContent(buffer, 'icon.png')).toBe(
-      'data:image/png;base64,cG5nLWJ5dGVz',
-    );
+    expect(encodeDataUriContent(buffer, 'icon.png')).toBe('data:image/png;base64,cG5nLWJ5dGVz');
   });
 
   it('wraps payload for css url() replacement', () => {
