@@ -1,3 +1,5 @@
+import { equalByValue } from '@js/core/utils/common';
+import { getPathParts } from '@js/core/utils/data';
 import type { ReadonlySignal, Signal } from '@ts/core/state_manager/index';
 import { computed, effect, signal } from '@ts/core/state_manager/index';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
@@ -6,11 +8,14 @@ import { isColumnFilterable, mergeColumnHeaderFilterOptions } from '@ts/grids/ne
 import type { OptionWithChanges } from '@ts/grids/new/grid_core/options_controller/types';
 
 import { OptionsController } from '../options_controller/options_controller';
+import { getTreeNodeByPath } from '../utils/tree/index';
 import { updateColumnSettings } from './columns_settings/index';
+import { IGNORE_COLUMN_OPTION_NAMES } from './const';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, ColumnsConfigurationFromData, VisibleColumn } from './types';
 import {
   columnOptionUpdate,
+  getColumnByIndexOrName,
   getColumnIndexByName,
   getColumnOptionsFromDataItem,
   normalizeColumns,
@@ -121,14 +126,16 @@ export class ColumnsController {
   }
 
   public columnOption<TProp extends keyof ColumnSettings>(
-    { name }: Column,
+    column: Column,
     // TODO: Fix type -> option may be path with dots in runtime
     //  E.g: 'columnOption('A', 'headerFilter.search.enabled', true)
     option: TProp,
     value: ColumnSettings[TProp],
   ): void {
+    const { name } = column;
     const settings = this.columnsSettings.peek();
     const columnIdx = getColumnIndexByName(settings, name);
+    const prevValue = getTreeNodeByPath(column, getPathParts(option));
 
     this.columnsSettings.value = columnOptionUpdate(
       settings,
@@ -136,12 +143,43 @@ export class ColumnsController {
       option,
       value,
     );
+
+    this.fireOptionChanged(columnIdx, option, value, prevValue);
   }
 
   public updateColumns(func: (columns: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
+    const prevColumns = this.columns.peek();
+
     let newColumnSettings = func(this.columnsSettings.peek());
     newColumnSettings = normalizeColumnsVisibleIndexes(newColumnSettings);
     this.columnsSettings.value = newColumnSettings;
+
+    const newColumns = this.columns.peek();
+    newColumns.forEach((newColumn, columnIdx) => {
+      const prevColumn = getColumnByIndexOrName(prevColumns, newColumn.name);
+      if (prevColumn) {
+        const options = new Set([...Object.keys(prevColumn), ...Object.keys(newColumn)]);
+        for (const option of options) {
+          if (!IGNORE_COLUMN_OPTION_NAMES[option]) {
+            const prevValue = prevColumn[option];
+            const newValue = newColumn[option];
+            this.fireOptionChanged(columnIdx, option, newValue, prevValue);
+          }
+        }
+      }
+    });
+  }
+
+  private fireOptionChanged(
+    columnIndex: number,
+    optionName: string,
+    newValue: unknown,
+    prevValue: unknown,
+  ): void {
+    if (!equalByValue(prevValue, newValue, { maxDepth: 5 })) {
+      const fullOptionPath = `columns[${columnIndex}].${optionName}`;
+      this.options.notifyColumnOptionChanged(fullOptionPath, newValue, prevValue);
+    }
   }
 
   public setColumnOptionsFromDataItem(

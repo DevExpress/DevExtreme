@@ -203,11 +203,12 @@ export function shouldRunTestAtIndex(testIndex) {
   return part === currentPart;
 }
 
+// Remote WidgetsGalleryDataService is unstable, so RemoteGrouping is skipped
 const SKIPPED_TESTS = {
-  jQuery: {},
-  Angular: {},
-  Vue: {},
-  React: {},
+  jQuery: { DataGrid: ['RemoteGrouping'] },
+  Angular: { DataGrid: ['RemoteGrouping'] },
+  Vue: { DataGrid: ['RemoteGrouping'] },
+  React: { DataGrid: ['RemoteGrouping'] },
 };
 
 export function shouldSkipDemo(framework, component, demoName, skippedTests) {

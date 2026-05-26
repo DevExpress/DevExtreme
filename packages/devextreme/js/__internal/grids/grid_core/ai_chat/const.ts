@@ -53,6 +53,6 @@ export const CLASSES = {
 export const CLEAR_CHAT_ICON = 'clearhistory';
 export const REGENERATE_ICON = 'restore';
 
-export const SUCCESS_ITEM_EMOJI = '✅';
-export const ERROR_ITEM_EMOJI = '❌';
-export const ABORTED_ITEM_EMOJI = '⚠️';
+export const SUCCESS_ITEM_EMOJI = '\u2705';
+export const ERROR_ITEM_EMOJI = '\u274C';
+export const ABORTED_ITEM_EMOJI = '\u26A0\uFE0F';
