@@ -11,6 +11,8 @@ export interface AppointmentModel<T = HTMLDivElement> {
   getGeometry: () => Position;
   getColor: (view: string) => string | undefined;
   getSnapshot: () => object;
+  isFocused: () => boolean;
+  isDragSource: () => boolean;
 }
 
 const getColor = (appointment: HTMLDivElement): string => appointment.style.backgroundColor;
@@ -60,4 +62,6 @@ export const createAppointmentModel = <T extends HTMLDivElement | null>(
     date: getDisplayDate(element),
     ...getGeometry(element),
   }),
+  isFocused: () => element?.classList.contains('dx-state-focused') ?? false,
+  isDragSource: () => element?.classList.contains('dx-scheduler-appointment-drag-source') ?? false,
 });
