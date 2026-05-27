@@ -112,7 +112,7 @@ const createDataGridWithAiAndPopup = async (
 
 describe('AI Assistant error handling', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
-  let validateSpy: ReturnType<typeof jest.spyOn>;
+  let parseSpy: ReturnType<typeof jest.spyOn>;
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let executeCommandsSpy: ReturnType<typeof jest.spyOn>;
   // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -122,8 +122,8 @@ describe('AI Assistant error handling', () => {
     beforeTest();
     jest.spyOn(errors, 'log').mockImplementation(jest.fn());
 
-    validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
-      .mockReturnValue(true);
+    parseSpy = jest.spyOn(GridCommands.prototype, 'parse')
+      .mockImplementation((actions) => actions);
     executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
       .mockResolvedValue([
         { status: 'success', message: 'Done' },
@@ -133,7 +133,7 @@ describe('AI Assistant error handling', () => {
   });
 
   afterEach(() => {
-    validateSpy.mockRestore();
+    parseSpy.mockRestore();
     executeCommandsSpy.mockRestore();
     buildResponseSchemaSpy.mockRestore();
     afterTest();
@@ -256,8 +256,8 @@ describe('AI Assistant error handling', () => {
   });
 
   describe('validation failure', () => {
-    it('should fail when command validation returns false', async () => {
-      validateSpy.mockReturnValue(false);
+    it('should fail when command parse returns null', async () => {
+      parseSpy.mockReturnValue(null);
 
       const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
