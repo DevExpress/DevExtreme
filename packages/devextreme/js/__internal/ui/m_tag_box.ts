@@ -1396,10 +1396,12 @@ class TagBox<
   }
 
   _removeTagElement($tag) {
+    const { showMultiTagOnly, maxDisplayedTags } = this.option();
     if ($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
-      if (!this.option('showMultiTagOnly')) {
-        const { maxDisplayedTags } = this.option();
-        this.option('value', this._getValue().slice(0, maxDisplayedTags));
+      if (!showMultiTagOnly && isDefined(maxDisplayedTags)) {
+        const displayedTagsCount = Math.max(0, maxDisplayedTags - 1);
+        const newValue = this._getValue().slice(0, displayedTagsCount);
+        this.option('value', newValue);
       } else {
         this.clear();
       }
