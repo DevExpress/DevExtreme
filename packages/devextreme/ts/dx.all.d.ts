@@ -4700,9 +4700,9 @@ declare module DevExpress.common.grids {
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
   /**
-   * [descr:BasicFilterExprObj]
+   * [descr:BasicFilterExpr]
    */
-  export type BasicFilterExprObj = {
+  export type BasicFilterExpr = {
     type: 'basic';
     field: string;
     operator: DevExpress.common.data.SearchOperation;
@@ -5251,13 +5251,13 @@ declare module DevExpress.common.grids {
   };
   export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**
-   * [descr:CombinedFilterExprObj]
+   * [descr:CombinedFilterExpr]
    */
-  export type CombinedFilterExprObj = {
+  export type CombinedFilterExpr = {
     type: 'combined';
-    left: FilterExprObj;
     combiner: 'and' | 'or';
-    right: FilterExprObj;
+    leftId: string;
+    rightId: string;
   };
   /**
    * [descr:CommandInfo]
@@ -5265,7 +5265,10 @@ declare module DevExpress.common.grids {
   export type CommandInfo<
     TCommands extends PredefinedCommands = PredefinedCommands
   > = {
-    [K in keyof TCommands]: { name: K; args: TCommands[K] };
+    [K in keyof TCommands]: {
+      name: K;
+      args: TCommands[K];
+    };
   }[keyof TCommands];
   /**
    * [descr:CompositeKeyPair]
@@ -5450,12 +5453,26 @@ declare module DevExpress.common.grids {
   export type EnterKeyAction = 'startEdit' | 'moveFocus';
   export type EnterKeyDirection = 'none' | 'column' | 'row';
   /**
-   * [descr:FilterExprObj]
+   * [descr:FilterExpr]
    */
-  export type FilterExprObj =
-    | BasicFilterExprObj
-    | CombinedFilterExprObj
-    | NegatedFilterExprObj;
+  export type FilterExpr =
+    | BasicFilterExpr
+    | CombinedFilterExpr
+    | NegatedFilterExpr;
+  /**
+   * [descr:FilterExprNode]
+   */
+  interface FilterExprNode {
+    id: string;
+    expr: FilterExpr;
+  }
+  /**
+   * [descr:FilterExprTree]
+   */
+  interface FilterExprTree {
+    rootId: string;
+    nodes: FilterExprNode[];
+  }
   export type FilterOperation =
     | '='
     | '<>'
@@ -6481,11 +6498,11 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
-   * [descr:NegatedFilterExprObj]
+   * [descr:NegatedFilterExpr]
    */
-  export type NegatedFilterExprObj = {
+  export type NegatedFilterExpr = {
     type: 'negated';
-    expression: FilterExprObj;
+    expressionId: string;
   };
   /**
    * [descr:NewRowInfo]
@@ -6567,7 +6584,7 @@ declare module DevExpress.common.grids {
       width: number | string;
     };
     filterValue: {
-      expression: FilterExprObj | null;
+      expression: FilterExprTree | null;
     };
     clearFilter: {};
     focusRowByKey: {

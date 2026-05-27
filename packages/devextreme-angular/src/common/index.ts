@@ -281,7 +281,7 @@ export namespace Grids {
     export type AIColumnRequestCreatingInfo<TRowData = any> = GridsModule.AIColumnRequestCreatingInfo<TRowData>;
     export type ApplyChangesMode = GridsModule.ApplyChangesMode;
     export type ApplyFilterMode = GridsModule.ApplyFilterMode;
-    export type BasicFilterExprObj = GridsModule.BasicFilterExprObj;
+    export type BasicFilterExpr = GridsModule.BasicFilterExpr;
     export type ColumnAIOptions = GridsModule.ColumnAIOptions;
     export type ColumnBase<TRowData = any> = GridsModule.ColumnBase<TRowData>;
     export type ColumnButtonBase = GridsModule.ColumnButtonBase;
@@ -297,7 +297,7 @@ export namespace Grids {
     export type ColumnHeaderFilterSearchConfig = GridsModule.ColumnHeaderFilterSearchConfig;
     export type ColumnLookup = GridsModule.ColumnLookup;
     export type ColumnResizeMode = GridsModule.ColumnResizeMode;
-    export type CombinedFilterExprObj = GridsModule.CombinedFilterExprObj;
+    export type CombinedFilterExpr = GridsModule.CombinedFilterExpr;
     export type CommandInfo<TCommands extends PredefinedCommands = PredefinedCommands> = GridsModule.CommandInfo<TCommands>;
     export type CompositeKeyPair = GridsModule.CompositeKeyPair;
     export type DataChange<TRowData = any, TKey = any> = GridsModule.DataChange<TRowData, TKey>;
@@ -309,7 +309,9 @@ export namespace Grids {
     export type EditingTextsBase = GridsModule.EditingTextsBase;
     export type EnterKeyAction = GridsModule.EnterKeyAction;
     export type EnterKeyDirection = GridsModule.EnterKeyDirection;
-    export type FilterExprObj = GridsModule.FilterExprObj;
+    export type FilterExpr = GridsModule.FilterExpr;
+    export type FilterExprNode = GridsModule.FilterExprNode;
+    export type FilterExprTree = GridsModule.FilterExprTree;
     export type FilterOperation = GridsModule.FilterOperation;
     export type FilterPanel<TComponent = any, TRowData = any, TKey = any> = GridsModule.FilterPanel<TComponent, TRowData, TKey>;
     export type FilterPanelTexts = GridsModule.FilterPanelTexts;
@@ -330,7 +332,7 @@ export namespace Grids {
     export type KeyboardNavigation = GridsModule.KeyboardNavigation;
     export type KeyDownInfo = GridsModule.KeyDownInfo;
     export type LoadPanel = GridsModule.LoadPanel;
-    export type NegatedFilterExprObj = GridsModule.NegatedFilterExprObj;
+    export type NegatedFilterExpr = GridsModule.NegatedFilterExpr;
     export type NewRowInfo<TRowData = any> = GridsModule.NewRowInfo<TRowData>;
     export type NewRowPosition = GridsModule.NewRowPosition;
     export type Pager = GridsModule.Pager;
