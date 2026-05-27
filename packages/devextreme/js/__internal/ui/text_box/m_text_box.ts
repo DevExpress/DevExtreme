@@ -95,11 +95,11 @@ class TextBox<
         this._$searchIcon.remove();
       }
 
-      this.option({
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        showClearButton: this._showClearButton === undefined ? this.option('showClearButton') : this._showClearButton,
-      });
+      if (this._showClearButton === undefined) {
+        return;
+      }
 
+      this.option({ showClearButton: this._showClearButton });
       this._showClearButton = undefined;
     }
   }
