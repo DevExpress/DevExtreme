@@ -1645,11 +1645,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private updateAppointmentOnDrop(
     appointmentData: Appointment,
+    targetedAppointmentData: TargetedAppointment,
     $cell: dxElementWrapper,
   ): Promise<void> {
     const updatedData = this.getUpdatedData(appointmentData, $cell);
     const newAppointmentData = extend({}, appointmentData, updatedData);
-    const startDate = this._dataAccessors.get('startDate', newAppointmentData);
+    const startDate = this._dataAccessors.get('startDate', targetedAppointmentData);
 
     return new Promise((resolve) => {
       this.checkRecurringAppointment(
@@ -1663,6 +1664,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           ).always(resolve);
         },
         false,
+        undefined,
+        undefined,
+        undefined,
+        (): void => { resolve(); },
       );
     });
   }
@@ -1676,6 +1681,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     isPopupEditing?: any,
     dragEvent?: any,
     recurrenceEditMode?: any,
+    onCancel?: () => void,
   ) {
     const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
 
@@ -1710,7 +1716,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
               dragEvent,
             );
           })
-          .fail(() => this._appointments.moveAppointmentBack(dragEvent));
+          .fail(() => {
+            if (this.option('_newAppointments')) {
+              onCancel?.();
+            } else {
+              this._appointments.moveAppointmentBack(dragEvent);
+            }
+          });
     }
   }
 

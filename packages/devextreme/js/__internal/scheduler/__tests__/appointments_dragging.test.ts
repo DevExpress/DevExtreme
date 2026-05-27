@@ -377,6 +377,40 @@ describe('Appointments Dragging', () => {
 
       expect(appointment.isDragSource()).toBe(false);
     });
+
+    it('should remove drag-source class when changing recurring appointment was cancelled', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+          recurrenceRule: 'FREQ=DAILY;COUNT=5',
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+        editing: true,
+        onAppointmentUpdating: (e) => {
+          e.cancel = new Promise((resolve) => {
+            setTimeout(() => resolve(false), 3000);
+          });
+        },
+      });
+
+      const appointment = POM.getAppointments()[0];
+
+      dragStart(POM, appointment.element);
+      dragMove(POM, appointment.element, POM.getDateTableCell(4, 0));
+      dragEnd(POM, appointment.element);
+
+      expect(POM.isPopupVisible()).toBe(true);
+      expect(appointment.isDragSource()).toBe(true);
+
+      POM.popup.closeButton.click();
+      await new Promise(process.nextTick);
+
+      expect(POM.isPopupVisible()).toBe(false);
+      expect(appointment.isDragSource()).toBe(false);
+    });
   });
 
   describe('Allow dragging', () => {
@@ -809,6 +843,105 @@ describe('Appointments Dragging', () => {
             text: 'Appointment 2',
             startDate: new Date(2015, 1, 9, 3),
             endDate: new Date(2015, 1, 9, 4),
+          }),
+        }),
+      );
+    });
+
+    it('should correctly update recurring appointment when editing a single occurrence', async () => {
+      const onAppointmentUpdated = jest.fn();
+      const onAppointmentAdded = jest.fn();
+
+      const appointmentData = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5',
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [{ ...appointmentData }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+        editing: true,
+        onAppointmentUpdated,
+        onAppointmentAdded,
+      });
+
+      const appointment = POM.getAppointments()[0].element;
+      const targetCell = POM.getDateTableCell(4, 0);
+
+      dragStart(POM, appointment);
+      dragMove(POM, appointment, targetCell);
+      dragEnd(POM, appointment);
+
+      POM.popup.editAppointmentButton.click();
+      await new Promise(process.nextTick);
+
+      expect(onAppointmentAdded).toHaveBeenCalledTimes(1);
+      expect(onAppointmentAdded).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appointmentData: expect.objectContaining({
+            text: 'Appointment 1',
+            startDate: new Date(2015, 1, 9, 2),
+            endDate: new Date(2015, 1, 9, 3),
+          }),
+        }),
+      );
+
+      const addedAppointment = (onAppointmentAdded.mock.calls[0][0] as any).appointmentData;
+      expect(addedAppointment.recurrenceRule).toBeUndefined();
+
+      expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
+      expect(onAppointmentUpdated).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appointmentData: expect.objectContaining({
+            text: 'Appointment 1',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 9),
+            recurrenceRule: 'FREQ=DAILY;COUNT=5',
+            recurrenceException: '20150209T000000Z',
+          }),
+        }),
+      );
+    });
+
+    it('should correctly update recurring appointment when editing the series', async () => {
+      const onAppointmentUpdated = jest.fn();
+
+      const appointmentData = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5',
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [{ ...appointmentData }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+        editing: true,
+        onAppointmentUpdated,
+      });
+
+      const appointment = POM.getAppointments()[0].element;
+      const targetCell = POM.getDateTableCell(4, 0);
+
+      dragStart(POM, appointment);
+      dragMove(POM, appointment, targetCell);
+      dragEnd(POM, appointment);
+
+      POM.popup.editSeriesButton.click();
+      await new Promise(process.nextTick);
+
+      expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
+      expect(onAppointmentUpdated).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appointmentData: expect.objectContaining({
+            text: 'Appointment 1',
+            startDate: new Date(2015, 1, 9, 2),
+            endDate: new Date(2015, 1, 9, 3),
+            recurrenceRule: 'FREQ=DAILY;COUNT=5',
           }),
         }),
       );

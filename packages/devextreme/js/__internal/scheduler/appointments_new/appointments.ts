@@ -110,12 +110,18 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     return result;
   }
 
-  public getAppointmentData($element: dxElementWrapper): SafeAppointment {
+  public getAppointmentData($element: dxElementWrapper): {
+    appointmentData: SafeAppointment,
+    targetedAppointmentData: TargetedAppointment,
+  } {
     const viewItem = this.viewItems.find(
       (item: ViewItem) => item.$element().is($element),
-    );
+    ) as BaseAppointmentView;
 
-    return (viewItem as BaseAppointmentView).appointmentData;
+    return {
+      appointmentData: viewItem.appointmentData,
+      targetedAppointmentData: viewItem.targetedAppointmentData,
+    };
   }
 
   public get $allDayContainer(): dxElementWrapper | null {

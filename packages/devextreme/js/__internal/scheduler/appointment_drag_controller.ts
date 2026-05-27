@@ -9,7 +9,7 @@ import Draggable from '@ts/m_draggable';
 
 import { APPOINTMENT_CLASSES } from './appointments_new/const';
 import type Scheduler from './m_scheduler';
-import type { AppointmentTooltipItem } from './types';
+import type { AppointmentTooltipItem, TargetedAppointment } from './types';
 import type { AppointmentItemViewModel } from './view_model/types';
 
 const APPOINTMENT_DRAG_SOURCE_CLASS = 'dx-scheduler-appointment-drag-source';
@@ -31,12 +31,16 @@ export interface AppointmentDragControllerOptions {
 
   updateAppointmentOnDrop: (
     appointmentData: Appointment,
+    targetedAppointmentData: TargetedAppointment,
     $cell: dxElementWrapper,
   ) => Promise<void>;
 }
 
 export interface WorkSpaceDraggableOptions {
-  getAppointmentData: ($element: dxElementWrapper) => Appointment;
+  getAppointmentData: ($element: dxElementWrapper) => {
+    appointmentData: Appointment;
+    targetedAppointmentData: TargetedAppointment;
+  };
 }
 
 export interface TooltipDraggableOptions {
@@ -92,17 +96,17 @@ export class AppointmentDragController {
     $tooltipList: dxElementWrapper,
     draggableOptions: TooltipDraggableOptions,
   ): void {
-    let draggingTooltipItem: AppointmentTooltipItem | null = null;
+    let tooltipItem: AppointmentTooltipItem | null = null;
 
     const config: DraggableProperties = {
       ...this.getCommonDraggableConfig(),
       filter: `.${TOOLTIP_LIST_ITEM_CLASS}`,
       dragTemplate: () => {
-        if (!draggingTooltipItem) {
+        if (!tooltipItem) {
           return $();
         }
 
-        const appointmentViewModel = draggingTooltipItem.settings;
+        const appointmentViewModel = tooltipItem.settings;
 
         this.$dragClone = draggableOptions.dragTemplate(appointmentViewModel);
         this.$dragClone.css({ top: '', left: '' });
@@ -111,8 +115,11 @@ export class AppointmentDragController {
         return this.$dragClone;
       },
       onDragStart: (e: DragStartEvent) => {
-        draggingTooltipItem = $(e.itemElement).data('dxListItemData') as unknown as AppointmentTooltipItem;
-        e.itemData = draggingTooltipItem.appointment;
+        tooltipItem = $(e.itemElement).data('dxListItemData') as unknown as AppointmentTooltipItem;
+        e.itemData = {
+          appointmentData: tooltipItem.appointment,
+          targetedAppointmentData: tooltipItem.targetedAppointment ?? tooltipItem.appointment,
+        };
 
         this.onDragStart(e);
       },
@@ -144,7 +151,7 @@ export class AppointmentDragController {
   }
 
   private onDragStart(e: DragStartEvent): void {
-    if (!this.options.canDragAppointment(e.itemData)) {
+    if (!this.options.canDragAppointment(e.itemData.appointmentData)) {
       e.cancel = true;
       return;
     }
@@ -182,18 +189,23 @@ export class AppointmentDragController {
       return;
     }
 
-    this.options.updateAppointmentOnDrop(e.itemData, this.$highlightedCell)
+    this.options.updateAppointmentOnDrop(
+      e.itemData.appointmentData,
+      e.itemData.targetedAppointmentData,
+      this.$highlightedCell,
+    )
       .finally(() => { this.removeDraggingClasses($(e.itemElement)); })
       .catch((err) => { throw err; });
 
     this.removeCellHighlight();
   }
 
-  private onDragCancel(e): void {
+  // Note: onDragCancel is private callback, so there's no type for it
+  private onDragCancel(e: DragEndEvent): void {
     this.removeDraggingClasses($(e.itemElement));
   }
 
-  public removeDraggingClasses($dragSource: dxElementWrapper): void {
+  private removeDraggingClasses($dragSource: dxElementWrapper): void {
     $dragSource.removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
     this.removeCellHighlight();
   }
