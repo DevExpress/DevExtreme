@@ -56,12 +56,17 @@ export function resolveTypeScript(
   projectRoot: string,
   typescriptModule?: string,
 ): typeof import('typescript') {
-  const candidates = typescriptModule
+  const moduleNameCandidates = typescriptModule
     ? [
         path.isAbsolute(typescriptModule)
           ? typescriptModule
-          : path.resolve(projectRoot, typescriptModule),
+          : typescriptModule.startsWith('.')
+            ? path.resolve(projectRoot, typescriptModule)
+            : typescriptModule,
       ]
+    : [];
+  const candidates = typescriptModule
+    ? moduleNameCandidates
     : [
         path.join(projectRoot, 'node_modules', 'typescript-min'),
         path.join(projectRoot, 'node_modules', 'typescript'),
