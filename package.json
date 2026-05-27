@@ -130,8 +130,7 @@
       "webpack-dev-server@<=5.2.3": "^5.2.4",
       "yaml@>=2.0.0 <2.8.3": "^2.8.3",
       "@babel/plugin-transform-modules-systemjs@>=7.12.0 <7.29.4": "^7.29.4",
-      "@eslint/plugin-kit@<0.3.4": ">=0.3.4",
-      "@parcel/reporter-dev-server@>=1.6.1 <=2.16.3": ">=2.16.4"
+      "@eslint/plugin-kit@<0.3.4": ">=0.3.4"
     }
   },
   "packageManager": "pnpm@9.15.9",
