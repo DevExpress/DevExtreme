@@ -12,6 +12,7 @@ import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -1188,6 +1189,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private attachDragEvents(element) {
+    if (this.option('newAppointments')) {
+      return;
+    }
+
     this.detachDragEvents(element);
 
     const onDragEnter = (e) => {
@@ -2219,10 +2224,55 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     );
   }
 
+  public getCellFromDragTarget($dragTarget: dxElementWrapper): dxElementWrapper | null {
+    if ($dragTarget.length === 0) {
+      return null;
+    }
+
+    const point = this.getPointFromDragTarget($dragTarget);
+    const elements = (domAdapter as any).elementsFromPoint(point.x, point.y);
+
+    const cell = elements.find((element) => element.classList.contains('dx-scheduler-date-table-cell')
+        || element.classList.contains('dx-scheduler-all-day-table-cell'));
+
+    return cell ? $(cell) : null;
+  }
+
+  private getPointFromDragTarget($dragTarget: dxElementWrapper): { x: number; y: number } {
+    const THRESHOLD = 10;
+
+    const dragElementContainer = $dragTarget.get(0);
+    const rect = dragElementContainer.getBoundingClientRect();
+
+    const cellWidth = this.getCellWidth();
+    const isWideAppointment = rect.width > cellWidth;
+    const isNarrowAppointment = rect.width <= THRESHOLD;
+
+    const x = rect.left;
+    const y = rect.top;
+
+    if (isWideAppointment) {
+      return {
+        x: x + THRESHOLD,
+        y: y + THRESHOLD,
+      };
+    }
+
+    if (isNarrowAppointment) {
+      return { x, y };
+    }
+
+    return {
+      x: x + rect.width / 2,
+      y: y + THRESHOLD,
+    };
+  }
+
   // ------------
   // DnD should be removed from work-space
   // ------------
 
+  // TODO<Appointments>: dragBehavior when old impl is removed
   initDragBehavior(scheduler) {
     if (!this.dragBehavior && scheduler) {
       this.dragBehavior = new AppointmentDragBehavior(scheduler);
@@ -3276,6 +3326,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 }
 
+// TODO<Appointments>: remove dragBehavior when old impl is removed
 const createDragBehaviorConfig = (
   container,
   rootElement,
