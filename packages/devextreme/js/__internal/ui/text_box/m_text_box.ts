@@ -2,7 +2,6 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
-import { isDefined } from '@js/core/utils/type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import TextEditor from '@ts/ui/text_box/text_editor.mask';
 
@@ -97,7 +96,8 @@ class TextBox<
       }
 
       this.option({
-        showClearButton: isDefined(this._showClearButton) ?? this.option('showClearButton'),
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        showClearButton: this._showClearButton === undefined ? this.option('showClearButton') : this._showClearButton,
       });
 
       this._showClearButton = undefined;
