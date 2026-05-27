@@ -817,7 +817,9 @@
         "mode": "jquery",
         "typescriptModule": "typescript-min"
       },
+      "dependsOn": ["build:npm:dts-bundle"],
       "inputs": [
+        "{projectRoot}/artifacts/ts/dx.all.d.ts",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",
         "{projectRoot}/build/gulp/modules_metadata.json"

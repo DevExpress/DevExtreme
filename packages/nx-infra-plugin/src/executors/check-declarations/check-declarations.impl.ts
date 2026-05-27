@@ -175,11 +175,12 @@ async function resolveModuleDeclarationFiles(
 
 async function writeCheckEntryFile(
   entryDir: string,
-  fileName: string,
+  fileStem: string,
   content: string,
 ): Promise<string> {
   await ensureDir(entryDir);
-  const entryPath = path.join(entryDir, fileName);
+  const uniqueSuffix = `${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const entryPath = path.join(entryDir, `${fileStem}-${uniqueSuffix}.ts`);
   await writeFileText(entryPath, content);
   return entryPath;
 }
@@ -215,7 +216,7 @@ async function runModeCheck(resolved: ResolvedCheckDeclarations): Promise<void> 
       const content = buildJqueryCheckContent(resolved.tsBundleFile, modules);
       const entryPath = await writeCheckEntryFile(
         path.join(projectRoot, resolved.entryOutputDir),
-        'globals.ts',
+        'globals',
         content,
       );
       await runTypeCheckWithTemporaryEntry(entryPath, () =>
@@ -256,7 +257,7 @@ async function runModeCheck(resolved: ResolvedCheckDeclarations): Promise<void> 
       const content = buildPublicModulesCheckContent(modules, resolved.npmPackageDir);
       const entryPath = await writeCheckEntryFile(
         path.join(projectRoot, resolved.entryOutputDir),
-        'modules.ts',
+        'modules',
         content,
       );
       await runTypeCheckWithTemporaryEntry(entryPath, () =>
