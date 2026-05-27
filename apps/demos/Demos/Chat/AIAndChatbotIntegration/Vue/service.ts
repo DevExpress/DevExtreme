@@ -10,7 +10,7 @@ export type AIMessage = (
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
-  deployment: 'gpt-4o-mini',
+  deployment: 'demo-mini',
   apiVersion: '2024-02-01',
   endpoint: 'https://public-api.devexpress.com/demo-openai',
   apiKey: 'DEMO',
@@ -22,7 +22,7 @@ export async function getAIResponse(messages: AIMessage[]): Promise<AIResponse> 
   const params: Record<string, any> = {
     messages,
     model: AzureOpenAIConfig.deployment,
-    max_tokens: 1000,
+    max_completion_tokens: 1000,
     temperature: 0.7,
   };
 
