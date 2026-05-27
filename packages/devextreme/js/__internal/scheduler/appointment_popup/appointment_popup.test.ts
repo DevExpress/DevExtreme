@@ -426,11 +426,14 @@ describe('Isolated AppointmentPopup environment', () => {
         readOnly: true,
       });
 
-      expect(POM.isRecurrenceGroupVisible()).toBe(false);
+      const visibleBefore = POM.isRecurrenceGroupVisible();
 
       POM.recurrenceSettingsButton.click();
 
-      expect(POM.isRecurrenceGroupVisible()).toBe(true);
+      const visibleAfter = POM.isRecurrenceGroupVisible();
+
+      expect(visibleBefore).toBe(false);
+      expect(visibleAfter).toBe(true);
     });
 
     it('should close repeat selectbox popup when navigating to recurrence group via settings button', async () => {
@@ -441,11 +444,14 @@ describe('Isolated AppointmentPopup environment', () => {
       const repeatEditor = POM.dxForm.getEditor('repeatEditor');
       POM.getInput('repeatEditor').click();
 
-      expect(repeatEditor?.option('opened')).toBe(true);
+      const openedBefore = repeatEditor?.option('opened');
 
       POM.recurrenceSettingsButton.click();
 
-      expect(repeatEditor?.option('opened')).toBe(false);
+      const openedAfter = repeatEditor?.option('opened');
+
+      expect(openedBefore).toBe(true);
+      expect(openedAfter).toBe(false);
     });
 
     it('should have disabled week day buttons when allowUpdating is false', async () => {
@@ -509,8 +515,7 @@ describe('Isolated AppointmentPopup environment', () => {
 
     it('should open main form when opening recurring appointment', async () => {
       const { POM } = await createAppointmentPopup({
-        appointmentData:
-        { ...recurringAppointment },
+        appointmentData: { ...recurringAppointment },
       });
 
       expect(POM.isMainGroupVisible()).toBe(true);
@@ -792,6 +797,119 @@ describe('Isolated AppointmentPopup environment', () => {
       editorsWithHiddenLabel.forEach((name) => {
         expect(POM.dxForm.getEditor(name)?.option('labelMode')).toBe('hidden');
       });
+    });
+  });
+
+  describe('Customize form items', () => {
+    const appointment = {
+      text: 'Meeting',
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+    };
+
+    it('should use default form items when editing.form.items is not configured', async () => {
+      const { POM } = await createAppointmentPopup({ appointmentData: { ...appointment } });
+
+      const formItems = POM.dxForm.option('items') ?? [];
+
+      expect(formItems.length).toBeGreaterThan(0);
+    });
+
+    it('should produce empty form when editing.form.items is empty array', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { items: [] } },
+      });
+
+      const formItems = POM.dxForm.option('items') ?? [];
+
+      expect(formItems.length).toBe(0);
+    });
+
+    it('should resolve named group when specified as string in items array', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { items: ['mainGroup'] } },
+      });
+
+      const formItems = POM.dxForm.option('items') ?? [];
+
+      expect(formItems.length).toBe(1);
+      expect(formItems[0]?.name).toBe('mainGroup');
+    });
+
+    it.each([true, false])('should set group visibility to %s when specified in object config', async (visible) => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { items: [{ name: 'mainGroup', visible }] } },
+      });
+
+      const formItems = POM.dxForm.option('items') ?? [];
+
+      expect(formItems[0]?.visible).toBe(visible);
+    });
+
+    it('should filter group children to specified named items', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { items: [{ name: 'mainGroup', items: ['subjectGroup', 'dateGroup'] }] } },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mainGroup = (POM.dxForm.option('items') ?? [])[0] as any;
+
+      expect(mainGroup?.items?.length).toBe(2);
+      expect(mainGroup?.items?.[0]?.name).toBe('subjectGroup');
+      expect(mainGroup?.items?.[1]?.name).toBe('dateGroup');
+    });
+
+    it('should produce empty children when items array in group config is empty', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { items: [{ name: 'mainGroup', items: [] }] } },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mainGroup = (POM.dxForm.option('items') ?? [])[0] as any;
+
+      expect(mainGroup?.items?.length).toBe(0);
+    });
+
+    it('should create placeholder item for non-existent group name', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { items: ['nonExistentGroup'] } },
+      });
+
+      const formItems = POM.dxForm.option('items') ?? [];
+
+      expect(formItems.length).toBe(1);
+    });
+
+    it('should handle mixed string and object items', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { items: ['mainGroup', { name: 'mainGroup', visible: false }] } },
+      });
+
+      const formItems = POM.dxForm.option('items') ?? [];
+
+      expect(formItems.length).toBe(2);
+      expect(formItems[0]?.name).toBe('mainGroup');
+      expect(formItems[1]?.name).toBe('mainGroup');
+      expect(formItems[1]?.visible).toBe(false);
+    });
+
+    it('should call custom onContentReady and onInitialized form callbacks', async () => {
+      const onContentReady = jest.fn();
+      const onInitialized = jest.fn();
+
+      await createAppointmentPopup({
+        editing: { form: { onContentReady, onInitialized } },
+      });
+
+      expect(onContentReady).toHaveBeenCalled();
+      expect(onInitialized).toHaveBeenCalled();
     });
   });
 });
