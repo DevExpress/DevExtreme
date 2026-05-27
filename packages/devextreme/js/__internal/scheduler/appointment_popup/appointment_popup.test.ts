@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import { loadMessages, locale } from '@js/localization';
 import { fireEvent } from '@testing-library/dom';
+import DOMComponent from '@ts/core/widget/dom_component';
 
 import fx from '../../../common/core/animation/fx';
 import {
@@ -361,8 +362,8 @@ describe('Isolated AppointmentPopup environment', () => {
 
     it.each([
       'startDateEditor', 'startTimeEditor', 'endDateEditor', 'endTimeEditor',
-    ])('should not close popup on save button click when %s is empty', async (editorName) => {
-      const { popup, POM } = await createAppointmentPopup({
+    ])('should block save when %s is empty', async (editorName) => {
+      const { POM, callbacks } = await createAppointmentPopup({
         appointmentData: { ...commonAppointment },
       });
 
@@ -370,13 +371,13 @@ describe('Isolated AppointmentPopup environment', () => {
       POM.saveButton.click();
       await Promise.resolve();
 
-      expect(popup.visible).toBe(true);
+      expect(callbacks.onSave).not.toHaveBeenCalled();
     });
 
     it.each([
       'startTimeEditor', 'endDateEditor', 'endTimeEditor',
-    ])('should not close popup on save button click in recurrence form when %s editor is empty', async (editorName) => {
-      const { popup, POM } = await createAppointmentPopup({
+    ])('should block save in recurrence form when %s is empty', async (editorName) => {
+      const { POM, callbacks } = await createAppointmentPopup({
         appointmentData: { ...commonAppointment },
       });
 
@@ -385,7 +386,7 @@ describe('Isolated AppointmentPopup environment', () => {
       POM.saveButton.click();
       await Promise.resolve();
 
-      expect(popup.visible).toBe(true);
+      expect(callbacks.onSave).not.toHaveBeenCalled();
     });
 
     it('should not block save in recurrence form when startDateEditor is empty', async () => {
@@ -398,10 +399,11 @@ describe('Isolated AppointmentPopup environment', () => {
 
       const recurrenceStartDate = POM.getInputValue('recurrenceStartDateEditor');
 
+      expect(recurrenceStartDate).toBe('5/9/2017');
+
       POM.saveButton.click();
       await Promise.resolve();
 
-      expect(recurrenceStartDate).toBe('5/9/2017');
       expect(callbacks.onSave).toHaveBeenCalledTimes(1);
     });
   });
@@ -765,19 +767,31 @@ describe('Isolated AppointmentPopup environment', () => {
     });
 
     it('should set animation offset CSS variable when switching to recurrence form', async () => {
-      setupSchedulerTestEnvironment({
-        height: 600,
-        classRects: {
-          'dx-form': { top: 10 },
-          'dx-scheduler-form-main-group': { top: 60 },
-        },
-      });
+      const originalGetComputedStyle = window.getComputedStyle;
+      const originalGetBoundingClientRect = Element.prototype.getBoundingClientRect;
+      const originalGetClientRects = Element.prototype.getClientRects;
+      const originalIsVisible = DOMComponent.prototype._isVisible;
 
-      const { POM } = await createAppointmentPopup();
-      POM.selectRepeatValue('weekly');
+      try {
+        setupSchedulerTestEnvironment({
+          height: 600,
+          classRects: {
+            'dx-form': { top: 10 },
+            'dx-scheduler-form-main-group': { top: 60 },
+          },
+        });
 
-      const animationTop = POM.dxForm.$element()[0].style.getPropertyValue('--dx-scheduler-animation-top');
-      expect(animationTop).toBe('50px');
+        const { POM } = await createAppointmentPopup();
+        POM.selectRepeatValue('weekly');
+
+        const animationTop = POM.dxForm.$element()[0].style.getPropertyValue('--dx-scheduler-animation-top');
+        expect(animationTop).toBe('50px');
+      } finally {
+        window.getComputedStyle = originalGetComputedStyle;
+        Element.prototype.getBoundingClientRect = originalGetBoundingClientRect;
+        Element.prototype.getClientRects = originalGetClientRects;
+        DOMComponent.prototype._isVisible = originalIsVisible;
+      }
     });
 
     it('T1318550: editors with hidden outer label must have labelMode: hidden', async () => {
