@@ -29,49 +29,6 @@ import gridCoreUtils from '../m_utils';
 import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 import { DataHelperMixin } from './m_data_helper_mixin';
 
-const changePaging = function (that, optionName, value) {
-  const dataSource = that._dataSource;
-
-  if (dataSource) {
-    if (value !== undefined) {
-      const oldValue = that._getPagingOptionValue(optionName);
-      if (oldValue !== value) {
-        if (optionName === 'pageSize') {
-          dataSource.pageIndex(0);
-        }
-        dataSource[optionName](value);
-
-        that._skipProcessingPagingChange = true;
-
-        if (optionName === 'pageSize') {
-          that.option('paging.pageIndex', 0);
-        }
-        that.option(`paging.${optionName}`, value);
-
-        that._skipProcessingPagingChange = false;
-        const pageIndex = dataSource.pageIndex();
-        that._isPaging = optionName === 'pageIndex';
-
-        return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
-          .done(() => {
-            that._isPaging = false;
-            that.pageChanged.fire(pageIndex);
-          });
-      }
-
-      return Deferred().resolve().promise();
-    }
-
-    return dataSource[optionName]();
-  }
-
-  if (optionName === 'pageIndex' && value !== undefined) {
-    return Deferred().resolve().promise();
-  }
-
-  return 0;
-};
-
 export interface HandleDataChangedArguments {
   changeType?: 'refresh' | 'update' | 'loadError';
   isDelayed?: boolean;
@@ -120,7 +77,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _changes!: any[];
 
-  private readonly _skipProcessingPagingChange: boolean | undefined;
+  private _pagingDeferred: any;
+
+  private _skipProcessingPagingChange: boolean | undefined;
 
   private _useSortingGroupingFromColumns: boolean | undefined;
 
@@ -370,12 +329,23 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
             this._isPaging = changedPagingOptions.isPageIndexChanged;
 
-            dataSource.load().done(() => {
+            const loadPromise = changedPagingOptions.isPageSizeChanged
+              ? dataSource.reload()
+              : dataSource.load();
+
+            loadPromise.done(() => {
               this._isPaging = false;
               that.pageChanged.fire(pageIndex);
+              this._resolvePagingDeferred();
+            }).fail(() => {
+              this._resolvePagingDeferred();
             });
+            handled();
+            break;
           }
         }
+
+        this._resolvePagingDeferred();
         handled();
         break;
       case 'rtlEnabled':
@@ -1624,11 +1594,19 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: virtual_scrolling
    */
   public pageIndex(value?) {
-    return changePaging(this, 'pageIndex', value);
+    if (value === undefined) {
+      return this._dataSource ? this._getPagingOptionValue('pageIndex') : 0;
+    }
+
+    return this._changePaging('pageIndex', value);
   }
 
   public pageSize(value?) {
-    return changePaging(this, 'pageSize', value);
+    if (value === undefined) {
+      return this._dataSource ? this._getPagingOptionValue('pageSize') : 0;
+    }
+
+    return this._changePaging('pageSize', value);
   }
 
   public isCustomLoading() {
@@ -1708,6 +1686,45 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
       this.updateItems({ changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly });
+    }
+  }
+
+  private _changePaging(optionName, value) {
+    const dataSource = this._dataSource;
+
+    if (!dataSource) {
+      return Deferred().resolve().promise();
+    }
+
+    const oldValue = this._getPagingOptionValue(optionName);
+    if (oldValue === value) {
+      return Deferred().resolve().promise();
+    }
+
+    const pagingOptions = {
+      ...this.option('paging'),
+      [optionName]: value,
+    };
+
+    if (optionName === 'pageSize') {
+      pagingOptions.pageIndex = 0;
+    }
+
+    this._resolvePagingDeferred();
+    // @ts-expect-error
+    this._pagingDeferred = new Deferred();
+
+    this._skipProcessingPagingChange = true;
+    this.option('paging', pagingOptions);
+    this._skipProcessingPagingChange = false;
+
+    return this._pagingDeferred.promise();
+  }
+
+  private _resolvePagingDeferred() {
+    if (this._pagingDeferred) {
+      this._pagingDeferred.resolve();
+      this._pagingDeferred = null;
     }
   }
 
