@@ -342,6 +342,24 @@ describe('Appointment Form', () => {
     });
   });
 
+  describe('Validation', () => {
+    it('should close popup on save when startDateEditor is empty in recurrence form', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({ ...commonAppointment });
+
+      POM.popup.setInputValue('startDateEditor', null);
+      POM.popup.selectRepeatValue('daily');
+
+      expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/9/2017');
+
+      POM.popup.saveButton.click();
+      await Promise.resolve();
+
+      expect(POM.isPopupVisible()).toBe(false);
+    });
+  });
+
   describe('State', () => {
     it('should have correct editor values when opening for empty date cell - 1', async () => {
       const { POM } = await createScheduler({
