@@ -13,7 +13,7 @@ import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/text_area';
 import type { OptionChanged } from '@ts/core/widget/types';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
 type ScrollAwareEvent = (MouseEvent | PointerEvent) & {
