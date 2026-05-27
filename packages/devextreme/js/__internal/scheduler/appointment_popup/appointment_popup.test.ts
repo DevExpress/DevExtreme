@@ -500,6 +500,11 @@ describe('Isolated AppointmentPopup environment', () => {
 
       expect(POM.mainGroup.getAttribute('inert')).toBe('true');
       expect(POM.recurrenceGroup.getAttribute('inert')).toBeNull();
+
+      POM.backButton.click();
+
+      expect(POM.mainGroup.getAttribute('inert')).toBeNull();
+      expect(POM.recurrenceGroup.getAttribute('inert')).toBe('true');
     });
 
     it('should adjust popup height when switching to recurrence form', async () => {
@@ -920,12 +925,17 @@ describe('Isolated AppointmentPopup environment', () => {
       const onContentReady = jest.fn();
       const onInitialized = jest.fn();
 
-      await createAppointmentPopup({
+      const { POM } = await createAppointmentPopup({
         editing: { form: { onContentReady, onInitialized } },
       });
 
       expect(onContentReady).toHaveBeenCalled();
       expect(onInitialized).toHaveBeenCalled();
+
+      POM.selectRepeatValue('weekly');
+
+      expect(POM.isMainGroupVisible()).toBe(false);
+      expect(POM.isRecurrenceGroupVisible()).toBe(true);
     });
   });
 });
