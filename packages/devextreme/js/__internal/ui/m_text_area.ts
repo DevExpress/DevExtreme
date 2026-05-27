@@ -16,8 +16,9 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
-export const TEXTAREA_CLASS = 'dx-textarea';
-export const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
+type ScrollAwareEvent = (MouseEvent | PointerEvent) & {
+  isScrollingEvent?: boolean;
+};
 
 export interface TextAreaProperties extends Omit<Properties,
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput'
@@ -26,6 +27,9 @@ export interface TextAreaProperties extends Omit<Properties,
 > {
   _shouldAttachKeyboardEvents?: boolean;
 }
+
+export const TEXTAREA_CLASS = 'dx-textarea';
+export const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
 class TextArea<
   TProperties extends TextAreaProperties = TextAreaProperties,
@@ -84,32 +88,32 @@ class TextArea<
     const $input = this._input();
     const initScrollData = prepareScrollData($input, true);
 
-    // @ts-expect-error ts-error
+    // @ts-expect-error addNamespace
     eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
     eventsEngine.on(
       $input,
-      // @ts-expect-error ts-error
+      // @ts-expect-error addNamespace
       addNamespace(pointerEvents.down, this.NAME),
       this._pointerDownHandler.bind(this),
     );
     eventsEngine.on(
       $input,
-      // @ts-expect-error ts-error
+      // @ts-expect-error addNamespace
       addNamespace(pointerEvents.move, this.NAME),
       this._pointerMoveHandler.bind(this),
     );
   }
 
-  _pointerDownHandler(e): void {
+  _pointerDownHandler(e: MouseEvent | PointerEvent): void {
     this._eventY = eventData(e).y;
   }
 
-  _pointerMoveHandler(e): void {
+  _pointerMoveHandler(e: MouseEvent | PointerEvent): void {
     const currentEventY = eventData(e).y;
     const delta = this._eventY - currentEventY;
 
     if (allowScroll(this._input(), delta)) {
-      e.isScrollingEvent = true;
+      (e as ScrollAwareEvent).isScrollingEvent = true;
       e.stopPropagation();
     }
 
@@ -144,7 +148,7 @@ class TextArea<
 
   _renderEvents(): void {
     if (this.option('autoResizeEnabled')) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error addNamespace
       eventsEngine.on(this._input(), addNamespace('input paste', this.NAME), this._updateInputHeight.bind(this));
     }
 
@@ -152,7 +156,7 @@ class TextArea<
   }
 
   _refreshEvents(): void {
-    // @ts-expect-error ts-error
+    // @ts-expect-error addNamespace
     eventsEngine.off(this._input(), addNamespace('input paste', this.NAME));
     super._refreshEvents();
   }
