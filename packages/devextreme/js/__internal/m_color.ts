@@ -259,6 +259,27 @@ const standardColorTypes = [
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _round = Math.round;
 
+export interface ColorInstance {
+  baseColor: string | undefined;
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+  hsv: { h: number; s: number; v: number };
+  hsl: { h: number; s: number; l: number };
+  colorIsInvalid: boolean;
+  highlight: (step?: number) => string;
+  darken: (step?: number) => string;
+  alter: (step: number) => ColorInstance;
+  blend: (blendColor: ColorInstance | string, opacity: number) => ColorInstance;
+  toHex: () => string;
+  getPureColor: () => ColorInstance;
+  isValidHex: (hex: string) => boolean;
+  isValidRGB: (r: number, g: number, b: number) => boolean;
+  isValidAlpha: (a: number) => boolean;
+  fromHSL: (hsl: { h: number; s: number; l: number }) => ColorInstance;
+}
+
 function Color(value?) {
   this.baseColor = value;
   let color;
@@ -580,4 +601,9 @@ Color.prototype = {
   },
 };
 
-export default Color;
+interface ColorConstructor {
+  prototype: ColorInstance;
+  new(value?: string): ColorInstance;
+}
+
+export default Color as unknown as ColorConstructor;

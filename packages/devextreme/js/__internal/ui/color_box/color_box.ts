@@ -10,8 +10,8 @@ import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 
 import type { PopupProperties } from '../popup/m_popup';
 import type Popup from '../popup/m_popup';
-import type { ColorViewProperties } from './m_color_view';
-import ColorView from './m_color_view';
+import type { ColorViewProperties } from './color_view';
+import ColorView from './color_view';
 
 const COLOR_BOX_CLASS = 'dx-colorbox';
 const COLOR_BOX_INPUT_CLASS = `${COLOR_BOX_CLASS}-input`;
@@ -281,7 +281,8 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     super._cancelButtonHandler();
   }
 
-  // needed to be typed in widget.ts
+  // need to be typed in widget.ts
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _getKeyboardListeners(): any[] {
     return super._getKeyboardListeners().concat([this._colorView]);
   }
@@ -303,7 +304,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   }
 
   _renderNoColorIcon(): void {
-    if (!this._$noColorIcon || !this._$noColorIcon.length) {
+    if (!this._$noColorIcon?.length) {
       this._$noColorIcon = $('<i>')
         .addClass(`${DX_ICON_CLASS} ${DX_ICON_COLOR_DISMISS}`)
         .appendTo(this._$colorResultPreview);
@@ -316,7 +317,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
 
     this._$colorBoxInputContainer.toggleClass(COLOR_BOX_COLOR_IS_NOT_DEFINED, !hasValue);
 
-    if (hasValue) {
+    if (value !== null && value !== undefined) {
       this._cleanNoColorIcon();
 
       colorUtils.makeTransparentBackground(this._$colorResultPreview, value);
@@ -394,7 +395,6 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     return value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldLogFieldTemplateDeprecationWarning(): boolean {
     return true;
   }
@@ -435,7 +435,9 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       case 'applyButtonText':
       case 'cancelButtonText':
         super._optionChanged(args);
-        this._popup && this._addPopupBottomClasses();
+        if (this._popup) {
+          this._addPopupBottomClasses();
+        }
         break;
       case 'editAlphaChannel':
       case 'keyStep':
