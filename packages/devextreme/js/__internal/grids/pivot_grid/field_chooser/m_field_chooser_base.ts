@@ -173,8 +173,9 @@ export class FieldChooserBase extends mixinWidget {
 
   renderField(field, showColumnLines) {
     const that = this;
+    const caption = field.caption ?? field.dataField ?? '';
     const $fieldContent = $(DIV).addClass(CLASSES.area.fieldContent)
-      .text(field.caption || field.dataField);
+      .text(caption);
     const $fieldElement = $(DIV)
       .addClass(CLASSES.area.field)
       .addClass(CLASSES.area.box)
@@ -191,7 +192,7 @@ export class FieldChooserBase extends mixinWidget {
             alignment: that.option('rtlEnabled') ? 'right' : 'left',
             sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
             allowSorting: field.allowSorting,
-            caption: field.caption || field.dataField,
+            caption,
           },
           showColumnLines,
         });
@@ -205,7 +206,7 @@ export class FieldChooserBase extends mixinWidget {
           filterValues: mainGroupField.filterValues,
           allowFiltering: mainGroupField.allowFiltering && !field.groupIndex,
           allowSorting: field.allowSorting,
-          caption: field.caption || field.dataField,
+          caption,
         },
         showColumnLines,
       });
