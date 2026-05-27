@@ -854,8 +854,8 @@ describe('Appointments Dragging', () => {
 
       const appointmentData = {
         text: 'Appointment 1',
-        startDate: new Date(2015, 1, 9, 8),
-        endDate: new Date(2015, 1, 9, 9),
+        startDate: '2015-02-08T18:00:00.000Z',
+        endDate: '2015-02-08T19:00:00.000Z',
         recurrenceRule: 'FREQ=DAILY;COUNT=5',
       };
 
@@ -866,6 +866,7 @@ describe('Appointments Dragging', () => {
         editing: true,
         onAppointmentUpdated,
         onAppointmentAdded,
+        timeZone: 'UTC',
       });
 
       const appointment = POM.getAppointments()[0].element;
@@ -879,15 +880,13 @@ describe('Appointments Dragging', () => {
       await new Promise(process.nextTick);
 
       expect(onAppointmentAdded).toHaveBeenCalledTimes(1);
-      expect(onAppointmentAdded).toHaveBeenCalledWith(
-        expect.objectContaining({
-          appointmentData: expect.objectContaining({
-            text: 'Appointment 1',
-            startDate: new Date(2015, 1, 9, 2),
-            endDate: new Date(2015, 1, 9, 3),
-          }),
-        }),
-      );
+      const addedAppointmentData = (onAppointmentAdded.mock.calls[0][0] as any).appointmentData;
+      expect(addedAppointmentData).toEqual({
+        text: 'Appointment 1',
+        startDate: '2015-02-09T02:00:00.000Z',
+        endDate: '2015-02-09T03:00:00.000Z',
+        allDay: false,
+      });
 
       const addedAppointment = (onAppointmentAdded.mock.calls[0][0] as any).appointmentData;
       expect(addedAppointment.recurrenceRule).toBeUndefined();
@@ -897,10 +896,10 @@ describe('Appointments Dragging', () => {
         expect.objectContaining({
           appointmentData: expect.objectContaining({
             text: 'Appointment 1',
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9),
+            startDate: '2015-02-08T18:00:00.000Z',
+            endDate: '2015-02-08T19:00:00.000Z',
             recurrenceRule: 'FREQ=DAILY;COUNT=5',
-            recurrenceException: '20150209T000000Z',
+            recurrenceException: '20150209T180000Z',
           }),
         }),
       );
