@@ -11,19 +11,18 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v6
       with:
-        version: 9
         run_install: false
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -52,7 +51,7 @@ jobs:
         mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
 
     - name: Copy build artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: devextreme-sources
         path: |
@@ -62,27 +61,26 @@ jobs:
           devextreme-react-installer.tgz
           devextreme-vue-installer.tgz
         retention-days: 1
-  
+
   publish-ES:
     runs-on: ubuntu-latest
     needs: [build-devextreme-all]
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v6
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -90,7 +88,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -112,7 +110,7 @@ jobs:
     - name: Prepare configs
       working-directory: apps/demos
       run: pnpm run prepare-js
-    
+
     - name: Copy metadata
       working-directory: apps/demos
       run: pnpm run make-demos-bundle --copy-metadata
@@ -126,7 +124,7 @@ jobs:
       run: pnpm run make-demos-bundle --framework="Vue"
 
     - name: Save publish-demos directory for ES as an artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: publish-demos
         path: ./apps/demos/publish-demos
@@ -170,21 +168,20 @@ jobs:
             index: 10
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v6
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -192,7 +189,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -231,9 +228,9 @@ jobs:
     - name: Angular post process index.html
       working-directory: apps/demos
       run: pnpm run post-process-angular
-    
+
     - name: Save publish-demos directory for Angular as an artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: publish-demos-angular-${{ matrix.index }}
         path: ./apps/demos/publish-demos/
@@ -241,15 +238,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [build-devextreme-all, publish-ES, publish-angular]
-    steps: 
+    steps:
       - name: Download publish-demos artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
 
       - name: Download publish-demos artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: publish-demos-angular-*
           merge-multiple: true
