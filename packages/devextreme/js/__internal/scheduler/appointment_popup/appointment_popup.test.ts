@@ -398,11 +398,12 @@ describe('Isolated AppointmentPopup environment', () => {
       POM.setInputValue('startDateEditor', null);
       POM.selectRepeatValue('daily');
 
-      expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/9/2017');
+      const recurrenceStartDate = POM.getInputValue('recurrenceStartDateEditor');
 
       POM.saveButton.click();
       await Promise.resolve();
 
+      expect(recurrenceStartDate).toBe('5/9/2017');
       expect(callbacks.onSave).toHaveBeenCalledTimes(1);
     });
   });
@@ -567,7 +568,6 @@ describe('Isolated AppointmentPopup environment', () => {
         expect(POM.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
         expect(POM.getInputValue('recurrenceCountEditor')).toBe('2');
         expect(POM.getInputValue('recurrencePeriodEditor')).toBe('Week(s)');
-        // [Sun, Mon, Tue, Wed, Thu, Fri, Sat] — MO,WE,FR → positions 1,3,5
         expect(POM.getWeekDaysSelection()).toEqual([false, true, false, true, false, true, false]);
         expect(POM.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
@@ -735,9 +735,9 @@ describe('Isolated AppointmentPopup environment', () => {
 
       it('should not be focused when value is changed via API', async () => {
         const { POM } = await createAppointmentPopup({
-          appointmentData:
-          { ...recurringAppointment },
+          appointmentData: { ...recurringAppointment },
         });
+
         POM.recurrenceSettingsButton.click();
 
         const frequencyEditor = POM.dxForm.getEditor('recurrencePeriodEditor');
@@ -750,9 +750,9 @@ describe('Isolated AppointmentPopup environment', () => {
 
       it('should be focused when value is changed via keyboard', async () => {
         const { POM } = await createAppointmentPopup({
-          appointmentData:
-          { ...recurringAppointment },
+          appointmentData: { ...recurringAppointment },
         });
+
         POM.recurrenceSettingsButton.click();
 
         const frequencyEditorInputElement = POM.getInput('recurrencePeriodEditor');
@@ -786,6 +786,7 @@ describe('Isolated AppointmentPopup environment', () => {
       const { POM } = await createAppointmentPopup({
         appointmentData: { ...baseAppointment, recurrenceRule: 'FREQ=YEARLY;BYMONTHDAY=1;BYMONTH=5' },
       });
+
       POM.recurrenceSettingsButton.click();
 
       const editorsWithHiddenLabel = [
