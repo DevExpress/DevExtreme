@@ -430,6 +430,19 @@ describe('columnsPinningCommand', () => {
       }).success).toBe(true);
     });
 
+    it('accepts fixedPosition=null and parses it to undefined', () => {
+      const result = columnsPinningCommand.schema.safeParse({
+        dataField: 'name',
+        fixed: true,
+        fixedPosition: null,
+      });
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.fixedPosition).toBeUndefined();
+      }
+    });
+
     it('rejects when dataField is missing', () => {
       expect(columnsPinningCommand.schema.safeParse({
         fixed: true,
