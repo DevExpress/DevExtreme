@@ -275,7 +275,7 @@ export interface ColorInstance {
   toHex: () => string;
   getPureColor: () => ColorInstance;
   isValidHex: (hex: string) => boolean;
-  isValidRGB: (r: number, g: number, b: number) => boolean;
+  isValidRGB: (r: number | undefined, g: number | undefined, b: number | undefined) => boolean;
   isValidAlpha: (a: number) => boolean;
   fromHSL: (hsl: { h: number; s: number; l: number }) => ColorInstance;
 }
@@ -516,10 +516,10 @@ function isIntegerBetweenMinAndMax(number, min?, max?) {
   min = min || 0;
   max = max || 255;
 
-  if (number % 1 !== 0
+  if (typeof number !== 'number'
+       || number % 1 !== 0
        || number < min
        || number > max
-       || typeof number !== 'number'
        || isNaN(number)) {
     return false;
   }

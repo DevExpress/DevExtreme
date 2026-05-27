@@ -219,7 +219,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       onValueChanged: ({ event, value: changedValue, previousValue }): void => {
         const { applyValueMode: currentValueMode } = this.option();
         const isInstantlyMode = currentValueMode === 'instantly';
-        const isOldValue = colorUtils.makeRgba(changedValue) === previousValue;
+        const isOldValue = colorUtils.makeRgba(new Color(changedValue)) === previousValue;
         const isChangesApplied = isInstantlyMode || this._colorViewEnterKeyPressed;
         const isValueCleared = this._shouldSaveEmptyValue;
 
@@ -238,7 +238,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _enterKeyHandler(e: KeyboardEvent): boolean | undefined {
     const newValue = this._input().val();
     const { value, editAlphaChannel } = this.option();
-    const oldValue = value && editAlphaChannel ? colorUtils.makeRgba(value) : value;
+    const oldValue = value && editAlphaChannel ? colorUtils.makeRgba(new Color(value)) : value;
 
     if (!newValue) return false;
 
@@ -251,7 +251,8 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     if (newValue !== oldValue) {
       this._applyColorFromInput(newValue);
       this._saveValueChangeEvent(e);
-      this.option('value', editAlphaChannel ? colorUtils.makeRgba(newValue) : newValue);
+      this.option('value', editAlphaChannel
+        ? colorUtils.makeRgba(new Color(newValue)) : newValue);
     }
 
     if (this._colorView) {
@@ -313,14 +314,14 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
 
   _updateNoColorIndicator(): void {
     const { value } = this.option();
-    const hasValue = Boolean(value);
+    const hasValue = value !== null && value !== undefined && value.length > 0;
 
     this._$colorBoxInputContainer.toggleClass(COLOR_BOX_COLOR_IS_NOT_DEFINED, !hasValue);
 
-    if (value !== null && value !== undefined) {
+    if (hasValue) {
       this._cleanNoColorIcon();
 
-      colorUtils.makeTransparentBackground(this._$colorResultPreview, value);
+      colorUtils.makeTransparentBackground(this._$colorResultPreview, new Color(value));
     } else {
       this._$colorResultPreview.removeAttr('style');
       this._renderNoColorIcon();
@@ -345,7 +346,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _renderValue(): DeferredObj<unknown> {
     const { value, editAlphaChannel } = this.option();
     const shouldConvertToColor = value && editAlphaChannel;
-    const text = shouldConvertToColor ? colorUtils.makeRgba(value) : value;
+    const text = shouldConvertToColor ? colorUtils.makeRgba(new Color(value)) : value;
 
     this.option('text', text);
 
@@ -389,7 +390,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     }
 
     if (editAlphaChannel) {
-      return colorUtils.makeRgba(value);
+      return colorUtils.makeRgba(newColor);
     }
 
     return value;

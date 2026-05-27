@@ -417,16 +417,12 @@ class ColorView extends Editor<ColorViewProperties> {
     this._renderAlphaChannelElements();
   }
 
-  _makeTransparentBackground($el: dxElementWrapper, color: string | ColorInstance): void {
-    const colorInstance = color instanceof Color ? color : new Color(color);
-
-    $el.css('backgroundColor', this._makeRgba(colorInstance));
+  _makeTransparentBackground($el: dxElementWrapper, color: ColorInstance): void {
+    $el.css('backgroundColor', this._makeRgba(color));
   }
 
-  _makeRgba(color: string | ColorInstance): string {
-    const colorInstance = color instanceof Color ? color : new Color(color);
-
-    return `rgba(${[colorInstance.r, colorInstance.g, colorInstance.b, colorInstance.a].join(', ')})`;
+  _makeRgba(color:ColorInstance): string {
+    return `rgba(${[color.r, color.g, color.b, color.a].join(', ')})`;
   }
 
   _renderColorPickerContainer(): void {
@@ -671,7 +667,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this._$currentColor = $('<div>').addClass([COLOR_VIEW_COLOR_PREVIEW, COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW].join(' '));
     this._$baseColor = $('<div>').addClass([COLOR_VIEW_COLOR_PREVIEW, COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT].join(' '));
 
-    this._makeTransparentBackground(this._$baseColor, matchValue ?? '');
+    this._makeTransparentBackground(this._$baseColor, new Color(matchValue ?? BLACK_COLOR));
     this._makeTransparentBackground(this._$currentColor, this._currentColor);
 
     $colorsPreviewContainerInner.append([this._$baseColor, this._$currentColor]);
@@ -946,7 +942,7 @@ class ColorView extends Editor<ColorViewProperties> {
   }
 
   _updateColor(isHex: boolean, args: ValueChangedEvent): void {
-    let rgba:number[] = [];
+    let rgba: number[] = [];
     let newColor = '';
 
     if (isHex) {
@@ -954,9 +950,13 @@ class ColorView extends Editor<ColorViewProperties> {
     } else {
       rgba = this._validateRgb();
       if (this._alphaChannelInput) {
-        const { value } = this._alphaChannelInput.option();
-        rgba.push(value !== undefined && this._currentColor.isValidAlpha(value)
-          ? value : this._currentColor.a);
+        const { value: alphaValue } = this._alphaChannelInput.option();
+        const isValidAlpha = alphaValue !== undefined
+          && this._currentColor.isValidAlpha(alphaValue);
+
+        const valueToAdd = isValidAlpha ? alphaValue : this._currentColor.a;
+
+        rgba.push(valueToAdd);
         newColor = `rgba(${rgba.join(', ')})`;
       } else {
         newColor = `rgb(${rgba.join(', ')})`;
@@ -980,8 +980,7 @@ class ColorView extends Editor<ColorViewProperties> {
     let { value: g } = this._rgbInputs[1].option();
     let { value: b } = this._rgbInputs[2].option();
 
-    const isInvalidRgb = r === undefined || g === undefined || b === undefined
-      || !this._currentColor.isValidRGB(r, g, b);
+    const isInvalidRgb = !this._currentColor.isValidRGB(r, g, b);
     if (isInvalidRgb) {
       r = this._currentColor.r;
       g = this._currentColor.g;
