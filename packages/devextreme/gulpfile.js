@@ -48,6 +48,12 @@ function getTranspileConfig() {
 
 const transpileConfig = getTranspileConfig();
 
+function getDeclarationsConfiguration() {
+    return env.BUILD_INTERNAL_PACKAGE ? 'internal' : '';
+}
+
+const declarationsConfig = getDeclarationsConfiguration();
+
 gulp.task('transpile', shell.task(
     transpileConfig
         ? `pnpm nx run devextreme:build:transpile -c ${transpileConfig}`
@@ -68,7 +74,11 @@ gulp.task('aspnet', shell.task(
 
 gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
 
-gulp.task('ts', shell.task('pnpm nx run devextreme:build:declarations'));
+gulp.task('ts', shell.task(
+    declarationsConfig
+        ? `pnpm nx run devextreme:build:declarations -c ${declarationsConfig}`
+        : 'pnpm nx run devextreme:build:declarations'
+));
 
 gulp.task('check-license-notices', shell.task('pnpm nx run devextreme:verify:licenses'));
 
