@@ -2,6 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import { loadMessages, locale } from '@js/localization';
+import type { GroupItem } from '@js/ui/form';
 import { fireEvent } from '@testing-library/dom';
 import DOMComponent from '@ts/core/widget/dom_component';
 
@@ -872,8 +873,7 @@ describe('Isolated AppointmentPopup environment', () => {
         editing: { form: { items: [{ name: 'mainGroup', items: ['subjectGroup', 'dateGroup'] }] } },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mainGroup = (POM.dxForm.option('items') ?? [])[0] as any;
+      const mainGroup = (POM.dxForm.option('items') ?? [])[0] as GroupItem;
 
       expect(mainGroup?.items?.length).toBe(2);
       expect(mainGroup?.items?.[0]?.name).toBe('subjectGroup');
@@ -886,8 +886,7 @@ describe('Isolated AppointmentPopup environment', () => {
         editing: { form: { items: [{ name: 'mainGroup', items: [] }] } },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mainGroup = (POM.dxForm.option('items') ?? [])[0] as any;
+      const mainGroup = (POM.dxForm.option('items') ?? [])[0] as GroupItem;
 
       expect(mainGroup?.items?.length).toBe(0);
     });
