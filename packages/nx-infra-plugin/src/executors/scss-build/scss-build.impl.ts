@@ -318,27 +318,37 @@ async function runWatchBuild(
   await new Promise<void>((resolve) => {
     let timer: NodeJS.Timeout | undefined;
     let busy = false;
+    let pending = false;
+
+    const runRebuild = async (): Promise<void> => {
+      if (busy) {
+        pending = true;
+        return;
+      }
+
+      busy = true;
+      try {
+        await rebuild();
+        logger.info('scss-build watch: rebuild complete');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        logger.error(`scss-build watch rebuild failed: ${message}`);
+      } finally {
+        busy = false;
+        if (pending) {
+          pending = false;
+          void runRebuild();
+        }
+      }
+    };
 
     const scheduleRebuild = () => {
       if (timer) {
         clearTimeout(timer);
       }
 
-      timer = setTimeout(async () => {
-        if (busy) {
-          return;
-        }
-
-        busy = true;
-        try {
-          await rebuild();
-          logger.info('scss-build watch: rebuild complete');
-        } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
-          logger.error(`scss-build watch rebuild failed: ${message}`);
-        } finally {
-          busy = false;
-        }
+      timer = setTimeout(() => {
+        void runRebuild();
       }, 200);
     };
 
