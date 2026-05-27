@@ -612,7 +612,8 @@ class TextEditorBase<
   }
 
   _setFieldAria(force?: boolean): void {
-    const inputAttr = this.option('inputAttr');
+    const { inputAttr } = this.option();
+
     const ariaLabel = inputAttr?.['aria-label'];
     const labelId = this._label?.getId();
 
@@ -638,19 +639,17 @@ class TextEditorBase<
     } = this.option();
 
     const labelConfig = {
-      onClickHandler: (): void => {
-        this.focus();
-      },
-      onHoverHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
-      onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
+      rtlEnabled,
       $editor: this.$element(),
       text: label,
       mark: labelMark,
       mode: labelMode,
-      rtlEnabled,
       containsButtonsBefore: !!this._$beforeButtonsContainer,
       getContainerWidth: (): number => this._getLabelContainerWidth(),
       getBeforeWidth: (): number => this._getLabelBeforeWidth(),
+      onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
+      onClickHandler: (): void => { this.focus(); },
+      onHoverHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
     };
 
     this._label = new TextEditorLabelCreator(labelConfig);
@@ -699,6 +698,7 @@ class TextEditorBase<
       // @ts-expect-error eventsEngine typification
       eventsEngine.trigger(this._input(), 'focus');
     });
+
     this._toggleEmptinessEventHandler();
   }
 
