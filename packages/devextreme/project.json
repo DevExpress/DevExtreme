@@ -840,7 +840,6 @@
       "options": {
         "commands": [
           "pnpm nx run devextreme:copy:ts-vendor",
-          "pnpm nx run devextreme:build:npm:dts-bundle",
           "pnpm nx run devextreme:verify:ts-jquery",
           "pnpm nx run devextreme:verify:ts-bundle"
         ],
@@ -1315,7 +1314,6 @@
       "options": {
         "commands": [
           "pnpm nx run devextreme:verify:ts-modules",
-          "pnpm nx run devextreme:build:npm:dts-bundle",
           "pnpm nx run devextreme:verify:ts-bundle",
           "pnpm nx run devextreme:verify:ts-jquery",
           "pnpm nx run devextreme:verify:public-modules"
