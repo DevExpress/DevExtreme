@@ -20,17 +20,46 @@ import {
   filterValueCommand,
 } from '../filtering';
 
-const basicExpr = (
+// The id lives on the wrapper; expr is the discriminated variant.
+const basicNode = (
+  id: string,
   field: string,
   operator: string,
   value: unknown,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any => ({
-  type: 'basic',
-  field,
-  operator,
-  value,
+  id,
+  expr: {
+    type: 'basic', field, operator, value,
+  },
 });
+
+const combinedNode = (
+  id: string,
+  combiner: string,
+  leftId: string,
+  rightId: string,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any => ({
+  id,
+  expr: {
+    type: 'combined', combiner, leftId, rightId,
+  },
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const negatedNode = (id: string, expressionId: string): any => ({
+  id,
+  expr: { type: 'negated', expressionId },
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const tree = (rootId: string, nodes: unknown[]): any => ({ rootId, nodes });
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const singleBasic = (field: string, operator: string, value: unknown): any => tree('n1', [
+  basicNode('n1', field, operator, value),
+]);
 
 const createCallbacks = (): {
   success: jest.Mock<(message?: string) => CommandResult>;
@@ -66,7 +95,7 @@ describe('filterValueCommand', () => {
   describe('schema', () => {
     it('accepts a basic expression', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: basicExpr('name', '=', 'Alpha'),
+        expression: singleBasic('name', '=', 'Alpha'),
       }).success).toBe(true);
     });
 
@@ -75,66 +104,59 @@ describe('filterValueCommand', () => {
       ['contains'], ['notcontains'], ['startswith'], ['endswith'],
     ])('accepts op "%s"', (op) => {
       expect(filterValueCommand.schema.safeParse({
-        expression: basicExpr('name', op, 'Alpha'),
+        expression: singleBasic('name', op, 'Alpha'),
       }).success).toBe(true);
     });
 
     it.each([
-      [basicExpr('name', '=', 'Alpha')],
-      [basicExpr('name', '=', 1)],
-      [basicExpr('name', '=', true)],
-      [basicExpr('name', '=', null)],
+      [singleBasic('name', '=', 'Alpha')],
+      [singleBasic('name', '=', 1)],
+      [singleBasic('name', '=', true)],
+      [singleBasic('name', '=', null)],
     ])('accepts scalar value %p', (expression) => {
       expect(filterValueCommand.schema.safeParse({ expression }).success).toBe(true);
     });
 
     it('accepts a combined expression with "and"', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: {
-          type: 'combined',
-          left: basicExpr('name', '=', 'Alpha'),
-          combiner: 'and',
-          right: basicExpr('age', '>', 10),
-        },
+        expression: tree('n3', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          basicNode('n2', 'age', '>', 10),
+          combinedNode('n3', 'and', 'n1', 'n2'),
+        ]),
       }).success).toBe(true);
     });
 
     it('accepts a combined expression with "or"', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: {
-          type: 'combined',
-          left: basicExpr('name', '=', 'Alpha'),
-          combiner: 'or',
-          right: basicExpr('name', '=', 'Beta'),
-        },
+        expression: tree('n3', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          basicNode('n2', 'name', '=', 'Beta'),
+          combinedNode('n3', 'or', 'n1', 'n2'),
+        ]),
       }).success).toBe(true);
     });
 
     it('accepts a negated expression', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: {
-          type: 'negated',
-          expression: basicExpr('name', '=', 'Alpha'),
-        },
+        expression: tree('n2', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          negatedNode('n2', 'n1'),
+        ]),
       }).success).toBe(true);
     });
 
     it('accepts deeply nested expressions', () => {
+      // !(name = "Alpha") AND (age > 10 OR age < 30)
       expect(filterValueCommand.schema.safeParse({
-        expression: {
-          type: 'combined',
-          left: {
-            type: 'negated',
-            expression: basicExpr('name', '=', 'Alpha'),
-          },
-          combiner: 'and',
-          right: {
-            type: 'combined',
-            left: basicExpr('age', '>', 10),
-            combiner: 'or',
-            right: basicExpr('age', '<', 30),
-          },
-        },
+        expression: tree('n7', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          negatedNode('n2', 'n1'),
+          basicNode('n3', 'age', '>', 10),
+          basicNode('n4', 'age', '<', 30),
+          combinedNode('n5', 'or', 'n3', 'n4'),
+          combinedNode('n7', 'and', 'n2', 'n5'),
+        ]),
       }).success).toBe(true);
     });
 
@@ -146,32 +168,59 @@ describe('filterValueCommand', () => {
       expect(filterValueCommand.schema.safeParse({}).success).toBe(false);
     });
 
+    it('rejects an empty nodes array', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: tree('n1', []),
+      }).success).toBe(false);
+    });
+
     it('rejects an unknown op', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: basicExpr('name', 'like', 'Alpha'),
+        expression: singleBasic('name', 'like', 'Alpha'),
       }).success).toBe(false);
     });
 
     it('rejects an unknown combiner', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: {
-          type: 'combined',
-          left: basicExpr('name', '=', 'Alpha'),
-          combiner: 'xor',
-          right: basicExpr('age', '>', 10),
-        },
+        expression: tree('n3', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          basicNode('n2', 'age', '>', 10),
+          combinedNode('n3', 'xor', 'n1', 'n2'),
+        ]),
+      }).success).toBe(false);
+    });
+
+    it('rejects unknown properties inside expr', () => {
+      const n = basicNode('n1', 'name', '=', 'Alpha');
+      n.expr.extra = 1;
+      expect(filterValueCommand.schema.safeParse({
+        expression: tree('n1', [n]),
       }).success).toBe(false);
     });
 
     it('rejects an object value (non-scalar)', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: basicExpr('name', '=', { foo: 1 }),
+        expression: singleBasic('name', '=', { foo: 1 }),
       }).success).toBe(false);
     });
 
-    it('rejects unknown properties', () => {
+    it('rejects unknown properties on the tree', () => {
       expect(filterValueCommand.schema.safeParse({
-        expression: basicExpr('name', '=', 'Alpha'),
+        expression: { ...singleBasic('name', '=', 'Alpha'), extra: 1 },
+      }).success).toBe(false);
+    });
+
+    it('rejects unknown properties on a node', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: tree('n1', [
+          { ...basicNode('n1', 'name', '=', 'Alpha'), extra: 1 },
+        ]),
+      }).success).toBe(false);
+    });
+
+    it('rejects unknown properties on the args object', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: singleBasic('name', '=', 'Alpha'),
         extra: 1,
       }).success).toBe(false);
     });
@@ -184,10 +233,47 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
-        expression: basicExpr('name', '=', 'Alpha'),
+        expression: singleBasic('name', '=', 'Alpha'),
       });
 
       expect(spy).toHaveBeenCalledWith('filterValue', ['name', '=', 'Alpha']);
+      expect(result.status).toBe('success');
+    });
+
+    it('converts a combined node into the legacy array form', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('n3', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          basicNode('n2', 'age', '>', 10),
+          combinedNode('n3', 'and', 'n1', 'n2'),
+        ]),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', [
+        ['name', '=', 'Alpha'],
+        'and',
+        ['age', '>', 10],
+      ]);
+      expect(result.status).toBe('success');
+    });
+
+    it('converts a negated node into the legacy array form', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('n2', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          negatedNode('n2', 'n1'),
+        ]),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', ['!', ['name', '=', 'Alpha']]);
       expect(result.status).toBe('success');
     });
 
@@ -212,10 +298,106 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
-        expression: basicExpr('name', '=', 'Alpha'),
+        expression: singleBasic('name', '=', 'Alpha'),
       });
 
       expect(result.status).toBe('failure');
+    });
+  });
+
+  describe('converter', () => {
+    it('returns failure on duplicate node id', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('n1', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          basicNode('n1', 'age', '>', 10),
+        ]),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('returns failure when rootId is not in nodes', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('nMissing', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+        ]),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('returns failure when combined references a missing id', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('n2', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          combinedNode('n2', 'and', 'n1', 'nGhost'),
+        ]),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('returns failure when negated references a missing id', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('n1', [
+          negatedNode('n1', 'nGhost'),
+        ]),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('returns failure on a cycle', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('n1', [
+          negatedNode('n1', 'n2'),
+          negatedNode('n2', 'n1'),
+        ]),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('tolerates unreachable extra nodes', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: tree('n1', [
+          basicNode('n1', 'name', '=', 'Alpha'),
+          basicNode('nOrphan', 'age', '>', 10),
+        ]),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', ['name', '=', 'Alpha']);
+      expect(result.status).toBe('success');
     });
   });
 
@@ -225,7 +407,7 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       await filterValueCommand.execute(instance, callbacks)({
-        expression: basicExpr('name', '=', 'Alpha'),
+        expression: singleBasic('name', '=', 'Alpha'),
       });
 
       expect(callbacks.success).toHaveBeenCalledWith('Apply a filter.');
@@ -250,7 +432,7 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       await filterValueCommand.execute(instance, callbacks)({
-        expression: basicExpr('name', '=', 'Alpha'),
+        expression: singleBasic('name', '=', 'Alpha'),
       });
 
       expect(callbacks.failure).toHaveBeenCalledWith('Apply a filter.');

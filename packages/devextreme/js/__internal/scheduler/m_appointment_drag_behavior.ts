@@ -9,6 +9,7 @@ import type { AppointmentViewModelPlain } from './view_model/types';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
+// TODO<Appointments>: delete this file when old impl is removed
 export default class AppointmentDragBehavior {
   workspace = this.scheduler._workSpace;
 

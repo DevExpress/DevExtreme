@@ -322,7 +322,7 @@ args: {
 }
 }
 
-const deployment = "gpt-4o-mini";
+const deployment = "demo-mini";
 const apiVersion = "2024-02-01";
 const endpoint = "https://public-api.devexpress.com/demo-openai";
 const apiKey = "DEMO";
@@ -339,7 +339,7 @@ async function getAIResponse(messages, signal): Promise<string> {
     const params = {
         messages,
         model: deployment,
-        max_tokens: 1000,
+        max_completion_tokens: 1000,
         temperature: 0.7,
     };
 

@@ -3,9 +3,12 @@ import $ from '@js/core/renderer';
 import type dxTooltip from '@js/ui/tooltip';
 import { within } from '@testing-library/dom';
 
+const TOOLTIP_WIDGET_SELECTOR = `
+  .dx-scheduler-appointment-tooltip-wrapper.dx-tooltip.dx-widget
+`;
 const TOOLTIP_WRAPPER_SELECTOR = `
-  .dx-overlay-wrapper.dx-scheduler-overlay-panel,
-  .dx-overlay-wrapper.dx-scheduler-appointment-tooltip-wrapper
+  .dx-scheduler-appointment-tooltip-wrapper.dx-tooltip-wrapper,
+  .dx-scheduler-overlay-panel.dx-overlay-wrapper
 `;
 
 export class TooltipModel {
@@ -15,7 +18,7 @@ export class TooltipModel {
 
   get dxTooltip(): dxTooltip {
     // @ts-expect-error
-    return $('.dx-tooltip.dx-widget').dxTooltip('instance') as dxTooltip;
+    return $(TOOLTIP_WIDGET_SELECTOR).dxTooltip('instance') as dxTooltip;
   }
 
   get target(): Element | null {
@@ -29,6 +32,18 @@ export class TooltipModel {
 
   getScrollableContent(): Element | null {
     return this.element?.querySelector('.dx-scrollable .dx-scrollview-content') ?? null;
+  }
+
+  getList(): Element {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const tooltipContent = (this.dxTooltip as any)?.$content().get(0);
+    const list = tooltipContent?.querySelector('.dx-list.dx-widget');
+
+    if (!list) {
+      throw new Error('Tooltip list not found');
+    }
+
+    return list as Element;
   }
 
   getDeleteButtons(): HTMLElement[] {
