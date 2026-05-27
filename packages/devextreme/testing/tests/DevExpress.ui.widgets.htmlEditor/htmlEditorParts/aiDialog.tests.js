@@ -16,7 +16,7 @@ import AIDialog, {
 } from '__internal/ui/html_editor/ui/aiDialog';
 import { BUTTON_GROUP_CLASS } from '__internal/ui/button_group';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
-import { TEXTAREA_CLASS } from '__internal/ui/m_text_area';
+import { TEXTAREA_CLASS } from '__internal/ui/text_area';
 import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/text_editor.base';
 import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
 import { INFORMER_CLASS } from '__internal/ui/informer/informer';

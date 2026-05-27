@@ -20,7 +20,7 @@ import Informer, { INFORMER_CLASS, INFORMER_TEXT_CLASS } from '__internal/ui/inf
 import SpeechToText, { SPEECH_TO_TEXT_CLASS } from '__internal/ui/speech_to_text/speech_to_text';
 import { TOOLBAR_BEFORE_CLASS, TOOLBAR_AFTER_CLASS } from '__internal/ui/toolbar/toolbar.base';
 import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/text_editor.base';
-import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/m_text_area';
+import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/text_area';
 
 const fakeFile = {
     name: 'fakefile.png',
