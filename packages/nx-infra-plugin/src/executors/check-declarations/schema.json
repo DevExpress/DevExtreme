@@ -15,7 +15,7 @@
     },
     "tsBundleFile": {
       "type": "string",
-      "description": "Source bundle .d.ts for jquery check (relative to project root)."
+      "description": "Bundle .d.ts for jquery check (path relative to project root; embedded in /// <reference> relative to the generated entry file)."
     },
     "bundleArtifactPath": {
       "type": "string",

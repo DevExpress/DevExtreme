@@ -13,7 +13,7 @@ import {
 import { CheckDeclarationsExecutorSchema } from './schema';
 
 const DEFAULT_MODULES_METADATA = './build/gulp/modules_metadata.json';
-const DEFAULT_TS_BUNDLE = './ts/dx.all.d.ts';
+const DEFAULT_TS_BUNDLE = './artifacts/ts/dx.all.d.ts';
 const DEFAULT_BUNDLE_ARTIFACT = './artifacts/ts/dx.all.d.ts';
 const DEFAULT_MODULES_PATTERN = './js/**/*.d.ts';
 const DEFAULT_ENTRY_DIR = './artifacts';
@@ -173,14 +173,25 @@ async function resolveModuleDeclarationFiles(
   return files;
 }
 
-async function writeCheckEntryFile(
-  entryDir: string,
-  fileStem: string,
-  content: string,
-): Promise<string> {
-  await ensureDir(entryDir);
+export function resolvePathFromProjectRoot(projectRoot: string, relativePath: string): string {
+  return path.isAbsolute(relativePath) ? relativePath : path.resolve(projectRoot, relativePath);
+}
+
+export function toTripleSlashReferencePath(fromDirectory: string, targetFile: string): string {
+  let relative = toPosixPath(path.relative(fromDirectory, targetFile));
+  if (!relative.startsWith('.')) {
+    relative = relative ? `./${relative}` : '.';
+  }
+  return relative;
+}
+
+function prepareCheckEntryPath(entryDir: string, fileStem: string): string {
   const uniqueSuffix = `${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-  const entryPath = path.join(entryDir, `${fileStem}-${uniqueSuffix}.ts`);
+  return path.join(entryDir, `${fileStem}-${uniqueSuffix}.ts`);
+}
+
+async function writeCheckEntryFile(entryPath: string, content: string): Promise<string> {
+  await ensureDir(path.dirname(entryPath));
   await writeFileText(entryPath, content);
   return entryPath;
 }
@@ -213,12 +224,14 @@ async function runModeCheck(resolved: ResolvedCheckDeclarations): Promise<void> 
   switch (mode) {
     case 'jquery': {
       const modules = await loadModulesMetadata(resolved.modulesMetadataPath);
-      const content = buildJqueryCheckContent(resolved.tsBundleFile, modules);
-      const entryPath = await writeCheckEntryFile(
-        path.join(projectRoot, resolved.entryOutputDir),
-        'globals',
-        content,
+      const entryDir = path.join(projectRoot, resolved.entryOutputDir);
+      const entryPath = prepareCheckEntryPath(entryDir, 'globals');
+      const bundleReference = toTripleSlashReferencePath(
+        path.dirname(entryPath),
+        resolvePathFromProjectRoot(projectRoot, resolved.tsBundleFile),
       );
+      const content = buildJqueryCheckContent(bundleReference, modules);
+      await writeCheckEntryFile(entryPath, content);
       await runTypeCheckWithTemporaryEntry(entryPath, () =>
         runDeclarationsTypeCheck({
           projectRoot,
@@ -255,11 +268,11 @@ async function runModeCheck(resolved: ResolvedCheckDeclarations): Promise<void> 
     case 'public-modules': {
       const modules = await loadModulesMetadata(resolved.modulesMetadataPath);
       const content = buildPublicModulesCheckContent(modules, resolved.npmPackageDir);
-      const entryPath = await writeCheckEntryFile(
+      const entryPath = prepareCheckEntryPath(
         path.join(projectRoot, resolved.entryOutputDir),
         'modules',
-        content,
       );
+      await writeCheckEntryFile(entryPath, content);
       await runTypeCheckWithTemporaryEntry(entryPath, () =>
         runDeclarationsTypeCheck({
           projectRoot,

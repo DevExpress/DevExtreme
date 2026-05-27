@@ -3,6 +3,7 @@ import * as path from 'path';
 import { logger } from '@nx/devkit';
 import executor from './executor';
 import { buildJqueryCheckContent, widgetNameByPath } from './declaration-check-content';
+import { toTripleSlashReferencePath } from './check-declarations.impl';
 import { CheckDeclarationsExecutorSchema } from './schema';
 import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText } from '../../utils';
@@ -11,6 +12,14 @@ describe('declaration-check-content', () => {
   it('should resolve widget name from global path', () => {
     expect(widgetNameByPath('ui.dxButton')).toBe('dxButton');
     expect(widgetNameByPath('ui.dxDataGrid.extra')).toBe('');
+  });
+
+  it('should compute triple-slash path relative to entry directory', () => {
+    const projectRoot = path.join('C:', 'proj');
+    const entryDir = path.join(projectRoot, 'artifacts');
+    const bundleFile = path.join(projectRoot, 'artifacts', 'ts', 'dx.all.d.ts');
+
+    expect(toTripleSlashReferencePath(entryDir, bundleFile)).toBe('./ts/dx.all.d.ts');
   });
 
   it('should emit jquery widget usage for public widget exports', () => {
@@ -32,7 +41,9 @@ describe('declaration-check-content', () => {
   });
 });
 
-const PLUGIN_TYPESCRIPT = path.join(__dirname, '..', '..', '..', 'node_modules', 'typescript');
+const PLUGIN_TYPESCRIPT = path.dirname(
+  require.resolve('typescript/package.json', { paths: [__dirname] }),
+);
 
 describe('CheckDeclarationsExecutor E2E', () => {
   let tempDir: string;

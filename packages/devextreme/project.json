@@ -1297,10 +1297,16 @@
         "mode": "public-modules",
         "typescriptModule": "typescript-min"
       },
-      "dependsOn": ["build:npm:dts-modules"],
+      "dependsOn": [
+        { "target": "build:npm:dts-modules", "params": "forward" },
+        { "target": "build:npm:dts-bundle", "params": "forward" }
+      ],
       "inputs": [
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
-        "{projectRoot}/build/gulp/modules_metadata.json"
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts",
+        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{projectRoot}/ts/dx.all.d.ts",
+        "{projectRoot}/ts/aliases.d.ts"
       ],
       "configurations": {
         "internal": {
