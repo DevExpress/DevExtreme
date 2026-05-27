@@ -96,8 +96,6 @@ const APPLY_BUTTON_SELECTOR = `.${APPLY_BUTTON_CLASS}.dx-button`;
 const CLEAR_BUTTON_SELECTOR = `.${CLEAR_BUTTON_CLASS}.dx-button`;
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 
-const WINDOW_RATIO = 0.8;
-
 const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
 };
