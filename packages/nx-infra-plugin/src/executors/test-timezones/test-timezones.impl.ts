@@ -10,15 +10,7 @@ const DEFAULT_MOMENT_TIMEZONE_URL =
 const MOMENT_TIMEZONE_FETCH_TIMEOUT_MS = 60_000;
 
 function isFetchTimeoutError(error: unknown): boolean {
-  if (!(error instanceof Error)) {
-    return false;
-  }
-
-  if (error.name === 'TimeoutError' || error.name === 'AbortError') {
-    return true;
-  }
-
-  return error.cause instanceof Error && isFetchTimeoutError(error.cause);
+  return error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError');
 }
 
 interface MomentTimezoneZone {
@@ -72,9 +64,7 @@ export async function fetchMomentTimezoneData(
     return response.json() as Promise<MomentTimezoneData>;
   } catch (error) {
     if (isFetchTimeoutError(error)) {
-      throw new Error(
-        `Timed out after ${timeoutMs}ms fetching moment-timezone data from ${url}`,
-      );
+      throw new Error(`Timed out after ${timeoutMs}ms fetching moment-timezone data from ${url}`);
     }
     throw error;
   }
