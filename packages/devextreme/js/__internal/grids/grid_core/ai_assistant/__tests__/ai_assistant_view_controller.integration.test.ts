@@ -184,13 +184,13 @@ describe('AIAssistantViewController', () => {
 
   describe('message rendering', () => {
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let validateSpy;
+    let parseSpy;
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let executeCommandsSpy;
 
     beforeEach(() => {
-      validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
-        .mockReturnValue(true);
+      parseSpy = jest.spyOn(GridCommands.prototype, 'parse')
+        .mockImplementation((actions) => actions);
       executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
         .mockResolvedValue([
           { status: 'success', message: 'Sorted by Name ascending' },
@@ -198,7 +198,7 @@ describe('AIAssistantViewController', () => {
     });
 
     afterEach(() => {
-      validateSpy.mockRestore();
+      parseSpy.mockRestore();
       executeCommandsSpy.mockRestore();
     });
 
@@ -475,13 +475,13 @@ describe('AIAssistantViewController', () => {
 
   describe('manual store push', () => {
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let validateSpy;
+    let parseSpy;
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let executeCommandsSpy;
 
     beforeEach(() => {
-      validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
-        .mockReturnValue(true);
+      parseSpy = jest.spyOn(GridCommands.prototype, 'parse')
+        .mockImplementation((actions) => actions);
       executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
         .mockResolvedValue([
           { status: 'success', message: 'Done' },
@@ -489,7 +489,7 @@ describe('AIAssistantViewController', () => {
     });
 
     afterEach(() => {
-      validateSpy.mockRestore();
+      parseSpy.mockRestore();
       executeCommandsSpy.mockRestore();
     });
 

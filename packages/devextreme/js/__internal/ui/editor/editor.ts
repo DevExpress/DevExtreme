@@ -41,7 +41,8 @@ const VALIDATION_MESSAGE_KEYS_MAP = {
 };
 
 export type UnresolvedEvents = 'onContentReady' | 'onDisposing' | 'onInitialized' | 'onOptionChanged' | 'onValueChanged';
-export type ValueChangedEvent = NativeEventInfo<Editor> & ValueChangedInfo;
+export type ValueChangedEvent<TNativeEvent = Event> = NativeEventInfo<Editor, TNativeEvent>
+  & ValueChangedInfo;
 
 export interface EditorProperties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,7 +72,7 @@ class Editor<
 
   private _valueChangeActionSuppressed?: boolean;
 
-  _valueChangeEventInstance?: ValueChangedEvent;
+  _valueChangeEventInstance?: unknown;
 
   _$validationMessage?: dxElementWrapper;
 
@@ -195,11 +196,12 @@ class Editor<
     return {
       value,
       previousValue,
-      event: this._valueChangeEventInstance,
+      event: this._valueChangeEventInstance as (NativeEventInfo<Editor>
+          & ValueChangedInfo) | undefined,
     };
   }
 
-  _saveValueChangeEvent(e: ValueChangedEvent | undefined): void {
+  _saveValueChangeEvent<TEventType = ValueChangedEvent>(e: TEventType | undefined): void {
     this._valueChangeEventInstance = e;
   }
 

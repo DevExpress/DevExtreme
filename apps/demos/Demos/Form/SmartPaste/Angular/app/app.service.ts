@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
-  deployment: 'gpt-4o-mini',
+  deployment: 'demo-mini',
   apiVersion: '2024-02-01',
   endpoint: 'https://public-api.devexpress.com/demo-openai',
   apiKey: 'DEMO',

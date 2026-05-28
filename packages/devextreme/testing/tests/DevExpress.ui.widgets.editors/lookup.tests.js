@@ -96,8 +96,6 @@ const APPLY_BUTTON_SELECTOR = `.${APPLY_BUTTON_CLASS}.dx-button`;
 const CLEAR_BUTTON_SELECTOR = `.${CLEAR_BUTTON_CLASS}.dx-button`;
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 
-const WINDOW_RATIO = 0.8;
-
 const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
 };
@@ -3734,7 +3732,6 @@ if(devices.real().deviceType === 'desktop') {
 
                 const listItemContainerAttributes = {
                     tabindex: searchEnabled ? '-1' : '0',
-                    role: 'application',
                 };
 
                 let fieldAttributes = {
@@ -3891,7 +3888,7 @@ if(devices.real().deviceType === 'desktop') {
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
                 const $itemsContainer = $list.find(`.${LIST_ITEMS_CLASS}`);
 
-                helper.checkAttributes($scrollView, { tabindex: '-1', role: 'application' });
+                helper.checkAttributes($scrollView, { tabindex: '-1' });
                 helper.checkAttributes($itemsContainer, { });
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
@@ -3899,7 +3896,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes($itemsContainer, { 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($scrollView, { tabindex: '-1', role: 'application' });
+                helper.checkAttributes($scrollView, { tabindex: '-1' });
                 helper.checkAttributes($itemsContainer, { });
             });
         });

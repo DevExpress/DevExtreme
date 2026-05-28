@@ -16,8 +16,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
-import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
-import TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
+import type { TextEditorBaseProperties } from '@ts/ui/text_box/text_editor.base';
+import TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import type { HandlingArgs } from '@ts/ui/text_box/text_editor.mask.rule';
 import { EmptyMaskRule, MaskRule, StubMaskRule } from '@ts/ui/text_box/text_editor.mask.rule';
 import MaskStrategy from '@ts/ui/text_box/text_editor.mask.strategy';
@@ -242,8 +242,7 @@ class TextEditorMask<
   _changeHandler(e: DxEvent): void {
     const $input = this._input();
 
-    // @ts-expect-error dxElementWrapper.val() should return string
-    const inputValue = $input.val() as string;
+    const inputValue = $input.val();
 
     if (inputValue === this._changedValue) {
       return;
@@ -721,8 +720,7 @@ class TextEditorMask<
         this._validateMask();
         super._optionChanged(args);
 
-        // @ts-expect-error dxElementWrapper.val() should return string
-        this._changedValue = this._input().val() as string;
+        this._changedValue = this._input().val();
         break;
       case 'maskInvalidMessage':
         break;

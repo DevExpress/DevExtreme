@@ -409,6 +409,42 @@ describe('AIAssistantView', () => {
       expect(mockAIAssistantController.abortRequest).not.toHaveBeenCalled();
       expect(hideMock).not.toHaveBeenCalled();
     });
+
+    it('should not show confirm dialog again when hide is called after confirm', () => {
+      mockAIAssistantController.isProcessing.mockReturnValue(true);
+
+      let doneCallback: (result: boolean) => void = () => {};
+      const mockDialog = {
+        show: jest.fn().mockReturnValue({
+          done: jest.fn((cb: (result: boolean) => void) => {
+            doneCallback = cb;
+          }),
+        }),
+      };
+      (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
+      createAIAssistantView();
+
+      const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
+      const hideMock = jest.fn();
+      const event = { cancel: false, component: { hide: hideMock } };
+
+      aiChatConfig.popupOptions?.onHiding?.(event as any);
+
+      // Simulate: user confirms closing, hide() is called,
+      // which triggers onHiding again while still processing
+      hideMock.mockImplementation(() => {
+        const repeatHidingEvent = { cancel: false, component: { hide: hideMock } };
+
+        aiChatConfig.popupOptions?.onHiding?.(repeatHidingEvent as any);
+
+        expect(repeatHidingEvent.cancel).toBe(false);
+      });
+
+      doneCallback(true);
+
+      expect(createConfirmDialog).toHaveBeenCalledTimes(1);
+      expect(mockAIAssistantController.abortRequest).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('chat event handlers', () => {

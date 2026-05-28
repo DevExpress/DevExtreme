@@ -333,7 +333,6 @@ class Calendar<
         const cellElement = this._view._getContouredCell().get(0);
         event.target = cellElement;
       }
-      // @ts-expect-error ts-error
       this._saveValueChangeEvent(event);
     }
     this._setDateOption('value', value);
