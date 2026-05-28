@@ -8,7 +8,7 @@ import type { EventInfo, NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { TextBoxProperties } from '@ts/ui/text_box/m_text_box';
+import type { TextBoxProperties } from '@ts/ui/text_box/text_box';
 
 import type { Column } from '../columns_controller/types';
 import type { DefaultToolbarItem } from '../toolbar/types';

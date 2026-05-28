@@ -7,7 +7,7 @@ import type { SearchBoxControllerOptions } from '@ts/ui/collection/search_box_co
 import SearchBoxController from '@ts/ui/collection/search_box_controller';
 import type { DataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 import TreeViewBase from '@ts/ui/tree_view/tree_view.base';
 

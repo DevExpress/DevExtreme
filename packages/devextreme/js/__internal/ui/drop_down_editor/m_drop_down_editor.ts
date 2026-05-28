@@ -36,7 +36,7 @@ import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 
 import type Popover from '../popover/m_popover';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';

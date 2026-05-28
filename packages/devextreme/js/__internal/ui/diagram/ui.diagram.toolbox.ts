@@ -13,7 +13,7 @@ import DiagramFloatingPanel from '@ts/ui/diagram/ui.diagram.floating_panel';
 import Tooltip from '@ts/ui/m_tooltip';
 import type { PopupProperties } from '@ts/ui/popup/m_popup';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 
 const DIAGRAM_TOOLBOX_MIN_HEIGHT = 130;
 const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
