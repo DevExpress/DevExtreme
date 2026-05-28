@@ -242,10 +242,18 @@ describe('filterValueCommand', () => {
     });
 
     it('passes Date values through to the filter array', async () => {
-      const instance = await createGrid();
+      const date = new Date(2024, 4, 10);
+      const instance = await createGrid({
+        dataSource: [
+          { id: 1, SaleDate: date },
+        ],
+        columns: [
+          { dataField: 'id', dataType: 'number' },
+          { dataField: 'SaleDate', dataType: 'date' },
+        ],
+      });
       const spy = jest.spyOn(instance, 'option');
       const callbacks = createCallbacks();
-      const date = new Date(2024, 4, 10);
 
       const result = await filterValueCommand.execute(instance, callbacks)({
         expression: singleBasic('SaleDate', '=', date),
