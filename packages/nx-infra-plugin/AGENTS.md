@@ -57,10 +57,10 @@ Each behavior is owned by exactly ONE executor's canonical tests; consumers must
 
 ## Notable executors
 
-| Executor | Target example | Purpose |
-|----------|---------------|---------|
-| `license-check` | `verify:licenses` | Verify embedded license notices in built artifacts |
-| `test-timezones` | `test:timezones` | Fetch latest moment-timezone data and verify the bundled timezone list contains only valid IANA identifiers |
+| Executor         | Target example    | Purpose                                                                                                     |
+| ---------------- | ----------------- | ----------------------------------------------------------------------------------------------------------- |
+| `license-check`  | `verify:licenses` | Verify embedded license notices in built artifacts                                                          |
+| `test-timezones` | `test:timezones`  | Fetch latest moment-timezone data and verify the bundled timezone list contains only valid IANA identifiers |
 
 ## Refactor an existing executor
 
