@@ -34,7 +34,7 @@ import { isSmallScreen } from '@ts/ui/html_editor/utils/small_screen';
 import type { Properties as InformerProperties } from '@ts/ui/informer/informer';
 import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
 import { AnimationType } from '@ts/ui/load_indicator';
-import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
+import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/text_editor.base';
 
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';

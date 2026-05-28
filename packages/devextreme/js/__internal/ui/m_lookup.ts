@@ -24,7 +24,7 @@ import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
 import { getElementWidth } from '@ts/ui/drop_down_editor/m_utils';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 
 const window = getWindow();
 

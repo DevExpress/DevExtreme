@@ -1,5 +1,5 @@
 import '@js/ui/select_box';
-import '@ts/ui/color_box/m_color_view';
+import '@ts/ui/color_box/color_view';
 import '@js/ui/number_box';
 import '@js/ui/menu';
 

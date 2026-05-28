@@ -112,7 +112,7 @@ const createDataGridWithAiAndPopup = async (
 
 describe('AI Assistant error handling', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
-  let validateSpy: ReturnType<typeof jest.spyOn>;
+  let parseSpy: ReturnType<typeof jest.spyOn>;
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let executeCommandsSpy: ReturnType<typeof jest.spyOn>;
   // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -122,8 +122,8 @@ describe('AI Assistant error handling', () => {
     beforeTest();
     jest.spyOn(errors, 'log').mockImplementation(jest.fn());
 
-    validateSpy = jest.spyOn(GridCommands.prototype, 'validate')
-      .mockReturnValue(true);
+    parseSpy = jest.spyOn(GridCommands.prototype, 'parse')
+      .mockImplementation((actions) => actions);
     executeCommandsSpy = jest.spyOn(GridCommands.prototype, 'executeCommands')
       .mockResolvedValue([
         { status: 'success', message: 'Done' },
@@ -133,7 +133,7 @@ describe('AI Assistant error handling', () => {
   });
 
   afterEach(() => {
-    validateSpy.mockRestore();
+    parseSpy.mockRestore();
     executeCommandsSpy.mockRestore();
     buildResponseSchemaSpy.mockRestore();
     afterTest();
@@ -256,8 +256,8 @@ describe('AI Assistant error handling', () => {
   });
 
   describe('validation failure', () => {
-    it('should fail when command validation returns false', async () => {
-      validateSpy.mockReturnValue(false);
+    it('should fail when command parse returns null', async () => {
+      parseSpy.mockReturnValue(null);
 
       const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
@@ -281,10 +281,19 @@ describe('AI Assistant error handling', () => {
   });
 
   describe('execution already in progress', () => {
-    it('should fail when commands are already executing', async () => {
-      const isExecutingSpy = jest.spyOn(GridCommands.prototype, 'isExecuting')
-        .mockReturnValue(true);
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let isExecutingSpy: ReturnType<typeof jest.spyOn>;
 
+    beforeEach(() => {
+      isExecutingSpy = jest.spyOn(GridCommands.prototype, 'isExecuting')
+        .mockReturnValue(true);
+    });
+
+    afterEach(() => {
+      isExecutingSpy.mockRestore();
+    });
+
+    it('should fail when commands are already executing', async () => {
       const { model, getLastCallbacks } = await createDataGridWithAiAndPopup();
 
       model.sendAiRequest('Sort by name');
@@ -303,8 +312,6 @@ describe('AI Assistant error handling', () => {
           errorText: 'Execution already in progress. Please wait.',
         }),
       ]);
-
-      isExecutingSpy.mockRestore();
     });
   });
 

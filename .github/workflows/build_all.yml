@@ -24,14 +24,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -40,7 +40,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -55,7 +55,7 @@ jobs:
         run: pnpm run all:build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-npm-packages
           path: |
@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload SBOM artifacts
         if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom
           path: |
@@ -85,19 +85,19 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
       - name: Download npm packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-npm-packages
           path: npm

@@ -42,8 +42,8 @@ import type {
   Properties as FileUploaderProperties,
 } from '@ts/ui/file_uploader/file_uploader.types';
 import Informer from '@ts/ui/informer/informer';
-import type { TextAreaProperties } from '@ts/ui/m_text_area';
-import TextArea from '@ts/ui/m_text_area';
+import type { TextAreaProperties } from '@ts/ui/text_area';
+import TextArea from '@ts/ui/text_area';
 
 type EnterKeyEvent = NativeEventInfo<ChatTextArea, KeyboardEvent>;
 
