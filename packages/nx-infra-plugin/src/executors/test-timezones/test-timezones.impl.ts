@@ -7,6 +7,20 @@ import { TestTimezonesExecutorSchema } from './schema';
 const DEFAULT_MOMENT_TIMEZONE_URL =
   'https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/latest.json';
 
+const MOMENT_TIMEZONE_FETCH_TIMEOUT_MS = 60_000;
+
+function isFetchTimeoutError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  if (error.name === 'TimeoutError' || error.name === 'AbortError') {
+    return true;
+  }
+
+  return error.cause instanceof Error && isFetchTimeoutError(error.cause);
+}
+
 interface MomentTimezoneZone {
   name: string;
   abbrs: string[];
@@ -44,14 +58,26 @@ export function extractTimezoneList(fileContent: string): string[] {
   return timezones;
 }
 
-export async function fetchMomentTimezoneData(url: string): Promise<MomentTimezoneData> {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch moment-timezone data from ${url}: ${response.status} ${response.statusText}`,
-    );
+export async function fetchMomentTimezoneData(
+  url: string,
+  timeoutMs = MOMENT_TIMEZONE_FETCH_TIMEOUT_MS,
+): Promise<MomentTimezoneData> {
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch moment-timezone data from ${url}: ${response.status} ${response.statusText}`,
+      );
+    }
+    return response.json() as Promise<MomentTimezoneData>;
+  } catch (error) {
+    if (isFetchTimeoutError(error)) {
+      throw new Error(
+        `Timed out after ${timeoutMs}ms fetching moment-timezone data from ${url}`,
+      );
+    }
+    throw error;
   }
-  return response.json() as Promise<MomentTimezoneData>;
 }
 
 export function validateTimezoneList(
