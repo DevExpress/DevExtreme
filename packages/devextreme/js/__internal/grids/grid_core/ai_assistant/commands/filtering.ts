@@ -13,7 +13,7 @@ interface BasicFilterExpr {
   type: 'basic';
   field: string;
   operator: SearchOperation;
-  value: string | number | boolean | null;
+  value: string | number | boolean | Date | null;
 }
 
 interface CombinedFilterExpr {
@@ -40,13 +40,13 @@ interface FilterExprTree {
   nodes: FilterExprNode[];
 }
 
-type FilterExprArray = | [string, SearchOperation, string | number | boolean | null]
+type FilterExprArray = | [string, SearchOperation, string | number | boolean | Date | null]
   | [FilterExprArray, 'and' | 'or', FilterExprArray]
   | ['!', FilterExprArray];
 
 const filterOpSchema = z.enum(FILTER_OPS);
 
-const filterValueScalarSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
+const filterValueScalarSchema = z.union([z.string(), z.number(), z.boolean(), z.null(), z.date()]);
 
 const basicFilterExprSchema = z.object({
   type: z.enum(['basic']),
@@ -128,7 +128,7 @@ function convertFilterExprToArray(tree: FilterExprTree): FilterExprArray {
 
 export const filterValueCommand = defineGridCommand({
   name: 'filterValue',
-  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. The expression is a flat node list: {"rootId":id,"nodes":[...]}. Each node is {"id":<unique string like "n1">,"expr":<expression>}, where "expr" is one of: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","combiner":"and"|"or","leftId":nodeId,"rightId":nodeId}, negated {"type":"negated","expressionId":nodeId}. "rootId" MUST be the "id" of the outermost node (the top of the expression tree) and must match one of the node ids exactly — never invent a value like "root". Every "leftId"/"rightId"/"expressionId" must also match a node "id". Ids must be unique and must not form cycles. The "field" is the column dataField (not the caption). Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". To express "not and" / "not or", add a negated node whose expressionId points at a combined node. Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node): {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.',
+  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. The expression is a flat node list: {"rootId":id,"nodes":[...]}. Each node is {"id":<unique string like "n1">,"expr":<expression>}, where "expr" is one of: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","combiner":"and"|"or","leftId":nodeId,"rightId":nodeId}, negated {"type":"negated","expressionId":nodeId}. "rootId" MUST be the "id" of the outermost node (the top of the expression tree) and must match one of the node ids exactly — never invent a value like "root". Every "leftId"/"rightId"/"expressionId" must also match a node "id". Ids must be unique and must not form cycles. The "field" is the column dataField (not the caption). Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". DATE VALUES: When a value is a date, encode it as "AIDate(year, month, day)" where year is the full year, month is 1-based (1=January, 12=December), day is the day of the month. Example: May 10, 2024 → "AIDate(2024, 5, 10)". Do NOT use ISO strings or any other date format. To express "not and" / "not or", add a negated node whose expressionId points at a combined node. Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node): {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.',
   schema: filterValueCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const defaultMessage = args.expression === null

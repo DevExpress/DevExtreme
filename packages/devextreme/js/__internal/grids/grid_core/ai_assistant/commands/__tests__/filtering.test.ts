@@ -113,6 +113,7 @@ describe('filterValueCommand', () => {
       [singleBasic('name', '=', 1)],
       [singleBasic('name', '=', true)],
       [singleBasic('name', '=', null)],
+      [singleBasic('name', '=', new Date(2024, 4, 10))],
     ])('accepts scalar value %p', (expression) => {
       expect(filterValueCommand.schema.safeParse({ expression }).success).toBe(true);
     });
@@ -237,6 +238,20 @@ describe('filterValueCommand', () => {
       });
 
       expect(spy).toHaveBeenCalledWith('filterValue', ['name', '=', 'Alpha']);
+      expect(result.status).toBe('success');
+    });
+
+    it('passes Date values through to the filter array', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+      const date = new Date(2024, 4, 10);
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('SaleDate', '=', date),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', ['SaleDate', '=', date]);
       expect(result.status).toBe('success');
     });
 
