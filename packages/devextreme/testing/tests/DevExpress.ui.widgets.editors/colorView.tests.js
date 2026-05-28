@@ -7,7 +7,7 @@ import fx from 'common/core/animation/fx';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'fluent_blue_light.css!';
-import '__internal/ui/color_box/m_color_view';
+import '__internal/ui/color_box/color_view';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const COLORVIEW_PALETTE_SELECTOR = '.dx-colorview-palette';
