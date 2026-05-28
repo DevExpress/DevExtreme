@@ -24,12 +24,12 @@ jobs:
 
         steps:
             - name: Use Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                 node-version-file: '.node-version'
 
             - name: Checkout gh-pages branch
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                 ref: gh-pages
                 path: gh-pages
@@ -43,7 +43,7 @@ jobs:
                 python -m http.server 8083 &
 
             - name: Checkout main branch
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                 ref: ${{ env.TARGET_BRANCH }}
                 path: devextreme
@@ -56,11 +56,11 @@ jobs:
               with:
                 chrome-version: '145.0.7632.67'
 
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v6
               with:
                 run_install: false
 
-            - uses: actions/cache@v4
+            - uses: actions/cache@v5
               name: Setup pnpm cache
               with:
                 path: ${{ env.STORE_PATH }}
@@ -93,7 +93,7 @@ jobs:
 
             - name: Copy screenshots artifacts
               if: ${{ failure() }}
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                 name: screenshots
                 path: ${{ github.workspace }}/devextreme/apps/demos/testing/artifacts/compared-screenshots/**/*

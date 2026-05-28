@@ -19,15 +19,15 @@ import { Deferred } from '@js/core/utils/deferred';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import { isDefined } from '@js/core/utils/type';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
-import TextEditor from '@ts/ui/text_box/m_text_editor';
+import TextEditor from '@ts/ui/text_box/text_editor';
 
-import type { TextEditorBaseProperties } from '../text_box/m_text_editor.base';
+import type { TextEditorBaseProperties } from '../text_box/text_editor.base';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
 import SpinButtons from './m_number_box.spins';
 
 const math = Math;
 
-const WIDGET_CLASS = 'dx-numberbox';
+export const WIDGET_CLASS = 'dx-numberbox';
 const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
 const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';

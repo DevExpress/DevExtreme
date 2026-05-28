@@ -1,5 +1,7 @@
 import type { SummaryType } from '@js/common/grids';
 import { defineGridCommand } from '@ts/grids/grid_core/ai_assistant/commands/defineGridCommand';
+// eslint-disable-next-line spellcheck/spell-checker
+import { optionalNullish } from '@ts/grids/grid_core/ai_assistant/commands/utils';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import { z } from 'zod';
 
@@ -7,20 +9,22 @@ import type { Column } from './types';
 
 const SUMMARY_TYPES = ['sum', 'min', 'max', 'avg', 'count'] as const satisfies readonly SummaryType[];
 
+/* eslint-disable spellcheck/spell-checker */
 const summaryItemBaseShape = {
   column: z.string(),
   summaryType: z.enum(SUMMARY_TYPES),
-  showInColumn: z.string().optional(),
-  displayFormat: z.string().optional(),
+  showInColumn: optionalNullish(z.string()),
+  displayFormat: optionalNullish(z.string()),
 };
 
 const totalItemSchema = z.object(summaryItemBaseShape).strict();
 
 const groupItemSchema = z.object({
   ...summaryItemBaseShape,
-  showInGroupFooter: z.boolean().optional(),
-  alignByColumn: z.boolean().optional(),
+  showInGroupFooter: optionalNullish(z.boolean()),
+  alignByColumn: optionalNullish(z.boolean()),
 }).strict();
+/* eslint-enable spellcheck/spell-checker */
 
 const summaryCommandSchema = z.object({
   totalItems: z.array(totalItemSchema),

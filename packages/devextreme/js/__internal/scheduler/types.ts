@@ -4,7 +4,7 @@ import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
-import type { AppointmentViewModelPlain } from './view_model/types';
+import type { AppointmentItemViewModel } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
@@ -263,14 +263,13 @@ export interface AppointmentTooltipItem {
   appointment: Appointment;
   targetedAppointment?: Appointment | TargetedAppointment;
   color: Promise<string | undefined>;
+  settings: AppointmentItemViewModel;
 }
 
 export interface CompactAppointmentOptions {
   $container: dxElementWrapper;
   coordinates: { top: number; left: number };
-  items: (AppointmentTooltipItem & {
-    settings: AppointmentViewModelPlain;
-  })[];
+  items: AppointmentTooltipItem[];
   buttonColor: Promise<string | undefined>;
   sortedIndex: number;
   width: number;
