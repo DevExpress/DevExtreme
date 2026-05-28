@@ -421,7 +421,7 @@ class ColorView extends Editor<ColorViewProperties> {
     $el.css('backgroundColor', this._makeRgba(color));
   }
 
-  _makeRgba(color:ColorInstance): string {
+  _makeRgba(color: ColorInstance): string {
     return `rgba(${[color.r, color.g, color.b, color.a].join(', ')})`;
   }
 
