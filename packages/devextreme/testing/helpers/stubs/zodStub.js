@@ -12,6 +12,7 @@
         string: function() { return z; },
         boolean: function() { return z; },
         number: function() { return z; },
+        date: function() { return z; },
         null: function() { return z; },
         enum: function() { return z; },
         union: function() { return z; },
