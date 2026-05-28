@@ -67,11 +67,12 @@ Each behavior is owned by exactly ONE executor's canonical tests; consumers must
 
 Gulp tasks that have been migrated to Nx executor targets (the gulp task is now a thin `shell.task` delegate):
 
-| Gulp task | Nx target | Notes |
-| --------- | --------- | ----- |
-| `clean` | `clean:artifacts` | Uses `devextreme-nx-infra-plugin:clean` with `excludePatterns` to preserve `artifacts/css`, `artifacts/npm/devextreme/package.json`, and `artifacts/npm/devextreme-dist`. The gulp task delegates via `shell.task('pnpm nx clean:artifacts devextreme')`. |
+| Gulp task | Nx target         | Notes                                                                                                                                                                                                                                                     |
+| --------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `clean`   | `clean:artifacts` | Uses `devextreme-nx-infra-plugin:clean` with `excludePatterns` to preserve `artifacts/css`, `artifacts/npm/devextreme/package.json`, and `artifacts/npm/devextreme-dist`. The gulp task delegates via `shell.task('pnpm nx clean:artifacts devextreme')`. |
 
 When migrating additional gulp tasks, follow the same pattern:
+
 1. Ensure the Nx target fully replicates the gulp task's behavior (including exclusion lists, configurations, etc.)
 2. Replace the gulp task body with `shell.task('pnpm nx <target> <project>')`.
 3. Remove unused imports from the gulpfile.
