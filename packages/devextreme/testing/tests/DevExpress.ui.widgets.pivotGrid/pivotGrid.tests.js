@@ -523,6 +523,26 @@ QUnit.module('dxPivotGrid', {
         assert.strictEqual(expandValueChangingArgs, undefined);
     });
 
+    QUnit.test('keydown auto-repeat does not trigger expansion', function(assert) {
+        let expandValueChangingArgs;
+        const pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            onExpandValueChanging: function(args) {
+                expandValueChangingArgs = $.extend({}, args);
+            }
+        });
+        assert.ok(pivotGrid);
+
+        const $collapsedTd = $('#pivotGrid').find('.dx-pivotgrid-collapsed').closest('td');
+        assert.strictEqual($collapsedTd.length, 1);
+
+        $collapsedTd.trigger($.Event('keydown', { key: 'Enter', repeat: true }));
+
+        this.clock.tick(10);
+
+        assert.strictEqual(expandValueChangingArgs, undefined);
+    });
+
     QUnit.test('onCellClick cancel prevents keyboard expansion', function(assert) {
         let expandValueChangingArgs;
         const pivotGrid = createPivotGrid({
