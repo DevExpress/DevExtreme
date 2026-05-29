@@ -573,6 +573,96 @@ describe('New Appointments', () => {
     });
   });
 
+  describe('onAppointmentContextMenu', () => {
+    it('should call onAppointmentContextMenu callback', async () => {
+      const onAppointmentContextMenu = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
+
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentContextMenu,
+      });
+
+      const appointmentElement = POM.getAppointments()[0].element;
+      fireEvent(appointmentElement, new Event('dxcontextmenu', { bubbles: true }));
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+      expect(onAppointmentContextMenu).toHaveBeenCalledWith({
+        appointmentData: appointment,
+        targetedAppointmentData: {
+          ...appointment,
+          displayStartDate: new Date(2015, 1, 9, 8),
+          displayEndDate: new Date(2015, 1, 9, 9),
+        },
+        appointmentElement,
+        component: scheduler,
+        element: scheduler.$element().get(0),
+        event: expect.objectContaining({ type: 'dxcontextmenu' }),
+      });
+    });
+
+    it('should call onAppointmentContextMenu after .option() change', async () => {
+      const { POM, scheduler } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      const onAppointmentContextMenu = jest.fn();
+      scheduler.option('onAppointmentContextMenu', onAppointmentContextMenu);
+
+      fireEvent(
+        POM.getAppointments()[0].element,
+        new Event('dxcontextmenu', { bubbles: true }),
+      );
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onAppointmentContextMenu with correct targetedAppointmentData', async () => {
+      const onAppointmentContextMenu = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+        recurrenceRule: 'FREQ=DAILY',
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentContextMenu,
+      });
+
+      fireEvent(
+        POM.getAppointments()[0].element,
+        new Event('dxcontextmenu', { bubbles: true }),
+      );
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+      expect(onAppointmentContextMenu).toHaveBeenCalledWith(expect.objectContaining({
+        targetedAppointmentData: {
+          ...appointment,
+          displayStartDate: new Date(2015, 1, 9, 8),
+          displayEndDate: new Date(2015, 1, 9, 9),
+        },
+      }));
+    });
+  });
+
   describe('Tooltip', () => {
     it('should show tooltip on appointment click', async () => {
       const { POM } = await createScheduler({
