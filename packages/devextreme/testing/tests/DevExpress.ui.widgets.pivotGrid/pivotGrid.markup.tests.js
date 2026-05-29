@@ -101,6 +101,10 @@ QUnit.module('PivotGrid markup tests', () => {
     });
 
     QUnit.test('Expandable td has aria-expanded reflecting expanded state', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
         const clock = sinon.useFakeTimers();
         try {
             const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
@@ -119,6 +123,10 @@ QUnit.module('PivotGrid markup tests', () => {
     });
 
     QUnit.test('Expandable td has tabindex="0"', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
         const clock = sinon.useFakeTimers();
         try {
             const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
@@ -135,6 +143,10 @@ QUnit.module('PivotGrid markup tests', () => {
     });
 
     QUnit.test('Non-expandable td has neither aria-expanded nor tabindex', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
         const clock = sinon.useFakeTimers();
         try {
             const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
