@@ -1,4 +1,5 @@
 import type { SearchOperation } from '@js/common/data.types';
+import type { FilterExprNode, FilterExprTree } from '@js/common/grids';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import { z } from 'zod';
 
@@ -8,37 +9,6 @@ const FILTER_OPS = [
   '=', '<>', '<', '<=', '>', '>=',
   'contains', 'notcontains', 'startswith', 'endswith',
 ] as const satisfies readonly SearchOperation[];
-
-interface BasicFilterExpr {
-  type: 'basic';
-  field: string;
-  operator: SearchOperation;
-  value: string | number | boolean | Date | null;
-}
-
-interface CombinedFilterExpr {
-  type: 'combined';
-  combiner: 'and' | 'or';
-  leftId: string;
-  rightId: string;
-}
-
-interface NegatedFilterExpr {
-  type: 'negated';
-  expressionId: string;
-}
-
-type FilterExpr = BasicFilterExpr | CombinedFilterExpr | NegatedFilterExpr;
-
-interface FilterExprNode {
-  id: string;
-  expr: FilterExpr;
-}
-
-interface FilterExprTree {
-  rootId: string;
-  nodes: FilterExprNode[];
-}
 
 type FilterExprArray = | [string, SearchOperation, string | number | boolean | Date | null]
   | [FilterExprArray, 'and' | 'or', FilterExprArray]

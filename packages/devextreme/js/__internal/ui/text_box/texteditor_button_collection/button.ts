@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
+import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 
 type TextEditorButtonInstance = dxElementWrapper | Button;
 

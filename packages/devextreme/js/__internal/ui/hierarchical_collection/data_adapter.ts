@@ -9,7 +9,7 @@ import type { DisabledNodeSelectionMode } from '@js/ui/tree_view';
 import errors from '@js/ui/widget/ui.errors';
 import { getIntersection } from '@ts/core/utils/m_array';
 import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 
 import HierarchicalDataConverter, {
   type DataAccessors,
