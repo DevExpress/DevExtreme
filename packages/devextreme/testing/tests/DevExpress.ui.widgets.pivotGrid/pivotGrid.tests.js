@@ -512,10 +512,33 @@ QUnit.module('dxPivotGrid', {
         });
         assert.ok(pivotGrid);
 
-        const $nonExpandableTd = $('#pivotGrid').find('td:not([aria-expanded])').first();
+        const $nonExpandableTd = $('#pivotGrid').find('.dx-area-row-cell td').first();
         assert.ok($nonExpandableTd.length > 0);
 
         $nonExpandableTd.trigger($.Event('keydown', { key: 'Enter' }));
+
+        this.clock.tick(10);
+
+        assert.strictEqual(expandValueChangingArgs, undefined);
+    });
+
+    QUnit.test('onCellClick cancel prevents keyboard expansion', function(assert) {
+        let expandValueChangingArgs;
+        const pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            onExpandValueChanging: function(args) {
+                expandValueChangingArgs = $.extend({}, args);
+            },
+            onCellClick: function(args) {
+                args.cancel = true;
+            }
+        });
+        assert.ok(pivotGrid);
+
+        const $collapsedTd = $('#pivotGrid').find('.dx-pivotgrid-collapsed').closest('td');
+        assert.strictEqual($collapsedTd.length, 1);
+
+        $collapsedTd.trigger($.Event('keydown', { key: 'Enter' }));
 
         this.clock.tick(10);
 

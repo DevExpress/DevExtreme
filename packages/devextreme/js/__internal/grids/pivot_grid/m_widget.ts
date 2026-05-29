@@ -888,7 +888,7 @@ class PivotGrid extends Widget {
       const args = this._createEventArgs(e.currentTarget, e);
       if (args.cell && isDefined(args.cell.expanded)) {
         e.preventDefault();
-        this._handleCellClick({ currentTarget: e.currentTarget, preventDefault: noop });
+        this._handleCellClick(e);
       }
     }
   }
