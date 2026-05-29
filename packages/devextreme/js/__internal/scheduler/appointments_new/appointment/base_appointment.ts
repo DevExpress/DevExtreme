@@ -125,7 +125,6 @@ export class BaseAppointmentView<
   private attachContextMenuEvent(): void {
     eventsEngine.off(this.$element(), CONTEXT_MENU_EVENT_NAME);
     eventsEngine.on(
-    eventsEngine.on(
       this.$element(),
       CONTEXT_MENU_EVENT_NAME,
       (event: DxEvent) => this.option().onContextMenu(this, event),
