@@ -41,6 +41,7 @@ const getProperties = (options: {
   onAppointmentRendered: (): void => {},
   onAppointmentClick: (): void => {},
   onAppointmentDblClick: (): void => {},
+  onAppointmentContextMenu: (): void => {},
 
   getStartViewDate: () => new Date(2024, 0, 1),
   getSortedItems: () => [],
@@ -1513,6 +1514,54 @@ describe('Appointments', () => {
       expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
       expect(showEditAppointmentPopup).not.toHaveBeenCalled();
       expect(showAppointmentTooltip).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onAppointmentContextMenu', () => {
+    it('should call onAppointmentContextMenu on appointment dxcontextmenu event', () => {
+      const onAppointmentContextMenu = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentContextMenu,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      fireEvent(element, new Event('dxcontextmenu', { bubbles: true }));
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+      expect(onAppointmentContextMenu).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appointmentElement: element,
+          appointmentData: defaultAppointmentData,
+          targetedAppointmentData: expect.objectContaining({
+            ...defaultAppointmentData,
+          }),
+          event: expect.objectContaining({ type: 'dxcontextmenu' }),
+        }),
+      );
+    });
+
+    it('should not call onAppointmentContextMenu on collector dxcontextmenu event', () => {
+      const onAppointmentContextMenu = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentContextMenu,
+      });
+      instance.option('viewModel', [
+        mockAppointmentCollectorViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      fireEvent(element, new Event('dxcontextmenu', { bubbles: true }));
+
+      expect(onAppointmentContextMenu).not.toHaveBeenCalled();
     });
   });
 });
