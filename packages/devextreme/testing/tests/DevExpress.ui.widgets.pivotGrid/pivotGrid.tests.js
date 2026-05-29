@@ -434,6 +434,95 @@ QUnit.module('dxPivotGrid', {
         assert.strictEqual(expandValueChangingArgs, undefined);
     });
 
+    QUnit.test('expand column item by Enter keydown', function(assert) {
+        let expandValueChangingArgs;
+        const pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            onExpandValueChanging: function(args) {
+                expandValueChangingArgs = $.extend({}, args);
+            }
+        });
+        assert.ok(pivotGrid);
+
+        const $collapsedTd = $('#pivotGrid').find('.dx-pivotgrid-collapsed').closest('td');
+        assert.strictEqual($collapsedTd.length, 1);
+
+        $collapsedTd.trigger($.Event('keydown', { key: 'Enter' }));
+
+        this.clock.tick(10);
+
+        assert.deepEqual(expandValueChangingArgs, {
+            area: 'column',
+            path: ['2012'],
+            expanded: true,
+            needExpandData: true
+        });
+    });
+
+    QUnit.test('collapse column item by Space keydown', function(assert) {
+        let expandValueChangingArgs;
+        const pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            onExpandValueChanging: function(args) {
+                expandValueChangingArgs = $.extend({}, args);
+            }
+        });
+        assert.ok(pivotGrid);
+
+        const $expandedTd = $('#pivotGrid').find('.dx-pivotgrid-expanded').closest('td');
+        assert.strictEqual($expandedTd.length, 1);
+
+        $expandedTd.trigger($.Event('keydown', { key: ' ' }));
+
+        this.clock.tick(10);
+
+        assert.deepEqual(expandValueChangingArgs, {
+            area: 'column',
+            path: ['2010'],
+            expanded: false
+        });
+    });
+
+    QUnit.test('keydown with keys other than Enter and Space does not toggle expansion', function(assert) {
+        let expandValueChangingArgs;
+        const pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            onExpandValueChanging: function(args) {
+                expandValueChangingArgs = $.extend({}, args);
+            }
+        });
+        assert.ok(pivotGrid);
+
+        const $collapsedTd = $('#pivotGrid').find('.dx-pivotgrid-collapsed').closest('td');
+        assert.strictEqual($collapsedTd.length, 1);
+
+        $collapsedTd.trigger($.Event('keydown', { key: 'Tab' }));
+
+        this.clock.tick(10);
+
+        assert.strictEqual(expandValueChangingArgs, undefined);
+    });
+
+    QUnit.test('keydown on a non-expandable td does not toggle expansion', function(assert) {
+        let expandValueChangingArgs;
+        const pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            onExpandValueChanging: function(args) {
+                expandValueChangingArgs = $.extend({}, args);
+            }
+        });
+        assert.ok(pivotGrid);
+
+        const $nonExpandableTd = $('#pivotGrid').find('td:not([aria-expanded])').first();
+        assert.ok($nonExpandableTd.length > 0);
+
+        $nonExpandableTd.trigger($.Event('keydown', { key: 'Enter' }));
+
+        this.clock.tick(10);
+
+        assert.strictEqual(expandValueChangingArgs, undefined);
+    });
+
     QUnit.test('T248253. DataSource changed', function(assert) {
         let expandValueChangingArgs;
         const pivotGrid = createPivotGrid($.extend(this.testOptions, {

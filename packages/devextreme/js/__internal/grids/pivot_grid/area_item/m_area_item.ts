@@ -198,6 +198,8 @@ abstract class AreaItem {
             span.classList.add(PIVOTGRID_EXPAND_CLASS);
             div.appendChild(span);
             td.appendChild(div);
+            td.setAttribute('aria-expanded', String(cell.expanded));
+            td.setAttribute('tabindex', '0');
           }
 
           cellText = this._getCellText(cell, encodeHtml);

@@ -875,6 +875,16 @@ class PivotGrid extends Widget {
     });
   }
 
+  _handleCellKeyDown(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const args = this._createEventArgs(e.currentTarget, e);
+      if (args.cell && isDefined(args.cell.expanded)) {
+        e.preventDefault();
+        this._handleCellClick({ currentTarget: e.currentTarget, preventDefault: noop });
+      }
+    }
+  }
+
   _getNoDataText() {
     return this.option('texts.noData');
   }
@@ -1066,6 +1076,7 @@ class PivotGrid extends Widget {
       .toggleClass('dx-word-wrap', !!that.option('wordWrapEnabled'));
 
     eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', that._handleCellClick.bind(that));
+    eventsEngine.on($table, addNamespace('keydown', 'dxPivotGrid'), 'td', that._handleCellKeyDown.bind(that));
 
     return $table;
   }
