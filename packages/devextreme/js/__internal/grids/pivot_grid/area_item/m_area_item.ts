@@ -199,6 +199,7 @@ abstract class AreaItem {
             div.appendChild(span);
             td.appendChild(div);
             td.setAttribute('role', 'button');
+            td.setAttribute('aria-label', String(cell.text ?? cell.value ?? ''));
             td.setAttribute('aria-expanded', String(cell.expanded));
             td.setAttribute('tabindex', '0');
           }

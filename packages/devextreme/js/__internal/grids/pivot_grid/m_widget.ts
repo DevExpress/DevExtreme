@@ -20,6 +20,7 @@ import type { Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
+import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isFluent } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -883,6 +884,12 @@ class PivotGrid extends Widget {
       const args = this._createEventArgs(e.currentTarget, e);
       if (args.cell && isDefined(args.cell.expanded)) {
         e.preventDefault();
+        saveFocusedElementInfo(e.currentTarget, this);
+        const onReady = () => {
+          this.off('contentReady', onReady);
+          restoreFocus(this);
+        };
+        this.on('contentReady', onReady);
         this._handleCellClick(e);
       }
     }
