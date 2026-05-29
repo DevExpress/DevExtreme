@@ -51,7 +51,6 @@ module('Renovated Render', {
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
             this.instance = $('#scheduler-work-space')[workSpace]({
-                renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
                 endDayHour: 1,
