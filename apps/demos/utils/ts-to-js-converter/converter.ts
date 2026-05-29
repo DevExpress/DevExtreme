@@ -78,16 +78,15 @@ const pipeSource = async (
   }));
 };
 
-// eslint-disable-next-line require-await
-const execTsc = async (directory: string, args: string): Promise<string> => new Promise((resolve, reject) => {
-  cps.exec(`tsc ${args}`, (error, stdout, stderr) => {
-    if (error != null) {
-      // eslint-disable-next-line prefer-promise-reject-errors
-      return reject(`${error}\n${stderr}\n${stdout}`);
-    }
-    return resolve(stdout);
-  });
-});
+const execTsc = async (directory: string, args: string[]): Promise<string> => {
+  const tscScript = require.resolve('typescript/bin/tsc');
+  const { stdout } = await promisify(cps.execFile)(
+    process.execPath,
+    [tscScript, ...args],
+    { cwd: directory },
+  );
+  return stdout;
+};
 
 const compile = async (resolve: PathResolvers, log: Logger) => {
   log.debug('compiling sources and unit tests');
@@ -110,7 +109,7 @@ const compile = async (resolve: PathResolvers, log: Logger) => {
     ),
   );
 
-  await execTsc(resolve.source('./'), `--build ${tsconfigFile}`);
+  await execTsc(resolve.source('./'), ['--build', tsconfigFile]);
 };
 
 const copyAssets = async (resolve: PathResolvers, log: Logger) => {

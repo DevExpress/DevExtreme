@@ -1,6 +1,6 @@
 {
   "name": "devextreme-themebuilder",
-  "version": "26.1.0",
+  "version": "26.1.2",
   "description": "DevExtreme ThemeBuilder",
   "keywords": [
     "devextreme",
@@ -30,7 +30,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.21",
     "clean-css": "^5.3.0",
-    "postcss": "^8.2.6",
+    "postcss": "^8.5.10",
     "sass-embedded": "1.93.3"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "express": "4.22.1",
     "filing-cabinet": "4.1.6",
     "fs-extra": "11.2.0",
-    "immutable": "^5.1.5",
+    "immutable": "5.1.5",
     "precinct": "11.0.5",
     "sinon": "18.0.1",
     "ts-jest": "29.1.2",

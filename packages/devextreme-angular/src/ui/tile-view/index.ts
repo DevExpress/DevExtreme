@@ -56,7 +56,6 @@ import {
  */
 @Component({
     selector: 'dx-tile-view',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

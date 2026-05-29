@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="long-title"><h3>Energy Production (GWh, 2016)</h3></div>
+    <div class="long-title"><h3>Energy Production (GWh, 2024)</h3></div>
     <div class="pies-container">
       <DxPieChart
         v-for="country in countries"

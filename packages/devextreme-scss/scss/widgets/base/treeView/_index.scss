@@ -12,6 +12,7 @@
     @include dx-icon($collapse-icon-name);
 
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     font-size: $font-size;

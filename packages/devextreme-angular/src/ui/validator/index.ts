@@ -67,7 +67,6 @@ import {
  */
 @Component({
     selector: 'dx-validator',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

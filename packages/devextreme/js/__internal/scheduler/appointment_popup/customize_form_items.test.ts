@@ -2,7 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { type ConfigItem, customizeFormItems, type FormItem } from './m_customize_form_items';
+import { type ConfigItem, customizeFormItems, type FormItem } from './customize_form_items';
 
 const subjectGroup: FormItem = {
   name: 'subjectGroup',

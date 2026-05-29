@@ -29,6 +29,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
+import { logger } from '@ts/core/utils/m_console';
 import type { ActionConfig } from '@ts/core/widget/component';
 import Animator from '@ts/ui/scroll_view/animator';
 import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
@@ -38,6 +39,7 @@ import Scrollbar from '@ts/ui/scroll_view/scrollbar';
 import type {
   AllowedDirections, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs, ScrollOffset,
 } from '@ts/ui/scroll_view/types';
+import { getAdjustedBaseContainerSize } from '@ts/ui/scroll_view/utils/get_adjusted_base_container_size';
 
 interface ScrollVelocity {
   x: number;
@@ -562,16 +564,22 @@ export class Scroller {
 
   _updateScrollbar(): void {
     deferUpdater(() => {
-      const containerSize = this._containerSize();
+      const dimension = this._dimension;
+      const rawContainerSize = getBoundingRect(this._$container[0])[dimension];
+      const containerSize = Math.round(rawContainerSize);
       const contentSize = this._contentSize();
 
       // NOTE: Real container and content sizes can be a fractional number when scaling.
       //       Let's save sizes when scale = 100% to decide whether it is necessary to show
       //       the scrollbar based on by more precise numbers. We can do it because the container
       //       size to content size ratio should remain approximately the same at any zoom.
-      const dimension = this._dimension;
-      const baseContainerSize = this._getBaseDimension(this._$container[0], dimension);
+      const rawBaseContainerSize = this._getBaseDimension(this._$container[0], dimension);
       const baseContentSize = this._getBaseDimension(this._$content[0], dimension);
+      const baseContainerSize = getAdjustedBaseContainerSize(
+        rawContainerSize,
+        rawBaseContainerSize,
+        baseContentSize,
+      );
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferRender(() => {
@@ -690,10 +698,8 @@ export class SimulatedStrategy<
 
   _$content!: dxElementWrapper;
 
-  // eslint-disable-next-line no-restricted-globals
   _updateHandlerTimeout?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _validateWheelTimer?: ReturnType<typeof setTimeout>;
 
   _eventForUserAction?: unknown;
@@ -1089,7 +1095,11 @@ export class SimulatedStrategy<
     const actionHandler = this._createActionByOption(optionName);
 
     return (...args: unknown[]) => {
-      actionHandler(extend(this._createActionArgs(), args));
+      try {
+        actionHandler(extend(this._createActionArgs(), args));
+      } catch (e) {
+        logger.error(e);
+      }
     };
   }
 

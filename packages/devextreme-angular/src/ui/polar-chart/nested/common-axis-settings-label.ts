@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-axis-settings-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

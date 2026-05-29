@@ -48,13 +48,3 @@
   width: 100%;
 }
 
-::ng-deep #form .dx-scheduler-form-main-group,
-::ng-deep #form .dx-scheduler-form-recurrence-group {
-  padding-top: 0;
-}
-
-::ng-deep #form:not(.hide-informer) .dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
-::ng-deep #form:not(.hide-informer) .dx-scheduler-form-main-group.dx-scheduler-form-main-group-hidden {
-  top: 44px;
-}
-

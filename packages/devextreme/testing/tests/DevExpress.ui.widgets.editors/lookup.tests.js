@@ -92,9 +92,9 @@ const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
 const FOCUSED_CLASS = 'dx-state-focused';
 
+const APPLY_BUTTON_SELECTOR = `.${APPLY_BUTTON_CLASS}.dx-button`;
+const CLEAR_BUTTON_SELECTOR = `.${CLEAR_BUTTON_CLASS}.dx-button`;
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
-
-const WINDOW_RATIO = 0.8;
 
 const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
@@ -2192,7 +2192,7 @@ QUnit.module('popup options', {
     [true, false].forEach(dropDownCentered => {
         [true, false].forEach(_scrollToSelectedItemEnabled => {
             [true, false].forEach(usePopover => {
-                QUnit.test(`Popup should have correct _loopFocus option value if usePopover=${usePopover}, _scrollToSelectedItemEnabled=${_scrollToSelectedItemEnabled}, dropDownCentered=${dropDownCentered}`, function(assert) {
+                QUnit.test(`Popup should have correct tabFocusLoopEnabled option value if usePopover=${usePopover}, _scrollToSelectedItemEnabled=${_scrollToSelectedItemEnabled}, dropDownCentered=${dropDownCentered}`, function(assert) {
                     const instance = $('#lookupOptions').dxLookup({
                         _scrollToSelectedItemEnabled,
                         usePopover,
@@ -2211,9 +2211,9 @@ QUnit.module('popup options', {
                         ? dropDownCentered
                         : !usePopover;
 
-                    const { _loopFocus } = popup.option();
+                    const { tabFocusLoopEnabled } = popup.option();
 
-                    assert.strictEqual(_loopFocus, expectedValue, `_loopFocus: ${_loopFocus} is correct`);
+                    assert.strictEqual(tabFocusLoopEnabled, expectedValue, `tabFocusLoopEnabled: ${tabFocusLoopEnabled} is correct`);
                 });
             });
         });
@@ -2654,6 +2654,195 @@ QUnit.module('list options', {
     });
 });
 
+QUnit.module('keyboard navigation - focus management', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+        this.getList = (instance) => instance._list;
+    },
+    afterEach: function() {
+        this.clock.restore();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('list should have tabIndex=-1 when searchEnabled is true', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: true,
+            opened: true,
+        }).dxLookup('instance');
+
+        assert.strictEqual(this.getList(instance).option('tabIndex'), -1, 'list tabIndex is -1 when searchEnabled is true');
+    });
+
+    QUnit.test('list should have tabIndex=0 when searchEnabled is false', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: false,
+            opened: true,
+        }).dxLookup('instance');
+
+        assert.strictEqual(this.getList(instance).option('tabIndex'), 0, 'list tabIndex is 0 when searchEnabled is false');
+    });
+
+    QUnit.test('list tabIndex should update when searchEnabled changes at runtime', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: true,
+            opened: true,
+        }).dxLookup('instance');
+
+        const list = this.getList(instance);
+
+        assert.strictEqual(list.option('tabIndex'), -1, 'tabIndex is -1 initially with searchEnabled=true');
+
+        instance.option('searchEnabled', false);
+        assert.strictEqual(list.option('tabIndex'), 0, 'tabIndex changed to 0 after searchEnabled set to false');
+
+        instance.option('searchEnabled', true);
+        assert.strictEqual(list.option('tabIndex'), -1, 'tabIndex changed back to -1 after searchEnabled set to true');
+    });
+
+    QUnit.test('list should receive focusStateEnabled from Lookup', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            opened: true,
+        }).dxLookup('instance');
+
+        assert.ok(this.getList(instance).option('focusStateEnabled'), 'list has focusStateEnabled=true when Lookup has focusStateEnabled=true');
+    });
+
+    QUnit.test('list focusStateEnabled should update when parent focusStateEnabled changes at runtime', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            opened: true,
+        }).dxLookup('instance');
+
+        const list = this.getList(instance);
+
+        instance.option('focusStateEnabled', false);
+        assert.notOk(list.option('focusStateEnabled'), 'list focusStateEnabled updated to false');
+
+        instance.option('focusStateEnabled', true);
+        assert.ok(list.option('focusStateEnabled'), 'list focusStateEnabled updated to true');
+    });
+
+    QUnit.test('done button should receive focusStateEnabled from Lookup', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            applyValueMode: 'useButtons',
+            opened: true,
+        }).dxLookup('instance');
+
+        const $doneButton = $(instance.content()).parent().find(APPLY_BUTTON_SELECTOR);
+        assert.ok($doneButton.length, 'done button exists');
+
+        const doneButton = $doneButton.dxButton('instance');
+        assert.ok(doneButton.option('focusStateEnabled'), 'done button has focusStateEnabled=true');
+    });
+
+    QUnit.test('clear button should receive focusStateEnabled from Lookup', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            showClearButton: true,
+            opened: true,
+        }).dxLookup('instance');
+
+        const $clearButton = $(instance.content()).parent().find(CLEAR_BUTTON_SELECTOR);
+        assert.ok($clearButton.length, 'clear button exists');
+
+        const clearButton = $clearButton.dxButton('instance');
+        assert.ok(clearButton.option('focusStateEnabled'), 'clear button has focusStateEnabled=true');
+    });
+
+    QUnit.test('cancel button should receive focusStateEnabled from Lookup', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            showCancelButton: true,
+            opened: true,
+        }).dxLookup('instance');
+
+        const $cancelButton = $(instance.content()).parent().find(CANCEL_BUTTON_SELECTOR);
+        assert.ok($cancelButton.length, 'cancel button exists');
+
+        const cancelButton = $cancelButton.dxButton('instance');
+        assert.ok(cancelButton.option('focusStateEnabled'), 'cancel button has focusStateEnabled=true');
+    });
+
+    QUnit.test('toolbar buttons should not have focusStateEnabled when Lookup has focusStateEnabled=false', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: false,
+            showClearButton: true,
+            showCancelButton: true,
+            applyValueMode: 'useButtons',
+            opened: true,
+        }).dxLookup('instance');
+
+        const doneButton = $(instance.content()).parent().find(APPLY_BUTTON_SELECTOR).dxButton('instance');
+        const clearButton = $(instance.content()).parent().find(CLEAR_BUTTON_SELECTOR).dxButton('instance');
+        const cancelButton = $(instance.content()).parent().find(CANCEL_BUTTON_SELECTOR).dxButton('instance');
+
+        assert.notOk(doneButton.option('focusStateEnabled'), 'done button has focusStateEnabled=false');
+        assert.notOk(clearButton.option('focusStateEnabled'), 'clear button has focusStateEnabled=false');
+        assert.notOk(cancelButton.option('focusStateEnabled'), 'cancel button has focusStateEnabled=false');
+    });
+
+    QUnit.test('toolbar buttons should update focusStateEnabled when Lookup focusStateEnabled changes from true to false at runtime', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            showClearButton: true,
+            showCancelButton: true,
+            applyValueMode: 'useButtons',
+            opened: true,
+        }).dxLookup('instance');
+
+        const $overlayContent = $(instance.content()).parent();
+
+        assert.ok($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button initially has focusStateEnabled=true');
+        assert.ok($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button initially has focusStateEnabled=true');
+        assert.ok($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button initially has focusStateEnabled=true');
+
+        instance.option('focusStateEnabled', false);
+
+        assert.notOk($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button updated to focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button updated to focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button updated to focusStateEnabled=false');
+    });
+
+    QUnit.test('toolbar buttons should update focusStateEnabled when Lookup focusStateEnabled changes from false to true at runtime', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            items: [1, 2, 3],
+            focusStateEnabled: false,
+            showClearButton: true,
+            showCancelButton: true,
+            applyValueMode: 'useButtons',
+            opened: true,
+        }).dxLookup('instance');
+
+        const $overlayContent = $(instance.content()).parent();
+
+        assert.notOk($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button initially has focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button initially has focusStateEnabled=false');
+        assert.notOk($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button initially has focusStateEnabled=false');
+
+        instance.option('focusStateEnabled', true);
+
+        assert.ok($overlayContent.find(APPLY_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'done button updated to focusStateEnabled=true');
+        assert.ok($overlayContent.find(CLEAR_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'clear button updated to focusStateEnabled=true');
+        assert.ok($overlayContent.find(CANCEL_BUTTON_SELECTOR).dxButton('instance').option('focusStateEnabled'), 'cancel button updated to focusStateEnabled=true');
+    });
+});
+
 QUnit.module('Native scrolling', () => {
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
         const data = [];
@@ -2908,25 +3097,6 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find('.dx-list-item').first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
-    });
-
-    QUnit.testInActiveWindow('lookup-list keyboard navigation should work after focusing on list', function(assert) {
-        const $element = $('#widget').dxLookup({
-            opened: true,
-            items: [1, 2, 3],
-            focusStateEnabled: true,
-            searchEnabled: true
-        });
-        const instance = $element.dxLookup('instance');
-
-        instance._$list.dxList('focus');
-        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
-
-        const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
-        const keyboard = keyboardMock($listItemContainer);
-        keyboard.keyDown('down');
-
-        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
     });
 
     [true, false].forEach(value => {
@@ -3379,6 +3549,36 @@ QUnit.module('dataSource integration', {
         this.clock.tick(loadDelay / 2);
         assert.ok($loadPanel.is(':hidden'), 'load panel is not visible if value length less than minSearchLength)');
     });
+
+    QUnit.test('search should find items when search value is in NFD Unicode form and items are in NFC form (T1326069)', function(assert) {
+        const NFC_CHAR = '\u1EC7'; // precomposed form (NFC)
+        const itemsNFC = [
+            `test item 1 h${NFC_CHAR}`,
+            `test item 2 H${NFC_CHAR}`,
+            'test item 3',
+        ];
+
+        const instance = this.$element.dxLookup({
+            dataSource: itemsNFC,
+            searchEnabled: true,
+            searchTimeout: 0,
+            opened: true
+        }).dxLookup('instance');
+
+        const $content = $(instance.content());
+        const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+        const searchValueNFD = 'h\u0065\u0323\u0302';
+
+        assert.notStrictEqual(searchValueNFD, searchValueNFD.normalize('NFC'),
+            'NFD and NFC forms are different strings');
+
+        $($input.val(searchValueNFD)).trigger('input');
+        this.clock.tick(0);
+
+        const $listItems = $content.find(`.${LIST_ITEM_CLASS}`);
+        assert.equal($listItems.length, 2, 'items containing the NFC character should be found when searching with its NFD equivalent');
+    });
 });
 
 
@@ -3515,7 +3715,7 @@ if(devices.real().deviceType === 'desktop') {
             QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, function() {
                 helper.createWidget({
                     opened: true,
-                    searchEnabled
+                    searchEnabled,
                 });
 
                 const localizedRoleDescription = messageLocalization.format('dxList-ariaRoleDescription');
@@ -3531,8 +3731,7 @@ if(devices.real().deviceType === 'desktop') {
                 };
 
                 const listItemContainerAttributes = {
-                    tabindex: '0',
-                    role: 'application',
+                    tabindex: searchEnabled ? '-1' : '0',
                 };
 
                 let fieldAttributes = {
@@ -3571,9 +3770,12 @@ if(devices.real().deviceType === 'desktop') {
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
 
-                helper.widget.option('searchEnabled', !searchEnabled);
+                const newSearchEnabled = !searchEnabled;
+
+                helper.widget.option('searchEnabled', newSearchEnabled);
 
                 listAttributes.id = helper.widget._listId;
+                listItemContainerAttributes.tabindex = newSearchEnabled ? '-1' : '0';
 
                 fieldAttributes = {
                     role: 'combobox',
@@ -3591,8 +3793,10 @@ if(devices.real().deviceType === 'desktop') {
                     id: helper.widget._popupContentId,
                 };
 
+                const scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
+
                 helper.checkAttributes($list, listAttributes, 'list');
-                helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
+                helper.checkAttributes(scrollView, listItemContainerAttributes, 'scrollview content');
                 helper.checkAttributes($field, fieldAttributes, 'field');
                 helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
@@ -3684,17 +3888,38 @@ if(devices.real().deviceType === 'desktop') {
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
                 const $itemsContainer = $list.find(`.${LIST_ITEMS_CLASS}`);
 
-                helper.checkAttributes($scrollView, { tabindex: '0', role: 'application' });
+                helper.checkAttributes($scrollView, { tabindex: '-1' });
                 helper.checkAttributes($itemsContainer, { });
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                helper.checkAttributes($scrollView, { tabindex: '0', role: 'application' });
+                helper.checkAttributes($scrollView, { tabindex: '-1', role: 'application' });
                 helper.checkAttributes($itemsContainer, { 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($scrollView, { tabindex: '0', role: 'application' });
+                helper.checkAttributes($scrollView, { tabindex: '-1' });
                 helper.checkAttributes($itemsContainer, { });
             });
+        });
+
+        QUnit.test('should use localization variable for search input aria-label (T1328842)', function(assert) {
+            const originalAriaLabel = messageLocalization.format('Search');
+            const customAriaLabel = 'Test aria label';
+
+            messageLocalization.load({ en: { 'Search': customAriaLabel } });
+
+            try {
+                helper.createWidget({
+                    opened: true,
+                    searchEnabled: true,
+                });
+
+                const $searchInput = helper.widget._popup.$content().find(`.${LOOKUP_SEARCH_CLASS} input`);
+                const searchInputAriaLabel = $searchInput.attr('aria-label');
+
+                assert.strictEqual(searchInputAriaLabel, customAriaLabel, 'search input aria-label uses the value from localization key');
+            } finally {
+                messageLocalization.load({ en: { 'Search': originalAriaLabel } });
+            }
         });
     });
 }

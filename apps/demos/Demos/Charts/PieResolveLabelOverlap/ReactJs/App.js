@@ -28,7 +28,7 @@ function App() {
         id="pie"
         dataSource={dataSource}
         palette="Bright"
-        title="Olympic Medals in 2008"
+        title="Olympic Medals in 2024"
         resolveLabelOverlapping={resolveMode}
       >
         <Series

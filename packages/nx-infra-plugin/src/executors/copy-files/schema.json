@@ -1,5 +1,7 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Copy Files Executor Schema",
+  "description": "Copy files to destination",
   "type": "object",
   "properties": {
     "files": {
@@ -14,10 +16,35 @@
           "to": {
             "type": "string",
             "description": "Destination path relative to project root. For glob patterns, this should be a directory."
+          },
+          "excludePatterns": {
+            "type": "array",
+            "description": "Glob patterns for files to exclude when copying via a glob pattern in from.",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": ["from", "to"]
       }
+    },
+    "applyLicenseHeaders": {
+      "type": "object",
+      "description": "When provided, applies DevExtreme license headers after copying. The targetSubdir field is required and resolves relative to the project root.",
+      "properties": {
+        "licenseTemplateFile": { "type": "string" },
+        "mode": { "type": "string", "enum": ["eula", "mit"] },
+        "eulaUrl": { "type": "string" },
+        "version": { "type": "string" },
+        "commentType": { "type": "string", "enum": ["!", "*"] },
+        "separator": { "type": "string" },
+        "prependAfterLicense": { "type": "string" },
+        "filenameMode": { "type": "string", "enum": ["relative", "basename"] },
+        "includePatterns": { "type": "array", "items": { "type": "string" } },
+        "excludePatterns": { "type": "array", "items": { "type": "string" } },
+        "targetSubdir": { "type": "string" }
+      },
+      "required": ["targetSubdir"]
     }
   },
   "required": ["files"]

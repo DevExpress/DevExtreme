@@ -10,14 +10,6 @@
       type="bar"
     />
     <DxSeries
-      value-field="year1970"
-      name="1970"
-    />
-    <DxSeries
-      value-field="year1980"
-      name="1980"
-    />
-    <DxSeries
       value-field="year1990"
       name="1990"
     />
@@ -26,12 +18,20 @@
       name="2000"
     />
     <DxSeries
-      value-field="year2008"
-      name="2008"
+      value-field="year2010"
+      name="2010"
     />
     <DxSeries
-      value-field="year2009"
-      name="2009"
+      value-field="year2020"
+      name="2020"
+    />
+    <DxSeries
+      value-field="year2021"
+      name="2021"
+    />
+    <DxSeries
+      value-field="year2022"
+      name="2022"
     />
     <DxLegend
       vertical-alignment="bottom"

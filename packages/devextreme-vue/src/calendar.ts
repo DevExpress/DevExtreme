@@ -13,7 +13,7 @@ import {
  WeekNumberRule,
 } from "devextreme/ui/calendar";
 import {
- FirstDayOfWeek,
+ DayOfWeek,
  ValidationMessageMode,
  Position,
  ValidationStatus,
@@ -76,7 +76,7 @@ const componentConfig = {
     disabled: Boolean,
     disabledDates: [Array, Function] as PropType<Array<Date> | (((data: DisabledDate) => boolean))>,
     elementAttr: Object as PropType<Record<string, any>>,
-    firstDayOfWeek: Number as PropType<FirstDayOfWeek>,
+    firstDayOfWeek: Number as PropType<DayOfWeek>,
     focusStateEnabled: Boolean,
     height: [Number, String],
     hint: String,

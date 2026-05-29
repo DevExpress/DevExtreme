@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-filter-builder',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

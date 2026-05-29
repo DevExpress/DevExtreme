@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import { keyboard } from '@js/common/core/events/short';
 import domAdapter from '@js/core/dom_adapter';
 import { cleanDataRecursive } from '@js/core/element_data';
 import injector from '@js/core/utils/dependency_injector';
@@ -7,6 +8,8 @@ import { render } from 'inferno';
 import { createElement } from 'inferno-create-element';
 
 const remove = (element) => {
+  keyboard.disposeProcessorsForSubtree(element);
+
   const { parentNode } = element;
 
   if (parentNode) {

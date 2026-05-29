@@ -1,4 +1,4 @@
-import RadioGroup from '../../__internal/ui/radio_group/m_radio_group';
+import RadioGroup from '../../__internal/ui/radio_group/radio_group';
 
 export default RadioGroup;
 

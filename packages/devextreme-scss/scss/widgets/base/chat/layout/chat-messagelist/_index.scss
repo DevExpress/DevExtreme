@@ -47,6 +47,10 @@
 }
 
 .dx-chat-messagelist-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   .dx-scrollview-content {
     display: flex;
     height: 100%;

@@ -537,7 +537,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     return $cellElements;
   }
 
-  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  protected _getVisibleColumnIndex(
+    $cells: dxElementWrapper,
+    rowIndex: number,
+    columnIdentifier: string | number,
+  ): number {
     const editFormRowIndex = this._editingController.getEditFormRowIndex();
 
     if (editFormRowIndex === rowIndex && isString(columnIdentifier)) {
@@ -545,7 +549,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
       return this._getEditFormEditorVisibleIndex($cells, column);
     }
 
-    return super._getVisibleColumnIndex.apply(this, arguments as any);
+    return super._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
   }
 
   private _getEditFormEditorVisibleIndex($cells, column) {

@@ -6,32 +6,32 @@ export const medalSources = [
 
 export const medalStatistics = [{
   country: 'USA',
-  gold: 36,
-  silver: 38,
-  bronze: 36,
+  gold: 40,
+  silver: 44,
+  bronze: 42,
 }, {
-  country: 'China',
-  gold: 51,
-  silver: 21,
-  bronze: 28,
-}, {
-  country: 'Russia',
-  gold: 23,
-  silver: 21,
-  bronze: 28,
-}, {
-  country: 'Britain',
-  gold: 19,
-  silver: 13,
-  bronze: 15,
+  country: 'Japan',
+  gold: 20,
+  silver: 12,
+  bronze: 13,
 }, {
   country: 'Australia',
-  gold: 14,
-  silver: 15,
-  bronze: 17,
+  gold: 18,
+  silver: 19,
+  bronze: 16,
 }, {
-  country: 'Germany',
+  country: 'France',
   gold: 16,
-  silver: 10,
+  silver: 26,
+  bronze: 22,
+}, {
+  country: 'Great Britain',
+  gold: 14,
+  silver: 22,
+  bronze: 29,
+}, {
+  country: 'Italy',
+  gold: 12,
+  silver: 13,
   bronze: 15,
 }];

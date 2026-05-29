@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get changed files
         uses: DevExpress/github-actions/get-changed-files@v1
@@ -66,7 +66,7 @@ jobs:
           echo "has-changed-demos=${HAS_CHANGED}" >> $GITHUB_OUTPUT
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: changed-demos
           path: apps/demos/changed-files.json
@@ -112,14 +112,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -127,7 +127,7 @@ jobs:
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -142,8 +142,8 @@ jobs:
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
         shell: bash
         run: |
-          pnpx nx build devextreme-scss
-          pnpx nx build devextreme -c testing
+          pnpm exec nx build devextreme-scss
+          pnpm exec nx build devextreme -c testing
 
       - name: DevExtreme - Build-all
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
@@ -155,7 +155,7 @@ jobs:
           7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
       - name: Upload build artifacts (for jQuery tests)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-artifacts-jquery
           path: ./packages/devextreme/artifacts.zip
@@ -172,7 +172,7 @@ jobs:
 
       - name: Copy build artifacts
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-sources
           path: |
@@ -199,19 +199,19 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - name: Download devextreme sources
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -220,7 +220,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -243,14 +243,14 @@ jobs:
 
       - name: Prepare bundles
         working-directory: apps/demos
-        run: pnpx nx prepare-bundles
+        run: pnpm exec nx prepare-bundles
 
       - name: Demos - Run tsc
         working-directory: apps/demos
         run: pnpm exec tsc --noEmit
 
       - name: Copy build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-bundles
           path: |
@@ -271,19 +271,19 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download devextreme packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -292,7 +292,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -333,27 +333,27 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
       if: github.event_name == 'pull_request'
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: changed-demos
         path: apps/demos
       continue-on-error: true
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -362,7 +362,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -382,7 +382,7 @@ jobs:
       env:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
         NODE_OPTIONS: --max-old-space-size=8192
-      run: pnpx nx lint
+      run: pnpm exec nx lint
 
     - name: Run lint on changed demos
       if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed'
@@ -390,7 +390,7 @@ jobs:
       env:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
       run: |
-        pnpx nx lint-non-demos
+        pnpm exec nx lint-non-demos
 
         if [ -f "changed-files.json" ]; then
           echo "Running lint-demos on changed files"
@@ -426,26 +426,26 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download changed demos
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: changed-demos
         path: apps/demos
       continue-on-error: true
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
@@ -454,7 +454,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -524,19 +524,19 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
@@ -545,7 +545,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -616,10 +616,10 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-artifacts-jquery
         path: ./packages/devextreme
@@ -634,11 +634,11 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -647,7 +647,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -658,22 +658,37 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    - name: Set Roboto font directory
+      if: contains(matrix.THEME, 'material')
+      run: echo "ROBOTO_FONT_DIR=${HOME}/.local/share/fonts/roboto" >> $GITHUB_ENV
+
     - name: Cache Roboto font
       if: contains(matrix.THEME, 'material')
       id: cache-roboto
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
-        path: /usr/share/fonts/truetype/roboto
-        key: roboto-font-${{ runner.os }}
+        path: ${{ env.ROBOTO_FONT_DIR }}
+        key: roboto-font-${{ runner.os }}-8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
 
     - name: Install Roboto font for Material theme
       if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
+      env:
+        GOOGLE_FONTS_COMMIT: 8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
+        ROBOTO_SHA256: d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134
       run: |
-        echo "Installing Roboto font..."
-        sudo apt-get update -qq
-        sudo apt-get install -y -qq fonts-roboto fonts-roboto-unhinted
-        sudo fc-cache -f -v > /dev/null 2>&1 || true
+        echo "Installing Roboto font from google/fonts (pinned commit)..."
+        mkdir -p "$ROBOTO_FONT_DIR"
+        BASE_URL="https://raw.githubusercontent.com/google/fonts/${GOOGLE_FONTS_COMMIT}/ofl/roboto"
+
+        curl -fsSL "${BASE_URL}/Roboto%5Bwdth%2Cwght%5D.ttf" -o /tmp/Roboto.ttf
+        echo "${ROBOTO_SHA256}  /tmp/Roboto.ttf" | sha256sum -c -
+
+        mv /tmp/Roboto.ttf "$ROBOTO_FONT_DIR/"
         echo "Roboto font installed"
+
+    - name: Refresh font cache
+      if: contains(matrix.THEME, 'material')
+      run: fc-cache -f > /dev/null 2>&1
 
     - name: Run Web Server
       run: python -m http.server 8080 &
@@ -708,7 +723,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: pnpx nx test-testcafe
+      run: pnpm exec nx test-testcafe
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
@@ -727,7 +742,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: failure() && matrix.STRATEGY == 'screenshots'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -735,7 +750,7 @@ jobs:
 
     - name: Copy accessibility report
       if: matrix.STRATEGY == 'accessibility'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}
         path: apps/demos/testing/artifacts/axe-reports/*
@@ -780,7 +795,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
@@ -788,16 +803,16 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -806,7 +821,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -827,13 +842,13 @@ jobs:
 
     - name: Update bundles config
       working-directory: apps/demos
-      run: pnpx gulp update-config
+      run: pnpm exec gulp update-config
 
     - name: Create bundles dir
       run: mkdir -p apps/demos/bundles
 
     - name: Download bundles artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles
         path: apps/demos/bundles
@@ -853,6 +868,8 @@ jobs:
       run: |
         if [[ "${{ matrix.CONSTEL }}" == react* ]]; then
           echo "concurrency=4" >> $GITHUB_OUTPUT
+        elif [[ "${{ matrix.CONSTEL }}" == vue* ]]; then
+          echo "concurrency=1" >> $GITHUB_OUTPUT
         elif [[ "${{ matrix.CONSTEL }}" == angular* ]]; then
           echo "concurrency=2" >> $GITHUB_OUTPUT
         else
@@ -874,7 +891,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: pnpx nx test-testcafe
+      run: pnpm exec nx test-testcafe
 
     - name: Sanitize job name
       if: ${{ failure() }}
@@ -882,7 +899,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -908,7 +925,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
@@ -916,23 +933,23 @@ jobs:
           chrome-version: '145.0.7632.67'
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - name: Download devextreme sources
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
       - name: Download changed demos
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: changed-demos
           path: apps/demos
         continue-on-error: true
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -941,7 +958,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -962,19 +979,19 @@ jobs:
 
       - name: Update bundles config
         working-directory: apps/demos
-        run: pnpx gulp update-config
+        run: pnpm exec gulp update-config
 
       - name: Create bundles dir
         run: mkdir -p apps/demos/bundles
 
       - name: Download bundles artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles
           path: apps/demos/bundles
 
       - name: Download changes artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: changed-demos
           path: apps/demos
@@ -1001,7 +1018,7 @@ jobs:
           # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
           # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
           CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-        run: pnpx nx test-testcafe
+        run: pnpm exec nx test-testcafe
 
       - name: Sanitize job name
         if: ${{ failure() }}
@@ -1009,7 +1026,7 @@ jobs:
 
       - name: Copy screenshots artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: screenshots-${{ env.JOB_NAME }}
           path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -1023,7 +1040,7 @@ jobs:
     steps:
       - name: Merge jQuery screenshot artifacts
         if: needs.testcafe-jquery.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-jquery
@@ -1032,7 +1049,7 @@ jobs:
 
       - name: Merge React screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-react
@@ -1041,7 +1058,7 @@ jobs:
 
       - name: Merge Vue screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-vue
@@ -1050,7 +1067,7 @@ jobs:
 
       - name: Merge Angular screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-angular
@@ -1059,7 +1076,7 @@ jobs:
 
       - name: Merge jQuery accessibility reports
         if: needs.testcafe-jquery.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: accessibility-reports-jquery
@@ -1078,10 +1095,10 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-artifacts-jquery
         path: ./packages/devextreme
@@ -1096,11 +1113,11 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -1108,7 +1125,7 @@ jobs:
       shell: bash
       run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -1131,7 +1148,7 @@ jobs:
 
     - name: Upload CSP report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: csp-violations-jquery
         path: apps/demos/csp-reports/
@@ -1155,10 +1172,10 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
@@ -1168,11 +1185,11 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -1180,7 +1197,7 @@ jobs:
       shell: bash
       run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -1207,7 +1224,7 @@ jobs:
 
     - name: Upload CSP report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: csp-violations-${{ matrix.FRAMEWORK }}
         path: apps/demos/csp-reports/
@@ -1222,15 +1239,15 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
       - name: Download all CSP reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: csp-violations-*
           path: csp-reports-all
@@ -1278,7 +1295,7 @@ jobs:
 
       - name: Upload merged CSP reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: csp-violations-report
           path: apps/demos/csp-reports/

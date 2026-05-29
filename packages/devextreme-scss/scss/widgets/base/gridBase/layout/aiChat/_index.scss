@@ -1,0 +1,72 @@
+@use "../../../icon_fonts" as *;
+@use './variables' as *;
+
+.dx-ai-chat .dx-popup-content {
+  padding: 0;
+}
+
+.dx-ai-chat__content {
+  border: none;
+  min-height: auto;
+}
+
+.dx-ai-chat__empty-image {
+  @include dx-icon(sparkle);
+
+  border-radius: 999em;
+}
+
+.dx-ai-chat__content .dx-chat-messagebubble {
+  position: relative;
+  overflow: hidden;
+}
+
+.dx-ai-chat__message {
+  display: flex;
+  gap: $ai-chat-message-gap;
+  min-width: $ai-chat-message-width;
+}
+
+.dx-ai-chat__message-content {
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  gap: $ai-chat-message-content-gap;
+}
+
+.dx-ai-chat__message-header {
+  font-weight: 600;
+}
+
+.dx-ai-chat__message-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $ai-chat-message-gap;
+}
+
+.dx-ai-chat__action-list {
+  display: flex;
+  flex-flow: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dx-ai-chat__action-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: $ai-chat-message-content-gap;
+}
+
+.dx-ai-chat__message-progressbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 0;
+}
+
+.dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
+  pointer-events: none;
+}

@@ -3,6 +3,7 @@ import {
   addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
 } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import numberLocalization from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
@@ -17,15 +18,16 @@ import {
 import { Deferred } from '@js/core/utils/deferred';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import { isDefined } from '@js/core/utils/type';
-import TextEditor from '@ts/ui/text_box/m_text_editor';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import TextEditor from '@ts/ui/text_box/text_editor';
 
-import type { TextEditorBaseProperties } from '../text_box/m_text_editor.base';
+import type { TextEditorBaseProperties } from '../text_box/text_editor.base';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
 import SpinButtons from './m_number_box.spins';
 
 const math = Math;
 
-const WIDGET_CLASS = 'dx-numberbox';
+export const WIDGET_CLASS = 'dx-numberbox';
 const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
 const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
@@ -218,12 +220,25 @@ class NumberBoxBase<
   _forceValueRender(): void {
     const value = this.option('value');
     const number = Number(value);
-    const formattedValue = isNaN(number) ? '' : this._applyDisplayValueFormatter(value);
+    const formattedValue = isNaN(number)
+      ? ''
+      : this._applyDisplayValueFormatter(value);
 
     this._renderDisplayText(formattedValue);
   }
 
   _applyDisplayValueFormatter(value): string | undefined {
+    if (!this.option('format')) {
+      const globalNumberFormat = getGlobalFormatByDataType('number');
+
+      if (globalNumberFormat) {
+        return numberLocalization.format(
+          Number(value),
+          globalNumberFormat,
+        ) as string;
+      }
+    }
+
     const { displayValueFormatter } = this.option();
 
     return displayValueFormatter?.(value);

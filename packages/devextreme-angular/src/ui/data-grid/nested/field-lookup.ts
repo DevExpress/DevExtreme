@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-field-lookup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

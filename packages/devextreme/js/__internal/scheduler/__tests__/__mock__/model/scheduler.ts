@@ -1,7 +1,7 @@
 import { within } from '@testing-library/dom';
 import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
 
-import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/m_popup';
+import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/popup';
 import { POPUP_DIALOG_CLASS } from '../../../m_scheduler';
 import type { AppointmentModel } from './appointment';
 import { createAppointmentModel } from './appointment';
@@ -52,6 +52,13 @@ export class SchedulerModel {
     const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
     const appointments = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment'));
     return appointments.map((element) => createAppointmentModel(element as HTMLDivElement));
+  }
+
+  getDraggedAppointment(): AppointmentModel | null {
+    const draggableContainer = this.container.querySelector('.dx-scheduler-draggable-container');
+    const dragClone = draggableContainer?.querySelector('.dx-scheduler-appointment');
+
+    return dragClone ? createAppointmentModel(dragClone as HTMLDivElement) : null;
   }
 
   getTooltipAppointment(index = 0): HTMLElement | null {
@@ -105,6 +112,16 @@ export class SchedulerModel {
     return result as HTMLElement;
   }
 
+  getWorkspace(): HTMLElement {
+    const result = this.container.querySelector('.dx-scheduler-work-space');
+
+    if (!result) {
+      throw new Error('Workspace not found');
+    }
+
+    return result as HTMLElement;
+  }
+
   getHeaderPanelContent(): string[] {
     const cells = this.container.querySelectorAll('.dx-scheduler-header-panel-cell');
     return getTexts(cells);
@@ -134,6 +151,10 @@ export class SchedulerModel {
 
   isPopupVisible(): boolean {
     return this.getPopups().length > 0;
+  }
+
+  isRecurrenceDialogVisible(): boolean {
+    return !!document.querySelector(`.dx-overlay-wrapper.${POPUP_DIALOG_CLASS}`);
   }
 
   getPopups = (): NodeListOf<Element> => document.querySelectorAll(`.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}, .dx-overlay-wrapper.${POPUP_DIALOG_CLASS}`);

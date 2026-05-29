@@ -53,7 +53,7 @@ describe('PrepareSubmodulesExecutor E2E', () => {
   });
 
   describe('Basic functionality', () => {
-    it('should generate package.json files for discovered modules', async () => {
+    it('should generate package.json files for top-level modules with correct relative paths', async () => {
       const options: PrepareSubmodulesExecutorSchema = {
         distDirectory: './npm',
       };
@@ -63,20 +63,15 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       expect(result.success).toBe(true);
 
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
+      const buttonPkg = JSON.parse(await readFileText(path.join(npmDir, 'button', 'package.json')));
 
-      const buttonPkgPath = path.join(npmDir, 'button', 'package.json');
-      expect(fs.existsSync(buttonPkgPath)).toBe(true);
-
-      const buttonPkg = JSON.parse(await readFileText(buttonPkgPath));
-      expect(buttonPkg).toMatchObject({
-        sideEffects: false,
-        main: expect.stringContaining('cjs/button.js'),
-        module: expect.stringContaining('esm/button.js'),
-        typings: expect.stringContaining('cjs/button.d.ts'),
-      });
+      expect(buttonPkg.sideEffects).toBe(false);
+      expect(buttonPkg.main).toBe('../cjs/button.js');
+      expect(buttonPkg.module).toBe('../esm/button.js');
+      expect(buttonPkg.typings).toBe('../cjs/button.d.ts');
     });
 
-    it('should handle nested module structures', async () => {
+    it('should discover nested module exports from the ESM index file', async () => {
       const options: PrepareSubmodulesExecutorSchema = {
         distDirectory: './npm',
       };
@@ -94,7 +89,7 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       expect(gridPkg.module).toContain('esm/data/grid.js');
     });
 
-    it('should work with custom submodule files', async () => {
+    it('should pick up additional submodules added to the ESM index file', async () => {
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
 
       await writeFileText(path.join(npmDir, 'esm', 'custom.js'), 'export const Custom = {};');
@@ -121,7 +116,7 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       expect(customPkg.module).toBe('../esm/custom.js');
     });
 
-    it('should handle devextreme-react-like structure', async () => {
+    it('should generate package.json files for explicit submoduleFolders entries', async () => {
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
 
       fs.mkdirSync(path.join(npmDir, 'esm', 'common'), { recursive: true });
@@ -158,21 +153,6 @@ describe('PrepareSubmodulesExecutor E2E', () => {
   });
 
   describe('Package.json content validation', () => {
-    it('should generate correct relative paths for top-level modules', async () => {
-      const options: PrepareSubmodulesExecutorSchema = {
-        distDirectory: './npm',
-      };
-
-      await executor(options, context);
-
-      const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
-      const buttonPkg = JSON.parse(await readFileText(path.join(npmDir, 'button', 'package.json')));
-
-      expect(buttonPkg.main).toBe('../cjs/button.js');
-      expect(buttonPkg.module).toBe('../esm/button.js');
-      expect(buttonPkg.typings).toBe('../cjs/button.d.ts');
-    });
-
     it('should generate correct paths for nested folder modules with index.js', async () => {
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
 
@@ -202,10 +182,6 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       expect(commonCorePkg.main).toBe('../../cjs/common/core/index.js');
       expect(commonCorePkg.module).toBe('../../esm/common/core/index.js');
       expect(commonCorePkg.typings).toBe('../../cjs/common/core/index.d.ts');
-
-      expect(commonCorePkg.main).not.toBe('../../cjs/index.js');
-      expect(commonCorePkg.module).not.toBe('../../esm/index.js');
-      expect(commonCorePkg.typings).not.toBe('../../cjs/index.d.ts');
     });
   });
 

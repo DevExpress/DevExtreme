@@ -9,6 +9,20 @@ describe('CopyFilesExecutor E2E', () => {
   let tempDir: string;
   let context = createMockContext();
 
+  async function setupExcludePatternsFixture(): Promise<void> {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const srcDir = path.join(projectDir, 'src');
+    const testDir = path.join(srcDir, 'test');
+
+    fs.mkdirSync(testDir, { recursive: true });
+
+    await writeFileText(path.join(srcDir, 'app.js'), 'export const app = true;');
+    await writeFileText(path.join(srcDir, 'utils.js'), 'export const utils = true;');
+    await writeFileText(path.join(srcDir, 'helper.spec.js'), 'test("helper", () => {});');
+    await writeFileText(path.join(testDir, 'app.spec.js'), 'test("app", () => {});');
+    await writeFileText(path.join(testDir, 'utils.spec.js'), 'test("utils", () => {});');
+  }
+
   beforeEach(async () => {
     tempDir = createTempDir('nx-copy-e2e-');
     context = createMockContext({ root: tempDir });
@@ -129,5 +143,145 @@ describe('CopyFilesExecutor E2E', () => {
       expect(fs.existsSync(path.join(distDir, 'file2.ts'))).toBe(true);
       expect(fs.existsSync(path.join(distDir, 'other.js'))).toBe(false);
     });
+  });
+
+  it('should exclude files matching excludePatterns from glob copy', async () => {
+    await setupExcludePatternsFixture();
+
+    const options: CopyFilesExecutorSchema = {
+      files: [
+        {
+          from: './src/**/*.js',
+          to: './dist',
+          excludePatterns: ['**/test/**', '**/*.spec.js'],
+        },
+      ],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distDir = path.join(projectDir, 'dist');
+
+    expect(fs.existsSync(path.join(distDir, 'app.js'))).toBe(true);
+    expect(fs.existsSync(path.join(distDir, 'utils.js'))).toBe(true);
+    expect(fs.existsSync(path.join(distDir, 'helper.spec.js'))).toBe(false);
+    expect(fs.existsSync(path.join(distDir, 'app.spec.js'))).toBe(false);
+    expect(fs.existsSync(path.join(distDir, 'utils.spec.js'))).toBe(false);
+  });
+
+  it('should copy all files when excludePatterns is omitted', async () => {
+    await setupExcludePatternsFixture();
+
+    const options: CopyFilesExecutorSchema = {
+      files: [{ from: './src/**/*.js', to: './dist2' }],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distDir = path.join(projectDir, 'dist2');
+
+    expect(fs.existsSync(path.join(distDir, 'app.js'))).toBe(true);
+    expect(fs.existsSync(path.join(distDir, 'helper.spec.js'))).toBe(true);
+    expect(fs.existsSync(path.join(distDir, 'utils.spec.js'))).toBe(true);
+  });
+
+  it('should copy all files when excludePatterns is an empty array', async () => {
+    await setupExcludePatternsFixture();
+
+    const options: CopyFilesExecutorSchema = {
+      files: [{ from: './src/**/*.js', to: './dist3', excludePatterns: [] }],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const distDir = path.join(projectDir, 'dist3');
+
+    expect(fs.existsSync(path.join(distDir, 'app.js'))).toBe(true);
+    expect(fs.existsSync(path.join(distDir, 'helper.spec.js'))).toBe(true);
+    expect(fs.existsSync(path.join(distDir, 'utils.spec.js'))).toBe(true);
+  });
+
+  it('should apply different excludePatterns independently per file entry', async () => {
+    await setupExcludePatternsFixture();
+
+    const options: CopyFilesExecutorSchema = {
+      files: [
+        { from: './src/**/*.js', to: './out-a', excludePatterns: ['**/*.spec.js'] },
+        { from: './src/**/*.js', to: './out-b', excludePatterns: ['**/test/**'] },
+      ],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+
+    const outA = path.join(projectDir, 'out-a');
+    expect(fs.existsSync(path.join(outA, 'app.js'))).toBe(true);
+    expect(fs.existsSync(path.join(outA, 'helper.spec.js'))).toBe(false);
+    expect(fs.existsSync(path.join(outA, 'utils.spec.js'))).toBe(false);
+
+    const outB = path.join(projectDir, 'out-b');
+    expect(fs.existsSync(path.join(outB, 'app.js'))).toBe(true);
+    expect(fs.existsSync(path.join(outB, 'helper.spec.js'))).toBe(true);
+    expect(fs.existsSync(path.join(outB, 'utils.spec.js'))).toBe(false);
+  });
+
+  it('should not error when excludePatterns is specified alongside a direct file path', async () => {
+    await setupExcludePatternsFixture();
+
+    const options: CopyFilesExecutorSchema = {
+      files: [{ from: './README.md', to: './dist-direct/README.md', excludePatterns: ['**/*.md'] }],
+    };
+
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    expect(fs.existsSync(path.join(projectDir, 'dist-direct', 'README.md'))).toBe(true);
+  });
+
+  it('should forward applyLicenseHeaders option to license header pipeline', async () => {
+    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    const buildDir = path.join(projectDir, 'build', 'gulp');
+    fs.mkdirSync(buildDir, { recursive: true });
+    await writeFileText(
+      path.join(buildDir, 'license-header.txt'),
+      `/*<%= commentType %>\n* DevExtreme (<%= file.relative %>)\n*/\n`,
+    );
+    await writeFileText(
+      path.join(projectDir, 'aspnet-source.js'),
+      'module.exports = function aspnet() {};\n',
+    );
+
+    const options: CopyFilesExecutorSchema = {
+      files: [{ from: './aspnet-source.js', to: './artifacts/js/dx.aspnet.mvc.js' }],
+      applyLicenseHeaders: {
+        licenseTemplateFile: './build/gulp/license-header.txt',
+        targetSubdir: './artifacts/js',
+        separator: '',
+        includePatterns: ['dx.aspnet.mvc.js'],
+      },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const copiedContent = await readFileText(
+      path.join(projectDir, 'artifacts', 'js', 'dx.aspnet.mvc.js'),
+    );
+    expect(copiedContent).toMatch(/^\/\*!/);
+    expect(copiedContent).toContain('DevExtreme (dx.aspnet.mvc.js)');
   });
 });

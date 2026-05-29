@@ -24,7 +24,6 @@ import { DxoUser } from './base/user';
 
 @Component({
     selector: 'dxo-author',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

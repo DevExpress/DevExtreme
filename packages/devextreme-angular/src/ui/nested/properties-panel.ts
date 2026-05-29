@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-properties-panel',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

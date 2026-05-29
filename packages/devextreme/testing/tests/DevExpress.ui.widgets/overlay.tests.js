@@ -2063,6 +2063,46 @@ testModule('hide on outside click', moduleConfig, () => {
         assert.equal(overlay1.option('visible'), true, 'Bottom overlay should not get outside click when inner overlay clicked');
     });
 
+    test('overlay opened above inner overlay should close on click inside inner overlay', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $(overlay1.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay2.option('visible'), false, 'Overlay opened above inner overlay should close');
+        assert.strictEqual(overlay1.option('visible'), true, 'Inner overlay itself should stay visible');
+    });
+
+    test('click inside inner overlay should not close overlays below it in stack', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $(overlay2.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), true, 'Overlay below inner overlay should not close');
+        assert.strictEqual(overlay2.option('visible'), true, 'Inner overlay should stay visible');
+    });
+
     // T494814
     test('overlay should not be hidden after click in detached element', function(assert) {
         const overlay = $('#overlayWithAnonymousTmpl').dxOverlay({
@@ -3278,11 +3318,11 @@ testModule('focus policy', {
         assert.strictEqual(getActiveElement(), $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
     });
 
-    test('focus in Overlay should be looped if _loopFocus: true and shading: false', function(assert) {
+    test('focus in Overlay should be looped if tabFocusLoopEnabled: true and shading: false', function(assert) {
         const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
             visible: true,
             shading: false,
-            _loopFocus: true,
+            tabFocusLoopEnabled: true,
             contentTemplate: $('#focusableTemplate')
         });
         const $content = overlay.$content();
@@ -3300,7 +3340,7 @@ testModule('focus policy', {
         assert.strictEqual(getActiveElement(), lastFocusableElement, 'last item is focused');
     });
 
-    test('focus in Overlay should be looped if shading: false, _loopFocus gets true in runtime', function(assert) {
+    test('focus in Overlay should be looped if shading: false, tabFocusLoopEnabled gets true in runtime', function(assert) {
         const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
             visible: true,
             shading: false,
@@ -3321,7 +3361,7 @@ testModule('focus policy', {
 
         assert.strictEqual(getActiveElement() !== lastFocusableElement, true, 'last item is not focused');
 
-        overlay.option('_loopFocus', true);
+        overlay.option('tabFocusLoopEnabled', true);
 
         $(lastFocusableElement).focus();
         $(lastFocusableElement).trigger(this.tabEvent);
@@ -4125,7 +4165,7 @@ testModule('renderGeometry', {
         };
         for(const optionName in newOptions) {
             QUnit.testInActiveWindow(optionName, function(assert) {
-                // eslint-disable-next-line qunit/no-async-in-loops
+
                 const showingResizeHandled = assert.async();
                 setTimeout(() => {
                     this.overlayInstance.option(optionName, newOptions[optionName]);

@@ -345,7 +345,9 @@ const verifyGridStyles = async (t: TestController, dataGrid: DataGrid, {
 const functionalTest = (matrixOptions: MatrixOptions) => {
   test(`Should have correct applied styles with ${getTestParams(matrixOptions)}`, async (t) => {
     const dataGrid = new DataGrid(`#${SELECTORS.gridContainer}`);
-    await dataGrid.isReady();
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
 
     await verifyGridStyles(t, dataGrid, matrixOptions);
 

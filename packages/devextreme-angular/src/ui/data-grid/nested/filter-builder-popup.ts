@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-filter-builder-popup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
@@ -378,6 +377,14 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
     @Input()

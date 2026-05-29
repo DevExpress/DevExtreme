@@ -55,7 +55,6 @@ import {
  */
 @Component({
     selector: 'dx-multi-view',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -10,6 +10,7 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isNumeric, type } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 import { CLASSES } from './const';
 
@@ -283,6 +284,9 @@ function getFieldsDataType(fields) {
 }
 
 const DATE_INTERVAL_FORMATS = {
+  year(value) {
+    return String(value);
+  },
   month(value) {
     return localizationDate.getMonthNames()[value - 1];
   },
@@ -297,7 +301,8 @@ const DATE_INTERVAL_FORMATS = {
 function setDefaultFieldValueFormatting(field) {
   if (field.dataType === 'date') {
     if (!field.format) {
-      setFieldProperty(field, 'format', DATE_INTERVAL_FORMATS[field.groupInterval]);
+      const dateIntervalFormat = DATE_INTERVAL_FORMATS[field.groupInterval];
+      setFieldProperty(field, 'format', field.groupInterval ? dateIntervalFormat : getGlobalFormatByDataType('date'));
     }
   } else if (field.dataType === 'number') {
     const groupInterval = isNumeric(field.groupInterval)

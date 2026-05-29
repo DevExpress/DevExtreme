@@ -1,4 +1,7 @@
 {
+  "$schema": "https://json-schema.org/schema",
+  "title": "Generate Components Executor Schema",
+  "description": "Generate framework components from DevExtreme metadata",
   "type": "object",
   "properties": {
     "metadataPath": {

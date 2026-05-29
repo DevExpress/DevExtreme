@@ -84,7 +84,6 @@ import {
  */
 @Component({
     selector: 'dx-form',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

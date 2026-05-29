@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-file-manager-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -27,7 +27,7 @@ const App = () => {
   }), [isHomeAddressVisible]);
 
   const generateNewPhoneOptions = useCallback((index: number): ITextBoxOptions => ({
-    mask: '+1 (X00) 000-0000',
+    mask: '(X00) 000-0000',
     maskRules: { X: /[01-9]/ },
     buttons: [{
       name: 'trash',

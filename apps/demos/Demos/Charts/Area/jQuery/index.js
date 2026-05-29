@@ -14,7 +14,7 @@ $(() => {
     margin: {
       bottom: 20,
     },
-    title: 'Population: Age Structure (2018)',
+    title: 'Population: Age Structure (2024)',
     argumentAxis: {
       valueMarginsEnabled: false,
     },

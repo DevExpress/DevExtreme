@@ -1177,17 +1177,16 @@ export class RowsView extends ColumnsView {
    * @extended: column_fixing, filter_row, row_dragging, vitrual_columns, virtual_scrolling
    */
   protected _resizeCore() {
-    const that = this;
-
-    that._fireColumnResizedCallbacks();
-    that._updateRowHeight();
+    this._fireColumnResizedCallbacks();
+    this._updateRowHeight();
 
     deferRender(() => {
-      that._renderScrollable();
-      that.renderNoDataText();
-      that.updateFreeSpaceRowHeight();
+      this._renderScrollable();
+      this.renderNoDataText();
+      this.updateFreeSpaceRowHeight();
+
       deferUpdate(() => {
-        that._updateScrollable();
+        this._updateScrollable();
       });
     });
   }

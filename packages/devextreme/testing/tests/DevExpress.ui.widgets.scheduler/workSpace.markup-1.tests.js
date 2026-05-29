@@ -261,7 +261,7 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Scheduler workspace day should have right groupedStrategy, groupOrientation = vertical', async function(assert) {
-        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
+        assert.ok(this.instance.groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
     });
 
     QUnit.test('Scheduler all day rows should be built into dateTable', async function(assert) {
@@ -586,9 +586,11 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
 
 const workWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            type: 'workWeek',
+            skippedDays: [0, 6],
             getResourceManager: getEmptyResourceManager,
-        }).dxSchedulerWorkSpaceWorkWeek('instance');
+        }).dxSchedulerWorkSpaceWeek('instance');
     }
 };
 
@@ -596,7 +598,7 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
     QUnit.test('Scheduler workspace work week should have a right css class', async function(assert) {
         const $element = this.instance.$element();
 
-        assert.ok($element.hasClass('dx-scheduler-work-space-work-week'), 'dxSchedulerWorkSpaceWorkWeek has \'dx-scheduler-workspace-work-week\' css class');
+        assert.ok($element.hasClass('dx-scheduler-work-space-work-week'), 'workWeek has \'dx-scheduler-workspace-work-week\' css class');
     });
 
     QUnit.test('Scheduler all day panel should contain one row & 5 cells', async function(assert) {
@@ -682,10 +684,12 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
     });
 
     QUnit.test('Scheduler workspace work week view should be correct with any first day of week', async function(assert) {
-        const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({
+        const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            type: 'workWeek',
+            skippedDays: [0, 6],
             firstDayOfWeek: 2,
             currentDate: new Date(2015, 1, 4)
-        }).dxSchedulerWorkSpaceWorkWeek('instance');
+        }).dxSchedulerWorkSpaceWeek('instance');
 
         const $element = instance.$element();
 
@@ -710,10 +714,12 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
     });
 
     QUnit.test('Scheduler workspace work week view should be correct with any first day of week, if currentDate is Sunday', async function(assert) {
-        const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({
+        const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            type: 'workWeek',
+            skippedDays: [0, 6],
             currentDate: new Date(2016, 0, 10),
             firstDayOfWeek: 3
-        }).dxSchedulerWorkSpaceWorkWeek('instance');
+        }).dxSchedulerWorkSpaceWeek('instance');
 
         const $element = instance.$element();
 

@@ -287,7 +287,7 @@ function App() {
           </div>
           <div className="dx-field-value">
             <TextBox
-              mask="+1 (X00) 000-0000"
+              mask="(X00) 000-0000"
               inputAttr={maskLabel}
               maskRules={phoneRules}
               maskInvalidMessage="The phone must have a correct USA phone format"

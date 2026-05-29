@@ -2,7 +2,7 @@ $(() => {
   const pieChart = $('#pie').dxPieChart({
     palette: 'bright',
     dataSource,
-    title: 'Olympic Medals in 2008',
+    title: 'Olympic Medals in 2024',
     margin: {
       bottom: 20,
     },

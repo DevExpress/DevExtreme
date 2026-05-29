@@ -21,10 +21,10 @@ export default function RowTemplate(props: RowTemplateProps) {
           showMinMax={true}
           className="sparkline"
           argumentField="month"
-          valueField={`alum${props.year}`}
+          valueField={`copper${props.year}`}
           type="bar"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
       <td>
@@ -40,7 +40,7 @@ export default function RowTemplate(props: RowTemplateProps) {
           minColor="#9ab57e"
           maxColor="#8076bb"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
       <td>
@@ -48,13 +48,13 @@ export default function RowTemplate(props: RowTemplateProps) {
           dataSource={props.source}
           className="sparkline"
           argumentField="month"
-          valueField={`copper${props.year}`}
+          valueField={`palladium${props.year}`}
           type="bar"
           barPositiveColor="#e55253"
           firstLastColor="#ebdd8f"
           pointColor="#e8c267"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
     </tr>

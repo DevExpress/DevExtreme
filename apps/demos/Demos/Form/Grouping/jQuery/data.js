@@ -11,7 +11,7 @@ const employees = {
   City: 'Los Angeles',
   State: 'CA',
   Zipcode: '90013',
-  Phone: '+1(213) 555-9392',
+  Phone: '(213) 555-9392',
   Email: 'jheart@dx-email.com',
   Skype: 'jheart_DX_skype',
 };

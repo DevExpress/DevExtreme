@@ -11,15 +11,16 @@ const replace = require('gulp-replace');
 const lazyPipe = require('lazypipe');
 const gulpFilter = require('gulp-filter');
 const gulpRename = require('gulp-rename');
+const shell = require('gulp-shell');
 
-const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const env = require('./env-variables.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDistDir } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
 
 const resultPath = ctx.RESULT_NPM_PATH;
+const devextremeDistWorkspacePackageJsonPath = '../devextreme-dist/package.json';
 
 const srcGlobsPattern = (path, exclude) => [
     `${path}/**/*.js`,
@@ -95,7 +96,6 @@ const sources = (src, dist, distGlob) => (() => merge(
         .src(src)
         .pipe(licenseValidator())
         .pipe(headerPipes.starLicense())
-        .pipe(compressionPipes.beautify())
         .pipe(gulp.dest(dist)),
 
     gulp
@@ -110,6 +110,11 @@ const sources = (src, dist, distGlob) => (() => merge(
         .src('build/npm-bin/*.js')
         .pipe(eol('\n'))
         .pipe(gulp.dest(`${dist}/bin`)),
+
+    gulp
+        .src(['license/**'])
+        .pipe(eol('\n'))
+        .pipe(gulp.dest(`${dist}/license`)),
 
     gulp
         .src('webpack.config.js')
@@ -153,10 +158,34 @@ const distPath = `${resultPath}/${packageDistDir}`;
 gulp.task('npm-sources', gulp.series(
     'ts-sources',
     () => gulp
-        .src(`${resultPath}/${devextremeDistDir}/package.json`)
-        .pipe(overwriteInternalPackageName())
-        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(distPath))),
-    sources(srcGlobs, packagePath, distGlobs))
+        .src(devextremeDistWorkspacePackageJsonPath)
+        .pipe(
+            through.obj((file, enc, callback) => {
+                const pkg = JSON.parse(file.contents.toString(enc));
+
+                pkg.version = ctx.version;
+                delete pkg.publishConfig;
+
+                file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
+                callback(null, file);
+            })
+        )
+        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, overwriteInternalPackageName()))
+        .pipe(gulp.dest(distPath)),
+    () => merge(
+        gulp
+            .src('../devextreme-dist/README.md')
+            .pipe(gulp.dest(distPath)),
+        gulp
+            .src('../devextreme-dist/LICENSE.md')
+            .pipe(gulp.dest(distPath)),
+    ),
+    sources(srcGlobs, packagePath, distGlobs),
+    shell.task(
+        ctx.uglify
+            ? 'pnpm nx run devextreme:compress:npm-sources -c production'
+            : 'pnpm nx run devextreme:compress:npm-sources'
+    ))
 );
 
 gulp.task('npm-dist', () => gulp

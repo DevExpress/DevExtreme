@@ -60,7 +60,7 @@ export class AppComponent {
 
   generateNewPhoneOptions(index: number): DxTextBoxTypes.Properties {
     return {
-      mask: '+1 (X00) 000-0000',
+      mask: '(X00) 000-0000',
       maskRules: { X: /[01-9]/ },
       buttons: [{
         name: 'trash',

@@ -17,7 +17,7 @@ import {
 
 
 import type { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
-import type { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { DayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -28,7 +28,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-box-calendar-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
@@ -92,10 +91,10 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): DayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 

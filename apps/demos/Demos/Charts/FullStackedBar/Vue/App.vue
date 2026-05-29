@@ -8,7 +8,7 @@
       type="fullstackedbar"
     />
     <DxTitle
-      text="Energy Consumption in 2004"
+      text="Energy Consumption in 2024"
       subtitle="(Millions of Tons, Oil Equivalent)"
     />
     <DxSeries

@@ -17,7 +17,7 @@ function App() {
   return (
     <Chart
       id="chart"
-      title="Gross State Product within the Great Lakes Region"
+      title="Gross State Product within the Great Lakes Region (Billions USD)"
       dataSource={grossProductData}
       onPointClick={onPointClick}
     >
@@ -36,16 +36,16 @@ function App() {
       </CommonSeriesSettings>
       <Series
         argumentField="state"
-        valueField="year2018"
-        name="2018"
+        valueField="year2024"
+        name="2024"
       />
       <Series
-        valueField="year2017"
-        name="2017"
+        valueField="year2023"
+        name="2023"
       />
       <Series
-        valueField="year2016"
-        name="2016"
+        valueField="year2022"
+        name="2022"
       />
       <Legend
         verticalAlignment="bottom"

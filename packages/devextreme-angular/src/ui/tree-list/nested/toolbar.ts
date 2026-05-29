@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-list-toolbar',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

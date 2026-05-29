@@ -35,7 +35,11 @@ const getFocusedCellChangedEventArgs = ClientFunction(
       .args;
 
     return {
+      cellElementText: eventArgs.cellElement.get(0).textContent,
       columnIndex: eventArgs.columnIndex,
+      row: {
+        data: eventArgs.row.data,
+      },
       rowIndex: eventArgs.rowIndex,
     };
   },
@@ -102,7 +106,11 @@ export const checkFocusedRowChangingEventArgs = async (
 export const checkFocusedCellChangedEventArgs = async (
   t: TestController,
   expectedArgs: {
+    cellElement?: Selector;
     columnIndex: number;
+    row?: {
+      data: any;
+    };
     rowIndex: number;
   },
 ): Promise<void> => {
@@ -113,6 +121,19 @@ export const checkFocusedCellChangedEventArgs = async (
     .eql(expectedArgs.columnIndex)
     .expect(args.rowIndex)
     .eql(expectedArgs.rowIndex);
+
+  if (expectedArgs.row?.data) {
+    await t
+      .expect(args.row.data)
+      .eql(expectedArgs.row.data);
+  }
+
+  if (expectedArgs.cellElement) {
+    const expectedCellElementText = await expectedArgs.cellElement.textContent;
+    await t
+      .expect(args.cellElementText)
+      .eql(expectedCellElementText);
+  }
 };
 
 export const checkFocusedRowChangedEventArgs = async (

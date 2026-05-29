@@ -48,7 +48,7 @@ function App() {
           itemTextPosition="bottom"
         />
         <Export enabled={true} />
-        <Title text="Energy Consumption in 2004">
+        <Title text="Energy Consumption in 2024">
           <Subtitle text="(Millions of Tons, Oil Equivalent)" />
         </Title>
         <Tooltip enabled={true} />

@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-legend',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

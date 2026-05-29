@@ -98,7 +98,9 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
   const dataGrid = new DataGrid('#container');
   const filterCell = dataGrid.getFilterCell(0);
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await t
     .click(filterCell.menuButton)

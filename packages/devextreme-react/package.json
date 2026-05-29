@@ -1,7 +1,7 @@
 {
   "author": "Developer Express Inc.",
   "name": "devextreme-react",
-  "version": "26.1.0",
+  "version": "26.1.2",
   "description": "DevExtreme UI and Visualization Components for React",
   "repository": {
     "type": "git",
@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "14.3.1",
-    "@testing-library/user-event": "14.5.2",
+    "@testing-library/user-event": "14.6.1",
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
     "devextreme-metadata": "workspace:*",

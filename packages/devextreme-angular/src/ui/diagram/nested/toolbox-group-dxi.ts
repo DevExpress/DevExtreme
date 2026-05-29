@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_groups } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-diagram-toolbox-group',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

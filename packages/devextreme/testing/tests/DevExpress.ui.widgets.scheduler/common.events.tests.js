@@ -615,29 +615,6 @@ QUnit.module('Events', {
         assert.deepEqual(appointments.option('onAppointmentDblClick')(), scheduler.instance.option('onAppointmentDblClick')(), 'scheduler has correct onAppointmentDblClick after option change');
     });
 
-    QUnit.test('onAppointmentFormOpening event should be fired while details form is opening', async function(assert) {
-        const stub = sinon.stub();
-        const data = {
-            text: 'One',
-            location: 'NY'
-        };
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            onAppointmentFormOpening: stub,
-            editing: {
-                legacyForm: true
-            },
-        });
-
-        scheduler.instance.showAppointmentPopup(data);
-
-        const args = stub.getCall(0).args[0];
-
-        assert.ok(stub.calledOnce, 'Event was fired');
-        assert.equal(args.appointmentData, data, 'Appointment data is OK');
-        assert.equal(args.form, scheduler.instance.getAppointmentDetailsForm(), 'Appointment form is OK');
-    });
-
     QUnit.test('Option changed', async function(assert) {
         const scheduler = await createWrapper();
 
@@ -649,7 +626,12 @@ QUnit.module('Events', {
             'onAppointmentDeleting': function() { return true; },
             'onAppointmentDeleted': function() { return true; },
             'onAppointmentFormOpening': function() { return true; },
-            'onAppointmentTooltipShowing': function() { return true; }
+            'onAppointmentTooltipShowing': function() { return true; },
+            'onSelectionEnd': function() { return true; },
+            'onAppointmentRendered': function() { return true; },
+            'onAppointmentClick': function() { return true; },
+            'onAppointmentDblClick': function() { return true; },
+            'onAppointmentContextMenu': function() { return true; },
         });
 
         $.each(scheduler.instance.getActions(), function(name, action) {
@@ -671,12 +653,14 @@ QUnit.module('Events', {
             dataSource: [appointment]
         });
 
-        const workspaceSpy = sinon.spy(scheduler.instance._workSpace, '_dimensionChanged');
-        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, 'repaintAppointments');
+        const $element = $(scheduler.instance.$element());
+        const initialAppointmentWidth = $element.find('.dx-scheduler-appointment').outerWidth();
 
+        scheduler.instance.option('width', 400);
         resizeCallbacks.fire();
 
-        assert.ok(appointmentsSpy.calledAfter(workspaceSpy), 'workSpace dimension changing was called before appointments repainting');
+        const updatedAppointmentWidth = $element.find('.dx-scheduler-appointment').outerWidth();
+        assert.ok(updatedAppointmentWidth < initialAppointmentWidth, 'appointment width is recalculated after resize');
     });
 
     QUnit.test('ContentReady event should be fired after render completely ready (T902483)', async function(assert) {

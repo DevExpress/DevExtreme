@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-summary',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

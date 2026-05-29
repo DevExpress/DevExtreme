@@ -1,3 +1,5 @@
+import type { SnapToCellsMode } from '@js/ui/scheduler';
+
 import type {
   CellInterval, ListEntity, Position,
 } from '../../types';
@@ -5,20 +7,26 @@ import type {
 export const snapToCells = <T extends ListEntity & Position>(
   entities: T[],
   cells: CellInterval[],
-  isSnapToCell = true,
+  mode: SnapToCellsMode = 'always',
 ): T[] => {
-  if (!isSnapToCell) {
-    return entities;
-  }
+  if (mode === 'never') return entities;
 
   return entities.map((entity) => {
-    const { cellIndex, endCellIndex } = entity;
+    const startCell = cells[entity.cellIndex];
+    const endCell = cells[entity.endCellIndex];
+    const cellDuration = startCell.max - startCell.min;
+    const appointmentDuration = entity.endDateUTC - entity.startDateUTC;
+    const isLessThanTwoCells = cellDuration > 0 && appointmentDuration / cellDuration < 2;
+    const shouldSnap = mode === 'always' || isLessThanTwoCells;
+
+    const startDateUTC = shouldSnap ? startCell.min : entity.startDateUTC;
+    const endDateUTC = shouldSnap ? endCell.max : entity.endDateUTC;
 
     return {
       ...entity,
-      startDateUTC: cells[cellIndex].min,
-      endDateUTC: cells[endCellIndex].max,
-      duration: cells[endCellIndex].max - cells[cellIndex].min,
+      startDateUTC,
+      endDateUTC,
+      duration: endDateUTC - startDateUTC,
     };
   });
 };

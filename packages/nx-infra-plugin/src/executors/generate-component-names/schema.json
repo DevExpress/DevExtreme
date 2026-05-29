@@ -1,7 +1,8 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Generate Component Names Executor Schema",
+  "description": "Generate component names",
   "type": "object",
-  "description": "Generate component names. Use case example: server-side testing",
   "properties": {
     "componentFilesPath": {
       "type": "string",
@@ -21,7 +22,5 @@
       "description": "Output file path for generated component names",
       "default": "./tests/src/server/component-names.ts"
     }
-  },
-  "required": [],
-  "additionalProperties": false
+  }
 }

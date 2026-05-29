@@ -1,7 +1,7 @@
 $(() => {
   const chart = $('#chart').dxChart({
     dataSource,
-    title: 'Weather in Las Vegas, NV (2017)',
+    title: 'Weather in Las Vegas, NV (2025)',
     commonSeriesSettings: {
       argumentField: 'date',
     },

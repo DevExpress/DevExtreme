@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-card-view-card-view-selection',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

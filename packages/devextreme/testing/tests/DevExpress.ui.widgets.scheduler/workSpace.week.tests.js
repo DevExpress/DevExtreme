@@ -4,7 +4,6 @@ import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_week';
-import '__internal/scheduler/workspaces/m_work_space_work_week';
 
 import {
     applyWorkspaceGroups,
@@ -611,9 +610,11 @@ module('Work Space Week', () => {
 module('Work Space Work Week', () => {
     module('Default', {
         beforeEach: function() {
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+                type: 'workWeek',
+                skippedDays: [0, 6],
                 getResourceManager: getEmptyResourceManager,
-            }).dxSchedulerWorkSpaceWorkWeek('instance');
+            }).dxSchedulerWorkSpaceWeek('instance');
         }
     }, () => {
         skip('Work space should find cell coordinates by date', async function(assert) {
@@ -670,11 +671,13 @@ module('Work Space Work Week', () => {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $('#scheduler-work-space')
-                    .dxSchedulerWorkSpaceWorkWeek({
+                    .dxSchedulerWorkSpaceWeek({
+                        type: 'workWeek',
+                        skippedDays: [0, 6],
                         getResourceManager: getEmptyResourceManager,
                         ...options,
                     })
-                    .dxSchedulerWorkSpaceWorkWeek('instance');
+                    .dxSchedulerWorkSpaceWeek('instance');
             };
         }
     }, () => {

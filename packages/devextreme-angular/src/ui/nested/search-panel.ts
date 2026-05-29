@@ -26,7 +26,6 @@ import { DxoSearchPanel } from './base/search-panel';
 
 @Component({
     selector: 'dxo-search-panel',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

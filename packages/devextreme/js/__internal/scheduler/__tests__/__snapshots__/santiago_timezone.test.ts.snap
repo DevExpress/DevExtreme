@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`scheduler should render correct workspace in Santiago DST for view: Day DST 1`] = `
 [
@@ -307,7 +307,7 @@ exports[`scheduler should render correct workspace in Santiago DST for view: Tim
   "Wed 4",
   "Thu 5",
   "Fri 6",
-  "Sat 7",
+  "Mon 9",
   "12:00 AM",
   "6:00 AM",
   "12:00 PM",

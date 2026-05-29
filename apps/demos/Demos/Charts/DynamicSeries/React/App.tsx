@@ -11,7 +11,7 @@ import type { ISeriesTemplateProps } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 
 const customizeSeries: ISeriesTemplateProps['customizeSeries'] = (valueFromNameField: number) => (
-  valueFromNameField === 2009
+  valueFromNameField === 2020
     ? { type: 'line', label: { visible: true }, color: '#ff3f7a' }
     : {}
 );

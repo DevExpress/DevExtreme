@@ -23,6 +23,7 @@ import HTMLReactParser from 'html-react-parser';
 import './styles.css';
 import { Guid } from 'devextreme-react/cjs/common';
 import { Message } from 'devextreme/artifacts/npm/devextreme/ui/chat';
+import type { ItemClickEvent as ButtonGroupItemClickEvent, Item as ButtonGroupItem } from 'devextreme/ui/button_group';
 
 const meta: Meta<typeof Chat> = {
     title: 'Components/Chat',
@@ -986,3 +987,121 @@ export const ControlledMode: Story = {
         );
     }
 }
+
+export const SendButtonOptions: Story = {
+    args: {
+        action: 'send',
+        icon: 'arrowright',
+        enableOnClick: false,
+    },
+    argTypes: {
+        action: {
+            control: 'select',
+            options: ['send', 'custom'],
+        },
+        icon: {
+            control: 'text',
+        },
+        enableOnClick: {
+            name: 'Enable onClick handler',
+            control: 'boolean',
+        },
+    },
+    render: ({ action, icon, enableOnClick }) => {
+        const [messages, setMessages] = useState<ChatTypes.Message[]>([...initialMessages]);
+        const [lastClick, setLastClick] = useState<string>('—');
+
+        const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
+            setMessages((prev) => [...prev, message]);
+        }, []);
+
+        const sendButtonOptions = useMemo<ChatTypes.SendButtonProperties>(() => ({
+            action,
+            icon,
+            ...(enableOnClick && {
+                onClick: () => setLastClick(new Date().toLocaleTimeString()),
+            }),
+        }), [action, icon, enableOnClick]);
+
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <div>
+                    Last onClick fired at: <strong>{lastClick}</strong>
+                </div>
+                <Chat
+                    width={400}
+                    height={500}
+                    items={messages}
+                    user={secondAuthor}
+                    onMessageEntered={onMessageEntered}
+                    sendButtonOptions={sendButtonOptions}
+                />
+            </div>
+        );
+    },
+};
+
+const suggestionItems: ButtonGroupItem[] = [
+    { text: '📦 Track my orders' },
+    { text: '⭐ Check in-stock favorites' },
+    { text: '🔄 Start a return' },
+    { text: '🔍 Find my order' },
+    { text: '💳 Payment & billing help with Soul' },
+];
+
+export const Suggestions: Story = {
+    args: {
+        sendImmediately: false,
+        stylingMode: 'outlined',
+    },
+    argTypes: {
+        sendImmediately: {
+            name: 'Send immediately on suggestion click',
+            control: 'boolean',
+        },
+        stylingMode: {
+            name: 'Suggestions styling mode',
+            control: 'select',
+            options: ['contained', 'outlined', 'text'],
+        },
+    },
+    render: ({ sendImmediately, stylingMode }) => {
+        const [messages, setMessages] = useState<ChatTypes.Message[]>([]);
+        const [inputFieldText, setInputFieldText] = useState('');
+
+        const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
+            setMessages((prev) => [...prev, message]);
+            setInputFieldText('');
+        }, []);
+
+        const suggestions = useMemo<ChatTypes.Properties['suggestions']>(() => ({
+            items: suggestionItems,
+            stylingMode,
+            onItemClick: (e: ButtonGroupItemClickEvent) => {
+                if (sendImmediately) {
+                    setMessages((prev) => [...prev, {
+                        timestamp: new Date(),
+                        author: firstAuthor,
+                        text: e.itemData?.text,
+                    }]);
+                } else {
+                    setInputFieldText(e.itemData?.text ?? '');
+                }
+            },
+        }), [sendImmediately, stylingMode]);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={740}
+                    height={500}
+                    items={messages}
+                    user={firstAuthor}
+                    inputFieldText={inputFieldText}
+                    onMessageEntered={onMessageEntered}
+                    suggestions={suggestions}
+                />
+            </div>
+        );
+    },
+};

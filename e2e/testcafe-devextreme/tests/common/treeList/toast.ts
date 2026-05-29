@@ -10,7 +10,10 @@ fixture.disablePageReloads`Toasts in TreeList`
 test('Toast should be visible after calling and should be not visible after default display time', async (t) => {
   const treeList = new TreeList('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await treeList.isReady();
+  await t
+    .expect(treeList.isReady())
+    .ok();
+
   await treeList.apiShowErrorToast();
   await t.expect(treeList.getToast().exists).ok();
 
@@ -21,5 +24,5 @@ test('Toast should be visible after calling and should be not visible after defa
     .ok(compareResults.errorMessages());
   await t.expect(treeList.getToast().exists).notOk();
 }).before(async () => {
-  createWidget('dxTreeList', {});
+  await createWidget('dxTreeList', {});
 });

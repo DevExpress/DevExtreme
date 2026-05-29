@@ -11,9 +11,7 @@ import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
- AIIntegration,
-} from "devextreme/common/ai-integration";
-import {
+ AIAssistant,
  ColumnChooser,
  ColumnResizeMode,
  FilterPanel,
@@ -22,6 +20,9 @@ import {
  SearchPanel,
  Sorting,
  AIColumnMode,
+ CommandInfo,
+ ResponseStatusTexts,
+ ResponseStatus,
  DataChangeType,
  ColumnAIOptions,
  FilterOperation,
@@ -54,8 +55,12 @@ import {
  StateStoreType,
 } from "devextreme/common/grids";
 import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
+import {
  dxDataGridColumn,
  AdaptiveDetailRowPreparingEvent,
+ AIAssistantRequestCreatingEvent,
  AIColumnRequestCreatingEvent,
  CellClickEvent,
  CellDblClickEvent,
@@ -273,6 +278,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "aiAssistant" |
   "aiIntegration" |
   "allowColumnReordering" |
   "allowColumnResizing" |
@@ -319,6 +325,7 @@ type AccessibleOptions = Pick<Properties,
   "masterDetail" |
   "noDataText" |
   "onAdaptiveDetailRowPreparing" |
+  "onAIAssistantRequestCreating" |
   "onAIColumnRequestCreating" |
   "onCellClick" |
   "onCellDblClick" |
@@ -399,6 +406,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiAssistant: Object as PropType<AIAssistant | Record<string, any>>,
     aiIntegration: Object as PropType<AIIntegration>,
     allowColumnReordering: Boolean,
     allowColumnResizing: Boolean,
@@ -445,6 +453,7 @@ const componentConfig = {
     masterDetail: Object as PropType<Record<string, any>>,
     noDataText: String,
     onAdaptiveDetailRowPreparing: Function as PropType<((e: AdaptiveDetailRowPreparingEvent) => void)>,
+    onAIAssistantRequestCreating: Function as PropType<((e: AIAssistantRequestCreatingEvent) => void)>,
     onAIColumnRequestCreating: Function as PropType<((e: AIColumnRequestCreatingEvent) => void)>,
     onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
     onCellDblClick: Function as PropType<((e: CellDblClickEvent) => void)>,
@@ -521,6 +530,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiAssistant": null,
     "update:aiIntegration": null,
     "update:allowColumnReordering": null,
     "update:allowColumnResizing": null,
@@ -567,6 +577,7 @@ const componentConfig = {
     "update:masterDetail": null,
     "update:noDataText": null,
     "update:onAdaptiveDetailRowPreparing": null,
+    "update:onAIAssistantRequestCreating": null,
     "update:onAIColumnRequestCreating": null,
     "update:onCellClick": null,
     "update:onCellDblClick": null,
@@ -647,6 +658,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = DataGrid;
     (this as any).$_hasAsyncTemplate = false;
     (this as any).$_expectedChildren = {
+      aiAssistant: { isCollectionItem: false, optionName: "aiAssistant" },
       column: { isCollectionItem: true, optionName: "columns" },
       columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       columnFixing: { isCollectionItem: false, optionName: "columnFixing" },
@@ -717,6 +729,38 @@ const DxAI = defineComponent(DxAIConfig);
 (DxAI as any).$_optionName = "ai";
 (DxAI as any).$_expectedChildren = {
   editorOptions: { isCollectionItem: false, optionName: "editorOptions" }
+};
+
+const DxAIAssistantConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:aiIntegration": null,
+    "update:chat": null,
+    "update:customizeResponseText": null,
+    "update:customizeResponseTitle": null,
+    "update:enabled": null,
+    "update:popup": null,
+    "update:title": null,
+  },
+  props: {
+    aiIntegration: Object as PropType<AIIntegration>,
+    chat: Object as PropType<Record<string, any>>,
+    customizeResponseText: Function as PropType<((command: CommandInfo) => ResponseStatusTexts)>,
+    customizeResponseTitle: Function as PropType<((status: ResponseStatus, commandNames: Array<string>) => string)>,
+    enabled: Boolean,
+    popup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
+    title: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAIAssistantConfig);
+
+const DxAIAssistant = defineComponent(DxAIAssistantConfig);
+
+(DxAIAssistant as any).$_optionName = "aiAssistant";
+(DxAIAssistant as any).$_expectedChildren = {
+  popup: { isCollectionItem: false, optionName: "popup" }
 };
 
 const DxAIOptionsConfig = {
@@ -2261,6 +2305,7 @@ const DxFilterBuilderPopupConfig = {
     "update:shadingColor": null,
     "update:showCloseButton": null,
     "update:showTitle": null,
+    "update:tabFocusLoopEnabled": null,
     "update:tabIndex": null,
     "update:title": null,
     "update:titleTemplate": null,
@@ -2311,6 +2356,7 @@ const DxFilterBuilderPopupConfig = {
     shadingColor: String,
     showCloseButton: Boolean,
     showTitle: Boolean,
+    tabFocusLoopEnabled: Boolean,
     tabIndex: Number,
     title: String,
     titleTemplate: {},
@@ -3528,6 +3574,7 @@ const DxPopupConfig = {
     "update:shadingColor": null,
     "update:showCloseButton": null,
     "update:showTitle": null,
+    "update:tabFocusLoopEnabled": null,
     "update:tabIndex": null,
     "update:title": null,
     "update:titleTemplate": null,
@@ -3578,6 +3625,7 @@ const DxPopupConfig = {
     shadingColor: String,
     showCloseButton: Boolean,
     showTitle: Boolean,
+    tabFocusLoopEnabled: Boolean,
     tabIndex: Number,
     title: String,
     titleTemplate: {},
@@ -4318,7 +4366,7 @@ const DxTabPanelOptionsConfig = {
     items: Array as PropType<Array<any | dxTabPanelItem | string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     loop: Boolean,
     noDataText: String,
     onContentReady: Function as PropType<((e: TabPanelContentReadyEvent) => void)>,
@@ -4693,6 +4741,7 @@ export default DxDataGrid;
 export {
   DxDataGrid,
   DxAI,
+  DxAIAssistant,
   DxAIOptions,
   DxAnimation,
   DxAsyncRule,

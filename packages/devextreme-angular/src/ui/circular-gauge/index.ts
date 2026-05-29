@@ -102,7 +102,6 @@ import {
  */
 @Component({
     selector: 'dx-circular-gauge',
-    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },

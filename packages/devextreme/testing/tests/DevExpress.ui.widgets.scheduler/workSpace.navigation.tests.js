@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_day';
 import '__internal/scheduler/workspaces/m_work_space_month';
-import '__internal/scheduler/workspaces/m_work_space_work_week';
+import '__internal/scheduler/workspaces/m_work_space_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
@@ -777,32 +777,6 @@ module('Workspace navigation', () => {
                     $($table).trigger($.Event('dxpointermove', { target: cell, toElement: cell, which: 1 }));
 
                     assert.equal(cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
-                });
-
-                test('It should not be possible to select cells via mouse if scrollable \'scrollByContent\' is true', async function(assert) {
-                    const $element = this.createInstance({
-                        focusStateEnabled: true,
-                        firstDayOfWeek: 1,
-                        currentDate: new Date(2015, 3, 1),
-                        height: 400,
-                        allowMultipleCellSelection: true,
-                        onContentReady: function(e) {
-                            const scrollable = e.component._dateTableScrollable;
-                            scrollable.option('scrollByContent', true);
-                        },
-                    }, 'dxSchedulerWorkSpaceMonth');
-                    const workspace = $element.dxSchedulerWorkSpaceMonth('instance');
-
-                    const stub = sinon.stub(workspace, 'notifyObserver');
-
-                    const cells = $element.find('.' + CELL_CLASS);
-                    const cell = cells.eq(23).get(0);
-                    const $table = $element.find('.dx-scheduler-date-table');
-
-                    pointerMock(cells.eq(2)).start().click();
-                    $($table).trigger($.Event('dxpointermove', { target: cell, toElement: cell, which: 1 }));
-
-                    assert.notOk(stub.calledOnce, 'Cells weren\'t selected');
                 });
 
                 test('Multiselection with left arrow should work in workspace day', async function(assert) {

@@ -104,6 +104,35 @@ QUnit.module('render', {
         assert.ok(labelWidth <= labelMaxWidth, 'Real label width less or equal to the max width');
     });
 
+    QUnit.test('label max-width should be calculated correctly when parent has CSS transform scale (T1245421)', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').css('width', '400px');
+        const $element = $('<div>').appendTo($container);
+
+        $element.dxToolbar({
+            items: [
+                { location: 'before', text: 'Very long toolbar label text that should be truncated' },
+                { location: 'after', widget: 'dxButton', options: { text: 'Action' } }
+            ]
+        });
+
+        const toolbar = $element.dxToolbar('instance');
+        const $label = $element.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
+        const maxWidthBefore = parseFloat($label.css('max-width'));
+
+        $container.css('transform', 'scale(0.5)');
+        toolbar._dimensionChanged();
+        const maxWidthDuringScale = parseFloat($label.css('max-width'));
+
+        $container.css('transform', '');
+        toolbar._dimensionChanged();
+        const maxWidthAfter = parseFloat($label.css('max-width'));
+
+        assert.roughEqual(maxWidthDuringScale, maxWidthBefore, 1, 'max-width is not affected by CSS transform scale');
+        assert.roughEqual(maxWidthAfter, maxWidthBefore, 1, 'max-width is restored correctly after transform is removed');
+
+        $container.remove();
+    });
+
     QUnit.test('items - long labels', function(assert) {
         this.$element.dxToolbar({
             items: [

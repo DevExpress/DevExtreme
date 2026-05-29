@@ -2,8 +2,9 @@ import type { TextEditorButton as PublicTextEditorButton, TextEditorButtonLocati
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxButton from '@js/ui/button';
+import type { Properties } from '@js/ui/button';
 import errors from '@js/ui/widget/ui.errors';
-import type TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
+import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import type TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
 import CustomButton from '@ts/ui/text_box/texteditor_button_collection/custom';
 
@@ -64,7 +65,11 @@ function isPredefinedButtonName(
 
 export type TextEditorButtonInfo = PublicTextEditorButton & {
   name: string;
-  Ctor: typeof CustomButton;
+  Ctor: new (
+    name: string,
+    editor: TextEditorBase,
+    options: Properties,
+  ) => TextEditorButton;
 };
 
 export default class TextEditorButtonCollection<

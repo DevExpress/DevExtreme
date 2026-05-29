@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-hide',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

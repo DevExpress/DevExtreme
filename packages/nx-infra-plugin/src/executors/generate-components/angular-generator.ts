@@ -12,7 +12,8 @@ export async function generateAngularComponents(
     internalTools = require('devextreme-internal-tools');
   } catch (error: any) {
     throw new Error(
-      'devextreme-internal-tools not found. Run: pnpm install\n'
+      'devextreme-internal-tools not found.\n'
+        + 'Run "pnpm install --frozen-lockfile" from the repository root to install dependencies.\n'
         + `Original error: ${error.message}`,
     );
   }
@@ -74,6 +75,14 @@ export async function generateAngularComponents(
   });
   logger.verbose('✓ Module facades generated');
 
+  logger.verbose('🔗 Generating common reexports...');
+  AngularCommonReexportsGenerator.generate({
+    outputPath: path.dirname(componentsDir),
+    metadata: metaData,
+    templatingOptions: config.templatingOptions,
+  });
+  logger.verbose('✓ Common reexports generated');
+
   logger.verbose('📋 Generating index facades...');
   const facadeGenerator = new AngularFacadeGenerator();
   facadeGenerator.generate({
@@ -83,15 +92,8 @@ export async function generateAngularComponents(
       },
     },
     commonImports: ['./common', './common/grids', './common/charts'],
+    commonReexports: metaData?.commonReexports,
     templatingOptions: config.templatingOptions,
   });
   logger.verbose('✓ Index facades generated');
-
-  logger.verbose('🔗 Generating common reexports...');
-  AngularCommonReexportsGenerator.generate({
-    outputPath: path.dirname(componentsDir),
-    metadata: metaData,
-    templatingOptions: config.templatingOptions,
-  });
-  logger.verbose('✓ Common reexports generated');
 }

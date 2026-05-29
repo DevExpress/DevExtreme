@@ -11,7 +11,7 @@ $(() => {
     const params = {
       messages,
       model: deployment,
-      max_tokens: 1000,
+      max_completion_tokens: 1000,
       temperature: 0.7,
     };
 
@@ -21,7 +21,7 @@ $(() => {
     return result;
   }
 
-  const aiIntegration = new DevExpress.aiIntegration({
+  const aiIntegration = new DevExpress.aiIntegration.AIIntegration({
     sendRequest({ prompt }) {
       const controller = new AbortController();
       const signal = controller.signal;

@@ -30,13 +30,30 @@ import {
 } from './m_header_filter_core';
 
 const DATE_INTERVAL_FORMATS = {
+  year(value) {
+    return String(value);
+  },
   month(value) {
     return dateLocalization.getMonthNames()[value - 1];
   },
   quarter(value) {
     return dateLocalization.format(new Date(2000, value * 3 - 1), 'quarter');
   },
+  day(value) {
+    return String(value);
+  },
+  hour(value) {
+    return String(value);
+  },
+  minute(value) {
+    return String(value);
+  },
+  second(value) {
+    return String(value);
+  },
 };
+
+const getDateIntervalFormat = (intervalKey: string) => DATE_INTERVAL_FORMATS[intervalKey] ?? ((v) => String(v));
 
 function ungroupUTCDates(items, dateParts?, dates?) {
   dateParts = dateParts || [];
@@ -84,7 +101,7 @@ export const getFormatOptions = function (value, column, currentLevel) {
     result.groupInterval = groupInterval[currentLevel];
 
     if (gridCoreUtils.isDateType(column.dataType)) {
-      result.format = DATE_INTERVAL_FORMATS[groupInterval[currentLevel]];
+      result.format = getDateIntervalFormat(groupInterval[currentLevel]);
     } else if (column.dataType === 'number') {
       result.getDisplayFormat = function () {
         const formatOptions = { format: column.format, target: 'headerFilter' };

@@ -60,17 +60,19 @@ class ListEdit extends ListBase {
       }
 
       if (e.shiftKey && itemDragging?.allowReordering) {
+        if (focusedItemIndex === NOT_EXISTING_INDEX) {
+          return;
+        }
+
         const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
 
-        if (nextItemIndex < 0
-          || nextItemIndex === NOT_EXISTING_INDEX
-          || nextItemIndex > this._getLastItemIndex()) {
+        if (nextItemIndex < 0) {
           return;
         }
 
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
-        if (!$nextItem) {
+        if (!$nextItem?.length) {
           return;
         }
 

@@ -1,7 +1,7 @@
 $(() => {
   $('#chart').dxChart({
     palette: 'violet',
-    title: 'Crude Oil Prices in 2005',
+    title: 'Crude Oil Prices in 2024',
     dataSource,
     commonSeriesSettings: {
       argumentField: 'date',

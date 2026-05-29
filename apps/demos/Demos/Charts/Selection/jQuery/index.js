@@ -24,8 +24,8 @@ $(() => {
       },
     },
     series: [
-      { valueField: 'year2007', name: '2007 - 2008' },
-      { valueField: 'year2008', name: '2008 - 2009' },
+      { valueField: 'year2019', name: '2019 - 2020' },
+      { valueField: 'year2020', name: '2020 - 2021' },
     ],
     title: {
       text: 'Economy - Export Change',

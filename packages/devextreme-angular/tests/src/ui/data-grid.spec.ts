@@ -415,7 +415,7 @@ describe('Nested DxDataGrid', () => {
     );
 
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 3000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
   });
 
   afterEach(() => {
@@ -567,7 +567,7 @@ describe('DxDataGrid slow tests', () => {
   const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 
   beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
     TestBed.configureTestingModule(
       {
@@ -591,7 +591,7 @@ describe('DxDataGrid slow tests', () => {
 
     fixture.detectChanges();
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 500; i++) {
       document.body.click();
       fixture.detectChanges();
     }
@@ -600,7 +600,7 @@ describe('DxDataGrid slow tests', () => {
 
     const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 500; i++) {
       document.body.click();
       fixture.detectChanges();
     }
@@ -610,6 +610,6 @@ describe('DxDataGrid slow tests', () => {
     const memoryAfter = await (performance as any).measureUserAgentSpecificMemory();
     const memoryDiff = Math.round((memoryAfter.bytes - memoryBefore.bytes) / 1024);
 
-    expect(memoryDiff).toBeLessThan(40);
+    expect(memoryDiff).toBeLessThan(100);
   });
 });

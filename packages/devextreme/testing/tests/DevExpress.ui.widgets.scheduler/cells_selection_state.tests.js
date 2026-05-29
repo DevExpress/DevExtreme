@@ -190,7 +190,7 @@ module('Cells Selection State', () => {
 
         cellsSelectionState.setFocusedCell(1, 1, false);
 
-        const focusedCellData = cellsSelectionState._focusedCell;
+        const focusedCellData = cellsSelectionState.focusedCell;
 
         assert.deepEqual(
             focusedCellData,
@@ -301,18 +301,18 @@ module('Cells Selection State', () => {
         cellsSelectionState.releaseSelectedAndFocusedCells();
 
         assert.deepEqual(
-            cellsSelectionState._prevFocusedCell,
+            cellsSelectionState.prevFocusedCell,
             testViewDataMap.horizontalGrouping[1][1].cellData,
             'Correct cached focused cell data',
         );
         assert.deepEqual(
-            cellsSelectionState._prevSelectedCells,
+            cellsSelectionState.prevSelectedCells,
             [testViewDataMap.horizontalGrouping[1][0].cellData, testViewDataMap.horizontalGrouping[1][1].cellData],
             'Correct cachedfocused cell',
         );
 
-        const prevFocusedCellData = cellsSelectionState._focusedCell;
-        const prevSelectedCells = cellsSelectionState._selectedCells;
+        const prevFocusedCellData = cellsSelectionState.focusedCell;
+        const prevSelectedCells = cellsSelectionState.selectedCells;
 
         assert.deepEqual(
             prevFocusedCellData,
@@ -353,18 +353,18 @@ module('Cells Selection State', () => {
         cellsSelectionState.clearSelectedAndFocusedCells();
 
         assert.deepEqual(
-            cellsSelectionState._prevFocusedCell,
+            cellsSelectionState.prevFocusedCell,
             null,
             'Correct cached focused cell data',
         );
         assert.deepEqual(
-            cellsSelectionState._prevSelectedCells,
+            cellsSelectionState.prevSelectedCells,
             null,
             'Correct cachedfocused cell',
         );
 
-        const prevFocusedCellData = cellsSelectionState._focusedCell;
-        const prevSelectedCells = cellsSelectionState._selectedCells;
+        const prevFocusedCellData = cellsSelectionState.focusedCell;
+        const prevSelectedCells = cellsSelectionState.selectedCells;
 
         assert.deepEqual(
             prevFocusedCellData,

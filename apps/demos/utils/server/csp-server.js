@@ -2,10 +2,10 @@
 
 const crypto = require('crypto');
 const express = require('express');
-const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
 const { join, resolve } = require('path');
 const { readFileSync, readdirSync } = require('fs');
+const RateLimit = require('express-rate-limit');
 
 const root = join(__dirname, '..', '..', '..', '..');
 const indexFileName = 'index.html';
@@ -68,7 +68,7 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/Cell': {
     'img-src': ['data:'],
   },
-  // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
+  // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh. Cannot move to a separate file or index.js
   'DataGrid/AIColumns': {
     'script-src': ["'unsafe-inline'"],
     'connect-src': ['https://public-api.devexpress.com'],
@@ -105,10 +105,6 @@ const CSP_DEMO_ALLOWLIST = {
   },
   Gantt: {
     'img-src': ['data:'],
-  },
-  // TODO: fix inline style in taskTemplate
-  'Gantt/TaskTemplate': {
-    'style-src': ["'unsafe-inline'"],
   },
   Diagram: {
     'img-src': ['data:'],
@@ -149,7 +145,7 @@ const CSP_DEMO_ALLOWLIST = {
   'TagBox/Grouping': {
     'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
-  // AI demos use inline <script type="module"> to import OpenAI SDK from esm.sh
+  // AI demos use inline <script type="module"> to import OpenAI SDK from esm.sh. Cannot move to a separate file or index.js
   'TreeList/AIColumns': {
     'connect-src': ['https://public-api.devexpress.com'],
     'script-src': ["'unsafe-inline'"],
@@ -177,8 +173,6 @@ const CSP_DEMO_ALLOWLIST = {
   },
   'TreeList/Overview': {
     'img-src': ['data:'],
-    // TODO: fix inline style in cellTemplate (background-image)
-    'style-src': ["'unsafe-inline'"],
   },
   // globalize/message.js uses new Function() internally
   'Localization/UsingGlobalize': {
@@ -195,10 +189,6 @@ const CSP_DEMO_ALLOWLIST = {
   // Inline <script type="module"> to import remark/rehype from esm.sh
   'HtmlEditor/MarkdownSupport': {
     'script-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attribute
-  'DataGrid/RowSelection': {
-    'style-src': ["'unsafe-inline'"],
   },
   // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'Chat/AIAndChatbotIntegration': {
@@ -380,16 +370,19 @@ const app = express();
 app.use(cookieParser());
 app.use(cspMiddleware);
 
+const demoIndexLimiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
 app.post('/csp-report', cspReportHandler);
 app.get('/csp-violations', cspViolationsHandler);
 app.delete('/csp-violations', cspViolationsClearHandler);
 
-app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexLimiter, demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexLimiter, demoIndexHandler);
 
-app.use(
-  serveStatic(root, { index: [indexFileName] }),
-);
+app.use(express.static(root, { index: [indexFileName] }));
 
 const server = app.listen(port, host, () => {
   console.log(`CSP Demo server listening on http://${host}:${port}`);

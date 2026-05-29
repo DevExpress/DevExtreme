@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import type {
-  CalendarSelectionMode, FirstDayOfWeek, WeekNumberRule,
+  CalendarSelectionMode, DayOfWeek, WeekNumberRule,
 } from '@js/ui/calendar';
 
 import type { BaseViewProperties } from './calendar.base_view';
@@ -25,7 +25,7 @@ const WEEK_NUMBER_TEXT = 'WeekNumber';
 export interface MonthViewProperties extends BaseViewProperties {
   showWeekNumbers: boolean;
 
-  firstDayOfWeek?: FirstDayOfWeek;
+  firstDayOfWeek?: DayOfWeek;
 
   weekNumberRule?: WeekNumberRule;
 

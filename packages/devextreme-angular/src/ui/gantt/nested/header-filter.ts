@@ -29,7 +29,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-header-filter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -1,28 +1,22 @@
 import registerComponent from '@js/core/component_registrator';
-import { getBoundingRect } from '@js/core/utils/position';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerTimeline from './m_timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
+const TIMELINE_WORK_WEEK_CLASS = 'dx-scheduler-timeline-work-week';
 
 export default class SchedulerTimelineWeek extends SchedulerTimeline {
-  get type() { return VIEWS.TIMELINE_WEEK; }
+  get type(): string {
+    return this.option('type') ?? VIEWS.TIMELINE_WEEK;
+  }
 
   protected override getElementClass() {
-    return TIMELINE_CLASS;
+    return this.type === VIEWS.TIMELINE_WORK_WEEK ? TIMELINE_WORK_WEEK_CLASS : TIMELINE_CLASS;
   }
 
-  _getHeaderPanelCellWidth($headerRow) {
-    return getBoundingRect($headerRow.children().first().get(0)).width;
-  }
-
-  _needRenderWeekHeader() {
+  protected override needRenderWeekHeader() {
     return true;
-  }
-
-  _incrementDate(date) {
-    date.setDate(date.getDate() + 1);
   }
 }
 

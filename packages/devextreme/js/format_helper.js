@@ -9,6 +9,7 @@ import {
 import dateUtils from './core/utils/date';
 import numberLocalization from './common/core/localization/number';
 import dateLocalization from './common/core/localization/date';
+import { getGlobalFormatByDataType } from './__internal/core/m_global_format_config';
 import dependencyInjector from './core/utils/dependency_injector';
 
 import './common/core/localization/currency';
@@ -18,7 +19,18 @@ export default dependencyInjector({
         const formatIsValid = isString(format) && format !== '' || isPlainObject(format) || isFunction(format);
         const valueIsValid = isNumeric(value) || (isDate(value) && !isNaN(value.getTime()));
 
-        if(!formatIsValid || !valueIsValid) {
+        if(!valueIsValid) {
+            return isDefined(value) ? value.toString() : '';
+        }
+
+        if(!formatIsValid && isNumeric(value)) {
+            const globalNumberFormat = getGlobalFormatByDataType('number');
+            if(globalNumberFormat) {
+                return numberLocalization.format(value, globalNumberFormat);
+            }
+        }
+
+        if(!formatIsValid) {
             return isDefined(value) ? value.toString() : '';
         }
 

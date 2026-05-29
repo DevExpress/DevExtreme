@@ -30,7 +30,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return this.option('dateCellTemplate');
   }
 
-  _calculateDurationInCells(timeDiff) {
+  protected override calculateDurationInCells(timeDiff) {
     return timeDiff / this.getCellDuration();
   }
 

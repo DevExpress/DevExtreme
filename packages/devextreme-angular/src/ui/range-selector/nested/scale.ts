@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-range-selector-scale',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

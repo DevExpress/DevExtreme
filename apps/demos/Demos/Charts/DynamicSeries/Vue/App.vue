@@ -35,7 +35,7 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.ts';
 
-const customizeSeries: (seriesName: any) => ChartSeries = (seriesName) => ((seriesName === 2009)
+const customizeSeries: (seriesName: any) => ChartSeries = (seriesName) => ((seriesName === 2020)
   ? { type: 'line', label: { visible: true }, color: '#ff3f7a' }
   : {});
 </script>

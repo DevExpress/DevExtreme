@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_cols } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-col',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

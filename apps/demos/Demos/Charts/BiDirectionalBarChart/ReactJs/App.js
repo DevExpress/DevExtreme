@@ -19,7 +19,7 @@ function customizeLabel(e) {
 function App() {
   return (
     <Chart
-      title="Population Pyramid For Norway 2016"
+      title="Population Pyramid For Norway 2024"
       dataSource={dataSource}
       id="chart"
       rotated={true}

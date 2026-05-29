@@ -19,7 +19,7 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'disabled'
      * @public
      */
-    disabledExpr?: string | Function;
+    disabledExpr?: string | ((item: TItem) => boolean | undefined);
     /**
      * @docid
      * @default 'text'
@@ -44,19 +44,19 @@ export interface HierarchicalCollectionWidgetOptions<
      * @default 'items'
      * @public
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: TItem) => TItem[] | undefined);
     /**
      * @docid
      * @default 'id'
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * @docid
      * @default 'selected'
      * @public
      */
-    selectedExpr?: string | Function;
+    selectedExpr?: string | ((item: TItem, value: boolean | undefined) => boolean | undefined);
 }
 /**
  * @docid

@@ -28,7 +28,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-bar-gauge-legend',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

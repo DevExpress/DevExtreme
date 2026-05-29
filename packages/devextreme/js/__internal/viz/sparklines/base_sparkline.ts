@@ -275,6 +275,7 @@ const _disposeTooltip = BaseSparkline.prototype._disposeTooltip;
 BaseSparkline.prototype._disposeTooltip = function () {
   if (this._tooltip) {
     _disposeTooltip.apply(this, arguments);
+    this._tooltipShown = false;
   }
 };
 BaseSparkline.prototype._setTooltipRendererOptions = function () {

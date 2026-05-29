@@ -33,6 +33,9 @@ function xor(a: boolean, b: boolean): boolean {
   return (a || b) && !(a && b);
 }
 
+type TagBoxItem = string | number | any;
+type SelectedItemsMap = Record<string, TagBoxItem>;
+
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
 const TAGBOX_TAG_DISPLAY_VALUE = 'dxTagDisplayValue';
 
@@ -51,13 +54,13 @@ const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
-export interface TagBoxProperties extends Omit<Properties,
-'onCustomItemCreating'
-| 'onItemClick' | 'onSelectionChanged'
-| 'onOpened' | 'onClosed'
-| 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
-
+export interface TagBoxProperties extends Omit<
+  Properties,
+  'onCustomItemCreating'
+  | 'onItemClick' | 'onSelectionChanged'
+  | 'onOpened' | 'onClosed'
+  | 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+  | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
 }
 
 class TagBox<
@@ -217,9 +220,12 @@ class TagBox<
     return this._getValue().length === 0;
   }
 
-  _updateTagsContainer($element): void {
-    this._$tagsContainer = $element
-      .addClass(TAGBOX_TAG_CONTAINER_CLASS);
+  _updateTagsContainer($element: dxElementWrapper | null | undefined): void {
+    if (!$element) {
+      return;
+    }
+
+    this._$tagsContainer = $element.addClass(TAGBOX_TAG_CONTAINER_CLASS);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -490,7 +496,6 @@ class TagBox<
 
     this._getSubmitElement()
       .empty()
-      // @ts-expect-error ts-error
       .append($options);
   }
 
@@ -857,7 +862,7 @@ class TagBox<
     // @ts-expect-error ts-error
     const isListItemsLoaded = !!listSelectedItems && this._list._dataController.isLoaded();
     const selectedItems = listSelectedItems || this.option('selectedItems');
-    // @ts-expect-error ts-error
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
     // @ts-expect-error ts-error
     const filteredItems = selectedItems.filter(clientFilterFunction);
@@ -904,13 +909,13 @@ class TagBox<
   _createTagsData(values, filteredItems) {
     const items = [];
     const cache = {};
-    // @ts-expect-error ts-error
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     const isValueExprSpecified = this._valueGetterExpr() === 'this';
     const { acceptCustomValue } = this.option();
     const filteredValues = {};
 
     filteredItems.forEach((filteredItem) => {
-      // @ts-expect-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
 
       filteredValues[filteredItemValue] = filteredItem;
@@ -964,7 +969,7 @@ class TagBox<
       return item;
     }
     const selectedItem = this.option('selectedItem');
-    // @ts-expect-error
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
 
     return customItem;
@@ -1043,7 +1048,10 @@ class TagBox<
       this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
       if (this._selectedItems.length === this._valuesToUpdate.length) {
-        this._tagsToRender = this._selectedItems;
+        this._tagsToRender = this._sortSelectedItemsByValues(
+          this._selectedItems,
+          this._valuesToUpdate,
+        );
         this._renderTagsImpl();
         isPlainDataUsed = true;
         d.resolve();
@@ -1108,6 +1116,45 @@ class TagBox<
     }
 
     return selectedItems;
+  }
+
+  _shouldUseClickOrderForTags(values: TagBox['_valuesToUpdate']): boolean {
+    const { maxDisplayedTags, showMultiTagOnly } = this.option();
+
+    return !showMultiTagOnly
+      && isDefined(maxDisplayedTags)
+      && values.length > maxDisplayedTags;
+  }
+
+  _sortSelectedItemsByValues(
+    selectedItems: TagBoxItem[],
+    values: TagBoxItem[],
+  ): TagBoxItem[] {
+    if (!this._shouldUseClickOrderForTags(values) || !selectedItems.length) {
+      return selectedItems;
+    }
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
+    const isValueExprDefault = this._valueGetterExpr() === 'this';
+
+    const mappedSelectedItems = selectedItems.reduce<SelectedItemsMap>((result, item) => {
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
+      const itemValue = isValueExprDefault ? JSON.stringify(item) : this._valueGetter(item);
+      result[itemValue] = item;
+
+      return result;
+    }, {});
+
+    const selectedByOrderItems: TagBoxItem[] = values.reduce((result, currentValue) => {
+      const normalizedValue = isValueExprDefault ? JSON.stringify(currentValue) : currentValue;
+      const item = mappedSelectedItems[normalizedValue];
+      if (isDefined(item)) {
+        result.push(item);
+      }
+
+      return result;
+    }, []);
+
+    return selectedByOrderItems;
   }
 
   _filterSelectedItems(plainItems, values) {
@@ -1177,8 +1224,7 @@ class TagBox<
 
   _renderTagsElements(items): void {
     const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
-    const showMultiTagOnly = this.option('showMultiTagOnly');
-    const maxDisplayedTags = this.option('maxDisplayedTags');
+    const { showMultiTagOnly, maxDisplayedTags } = this.option();
 
     items.forEach((item, index) => {
       // @ts-expect-error ts-error
@@ -1203,7 +1249,7 @@ class TagBox<
       const $tags = this._tagElements();
 
       const selectedItems = this.option('selectedItems') ?? [];
-      // @ts-expect-error ts-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const values = selectedItems.map((item) => this._valueGetter(item));
 
       each($tags, (_, tag) => {
@@ -1249,7 +1295,7 @@ class TagBox<
   }
 
   _renderTag(item, $input): void {
-    // @ts-expect-error ts-error
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const value = this._valueGetter(item);
 
     if (!isDefined(value)) {
@@ -1350,10 +1396,12 @@ class TagBox<
   }
 
   _removeTagElement($tag) {
+    const { showMultiTagOnly, maxDisplayedTags } = this.option();
     if ($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
-      if (!this.option('showMultiTagOnly')) {
-        const { maxDisplayedTags } = this.option();
-        this.option('value', this._getValue().slice(0, maxDisplayedTags));
+      if (!showMultiTagOnly && isDefined(maxDisplayedTags)) {
+        const displayedTagsCount = Math.max(0, maxDisplayedTags - 1);
+        const newValue = this._getValue().slice(0, displayedTagsCount);
+        this.option('value', newValue);
       } else {
         this.clear();
       }
@@ -1396,12 +1444,12 @@ class TagBox<
     const value = this._getValue().slice();
 
     each(e.removedItems || [], (_, removedItem) => {
-      // @ts-expect-error ts-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       this._removeTag(value, this._valueGetter(removedItem));
     });
 
     each(e.addedItems || [], (_, addedItem) => {
-      // @ts-expect-error ts-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       this._addTag(value, this._valueGetter(addedItem));
     });
 
@@ -1559,7 +1607,7 @@ class TagBox<
     }
 
     const dataController = this._dataController;
-    // @ts-expect-error ts-error
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     const valueGetterExpr = this._valueGetterExpr();
 
     if (isString(valueGetterExpr) && valueGetterExpr !== 'this') {
@@ -1581,14 +1629,14 @@ class TagBox<
 
   _dataSourceFilterExpr() {
     const filter = [];
-    // @ts-expect-error
+    // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]]));
 
     return filter;
   }
 
   _dataSourceFilterFunction(itemData) {
-    // @ts-expect-error ts-error
+    // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const itemValue = this._valueGetter(itemData);
     let result = true;
 
@@ -1637,7 +1685,7 @@ class TagBox<
 
     return this
       ._getPlainItems(this._list.option('selectedItems'))
-      // @ts-expect-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       .map((item) => this._valueGetter(item));
   }
 
@@ -1696,7 +1744,7 @@ class TagBox<
     }
 
     const previousItemsValuesMap = previousItems.reduce((map, item) => {
-      // @ts-expect-error ts-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const value = this._valueGetter(item);
       map[value] = item;
       return map;
@@ -1704,7 +1752,7 @@ class TagBox<
 
     const addedItems = [];
     newItems.forEach((item) => {
-      // @ts-expect-error ts-error
+      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       const value = this._valueGetter(item);
       if (!previousItemsValuesMap[value]) {
         addedItems.push(item as never);

@@ -72,8 +72,16 @@ export class PopupModel {
     return this.queries.getByRole('button', { name: 'Edit series' }) as HTMLElement;
   }
 
+  get deleteSeriesButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Delete series' }) as HTMLElement;
+  }
+
   get editAppointmentButton(): HTMLElement {
     return this.queries.getByRole('button', { name: 'Edit appointment' }) as HTMLElement;
+  }
+
+  get deleteAppointmentButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Delete appointment' }) as HTMLElement;
   }
 
   get recurrenceSettingsButton(): HTMLElement {

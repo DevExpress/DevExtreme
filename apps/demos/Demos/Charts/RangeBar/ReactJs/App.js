@@ -17,7 +17,7 @@ function App() {
       id="chart"
       dataSource={oilPrices}
       palette="Violet"
-      title="Crude Oil Prices in 2005"
+      title="Crude Oil Prices in 2024"
     >
       <Tooltip enabled={true}></Tooltip>
       <CommonSeriesSettings

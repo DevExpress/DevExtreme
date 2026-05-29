@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-details',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -21,6 +21,7 @@ import {
   isDefined, isExponential, isFunction, isObject,
 } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { getAdjustedLog10 as log10 } from '@ts/viz/core/utils';
 
 const _format = formatHelper.format;
@@ -294,6 +295,7 @@ export function smartFormatter(tick, options) {
   let { format } = options.labelOptions;
   const { ticks } = options;
   const isLogarithmic = options.type === 'logarithmic';
+  const globalFormatDataType = options.dataType === 'datetime' ? 'datetime' : 'number';
 
   if (ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
     tickInterval = abs(tick) >= 1 ? 1 : adjust(1 - abs(tick), tick);
@@ -301,6 +303,10 @@ export function smartFormatter(tick, options) {
 
   if (Object.is(tick, -0)) {
     tick = 0;
+  }
+
+  if (!isDefined(format)) {
+    format = getGlobalFormatByDataType(globalFormatDataType);
   }
 
   if (!isDefined(format) && options.type !== 'discrete' && tick && (options.logarithmBase === 10 || !isLogarithmic)) {

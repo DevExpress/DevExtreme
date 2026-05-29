@@ -206,6 +206,33 @@ describe('LocalizationExecutor E2E', () => {
     }
   });
 
+  it('should forward applyLicenseHeaders option to license header pipeline', async () => {
+    const licenseTemplatePath = path.join(fixture.buildDir, 'license-header.txt');
+    await writeFileText(
+      licenseTemplatePath,
+      `/*<%= commentType %>\n* DevExtreme (<%= file.relative %>)\n*/\n`,
+    );
+
+    const options: LocalizationExecutorSchema = {
+      messagesDir: './js/localization/messages',
+      messageTemplate: './build/gulp/localization-template.jst',
+      messageOutputDir: './artifacts/js/localization',
+      skipCldrGeneration: true,
+      applyLicenseHeaders: {
+        licenseTemplateFile: './build/gulp/license-header.txt',
+        separator: '',
+        includePatterns: ['**/*.js'],
+      },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const enContent = await readFileText(path.join(fixture.artifactsDir, MESSAGE_FILE.EN));
+    expect(enContent).toMatch(/^\/\*!/);
+    expect(enContent).toContain('DevExtreme (dx.messages.en.js)');
+  });
+
   it('should have correct output structure', async () => {
     const options: LocalizationExecutorSchema = {
       messagesDir: './js/localization/messages',

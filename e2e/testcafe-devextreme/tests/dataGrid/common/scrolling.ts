@@ -2,6 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import type { DataGridScrollMode } from 'devextreme/ui/data_grid';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -1495,74 +1496,120 @@ test.meta({ runInTheme: Themes.genericLight })('New virtual mode. Navigation to 
   });
 });
 
+// T1284002
+test('Last group should not disappear after collapsing another subgroup with virtual scrolling, local grouping and remote operations (T1284002)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiCollapseRow(['Cell phones', 'Touch Screen Phones']);
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const dataRows = visibleRows.filter((r) => r.rowType === 'data');
+
+  await t.expect(dataRows.length).eql(2, 'Computers category should still show 2 data rows');
+}).before(async () => createWidget('dxDataGrid', {
+  height: 500,
+  dataSource: [
+    {
+      Id: 1, Category: 'Cell phones', Subcategory: 'Touch Screen Phones', Store: 'Europe Online Store', Date: '2024-01-10',
+    },
+    {
+      Id: 2, Category: 'Cell phones', Subcategory: 'Touch Screen Phones', Store: 'Europe Online Store', Date: '2024-02-15',
+    },
+    {
+      Id: 3, Category: 'Computers', Subcategory: 'Computers Accessories', Store: 'North America Reseller', Date: '2024-03-20',
+    },
+    {
+      Id: 4, Category: 'Computers', Subcategory: 'Computers Accessories', Store: 'North America Online Store', Date: '2024-04-25',
+    },
+  ],
+  keyExpr: 'Id',
+  remoteOperations: {
+    filtering: true,
+    sorting: true,
+    paging: true,
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+  grouping: {
+    autoExpandAll: true,
+  },
+  columns: [
+    { dataField: 'Id', dataType: 'number' },
+    { dataField: 'Category', dataType: 'string', groupIndex: 0 },
+    { dataField: 'Subcategory', dataType: 'string', groupIndex: 1 },
+    { dataField: 'Store', dataType: 'string', groupIndex: 2 },
+    { dataField: 'Date', dataType: 'date', format: 'yyyy-MM-dd' },
+  ],
+}));
+
 // T1152498
-// TODO: fix unstable tests
-// ['infinite', 'virtual'].forEach((scrollingMode) => {
-// eslint-disable-next-line @stylistic/max-len
-//   test.meta({ browserSize: [900, 600] })(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
-//   // arrange
-//     const dataGrid = new DataGrid('#container');
-//     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-//
-//     // act
-//     await dataGrid.scrollTo({ y: 200 });
-//     await t.wait(100);
-//     await dataGrid.scrollTo({ y: 400 });
-//     await t.wait(300);
-//
-//     // assert
-//     await t
-//       .expect(await takeScreenshot(`grid-${scrollingMode}-scrolling-T1152498.png`, '#container'))
-//       .ok()
-//       .expect(compareResults.isValid())
-//       .ok(compareResults.errorMessages());
-//   }).before(async (t) => {
-//     await createWidget('dxDataGrid', {
-//       dataSource: [...new Array(500)].map((_, index) => ({ id: index, text: `item ${index}` })),
-//       keyExpr: 'id',
-//       height: 440,
-//       width: 800,
-//       renderAsync: false,
-//       templatesRenderAsynchronously: true,
-//       columnFixing: {
-//          // @ts-expect-error private option
-//          legacyMode: true,
-//       },
-//       customizeColumns(columns) {
-//         columns[0].width = 70;
-//         columns[0].fixed = true;
-//         columns[0].cellTemplate = '#test';
-//       },
-//       scrolling: {
-//         mode: scrollingMode,
-//       },
-//     });
-//
-//     await t.wait(100);
-//
-//     // simulating async rendering in React
-//     await ClientFunction(() => {
-//       const dataGrid = ($('#container') as any).dxDataGrid('instance');
-//
-//       // eslint-disable-next-line no-underscore-dangle
-//       dataGrid.getView('rowsView')._templatesCache = {};
-//
-//       // eslint-disable-next-line no-underscore-dangle
-//       dataGrid._getTemplate = () => ({
-//         render(options) {
-//           setTimeout(() => {
-//             ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
-//             options.deferred?.resolve();
-//           }, 200);
-//         },
-//       });
-//
-//       dataGrid.repaint();
-//     })();
-//
-//     await t.wait(300);
-//   });
-// });
+['infinite', 'virtual'].forEach((scrollingMode: DataGridScrollMode) => {
+  test(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    // act
+    await dataGrid.scrollTo(t, { y: 200 });
+    await dataGrid.scrollTo(t, { y: 600 });
+    await t.expect(dataGrid.isReady()).ok();
+
+    // assert
+    await testScreenshot(t, takeScreenshot, `grid-${scrollingMode}-scrolling-T1152498.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    await createWidget('dxDataGrid', {
+      dataSource: [...new Array(500)].map((_, index) => ({ id: index, text: `item ${index}` })),
+      keyExpr: 'id',
+      height: 440,
+      width: 800,
+      renderAsync: false,
+      templatesRenderAsynchronously: true,
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
+      customizeColumns(columns) {
+        columns[0].width = 70;
+        columns[0].fixed = true;
+        columns[0].cellTemplate = '#test';
+      },
+      scrolling: {
+        mode: scrollingMode,
+      },
+    });
+
+    const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
+
+    // simulating async rendering in React
+    await ClientFunction(() => {
+      const dataGridInstance = ($('#container') as any).dxDataGrid('instance');
+
+      // eslint-disable-next-line no-underscore-dangle
+      dataGridInstance.getView('rowsView')._templatesCache = {};
+
+      // eslint-disable-next-line no-underscore-dangle
+      dataGridInstance._getTemplate = () => ({
+        render(options) {
+          setTimeout(() => {
+            ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
+            options.deferred?.resolve();
+          }, 1000);
+        },
+      });
+
+      dataGridInstance.repaint();
+    })();
+  });
+});
 
 test('Editors should keep changes after being scrolled out of sight (T1145698)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -2046,4 +2093,104 @@ test('Warning should not be thrown if scrolling is virtual and height is specifi
       ],
     });
   });
+});
+
+// T1326460
+test('Horizontal scrollbar should not appear when columnHidingEnabled is true and vertical scrollbar is present (T1326460)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const scrollContainerWidth = await dataGrid.getScrollContainer().clientWidth;
+  const rowsWidth = await dataGrid.getRows().nth(0).clientWidth;
+
+  await t.expect(rowsWidth).eql(scrollContainerWidth);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 552,
+  height: 300,
+  dataSource: getData(20, 10),
+  columnHidingEnabled: true,
+  columnWidth: 100,
+  scrolling: {
+    useNative: true,
+  },
+}));
+
+test('navigateToRow should scroll to the correct row with virtual scrolling (T1220800)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const targetKey = 901;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await dataGrid.apiNavigateToRow(targetKey);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.getDataCells(0).nth(0).textContent)
+    .eql(String(targetKey));
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t.expect(visibleRows[0].key).eql(targetKey, `Row with key ${targetKey} should be the first visible row after navigation`);
+}).before(async (t) => {
+  const initStore = ClientFunction(() => {
+    const getItems = (): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < 1000000; i += 1) {
+        items.push({
+          ID: i + 1,
+          Name: `Name ${i + 1}`,
+          Description: `Text text text text text text text text text text ${i + 1}`,
+        });
+      }
+      return items;
+    };
+
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'ID',
+      data: getItems(),
+    });
+  });
+
+  await initStore.with({ boundTestRun: t })();
+
+  return createWidget('dxDataGrid', () => ({
+    dataSource: new (window as any).DevExpress.data.CustomStore({
+      key: 'ID',
+      loadMode: 'raw',
+      load(loadOptions) {
+        return new Promise((resolve) => {
+          (window as any).myStore.load(loadOptions).done((data) => {
+            resolve(data);
+          });
+        });
+      },
+      totalCount() {
+        return (window as any).myStore.totalCount();
+      },
+    }),
+    width: 900,
+    height: 250,
+    wordWrapEnabled: true,
+    showBorders: true,
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      useNative: false,
+    },
+    paging: {
+      pageSize: 20,
+    },
+    columns: [
+      {
+        dataField: 'ID',
+        width: 90,
+      },
+      'Name',
+      'Description',
+    ],
+  }));
 });

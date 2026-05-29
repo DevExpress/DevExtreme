@@ -29,10 +29,6 @@ const addStickyColumnClass = ($cell, fixedPosition, addWidgetPrefix): void => {
   }
 };
 
-const toggleFirstHeaderClass = ($cell, value, addWidgetPrefix): void => {
-  $cell.toggleClass(addWidgetPrefix(CLASSES.firstHeader), value);
-};
-
 const toggleColumnNoBorderClass = ($cell, value, addWidgetPrefix): void => {
   $cell.toggleClass(addWidgetPrefix(CLASSES.columnNoBorder), value);
 };
@@ -349,7 +345,6 @@ const getNextHeaderCell = (
 };
 
 export const GridCoreStickyColumnsDom = {
-  toggleFirstHeaderClass,
   toggleColumnNoBorderClass,
   addStickyColumnClass,
   addStickyColumnBorderLeftClass,

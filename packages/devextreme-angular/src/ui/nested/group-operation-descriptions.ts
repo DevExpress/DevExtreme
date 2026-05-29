@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-group-operation-descriptions',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

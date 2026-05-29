@@ -67,7 +67,9 @@ test('TreeList - Expand/collapse mechanism breaks after dragging action in the s
   test(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async (t) => {
     const treeList = new TreeList('#container');
 
-    await treeList.isReady();
+    await t
+      .expect(treeList.isReady())
+      .ok();
 
     await treeList.moveRow(0, 10, 10, true);
 

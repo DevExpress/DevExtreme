@@ -15,7 +15,7 @@ export default function RowTemplate(props) {
           valueField={props.year}
           type="line"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
       <td>
@@ -32,7 +32,7 @@ export default function RowTemplate(props) {
           minColor="#6babac"
           maxColor="#ebdd8f"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
       <td>
@@ -48,7 +48,7 @@ export default function RowTemplate(props) {
           pointSymbol="square"
           pointColor="#ebdd8f"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
     </tr>

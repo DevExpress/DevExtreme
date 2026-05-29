@@ -24,6 +24,7 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
 const LIST_GROUP_CLASS = 'dx-list-group';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
@@ -1139,29 +1140,6 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
     });
 
-    QUnit.test('onItemSwipe handler should not be triggered if "_swipeEnabled" is false on init', function(assert) {
-        assert.expect(0);
-
-        const swipeHandler = () => {
-            assert.ok(true, 'swipe handled');
-        };
-
-        this.element.dxList({
-            items: [0],
-            onItemSwipe: swipeHandler,
-            _swipeEnabled: false
-        }).dxList('instance');
-
-        const item = $.proxy(function() {
-            return this.element.find(`.${LIST_ITEM_CLASS}`).eq(0);
-        }, this);
-        const swipeItem = () => {
-            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
-        };
-
-        swipeItem();
-    });
-
     QUnit.test('onItemSwipe - subscription by on method', function(assert) {
         assert.expect(2);
 
@@ -1188,7 +1166,7 @@ QUnit.module('options changed', moduleSetup, () => {
         list.off('itemSwipe');
         swipeItem();
 
-        list.on('itemSwipe', swipeHandler);
+        list.on({ 'itemSwipe': swipeHandler });
         swipeItem();
     });
 
@@ -4792,6 +4770,94 @@ QUnit.module('Search', () => {
     });
 });
 
+QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
+    moduleSetup.afterEach.call(this);
+    window.getSelection().removeAllRanges();
+} }, () => {
+
+    const selectTextNodePart = (textNode, startOffset, endOffset) => {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        selection.removeAllRanges();
+        range.setStart(textNode, startOffset);
+        range.setEnd(textNode, endOffset);
+        selection.addRange(range);
+        return selection;
+    };
+
+    const getFirstListItemAndTextNode = ($list) => {
+        const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const textNode = $item.find(`.${LIST_ITEM_CONTENT_CLASS}`).eq(0).get(0).firstChild;
+
+        return { $item, textNode };
+    };
+
+    QUnit.test('text selection should not be cleared when dragging on list item without onItemSwipe', function(assert) {
+        this.element.dxList({
+            items: ['Item 1', 'Item 2'],
+        });
+
+        const { $item, textNode } = getFirstListItemAndTextNode(this.element);
+        assert.strictEqual(!!textNode, true, 'text node found in list item');
+
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
+
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
+
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists after drag');
+    });
+
+    QUnit.test('text selection should be preserved after onItemSwipe handler is removed from options', function(assert) {
+        this.element.dxList({
+            items: ['Item 1', 'Item 2'],
+            onItemSwipe: sinon.spy(),
+        });
+        const list = this.element.dxList('instance');
+
+        list.option('onItemSwipe', null);
+
+        const { $item, textNode } = getFirstListItemAndTextNode(this.element);
+        assert.strictEqual(!!textNode, true, 'text node found in list item');
+
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
+
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
+
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists after drag');
+    });
+
+    QUnit.test('text selection should reflect itemSwipe on/off subscription state', function(assert) {
+        this.element.dxList({
+            items: ['Item 1', 'Item 2'],
+        });
+
+        const list = this.element.dxList('instance');
+
+        const { $item, textNode } = getFirstListItemAndTextNode(this.element);
+        assert.strictEqual(!!textNode, true, 'text node found in list item');
+
+        list.on('itemSwipe', sinon.spy());
+
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag with subscribed swipe handler');
+
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
+
+        assert.strictEqual(window.getSelection().toString(), '', 'text selection is cleared while swipe handler is attached');
+
+        list.off('itemSwipe');
+
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
+
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
+
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists after drag when swipe handler is removed');
+    });
+});
+
 let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
@@ -5230,5 +5296,79 @@ QUnit.module('Accessibility', () => {
 
         $groupHeader.trigger('dxclick');
         assert.strictEqual($groupHeader.attr('aria-expanded'), 'true', 'aria-expanded is changed');
+    });
+
+    QUnit.test('SelectAll checkbox aria-label should reflect selectAllText option on init (T1328637)', function(assert) {
+        const instance = $('#list').dxList({
+            selectionMode: 'all',
+            showSelectionControls: true,
+            selectAllText: 'custom-select-all',
+        }).dxList('instance');
+
+        const $selectAllCheckBox = instance.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'custom-select-all',
+            'checkbox aria-label uses selectAllText');
+    });
+
+    QUnit.test('Select all container aria-label should reflect selectAllText option on init (T1328637)', function(assert) {
+        const instance = $('#list').dxList({
+            selectionMode: 'all',
+            showSelectionControls: true,
+            selectAllText: 'custom-select-all',
+        }).dxList('instance');
+
+        const $selectAll = instance.$element().find(`.${LIST_SELECT_ALL_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'custom-select-all, Not checked',
+            'container aria-label uses selectAllText');
+    });
+
+    QUnit.test('Select all aria-labels should update when selectAllText changes at runtime (T1328637)', function(assert) {
+        const instance = $('#list').dxList({
+            items: ['text 1'],
+            selectionMode: 'all',
+            showSelectionControls: true,
+        }).dxList('instance');
+
+        instance.option('selectAllText', 'custom-select-all');
+
+        const $selectAll = instance.$element().find(`.${LIST_SELECT_ALL_CLASS}`);
+        const $selectAllCheckBox = instance.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'custom-select-all, Not checked',
+            'container aria-label updated after runtime change');
+        assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'custom-select-all',
+            'checkbox aria-label updated after runtime change');
+    });
+
+    [true, false].forEach(repaintChangesOnly => {
+        QUnit.test(`scrollview-content should not have role when dataSource is empty on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), undefined);
+        });
+
+        QUnit.test(`scrollview-content should have role="application" when dataSource has items on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
+        });
+
+        QUnit.test(`scrollview-content role should be removed when dataSource is cleared at runtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
+
+            instance.option('dataSource', []);
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), undefined);
+        });
+
+        QUnit.test(`scrollview-content role should be restored when dataSource is set at runtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
+
+            instance.option('dataSource', ['Item 1']);
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
+        });
     });
 });

@@ -26,6 +26,7 @@ import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
 import { AIPromptEditor } from './aiPromptEditor';
+import { AIAssistantChat } from './aiAssistantChat';
 import EditPopup from './editPopup';
 
 export const CLASS = {
@@ -83,6 +84,8 @@ export const CLASS = {
   toast: 'dx-toast-wrapper',
   dragHeader: 'drag-header',
   aiPromptEditor: 'dx-ai-prompt-editor',
+  aiAssistantChat: 'dx-ai-chat',
+  aiAssistantButton: 'ai-assistant-button',
   sortableDragging: 'dx-sortable-dragging',
 };
 
@@ -190,8 +193,16 @@ export default class DataGrid extends GridCore {
     return this.getRowsView().find(`.${CLASS.row}`);
   }
 
+  getDataRows(): Selector {
+    return this.getRows().filter(`.${CLASS.dataRow}`);
+  }
+
   getCells(): Selector {
     return this.getRowsView().find('td');
+  }
+
+  getDataCells(rowIndex: number): Selector {
+    return this.getDataRows().nth(rowIndex).find('td');
   }
 
   getDataRow(index: number): DataRow {
@@ -742,16 +753,12 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiFocus(): Promise<void> {
+  apiFocus(cellElement?: Selector): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => (getInstance() as any).focus(),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
+      () => (getInstance() as any).focus(cellElement?.()),
+      { dependencies: { getInstance, cellElement } },
     )();
   }
 
@@ -966,8 +973,10 @@ export default class DataGrid extends GridCore {
       const isElementInRowsView = (element) => {
         const rowsViewRect = rowsViewElement[0].getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
+        const tolerance = 1;
 
-        return elementRect.top >= rowsViewRect.top && elementRect.bottom <= rowsViewRect.bottom;
+        return elementRect.top >= rowsViewRect.top - tolerance
+          && elementRect.bottom <= rowsViewRect.bottom + tolerance;
       };
       const rowElement = rowsViewElement.find('.dx-row-focused');
 
@@ -1027,5 +1036,13 @@ export default class DataGrid extends GridCore {
 
   getAIPromptEditor(): AIPromptEditor {
     return new AIPromptEditor(this.body.find(`.${CLASS.aiPromptEditor}`));
+  }
+
+  getAIAssistantChat(): AIAssistantChat {
+    return new AIAssistantChat(this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`));
+  }
+
+  getAIAssistantButton(): Selector {
+    return this.getHeaderPanel().element.find(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
   }
 }

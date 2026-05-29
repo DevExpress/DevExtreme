@@ -51,7 +51,6 @@ export { ProgressBar } from "./progress-bar";
 export { RadioGroup } from "./radio-group";
 export { RangeSelector } from "./range-selector";
 export { RangeSlider } from "./range-slider";
-export { RecurrenceEditor } from "./recurrence-editor";
 export { Resizable } from "./resizable";
 export { ResponsiveBox } from "./responsive-box";
 export { Sankey } from "./sankey";

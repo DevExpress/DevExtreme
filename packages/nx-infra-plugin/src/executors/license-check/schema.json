@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "License Check Executor Schema",
+  "description": "Verify embedded license notices in built artifacts",
+  "type": "object",
+  "properties": {
+    "files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Paths to files whose embedded license notices must be verified (relative to project root)"
+    },
+    "licenses": {
+      "type": "array",
+      "minItems": 1,
+      "description": "License entries to verify; field values are matched verbatim (regex metacharacters are escaped automatically)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable library description; appears in error messages and is matched verbatim in the bundle"
+          },
+          "homepageUrl": {
+            "type": "string",
+            "description": "Library homepage URL embedded in the license notice"
+          },
+          "copyright": {
+            "type": "string",
+            "description": "Copyright line embedded in the license notice"
+          },
+          "licenseType": {
+            "type": "string",
+            "description": "License-type line embedded in the license notice"
+          },
+          "licenseUrl": {
+            "type": "string",
+            "description": "License-text URL embedded in the license notice"
+          }
+        },
+        "required": ["name", "homepageUrl", "copyright", "licenseType", "licenseUrl"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["files", "licenses"]
+}

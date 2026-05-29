@@ -28,7 +28,6 @@ export class RenderData {
 
 @Directive({
   selector: '[dxTemplate]',
-  standalone: true,
 })
 export class DxTemplateDirective {
   @Input()

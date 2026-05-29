@@ -94,10 +94,6 @@ function App() {
             type="bar"
           />
           <Series
-            valueField="year1990"
-            name="1990"
-          />
-          <Series
             valueField="year2000"
             name="2000"
           />
@@ -106,12 +102,16 @@ function App() {
             name="2010"
           />
           <Series
-            valueField="year2016"
-            name="2016"
+            valueField="year2020"
+            name="2020"
           />
           <Series
-            valueField="year2017"
-            name="2017"
+            valueField="year2021"
+            name="2021"
+          />
+          <Series
+            valueField="year2022"
+            name="2022"
           />
           <Legend
             verticalAlignment="bottom"

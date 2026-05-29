@@ -1,7 +1,7 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
-import type { Attachment, InputFieldTextChangedEvent } from '@js/ui/chat';
+import type { Attachment, InputFieldTextChangedEvent, SendButtonProperties } from '@js/ui/chat';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import type { InputEvent } from '@js/ui/text_area';
@@ -39,6 +39,8 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   speechToTextOptions?: SpeechToTextProperties;
 
   text?: string;
+
+  sendButtonOptions?: SendButtonProperties;
 
   onMessageEntered?: (e: MessageEnteredEvent) => void;
 
@@ -176,6 +178,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       speechToTextEnabled,
       speechToTextOptions,
       text,
+      sendButtonOptions,
     } = this.option();
 
     const options = {
@@ -187,6 +190,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       value: previewText || text,
       speechToTextEnabled,
       speechToTextOptions,
+      sendButtonOptions,
       onInput: (e: InputEvent): void => {
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
@@ -319,6 +323,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
       case 'text':
         this._textArea.option('value', value);
+        break;
+
+      case 'sendButtonOptions':
+        this._textArea.option(fullName, value);
         break;
 
       default:

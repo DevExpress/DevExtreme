@@ -69,8 +69,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override getCellCoordinatesByIndex(index) {
-    const rowIndex = Math.floor(index / this._getCellCount());
-    const columnIndex = index - this._getCellCount() * rowIndex;
+    const rowIndex = Math.floor(index / this.getCellCount());
+    const columnIndex = index - this.getCellCount() * rowIndex;
 
     return {
       rowIndex,
@@ -135,7 +135,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   renderRDateTable() {
     utils.renovation.renderComponent(
       this,
-      this._$dateTable,
+      this.$dateTable,
       DateTableMonthComponent,
       'renovatedDateTable',
       this.getRDateTableProps(),
@@ -156,8 +156,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
   protected override updateAllDayVisibility() { return noop(); }
 
-  _updateAllDayHeight() { return noop(); }
-
   // --------------
   // These methods should be deleted when we get rid of old render
   // --------------
@@ -166,7 +164,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
   protected override renderAllDayPanel() { return noop(); }
 
-  _setMonthClassesToCell($cell, data) {
+  private setMonthClassesToCell($cell, data) {
     $cell
       .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
       .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.isFirstDayMonthHighlighting)
@@ -182,7 +180,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       return monthUtils.getCellText(date, this.option('intervalCount') as any);
     };
     options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
-    options.setAdditionalClasses = this._setMonthClassesToCell.bind(this);
+    options.setAdditionalClasses = this.setMonthClassesToCell.bind(this);
 
     super.renderTableBody(options);
   }

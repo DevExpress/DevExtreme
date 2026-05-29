@@ -1,7 +1,7 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema",
-  "title": "Localization Executor",
-  "description": "Generates localization message files and TypeScript CLDR data modules",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Localization Executor Schema",
+  "description": "Generate localization message files and TypeScript CLDR data modules",
   "type": "object",
   "properties": {
     "messagesDir": {
@@ -48,7 +48,23 @@
       "type": "boolean",
       "description": "Skip message file generation (only generate CLDR TypeScript files)",
       "default": false
+    },
+    "applyLicenseHeaders": {
+      "type": "object",
+      "description": "When provided, applies DevExtreme license headers to the executor output. Defaults the target directory to messageOutputDir; override via targetSubdir.",
+      "properties": {
+        "licenseTemplateFile": { "type": "string" },
+        "mode": { "type": "string", "enum": ["eula", "mit"] },
+        "eulaUrl": { "type": "string" },
+        "version": { "type": "string" },
+        "commentType": { "type": "string", "enum": ["!", "*"] },
+        "separator": { "type": "string" },
+        "prependAfterLicense": { "type": "string" },
+        "filenameMode": { "type": "string", "enum": ["relative", "basename"] },
+        "includePatterns": { "type": "array", "items": { "type": "string" } },
+        "excludePatterns": { "type": "array", "items": { "type": "string" } },
+        "targetSubdir": { "type": "string" }
+      }
     }
-  },
-  "required": []
+  }
 }

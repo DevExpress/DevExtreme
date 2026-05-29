@@ -1,3 +1,4 @@
+// TODO<Appointments>: delete unused classes when old impl is removed
 export const FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
 export const REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
 export const REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';

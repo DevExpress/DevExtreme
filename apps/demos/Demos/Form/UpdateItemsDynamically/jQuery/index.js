@@ -77,7 +77,7 @@ $(() => {
         text: `Phone ${index + 1}`,
       },
       editorOptions: {
-        mask: '+1 (X00) 000-0000',
+        mask: '(X00) 000-0000',
         maskRules: { X: /[01-9]/ },
         buttons: [{
           name: 'trash',

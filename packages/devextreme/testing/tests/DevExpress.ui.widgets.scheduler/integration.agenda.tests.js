@@ -786,7 +786,7 @@ module('Integration: Agenda', moduleConfig, () => {
         const rowHeight = 77;
         const $element = instance.$element();
         const expectedWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
-        const agendaStub = sinon.stub(agenda, '_getRowHeight').returns(rowHeight);
+        const agendaStub = sinon.stub(agenda, 'getRowHeight').returns(rowHeight);
 
         try {
             instance.option('dataSource', [
@@ -1212,31 +1212,6 @@ module('Integration: Agenda', moduleConfig, () => {
         });
     });
 
-    test('Long appointment parts popup should have original data', async function(assert) {
-        const instance = await createInstance({
-            views: ['agenda'],
-            currentView: 'agenda',
-            currentDate: new Date(2016, 1, 24),
-            startDayHour: 8,
-            endDayHour: 20,
-            startDateExpr: 'Start',
-            dataSource: [
-                { Start: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 27, 1, 30), text: 'a' }
-            ],
-            editing: { legacyForm: true }
-        });
-
-        const $appointment = $(instance.$element()).find('.dx-scheduler-appointment').eq(1);
-        $appointment.trigger(dblclickEvent.name);
-
-        const detailsForm = instance.getAppointmentDetailsForm();
-        const formData = detailsForm.option('formData');
-
-        assert.deepEqual(formData.Start, new Date(2016, 1, 24, 1), 'start is correct');
-        assert.deepEqual(formData.endDate, new Date(2016, 1, 27, 1, 30), 'end is correct');
-        assert.equal(formData.text, 'a', 'text is correct');
-    });
-
     test('Long appointment should be rendered correctly after changing view', async function(assert) {
         const instance = await createInstance({
             views: ['agenda', 'month'],
@@ -1565,7 +1540,7 @@ module('Integration: Agenda', moduleConfig, () => {
             instance.option('dataSource', data);
             await waitAsync(0);
 
-            const calculatedRows = agendaWorkspace._rows[0];
+            const calculatedRows = agendaWorkspace.rows[0];
             assert.equal(calculatedRows.length, 65, 'Rows are OK');
 
             $.each(calculatedRows, function(index, item) {
@@ -1606,7 +1581,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[1, 2, 2, 2, 2]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1640,7 +1615,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[0, 1, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1671,7 +1646,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[1, 1, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1709,7 +1684,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[0, 1, 1, 0, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();

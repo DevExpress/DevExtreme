@@ -38,7 +38,7 @@ function App() {
   return (
     <div>
       <div className="long-title">
-        <h3>Energy Production (GWh, 2016)</h3>
+        <h3>Energy Production (GWh, 2024)</h3>
       </div>
       <div className="pies-container">{pies}</div>
     </div>

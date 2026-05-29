@@ -23,7 +23,7 @@ import {
 
 
 import type { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
-import type { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { DayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxCalendar from 'devextreme/ui/calendar';
 
@@ -57,7 +57,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-calendar',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -169,10 +168,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): DayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -636,7 +635,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() firstDayOfWeekChange: EventEmitter<FirstDayOfWeek | undefined>;
+    @Output() firstDayOfWeekChange: EventEmitter<DayOfWeek | undefined>;
 
     /**
     

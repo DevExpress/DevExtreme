@@ -137,10 +137,10 @@ QUnit.module('Keyboard navigation accessibility', {
         this.gridView.render($('#container'));
         this.clock.tick(10);
 
-        const _editingCellTabHandler = this.keyboardNavigationController._editingCellTabHandler;
-        this.keyboardNavigationController._editingCellTabHandler = (eventArgs, direction) => {
+        const editingCellTabHandler = this.keyboardNavigationController.editingCellTabHandler;
+        this.keyboardNavigationController.editingCellTabHandler = (eventArgs, direction) => {
             const $target = $(eventArgs.originalEvent.target);
-            const result = _editingCellTabHandler.bind(this.keyboardNavigationController)(eventArgs, direction);
+            const result = editingCellTabHandler.bind(this.keyboardNavigationController)(eventArgs, direction);
 
             if($target.hasClass('dx-link')) {
                 assert.equal(result, eventArgs.shift ? $target.index() === 0 : $target.index() === 1, 'need default behavior');
@@ -163,13 +163,13 @@ QUnit.module('Keyboard navigation accessibility', {
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').first().get(0));
 
         // assert
-        assert.equal(counter, 1, '_editingCellTabHandler counter');
+        assert.equal(counter, 1, 'editingCellTabHandler counter');
 
         // act
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').last().get(0));
 
         // assert
-        assert.equal(counter, 2, '_editingCellTabHandler counter');
+        assert.equal(counter, 2, 'editingCellTabHandler counter');
         assert.ok($('#qunit-fixture').find(':focus').is('input'), 'focused element');
         assert.equal($('#qunit-fixture').find(':focus').closest('td').index(), 3, 'focused element index');
 
@@ -184,13 +184,13 @@ QUnit.module('Keyboard navigation accessibility', {
         this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').last().get(0));
 
         // assert
-        assert.equal(counter, 3, '_editingCellTabHandler counter');
+        assert.equal(counter, 3, 'editingCellTabHandler counter');
 
         // act
         this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').first().get(0));
 
         // assert
-        assert.equal(counter, 4, '_editingCellTabHandler counter');
+        assert.equal(counter, 4, 'editingCellTabHandler counter');
     });
 
     // T741590

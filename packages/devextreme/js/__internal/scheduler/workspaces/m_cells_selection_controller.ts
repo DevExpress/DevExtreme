@@ -103,7 +103,7 @@ export class CellsSelectionController {
       };
     }
 
-    return isDateAndTimeView(viewType) ? focusedCellPosition : this._processEdgeCell({
+    return isDateAndTimeView(viewType) ? focusedCellPosition : this.processEdgeCell({
       nextColumnIndex,
       rowIndex,
       columnIndex,
@@ -115,7 +115,7 @@ export class CellsSelectionController {
     });
   }
 
-  _processEdgeCell(options) {
+  private processEdgeCell(options) {
     const {
       nextColumnIndex,
       rowIndex,
@@ -167,23 +167,23 @@ export class CellsSelectionController {
     const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
 
     const nextFocusedCellData = isValidMultiSelection
-      ? this._getNextCellData(currentCellData, focusedCellData)
+      ? this.getNextCellData(currentCellData, focusedCellData)
       : currentCellData;
 
     return nextFocusedCellData;
   }
 
-  _getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell?: any) {
+  private getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell?: any) {
     if (isVirtualCell) {
       return focusedCellData;
     }
 
-    const isValidNextFocusedCell = this._isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
+    const isValidNextFocusedCell = this.isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
 
     return isValidNextFocusedCell ? nextFocusedCellData : focusedCellData;
   }
 
-  _isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
+  private isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
     if (!focusedCellData) {
       return true;
     }

@@ -7,6 +7,12 @@
     "devextreme"
   ],
   "targets": {
+    "clean:src-metadata": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./src/metadata"
+      }
+    },
     "clean:src-ui": {
       "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
@@ -64,7 +70,8 @@
         "packageJsonPath": "./package.json",
         "includePatterns": [
           "**/*.ts"
-        ]
+        ],
+        "mode": "mit"
       }
     },
     "build:ngc": {
@@ -111,9 +118,6 @@
     },
     "npm:pack-npm-dist": {
       "executor": "devextreme-nx-infra-plugin:pack-npm",
-      "options": {
-        "workingDirectory": "./npm/dist"
-      },
       "outputs": [
         "{projectRoot}/npm/dist/*.tgz"
       ],
@@ -162,7 +166,7 @@
         "!{projectRoot}/src/ui/popup/index.ts",
         "{projectRoot}/src/index.ts",
         "{projectRoot}/src/common/index.ts",
-        "{projectRoot}/metadata/generated/**/*"
+        "{projectRoot}/src/metadata/generated/**/*"
       ]
     },
     "regenerate": {
@@ -172,6 +176,7 @@
       ],
       "options": {
         "commands": [
+          "pnpm --workspace-root nx clean:src-metadata devextreme-angular",
           "pnpm --workspace-root nx clean:src-ui devextreme-angular",
           "pnpm --workspace-root nx generate-components devextreme-angular"
         ],
@@ -183,7 +188,7 @@
         "!{projectRoot}/src/ui/popup/index.ts",
         "{projectRoot}/src/index.ts",
         "{projectRoot}/src/common/index.ts",
-        "{projectRoot}/metadata/generated/**/*"
+        "{projectRoot}/src/metadata/generated/**/*"
       ],
       "inputs": [
         "default"

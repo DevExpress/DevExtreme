@@ -12,6 +12,9 @@ fixture`Row dragging.Visual`
 test('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // drag the row down
   await dataGrid.moveRow(0, 30, 150, true);

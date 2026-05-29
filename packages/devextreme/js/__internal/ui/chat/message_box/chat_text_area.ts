@@ -14,7 +14,7 @@ import type {
   InitializedEvent,
 } from '@js/ui/button';
 import type Button from '@js/ui/button';
-import type { Attachment } from '@js/ui/chat';
+import type { Attachment, SendButtonProperties } from '@js/ui/chat';
 import type {
   UploadedEvent,
   UploadStartedEvent,
@@ -42,8 +42,8 @@ import type {
   Properties as FileUploaderProperties,
 } from '@ts/ui/file_uploader/file_uploader.types';
 import Informer from '@ts/ui/informer/informer';
-import type { TextAreaProperties } from '@ts/ui/m_text_area';
-import TextArea from '@ts/ui/m_text_area';
+import type { TextAreaProperties } from '@ts/ui/text_area';
+import TextArea from '@ts/ui/text_area';
 
 type EnterKeyEvent = NativeEventInfo<ChatTextArea, KeyboardEvent>;
 
@@ -59,6 +59,8 @@ export type Properties = TextAreaProperties & {
   speechToTextEnabled?: boolean;
 
   speechToTextOptions?: SpeechToTextProperties;
+
+  sendButtonOptions?: SendButtonProperties;
 
   onSend?: (e: SendEvent) => void;
 };
@@ -78,9 +80,8 @@ export const CHAT_TEXT_AREA_TOOLBAR = 'dx-chat-textarea-toolbar';
 const MAX_ATTACHMENTS_COUNT = 10;
 const INFORMER_DELAY = 10000;
 
-const ERRORS = {
-  // @ts-expect-error format params should be extended
-  fileLimit: messageLocalization.format('dxChat-fileLimitReachedWarning', MAX_ATTACHMENTS_COUNT),
+const ERROR_MESSAGE_NAME = {
+  fileLimit: 'dxChat-fileLimitReachedWarning',
 };
 
 export const STT_INITIAL_STATE: ButtonState = {
@@ -104,6 +105,14 @@ export const SEND_BUTTON_READY_TO_SEND_STATE: ButtonState = {
   type: 'default',
   disabled: false,
 };
+
+export const SEND_BUTTON_CUSTOM_ACTIVE_STATE: ButtonState = {
+  stylingMode: 'contained',
+  type: 'default',
+  disabled: false,
+};
+
+const SEND_BUTTON_DEFAULT_ICON = 'arrowright';
 
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
@@ -135,6 +144,8 @@ class ChatTextArea extends TextArea<Properties> {
   _isSpeechToTextListening?: boolean;
 
   _sendAction?: (e: Partial<SendEvent>) => void;
+
+  _sendButtonClickAction?: (e: Partial<ClickEvent>) => void;
 
   getAttachments(): Attachment[] | undefined {
     if (!this._filesToSend?.size) {
@@ -202,11 +213,21 @@ class ChatTextArea extends TextArea<Properties> {
     super._init();
 
     this._createSendAction();
+    this._createSendButtonClickAction();
   }
 
   _createSendAction(): void {
     this._sendAction = this._createActionByOption(
       'onSend',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createSendButtonClickAction(): void {
+    const { sendButtonOptions } = this.option();
+
+    this._sendButtonClickAction = this._createAction(
+      sendButtonOptions?.onClick,
       { excludeValidators: ['disabled'] },
     );
   }
@@ -379,6 +400,7 @@ class ChatTextArea extends TextArea<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      sendButtonOptions,
     } = this.option();
 
     const configuration = {
@@ -388,13 +410,14 @@ class ChatTextArea extends TextArea<Properties> {
         activeStateEnabled,
         focusStateEnabled,
         hoverStateEnabled,
-        icon: 'arrowright',
+        icon: sendButtonOptions?.icon ?? SEND_BUTTON_DEFAULT_ICON,
         ...SEND_BUTTON_INITIAL_STATE,
         elementAttr: {
           'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel'),
         },
         onClick: (e: ClickEvent): void => {
           this._processSendButtonActivation(e);
+          this._sendButtonClickAction?.(e);
         },
         onInitialized: (e: InitializedEvent): void => {
           this._sendButton = e.component;
@@ -433,6 +456,10 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _renderFileUploader(): void {
+    if (!this._$textEditorContainer) {
+      return;
+    }
+
     this._$fileUploader = $('<div>')
       .addClass(CHAT_TEXT_AREA_ATTACHMENTS)
       .insertBefore(this._$textEditorContainer);
@@ -532,7 +559,11 @@ class ChatTextArea extends TextArea<Properties> {
   };
 
   _fileUploaderFileLimitReached(): void {
-    this._showInformer(ERRORS.fileLimit);
+    this._showInformer(messageLocalization.format(
+      ERROR_MESSAGE_NAME.fileLimit,
+      // @ts-expect-error format params should be extended
+      MAX_ATTACHMENTS_COUNT,
+    ));
     this._updateInputHeight();
   }
 
@@ -559,6 +590,12 @@ class ChatTextArea extends TextArea<Properties> {
       return;
     }
 
+    if (this._isCustomBehavior()) {
+      this._speechToTextButton?.option(STT_INITIAL_STATE);
+      this._sendButton?.option(SEND_BUTTON_CUSTOM_ACTIVE_STATE);
+      return;
+    }
+
     this._speechToTextButton?.option(STT_INITIAL_STATE);
     this._sendButton?.option(SEND_BUTTON_INITIAL_STATE);
   }
@@ -581,13 +618,24 @@ class ChatTextArea extends TextArea<Properties> {
     return maxHeight;
   }
 
-  _keyPressHandler(e: InputEvent): void {
+  _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     super._keyPressHandler(e);
 
     this._updateButtonsState();
   }
 
+  _isCustomBehavior(): boolean {
+    const { sendButtonOptions } = this.option();
+
+    return sendButtonOptions?.action === 'custom';
+  }
+
   _processSendButtonActivation(e: Partial<SendEvent>): void {
+    if (this._isCustomBehavior()) {
+      this._updateButtonsState();
+      return;
+    }
+
     this._sendAction?.(e);
     this.clear();
     this.resetFileUploader();
@@ -633,6 +681,10 @@ class ChatTextArea extends TextArea<Properties> {
         this._speechToTextButton?.option(this._getSpeechToTextButtonOptions());
         break;
 
+      case 'sendButtonOptions':
+        this._handleSendButtonOptionsChange();
+        break;
+
       default:
         super._optionChanged(args);
     }
@@ -652,6 +704,22 @@ class ChatTextArea extends TextArea<Properties> {
 
     const options = Widget.getOptionsFromContainer(args);
     this._fileUploader?.option(options);
+  }
+
+  _handleSendButtonOptionsChange(): void {
+    const { sendButtonOptions } = this.option();
+
+    this._createSendButtonClickAction();
+
+    this._sendButton?.option({
+      onClick: (e: ClickEvent): void => {
+        this._processSendButtonActivation(e);
+        this._sendButtonClickAction?.(e);
+      },
+      icon: sendButtonOptions?.icon ?? SEND_BUTTON_DEFAULT_ICON,
+    });
+
+    this._updateButtonsState();
   }
 
   _isValuableTextEntered(): boolean {

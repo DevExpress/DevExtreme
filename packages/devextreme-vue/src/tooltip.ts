@@ -61,6 +61,7 @@ type AccessibleOptions = Pick<Properties,
   "shading" |
   "shadingColor" |
   "showEvent" |
+  "tabFocusLoopEnabled" |
   "target" |
   "visible" |
   "width" |
@@ -101,6 +102,7 @@ const componentConfig = {
     shading: Boolean,
     shadingColor: String,
     showEvent: [Object, String] as PropType<Record<string, any> | string>,
+    tabFocusLoopEnabled: Boolean,
     target: {},
     visible: Boolean,
     width: [Number, String],
@@ -137,6 +139,7 @@ const componentConfig = {
     "update:shading": null,
     "update:shadingColor": null,
     "update:showEvent": null,
+    "update:tabFocusLoopEnabled": null,
     "update:target": null,
     "update:visible": null,
     "update:width": null,

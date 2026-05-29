@@ -561,7 +561,6 @@ class SelectBox<
     const value = this._displayGetter(initialSelectedItem);
     const displayValue = value ? String(value) : '';
     const inputText = this._searchValue();
-    // @ts-expect-error ts-error
     return displayValue === inputText;
   }
 
@@ -716,7 +715,7 @@ class SelectBox<
     return super._isFocused() && $(activeElement).closest(this._input()).length > 0;
   }
 
-  _getValueChangeEventOptionName(): string {
+  _getValueChangeEventOptionName(): keyof TProperties {
     return 'customItemCreateEvent';
   }
 

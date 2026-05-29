@@ -336,6 +336,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         scheduler.tooltip.clickOnItem();
         scheduler.appointmentForm.setSubject('new text');
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Should render 2 appointments');
         assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, 'Should re-rendered all appointments');

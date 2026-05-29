@@ -23,19 +23,19 @@ if (window && window.config?.packageConfigPaths) {
   ],
 })
 export class AppComponent {
-  aluminumCosts: CostInfo[];
+  copperCosts: CostInfo[];
 
   nickelCosts: CostInfo[];
 
-  cooperCosts: CostInfo[];
+  palladiumCosts: CostInfo[];
 
   years: number[];
 
   constructor(service: Service) {
-    this.aluminumCosts = service.getAluminumCosts();
+    this.copperCosts = service.getCopperCosts();
     this.nickelCosts = service.getNickelCosts();
-    this.cooperCosts = service.getCooperCosts();
-    this.years = [2010, 2011, 2012];
+    this.palladiumCosts = service.getPalladiumCosts();
+    this.years = [2021, 2022, 2023];
   }
 }
 

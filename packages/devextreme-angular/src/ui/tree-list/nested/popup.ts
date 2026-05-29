@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-list-popup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
@@ -378,6 +377,14 @@ export class DxoTreeListPopupComponent extends NestedOption implements OnDestroy
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
     @Input()

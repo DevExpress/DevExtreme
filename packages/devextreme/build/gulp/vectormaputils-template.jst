@@ -6,10 +6,10 @@
     } else if(typeof module === "object" && module.exports) {
         factory(exports);
     } else {
-        var exports = root.DevExpress = root.DevExpress || {};
-        exports = exports.viz = exports.viz || {};
-        exports = exports.vectormaputils = {};
-        factory(exports);
+        var browserExports = root.DevExpress = root.DevExpress || {};
+        browserExports = browserExports.viz = browserExports.viz || {};
+        browserExports = browserExports.vectormaputils = {};
+        factory(browserExports);
     }
 }(this, function(exports) {
 <%= data %>

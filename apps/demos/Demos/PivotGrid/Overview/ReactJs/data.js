@@ -5,7 +5,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 1740,
-    date: new Date('2013-01-06'),
+    date: new Date('2023-01-06'),
   },
   {
     id: 10249,
@@ -13,7 +13,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 850,
-    date: new Date('2013-01-13'),
+    date: new Date('2023-01-13'),
   },
   {
     id: 10250,
@@ -21,7 +21,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2235,
-    date: new Date('2013-01-07'),
+    date: new Date('2023-01-07'),
   },
   {
     id: 10251,
@@ -29,7 +29,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1965,
-    date: new Date('2013-01-03'),
+    date: new Date('2023-01-03'),
   },
   {
     id: 10252,
@@ -37,7 +37,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 880,
-    date: new Date('2013-01-10'),
+    date: new Date('2023-01-10'),
   },
   {
     id: 10253,
@@ -45,7 +45,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 5260,
-    date: new Date('2013-01-17'),
+    date: new Date('2023-01-17'),
   },
   {
     id: 10254,
@@ -53,7 +53,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 2790,
-    date: new Date('2013-01-21'),
+    date: new Date('2023-01-21'),
   },
   {
     id: 10255,
@@ -61,7 +61,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 3140,
-    date: new Date('2013-01-01'),
+    date: new Date('2023-01-01'),
   },
   {
     id: 10256,
@@ -69,7 +69,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 6175,
-    date: new Date('2013-01-24'),
+    date: new Date('2023-01-24'),
   },
   {
     id: 10257,
@@ -77,7 +77,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 4575,
-    date: new Date('2013-01-11'),
+    date: new Date('2023-01-11'),
   },
   {
     id: 10258,
@@ -85,7 +85,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 3680,
-    date: new Date('2013-01-12'),
+    date: new Date('2023-01-12'),
   },
   {
     id: 10259,
@@ -93,7 +93,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 8400,
-    date: new Date('2013-01-05'),
+    date: new Date('2023-01-05'),
   },
   {
     id: 10260,
@@ -101,7 +101,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 1325,
-    date: new Date('2013-01-14'),
+    date: new Date('2023-01-14'),
   },
   {
     id: 10261,
@@ -109,7 +109,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 3920,
-    date: new Date('2013-01-05'),
+    date: new Date('2023-01-05'),
   },
   {
     id: 10262,
@@ -117,7 +117,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2220,
-    date: new Date('2013-01-15'),
+    date: new Date('2023-01-15'),
   },
   {
     id: 10263,
@@ -125,7 +125,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 940,
-    date: new Date('2013-01-01'),
+    date: new Date('2023-01-01'),
   },
   {
     id: 10264,
@@ -133,7 +133,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1630,
-    date: new Date('2013-01-10'),
+    date: new Date('2023-01-10'),
   },
   {
     id: 10265,
@@ -141,7 +141,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2910,
-    date: new Date('2013-01-23'),
+    date: new Date('2023-01-23'),
   },
   {
     id: 10266,
@@ -149,7 +149,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 2600,
-    date: new Date('2013-01-14'),
+    date: new Date('2023-01-14'),
   },
   {
     id: 10267,
@@ -157,7 +157,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 4340,
-    date: new Date('2013-01-26'),
+    date: new Date('2023-01-26'),
   },
   {
     id: 10268,
@@ -165,7 +165,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 6650,
-    date: new Date('2013-01-24'),
+    date: new Date('2023-01-24'),
   },
   {
     id: 10269,
@@ -173,7 +173,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 490,
-    date: new Date('2013-01-22'),
+    date: new Date('2023-01-22'),
   },
   {
     id: 10270,
@@ -181,7 +181,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 3390,
-    date: new Date('2013-01-25'),
+    date: new Date('2023-01-25'),
   },
   {
     id: 10271,
@@ -189,7 +189,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 5160,
-    date: new Date('2013-02-20'),
+    date: new Date('2023-02-20'),
   },
   {
     id: 10272,
@@ -197,7 +197,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 5750,
-    date: new Date('2013-02-12'),
+    date: new Date('2023-02-12'),
   },
   {
     id: 10273,
@@ -205,7 +205,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2805,
-    date: new Date('2013-02-13'),
+    date: new Date('2023-02-13'),
   },
   {
     id: 10274,
@@ -213,7 +213,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2505,
-    date: new Date('2013-02-09'),
+    date: new Date('2023-02-09'),
   },
   {
     id: 10275,
@@ -221,7 +221,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 930,
-    date: new Date('2013-02-04'),
+    date: new Date('2023-02-04'),
   },
   {
     id: 10276,
@@ -229,7 +229,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 1240,
-    date: new Date('2013-02-03'),
+    date: new Date('2023-02-03'),
   },
   {
     id: 10277,
@@ -237,7 +237,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 315,
-    date: new Date('2013-02-04'),
+    date: new Date('2023-02-04'),
   },
   {
     id: 10278,
@@ -245,7 +245,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2870,
-    date: new Date('2013-02-18'),
+    date: new Date('2023-02-18'),
   },
   {
     id: 10279,
@@ -253,7 +253,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 5150,
-    date: new Date('2013-02-18'),
+    date: new Date('2023-02-18'),
   },
   {
     id: 10280,
@@ -261,7 +261,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 2725,
-    date: new Date('2013-02-20'),
+    date: new Date('2023-02-20'),
   },
   {
     id: 10281,
@@ -269,7 +269,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 2840,
-    date: new Date('2013-02-04'),
+    date: new Date('2023-02-04'),
   },
   {
     id: 10282,
@@ -277,7 +277,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 1200,
-    date: new Date('2013-02-03'),
+    date: new Date('2023-02-03'),
   },
   {
     id: 10283,
@@ -285,7 +285,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 4550,
-    date: new Date('2013-02-08'),
+    date: new Date('2023-02-08'),
   },
   {
     id: 10284,
@@ -293,7 +293,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 6040,
-    date: new Date('2013-02-17'),
+    date: new Date('2023-02-17'),
   },
   {
     id: 10285,
@@ -301,7 +301,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2205,
-    date: new Date('2013-02-08'),
+    date: new Date('2023-02-08'),
   },
   {
     id: 10286,
@@ -309,7 +309,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 990,
-    date: new Date('2013-02-20'),
+    date: new Date('2023-02-20'),
   },
   {
     id: 10287,
@@ -317,7 +317,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 700,
-    date: new Date('2013-02-11'),
+    date: new Date('2023-02-11'),
   },
   {
     id: 10288,
@@ -325,7 +325,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2325,
-    date: new Date('2013-02-15'),
+    date: new Date('2023-02-15'),
   },
   {
     id: 10289,
@@ -333,7 +333,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 930,
-    date: new Date('2013-02-21'),
+    date: new Date('2023-02-21'),
   },
   {
     id: 10290,
@@ -341,7 +341,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1560,
-    date: new Date('2013-02-04'),
+    date: new Date('2023-02-04'),
   },
   {
     id: 10291,
@@ -349,7 +349,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 1740,
-    date: new Date('2013-03-04'),
+    date: new Date('2023-03-04'),
   },
   {
     id: 10292,
@@ -357,7 +357,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 3575,
-    date: new Date('2013-03-20'),
+    date: new Date('2023-03-20'),
   },
   {
     id: 10293,
@@ -365,7 +365,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 4500,
-    date: new Date('2013-03-04'),
+    date: new Date('2023-03-04'),
   },
   {
     id: 10294,
@@ -373,7 +373,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1605,
-    date: new Date('2013-03-17'),
+    date: new Date('2023-03-17'),
   },
   {
     id: 10295,
@@ -381,7 +381,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 800,
-    date: new Date('2013-03-21'),
+    date: new Date('2023-03-21'),
   },
   {
     id: 10296,
@@ -389,7 +389,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 640,
-    date: new Date('2013-03-08'),
+    date: new Date('2023-03-08'),
   },
   {
     id: 10297,
@@ -397,7 +397,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 735,
-    date: new Date('2013-03-19'),
+    date: new Date('2023-03-19'),
   },
   {
     id: 10298,
@@ -405,7 +405,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2520,
-    date: new Date('2013-03-20'),
+    date: new Date('2023-03-20'),
   },
   {
     id: 10299,
@@ -413,7 +413,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 6675,
-    date: new Date('2013-03-18'),
+    date: new Date('2023-03-18'),
   },
   {
     id: 10300,
@@ -421,7 +421,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 3625,
-    date: new Date('2013-03-25'),
+    date: new Date('2023-03-25'),
   },
   {
     id: 10301,
@@ -429,7 +429,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 1200,
-    date: new Date('2013-03-07'),
+    date: new Date('2023-03-07'),
   },
   {
     id: 10302,
@@ -437,7 +437,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 2700,
-    date: new Date('2013-03-19'),
+    date: new Date('2023-03-19'),
   },
   {
     id: 10303,
@@ -445,7 +445,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 5950,
-    date: new Date('2013-03-24'),
+    date: new Date('2023-03-24'),
   },
   {
     id: 10304,
@@ -453,7 +453,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 5120,
-    date: new Date('2013-03-08'),
+    date: new Date('2023-03-08'),
   },
   {
     id: 10305,
@@ -461,7 +461,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1980,
-    date: new Date('2013-03-17'),
+    date: new Date('2023-03-17'),
   },
   {
     id: 10306,
@@ -469,7 +469,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1110,
-    date: new Date('2013-03-08'),
+    date: new Date('2023-03-08'),
   },
   {
     id: 10307,
@@ -477,7 +477,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 980,
-    date: new Date('2013-03-21'),
+    date: new Date('2023-03-21'),
   },
   {
     id: 10308,
@@ -485,7 +485,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 5460,
-    date: new Date('2013-03-19'),
+    date: new Date('2023-03-19'),
   },
   {
     id: 10309,
@@ -493,7 +493,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 3800,
-    date: new Date('2013-03-12'),
+    date: new Date('2023-03-12'),
   },
   {
     id: 10310,
@@ -501,7 +501,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2610,
-    date: new Date('2013-03-04'),
+    date: new Date('2023-03-04'),
   },
   {
     id: 10311,
@@ -509,7 +509,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 2010,
-    date: new Date('2013-03-23'),
+    date: new Date('2023-03-23'),
   },
   {
     id: 10312,
@@ -517,7 +517,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 7680,
-    date: new Date('2013-04-15'),
+    date: new Date('2023-04-15'),
   },
   {
     id: 10313,
@@ -525,7 +525,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 1325,
-    date: new Date('2013-04-07'),
+    date: new Date('2023-04-07'),
   },
   {
     id: 10314,
@@ -533,7 +533,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2835,
-    date: new Date('2013-04-10'),
+    date: new Date('2023-04-10'),
   },
   {
     id: 10315,
@@ -541,7 +541,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 3660,
-    date: new Date('2013-04-10'),
+    date: new Date('2023-04-10'),
   },
   {
     id: 10316,
@@ -549,7 +549,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 390,
-    date: new Date('2013-04-12'),
+    date: new Date('2023-04-12'),
   },
   {
     id: 10317,
@@ -557,7 +557,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 4420,
-    date: new Date('2013-04-08'),
+    date: new Date('2023-04-08'),
   },
   {
     id: 10318,
@@ -565,7 +565,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1755,
-    date: new Date('2013-04-13'),
+    date: new Date('2023-04-13'),
   },
   {
     id: 10319,
@@ -573,7 +573,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2580,
-    date: new Date('2013-04-15'),
+    date: new Date('2023-04-15'),
   },
   {
     id: 10320,
@@ -581,7 +581,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 850,
-    date: new Date('2013-04-01'),
+    date: new Date('2023-04-01'),
   },
   {
     id: 10321,
@@ -589,7 +589,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 2825,
-    date: new Date('2013-04-10'),
+    date: new Date('2023-04-10'),
   },
   {
     id: 10322,
@@ -597,7 +597,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 540,
-    date: new Date('2013-04-06'),
+    date: new Date('2023-04-06'),
   },
   {
     id: 10323,
@@ -605,7 +605,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 1110,
-    date: new Date('2013-04-16'),
+    date: new Date('2023-04-16'),
   },
   {
     id: 10324,
@@ -613,7 +613,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 6850,
-    date: new Date('2013-04-19'),
+    date: new Date('2023-04-19'),
   },
   {
     id: 10325,
@@ -621,7 +621,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 1940,
-    date: new Date('2013-04-23'),
+    date: new Date('2023-04-23'),
   },
   {
     id: 10326,
@@ -629,7 +629,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1980,
-    date: new Date('2013-04-21'),
+    date: new Date('2023-04-21'),
   },
   {
     id: 10327,
@@ -637,7 +637,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 3090,
-    date: new Date('2013-04-03'),
+    date: new Date('2023-04-03'),
   },
   {
     id: 10328,
@@ -645,7 +645,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1640,
-    date: new Date('2013-04-24'),
+    date: new Date('2023-04-24'),
   },
   {
     id: 10329,
@@ -653,7 +653,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3585,
-    date: new Date('2013-04-01'),
+    date: new Date('2023-04-01'),
   },
   {
     id: 10330,
@@ -661,7 +661,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1770,
-    date: new Date('2013-04-01'),
+    date: new Date('2023-04-01'),
   },
   {
     id: 10331,
@@ -669,7 +669,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4005,
-    date: new Date('2013-04-04'),
+    date: new Date('2023-04-04'),
   },
   {
     id: 10332,
@@ -677,7 +677,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2870,
-    date: new Date('2013-04-02'),
+    date: new Date('2023-04-02'),
   },
   {
     id: 10333,
@@ -685,7 +685,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 960,
-    date: new Date('2013-04-20'),
+    date: new Date('2023-04-20'),
   },
   {
     id: 10334,
@@ -693,7 +693,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 8640,
-    date: new Date('2013-05-14'),
+    date: new Date('2023-05-14'),
   },
   {
     id: 10335,
@@ -701,7 +701,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 5450,
-    date: new Date('2013-05-24'),
+    date: new Date('2023-05-24'),
   },
   {
     id: 10336,
@@ -709,7 +709,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2535,
-    date: new Date('2013-05-07'),
+    date: new Date('2023-05-07'),
   },
   {
     id: 10337,
@@ -717,7 +717,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1155,
-    date: new Date('2013-05-20'),
+    date: new Date('2023-05-20'),
   },
   {
     id: 10338,
@@ -725,7 +725,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 3140,
-    date: new Date('2013-05-18'),
+    date: new Date('2023-05-18'),
   },
   {
     id: 10339,
@@ -733,7 +733,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 2260,
-    date: new Date('2013-05-19'),
+    date: new Date('2023-05-19'),
   },
   {
     id: 10340,
@@ -741,7 +741,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1215,
-    date: new Date('2013-05-23'),
+    date: new Date('2023-05-23'),
   },
   {
     id: 10341,
@@ -749,7 +749,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1210,
-    date: new Date('2013-05-08'),
+    date: new Date('2023-05-08'),
   },
   {
     id: 10342,
@@ -757,7 +757,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 875,
-    date: new Date('2013-05-25'),
+    date: new Date('2023-05-25'),
   },
   {
     id: 10343,
@@ -765,7 +765,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5400,
-    date: new Date('2013-05-03'),
+    date: new Date('2023-05-03'),
   },
   {
     id: 10344,
@@ -773,7 +773,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 5940,
-    date: new Date('2013-05-25'),
+    date: new Date('2023-05-25'),
   },
   {
     id: 10345,
@@ -781,7 +781,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 9210,
-    date: new Date('2013-05-22'),
+    date: new Date('2023-05-22'),
   },
   {
     id: 10346,
@@ -789,7 +789,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 7950,
-    date: new Date('2013-05-12'),
+    date: new Date('2023-05-12'),
   },
   {
     id: 10347,
@@ -797,7 +797,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 3740,
-    date: new Date('2013-05-24'),
+    date: new Date('2023-05-24'),
   },
   {
     id: 10348,
@@ -805,7 +805,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 990,
-    date: new Date('2013-05-02'),
+    date: new Date('2023-05-02'),
   },
   {
     id: 10349,
@@ -813,7 +813,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 3190,
-    date: new Date('2013-05-03'),
+    date: new Date('2023-05-03'),
   },
   {
     id: 10350,
@@ -821,7 +821,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 2430,
-    date: new Date('2013-05-11'),
+    date: new Date('2023-05-11'),
   },
   {
     id: 10351,
@@ -829,7 +829,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 7380,
-    date: new Date('2013-06-15'),
+    date: new Date('2023-06-15'),
   },
   {
     id: 10352,
@@ -837,7 +837,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 4475,
-    date: new Date('2013-06-08'),
+    date: new Date('2023-06-08'),
   },
   {
     id: 10353,
@@ -845,7 +845,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 1290,
-    date: new Date('2013-06-10'),
+    date: new Date('2023-06-10'),
   },
   {
     id: 10354,
@@ -853,7 +853,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2250,
-    date: new Date('2013-06-10'),
+    date: new Date('2023-06-10'),
   },
   {
     id: 10355,
@@ -861,7 +861,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 350,
-    date: new Date('2013-06-22'),
+    date: new Date('2023-06-22'),
   },
   {
     id: 10356,
@@ -869,7 +869,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 5480,
-    date: new Date('2013-06-24'),
+    date: new Date('2023-06-24'),
   },
   {
     id: 10357,
@@ -877,7 +877,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 2355,
-    date: new Date('2013-06-10'),
+    date: new Date('2023-06-10'),
   },
   {
     id: 10358,
@@ -885,7 +885,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1960,
-    date: new Date('2013-06-23'),
+    date: new Date('2023-06-23'),
   },
   {
     id: 10359,
@@ -893,7 +893,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 4125,
-    date: new Date('2013-06-06'),
+    date: new Date('2023-06-06'),
   },
   {
     id: 10360,
@@ -901,7 +901,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 7925,
-    date: new Date('2013-06-12'),
+    date: new Date('2023-06-12'),
   },
   {
     id: 10361,
@@ -909,7 +909,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 1120,
-    date: new Date('2013-06-22'),
+    date: new Date('2023-06-22'),
   },
   {
     id: 10362,
@@ -917,7 +917,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 5130,
-    date: new Date('2013-06-10'),
+    date: new Date('2023-06-10'),
   },
   {
     id: 10363,
@@ -925,7 +925,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 2475,
-    date: new Date('2013-06-10'),
+    date: new Date('2023-06-10'),
   },
   {
     id: 10364,
@@ -933,7 +933,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 2100,
-    date: new Date('2013-06-06'),
+    date: new Date('2023-06-06'),
   },
   {
     id: 10365,
@@ -941,7 +941,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3570,
-    date: new Date('2013-06-10'),
+    date: new Date('2023-06-10'),
   },
   {
     id: 10366,
@@ -949,7 +949,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 550,
-    date: new Date('2013-06-02'),
+    date: new Date('2023-06-02'),
   },
   {
     id: 10367,
@@ -957,7 +957,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 2850,
-    date: new Date('2013-06-26'),
+    date: new Date('2023-06-26'),
   },
   {
     id: 10368,
@@ -965,7 +965,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 1460,
-    date: new Date('2013-06-17'),
+    date: new Date('2023-06-17'),
   },
   {
     id: 10369,
@@ -973,7 +973,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 960,
-    date: new Date('2013-06-17'),
+    date: new Date('2023-06-17'),
   },
   {
     id: 10370,
@@ -981,7 +981,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1520,
-    date: new Date('2013-06-03'),
+    date: new Date('2023-06-03'),
   },
   {
     id: 10371,
@@ -989,7 +989,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 6750,
-    date: new Date('2013-06-21'),
+    date: new Date('2023-06-21'),
   },
   {
     id: 10372,
@@ -997,7 +997,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 7260,
-    date: new Date('2013-07-14'),
+    date: new Date('2023-07-14'),
   },
   {
     id: 10373,
@@ -1005,7 +1005,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 2450,
-    date: new Date('2013-07-11'),
+    date: new Date('2023-07-11'),
   },
   {
     id: 10374,
@@ -1013,7 +1013,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 3540,
-    date: new Date('2013-07-02'),
+    date: new Date('2023-07-02'),
   },
   {
     id: 10375,
@@ -1021,7 +1021,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1950,
-    date: new Date('2013-07-03'),
+    date: new Date('2023-07-03'),
   },
   {
     id: 10376,
@@ -1029,7 +1029,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 360,
-    date: new Date('2013-07-07'),
+    date: new Date('2023-07-07'),
   },
   {
     id: 10377,
@@ -1037,7 +1037,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 4500,
-    date: new Date('2013-07-03'),
+    date: new Date('2023-07-03'),
   },
   {
     id: 10378,
@@ -1045,7 +1045,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4575,
-    date: new Date('2013-07-21'),
+    date: new Date('2023-07-21'),
   },
   {
     id: 10379,
@@ -1053,7 +1053,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2310,
-    date: new Date('2013-07-18'),
+    date: new Date('2023-07-18'),
   },
   {
     id: 10380,
@@ -1061,7 +1061,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 7500,
-    date: new Date('2013-07-04'),
+    date: new Date('2023-07-04'),
   },
   {
     id: 10381,
@@ -1069,7 +1069,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 3575,
-    date: new Date('2013-07-23'),
+    date: new Date('2023-07-23'),
   },
   {
     id: 10382,
@@ -1077,7 +1077,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 760,
-    date: new Date('2013-07-01'),
+    date: new Date('2023-07-01'),
   },
   {
     id: 10383,
@@ -1085,7 +1085,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 3480,
-    date: new Date('2013-07-23'),
+    date: new Date('2023-07-23'),
   },
   {
     id: 10384,
@@ -1093,7 +1093,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 4875,
-    date: new Date('2013-07-11'),
+    date: new Date('2023-07-11'),
   },
   {
     id: 10385,
@@ -1101,7 +1101,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4980,
-    date: new Date('2013-07-19'),
+    date: new Date('2023-07-19'),
   },
   {
     id: 10386,
@@ -1109,7 +1109,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2580,
-    date: new Date('2013-07-04'),
+    date: new Date('2023-07-04'),
   },
   {
     id: 10387,
@@ -1117,7 +1117,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2650,
-    date: new Date('2013-07-16'),
+    date: new Date('2023-07-16'),
   },
   {
     id: 10388,
@@ -1125,7 +1125,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1190,
-    date: new Date('2013-07-02'),
+    date: new Date('2023-07-02'),
   },
   {
     id: 10389,
@@ -1133,7 +1133,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 960,
-    date: new Date('2013-07-26'),
+    date: new Date('2023-07-26'),
   },
   {
     id: 10390,
@@ -1141,7 +1141,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 3600,
-    date: new Date('2013-08-08'),
+    date: new Date('2023-08-08'),
   },
   {
     id: 10391,
@@ -1149,7 +1149,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 2250,
-    date: new Date('2013-08-01'),
+    date: new Date('2023-08-01'),
   },
   {
     id: 10392,
@@ -1157,7 +1157,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 1275,
-    date: new Date('2013-08-02'),
+    date: new Date('2023-08-02'),
   },
   {
     id: 10393,
@@ -1165,7 +1165,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 3885,
-    date: new Date('2013-08-14'),
+    date: new Date('2023-08-14'),
   },
   {
     id: 10394,
@@ -1173,7 +1173,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1900,
-    date: new Date('2013-08-05'),
+    date: new Date('2023-08-05'),
   },
   {
     id: 10395,
@@ -1181,7 +1181,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 2300,
-    date: new Date('2013-08-09'),
+    date: new Date('2023-08-09'),
   },
   {
     id: 10396,
@@ -1189,7 +1189,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 2895,
-    date: new Date('2013-08-15'),
+    date: new Date('2023-08-15'),
   },
   {
     id: 10397,
@@ -1197,7 +1197,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 350,
-    date: new Date('2013-08-20'),
+    date: new Date('2023-08-20'),
   },
   {
     id: 10398,
@@ -1205,7 +1205,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 4200,
-    date: new Date('2013-08-22'),
+    date: new Date('2023-08-22'),
   },
   {
     id: 10399,
@@ -1213,7 +1213,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 7175,
-    date: new Date('2013-08-14'),
+    date: new Date('2023-08-14'),
   },
   {
     id: 10400,
@@ -1221,7 +1221,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 4420,
-    date: new Date('2013-08-24'),
+    date: new Date('2023-08-24'),
   },
   {
     id: 10401,
@@ -1229,7 +1229,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 6990,
-    date: new Date('2013-08-22'),
+    date: new Date('2023-08-22'),
   },
   {
     id: 10402,
@@ -1237,7 +1237,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 2125,
-    date: new Date('2013-08-05'),
+    date: new Date('2023-08-05'),
   },
   {
     id: 10403,
@@ -1245,7 +1245,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 2220,
-    date: new Date('2013-08-16'),
+    date: new Date('2023-08-16'),
   },
   {
     id: 10404,
@@ -1253,7 +1253,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1575,
-    date: new Date('2013-08-23'),
+    date: new Date('2023-08-23'),
   },
   {
     id: 10405,
@@ -1261,7 +1261,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1880,
-    date: new Date('2013-08-12'),
+    date: new Date('2023-08-12'),
   },
   {
     id: 10406,
@@ -1269,7 +1269,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 710,
-    date: new Date('2013-08-25'),
+    date: new Date('2023-08-25'),
   },
   {
     id: 10407,
@@ -1277,7 +1277,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 390,
-    date: new Date('2013-08-20'),
+    date: new Date('2023-08-20'),
   },
   {
     id: 10408,
@@ -1285,7 +1285,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4635,
-    date: new Date('2013-08-04'),
+    date: new Date('2023-08-04'),
   },
   {
     id: 10409,
@@ -1293,7 +1293,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 4350,
-    date: new Date('2013-08-19'),
+    date: new Date('2023-08-19'),
   },
   {
     id: 10410,
@@ -1301,7 +1301,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 6020,
-    date: new Date('2013-08-02'),
+    date: new Date('2023-08-02'),
   },
   {
     id: 10411,
@@ -1309,7 +1309,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 3660,
-    date: new Date('2013-08-19'),
+    date: new Date('2023-08-19'),
   },
   {
     id: 10412,
@@ -1317,7 +1317,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 4525,
-    date: new Date('2013-08-24'),
+    date: new Date('2023-08-24'),
   },
   {
     id: 10413,
@@ -1325,7 +1325,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 4410,
-    date: new Date('2013-09-12'),
+    date: new Date('2023-09-12'),
   },
   {
     id: 10414,
@@ -1333,7 +1333,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 1725,
-    date: new Date('2013-09-07'),
+    date: new Date('2023-09-07'),
   },
   {
     id: 10415,
@@ -1341,7 +1341,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2715,
-    date: new Date('2013-09-14'),
+    date: new Date('2023-09-14'),
   },
   {
     id: 10416,
@@ -1349,7 +1349,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2820,
-    date: new Date('2013-09-08'),
+    date: new Date('2023-09-08'),
   },
   {
     id: 10417,
@@ -1357,7 +1357,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2310,
-    date: new Date('2013-09-12'),
+    date: new Date('2023-09-12'),
   },
   {
     id: 10418,
@@ -1365,7 +1365,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 780,
-    date: new Date('2013-09-08'),
+    date: new Date('2023-09-08'),
   },
   {
     id: 10419,
@@ -1373,7 +1373,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 2370,
-    date: new Date('2013-09-19'),
+    date: new Date('2023-09-19'),
   },
   {
     id: 10420,
@@ -1381,7 +1381,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1410,
-    date: new Date('2013-09-09'),
+    date: new Date('2023-09-09'),
   },
   {
     id: 10421,
@@ -1389,7 +1389,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 1825,
-    date: new Date('2013-09-23'),
+    date: new Date('2023-09-23'),
   },
   {
     id: 10422,
@@ -1397,7 +1397,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 4075,
-    date: new Date('2013-09-06'),
+    date: new Date('2023-09-06'),
   },
   {
     id: 10423,
@@ -1405,7 +1405,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 1020,
-    date: new Date('2013-09-04'),
+    date: new Date('2023-09-04'),
   },
   {
     id: 10424,
@@ -1413,7 +1413,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 2820,
-    date: new Date('2013-09-08'),
+    date: new Date('2023-09-08'),
   },
   {
     id: 10425,
@@ -1421,7 +1421,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 3050,
-    date: new Date('2013-09-04'),
+    date: new Date('2023-09-04'),
   },
   {
     id: 10426,
@@ -1429,7 +1429,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 5080,
-    date: new Date('2013-09-25'),
+    date: new Date('2023-09-25'),
   },
   {
     id: 10427,
@@ -1437,7 +1437,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1125,
-    date: new Date('2013-09-13'),
+    date: new Date('2023-09-13'),
   },
   {
     id: 10428,
@@ -1445,7 +1445,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 850,
-    date: new Date('2013-09-24'),
+    date: new Date('2023-09-24'),
   },
   {
     id: 10429,
@@ -1453,7 +1453,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1440,
-    date: new Date('2013-09-19'),
+    date: new Date('2023-09-19'),
   },
   {
     id: 10430,
@@ -1461,7 +1461,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1950,
-    date: new Date('2013-09-02'),
+    date: new Date('2023-09-02'),
   },
   {
     id: 10431,
@@ -1469,7 +1469,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 6390,
-    date: new Date('2013-10-11'),
+    date: new Date('2023-10-11'),
   },
   {
     id: 10432,
@@ -1477,7 +1477,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 4625,
-    date: new Date('2013-10-02'),
+    date: new Date('2023-10-02'),
   },
   {
     id: 10433,
@@ -1485,7 +1485,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 3510,
-    date: new Date('2013-10-24'),
+    date: new Date('2023-10-24'),
   },
   {
     id: 10434,
@@ -1493,7 +1493,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2730,
-    date: new Date('2013-10-15'),
+    date: new Date('2023-10-15'),
   },
   {
     id: 10435,
@@ -1501,7 +1501,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2070,
-    date: new Date('2013-10-15'),
+    date: new Date('2023-10-15'),
   },
   {
     id: 10436,
@@ -1509,7 +1509,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 2320,
-    date: new Date('2013-10-18'),
+    date: new Date('2023-10-18'),
   },
   {
     id: 10437,
@@ -1517,7 +1517,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4260,
-    date: new Date('2013-10-24'),
+    date: new Date('2023-10-24'),
   },
   {
     id: 10438,
@@ -1525,7 +1525,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 840,
-    date: new Date('2013-10-18'),
+    date: new Date('2023-10-18'),
   },
   {
     id: 10439,
@@ -1533,7 +1533,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 7300,
-    date: new Date('2013-10-24'),
+    date: new Date('2023-10-24'),
   },
   {
     id: 10440,
@@ -1541,7 +1541,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5950,
-    date: new Date('2013-10-11'),
+    date: new Date('2023-10-11'),
   },
   {
     id: 10441,
@@ -1549,7 +1549,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 3220,
-    date: new Date('2013-10-25'),
+    date: new Date('2023-10-25'),
   },
   {
     id: 10442,
@@ -1557,7 +1557,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 4470,
-    date: new Date('2013-10-05'),
+    date: new Date('2023-10-05'),
   },
   {
     id: 10443,
@@ -1565,7 +1565,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 3675,
-    date: new Date('2013-10-23'),
+    date: new Date('2023-10-23'),
   },
   {
     id: 10444,
@@ -1573,7 +1573,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4260,
-    date: new Date('2013-10-01'),
+    date: new Date('2023-10-01'),
   },
   {
     id: 10445,
@@ -1581,7 +1581,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4245,
-    date: new Date('2013-10-26'),
+    date: new Date('2023-10-26'),
   },
   {
     id: 10446,
@@ -1589,7 +1589,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1470,
-    date: new Date('2013-10-01'),
+    date: new Date('2023-10-01'),
   },
   {
     id: 10447,
@@ -1597,7 +1597,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1810,
-    date: new Date('2013-10-02'),
+    date: new Date('2023-10-02'),
   },
   {
     id: 10448,
@@ -1605,7 +1605,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 600,
-    date: new Date('2013-10-23'),
+    date: new Date('2023-10-23'),
   },
   {
     id: 10449,
@@ -1613,7 +1613,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 7500,
-    date: new Date('2013-11-03'),
+    date: new Date('2023-11-03'),
   },
   {
     id: 10450,
@@ -1621,7 +1621,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 4625,
-    date: new Date('2013-11-02'),
+    date: new Date('2023-11-02'),
   },
   {
     id: 10451,
@@ -1629,7 +1629,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2625,
-    date: new Date('2013-11-09'),
+    date: new Date('2023-11-09'),
   },
   {
     id: 10452,
@@ -1637,7 +1637,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1440,
-    date: new Date('2013-11-15'),
+    date: new Date('2023-11-15'),
   },
   {
     id: 10453,
@@ -1645,7 +1645,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2420,
-    date: new Date('2013-11-15'),
+    date: new Date('2023-11-15'),
   },
   {
     id: 10454,
@@ -1653,7 +1653,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 4180,
-    date: new Date('2013-11-15'),
+    date: new Date('2023-11-15'),
   },
   {
     id: 10455,
@@ -1661,7 +1661,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 3720,
-    date: new Date('2013-11-25'),
+    date: new Date('2023-11-25'),
   },
   {
     id: 10456,
@@ -1669,7 +1669,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2730,
-    date: new Date('2013-11-08'),
+    date: new Date('2023-11-08'),
   },
   {
     id: 10457,
@@ -1677,7 +1677,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 3775,
-    date: new Date('2013-11-17'),
+    date: new Date('2023-11-17'),
   },
   {
     id: 10458,
@@ -1685,7 +1685,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 3525,
-    date: new Date('2013-11-15'),
+    date: new Date('2023-11-15'),
   },
   {
     id: 10459,
@@ -1693,7 +1693,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 5320,
-    date: new Date('2013-11-08'),
+    date: new Date('2023-11-08'),
   },
   {
     id: 10460,
@@ -1701,7 +1701,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 7050,
-    date: new Date('2013-11-14'),
+    date: new Date('2023-11-14'),
   },
   {
     id: 10461,
@@ -1709,7 +1709,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 4200,
-    date: new Date('2013-11-18'),
+    date: new Date('2023-11-18'),
   },
   {
     id: 10462,
@@ -1717,7 +1717,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4960,
-    date: new Date('2013-11-04'),
+    date: new Date('2023-11-04'),
   },
   {
     id: 10463,
@@ -1725,7 +1725,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2280,
-    date: new Date('2013-11-13'),
+    date: new Date('2023-11-13'),
   },
   {
     id: 10464,
@@ -1733,7 +1733,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 590,
-    date: new Date('2013-11-11'),
+    date: new Date('2023-11-11'),
   },
   {
     id: 10465,
@@ -1741,7 +1741,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 810,
-    date: new Date('2013-11-12'),
+    date: new Date('2023-11-12'),
   },
   {
     id: 10466,
@@ -1749,7 +1749,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 2625,
-    date: new Date('2013-11-07'),
+    date: new Date('2023-11-07'),
   },
   {
     id: 10467,
@@ -1757,7 +1757,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 8280,
-    date: new Date('2013-12-01'),
+    date: new Date('2023-12-01'),
   },
   {
     id: 10468,
@@ -1765,7 +1765,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 5650,
-    date: new Date('2013-12-19'),
+    date: new Date('2023-12-19'),
   },
   {
     id: 10469,
@@ -1773,7 +1773,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2760,
-    date: new Date('2013-12-14'),
+    date: new Date('2023-12-14'),
   },
   {
     id: 10470,
@@ -1781,7 +1781,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2670,
-    date: new Date('2013-12-03'),
+    date: new Date('2023-12-03'),
   },
   {
     id: 10471,
@@ -1789,7 +1789,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2520,
-    date: new Date('2013-12-20'),
+    date: new Date('2023-12-20'),
   },
   {
     id: 10472,
@@ -1797,7 +1797,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 4080,
-    date: new Date('2013-12-21'),
+    date: new Date('2023-12-21'),
   },
   {
     id: 10473,
@@ -1805,7 +1805,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4140,
-    date: new Date('2013-12-22'),
+    date: new Date('2023-12-22'),
   },
   {
     id: 10474,
@@ -1813,7 +1813,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 390,
-    date: new Date('2013-12-04'),
+    date: new Date('2023-12-04'),
   },
   {
     id: 10475,
@@ -1821,7 +1821,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 1400,
-    date: new Date('2013-12-19'),
+    date: new Date('2023-12-19'),
   },
   {
     id: 10476,
@@ -1829,7 +1829,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 7275,
-    date: new Date('2013-12-22'),
+    date: new Date('2023-12-22'),
   },
   {
     id: 10477,
@@ -1837,7 +1837,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 4100,
-    date: new Date('2013-12-20'),
+    date: new Date('2023-12-20'),
   },
   {
     id: 10478,
@@ -1845,7 +1845,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 7290,
-    date: new Date('2013-12-05'),
+    date: new Date('2023-12-05'),
   },
   {
     id: 10479,
@@ -1853,7 +1853,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 625,
-    date: new Date('2013-12-22'),
+    date: new Date('2023-12-22'),
   },
   {
     id: 10480,
@@ -1861,7 +1861,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4460,
-    date: new Date('2013-12-12'),
+    date: new Date('2023-12-12'),
   },
   {
     id: 10481,
@@ -1869,7 +1869,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3825,
-    date: new Date('2013-12-13'),
+    date: new Date('2023-12-13'),
   },
   {
     id: 10482,
@@ -1877,7 +1877,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2850,
-    date: new Date('2013-12-17'),
+    date: new Date('2023-12-17'),
   },
   {
     id: 10483,
@@ -1885,7 +1885,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 2780,
-    date: new Date('2013-12-07'),
+    date: new Date('2023-12-07'),
   },
   {
     id: 10484,
@@ -1893,7 +1893,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 840,
-    date: new Date('2013-12-18'),
+    date: new Date('2023-12-18'),
   },
   {
     id: 10485,
@@ -1901,7 +1901,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2970,
-    date: new Date('2013-12-23'),
+    date: new Date('2023-12-23'),
   },
   {
     id: 10486,
@@ -1909,7 +1909,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 945,
-    date: new Date('2013-12-06'),
+    date: new Date('2023-12-06'),
   },
   {
     id: 10487,
@@ -1917,7 +1917,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2625,
-    date: new Date('2013-12-04'),
+    date: new Date('2023-12-04'),
   },
   {
     id: 10488,
@@ -1925,7 +1925,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 390,
-    date: new Date('2013-12-01'),
+    date: new Date('2023-12-01'),
   },
   {
     id: 10489,
@@ -1933,7 +1933,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 7710,
-    date: new Date('2014-01-18'),
+    date: new Date('2024-01-18'),
   },
   {
     id: 10490,
@@ -1941,7 +1941,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 7975,
-    date: new Date('2014-01-10'),
+    date: new Date('2024-01-10'),
   },
   {
     id: 10491,
@@ -1949,7 +1949,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 3285,
-    date: new Date('2014-01-13'),
+    date: new Date('2024-01-13'),
   },
   {
     id: 10492,
@@ -1957,7 +1957,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2580,
-    date: new Date('2014-01-22'),
+    date: new Date('2024-01-22'),
   },
   {
     id: 10493,
@@ -1965,7 +1965,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2160,
-    date: new Date('2014-01-26'),
+    date: new Date('2024-01-26'),
   },
   {
     id: 10494,
@@ -1973,7 +1973,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 1100,
-    date: new Date('2014-01-25'),
+    date: new Date('2024-01-25'),
   },
   {
     id: 10495,
@@ -1981,7 +1981,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4425,
-    date: new Date('2014-01-21'),
+    date: new Date('2024-01-21'),
   },
   {
     id: 10496,
@@ -1989,7 +1989,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1360,
-    date: new Date('2014-01-22'),
+    date: new Date('2024-01-22'),
   },
   {
     id: 10497,
@@ -1997,7 +1997,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 3250,
-    date: new Date('2014-01-14'),
+    date: new Date('2024-01-14'),
   },
   {
     id: 10498,
@@ -2005,7 +2005,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5550,
-    date: new Date('2014-01-21'),
+    date: new Date('2024-01-21'),
   },
   {
     id: 10499,
@@ -2013,7 +2013,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 2860,
-    date: new Date('2014-01-25'),
+    date: new Date('2024-01-25'),
   },
   {
     id: 10500,
@@ -2021,7 +2021,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 3450,
-    date: new Date('2014-01-24'),
+    date: new Date('2024-01-24'),
   },
   {
     id: 10501,
@@ -2029,7 +2029,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 5425,
-    date: new Date('2014-01-11'),
+    date: new Date('2024-01-11'),
   },
   {
     id: 10502,
@@ -2037,7 +2037,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4860,
-    date: new Date('2014-01-12'),
+    date: new Date('2024-01-12'),
   },
   {
     id: 10503,
@@ -2045,7 +2045,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4695,
-    date: new Date('2014-01-16'),
+    date: new Date('2024-01-16'),
   },
   {
     id: 10504,
@@ -2053,7 +2053,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 610,
-    date: new Date('2014-01-05'),
+    date: new Date('2024-01-05'),
   },
   {
     id: 10505,
@@ -2061,7 +2061,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1580,
-    date: new Date('2014-01-15'),
+    date: new Date('2024-01-15'),
   },
   {
     id: 10506,
@@ -2069,7 +2069,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 3780,
-    date: new Date('2014-02-18'),
+    date: new Date('2024-02-18'),
   },
   {
     id: 10507,
@@ -2077,7 +2077,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 5400,
-    date: new Date('2014-02-21'),
+    date: new Date('2024-02-21'),
   },
   {
     id: 10508,
@@ -2085,7 +2085,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 630,
-    date: new Date('2014-02-18'),
+    date: new Date('2024-02-18'),
   },
   {
     id: 10509,
@@ -2093,7 +2093,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 3960,
-    date: new Date('2014-02-04'),
+    date: new Date('2024-02-04'),
   },
   {
     id: 10510,
@@ -2101,7 +2101,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2010,
-    date: new Date('2014-02-25'),
+    date: new Date('2024-02-25'),
   },
   {
     id: 10511,
@@ -2109,7 +2109,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 5000,
-    date: new Date('2014-02-01'),
+    date: new Date('2024-02-01'),
   },
   {
     id: 10512,
@@ -2117,7 +2117,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1995,
-    date: new Date('2014-02-20'),
+    date: new Date('2024-02-20'),
   },
   {
     id: 10513,
@@ -2125,7 +2125,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 860,
-    date: new Date('2014-02-12'),
+    date: new Date('2024-02-12'),
   },
   {
     id: 10514,
@@ -2133,7 +2133,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 2150,
-    date: new Date('2014-02-10'),
+    date: new Date('2024-02-10'),
   },
   {
     id: 10515,
@@ -2141,7 +2141,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 4050,
-    date: new Date('2014-02-06'),
+    date: new Date('2024-02-06'),
   },
   {
     id: 10516,
@@ -2149,7 +2149,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 2960,
-    date: new Date('2014-02-18'),
+    date: new Date('2024-02-18'),
   },
   {
     id: 10517,
@@ -2157,7 +2157,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 3390,
-    date: new Date('2014-02-03'),
+    date: new Date('2024-02-03'),
   },
   {
     id: 10518,
@@ -2165,7 +2165,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 4425,
-    date: new Date('2014-02-15'),
+    date: new Date('2024-02-15'),
   },
   {
     id: 10519,
@@ -2173,7 +2173,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 1180,
-    date: new Date('2014-02-23'),
+    date: new Date('2024-02-23'),
   },
   {
     id: 10520,
@@ -2181,7 +2181,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 360,
-    date: new Date('2014-02-08'),
+    date: new Date('2024-02-08'),
   },
   {
     id: 10521,
@@ -2189,7 +2189,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2310,
-    date: new Date('2014-02-13'),
+    date: new Date('2024-02-13'),
   },
   {
     id: 10522,
@@ -2197,7 +2197,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1770,
-    date: new Date('2014-02-20'),
+    date: new Date('2024-02-20'),
   },
   {
     id: 10523,
@@ -2205,7 +2205,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 3060,
-    date: new Date('2014-02-26'),
+    date: new Date('2024-02-26'),
   },
   {
     id: 10524,
@@ -2213,7 +2213,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1750,
-    date: new Date('2014-02-12'),
+    date: new Date('2024-02-12'),
   },
   {
     id: 10525,
@@ -2221,7 +2221,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 2280,
-    date: new Date('2014-03-09'),
+    date: new Date('2024-03-09'),
   },
   {
     id: 10526,
@@ -2229,7 +2229,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 7600,
-    date: new Date('2014-03-25'),
+    date: new Date('2024-03-25'),
   },
   {
     id: 10527,
@@ -2237,7 +2237,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 1035,
-    date: new Date('2014-03-23'),
+    date: new Date('2024-03-23'),
   },
   {
     id: 10528,
@@ -2245,7 +2245,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1245,
-    date: new Date('2014-03-01'),
+    date: new Date('2024-03-01'),
   },
   {
     id: 10529,
@@ -2253,7 +2253,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2860,
-    date: new Date('2014-03-19'),
+    date: new Date('2024-03-19'),
   },
   {
     id: 10530,
@@ -2261,7 +2261,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 440,
-    date: new Date('2014-03-19'),
+    date: new Date('2024-03-19'),
   },
   {
     id: 10531,
@@ -2269,7 +2269,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4665,
-    date: new Date('2014-03-02'),
+    date: new Date('2024-03-02'),
   },
   {
     id: 10532,
@@ -2277,7 +2277,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2270,
-    date: new Date('2014-03-15'),
+    date: new Date('2024-03-15'),
   },
   {
     id: 10533,
@@ -2285,7 +2285,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 5000,
-    date: new Date('2014-03-09'),
+    date: new Date('2024-03-09'),
   },
   {
     id: 10534,
@@ -2293,7 +2293,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5100,
-    date: new Date('2014-03-23'),
+    date: new Date('2024-03-23'),
   },
   {
     id: 10535,
@@ -2301,7 +2301,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 2120,
-    date: new Date('2014-03-11'),
+    date: new Date('2024-03-11'),
   },
   {
     id: 10536,
@@ -2309,7 +2309,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 9510,
-    date: new Date('2014-03-19'),
+    date: new Date('2024-03-19'),
   },
   {
     id: 10537,
@@ -2317,7 +2317,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 7600,
-    date: new Date('2014-03-21'),
+    date: new Date('2024-03-21'),
   },
   {
     id: 10538,
@@ -2325,7 +2325,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 5420,
-    date: new Date('2014-03-15'),
+    date: new Date('2024-03-15'),
   },
   {
     id: 10539,
@@ -2333,7 +2333,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1980,
-    date: new Date('2014-03-05'),
+    date: new Date('2024-03-05'),
   },
   {
     id: 10540,
@@ -2341,7 +2341,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1820,
-    date: new Date('2014-03-07'),
+    date: new Date('2024-03-07'),
   },
   {
     id: 10541,
@@ -2349,7 +2349,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1670,
-    date: new Date('2014-03-21'),
+    date: new Date('2024-03-21'),
   },
   {
     id: 10542,
@@ -2357,7 +2357,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 4800,
-    date: new Date('2014-03-08'),
+    date: new Date('2024-03-08'),
   },
   {
     id: 10543,
@@ -2365,7 +2365,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2925,
-    date: new Date('2014-03-03'),
+    date: new Date('2024-03-03'),
   },
   {
     id: 10544,
@@ -2373,7 +2373,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 2940,
-    date: new Date('2014-04-11'),
+    date: new Date('2024-04-11'),
   },
   {
     id: 10545,
@@ -2381,7 +2381,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 3525,
-    date: new Date('2014-04-13'),
+    date: new Date('2024-04-13'),
   },
   {
     id: 10546,
@@ -2389,7 +2389,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2475,
-    date: new Date('2014-04-22'),
+    date: new Date('2024-04-22'),
   },
   {
     id: 10547,
@@ -2397,7 +2397,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 3315,
-    date: new Date('2014-04-08'),
+    date: new Date('2024-04-08'),
   },
   {
     id: 10548,
@@ -2405,7 +2405,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 3140,
-    date: new Date('2014-04-07'),
+    date: new Date('2024-04-07'),
   },
   {
     id: 10549,
@@ -2413,7 +2413,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 2520,
-    date: new Date('2014-04-01'),
+    date: new Date('2024-04-01'),
   },
   {
     id: 10550,
@@ -2421,7 +2421,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1200,
-    date: new Date('2014-04-10'),
+    date: new Date('2024-04-10'),
   },
   {
     id: 10551,
@@ -2429,7 +2429,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2060,
-    date: new Date('2014-04-21'),
+    date: new Date('2024-04-21'),
   },
   {
     id: 10552,
@@ -2437,7 +2437,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 7875,
-    date: new Date('2014-04-02'),
+    date: new Date('2024-04-02'),
   },
   {
     id: 10553,
@@ -2445,7 +2445,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 1450,
-    date: new Date('2014-04-07'),
+    date: new Date('2024-04-07'),
   },
   {
     id: 10554,
@@ -2453,7 +2453,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 2640,
-    date: new Date('2014-04-22'),
+    date: new Date('2024-04-22'),
   },
   {
     id: 10555,
@@ -2461,7 +2461,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 4500,
-    date: new Date('2014-04-05'),
+    date: new Date('2024-04-05'),
   },
   {
     id: 10556,
@@ -2469,7 +2469,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 5050,
-    date: new Date('2014-04-11'),
+    date: new Date('2024-04-11'),
   },
   {
     id: 10557,
@@ -2477,7 +2477,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 2940,
-    date: new Date('2014-04-02'),
+    date: new Date('2024-04-02'),
   },
   {
     id: 10558,
@@ -2485,7 +2485,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2880,
-    date: new Date('2014-04-14'),
+    date: new Date('2024-04-14'),
   },
   {
     id: 10559,
@@ -2493,7 +2493,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1050,
-    date: new Date('2014-04-19'),
+    date: new Date('2024-04-19'),
   },
   {
     id: 10560,
@@ -2501,7 +2501,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1850,
-    date: new Date('2014-04-02'),
+    date: new Date('2024-04-02'),
   },
   {
     id: 10561,
@@ -2509,7 +2509,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 3160,
-    date: new Date('2014-04-01'),
+    date: new Date('2024-04-01'),
   },
   {
     id: 10562,
@@ -2517,7 +2517,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 875,
-    date: new Date('2014-04-04'),
+    date: new Date('2024-04-04'),
   },
   {
     id: 10563,
@@ -2525,7 +2525,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1380,
-    date: new Date('2014-04-21'),
+    date: new Date('2024-04-21'),
   },
   {
     id: 10564,
@@ -2533,7 +2533,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 3060,
-    date: new Date('2014-04-06'),
+    date: new Date('2024-04-06'),
   },
   {
     id: 10565,
@@ -2541,7 +2541,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 6690,
-    date: new Date('2014-05-19'),
+    date: new Date('2024-05-19'),
   },
   {
     id: 10566,
@@ -2549,7 +2549,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 4525,
-    date: new Date('2014-05-15'),
+    date: new Date('2024-05-15'),
   },
   {
     id: 10567,
@@ -2557,7 +2557,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 4665,
-    date: new Date('2014-05-10'),
+    date: new Date('2024-05-10'),
   },
   {
     id: 10568,
@@ -2565,7 +2565,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 4530,
-    date: new Date('2014-05-18'),
+    date: new Date('2024-05-18'),
   },
   {
     id: 10569,
@@ -2573,7 +2573,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1330,
-    date: new Date('2014-05-08'),
+    date: new Date('2024-05-08'),
   },
   {
     id: 10570,
@@ -2581,7 +2581,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 1720,
-    date: new Date('2014-05-20'),
+    date: new Date('2024-05-20'),
   },
   {
     id: 10571,
@@ -2589,7 +2589,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 3750,
-    date: new Date('2014-05-16'),
+    date: new Date('2024-05-16'),
   },
   {
     id: 10572,
@@ -2597,7 +2597,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1290,
-    date: new Date('2014-05-10'),
+    date: new Date('2024-05-10'),
   },
   {
     id: 10573,
@@ -2605,7 +2605,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 4925,
-    date: new Date('2014-05-14'),
+    date: new Date('2024-05-14'),
   },
   {
     id: 10574,
@@ -2613,7 +2613,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 4300,
-    date: new Date('2014-05-22'),
+    date: new Date('2024-05-22'),
   },
   {
     id: 10575,
@@ -2621,7 +2621,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 5740,
-    date: new Date('2014-05-08'),
+    date: new Date('2024-05-08'),
   },
   {
     id: 10576,
@@ -2629,7 +2629,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 1440,
-    date: new Date('2014-05-21'),
+    date: new Date('2024-05-21'),
   },
   {
     id: 10577,
@@ -2637,7 +2637,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 5975,
-    date: new Date('2014-05-25'),
+    date: new Date('2024-05-25'),
   },
   {
     id: 10578,
@@ -2645,7 +2645,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4440,
-    date: new Date('2014-05-05'),
+    date: new Date('2024-05-05'),
   },
   {
     id: 10579,
@@ -2653,7 +2653,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2310,
-    date: new Date('2014-05-24'),
+    date: new Date('2024-05-24'),
   },
   {
     id: 10580,
@@ -2661,7 +2661,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2250,
-    date: new Date('2014-05-06'),
+    date: new Date('2024-05-06'),
   },
   {
     id: 10581,
@@ -2669,7 +2669,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 2320,
-    date: new Date('2014-05-14'),
+    date: new Date('2024-05-14'),
   },
   {
     id: 10582,
@@ -2677,7 +2677,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 5190,
-    date: new Date('2014-06-26'),
+    date: new Date('2024-06-26'),
   },
   {
     id: 10583,
@@ -2685,7 +2685,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 925,
-    date: new Date('2014-06-04'),
+    date: new Date('2024-06-04'),
   },
   {
     id: 10584,
@@ -2693,7 +2693,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 3240,
-    date: new Date('2014-06-20'),
+    date: new Date('2024-06-20'),
   },
   {
     id: 10585,
@@ -2701,7 +2701,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 3180,
-    date: new Date('2014-06-23'),
+    date: new Date('2024-06-23'),
   },
   {
     id: 10586,
@@ -2709,7 +2709,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 780,
-    date: new Date('2014-06-13'),
+    date: new Date('2024-06-13'),
   },
   {
     id: 10587,
@@ -2717,7 +2717,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 4680,
-    date: new Date('2014-06-08'),
+    date: new Date('2024-06-08'),
   },
   {
     id: 10588,
@@ -2725,7 +2725,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 2475,
-    date: new Date('2014-06-25'),
+    date: new Date('2024-06-25'),
   },
   {
     id: 10589,
@@ -2733,7 +2733,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1920,
-    date: new Date('2014-06-20'),
+    date: new Date('2024-06-20'),
   },
   {
     id: 10590,
@@ -2741,7 +2741,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 7500,
-    date: new Date('2014-06-25'),
+    date: new Date('2024-06-25'),
   },
   {
     id: 10591,
@@ -2749,7 +2749,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5025,
-    date: new Date('2014-06-26'),
+    date: new Date('2024-06-26'),
   },
   {
     id: 10592,
@@ -2757,7 +2757,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 2400,
-    date: new Date('2014-06-08'),
+    date: new Date('2024-06-08'),
   },
   {
     id: 10593,
@@ -2765,7 +2765,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 5430,
-    date: new Date('2014-06-03'),
+    date: new Date('2024-06-03'),
   },
   {
     id: 10594,
@@ -2773,7 +2773,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 4475,
-    date: new Date('2014-06-19'),
+    date: new Date('2024-06-19'),
   },
   {
     id: 10595,
@@ -2781,7 +2781,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 1420,
-    date: new Date('2014-06-20'),
+    date: new Date('2024-06-20'),
   },
   {
     id: 10596,
@@ -2789,7 +2789,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2670,
-    date: new Date('2014-06-25'),
+    date: new Date('2024-06-25'),
   },
   {
     id: 10597,
@@ -2797,7 +2797,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1930,
-    date: new Date('2014-06-02'),
+    date: new Date('2024-06-02'),
   },
   {
     id: 10598,
@@ -2805,7 +2805,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 580,
-    date: new Date('2014-06-25'),
+    date: new Date('2024-06-25'),
   },
   {
     id: 10599,
@@ -2813,7 +2813,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1620,
-    date: new Date('2014-06-12'),
+    date: new Date('2024-06-12'),
   },
   {
     id: 10600,
@@ -2821,7 +2821,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4530,
-    date: new Date('2014-06-02'),
+    date: new Date('2024-06-02'),
   },
   {
     id: 10601,
@@ -2829,7 +2829,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 6025,
-    date: new Date('2014-06-23'),
+    date: new Date('2024-06-23'),
   },
   {
     id: 10602,
@@ -2837,7 +2837,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 3540,
-    date: new Date('2014-07-21'),
+    date: new Date('2024-07-21'),
   },
   {
     id: 10603,
@@ -2845,7 +2845,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 3000,
-    date: new Date('2014-07-01'),
+    date: new Date('2024-07-01'),
   },
   {
     id: 10604,
@@ -2853,7 +2853,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 3240,
-    date: new Date('2014-07-26'),
+    date: new Date('2024-07-26'),
   },
   {
     id: 10605,
@@ -2861,7 +2861,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2265,
-    date: new Date('2014-07-22'),
+    date: new Date('2024-07-22'),
   },
   {
     id: 10606,
@@ -2869,7 +2869,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 400,
-    date: new Date('2014-07-09'),
+    date: new Date('2024-07-09'),
   },
   {
     id: 10607,
@@ -2877,7 +2877,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 1460,
-    date: new Date('2014-07-08'),
+    date: new Date('2024-07-08'),
   },
   {
     id: 10608,
@@ -2885,7 +2885,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1620,
-    date: new Date('2014-07-18'),
+    date: new Date('2024-07-18'),
   },
   {
     id: 10609,
@@ -2893,7 +2893,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2400,
-    date: new Date('2014-07-25'),
+    date: new Date('2024-07-25'),
   },
   {
     id: 10610,
@@ -2901,7 +2901,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 5275,
-    date: new Date('2014-07-04'),
+    date: new Date('2024-07-04'),
   },
   {
     id: 10611,
@@ -2909,7 +2909,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 4475,
-    date: new Date('2014-07-03'),
+    date: new Date('2024-07-03'),
   },
   {
     id: 10612,
@@ -2917,7 +2917,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 3980,
-    date: new Date('2014-07-21'),
+    date: new Date('2024-07-21'),
   },
   {
     id: 10613,
@@ -2925,7 +2925,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 5700,
-    date: new Date('2014-07-18'),
+    date: new Date('2024-07-18'),
   },
   {
     id: 10614,
@@ -2933,7 +2933,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 5575,
-    date: new Date('2014-07-01'),
+    date: new Date('2024-07-01'),
   },
   {
     id: 10615,
@@ -2941,7 +2941,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 2160,
-    date: new Date('2014-07-02'),
+    date: new Date('2024-07-02'),
   },
   {
     id: 10616,
@@ -2949,7 +2949,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 960,
-    date: new Date('2014-07-09'),
+    date: new Date('2024-07-09'),
   },
   {
     id: 10617,
@@ -2957,7 +2957,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1280,
-    date: new Date('2014-07-04'),
+    date: new Date('2024-07-04'),
   },
   {
     id: 10618,
@@ -2965,7 +2965,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1040,
-    date: new Date('2014-07-02'),
+    date: new Date('2024-07-02'),
   },
   {
     id: 10619,
@@ -2973,7 +2973,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1760,
-    date: new Date('2014-07-25'),
+    date: new Date('2024-07-25'),
   },
   {
     id: 10620,
@@ -2981,7 +2981,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 4080,
-    date: new Date('2014-07-07'),
+    date: new Date('2024-07-07'),
   },
   {
     id: 10621,
@@ -2989,7 +2989,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1000,
-    date: new Date('2014-07-21'),
+    date: new Date('2024-07-21'),
   },
   {
     id: 10622,
@@ -2997,7 +2997,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 1770,
-    date: new Date('2014-08-23'),
+    date: new Date('2024-08-23'),
   },
   {
     id: 10623,
@@ -3005,7 +3005,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 2700,
-    date: new Date('2014-08-09'),
+    date: new Date('2024-08-09'),
   },
   {
     id: 10624,
@@ -3013,7 +3013,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2175,
-    date: new Date('2014-08-03'),
+    date: new Date('2024-08-03'),
   },
   {
     id: 10625,
@@ -3021,7 +3021,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 3375,
-    date: new Date('2014-08-11'),
+    date: new Date('2024-08-11'),
   },
   {
     id: 10626,
@@ -3029,7 +3029,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2040,
-    date: new Date('2014-08-01'),
+    date: new Date('2024-08-01'),
   },
   {
     id: 10627,
@@ -3037,7 +3037,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 3000,
-    date: new Date('2014-08-21'),
+    date: new Date('2024-08-21'),
   },
   {
     id: 10628,
@@ -3045,7 +3045,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 3900,
-    date: new Date('2014-08-16'),
+    date: new Date('2024-08-16'),
   },
   {
     id: 10629,
@@ -3053,7 +3053,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1370,
-    date: new Date('2014-08-20'),
+    date: new Date('2024-08-20'),
   },
   {
     id: 10630,
@@ -3061,7 +3061,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 5700,
-    date: new Date('2014-08-01'),
+    date: new Date('2024-08-01'),
   },
   {
     id: 10631,
@@ -3069,7 +3069,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 1275,
-    date: new Date('2014-08-22'),
+    date: new Date('2024-08-22'),
   },
   {
     id: 10632,
@@ -3077,7 +3077,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 4060,
-    date: new Date('2014-08-13'),
+    date: new Date('2024-08-13'),
   },
   {
     id: 10633,
@@ -3085,7 +3085,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 4560,
-    date: new Date('2014-08-20'),
+    date: new Date('2024-08-20'),
   },
   {
     id: 10634,
@@ -3093,7 +3093,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 7575,
-    date: new Date('2014-08-20'),
+    date: new Date('2024-08-20'),
   },
   {
     id: 10635,
@@ -3101,7 +3101,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 700,
-    date: new Date('2014-08-25'),
+    date: new Date('2024-08-25'),
   },
   {
     id: 10636,
@@ -3109,7 +3109,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2400,
-    date: new Date('2014-08-16'),
+    date: new Date('2024-08-16'),
   },
   {
     id: 10637,
@@ -3117,7 +3117,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1390,
-    date: new Date('2014-08-15'),
+    date: new Date('2024-08-15'),
   },
   {
     id: 10638,
@@ -3125,7 +3125,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1320,
-    date: new Date('2014-08-09'),
+    date: new Date('2024-08-09'),
   },
   {
     id: 10639,
@@ -3133,7 +3133,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 1680,
-    date: new Date('2014-08-09'),
+    date: new Date('2024-08-09'),
   },
   {
     id: 10640,
@@ -3141,7 +3141,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1500,
-    date: new Date('2014-08-11'),
+    date: new Date('2024-08-11'),
   },
   {
     id: 10641,
@@ -3149,7 +3149,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 6150,
-    date: new Date('2014-09-21'),
+    date: new Date('2024-09-21'),
   },
   {
     id: 10642,
@@ -3157,7 +3157,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 3675,
-    date: new Date('2014-09-02'),
+    date: new Date('2024-09-02'),
   },
   {
     id: 10643,
@@ -3165,7 +3165,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 2250,
-    date: new Date('2014-09-05'),
+    date: new Date('2024-09-05'),
   },
   {
     id: 10644,
@@ -3173,7 +3173,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 3585,
-    date: new Date('2014-09-10'),
+    date: new Date('2024-09-10'),
   },
   {
     id: 10645,
@@ -3181,7 +3181,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1470,
-    date: new Date('2014-09-01'),
+    date: new Date('2024-09-01'),
   },
   {
     id: 10646,
@@ -3189,7 +3189,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 2260,
-    date: new Date('2014-09-02'),
+    date: new Date('2024-09-02'),
   },
   {
     id: 10647,
@@ -3197,7 +3197,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 3765,
-    date: new Date('2014-09-03'),
+    date: new Date('2024-09-03'),
   },
   {
     id: 10648,
@@ -3205,7 +3205,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1640,
-    date: new Date('2014-09-04'),
+    date: new Date('2024-09-04'),
   },
   {
     id: 10649,
@@ -3213,7 +3213,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 4475,
-    date: new Date('2014-09-09'),
+    date: new Date('2024-09-09'),
   },
   {
     id: 10650,
@@ -3221,7 +3221,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5975,
-    date: new Date('2014-09-04'),
+    date: new Date('2024-09-04'),
   },
   {
     id: 10651,
@@ -3229,7 +3229,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 1100,
-    date: new Date('2014-09-16'),
+    date: new Date('2024-09-16'),
   },
   {
     id: 10652,
@@ -3237,7 +3237,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 9210,
-    date: new Date('2014-09-09'),
+    date: new Date('2024-09-09'),
   },
   {
     id: 10653,
@@ -3245,7 +3245,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 3700,
-    date: new Date('2014-09-01'),
+    date: new Date('2024-09-01'),
   },
   {
     id: 10654,
@@ -3253,7 +3253,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 3620,
-    date: new Date('2014-09-19'),
+    date: new Date('2024-09-19'),
   },
   {
     id: 10655,
@@ -3261,7 +3261,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4275,
-    date: new Date('2014-09-01'),
+    date: new Date('2024-09-01'),
   },
   {
     id: 10656,
@@ -3269,7 +3269,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2370,
-    date: new Date('2014-09-03'),
+    date: new Date('2024-09-03'),
   },
   {
     id: 10657,
@@ -3277,7 +3277,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1870,
-    date: new Date('2014-09-10'),
+    date: new Date('2024-09-10'),
   },
   {
     id: 10658,
@@ -3285,7 +3285,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2070,
-    date: new Date('2014-09-25'),
+    date: new Date('2024-09-25'),
   },
   {
     id: 10659,
@@ -3293,7 +3293,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5025,
-    date: new Date('2014-09-19'),
+    date: new Date('2024-09-19'),
   },
   {
     id: 10660,
@@ -3301,7 +3301,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 1080,
-    date: new Date('2014-10-15'),
+    date: new Date('2024-10-15'),
   },
   {
     id: 10661,
@@ -3309,7 +3309,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 1400,
-    date: new Date('2014-10-22'),
+    date: new Date('2024-10-22'),
   },
   {
     id: 10662,
@@ -3317,7 +3317,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 4260,
-    date: new Date('2014-10-01'),
+    date: new Date('2024-10-01'),
   },
   {
     id: 10663,
@@ -3325,7 +3325,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 2745,
-    date: new Date('2014-10-01'),
+    date: new Date('2024-10-01'),
   },
   {
     id: 10664,
@@ -3333,7 +3333,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2920,
-    date: new Date('2014-10-23'),
+    date: new Date('2024-10-23'),
   },
   {
     id: 10665,
@@ -3341,7 +3341,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 3520,
-    date: new Date('2014-10-11'),
+    date: new Date('2024-10-11'),
   },
   {
     id: 10666,
@@ -3349,7 +3349,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4035,
-    date: new Date('2014-10-20'),
+    date: new Date('2024-10-20'),
   },
   {
     id: 10667,
@@ -3357,7 +3357,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1730,
-    date: new Date('2014-10-05'),
+    date: new Date('2024-10-05'),
   },
   {
     id: 10668,
@@ -3365,7 +3365,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 975,
-    date: new Date('2014-10-06'),
+    date: new Date('2024-10-06'),
   },
   {
     id: 10669,
@@ -3373,7 +3373,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5700,
-    date: new Date('2014-10-06'),
+    date: new Date('2024-10-06'),
   },
   {
     id: 10670,
@@ -3381,7 +3381,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 5080,
-    date: new Date('2014-10-18'),
+    date: new Date('2024-10-18'),
   },
   {
     id: 10671,
@@ -3389,7 +3389,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 1230,
-    date: new Date('2014-10-11'),
+    date: new Date('2024-10-11'),
   },
   {
     id: 10672,
@@ -3397,7 +3397,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 600,
-    date: new Date('2014-10-08'),
+    date: new Date('2024-10-08'),
   },
   {
     id: 10673,
@@ -3405,7 +3405,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 3700,
-    date: new Date('2014-10-08'),
+    date: new Date('2024-10-08'),
   },
   {
     id: 10674,
@@ -3413,7 +3413,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3375,
-    date: new Date('2014-10-11'),
+    date: new Date('2024-10-11'),
   },
   {
     id: 10675,
@@ -3421,7 +3421,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1500,
-    date: new Date('2014-10-17'),
+    date: new Date('2024-10-17'),
   },
   {
     id: 10676,
@@ -3429,7 +3429,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 370,
-    date: new Date('2014-10-05'),
+    date: new Date('2024-10-05'),
   },
   {
     id: 10677,
@@ -3437,7 +3437,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2340,
-    date: new Date('2014-10-16'),
+    date: new Date('2024-10-16'),
   },
   {
     id: 10678,
@@ -3445,7 +3445,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 1080,
-    date: new Date('2014-10-08'),
+    date: new Date('2024-10-08'),
   },
   {
     id: 10679,
@@ -3453,7 +3453,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 2775,
-    date: new Date('2014-10-21'),
+    date: new Date('2024-10-21'),
   },
   {
     id: 10680,
@@ -3461,7 +3461,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 4380,
-    date: new Date('2014-11-09'),
+    date: new Date('2024-11-09'),
   },
   {
     id: 10681,
@@ -3469,7 +3469,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 5500,
-    date: new Date('2014-11-21'),
+    date: new Date('2024-11-21'),
   },
   {
     id: 10682,
@@ -3477,7 +3477,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 1920,
-    date: new Date('2014-11-24'),
+    date: new Date('2024-11-24'),
   },
   {
     id: 10683,
@@ -3485,7 +3485,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 765,
-    date: new Date('2014-11-24'),
+    date: new Date('2024-11-24'),
   },
   {
     id: 10684,
@@ -3493,7 +3493,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 370,
-    date: new Date('2014-11-18'),
+    date: new Date('2024-11-18'),
   },
   {
     id: 10685,
@@ -3501,7 +3501,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 3500,
-    date: new Date('2014-11-25'),
+    date: new Date('2024-11-25'),
   },
   {
     id: 10686,
@@ -3509,7 +3509,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 825,
-    date: new Date('2014-11-09'),
+    date: new Date('2024-11-09'),
   },
   {
     id: 10687,
@@ -3517,7 +3517,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 490,
-    date: new Date('2014-11-23'),
+    date: new Date('2024-11-23'),
   },
   {
     id: 10688,
@@ -3525,7 +3525,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 7075,
-    date: new Date('2014-11-20'),
+    date: new Date('2024-11-20'),
   },
   {
     id: 10689,
@@ -3533,7 +3533,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 1350,
-    date: new Date('2014-11-25'),
+    date: new Date('2024-11-25'),
   },
   {
     id: 10690,
@@ -3541,7 +3541,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 1440,
-    date: new Date('2014-11-15'),
+    date: new Date('2024-11-15'),
   },
   {
     id: 10691,
@@ -3549,7 +3549,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 1110,
-    date: new Date('2014-11-03'),
+    date: new Date('2024-11-03'),
   },
   {
     id: 10692,
@@ -3557,7 +3557,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 1150,
-    date: new Date('2014-11-23'),
+    date: new Date('2024-11-23'),
   },
   {
     id: 10693,
@@ -3565,7 +3565,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 2040,
-    date: new Date('2014-11-20'),
+    date: new Date('2024-11-20'),
   },
   {
     id: 10694,
@@ -3573,7 +3573,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3090,
-    date: new Date('2014-11-24'),
+    date: new Date('2024-11-24'),
   },
   {
     id: 10695,
@@ -3581,7 +3581,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1940,
-    date: new Date('2014-11-24'),
+    date: new Date('2024-11-24'),
   },
   {
     id: 10696,
@@ -3589,7 +3589,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 3090,
-    date: new Date('2014-11-16'),
+    date: new Date('2024-11-16'),
   },
   {
     id: 10697,
@@ -3597,7 +3597,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 4900,
-    date: new Date('2014-11-05'),
+    date: new Date('2024-11-05'),
   },
   {
     id: 10698,
@@ -3605,7 +3605,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 3465,
-    date: new Date('2014-11-07'),
+    date: new Date('2024-11-07'),
   },
   {
     id: 10699,
@@ -3613,7 +3613,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1110,
-    date: new Date('2014-11-20'),
+    date: new Date('2024-11-20'),
   },
   {
     id: 10700,
@@ -3621,7 +3621,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1650,
-    date: new Date('2014-11-02'),
+    date: new Date('2024-11-02'),
   },
   {
     id: 10701,
@@ -3629,7 +3629,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 5280,
-    date: new Date('2014-12-04'),
+    date: new Date('2024-12-04'),
   },
   {
     id: 10702,
@@ -3637,7 +3637,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 3075,
-    date: new Date('2014-12-02'),
+    date: new Date('2024-12-02'),
   },
   {
     id: 10703,
@@ -3645,7 +3645,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 690,
-    date: new Date('2014-12-07'),
+    date: new Date('2024-12-07'),
   },
   {
     id: 10704,
@@ -3653,7 +3653,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1305,
-    date: new Date('2014-12-15'),
+    date: new Date('2024-12-15'),
   },
   {
     id: 10705,
@@ -3661,7 +3661,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1970,
-    date: new Date('2014-12-01'),
+    date: new Date('2024-12-01'),
   },
   {
     id: 10706,
@@ -3669,7 +3669,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 3760,
-    date: new Date('2014-12-18'),
+    date: new Date('2024-12-18'),
   },
   {
     id: 10707,
@@ -3677,7 +3677,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1920,
-    date: new Date('2014-12-22'),
+    date: new Date('2024-12-22'),
   },
   {
     id: 10708,
@@ -3685,7 +3685,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1360,
-    date: new Date('2014-12-12'),
+    date: new Date('2024-12-12'),
   },
   {
     id: 10709,
@@ -3693,7 +3693,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 2525,
-    date: new Date('2014-12-06'),
+    date: new Date('2024-12-06'),
   },
   {
     id: 10710,
@@ -3701,7 +3701,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 5575,
-    date: new Date('2014-12-20'),
+    date: new Date('2024-12-20'),
   },
   {
     id: 10711,
@@ -3709,7 +3709,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 5560,
-    date: new Date('2014-12-10'),
+    date: new Date('2024-12-10'),
   },
   {
     id: 10712,
@@ -3717,7 +3717,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 2820,
-    date: new Date('2014-12-10'),
+    date: new Date('2024-12-10'),
   },
   {
     id: 10713,
@@ -3725,7 +3725,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 4000,
-    date: new Date('2014-12-12'),
+    date: new Date('2024-12-12'),
   },
   {
     id: 10714,
@@ -3733,7 +3733,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 5820,
-    date: new Date('2014-12-02'),
+    date: new Date('2024-12-02'),
   },
   {
     id: 10715,
@@ -3741,7 +3741,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 1275,
-    date: new Date('2014-12-12'),
+    date: new Date('2024-12-12'),
   },
   {
     id: 10716,
@@ -3749,7 +3749,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1310,
-    date: new Date('2014-12-01'),
+    date: new Date('2024-12-01'),
   },
   {
     id: 10717,
@@ -3757,7 +3757,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 2180,
-    date: new Date('2014-12-26'),
+    date: new Date('2024-12-26'),
   },
   {
     id: 10718,
@@ -3765,7 +3765,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4470,
-    date: new Date('2014-12-17'),
+    date: new Date('2024-12-17'),
   },
   {
     id: 10719,
@@ -3773,7 +3773,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2990,
-    date: new Date('2014-12-15'),
+    date: new Date('2024-12-15'),
   },
   {
     id: 10720,
@@ -3781,7 +3781,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 7650,
-    date: new Date('2014-12-18'),
+    date: new Date('2024-12-18'),
   },
   {
     id: 10721,
@@ -3789,7 +3789,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 780,
-    date: new Date('2014-12-02'),
+    date: new Date('2024-12-02'),
   },
   {
     id: 10722,
@@ -3797,7 +3797,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2970,
-    date: new Date('2014-12-13'),
+    date: new Date('2024-12-13'),
   },
   {
     id: 10723,
@@ -3805,7 +3805,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1155,
-    date: new Date('2014-12-05'),
+    date: new Date('2024-12-05'),
   },
   {
     id: 10724,
@@ -3813,7 +3813,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 4470,
-    date: new Date('2015-01-10'),
+    date: new Date('2025-01-10'),
   },
   {
     id: 10725,
@@ -3821,7 +3821,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 1125,
-    date: new Date('2015-01-21'),
+    date: new Date('2025-01-21'),
   },
   {
     id: 10726,
@@ -3829,7 +3829,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 645,
-    date: new Date('2015-01-17'),
+    date: new Date('2025-01-17'),
   },
   {
     id: 10727,
@@ -3837,7 +3837,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 675,
-    date: new Date('2015-01-05'),
+    date: new Date('2025-01-05'),
   },
   {
     id: 10728,
@@ -3845,7 +3845,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2840,
-    date: new Date('2015-01-05'),
+    date: new Date('2025-01-05'),
   },
   {
     id: 10729,
@@ -3853,7 +3853,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 2660,
-    date: new Date('2015-01-04'),
+    date: new Date('2025-01-04'),
   },
   {
     id: 10730,
@@ -3861,7 +3861,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4560,
-    date: new Date('2015-01-12'),
+    date: new Date('2025-01-12'),
   },
   {
     id: 10731,
@@ -3869,7 +3869,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2880,
-    date: new Date('2015-01-20'),
+    date: new Date('2025-01-20'),
   },
   {
     id: 10732,
@@ -3877,7 +3877,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 500,
-    date: new Date('2015-01-02'),
+    date: new Date('2025-01-02'),
   },
   {
     id: 10733,
@@ -3885,7 +3885,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 3925,
-    date: new Date('2015-01-07'),
+    date: new Date('2025-01-07'),
   },
   {
     id: 10734,
@@ -3893,7 +3893,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 5660,
-    date: new Date('2015-01-18'),
+    date: new Date('2025-01-18'),
   },
   {
     id: 10735,
@@ -3901,7 +3901,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 4830,
-    date: new Date('2015-01-13'),
+    date: new Date('2025-01-13'),
   },
   {
     id: 10736,
@@ -3909,7 +3909,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 3075,
-    date: new Date('2015-01-22'),
+    date: new Date('2025-01-22'),
   },
   {
     id: 10737,
@@ -3917,7 +3917,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 3120,
-    date: new Date('2015-01-14'),
+    date: new Date('2025-01-14'),
   },
   {
     id: 10738,
@@ -3925,7 +3925,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3525,
-    date: new Date('2015-01-23'),
+    date: new Date('2025-01-23'),
   },
   {
     id: 10739,
@@ -3933,7 +3933,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1930,
-    date: new Date('2015-01-09'),
+    date: new Date('2025-01-09'),
   },
   {
     id: 10740,
@@ -3941,7 +3941,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 2890,
-    date: new Date('2015-01-02'),
+    date: new Date('2025-01-02'),
   },
   {
     id: 10741,
@@ -3949,7 +3949,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 1545,
-    date: new Date('2015-01-17'),
+    date: new Date('2025-01-17'),
   },
   {
     id: 10742,
@@ -3957,7 +3957,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3630,
-    date: new Date('2015-01-20'),
+    date: new Date('2025-01-20'),
   },
   {
     id: 10743,
@@ -3965,7 +3965,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 4035,
-    date: new Date('2015-01-14'),
+    date: new Date('2025-01-14'),
   },
   {
     id: 10744,
@@ -3973,7 +3973,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 345,
-    date: new Date('2015-01-06'),
+    date: new Date('2025-01-06'),
   },
   {
     id: 10745,
@@ -3981,7 +3981,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 7000,
-    date: new Date('2015-01-07'),
+    date: new Date('2025-01-07'),
   },
   {
     id: 10746,
@@ -3989,7 +3989,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 3060,
-    date: new Date('2015-02-13'),
+    date: new Date('2025-02-13'),
   },
   {
     id: 10747,
@@ -3997,7 +3997,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 6425,
-    date: new Date('2015-02-04'),
+    date: new Date('2025-02-04'),
   },
   {
     id: 10748,
@@ -4005,7 +4005,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 615,
-    date: new Date('2015-02-22'),
+    date: new Date('2025-02-22'),
   },
   {
     id: 10749,
@@ -4013,7 +4013,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1755,
-    date: new Date('2015-02-07'),
+    date: new Date('2025-02-07'),
   },
   {
     id: 10750,
@@ -4021,7 +4021,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1540,
-    date: new Date('2015-02-21'),
+    date: new Date('2025-02-21'),
   },
   {
     id: 10751,
@@ -4029,7 +4029,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 2820,
-    date: new Date('2015-02-24'),
+    date: new Date('2025-02-24'),
   },
   {
     id: 10752,
@@ -4037,7 +4037,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4305,
-    date: new Date('2015-02-10'),
+    date: new Date('2025-02-10'),
   },
   {
     id: 10753,
@@ -4045,7 +4045,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 1520,
-    date: new Date('2015-02-26'),
+    date: new Date('2025-02-26'),
   },
   {
     id: 10754,
@@ -4053,7 +4053,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 4725,
-    date: new Date('2015-02-18'),
+    date: new Date('2025-02-18'),
   },
   {
     id: 10755,
@@ -4061,7 +4061,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 6750,
-    date: new Date('2015-02-16'),
+    date: new Date('2025-02-16'),
   },
   {
     id: 10756,
@@ -4069,7 +4069,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 5540,
-    date: new Date('2015-02-07'),
+    date: new Date('2025-02-07'),
   },
   {
     id: 10757,
@@ -4077,7 +4077,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 9300,
-    date: new Date('2015-02-03'),
+    date: new Date('2025-02-03'),
   },
   {
     id: 10758,
@@ -4085,7 +4085,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 3700,
-    date: new Date('2015-02-26'),
+    date: new Date('2025-02-26'),
   },
   {
     id: 10759,
@@ -4093,7 +4093,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 740,
-    date: new Date('2015-02-01'),
+    date: new Date('2025-02-01'),
   },
   {
     id: 10760,
@@ -4101,7 +4101,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4755,
-    date: new Date('2015-02-23'),
+    date: new Date('2025-02-23'),
   },
   {
     id: 10761,
@@ -4109,7 +4109,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2570,
-    date: new Date('2015-02-20'),
+    date: new Date('2025-02-20'),
   },
   {
     id: 10762,
@@ -4117,7 +4117,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 2860,
-    date: new Date('2015-02-19'),
+    date: new Date('2025-02-19'),
   },
   {
     id: 10763,
@@ -4125,7 +4125,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 5430,
-    date: new Date('2015-03-21'),
+    date: new Date('2025-03-21'),
   },
   {
     id: 10764,
@@ -4133,7 +4133,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 4525,
-    date: new Date('2015-03-21'),
+    date: new Date('2025-03-21'),
   },
   {
     id: 10765,
@@ -4141,7 +4141,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 1515,
-    date: new Date('2015-03-10'),
+    date: new Date('2025-03-10'),
   },
   {
     id: 10766,
@@ -4149,7 +4149,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 630,
-    date: new Date('2015-03-15'),
+    date: new Date('2025-03-15'),
   },
   {
     id: 10767,
@@ -4157,7 +4157,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1310,
-    date: new Date('2015-03-01'),
+    date: new Date('2025-03-01'),
   },
   {
     id: 10768,
@@ -4165,7 +4165,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 3200,
-    date: new Date('2015-03-17'),
+    date: new Date('2025-03-17'),
   },
   {
     id: 10769,
@@ -4173,7 +4173,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 3945,
-    date: new Date('2015-03-20'),
+    date: new Date('2025-03-20'),
   },
   {
     id: 10770,
@@ -4181,7 +4181,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2990,
-    date: new Date('2015-03-18'),
+    date: new Date('2025-03-18'),
   },
   {
     id: 10771,
@@ -4189,7 +4189,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 1125,
-    date: new Date('2015-03-22'),
+    date: new Date('2025-03-22'),
   },
   {
     id: 10772,
@@ -4197,7 +4197,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 7950,
-    date: new Date('2015-03-17'),
+    date: new Date('2025-03-17'),
   },
   {
     id: 10773,
@@ -4205,7 +4205,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 2960,
-    date: new Date('2015-03-25'),
+    date: new Date('2025-03-25'),
   },
   {
     id: 10774,
@@ -4213,7 +4213,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 3930,
-    date: new Date('2015-03-23'),
+    date: new Date('2025-03-23'),
   },
   {
     id: 10775,
@@ -4221,7 +4221,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 6975,
-    date: new Date('2015-03-02'),
+    date: new Date('2025-03-02'),
   },
   {
     id: 10776,
@@ -4229,7 +4229,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4220,
-    date: new Date('2015-03-17'),
+    date: new Date('2025-03-17'),
   },
   {
     id: 10777,
@@ -4237,7 +4237,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 3090,
-    date: new Date('2015-03-25'),
+    date: new Date('2025-03-25'),
   },
   {
     id: 10778,
@@ -4245,7 +4245,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2380,
-    date: new Date('2015-03-01'),
+    date: new Date('2025-03-01'),
   },
   {
     id: 10779,
@@ -4253,7 +4253,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1510,
-    date: new Date('2015-03-07'),
+    date: new Date('2025-03-07'),
   },
   {
     id: 10780,
@@ -4261,7 +4261,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 1020,
-    date: new Date('2015-03-19'),
+    date: new Date('2025-03-19'),
   },
   {
     id: 10781,
@@ -4269,7 +4269,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 6700,
-    date: new Date('2015-03-26'),
+    date: new Date('2025-03-26'),
   },
   {
     id: 10782,
@@ -4277,7 +4277,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 4890,
-    date: new Date('2015-04-02'),
+    date: new Date('2025-04-02'),
   },
   {
     id: 10783,
@@ -4285,7 +4285,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 7225,
-    date: new Date('2015-04-13'),
+    date: new Date('2025-04-13'),
   },
   {
     id: 10784,
@@ -4293,7 +4293,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 795,
-    date: new Date('2015-04-07'),
+    date: new Date('2025-04-07'),
   },
   {
     id: 10785,
@@ -4301,7 +4301,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1785,
-    date: new Date('2015-04-03'),
+    date: new Date('2025-04-03'),
   },
   {
     id: 10786,
@@ -4309,7 +4309,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1850,
-    date: new Date('2015-04-03'),
+    date: new Date('2025-04-03'),
   },
   {
     id: 10787,
@@ -4317,7 +4317,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 5120,
-    date: new Date('2015-04-12'),
+    date: new Date('2025-04-12'),
   },
   {
     id: 10788,
@@ -4325,7 +4325,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 615,
-    date: new Date('2015-04-07'),
+    date: new Date('2025-04-07'),
   },
   {
     id: 10789,
@@ -4333,7 +4333,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2860,
-    date: new Date('2015-04-05'),
+    date: new Date('2025-04-05'),
   },
   {
     id: 10790,
@@ -4341,7 +4341,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 1525,
-    date: new Date('2015-04-24'),
+    date: new Date('2025-04-24'),
   },
   {
     id: 10791,
@@ -4349,7 +4349,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 7425,
-    date: new Date('2015-04-15'),
+    date: new Date('2025-04-15'),
   },
   {
     id: 10792,
@@ -4357,7 +4357,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 6080,
-    date: new Date('2015-04-13'),
+    date: new Date('2025-04-13'),
   },
   {
     id: 10793,
@@ -4365,7 +4365,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 9390,
-    date: new Date('2015-04-19'),
+    date: new Date('2025-04-19'),
   },
   {
     id: 10794,
@@ -4373,7 +4373,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 3200,
-    date: new Date('2015-04-26'),
+    date: new Date('2025-04-26'),
   },
   {
     id: 10795,
@@ -4381,7 +4381,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4380,
-    date: new Date('2015-04-05'),
+    date: new Date('2025-04-05'),
   },
   {
     id: 10796,
@@ -4389,7 +4389,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 4725,
-    date: new Date('2015-04-06'),
+    date: new Date('2025-04-06'),
   },
   {
     id: 10797,
@@ -4397,7 +4397,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 930,
-    date: new Date('2015-04-25'),
+    date: new Date('2025-04-25'),
   },
   {
     id: 10798,
@@ -4405,7 +4405,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 1910,
-    date: new Date('2015-04-05'),
+    date: new Date('2025-04-05'),
   },
   {
     id: 10799,
@@ -4413,7 +4413,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 2725,
-    date: new Date('2015-04-16'),
+    date: new Date('2025-04-16'),
   },
   {
     id: 10800,
@@ -4421,7 +4421,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 4720,
-    date: new Date('2015-04-02'),
+    date: new Date('2025-04-02'),
   },
   {
     id: 10801,
@@ -4429,7 +4429,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 2800,
-    date: new Date('2015-04-26'),
+    date: new Date('2025-04-26'),
   },
   {
     id: 10802,
@@ -4437,7 +4437,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 3780,
-    date: new Date('2015-04-24'),
+    date: new Date('2025-04-24'),
   },
   {
     id: 10803,
@@ -4445,7 +4445,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 2340,
-    date: new Date('2015-04-17'),
+    date: new Date('2025-04-17'),
   },
   {
     id: 10804,
@@ -4453,7 +4453,7 @@ export const sales = [
     country: 'United States of America',
     city: 'New York',
     amount: 4830,
-    date: new Date('2015-05-12'),
+    date: new Date('2025-05-12'),
   },
   {
     id: 10805,
@@ -4461,7 +4461,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Los Angeles',
     amount: 2075,
-    date: new Date('2015-05-23'),
+    date: new Date('2025-05-23'),
   },
   {
     id: 10806,
@@ -4469,7 +4469,7 @@ export const sales = [
     country: 'United States of America',
     city: 'Denver',
     amount: 3420,
-    date: new Date('2015-05-21'),
+    date: new Date('2025-05-21'),
   },
   {
     id: 10807,
@@ -4477,7 +4477,7 @@ export const sales = [
     country: 'Canada',
     city: 'Vancouver',
     amount: 1440,
-    date: new Date('2015-05-10'),
+    date: new Date('2025-05-10'),
   },
   {
     id: 10808,
@@ -4485,7 +4485,7 @@ export const sales = [
     country: 'Canada',
     city: 'Edmonton',
     amount: 1680,
-    date: new Date('2015-05-15'),
+    date: new Date('2025-05-15'),
   },
   {
     id: 10809,
@@ -4493,7 +4493,7 @@ export const sales = [
     country: 'Brazil',
     city: 'Rio de Janeiro',
     amount: 3440,
-    date: new Date('2015-05-16'),
+    date: new Date('2025-05-16'),
   },
   {
     id: 10810,
@@ -4501,7 +4501,7 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 4695,
-    date: new Date('2015-05-10'),
+    date: new Date('2025-05-10'),
   },
   {
     id: 10811,
@@ -4509,7 +4509,7 @@ export const sales = [
     country: 'Paraguay',
     city: 'Asuncion',
     amount: 2380,
-    date: new Date('2015-05-06'),
+    date: new Date('2025-05-06'),
   },
   {
     id: 10812,
@@ -4517,7 +4517,7 @@ export const sales = [
     country: 'United Kingdom',
     city: 'London',
     amount: 1875,
-    date: new Date('2015-05-25'),
+    date: new Date('2025-05-25'),
   },
   {
     id: 10813,
@@ -4525,7 +4525,7 @@ export const sales = [
     country: 'Germany',
     city: 'Berlin',
     amount: 7550,
-    date: new Date('2015-05-14'),
+    date: new Date('2025-05-14'),
   },
   {
     id: 10814,
@@ -4533,7 +4533,7 @@ export const sales = [
     country: 'Spain',
     city: 'Madrid',
     amount: 3340,
-    date: new Date('2015-05-01'),
+    date: new Date('2025-05-01'),
   },
   {
     id: 10815,
@@ -4541,7 +4541,7 @@ export const sales = [
     country: 'Japan',
     city: 'Tokyo',
     amount: 8370,
-    date: new Date('2015-05-13'),
+    date: new Date('2025-05-13'),
   },
   {
     id: 10816,
@@ -4549,7 +4549,7 @@ export const sales = [
     country: 'Republic of Korea',
     city: 'Seoul',
     amount: 3550,
-    date: new Date('2015-05-26'),
+    date: new Date('2025-05-26'),
   },
   {
     id: 10817,
@@ -4557,7 +4557,7 @@ export const sales = [
     country: 'Australia',
     city: 'Sydney',
     amount: 2620,
-    date: new Date('2015-05-17'),
+    date: new Date('2025-05-17'),
   },
   {
     id: 10818,
@@ -4565,7 +4565,7 @@ export const sales = [
     country: 'Australia',
     city: 'Melbourne',
     amount: 2400,
-    date: new Date('2015-05-21'),
+    date: new Date('2025-05-21'),
   },
   {
     id: 10819,
@@ -4573,7 +4573,7 @@ export const sales = [
     country: 'South Africa',
     city: 'Pretoria',
     amount: 1740,
-    date: new Date('2015-05-21'),
+    date: new Date('2025-05-21'),
   },
   {
     id: 10820,
@@ -4581,7 +4581,7 @@ export const sales = [
     country: 'Egypt',
     city: 'Cairo',
     amount: 500,
-    date: new Date('2015-05-26'),
+    date: new Date('2025-05-26'),
   },
   {
     id: 10821,
@@ -4589,6 +4589,6 @@ export const sales = [
     country: 'Argentina',
     city: 'Buenos Aires',
     amount: 780,
-    date: new Date('2015-05-07'),
+    date: new Date('2025-05-07'),
   },
 ];

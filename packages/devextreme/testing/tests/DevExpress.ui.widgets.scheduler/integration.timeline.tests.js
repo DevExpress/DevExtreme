@@ -76,7 +76,7 @@ QUnit.test('Scheduler should have a right timeline work space', async function(a
 
     scheduler.instance.option('currentView', 'timelineWorkWeek');
     await waitAsync(0);
-    assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWorkWeek('instance'), 'Work space is timelineWorkWeek after change option ');
+    assert.strictEqual(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance').option('type'), 'timelineWorkWeek', 'Work space is timelineWorkWeek after change option ');
 
     scheduler.instance.option('currentView', 'timelineMonth');
     await waitAsync(0);
@@ -101,6 +101,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
@@ -132,6 +133,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
@@ -162,6 +164,7 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
     } finally {
@@ -206,6 +209,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
@@ -236,6 +240,7 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
+        await Promise.resolve();
 
         assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
     } finally {

@@ -63,7 +63,7 @@ function App() {
           <div className="dx-field-label">Text mask</div>
           <div className="dx-field-value">
             <TextBox
-              mask="+1 (X00) 000-0000"
+              mask="(X00) 000-0000"
               inputAttr={maskLabel}
               maskRules={rules}
             />

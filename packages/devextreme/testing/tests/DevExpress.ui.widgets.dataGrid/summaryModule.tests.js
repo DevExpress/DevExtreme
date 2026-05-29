@@ -973,8 +973,11 @@ QUnit.module('Footer with real dataController and columnController', {
             { dataField: 'age', index: 1 },
             { dataField: 'cash', index: 2 }
         ];
-        const summaryCells = this.dataController._calculateSummaryCells(summaryItems, aggregates, visibleColumns, function(summaryItem, column) {
-            return column.index;
+        const summaryCells = this.dataController._calculateSummaryCells({
+            summaryItems: summaryItems,
+            aggregates: aggregates,
+            visibleColumns: visibleColumns,
+            calculateTargetColumnIndex: (summaryItem, column) => column.index,
         });
 
         // assert

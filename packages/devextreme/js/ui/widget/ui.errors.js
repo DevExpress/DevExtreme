@@ -277,6 +277,11 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1067: '\'aiIntegration\' is not configured in the {0} column.',
 
     /**
+    * @name ErrorsUIWidgets.E1068
+    */
+    E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
@@ -397,4 +402,8 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1028
      */
     W1028: 'Nested/banded columns do not support the following properties: {0}.',
+    /**
+     * @name ErrorsUIWidgets.W1029
+     */
+    W1029: '\'hiddenWeekDays\' must leave at least one weekday visible.',
 });

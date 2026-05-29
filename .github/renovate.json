@@ -1,6 +1,7 @@
 {
     "extends": [
-        "config:js-lib"
+        "config:js-lib",
+        "github>DevExpress/devextreme-renovate-config"
     ],
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
@@ -141,7 +142,6 @@
                 "gulp-jsbeautifier",
                 "gulp-multi-process",
                 "gulp-notify",
-                "gulp-remote-src",
                 "gulp-rename",
                 "gulp-tap",
                 "gulp-uglify-es",

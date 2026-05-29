@@ -45,7 +45,6 @@ import {
  */
 @Component({
     selector: 'dx-pagination',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

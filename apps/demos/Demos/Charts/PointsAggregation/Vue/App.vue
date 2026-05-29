@@ -69,7 +69,7 @@
         :enabled="true"
         :customize-tooltip="customizeTooltip"
       />
-      <DxTitle text="Weather in Las Vegas, NV (2017)"/>
+      <DxTitle text="Weather in Las Vegas, NV (2025)"/>
     </DxChart>
     <div class="options">
       <div class="caption">Options</div>

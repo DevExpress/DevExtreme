@@ -6,40 +6,41 @@ import type SchedulerWorkSpace from '../workspaces/m_work_space';
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
 class CurrentTimeShader {
-  _$container = this._workSpace._dateTableScrollable.$content();
+  protected $container = this.workSpace.getScrollable().$content();
 
-  _shader!: dxElementWrapper[];
+  protected shader!: dxElementWrapper[];
 
-  _$shader!: dxElementWrapper;
+  protected $shader!: dxElementWrapper;
 
-  constructor(public _workSpace: SchedulerWorkSpace) {
+  constructor(protected workSpace: SchedulerWorkSpace) {
   }
 
-  render(): void {
+  render(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {
     this.initShaderElements();
 
-    this.renderShader();
+    this.renderShader(isHorizontalGroupedWorkSpace, groupCount, cellCount);
 
-    this._shader.forEach((shader) => {
-      this._$container.append(shader);
+    this.shader.forEach((shader) => {
+      this.$container.append(shader);
     });
   }
 
   initShaderElements(): void {
-    this._$shader = this.createShader();
-    this._shader = [];
-    this._shader.push(this._$shader);
+    this.$shader = this.createShader();
+    this.shader = [];
+    this.shader.push(this.$shader);
   }
 
-  renderShader(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  renderShader(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number):void {}
 
   createShader(): dxElementWrapper {
     return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
   }
 
   clean(): void {
-    if (this._$container) {
-      this._$container.find(`.${DATE_TIME_SHADER_CLASS}`).remove();
+    if (this.$container) {
+      this.$container.find(`.${DATE_TIME_SHADER_CLASS}`).remove();
     }
   }
 }

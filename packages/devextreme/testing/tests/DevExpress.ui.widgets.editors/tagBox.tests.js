@@ -1060,7 +1060,7 @@ QUnit.module('multi tag support', {
         assert.deepEqual($tag.text(), '3 selected', 'text is correct');
     });
 
-    QUnit.test('multi tag should deselect overflow tags only when showMultiTagOnly is false', function(assert) {
+    QUnit.test('multi tag remove should deselect all items grouped under it when showMultiTagOnly is false (T1329352)', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
@@ -1069,14 +1069,85 @@ QUnit.module('multi tag support', {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $multiTag = $tagBox.find('.' + TAGBOX_MULTI_TAG_CLASS);
+        const $multiTag = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
 
         $($multiTag.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`)).trigger('dxclick');
 
-        assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).length, 2, 'only 2 tags remain');
-        assert.deepEqual(tagBox.option('value'), [1, 2], 'value is correct');
-        assert.deepEqual(this.getTexts($tagBox.find('.' + TAGBOX_TAG_CLASS)), ['1', '2'], 'tags have correct text');
+        assert.equal($tagBox.find(`.${TAGBOX_TAG_CLASS}`).length, 1, 'only the individually rendered tag remains');
+        assert.deepEqual(tagBox.option('value'), [1], 'only the value visible as an individual tag remains');
     });
+
+    QUnit.test('multi tag remove should deselect all items when showMultiTagOnly is true (T1329352)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxDisplayedTags: 2,
+            showMultiTagOnly: true
+        });
+
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $multiTag = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
+
+        $($multiTag.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`)).trigger('dxclick');
+
+        assert.equal($tagBox.find(`.${TAGBOX_TAG_CLASS}`).length, 0, 'no tags remain');
+        assert.deepEqual(tagBox.option('value'), [], 'value is cleared');
+    });
+
+    QUnit.test('TagBox should preserve reverse click order in leading tag when showMultiTagOnly is false', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            showSelectionControls: true,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+            opened: true
+        });
+
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = getListItems(tagBox);
+
+        $listItems.last().trigger('dxclick');
+        $listItems.eq(7).trigger('dxclick');
+        $listItems.eq(6).trigger('dxclick');
+
+
+        assert.strictEqual($tagBox.find('.' + TAGBOX_TAG_CLASS).first().text(), '10', 'leading tag has correct text');
+    });
+
+    QUnit.test('TagBox should work correctly with string ID\'s in item when valueExpr is used', function(assert) {
+        const items = [
+            { ID: 'a', Name: 'HD Video Player' },
+            { ID: 'b', Name: 'SuperHD Video Player' },
+            { ID: 'c', Name: 'SuperPlasma 50' },
+            { ID: 'd', Name: 'SuperLED 50' }
+        ];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: items,
+            valueExpr: 'ID',
+            displayExpr: 'Name',
+            showSelectionControls: true,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+            opened: true
+        });
+
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = getListItems(tagBox);
+
+        $listItems.last().trigger('dxclick');
+        $listItems.eq(2).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+
+
+        assert.strictEqual($tagBox.find('.' + TAGBOX_TAG_CLASS).first().text(), items[items.length - 1].Name, 'leading tag has correct text');
+    });
+
 
     QUnit.test('only one multi tag should be rendered when selectAll checked and value changind on runtime', function(assert) {
         let suppressSelectionChanged = false;

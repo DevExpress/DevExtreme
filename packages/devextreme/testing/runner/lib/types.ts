@@ -100,16 +100,9 @@ export interface VectorMapDataItem {
   expected: string;
 }
 
-export interface VectorMapOutputItem {
-  file: string;
-  variable: string | null;
-  content: JsonValue;
-}
-
 export interface PortsMap {
   [key: string]: number | string;
   qunit: number | string;
-  'vectormap-utils-tester': number | string;
 }
 
 export type TemplateVarValue = JsonValue | bigint | undefined;

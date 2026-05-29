@@ -120,7 +120,7 @@ export interface OverlayProperties extends Properties {
 
   zIndex?: number;
 
-  _loopFocus?: boolean;
+  tabFocusLoopEnabled?: boolean;
 
   _ignorePreventScrollEventsDeprecation?: boolean;
 
@@ -294,7 +294,7 @@ class Overlay<
       ignoreChildEvents: true,
       _checkParentVisibility: true,
       _fixWrapperPosition: false,
-      _loopFocus: false,
+      tabFocusLoopEnabled: false,
       _ignorePreventScrollEventsDeprecation: false,
       // NOTE: private option
       hideTopOverlayHandler: (): void => {
@@ -456,7 +456,7 @@ class Overlay<
 
     const isTargetDocument = domUtils.contains(window.document, target);
     const isAttachedTarget = $(window.document).is($target) || isTargetDocument;
-    const isInnerOverlay = $($target).closest(`.${INNER_OVERLAY_CLASS}`).length;
+    const isInnerOverlay = this._isTargetInLowerInnerOverlay($target);
     const isTargetContent = this._$content?.is($target);
     const content = this._$content?.get(0);
     const isTargetInContent = content ? domUtils.contains(content, target) : false;
@@ -494,6 +494,27 @@ class Overlay<
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.hide();
+  }
+
+  _isTargetInLowerInnerOverlay($target: dxElementWrapper): boolean {
+    const $closestInnerOverlay = $target.closest(`.${INNER_OVERLAY_CLASS}`);
+
+    if (!$closestInnerOverlay.length) {
+      return false;
+    }
+
+    const overlayStack = this._overlayStack();
+    const innerOverlayElement = $closestInnerOverlay.get(0);
+    // @ts-expect-error this and Overlay have no overlap
+    const thisIndex = overlayStack.indexOf(this);
+
+    for (let i = 0; i < overlayStack.length; i += 1) {
+      if (overlayStack[i]._$content?.get(0) === innerOverlayElement) {
+        return thisIndex <= i;
+      }
+    }
+
+    return true;
   }
 
   _getAnonymousTemplateName(): string {
@@ -939,12 +960,11 @@ class Overlay<
   }
 
   _toggleTabTerminator(enabled: boolean): void {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _loopFocus } = this.option();
+    const { tabFocusLoopEnabled } = this.option();
     // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace('keydown', this.NAME);
 
-    if (_loopFocus || enabled) {
+    if (tabFocusLoopEnabled || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
       this._destroyTabTerminator();
@@ -1527,7 +1547,7 @@ class Overlay<
     switch (name) {
       case 'animation':
         break;
-      case '_loopFocus':
+      case 'tabFocusLoopEnabled':
       case 'shading': {
         this._toggleShading(this._isVisible());
         this._toggleSafariScrolling();

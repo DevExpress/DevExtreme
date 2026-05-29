@@ -1,22 +1,22 @@
 import type ViewDataProvider from './view_model/m_view_data_provider';
 
 export default class CellsSelectionState {
-  _focusedCell: any = null;
+  private focusedCell: any = null;
 
-  _selectedCells: any = null;
+  private selectedCells: any = null;
 
-  _firstSelectedCell: any = null;
+  private firstSelectedCell: any = null;
 
-  _prevFocusedCell: any = null;
+  private prevFocusedCell: any = null;
 
-  _prevFirstSelectedCell: any;
+  private prevFirstSelectedCell: any;
 
-  _prevSelectedCells: any = null;
+  private prevSelectedCells: any = null;
 
   constructor(public viewDataProvider: ViewDataProvider) {}
 
   getFocusedCell() {
-    const focusedCell = this._focusedCell;
+    const { focusedCell } = this;
 
     if (!focusedCell) {
       return undefined;
@@ -34,7 +34,7 @@ export default class CellsSelectionState {
   setFocusedCell(rowIndex, columnIndex, isAllDay) {
     if (rowIndex >= 0) {
       const cell = this.viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
-      this._focusedCell = cell;
+      this.focusedCell = cell;
     }
   }
 
@@ -54,20 +54,20 @@ export default class CellsSelectionState {
         firstCellCoordinates.columnIndex,
         firstCellCoordinates.allDay,
       )
-      : this._firstSelectedCell;
+      : this.firstSelectedCell;
     const lastCell = viewDataProvider.getCellData(lastRowIndex, lastColumnIndex, isLastCellAllDay);
 
-    this._firstSelectedCell = firstCell;
+    this.firstSelectedCell = firstCell;
 
-    this._selectedCells = this.viewDataProvider.getCellsBetween(firstCell, lastCell);
+    this.selectedCells = this.viewDataProvider.getCellsBetween(firstCell, lastCell);
   }
 
   setSelectedCellsByData(selectedCellsData) {
-    this._selectedCells = selectedCellsData;
+    this.selectedCells = selectedCellsData;
   }
 
   getSelectedCells() {
-    return this._selectedCells;
+    return this.selectedCells;
   }
 
   releaseSelectedAndFocusedCells() {
@@ -76,33 +76,33 @@ export default class CellsSelectionState {
   }
 
   releaseSelectedCells() {
-    this._prevSelectedCells = this._selectedCells;
-    this._prevFirstSelectedCell = this._firstSelectedCell;
+    this.prevSelectedCells = this.selectedCells;
+    this.prevFirstSelectedCell = this.firstSelectedCell;
 
-    this._selectedCells = null;
-    this._firstSelectedCell = null;
+    this.selectedCells = null;
+    this.firstSelectedCell = null;
   }
 
   releaseFocusedCell() {
-    this._prevFocusedCell = this._focusedCell;
-    this._focusedCell = null;
+    this.prevFocusedCell = this.focusedCell;
+    this.focusedCell = null;
   }
 
   restoreSelectedAndFocusedCells() {
-    this._selectedCells = this._selectedCells || this._prevSelectedCells;
-    this._focusedCell = this._focusedCell || this._prevFocusedCell;
-    this._firstSelectedCell = this._firstSelectedCell || this._prevFirstSelectedCell;
+    this.selectedCells = this.selectedCells || this.prevSelectedCells;
+    this.focusedCell = this.focusedCell || this.prevFocusedCell;
+    this.firstSelectedCell = this.firstSelectedCell || this.prevFirstSelectedCell;
 
-    this._prevSelectedCells = null;
-    this._prevFirstSelectedCell = null;
-    this._prevFocusedCell = null;
+    this.prevSelectedCells = null;
+    this.prevFirstSelectedCell = null;
+    this.prevFocusedCell = null;
   }
 
   clearSelectedAndFocusedCells() {
-    this._prevSelectedCells = null;
-    this._selectedCells = null;
+    this.prevSelectedCells = null;
+    this.selectedCells = null;
 
-    this._prevFocusedCell = null;
-    this._focusedCell = null;
+    this.prevFocusedCell = null;
+    this.focusedCell = null;
   }
 }

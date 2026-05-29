@@ -38,6 +38,7 @@ treeListCore.registerModulesOrder([
   'columnHeaders',
   'filterRow',
   'headerPanel',
+  'aiAssistant',
   'headerFilter',
   'sorting',
   'search',

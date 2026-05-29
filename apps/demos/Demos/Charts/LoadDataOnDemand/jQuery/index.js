@@ -8,7 +8,7 @@ $(() => {
       sort: 'date',
       paginate: false,
     }),
-    title: 'Temperature in Toronto (2017)',
+    title: 'Temperature in Toronto (2025)',
     zoomAndPan: {
       argumentAxis: 'pan',
     },
@@ -17,9 +17,9 @@ $(() => {
     },
     argumentAxis: {
       argumentType: 'datetime',
-      wholeRange: [new Date(2017, 0, 1), new Date(2017, 11, 31)],
+      wholeRange: [new Date(2025, 0, 1), new Date(2025, 11, 31)],
       visualRange: {
-        startValue: new Date(2017, 3, 1),
+        startValue: new Date(2025, 3, 1),
         length: {
           weeks: 2,
         },

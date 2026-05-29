@@ -150,12 +150,12 @@ test('The AI column should not be hidden when there is a second AI column with a
 
 test('The AI column should have value in the adaptive detail row', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await resolveAIRequest();
 
   // assert
-  await t.expect(dataGrid.isReady()).ok();
 
   const adaptiveButton = dataGrid.getAdaptiveButton();
 
@@ -199,7 +199,7 @@ test('The AI column should have value in the adaptive detail row', async (t) => 
       ai: {
         prompt: 'Send me nothing',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest({ data }) {
             return {
               promise: new Promise<string>((resolve) => {

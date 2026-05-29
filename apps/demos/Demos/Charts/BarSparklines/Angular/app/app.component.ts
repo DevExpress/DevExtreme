@@ -42,7 +42,7 @@ export class AppComponent {
       filter: ['month', '<=', '12'],
       paginate: false,
     });
-    this.years = [2010, 2011, 2012];
+    this.years = [2021, 2022, 2023];
   }
 
   onValueChanged(e) {

@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_panes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-pane',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

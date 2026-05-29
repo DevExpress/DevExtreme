@@ -20,7 +20,7 @@ import SelectBox from 'devextreme-react/select-box';
 import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { months, monthLabel } from './data.ts';
 
-const year = 2017;
+const year = 2025;
 let selectedMonth = 1;
 
 const startOfMonthStr = (month: number): string => `${month}/01/${year}`;

@@ -22,7 +22,7 @@ if (window && window.config?.packageConfigPaths) {
 })
 
 export class AppComponent {
-  date: Date = new Date(2018, 9, 16, 15, 8, 12);
+  date: Date = new Date(2025, 9, 16, 15, 8, 12);
 }
 
 bootstrapApplication(AppComponent, {

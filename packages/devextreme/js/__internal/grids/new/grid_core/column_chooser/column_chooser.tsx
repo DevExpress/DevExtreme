@@ -87,8 +87,7 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
           dragEnabled={true}
           resizeEnabled={true}
           showCloseButton={true}
-          // @ts-expect-error
-          _loopFocus={true}
+          tabFocusLoopEnabled={true}
 
           toolbarItems={toolbarItems}
           wrapperAttr={{ class: this.getPopupWrapperClass() }}

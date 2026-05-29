@@ -15,6 +15,7 @@ import formatHelper from '@js/format_helper';
 import type { CustomOperation, DataType, Field } from '@js/ui/filter_builder';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 import { getConfig } from './m_between';
 import filterOperationsDictionary from './m_filter_operations_dictionary';
@@ -62,7 +63,8 @@ const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = `${FILTER_BUILDER_ITEM_TEXT_CLA
 const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = `${FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS}-empty`;
 
 function getDateFormat(dataType: DataType | undefined): Format | undefined {
-  return dataType ? DEFAULT_FORMAT[dataType] : undefined;
+  if (!dataType) return undefined;
+  return getGlobalFormatByDataType(dataType) ?? DEFAULT_FORMAT[dataType];
 }
 
 function getFormattedValueText(field: Field, value: FieldValue): string {

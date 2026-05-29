@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-filter-builder-popup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -38,6 +38,7 @@ export const ThemeDecorator: Decorator = (Story, ctx) => {
 
     const [prevTheme, setPrevTheme] = React.useState<string | null>(null);
     const [prevCompact, setPrevCompact] = React.useState<boolean | null>(null);
+    const [cssLoaded, setCssLoaded] = React.useState(false);
 
     React.useEffect(() => {
         if (prevTheme !== null && prevCompact !== null) {
@@ -54,9 +55,14 @@ export const ThemeDecorator: Decorator = (Story, ctx) => {
     const cssFileHref = `css/dx.${theme}${compact ? '.compact' : ''}.css`;
 
     return (
-        <div className={`dx-theme-${themeName}-typography storybook-theme-decorator`}>
-            <link rel="stylesheet" href={cssFileHref} />
-            <Story />
+        <div key={cssFileHref} className={`dx-theme-${themeName}-typography storybook-theme-decorator`}>
+            <link
+                rel="stylesheet"
+                href={cssFileHref}
+                onLoad={() => setCssLoaded(true)}
+                onError={() => setCssLoaded(true)}
+            />
+            {cssLoaded && <Story />}
         </div>
     );
 }

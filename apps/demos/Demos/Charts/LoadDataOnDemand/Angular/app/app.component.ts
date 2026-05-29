@@ -28,7 +28,7 @@ export class AppComponent {
   @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
 
   private _visualRange: VisualRange = {
-    startValue: new Date(2017, 3, 1),
+    startValue: new Date(2025, 3, 1),
     length: {
       weeks: 2,
     },
@@ -45,8 +45,8 @@ export class AppComponent {
   });
 
   bounds = {
-    startValue: new Date(2017, 0, 1),
-    endValue: new Date(2017, 11, 31),
+    startValue: new Date(2025, 0, 1),
+    endValue: new Date(2025, 11, 31),
   };
 
   constructor(private httpClient: HttpClient) {}

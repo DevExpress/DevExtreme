@@ -62,6 +62,7 @@ import {
     SelectionChangedInfo,
     ToolbarPreparingInfo,
     AIColumnRequestCreatingInfo,
+    AIAssistantRequestCreatingInfo,
 } from '../common/grids';
 
 import { dxToolbarItem } from './toolbar';
@@ -114,6 +115,10 @@ export {
 } from '../common';
 
 export {
+    AIAssistant,
+    PredefinedCommands,
+    PredefinedCommandNames,
+    ResponseStatusTexts,
     ApplyFilterMode,
     ColumnChooser,
     ColumnChooserMode,
@@ -172,7 +177,7 @@ export {
 /** @public */
 export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 /** @public */
-export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type TreeListPredefinedToolbarItem = 'addRowButton' | 'aiAssistantButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 /** @public */
 export type TreeListCommandColumnType = 'adaptive' | 'ai' | 'buttons' | 'drag';
 /** @public */
@@ -180,6 +185,14 @@ export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
 /** @public */
 export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
+
+/**
+* @docid _ui_tree_list_AIAssistantRequestCreatingEvent
+* @public
+* @type object
+* @inherits EventInfo,Cancelable,AIAssistantRequestCreatingInfo
+*/
+export type AIAssistantRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & Cancelable & AIAssistantRequestCreatingInfo;
 
 /**
  * @docid _ui_tree_list_AdaptiveDetailRowPreparingEvent
@@ -897,6 +910,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
     readonly watch?: Function;
 };
 
+/** @public */
 export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
     readonly columnIndex: number;
@@ -967,19 +981,19 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @docid
      * @public
      */
-    hasItemsExpr?: string | Function;
+    hasItemsExpr?: string | ((item: TRowData, value: boolean | undefined) => boolean | undefined);
     /**
      * @docid
      * @default "items"
      * @public
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: TRowData, value: undefined | TRowData[]) => TRowData[] | undefined);
     /**
      * @docid
      * @default "id"
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TRowData, value?: TKey) => TKey);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellClickEvent}
@@ -1119,7 +1133,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default "parentId"
      * @public
      */
-    parentIdExpr?: string | Function;
+    parentIdExpr?: string | ((item: TRowData, value?: TKey) => TKey | undefined);
     /**
      * @docid
      * @default "auto"
@@ -1518,7 +1532,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     updateDimensions(): void;
 }
 
-type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+type DefaultToolbarItemName = 'addRowButton' | 'aiAssistantButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 export type dxTreeListToolbar = Toolbar;
 export type dxTreeListToolbarItem = ToolbarItem;
 
@@ -1526,6 +1540,7 @@ export type dxTreeListToolbarItem = ToolbarItem;
  * @docid dxTreeListToolbarItem
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxTreeList
+ * @public
  */
 export interface ToolbarItem extends dxToolbarItem {
     /**
@@ -1799,6 +1814,7 @@ export type Row<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ExplicitTypes<TRowData, TKey> = {
+  AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<TRowData, TKey>;
   AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
   CellClickEvent: CellClickEvent<TRowData, TKey>;
   CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
@@ -1876,6 +1892,11 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
+ * @docid dxTreeListOptions.onAIAssistantRequestCreating
+ * @type_function_param1 e:{ui/tree_list:AIAssistantRequestCreatingEvent}
+ */
+onAIAssistantRequestCreating?: ((e: AIAssistantRequestCreatingEvent) => void);
+ /**
  * @docid dxTreeListOptions.onAdaptiveDetailRowPreparing
  * @type_function_param1 e:{ui/tree_list:AdaptiveDetailRowPreparingEvent}
  */

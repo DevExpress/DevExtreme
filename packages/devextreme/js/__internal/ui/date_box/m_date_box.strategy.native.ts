@@ -5,6 +5,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { inputType } from '@js/core/utils/support';
 import type { Format } from '@js/localization';
 import type { TextBoxType } from '@js/ui/text_box';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 import type { PopupProperties } from '../popup/m_popup';
 import type { DateBoxBaseProperties } from './date_box.base';
@@ -72,9 +73,12 @@ class NativeStrategy extends DateBoxStrategy {
 
   getDisplayFormat(displayFormat?: Format): Format {
     const type = this._getDateBoxType();
+    const globalFormat = type === 'date' || type === 'datetime' || type === 'datetime-local'
+      ? getGlobalFormatByDataType(type === 'datetime-local' ? 'datetime' : type)
+      : undefined;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || dateUtils.FORMATS_MAP[type] as string;
+    return displayFormat || globalFormat || dateUtils.FORMATS_MAP[type] as string;
   }
 
   renderInputMinMax($input?: dxElementWrapper): void {

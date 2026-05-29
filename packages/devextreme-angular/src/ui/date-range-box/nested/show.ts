@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-range-box-show',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

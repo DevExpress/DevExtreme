@@ -1,5 +1,5 @@
 $(() => {
-  const year = 2017;
+  const year = 2025;
   let selectedMonth = 1;
 
   const startOfMonthStr = (month) => `${month}/01/${year}`;

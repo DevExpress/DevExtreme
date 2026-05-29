@@ -49,4 +49,17 @@ export default class Card {
     getHighlightedTexts(): Selector {
         return this.element.find(`.${CLASS.fieldValue}__${CLASS.highlightedState}`);
     }
+
+    async getCaptions(): Promise<string[]> {
+        const captionElements = this.element.find(`.${CLASS.fieldCaption}`);
+        const count = await captionElements.count;
+        const captions: string[] = [];
+
+        for (let i = 0; i < count; i += 1) {
+            const caption = await captionElements.nth(i).innerText;
+            captions.push(caption.replace(/:$/, ''));
+        }
+
+        return captions;
+    }
 }

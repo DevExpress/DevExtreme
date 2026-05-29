@@ -119,7 +119,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
           ai: {
             prompt: 'Initial prompt',
             // eslint-disable-next-line new-cap
-            aiIntegration: new (window as any).DevExpress.aiIntegration({
+            aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
               sendRequest(prompt) {
                 return {
                   promise: new Promise<string>((resolve) => {
@@ -222,7 +222,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
           ai: {
             prompt: 'Initial prompt',
             // eslint-disable-next-line new-cap
-            aiIntegration: new (window as any).DevExpress.aiIntegration({
+            aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
               sendRequest(prompt) {
                 return {
                   promise: new Promise<string>((resolve) => {

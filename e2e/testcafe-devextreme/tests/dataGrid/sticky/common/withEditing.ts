@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import type { DataRenderMode } from 'devextreme/ui/data_grid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
@@ -333,31 +334,34 @@ test.meta({ browserSize: [800, 800] })('The cell edit mode: The validation messa
   },
 }));
 
-test.meta({ browserSize: [800, 800] })('The cell edit mode: The focus overlay element should scroll vertically', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+(['standard', 'virtual'] as DataRenderMode[]).forEach((rowRenderingMode) => {
+  test.meta({ browserSize: [800, 800] })(`The cell edit mode: The focus overlay element should scroll vertically (rowRenderingMode=${rowRenderingMode})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-  await t.expect(dataGrid.isReady()).ok();
+    await t.expect(dataGrid.isReady()).ok();
 
-  await t.click(dataGrid.getDataCell(5, 0).element);
+    await t.click(dataGrid.getDataCell(5, 0).element);
 
-  await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_focused_fixed_column_1.png', { element: dataGrid.element });
+    await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_focused_fixed_column_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { y: 10000 });
+    await dataGrid.scrollTo(t, { y: 10000 });
 
-  await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_focused_fixed_column_2.png', { element: dataGrid.element });
+    await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_focused_fixed_column_2.png', { element: dataGrid.element });
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  ...defaultConfig,
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-  },
-  scrolling: {
-    showScrollbar: 'never',
-  },
-  columnWidth: 200,
-}));
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+    },
+    scrolling: {
+      showScrollbar: 'never',
+      rowRenderingMode,
+    },
+    columnWidth: 200,
+  }));
+});

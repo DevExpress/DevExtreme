@@ -3,7 +3,7 @@
     <DxChart
       :data-source="monthWeather"
       :customize-point="customizePoint"
-      title="Temperature in Seattle: October 2017"
+      title="Temperature in Seattle: October 2025"
     >
       <DxSize :height="420"/>
       <DxValueAxis>

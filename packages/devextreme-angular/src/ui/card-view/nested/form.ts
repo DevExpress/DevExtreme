@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-form',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

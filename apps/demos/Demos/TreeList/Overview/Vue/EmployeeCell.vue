@@ -1,8 +1,9 @@
 <template>
   <div>
-    <div
+    <img
       v-if="cellData.Task_Assigned_Employee"
-      :style="'background-image:url(' + cellData.Task_Assigned_Employee.Picture + ')'"
+      :src="cellData.Task_Assigned_Employee.Picture"
+      alt=""
       class="img"
     />
     <span
@@ -28,10 +29,8 @@ withDefaults(defineProps<{
 .img {
   height: 50px;
   width: 50px;
+  object-fit: contain;
   margin-right: 14px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
   border-radius: 25px;
   border: 1px solid lightgray;
   background-color: #fff;

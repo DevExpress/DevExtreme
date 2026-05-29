@@ -14,6 +14,7 @@ import {
   ChangeStyleCommand,
   ChangeToneCommand,
   ExecuteCommand,
+  ExecuteGridAssistantCommand,
   ExpandCommand,
   ProofreadCommand,
   ShortenCommand,
@@ -65,6 +66,19 @@ const COMMANDS = {
     command: TranslateCommand,
     params: { text: 'text for translation', lang: 'French' },
     params2: { text: 'text for translation 2', lang: 'Spanish' },
+  },
+  [CommandNames.ExecuteGridAssistant]: {
+    command: ExecuteGridAssistantCommand,
+    params: {
+      text: 'sort by name',
+      context: { columns: [] },
+      responseSchema: { type: 'object', properties: {} },
+    },
+    params2: {
+      text: 'filter by id',
+      context: { columns: [] },
+      responseSchema: { type: 'object', properties: {} },
+    },
   },
 };
 

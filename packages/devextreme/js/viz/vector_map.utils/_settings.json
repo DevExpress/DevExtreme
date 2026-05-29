@@ -9,12 +9,5 @@
         "files": [
             "js-stream"
         ]
-    },
-    "node": {
-        "fileName": "dx.vectormaputils.node",
-        "files": [
-            "node-stream",
-            "node-cmd"
-        ]
     }
 }

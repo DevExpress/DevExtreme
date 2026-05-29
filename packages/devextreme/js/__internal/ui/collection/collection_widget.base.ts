@@ -156,7 +156,6 @@ class CollectionWidget<
 > extends Widget<TProperties> {
   private _focusedItemId?: string;
 
-  // eslint-disable-next-line no-restricted-globals
   private _itemFocusTimeout?: ReturnType<typeof setTimeout>;
 
   private _itemRenderAction?: (event?: ActionArgs<TItem>) => void;
@@ -605,6 +604,10 @@ class CollectionWidget<
     this.setAria('activedescendant', null, $target);
   }
 
+  _getItemIdTarget($target: dxElementWrapper): dxElementWrapper {
+    return $target;
+  }
+
   _refreshItemId(
     $target: dxElementWrapper,
     needCleanItemId: boolean | undefined,
@@ -616,10 +619,12 @@ class CollectionWidget<
       return;
     }
 
+    const $idTarget = this._getItemIdTarget($target);
+
     if (!needCleanItemId && focusedElement) {
-      this.setAria('id', this.getFocusedItemId(), $target);
+      this.setAria('id', this.getFocusedItemId(), $idTarget);
     } else {
-      this.setAria('id', null, $target);
+      this.setAria('id', null, $idTarget);
     }
   }
 
@@ -1439,7 +1444,7 @@ class CollectionWidget<
     return this._itemContainer();
   }
 
-  _renderEmptyMessage(rootNodes?: TItem[]): void {
+  _renderEmptyMessage(rootNodes?: TItem[]): boolean {
     const { items: userItems = [], noDataText } = this.option();
 
     const items = rootNodes ?? userItems;
@@ -1450,7 +1455,6 @@ class CollectionWidget<
       this._$noData.remove();
       // @ts-expect-error ts-error
       this._$noData = null;
-      this.setAria('label', undefined);
     }
 
     if (!hideNoData) {
@@ -1466,6 +1470,8 @@ class CollectionWidget<
       }
     }
     this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
+
+    return !hideNoData;
   }
 
   _itemDXEventHandler(

@@ -2684,6 +2684,47 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(isOk, 'arrows handling should not throw an error');
     });
+
+    QUnit.test('should be closed on escape key press when focus is on a child element', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), false, 'popup is closed after pressing esc on a child element');
+    });
+
+    QUnit.test('should remain visible when child element prevents default on escape key press', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+
+        $input.on('keydown', (e) => {
+            const isEscape = e.key === 'Escape' || e.which === 27;
+            if(isEscape) {
+                e.preventDefault();
+            }
+        });
+
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible after pressing esc on a child element that prevents default');
+    });
+
+    QUnit.test('should remain visible when child element presses escape and _ignoreCloseOnChildEscape is true', function(assert) {
+        this.init({ dragEnabled: false, _ignoreCloseOnChildEscape: true });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible when _ignoreCloseOnChildEscape is true');
+    });
 });
 
 QUnit.module('rendering', {

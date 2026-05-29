@@ -330,6 +330,8 @@ class TimeView extends Editor<TimeViewProperties> {
     const { stylingMode } = this.option();
 
     return {
+      format: 'decimal',
+      useMaskBehavior: false,
       showSpinButtons: true,
       displayValueFormatter(value): string {
         return (value < 10 ? '0' : '') + value;

@@ -74,6 +74,7 @@ class SliderHandle extends Widget<SliderHandlerProperties> {
 
   _clean(): void {
     super._clean();
+    this._sliderTooltip?.dispose();
     this._sliderTooltip = null;
   }
 

@@ -47,7 +47,7 @@
           <DxTextBox
             :mask-rules="rules"
             :input-attr="{ 'aria-label': 'Mask' }"
-            mask="+1 (X00) 000-0000"
+            mask="(X00) 000-0000"
           />
         </div>
       </div>

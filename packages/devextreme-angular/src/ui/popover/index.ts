@@ -81,7 +81,6 @@ import {
  */
 @Component({
     selector: 'dx-popover',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -397,6 +396,16 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+
+    
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
 
@@ -728,6 +737,13 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() targetChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -817,6 +833,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { emit: 'showCloseButtonChange' },
             { emit: 'showEventChange' },
             { emit: 'showTitleChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'targetChange' },
             { emit: 'titleChange' },
             { emit: 'titleTemplateChange' },

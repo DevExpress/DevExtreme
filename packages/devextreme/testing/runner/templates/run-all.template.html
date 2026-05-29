@@ -58,6 +58,8 @@
     $(function() {
         var TEST_TIMEOUT_SECONDS = 45,
             TEST_TIMEOUT = TEST_TIMEOUT_SECONDS * 1000,
+            SUITE_TIMEOUT_SECONDS = 180,
+            SUITE_TIMEOUT = SUITE_TIMEOUT_SECONDS * 1000,
             WORKER_NAME_PREFIX = "workerFrame",
             busyCount = 0,
             suitesDescription = {
@@ -193,16 +195,31 @@
                 pureTime: 0,
                 finalized: false,
 
+                suiteTimer: setTimeout(function() {
+                    var suite = suitesInProgress[i];
+                    if(suite && !suite.finalized) {
+                        window.RUNNER_ON_MISC_ERROR({ location: suite.url || '' },
+                            "Suite timed out after " + SUITE_TIMEOUT_SECONDS + " seconds (no QUnit.done received): " + suite.name);
+                        var suiteName = suite.name;
+                        suite.finalize(false);
+                        notifySuiteFinalized(suiteName, false, 0, function() {
+                            nextUrl(i);
+                        });
+                    }
+                }, SUITE_TIMEOUT),
+
                 finalize: function(success) {
                     if(this.finalized) {
                         return;
                     }
 
                     this.finalized = true;
+                    clearTimeout(this.suiteTimer);
                     this.time = roundTime((new Date() - this.startTime) / 1000);
                     this.pureTime = roundTime(this.pureTime);
                     delete this.startTime;
 
+                    delete this.suiteTimer;
                     delete this.finalize;
                     delete this.url;
 
@@ -313,17 +330,23 @@
 
             function launchStopWatch() {
                 return setTimeout(function() {
+                    if(!testSuite || testSuite.finalized) return;
                     testCase.finalize(false, 0);
                     testCase.name = getTestCaseName(testSuite, qunitData);
                     testCase.url = getTestCaseUrl(testSuite, qunitData);
                     testCase.failure = testCase.failure || { };
                     testCase.failure.message = "Test timed out after " + TEST_TIMEOUT_SECONDS + " seconds!";
+                    var suiteName = testSuite.name;
                     testSuite.finalize(false, 0);
+                    notifySuiteFinalized(suiteName, false, 0, function() {
+                        nextUrl(i);
+                    });
                 }, TEST_TIMEOUT);
             }
 
             if(testSuite) {
                 testSuite.results.push(testCase);
+                $.post("/Main/NotifyTestStarted", { name: getTestCaseName(testSuite, qunitData) });
             } else {
                 window.RUNNER_ON_MISC_ERROR(qunitData.suiteUrl,
                     "The test suite has already been finalized when an test has executed in the following test" +
@@ -332,8 +355,6 @@
                     new Error().stack
                 );
             }
-
-            $.post("/Main/NotifyTestStarted", { name: getTestCaseName(testSuite, qunitData) });
         };
 
         var indicateTestStatusInTitle = function(failed) {
@@ -429,6 +450,7 @@
             if(suite) {
                 if(suite.finalized) {
                     suitesInProgress[i] = null;
+                    nextUrl(i);
                     return;
                 }
 
@@ -438,6 +460,8 @@
                 notifySuiteFinalized(suiteName, passed, qunitData.runtime, function() {
                     nextUrl.call(window, i);
                 });
+            } else {
+                nextUrl(i);
             }
         };
 

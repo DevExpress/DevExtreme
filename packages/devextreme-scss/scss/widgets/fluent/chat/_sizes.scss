@@ -4,6 +4,7 @@
 @use "../sizes" as *;
 @use "../typography/sizes" as *;
 @use "../popup/sizes" as *;
+@use "../button/colors" as *;
 
 // adduse
 
@@ -35,6 +36,12 @@ $chat-alerts-padding-block: null !default;
 $chat-alerts-padding-inline: 8px !default;
 $chat-alerts-row-gap: null !default;
 $chat-alert-padding-block: null !default;
+
+$chat-suggestions-padding: null !default;
+$chat-suggestions-border-width: $fluent-base-border-width !default;
+$chat-suggestions-button-border-radius: $button-border-radius !default;
+$chat-suggestions-button-max-width: 200px !default;
+$chat-suggestions-gap: 12px !default;
 
 $chat-message-editing-preview-caption-font-size: $fluent-xs-font-size !default;
 $chat-message-editing-preview-content-row-gap: null !default;
@@ -95,6 +102,8 @@ $chat-bubble-gap: 8px !default;
   $chat-alerts-row-gap: 2px !default;
   $chat-alert-padding-block: 6px !default;
 
+  $chat-suggestions-padding: 20px !default;
+
   $chat-message-editing-preview-content-padding-inline: 12px !default;
   $chat-message-editing-preview-content-row-gap: 4px !default;
 
@@ -132,6 +141,8 @@ $chat-bubble-gap: 8px !default;
   $chat-alerts-padding-block: 8px !default;
   $chat-alerts-row-gap: 2px !default;
   $chat-alert-padding-block: 5px !default;
+
+  $chat-suggestions-padding: 16px !default;
 
   $chat-message-editing-preview-content-padding-inline: 8px !default;
   $chat-message-editing-preview-content-row-gap: 2px !default;

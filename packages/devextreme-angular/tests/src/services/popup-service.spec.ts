@@ -6,7 +6,6 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import 'devextreme/dist/css/dx.light.css';
 
 @Component({
-  standalone: true,
   imports: [DxButtonModule],
   selector: '',
   template: `<div class="popup-content" style="height:300px">

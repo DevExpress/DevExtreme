@@ -12,8 +12,8 @@ import {
 
 
 
-import type { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
-import type { FirstDayOfWeek, Orientation } from 'devextreme/common';
+import type { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, SnapToCellsMode, ViewType } from 'devextreme/ui/scheduler';
+import type { DayOfWeek, Orientation } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_views } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-scheduler-view',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
@@ -111,10 +110,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): DayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -140,6 +139,14 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
     set groups(value: Array<string>) {
         this._setOption('groups', value);
+    }
+
+    @Input()
+    get hiddenWeekDays(): Array<DayOfWeek> | undefined {
+        return this._getOption('hiddenWeekDays');
+    }
+    set hiddenWeekDays(value: Array<DayOfWeek> | undefined) {
+        this._setOption('hiddenWeekDays', value);
     }
 
     @Input()
@@ -188,6 +195,14 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
     set scrolling(value: dxSchedulerScrolling) {
         this._setOption('scrolling', value);
+    }
+
+    @Input()
+    get snapToCellsMode(): SnapToCellsMode {
+        return this._getOption('snapToCellsMode');
+    }
+    set snapToCellsMode(value: SnapToCellsMode) {
+        this._setOption('snapToCellsMode', value);
     }
 
     @Input()

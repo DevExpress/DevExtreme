@@ -9,6 +9,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { format } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import { getGanttViewCore } from '@ts/ui/gantt/gantt_importer';
@@ -565,10 +566,15 @@ export class GanttView extends Widget<GanttViewProperties> {
   getFormattedDateText(date): string {
     let result = '';
     if (date) {
-      const datePart = dateLocalization.format(date, 'shortDate');
-      const timeFormat = this._hasAmPM() ? 'hh:mm a' : 'HH:mm';
-      const timePart = dateLocalization.format(date, timeFormat);
-      result = `${datePart} ${timePart}`;
+      const globalDateTimeFormat = getGlobalFormatByDataType('datetime');
+      if (globalDateTimeFormat) {
+        result = String(dateLocalization.format(date, globalDateTimeFormat) ?? '');
+      } else {
+        const datePart = dateLocalization.format(date, 'shortDate');
+        const timeFormat = this._hasAmPM() ? 'hh:mm a' : 'HH:mm';
+        const timePart = dateLocalization.format(date, timeFormat);
+        result = `${datePart} ${timePart}`;
+      }
     }
     return result;
   }

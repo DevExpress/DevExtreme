@@ -77,7 +77,6 @@ import {
  */
 @Component({
     selector: 'dx-popup',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -471,6 +470,16 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+
+    
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
 
@@ -868,6 +877,13 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -966,6 +982,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'shadingColorChange' },
             { emit: 'showCloseButtonChange' },
             { emit: 'showTitleChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'tabIndexChange' },
             { emit: 'titleChange' },
             { emit: 'titleTemplateChange' },

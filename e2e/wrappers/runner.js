@@ -36,7 +36,7 @@ const frameworkConfig = {
         port: 3030,
     },
     angular: {
-        staticPath: path.resolve(__dirname, 'builders/angular19/dist/angular/browser/index.html'),
+        staticPath: path.resolve(__dirname, 'builders/angular/dist/angular/browser/index.html'),
         port: 3031,
     },
     vue: {

@@ -21,6 +21,8 @@ const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical';
 const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
+const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
+const ITEM_CONTENT_CLASS = 'dx-item-content';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -319,23 +321,101 @@ QUnit.module('Aria accessibility', {
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
     });
 
-    QUnit.test('Items: [1, 2, 3], Item.selected: true', function() {
+    QUnit.test('Items: [1, 2, 3], Item.selected: true', function(assert) {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([0], { attributes: ['aria-checked'], role: 'radio' });
+        helper.checkItemsAttributes([], {});
+
+        helper.getItems().each((index, item) => {
+            const $radioContainer = $(item).find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+            const $itemContent = $(item).find(`.${ITEM_CONTENT_CLASS}`);
+            const contentId = $itemContent.attr('id');
+
+            assert.ok(contentId, `item[${index}] content element has an id`);
+            assert.strictEqual($radioContainer.attr('role'), 'radio', `item[${index}] radio container has role="radio"`);
+            assert.strictEqual($radioContainer.attr('aria-checked'), index === 0 ? 'true' : 'false', `item[${index}] radio container has correct aria-checked`);
+            assert.strictEqual($radioContainer.attr('aria-labelledby'), contentId, `item[${index}] radio container aria-labelledby references content id`);
+        });
     });
 
-    QUnit.test('Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement', function() {
+    QUnit.test('Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement', function(assert) {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.widget.option('focusedElement', helper.getItems().eq(0));
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([0], { attributes: ['aria-checked'], role: 'radio' });
+        helper.checkItemsAttributes([], {});
+
+        helper.getItems().each((index, item) => {
+            const $radioContainer = $(item).find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+            const $itemContent = $(item).find(`.${ITEM_CONTENT_CLASS}`);
+            const contentId = $itemContent.attr('id');
+
+            assert.ok(contentId, `item[${index}] content element has an id`);
+            assert.strictEqual($radioContainer.attr('role'), 'radio', `item[${index}] radio container has role="radio"`);
+            assert.strictEqual($radioContainer.attr('aria-checked'), index === 0 ? 'true' : 'false', `item[${index}] radio container has correct aria-checked`);
+            assert.strictEqual($radioContainer.attr('aria-labelledby'), contentId, `item[${index}] radio container aria-labelledby references content id`);
+        });
 
         helper.widget.option('focusedElement', null);
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([0], { attributes: ['aria-checked'], role: 'radio' });
+        helper.checkItemsAttributes([], {});
+
+        helper.getItems().each((index, item) => {
+            const $radioContainer = $(item).find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+            const $itemContent = $(item).find(`.${ITEM_CONTENT_CLASS}`);
+            const contentId = $itemContent.attr('id');
+
+            assert.ok(contentId, `item[${index}] content element has an id after clearing focusedElement`);
+            assert.strictEqual($radioContainer.attr('role'), 'radio', `item[${index}] radio container has role="radio" after clearing focusedElement`);
+            assert.strictEqual($radioContainer.attr('aria-checked'), index === 0 ? 'true' : 'false', `item[${index}] radio container has correct aria-checked after clearing focusedElement`);
+            assert.strictEqual($radioContainer.attr('aria-labelledby'), contentId, `item[${index}] radio container aria-labelledby references content id after clearing focusedElement`);
+        });
+    });
+
+    QUnit.test('Items with itemTemplate: radio container has correct aria attributes', function(assert) {
+        helper.createWidget({
+            items: [{ text: 'custom 1' }, { text: 'custom 2' }],
+            itemTemplate(itemData, _, itemElement) {
+                const $button = $('<button>').text(itemData.text);
+                itemElement.append($button);
+            },
+        });
+
+        helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
+        helper.checkItemsAttributes([], {});
+
+        helper.getItems().each((index, item) => {
+            const $radioContainer = $(item).find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+            const $itemContent = $(item).find(`.${ITEM_CONTENT_CLASS}`);
+            const contentId = $itemContent.attr('id');
+
+            assert.ok(contentId, `item[${index}] content element has an id`);
+            assert.strictEqual($radioContainer.attr('role'), 'radio', `item[${index}] radio container has role="radio"`);
+            assert.strictEqual($radioContainer.attr('aria-checked'), 'false', `item[${index}] radio container has aria-checked="false" initially`);
+            assert.strictEqual($radioContainer.attr('aria-labelledby'), contentId, `item[${index}] radio container aria-labelledby references content id`);
+        });
+    });
+
+    QUnit.test('Item with html: role="radio" is set on item element, no radio container created', function(assert) {
+        helper.createWidget({
+            items: [
+                { html: '<span>Option A</span>' },
+                { html: '<span>Option B</span>' },
+            ],
+        });
+
+        helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
+
+        helper.getItems().each((index, item) => {
+            const $item = $(item);
+            const $radioContainer = $item.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
+            assert.strictEqual($radioContainer.length, 0, `item[${index}] has no radio container when html is provided`);
+            assert.strictEqual($item.attr('role'), 'radio', `item[${index}] element itself has role="radio"`);
+            assert.strictEqual($item.attr('aria-checked'), 'false', `item[${index}] element has aria-checked="false" by default`);
+            assert.strictEqual($item.attr('aria-labelledby'), undefined, `item[${index}] element has no aria-labelledby when html is provided`);
+        });
     });
 });
 

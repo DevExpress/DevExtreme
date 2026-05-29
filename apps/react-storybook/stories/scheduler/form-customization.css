@@ -9,3 +9,13 @@
 .scheduler-form-custom-icon-button * {
   padding: 0 !important;
 }
+
+.custom-form-notice {
+  background: #fce4e4;
+  border: 1px solid #e0a0a0;
+  border-radius: 4px;
+  padding: 8px 12px;
+  color: #8b3a3a;
+  font-size: 13px;
+  line-height: 1.4;
+}

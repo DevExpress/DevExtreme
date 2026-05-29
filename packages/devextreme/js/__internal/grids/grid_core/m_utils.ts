@@ -1,6 +1,7 @@
 // @ts-check
 
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import dateLocalization from '@js/common/core/localization/date';
 import DataSource from '@js/common/data/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/common/data/utils';
@@ -19,6 +20,7 @@ import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
@@ -83,6 +85,21 @@ function isDateType(dataType) {
   return dataType === 'date' || dataType === 'datetime';
 }
 
+const getGlobalFormat = (dataType) => {
+  const globalFormat = getGlobalFormatByDataType(dataType);
+
+  if (!globalFormat) {
+    return undefined;
+  }
+
+  return isString(globalFormat)
+    ? (value) => {
+      const dateValue = value instanceof Date ? value : new Date(value);
+      return isNaN(dateValue.getTime()) ? '' : dateLocalization.format(dateValue, globalFormat);
+    }
+    : globalFormat;
+};
+
 const setEmptyText = function ($container) {
   $container.get(0).textContent = '\u00A0';
 };
@@ -127,9 +144,9 @@ const getSummaryText = function (summaryItem, summaryTexts) {
 };
 
 const getWidgetInstance = function ($element) {
-  const editorData = $element.data && $element.data();
-  const dxComponents = editorData && editorData.dxComponents;
-  const widgetName = dxComponents && dxComponents[0];
+  const editorData = $element?.data();
+  const dxComponents = editorData?.dxComponents;
+  const widgetName = dxComponents?.[0];
 
   return widgetName && editorData[widgetName];
 };
@@ -389,9 +406,9 @@ export default {
   getFormatByDataType(dataType) {
     switch (dataType) {
       case 'date':
-        return 'shortDate';
+        return getGlobalFormat('date') || 'shortDate';
       case 'datetime':
-        return 'shortDateShortTime';
+        return getGlobalFormat('datetime') || 'shortDateShortTime';
       default:
         return undefined;
     }
@@ -419,6 +436,7 @@ export default {
     } else {
       result = function (data) {
         let result = column.calculateCellValue(data);
+
         if (result === undefined || result === '') {
           result = null;
         }

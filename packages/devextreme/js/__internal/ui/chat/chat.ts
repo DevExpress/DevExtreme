@@ -18,9 +18,12 @@ import type {
   MessageUpdatedEvent,
   MessageUpdatingEvent,
   Properties as ChatProperties,
+  SendButtonClickEvent,
+  SendButtonProperties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -39,6 +42,7 @@ import type {
   Properties as MessageListProperties,
 } from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
+import Suggestions, { type SuggestionsOptions } from '@ts/ui/chat/suggestions';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
@@ -50,6 +54,8 @@ class Chat extends Widget<ChatProperties> {
   _messageList!: MessageList;
 
   _alertList!: AlertList;
+
+  _suggestions?: Suggestions;
 
   _messageToEdit?: Message;
 
@@ -79,13 +85,15 @@ class Chat extends Widget<ChatProperties> {
 
   _inputFieldTextChangedAction?: (e: Partial<InputFieldTextChangedEvent>) => void;
 
+  _sendButtonAction?: (e: Partial<SendButtonClickEvent>) => void;
+
   _getDefaultOptions(): ChatProperties {
     return {
       ...super._getDefaultOptions(),
       activeStateEnabled: true,
       alerts: [],
       dataSource: null,
-      dayHeaderFormat: 'shortdate',
+      dayHeaderFormat: getGlobalFormatByDataType('date') ?? 'shortdate',
       editing: {
         allowUpdating: false,
         allowDeleting: false,
@@ -97,7 +105,7 @@ class Chat extends Widget<ChatProperties> {
       inputFieldText: '',
       items: [],
       messageTemplate: null,
-      messageTimestampFormat: 'shorttime',
+      messageTimestampFormat: getGlobalFormatByDataType('time') ?? 'shorttime',
       reloadOnChange: true,
       showAvatar: true,
       showDayHeaders: true,
@@ -107,6 +115,12 @@ class Chat extends Widget<ChatProperties> {
       speechToTextOptions: undefined,
       typingUsers: [],
       user: { id: new Guid().toString() },
+      sendButtonOptions: {
+        icon: 'arrowright',
+        action: 'send',
+        onClick: undefined,
+      },
+      suggestions: undefined,
       onMessageDeleted: undefined,
       onMessageDeleting: undefined,
       onMessageEditCanceled: undefined,
@@ -138,6 +152,7 @@ class Chat extends Widget<ChatProperties> {
     this._createTypingEndAction();
     this._createAttachmentDownloadAction();
     this._createInputFieldTextChangedAction();
+    this._createSendButtonAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -175,6 +190,7 @@ class Chat extends Widget<ChatProperties> {
 
     this._renderMessageList();
     this._renderAlertList();
+    this._renderSuggestions();
     this._renderMessageBox();
 
     this._updateRootAria();
@@ -462,6 +478,36 @@ class Chat extends Widget<ChatProperties> {
     });
   }
 
+  _getSuggestionsConfiguration(): SuggestionsOptions {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      rtlEnabled,
+      suggestions,
+    } = this.option();
+
+    const hasSuggestionOptions = Boolean(Object.keys(suggestions ?? {}).length);
+
+    if (!hasSuggestionOptions) {
+      return {};
+    }
+
+    const config: SuggestionsOptions = {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      rtlEnabled,
+      ...suggestions,
+    };
+
+    return config;
+  }
+
+  _renderSuggestions(): void {
+    this._suggestions = new Suggestions(this.$element(), this._getSuggestionsConfiguration());
+  }
+
   _renderMessageBox(): void {
     const {
       activeStateEnabled,
@@ -472,6 +518,8 @@ class Chat extends Widget<ChatProperties> {
       speechToTextEnabled,
       speechToTextOptions,
     } = this.option();
+
+    const sendButtonOptions = this._getSendButtonOptionsWithAction();
 
     const $messageBox = $('<div>');
 
@@ -485,6 +533,7 @@ class Chat extends Widget<ChatProperties> {
       text: inputFieldText,
       speechToTextEnabled,
       speechToTextOptions,
+      sendButtonOptions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -605,6 +654,21 @@ class Chat extends Widget<ChatProperties> {
     );
   }
 
+  _createSendButtonAction(): void {
+    const { sendButtonOptions } = this.option();
+
+    this._sendButtonAction = this._createAction(sendButtonOptions?.onClick, { excludeValidators: ['disabled'] });
+  }
+
+  _getSendButtonOptionsWithAction(): SendButtonProperties | undefined {
+    const { sendButtonOptions } = this.option();
+
+    return {
+      ...sendButtonOptions,
+      onClick: this._sendButtonAction,
+    };
+  }
+
   _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
     const { text, event, attachments } = e;
     const { user } = this.option();
@@ -661,7 +725,9 @@ class Chat extends Widget<ChatProperties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
+        this._suggestions?.updateOptions(this._getSuggestionsConfiguration());
         this._messageBox.option(name, value);
+        super._optionChanged(args);
         break;
       case 'speechToTextEnabled':
       case 'speechToTextOptions':
@@ -743,6 +809,17 @@ class Chat extends Widget<ChatProperties> {
         break;
       case 'reloadOnChange':
         break;
+      case 'sendButtonOptions':
+        this._createSendButtonAction();
+        this._messageBox.option(name, this._getSendButtonOptionsWithAction());
+        break;
+      case 'suggestions':
+        this._suggestions?.updateOptions(this._getSuggestionsConfiguration());
+        break;
+      case 'rtlEnabled':
+        this._suggestions?.updateOptions(this._getSuggestionsConfiguration());
+        super._optionChanged(args);
+        break;
       default:
         super._optionChanged(args);
     }
@@ -760,6 +837,7 @@ class Chat extends Widget<ChatProperties> {
   }
 
   _dispose(): void {
+    this._suggestions?.dispose();
     this._deleteConfirmationPopup?.dispose();
     super._dispose();
   }

@@ -2,7 +2,6 @@ packages:
   - 'apps/*'
   - 'e2e/*'
   - 'packages/*'
-  - 'packages/devextreme/artifacts/npm/devextreme-dist'
   - '!packages/sbom'
 
 catalog:
@@ -11,13 +10,13 @@ catalog:
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.25
-  devexpress-gantt: 4.1.66
-  devextreme-exceljs-fork: 4.4.7
+  devexpress-diagram: 2.2.29
+  devexpress-gantt: 4.1.69
+  devextreme-exceljs-fork: 4.4.9
   devextreme-quill: 1.7.9
-  eslint: 9.39.2
+  eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.9
+  eslint-config-devextreme: 1.1.10
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -28,45 +27,47 @@ catalog:
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
   jquery: 4.0.0
+  zod: 3.24.4
+  zod-to-json-schema: 3.24.6
   "@babel/eslint-parser": 7.28.6
   "@eslint-stylistic/metadata": ^2.13.0
-  "@eslint/eslintrc": 3.3.3
-  "@stylistic/eslint-plugin": 5.7.1
-  "@types/jquery": 3.5.33
+  "@eslint/eslintrc": 3.3.5
+  "@stylistic/eslint-plugin": 5.10.0
+  "@types/jquery": 4.0.0
   "@typescript-eslint/eslint-plugin": 8.52.0
   "@typescript-eslint/parser": 8.52.0
 
 catalogs:
   angular:
-    "@angular-devkit/build-angular": ~19.2.19
-    "@angular-devkit/architect": ~0.1902.19
-    "@angular-devkit/schematics": ~19.2.19
-    "@angular/cli": ~19.2.19
-    "@angular/common": ~19.2.19
-    "@angular/compiler": ~19.2.19
-    "@angular/compiler-cli": ~19.2.19
-    "@angular/core": ~19.2.19
-    "@angular/forms": ~19.2.19
-    "@angular/platform-browser": ~19.2.19
-    "@angular/platform-browser-dynamic": ~19.2.19
-    "@angular/platform-server": ~19.2.19
-    "@angular/router": ~19.2.19
-    "ng-packagr": ~19.2.2
-    "typescript": 5.5.4
-    "zone.js": 0.15.1
+    "@angular-devkit/build-angular": ~20.3.21
+    "@angular-devkit/architect": ~0.2003.21
+    "@angular-devkit/schematics": ~20.3.21
+    "@angular/cli": ~20.3.21
+    "@angular/common": ~20.3.21
+    "@angular/compiler": ~20.3.21
+    "@angular/compiler-cli": ~20.3.21
+    "@angular/core": ~20.3.21
+    "@angular/forms": ~20.3.21
+    "@angular/platform-browser": ~20.3.21
+    "@angular/platform-browser-dynamic": ~20.3.21
+    "@angular/platform-server": ~20.3.21
+    "@angular/router": ~20.3.21
+    "ng-packagr": ~20.3.0
+    "typescript": ~5.8.0
+    "zone.js": ~0.15.1
   eslint8:
-    eslint: 9.39.2
+    eslint: 9.39.4
     eslint-config-airbnb-typescript: 17.1.0
-    eslint-plugin-i18n: 2.3.0
-    eslint-plugin-import: 2.29.0
-    eslint-plugin-no-only-tests: 3.1.0
+    eslint-plugin-i18n: 2.4.0
+    eslint-plugin-import: 2.32.0
+    eslint-plugin-no-only-tests: 3.3.0
     eslint-plugin-qunit: 7.3.4
     gulp-eslint-new: 1.9.1
     "@babel/eslint-parser": 7.28.6
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:
-    "devextreme-internal-tools": 20.2.0
+    "devextreme-internal-tools": 20.4.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8

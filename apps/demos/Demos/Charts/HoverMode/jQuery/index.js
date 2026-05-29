@@ -10,9 +10,9 @@ $(() => {
       },
     },
     series: [
-      { valueField: 'year2004', name: '2004' },
-      { valueField: 'year2001', name: '2001' },
-      { valueField: 'year1998', name: '1998' },
+      { valueField: 'year2024', name: '2024' },
+      { valueField: 'year2020', name: '2020' },
+      { valueField: 'year2016', name: '2016' },
     ],
     stickyHovering: false,
     title: {

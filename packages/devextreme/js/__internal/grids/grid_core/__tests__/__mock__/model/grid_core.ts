@@ -16,12 +16,15 @@ import { ConfirmationDialogModel } from './confirmation_dialog';
 import { EditFormModel } from './edit_form';
 import { FilterPanelModel } from './filter_panel';
 import { DataRowModel } from './row/data_row';
+import { FilterRowModel } from './row/filter_row';
 import { GroupRowModel } from './row/group_row';
 
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
+  filterRowClass: 'filter-row',
+  scrollableContainer: 'dx-scrollable-container',
   aiDialog: 'dx-aidialog',
   aiPromptEditor: 'dx-ai-prompt-editor',
   toast: 'dx-toast',
@@ -49,12 +52,19 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
     return this.root.querySelector(`.${SELECTORS.aiPromptEditor}`) as HTMLElement;
   }
 
-  public getHeaderCells(): NodeListOf<HTMLElement> {
-    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
+  public getHeaderRows(): NodeListOf<HTMLElement> {
+    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass}`);
   }
 
-  public getHeaderCell(columnIndex: number): HeaderCellModel {
-    return new HeaderCellModel(this.getHeaderCells()[columnIndex], this.addWidgetPrefix.bind(this));
+  public getHeaderCells(rowIndex = 0): NodeListOf<HTMLElement> {
+    return this.getHeaderRows()[rowIndex].querySelectorAll('td');
+  }
+
+  public getHeaderCell(columnIndex: number, rowIndex = 0): HeaderCellModel {
+    return new HeaderCellModel(
+      this.getHeaderCells(rowIndex)[columnIndex],
+      this.addWidgetPrefix.bind(this),
+    );
   }
 
   public getAIHeaderCell(columnIndex: number): AIHeaderCellModel {
@@ -90,12 +100,23 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
     );
   }
 
+  public getFilterRow(): FilterRowModel {
+    const filterRowElement = this.root.querySelector(
+      `.${this.addWidgetPrefix(SELECTORS.filterRowClass)}`,
+    );
+    return new FilterRowModel(filterRowElement as HTMLElement);
+  }
+
   public getGroupRows(): NodeListOf<HTMLElement> {
     return this.root.querySelectorAll(`.${SELECTORS.groupRowClass}`);
   }
 
   public getGroupRow(rowIndex: number): GroupRowModel {
     return new GroupRowModel(this.getGroupRows()[rowIndex]);
+  }
+
+  public getScrollableContainer(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.scrollableContainer}`) as HTMLElement;
   }
 
   public getHeaderByText(text: string): dxElementWrapper {

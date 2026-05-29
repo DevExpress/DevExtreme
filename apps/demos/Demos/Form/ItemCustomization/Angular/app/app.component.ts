@@ -78,7 +78,7 @@ export class AppComponent implements AfterViewInit {
     this.hireDateEditorOptions = { width: '100%', value: null };
     this.birthDateEditorOptions = { width: '100%', disabled: true };
     this.notesEditorOptions = { height: 90, maxLength: 200 };
-    this.phoneEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
+    this.phoneEditorOptions = { mask: '(X00) 000-0000', maskRules: { X: /[02-9]/ } };
 
     this.labelTemplates = [
       { name: 'name', icon: 'dx-icon-user' },

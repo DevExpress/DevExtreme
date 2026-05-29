@@ -12,8 +12,8 @@ import modules from '../m_modules';
 import type { Controllers, OptionChanged, Views } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { Direction } from './const';
-import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard_navigation_utils';
 import type { NavigationDirection } from './types';
+import { isElementDefined, isFixedColumnIndexOffsetRequired } from './utils';
 
 export class KeyboardNavigationController extends modules.ViewController {
   private keyDownListener: any;

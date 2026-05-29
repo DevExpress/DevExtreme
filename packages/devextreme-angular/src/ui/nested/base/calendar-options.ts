@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import type { FirstDayOfWeek, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import type { DayOfWeek, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import type { CalendarSelectionMode, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, WeekNumberRule } from 'devextreme/ui/calendar';
 
 @Component({
@@ -61,10 +61,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('elementAttr', value);
     }
 
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): DayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 

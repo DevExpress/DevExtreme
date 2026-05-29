@@ -35,7 +35,7 @@ export class AppComponent {
     this.copperCosts = service.getCopperCosts();
     this.nickelCosts = service.getNickelCosts();
     this.palladiumCosts = service.getPalladiumCosts();
-    this.years = [2010, 2011, 2012];
+    this.years = [2021, 2022, 2023];
   }
 }
 

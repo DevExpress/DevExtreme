@@ -9,7 +9,7 @@
             :use-mask-behavior="true"
             :input-attr="{ 'aria-label': 'Date' }"
             type="datetime"
-            placeholder="12/31/2018, 2:52 PM"
+            placeholder="12/31/2025, 2:52 PM"
           />
         </div>
       </div>
@@ -21,7 +21,7 @@
             :use-mask-behavior="true"
             :value="date"
             :input-attr="{ 'aria-label': 'Date' }"
-            placeholder="10/16/2018"
+            placeholder="10/16/2025"
             display-format="shortdate"
             type="date"
           />
@@ -36,7 +36,7 @@
             :input-attr="{ 'aria-label': 'Date' }"
             :value="date"
             type="datetime"
-            placeholder="Tuesday, 16 of Oct, 2018 14:52"
+            placeholder="Thursday, 16 of Oct, 2025 14:52"
             display-format="EEEE, d of MMM, yyyy HH:mm"
           />
         </div>
@@ -49,7 +49,7 @@
             :use-mask-behavior="true"
             :input-attr="{ 'aria-label': 'Date' }"
             :value="date"
-            placeholder="Year: 2018"
+            placeholder="Year: 2025"
             display-format="'Year': yyyy"
             type="date"
           />
@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import DxDateBox from 'devextreme-vue/date-box';
 
-const date = new Date(2018, 9, 16, 15, 8, 12);
+const date = new Date(2025, 9, 16, 15, 8, 12);
 </script>
 <style>
 .dx-fieldset {

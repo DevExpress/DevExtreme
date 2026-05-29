@@ -259,7 +259,7 @@ QUnit.module('Rendering', function() {
             const maxHeight = popup.option('maxHeight');
             const positionCollision = popup.option('position.collision');
 
-            assert.ok(Math.floor(maxHeight()) < windowHeight(), 'maxHeight is correct');
+            assert.ok(Math.floor(maxHeight) < windowHeight(), 'maxHeight is correct');
             assert.equal(positionCollision, 'flip', 'collision is correct');
         } finally {
             scrollTop.restore();

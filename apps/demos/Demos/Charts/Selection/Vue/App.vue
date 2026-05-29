@@ -21,12 +21,12 @@
       </DxLabel>
     </DxCommonSeriesSettings>
     <DxSeries
-      value-field="year2007"
-      name="2007 - 2008"
+      value-field="year2019"
+      name="2019 - 2020"
     />
     <DxSeries
-      value-field="year2008"
-      name="2008 - 2009"
+      value-field="year2020"
+      name="2020 - 2021"
     />
     <DxValueAxis>
       <DxLabel>

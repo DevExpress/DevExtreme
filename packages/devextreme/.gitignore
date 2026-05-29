@@ -1,6 +1,5 @@
 node_modules
 /artifacts
-!/artifacts/npm/devextreme-dist/package.json
 /testing/testcafe/artifacts
 /testing/LastSuiteTime.txt
 /dotnet_packages

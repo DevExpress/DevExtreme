@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Dts Bundle Executor Schema",
+  "description": "Assemble TypeScript declaration bundle files from source",
+  "type": "object",
+  "properties": {
+    "bundleSources": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Source .d.ts files to concatenate (relative to project root)."
+    },
+    "artifactPath": {
+      "type": "string",
+      "description": "Output path for the TypeScript artifacts bundle (relative to project root)."
+    },
+    "packagePath": {
+      "type": "string",
+      "description": "Output path for the npm package bundle (relative to project root)."
+    },
+    "licenseTemplateFile": {
+      "type": "string",
+      "description": "Path to the license header template file (relative to project root)."
+    },
+    "eulaUrl": {
+      "type": "string",
+      "description": "EULA URL embedded in the license header."
+    }
+  },
+  "required": ["bundleSources", "artifactPath", "packagePath"]
+}

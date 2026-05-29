@@ -24,7 +24,6 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
 
 @Component({
     selector: 'dxo-variables',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

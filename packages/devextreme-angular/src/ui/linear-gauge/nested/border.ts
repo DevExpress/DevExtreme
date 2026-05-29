@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-border',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

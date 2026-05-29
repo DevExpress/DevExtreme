@@ -1,0 +1,72 @@
+@use './variables' as *;
+
+@mixin ai-chat-messagelist-empty(
+  $messagelist-empty-icon-color,
+  $messagelist-empty-icon-background-color,
+) {
+  .dx-ai-chat__empty-image {
+    color: $messagelist-empty-icon-color;
+    background-color: $messagelist-empty-icon-background-color;
+  }
+}
+
+@mixin ai-chat-message-pending(
+  $pending-message-color,
+) {
+  .dx-ai-chat__message--pending {
+    .dx-ai-chat__message-icon, .dx-ai-chat__message-status {
+      color: $pending-message-color;
+    }
+  }
+}
+
+@mixin ai-chat-message-success(
+  $success-message-color,
+) {
+  .dx-ai-chat__message--success .dx-ai-chat__message-icon,
+  .dx-ai-chat__action-list-item--success {
+    color: $success-message-color;
+  }
+}
+
+@mixin ai-chat-message-error(
+  $error-message-color,
+) {
+  .dx-ai-chat__message--error .dx-ai-chat__message-icon,
+  .dx-ai-chat__action-list-item--error,
+  .dx-ai-chat__action-list-item--aborted,
+  .dx-ai-chat__message-error-text {
+    color: $error-message-color;
+  }
+}
+
+@mixin ai-chat-messagebubble-border(
+  $border-color,
+) {
+  .dx-ai-chat__content .dx-chat-messagegroup-alignment-start .dx-chat-messagebubble {
+    border-width: 1px;
+    border-style: solid;
+    border-color: $border-color;
+  }
+}
+
+@mixin ai-chat-message-regenerate-button(
+  $hover-background-color,
+) {
+  .dx-ai-chat__message-regenerate-button {
+    cursor: pointer;
+
+    &:hover::before {
+      border-radius: $ai-chat-message-regenerate-button-border-radius;
+      background-color: $hover-background-color;
+    }
+  }
+}
+
+@mixin ai-chat-message-icon(
+  $icon-size,
+) {
+  .dx-ai-chat__message-icon, .dx-ai-chat__message-regenerate-button {
+    font-size: $icon-size;
+  }
+}

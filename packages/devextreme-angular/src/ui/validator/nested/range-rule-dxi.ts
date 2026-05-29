@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-validator-range-rule',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
