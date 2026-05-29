@@ -542,6 +542,34 @@ QUnit.module('dxPivotGrid', {
         assert.strictEqual(expandValueChangingArgs, undefined);
     });
 
+    QUnit.test('keyboard activation preserves focus on the same cell after re-render', function(assert) {
+        let expandValueChangingArgs;
+        const pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            onExpandValueChanging: function(args) {
+                expandValueChangingArgs = $.extend({}, args);
+            }
+        });
+        assert.ok(pivotGrid);
+
+        const $collapsedTd = $('#pivotGrid').find('.dx-pivotgrid-collapsed').closest('td');
+        assert.strictEqual($collapsedTd.length, 1);
+        const ariaLabelBefore = $collapsedTd.attr('aria-label');
+        $collapsedTd.get(0).focus();
+
+        $collapsedTd.trigger($.Event('keydown', { key: 'Enter' }));
+
+        this.clock.tick(100);
+
+        assert.deepEqual(expandValueChangingArgs, {
+            area: 'column',
+            path: ['2012'],
+            expanded: true,
+            needExpandData: true
+        });
+        assert.strictEqual($(document.activeElement).attr('aria-label'), ariaLabelBefore, 'focus restored to the same cell after expand');
+    });
+
     QUnit.test('onCellClick cancel prevents keyboard expansion', function(assert) {
         let expandValueChangingArgs;
         const pivotGrid = createPivotGrid({
