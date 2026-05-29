@@ -207,7 +207,6 @@ class TextEditorBase<
     return rules;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDefaultButtons(): TextEditorButtonInfo[] {
     return [
       {
@@ -237,7 +236,6 @@ class TextEditorBase<
     return this._inputWrapper().find(`.${TEXTEDITOR_BUTTONS_CONTAINER_CLASS}`).eq(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isControlKey(key: string): boolean {
     return CONTROL_KEYS.includes(key);
   }
@@ -781,7 +779,6 @@ class TextEditorBase<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getValueChangeEventOptionName(): keyof TProperties {
     return 'valueChangeEvent';
   }
@@ -814,7 +811,6 @@ class TextEditorBase<
     this._renderValueChangeEvent();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderValueEventName(): string {
     return 'input change keypress';
   }

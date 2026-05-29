@@ -21,8 +21,8 @@ import Widget from '@ts/core/widget/widget';
 import FileUploader from '@ts/ui/file_uploader/file_uploader';
 import type { CancelButtonClickEvent, FileValidationErrorEvent, Properties as FileUploaderProperties } from '@ts/ui/file_uploader/file_uploader.types';
 import Informer from '@ts/ui/informer/informer';
-import type { TextAreaProperties } from '@ts/ui/m_text_area';
-import TextArea from '@ts/ui/m_text_area';
+import type { TextAreaProperties } from '@ts/ui/text_area';
+import TextArea from '@ts/ui/text_area';
 
 const CHAT_TEXT_AREA_ATTACHMENTS = 'dx-chat-textarea-attachments';
 export const CHAT_TEXT_AREA_ATTACH_BUTTON = 'dx-chat-textarea-attach-button';

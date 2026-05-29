@@ -7,7 +7,7 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 
 import HierarchicalDataConverter, {
   type DataAccessors,
