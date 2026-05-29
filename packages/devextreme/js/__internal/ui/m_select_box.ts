@@ -449,7 +449,6 @@ class SelectBox<
     const fieldTemplate = this._getTemplate(fieldTemplateOption);
 
     if (!(fieldTemplate && fieldTemplateOption)) {
-      // @ts-expect-error ts-error
       const text = this._displayGetter(item);
 
       this.option('text', text);
@@ -559,7 +558,6 @@ class SelectBox<
       return false;
     }
 
-    // @ts-expect-error ts-error
     const value = this._displayGetter(initialSelectedItem);
     const displayValue = value ? String(value) : '';
     const inputText = this._searchValue();
@@ -693,7 +691,6 @@ class SelectBox<
 
   _clearTextValue(): void {
     const selectedItem = this.option('selectedItem');
-    // @ts-expect-error ts-error
     const selectedItemText = this._displayGetter(selectedItem);
     const shouldRestoreValue = selectedItem && selectedItemText !== '';
 
@@ -815,10 +812,9 @@ class SelectBox<
     return this._loadItemDeferred;
   }
 
-  _isCustomItemSelected() {
+  _isCustomItemSelected(): boolean {
     const selectedItem = this.option('selectedItem');
     const searchValue = this._searchValue();
-    // @ts-expect-error ts-error
     const selectedItemText = this._displayGetter(selectedItem);
 
     return !selectedItemText || searchValue !== selectedItemText.toString();
@@ -881,7 +877,6 @@ class SelectBox<
     this._cancelSearchIfNeed();
     // @ts-expect-error ts-error
     this._setValue(this._valueGetter(item));
-    // @ts-expect-error ts-error
     this._renderDisplayText(this._displayGetter(item));
     this._isValueChanging = false;
   }
@@ -960,7 +955,6 @@ class SelectBox<
     }
 
     const inputElement = $input.get(0) as HTMLInputElement;
-    // @ts-expect-error ts-error
     const displayValue = this._displayGetter(item).toString();
     inputElement.value = displayValue;
     this._caret({ start: valueLength, end: displayValue.length });

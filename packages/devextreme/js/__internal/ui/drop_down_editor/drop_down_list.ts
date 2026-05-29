@@ -57,10 +57,13 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
   displayCustomValue?: boolean;
   items?: Item[];
 }
-
 class DropDownList<
   TProperties extends DropDownListProperties = DropDownListProperties,
 > extends DropDownEditor<TProperties> {
+  declare protected _displayGetter: (item: unknown) => string; // DataExpressionMixin workaround
+
+  declare protected _compileDisplayGetter: () => void; // DataExpressionMixin workaround
+
   _list?: List;
 
   _$list?: dxElementWrapper;
@@ -416,9 +419,8 @@ class DropDownList<
     this.option('displayValue', displayValue);
   }
 
-  _displayValue(item: Item): string {
-    // @ts-expect-error refactor DataExpressionMixin
-    return this._displayGetter(item) as string;
+  _displayValue(item): string {
+    return this._displayGetter(item);
   }
 
   _refreshSelected(): void {
@@ -1026,7 +1028,6 @@ class DropDownList<
 
   _setSubmitValue(): void {
     const { value } = this.option();
-    // @ts-expect-error refactor DataExpressionMixin
     const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
 
     this._getSubmitElement().val(submitValue);

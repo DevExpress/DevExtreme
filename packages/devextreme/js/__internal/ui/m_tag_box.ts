@@ -439,7 +439,6 @@ class TagBox<
 
         $container.append($tagContent);
       }, ['text'], this.option('integrationOptions.watchMethod'), {
-        // @ts-expect-error ts-error
         text: this._displayGetter,
       }),
     });
@@ -488,7 +487,6 @@ class TagBox<
 
       $options.push(
         $('<option>')
-          // @ts-expect-error ts-error
           .val(useDisplayText ? this._displayGetter(value[i]) : value[i])
           .attr('selected', 'selected'),
       );
@@ -1304,7 +1302,6 @@ class TagBox<
     }
 
     let $tag = this._getTag(value);
-    // @ts-expect-error ts-error
     const displayValue = this._displayGetter(item);
     const itemModel = this._getItemModel(item, displayValue);
 
