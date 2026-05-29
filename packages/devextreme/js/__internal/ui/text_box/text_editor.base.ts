@@ -207,7 +207,6 @@ class TextEditorBase<
     return rules;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDefaultButtons(): TextEditorButtonInfo[] {
     return [
       {
@@ -237,7 +236,6 @@ class TextEditorBase<
     return this._inputWrapper().find(`.${TEXTEDITOR_BUTTONS_CONTAINER_CLASS}`).eq(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isControlKey(key: string): boolean {
     return CONTROL_KEYS.includes(key);
   }
@@ -494,7 +492,6 @@ class TextEditorBase<
 
     this.option({ text: textValue });
 
-    // @ts-expect-error @ts-error
     const inputElementValue = this._input().val() as string | undefined;
 
     // fallback to empty string is required to support WebKit native date picker in some basic
@@ -613,7 +610,8 @@ class TextEditorBase<
   }
 
   _setFieldAria(force?: boolean): void {
-    const inputAttr = this.option('inputAttr');
+    const { inputAttr } = this.option();
+
     const ariaLabel = inputAttr?.['aria-label'];
     const labelId = this._label?.getId();
 
@@ -639,19 +637,17 @@ class TextEditorBase<
     } = this.option();
 
     const labelConfig = {
-      onClickHandler: (): void => {
-        this.focus();
-      },
-      onHoverHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
-      onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
+      rtlEnabled,
       $editor: this.$element(),
       text: label,
       mark: labelMark,
       mode: labelMode,
-      rtlEnabled,
       containsButtonsBefore: !!this._$beforeButtonsContainer,
       getContainerWidth: (): number => this._getLabelContainerWidth(),
       getBeforeWidth: (): number => this._getLabelBeforeWidth(),
+      onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
+      onClickHandler: (): void => { this.focus(); },
+      onHoverHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
     };
 
     this._label = new TextEditorLabelCreator(labelConfig);
@@ -700,6 +696,7 @@ class TextEditorBase<
       // @ts-expect-error eventsEngine typification
       eventsEngine.trigger(this._input(), 'focus');
     });
+
     this._toggleEmptinessEventHandler();
   }
 
@@ -782,7 +779,6 @@ class TextEditorBase<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getValueChangeEventOptionName(): keyof TProperties {
     return 'valueChangeEvent';
   }
@@ -815,7 +811,6 @@ class TextEditorBase<
     this._renderValueChangeEvent();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderValueEventName(): string {
     return 'input change keypress';
   }
@@ -894,8 +889,7 @@ class TextEditorBase<
   }
 
   _toggleEmptinessEventHandler(): void {
-    // @ts-expect-error dxElementWrapper.val() typification
-    const text = this._input().val() as string;
+    const text = this._input().val();
 
     const isEmpty = (text === '' || text === null) && this._isValueValid();
 

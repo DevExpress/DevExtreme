@@ -54,6 +54,13 @@ export class SchedulerModel {
     return appointments.map((element) => createAppointmentModel(element as HTMLDivElement));
   }
 
+  getDraggedAppointment(): AppointmentModel | null {
+    const draggableContainer = this.container.querySelector('.dx-scheduler-draggable-container');
+    const dragClone = draggableContainer?.querySelector('.dx-scheduler-appointment');
+
+    return dragClone ? createAppointmentModel(dragClone as HTMLDivElement) : null;
+  }
+
   getTooltipAppointment(index = 0): HTMLElement | null {
     return this.tooltip.getAppointmentItem(index);
   }

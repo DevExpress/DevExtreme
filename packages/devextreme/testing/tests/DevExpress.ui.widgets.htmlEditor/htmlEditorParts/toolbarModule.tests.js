@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'fluent_blue_light.css!';
 
 import 'ui/select_box';
-import '__internal/ui/color_box/m_color_view';
+import '__internal/ui/color_box/color_view';
 import 'ui/drop_down_button';
 
 import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';

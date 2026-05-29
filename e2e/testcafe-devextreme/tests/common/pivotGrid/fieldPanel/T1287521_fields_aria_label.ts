@@ -23,7 +23,9 @@ test('Header fields should have correct aria-label', async (t) => {
     .expect(columnHeader.getHeaderFilterIcon(1).ariaLabel)
     .eql('Show filter options for column \'Column2\'')
     .expect(filterHeader.getHeaderFilterIcon(0).ariaLabel)
-    .eql('Show filter options for column \'Column3\'');
+    .eql('Show filter options for column \'Column3\'')
+    .expect(columnHeader.getHeaderFilterIcon(2).ariaLabel)
+    .notContains('undefined');
 }).before(async () => {
   await createWidget('dxPivotGrid', {
     allowFiltering: true,
@@ -42,6 +44,8 @@ test('Header fields should have correct aria-label', async (t) => {
         area: 'column',
       }, {
         dataField: 'column2',
+        area: 'column',
+      }, {
         area: 'column',
       }, {
         dataField: 'column3',

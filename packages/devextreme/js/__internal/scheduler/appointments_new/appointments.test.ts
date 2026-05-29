@@ -4,7 +4,6 @@ import {
 import $ from '@js/core/renderer';
 import { fireEvent } from '@testing-library/dom';
 
-import fx from '../../../common/core/animation/fx';
 import { mockAppointmentDataAccessor } from '../__mock__/appointment_data_accessor.mock';
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import type { ResourceConfig } from '../utils/loader/types';
@@ -42,9 +41,10 @@ const getProperties = (options: {
   onAppointmentRendered: (): void => {},
   onAppointmentClick: (): void => {},
   onAppointmentDblClick: (): void => {},
+  onAppointmentContextMenu: (): void => {},
 
   getStartViewDate: () => new Date(2024, 0, 1),
-  getSortedAppointments: () => [],
+  getSortedItems: () => [],
   isVirtualScrolling: () => false,
   scrollTo: (): void => {},
 
@@ -52,9 +52,10 @@ const getProperties = (options: {
   getResourceManager: () => getResourceManagerMock(options.resources ?? []),
   getDataAccessor: () => mockAppointmentDataAccessor,
 
-  showTooltipForAppointment: (): void => {},
-  showTooltipForCollector: (): void => {},
+  showAppointmentTooltip: (): void => {},
   showEditAppointmentPopup: (): void => {},
+  allowDelete: false,
+  onDeleteKeyPress: (): void => {},
 });
 
 const createAppointments = (
@@ -80,8 +81,6 @@ const dblClick = (element: HTMLElement): void => {
 
 describe('Appointments', () => {
   beforeEach(() => {
-    fx.off = true;
-
     const $container = $('<div>')
       .addClass('container')
       .appendTo(document.body);
@@ -97,8 +96,6 @@ describe('Appointments', () => {
 
   afterEach(() => {
     $('.container').remove();
-    fx.off = false;
-    jest.useRealTimers();
   });
 
   describe('Classes', () => {
@@ -553,7 +550,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -561,9 +558,7 @@ describe('Appointments', () => {
         const viewItem1 = instance.getViewItemBySortedIndex(1);
 
         (viewItem0?.$element().get(0) as HTMLElement).click();
-        viewItem0?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(viewItem0?.$element().attr('tabindex')).toBe('-1');
         expect(viewItem1?.$element().attr('tabindex')).toBe('0');
@@ -579,7 +574,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -587,9 +582,7 @@ describe('Appointments', () => {
         const viewItem1 = instance.getViewItemBySortedIndex(1);
 
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab', shiftKey: true });
 
         expect(viewItem0?.$element().attr('tabindex')).toBe('0');
         expect(viewItem1?.$element().attr('tabindex')).toBe('-1');
@@ -650,7 +643,7 @@ describe('Appointments', () => {
           ...getProperties(),
           isVirtualScrolling: () => true,
           scrollTo,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(1),
           ],
         });
@@ -661,9 +654,7 @@ describe('Appointments', () => {
 
         const viewItem1 = instance.getViewItemBySortedIndex(0);
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(scrollTo).toHaveBeenCalled();
       });
@@ -672,7 +663,7 @@ describe('Appointments', () => {
         const instance = createAppointments({
           ...getProperties(),
           isVirtualScrolling: () => true,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(2),
           ],
         });
@@ -686,9 +677,7 @@ describe('Appointments', () => {
         const viewItem2 = instance.getViewItemBySortedIndex(2);
 
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(document.activeElement).toBe(viewItem2?.$element().get(0));
       });
@@ -701,7 +690,7 @@ describe('Appointments', () => {
         const instance = createAppointments({
           ...getProperties(),
           isVirtualScrolling: () => true,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1), makeSortedEntity(2),
           ],
         });
@@ -711,9 +700,7 @@ describe('Appointments', () => {
 
         const viewItem1 = instance.getViewItemBySortedIndex(1);
         (viewItem1?.$element().get(0) as HTMLElement).click();
-        viewItem1?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem1?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         // item2 is not rendered yet, so focus cannot move yet
         expect(instance.getViewItemBySortedIndex(2)).toBeUndefined();
@@ -737,7 +724,7 @@ describe('Appointments', () => {
           isVirtualScrolling: () => true,
           scrollTo,
           getStartViewDate: () => startViewDate,
-          getSortedAppointments: () => [
+          getSortedItems: () => [
             makeSortedEntity(0), makeSortedEntity(1, appointmentStartDate),
           ],
         });
@@ -747,9 +734,7 @@ describe('Appointments', () => {
 
         const viewItem0 = instance.getViewItemBySortedIndex(0);
         (viewItem0?.$element().get(0) as HTMLElement).click();
-        viewItem0?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(scrollTo).toHaveBeenCalledWith(appointmentStartDate, expect.anything());
       });
@@ -767,15 +752,13 @@ describe('Appointments', () => {
           isVirtualScrolling: () => true,
           scrollTo,
           getStartViewDate: () => startViewDate,
-          getSortedAppointments: () => sortedEntities,
+          getSortedItems: () => sortedEntities,
         });
         instance.option('viewModel', viewModel);
 
         const viewItem0 = instance.getViewItemBySortedIndex(0);
         (viewItem0?.$element().get(0) as HTMLElement).click();
-        viewItem0?.$element().get(0).dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'Tab' });
 
         expect(scrollTo).toHaveBeenCalledWith(startViewDate, expect.anything());
       });
@@ -784,9 +767,7 @@ describe('Appointments', () => {
     describe('Navigation after partial render', () => {
       const pressTab = (): void => {
         const activeElement = document.activeElement as HTMLElement;
-        activeElement.dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-        );
+        fireEvent.keyDown(activeElement, { key: 'Tab' });
       };
 
       it('should navigate to the last appointment correctly after an appointment is added', () => {
@@ -802,7 +783,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -838,7 +819,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -870,7 +851,7 @@ describe('Appointments', () => {
 
         const instance = createAppointments({
           ...getProperties(),
-          getSortedAppointments: () => viewModel as unknown as SortedEntity[],
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
         });
         instance.option('viewModel', viewModel);
 
@@ -889,6 +870,349 @@ describe('Appointments', () => {
         const lastViewItem = instance.getViewItemBySortedIndex(2);
         expect(document.activeElement).toBe(lastViewItem?.$element().get(0));
         expect(lastViewItem?.$element().attr('tabindex')).toBe('0');
+      });
+    });
+
+    describe('Home/End navigation', () => {
+      it('should move focus to first appointment on Home key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        const viewItem2 = instance.getViewItemBySortedIndex(2);
+
+        (viewItem2?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem2?.$element().get(0) as HTMLElement, { key: 'Home' });
+
+        expect(viewItem0?.$element().attr('tabindex')).toBe('0');
+        expect(viewItem2?.$element().attr('tabindex')).toBe('-1');
+        expect(document.activeElement).toBe(viewItem0?.$element().get(0));
+      });
+
+      it('should prevent default browser behavior on Home key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem1 = instance.getViewItemBySortedIndex(1);
+        (viewItem1?.$element().get(0) as HTMLElement).click();
+
+        const wasDefaultPrevented = !fireEvent.keyDown(
+          viewItem1?.$element().get(0) as HTMLElement,
+          { key: 'Home' },
+        );
+
+        expect(wasDefaultPrevented).toBe(true);
+      });
+
+      it('should prevent default browser behavior on End key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        (viewItem0?.$element().get(0) as HTMLElement).click();
+
+        const wasDefaultPrevented = !fireEvent.keyDown(
+          viewItem0?.$element().get(0) as HTMLElement,
+          { key: 'End' },
+        );
+
+        expect(wasDefaultPrevented).toBe(true);
+      });
+
+      it('should prevent default browser behavior on Enter key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+
+        const wasDefaultPrevented = !fireEvent.keyDown(
+          viewItem?.$element().get(0) as HTMLElement,
+          { key: 'Enter' },
+        );
+
+        expect(wasDefaultPrevented).toBe(true);
+      });
+
+      it('should prevent default browser behavior on Space key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+
+        const wasDefaultPrevented = !fireEvent.keyDown(
+          viewItem?.$element().get(0) as HTMLElement,
+          { key: ' ' },
+        );
+
+        expect(wasDefaultPrevented).toBe(true);
+      });
+
+      it('should move focus to last appointment on End key', () => {
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 2 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem0 = instance.getViewItemBySortedIndex(0);
+        const viewItem2 = instance.getViewItemBySortedIndex(2);
+
+        (viewItem0?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem0?.$element().get(0) as HTMLElement, { key: 'End' });
+
+        expect(viewItem2?.$element().attr('tabindex')).toBe('0');
+        expect(viewItem0?.$element().attr('tabindex')).toBe('-1');
+        expect(document.activeElement).toBe(viewItem2?.$element().get(0));
+      });
+    });
+
+    describe('Keyboard actions', () => {
+      it('should call onDeleteKeyPress when Delete is pressed and allowDelete is true', () => {
+        const onDeleteKeyPress = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 1 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          allowDelete: true,
+          onDeleteKeyPress,
+          getSortedItems: () => [{
+            sortedIndex: 0,
+            itemData: defaultAppointmentData,
+            source: { startDate: 0 },
+          }] as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Delete' });
+
+        expect(onDeleteKeyPress).toHaveBeenCalledTimes(1);
+        expect(onDeleteKeyPress).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: defaultAppointmentData }),
+        );
+      });
+
+      it('should not call onDeleteKeyPress when Delete is pressed and allowDelete is false', () => {
+        const onDeleteKeyPress = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          allowDelete: false,
+          onDeleteKeyPress,
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Delete' });
+
+        expect(onDeleteKeyPress).not.toHaveBeenCalled();
+      });
+
+      it('should not call onDeleteKeyPress when Delete is pressed on appointment collector', () => {
+        const onDeleteKeyPress = jest.fn();
+        const viewModel = [
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          allowDelete: true,
+          onDeleteKeyPress,
+          getSortedItems: () => viewModel as unknown as SortedEntity[],
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Delete' });
+
+        expect(onDeleteKeyPress).not.toHaveBeenCalled();
+      });
+
+      it('should show appointment popup when Enter is pressed', () => {
+        const showEditAppointmentPopup = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          showEditAppointmentPopup,
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Enter' });
+
+        expect(showEditAppointmentPopup).toHaveBeenCalledTimes(1);
+        expect(showEditAppointmentPopup).toHaveBeenCalledWith(
+          defaultAppointmentData,
+          expect.objectContaining({ ...defaultAppointmentData }),
+        );
+      });
+
+      it('should call onAppointmentDblClick when Enter is pressed', () => {
+        const onAppointmentDblClick = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          onAppointmentDblClick,
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Enter' });
+
+        expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDblClick).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: defaultAppointmentData }),
+        );
+      });
+
+      it('should show appointment popup when Space is pressed', () => {
+        const showEditAppointmentPopup = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          showEditAppointmentPopup,
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: ' ' });
+
+        expect(showEditAppointmentPopup).toHaveBeenCalledTimes(1);
+        expect(showEditAppointmentPopup).toHaveBeenCalledWith(
+          defaultAppointmentData,
+          expect.objectContaining({ ...defaultAppointmentData }),
+        );
+      });
+
+      it('should call onAppointmentDblClick when Space is pressed', () => {
+        const onAppointmentDblClick = jest.fn();
+        const viewModel = [
+          mockGridViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          onAppointmentDblClick,
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        (viewItem?.$element().get(0) as HTMLElement).click();
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: ' ' });
+
+        expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
+        expect(onAppointmentDblClick).toHaveBeenCalledWith(
+          expect.objectContaining({ appointmentData: defaultAppointmentData }),
+        );
+      });
+
+      it('should show tooltip when Enter is pressed on appointment collector', () => {
+        const showAppointmentTooltip = jest.fn();
+        const showEditAppointmentPopup = jest.fn();
+        const viewModel = [
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          showAppointmentTooltip,
+          showEditAppointmentPopup,
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: 'Enter' });
+
+        expect(showAppointmentTooltip).toHaveBeenCalledTimes(1);
+        expect(showEditAppointmentPopup).not.toHaveBeenCalled();
+      });
+
+      it('should show tooltip when Space is pressed on appointment collector', () => {
+        const showAppointmentTooltip = jest.fn();
+        const showEditAppointmentPopup = jest.fn();
+        const viewModel = [
+          mockAppointmentCollectorViewModel({ ...defaultAppointmentData }, { sortedIndex: 0 }),
+        ];
+
+        const instance = createAppointments({
+          ...getProperties(),
+          showAppointmentTooltip,
+          showEditAppointmentPopup,
+        });
+        instance.option('viewModel', viewModel);
+
+        const viewItem = instance.getViewItemBySortedIndex(0);
+        fireEvent.keyDown(viewItem?.$element().get(0) as HTMLElement, { key: ' ' });
+
+        expect(showAppointmentTooltip).toHaveBeenCalledTimes(1);
+        expect(showEditAppointmentPopup).not.toHaveBeenCalled();
       });
     });
   });
@@ -1007,14 +1331,12 @@ describe('Appointments', () => {
 
     it('should prevent tooltip showing when onAppointmentClick callback sets e.cancel = true', () => {
       const onAppointmentClick = jest.fn((e) => { (e as any).cancel = true; });
-      const showTooltipForAppointment = jest.fn();
-      const showTooltipForCollector = jest.fn();
+      const showAppointmentTooltip = jest.fn();
 
       const instance = createAppointments({
         ...getProperties(),
         onAppointmentClick,
-        showTooltipForAppointment,
-        showTooltipForCollector,
+        showAppointmentTooltip,
       });
       instance.option('viewModel', [
         mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
@@ -1028,16 +1350,15 @@ describe('Appointments', () => {
       jest.runAllTimers();
 
       expect(onAppointmentClick).toHaveBeenCalledTimes(1);
-      expect(showTooltipForAppointment).not.toHaveBeenCalled();
-      expect(showTooltipForCollector).not.toHaveBeenCalled();
+      expect(showAppointmentTooltip).not.toHaveBeenCalled();
     });
 
     it('should show tooltip correctly when two appointments are clicked one after another quickly', () => {
-      const showTooltipForAppointment = jest.fn();
+      const showAppointmentTooltip = jest.fn();
 
       const instance = createAppointments({
         ...getProperties(),
-        showTooltipForAppointment,
+        showAppointmentTooltip,
       });
       instance.option('viewModel', [
         mockGridViewModel({ ...defaultAppointmentData, text: 'Appointment 1' }, { sortedIndex: 0 }),
@@ -1055,11 +1376,14 @@ describe('Appointments', () => {
       element2.click();
       jest.runAllTimers();
 
-      expect(showTooltipForAppointment).toHaveBeenCalledTimes(1);
-      expect(showTooltipForAppointment).toHaveBeenCalledWith(
-        expect.objectContaining({ text: 'Appointment 2' }),
+      expect(showAppointmentTooltip).toHaveBeenCalledTimes(1);
+      expect(showAppointmentTooltip).toHaveBeenCalledWith(
         $(element2),
-        expect.objectContaining({ text: 'Appointment 2' }),
+        [
+          expect.objectContaining({
+            appointment: expect.objectContaining({ text: 'Appointment 2' }),
+          }),
+        ],
       );
     });
   });
@@ -1117,14 +1441,12 @@ describe('Appointments', () => {
 
     it('should show appointment popup on appointment double click', () => {
       const showEditAppointmentPopup = jest.fn();
-      const showTooltipForAppointment = jest.fn();
-      const showTooltipForCollector = jest.fn();
+      const showAppointmentTooltip = jest.fn();
 
       const instance = createAppointments({
         ...getProperties(),
         showEditAppointmentPopup,
-        showTooltipForAppointment,
-        showTooltipForCollector,
+        showAppointmentTooltip,
       });
       instance.option('viewModel', [
         mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
@@ -1144,8 +1466,7 @@ describe('Appointments', () => {
           ...defaultAppointmentData,
         }),
       );
-      expect(showTooltipForAppointment).not.toHaveBeenCalled();
-      expect(showTooltipForCollector).not.toHaveBeenCalled();
+      expect(showAppointmentTooltip).not.toHaveBeenCalled();
     });
 
     it('should not show appointment popup on collector double click', () => {
@@ -1171,15 +1492,13 @@ describe('Appointments', () => {
     it('should not show tooltip or appointment popup if onAppointmentDblClick sets e.cancel', () => {
       const onAppointmentDblClick = jest.fn((e) => { (e as any).cancel = true; });
       const showEditAppointmentPopup = jest.fn();
-      const showTooltipForAppointment = jest.fn();
-      const showTooltipForCollector = jest.fn();
+      const showAppointmentTooltip = jest.fn();
 
       const instance = createAppointments({
         ...getProperties(),
         onAppointmentDblClick,
         showEditAppointmentPopup,
-        showTooltipForAppointment,
-        showTooltipForCollector,
+        showAppointmentTooltip,
       });
       instance.option('viewModel', [
         mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
@@ -1194,8 +1513,55 @@ describe('Appointments', () => {
 
       expect(onAppointmentDblClick).toHaveBeenCalledTimes(1);
       expect(showEditAppointmentPopup).not.toHaveBeenCalled();
-      expect(showTooltipForAppointment).not.toHaveBeenCalled();
-      expect(showTooltipForCollector).not.toHaveBeenCalled();
+      expect(showAppointmentTooltip).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onAppointmentContextMenu', () => {
+    it('should call onAppointmentContextMenu on appointment dxcontextmenu event', () => {
+      const onAppointmentContextMenu = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentContextMenu,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      fireEvent(element, new Event('dxcontextmenu', { bubbles: true }));
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+      expect(onAppointmentContextMenu).toHaveBeenCalledWith(
+        expect.objectContaining({
+          appointmentElement: element,
+          appointmentData: defaultAppointmentData,
+          targetedAppointmentData: expect.objectContaining({
+            ...defaultAppointmentData,
+          }),
+          event: expect.objectContaining({ type: 'dxcontextmenu' }),
+        }),
+      );
+    });
+
+    it('should not call onAppointmentContextMenu on collector dxcontextmenu event', () => {
+      const onAppointmentContextMenu = jest.fn();
+      const instance = createAppointments({
+        ...getProperties(),
+        onAppointmentContextMenu,
+      });
+      instance.option('viewModel', [
+        mockAppointmentCollectorViewModel(defaultAppointmentData, { sortedIndex: 0 }),
+      ]);
+
+      const viewItem = instance.getViewItemBySortedIndex(0);
+      const element = viewItem?.$element().get(0) as HTMLElement;
+
+      fireEvent(element, new Event('dxcontextmenu', { bubbles: true }));
+
+      expect(onAppointmentContextMenu).not.toHaveBeenCalled();
     });
   });
 });

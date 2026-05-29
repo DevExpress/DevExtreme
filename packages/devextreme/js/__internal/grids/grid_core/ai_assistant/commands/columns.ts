@@ -3,6 +3,8 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
+// eslint-disable-next-line spellcheck/spell-checker
+import { optionalNullish } from './utils';
 
 const columnsVisibilityCommandSchema = z.object({
   dataField: z.string(),
@@ -77,7 +79,8 @@ export const columnsReorderCommand = defineGridCommand({
 const columnsPinningCommandSchema = z.object({
   dataField: z.string(),
   fixed: z.boolean(),
-  fixedPosition: z.enum(['left', 'right']).optional(),
+  // eslint-disable-next-line spellcheck/spell-checker
+  fixedPosition: optionalNullish(z.enum(['left', 'right'])),
 }).strict();
 
 export const columnsPinningCommand = defineGridCommand({

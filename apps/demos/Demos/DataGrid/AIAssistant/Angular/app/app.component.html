@@ -1,0 +1,40 @@
+<dx-data-grid
+  id="gridContainer"
+  keyExpr="Id"
+  [dataSource]="sales"
+  [showBorders]="true"
+  [filterSyncEnabled]="true"
+>
+  <dxo-data-grid-search-panel
+    [visible]="true"
+    [width]="240"
+    placeholder="Search..."
+  />
+  <dxo-data-grid-group-panel [visible]="true" />
+  <dxo-data-grid-header-filter [visible]="true" />
+  <dxo-data-grid-filter-row [visible]="true" />
+  <dxo-data-grid-paging [pageSize]="10" />
+  <dxo-data-grid-pager
+    [visible]="true"
+    [allowedPageSizes]="[10, 25, 50, 100]"
+    [showPageSizeSelector]="true"
+  />
+
+  <dxo-data-grid-ai-assistant
+    [enabled]="true"
+    [aiIntegration]="aiIntegration"
+    [chat]="chatConfig"
+  />
+
+  <dxi-data-grid-column dataField="Product" />
+  <dxi-data-grid-column
+    dataField="Amount"
+    caption="Sale Amount"
+    dataType="number"
+    format="currency"
+  />
+  <dxi-data-grid-column dataField="Region" dataType="string" />
+  <dxi-data-grid-column dataField="Sector" dataType="string" />
+  <dxi-data-grid-column dataField="SaleDate" dataType="date" />
+  <dxi-data-grid-column dataField="Customer" dataType="string" />
+</dx-data-grid>

@@ -38,26 +38,26 @@ jobs:
     steps:
       - name: Checkout PR head commit
         if: inputs.action == 'deploy'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: refs/pull/${{ inputs.pr_number }}/head
           fetch-depth: 1
 
       - name: Checkout base repo
         if: inputs.action == 'remove'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
       - name: Use Node.js
         if: inputs.action == 'deploy'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "20"
 
       - name: Setup pnpm
         if: inputs.action == 'deploy'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -69,7 +69,7 @@ jobs:
 
       - name: Setup pnpm cache
         if: inputs.action == 'deploy'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}

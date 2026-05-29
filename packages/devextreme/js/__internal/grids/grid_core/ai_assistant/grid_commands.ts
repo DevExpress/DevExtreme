@@ -151,26 +151,33 @@ export class GridCommands {
     return schema;
   }
 
-  public validate(actions: ExecuteGridAssistantAction[]): boolean {
+  public parse(actions: ExecuteGridAssistantAction[]): ExecuteGridAssistantAction[] | null {
+    const parsedActions: ExecuteGridAssistantAction[] = [];
+
     for (const action of actions as Record<string, unknown>[]) {
       if (!action || typeof action.name !== 'string' || action.name === '') {
-        return false;
+        return null;
       }
 
       const command = this.commands.get(action.name);
 
       if (!command || !isDefined(action.args) || !isObject(action.args)) {
-        return false;
+        return null;
       }
 
-      const parseResult = command.schema.strict().safeParse(action.args);
+      const parseResult = command.schema.safeParse(action.args);
 
       if (!parseResult.success) {
-        return false;
+        return null;
       }
+
+      parsedActions.push({
+        name: action.name,
+        args: parseResult.data as Record<string, unknown>,
+      });
     }
 
-    return true;
+    return parsedActions;
   }
 
   private async executeCommand(

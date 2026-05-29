@@ -4,6 +4,7 @@ import {
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/scheduler';
+import { fireEvent } from '@testing-library/dom';
 
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
@@ -572,6 +573,96 @@ describe('New Appointments', () => {
     });
   });
 
+  describe('onAppointmentContextMenu', () => {
+    it('should call onAppointmentContextMenu callback', async () => {
+      const onAppointmentContextMenu = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      };
+
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentContextMenu,
+      });
+
+      const appointmentElement = POM.getAppointments()[0].element;
+      fireEvent(appointmentElement, new Event('dxcontextmenu', { bubbles: true }));
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+      expect(onAppointmentContextMenu).toHaveBeenCalledWith({
+        appointmentData: appointment,
+        targetedAppointmentData: {
+          ...appointment,
+          displayStartDate: new Date(2015, 1, 9, 8),
+          displayEndDate: new Date(2015, 1, 9, 9),
+        },
+        appointmentElement,
+        component: scheduler,
+        element: scheduler.$element().get(0),
+        event: expect.objectContaining({ type: 'dxcontextmenu' }),
+      });
+    });
+
+    it('should call onAppointmentContextMenu after .option() change', async () => {
+      const { POM, scheduler } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      const onAppointmentContextMenu = jest.fn();
+      scheduler.option('onAppointmentContextMenu', onAppointmentContextMenu);
+
+      fireEvent(
+        POM.getAppointments()[0].element,
+        new Event('dxcontextmenu', { bubbles: true }),
+      );
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onAppointmentContextMenu with correct targetedAppointmentData', async () => {
+      const onAppointmentContextMenu = jest.fn();
+
+      const appointment = {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+        recurrenceRule: 'FREQ=DAILY',
+      };
+
+      const { POM } = await createScheduler({
+        dataSource: [appointment],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        onAppointmentContextMenu,
+      });
+
+      fireEvent(
+        POM.getAppointments()[0].element,
+        new Event('dxcontextmenu', { bubbles: true }),
+      );
+
+      expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
+      expect(onAppointmentContextMenu).toHaveBeenCalledWith(expect.objectContaining({
+        targetedAppointmentData: {
+          ...appointment,
+          displayStartDate: new Date(2015, 1, 9, 8),
+          displayEndDate: new Date(2015, 1, 9, 9),
+        },
+      }));
+    });
+  });
+
   describe('Tooltip', () => {
     it('should show tooltip on appointment click', async () => {
       const { POM } = await createScheduler({
@@ -754,6 +845,90 @@ describe('New Appointments', () => {
       expect(onAppointmentUpdated).toHaveBeenCalledTimes(1);
       expect((onAppointmentUpdated.mock.calls[0][0] as any).appointmentData).toBe(appointment);
       expect(appointment.text).toBe('Updated Appointment');
+    });
+  });
+
+  describe('Keyboard navigation', () => {
+    it('should delete appointment by delete key', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(0);
+    });
+
+    it('should delete recurring appointment occurrence by delete key', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+          recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        }],
+        currentDate: new Date(2015, 1, 9),
+        currentView: 'week',
+        recurrenceEditMode: 'occurrence',
+      });
+
+      expect(POM.getAppointments().length).toBe(3);
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(2);
+    });
+
+    it.each([
+      { editing: true },
+      { editing: { allowDeleting: true } },
+      { editing: { allowDeleting: true, allowUpdating: false } },
+    ])('should delete appointment when editing=$editing', async ({ editing }) => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+        editing,
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(0);
+    });
+
+    it.each([
+      { editing: { allowDeleting: false } },
+      { editing: false },
+    ])('should NOT delete appointment when editing=$editing', async ({ editing }) => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentDate: new Date(2015, 1, 9, 8),
+        editing,
+      });
+
+      const appointment = POM.getAppointments()[0];
+      appointment.element.focus();
+      fireEvent.keyDown(appointment.element, { key: 'Delete' });
+      await new Promise(process.nextTick);
+
+      expect(POM.getAppointments().length).toBe(1);
     });
   });
 });

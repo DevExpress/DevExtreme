@@ -105,7 +105,7 @@ export type ResponseStatusTexts = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type BasicFilterExprObj = {
+export type BasicFilterExpr = {
   type: 'basic';
   field: string;
   operator: SearchOperation;
@@ -117,11 +117,11 @@ export type BasicFilterExprObj = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type CombinedFilterExprObj = {
+export type CombinedFilterExpr = {
   type: 'combined';
-  left: FilterExprObj;
   combiner: 'and' | 'or';
-  right: FilterExprObj;
+  leftId: string;
+  rightId: string;
 };
 
 /**
@@ -129,9 +129,9 @@ export type CombinedFilterExprObj = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type NegatedFilterExprObj = {
+export type NegatedFilterExpr = {
   type: 'negated';
-  expression: FilterExprObj;
+  expressionId: string;
 };
 
 /**
@@ -139,7 +139,27 @@ export type NegatedFilterExprObj = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type FilterExprObj = BasicFilterExprObj | CombinedFilterExprObj | NegatedFilterExprObj;
+export type FilterExpr = BasicFilterExpr | CombinedFilterExpr | NegatedFilterExpr;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+interface FilterExprNode {
+  id: string;
+  expr: FilterExpr;
+}
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+interface FilterExprTree {
+  rootId: string;
+  nodes: FilterExprNode[];
+}
 
 /**
  * @docid
@@ -175,7 +195,7 @@ export type PredefinedCommands = {
     width: number | string;
   };
   filterValue: {
-    expression: FilterExprObj | null;
+    expression: FilterExprTree | null;
   };
   clearFilter: {};
   focusRowByKey: {
@@ -220,7 +240,12 @@ export type PredefinedCommands = {
  */
 export type CommandInfo<
   TCommands extends PredefinedCommands = PredefinedCommands,
-> = { [K in keyof TCommands]: { name: K; args: TCommands[K] } }[keyof TCommands];
+> = {
+  [K in keyof TCommands]: {
+    name: K;
+    args: TCommands[K]
+  }
+}[keyof TCommands];
 
 /**
  * @docid

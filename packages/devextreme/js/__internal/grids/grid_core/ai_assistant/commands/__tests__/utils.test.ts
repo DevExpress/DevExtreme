@@ -3,8 +3,10 @@ import {
   expect,
   it,
 } from '@jest/globals';
+import { z } from 'zod';
 
-import { isKeyShapeValid, normalizeKey } from '../utils';
+// eslint-disable-next-line spellcheck/spell-checker
+import { isKeyShapeValid, normalizeKey, optionalNullish } from '../utils';
 
 describe('normalizeKey', () => {
   it('returns a string key as-is', () => {
@@ -32,6 +34,64 @@ describe('normalizeKey', () => {
     expect(normalizeKey([])).toEqual({});
   });
 });
+
+/* eslint-disable spellcheck/spell-checker */
+describe('optionalNullish', () => {
+  it('parses a valid value through unchanged', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.parse('hello')).toBe('hello');
+  });
+
+  it('parses undefined to undefined', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.parse(undefined)).toBeUndefined();
+  });
+
+  it('parses null to undefined', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.parse(null)).toBeUndefined();
+  });
+
+  it('preserves falsy non-nullish values (0, false, "")', () => {
+    expect(optionalNullish(z.number()).parse(0)).toBe(0);
+    expect(optionalNullish(z.boolean()).parse(false)).toBe(false);
+    expect(optionalNullish(z.string()).parse('')).toBe('');
+  });
+
+  it('rejects a value of the wrong type', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.safeParse(123).success).toBe(false);
+  });
+
+  it('transforms null on an object field to undefined', () => {
+    const schema = z.object({
+      required: z.string(),
+      optional: optionalNullish(z.string()),
+    }).strict();
+
+    expect(schema.parse({ required: 'r', optional: null })).toEqual({
+      required: 'r',
+      optional: undefined,
+    });
+  });
+
+  it('accepts an omitted object field', () => {
+    const schema = z.object({
+      required: z.string(),
+      optional: optionalNullish(z.string()),
+    }).strict();
+
+    expect(schema.parse({ required: 'r' })).toEqual({
+      required: 'r',
+      optional: undefined,
+    });
+  });
+});
+/* eslint-enable spellcheck/spell-checker */
 
 describe('isKeyShapeValid', () => {
   describe('single-field keyExpr (string)', () => {
