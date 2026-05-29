@@ -501,6 +501,16 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     return super._isClearButtonVisible() && !this._isNativeType();
   }
 
+  _toggleEmptinessEventHandler(): void {
+    if (this._isNativeType()) {
+      this._toggleEmptiness(false);
+
+      return;
+    }
+
+    super._toggleEmptinessEventHandler();
+  }
+
   _renderValue(): DeferredObj<unknown> {
     const value = this.getDateOption('value');
 
@@ -824,7 +834,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const isValueChanged = this._isValueChanged(value);
 
     if (isValueChanged && dxEvent) {
-      // @ts-expect-error editor's ValueChangedEvent should be extended
       this._saveValueChangeEvent(dxEvent);
     }
 

@@ -1,4 +1,4 @@
-import TextArea from '../__internal/ui/m_text_area';
+import TextArea from '../__internal/ui/text_area';
 
 export default TextArea;
 

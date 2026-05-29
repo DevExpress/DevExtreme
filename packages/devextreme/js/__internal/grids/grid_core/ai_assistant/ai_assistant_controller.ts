@@ -84,16 +84,18 @@ export class AIAssistantController extends Controller {
       return Promise.reject(new Error(localizedErrorMsg));
     }
 
-    if (!this.gridCommands?.validate(response.actions)) {
+    const parsedActions = this.gridCommands?.parse(response.actions);
+
+    if (!parsedActions) {
       const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantInvalidResponseMessage');
       return Promise.reject(new Error(localizedErrorMsg));
     }
 
     const customizeResponseText = this.option('aiAssistant.customizeResponseText');
-    const notInitializedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
+    const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
 
-    return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
-      ?? Promise.reject(new Error(notInitializedErrorMsg));
+    return this.gridCommands?.executeCommands(parsedActions, customizeResponseText)
+      ?? Promise.reject(new Error(localizedErrorMsg));
   }
 
   private createPendingAIMessage(message: Message): AIMessage {

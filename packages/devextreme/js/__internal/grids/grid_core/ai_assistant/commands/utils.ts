@@ -31,6 +31,22 @@ export const normalizeKey = (
   return key;
 };
 
+/* eslint-disable spellcheck/spell-checker */
+type OptionalNullishSchema<T extends z.ZodTypeAny> = z.ZodEffects<
+  z.ZodOptional<z.ZodNullable<T>>,
+  z.output<T> | undefined,
+  z.input<T> | null | undefined
+>;
+
+// Treats `null` as "absent" for optional schema fields
+export function optionalNullish<T extends z.ZodTypeAny>(
+  schema: T,
+): OptionalNullishSchema<T> {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return schema.nullish().transform((value) => value ?? undefined);
+}
+/* eslint-enable spellcheck/spell-checker */
+
 // Validates the user-supplied key against the grid's keyExpr shape.
 // Caller is responsible for resolving keyExpr first — passing `undefined`
 // would mean "no row key configured", which is a different failure case.

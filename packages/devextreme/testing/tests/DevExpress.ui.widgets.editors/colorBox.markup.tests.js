@@ -6,7 +6,7 @@ import 'ui/color_box';
 import {
     DX_ICON_CLASS,
     DX_ICON_COLOR_DISMISS
-} from '__internal/ui/color_box/m_color_box';
+} from '__internal/ui/color_box/color_box';
 
 QUnit.testStart(function() {
     const markup =

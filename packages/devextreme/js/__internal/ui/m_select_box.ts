@@ -561,7 +561,6 @@ class SelectBox<
     const value = this._displayGetter(initialSelectedItem);
     const displayValue = value ? String(value) : '';
     const inputText = this._searchValue();
-    // @ts-expect-error ts-error
     return displayValue === inputText;
   }
 

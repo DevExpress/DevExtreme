@@ -1,3 +1,3 @@
-import TextBox from '../../__internal/ui/text_box/m_text_box';
+import TextBox from '../../__internal/ui/text_box/text_box';
 
 export default TextBox;

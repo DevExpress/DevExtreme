@@ -1,10 +1,5 @@
-// eslint-disable-next-line import/no-unresolved
-import { AzureOpenAI } from 'https://esm.sh/openai@4.73.1';
-
-window.AzureOpenAI = AzureOpenAI;
-
 $(() => {
-  const deployment = 'gpt-4o-mini';
+  const deployment = 'demo-mini';
   const apiVersion = '2024-02-01';
   const endpoint = 'https://public-api.devexpress.com/demo-openai';
   const apiKey = 'DEMO';
@@ -21,7 +16,7 @@ $(() => {
     const params = {
       messages,
       model: deployment,
-      max_tokens: 1000,
+      max_completion_tokens: 1000,
       temperature: 0.7,
     };
 
@@ -110,6 +105,7 @@ $(() => {
     filterRow: {
       visible: true,
     },
+    filterSyncEnabled: true,
     paging: {
       pageSize: 10,
     },
