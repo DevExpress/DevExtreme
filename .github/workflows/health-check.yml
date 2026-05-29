@@ -24,5 +24,7 @@ jobs:
             'GHSA-g93w-mfhg-p222', // @angular/compiler
             'GHSA-45q2-gjvg-7973', // @angular/platform-server
             'GHSA-rfh7-fxqc-q52v', // @angular/platform-server
+            'GHSA-2gmp-34j9-fqjm', // replicator
+            'GHSA-848j-6mx2-7j84', // elliptic
           ]
         }
