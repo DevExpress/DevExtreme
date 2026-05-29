@@ -179,6 +179,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       onAppointmentRendered: noop,
       onAppointmentClick: noop,
       onAppointmentDblClick: noop,
+      onAppointmentContextMenu: noop,
       allowDelete: false,
       onDeleteKeyPress: noop,
     };
