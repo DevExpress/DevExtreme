@@ -584,9 +584,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateAppointmentDataSource();
         this.updateOption('workSpace', args.fullName, value);
         break;
-      case 'renovateRender':
-        this.updateOption('workSpace', name, value);
-        break;
       case '_draggingMode':
         this.updateOption('workSpace', 'draggingMode', value);
         break;
@@ -1542,8 +1539,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
       },
 
-      // TODO: SSR does not work correctly with renovated render
-      renovateRender: this.isRenovatedRender(isVirtualScrolling),
     }, currentViewOptions);
 
     result.notifyScheduler = this.notifyScheduler;
@@ -1559,10 +1554,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
 
     return result;
-  }
-
-  private isRenovatedRender(isVirtualScrolling) {
-    return (this.option('renovateRender') && hasWindow()) || isVirtualScrolling;
   }
 
   private waitAsyncTemplate(callback) {

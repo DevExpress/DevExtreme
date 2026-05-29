@@ -15,7 +15,6 @@ import SchedulerWorkSpace from './m_work_space';
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
-const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   private indicatorInterval: any;
@@ -158,15 +157,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   renderCurrentDateTimeIndication(): void {
     this.renderCurrentDateTimeLineAndShader();
 
-    if (this.isRenovatedRender()) {
-      this.renderWorkSpace({
-        generateNewData: true,
-        renderComponents: {
-          header: true,
-          timePanel: true,
-        },
-      });
-    }
+    this.renderWorkSpace({
+      generateNewData: true,
+      renderComponents: {
+        header: true,
+        timePanel: true,
+      },
+    });
   }
 
   renderCurrentDateTimeLineAndShader(): void {
@@ -304,21 +301,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     const rtlOffset = this.getRtlOffset(this.getCellWidth());
 
     this.renderIndicator(height, rtlOffset, $container, groupCount);
-
-    // TODO Old render: delete this code with the old render.
-    if (!this.isRenovatedRender()) {
-      this.setCurrentTimeCells();
-    }
-  }
-
-  // TODO Old render: replace base call methods by these after the deleting of the old render.
-  protected setCurrentTimeCells(): void {
-    const timePanelCells = this.getTimePanelCells();
-    const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
-    currentTimeCellIndices.forEach((timePanelCellIndex) => {
-      timePanelCells.eq(timePanelCellIndex)
-        .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
-    });
   }
 }
 

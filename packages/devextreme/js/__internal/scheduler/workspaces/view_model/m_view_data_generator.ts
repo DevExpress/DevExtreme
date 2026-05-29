@@ -489,7 +489,6 @@ export class ViewDataGenerator {
     };
   }
 
-  // TODO: make it protected with old render
   public getDateByCellIndices(
     options: any,
     rowIndex: number,
