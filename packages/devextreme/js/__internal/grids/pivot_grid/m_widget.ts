@@ -884,6 +884,9 @@ class PivotGrid extends Widget {
   }
 
   _handleCellKeyDown(e) {
+    if (e.repeat) {
+      return;
+    }
     if (e.key === 'Enter' || e.key === ' ') {
       const args = this._createEventArgs(e.currentTarget, e);
       if (args.cell && isDefined(args.cell.expanded)) {
