@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxDataGridModule, DxTextAreaModule } from 'devextreme-angular';
+import { DxDataGridModule } from 'devextreme-angular';
+import 'devextreme/ui/text_area';
 import { Service, Employee, State } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,7 +21,6 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   imports: [
     DxDataGridModule,
-    DxTextAreaModule,
   ],
 })
 export class AppComponent {

@@ -10,6 +10,7 @@ import DataGrid, {
   Toolbar,
   Item,
 } from 'devextreme-react/data-grid';
+import 'devextreme/ui/button';
 import { query } from 'devextreme-react/common/data';
 import { orders } from './data.js';
 

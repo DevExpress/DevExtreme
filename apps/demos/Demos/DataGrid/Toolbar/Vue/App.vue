@@ -87,6 +87,7 @@ import {
   DxItem,
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import 'devextreme/ui/button';
 import { query } from 'devextreme-vue/common/data';
 import { orders } from './data.ts';
 

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item, RequiredRule, EmailRule, AsyncRule, CustomRule } from 'devextreme-react/card-view';
+import 'devextreme/ui/text_area';
 import type { ValidationCallbackData } from 'devextreme-react/common';
 
 import { employees } from './data.ts';

@@ -2,6 +2,7 @@ import React from 'react';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import CardView, { Column, Editing, RequiredRule, SearchPanel, HeaderFilter, Form, Item } from 'devextreme-react/card-view';
 import 'devextreme-react/text-area';
+import 'devextreme/ui/select_box';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 

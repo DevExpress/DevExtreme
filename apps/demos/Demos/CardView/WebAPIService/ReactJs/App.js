@@ -10,6 +10,7 @@ import CardView, {
   Item,
 } from 'devextreme-react/card-view';
 import 'devextreme-react/text-area';
+import 'devextreme/ui/select_box';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 const dataSource = AspNetData.createStore({
