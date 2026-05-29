@@ -85,7 +85,7 @@ const KeyboardProcessor = Class.inherit({
   },
 
   process(e: DxEvent<KeyboardEvent>) {
-    this._handler(createKeyDownOptions(e));
+    this._handler?.(createKeyDownOptions(e));
   },
 
   toggleProcessing({ type }) {
