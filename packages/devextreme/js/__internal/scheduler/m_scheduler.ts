@@ -447,7 +447,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
         break;
       case 'onAppointmentContextMenu':
-        this._appointments.option('onItemContextMenu', this._createActionByOption(name));
+        if (this.option('_newAppointments')) {
+          this.actions.onAppointmentContextMenu = this._createActionByOption('onAppointmentContextMenu');
+        } else {
+          this._appointments.option('onItemContextMenu', this._createActionByOption(name));
+        }
         this.appointmentTooltip._options.onItemContextMenu = this._createActionByOption(name);
         break;
       case 'noDataText':
@@ -1026,6 +1030,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onAppointmentRendered: this._createActionByOption('onAppointmentRendered'),
       onAppointmentClick: this._createActionByOption('onAppointmentClick'),
       onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
+      onAppointmentContextMenu: this._createActionByOption('onAppointmentContextMenu'),
     };
   }
 
@@ -1095,6 +1100,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         onAppointmentRendered: (...args) => this.actions.onAppointmentRendered(...args),
         onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
         onAppointmentDblClick: (...args) => this.actions.onAppointmentDblClick(...args),
+        onAppointmentContextMenu: (...args) => this.actions.onAppointmentContextMenu(...args),
         onDeleteKeyPress: (e) => {
           this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
         },
