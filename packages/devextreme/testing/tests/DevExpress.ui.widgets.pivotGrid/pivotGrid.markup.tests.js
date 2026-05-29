@@ -142,7 +142,27 @@ QUnit.module('PivotGrid markup tests', () => {
         }
     });
 
-    QUnit.test('Non-expandable td has neither aria-expanded nor tabindex', function(assert) {
+    QUnit.test('Expandable td has role="button"', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
+        const clock = sinon.useFakeTimers();
+        try {
+            const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
+            clock.tick(10);
+
+            const $expandedTd = pivotGrid.$element().find('.dx-pivotgrid-expanded').first().closest('td');
+            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+
+            assert.strictEqual($expandedTd.attr('role'), 'button', 'expanded td has role="button"');
+            assert.strictEqual($collapsedTd.attr('role'), 'button', 'collapsed td has role="button"');
+        } finally {
+            clock.restore();
+        }
+    });
+
+    QUnit.test('Non-expandable td has no role, aria-expanded, or tabindex', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
             return;
@@ -155,6 +175,7 @@ QUnit.module('PivotGrid markup tests', () => {
             const $nonExpandableTd = pivotGrid.$element().find('td:not([aria-expanded])').first();
 
             assert.ok($nonExpandableTd.length > 0, 'non-expandable td exists');
+            assert.strictEqual($nonExpandableTd.attr('role'), undefined, 'no role attribute');
             assert.strictEqual($nonExpandableTd.attr('aria-expanded'), undefined, 'no aria-expanded attribute');
             assert.strictEqual($nonExpandableTd.attr('tabindex'), undefined, 'no tabindex attribute');
         } finally {
