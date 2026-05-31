@@ -1045,4 +1045,15 @@ export default class DataGrid extends GridCore {
   getAIAssistantButton(): Selector {
     return this.getHeaderPanel().element.find(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
   }
+
+  focusAIAssistantButton(): Promise<void> {
+    const buttonSelector = this.getAIAssistantButton();
+
+    return ClientFunction(
+      () => {
+        (buttonSelector() as unknown as HTMLElement)?.focus();
+      },
+      { dependencies: { buttonSelector } },
+    )();
+  }
 }

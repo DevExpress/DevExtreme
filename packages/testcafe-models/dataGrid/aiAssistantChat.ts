@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import Popup from '../popup';
 import Button from '../button';
 import Chat from '../chat';
@@ -26,6 +25,8 @@ const CLASS = {
   actionListItemText: 'dx-ai-chat__action-list-item-text',
   closeButton: 'dx-closebutton',
   clearChatButton: 'dx-icon-clearhistory',
+  suggestion: 'dx-chat-suggestions',
+  suggestionButton: 'dx-button',
 };
 
 export class AIAssistantChat extends Popup {
@@ -37,6 +38,10 @@ export class AIAssistantChat extends Popup {
     return new Chat(this.element.find(`.${CLASS.aiChatContent}`));
   }
 
+  getInput(): Selector {
+    return this.getChat().getInput();
+  }
+
   getCloseButton(): Button {
     return new Button(this.element.find(`.${CLASS.closeButton}`));
   }
@@ -46,6 +51,14 @@ export class AIAssistantChat extends Popup {
   }
 
   getMessages(): Selector {
+    return this.getChat().getMessageBubbles();
+  }
+
+  getUserMessages(): Selector {
+    return this.getMessages().filter((node) => !node.querySelector('.dx-ai-chat__message'));
+  }
+
+  getAIMessages(): Selector {
     return this.element.find(`.${CLASS.message}`);
   }
 
@@ -61,40 +74,40 @@ export class AIAssistantChat extends Popup {
     return this.element.find(`.${CLASS.messageError}`);
   }
 
-  getMessage(index: number): Selector {
-    return this.getMessages().nth(index);
+  getAIMessage(index: number): Selector {
+    return this.getAIMessages().nth(index);
   }
 
   getMessageHeader(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageHeader}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageHeader}`);
   }
 
   getMessageErrorText(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageErrorText}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageErrorText}`);
   }
 
   getMessageProgressBar(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageProgressBar}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageProgressBar}`);
   }
 
   getMessageRegenerateButton(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageRegenerateButton}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageRegenerateButton}`);
   }
 
   getActionList(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionList}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionList}`);
   }
 
   getActionItems(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionListItem}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItem}`);
   }
 
   getSuccessActionItems(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionListItemSuccess}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItemSuccess}`);
   }
 
   getErrorActionItems(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionListItemError}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItemError}`);
   }
 
   getActionItemText(messageIndex: number, actionIndex: number): Selector {
@@ -103,5 +116,13 @@ export class AIAssistantChat extends Popup {
 
   getActionItemIcon(messageIndex: number, actionIndex: number): Selector {
     return this.getActionItems(messageIndex).nth(actionIndex).find(`.${CLASS.actionListItemIcon}`);
+  }
+
+  getSuggestions(): Selector {
+    return this.element.find(`.${CLASS.suggestion} .${CLASS.suggestionButton}`);
+  }
+
+  getTitle(): Selector {
+    return this.topToolbar;
   }
 }
