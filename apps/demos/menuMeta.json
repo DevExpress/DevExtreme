@@ -65,6 +65,7 @@
       {
         "Name": "Chat",
         "Equivalents": "dxChat, dx-chat, chat",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "AI and Chatbot Integration",
