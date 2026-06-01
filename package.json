@@ -33,7 +33,7 @@
     "@nx/jest": "22.7.0",
     "@nx/js": "22.7.0",
     "@types/jest": "29.5.14",
-    "@types/node": "20.12.8",
+    "@types/node": "catalog:tools",
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "2.0.4",
     "@types/yargs": "17.0.35",
