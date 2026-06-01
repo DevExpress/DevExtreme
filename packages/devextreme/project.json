@@ -13,7 +13,8 @@
         "targetDirectory": "./artifacts",
         "excludePatterns": [
           "./artifacts/css",
-          "./artifacts/npm/devextreme/package.json"
+          "./artifacts/npm/devextreme/package.json",
+          "./artifacts/npm/devextreme-dist"
         ]
       }
     },
