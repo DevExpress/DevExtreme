@@ -7,6 +7,17 @@ import fs from 'fs';
 
 import { converter, prettifyOutputs } from './converter';
 
+const defaultConversionConcurrency = 8;
+
+const logger = {
+  warning: consola.warn,
+  error: consola.error,
+  debug: consola.debug,
+  info: consola.info,
+  start: consola.start,
+  success: consola.success,
+};
+
 function findFoldersWithTsxFiles(directory) {
   const foldersWithTsxFiles = [];
   const filesAndFolders = fs.readdirSync(directory);
@@ -51,16 +62,7 @@ const getPatterns = () => {
   return filteredDemos.map((demoName) => demoName.split(path.sep).join(path.posix.sep));
 };
 
-const performConversion = async (patterns) => {
-  const logger = {
-    warning: consola.warn,
-    error: consola.error,
-    debug: consola.debug,
-    info: consola.info,
-    start: consola.start,
-    success: consola.success,
-  };
-
+const performConversion = async (patterns, conversionConcurrency) => {
   const args = minimist(patterns);
 
   const sourceDirs = args._ || [process.cwd()];
@@ -81,29 +83,30 @@ const performConversion = async (patterns) => {
   // @ts-ignore
   )).flat(1);
 
-  let convertedOutDirs: string[];
-
   try {
-    const outDirs = await Promise.all(
-      entries.map(async ({ source, out }) => {
-        logger.start(`converting ${source}`);
-        const converted = await converter(source, out, logger, { prettify: false });
-        if (converted) {
-          logger.success(`${source} complete`);
-        }
-        return converted ? out : null;
-      }),
-    );
+    const outDirs: (string | null)[] = [];
+    const entryBatches = splitArrayIntoSubarrays(entries, conversionConcurrency);
 
-    convertedOutDirs = outDirs.filter(
+    for (const entryBatch of entryBatches) {
+      outDirs.push(...await Promise.all(
+        entryBatch.map(async ({ source, out }) => {
+          logger.start(`converting ${source}`);
+          const converted = await converter(source, out, logger, { prettify: false });
+          if (converted) {
+            logger.success(`${source} complete`);
+          }
+          return converted ? out : null;
+        }),
+      ));
+    }
+
+    return outDirs.filter(
       (outDir): outDir is string => outDir != null,
     );
   } catch (error) {
     logger.error(error);
     process.exit(1);
   }
-
-  await prettifyOutputs(convertedOutDirs, logger);
 };
 
 function splitArrayIntoSubarrays(array, subarrayLength) {
@@ -114,6 +117,17 @@ function splitArrayIntoSubarrays(array, subarrayLength) {
   }
 
   return result;
+}
+
+function getConversionConcurrency() {
+  const rawValue = process.env.CONVERT_TO_JS_CONCURRENCY;
+  const parsedValue = rawValue == null ? defaultConversionConcurrency : Number(rawValue);
+
+  if (!Number.isInteger(parsedValue) || parsedValue < 1) {
+    throw new Error(`CONVERT_TO_JS_CONCURRENCY must be a positive integer. Received: ${rawValue}`);
+  }
+
+  return parsedValue;
 }
 
 async function startScript() {
@@ -138,10 +152,15 @@ async function startScript() {
 
 async function batchPatternsAndConvert() {
   const allPatterns = getPatterns();
-  const batches = splitArrayIntoSubarrays(allPatterns, 10);
+  const conversionConcurrency = getConversionConcurrency();
+  const batches = splitArrayIntoSubarrays(allPatterns, conversionConcurrency);
+  const convertedOutDirs: string[] = [];
+
   for (const batch of batches) {
-    await performConversion(batch);
+    convertedOutDirs.push(...await performConversion(batch, conversionConcurrency));
   }
+
+  await prettifyOutputs(convertedOutDirs, process.cwd(), logger);
 }
 
 startScript();

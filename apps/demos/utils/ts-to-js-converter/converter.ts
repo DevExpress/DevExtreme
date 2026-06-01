@@ -41,6 +41,8 @@ const redundantAssets = ['*tsconfig*', 'types.js'];
 
 const quoteShellArg = (value: string) => `"${value.replace(/(["\\$`])/g, '\\$1')}"`;
 
+const toPosixPath = (value: string) => value.split(path.sep).join(path.posix.sep);
+
 const makeConfig = (
   resolve: PathResolvers,
   include: string[],
@@ -66,6 +68,7 @@ const makeConfig = (
     skipLibCheck: true,
     allowSyntheticDefaultImports: true,
     resolveJsonModule: true,
+    preserveSymlinks: true,
   },
 });
 
@@ -98,12 +101,10 @@ const execTsc = async (directory: string, args: string[]): Promise<string> => {
     const { stdout, stderr } = error as { stdout?: string; stderr?: string };
 
     if (stdout) {
-      // eslint-disable-next-line no-console
       console.error(stdout);
     }
 
     if (stderr) {
-      // eslint-disable-next-line no-console
       console.error(stderr);
     }
 
@@ -205,10 +206,21 @@ const patchImports = async (resolve: PathResolvers, log: Logger) => {
   log.debug('imports patching done');
 };
 
+const prettify = async (resolve: PathResolvers, log: Logger) => {
+  log.debug('running Prettier');
+  const prettierCommand = `prettier --write "${resolve.out('')}${path.sep}!(*.{css,json,md,tsbuildinfo})" --single-attribute-per-line --print-width 100`;
+  await exec(prettierCommand, {
+    cwd: resolve.out(''),
+  });
+  await exec(`eslint --fix "${resolve.out('')}" --ignore-pattern "config.js" --ignore-pattern "*.tsbuildinfo"`, {
+    cwd: resolve.out(''),
+  });
+};
+
 export const prettifyOutputs = async (
   outDirs: string[],
+  demosRootDir: string,
   log: Logger,
-  cwd = process.cwd(),
 ) => {
   const uniqueOutDirs = [...new Set(outDirs)];
 
@@ -219,22 +231,37 @@ export const prettifyOutputs = async (
   log.debug('running Prettier');
 
   const prettierPatterns = uniqueOutDirs
-    .map((outDir) => quoteShellArg(
-      `${path.resolve(outDir)}${path.sep}!(*.{css,json,md,tsbuildinfo})`,
-    ))
+    .map((outDir) => quoteShellArg(`${path.resolve(outDir)}${path.sep}!(*.{css,json,md,tsbuildinfo})`))
     .join(' ');
   const eslintPatterns = uniqueOutDirs
-    .map((outDir) => quoteShellArg(path.resolve(outDir)))
+    .map((outDir) => quoteShellArg(
+      toPosixPath(path.relative(demosRootDir, outDir)),
+    ))
     .join(' ');
 
-  await exec(
-    `prettier --write ${prettierPatterns} --single-attribute-per-line --print-width 100`,
-    { cwd },
-  );
-  await exec(
-    `eslint --fix ${eslintPatterns} --ignore-pattern "**/config.js" --ignore-pattern "*.tsbuildinfo"`,
-    { cwd },
-  );
+  const prettierConfig = quoteShellArg(path.join(demosRootDir, '.prettierrc.json'));
+  const eslintConfig = quoteShellArg(path.join(demosRootDir, 'eslint.config.mjs'));
+  const prettierCommand = [
+    'prettier',
+    '--write',
+    prettierPatterns,
+    '--config',
+    prettierConfig,
+    '--single-attribute-per-line',
+    '--print-width 100',
+  ].join(' ');
+  const eslintCommand = [
+    'eslint',
+    '--fix',
+    eslintPatterns,
+    '--config',
+    eslintConfig,
+    '--ignore-pattern "**/config.js"',
+    '--ignore-pattern "*.tsbuildinfo"',
+  ].join(' ');
+
+  await exec(prettierCommand, { cwd: uniqueOutDirs[0] });
+  await exec(eslintCommand, { cwd: demosRootDir });
 };
 
 const hasTypescriptFiles = async (resolve: PathResolver) => {
@@ -285,7 +312,7 @@ export const converter = async (
     await copyAssets(resolve, log);
     await patchImports(resolve, log);
     if (options.prettify !== false) {
-      await prettifyOutputs([outDir], log, outDir);
+      await prettify(resolve, log);
     }
     await strip(resolve, log);
     return true;
