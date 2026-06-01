@@ -5,6 +5,7 @@ import {
   Scheduler, Resource, Toolbar, Item,
 } from 'devextreme-react/scheduler';
 import { SelectBox } from 'devextreme-react/select-box';
+import 'devextreme/ui/button';
 import { assignees, data, currentDate } from './data.js';
 
 const views = ['day', 'week', 'workWeek', 'month'];

@@ -61,6 +61,7 @@ import {
 import type { DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import type { DataSource } from 'devextreme-vue/common/data';
+import 'devextreme/ui/button';
 import { assignees, currentDate, data } from './data.ts';
 
 const MS_IN_HOUR = 60 * 1000;
