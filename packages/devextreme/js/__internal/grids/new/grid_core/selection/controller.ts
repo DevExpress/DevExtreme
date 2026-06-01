@@ -159,7 +159,7 @@ export class SelectionController {
 
       const isLoaded = this.dataController.isLoaded.value;
       if (isLoaded) {
-        const selectedCardKeys = this.selectedCardKeys.peek();
+        const selectedCardKeys = this.selectedCardKeys.value;
 
         this.selectCards(selectedCardKeys);
       }
