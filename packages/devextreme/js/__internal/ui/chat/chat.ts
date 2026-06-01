@@ -356,7 +356,6 @@ class Chat extends Widget<ChatProperties> {
   }
 
   _getMessageTemplate(): MessageTemplate {
-    // Test
     return this._getRenderTemplateFunction('messageTemplate');
   }
 
