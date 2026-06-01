@@ -76,7 +76,6 @@ export const getGroupWidth = (groupIndex, viewDataProvider, options) => {
 
   const cellWidth = getCellWidth(DOMMetaData);
   let result = viewDataProvider.getCellCount(options) * cellWidth;
-  // TODO: refactor after deleting old render
   if (isVirtualScrolling) {
     const groupedData = viewDataProvider.groupedDataMap.dateTableGroupedMap;
     const groupLength = groupedData[groupIndex][0].length;
