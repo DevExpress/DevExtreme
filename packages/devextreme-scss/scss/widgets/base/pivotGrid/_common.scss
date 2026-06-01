@@ -75,11 +75,6 @@
     box-sizing: content-box;
   }
 
-  td[aria-expanded]:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: -2px;
-  }
-
   .dx-area-description-cell {
     position: relative;
     background-clip: padding-box;  // T379462
