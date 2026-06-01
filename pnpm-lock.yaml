@@ -473,8 +473,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
-        specifier: 5.0.0
-        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.1.0
+        version: 5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-aspnet-data-nojquery:
         specifier: 5.1.0
         version: 5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
@@ -1544,8 +1544,8 @@ importers:
         specifier: 2.2.2
         version: 2.2.2
       devextreme-aspnet-data:
-        specifier: 5.0.0
-        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.1.0
+        version: 5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-cldr-data:
         specifier: 1.0.3
         version: 1.0.3
@@ -9782,8 +9782,8 @@ packages:
     peerDependencies:
       devextreme: '>=18.1.0'
 
-  devextreme-aspnet-data@5.0.0:
-    resolution: {integrity: sha512-JtI8qOPGcKWIa06rMS335lpE+HhttygJzMG1Y1x0PoQ6RIxJ5NfD/R7cFiE2hsRXqJYIV6MLV1/qkMs169oR1A==}
+  devextreme-aspnet-data@5.1.0:
+    resolution: {integrity: sha512-8jlAmBq+KcxMwVd5ukAhhia/JWx5fAdZ3qSaATdnCHlYxCCuIL50dBQw9Qd7khk8E0zj3UHwuA/lbhHCxZZxKg==}
     peerDependencies:
       devextreme: '>=18.1.0'
 
@@ -28473,7 +28473,7 @@ snapshots:
     dependencies:
       devextreme: link:packages/devextreme/artifacts/npm/devextreme
 
-  devextreme-aspnet-data@5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
+  devextreme-aspnet-data@5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
     dependencies:
       devextreme: link:packages/devextreme/artifacts/npm/devextreme
 
