@@ -5,7 +5,7 @@ import { glob } from 'glob';
 import { consola } from 'consola';
 import fs from 'fs';
 
-import { converter } from './converter';
+import { converter, prettifyOutputs } from './converter';
 
 function findFoldersWithTsxFiles(directory) {
   const foldersWithTsxFiles = [];
@@ -81,19 +81,29 @@ const performConversion = async (patterns) => {
   // @ts-ignore
   )).flat(1);
 
-  await Promise.all(
-    entries.map(async ({ source, out }) => {
-      logger.start(`converting ${source}`);
-      await converter(source, out, logger);
-      logger.success(`${source} complete`);
-    }),
-  )
-    // eslint-disable-next-line no-void
-    .then(void 0)
-    .catch((error) => {
-      logger.error(error);
-      process.exit(1);
-    });
+  let convertedOutDirs: string[];
+
+  try {
+    const outDirs = await Promise.all(
+      entries.map(async ({ source, out }) => {
+        logger.start(`converting ${source}`);
+        const converted = await converter(source, out, logger, { prettify: false });
+        if (converted) {
+          logger.success(`${source} complete`);
+        }
+        return converted ? out : null;
+      }),
+    );
+
+    convertedOutDirs = outDirs.filter(
+      (outDir): outDir is string => outDir != null,
+    );
+  } catch (error) {
+    logger.error(error);
+    process.exit(1);
+  }
+
+  await prettifyOutputs(convertedOutDirs, logger);
 };
 
 function splitArrayIntoSubarrays(array, subarrayLength) {

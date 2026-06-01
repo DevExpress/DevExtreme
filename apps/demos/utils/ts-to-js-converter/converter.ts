@@ -9,7 +9,12 @@ import { promisify } from 'util';
 import _ from 'lodash';
 import os from 'os';
 
-import { Logger, PathResolver, PathResolvers } from './types';
+import {
+  ConverterOptions,
+  Logger,
+  PathResolver,
+  PathResolvers,
+} from './types';
 
 let platformGlob = glob;
 const makePathArrayPosix = (pathArray) => pathArray.map(
@@ -33,6 +38,8 @@ const bundleAssets = [
 ];
 
 const redundantAssets = ['*tsconfig*', 'types.js'];
+
+const quoteShellArg = (value: string) => `"${value.replace(/(["\\$`])/g, '\\$1')}"`;
 
 const makeConfig = (
   resolve: PathResolvers,
@@ -80,12 +87,28 @@ const pipeSource = async (
 
 const execTsc = async (directory: string, args: string[]): Promise<string> => {
   const tscScript = require.resolve('typescript/bin/tsc');
-  const { stdout } = await promisify(cps.execFile)(
-    process.execPath,
-    [tscScript, ...args],
-    { cwd: directory },
-  );
-  return stdout;
+  try {
+    const { stdout } = await promisify(cps.execFile)(
+      process.execPath,
+      [tscScript, ...args],
+      { cwd: directory },
+    );
+    return stdout;
+  } catch (error) {
+    const { stdout, stderr } = error as { stdout?: string; stderr?: string };
+
+    if (stdout) {
+      // eslint-disable-next-line no-console
+      console.error(stdout);
+    }
+
+    if (stderr) {
+      // eslint-disable-next-line no-console
+      console.error(stderr);
+    }
+
+    throw error;
+  }
 };
 
 const compile = async (resolve: PathResolvers, log: Logger) => {
@@ -182,14 +205,36 @@ const patchImports = async (resolve: PathResolvers, log: Logger) => {
   log.debug('imports patching done');
 };
 
-const prettify = async (resolve: PathResolvers, log: Logger) => {
+export const prettifyOutputs = async (
+  outDirs: string[],
+  log: Logger,
+  cwd = process.cwd(),
+) => {
+  const uniqueOutDirs = [...new Set(outDirs)];
+
+  if (uniqueOutDirs.length === 0) {
+    return;
+  }
+
   log.debug('running Prettier');
-  await exec(`prettier --write "${resolve.out('')}${path.sep}!(*.{css,json,md,tsbuildinfo})" --single-attribute-per-line --print-width 100`, {
-    cwd: resolve.out(''),
-  });
-  await exec(`eslint --fix "${resolve.out('')}" --ignore-pattern "config.js" --ignore-pattern "*.tsbuildinfo"`, {
-    cwd: resolve.out(''),
-  });
+
+  const prettierPatterns = uniqueOutDirs
+    .map((outDir) => quoteShellArg(
+      `${path.resolve(outDir)}${path.sep}!(*.{css,json,md,tsbuildinfo})`,
+    ))
+    .join(' ');
+  const eslintPatterns = uniqueOutDirs
+    .map((outDir) => quoteShellArg(path.resolve(outDir)))
+    .join(' ');
+
+  await exec(
+    `prettier --write ${prettierPatterns} --single-attribute-per-line --print-width 100`,
+    { cwd },
+  );
+  await exec(
+    `eslint --fix ${eslintPatterns} --ignore-pattern "**/config.js" --ignore-pattern "*.tsbuildinfo"`,
+    { cwd },
+  );
 };
 
 const hasTypescriptFiles = async (resolve: PathResolver) => {
@@ -203,7 +248,8 @@ export const converter = async (
   sourceDir: string,
   outDir: string,
   log: Logger,
-): Promise<void> => {
+  options: ConverterOptions = {},
+): Promise<boolean> => {
   log.debug('TS to JS example converter starting');
   log.debug(`sourceDir: ${sourceDir}`);
   log.debug(`outDir: ${outDir}`);
@@ -218,7 +264,7 @@ export const converter = async (
 
   if (!await hasTypescriptFiles(sourceDirResolver)) {
     log.info(`No TypeScript files found in ${sourceDir}. Skipping...`);
-    return;
+    return false;
   }
 
   log.debug(`touching ${outDir}`);
@@ -238,11 +284,11 @@ export const converter = async (
     await compile(resolve, log);
     await copyAssets(resolve, log);
     await patchImports(resolve, log);
-    await prettify(resolve, log);
+    if (options.prettify !== false) {
+      await prettifyOutputs([outDir], log, outDir);
+    }
     await strip(resolve, log);
-  } catch (error) {
-    log.error(error);
-    return;
+    return true;
   } finally {
     log.debug(`removing temp directory: ${tempDir}`);
     await remove(tempDir);

@@ -416,12 +416,13 @@ jobs:
     name: Check generated demos (changed only)
     runs-on: devextreme-shr2
     timeout-minutes: 10
-    needs: [check-should-run, get-changes, determine-framework-tests-scope]
+    needs: [check-should-run, get-changes, build-devextreme, determine-framework-tests-scope]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
-      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed'
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-devextreme.result == 'success'
 
     steps:
     - name: Get sources
@@ -472,6 +473,12 @@ jobs:
       with:
         node-version-file: '.node-version'
 
+    - name: Download devextreme sources
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-sources
+
     - name: Get pnpm store directory
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       shell: bash
@@ -490,6 +497,16 @@ jobs:
     - name: Install dependencies
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Prepare JS
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
+      working-directory: apps/demos
+      run: pnpm run prepare-js
 
     - name: Check generated JS demos
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
@@ -512,12 +529,13 @@ jobs:
     name: Check generated demos (${{ matrix.CONSTEL }})
     runs-on: devextreme-shr2
     timeout-minutes: 15
-    needs: [check-should-run, determine-framework-tests-scope]
+    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
-      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-devextreme.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -536,6 +554,11 @@ jobs:
       with:
         node-version-file: '.node-version'
 
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-sources
+
     - name: Get pnpm store directory
       shell: bash
       run: |
@@ -551,6 +574,14 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Prepare JS
+      working-directory: apps/demos
+      run: pnpm run prepare-js
 
     - name: Check generated JS demos
       working-directory: apps/demos
