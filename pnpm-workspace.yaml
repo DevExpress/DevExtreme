@@ -55,20 +55,6 @@ catalogs:
     "ng-packagr": ~20.3.0
     "typescript": ~5.8.0
     "zone.js": ~0.15.1
-  angular-demos:
-    "@angular/animations": ~21.2.13
-    "@angular-devkit/build-angular": ~21.2.13
-    "@angular/cli": ~21.2.13
-    "@angular/common": ~21.2.13
-    "@angular/compiler": ~21.2.13
-    "@angular/compiler-cli": ~21.2.13
-    "@angular/core": ~21.2.13
-    "@angular/forms": ~21.2.13
-    "@angular/platform-browser": ~21.2.13
-    "@angular/platform-browser-dynamic": ~21.2.13
-    "@angular/platform-server": ~21.2.13
-    "typescript": ~5.9.3
-    "zone.js": 0.15.1
   eslint8:
     eslint: 9.39.4
     eslint-config-airbnb-typescript: 17.1.0

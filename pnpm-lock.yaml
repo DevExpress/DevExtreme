@@ -54,46 +54,6 @@ catalogs:
     zone.js:
       specifier: ~0.15.1
       version: 0.15.1
-  angular-demos:
-    '@angular-devkit/build-angular':
-      specifier: ~21.2.13
-      version: 21.2.13
-    '@angular/animations':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/cli':
-      specifier: ~21.2.13
-      version: 21.2.13
-    '@angular/common':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/compiler':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/compiler-cli':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/core':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/forms':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/platform-browser':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/platform-browser-dynamic':
-      specifier: ~21.2.13
-      version: 21.2.15
-    '@angular/platform-server':
-      specifier: ~21.2.13
-      version: 21.2.15
-    typescript:
-      specifier: ~5.9.3
-      version: 5.9.3
-    zone.js:
-      specifier: 0.15.1
-      version: 0.15.1
   default:
     '@babel/eslint-parser':
       specifier: 7.28.6
@@ -433,34 +393,34 @@ importers:
   apps/demos:
     dependencies:
       '@angular-devkit/build-angular':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.13
         version: 21.2.13(dc7cdqo6y4nrrc5yjutt4qleiq)
       '@angular/animations':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))
       '@angular/cli':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.13
         version: 21.2.13(@types/node@20.19.37)(chokidar@5.0.0)
       '@angular/common':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
       '@angular/compiler':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15
       '@angular/compiler-cli':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/compiler@21.2.15)(typescript@5.9.3)
       '@angular/core':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)
       '@angular/forms':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.15(@angular/animations@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       '@angular/platform-browser':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/animations@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))
       '@angular/platform-browser-dynamic':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.2.15)(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.15(@angular/animations@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))
       '@aspnet/signalr':
         specifier: 1.0.27
@@ -646,7 +606,7 @@ importers:
         specifier: 0.3.0
         version: 0.3.0
       typescript:
-        specifier: catalog:angular-demos
+        specifier: ~5.9.3
         version: 5.9.3
       unified:
         specifier: 10.1.2
@@ -670,11 +630,11 @@ importers:
         specifier: 'catalog:'
         version: 3.24.6(zod@3.24.4)
       zone.js:
-        specifier: catalog:angular-demos
+        specifier: 0.15.1
         version: 0.15.1
     devDependencies:
       '@angular/platform-server':
-        specifier: catalog:angular-demos
+        specifier: ~21.2.15
         version: 21.2.15(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.2.15)(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.15(@angular/animations@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       '@babel/core':
         specifier: 7.29.0
