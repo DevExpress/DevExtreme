@@ -178,6 +178,30 @@ describe('when keyExpr is missing', () => {
   });
 });
 
+describe('clear selection toolbar button', () => {
+  it('should clear selection after runtime selectedCardKeys option update', () => {
+    const cardView = setup({
+      keyExpr: 'id',
+      dataSource: [{ id: 1 }, { id: 2 }],
+      selection: {
+        mode: 'multiple',
+      },
+      selectedCardKeys: [],
+    });
+
+    expect(cardView.getSelectedCardKeys()).toEqual([]);
+
+    cardView.option('selectedCardKeys', [2]);
+
+    expect(cardView.getSelectedCardKeys()).toEqual([2]);
+
+    const clearSelectionButton = getClearSelectionButton();
+    clearSelectionButton?.dispatchEvent(new MouseEvent('click'));
+
+    expect(cardView.getSelectedCardKeys()).toEqual([]);
+  });
+});
+
 describe('selectAll with filters', () => {
   it('should select only cards matching filterValue', () => {
     const cardView = setup({
@@ -300,29 +324,5 @@ describe('selectAll with filters', () => {
     cardView.selectAll();
 
     expect(cardView.getSelectedCardKeys()).toEqual([1]);
-  });
-});
-
-describe('clear selection toolbar button', () => {
-  it('should clear selection after runtime selectedCardKeys option update', () => {
-    const cardView = setup({
-      keyExpr: 'id',
-      dataSource: [{ id: 1 }, { id: 2 }],
-      selection: {
-        mode: 'multiple',
-      },
-      selectedCardKeys: [],
-    });
-
-    expect(cardView.getSelectedCardKeys()).toEqual([]);
-
-    cardView.option('selectedCardKeys', [2]);
-
-    expect(cardView.getSelectedCardKeys()).toEqual([2]);
-
-    const clearSelectionButton = getClearSelectionButton();
-    clearSelectionButton?.dispatchEvent(new MouseEvent('click'));
-
-    expect(cardView.getSelectedCardKeys()).toEqual([]);
   });
 });
