@@ -554,44 +554,41 @@ module('Integration: Appointments in Timeline views', {
                 }
             });
 
-            [true, false].forEach((isRenovatedRender) => {
-                test(`Multi-day appointment should be rendered when started after endDayHour (T819852) when renovateRender is ${isRenovatedRender}`, async function(assert) {
-                    const data = [{
-                        text: 'Default appt',
-                        startDate: new Date('2019-10-03T06:00:00.000'),
-                        endDate: new Date('2019-10-03T18:00:00.000'),
-                    }, {
-                        text: 'Appt with end before endDayHour',
-                        startDate: new Date('2019-10-02T17:00:00.000'),
-                        endDate: new Date('2019-10-03T17:00:00.000'),
-                    }, {
-                        text: 'Appt with end before startDayHour',
-                        startDate: new Date('2019-10-02T17:30:00.000'),
-                        endDate: new Date('2019-10-02T18:30:00.000'),
-                    }, {
-                        text: 'Appt with end after endDayHour',
-                        startDate: new Date('2019-10-02T18:55:00.000'),
-                        endDate: new Date('2019-10-03T19:00:00.000'),
-                    }];
+            test('Multi-day appointment should be rendered when started after endDayHour (T819852)', async function(assert) {
+                const data = [{
+                    text: 'Default appt',
+                    startDate: new Date('2019-10-03T06:00:00.000'),
+                    endDate: new Date('2019-10-03T18:00:00.000'),
+                }, {
+                    text: 'Appt with end before endDayHour',
+                    startDate: new Date('2019-10-02T17:00:00.000'),
+                    endDate: new Date('2019-10-03T17:00:00.000'),
+                }, {
+                    text: 'Appt with end before startDayHour',
+                    startDate: new Date('2019-10-02T17:30:00.000'),
+                    endDate: new Date('2019-10-02T18:30:00.000'),
+                }, {
+                    text: 'Appt with end after endDayHour',
+                    startDate: new Date('2019-10-02T18:55:00.000'),
+                    endDate: new Date('2019-10-03T19:00:00.000'),
+                }];
 
-                    const scheduler = await createInstance({
-                        dataSource: data,
-                        views: ['timelineWeek'],
-                        currentView: 'timelineWeek',
-                        currentDate: new Date(2019, 9, 4),
-                        cellDuration: 660,
-                        startDayHour: 7,
-                        endDayHour: 18,
-                        height: 580,
-                        renovateRender: scrollingMode === 'virtual' || isRenovatedRender,
-                        width: 800
-                    });
-
-                    assert.strictEqual(scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(2)).position().left, $(scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(2)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(3)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
+                const scheduler = await createInstance({
+                    dataSource: data,
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2019, 9, 4),
+                    cellDuration: 660,
+                    startDayHour: 7,
+                    endDayHour: 18,
+                    height: 580,
+                    width: 800
                 });
+
+                assert.strictEqual(scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');
+                assert.strictEqual($(scheduler.appointments.getAppointment(2)).position().left, $(scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
+                assert.strictEqual($(scheduler.appointments.getAppointment(2)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
+                assert.strictEqual($(scheduler.appointments.getAppointment(3)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
             });
         });
     });
