@@ -11,7 +11,8 @@
     "@types/node": "catalog:tools",
     "devextreme-internal-tools": "catalog:tools",
     "prettier": "catalog:tools",
-    "ts-node": "catalog:tools"
+    "ts-node": "catalog:tools",
+    "typescript": "catalog:tools"
   },
   "files": [
     "dist"
