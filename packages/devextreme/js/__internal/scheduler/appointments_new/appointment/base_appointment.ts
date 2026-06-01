@@ -19,6 +19,7 @@ import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_d
 import { EVENTS_NAMESPACE, ViewItem, type ViewItemProperties } from '../view_item';
 
 const DOUBLE_CLICK_EVENT_NAME = addNamespace('dxdblclick', EVENTS_NAMESPACE.namespace);
+const CONTEXT_MENU_EVENT_NAME = addNamespace('dxcontextmenu', EVENTS_NAMESPACE.namespace);
 
 export interface BaseAppointmentViewProperties
   extends ViewItemProperties {
@@ -30,6 +31,7 @@ export interface BaseAppointmentViewProperties
   onRendered: (e: AppointmentRenderedEvent) => void;
   onClick: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
   onDblClick: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
+  onContextMenu: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
 
   getDataAccessor: () => AppointmentDataAccessor;
   getResourceColor: () => Promise<string | undefined>;
@@ -76,6 +78,7 @@ export class BaseAppointmentView<
     this.attachFocusEvents();
     this.attachClickEvent();
     this.attachDblClickEvent();
+    this.attachContextMenuEvent();
     this.attachKeydownEvents();
     this.renderContentTemplate();
   }
@@ -85,6 +88,7 @@ export class BaseAppointmentView<
 
     dxClick.off(this.$element(), EVENTS_NAMESPACE);
     eventsEngine.off(this.$element(), DOUBLE_CLICK_EVENT_NAME);
+    eventsEngine.off(this.$element(), CONTEXT_MENU_EVENT_NAME);
   }
 
   protected applyElementClasses(): void {
@@ -115,6 +119,15 @@ export class BaseAppointmentView<
       this.$element(),
       DOUBLE_CLICK_EVENT_NAME,
       (event: DxEvent<MouseEvent>) => this.option().onDblClick(this, event),
+    );
+  }
+
+  private attachContextMenuEvent(): void {
+    eventsEngine.off(this.$element(), CONTEXT_MENU_EVENT_NAME);
+    eventsEngine.on(
+      this.$element(),
+      CONTEXT_MENU_EVENT_NAME,
+      (event: DxEvent) => this.option().onContextMenu(this, event),
     );
   }
 

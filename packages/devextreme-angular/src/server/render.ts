@@ -25,6 +25,9 @@ export class DxServerModule {
           temp.innerHTML = renderToString(el);
 
           const mainElement = temp.childNodes[0];
+          if (!mainElement) {
+            return;
+          }
           const childString = mainElement.innerHTML;
 
           for (let i = 0; i < mainElement.attributes.length; i++) {

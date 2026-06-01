@@ -194,14 +194,12 @@ module('Work Space Day', {
         assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 16, 23, 59)], 'Range is OK');
     });
 
-    test('Each cell should contain jQuery dxCellData', async function(assert) {
-        this.instance.option('renovateRender', false);
-
+    test('Each cell should contain correct cellData', async function(assert) {
         this.instance.option('currentDate', new Date(2015, 2, 16));
 
         const $cell = this.instance.$element().find('.' + CELL_CLASS).first();
 
-        assert.deepEqual($cell.data('dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cell), {
             startDate: new Date(2015, 2, 16, 0, 0),
             endDate: new Date(2015, 2, 16, 0, 30),
             allDay: false,
@@ -209,20 +207,16 @@ module('Work Space Day', {
         });
     });
 
-    test('dxCellData should be \'immutable\'', function(assert) {
-        this.instance.option('renovateRender', false);
-
+    test('cellData should be \'immutable\'', function(assert) {
         const $element = this.instance.$element();
         const $cell = $element.find('.' + CELL_CLASS).first();
         const cellData = this.instance.getCellData($cell);
 
         cellData.cellCustomField = 'cell-custom-data';
-        assert.strictEqual($element.find('.' + CELL_CLASS).first().data('dxCellData').cellCustomField, undefined, 'Cell data is not affected');
+        assert.strictEqual(this.instance.getCellData($element.find('.' + CELL_CLASS).first()).cellCustomField, undefined, 'Cell data is not affected');
     });
 
     test('Cells have right cellData in vertical grouped WorkSpace Day view', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         await applyWorkspaceGroups(this.instance, [{
             label: 'one',
             fieldExpr: 'one',
@@ -234,8 +228,8 @@ module('Work Space Day', {
             startDayHour: 9,
             showAllDayPanel: false
         });
-        const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-        const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(36).data('dxCellData');
+        const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+        const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(36));
 
         assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 16, 9), 'cell has right startDate');
         assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 16, 9, 30), 'cell has right endDate');
@@ -284,12 +278,10 @@ module('Work Space Day with grouping by date', () => {
         });
 
         test('Date table cells shoud have right cellData, groupByDate = true', async function(assert) {
-            this.instance.option('renovateRender', false);
-
             this.instance.option('intervalCount', 3);
             const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
-            assert.deepEqual($cells.eq(0).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(0)), {
                 startDate: new Date(2018, 2, 1),
                 endDate: new Date(2018, 2, 1, 0, 30),
                 allDay: false,
@@ -299,7 +291,7 @@ module('Work Space Day with grouping by date', () => {
                 groupIndex: 0,
             });
 
-            assert.deepEqual($cells.eq(1).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(1)), {
                 startDate: new Date(2018, 2, 1),
                 endDate: new Date(2018, 2, 1, 0, 30),
                 allDay: false,
@@ -309,7 +301,7 @@ module('Work Space Day with grouping by date', () => {
                 groupIndex: 1,
             });
 
-            assert.deepEqual($cells.eq(2).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(2)), {
                 startDate: new Date(2018, 2, 2),
                 endDate: new Date(2018, 2, 2, 0, 30),
                 allDay: false,
@@ -319,7 +311,7 @@ module('Work Space Day with grouping by date', () => {
                 groupIndex: 0,
             });
 
-            assert.deepEqual($cells.eq(3).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(3)), {
                 startDate: new Date(2018, 2, 2),
                 endDate: new Date(2018, 2, 2, 0, 30),
                 allDay: false,
@@ -329,7 +321,7 @@ module('Work Space Day with grouping by date', () => {
                 groupIndex: 1,
             });
 
-            assert.deepEqual($cells.eq(4).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(4)), {
                 startDate: new Date(2018, 2, 3),
                 endDate: new Date(2018, 2, 3, 0, 30),
                 allDay: false,
@@ -339,7 +331,7 @@ module('Work Space Day with grouping by date', () => {
                 groupIndex: 0,
             });
 
-            assert.deepEqual($cells.eq(5).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(5)), {
                 startDate: new Date(2018, 2, 3),
                 endDate: new Date(2018, 2, 3, 0, 30),
                 allDay: false,
@@ -351,34 +343,32 @@ module('Work Space Day with grouping by date', () => {
         });
 
         test('Date table cells should have right cellData, groupByDate = true without groups', async function(assert) {
-            this.instance.option('renovateRender', false);
-
             this.instance.option('getResourceManager', getEmptyResourceManager);
             this.instance.option('groups', []);
             const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
-            assert.deepEqual($cells.eq(0).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(0)), {
                 startDate: new Date(2018, 2, 1),
                 endDate: new Date(2018, 2, 1, 0, 30),
                 allDay: false,
                 groupIndex: 0,
             });
 
-            assert.deepEqual($cells.eq(1).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(1)), {
                 startDate: new Date(2018, 2, 2),
                 endDate: new Date(2018, 2, 2, 0, 30),
                 allDay: false,
                 groupIndex: 0,
             });
 
-            assert.deepEqual($cells.eq(2).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(2)), {
                 startDate: new Date(2018, 2, 1, 0, 30),
                 endDate: new Date(2018, 2, 1, 1, 0),
                 allDay: false,
                 groupIndex: 0,
             });
 
-            assert.deepEqual($cells.eq(3).data('dxCellData'), {
+            assert.deepEqual(this.instance.getCellData($cells.eq(3)), {
                 startDate: new Date(2018, 2, 2, 0, 30),
                 endDate: new Date(2018, 2, 2, 1, 0),
                 allDay: false,
@@ -443,11 +433,10 @@ module('Work Space Day with grouping by date', () => {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 29),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(95).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(95));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 30, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 30, 0, 30), 'cell has right endtDate');
@@ -461,11 +450,10 @@ module('Work Space Day with grouping by date', () => {
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 28),
                 startDate: new Date(2017, 5, 21),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(143).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(143));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 27, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 27, 0, 30), 'cell has right endtDate');
@@ -479,11 +467,10 @@ module('Work Space Day with grouping by date', () => {
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 25),
                 startDate: new Date(2017, 5, 30),
-                renovateRender: false,
             });
 
-            const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
-            const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(143).data('dxCellData');
+            const firstCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+            const secondCellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(143));
 
             assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 24, 0), 'cell has right startDate');
             assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 24, 0, 30), 'cell has right endtDate');

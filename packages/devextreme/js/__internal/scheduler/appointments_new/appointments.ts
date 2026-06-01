@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 import type { Cancelable, DxEvent } from '@js/events';
 import type {
   AppointmentClickEvent,
+  AppointmentContextMenuEvent,
   AppointmentDblClickEvent,
   AppointmentRenderedEvent,
   Properties as SchedulerProperties,
@@ -59,6 +60,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   onAppointmentRendered: (e: AppointmentRenderedEvent) => void;
   onAppointmentClick: (e: AppointmentClickEvent) => void;
   onAppointmentDblClick: (e: AppointmentDblClickEvent) => void;
+  onAppointmentContextMenu: (e: AppointmentContextMenuEvent) => void;
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
@@ -177,6 +179,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       onAppointmentRendered: noop,
       onAppointmentClick: noop,
       onAppointmentDblClick: noop,
+      onAppointmentContextMenu: noop,
       allowDelete: false,
       onDeleteKeyPress: noop,
     };
@@ -374,6 +377,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       getDataAccessor: this.option().getDataAccessor,
       onClick: this.onAppointmentClick.bind(this),
       onDblClick: this.onAppointmentDblClick.bind(this),
+      onContextMenu: this.onAppointmentContextMenu.bind(this),
     };
 
     if (isGridAppointmentViewModel(appointmentViewModel)) {
@@ -514,6 +518,21 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       appointmentView.appointmentData,
       appointmentView.targetedAppointmentData,
     );
+  }
+
+  private onAppointmentContextMenu(
+    appointmentView: BaseAppointmentView,
+    event: DxEvent,
+  ): void {
+    const e = {
+      appointmentElement: getPublicElement(appointmentView.$element()),
+      appointmentData: appointmentView.appointmentData,
+      targetedAppointmentData: appointmentView.targetedAppointmentData,
+      event,
+    };
+
+    // @ts-expect-error 'component' and 'element' are set by action
+    this.option().onAppointmentContextMenu(e);
   }
 
   private onCollectorClick(collector: AppointmentCollector): void {
