@@ -28,6 +28,7 @@ export const getBaseAppointmentViewProperties = (
     onFocusOut: () => {},
     onClick: () => {},
     onDblClick: () => {},
+    onContextMenu: () => {},
     onKeyDown: () => {},
     getDataAccessor: (): AppointmentDataAccessor => mockAppointmentDataAccessor,
     getResourceColor: (): Promise<string | undefined> => Promise.resolve(undefined),

@@ -13,7 +13,7 @@ import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/text_area';
 import type { OptionChanged } from '@ts/core/widget/types';
-import TextBox from '@ts/ui/text_box/m_text_box';
+import TextBox from '@ts/ui/text_box/text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
 type ScrollAwareEvent = (MouseEvent | PointerEvent) & {
@@ -80,7 +80,6 @@ class TextArea<
     return $input;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setInputMinHeight(): void {}
 
   _renderScrollHandler(): void {
@@ -236,7 +235,6 @@ class TextArea<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAdjustedMaxHeight(maxHeight: number, heightDifference: number): number {
     const adjustedMaxHeight = maxHeight - heightDifference;
 
@@ -263,7 +261,6 @@ class TextArea<
     return undefined;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderInputType(): void {}
 
   _visibilityChanged(visible: boolean): void {

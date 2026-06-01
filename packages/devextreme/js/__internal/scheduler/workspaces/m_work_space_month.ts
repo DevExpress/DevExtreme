@@ -13,11 +13,6 @@ import SchedulerWorkSpace from './m_work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
-const DATE_TABLE_CURRENT_DATE_CLASS = 'dx-scheduler-date-table-current-date';
-const DATE_TABLE_CELL_TEXT_CLASS = 'dx-scheduler-date-table-cell-text';
-const DATE_TABLE_FIRST_OF_MONTH_CLASS = 'dx-scheduler-date-table-first-of-month';
-const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
-
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
@@ -155,35 +150,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override updateAllDayVisibility() { return noop(); }
-
-  // --------------
-  // These methods should be deleted when we get rid of old render
-  // --------------
-
-  protected override renderTimePanel() { return noop(); }
-
-  protected override renderAllDayPanel() { return noop(); }
-
-  private setMonthClassesToCell($cell, data) {
-    $cell
-      .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
-      .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.isFirstDayMonthHighlighting)
-      .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
-  }
-
-  protected override createAllDayPanelElements() {}
-
-  protected override renderTableBody(options) {
-    options.getCellText = (rowIndex, columnIndex) => {
-      const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
-
-      return monthUtils.getCellText(date, this.option('intervalCount') as any);
-    };
-    options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
-    options.setAdditionalClasses = this.setMonthClassesToCell.bind(this);
-
-    super.renderTableBody(options);
-  }
 }
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth as any);

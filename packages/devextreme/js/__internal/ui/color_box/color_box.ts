@@ -10,8 +10,8 @@ import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 
 import type { PopupProperties } from '../popup/m_popup';
 import type Popup from '../popup/m_popup';
-import type { ColorViewProperties } from './m_color_view';
-import ColorView from './m_color_view';
+import type { ColorViewProperties } from './color_view';
+import ColorView from './color_view';
 
 const COLOR_BOX_CLASS = 'dx-colorbox';
 const COLOR_BOX_INPUT_CLASS = `${COLOR_BOX_CLASS}-input`;
@@ -219,7 +219,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       onValueChanged: ({ event, value: changedValue, previousValue }): void => {
         const { applyValueMode: currentValueMode } = this.option();
         const isInstantlyMode = currentValueMode === 'instantly';
-        const isOldValue = colorUtils.makeRgba(changedValue) === previousValue;
+        const isOldValue = colorUtils.makeRgba(new Color(changedValue)) === previousValue;
         const isChangesApplied = isInstantlyMode || this._colorViewEnterKeyPressed;
         const isValueCleared = this._shouldSaveEmptyValue;
 
@@ -238,7 +238,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _enterKeyHandler(e: KeyboardEvent): boolean | undefined {
     const newValue = this._input().val();
     const { value, editAlphaChannel } = this.option();
-    const oldValue = value && editAlphaChannel ? colorUtils.makeRgba(value) : value;
+    const oldValue = value && editAlphaChannel ? colorUtils.makeRgba(new Color(value)) : value;
 
     if (!newValue) return false;
 
@@ -251,7 +251,8 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     if (newValue !== oldValue) {
       this._applyColorFromInput(newValue);
       this._saveValueChangeEvent(e);
-      this.option('value', editAlphaChannel ? colorUtils.makeRgba(newValue) : newValue);
+      this.option('value', editAlphaChannel
+        ? colorUtils.makeRgba(new Color(newValue)) : newValue);
     }
 
     if (this._colorView) {
@@ -281,7 +282,8 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     super._cancelButtonHandler();
   }
 
-  // needed to be typed in widget.ts
+  // need to be typed in widget.ts
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _getKeyboardListeners(): any[] {
     return super._getKeyboardListeners().concat([this._colorView]);
   }
@@ -303,7 +305,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   }
 
   _renderNoColorIcon(): void {
-    if (!this._$noColorIcon || !this._$noColorIcon.length) {
+    if (!this._$noColorIcon?.length) {
       this._$noColorIcon = $('<i>')
         .addClass(`${DX_ICON_CLASS} ${DX_ICON_COLOR_DISMISS}`)
         .appendTo(this._$colorResultPreview);
@@ -312,14 +314,14 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
 
   _updateNoColorIndicator(): void {
     const { value } = this.option();
-    const hasValue = Boolean(value);
+    const hasValue = value !== null && value !== undefined && value.length > 0;
 
     this._$colorBoxInputContainer.toggleClass(COLOR_BOX_COLOR_IS_NOT_DEFINED, !hasValue);
 
     if (hasValue) {
       this._cleanNoColorIcon();
 
-      colorUtils.makeTransparentBackground(this._$colorResultPreview, value);
+      colorUtils.makeTransparentBackground(this._$colorResultPreview, new Color(value));
     } else {
       this._$colorResultPreview.removeAttr('style');
       this._renderNoColorIcon();
@@ -344,7 +346,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _renderValue(): DeferredObj<unknown> {
     const { value, editAlphaChannel } = this.option();
     const shouldConvertToColor = value && editAlphaChannel;
-    const text = shouldConvertToColor ? colorUtils.makeRgba(value) : value;
+    const text = shouldConvertToColor ? colorUtils.makeRgba(new Color(value)) : value;
 
     this.option('text', text);
 
@@ -388,13 +390,12 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     }
 
     if (editAlphaChannel) {
-      return colorUtils.makeRgba(value);
+      return colorUtils.makeRgba(newColor);
     }
 
     return value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldLogFieldTemplateDeprecationWarning(): boolean {
     return true;
   }
@@ -435,7 +436,9 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       case 'applyButtonText':
       case 'cancelButtonText':
         super._optionChanged(args);
-        this._popup && this._addPopupBottomClasses();
+        if (this._popup) {
+          this._addPopupBottomClasses();
+        }
         break;
       case 'editAlphaChannel':
       case 'keyStep':

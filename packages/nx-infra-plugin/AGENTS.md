@@ -62,3 +62,18 @@ Each behavior is owned by exactly ONE executor's canonical tests; consumers must
 3. Preserve exact functional parity. Verify with the executor's e2e spec before and after.
 4. Update consumer imports in one batch.
 5. Run the full validation pipeline.
+
+## Migrated gulp tasks
+
+Gulp tasks that have been migrated to Nx executor targets (the gulp task is now a thin `shell.task` delegate):
+
+| Gulp task | Nx target         | Notes                                                                                                                                                                                                                                                     |
+| --------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `clean`   | `clean:artifacts` | Uses `devextreme-nx-infra-plugin:clean` with `excludePatterns` to preserve `artifacts/css`, `artifacts/npm/devextreme/package.json`, and `artifacts/npm/devextreme-dist`. The gulp task delegates via `shell.task('pnpm nx clean:artifacts devextreme')`. |
+
+When migrating additional gulp tasks, follow the same pattern:
+
+1. Ensure the Nx target fully replicates the gulp task's behavior (including exclusion lists, configurations, etc.)
+2. Replace the gulp task body with `shell.task('pnpm nx <target> <project>')`.
+3. Remove unused imports from the gulpfile.
+4. Test that both `gulp <task>` and `pnpm nx <target> <project>` produce identical results.
