@@ -301,7 +301,7 @@ importers:
         specifier: 19.1.0
         version: 19.1.0
       postcss:
-        specifier: ~8.5.10
+        specifier: 8.5.10
         version: 8.5.10
       shelljs:
         specifier: 0.8.5
@@ -636,7 +636,7 @@ importers:
         version: 0.15.1
     devDependencies:
       '@angular/platform-server':
-        specifier: ~21.2.15
+        specifier: 21.2.15
         version: 21.2.15(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.2.15)(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.15(@angular/animations@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       '@babel/core':
         specifier: 7.29.0
