@@ -1111,6 +1111,8 @@ jobs:
       needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
     timeout-minutes: 60
+    env:
+      CSP_USE_BUNDLED: '0'
 
     steps:
     - name: Get sources
@@ -1174,7 +1176,7 @@ jobs:
         if-no-files-found: ignore
 
   csp-check-frameworks:
-    name: CSP check (${{ matrix.FRAMEWORK }})
+    name: ${{ matrix.SHARD_TOTAL == 1 && format('CSP check ({0})', matrix.FRAMEWORK) || format('CSP check ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
       always() &&
@@ -1184,10 +1186,21 @@ jobs:
       needs.build-devextreme.result == 'success'
     strategy:
       fail-fast: false
+      # Angular AOT bundling is slow, so it is split into parallel shards
+      # (CSP_SHARD_*, round-robin in csp-bundle-angular.js). React/Vue stay light.
       matrix:
-        FRAMEWORK: [React, Vue, Angular]
+        include:
+          - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: React,   SHARD_INDEX: 2, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Vue,     SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Vue,     SHARD_INDEX: 2, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
     runs-on: devextreme-shr2
     timeout-minutes: 60
+    env:
+      CSP_USE_BUNDLED: '1'
 
     steps:
     - name: Get sources
@@ -1231,6 +1244,16 @@ jobs:
       working-directory: apps/demos
       run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
+    # Bundle production-style pages only when the CSP check is configured to
+    # read csp-bundled-demos; otherwise the checker uses SystemJS dev demos.
+    - name: Bundle demos for CSP check
+      if: env.CSP_USE_BUNDLED == '1' || env.CSP_USE_BUNDLED == 'true'
+      working-directory: apps/demos
+      env:
+        CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
+        CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
+      run: node utils/server/csp-bundle.js --framework=${{ matrix.FRAMEWORK }}
+
     - name: Start CSP Server
       run: node apps/demos/utils/server/csp-server.js 8080 &
 
@@ -1239,13 +1262,15 @@ jobs:
       env:
         CSP_FRAMEWORKS: ${{ matrix.FRAMEWORK }}
         CHROME_PATH: google-chrome-stable
+        CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
+        CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
       run: node utils/server/csp-check.js
 
     - name: Upload CSP report
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: csp-violations-${{ matrix.FRAMEWORK }}
+        name: csp-violations-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
 
