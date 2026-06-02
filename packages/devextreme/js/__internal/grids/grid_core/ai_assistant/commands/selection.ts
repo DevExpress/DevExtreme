@@ -45,17 +45,17 @@ export const selectByKeysCommand = defineGridCommand({
 
 const selectByIndexesCommandSchema = z.object({
   indexes: z.array(z.number().int().min(1)).min(1),
-  deselect: z.boolean(),
+  deselect: z.boolean().optional(),
 }).strict();
 
 export const selectByIndexesCommand = defineGridCommand({
   name: 'selectByIndexes',
   description: 'Select or deselect specific rows by their 1-based indexes within the current page. '
     + 'Index 1 is the first row on the visible page; group/header rows are not addressable. '
-    + 'Set deselect to true to remove the listed rows from the current selection (e.g. "unselect row 1"); set deselect to false to select them. '
-    + 'When deselect is false, the listed rows replace the current selection. '
+    + 'Set deselect to true to remove the listed rows from the current selection (e.g. "unselect row 1"); omit it or set it to false to select them. '
+    + 'When deselect is false or omitted, the listed rows replace the current selection. '
     + 'To target rows that are not on the current page, use selectByKeys, or call pageIndex first to switch the page. '
-    + 'To clear the whole selection, use deselectAll or clearSelection.',
+    + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection.',
   schema: selectByIndexesCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const rowIndexes = args.indexes.join(', ');
