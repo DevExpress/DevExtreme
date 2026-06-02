@@ -4,6 +4,8 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import { AI_INTEGRATION_PAGE, GRID_SELECTOR, getRequestColumnNames } from './testHelpers';
 
+const getRequestCount = ClientFunction(() => (window as any).__aiRequests.length);
+
 // === §1.11 onAIAssistantRequestCreating ===
 
 fixture.disablePageReloads`AI Assistant - RequestCreating`
@@ -296,3 +298,211 @@ test('Sort on removed column then submit another prompt should not crash', async
     },
   };
 }));
+
+// === §5.1 Cancellation via onAIAssistantRequestCreating's cancel ===
+
+fixture.disablePageReloads`AI Assistant - Cancellation`
+  .page(AI_INTEGRATION_PAGE);
+
+// 5.1.1
+test('cancel = true should abort before any request is dispatched', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getMessages().count).eql(2);
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getSuccessMessages().count).eql(0);
+  // The request never reached the integration, and the grid is untouched.
+  await t.expect(getRequestCount()).eql(0);
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(aiChat.isInputDisabled()).notOk();
+}).before(async () => createWidget('dxDataGrid', () => {
+  (window as any).__aiRequests = [];
+
+  return {
+    dataSource: [
+      { id: 1, name: 'Alice', value: 30 },
+      { id: 2, name: 'Bob', value: 20 },
+      { id: 3, name: 'Charlie', value: 10 },
+    ],
+    keyExpr: 'id',
+    columns: ['id', 'name', 'value'],
+    showBorders: true,
+    aiAssistant: {
+      enabled: true,
+      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+        sendRequest(params: any) {
+          (window as any).__aiRequests.push(params);
+
+          return {
+            promise: Promise.resolve({
+              actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
+            }),
+            abort: (): void => {},
+          };
+        },
+      }),
+    },
+    onAIAssistantRequestCreating(e: any) {
+      e.cancel = true;
+    },
+  };
+}));
+
+// 5.1.2
+test('cancel left untouched should dispatch the request normally', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getSuccessMessages().count).eql(1);
+  await t.expect(getRequestCount()).eql(1);
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+}).before(async () => createWidget('dxDataGrid', () => {
+  (window as any).__aiRequests = [];
+
+  return {
+    dataSource: [
+      { id: 1, name: 'Alice', value: 30 },
+      { id: 2, name: 'Bob', value: 20 },
+      { id: 3, name: 'Charlie', value: 10 },
+    ],
+    keyExpr: 'id',
+    columns: ['id', 'name', 'value'],
+    showBorders: true,
+    aiAssistant: {
+      enabled: true,
+      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+        sendRequest(params: any) {
+          (window as any).__aiRequests.push(params);
+
+          return {
+            promise: Promise.resolve({
+              actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
+            }),
+            abort: (): void => {},
+          };
+        },
+      }),
+    },
+    onAIAssistantRequestCreating() {
+      // Leave cancel untouched (defaults to false).
+    },
+  };
+}));
+
+// 5.1.3
+test('cancel = true from a dynamic context check should abort when the condition holds', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(getRequestCount()).eql(0);
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+}).before(async () => createWidget('dxDataGrid', () => {
+  (window as any).__aiRequests = [];
+
+  return {
+    dataSource: [
+      { id: 1, name: 'Alice', value: 30 },
+      { id: 2, name: 'Bob', value: 20 },
+      { id: 3, name: 'Charlie', value: 10 },
+    ],
+    keyExpr: 'id',
+    columns: ['id', 'name', 'value'],
+    showBorders: true,
+    aiAssistant: {
+      enabled: true,
+      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+        sendRequest(params: any) {
+          (window as any).__aiRequests.push(params);
+
+          return {
+            promise: Promise.resolve({
+              actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
+            }),
+            abort: (): void => {},
+          };
+        },
+      }),
+    },
+    onAIAssistantRequestCreating(e: any) {
+      if (e.context.columns.some((c: any) => c.dataField === 'name')) {
+        e.cancel = true;
+      }
+    },
+  };
+}));
+
+// 5.1.4
+// The plan expects NO Regenerate for a user-initiated cancel, but the current implementation
+// shows it (abort → failAIMessage → Failure with no commands → needToShowRegenerateButton = true),
+// same as the popup-close abort in 1.12.11. This locks the CURRENT behavior — flip once the
+// design question is resolved.
+test('cancel-aborted message currently shows a Regenerate button', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+}).before(async () => createWidget('dxDataGrid', () => ({
+  dataSource: [
+    { id: 1, name: 'Alice', value: 30 },
+    { id: 2, name: 'Bob', value: 20 },
+    { id: 3, name: 'Charlie', value: 10 },
+  ],
+  keyExpr: 'id',
+  columns: ['id', 'name', 'value'],
+  showBorders: true,
+  aiAssistant: {
+    enabled: true,
+    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+      sendRequest() {
+        return {
+          promise: Promise.resolve({
+            actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
+          }),
+          abort: (): void => {},
+        };
+      },
+    }),
+  },
+  onAIAssistantRequestCreating(e: any) {
+    e.cancel = true;
+  },
+})));
