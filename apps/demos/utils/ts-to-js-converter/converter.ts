@@ -215,10 +215,6 @@ const patchImports = async (resolve: PathResolvers, log: Logger) => {
   log.debug('imports patching done');
 };
 
-// Format converted demos in chunks so a single `/bin/sh -c` command stays well under the OS
-// argument-length limit (Linux MAX_ARG_STRLEN ~128KB) even when a CONSTEL slice converts
-// hundreds of dirs. Prettier/ESLint `--fix` are per-file, so splitting the file list does not
-// change output -- provided each tool's cwd stays fixed across chunks (see prettierCwd below).
 const PRETTIFY_CHUNK_SIZE = 50;
 
 const formatOutputs = async (
@@ -275,11 +271,7 @@ export const prettifyOutputs = async (
 
   const prettierConfig = quoteShellArg(path.join(demosRootDir, '.prettierrc.json'));
   const eslintConfig = quoteShellArg(path.join(demosRootDir, 'eslint.config.mjs'));
-  // Prettier resolves `.prettierrc.json` `overrides[].files` globs relative to its cwd. The
-  // committed JS demos were formatted with cwd set to an output dir (so the per-file relative
-  // path is just `App.jsx`, which does NOT match the `**/ReactJs/**` override). Keep that cwd
-  // FIXED across every chunk so override matching -- and therefore output -- is identical to a
-  // single un-chunked run.
+
   const prettierCwd = uniqueOutDirs[0];
 
   for (const chunk of splitArrayIntoSubarrays(uniqueOutDirs, PRETTIFY_CHUNK_SIZE)) {
