@@ -1,9 +1,6 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-
-const GRID_SELECTOR = '#container';
-const AI_INTEGRATION_PAGE = url(__dirname, '../../../container-ai-integration.html');
+import { AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
 
 // === §2.1 Unsupported / unknown intent ===
 
