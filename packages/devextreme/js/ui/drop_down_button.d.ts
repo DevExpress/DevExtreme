@@ -194,7 +194,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @type Array<dxDropDownButtonItem | any>
-     * @default null
      * @public
      */
     items?: Array<Item | any>;
@@ -212,7 +211,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     noDataText?: string;
     /**
      * @docid
-     * @default null
      * @type function
      * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
      * @action
@@ -221,7 +219,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onButtonClick?: ((e: ButtonClickEvent) => void) | string;
     /**
      * @docid
-     * @default null
      * @type function
      * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
      * @action
@@ -230,7 +227,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
      * @docid
-     * @default null
      * @type function
      * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
      * @action

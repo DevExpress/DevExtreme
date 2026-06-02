@@ -60,9 +60,9 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 class DropDownList<
   TProperties extends DropDownListProperties = DropDownListProperties,
 > extends DropDownEditor<TProperties> {
-  declare protected _displayGetter: (item: unknown) => string; // DataExpressionMixin workaround
+  declare _displayGetter: (item: unknown) => string; // DataExpressionMixin workaround
 
-  declare protected _compileDisplayGetter: () => void; // DataExpressionMixin workaround
+  declare _compileDisplayGetter: () => void; // DataExpressionMixin workaround
 
   _list?: List;
 

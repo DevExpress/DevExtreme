@@ -1,15 +1,12 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { FunctionTemplate } from '@js/core/templates/function_template';
-import { ensureDefined } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
-import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
-import DataController from '@js/data_controller';
+import type { DataSourceLike } from '@js/data/data_source';
 import type {
   Item as ButtonGroupItem,
   Properties as ButtonGroupProperties,
@@ -19,9 +16,13 @@ import type { Item, Properties } from '@js/ui/drop_down_button';
 import messageLocalization from '@ts/core/localization/message';
 import { getPublicElement } from '@ts/core/m_element';
 import { Guid } from '@ts/core/m_guid';
+import { FunctionTemplate } from '@ts/core/templates/m_function_template';
+import { ensureDefined } from '@ts/core/utils/m_common';
+import { isDefined, isObject, isPlainObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type { DataSourceType } from '@ts/data/data_controller/data_controller';
+import DataController from '@ts/data/data_controller/data_controller';
 import { getElementWidth } from '@ts/ui/drop_down_editor/utils';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
@@ -92,15 +93,11 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       template: null,
       text: '',
       type: 'normal',
-      // @ts-expect-error ts-error
-      onButtonClick: null,
-      // @ts-expect-error ts-error
-      onSelectionChanged: null,
-      // @ts-expect-error ts-error
-      onItemClick: null,
+      onButtonClick: undefined,
+      onSelectionChanged: undefined,
+      onItemClick: undefined,
       opened: false,
-      // @ts-expect-error ts-error
-      items: null,
+      items: undefined,
       dataSource: null,
       focusStateEnabled: true,
       hoverStateEnabled: true,
@@ -146,7 +143,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error ts-error
       content: new FunctionTemplate((options) => {
         const $popupContent = $(options.container);
         const $listContainer = $('<div>').appendTo($popupContent);
@@ -163,8 +159,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   _compileKeyGetter(): void {
-    // @ts-expect-error ts-error
-    this._keyGetter = compileGetter(this._dataController.key());
+    const key = this._dataController.key();
+    if (key !== undefined) {
+      this._keyGetter = compileGetter(key);
+    }
   }
 
   _compileDisplayGetter(): void {
@@ -216,9 +214,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const selectedItemKey = this.option('selectedItemKey');
     // @ts-expect-error ts-error
     this._dataController.loadSingle(selectedItemKey)
-      // @ts-expect-error ts-error
-      .done(d.resolve)
-      .fail(() => {
+      .then((item) => { d.resolve(item); })
+      .catch(() => {
         d.reject(null);
       });
 
@@ -456,8 +453,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       displayExpr,
       itemTemplate,
       items,
-      // @ts-expect-error ts-error
-      dataSource: this._dataController.getDataSource(),
+      dataSource: this._dataController.getDataSource() as DataSourceLike<Item> | null,
       onItemClick: (e) => {
         if (!this.option('useSelectMode')) {
           this._lastSelectedItemData = e.itemData;
