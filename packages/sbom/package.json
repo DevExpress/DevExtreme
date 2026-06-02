@@ -13,5 +13,5 @@
       "qs@>=6.11.1 <=6.15.1": ">=6.15.2"
     }
   },
-  "packageManager": "pnpm@9.15.9"
+  "packageManager": "pnpm@11.5.1"
 }
