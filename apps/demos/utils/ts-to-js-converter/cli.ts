@@ -5,7 +5,19 @@ import { glob } from 'glob';
 import { consola } from 'consola';
 import fs from 'fs';
 
-import { converter } from './converter';
+import { converter, prettifyOutputs, splitArrayIntoSubarrays } from './converter';
+import { ActionConverterEntry } from './types';
+
+const defaultConversionConcurrency = 8;
+
+const logger = {
+  warning: consola.warn,
+  error: consola.error,
+  debug: consola.debug,
+  info: consola.info,
+  start: consola.start,
+  success: consola.success,
+};
 
 function findFoldersWithTsxFiles(directory) {
   const foldersWithTsxFiles = [];
@@ -51,16 +63,7 @@ const getPatterns = () => {
   return filteredDemos.map((demoName) => demoName.split(path.sep).join(path.posix.sep));
 };
 
-const performConversion = async (patterns) => {
-  const logger = {
-    warning: consola.warn,
-    error: consola.error,
-    debug: consola.debug,
-    info: consola.info,
-    start: consola.start,
-    success: consola.success,
-  };
-
+const performConversion = async (patterns, conversionConcurrency) => {
   const args = minimist(patterns);
 
   const sourceDirs = args._ || [process.cwd()];
@@ -81,57 +84,82 @@ const performConversion = async (patterns) => {
   // @ts-ignore
   )).flat(1);
 
-  await Promise.all(
-    entries.map(async ({ source, out }) => {
-      logger.start(`converting ${source}`);
-      await converter(source, out, logger);
-      logger.success(`${source} complete`);
-    }),
-  )
-    // eslint-disable-next-line no-void
-    .then(void 0)
-    .catch((error) => {
-      logger.error(error);
-      process.exit(1);
-    });
-};
+  const outDirs: (string | null)[] = [];
+  let failedCount = 0;
+  const entryBatches = splitArrayIntoSubarrays<ActionConverterEntry>(
+    entries,
+    conversionConcurrency,
+  );
 
-function splitArrayIntoSubarrays(array, subarrayLength) {
-  const result = [];
-
-  for (let i = 0; i < array.length; i += subarrayLength) {
-    result.push(array.slice(i, i + subarrayLength));
+  for (const entryBatch of entryBatches) {
+    outDirs.push(...await Promise.all(
+      entryBatch.map(async ({ source, out }) => {
+        logger.start(`converting ${source}`);
+        try {
+          const converted = await converter(source, out, logger);
+          if (converted) {
+            logger.success(`${source} complete`);
+          }
+          return converted ? out : null;
+        } catch {
+          logger.error(`failed converting ${source}`);
+          failedCount += 1;
+          return null;
+        }
+      }),
+    ));
   }
 
-  return result;
+  return {
+    outDirs: outDirs.filter((outDir): outDir is string => outDir != null),
+    failedCount,
+  };
+};
+
+function getConversionConcurrency() {
+  const rawValue = process.env.CONVERT_TO_JS_CONCURRENCY;
+  const parsedValue = rawValue == null ? defaultConversionConcurrency : Number(rawValue);
+
+  if (!Number.isInteger(parsedValue) || parsedValue < 1) {
+    throw new Error(`CONVERT_TO_JS_CONCURRENCY must be a positive integer. Received: ${rawValue}`);
+  }
+
+  return parsedValue;
 }
 
 async function startScript() {
   const userFlags = process.argv.slice(2);
-  if (userFlags[0] === 'split') {
-    process.env.CONSTEL = '1/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-    process.env.CONSTEL = '2/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-    process.env.CONSTEL = '3/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-    process.env.CONSTEL = '4/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-  } else {
-    await batchPatternsAndConvert();
+  const parts = userFlags[0] === 'split' ? ['1/4', '2/4', '3/4', '4/4'] : [null];
+  let failedCount = 0;
+
+  for (const part of parts) {
+    if (part != null) {
+      process.env.CONSTEL = part;
+      consola.log('Start converting Part', process.env.CONSTEL);
+    }
+    failedCount += await batchPatternsAndConvert();
   }
+
+  return failedCount;
 }
 
 async function batchPatternsAndConvert() {
   const allPatterns = getPatterns();
-  const batches = splitArrayIntoSubarrays(allPatterns, 10);
-  for (const batch of batches) {
-    await performConversion(batch);
-  }
+  const conversionConcurrency = getConversionConcurrency();
+  const { outDirs, failedCount } = await performConversion(allPatterns, conversionConcurrency);
+
+  await prettifyOutputs(outDirs, process.cwd(), logger);
+
+  return failedCount;
 }
 
-startScript();
+startScript()
+  .then((failedCount) => {
+    if (failedCount > 0) {
+      process.exit(1);
+    }
+  })
+  .catch((error) => {
+    logger.error(error);
+    process.exit(1);
+  });
