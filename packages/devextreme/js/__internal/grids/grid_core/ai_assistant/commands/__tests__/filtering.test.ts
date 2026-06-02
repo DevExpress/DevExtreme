@@ -113,7 +113,6 @@ describe('filterValueCommand', () => {
       [singleBasic('name', '=', 1)],
       [singleBasic('name', '=', true)],
       [singleBasic('name', '=', null)],
-      [singleBasic('name', '=', new Date(2024, 4, 10))],
     ])('accepts scalar value %p', (expression) => {
       expect(filterValueCommand.schema.safeParse({ expression }).success).toBe(true);
     });

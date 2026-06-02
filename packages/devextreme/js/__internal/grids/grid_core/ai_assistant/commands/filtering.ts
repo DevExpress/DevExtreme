@@ -16,7 +16,14 @@ type FilterExprArray = | [string, SearchOperation, string | number | boolean | D
 
 const filterOpSchema = z.enum(FILTER_OPS);
 
-const filterValueScalarSchema = z.union([z.string(), z.number(), z.boolean(), z.null(), z.date()]);
+const filterValueScalarSchema = z.union([
+  z.string().describe(
+    'A plain string value. If the value represents a date, it must use the AIDate(year, month, day) format where month is 1-based (1=January, 12=December), instead of ISO string or natural language.',
+  ),
+  z.number().describe('A numeric filter value.'),
+  z.boolean().describe('A boolean filter value.'),
+  z.null().describe('A null filter value.'),
+]);
 
 const basicFilterExprSchema = z.object({
   type: z.enum(['basic']),
