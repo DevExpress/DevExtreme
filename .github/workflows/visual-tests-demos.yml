@@ -435,26 +435,58 @@ jobs:
         path: apps/demos
       continue-on-error: true
 
+    - name: Detect changed React TS demos
+      id: changed-react-demos
+      working-directory: apps/demos
+      run: |
+        if [ ! -f "changed-files.json" ]; then
+          echo "changed-files.json not found, skipping generated JS demos check"
+          echo "has-react-demos=false" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        jq -r '.[].filename' changed-files.json \
+          | grep '/React/' \
+          | grep -E '\.tsx?$' \
+          | sed 's|^apps/demos/||' \
+          | sed -E 's|/[^/]*\.tsx?$||' \
+          | sort \
+          | uniq > changed-react-demos.txt || true
+
+        if [ -s changed-react-demos.txt ]; then
+          echo "Changed React demos:"
+          cat changed-react-demos.txt
+          echo "has-react-demos=true" >> $GITHUB_OUTPUT
+        else
+          echo "No React demos found in changed files, skipping conversion"
+          echo "has-react-demos=false" >> $GITHUB_OUTPUT
+        fi
+
     - uses: pnpm/action-setup@v6
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       with:
         run_install: false
 
     - name: Use Node.js
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
     - name: Get pnpm store directory
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       shell: bash
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
     - uses: actions/cache/restore@v5
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -463,38 +495,25 @@ jobs:
           ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       run: pnpm install --frozen-lockfile
 
     - name: Install tgz
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
     - name: Prepare JS
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: pnpm run prepare-js
 
     - name: Check generated JS demos
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: |
-        if [ -f "changed-files.json" ]; then
-          echo "Running convert-to-js on changed files only"
-
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
-
-          if [ -z "$CHANGED_DEMOS" ]; then
-            echo "No React demos found in changed files, skipping conversion"
-          else
-            echo "Changed React demos:"
-            echo "$CHANGED_DEMOS"
-
-            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
-              if [ ! -z "$demo_dir" ]; then
-                echo "Converting: $demo_dir"
-                pnpm run convert-to-js "$demo_dir"
-              fi
-            done
-          fi
-        fi
+        echo "Running convert-to-js on changed files only"
+        xargs -r pnpm run convert-to-js < changed-react-demos.txt
 
         git add ./Demos -N
 
@@ -520,7 +539,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONSTEL: ['1/5', '2/5', '3/5', '4/5', '5/5']
+        CONSTEL: ['1/2', '2/2']
 
     steps:
     - name: Get sources
@@ -1300,4 +1319,3 @@ jobs:
           name: csp-violations-report
           path: apps/demos/csp-reports/
           if-no-files-found: ignore
-
