@@ -513,7 +513,7 @@ jobs:
       working-directory: apps/demos
       run: |
         echo "Running convert-to-js on changed files only"
-        xargs pnpm run convert-to-js < changed-react-demos.txt
+        xargs -r pnpm run convert-to-js < changed-react-demos.txt
 
         git add ./Demos -N
 

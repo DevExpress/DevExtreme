@@ -10,7 +10,6 @@ import _ from 'lodash';
 import os from 'os';
 
 import {
-  ConverterOptions,
   Logger,
   PathResolver,
   PathResolvers,
@@ -42,6 +41,16 @@ const redundantAssets = ['*tsconfig*', 'types.js'];
 const quoteShellArg = (value: string) => `"${value.replace(/(["\\$`])/g, '\\$1')}"`;
 
 const toPosixPath = (value: string) => value.split(path.sep).join(path.posix.sep);
+
+export function splitArrayIntoSubarrays<T>(array: T[], subarrayLength: number): T[][] {
+  const result: T[][] = [];
+
+  for (let i = 0; i < array.length; i += subarrayLength) {
+    result.push(array.slice(i, i + subarrayLength));
+  }
+
+  return result;
+}
 
 const makeConfig = (
   resolve: PathResolvers,
@@ -206,41 +215,28 @@ const patchImports = async (resolve: PathResolvers, log: Logger) => {
   log.debug('imports patching done');
 };
 
-const prettify = async (resolve: PathResolvers, log: Logger) => {
-  log.debug('running Prettier');
-  const prettierCommand = `prettier --write "${resolve.out('')}${path.sep}!(*.{css,json,md,tsbuildinfo})" --single-attribute-per-line --print-width 100`;
-  await exec(prettierCommand, {
-    cwd: resolve.out(''),
-  });
-  await exec(`eslint --fix "${resolve.out('')}" --ignore-pattern "config.js" --ignore-pattern "*.tsbuildinfo"`, {
-    cwd: resolve.out(''),
-  });
-};
+// Format converted demos in chunks so a single `/bin/sh -c` command stays well under the OS
+// argument-length limit (Linux MAX_ARG_STRLEN ~128KB) even when a CONSTEL slice converts
+// hundreds of dirs. Prettier/ESLint `--fix` are per-file, so splitting the file list does not
+// change output -- provided each tool's cwd stays fixed across chunks (see prettierCwd below).
+const PRETTIFY_CHUNK_SIZE = 50;
 
-export const prettifyOutputs = async (
+const formatOutputs = async (
   outDirs: string[],
   demosRootDir: string,
-  log: Logger,
+  prettierCwd: string,
+  prettierConfig: string,
+  eslintConfig: string,
 ) => {
-  const uniqueOutDirs = [...new Set(outDirs)];
-
-  if (uniqueOutDirs.length === 0) {
-    return;
-  }
-
-  log.debug('running Prettier');
-
-  const prettierPatterns = uniqueOutDirs
+  const prettierPatterns = outDirs
     .map((outDir) => quoteShellArg(`${path.resolve(outDir)}${path.sep}!(*.{css,json,md,tsbuildinfo})`))
     .join(' ');
-  const eslintPatterns = uniqueOutDirs
+  const eslintPatterns = outDirs
     .map((outDir) => quoteShellArg(
       toPosixPath(path.relative(demosRootDir, outDir)),
     ))
     .join(' ');
 
-  const prettierConfig = quoteShellArg(path.join(demosRootDir, '.prettierrc.json'));
-  const eslintConfig = quoteShellArg(path.join(demosRootDir, 'eslint.config.mjs'));
   const prettierCommand = [
     'prettier',
     '--write',
@@ -260,8 +256,35 @@ export const prettifyOutputs = async (
     '--ignore-pattern "*.tsbuildinfo"',
   ].join(' ');
 
-  await exec(prettierCommand, { cwd: uniqueOutDirs[0] });
+  await exec(prettierCommand, { cwd: prettierCwd });
   await exec(eslintCommand, { cwd: demosRootDir });
+};
+
+export const prettifyOutputs = async (
+  outDirs: string[],
+  demosRootDir: string,
+  log: Logger,
+) => {
+  const uniqueOutDirs = [...new Set(outDirs)];
+
+  if (uniqueOutDirs.length === 0) {
+    return;
+  }
+
+  log.debug('running Prettier');
+
+  const prettierConfig = quoteShellArg(path.join(demosRootDir, '.prettierrc.json'));
+  const eslintConfig = quoteShellArg(path.join(demosRootDir, 'eslint.config.mjs'));
+  // Prettier resolves `.prettierrc.json` `overrides[].files` globs relative to its cwd. The
+  // committed JS demos were formatted with cwd set to an output dir (so the per-file relative
+  // path is just `App.jsx`, which does NOT match the `**/ReactJs/**` override). Keep that cwd
+  // FIXED across every chunk so override matching -- and therefore output -- is identical to a
+  // single un-chunked run.
+  const prettierCwd = uniqueOutDirs[0];
+
+  for (const chunk of splitArrayIntoSubarrays(uniqueOutDirs, PRETTIFY_CHUNK_SIZE)) {
+    await formatOutputs(chunk, demosRootDir, prettierCwd, prettierConfig, eslintConfig);
+  }
 };
 
 const hasTypescriptFiles = async (resolve: PathResolver) => {
@@ -275,7 +298,6 @@ export const converter = async (
   sourceDir: string,
   outDir: string,
   log: Logger,
-  options: ConverterOptions = {},
 ): Promise<boolean> => {
   log.debug('TS to JS example converter starting');
   log.debug(`sourceDir: ${sourceDir}`);
@@ -311,9 +333,6 @@ export const converter = async (
     await compile(resolve, log);
     await copyAssets(resolve, log);
     await patchImports(resolve, log);
-    if (options.prettify !== false) {
-      await prettify(resolve, log);
-    }
     await strip(resolve, log);
     return true;
   } finally {

@@ -5,7 +5,8 @@ import { glob } from 'glob';
 import { consola } from 'consola';
 import fs from 'fs';
 
-import { converter, prettifyOutputs } from './converter';
+import { converter, prettifyOutputs, splitArrayIntoSubarrays } from './converter';
+import { ActionConverterEntry } from './types';
 
 const defaultConversionConcurrency = 8;
 
@@ -83,41 +84,37 @@ const performConversion = async (patterns, conversionConcurrency) => {
   // @ts-ignore
   )).flat(1);
 
-  try {
-    const outDirs: (string | null)[] = [];
-    const entryBatches = splitArrayIntoSubarrays(entries, conversionConcurrency);
+  const outDirs: (string | null)[] = [];
+  let failedCount = 0;
+  const entryBatches = splitArrayIntoSubarrays<ActionConverterEntry>(
+    entries,
+    conversionConcurrency,
+  );
 
-    for (const entryBatch of entryBatches) {
-      outDirs.push(...await Promise.all(
-        entryBatch.map(async ({ source, out }) => {
-          logger.start(`converting ${source}`);
-          const converted = await converter(source, out, logger, { prettify: false });
+  for (const entryBatch of entryBatches) {
+    outDirs.push(...await Promise.all(
+      entryBatch.map(async ({ source, out }) => {
+        logger.start(`converting ${source}`);
+        try {
+          const converted = await converter(source, out, logger);
           if (converted) {
             logger.success(`${source} complete`);
           }
           return converted ? out : null;
-        }),
-      ));
-    }
-
-    return outDirs.filter(
-      (outDir): outDir is string => outDir != null,
-    );
-  } catch (error) {
-    logger.error(error);
-    process.exit(1);
+        } catch {
+          logger.error(`failed converting ${source}`);
+          failedCount += 1;
+          return null;
+        }
+      }),
+    ));
   }
+
+  return {
+    outDirs: outDirs.filter((outDir): outDir is string => outDir != null),
+    failedCount,
+  };
 };
-
-function splitArrayIntoSubarrays(array, subarrayLength) {
-  const result = [];
-
-  for (let i = 0; i < array.length; i += subarrayLength) {
-    result.push(array.slice(i, i + subarrayLength));
-  }
-
-  return result;
-}
 
 function getConversionConcurrency() {
   const rawValue = process.env.CONVERT_TO_JS_CONCURRENCY;
@@ -132,35 +129,37 @@ function getConversionConcurrency() {
 
 async function startScript() {
   const userFlags = process.argv.slice(2);
-  if (userFlags[0] === 'split') {
-    process.env.CONSTEL = '1/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-    process.env.CONSTEL = '2/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-    process.env.CONSTEL = '3/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-    process.env.CONSTEL = '4/4';
-    consola.log('Start converting Part', process.env.CONSTEL);
-    await batchPatternsAndConvert();
-  } else {
-    await batchPatternsAndConvert();
+  const parts = userFlags[0] === 'split' ? ['1/4', '2/4', '3/4', '4/4'] : [null];
+  let failedCount = 0;
+
+  for (const part of parts) {
+    if (part != null) {
+      process.env.CONSTEL = part;
+      consola.log('Start converting Part', process.env.CONSTEL);
+    }
+    failedCount += await batchPatternsAndConvert();
   }
+
+  return failedCount;
 }
 
 async function batchPatternsAndConvert() {
   const allPatterns = getPatterns();
   const conversionConcurrency = getConversionConcurrency();
-  const batches = splitArrayIntoSubarrays(allPatterns, conversionConcurrency);
-  const convertedOutDirs: string[] = [];
+  const { outDirs, failedCount } = await performConversion(allPatterns, conversionConcurrency);
 
-  for (const batch of batches) {
-    convertedOutDirs.push(...await performConversion(batch, conversionConcurrency));
-  }
+  await prettifyOutputs(outDirs, process.cwd(), logger);
 
-  await prettifyOutputs(convertedOutDirs, process.cwd(), logger);
+  return failedCount;
 }
 
-startScript();
+startScript()
+  .then((failedCount) => {
+    if (failedCount > 0) {
+      process.exit(1);
+    }
+  })
+  .catch((error) => {
+    logger.error(error);
+    process.exit(1);
+  });

@@ -16,7 +16,3 @@ export type ActionConverterEntry = {
   source: string
   out: string
 };
-
-export type ConverterOptions = {
-  prettify?: boolean
-};
