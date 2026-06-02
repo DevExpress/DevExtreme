@@ -1,4 +1,4 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule } from 'devextreme-angular';
 import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
@@ -21,6 +21,7 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  changeDetection: ChangeDetectionStrategy.Eager,
   preserveWhitespaces: true,
   imports: [DxListModule],
 })
