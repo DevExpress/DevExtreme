@@ -142,14 +142,18 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
   }
 
   _dataSourceOptions() {
+    const { maxItemCount } = this.option();
     return {
       paginate: true,
-      pageSize: this.option('maxItemCount'),
+      pageSize: maxItemCount,
     };
   }
 
   _searchDataSource(searchValue): void {
-    this._dataSource.pageSize(this.option('maxItemCount'));
+    const { maxItemCount } = this.option();
+    if (maxItemCount) {
+      this._dataSource.pageSize(maxItemCount);
+    }
     super._searchDataSource(searchValue);
     this._clearFocusedItem();
   }
