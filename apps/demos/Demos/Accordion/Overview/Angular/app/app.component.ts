@@ -1,4 +1,9 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  enableProdMode,
+  provideZoneChangeDetection
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule,
@@ -17,6 +22,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
