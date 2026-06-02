@@ -777,6 +777,15 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  apiGetDataSourceSortParams(): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).getDataSource().sort(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
@@ -1044,5 +1053,16 @@ export default class DataGrid extends GridCore {
 
   getAIAssistantButton(): Selector {
     return this.getHeaderPanel().element.find(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
+  }
+
+  focusAIAssistantButton(): Promise<void> {
+    const buttonSelector = this.getAIAssistantButton();
+
+    return ClientFunction(
+      () => {
+        (buttonSelector() as unknown as HTMLElement)?.focus();
+      },
+      { dependencies: { buttonSelector } },
+    )();
   }
 }
