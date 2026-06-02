@@ -142,7 +142,7 @@ const compile = async (resolve: PathResolvers, log: Logger) => {
     ),
   );
 
-  await execTsc(resolve.source('./'), `--build ${tsconfigFile}`);
+  await execTsc(resolve.source('./'), ['--build', tsconfigFile]);
 };
 
 const copyAssets = async (resolve: PathResolvers, log: Logger) => {
@@ -173,7 +173,7 @@ const strip = async (resolve: PathResolvers, log: Logger) => {
   });
 };
 
-const replaceInFiles = async (filenamePatterns: string[], replacementCallback: (string) => string, resolvePath: (string) => string, log: Logger) => (
+const replaceInFiles = (filenamePatterns: string[], replacementCallback: (string) => string, resolvePath: (string) => string, log: Logger) => (
   Promise.all(
     filenamePatterns.map(async (pattern) => {
       const files = await platformGlob(resolvePath(pattern));
