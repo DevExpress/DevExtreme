@@ -10,6 +10,7 @@ import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
+import type ChatTextArea from '@ts/ui/chat/message_box/chat_text_area';
 import {
   CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS,
   CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS,
@@ -257,7 +258,14 @@ export class AIChat {
     const $textArea = this.chatInstance?.$element().find(`.${CLASSES.textArea}`);
 
     if ($textArea?.length) {
-      gridCoreUtils.getWidgetInstance($textArea)?.option('disabled', disabled);
+      const chatTextAreaInstance: ChatTextArea = gridCoreUtils.getWidgetInstance($textArea);
+      chatTextAreaInstance?.option('disabled', disabled);
+
+      if (disabled) {
+        chatTextAreaInstance?.blur();
+      } else {
+        chatTextAreaInstance?.focus();
+      }
     }
   }
 

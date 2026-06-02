@@ -23,6 +23,8 @@ import type { AIChatOptions, CommandResult } from './types';
 
 const mockWidgetInstance = {
   option: jest.fn(),
+  blur: jest.fn(),
+  focus: jest.fn(),
 };
 
 jest.mock('../m_utils', () => ({
