@@ -1,7 +1,4 @@
-import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import { getPublicElement } from '@js/core/element';
-import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
@@ -19,8 +16,12 @@ import type {
 } from '@js/ui/button_group';
 import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
+import messageLocalization from '@ts/core/localization/message';
+import { getPublicElement } from '@ts/core/m_element';
+import { Guid } from '@ts/core/m_guid';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type { DataSourceType } from '@ts/data/data_controller/data_controller';
 import { getElementWidth } from '@ts/ui/drop_down_editor/utils';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
@@ -81,7 +82,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       itemTemplate: 'item',
       keyExpr: 'this',
       selectedItem: null,
-      // @ts-expect-error ts-error
       selectedItemKey: null,
       stylingMode: 'outlined',
       deferRendering: true,
@@ -89,7 +89,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       useSelectMode: false,
       splitButton: false,
       showArrowIcon: true,
-      // @ts-expect-error ts-error
       template: null,
       text: '',
       type: 'normal',
@@ -738,7 +737,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._setListOption('keyExpr', this._dataController.key());
   }
 
-  focus() {
+  focus(): void {
     this._buttonGroup.focus();
   }
 
@@ -858,7 +857,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }
   }
 
-  getDataSource() {
+  getDataSource(): DataSourceType | null {
     return this._dataController.getDataSource();
   }
 }

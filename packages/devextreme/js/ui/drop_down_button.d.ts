@@ -249,13 +249,13 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @readonly
      * @public
      */
-    selectedItem?: string | number | any;
+    selectedItem?: string | number | any | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    selectedItemKey?: string | number;
+    selectedItemKey?: string | number | null;
     /**
      * @docid
      * @default true
@@ -279,7 +279,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_return string|Element|jQuery
      * @public
      */
-    template?: template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
+    template?: null | template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default ""

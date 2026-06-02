@@ -6,7 +6,7 @@ import { normalizeDataSourceOptions } from '../../../common/data/data_source/uti
 import { extend } from '../../../core/utils/extend';
 import { isDefined } from '../../../core/utils/type';
 
-interface DataSourceType {
+export interface DataSourceType {
   _userData: unknown;
   _pageSize: number;
   dispose: () => void;
@@ -47,7 +47,6 @@ interface DataControllerOptions extends Record<string, unknown> {
 class DataController {
   private _isSharedDataSource = false;
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   private _dataSource: DataSourceType;
 
@@ -75,7 +74,6 @@ class DataController {
   }
 
   _updateDataSourceByItems(items: unknown[]): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     this._dataSource = new DataSource({
       store: new ArrayStore({
         key: this.key(),
@@ -93,7 +91,6 @@ class DataController {
         this._dataSource.dispose();
       }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       delete this._dataSource;
     }
@@ -126,9 +123,8 @@ class DataController {
   }
 
   loadNextPage(): Promise<unknown> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+
     this.pageIndex(1 + this.pageIndex());
 
     return this.load();
