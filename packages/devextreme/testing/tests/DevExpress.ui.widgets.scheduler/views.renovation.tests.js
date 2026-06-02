@@ -27,7 +27,7 @@ module('Renovated Views', () => {
                     dataSource: [{ id: 1, text: '1' }, { id: 2, text: '2' }],
                 }],
                 currentDate: new Date(2021, 1, 20),
-                renovateRender: true,
+
             });
 
             assert.equal(scheduler.workSpace.groups.getGroupHeaders().length, 2, 'Correct number of group headers');
@@ -45,7 +45,7 @@ module('Renovated Views', () => {
                 views: [currentView],
                 currentDate: new Date(2020, 1, 20),
                 shadeUntilCurrentTime: true,
-                renovateRender: true,
+
             });
 
             let shader = scheduler.workSpace.getShader();
@@ -68,7 +68,7 @@ module('Renovated Views', () => {
             currentView: 'week',
             width: 500,
             height: 500,
-            renovateRender: true,
+
         });
 
         let virtualCells = scheduler.workSpace.getVirtualCells();
@@ -94,7 +94,7 @@ module('Renovated Views', () => {
                 views: [view],
                 currentView: view,
                 showAllDayPanel: false,
-                renovateRender: true,
+
             });
 
             scheduler.instance.option('showAllDayPanel', true);
@@ -110,7 +110,7 @@ module('Renovated Views', () => {
                 views: [view],
                 currentView: view,
                 crossScrollingEnabled: true,
-                renovateRender: true,
+
                 height: 600,
                 currentDate: new Date(2020, 0, 1),
             });
