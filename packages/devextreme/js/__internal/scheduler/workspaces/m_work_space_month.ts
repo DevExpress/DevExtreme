@@ -87,19 +87,15 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override needCreateCrossScrolling(): boolean {
-    return this.option('crossScrollingEnabled') ?? this.isVerticalGroupedWorkSpace();
+    return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
   }
 
   protected override getViewStartByOptions(): Date {
-    const currentDate: Date = this.option('currentDate') ?? new Date();
-    const startDate: Date = this.option('startDate') ?? currentDate;
-    const firstMonthDate = dateUtils.getFirstMonthDate(startDate) ?? startDate;
-
     return monthUtils.getViewStartByOptions(
-      startDate,
-      currentDate,
+      this.option('startDate'),
+      this.option('currentDate'),
       this.option('intervalCount'),
-      firstMonthDate,
+      dateUtils.getFirstMonthDate(this.option('startDate')) as Date,
     );
   }
 

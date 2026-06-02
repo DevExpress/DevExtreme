@@ -106,24 +106,16 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     this.clearIndicatorUpdateInterval();
 
-    const scheduleIndicatorUpdate = (): void => {
+    // eslint-disable-next-line no-restricted-globals
+    this.indicatorInterval = setInterval(() => {
       this.renderCurrentDateTimeIndication();
-      this.indicatorInterval = setTimeout(
-        scheduleIndicatorUpdate,
-        this.option('indicatorUpdateInterval'),
-      );
-    };
-
-    this.indicatorInterval = setTimeout(
-      scheduleIndicatorUpdate,
-      this.option('indicatorUpdateInterval'),
-    );
+    }, this.option('indicatorUpdateInterval'));
   }
 
   private clearIndicatorUpdateInterval(): void {
     if (this.indicatorInterval) {
-      clearTimeout(this.indicatorInterval);
-      this.indicatorInterval = undefined;
+      clearInterval(this.indicatorInterval);
+      delete this.indicatorInterval;
     }
   }
 
