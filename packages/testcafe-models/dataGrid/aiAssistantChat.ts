@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import Popup from '../popup';
 import Button from '../button';
 import Chat from '../chat';
@@ -5,6 +6,7 @@ import Chat from '../chat';
 const CLASS = {
   aiChat: 'dx-ai-chat',
   aiChatContent: 'dx-ai-chat__content',
+  abortConfirmDialog: 'dx-datagrid-ai-assistant-confirm-dialog',
   message: 'dx-ai-chat__message',
   messagePending: 'dx-ai-chat__message--pending',
   messageSuccess: 'dx-ai-chat__message--success',
@@ -44,6 +46,16 @@ export class AIAssistantChat extends Popup {
 
   getCloseButton(): Button {
     return new Button(this.element.find(`.${CLASS.closeButton}`));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getAbortConfirmDialog(): Selector {
+    return Selector(`.${CLASS.abortConfirmDialog}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getAbortConfirmYesButton(): Selector {
+    return Selector(`.${CLASS.abortConfirmDialog} .dx-button`).withExactText('Yes');
   }
 
   getClearChatButton(): Selector {
@@ -120,6 +132,20 @@ export class AIAssistantChat extends Popup {
 
   getSuggestions(): Selector {
     return this.element.find(`.${CLASS.suggestion} .${CLASS.suggestionButton}`);
+  }
+
+  isInputDisabled(): Promise<boolean> {
+    return this.getChat().getTextArea().isDisabled;
+  }
+
+  isClearChatDisabled(): Promise<boolean> {
+    return this.getClearChatButton()
+      .parent('.dx-button')
+      .hasClass('dx-state-disabled');
+  }
+
+  isSuggestionDisabled(index: number): Promise<boolean> {
+    return this.getSuggestions().nth(index).hasClass('dx-state-disabled');
   }
 
   getTitle(): Selector {
