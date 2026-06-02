@@ -199,6 +199,7 @@ export const createAppointmentPopup = async (
 
   const dispose = (): void => {
     popup.dispose();
+    resourceManager.dispose();
     container.remove();
   };
 
