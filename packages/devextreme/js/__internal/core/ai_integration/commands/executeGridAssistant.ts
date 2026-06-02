@@ -6,8 +6,6 @@ import type {
 import { BaseCommand } from '@ts/core/ai_integration/commands/base';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
 
-import { parseDates } from './utils';
-
 export class ExecuteGridAssistantCommand extends BaseCommand<
   ExecuteGridAssistantCommandParams,
   ExecuteGridAssistantCommandResult
@@ -32,11 +30,11 @@ export class ExecuteGridAssistantCommand extends BaseCommand<
       if (response === '') {
         return { actions: [] };
       }
-      return JSON.parse(response, parseDates) as ExecuteGridAssistantCommandResult;
+      return JSON.parse(response) as ExecuteGridAssistantCommandResult;
     }
 
     const actions = typeof response.actions === 'string'
-      ? JSON.parse(response.actions, parseDates)
+      ? JSON.parse(response.actions)
       : response.actions;
 
     return { actions };

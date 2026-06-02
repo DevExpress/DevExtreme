@@ -66,6 +66,10 @@ const DATE_INTERVAL_SELECTORS = {
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
+export function isDateType(dataType: string | undefined): boolean {
+  return dataType === 'date' || dataType === 'datetime';
+}
+
 const getIntervalSelector = function () {
   const data = arguments[1];
   const value = this.calculateCellValue(data);
@@ -80,10 +84,6 @@ const getIntervalSelector = function () {
     return Math.floor(Number(value) / groupInterval) * groupInterval;
   }
 };
-
-function isDateType(dataType) {
-  return dataType === 'date' || dataType === 'datetime';
-}
 
 const getGlobalFormat = (dataType) => {
   const globalFormat = getGlobalFormatByDataType(dataType);
