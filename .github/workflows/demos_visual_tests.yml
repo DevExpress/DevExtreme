@@ -438,26 +438,58 @@ jobs:
         path: apps/demos
       continue-on-error: true
 
+    - name: Detect changed React TS demos
+      id: changed-react-demos
+      working-directory: apps/demos
+      run: |
+        if [ ! -f "changed-files.json" ]; then
+          echo "changed-files.json not found, skipping generated JS demos check"
+          echo "has-react-demos=false" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        jq -r '.[].filename' changed-files.json \
+          | grep '/React/' \
+          | grep -E '\.tsx?$' \
+          | sed 's|^apps/demos/||' \
+          | sed -E 's|/[^/]*\.tsx?$||' \
+          | sort \
+          | uniq > changed-react-demos.txt || true
+
+        if [ -s changed-react-demos.txt ]; then
+          echo "Changed React demos:"
+          cat changed-react-demos.txt
+          echo "has-react-demos=true" >> $GITHUB_OUTPUT
+        else
+          echo "No React demos found in changed files, skipping conversion"
+          echo "has-react-demos=false" >> $GITHUB_OUTPUT
+        fi
+
     - uses: pnpm/action-setup@v6
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       with:
         run_install: false
 
     - name: Use Node.js
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
     - name: Get pnpm store directory
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       shell: bash
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
     - uses: actions/cache/restore@v5
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -466,38 +498,25 @@ jobs:
           ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       run: pnpm install --frozen-lockfile
 
     - name: Install tgz
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
     - name: Prepare JS
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: pnpm run prepare-js
 
     - name: Check generated JS demos
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: |
-        if [ -f "changed-files.json" ]; then
-          echo "Running convert-to-js on changed files only"
-
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
-
-          if [ -z "$CHANGED_DEMOS" ]; then
-            echo "No React demos found in changed files, skipping conversion"
-          else
-            echo "Changed React demos:"
-            echo "$CHANGED_DEMOS"
-
-            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
-              if [ ! -z "$demo_dir" ]; then
-                echo "Converting: $demo_dir"
-                pnpm run convert-to-js "$demo_dir"
-              fi
-            done
-          fi
-        fi
+        echo "Running convert-to-js on changed files only"
+        xargs -r pnpm run convert-to-js < changed-react-demos.txt
 
         git add ./Demos -N
 
@@ -523,7 +542,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONSTEL: ['1/5', '2/5', '3/5', '4/5', '5/5']
+        CONSTEL: ['1/2', '2/2']
 
     steps:
     - name: Get sources
@@ -1079,3 +1098,221 @@ jobs:
           name: accessibility-reports-jquery
           pattern: accessibility-reports-*
           delete-merged: true
+
+  csp-check-jquery:
+    name: CSP check (jQuery)
+    needs: [check-should-run, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build-devextreme.result == 'success'
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-artifacts-jquery
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Start CSP Server
+      run: node apps/demos/utils/server/csp-server.js 8080 &
+
+    - name: Run CSP Check
+      working-directory: apps/demos
+      env:
+        CSP_FRAMEWORKS: jQuery
+        CHROME_PATH: google-chrome-stable
+      run: node utils/server/csp-check.js
+
+    - name: Upload CSP report
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: csp-violations-jquery
+        path: apps/demos/csp-reports/
+        if-no-files-found: ignore
+
+  csp-check-frameworks:
+    name: CSP check (${{ matrix.FRAMEWORK }})
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        FRAMEWORK: [React, Vue, Angular]
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-sources
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Start CSP Server
+      run: node apps/demos/utils/server/csp-server.js 8080 &
+
+    - name: Run CSP Check
+      working-directory: apps/demos
+      env:
+        CSP_FRAMEWORKS: ${{ matrix.FRAMEWORK }}
+        CHROME_PATH: google-chrome-stable
+      run: node utils/server/csp-check.js
+
+    - name: Upload CSP report
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: csp-violations-${{ matrix.FRAMEWORK }}
+        path: apps/demos/csp-reports/
+        if-no-files-found: ignore
+
+  csp-report-summary:
+    name: CSP Violations Summary
+    runs-on: devextreme-shr2
+    needs: [check-should-run, csp-check-jquery, csp-check-frameworks]
+    if: always() && needs.check-should-run.outputs.should-run == 'true'
+    timeout-minutes: 5
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+
+      - name: Download all CSP reports
+        uses: actions/download-artifact@v8
+        with:
+          pattern: csp-violations-*
+          path: csp-reports-all
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Summarize CSP violations
+        run: |
+          mkdir -p apps/demos/csp-reports
+
+          echo "## CSP Violations Report" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+
+          GRAND_TOTAL=0
+          for report in csp-reports-all/csp-violations-*.jsonl; do
+            [ -f "$report" ] || continue
+            FRAMEWORK=$(basename "$report" | sed 's/csp-violations-//;s/\.jsonl//')
+            cp "$report" "apps/demos/csp-reports/"
+
+            if [ -s "$report" ]; then
+              COUNT=$(wc -l < "$report" | tr -d ' ')
+              GRAND_TOTAL=$((GRAND_TOTAL + COUNT))
+              echo "### ⚠️ ${FRAMEWORK}: ${COUNT} violation(s)" >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '<details>' >> $GITHUB_STEP_SUMMARY
+              echo '<summary>Show detailed report</summary>' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              CSP_REPORT_FILE="$report" node apps/demos/utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '</details>' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+            else
+              echo "### ✅ ${FRAMEWORK}: No violations" >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+          if [ "$GRAND_TOTAL" -eq 0 ]; then
+            echo "✅ No CSP violations detected across all frameworks."
+          else
+            echo "⚠️  Total: $GRAND_TOTAL CSP violation(s)"
+          fi
+
+      - name: Upload merged CSP reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: csp-violations-report
+          path: apps/demos/csp-reports/
+          if-no-files-found: ignore
