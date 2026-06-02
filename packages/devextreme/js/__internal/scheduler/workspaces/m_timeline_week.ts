@@ -11,13 +11,14 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
     return this.option('type') ?? VIEWS.TIMELINE_WEEK;
   }
 
-  protected override getElementClass() {
+  protected override getElementClass(): string {
     return this.type === VIEWS.TIMELINE_WORK_WEEK ? TIMELINE_WORK_WEEK_CLASS : TIMELINE_CLASS;
   }
 
-  protected override needRenderWeekHeader() {
+  protected override needRenderWeekHeader(): boolean {
     return true;
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 registerComponent('dxSchedulerTimelineWeek', SchedulerTimelineWeek as any);

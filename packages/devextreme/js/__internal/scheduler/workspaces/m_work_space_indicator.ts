@@ -1,23 +1,34 @@
 import registerComponent from '@js/core/component_registrator';
-import $ from '@js/core/renderer';
+import $, { type dxElementWrapper } from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { OptionChanged } from '@ts/core/widget/types';
 import { getToday } from '@ts/scheduler/r1/utils/index';
 
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../m_classes';
 import timezoneUtils from '../m_utils_time_zone';
-import SchedulerWorkSpace from './m_work_space';
+import SchedulerWorkSpace, {
+  type WorkspaceOptionChangedOptions,
+  type WorkspaceOptionsInternal,
+} from './m_work_space';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 
+export interface WorkSpaceIndicatorDefaultOptions extends WorkspaceOptionsInternal {
+  showCurrentTimeIndicator: boolean;
+  indicatorTime: Date;
+  indicatorUpdateInterval: number;
+  shadeUntilCurrentTime: boolean;
+}
+
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
-  private indicatorInterval: any;
+  private indicatorInterval?: ReturnType<typeof setTimeout>;
 
   protected getToday(): Date {
     const viewOffset = this.option('viewOffset') as number;
@@ -35,7 +46,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return false;
   }
 
-  isIndicationAvailable() {
+  isIndicationAvailable(): boolean {
     if (!hasWindow()) {
       return false;
     }
@@ -45,7 +56,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return today >= dateUtils.trimTime(new Date(this.getStartViewDate()));
   }
 
-  isIndicatorVisible() {
+  isIndicatorVisible(): boolean {
     const today = this.getToday();
 
     // Subtracts 1 ms from the real endViewDate instead of 1 minute
@@ -57,10 +68,15 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return dateUtils.dateInRange(today, firstViewDate, endViewDate);
   }
 
-  protected renderIndicator(height, rtlOffset, $container, groupCount) {
+  protected renderIndicator(
+    height: number,
+    rtlOffset: number,
+    $container: dxElementWrapper,
+    groupCount: number,
+  ): void {
     const groupedByDate = this.isGroupedByDate();
     const repeatCount = groupedByDate ? 1 : groupCount;
-    for (let i = 0; i < repeatCount; i++) {
+    Array.from({ length: repeatCount }).forEach((_, i) => {
       const $indicator = this.createIndicator($container);
 
       setWidth(
@@ -68,44 +84,53 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth(),
       );
       this.groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
-    }
+    });
   }
 
-  protected createIndicator($container) {
+  protected createIndicator($container: dxElementWrapper): dxElementWrapper {
     const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
     $container.append($indicator);
 
     return $indicator;
   }
 
-  private getRtlOffset(width) {
+  private getRtlOffset(width: number): number {
     return this.option('rtlEnabled') ? getBoundingRect(this.$dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
-  protected setIndicationUpdateInterval() {
+  protected setIndicationUpdateInterval(): void {
     if (!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
       return;
     }
 
     this.clearIndicatorUpdateInterval();
 
-    this.indicatorInterval = setInterval(() => {
+    const scheduleIndicatorUpdate = (): void => {
       this.renderCurrentDateTimeIndication();
-    }, this.option('indicatorUpdateInterval'));
+      this.indicatorInterval = setTimeout(
+        scheduleIndicatorUpdate,
+        this.option('indicatorUpdateInterval'),
+      );
+    };
+
+    this.indicatorInterval = setTimeout(
+      scheduleIndicatorUpdate,
+      this.option('indicatorUpdateInterval'),
+    );
   }
 
-  private clearIndicatorUpdateInterval() {
+  private clearIndicatorUpdateInterval(): void {
     if (this.indicatorInterval) {
-      clearInterval(this.indicatorInterval);
-      delete this.indicatorInterval;
+      clearTimeout(this.indicatorInterval);
+      this.indicatorInterval = undefined;
     }
   }
 
-  protected isVerticalShader() {
+  protected isVerticalShader(): boolean {
     return true;
   }
 
-  getIndicationWidth() {
+  getIndicationWidth(): number {
     const cellCount = this.getCellCount();
     const cellSpan = Math.min(this.getIndicatorDaysSpan(), cellCount);
     const width = cellSpan * this.getCellWidth();
@@ -114,7 +139,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return Math.min(width, maxWidth);
   }
 
-  getIndicatorOffset() {
+  getIndicatorOffset(): number {
     const cellSpan = this.getIndicatorDaysSpan() - 1;
     const offset = cellSpan * this.getCellWidth();
 
@@ -137,7 +162,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return Math.ceil((timeDiff + 1) / toMs('day'));
   }
 
-  getIndicationHeight() {
+  getIndicationHeight(): number {
     const today = timezoneUtils.getDateWithoutTimezoneChange(this.getToday());
     const cellHeight = this.getCellHeight();
     const date = new Date(this.getStartViewDate());
@@ -152,9 +177,9 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return cellCount * cellHeight;
   }
 
-  _dispose() {
+  _dispose(): void {
     this.clearIndicatorUpdateInterval();
-    super._dispose.apply(this, arguments as any);
+    super._dispose();
   }
 
   renderCurrentDateTimeIndication(): void {
@@ -186,8 +211,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return false;
   }
 
-  protected override getHeaderPanelCellClass(i) {
-    const cellClass = super.getHeaderPanelCellClass(i);
+  protected override getHeaderPanelCellClass(i: number): string {
+    const cellClass = super.getHeaderPanelCellClass(i) as string;
 
     if (this.isCurrentTimeHeaderCell(i)) {
       return `${cellClass} ${HEADER_CURRENT_TIME_CELL_CLASS}`;
@@ -196,30 +221,30 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return cellClass;
   }
 
-  protected override cleanView() {
+  protected override cleanView(): void {
     super.cleanView();
 
     this.cleanDateTimeIndicator();
   }
 
-  _dimensionChanged() {
+  _dimensionChanged(): void {
     super._dimensionChanged();
 
     this.renderCurrentDateTimeLineAndShader();
   }
 
-  private cleanDateTimeIndicator() {
-    (this.$element() as any).find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
+  private cleanDateTimeIndicator(): void {
+    this.$element().find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
   }
 
-  protected override cleanWorkSpace() {
+  protected override cleanWorkSpace(): void {
     super.cleanWorkSpace();
 
     this.renderDateTimeIndication();
     this.setIndicationUpdateInterval();
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<WorkspaceOptionChangedOptions>): void {
     switch (args.name) {
       case 'showCurrentTimeIndicator':
       case 'indicatorTime':
@@ -242,16 +267,16 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): WorkSpaceIndicatorDefaultOptions {
     return extend(super._getDefaultOptions(), {
       showCurrentTimeIndicator: true,
       indicatorTime: new Date(),
       indicatorUpdateInterval: 5 * toMs('minute'),
       shadeUntilCurrentTime: true,
-    });
+    }) as WorkSpaceIndicatorDefaultOptions;
   }
 
-  protected getCurrentTimePanelCellIndices() {
+  protected getCurrentTimePanelCellIndices(): number[] {
     const rowCountPerGroup = this.getTimePanelRowCount();
     const today = this.getToday();
     const index = this.getCellIndexByDate(today);
@@ -261,10 +286,9 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       return [];
     }
 
-    let cellIndices;
-    if (currentTimeRowIndex === 0) {
-      cellIndices = [currentTimeRowIndex];
-    } else {
+    let cellIndices: number[] = [currentTimeRowIndex];
+
+    if (currentTimeRowIndex !== 0) {
       cellIndices = currentTimeRowIndex % 2 === 0
         ? [currentTimeRowIndex - 1, currentTimeRowIndex]
         : [currentTimeRowIndex, currentTimeRowIndex + 1];
@@ -275,7 +299,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       : 1;
 
     return [...new Array(verticalGroupCount)]
-      .reduce((currentIndices, _, groupIndex) => [
+      .reduce<number[]>((currentIndices, _, groupIndex) => [
         ...currentIndices,
         ...cellIndices.map((cellIndex) => rowCountPerGroup * groupIndex + cellIndex),
       ], []);
@@ -307,5 +331,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 registerComponent('dxSchedulerWorkSpace', SchedulerWorkSpaceIndicator as any);
 export default SchedulerWorkSpaceIndicator;
