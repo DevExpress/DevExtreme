@@ -29,9 +29,11 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { dxSchedulerOptions } from '@js/ui/scheduler';
+import type { ScrollEvent } from '@js/ui/scroll_view';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
+import type { OptionChanged } from '@ts/core/widget/types';
 import {
   AllDayPanelTitleComponent,
   AllDayTableComponent,
@@ -104,6 +106,40 @@ interface RenderComponentOptions {
 interface RenderRWorkspaceOptions {
   renderComponents: RenderComponentOptions;
   generateNewData: boolean;
+}
+
+export interface ViewDateGenerationOptions {
+  startDayHour: number;
+  endDayHour: number;
+  hoursInterval: number;
+  interval?: number;
+  intervalCount: number;
+  startViewDate: Date;
+  firstDayOfWeek: number;
+  skippedDays?: number[];
+  viewOffset: number;
+  viewType: ViewType;
+}
+
+export interface WorkspaceDateTableScrollableConfig {
+  useKeyboard: boolean;
+  bounceEnabled: boolean;
+  updateManually: boolean;
+  onScroll: (event: ScrollEvent) => void;
+  onInitialized: (args: { component: Scrollable }) => void;
+  onOptionChanged: (args: { fullName: string; value: unknown; component: Scrollable }) => void;
+  direction?: 'both';
+  onEnd?: () => void;
+}
+
+export interface WorkspaceHeaderScrollableConfig {
+  useKeyboard: boolean;
+  showScrollbar: 'never';
+  direction: 'horizontal';
+  useNative: false;
+  updateManually: true;
+  bounceEnabled: false;
+  onScroll: (event: ScrollEvent) => void;
 }
 
 const { tableCreator } = tableCreatorModule;
@@ -188,7 +224,7 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
   generateNewData: true,
 };
 
-type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
+export type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   groups: ResourceLoader[];
   getResourceManager: () => ResourceManager;
   startDate?: Date;
@@ -197,6 +233,30 @@ type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
+};
+
+export type WorkspaceOptionChangedOptions = WorkspaceOptionsInternal & {
+  onSelectionChanged?: unknown;
+  onSelectionEnd?: unknown;
+  onCellClick?: unknown;
+  onCellContextMenu?: unknown;
+  viewOffset?: number;
+  groupOrientation?: 'horizontal' | 'vertical';
+  timeZoneCalculator?: unknown;
+  allDayExpanded?: boolean;
+  width?: number | string;
+  allowMultipleCellSelection?: boolean;
+  selectedCellData?: unknown;
+  scrolling?: unknown;
+  schedulerHeight?: number;
+  schedulerWidth?: number;
+  agendaDuration?: number | 'month';
+  rowHeight?: number;
+  noDataText?: string;
+  showCurrentTimeIndicator?: boolean;
+  indicatorTime?: Date;
+  indicatorUpdateInterval?: number;
+  shadeUntilCurrentTime?: boolean;
 };
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;
@@ -651,8 +711,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$allDayTitle = $('<div>').appendTo(this.$headerPanelEmptyCell);
   }
 
-  protected dateTableScrollableConfig() {
-    let config: any = {
+  protected dateTableScrollableConfig(): WorkspaceDateTableScrollableConfig {
+    let config: WorkspaceDateTableScrollableConfig = {
       useKeyboard: false,
       bounceEnabled: false,
       updateManually: true,
@@ -665,14 +725,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       // To prevent scroll container focus in native mode we set tabindex -1 to container
       // In simulated mode focusable behavior prevented by useKeyboard: false private option
       onInitialized: ({ component }) => {
-        const useKeyboardDisabled = component.option('useKeyboard') === false;
-        const useNativeEnabled = component.option('useNative') === true;
+        const useKeyboardDisabled = component.option('useKeyboard');
+        const useNativeEnabled = component.option('useNative');
         if (useKeyboardDisabled && useNativeEnabled) {
           $(component.container()).attr('tabindex', -1);
         }
       },
       onOptionChanged: ({ fullName, value, component }) => {
-        const useKeyboardDisabled = component.option('useKeyboard') === false;
+        const useKeyboardDisabled = component.option('useKeyboard');
         if (useKeyboardDisabled && fullName === 'useNative' && value === true) {
           $(component.container()).attr('tabindex', -1);
         }
@@ -689,7 +749,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const currentOnScroll = config.onScroll;
       config = {
         ...config,
-        onScroll: (e) => {
+        onScroll: (e: ScrollEvent) => {
           currentOnScroll?.(e);
 
           this.virtualScrollingDispatcher.handleOnScrollEvent(e?.scrollOffset);
@@ -700,14 +760,24 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return config;
   }
 
-  protected createCrossScrollingConfig({ onScroll }): any {
+  protected createCrossScrollingConfig(
+    { onScroll }: Pick<WorkspaceDateTableScrollableConfig, 'onScroll'>,
+  ): Pick<WorkspaceDateTableScrollableConfig, 'direction' | 'onScroll' | 'onEnd'> {
     return {
       direction: 'both',
-      onScroll: (event) => {
-        onScroll?.();
+      onScroll: (event: ScrollEvent) => {
+        onScroll?.(event);
 
-        this.scrollSync.sidebar({ top: event.scrollOffset.top });
-        this.scrollSync.header({ left: event.scrollOffset.left });
+        const top = event.scrollOffset?.top;
+        const left = event.scrollOffset?.left;
+
+        if (top !== undefined) {
+          this.scrollSync.sidebar({ top });
+        }
+
+        if (left !== undefined) {
+          this.scrollSync.header({ left });
+        }
       },
       onEnd: () => {
         (this.option('onScrollEnd') as any)();
@@ -715,7 +785,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
   }
 
-  protected headerScrollableConfig() {
+  protected headerScrollableConfig(): WorkspaceHeaderScrollableConfig {
     return {
       useKeyboard: false,
       showScrollbar: 'never',
@@ -723,7 +793,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       useNative: false,
       updateManually: true,
       bounceEnabled: false,
-      onScroll: (event) => {
+      onScroll: (event: ScrollEvent) => {
         this.scrollSync.dateTable({ left: event.scrollOffset.left });
       },
     };
@@ -852,14 +922,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     );
   }
 
-  generateRenderOptions(isProvideVirtualCellsWidth?: any): ViewDataProviderOptions {
+  generateRenderOptions(isProvideVirtualCellsWidth = false): ViewDataProviderOptions {
     const groupCount = this.getGroupCount();
 
     const groupOrientation = groupCount > 0
       ? this.option('groupOrientation')
       : this.getDefaultGroupStrategy();
 
-    const options = {
+    const options: ViewDataProviderOptions = {
       groupByDate: this.option('groupByDate'),
       startRowIndex: 0,
       startCellIndex: 0,
@@ -1274,7 +1344,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
   }
 
-  protected getDateGenerationOptions() {
+  protected getDateGenerationOptions(): any {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
@@ -2247,9 +2317,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.virtualScrollingDispatcher.dispose();
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): WorkspaceOptionsInternal {
     // @ts-expect-error
-    return extend(super._getDefaultOptions(), {
+    const defaultOptions = extend(super._getDefaultOptions(), {
       currentDate: new Date(),
       intervalCount: 1,
       startDate: null,
@@ -2282,18 +2352,20 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       allDayPanelMode: 'all',
       height: undefined,
       draggingMode: 'outlook',
-      onScrollEnd: () => {},
+      onScrollEnd: noop,
       getHeaderHeight: undefined,
-      renderAppointments: () => {},
-      onShowAllDayPanel: () => {},
-      onSelectedCellsClick: () => {},
+      renderAppointments: noop,
+      onShowAllDayPanel: noop,
+      onSelectedCellsClick: noop,
       timeZoneCalculator: undefined,
       schedulerHeight: undefined,
       schedulerWidth: undefined,
     });
+
+    return defaultOptions;
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<WorkspaceOptionChangedOptions>): void {
     switch (args.name) {
       case 'startDayHour':
       case 'endDayHour':
