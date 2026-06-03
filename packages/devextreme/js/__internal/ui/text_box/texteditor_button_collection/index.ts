@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import type dxButton from '@js/ui/button';
 import type { Properties } from '@js/ui/button';
 import errors from '@js/ui/widget/ui.errors';
-import type TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
+import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import type TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
 import CustomButton from '@ts/ui/text_box/texteditor_button_collection/custom';
 
