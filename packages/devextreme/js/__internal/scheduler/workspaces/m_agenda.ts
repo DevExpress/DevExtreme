@@ -529,22 +529,12 @@ class SchedulerAgenda extends WorkSpace {
   updateScrollPosition(date: Date): void {
     const newDate = this.timeZoneCalculator.createDate(date, 'toGrid');
 
-    const bounds = this.getVisibleBounds();
-
-    if (this.needUpdateScrollPosition(newDate, bounds)) {
+    if (this.needUpdateScrollPosition(newDate)) {
       this.scrollTo(newDate);
     }
   }
 
-  needUpdateScrollPosition(
-    date: Date,
-    appointmentGroupValues?: unknown,
-    inAllDayRow?: boolean,
-  ): boolean {
-    if (appointmentGroupValues || inAllDayRow) {
-      noop();
-    }
-
+  override needUpdateScrollPosition(date: Date): boolean {
     const bounds = this.getVisibleBounds();
     const hours = date.getHours();
     const minutes = date.getMinutes();
@@ -558,7 +548,7 @@ class SchedulerAgenda extends WorkSpace {
       isUpdateNeeded = true;
     }
 
-    if (hours === bounds.bottom.hours && minutes > bounds.top.minutes) {
+    if (hours === bounds.bottom.hours && minutes > bounds.bottom.minutes) {
       isUpdateNeeded = true;
     }
 
