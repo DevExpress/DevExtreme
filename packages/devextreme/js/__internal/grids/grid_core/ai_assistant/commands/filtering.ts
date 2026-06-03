@@ -1,22 +1,31 @@
 import type { SearchOperation } from '@js/common/data.types';
-import type { FilterExprNode, FilterExprTree } from '@js/common/grids';
+import type { BasicFilterExpr, FilterExprNode, FilterExprTree } from '@js/common/grids';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
+import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
+import { resolveFilterValue } from './utils';
 
 const FILTER_OPS = [
   '=', '<>', '<', '<=', '>', '>=',
   'contains', 'notcontains', 'startswith', 'endswith',
 ] as const satisfies readonly SearchOperation[];
 
-type FilterExprArray = | [string, SearchOperation, string | number | boolean | null]
+type FilterExprArray = | [string, SearchOperation, BasicFilterExpr['value']]
   | [FilterExprArray, 'and' | 'or', FilterExprArray]
   | ['!', FilterExprArray];
 
 const filterOpSchema = z.enum(FILTER_OPS);
 
-const filterValueScalarSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
+const filterValueScalarSchema = z.union([
+  z.string().describe(
+    'A plain string value. Date values should be in "YYYY-MM-DDTHH:mm:ss" format (e.g. "2024-05-10T00:00:00", "2024-05-10T14:30:00"). The time part is always required. The "Z" suffix or timezone offset should not be appended unless the user explicitly requests it.',
+  ),
+  z.number().describe('A numeric filter value.'),
+  z.boolean().describe('A boolean filter value.'),
+  z.null().describe('A null filter value.'),
+]);
 
 const basicFilterExprSchema = z.object({
   type: z.enum(['basic']),
@@ -57,7 +66,10 @@ const filterValueCommandSchema = z.object({
   expression: filterExprTreeSchema.nullable(),
 }).strict();
 
-function convertFilterExprToArray(tree: FilterExprTree): FilterExprArray {
+function convertFilterExprToArray(
+  component: InternalGrid,
+  tree: FilterExprTree,
+): FilterExprArray {
   const byId = new Map<string, FilterExprNode>();
   for (const node of tree.nodes) {
     if (byId.has(node.id)) {
@@ -79,8 +91,11 @@ function convertFilterExprToArray(tree: FilterExprTree): FilterExprArray {
     try {
       const { expr } = node;
       switch (expr.type) {
-        case 'basic':
-          return [expr.field, expr.operator, expr.value];
+        case 'basic': {
+          const dataType = component.columnOption(expr.field, 'dataType');
+          const resolved = resolveFilterValue(dataType, expr.value);
+          return [expr.field, expr.operator, resolved];
+        }
         case 'combined':
           return [walk(expr.leftId), expr.combiner, walk(expr.rightId)];
         case 'negated':
@@ -98,7 +113,7 @@ function convertFilterExprToArray(tree: FilterExprTree): FilterExprArray {
 
 export const filterValueCommand = defineGridCommand({
   name: 'filterValue',
-  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. The expression is a flat node list: {"rootId":id,"nodes":[...]}. Each node is {"id":<unique string like "n1">,"expr":<expression>}, where "expr" is one of: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","combiner":"and"|"or","leftId":nodeId,"rightId":nodeId}, negated {"type":"negated","expressionId":nodeId}. "rootId" MUST be the "id" of the outermost node (the top of the expression tree) and must match one of the node ids exactly — never invent a value like "root". Every "leftId"/"rightId"/"expressionId" must also match a node "id". Ids must be unique and must not form cycles. The "field" is the column dataField (not the caption). Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". To express "not and" / "not or", add a negated node whose expressionId points at a combined node. Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node): {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.',
+  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. The expression is a flat node list: {"rootId":id,"nodes":[...]}. Each node is {"id":<unique string like "n1">,"expr":<expression>}, where "expr" is one of: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","combiner":"and"|"or","leftId":nodeId,"rightId":nodeId}, negated {"type":"negated","expressionId":nodeId}. "rootId" MUST be the "id" of the outermost node (the top of the expression tree) and must match one of the node ids exactly — never invent a value like "root". Every "leftId"/"rightId"/"expressionId" must also match a node "id". Ids must be unique and must not form cycles. The "field" is the column dataField (not the caption). Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". DATE VALUES: When a value is a date or datetime, always use "YYYY-MM-DDTHH:mm:ss" format without timezone suffix, e.g. "2024-05-10T00:00:00" for midnight or "2024-05-10T14:30:00" for a specific time. Always include the "T" and time part. Do NOT use date-only format like "2024-05-10" without time. Do NOT append "Z" or any timezone offset unless the user explicitly requests it. Do NOT use natural language for dates. To express "not and" / "not or", add a negated node whose expressionId points at a combined node. Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node): {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.',
   schema: filterValueCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const defaultMessage = args.expression === null
@@ -108,7 +123,7 @@ export const filterValueCommand = defineGridCommand({
     try {
       const filterValue = args.expression === null
         ? undefined
-        : convertFilterExprToArray(args.expression);
+        : convertFilterExprToArray(component, args.expression);
 
       // Handles remote operations via data controller listening for the `filtering` change
       component.option('filterValue', filterValue);
