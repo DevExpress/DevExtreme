@@ -109,7 +109,7 @@ export type BasicFilterExpr = {
   type: 'basic';
   field: string;
   operator: SearchOperation;
-  value: string | number | boolean | null;
+  value: string | number | boolean | null | Date;
 };
 
 /**

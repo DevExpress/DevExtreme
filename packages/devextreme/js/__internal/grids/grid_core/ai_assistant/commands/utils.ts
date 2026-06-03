@@ -1,5 +1,7 @@
-import type { CompositeKeyPair } from '@js/common/grids';
+import type { BasicFilterExpr, CompositeKeyPair } from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
+import { dateUtilsTs } from '@ts/core/utils/date';
+import { isDateType } from '@ts/grids/grid_core/m_utils';
 import { z } from 'zod';
 
 type RowKey = string | number | Record<string, string | number>;
@@ -64,3 +66,18 @@ export const isKeyShapeValid = (
 
   return keyExpr.every((field) => field in key);
 };
+
+type FilterExprValue = BasicFilterExpr['value'];
+
+export function resolveFilterValue(
+  dataType: string | undefined,
+  value: FilterExprValue,
+): FilterExprValue {
+  if (typeof value === 'string' && isDateType(dataType)) {
+    if (!dateUtilsTs.isValidDate(value)) {
+      return value;
+    }
+    return new Date(value);
+  }
+  return value;
+}
