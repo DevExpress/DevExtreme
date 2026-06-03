@@ -23,7 +23,6 @@ export class ExecuteGridAssistantCommand extends BaseCommand<
     };
   }
 
-  // TODO: check response more carefully
   protected parseResult(
     response: ExecuteGridAssistantCommandResponse,
   ): ExecuteGridAssistantCommandResult {
