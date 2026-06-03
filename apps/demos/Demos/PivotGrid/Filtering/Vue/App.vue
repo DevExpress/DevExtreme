@@ -67,7 +67,7 @@ const dataSource = new PivotGridDataSource({
     {
       dataField: '[Ship Date].[Calendar Year]',
       area: 'filter',
-      filterValues: ['[Ship Date].[Calendar Year].&[2004]'],
+      filterValues: ['[Ship Date].[Calendar Year].&[2024]'],
     },
   ],
   store: new XmlaStore({
