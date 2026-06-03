@@ -35,16 +35,13 @@ const changePaging = function (that, optionName, value) {
     if (value !== undefined) {
       const oldValue = that._getPagingOptionValue(optionName);
       if (oldValue !== value) {
-        if (optionName === 'pageSize') {
-          dataSource.pageIndex(0);
-        }
-        dataSource[optionName](value);
-
         that._skipProcessingPagingChange = true;
-        that.option(`paging.${optionName}`, value);
         if (optionName === 'pageSize' && value === 0) {
+          dataSource.pageIndex(0);
           that.option('paging.pageIndex', 0);
         }
+        dataSource[optionName](value);
+        that.option(`paging.${optionName}`, value);
         that._skipProcessingPagingChange = false;
         const pageIndex = dataSource.pageIndex();
         that._isPaging = optionName === 'pageIndex';
@@ -1227,7 +1224,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (this._repaintChangesOnly !== undefined) {
       change.repaintChangesOnly ??= this._repaintChangesOnly;
-      change.needUpdateDimensions ??= this._needUpdateDimensions;
+      change.needUpdateDimensions = change.needUpdateDimensions || this._needUpdateDimensions;
     } else if (change.changes) {
       change.repaintChangesOnly = this.option('repaintChangesOnly');
     } else if (isDataChanged) {
@@ -1235,7 +1232,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
       change.isDataChanged = true;
       change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && this.option('repaintChangesOnly');
-      change.needUpdateDimensions = operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding);
+
+      if (operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
+        change.needUpdateDimensions = true;
+      }
     }
 
     if (this._updateLockCount && !change.cancel) {
