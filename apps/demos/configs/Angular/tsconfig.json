@@ -3,7 +3,7 @@
     "target": "ES2022",
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {

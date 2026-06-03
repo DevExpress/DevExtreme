@@ -6,9 +6,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "jsx": "react",
-    "moduleResolution": "node",
-    "module": "CommonJS",
-    "ignoreDeprecations": "6.0"
+    "moduleResolution": "node16",
+    "module": "CommonJS"
   },
   "include": [
     "utils/**/*.ts",
