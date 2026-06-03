@@ -1,3 +1,4 @@
+import type { template } from '@js/common';
 import { locate, resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
@@ -2846,7 +2847,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$element().addClass(className);
   }
 
-  protected getDateHeaderTemplate() {
+  protected getDateHeaderTemplate(): template | undefined | null {
     return this.option('dateCellTemplate');
   }
 
