@@ -47,8 +47,8 @@ import { Appointments } from './appointments_new/appointments';
 import NotifyScheduler from './base/widget_notify_scheduler';
 import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
+import { hide as hideLoading, show as showLoading } from './loading';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
-import { hide as hideLoading, show as showLoading } from './m_loading';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
@@ -698,9 +698,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       });
 
       this._dataSource.isLoading() && showLoading({
-        container: this.$element(),
+        container: this.$element().get(0),
         position: {
-          of: this.$element(),
+          of: this.$element().get(0),
         },
       });
     } else {
