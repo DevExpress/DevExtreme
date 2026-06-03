@@ -4,6 +4,12 @@ packages:
   - 'packages/*'
   - '!packages/sbom'
 
+linkWorkspacePackages: true
+preferWorkspacePackages: true
+saveWorkspaceProtocol: false
+packageManagerStrict: false
+engineStrict: true
+
 overrides:
   "@devexpress/callsite-record@^4.1.6": 4.1.7
   "basic-ftp@<5.3.1": ">=5.3.1"
