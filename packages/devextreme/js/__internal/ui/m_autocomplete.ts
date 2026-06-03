@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import type { Properties } from '@js/ui/autocomplete';
+import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
 
@@ -151,7 +152,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
 
   _searchDataSource(searchValue): void {
     const { maxItemCount } = this.option();
-    if (maxItemCount) {
+    if (isDefined(maxItemCount)) {
       this._dataSource.pageSize(maxItemCount);
     }
     super._searchDataSource(searchValue);

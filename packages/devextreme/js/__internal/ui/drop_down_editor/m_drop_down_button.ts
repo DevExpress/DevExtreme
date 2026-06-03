@@ -160,7 +160,8 @@ export default class DropDownButton extends TextEditorButton {
     this.currentTemplate = dropDownButtonTemplate;
   }
 
-  update(): boolean {
+  // @ts-expect-error inconsistent return type, fix in TextEditorButton
+  update(): void {
     const shouldUpdate = super.update();
 
     if (shouldUpdate) {
@@ -170,9 +171,7 @@ export default class DropDownButton extends TextEditorButton {
       const options = this._getOptions();
 
       instance?.option(options);
-      this._legacyRender($editor, (instance as Button)?.$element(), options.visible);
+      this._legacyRender($editor, instance?.$element(), options.visible);
     }
-
-    return false;
   }
 }

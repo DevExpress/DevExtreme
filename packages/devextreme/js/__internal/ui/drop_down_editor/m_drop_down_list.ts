@@ -461,7 +461,7 @@ class DropDownList<
   _isSelectedValue(value: unknown, cache?: ItemCache): boolean {
     const { value: optionValue } = this.option();
 
-    // @ts-expect-error refacotor DataExpressionMixin
+    // @ts-expect-error refactor DataExpressionMixin
     return this._isValueEquals(value, optionValue) as boolean;
   }
 
@@ -927,7 +927,7 @@ class DropDownList<
     if (this._dataController.pageIndex() === 0) {
       this.option().items = newItems;
     } else {
-      this.option().items = this.option().items?.concat(newItems);
+      this.option().items = (this.option().items ?? []).concat(newItems);
     }
   }
 
