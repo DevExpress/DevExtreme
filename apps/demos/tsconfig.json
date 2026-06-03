@@ -6,7 +6,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "jsx": "react",
-    "moduleResolution": "node16",
+    "ignoreDeprecations": "6.0",
+    "moduleResolution": "node",
     "module": "CommonJS"
   },
   "include": [

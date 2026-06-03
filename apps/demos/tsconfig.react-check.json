@@ -6,6 +6,7 @@
     "verbatimModuleSyntax": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "ignoreDeprecations": "6.0",
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,

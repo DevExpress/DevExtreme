@@ -97,6 +97,7 @@ window.config = {
     module: 'system',
     emitDecoratorMetadata: true,
     experimentalDecorators: true,
+    "ignoreDeprecations": "6.0",
   },
   meta: {
     'typescript': {
