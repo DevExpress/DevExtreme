@@ -1029,7 +1029,20 @@ export default class DataGrid extends GridCore {
       { dependencies: { getInstance } },
     )();
   }
-  
+
+  apiState(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).state(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
   getDraggableHeader() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
   }
