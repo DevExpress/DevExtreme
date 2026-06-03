@@ -2,7 +2,10 @@ import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
-import { compositeKeyPairSchema, isKeyShapeValid, normalizeKey } from './utils';
+import {
+  // eslint-disable-next-line spellcheck/spell-checker
+  compositeKeyPairSchema, isKeyShapeValid, normalizeKey, optionalNullish,
+} from './utils';
 
 const selectByKeysCommandSchema = z.object({
   keys: z.array(z.union([
@@ -45,7 +48,8 @@ export const selectByKeysCommand = defineGridCommand({
 
 const selectByIndexesCommandSchema = z.object({
   indexes: z.array(z.number().int().min(1)).min(1),
-  deselect: z.boolean().optional(),
+  // eslint-disable-next-line spellcheck/spell-checker
+  deselect: optionalNullish(z.boolean()),
 }).strict();
 
 export const selectByIndexesCommand = defineGridCommand({
