@@ -28,7 +28,7 @@ export interface WorkSpaceIndicatorDefaultOptions extends WorkspaceOptionsIntern
 }
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
-  private indicatorInterval?: ReturnType<typeof setTimeout>;
+  private indicatorInterval?: ReturnType<typeof setInterval>;
 
   protected getToday(): Date {
     const viewOffset = this.option('viewOffset') as number;
