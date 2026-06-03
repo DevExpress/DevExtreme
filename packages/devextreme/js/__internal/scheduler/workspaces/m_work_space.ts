@@ -28,7 +28,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -74,6 +73,7 @@ import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import type { SafeSchedulerOptions } from '../utils/options/types';
 import {
   getAppointmentGroupIndex,
   getSafeGroupValues,
@@ -226,7 +226,7 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
   generateNewData: true,
 };
 
-export type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
+export type WorkspaceOptionsInternal = Omit<SafeSchedulerOptions, 'groups'> & {
   groups: ResourceLoader[];
   getResourceManager: () => ResourceManager;
   startDate?: Date;
@@ -262,6 +262,7 @@ export type WorkspaceOptionChangedOptions = WorkspaceOptionsInternal & {
   indicatorUpdateInterval?: number;
   shadeUntilCurrentTime?: boolean;
 };
+
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;
 
