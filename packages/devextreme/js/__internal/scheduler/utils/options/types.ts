@@ -31,6 +31,7 @@ export interface SchedulerInternalOptions {
   disabledExpr: string;
   visibleExpr: string;
   allowMultipleCellSelection: boolean;
+  skippedDays?: number[];
 }
 
 export interface SchedulerOptionsRule {
