@@ -34,6 +34,7 @@
         min: function() { return z; },
         max: function() { return z; },
         transform: function() { return z; },
+        describe: function() { return z; },
         // validation
         safeParse: function() { return { success: true, data: {} }; },
     };
