@@ -894,7 +894,8 @@ class DropDownEditor<
         of: this.$element(),
       }),
       showTitle: dropDownOptions?.showTitle,
-      width: getElementWidth(this.$element()),
+      // @ts-expect-error only function is accepted as value
+      width: () => getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
       hideOnParentScroll: true,
