@@ -62,6 +62,8 @@ const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 const TODAY_BUTTON_SELECTOR = `.${TODAY_BUTTON_CLASS}.${BUTTON_CLASS}`;
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
+const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
+
 
 const widgetName = 'dxDateBox';
 const { module: testModule, test } = QUnit;
@@ -3058,6 +3060,25 @@ testModule('native picker', function() {
                 assert.strictEqual(currentDate.getMinutes(), 1);
             }
         });
+    });
+
+    test('empty class should not be attached for native picker with null value (T1328901)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'native',
+            type: 'date',
+            value: null,
+            labelMode: 'floating',
+            label: 'Label',
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+
+        assert.strictEqual($dateBox.hasClass(TEXTEDITOR_EMPTY_INPUT_CLASS), false,
+            'empty class is not attached so floating label does not overlap with browser-rendered date format hint');
+
+        dateBox.option('value', new Date());
+
+        assert.strictEqual($dateBox.hasClass(TEXTEDITOR_EMPTY_INPUT_CLASS), false,
+            'empty class remains absent after value is set');
     });
 });
 

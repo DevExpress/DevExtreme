@@ -971,7 +971,7 @@
 /packages/devextreme/js/ui/text_area.d.ts                            @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/text_area_types.d.ts                      @DevExpress/devextreme-editors
 
-/packages/devextreme/js/__internal/ui/m_text_area.ts                 @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/text_area.ts                 @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/**/textArea/**                @DevExpress/devextreme-editors
 

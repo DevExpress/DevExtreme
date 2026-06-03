@@ -132,7 +132,7 @@ class SchedulerAgenda extends WorkSpace {
     return this.option('agendaDuration') as number;
   }
 
-  protected override renderAllDayPanel() { return noop(); }
+  protected renderAllDayPanel() { return noop(); }
 
   protected override updateAllDayVisibility() { return noop(); }
 
@@ -337,7 +337,7 @@ class SchedulerAgenda extends WorkSpace {
     this.$element().append(this.$dateTableScrollable.$element());
   }
 
-  protected override renderDateTable() {
+  protected renderDateTable() {
     this.renderTableBody({
       container: getPublicElement(this.$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
@@ -371,7 +371,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected override renderTableBody(options: any, delayCellTemplateRendering?: any) {
+  protected renderTableBody(options: any, delayCellTemplateRendering?: any) {
     const cellTemplates: any[] = [];
     const cellTemplateOpt = options.cellTemplate;
 
@@ -431,7 +431,7 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  protected override renderTimePanel() {
+  protected renderTimePanel() {
     this.renderTableBody({
       container: getPublicElement(this.$timePanel),
       rowCount: this.getTimePanelRowCount(),
@@ -531,6 +531,8 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   renovatedRenderSupported() { return false; }
+
+  override isVirtualScrolling() { return false; }
 
   protected override getTotalViewDuration() {
     return dateUtils.dateToMilliseconds('day') * (this.option('intervalCount') as any);

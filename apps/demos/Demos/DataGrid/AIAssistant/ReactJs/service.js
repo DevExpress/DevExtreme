@@ -4,7 +4,7 @@ import notify from 'devextreme/ui/notify';
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
-  deployment: 'gpt-4o-mini',
+  deployment: 'demo-mini',
   apiVersion: '2024-02-01',
   endpoint: 'https://public-api.devexpress.com/demo-openai',
   apiKey: 'DEMO',
@@ -14,7 +14,7 @@ async function getAIResponse(messages, signal, responseSchema) {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
-    max_tokens: 1000,
+    max_completion_tokens: 1000,
     temperature: 0.7,
     response_format: {
       type: 'json_schema',

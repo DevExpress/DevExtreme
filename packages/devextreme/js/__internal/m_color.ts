@@ -259,6 +259,27 @@ const standardColorTypes = [
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _round = Math.round;
 
+export interface ColorInstance {
+  baseColor: string | undefined;
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+  hsv: { h: number; s: number; v: number };
+  hsl: { h: number; s: number; l: number };
+  colorIsInvalid: boolean;
+  highlight: (step?: number) => string;
+  darken: (step?: number) => string;
+  alter: (step: number) => ColorInstance;
+  blend: (blendColor: ColorInstance | string, opacity: number) => ColorInstance;
+  toHex: () => string;
+  getPureColor: () => ColorInstance;
+  isValidHex: (hex: string) => boolean;
+  isValidRGB: (r: number | undefined, g: number | undefined, b: number | undefined) => boolean;
+  isValidAlpha: (a: number) => boolean;
+  fromHSL: (hsl: { h: number; s: number; l: number }) => ColorInstance;
+}
+
 function Color(value?) {
   this.baseColor = value;
   let color;
@@ -495,10 +516,10 @@ function isIntegerBetweenMinAndMax(number, min?, max?) {
   min = min || 0;
   max = max || 255;
 
-  if (number % 1 !== 0
+  if (typeof number !== 'number'
+       || number % 1 !== 0
        || number < min
        || number > max
-       || typeof number !== 'number'
        || isNaN(number)) {
     return false;
   }
@@ -580,4 +601,9 @@ Color.prototype = {
   },
 };
 
-export default Color;
+interface ColorConstructor {
+  prototype: ColorInstance;
+  new(value?: string): ColorInstance;
+}
+
+export default Color as unknown as ColorConstructor;

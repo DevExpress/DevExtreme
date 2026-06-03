@@ -23,6 +23,8 @@
         // chain modifiers
         optional: function() { return z; },
         nullable: function() { return z; },
+        // eslint-disable-next-line spellcheck/spell-checker
+        nullish: function() { return z; },
         strict: function() { return z; },
         int: function() { return z; },
         // eslint-disable-next-line spellcheck/spell-checker
@@ -30,6 +32,7 @@
         positive: function() { return z; },
         min: function() { return z; },
         max: function() { return z; },
+        transform: function() { return z; },
         // validation
         safeParse: function() { return { success: true, data: {} }; },
     };

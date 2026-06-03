@@ -13,7 +13,8 @@
         "targetDirectory": "./artifacts",
         "excludePatterns": [
           "./artifacts/css",
-          "./artifacts/npm/devextreme/package.json"
+          "./artifacts/npm/devextreme/package.json",
+          "./artifacts/npm/devextreme-dist"
         ]
       }
     },
@@ -868,7 +869,8 @@
       },
       "configurations": {
         "internal": {
-          "distDirectory": "./artifacts/npm/devextreme-dist-internal"
+          "distDirectory": "./artifacts/npm/devextreme-dist-internal",
+          "setName": "devextreme-dist-internal"
         }
       },
       "inputs": [

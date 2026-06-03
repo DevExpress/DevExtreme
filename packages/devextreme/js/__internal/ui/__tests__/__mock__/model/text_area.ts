@@ -1,4 +1,4 @@
-import TextArea from '@ts/ui/m_text_area';
+import TextArea from '@ts/ui/text_area';
 
 const CLASSES = {
   textArea: 'dx-texteditor-input',

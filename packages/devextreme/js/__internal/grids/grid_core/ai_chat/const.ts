@@ -1,5 +1,5 @@
-import { TEXTAREA_CLASS } from '@ts/ui/m_text_area';
 import { SPEECH_TO_TEXT_CLASS } from '@ts/ui/speech_to_text/speech_to_text';
+import { TEXTAREA_CLASS } from '@ts/ui/text_area';
 
 export const DEFAULT_POPUP_OPTIONS = {
   width: 400,
