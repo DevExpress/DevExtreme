@@ -168,15 +168,11 @@ const getHeightStrategyChangeOffset = (
 ): number => (currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0);
 
 export interface PopupProperties extends Properties {
+  autoResizeEnabled?: boolean;
+
   outsideDragFactor?: number;
 
-  forceApplyBindings?: () => void;
-
   preventScrollEvents?: boolean;
-
-  autoResizeEnabled: boolean;
-
-  _wrapperClassExternal?: string;
 
   useResizeObserver?: boolean;
 
@@ -185,6 +181,10 @@ export interface PopupProperties extends Properties {
   useFlatToolbarButtons?: boolean;
 
   _ignoreCloseOnChildEscape?: boolean;
+
+  _wrapperClassExternal?: string;
+
+  forceApplyBindings?: () => void;
 }
 
 class Popup<
