@@ -1,3 +1,4 @@
+import type { template } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
@@ -6,7 +7,6 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
-import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
 import { timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
@@ -359,7 +359,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override updateAllDayVisibility(): void { return noop(); }
 
-  protected override getDateHeaderTemplate(): dxSchedulerOptions['timeCellTemplate'] {
+  protected override getDateHeaderTemplate(): template | undefined | null {
     return this.option('timeCellTemplate');
   }
 
