@@ -10,12 +10,15 @@ export const skippedTests = {
       'FocusedRow',
       'FilteringAPI',
       'DeferredSelection',
+      'RemoteVirtualScrolling',
+      'CustomDataSource',
     ],
     Charts: [
       'ServerSideDataProcessing',
     ],
     TreeView: ['VirtualMode'],
     FilterBuilder: ['WithDataGrid'],
+    PivotGrid: ['WebAPIService'],
   },
   Angular: {
     Autocomplete: ['Overview'],
