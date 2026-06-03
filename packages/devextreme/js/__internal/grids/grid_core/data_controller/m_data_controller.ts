@@ -1156,7 +1156,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const changeType = change.changeType || 'refresh';
 
     change.changeType = changeType;
-    change.operationTypes = this._currentOperationTypes;
+    change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
 
     if (dataSource) {
