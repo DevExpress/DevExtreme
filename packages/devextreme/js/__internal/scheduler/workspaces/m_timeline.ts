@@ -68,8 +68,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getFormat(): string | ((date: Date) => string) {
-    const format = getGlobalFormatByDataType('time');
-    return typeof format === 'string' ? format : 'shorttime';
+    return getGlobalFormatByDataType('time') as string | ((date: Date) => string) || 'shorttime';
   }
 
   private getWorkSpaceHeight(): number {
