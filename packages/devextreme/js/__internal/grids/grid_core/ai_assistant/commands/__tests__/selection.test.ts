@@ -271,33 +271,62 @@ describe('selectByIndexesCommand', () => {
   afterEach(() => afterTest());
 
   describe('schema', () => {
-    it('accepts an array of positive integers', () => {
-      expect(selectByIndexesCommand.schema.safeParse({ indexes: [1, 2, 3] }).success).toBe(true);
+    it('accepts an array of positive integers with mode deselect', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1, 2, 3], mode: 'deselect',
+      }).success).toBe(true);
+    });
+
+    it('accepts mode select', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1], mode: 'select',
+      }).success).toBe(true);
     });
 
     it('rejects when indexes is missing', () => {
-      expect(selectByIndexesCommand.schema.safeParse({}).success).toBe(false);
+      expect(selectByIndexesCommand.schema.safeParse({ mode: 'select' }).success).toBe(false);
+    });
+
+    it('rejects when mode is missing', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1],
+      }).success).toBe(false);
+    });
+
+    it('rejects an invalid mode value', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1], mode: 'toggle',
+      }).success).toBe(false);
     });
 
     it('rejects when indexes is an empty array', () => {
-      expect(selectByIndexesCommand.schema.safeParse({ indexes: [] }).success).toBe(false);
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [], mode: 'select',
+      }).success).toBe(false);
     });
 
     it('rejects zero (indexes are 1-based)', () => {
-      expect(selectByIndexesCommand.schema.safeParse({ indexes: [0] }).success).toBe(false);
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [0], mode: 'select',
+      }).success).toBe(false);
     });
 
     it('rejects negative indexes', () => {
-      expect(selectByIndexesCommand.schema.safeParse({ indexes: [-1] }).success).toBe(false);
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [-1], mode: 'select',
+      }).success).toBe(false);
     });
 
     it('rejects non-integer indexes', () => {
-      expect(selectByIndexesCommand.schema.safeParse({ indexes: [1.5] }).success).toBe(false);
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1.5], mode: 'select',
+      }).success).toBe(false);
     });
 
     it('rejects unknown properties', () => {
       expect(selectByIndexesCommand.schema.safeParse({
         indexes: [1],
+        mode: 'select',
         extra: 1,
       }).success).toBe(false);
     });
@@ -309,7 +338,9 @@ describe('selectByIndexesCommand', () => {
       const selectSpy = jest.spyOn(instance, 'selectRowsByIndexes');
       const callbacks = createCallbacks();
 
-      const result = await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [0] });
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'select',
+      });
 
       expect(result.status).toBe('failure');
       expect(selectSpy).not.toHaveBeenCalled();
@@ -322,7 +353,7 @@ describe('selectByIndexesCommand', () => {
 
       // Three rows in createGrid; 1-based index 100 has no row on the current page.
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 100],
+        indexes: [1, 100], mode: 'select',
       });
 
       expect(result.status).toBe('failure');
@@ -341,7 +372,9 @@ describe('selectByIndexesCommand', () => {
       const selectSpy = jest.spyOn(instance, 'selectRowsByIndexes');
       const callbacks = createCallbacks();
 
-      const result = await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [1] });
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'select',
+      });
 
       expect(result.status).toBe('failure');
       expect(selectSpy).not.toHaveBeenCalled();
@@ -352,9 +385,41 @@ describe('selectByIndexesCommand', () => {
       const selectSpy = jest.spyOn(instance, 'selectRowsByIndexes').mockReturnValue(Promise.resolve([]) as never);
       const callbacks = createCallbacks();
 
-      const result = await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [1, 3] });
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1, 3], mode: 'select',
+      });
 
       expect(selectSpy).toHaveBeenCalledWith([0, 2]);
+      expect(result.status).toBe('success');
+    });
+
+    it('selects when mode is select', async () => {
+      const instance = await createGrid();
+      const selectSpy = jest.spyOn(instance, 'selectRowsByIndexes').mockReturnValue(Promise.resolve([]) as never);
+      const deselectSpy = jest.spyOn(instance, 'deselectRows');
+      const callbacks = createCallbacks();
+
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1, 3], mode: 'select',
+      });
+
+      expect(selectSpy).toHaveBeenCalledWith([0, 2]);
+      expect(deselectSpy).not.toHaveBeenCalled();
+      expect(result.status).toBe('success');
+    });
+
+    it('resolves indexes to row keys and calls deselectRows when deselecting', async () => {
+      const instance = await createGrid();
+      const deselectSpy = jest.spyOn(instance, 'deselectRows').mockReturnValue(Promise.resolve([]) as never);
+      const selectSpy = jest.spyOn(instance, 'selectRowsByIndexes');
+      const callbacks = createCallbacks();
+
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'deselect',
+      });
+
+      expect(deselectSpy).toHaveBeenCalledWith([1]);
+      expect(selectSpy).not.toHaveBeenCalled();
       expect(result.status).toBe('success');
     });
 
@@ -365,7 +430,9 @@ describe('selectByIndexesCommand', () => {
       });
       const callbacks = createCallbacks();
 
-      const result = await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [1] });
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'select',
+      });
 
       expect(result.status).toBe('failure');
     });
@@ -376,28 +443,59 @@ describe('selectByIndexesCommand', () => {
         .mockReturnValue(Promise.reject(new Error('Error')) as never);
       const callbacks = createCallbacks();
 
-      const result = await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [1] });
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'select',
+      });
+
+      expect(result.status).toBe('failure');
+    });
+
+    it('returns failure when deselectRows rejects', async () => {
+      const instance = await createGrid();
+      jest.spyOn(instance, 'deselectRows')
+        .mockReturnValue(Promise.reject(new Error('Error')) as never);
+      const callbacks = createCallbacks();
+
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'deselect',
+      });
 
       expect(result.status).toBe('failure');
     });
   });
 
   describe('default message', () => {
-    it('reports the 1-based row numbers on the current page on success', async () => {
+    it('reports the 1-based row numbers on the current page on select', async () => {
       const instance = await createGrid();
       jest.spyOn(instance, 'selectRowsByIndexes').mockReturnValue(Promise.resolve([]) as never);
       const callbacks = createCallbacks();
 
-      await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [1, 3] });
+      await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1, 3], mode: 'select',
+      });
 
       expect(callbacks.success).toHaveBeenCalledWith('Select row(s) number 1, 3 on the current page.');
+    });
+
+    it('reports the 1-based row numbers on the current page on deselect', async () => {
+      const instance = await createGrid();
+      jest.spyOn(instance, 'deselectRows').mockReturnValue(Promise.resolve([]) as never);
+      const callbacks = createCallbacks();
+
+      await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'deselect',
+      });
+
+      expect(callbacks.success).toHaveBeenCalledWith('Deselect row(s) number 1 on the current page.');
     });
 
     it('passes the same default message to failure', async () => {
       const instance = await createGrid({ selection: { mode: 'none' } });
       const callbacks = createCallbacks();
 
-      await selectByIndexesCommand.execute(instance, callbacks)({ indexes: [1] });
+      await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1], mode: 'select',
+      });
 
       expect(callbacks.failure).toHaveBeenCalledWith('Select row(s) number 1 on the current page.');
     });
