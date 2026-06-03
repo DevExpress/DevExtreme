@@ -1,3 +1,4 @@
+import type { Mode, Position } from '@js/common';
 import type { PositionConfig } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
@@ -15,12 +16,11 @@ import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import browser from '@js/core/utils/browser';
 import {
-  // @ts-expect-error
+  // @ts-expect-error fix on core/utils level
   splitPair,
 } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
@@ -29,13 +29,14 @@ import type {
   EventInfo,
   PointerInteractionEvent,
 } from '@js/events';
-import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
-import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import type { InitializedEvent as PopupInitializedEvent, Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import TextBox from '@ts/ui/text_box/text_box';
 
 import type Popover from '../popover/m_popover';
@@ -91,6 +92,16 @@ export interface DropDownEditorProperties extends Omit<
   _onMarkupRendered?: () => void;
 
   onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
+
+  popupPosition?: PositionConfig;
+
+  useHiddenSubmitElement?: boolean;
+
+  applyButtonText?: string;
+
+  cancelButtonText?: string;
+
+  validationMessagePosition?: Position | Mode;
 }
 
 interface TemplateRenderPayload {
@@ -99,10 +110,16 @@ interface TemplateRenderPayload {
   onRendered?: () => void;
 }
 
-interface FieldAddonsTemplates {
-  beforeTemplate?: { render: (payload: TemplateRenderPayload) => void };
-  afterTemplate?: { render: (payload: TemplateRenderPayload) => void };
+interface FieldTemplate {
+  render: (payload: TemplateRenderPayload) => void
 }
+
+interface FieldAddonsTemplates {
+  beforeTemplate?: FieldTemplate;
+  afterTemplate?: FieldTemplate;
+}
+
+type PopupToolbarItemConfig = ToolbarItem & { shortcut?: string };
 
 function createTemplateWrapperElement(): dxElementWrapper {
   return $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER);
@@ -110,6 +127,7 @@ function createTemplateWrapperElement(): dxElementWrapper {
 
 class DropDownEditor<
   TProperties extends DropDownEditorProperties = DropDownEditorProperties,
+// @ts-expect-error validationMessagePosition: Position | Mode vs TextBoxProperties (Position)
 > extends TextBox<TProperties> {
   _$container!: dxElementWrapper;
 
@@ -144,11 +162,11 @@ class DropDownEditor<
     return {
       ...super._supportedKeys(),
       tab: (e): void => {
-        if (!this.option('opened')) {
+        const { opened } = this.option();
+        if (!opened) {
           return;
         }
-        // @ts-expect-error ts-error
-        if (!this._popup.getFocusableElements().length) {
+        if (!this._popup?.getFocusableElements().length) {
           this.close();
           return;
         }
@@ -158,15 +176,16 @@ class DropDownEditor<
           : this._getFirstPopupElement();
 
         if ($focusableElement) {
-          // @ts-expect-error ts-error
+          // @ts-expect-error should be added on EventsEngine level
           eventsEngine.trigger($focusableElement, 'focus');
-          // @ts-expect-error ts-error
+          // @ts-expect-error should be added on dxElementWrapper level
           $focusableElement.select();
         }
         e.preventDefault();
       },
       escape: (e): boolean => {
-        if (this.option('opened')) {
+        const { opened } = this.option();
+        if (opened) {
           e.preventDefault();
         }
 
@@ -197,7 +216,8 @@ class DropDownEditor<
         return true;
       },
       enter: (e): boolean => {
-        if (this.option('opened')) {
+        const { opened } = this.option();
+        if (opened) {
           e.preventDefault();
           this._valueChangeEventHandler(e);
         }
@@ -207,7 +227,7 @@ class DropDownEditor<
   }
 
   _getDefaultButtons(): TextEditorButtonInfo[] {
-    // @ts-expect-error ts-error
+    // @ts-expect-error should be fixed on TextEditorButtonInfo level
     return super._getDefaultButtons().concat([{ name: 'dropDown', Ctor: DropDownButton }]);
   }
 
@@ -251,11 +271,11 @@ class DropDownEditor<
     const position = getDefaultAlignment(isRtlEnabled);
 
     return {
-      // @ts-expect-error ts-error
+      // @ts-expect-error Should be updated on PositionConfig level
       offset: { h: 0, v: -1 },
       my: `${position} top`,
       at: `${position} bottom`,
-      // @ts-expect-error ts-error
+      // @ts-expect-error Should be updated on PositionConfig level
       collision: 'flip flip',
     };
   }
@@ -267,7 +287,7 @@ class DropDownEditor<
           const isGeneric = device.platform === 'generic';
           return isGeneric;
         },
-        // @ts-expect-error ts-error
+        // @ts-expect-error Should be updated on PositionConfig level
         options: {
           popupPosition: { offset: { v: 0 } },
         },
@@ -292,7 +312,7 @@ class DropDownEditor<
 
   _updatePopupPosition(isRtlEnabled?: boolean): void {
     const { my, at } = this._getDefaultPopupPosition(isRtlEnabled);
-    const currentPosition = this.option('popupPosition');
+    const { popupPosition: currentPosition } = this.option();
 
     this.option('popupPosition', extend({}, currentPosition, { my, at }));
   }
@@ -335,7 +355,8 @@ class DropDownEditor<
   }
 
   _renderContentImpl(): void {
-    if (!this.option('deferRendering')) {
+    const { deferRendering } = this.option();
+    if (!deferRendering) {
       this._createPopup();
     }
   }
@@ -392,13 +413,14 @@ class DropDownEditor<
     }
   }
 
-  _getFieldTemplate() {
+  _getFieldTemplate(): FieldTemplate | undefined {
     const { fieldTemplate } = this.option();
 
     if (!fieldTemplate) {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, consistent-return
     return this._getTemplate(fieldTemplate);
   }
 
@@ -437,7 +459,8 @@ class DropDownEditor<
   }
 
   _renderValue(): DeferredObj<unknown> {
-    if (this.option('useHiddenSubmitElement')) {
+    const { useHiddenSubmitElement } = this.option();
+    if (useHiddenSubmitElement) {
       this._setSubmitValue();
     }
 
@@ -492,13 +515,11 @@ class DropDownEditor<
       return;
     }
 
-    if (!this._$templateWrapper) {
-      this._$templateWrapper = createTemplateWrapperElement()
-        .prependTo(this.$element());
-    }
+    this._$templateWrapper ??= createTemplateWrapperElement()
+      .prependTo(this.$element());
   }
 
-  _renderTemplatedField(fieldTemplate, data): void {
+  _renderTemplatedField(fieldTemplate: FieldTemplate, data: TemplateRenderPayload): void {
     const isFocused = focused(this._input());
 
     this._detachKeyboardEvents();
@@ -538,7 +559,7 @@ class DropDownEditor<
           const inputElement = $input.get(0) as HTMLInputElement;
           inputElement.focus({ preventScroll: true });
         } else {
-          // @ts-expect-error
+          // @ts-expect-error should be added on EventsEngine level
           eventsEngine.trigger($input, 'focus');
         }
       },
@@ -632,7 +653,7 @@ class DropDownEditor<
 
   _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error ts-error
+      // @ts-expect-error should be fixed in FunctionTemplate definition
       dropDownButton: new FunctionTemplate((options) => {
         const $icon = $('<div>').addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
         $(options.container).append($icon);
@@ -643,7 +664,7 @@ class DropDownEditor<
 
   _renderOpenHandler(): void {
     const $inputWrapper = this._inputWrapper();
-    // @ts-expect-error ts-error
+    // @ts-expect-error NAME property is missing
     const eventName = addNamespace(clickEventName, this.NAME);
     const { openOnFieldClick } = this.option();
 
@@ -659,10 +680,11 @@ class DropDownEditor<
   _attachFocusOutHandler(): void {
     if (isIOs) {
       this._detachFocusOutEvents();
-      // @ts-expect-error ts-error
-      eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event) => {
+      // @ts-expect-error NAME property is missing
+      eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event: DxEvent<FocusEvent>) => {
         const newTarget = event.relatedTarget;
-        if (newTarget && this.option('opened')) {
+        const { opened } = this.option();
+        if (newTarget && opened) {
           const isNewTargetOutside = this._isTargetOutOfComponent(newTarget);
           if (isNewTargetOutside) {
             this.close();
@@ -672,45 +694,51 @@ class DropDownEditor<
     }
   }
 
-  _isTargetOutOfComponent(newTarget): boolean {
+  _isTargetOutOfComponent(newTarget: EventTarget | null): boolean {
     const popupWrapper = this.content ? $(this.content()).closest(`.${DROP_DOWN_EDITOR_OVERLAY}`) : this._$popup;
-    // @ts-expect-error
+    // @ts-expect-error Should be fixed on core/renderer level
     const isTargetOutsidePopup = $(newTarget).closest(`.${DROP_DOWN_EDITOR_OVERLAY}`, popupWrapper).length === 0;
 
     return isTargetOutsidePopup;
   }
 
   _detachFocusOutEvents(): void {
-    // @ts-expect-error ts-error
-    isIOs && eventsEngine.off(this._inputWrapper(), addNamespace('focusout', this.NAME));
+    if (!isIOs) {
+      return;
+    }
+    // @ts-expect-error NAME property is missing
+    eventsEngine.off(this._inputWrapper(), addNamespace('focusout', this.NAME));
   }
 
-  _getInputClickHandler(openOnFieldClick) {
+  _getInputClickHandler(openOnFieldClick?: boolean): (
+    e: DxEvent<PointerInteractionEvent>,
+  ) => void {
     return openOnFieldClick
-      ? (e) => { this._executeOpenAction(e); }
-      : () => { this._focusInput(); };
+      ? (e: DxEvent<PointerInteractionEvent>): void => { this._executeOpenAction(e); }
+      : (): void => { this._focusInput(); };
   }
 
   _openHandler(): void {
     this._toggleOpenState();
   }
 
-  _executeOpenAction(e): void {
+  _executeOpenAction(e: DxEvent<PointerInteractionEvent>): void {
     this._openOnFieldClickAction?.({ event: e });
   }
 
-  _keyboardEventBindingTarget() {
+  _keyboardEventBindingTarget(): dxElementWrapper {
     return this._input();
   }
 
   _focusInput(): boolean {
-    if (this.option('disabled')) {
+    const { disabled, focusStateEnabled } = this.option();
+    if (disabled) {
       return false;
     }
 
-    if (this.option('focusStateEnabled') && !focused(this._input())) {
+    if (focusStateEnabled && !focused(this._input())) {
       this._resetCaretPosition();
-      // @ts-expect-error ts-error
+      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this._input(), 'focus');
     }
 
@@ -721,8 +749,7 @@ class DropDownEditor<
     const inputElement = this._input().get(0);
 
     if (inputElement) {
-      // @ts-expect-error ts-error
-      const { value } = inputElement;
+      const { value } = inputElement as HTMLInputElement;
       const caretPosition = isDefined(value)
         && (ignoreEditable || this._isEditable()) ? value.length : 0;
 
@@ -741,9 +768,10 @@ class DropDownEditor<
       return;
     }
 
-    if (!this.option('readOnly')) {
-      isVisible = arguments.length ? isVisible : !this.option('opened');
-      this.option('opened', isVisible);
+    const { readOnly, opened } = this.option();
+
+    if (!readOnly) {
+      this.option('opened', isVisible ?? !opened);
     }
   }
 
@@ -752,12 +780,12 @@ class DropDownEditor<
   }
 
   _renderOpenedState(): void {
-    const opened = this.option('opened');
+    const { opened } = this.option();
 
     if (opened) {
       this._createPopup();
     }
-    // @ts-expect-error ts-error
+
     this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE, opened);
     this._setPopupOption('visible', opened);
 
@@ -767,6 +795,7 @@ class DropDownEditor<
     };
 
     this.setAria(arias);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this.setAria('owns', (opened || undefined) && this._popupContentId, this.$element());
   }
 
@@ -784,8 +813,7 @@ class DropDownEditor<
   }
 
   _setPopupAriaLabel(): void {
-    // @ts-expect-error ts-error
-    const $overlayContent = this._popup.$overlayContent();
+    const $overlayContent = this._popup?.$overlayContent();
 
     this.setAria('label', OVERLAY_CONTENT_LABEL, $overlayContent);
   }
@@ -796,8 +824,7 @@ class DropDownEditor<
   _renderPopup(): void {
     const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
-    // @ts-expect-error ts-error
-    this._popup = this._createComponent(this._$popup, Popup, popupConfig);
+    this._popup = this._createComponent(this._$popup as dxElementWrapper, Popup, popupConfig);
 
     this._popup.on({
       showing: this._popupShowingHandler.bind(this),
@@ -817,11 +844,11 @@ class DropDownEditor<
   }
 
   _attachPopupKeyHandler(): void {
-    // @ts-expect-error ts-error
-    eventsEngine.on(this._popup.$overlayContent(), addNamespace('keydown', this.NAME), (e) => this._popupKeyHandler(e));
+    // @ts-expect-error ts-error NAME property is missing
+    eventsEngine.on(this._popup?.$overlayContent(), addNamespace('keydown', this.NAME), (e: DxEvent<KeyboardEvent>) => this._popupKeyHandler(e));
   }
 
-  _popupKeyHandler(e): void {
+  _popupKeyHandler(e: DxEvent<KeyboardEvent>): void {
     // eslint-disable-next-line default-case, @typescript-eslint/switch-exhaustiveness-check
     switch (normalizeKeyName(e)) {
       case 'tab':
@@ -833,20 +860,20 @@ class DropDownEditor<
     }
   }
 
-  _popupTabHandler(e): void {
-    const $target = $(e.target);
+  _popupTabHandler(e: DxEvent<KeyboardEvent>): void {
+    const $target = $(e.target as Element);
     const moveBackward = e.shiftKey && $target.is(this._getFirstPopupElement());
     const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
 
     if (moveForward || moveBackward) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this.field(), 'focus');
       e.preventDefault();
     }
   }
 
   _popupEscHandler(): void {
-    // @ts-expect-error ts-error
+    // @ts-expect-error should be added on EventsEngine level
     eventsEngine.trigger(this._input(), 'focus');
     this.close();
   }
@@ -860,16 +887,14 @@ class DropDownEditor<
   _contentReadyHandler(): void {}
 
   _popupConfig(): PopupProperties {
-    return {
+    const { popupPosition, dropDownOptions } = this.option();
+    const config: PopupProperties = {
       onInitialized: this._getPopupInitializedHandler(),
-      position: extend(this.option('popupPosition'), {
+      position: extend(popupPosition, {
         of: this.$element(),
       }),
-      // @ts-expect-error ts-error
-      showTitle: this.option('dropDownOptions.showTitle'),
-      _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error ts-error
-      width: (): number => getElementWidth(this.$element()),
+      showTitle: dropDownOptions?.showTitle,
+      width: getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
       hideOnParentScroll: true,
@@ -891,25 +916,27 @@ class DropDownEditor<
       toolbarItems: this._getPopupToolbarItems(),
       onPositioned: this._popupPositionedHandler.bind(this),
       fullScreen: false,
-      // @ts-expect-error ts-error
+      // @ts-expect-error should be added on Popup level
       contentTemplate: null,
       _hideOnParentScrollTarget: this.$element(),
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
       _ignorePreventScrollEventsDeprecation: true,
     };
+
+    return config;
   }
 
   // eslint-disable-next-line class-methods-use-this
   _popupInitializedHandler(): void {}
 
-  _getPopupInitializedHandler(): (e) => void {
+  _getPopupInitializedHandler(): (e: PopupInitializedEvent) => void {
     const { onPopupInitialized } = this.option();
 
-    return (e) => {
+    return (e: PopupInitializedEvent) => {
       this._popupInitializedHandler();
       if (onPopupInitialized) {
-        // @ts-expect-error
-        this._popupInitializedAction({ popup: e.component });
+        // @ts-expect-error action wrapper adds component/element at runtime
+        this._popupInitializedAction({ popup: e.component as Popup });
       }
     };
   }
@@ -926,14 +953,16 @@ class DropDownEditor<
   }
 
   _updatePopupWidth(): void {
-    const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+    const { dropDownOptions } = this.option();
+
+    const popupWidth = getSizeValue(dropDownOptions?.width);
 
     if (popupWidth === undefined) {
       this._setPopupOption('width', () => getElementWidth(this.$element()));
     }
   }
 
-  _popupPositionedHandler(e): void {
+  _popupPositionedHandler(e: Partial<PositioningEvent>): void {
     const { labelMode, stylingMode } = this.option();
 
     if (!this._popup) {
@@ -952,9 +981,7 @@ class DropDownEditor<
       const $label = this._label.$element();
 
       move($popupOverlayContent, {
-        // @ts-expect-error ts-error
-        // eslint-disable-next-line radix
-        top: locate($popupOverlayContent).top - parseInt($label.css('fontSize')),
+        top: locate($popupOverlayContent).top - parseInt($label.css('fontSize') ?? '0', 10),
       });
     }
   }
@@ -978,10 +1005,9 @@ class DropDownEditor<
   }
 
   _getValidationMessagePositionSide(): string {
-    // @ts-expect-error ts-error
     const { validationMessagePosition } = this.option();
 
-    if (validationMessagePosition !== 'auto') {
+    if (validationMessagePosition && validationMessagePosition !== 'auto') {
       return validationMessagePosition;
     }
 
@@ -991,8 +1017,9 @@ class DropDownEditor<
       const { top: myTop } = animationPosition.setup(this.$element());
 
       const { top: popupTop } = animationPosition.setup(this._popup.$content());
-      // @ts-expect-error ts-error
-      positionSide = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';
+      const { popupPosition } = this.option();
+      // @ts-expect-error Should be updated on PositionConfig level
+      positionSide = (myTop + popupPosition.offset.v) > popupTop ? 'bottom' : 'top';
     }
 
     return positionSide;
@@ -1003,10 +1030,9 @@ class DropDownEditor<
 
     const $target = $(target);
     const dropDownButton = this.getButton('dropDown');
-    const $dropDownButton = dropDownButton?.$element();
-    const isInputClicked = !!$target.closest(this.$element()).length;
-    // @ts-expect-error ts-error
-    const isDropDownButtonClicked = !!$target.closest($dropDownButton).length;
+    const $dropDownButton = dropDownButton?.$element() as dxElementWrapper;
+    const isInputClicked = Boolean($target.closest(this.$element()).length);
+    const isDropDownButtonClicked = Boolean($target.closest($dropDownButton).length);
     const isOutsideClick = !isInputClicked && !isDropDownButtonClicked;
 
     return isOutsideClick;
@@ -1025,19 +1051,19 @@ class DropDownEditor<
     super._clean();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _setPopupOption(optionName: string, value?): void {
-    // @ts-expect-error ts-error
-    this._setWidgetOption('_popup', arguments);
+  _setPopupOption(...args: [string, unknown?]): void {
+    // @ts-expect-error Should be fixed on Widget level
+    this._setWidgetOption('_popup', args);
   }
 
   _validatedOpening(): void {
-    if (!this.option('readOnly')) {
+    const { readOnly } = this.option();
+    if (!readOnly) {
       this._toggleOpenState(true);
     }
   }
 
-  _getPopupToolbarItems() {
+  _getPopupToolbarItems(): ToolbarItem[] {
     const { applyValueMode } = this.option();
 
     return applyValueMode === 'useButtons'
@@ -1046,29 +1072,28 @@ class DropDownEditor<
   }
 
   _getFirstPopupElement(): dxElementWrapper {
-    // @ts-expect-error ts-error
-    return $(this._popup.getFocusableElements()).first();
+    return $(this._popup?.getFocusableElements()).first();
   }
 
   _getLastPopupElement(): dxElementWrapper {
-    // @ts-expect-error ts-error
-    return $(this._popup.getFocusableElements()).last();
+    return $(this._popup?.getFocusableElements()).last();
   }
 
-  _popupToolbarItemsConfig() {
+  _popupToolbarItemsConfig(): PopupToolbarItemConfig[] {
+    const { applyButtonText, cancelButtonText } = this.option();
     const buttonsConfig = [
       {
         shortcut: 'done',
         options: {
           onClick: this._applyButtonHandler.bind(this),
-          text: this.option('applyButtonText'),
+          text: applyButtonText,
         },
       },
       {
         shortcut: 'cancel',
         options: {
           onClick: this._cancelButtonHandler.bind(this),
-          text: this.option('cancelButtonText'),
+          text: cancelButtonText,
         },
       },
     ];
@@ -1076,14 +1101,14 @@ class DropDownEditor<
     return this._applyButtonsLocation(buttonsConfig);
   }
 
-  _applyButtonsLocation(buttonsConfig) {
+  _applyButtonsLocation(buttonsConfig: PopupToolbarItemConfig[]): PopupToolbarItemConfig[] {
     const { buttonsLocation } = this.option();
     const resultConfig = buttonsConfig;
 
     if (buttonsLocation !== 'default') {
       const position = splitPair(buttonsLocation);
 
-      each(resultConfig, (_, element) => {
+      resultConfig.forEach((element) => {
         extend(element, {
           toolbar: position[0],
           location: position[1],
@@ -1095,23 +1120,25 @@ class DropDownEditor<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _applyButtonHandler(args?): void {
+  _applyButtonHandler(e?: unknown): void {
     this.close();
 
-    if (this.option('focusStateEnabled')) {
+    const { focusStateEnabled } = this.option();
+    if (focusStateEnabled) {
       this.focus();
     }
   }
 
   _cancelButtonHandler(): void {
     this.close();
-    if (this.option('focusStateEnabled')) {
+    const { focusStateEnabled } = this.option();
+    if (focusStateEnabled) {
       this.focus();
     }
   }
 
-  _popupOptionChanged(args): void {
-    // @ts-expect-error ts-error
+  _popupOptionChanged(args: OptionChanged<TProperties>): void {
+    // @ts-expect-error Add getOptionsFromContainer static method to Widget
     const options = Widget.getOptionsFromContainer(args);
 
     this._setPopupOption(options);
@@ -1123,7 +1150,8 @@ class DropDownEditor<
   }
 
   _renderSubmitElement(): void {
-    if (this.option('useHiddenSubmitElement')) {
+    const { useHiddenSubmitElement } = this.option();
+    if (useHiddenSubmitElement) {
       this._$submitElement = $('<input>')
         .attr('type', 'hidden')
         .appendTo(this.$element());
@@ -1137,10 +1165,11 @@ class DropDownEditor<
   }
 
   _getSubmitElement(): dxElementWrapper {
-    if (this.option('useHiddenSubmitElement')) {
-      // @ts-expect-error ts-error
-      return this._$submitElement;
+    const { useHiddenSubmitElement } = this.option();
+    if (useHiddenSubmitElement) {
+      return this._$submitElement as dxElementWrapper;
     }
+
     return super._getSubmitElement();
   }
 
