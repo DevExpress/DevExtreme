@@ -222,7 +222,7 @@ export type PredefinedCommands = {
   };
   selectByIndexes: {
     indexes: number[];
-    deselect?: boolean;
+    mode: 'select' | 'deselect';
   };
   selectAll: {};
   deselectAll: {};

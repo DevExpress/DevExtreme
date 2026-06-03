@@ -6611,7 +6611,7 @@ declare module DevExpress.common.grids {
     };
     selectByIndexes: {
       indexes: number[];
-      deselect?: boolean;
+      mode: 'select' | 'deselect';
     };
     selectAll: {};
     deselectAll: {};

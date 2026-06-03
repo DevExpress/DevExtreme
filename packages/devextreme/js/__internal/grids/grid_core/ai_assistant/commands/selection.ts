@@ -3,8 +3,7 @@ import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
 import {
-  // eslint-disable-next-line spellcheck/spell-checker
-  compositeKeyPairSchema, isKeyShapeValid, normalizeKey, optionalNullish,
+  compositeKeyPairSchema, isKeyShapeValid, normalizeKey,
 } from './utils';
 
 const selectByKeysCommandSchema = z.object({
@@ -48,22 +47,21 @@ export const selectByKeysCommand = defineGridCommand({
 
 const selectByIndexesCommandSchema = z.object({
   indexes: z.array(z.number().int().min(1)).min(1),
-  // eslint-disable-next-line spellcheck/spell-checker
-  deselect: optionalNullish(z.boolean()),
+  mode: z.enum(['select', 'deselect']),
 }).strict();
 
 export const selectByIndexesCommand = defineGridCommand({
   name: 'selectByIndexes',
   description: 'Select or deselect specific rows by their 1-based indexes within the current page. '
     + 'Index 1 is the first row on the visible page; group/header rows are not addressable. '
-    + 'Set deselect to true to remove the listed rows from the current selection (e.g. "unselect row 1"); omit it or set it to false to select them. '
-    + 'When deselect is false or omitted, the listed rows replace the current selection. '
+    + 'Set mode to "deselect" to remove the listed rows from the current selection (e.g. "unselect row 1"); set it to "select" to select them. '
+    + 'When mode is "select", the listed rows replace the current selection. '
     + 'To target rows that are not on the current page, use selectByKeys, or call pageIndex first to switch the page. '
     + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection.',
   schema: selectByIndexesCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const rowIndexes = args.indexes.join(', ');
-    const action = args.deselect ? 'Deselect' : 'Select';
+    const action = args.mode === 'deselect' ? 'Deselect' : 'Select';
     const defaultMessage = `${action} row(s) number ${rowIndexes} on the current page.`;
 
     if (component.option('selection.mode') === 'none') {
@@ -81,11 +79,17 @@ export const selectByIndexesCommand = defineGridCommand({
     }
 
     try {
-      if (args.deselect) {
-        const itemKeys = normalizedRowIndexes.map((index) => items[index].key);
-        await component.deselectRows(itemKeys);
-      } else {
-        await component.selectRowsByIndexes(normalizedRowIndexes);
+      switch (args.mode) {
+        case 'deselect': {
+          const itemKeys = normalizedRowIndexes.map((index) => items[index].key);
+          await component.deselectRows(itemKeys);
+          break;
+        }
+        case 'select':
+          await component.selectRowsByIndexes(normalizedRowIndexes);
+          break;
+        default:
+          return failure(defaultMessage);
       }
 
       return success(defaultMessage);
