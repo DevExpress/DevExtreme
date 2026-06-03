@@ -462,7 +462,7 @@ describe('filterValueCommand', () => {
         expression: singleBasic('name', '=', 'Alpha'),
       });
 
-      expect(callbacks.success).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'");
+      expect(callbacks.success).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'.");
     });
 
     it('uses `Clear filter.` when expression is null', async () => {
@@ -491,7 +491,7 @@ describe('filterValueCommand', () => {
         expression: singleBasic('name', '=', 'Alpha'),
       });
 
-      expect(callbacks.failure).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'");
+      expect(callbacks.failure).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'.");
     });
   });
 });
