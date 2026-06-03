@@ -197,7 +197,7 @@ class SchedulerAgenda extends WorkSpace {
 
   private renderNoData(): void {
     this.$noDataContainer = $('<div>').addClass(NODATA_CONTAINER_CLASS)
-      .html(this.option('noDataText') as string);
+      .html(this.option('noDataText'));
 
     this.$dateTableScrollable.$content().append(this.$noDataContainer);
   }
