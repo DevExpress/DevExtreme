@@ -96,10 +96,14 @@ function openCdp(wsUrl) {
   ws.addEventListener('message', ({ data }) => {
     const msg = JSON.parse(data);
     if (msg.id !== undefined) {
-      const cb = pending.get(msg.id);
-      if (cb) {
+      const entry = pending.get(msg.id);
+      if (entry) {
         pending.delete(msg.id);
-        cb(msg.result);
+        if (msg.error) {
+          entry.reject(new Error(msg.error.message || 'Chrome DevTools Protocol error'));
+        } else {
+          entry.resolve(msg.result);
+        }
       }
     } else if (msg.method) {
       for (const fn of eventListeners) fn(msg.method, msg.params);
@@ -114,10 +118,11 @@ function openCdp(wsUrl) {
     send(method, params) {
       msgId += 1;
       const id = msgId;
-      return new Promise((resolve) => {
-        pending.set(id, resolve);
+      return new Promise((resolve, reject) => {
+        pending.set(id, { resolve, reject });
         ws.send(JSON.stringify({ id, method, params: params ?? {} }));
       });
+    },
     },
     on(fn) { eventListeners.push(fn); },
     onError(fn) { ws.addEventListener('error', fn); },
