@@ -9,7 +9,11 @@ import { promisify } from 'util';
 import _ from 'lodash';
 import os from 'os';
 
-import { Logger, PathResolver, PathResolvers } from './types';
+import {
+  Logger,
+  PathResolver,
+  PathResolvers,
+} from './types';
 
 let platformGlob = glob;
 const makePathArrayPosix = (pathArray) => pathArray.map(
@@ -33,6 +37,20 @@ const bundleAssets = [
 ];
 
 const redundantAssets = ['*tsconfig*', 'types.js'];
+
+const quoteShellArg = (value: string) => `"${value.replace(/(["\\$`])/g, '\\$1')}"`;
+
+const toPosixPath = (value: string) => value.split(path.sep).join(path.posix.sep);
+
+export function splitArrayIntoSubarrays<T>(array: T[], subarrayLength: number): T[][] {
+  const result: T[][] = [];
+
+  for (let i = 0; i < array.length; i += subarrayLength) {
+    result.push(array.slice(i, i + subarrayLength));
+  }
+
+  return result;
+}
 
 const makeConfig = (
   resolve: PathResolvers,
@@ -59,6 +77,7 @@ const makeConfig = (
     skipLibCheck: true,
     allowSyntheticDefaultImports: true,
     resolveJsonModule: true,
+    preserveSymlinks: true,
   },
 });
 
@@ -78,15 +97,29 @@ const pipeSource = async (
   }));
 };
 
-const execTsc = async (directory: string, args: string): Promise<string> => new Promise((resolve, reject) => {
-  cps.exec(`tsc ${args}`, (error, stdout, stderr) => {
-    if (error != null) {
-      // eslint-disable-next-line prefer-promise-reject-errors
-      return reject(`${error}\n${stderr}\n${stdout}`);
+const execTsc = async (directory: string, args: string[]): Promise<string> => {
+  const tscScript = require.resolve('typescript/bin/tsc');
+  try {
+    const { stdout } = await promisify(cps.execFile)(
+      process.execPath,
+      [tscScript, ...args],
+      { cwd: directory },
+    );
+    return stdout;
+  } catch (error) {
+    const { stdout, stderr } = error as { stdout?: string; stderr?: string };
+
+    if (stdout) {
+      console.error(stdout);
     }
-    return resolve(stdout);
-  });
-});
+
+    if (stderr) {
+      console.error(stderr);
+    }
+
+    throw error;
+  }
+};
 
 const compile = async (resolve: PathResolvers, log: Logger) => {
   log.debug('compiling sources and unit tests');
@@ -109,7 +142,7 @@ const compile = async (resolve: PathResolvers, log: Logger) => {
     ),
   );
 
-  await execTsc(resolve.source('./'), `--build ${tsconfigFile}`);
+  await execTsc(resolve.source('./'), ['--build', tsconfigFile]);
 };
 
 const copyAssets = async (resolve: PathResolvers, log: Logger) => {
@@ -140,7 +173,7 @@ const strip = async (resolve: PathResolvers, log: Logger) => {
   });
 };
 
-const replaceInFiles = async (filenamePatterns: string[], replacementCallback: (string) => string, resolvePath: (string) => string, log: Logger) => (
+const replaceInFiles = (filenamePatterns: string[], replacementCallback: (string) => string, resolvePath: (string) => string, log: Logger) => (
   Promise.all(
     filenamePatterns.map(async (pattern) => {
       const files = await platformGlob(resolvePath(pattern));
@@ -181,14 +214,68 @@ const patchImports = async (resolve: PathResolvers, log: Logger) => {
   log.debug('imports patching done');
 };
 
-const prettify = async (resolve: PathResolvers, log: Logger) => {
+const PRETTIFY_CHUNK_SIZE = 50;
+
+const formatOutputs = async (
+  outDirs: string[],
+  demosRootDir: string,
+  prettierCwd: string,
+  prettierConfig: string,
+  eslintConfig: string,
+) => {
+  const prettierPatterns = outDirs
+    .map((outDir) => quoteShellArg(`${path.resolve(outDir)}${path.sep}!(*.{css,json,md,tsbuildinfo})`))
+    .join(' ');
+  const eslintPatterns = outDirs
+    .map((outDir) => quoteShellArg(
+      toPosixPath(path.relative(demosRootDir, outDir)),
+    ))
+    .join(' ');
+
+  const prettierCommand = [
+    'prettier',
+    '--write',
+    prettierPatterns,
+    '--config',
+    prettierConfig,
+    '--single-attribute-per-line',
+    '--print-width 100',
+  ].join(' ');
+  const eslintCommand = [
+    'eslint',
+    '--fix',
+    eslintPatterns,
+    '--config',
+    eslintConfig,
+    '--ignore-pattern "**/config.js"',
+    '--ignore-pattern "*.tsbuildinfo"',
+  ].join(' ');
+
+  await exec(prettierCommand, { cwd: prettierCwd });
+  await exec(eslintCommand, { cwd: demosRootDir });
+};
+
+export const prettifyOutputs = async (
+  outDirs: string[],
+  demosRootDir: string,
+  log: Logger,
+) => {
+  const uniqueOutDirs = [...new Set(outDirs)];
+
+  if (uniqueOutDirs.length === 0) {
+    return;
+  }
+
   log.debug('running Prettier');
-  await exec(`prettier --write "${resolve.out('')}${path.sep}!(*.{css,json,md,tsbuildinfo})" --single-attribute-per-line --print-width 100`, {
-    cwd: resolve.out(''),
-  });
-  await exec(`eslint --fix "${resolve.out('')}" --ignore-pattern "config.js" --ignore-pattern "*.tsbuildinfo"`, {
-    cwd: resolve.out(''),
-  });
+
+  const prettierConfig = quoteShellArg(path.join(demosRootDir, '.prettierrc.json'));
+  const eslintConfig = quoteShellArg(path.join(demosRootDir, 'eslint.config.mjs'));
+
+  const prettierCwd = uniqueOutDirs[0];
+
+  for (const chunk of splitArrayIntoSubarrays(uniqueOutDirs, PRETTIFY_CHUNK_SIZE)) {
+    await formatOutputs(chunk, demosRootDir, prettierCwd, prettierConfig, eslintConfig);
+  }
 };
 
 const hasTypescriptFiles = async (resolve: PathResolver) => {
@@ -202,7 +289,7 @@ export const converter = async (
   sourceDir: string,
   outDir: string,
   log: Logger,
-): Promise<void> => {
+): Promise<boolean> => {
   log.debug('TS to JS example converter starting');
   log.debug(`sourceDir: ${sourceDir}`);
   log.debug(`outDir: ${outDir}`);
@@ -217,7 +304,7 @@ export const converter = async (
 
   if (!await hasTypescriptFiles(sourceDirResolver)) {
     log.info(`No TypeScript files found in ${sourceDir}. Skipping...`);
-    return;
+    return false;
   }
 
   log.debug(`touching ${outDir}`);
@@ -237,11 +324,8 @@ export const converter = async (
     await compile(resolve, log);
     await copyAssets(resolve, log);
     await patchImports(resolve, log);
-    await prettify(resolve, log);
     await strip(resolve, log);
-  } catch (error) {
-    log.error(error);
-    return;
+    return true;
   } finally {
     log.debug(`removing temp directory: ${tempDir}`);
     await remove(tempDir);
