@@ -127,7 +127,7 @@ test('Popup should open on toolbar button click without changing grid state', as
 }).before(async () => createWidget('dxDataGrid', gridWithIdleAssistant));
 
 // 1.1.4
-test('Grid state should be preserved after popup close', async (t) => {
+test('AI Assistant-applied sorting should persist after popup close', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.expect(dataGrid.isReady()).ok();

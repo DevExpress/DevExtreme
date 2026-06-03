@@ -1,8 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { ClientFunction } from 'testcafe';
-import type { WidgetName, WidgetOptions } from 'devextreme-testcafe-models/types';
 import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
 
 export const GRID_SELECTOR = '#container';
 
