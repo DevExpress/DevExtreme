@@ -1,7 +1,5 @@
 import type { SearchOperation } from '@js/common/data.types';
-import { when } from '@js/core/utils/deferred';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
@@ -82,44 +80,26 @@ function convertFilterExprToArray(expr: FilterExprObj): FilterExprArray {
   }
 }
 
-const getFilterValueDefaultMessage = async (
-  component: InternalGrid,
-  filterValue: unknown,
-): Promise<string> => {
-  if (filterValue === undefined) {
-    return 'Clear filter.';
-  }
-
-  try {
-    const filterText: string = await when(
-      // Custom filter operations are omitted as not supported in command
-      component.getView('filterPanelView').getFilterText(filterValue, []),
-    );
-
-    return `Apply a filter: ${filterText}`;
-  } catch {
-    return 'Apply a filter.';
-  }
-};
-
 export const filterValueCommand = defineGridCommand({
   name: 'filterValue',
   description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. Expression forms: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","left":expr,"combiner":"and"|"or","right":expr}, negated {"type":"negated","expression":expr}. The "field" is the column dataField (not the caption). Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". To express "not and" / "not or", wrap the group in negation: {"type":"negated","expression":{"type":"combined",...}}.',
   schema: filterValueCommandSchema,
-  execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
-    const filterValue = args.expression === null
-      ? undefined
-      : convertFilterExprToArray(args.expression);
-
-    const defaultMessage = await getFilterValueDefaultMessage(component, filterValue);
+  execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
+    const defaultMessage = args.expression === null
+      ? 'Clear filter.'
+      : 'Apply a filter.';
 
     try {
+      const filterValue = args.expression === null
+        ? undefined
+        : convertFilterExprToArray(args.expression);
+
       // Handles remote operations via data controller listening for the `filtering` change
       component.option('filterValue', filterValue);
 
-      return success(defaultMessage);
+      return Promise.resolve(success(defaultMessage));
     } catch {
-      return failure(defaultMessage);
+      return Promise.resolve(failure(defaultMessage));
     }
   },
 });
