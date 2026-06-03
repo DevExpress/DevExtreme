@@ -233,7 +233,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
@@ -305,7 +305,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Demos - Check Vue TS
         working-directory: apps/demos
@@ -376,7 +376,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Run lint on all demos
       if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
@@ -503,7 +503,7 @@ jobs:
     - name: Install tgz
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
@@ -579,7 +579,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -855,7 +855,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -992,7 +992,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Prepare JS
         working-directory: apps/demos
@@ -1231,7 +1231,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Start CSP Server
       run: node apps/demos/utils/server/csp-server.js 8080 &

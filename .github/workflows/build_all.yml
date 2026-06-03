@@ -109,7 +109,7 @@ jobs:
         working-directory: ./e2e/devextreme-bundler
         run: |
           pnpm install --filter devextreme-bundler-test --frozen-lockfile
-          pnpm add --ignore-workspace ./devextreme.tgz
+          pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno ./devextreme.tgz
 
       - name: Build bundle
         working-directory: ./e2e/devextreme-bundler
