@@ -1,3 +1,4 @@
+import type { template } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
@@ -347,7 +348,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override updateAllDayVisibility(): void { return noop(); }
 
-  protected override getDateHeaderTemplate(): dxSchedulerOptions['timeCellTemplate'] {
+  protected override getDateHeaderTemplate(): template | undefined | null {
     return this.option('timeCellTemplate');
   }
 

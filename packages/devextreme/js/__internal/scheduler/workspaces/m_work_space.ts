@@ -1,3 +1,4 @@
+import type { template } from '@js/common';
 import { locate, resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
@@ -1358,6 +1359,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // TODO: necessary for old render
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDateGenerationOptions(isOldRender = false): ViewDateGenerationOptions {
+    // @ts-ignore
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
@@ -1366,7 +1368,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       firstDayOfWeek: this.firstDayOfWeek(),
       skippedDays: this.option('skippedDays'),
       viewOffset: 0,
-      viewType: this.type,
+      viewType: this.type as ViewType,
     };
   }
 
@@ -2867,7 +2869,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$element().addClass(className);
   }
 
-  protected getDateHeaderTemplate() {
+  protected getDateHeaderTemplate(): template | undefined | null {
     return this.option('dateCellTemplate');
   }
 
