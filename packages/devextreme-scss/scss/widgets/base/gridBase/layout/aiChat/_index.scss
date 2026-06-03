@@ -59,6 +59,13 @@
   gap: $ai-chat-message-content-gap;
 }
 
+.dx-ai-chat__action-list-item-text {
+  display: -webkit-box;
+  -webkit-line-clamp: $ai-chat-action-list-item-text-max-lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .dx-ai-chat__message-progressbar {
   position: absolute;
   left: 0;
