@@ -7,7 +7,8 @@
     "skipLibCheck": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "ignoreDeprecations": "6.0"
   },
   "include": [
     "utils/**/*.ts",
