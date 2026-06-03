@@ -27,8 +27,7 @@ QUnit.test('hide loadPanel', async function(assert) {
         position: { at: 'center' }
     });
 
-    loading.hide();
-    await Promise.resolve();
+    await loading.hide();
     assert.equal($('.dx-loadpanel').length, 0);
 });
 
