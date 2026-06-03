@@ -2085,9 +2085,18 @@ importers:
       '@types/react-dom':
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.28)
+      '@babel/eslint-parser':
+        specifier: 'catalog:'
+        version: 7.28.6(@babel/core@7.29.0)(eslint@9.39.4(jiti@2.6.1))
+      '@eslint/eslintrc':
+        specifier: 'catalog:'
+        version: 3.3.5
       '@eslint/js':
         specifier: 'catalog:'
         version: 9.39.4
+      '@stylistic/eslint-plugin':
+        specifier: 'catalog:'
+        version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5)
@@ -2112,6 +2121,12 @@ importers:
       eslint-config-devextreme:
         specifier: 'catalog:'
         version: 1.1.10(saoo7lfcycyr6ydu4vcymtvjky)
+      eslint-migration-utils:
+        specifier: workspace:*
+        version: link:../eslint-migration-utils
+      eslint-plugin-i18n:
+        specifier: 'catalog:'
+        version: 2.4.0
       eslint-plugin-import:
         specifier: 'catalog:'
         version: 2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))
@@ -2280,9 +2295,15 @@ importers:
       '@babel/eslint-parser':
         specifier: 'catalog:'
         version: 7.28.6(@babel/core@7.29.0)(eslint@9.39.4(jiti@2.6.1))
+      '@eslint-stylistic/metadata':
+        specifier: 'catalog:'
+        version: 2.13.0
       '@eslint/js':
         specifier: 'catalog:'
         version: 9.39.4
+      '@stylistic/eslint-plugin':
+        specifier: 'catalog:'
+        version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5)
