@@ -16,6 +16,7 @@ export const skippedTests = {
     ],
     TreeView: ['VirtualMode'],
     FilterBuilder: ['WithDataGrid'],
+    PivotGrid: ['WebAPIService'],
   },
   Angular: {
     Autocomplete: ['Overview'],
