@@ -70,7 +70,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this.getRowCount() * totalGroupCount;
   }
 
-  protected override getFormat(): string {
+  protected override getFormat(): string | ((date: Date) => string) {
     const format = getGlobalFormatByDataType('time');
     return typeof format === 'string' ? format : 'shorttime';
   }

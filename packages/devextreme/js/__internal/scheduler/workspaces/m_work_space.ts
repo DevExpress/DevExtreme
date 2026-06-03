@@ -1320,7 +1320,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected getFormat() { return abstract(); }
+  protected getFormat(): string | ((date: Date) => string) { return abstract(); }
 
   getWorkArea() {
     return this.$dateTableContainer;
