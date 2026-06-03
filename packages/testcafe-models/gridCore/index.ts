@@ -167,4 +167,17 @@ export default abstract class GridCore extends Widget {
       },
     )();
   }
+
+  apiState(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).state(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
 }

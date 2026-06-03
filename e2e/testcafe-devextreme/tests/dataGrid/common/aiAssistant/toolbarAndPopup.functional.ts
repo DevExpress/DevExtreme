@@ -1,5 +1,89 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidgetWithAIIntegration, AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
+import {
+  createWidgetWithAIIntegration,
+  AI_INTEGRATION_PAGE,
+  GRID_SELECTOR,
+} from './testHelpers';
+
+// AI Assistant enabled with a request that never resolves — keeps the chat in the
+// idle/empty state (no command runs) for visibility & open/close lifecycle tests.
+const gridWithIdleAssistant = (): any => ({
+  dataSource: [
+    { id: 1, name: 'Alice', value: 30 },
+    { id: 2, name: 'Bob', value: 20 },
+    { id: 3, name: 'Charlie', value: 10 },
+  ],
+  keyExpr: 'id',
+  columns: ['id', 'name', 'value'],
+  showBorders: true,
+  aiAssistant: {
+    enabled: true,
+    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+      sendRequest() {
+        return { promise: new Promise(() => {}), abort: (): void => {} };
+      },
+    }),
+  },
+});
+
+// Grid without the `aiAssistant` option — toolbar button must not be rendered.
+const gridWithoutAssistant = (): any => ({
+  dataSource: [
+    { id: 1, name: 'Alice', value: 30 },
+    { id: 2, name: 'Bob', value: 20 },
+    { id: 3, name: 'Charlie', value: 10 },
+  ],
+  keyExpr: 'id',
+  columns: ['id', 'name', 'value'],
+  showBorders: true,
+});
+
+// AI Assistant whose mocked request resolves to a single `sorting` command, so a
+// prompt actually mutates grid state (used to assert the command is applied).
+const gridWithSortingAssistant = (): any => ({
+  dataSource: [
+    { id: 1, name: 'Alice', value: 30 },
+    { id: 2, name: 'Bob', value: 20 },
+    { id: 3, name: 'Charlie', value: 10 },
+  ],
+  keyExpr: 'id',
+  columns: ['id', 'name', 'value'],
+  showBorders: true,
+  aiAssistant: {
+    enabled: true,
+    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+      sendRequest() {
+        return {
+          promise: Promise.resolve({
+            actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
+          }),
+          abort: (): void => {},
+        };
+      },
+    }),
+  },
+});
+
+// AI Assistant with a custom popup title (request stays pending — title only).
+const gridWithTitledAssistant = (): any => ({
+  dataSource: [
+    { id: 1, name: 'Alice', value: 30 },
+    { id: 2, name: 'Bob', value: 20 },
+    { id: 3, name: 'Charlie', value: 10 },
+  ],
+  keyExpr: 'id',
+  columns: ['id', 'name', 'value'],
+  showBorders: true,
+  aiAssistant: {
+    enabled: true,
+    title: 'My Custom Assistant',
+    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+      sendRequest() {
+        return { promise: new Promise(() => {}), abort: (): void => {} };
+      },
+    }),
+  },
+});
 
 // === §1.1 Toolbar entry point & popup lifecycle ===
 fixture.disablePageReloads`AI Assistant - Toolbar`
@@ -13,24 +97,7 @@ test('Toolbar button should be visible when aiAssistant.enabled is true', async 
 
   await t.expect(dataGrid.getAIAssistantButton().exists).ok();
 }).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        },
-      }),
-    },
-  }));
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
 });
 
 // 1.1.2
@@ -41,50 +108,28 @@ test('Toolbar button should be hidden when aiAssistant is not configured', async
 
   await t.expect(dataGrid.getAIAssistantButton().exists).notOk();
 }).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-  }));
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithoutAssistant);
 });
 
 // 1.1.3
-test('Popup should open on toolbar button click', async (t) => {
+test('Popup should open on toolbar button click without changing grid state', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.expect(dataGrid.isReady()).ok();
 
+  const initialState = await dataGrid.apiState();
+
   await t.click(dataGrid.getAIAssistantButton());
 
   const aiChat = dataGrid.getAIAssistantChat();
+  const finalState = await dataGrid.apiState();
 
-  await t
-    .expect(aiChat.element.visible).ok()
-    .expect(aiChat.getChat().element.exists).ok();
+  await t.expect(finalState).eql(initialState);
+  await t.expect(aiChat.element.visible).ok();
+  await t.expect(aiChat.getChat().element.exists).ok();
+  await t.expect(aiChat.getInput().visible).ok();
 }).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        },
-      }),
-    },
-  }));
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
 });
 
 // 1.1.4
@@ -110,29 +155,7 @@ test('Grid state should be preserved after popup close', async (t) => {
 
   await t.expect(sortOrder).eql('asc');
 }).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return {
-            promise: Promise.resolve({
-              actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
-            }),
-            abort: (): void => {},
-          };
-        },
-      }),
-    },
-  }));
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithSortingAssistant);
 });
 
 // 1.1.6
@@ -147,97 +170,43 @@ test('Custom title should be rendered in popup header', async (t) => {
 
   await t.expect(aiChat.getTitle().textContent).contains('My Custom Assistant');
 }).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    aiAssistant: {
-      enabled: true,
-      title: 'My Custom Assistant',
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        },
-      }),
-    },
-  }));
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithTitledAssistant);
 });
 
 // === §1.10 A11y / KBN ===
-
 fixture.disablePageReloads`AI Assistant - A11y`
   .page(AI_INTEGRATION_PAGE);
 
-// 1.10.1
-test('Toolbar button should be accessible and clickable', async (t) => {
-  const dataGrid = new DataGrid(GRID_SELECTOR);
-
-  await t.expect(dataGrid.isReady()).ok();
-
-  const button = dataGrid.getAIAssistantButton();
-
-  await t.expect(button.exists).ok();
-
-  await t.click(button);
-
-  await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        },
-      }),
-    },
-  }));
-});
-
-// 1.10.2
+// 1.10.2 (Enter) — focus the toolbar button and activate it with Enter.
 test('Toolbar button should activate via Enter key', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.expect(dataGrid.isReady()).ok();
 
-  const button = dataGrid.getAIAssistantButton();
-
-  await t.expect(button.exists).ok();
-
   await dataGrid.focusAIAssistantButton();
+
+  await t.expect(dataGrid.getAIAssistantButton().focused).ok();
+
   await t.pressKey('enter');
 
   await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
 }).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        },
-      }),
-    },
-  }));
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
+});
+
+// 1.10.2 (Space) — same scenario, activated with Space.
+test('Toolbar button should activate via Space key', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.focusAIAssistantButton();
+
+  await t.expect(dataGrid.getAIAssistantButton().focused).ok();
+
+  await t.pressKey('space');
+
+  await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
+}).before(async (t) => {
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
 });

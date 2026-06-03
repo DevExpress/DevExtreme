@@ -6,7 +6,6 @@ import Chat from '../chat';
 const CLASS = {
   aiChat: 'dx-ai-chat',
   aiChatContent: 'dx-ai-chat__content',
-  abortConfirmDialog: 'dx-datagrid-ai-assistant-confirm-dialog',
   message: 'dx-ai-chat__message',
   messagePending: 'dx-ai-chat__message--pending',
   messageSuccess: 'dx-ai-chat__message--success',
@@ -26,9 +25,7 @@ const CLASS = {
   actionListItemIcon: 'dx-ai-chat__action-list-item-icon',
   actionListItemText: 'dx-ai-chat__action-list-item-text',
   closeButton: 'dx-closebutton',
-  clearChatButton: 'dx-ai-chat__clear-button',
-  suggestion: 'dx-chat-suggestions',
-  suggestionButton: 'dx-button',
+  clearChatButton: 'dx-icon-clearhistory',
 };
 
 export class AIAssistantChat extends Popup {
@@ -48,30 +45,12 @@ export class AIAssistantChat extends Popup {
     return new Button(this.element.find(`.${CLASS.closeButton}`));
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getAbortConfirmDialog(): Selector {
-    return Selector(`.${CLASS.abortConfirmDialog}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getAbortConfirmYesButton(): Selector {
-    // The confirm dialog renders its buttons in [No, Yes] order with localized
-    // captions, so select the second button by position instead of by text.
-    return Selector(`.${CLASS.abortConfirmDialog} .dx-button`).nth(1);
-  }
-
   getClearChatButton(): Selector {
-    // `clearChatButton` is the toolbar item's cssClass; the actual dxButton (which
-    // carries the `dx-state-disabled` class) is nested inside it.
-    return this.element.find(`.${CLASS.clearChatButton} .dx-button`);
+    return this.element.find(`.${CLASS.clearChatButton}`);
   }
 
   getMessages(): Selector {
     return this.getChat().getMessageBubbles();
-  }
-
-  getUserMessages(): Selector {
-    return this.getMessages().filter((node) => !node.querySelector('.dx-ai-chat__message'));
   }
 
   getAIMessages(): Selector {
@@ -132,22 +111,6 @@ export class AIAssistantChat extends Popup {
 
   getActionItemIcon(messageIndex: number, actionIndex: number): Selector {
     return this.getActionItems(messageIndex).nth(actionIndex).find(`.${CLASS.actionListItemIcon}`);
-  }
-
-  getSuggestions(): Selector {
-    return this.element.find(`.${CLASS.suggestion} .${CLASS.suggestionButton}`);
-  }
-
-  isInputDisabled(): Promise<boolean> {
-    return this.getChat().getTextArea().isDisabled;
-  }
-
-  isClearChatDisabled(): Promise<boolean> {
-    return this.getClearChatButton().hasClass('dx-state-disabled');
-  }
-
-  isSuggestionDisabled(index: number): Promise<boolean> {
-    return this.getSuggestions().nth(index).hasClass('dx-state-disabled');
   }
 
   getTitle(): Selector {
