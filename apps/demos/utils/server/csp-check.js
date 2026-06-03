@@ -123,7 +123,6 @@ function openCdp(wsUrl) {
         ws.send(JSON.stringify({ id, method, params: params ?? {} }));
       });
     },
-    },
     on(fn) { eventListeners.push(fn); },
     onError(fn) { ws.addEventListener('error', fn); },
     close() { try { ws.close(); } catch { /* already closed */ } },
