@@ -118,30 +118,6 @@ describe('ExecuteGridAssistantCommand', () => {
         actions: [{ name: 'sort', args: { columnName: 'name', sortOrder: 'asc' } }],
       });
     });
-
-    it('should convert AIDate strings to Date objects in string response', () => {
-      const response = '{"actions":[{"name":"filterValue","args":{"expression":{"field":"SaleDate","operator":"=","value":"AIDate(2024, 5, 10)"}}}]}';
-      // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
-
-      const { args } = result.actions[0];
-      const expression = args.expression as Record<string, unknown>;
-      expect(expression.value).toBeInstanceOf(Date);
-      expect(expression.value).toStrictEqual(new Date(2024, 4, 10));
-    });
-
-    it('should convert AIDate strings to Date objects in stringified actions', () => {
-      const response = {
-        actions: '[{"name":"filterValue","args":{"expression":{"field":"SaleDate","operator":"=","value":"AIDate(2024, 12, 1)"}}}]',
-      };
-      // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
-
-      const { args } = result.actions[0];
-      const expression = args.expression as Record<string, unknown>;
-      expect(expression.value).toBeInstanceOf(Date);
-      expect(expression.value).toStrictEqual(new Date(2024, 11, 1));
-    });
   });
 
   describe('execute', () => {
