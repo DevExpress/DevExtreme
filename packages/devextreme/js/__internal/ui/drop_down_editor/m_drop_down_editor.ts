@@ -681,7 +681,7 @@ class DropDownEditor<
     if (isIOs) {
       this._detachFocusOutEvents();
       // @ts-expect-error NAME property is missing
-      eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event: FocusEvent) => {
+      eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event: DxEvent<FocusEvent>) => {
         const newTarget = event.relatedTarget;
         const { opened } = this.option();
         if (newTarget && opened) {
