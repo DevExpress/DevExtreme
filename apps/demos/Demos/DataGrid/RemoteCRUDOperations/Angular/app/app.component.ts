@@ -20,7 +20,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
