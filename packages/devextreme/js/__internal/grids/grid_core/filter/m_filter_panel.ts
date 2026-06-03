@@ -3,6 +3,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import CheckBox from '@js/ui/check_box';
@@ -311,7 +312,7 @@ export class FilterPanelView extends modules.View {
     return result;
   }
 
-  private getFilterText(filterValue, customOperations) {
+  public getFilterText(filterValue, customOperations): DeferredObj<string> {
     const options = {
       customOperations,
       columns: this._columnsController.getFilteringColumns(),

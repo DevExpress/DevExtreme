@@ -96,6 +96,21 @@
                 "DemoType": "Web"
               }
             ]
+          },
+          {
+            "Name": "Prompt Suggestions",
+            "Equivalents": "Prompt Suggestions, Question Suggestions, Suggested Prompts, Message Suggestions, Quick Prompts",
+            "Demos": [
+              {
+                "Title": "Prompt Suggestions",
+                "Name": "PromptSuggestions",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "html-react-parser,openai,unified",
+                "DemoType": "Web"
+              }
+            ]
           }
         ]
       },
@@ -4419,7 +4434,7 @@
                 "Title": "Prompt Suggestions",
                 "Name": "PromptSuggestions",
                 "Widget": "Chat",
-                "Badge": "New",
+                "Badge": "AI",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }

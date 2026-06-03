@@ -1,5 +1,7 @@
 import type { SearchOperation } from '@js/common/data.types';
 import type { BasicFilterExpr, FilterExprNode, FilterExprTree } from '@js/common/grids';
+import { when } from '@js/core/utils/deferred';
+import { isDefined } from '@js/core/utils/type';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
@@ -111,12 +113,28 @@ function convertFilterExprToArray(
   return walk(tree.rootId);
 }
 
+const getFilterSuccessMessage = async (
+  component: InternalGrid,
+  filterValue: FilterExprArray,
+): Promise<string> => {
+  try {
+    const filterText: string = await when(
+      // Custom filter operations are omitted as not supported in command
+      component.getView('filterPanelView').getFilterText(filterValue, []),
+    );
+
+    return `Apply a filter: ${filterText}.`;
+  } catch {
+    return 'Apply a filter.';
+  }
+};
+
 export const filterValueCommand = defineGridCommand({
   name: 'filterValue',
   description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. The expression is a flat node list: {"rootId":id,"nodes":[...]}. Each node is {"id":<unique string like "n1">,"expr":<expression>}, where "expr" is one of: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","combiner":"and"|"or","leftId":nodeId,"rightId":nodeId}, negated {"type":"negated","expressionId":nodeId}. "rootId" MUST be the "id" of the outermost node (the top of the expression tree) and must match one of the node ids exactly — never invent a value like "root". Every "leftId"/"rightId"/"expressionId" must also match a node "id". Ids must be unique and must not form cycles. The "field" is the column dataField (not the caption). Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". DATE VALUES: When a value is a date or datetime, always use "YYYY-MM-DDTHH:mm:ss" format without timezone suffix, e.g. "2024-05-10T00:00:00" for midnight or "2024-05-10T14:30:00" for a specific time. Always include the "T" and time part. Do NOT use date-only format like "2024-05-10" without time. Do NOT append "Z" or any timezone offset unless the user explicitly requests it. Do NOT use natural language for dates. To express "not and" / "not or", add a negated node whose expressionId points at a combined node. Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node): {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.',
   schema: filterValueCommandSchema,
-  execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
-    const defaultMessage = args.expression === null
+  execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
+    let defaultMessage = args.expression === null
       ? 'Clear filter.'
       : 'Apply a filter.';
 
@@ -125,12 +143,16 @@ export const filterValueCommand = defineGridCommand({
         ? undefined
         : convertFilterExprToArray(component, args.expression);
 
+      if (isDefined(filterValue)) {
+        defaultMessage = await getFilterSuccessMessage(component, filterValue);
+      }
+
       // Handles remote operations via data controller listening for the `filtering` change
       component.option('filterValue', filterValue);
 
-      return Promise.resolve(success(defaultMessage));
+      return success(defaultMessage);
     } catch {
-      return Promise.resolve(failure(defaultMessage));
+      return failure(defaultMessage);
     }
   },
 });

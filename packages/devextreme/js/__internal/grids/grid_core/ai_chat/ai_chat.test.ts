@@ -394,6 +394,27 @@ describe('AIChat', () => {
         expect(icons[2].textContent).toBe(ABORTED_ITEM_EMOJI);
       });
 
+      it('should expose the full command message via the title attribute (shown on hover)', () => {
+        createAIChat();
+        triggerContentTemplate();
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+        const message = "Apply a filter: [Name] Contains 'Health'";
+
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Filter',
+          status: 'success',
+          commands: [{ status: 'success', message }],
+        }, container);
+
+        const $text = container.querySelector(`.${CLASSES.actionListItemText}`);
+
+        expect($text?.textContent).toBe(message);
+        expect($text?.getAttribute('title')).toBe(message);
+      });
+
       it('should not render regenerate button when all commands succeed', () => {
         const onRegenerate = jest.fn();
         createAIChat({ onRegenerate });
