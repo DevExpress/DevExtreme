@@ -206,11 +206,8 @@ class SchedulerAgenda extends WorkSpace {
 
   protected override toggleHorizontalScrollClass(): void { return noop(); }
 
-  protected override createCrossScrollingConfig(): Pick<WorkspaceDateTableScrollableConfig, 'direction' | 'onScroll' | 'onEnd'> {
-    return {
-      onScroll: noop,
-      onEnd: noop,
-    };
+  protected override needCreateCrossScrolling(): boolean {
+    return false;
   }
 
   private setGroupHeaderCellsHeight(): void {
