@@ -27,7 +27,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return TIMELINE_CLASS;
   }
 
-  protected override getDateHeaderTemplate(): template | undefined {
+  protected override getDateHeaderTemplate(): template | undefined | null {
     return this.option('dateCellTemplate');
   }
 
