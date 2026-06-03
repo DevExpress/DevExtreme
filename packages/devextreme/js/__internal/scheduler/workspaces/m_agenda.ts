@@ -24,7 +24,7 @@ import { VIEWS } from '../utils/options/constants_view';
 import { reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
 import type { GroupNode } from '../utils/resource_manager/types';
 import type { ListEntity } from '../view_model/types';
-import WorkSpace, { type WorkspaceDateTableScrollableConfig, type WorkspaceOptionChangedOptions, type WorkspaceOptionsInternal } from './m_work_space';
+import WorkSpace, { type WorkspaceOptionChangedOptions, type WorkspaceOptionsInternal } from './m_work_space';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -394,11 +394,9 @@ class SchedulerAgenda extends WorkSpace {
 
   protected renderTableBody(
     options: AgendaRenderOptions,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     delayCellTemplateRendering?: unknown,
   ): void {
-    if (delayCellTemplateRendering) {
-      noop();
-    }
     const cellTemplates: unknown[] = [];
     const cellTemplateOpt = options.cellTemplate as {
       render?: (templateOptions: unknown) => unknown;
@@ -448,7 +446,7 @@ class SchedulerAgenda extends WorkSpace {
     };
 
     for (i = 0; i < this.rows.length; i += 1) {
-      each(this.rows[i], fillTableBody.bind(this));
+      each(this.rows[i], fillTableBody);
       this.setLastRowClass();
     }
 
@@ -529,22 +527,12 @@ class SchedulerAgenda extends WorkSpace {
   updateScrollPosition(date: Date): void {
     const newDate = this.timeZoneCalculator.createDate(date, 'toGrid');
 
-    const bounds = this.getVisibleBounds();
-
-    if (this.needUpdateScrollPosition(newDate, bounds)) {
+    if (this.needUpdateScrollPosition(newDate)) {
       this.scrollTo(newDate);
     }
   }
 
-  needUpdateScrollPosition(
-    date: Date,
-    appointmentGroupValues?: unknown,
-    inAllDayRow?: boolean,
-  ): boolean {
-    if (appointmentGroupValues || inAllDayRow) {
-      noop();
-    }
-
+  override needUpdateScrollPosition(date: Date): boolean {
     const bounds = this.getVisibleBounds();
     const hours = date.getHours();
     const minutes = date.getMinutes();
@@ -558,7 +546,7 @@ class SchedulerAgenda extends WorkSpace {
       isUpdateNeeded = true;
     }
 
-    if (hours === bounds.bottom.hours && minutes > bounds.top.minutes) {
+    if (hours === bounds.bottom.hours && minutes > bounds.bottom.minutes) {
       isUpdateNeeded = true;
     }
 

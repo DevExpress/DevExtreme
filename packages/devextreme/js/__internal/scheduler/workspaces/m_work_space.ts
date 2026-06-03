@@ -10,6 +10,7 @@ import {
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
+import type { OptionChangedEventInfo } from '@js/core/dom_component';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -28,6 +29,7 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { InitializedEventInfo } from '@js/events';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -127,9 +129,9 @@ export interface WorkspaceDateTableScrollableConfig {
   bounceEnabled: boolean;
   updateManually: boolean;
   onScroll: (event: ScrollEvent) => void;
-  onInitialized: (args: { component: Scrollable }) => void;
-  onOptionChanged: (args: { fullName: string; value: unknown; component: Scrollable }) => void;
-  direction?: 'both';
+  onInitialized: (args: InitializedEventInfo<Scrollable>) => void;
+  onOptionChanged: (args: OptionChangedEventInfo<Scrollable>) => void;
+  direction?: 'horizontal' | 'vertical' | 'both';
   onEnd?: () => void;
 }
 
@@ -140,6 +142,7 @@ export interface WorkspaceHeaderScrollableConfig {
   useNative: false;
   updateManually: true;
   bounceEnabled: false;
+  scrollByContent?: boolean;
   onScroll: (event: ScrollEvent) => void;
 }
 
@@ -254,7 +257,7 @@ export type WorkspaceOptionChangedOptions = WorkspaceOptionsInternal & {
   scrolling?: unknown;
   schedulerHeight?: number;
   schedulerWidth?: number;
-  agendaDuration?: number | 'month';
+  agendaDuration?: number;
   rowHeight?: number;
   noDataText?: string;
   showCurrentTimeIndicator?: boolean;
@@ -736,14 +739,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       // To prevent scroll container focus in native mode we set tabindex -1 to container
       // In simulated mode focusable behavior prevented by useKeyboard: false private option
       onInitialized: ({ component }) => {
-        const useKeyboardDisabled = !(component.option('useKeyboard') as unknown as boolean);
-        const useNativeEnabled = component.option('useNative') as unknown as boolean;
+        const useKeyboardDisabled = (component?.option('useKeyboard') as unknown as boolean | undefined) === false;
+        const useNativeEnabled = (component?.option('useNative') as unknown as boolean | undefined) === true;
         if (useKeyboardDisabled && useNativeEnabled) {
-          $(component.container()).attr('tabindex', -1);
+          $(component?.container()).attr('tabindex', -1);
         }
       },
       onOptionChanged: ({ fullName, value, component }) => {
-        const useKeyboardDisabled = !(component.option('useKeyboard') as unknown as boolean);
+        const useKeyboardDisabled = (component.option('useKeyboard') as unknown as boolean | undefined) === false;
         if (useKeyboardDisabled && fullName === 'useNative' && value === true) {
           $(component.container()).attr('tabindex', -1);
         }
@@ -1320,7 +1323,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected getFormat() { return abstract(); }
+  protected getFormat(): string | ((date: Date) => string) { return abstract(); }
 
   getWorkArea() {
     return this.$dateTableContainer;

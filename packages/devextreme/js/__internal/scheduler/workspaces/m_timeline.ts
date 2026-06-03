@@ -57,12 +57,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override getTotalRowCount(
     groupCount: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     includeAllDayPanelRows?: unknown,
   ): number {
-    if (includeAllDayPanelRows !== undefined) {
-      noop();
-    }
-
     if (this.isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
     }
@@ -70,9 +67,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this.getRowCount() * totalGroupCount;
   }
 
-  protected override getFormat(): string {
-    const format = getGlobalFormatByDataType('time');
-    return typeof format === 'string' ? format : 'shorttime';
+  protected override getFormat(): string | ((date: Date) => string) {
+    return getGlobalFormatByDataType('time') as string | ((date: Date) => string) || 'shorttime';
   }
 
   private getWorkSpaceHeight(): number {
@@ -413,9 +409,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     $container: dxElementWrapper,
     groupCount: number,
   ): void {
-    if (height !== undefined) {
-      noop();
-    }
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let $indicator: dxElementWrapper | undefined;
     const width = this.getIndicationWidth();

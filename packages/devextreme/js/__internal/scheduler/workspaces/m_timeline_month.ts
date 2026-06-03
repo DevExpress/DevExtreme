@@ -39,7 +39,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return true;
   }
 
-  // @ts-expect-error
   protected override getFormat(): (date: Date) => string {
     return formatWeekdayAndDay;
   }

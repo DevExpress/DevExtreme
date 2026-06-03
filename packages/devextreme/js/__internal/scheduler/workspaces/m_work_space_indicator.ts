@@ -76,7 +76,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   ): void {
     const groupedByDate = this.isGroupedByDate();
     const repeatCount = groupedByDate ? 1 : groupCount;
-    Array.from({ length: repeatCount }).forEach((_, i) => {
+    for (let i = 0; i < repeatCount; i += 1) {
       const $indicator = this.createIndicator($container);
 
       setWidth(
@@ -84,7 +84,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth(),
       );
       this.groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
-    });
+    }
   }
 
   protected createIndicator($container: dxElementWrapper): dxElementWrapper {

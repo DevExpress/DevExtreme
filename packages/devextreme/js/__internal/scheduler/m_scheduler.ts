@@ -540,7 +540,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateOption('workSpace', name, value);
         this.repaint();
         break;
-      // @ts-expect-error
       case 'skippedDays':
         break;
       case 'indicatorTime':
