@@ -204,11 +204,15 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('success');
     });
 
-    it('returns failure when option throws', async () => {
+    it('returns failure when applying the filter throws', async () => {
       const instance = await createGrid();
-      jest.spyOn(instance, 'option').mockImplementationOnce(() => {
-        throw new Error('Error');
-      });
+      const original = instance.option.bind(instance) as (...a: unknown[]) => unknown;
+      jest.spyOn(instance, 'option').mockImplementation(((...args: unknown[]) => {
+        if (args[0] === 'filterValue' && args.length > 1) {
+          throw new Error('Error');
+        }
+        return original(...args);
+      }) as never);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -220,7 +224,7 @@ describe('filterValueCommand', () => {
   });
 
   describe('default message', () => {
-    it('uses `Apply a filter.` when expression is set', async () => {
+    it('appends the human-readable filter text when expression is set', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
 
@@ -228,7 +232,7 @@ describe('filterValueCommand', () => {
         expression: basicExpr('name', '=', 'Alpha'),
       });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Apply a filter.');
+      expect(callbacks.success).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'");
     });
 
     it('uses `Clear filter.` when expression is null', async () => {
@@ -242,18 +246,22 @@ describe('filterValueCommand', () => {
       expect(callbacks.success).toHaveBeenCalledWith('Clear filter.');
     });
 
-    it('passes the same default message to failure when executability fails', async () => {
+    it('passes the same readable default message to failure when applying the filter fails', async () => {
       const instance = await createGrid();
-      jest.spyOn(instance, 'option').mockImplementationOnce(() => {
-        throw new Error('Error');
-      });
+      const original = instance.option.bind(instance) as (...a: unknown[]) => unknown;
+      jest.spyOn(instance, 'option').mockImplementation(((...args: unknown[]) => {
+        if (args[0] === 'filterValue' && args.length > 1) {
+          throw new Error('Error');
+        }
+        return original(...args);
+      }) as never);
       const callbacks = createCallbacks();
 
       await filterValueCommand.execute(instance, callbacks)({
         expression: basicExpr('name', '=', 'Alpha'),
       });
 
-      expect(callbacks.failure).toHaveBeenCalledWith('Apply a filter.');
+      expect(callbacks.failure).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'");
     });
   });
 });
