@@ -8,7 +8,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'confirmation',
   templateUrl: `.${modulePrefix}/confirmation/confirmation.component.html`,
   styleUrls: [`.${modulePrefix}/confirmation/confirmation.component.css`],
