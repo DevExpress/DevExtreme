@@ -57,12 +57,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override getTotalRowCount(
     groupCount: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     includeAllDayPanelRows?: unknown,
   ): number {
-    if (includeAllDayPanelRows !== undefined) {
-      noop();
-    }
-
     if (this.isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
     }
