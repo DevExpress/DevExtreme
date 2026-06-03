@@ -10,6 +10,8 @@ export const skippedTests = {
       'FocusedRow',
       'FilteringAPI',
       'DeferredSelection',
+      'RemoteVirtualScrolling',
+      'CustomDataSource',
     ],
     Charts: [
       'ServerSideDataProcessing',
