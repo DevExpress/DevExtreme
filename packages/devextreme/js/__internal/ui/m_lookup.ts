@@ -1161,13 +1161,12 @@ class Lookup extends DropDownList<LookupProperties> {
         switch (fullName) {
           case 'dropDownOptions.width':
           case 'dropDownOptions.height': {
-            const args = {
-              name,
-              fullName,
+            const optionArgs = {
+              ...args,
               value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value,
             };
-            this._popupOptionChanged(args);
-            this._innerWidgetOptionChanged(this._popup, args);
+            this._popupOptionChanged(optionArgs);
+            this._innerWidgetOptionChanged(this._popup, optionArgs);
             break;
           }
           default:
