@@ -14,7 +14,6 @@ import jest from 'eslint-plugin-jest';
 import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
 import js from '@eslint/js';
 import { fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -60,7 +59,6 @@ export default [
       'no-only-tests': noOnlyTests,
       '@stylistic': stylistic,
       jest,
-      '@typescript-eslint': tsPlugin,
       'deprecation': fixupPluginRules(deprecation),
     },
     languageOptions: {
