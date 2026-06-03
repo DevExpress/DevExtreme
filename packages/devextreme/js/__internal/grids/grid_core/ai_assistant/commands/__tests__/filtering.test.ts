@@ -264,6 +264,30 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('success');
     });
 
+    it('does not convert invalid date string for date columns', async () => {
+      const instance = await createGrid({
+        dataSource: [
+          { id: 1, SaleDate: new Date(2024, 4, 10) },
+        ],
+        columns: [
+          { dataField: 'id', dataType: 'number' },
+          { dataField: 'SaleDate', dataType: 'date' },
+        ],
+      });
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('SaleDate', '=', 'not-a-date'),
+      });
+
+      expect(spy).toHaveBeenCalledWith(
+        'filterValue',
+        ['SaleDate', '=', 'not-a-date'],
+      );
+      expect(result.status).toBe('success');
+    });
+
     it('converts a combined node into the legacy array form', async () => {
       const instance = await createGrid();
       const spy = jest.spyOn(instance, 'option');

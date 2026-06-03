@@ -1,21 +1,18 @@
 import type { SearchOperation } from '@js/common/data.types';
 import type { BasicFilterExpr, FilterExprNode, FilterExprTree } from '@js/common/grids';
-import { dateUtilsTs } from '@ts/core/utils/date';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
-import { isDateType } from '@ts/grids/grid_core/m_utils';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
+import { resolveFilterValue } from './utils';
 
 const FILTER_OPS = [
   '=', '<>', '<', '<=', '>', '>=',
   'contains', 'notcontains', 'startswith', 'endswith',
 ] as const satisfies readonly SearchOperation[];
 
-type FilterExprValue = BasicFilterExpr['value'];
-
-type FilterExprArray = | [string, SearchOperation, FilterExprValue]
+type FilterExprArray = | [string, SearchOperation, BasicFilterExpr['value']]
   | [FilterExprArray, 'and' | 'or', FilterExprArray]
   | ['!', FilterExprArray];
 
@@ -69,23 +66,6 @@ const filterValueCommandSchema = z.object({
   expression: filterExprTreeSchema.nullable(),
 }).strict();
 
-function resolveFilterValue(
-  component: InternalGrid,
-  field: string,
-  value: FilterExprValue,
-): FilterExprValue {
-  if (typeof value === 'string') {
-    const dataType = component.columnOption(field, 'dataType');
-    if (isDateType(dataType)) {
-      if (!dateUtilsTs.isValidDate(value)) {
-        return value;
-      }
-      return new Date(value);
-    }
-  }
-  return value;
-}
-
 function convertFilterExprToArray(
   component: InternalGrid,
   tree: FilterExprTree,
@@ -112,7 +92,8 @@ function convertFilterExprToArray(
       const { expr } = node;
       switch (expr.type) {
         case 'basic': {
-          const resolved = resolveFilterValue(component, expr.field, expr.value);
+          const dataType = component.columnOption(expr.field, 'dataType');
+          const resolved = resolveFilterValue(dataType, expr.value);
           return [expr.field, expr.operator, resolved];
         }
         case 'combined':
