@@ -1,6 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../../helpers/createWidget';
-import { aiIntegrationReady, AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
+import { createWidgetWithAIIntegration, AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
 
 // === §1.1 Toolbar entry point & popup lifecycle ===
 fixture.disablePageReloads`AI Assistant - Toolbar`
@@ -14,9 +13,7 @@ test('Toolbar button should be visible when aiAssistant.enabled is true', async 
 
   await t.expect(dataGrid.getAIAssistantButton().exists).ok();
 }).before(async (t) => {
-  await t.expect(aiIntegrationReady()).ok();
-
-  await createWidget('dxDataGrid', () => ({
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
     dataSource: [
       { id: 1, name: 'Alice', value: 30 },
       { id: 2, name: 'Bob', value: 20 },
@@ -44,9 +41,7 @@ test('Toolbar button should be hidden when aiAssistant is not configured', async
 
   await t.expect(dataGrid.getAIAssistantButton().exists).notOk();
 }).before(async (t) => {
-  await t.expect(aiIntegrationReady()).ok();
-
-  await createWidget('dxDataGrid', () => ({
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
     dataSource: [
       { id: 1, name: 'Alice', value: 30 },
       { id: 2, name: 'Bob', value: 20 },
@@ -72,9 +67,7 @@ test('Popup should open on toolbar button click', async (t) => {
     .expect(aiChat.element.visible).ok()
     .expect(aiChat.getChat().element.exists).ok();
 }).before(async (t) => {
-  await t.expect(aiIntegrationReady()).ok();
-
-  await createWidget('dxDataGrid', () => ({
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
     dataSource: [
       { id: 1, name: 'Alice', value: 30 },
       { id: 2, name: 'Bob', value: 20 },
@@ -117,9 +110,7 @@ test('Grid state should be preserved after popup close', async (t) => {
 
   await t.expect(sortOrder).eql('asc');
 }).before(async (t) => {
-  await t.expect(aiIntegrationReady()).ok();
-
-  await createWidget('dxDataGrid', () => ({
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
     dataSource: [
       { id: 1, name: 'Alice', value: 30 },
       { id: 2, name: 'Bob', value: 20 },
@@ -156,9 +147,7 @@ test('Custom title should be rendered in popup header', async (t) => {
 
   await t.expect(aiChat.getTitle().textContent).contains('My Custom Assistant');
 }).before(async (t) => {
-  await t.expect(aiIntegrationReady()).ok();
-
-  await createWidget('dxDataGrid', () => ({
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
     dataSource: [
       { id: 1, name: 'Alice', value: 30 },
       { id: 2, name: 'Bob', value: 20 },
@@ -198,9 +187,7 @@ test('Toolbar button should be accessible and clickable', async (t) => {
 
   await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
 }).before(async (t) => {
-  await t.expect(aiIntegrationReady()).ok();
-
-  await createWidget('dxDataGrid', () => ({
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
     dataSource: [
       { id: 1, name: 'Alice', value: 30 },
       { id: 2, name: 'Bob', value: 20 },
@@ -235,9 +222,7 @@ test('Toolbar button should activate via Enter key', async (t) => {
 
   await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
 }).before(async (t) => {
-  await t.expect(aiIntegrationReady()).ok();
-
-  await createWidget('dxDataGrid', () => ({
+  await createWidgetWithAIIntegration(t, 'dxDataGrid', () => ({
     dataSource: [
       { id: 1, name: 'Alice', value: 30 },
       { id: 2, name: 'Bob', value: 20 },
