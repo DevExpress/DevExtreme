@@ -122,7 +122,7 @@ export const filterValueCommand = defineGridCommand({
 
 export const clearFilterCommand = defineGridCommand({
   name: 'clearFilter',
-  description: 'Clear all filters. There is no way to clear filter for individual columns. If user wants to clear filter for a specific column, it is needed to clear all filters.',
+  description: 'Clear all filters. There is no way to clear a filter for an individual column. If the user wants to clear a filter for a specific column, all filters must be cleared.',
   schema: z.object({}).strict(),
   execute: (component, { success, failure }) => (): Promise<CommandResult> => {
     const defaultMessage = 'Clear filter.';
