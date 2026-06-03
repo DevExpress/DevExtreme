@@ -14,6 +14,7 @@
     "typescript": "catalog:angular",
     "eslint": "catalog:",
     "@eslint/eslintrc": "catalog:",
+    "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",

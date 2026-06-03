@@ -151,10 +151,6 @@ catalogs:
     zod-to-json-schema:
       specifier: 3.24.6
       version: 3.24.6
-  eslint8:
-    '@babel/eslint-parser':
-      specifier: 7.28.6
-      version: 7.28.6
   tools:
     '@types/node':
       specifier: 20.12.8
@@ -659,6 +655,9 @@ importers:
       '@eslint/eslintrc':
         specifier: 'catalog:'
         version: 3.3.5
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
       '@rollup/plugin-babel':
         specifier: 6.1.0
         version: 6.1.0(@babel/core@7.29.0)(@types/babel__core@7.20.5)(rollup@4.59.0)
@@ -989,6 +988,9 @@ importers:
       '@eslint/eslintrc':
         specifier: 'catalog:'
         version: 3.3.5
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
       '@rollup/plugin-alias':
         specifier: 3.1.9
         version: 3.1.9(rollup@4.59.0)
@@ -1073,6 +1075,9 @@ importers:
       '@eslint/eslintrc':
         specifier: 'catalog:'
         version: 3.3.5
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
@@ -1125,7 +1130,7 @@ importers:
   e2e/testcafe-devextreme:
     devDependencies:
       '@babel/eslint-parser':
-        specifier: catalog:eslint8
+        specifier: 'catalog:'
         version: 7.28.6(@babel/core@7.29.0)(eslint@9.39.4(jiti@2.6.1))
       '@babel/plugin-transform-runtime':
         specifier: 7.29.0
@@ -1133,6 +1138,9 @@ importers:
       '@eslint/eslintrc':
         specifier: 'catalog:'
         version: 3.3.5
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
@@ -1318,7 +1326,7 @@ importers:
         specifier: catalog:angular
         version: 20.3.21(@angular/compiler@20.3.21)(typescript@5.8.3)
       '@eslint/js':
-        specifier: 9.39.4
+        specifier: 'catalog:'
         version: 9.39.4
       '@types/jasmine':
         specifier: 5.1.4
@@ -1462,6 +1470,9 @@ importers:
       '@devextreme-generator/vue':
         specifier: 3.0.12
         version: 3.0.12(aoo27qkfdq5auaurml2woir77y)
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
       '@eslint-stylistic/metadata':
         specifier: 'catalog:'
         version: 2.13.0
@@ -2076,6 +2087,9 @@ importers:
       '@types/react-dom':
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.28)
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5)
@@ -2268,6 +2282,9 @@ importers:
       '@babel/eslint-parser':
         specifier: 'catalog:'
         version: 7.28.6(@babel/core@7.29.0)(eslint@9.39.4(jiti@2.6.1))
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5)

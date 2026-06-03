@@ -76,6 +76,7 @@
     "@vue/shared": "3.4.26",
     "vue-router": "4.2.5",
     "eslint": "catalog:",
+    "@eslint/js": "catalog:",
     "eslint-config-airbnb-typescript": "catalog:",
     "eslint-plugin-i18n": "catalog:",
     "eslint-plugin-import": "catalog:",
