@@ -61,7 +61,7 @@ async function processBatch(bundler: ESBundler, demos: Demo[]) {
   await Promise.all(promises);
 }
 
-async function processDemo(bundler: ESBundler, demo: Demo) {
+function processDemo(bundler: ESBundler, demo: Demo) {
   return new Promise((res) => {
     bundler.buildDemo(demo, res);
   }).then(() => { console.log(`${bundler.framework} Demo: ${demo.Widget} - ${demo.Name}`); });
