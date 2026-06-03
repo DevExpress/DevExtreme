@@ -33,6 +33,7 @@ import type {
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
@@ -79,7 +80,7 @@ import type { IFieldExpr } from './utils/index';
 import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
 import { VIEWS } from './utils/options/constants_view';
-import type { NormalizedView } from './utils/options/types';
+import type { NormalizedView, SafeSchedulerOptions } from './utils/options/types';
 import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
@@ -268,7 +269,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return resolveCallbacks.promise();
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<SafeSchedulerOptions>): void {
     this.schedulerOptionChanged(args);
 
     const { value, name } = args;
