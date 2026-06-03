@@ -959,7 +959,9 @@ class DropDownEditor<
     const popupWidth = getSizeValue(dropDownOptions?.width);
 
     if (popupWidth === undefined) {
-      this._setPopupOption('width', () => getElementWidth(this.$element()));
+      if (typeof this._popup?.option('width') !== 'function') {
+        this._setPopupOption('width', () => getElementWidth(this.$element()));
+      }
     }
   }
 
