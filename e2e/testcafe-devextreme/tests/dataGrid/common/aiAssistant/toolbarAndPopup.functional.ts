@@ -1,9 +1,9 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import {
-  createWidgetWithAIIntegration,
   AI_INTEGRATION_PAGE,
   GRID_SELECTOR,
 } from './testHelpers';
+import { createWidget } from '../../../../helpers/createWidget';
 
 // AI Assistant enabled with a request that never resolves — keeps the chat in the
 // idle/empty state (no command runs) for visibility & open/close lifecycle tests.
@@ -86,7 +86,7 @@ const gridWithTitledAssistant = (): any => ({
 });
 
 // === §1.1 Toolbar entry point & popup lifecycle ===
-fixture.disablePageReloads`AI Assistant - Toolbar`
+fixture`AI Assistant - Toolbar`
   .page(AI_INTEGRATION_PAGE);
 
 // 1.1.1
@@ -96,9 +96,7 @@ test('Toolbar button should be visible when aiAssistant.enabled is true', async 
   await t.expect(dataGrid.isReady()).ok();
 
   await t.expect(dataGrid.getAIAssistantButton().exists).ok();
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
-});
+}).before(async () => createWidget('dxDataGrid', gridWithIdleAssistant));
 
 // 1.1.2
 test('Toolbar button should be hidden when aiAssistant is not configured', async (t) => {
@@ -107,9 +105,7 @@ test('Toolbar button should be hidden when aiAssistant is not configured', async
   await t.expect(dataGrid.isReady()).ok();
 
   await t.expect(dataGrid.getAIAssistantButton().exists).notOk();
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithoutAssistant);
-});
+}).before(async () => createWidget('dxDataGrid', gridWithoutAssistant));
 
 // 1.1.3
 test('Popup should open on toolbar button click without changing grid state', async (t) => {
@@ -128,9 +124,7 @@ test('Popup should open on toolbar button click without changing grid state', as
   await t.expect(aiChat.element.visible).ok();
   await t.expect(aiChat.getChat().element.exists).ok();
   await t.expect(aiChat.getInput().visible).ok();
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
-});
+}).before(async () => createWidget('dxDataGrid', gridWithIdleAssistant));
 
 // 1.1.4
 test('Grid state should be preserved after popup close', async (t) => {
@@ -154,9 +148,7 @@ test('Grid state should be preserved after popup close', async (t) => {
   const sortOrder = await dataGrid.apiColumnOption('name', 'sortOrder');
 
   await t.expect(sortOrder).eql('asc');
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithSortingAssistant);
-});
+}).before(async () => createWidget('dxDataGrid', gridWithSortingAssistant));
 
 // 1.1.6
 test('Custom title should be rendered in popup header', async (t) => {
@@ -169,12 +161,10 @@ test('Custom title should be rendered in popup header', async (t) => {
   const aiChat = dataGrid.getAIAssistantChat();
 
   await t.expect(aiChat.getTitle().textContent).contains('My Custom Assistant');
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithTitledAssistant);
-});
+}).before(async () => createWidget('dxDataGrid', gridWithTitledAssistant));
 
 // === §1.10 A11y / KBN ===
-fixture.disablePageReloads`AI Assistant - A11y`
+fixture`AI Assistant - A11y`
   .page(AI_INTEGRATION_PAGE);
 
 // 1.10.2 (Enter) — focus the toolbar button and activate it with Enter.
@@ -190,9 +180,7 @@ test('Toolbar button should activate via Enter key', async (t) => {
   await t.pressKey('enter');
 
   await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
-});
+}).before(async () => createWidget('dxDataGrid', gridWithIdleAssistant));
 
 // 1.10.2 (Space) — same scenario, activated with Space.
 test('Toolbar button should activate via Space key', async (t) => {
@@ -207,6 +195,4 @@ test('Toolbar button should activate via Space key', async (t) => {
   await t.pressKey('space');
 
   await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
-}).before(async (t) => {
-  await createWidgetWithAIIntegration(t, 'dxDataGrid', gridWithIdleAssistant);
-});
+}).before(async () => createWidget('dxDataGrid', gridWithIdleAssistant));
