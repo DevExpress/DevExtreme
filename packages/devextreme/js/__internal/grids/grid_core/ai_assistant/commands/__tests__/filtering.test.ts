@@ -240,11 +240,10 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('success');
     });
 
-    it('passes Date values through to the filter array', async () => {
-      const date = new Date(2024, 4, 10);
+    it('converts ISO date string to Date object for date columns', async () => {
       const instance = await createGrid({
         dataSource: [
-          { id: 1, SaleDate: date },
+          { id: 1, SaleDate: new Date(2024, 4, 10) },
         ],
         columns: [
           { dataField: 'id', dataType: 'number' },
@@ -255,10 +254,13 @@ describe('filterValueCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
-        expression: singleBasic('SaleDate', '=', date),
+        expression: singleBasic('SaleDate', '=', '2024-05-10T00:00:00'),
       });
 
-      expect(spy).toHaveBeenCalledWith('filterValue', ['SaleDate', '=', date]);
+      expect(spy).toHaveBeenCalledWith(
+        'filterValue',
+        ['SaleDate', '=', new Date('2024-05-10T00:00:00')],
+      );
       expect(result.status).toBe('success');
     });
 
