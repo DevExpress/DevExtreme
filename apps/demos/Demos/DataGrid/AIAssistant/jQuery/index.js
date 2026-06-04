@@ -114,6 +114,15 @@ $(() => {
       allowedPageSizes: [10, 25, 50, 100],
       showPageSizeSelector: true,
     },
+    allowColumnResizing: true,
+    allowColumnReordering: true,
+    focusedRowEnabled: true,
+    selection: {
+      mode: 'multiple',
+    },
+    sorting: {
+      mode: 'multiple',
+    },
     aiAssistant: {
       enabled: true,
       aiIntegration,
