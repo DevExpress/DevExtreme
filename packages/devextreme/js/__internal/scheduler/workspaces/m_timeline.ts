@@ -19,6 +19,7 @@ import {
 import tableCreatorModule from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
+import type { ResourceLoader } from '../utils/loader/resource_loader';
 import type { WorkspaceDateTableScrollableConfig, WorkspaceHeaderScrollableConfig } from './m_work_space';
 import SchedulerWorkSpace, { type WorkSpaceIndicatorDefaultOptions } from './m_work_space_indicator';
 import type { ViewDataProviderOptions } from './view_model/m_types';
@@ -59,7 +60,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected override getTotalRowCount(
     groupCount: number,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    includeAllDayPanelRows?: unknown,
+    includeAllDayPanelRows?: boolean,
   ): number {
     if (this.isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
@@ -497,7 +498,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  protected override makeGroupRows(groups: unknown[], groupByDate: boolean): unknown {
+  protected override makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
+    elements: dxElementWrapper | dxElementWrapper[];
+    cellTemplates: (() => dxElementWrapper)[];
+  } {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
