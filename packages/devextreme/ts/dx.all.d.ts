@@ -17125,11 +17125,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.selectedItem]
      */
-    selectedItem?: string | number | any;
+    selectedItem?: string | number | any | null;
     /**
      * [descr:dxDropDownButtonOptions.selectedItemKey]
      */
-    selectedItemKey?: string | number;
+    selectedItemKey?: string | number | null;
     /**
      * [descr:dxDropDownButtonOptions.showArrowIcon]
      */
@@ -17146,6 +17146,7 @@ declare module DevExpress.ui {
      * [descr:dxDropDownButtonOptions.template]
      */
     template?:
+      | null
       | template
       | ((
           data: DevExpress.ui.dxButton.TemplateData,
@@ -24270,7 +24271,8 @@ declare module DevExpress.ui {
       | template
       | ((
           contentElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | null;
     /**
      * [descr:dxOverlayOptions.deferRendering]
      */
