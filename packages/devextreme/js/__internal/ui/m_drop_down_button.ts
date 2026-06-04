@@ -529,7 +529,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   _dimensionChanged(): void {
-    const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+    const { dropDownOptions } = this.option();
+    const popupWidth = getSizeValue(dropDownOptions?.width);
 
     if (popupWidth === undefined) {
       this._setPopupOption('width', () => getElementWidth(this.$element()));
