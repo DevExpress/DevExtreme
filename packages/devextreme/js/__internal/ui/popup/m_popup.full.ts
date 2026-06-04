@@ -8,13 +8,16 @@ import type { PopupProperties } from './m_popup';
 const TOOLBAR_WIDGET_NAME = 'dxToolbar';
 
 class PopupFull extends Popup {
-  protected readonly _toolbarName: string = TOOLBAR_WIDGET_NAME;
-
   _getDefaultOptions(): PopupProperties {
     return {
       ...super._getDefaultOptions(),
       preventScrollEvents: false,
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getToolbarName(): string {
+    return TOOLBAR_WIDGET_NAME;
   }
 }
 

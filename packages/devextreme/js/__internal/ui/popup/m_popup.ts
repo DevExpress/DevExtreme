@@ -97,7 +97,7 @@ const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 const BUTTON_OUTLINED_MODE = 'outlined';
 
-const TOOLBAR_NAME_BASE = 'dxToolbarBase';
+const TOOLBAR_BASE_WIDGET_NAME = 'dxToolbarBase';
 
 const HEIGHT_STRATEGIES = {
   static: '',
@@ -216,8 +216,6 @@ class Popup<
   };
 
   _toolbarItemClasses!: string[];
-
-  protected readonly _toolbarName: string = TOOLBAR_NAME_BASE;
 
   _shouldSkipContentResize!: (entry: ResizeObserverEntry) => boolean;
 
@@ -959,8 +957,9 @@ class Popup<
     return action;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
-    return this._toolbarName;
+    return TOOLBAR_BASE_WIDGET_NAME;
   }
 
   _toggleDisabledState(value: boolean): void {
