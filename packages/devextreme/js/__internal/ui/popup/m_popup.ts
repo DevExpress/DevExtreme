@@ -54,6 +54,7 @@ import type {
   ControllerProperties,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
+import type { PopupDragConfig } from '@ts/ui/popup/m_popup_drag';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 import PopupDrag from './m_popup_drag';
@@ -208,7 +209,7 @@ class Popup<
 
   _resizable!: Resizable;
 
-  _drag?: PopupDrag;
+  _drag?: PopupDrag<PopupPositionController>;
 
   _renderedDimensions?: {
     width: number;
@@ -216,6 +217,8 @@ class Popup<
   };
 
   _toolbarItemClasses!: string[];
+
+  protected readonly _toolbarName: string = TOOLBAR_NAME_BASE;
 
   _shouldSkipContentResize!: (entry: ResizeObserverEntry) => boolean;
 
@@ -957,9 +960,8 @@ class Popup<
     return action;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
-    return TOOLBAR_NAME_BASE;
+    return this._toolbarName;
   }
 
   _toggleDisabledState(value: boolean): void {
@@ -1119,7 +1121,7 @@ class Popup<
       return;
     }
 
-    const config = {
+    const config: PopupDragConfig<PopupPositionController> = {
       dragEnabled,
       handle: $dragTarget.get(0),
       draggableElement: this._$content?.get(0),
@@ -1129,7 +1131,7 @@ class Popup<
     if (this._drag) {
       this._drag.init(config);
     } else {
-      this._drag = new PopupDrag(config);
+      this._drag = new PopupDrag<PopupPositionController>(config);
     }
 
     this.$overlayContent().toggleClass(POPUP_DRAGGABLE_CLASS, dragEnabled);
