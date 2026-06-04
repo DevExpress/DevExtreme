@@ -14,13 +14,12 @@ import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
+import windowUtils from '@ts/core/utils/m_window';
 import swatch from '@ts/core/utils/swatch_container';
 import type {
   OverlayActions,
   OverlayProperties,
 } from '@ts/ui/overlay/overlay';
-
-import windowUtils from '../../core/utils/m_window';
 
 export type OverlayPositionAlignment = | 'top center'
   | 'bottom center'
@@ -240,7 +239,7 @@ export class OverlayPositionController<
     this.restorePositionOnNextRender(shouldRestorePosition);
   }
 
-  detectVisualPositionChange(event?: DxEvent<PointerInteractionEvent>): void {
+  detectVisualPositionChange(event?: DxEvent<PointerInteractionEvent | KeyboardEvent>): void {
     this._updateVisualPositionValue();
     this._raisePositionedEvents(event);
   }
@@ -313,7 +312,7 @@ export class OverlayPositionController<
     this.detectVisualPositionChange();
   }
 
-  _raisePositionedEvents(event?: DxEvent<PointerInteractionEvent>): void {
+  _raisePositionedEvents(event?: DxEvent<PointerInteractionEvent | KeyboardEvent>): void {
     const previousPosition = this._previousVisualPosition;
     const newPosition = this._visualPosition;
 
