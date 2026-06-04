@@ -12,6 +12,7 @@
         string: function() { return z; },
         boolean: function() { return z; },
         number: function() { return z; },
+        date: function() { return z; },
         null: function() { return z; },
         enum: function() { return z; },
         union: function() { return z; },
@@ -33,6 +34,7 @@
         min: function() { return z; },
         max: function() { return z; },
         transform: function() { return z; },
+        describe: function() { return z; },
         // validation
         safeParse: function() { return { success: true, data: {} }; },
     };
