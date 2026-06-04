@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SchedulerAgenda from '__internal/scheduler/workspaces/m_agenda';
+import SchedulerAgenda from '__internal/scheduler/workspaces/agenda';
 import dateLocalization from 'common/core/localization/date';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
