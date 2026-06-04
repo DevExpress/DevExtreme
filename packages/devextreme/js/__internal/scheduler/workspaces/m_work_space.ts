@@ -12,6 +12,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { OptionChangedEventInfo } from '@js/core/dom_component';
+import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -45,6 +46,7 @@ import {
   TimePanelComponent,
 } from '@ts/scheduler/r1/components/index';
 import type { ViewContext } from '@ts/scheduler/r1/components/types';
+import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/calculator';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate,
@@ -75,6 +77,7 @@ import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import VerticalShader from '../shaders/current_time_shader_vertical';
+import type { ViewCellData } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import type { SafeSchedulerOptions } from '../utils/options/types';
 import {
@@ -244,18 +247,22 @@ export type WorkspaceOptionsInternal = Omit<SafeSchedulerOptions, 'groups'> & {
 };
 
 export type WorkspaceOptionChangedOptions = WorkspaceOptionsInternal & {
-  onSelectionChanged?: unknown;
-  onSelectionEnd?: unknown;
-  onCellClick?: unknown;
-  onCellContextMenu?: unknown;
+  onSelectionChanged?: (args: { selectedCellData: ViewCellData[] }) => void;
+  onSelectionEnd?: (args: { selectedCellData: ViewCellData[] }) => void;
+  onCellClick?: (args: { cellData: ViewCellData; cellElement: DxElement; event: Event }) => void;
+  onCellContextMenu?: (args: {
+    cellData: ViewCellData;
+    cellElement: DxElement;
+    event: Event;
+  }) => void;
   viewOffset?: number;
   groupOrientation?: 'horizontal' | 'vertical';
-  timeZoneCalculator?: unknown;
+  timeZoneCalculator?: TimeZoneCalculator;
   allDayExpanded?: boolean;
   width?: number | string;
   allowMultipleCellSelection?: boolean;
-  selectedCellData?: unknown;
-  scrolling?: unknown;
+  selectedCellData?: ViewCellData[];
+  scrolling?: SafeSchedulerOptions['scrolling'];
   schedulerHeight?: number;
   schedulerWidth?: number;
   agendaDuration?: number;
