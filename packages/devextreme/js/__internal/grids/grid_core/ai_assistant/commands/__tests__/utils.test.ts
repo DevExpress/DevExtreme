@@ -6,8 +6,12 @@ import {
 import { z } from 'zod';
 
 import {
+  isKeyShapeValid,
+  normalizeKey,
   // eslint-disable-next-line spellcheck/spell-checker
-  isKeyShapeValid, normalizeKey, optionalNullish, resolveFilterValue,
+  optionalNullish,
+  resolveFilterValue,
+  splitIntoContiguousRanges,
 } from '../utils';
 
 describe('normalizeKey', () => {
@@ -166,5 +170,39 @@ describe('resolveFilterValue', () => {
 
   it('returns boolean values as-is regardless of dataType', () => {
     expect(resolveFilterValue('date', true)).toBe(true);
+  });
+});
+
+describe('splitIntoContiguousRanges', () => {
+  it('returns an empty array for an empty input', () => {
+    expect(splitIntoContiguousRanges([])).toEqual([]);
+  });
+
+  it('wraps a single index into a single range', () => {
+    expect(splitIntoContiguousRanges([5])).toEqual([[5]]);
+  });
+
+  it('keeps a fully contiguous input as one range', () => {
+    expect(splitIntoContiguousRanges([1, 2, 3, 4])).toEqual([[1, 2, 3, 4]]);
+  });
+
+  it('splits non-contiguous indexes into multiple ranges', () => {
+    expect(splitIntoContiguousRanges([1, 2, 5, 6, 7, 10])).toEqual([
+      [1, 2], [5, 6, 7], [10],
+    ]);
+  });
+
+  it('sorts unsorted input before splitting', () => {
+    expect(splitIntoContiguousRanges([5, 1, 6, 2, 10, 7])).toEqual([
+      [1, 2], [5, 6, 7], [10],
+    ]);
+  });
+
+  it('deduplicates repeated indexes', () => {
+    expect(splitIntoContiguousRanges([1, 1, 2, 2, 3])).toEqual([[1, 2, 3]]);
+  });
+
+  it('treats a one-step gap as a boundary', () => {
+    expect(splitIntoContiguousRanges([1, 3])).toEqual([[1], [3]]);
   });
 });
