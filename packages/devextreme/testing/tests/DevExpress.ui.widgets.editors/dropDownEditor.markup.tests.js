@@ -3,7 +3,7 @@ import { Deferred } from 'core/utils/deferred';
 import {
     DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON,
     DROP_DOWN_EDITOR_AFTER_FIELD_ADDON
-} from '__internal/ui/drop_down_editor/m_drop_down_editor';
+} from '__internal/ui/drop_down_editor/drop_down_editor';
 
 import 'ui/drop_down_editor/ui.drop_down_editor';
 

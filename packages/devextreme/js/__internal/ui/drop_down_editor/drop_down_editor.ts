@@ -41,8 +41,8 @@ import TextBox from '@ts/ui/text_box/text_box';
 
 import type Popover from '../popover/m_popover';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
-import DropDownButton from './m_drop_down_button';
-import { getElementWidth } from './m_utils';
+import DropDownButton from './drop_down_button';
+import { getElementWidth } from './utils';
 
 export const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -261,12 +261,10 @@ class DropDownEditor<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return true;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDefaultPopupPosition(isRtlEnabled?: boolean): PositionConfig {
     const position = getDefaultAlignment(isRtlEnabled);
 
@@ -377,17 +375,14 @@ class DropDownEditor<
       .eq(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAriaHasPopup(): string {
     return 'true';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAriaAutocomplete(): string {
     return 'none';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAriaRole(): string {
     return 'combobox';
   }
@@ -818,7 +813,6 @@ class DropDownEditor<
     this.setAria('label', OVERLAY_CONTENT_LABEL, $overlayContent);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderPopupContent(): void {}
 
   _renderPopup(): void {
@@ -882,7 +876,6 @@ class DropDownEditor<
     this.setAria('id', this._popupContentId, $popupContent);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _contentReadyHandler(): void {}
 
   _popupConfig(): PopupProperties {
@@ -925,7 +918,6 @@ class DropDownEditor<
     return config;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _popupInitializedHandler(): void {}
 
   _getPopupInitializedHandler(): (e: PopupInitializedEvent) => void {
@@ -983,7 +975,6 @@ class DropDownEditor<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _popupShowingHandler(): void {}
 
   _popupHidingHandler(): void {
@@ -1171,7 +1162,6 @@ class DropDownEditor<
     return super._getSubmitElement();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldLogFieldTemplateDeprecationWarning(): boolean {
     return false;
   }
