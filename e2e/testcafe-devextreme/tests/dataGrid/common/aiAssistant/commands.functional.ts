@@ -620,7 +620,7 @@ test('selectByIndexes [1] on single-row grid should select the row', async (t) =
   showBorders: true,
   selection: { mode: 'multiple' },
 }, [
-  { actions: [{ name: 'selectByIndexes', args: { indexes: [1] } }] },
+  { actions: [{ name: 'selectByIndexes', args: { indexes: [1], mode: 'select' } }] },
 ]));
 
 // 3.2.3
@@ -648,7 +648,7 @@ test('selectByIndexes [5] out of range on single-row grid should not crash', asy
   showBorders: true,
   selection: { mode: 'multiple' },
 }, [
-  { actions: [{ name: 'selectByIndexes', args: { indexes: [5] } }] },
+  { actions: [{ name: 'selectByIndexes', args: { indexes: [5], mode: 'select' } }] },
 ]));
 
 // === §3.3 Large dataset ===
