@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-editing',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

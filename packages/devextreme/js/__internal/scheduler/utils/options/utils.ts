@@ -16,9 +16,11 @@ const normalizeView = (view: RawViewType): NormalizedView | undefined => (isObje
   ? extend({}, DEFAULT_VIEW_OPTIONS[view.type as string], view) as NormalizedView
   : DEFAULT_VIEW_OPTIONS[view]);
 
-export const getViews = (views: RawViewType[]): NormalizedView[] => views
+export const getViews = (
+  views: RawViewType[],
+): NormalizedView[] => views
   .filter(isKnownView)
-  .map(normalizeView)
+  .map((v) => normalizeView(v))
   .filter(isExistedView);
 
 export function getCurrentView(

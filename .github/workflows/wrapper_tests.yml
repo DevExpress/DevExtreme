@@ -17,14 +17,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -33,7 +33,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -45,7 +45,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build devextreme package
-        run: pnpx nx build devextreme -c testing
+        run: pnpm exec nx build devextreme -c testing
 
   check-regenerate:
     runs-on: devextreme-shr2
@@ -53,14 +53,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -69,7 +69,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -106,14 +106,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -121,7 +121,7 @@ jobs:
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -134,12 +134,14 @@ jobs:
 
       - name: Download Browser
         if: matrix.framework == 'angular'
-        run: pnpx puppeteer browsers install chrome@130.0.6723.69
+        run: |
+          PUPPETEER_CMD="browsers install chrome@130.0.6723.69"
+          pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
 
       - name: Test ${{ matrix.framework }}
         env:
           NODE_OPTIONS: --max-old-space-size=8192
-        run: pnpx nx test devextreme-${{ matrix.framework }}
+        run: pnpm exec nx test devextreme-${{ matrix.framework }}
 
       - name: Pack ${{ matrix.framework }}
-        run: pnpx nx pack devextreme-${{ matrix.framework }}
+        run: pnpm exec nx pack devextreme-${{ matrix.framework }}

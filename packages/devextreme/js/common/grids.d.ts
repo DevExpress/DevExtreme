@@ -29,6 +29,7 @@ import {
 import {
   DataSource,
   DataSourceOptions,
+  SearchOperation,
 } from './data';
 
 import { DataSourceLike } from '../data/data_source';
@@ -62,6 +63,9 @@ import {
 import { LoadPanelIndicatorProperties } from '../ui/load_panel';
 
 import {
+  Properties as ChatProperties,
+} from '../ui/chat';
+import {
   Properties as PopupProperties,
 } from '../ui/popup';
 import {
@@ -77,7 +81,224 @@ import {
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from './core/animation';
 import { PagerBase } from '../ui/pagination';
-import { AIIntegration } from './ai-integration';
+import { AIIntegration, ExecuteGridAssistantCommandParams } from './ai-integration';
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type ResponseStatus = 'success' | 'failure';
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type ResponseStatusTexts = {
+  success?: string;
+  failure?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type BasicFilterExpr = {
+  type: 'basic';
+  field: string;
+  operator: SearchOperation;
+  value: string | number | boolean | null | Date;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type CombinedFilterExpr = {
+  type: 'combined';
+  combiner: 'and' | 'or';
+  leftId: string;
+  rightId: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type NegatedFilterExpr = {
+  type: 'negated';
+  expressionId: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type FilterExpr = BasicFilterExpr | CombinedFilterExpr | NegatedFilterExpr;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+interface FilterExprNode {
+  id: string;
+  expr: FilterExpr;
+}
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+interface FilterExprTree {
+  rootId: string;
+  nodes: FilterExprNode[];
+}
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type CompositeKeyPair = {
+  field: string;
+  value: string | number;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type PredefinedCommands = {
+  columnsVisibility: {
+    dataField: string;
+    visible: boolean;
+  };
+  columnsReorder: {
+    dataField: string;
+    visibleIndex: number;
+  };
+  columnsPinning: {
+    dataField: string;
+    fixed: boolean;
+    fixedPosition?: 'left' | 'right';
+  };
+  columnsResize: {
+    dataField: string;
+    width: number | string;
+  };
+  filterValue: {
+    expression: FilterExprTree | null;
+  };
+  clearFilter: {};
+  focusRowByKey: {
+    key: string | number | Array<CompositeKeyPair>;
+  };
+  focusRowByIndex: {
+    index: number;
+  };
+  paging: {
+    enabled: boolean;
+  };
+  pageSize: {
+    pageSize: number;
+  };
+  pageIndex: {
+    pageIndex: number;
+  };
+  searching: {
+    text: string;
+  };
+  selectByKeys: {
+    keys: Array<string | number | Array<CompositeKeyPair>>;
+    preserve: boolean;
+  };
+  selectByIndexes: {
+    indexes: number[];
+    mode: 'select' | 'deselect';
+  };
+  selectAll: {};
+  deselectAll: {};
+  clearSelection: {};
+  sorting: {
+    dataField: string;
+    sortOrder: SortOrder | 'none';
+  };
+  clearSorting: {};
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type CommandInfo<
+  TCommands extends PredefinedCommands = PredefinedCommands,
+> = {
+  [K in keyof TCommands]: {
+    name: K;
+    args: TCommands[K]
+  }
+}[keyof TCommands];
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type PredefinedCommandNames = keyof PredefinedCommands;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type AIAssistant<TCommands extends PredefinedCommands = PredefinedCommands> = {
+  /** @docid */
+  aiIntegration?: AIIntegration;
+  /**
+   * @docid
+   * @type dxChatOptions
+   */
+  chat?: ChatProperties;
+  /**
+   * @docid
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid
+   * @type dxPopupOptions
+   */
+  popup?: PopupProperties;
+  /**
+   * @docid
+   * @default 'AI Assistant'
+   */
+  title?: string;
+  /**
+   * @docid
+   */
+  customizeResponseTitle?: (status: ResponseStatus, commandNames: (keyof TCommands)[]) => string;
+  /**
+   * @docid
+   */
+  customizeResponseText?: (command: CommandInfo<TCommands>) => ResponseStatusTexts;
+};
+
+/**
+ * @docid
+ * @hidden
+ * @namespace DevExpress.common.grids
+ */
+export type AIAssistantRequestCreatingInfo = Pick<ExecuteGridAssistantCommandParams, 'context' | 'responseSchema' | 'additionalInfo'>;
 
 /**
  * @docid
@@ -1942,6 +2163,11 @@ interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRow
 export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = Omit<GridBaseOptionsBlank<TComponent, TRowData, TKey>, 'focusStateEnabled'> & {
   /**
    * @docid
+   * @public
+   */
+  aiAssistant?: AIAssistant;
+  /**
+   * @docid
    * @default undefined
    * @public
    */
@@ -2145,6 +2371,15 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @public
    */
   noDataText?: string;
+  /**
+   * @docid
+   * @default null
+   * @type_function_param1 e:object
+   * @type_function_param1_field component:this
+   * @action
+   * @public
+   */
+  onAIAssistantRequestCreating?: ((e: EventInfo<TComponent> & Cancelable & AIAssistantRequestCreatingInfo) => void);
   /**
    * @docid
    * @default null

@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-drop-down-button-hide',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

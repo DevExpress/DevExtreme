@@ -1,5 +1,5 @@
 $(() => {
-  $('#scheduler').dxScheduler({
+  const scheduler = $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: data,
     views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
@@ -9,6 +9,7 @@ $(() => {
     startDayHour: 8,
     endDayHour: 20,
     cellDuration: 60,
+    snapToCellsMode: 'always',
     groups: ['priority'],
     resources: [{
       fieldExpr: 'ownerId',
@@ -25,5 +26,13 @@ $(() => {
       icon: 'tags',
     }],
     height: 580,
+  }).dxScheduler('instance');
+
+  $('#snap-to-cells-mode').dxSelectBox({
+    items: ['auto', 'always', 'never'],
+    value: scheduler.option('snapToCellsMode'),
+    onValueChanged(e) {
+      scheduler.option('snapToCellsMode', e.value);
+    },
   });
 });

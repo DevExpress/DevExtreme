@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-list-popup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

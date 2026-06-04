@@ -23,7 +23,7 @@ import { createPath, foreachTree } from '../m_widget_utils';
 import SortableModule from '../sortable/m_sortable';
 import { ATTRIBUTES, CLASSES } from './const';
 import { dragAndDropItemRender } from './dom';
-import { reverseSortOrder } from './utils';
+import { reverseSortOrder, shouldCancelDragging } from './utils';
 
 const { Sortable } = SortableModule;
 
@@ -173,8 +173,9 @@ export class FieldChooserBase extends mixinWidget {
 
   renderField(field, showColumnLines) {
     const that = this;
+    const caption = field.caption ?? field.dataField ?? '';
     const $fieldContent = $(DIV).addClass(CLASSES.area.fieldContent)
-      .text(field.caption || field.dataField);
+      .text(caption);
     const $fieldElement = $(DIV)
       .addClass(CLASSES.area.field)
       .addClass(CLASSES.area.box)
@@ -191,7 +192,7 @@ export class FieldChooserBase extends mixinWidget {
             alignment: that.option('rtlEnabled') ? 'right' : 'left',
             sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
             allowSorting: field.allowSorting,
-            caption: field.caption || field.dataField,
+            caption,
           },
           showColumnLines,
         });
@@ -205,7 +206,7 @@ export class FieldChooserBase extends mixinWidget {
           filterValues: mainGroupField.filterValues,
           allowFiltering: mainGroupField.allowFiltering && !field.groupIndex,
           allowSorting: field.allowSorting,
-          caption: field.caption || field.dataField,
+          caption,
         },
         showColumnLines,
       });
@@ -253,15 +254,7 @@ export class FieldChooserBase extends mixinWidget {
       onDragging(e) {
         const field = e.sourceElement.data('field');
         const { targetGroup } = e;
-        e.cancel = false;
-
-        if (field.isMeasure === true) {
-          if (targetGroup === 'column' || targetGroup === 'row' || targetGroup === 'filter') {
-            e.cancel = true;
-          }
-        } else if (field.isMeasure === false && targetGroup === 'data') {
-          e.cancel = true;
-        }
+        e.cancel = shouldCancelDragging(field, targetGroup);
       },
       useIndicator: true,
       onChanged(e) {

@@ -48,7 +48,7 @@ const dxClassesPrefix = 'dx-';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
-  licensingDocLink: 'https://go.devexpress.com/Licensing_Documentation_DevExtremeVue.aspx',
+  licensingDocLink: 'https://www.devexpress.com/go/Licensing_Documentation_DevExpress_Vue.aspx',
 });
 
 function parseClassList(classList: string): string[] {

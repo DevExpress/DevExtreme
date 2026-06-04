@@ -585,7 +585,6 @@ QUnit.module('Options', () => {
             allowResizing: true,
             allowDragging: true,
             allowTimeZoneEditing: false,
-            legacyForm: false,
             form: {
                 iconsShowMode: 'main'
             },

@@ -774,6 +774,181 @@ QUnit.module('Intl localization', {
     });
 });
 
+QUnit.module('Global formatting config (spec, intl)', () => {
+    const saveGlobalFormats = () => {
+        const globalConfig = config();
+
+        return {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+            dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+        };
+    };
+    const restoreGlobalFormats = (saved) => {
+        const globalConfig = config();
+
+        Object.keys(saved).forEach((key) => {
+            const value = saved[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
+    };
+
+    QUnit.test('global dateFormat supports formatter function values', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateFormat: (date) => `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
+            });
+
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), config().dateFormat), '2-1-2020');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('global dateTimeFormat supports formatter function values', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormat: (date) => `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`,
+            });
+
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2, 14, 5), config().dateTimeFormat), '2/1/2020 14:5');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('global numberFormat supports formatter function values', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                numberFormat: (value) => `#${value.toFixed(2)}`,
+            });
+
+            assert.strictEqual(numberLocalization.format(12.3), '#12.30');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('dateTimeFormatPresets overrides shortDate with LDML pattern', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    shortDate: 'dd/MM/yyyy',
+                },
+            });
+
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'shortDate'), '02/01/2020');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('dateTimeFormatPresets overrides shortTime with LDML pattern', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    shortTime: 'HH:mm:ss',
+                },
+            });
+
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2, 14, 5, 30), 'shortTime'), '14:05:30');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('dateTimeFormatPresets supports function override', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    shortDate: (d) => `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`,
+                },
+            });
+
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'shortDate'), '2-1-2020');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('dateTimeFormatPresets case-insensitive lookup', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    shortDate: 'dd/MM/yyyy',
+                },
+            });
+
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'shortdate'), '02/01/2020', 'lowercase works');
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'SHORTDATE'), '02/01/2020', 'uppercase works');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('dateTimeFormatPresets does not affect non-preset format strings', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    shortDate: 'dd/MM/yyyy',
+                },
+            });
+
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'yyyy-MM-dd'), '2020-01-02');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('unknown preset key does not break formatting', function(assert) {
+        const saved = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                dateTimeFormatPresets: {
+                    unknownFormat: 'dd/MM/yyyy',
+                },
+            });
+
+            const result = dateLocalization.format(new Date(2020, 0, 2), 'shortDate');
+            assert.ok(result, 'shortDate still formats with unknown preset configured');
+        } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+});
+
 QUnit.module('Exceljs format', () => {
     ExcelJSLocalizationFormatTests.runCurrencyTests([
         { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },

@@ -90,7 +90,7 @@ const currentValue = ref(new Date());
 const cellTemplate = ref('cell');
 const disabled = ref(false);
 const showWeekNumbers = ref(false);
-const firstDay = ref<DxCalendarTypes.FirstDayOfWeek>(0);
+const firstDay = ref<DxCalendarTypes.DayOfWeek>(0);
 const weekNumberRule = ref<DxCalendarTypes.WeekNumberRule>('auto');
 const weekDays = [
   { id: 0, text: 'Sunday' },

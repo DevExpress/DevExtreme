@@ -4,18 +4,21 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
+import type { DxEvent } from '@js/events';
+import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
-import DOMComponent from '@ts/core/widget/dom_component';
 import type { TargetedAppointment } from '@ts/scheduler/types';
 
+import type { AppointmentItemViewModel } from '../view_model/types';
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
+import type { ViewItemProperties } from './view_item';
+import { ViewItem } from './view_item';
 
 export interface AppointmentCollectorProperties
-  extends DOMComponentProperties<AppointmentCollector> {
-  appointmentsCount: number;
+  extends ViewItemProperties {
+  items: AppointmentItemViewModel[],
   isCompact: boolean;
   geometry: {
     height: number;
@@ -25,13 +28,31 @@ export interface AppointmentCollectorProperties
   };
   targetedAppointmentData: TargetedAppointment;
   appointmentCollectorTemplate: TemplateBase;
+  onClick: (viewItem: AppointmentCollector, e: DxEvent) => void;
 }
 
 export class AppointmentCollector
-  extends DOMComponent<AppointmentCollector, AppointmentCollectorProperties> {
+  extends ViewItem<AppointmentCollectorProperties> {
   private defaultAppointmentCollectorTemplate!: FunctionTemplate;
 
   private buttonInstance?: Button;
+
+  private get appointmentsCount(): number {
+    return this.option().items.length;
+  }
+
+  override _setOptionsByReference(): void {
+    super._setOptionsByReference();
+
+    // Note: items have appointmentData, which is used as a key in dataSource
+    this._optionsByReference = {
+      ...this._optionsByReference,
+      // @ts-expect-error Component class has wrong type for _optionsByReference
+      items: true,
+      // @ts-expect-error Component class has wrong type for _optionsByReference
+      targetedAppointmentData: true,
+    };
+  }
 
   override _init(): void {
     super._init();
@@ -44,22 +65,31 @@ export class AppointmentCollector
   override _initMarkup(): void {
     super._initMarkup();
 
+    this.resize();
     this.applyElementClasses();
     this.applyElementAria();
-    this.resize();
+    this.attachFocusEvents();
+    this.attachKeydownEvents();
     this.renderContentTemplate();
   }
 
-  public resize(): void {
-    this.$element().css({
-      top: this.option().geometry.top,
-      left: this.option().geometry.left,
-    });
+  public override resize(
+    geometry?: { height: number; width: number; top: number; left: number },
+  ): void {
+    const newGeometry = geometry ?? this.option().geometry;
+    const {
+      top, left, width, height,
+    } = newGeometry;
 
-    this.buttonInstance?.option({
-      width: this.option().geometry.width,
-      height: this.option().geometry.height,
-    });
+    this.$element().css({ top, left });
+
+    this.buttonInstance?.option({ width, height });
+  }
+
+  public override setTabIndex(tabIndex: number | undefined): void {
+    super.setTabIndex(tabIndex);
+
+    this.buttonInstance?.option('tabIndex', tabIndex);
   }
 
   private applyElementClasses(): void {
@@ -93,16 +123,28 @@ export class AppointmentCollector
 
     this.buttonInstance = this._createComponent(this.$element(), Button, {
       type: 'default',
+      tabIndex: this.option().tabIndex,
       width: this.option().geometry.width,
       height: this.option().geometry.height,
-      template,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      template: new FunctionTemplate((e) => template.render({
+        container: e.container,
+        model: {
+          appointmentCount: this.appointmentsCount,
+          isCompact: this.option().isCompact,
+          items: this.option().items.map((item) => item.itemData),
+        },
+      })),
+      onClick: (e: ButtonClickEvent) => {
+        this.option().onClick(this, e.event as DxEvent);
+      },
     });
   }
 
   private defaultAppointmentCollectorContent(
     $container: dxElementWrapper,
   ): dxElementWrapper {
-    const count = this.option().appointmentsCount;
+    const count = this.appointmentsCount;
     const text = this.option().isCompact
       ? count
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

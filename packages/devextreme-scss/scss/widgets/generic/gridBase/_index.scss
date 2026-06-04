@@ -21,6 +21,7 @@
 @use "variables" as *;
 @forward "variables";
 @use 'layout/cell' as *;
+@use "layout/aiChat" as *;
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";

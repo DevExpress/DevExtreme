@@ -60,6 +60,8 @@ const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
 const CHAT_MESSAGE_EDITED_HIDING_CLASS = 'dx-chat-message-edited-hiding';
 
+const BUTTON_GROUP_ITEM_CLASS = 'dx-buttongroup-item';
+
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
@@ -116,10 +118,7 @@ const moduleConfig = {
             init(options);
         };
 
-        this.getEmptyView = () => {
-            return this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
-        };
-
+        this.getEmptyView = () => this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
         this.getMessageList = () => MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
         this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
         this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
@@ -132,6 +131,9 @@ const moduleConfig = {
         this.getMessageListEmptyView = () => this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
         this.getFileUploader = () => FileUploader.getInstance(this.$element.find(`.${FILEUPLOADER_CLASS}`));
         this.getAttachButton = () => Button.getInstance(this.$element.find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`));
+        this.getSuggestionsElement = () => this.instance._suggestions._$element;
+        this.getSuggestionItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        this.getSuggestionButtonGroup = () => this.instance._suggestions._buttonGroup;
 
         init();
     },
@@ -2503,6 +2505,63 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(onInputFieldTextChanged.callCount, 1, 'called once after runtime update');
             });
         });
+
+        QUnit.module('sendButtonOptions.onClick', moduleConfig, () => {
+            QUnit.test('onClick should be called when send button is clicked in custom mode', function(assert) {
+                const onClick = sinon.spy();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'custom', onClick },
+                });
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onClick.callCount, 1, 'onClick called once');
+            });
+
+            QUnit.test('onClick should receive correct arguments', function(assert) {
+                assert.expect(3);
+
+                this.reinit({
+                    sendButtonOptions: {
+                        action: 'custom',
+                        onClick: (e) => {
+                            const { component, element } = e;
+
+                            assert.strictEqual(component, this.instance, 'e.component is Chat instance');
+                            assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                            assert.strictEqual($(element).is(this.$element), true, 'e.element matches widget root');
+                        },
+                    },
+                });
+
+                this.$sendButton.trigger('dxclick');
+            });
+
+            QUnit.test('onClick should be possible to change at runtime', function(assert) {
+                const onClick = sinon.spy();
+
+                this.reinit({});
+
+                this.instance.option('sendButtonOptions', { action: 'custom', onClick });
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onClick.callCount, 1, 'onClick called once after runtime update');
+            });
+
+            QUnit.test('onClick should not be called when button is disabled in default mode', function(assert) {
+                const onClick = sinon.spy();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'send', onClick },
+                });
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onClick.callCount, 0, 'onClick not called when button is disabled');
+            });
+        });
     });
 
     QUnit.module('renderMessage', moduleConfig, () => {
@@ -2698,6 +2757,224 @@ QUnit.module('Chat', () => {
             this.instance.option('speechToTextOptions', newOptions);
 
             assert.deepEqual(messageBox.option('speechToTextOptions'), newOptions, 'speechToTextOptions is updated in messageBox');
+        });
+    });
+
+    QUnit.module('Suggestions integration', moduleConfig, () => {
+        QUnit.test('should render suggestions element if option is not passed', function(assert) {
+            assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions element is rendered without options');
+        });
+
+        QUnit.test('should render suggestions element when items are passed', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }] },
+            });
+
+            assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions element is rendered with items');
+        });
+
+        QUnit.test('suggestions should be rendered before messageBox', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }] },
+            });
+
+            const $suggestions = this.getSuggestionsElement();
+            const $messageBox = this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`);
+
+            assert.strictEqual($suggestions.next().is($messageBox), true, 'suggestions is rendered before messageBox');
+        });
+
+        QUnit.test('suggestions should be updated at runtime', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }, { text: 'Item 2' }] },
+            });
+
+            this.instance.option('suggestions', { items: [{ text: 'New 1' }, { text: 'New 2' }, { text: 'New 3' }] });
+
+            assert.strictEqual(this.getSuggestionItems().length, 3, 'items count updated');
+            assert.strictEqual(this.getSuggestionItems().eq(0).text(), 'New 1', 'first item text updated');
+        });
+
+        QUnit.test('onItemClick callback should be called when suggestion item is clicked', function(assert) {
+            assert.expect(1);
+
+            const clickedText = 'Item 1';
+
+            this.reinit({
+                suggestions: {
+                    items: [{ text: clickedText }, { text: 'Item 2' }],
+                    onItemClick: (e) => {
+                        assert.strictEqual(e.itemData.text, clickedText, 'correct item passed to callback');
+                    },
+                },
+            });
+
+            this.getSuggestionItems().first().trigger('dxclick');
+        });
+
+        QUnit.test('should keep suggestions container when setting suggestions option to undefined at runtime', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }, { text: 'Item 2' }] },
+            });
+
+            this.instance.option('suggestions', undefined);
+
+            assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions container remains in DOM');
+            assert.strictEqual(this.getSuggestionItems().length, 0, 'items are removed');
+        });
+
+        QUnit.test('suggestions items should be updated via nested option path', function(assert) {
+            this.reinit({
+                suggestions: { items: [{ text: 'Item 1' }] },
+            });
+
+            this.instance.option('suggestions.items', [{ text: 'New 1' }, { text: 'New 2' }]);
+
+            assert.strictEqual(this.getSuggestionItems().length, 2, 'items count updated via nested path');
+            assert.strictEqual(this.getSuggestionItems().eq(0).text(), 'New 1', 'first item text updated');
+        });
+
+        QUnit.test('nested option update should not drop other suggestions options', function(assert) {
+            assert.expect(1);
+
+            const clickedText = 'Item 1';
+
+            this.reinit({
+                suggestions: {
+                    items: [{ text: clickedText }],
+                    onItemClick: (e) => {
+                        assert.strictEqual(e.itemData.text, clickedText, 'onItemClick preserved after nested update');
+                    },
+                },
+            });
+
+            this.instance.option('suggestions.items', [{ text: clickedText }, { text: 'Item 2' }]);
+
+            this.getSuggestionItems().first().trigger('dxclick');
+        });
+
+        QUnit.module('Proxy state options', () => {
+            QUnit.test('buttonGroup should not be created when state options change and suggestions is not set', function(assert) {
+                this.reinit({});
+
+                this.instance.option({
+                    activeStateEnabled: false,
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false,
+                    rtlEnabled: true,
+                });
+
+                assert.strictEqual(this.getSuggestionButtonGroup(), undefined, 'buttonGroup is not created');
+            });
+
+            QUnit.test('buttonGroup should not be created when state options change and suggestions is empty object', function(assert) {
+                this.reinit({ suggestions: {} });
+
+                this.instance.option({
+                    activeStateEnabled: false,
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false,
+                    rtlEnabled: true,
+                });
+
+                assert.strictEqual(this.getSuggestionButtonGroup(), undefined, 'buttonGroup is not created');
+            });
+
+            [true, false].forEach(value => {
+                QUnit.test('state enabled options should be passed to buttonGroup on init', function(assert) {
+                    const options = {
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    };
+
+                    this.reinit(options);
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is passed');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is passed');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is passed');
+                });
+
+                QUnit.test('state enabled options should be updated in buttonGroup when changed at runtime', function(assert) {
+                    this.reinit({
+                        activeStateEnabled: !value,
+                        focusStateEnabled: !value,
+                        hoverStateEnabled: !value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option({
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                    });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is updated');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is updated');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is updated');
+                });
+
+                QUnit.test('state enabled options should be preserved when suggestions are updated at runtime', function(assert) {
+                    this.reinit({
+                        activeStateEnabled: value,
+                        focusStateEnabled: value,
+                        hoverStateEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('activeStateEnabled'), value, 'activeStateEnabled is preserved');
+                    assert.strictEqual(buttonGroup.option('focusStateEnabled'), value, 'focusStateEnabled is preserved');
+                    assert.strictEqual(buttonGroup.option('hoverStateEnabled'), value, 'hoverStateEnabled is preserved');
+                });
+            });
+
+            [true, false].forEach(value => {
+                QUnit.test('rtlEnabled should be passed to buttonGroup on init', function(assert) {
+                    this.reinit({
+                        rtlEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is passed');
+                });
+
+                QUnit.test('rtlEnabled should be updated in buttonGroup when changed at runtime', function(assert) {
+                    this.reinit({
+                        rtlEnabled: !value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('rtlEnabled', value);
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is updated');
+                });
+
+                QUnit.test('rtlEnabled should be preserved when suggestions are updated at runtime', function(assert) {
+                    this.reinit({
+                        rtlEnabled: value,
+                        suggestions: { items: [{ text: 'Item 1' }] },
+                    });
+
+                    this.instance.option('suggestions', { items: [{ text: 'New Item' }] });
+
+                    const buttonGroup = this.getSuggestionButtonGroup();
+
+                    assert.strictEqual(buttonGroup.option('rtlEnabled'), value, 'rtlEnabled is preserved');
+                });
+            });
         });
     });
 

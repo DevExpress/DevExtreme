@@ -398,8 +398,9 @@ class SelectBox<
     }
   }
 
-  _isCustomValueAllowed() {
-    return this.option('acceptCustomValue') || super._isCustomValueAllowed();
+  _isCustomValueAllowed(): boolean {
+    const { acceptCustomValue } = this.option();
+    return Boolean(acceptCustomValue) || super._isCustomValueAllowed();
   }
 
   _displayValue(item) {
@@ -471,6 +472,7 @@ class SelectBox<
   }
 
   _getActualSearchValue() {
+    // @ts-expect-error fix argument type in m_data_controller.ts
     return this._dataController.searchValue();
   }
 
@@ -561,7 +563,6 @@ class SelectBox<
     const value = this._displayGetter(initialSelectedItem);
     const displayValue = value ? String(value) : '';
     const inputText = this._searchValue();
-    // @ts-expect-error ts-error
     return displayValue === inputText;
   }
 
@@ -786,11 +787,12 @@ class SelectBox<
     const that = this;
     const deferred = Deferred();
 
-    super._loadItem(value, cache)
+    (super._loadItem(value, cache) as DeferredObj<unknown>)
       .done((item) => {
         deferred.resolve(item);
       })
       .fail((args) => {
+        // @ts-expect-error add shouldSkipCallback to args
         if (args?.shouldSkipCallback) {
           return;
         }
@@ -901,7 +903,6 @@ class SelectBox<
     return undefined;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _searchHandler(e?): void {
     if (this._preventFiltering) {
       delete this._preventFiltering;
@@ -912,7 +913,7 @@ class SelectBox<
       this._wasSearch(true);
     }
 
-    super._searchHandler(arguments);
+    super._searchHandler(e);
   }
 
   _dataSourceFiltered(searchValue?): void {
@@ -944,7 +945,8 @@ class SelectBox<
       return;
     }
 
-    const item = this._list && this._getPlainItems(this._list.option('items'))[0];
+    const { items } = this._list?.option() ?? {};
+    const item = this._list && this._getPlainItems(items)[0];
 
     if (!item) {
       return;

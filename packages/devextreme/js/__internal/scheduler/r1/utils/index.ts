@@ -1,8 +1,10 @@
 import { getThemeType } from '@ts/scheduler/r1/utils/themes';
 
 import {
+  calculateEndViewDate,
   calculateRows,
   calculateStartViewDate,
+  getDateByIndex,
 } from './agenda';
 import {
   calculateStartViewDate as dayCalculateStartViewDate,
@@ -33,9 +35,6 @@ import {
   getIntervalDuration,
   getTimePanelCellText,
 } from './week';
-import {
-  calculateStartViewDate as workWeekCalculateStartViewDate,
-} from './work_week';
 
 export {
   calculateCellIndex,
@@ -64,9 +63,7 @@ export {
   getValidCellDateForLocalTimeFormat,
   getVerticalGroupCountClass,
   getViewStartByOptions,
-  getWeekendsCount,
   isAppointmentTakesAllDay,
-  isDataOnWeekend,
   isDateAndTimeView,
   isDateInRange,
   isFirstCellInMonthWithIntervalCount,
@@ -87,8 +84,10 @@ export {
 } from './format_weekday';
 
 export const agendaUtils = {
+  calculateEndViewDate,
   calculateStartViewDate,
   calculateRows,
+  getDateByIndex,
 };
 
 export const dayUtils = {
@@ -100,10 +99,6 @@ export const weekUtils = {
   getTimePanelCellText,
   calculateStartViewDate: weekCalculateStartViewDate,
   calculateViewStartDate: weekCalculateViewStartDate,
-};
-
-export const workWeekUtils = {
-  calculateStartViewDate: workWeekCalculateStartViewDate,
 };
 
 export const monthUtils = {

@@ -86,41 +86,6 @@ module('Integration: Appointment editing', {
                 };
             }
         }, () => {
-            test('Scheduler appointment popup should correctly update recurrence appointment', async function(assert) {
-                const tasks = [{
-                    text: 'Recurrence task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30),
-                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
-                }];
-
-                const scheduler = await this.createInstance({
-                    dataSource: tasks,
-                    currentDate: new Date(2017, 2, 13),
-                    currentView: 'month',
-                    recurrenceEditMode: 'series',
-                    views: ['month'],
-                    startDateExpr: 'start',
-                    endDateExpr: 'end',
-                    editing: { legacyForm: true },
-                });
-
-                scheduler.appointments.dblclick(0);
-
-                const form = scheduler.instance.getAppointmentDetailsForm();
-                const repeatSwitch = form.getEditor('repeat');
-                repeatSwitch.option('value', false);
-
-                scheduler.appointmentPopup.clickDoneButton();
-
-                assert.deepEqual(scheduler.instance.option('dataSource')[0], {
-                    text: 'Recurrence task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30),
-                    recurrenceRule: ''
-                }, 'Appointment was updated correctly');
-            });
-
             test('updateAppointment method should be called with right args when task was resized, timelineMonth view', async function(assert) {
                 const data = [{
                     text: 'Task 1',
@@ -206,32 +171,6 @@ module('Integration: Appointment editing', {
                 assert.expect(2);
             });
 
-            test('Add new appointment', async function(assert) {
-                const data = new DataSource({
-                    store: this.tasks
-                });
-
-                const scheduler = await this.createInstance({
-                    currentDate: new Date(2015, 1, 9),
-                    dataSource: data,
-                    editing: { legacyForm: true }
-                });
-                const addAppointment = scheduler.instance.addAppointment;
-                const spy = sinon.spy(() => new Deferred());
-                const newItem = { startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' };
-                scheduler.instance.addAppointment = spy;
-                try {
-                    scheduler.instance.showAppointmentPopup(newItem, true);
-
-                    $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
-
-                    assert.ok(spy.calledOnce, 'Add method is called');
-                    assert.deepEqual(spy.getCall(0).args[0], newItem, 'New item is correct');
-                } finally {
-                    scheduler.instance.addAppointment = addAppointment;
-                }
-            });
-
             test('Add new appointment with delay(T381444)', async function(assert) {
                 const done = assert.async();
                 const data = [];
@@ -304,37 +243,6 @@ module('Integration: Appointment editing', {
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
                 const popup = scheduler.instance.appointmentPopup.popup;
-            });
-
-            // TODO: update editors in popup
-            test('Update appointment', async function(assert) {
-                const data = new DataSource({
-                    store: this.tasks
-                });
-
-                const scheduler = await this.createInstance({
-                    currentDate: new Date(2015, 1, 9),
-                    dataSource: data,
-                    editing: { legacyForm: true }
-                });
-
-                const updateAppointment = scheduler.instance.updateAppointment;
-                const spy = sinon.spy(() => new Deferred());
-                const updatedItem = this.tasks[0];
-                scheduler.instance.updateAppointment = spy;
-                try {
-                    scheduler.instance.showAppointmentPopup(updatedItem);
-
-                    $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
-
-                    hide();
-
-                    assert.ok(spy.calledOnce, 'Update method is called');
-                    assert.deepEqual(spy.getCall(0).args[0], updatedItem, 'Target item is correct');
-                    assert.deepEqual(spy.getCall(0).args[1], updatedItem, 'New data is correct');
-                } finally {
-                    scheduler.instance.updateAppointment = updateAppointment;
-                }
             });
 
             test('Scheduler should add only one appointment at multiple "done" button clicks on appointment form', async function(assert) {

@@ -615,29 +615,6 @@ QUnit.module('Events', {
         assert.deepEqual(appointments.option('onAppointmentDblClick')(), scheduler.instance.option('onAppointmentDblClick')(), 'scheduler has correct onAppointmentDblClick after option change');
     });
 
-    QUnit.test('onAppointmentFormOpening event should be fired while details form is opening', async function(assert) {
-        const stub = sinon.stub();
-        const data = {
-            text: 'One',
-            location: 'NY'
-        };
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            onAppointmentFormOpening: stub,
-            editing: {
-                legacyForm: true
-            },
-        });
-
-        scheduler.instance.showAppointmentPopup(data);
-
-        const args = stub.getCall(0).args[0];
-
-        assert.ok(stub.calledOnce, 'Event was fired');
-        assert.equal(args.appointmentData, data, 'Appointment data is OK');
-        assert.equal(args.form, scheduler.instance.getAppointmentDetailsForm(), 'Appointment form is OK');
-    });
-
     QUnit.test('Option changed', async function(assert) {
         const scheduler = await createWrapper();
 
@@ -649,7 +626,12 @@ QUnit.module('Events', {
             'onAppointmentDeleting': function() { return true; },
             'onAppointmentDeleted': function() { return true; },
             'onAppointmentFormOpening': function() { return true; },
-            'onAppointmentTooltipShowing': function() { return true; }
+            'onAppointmentTooltipShowing': function() { return true; },
+            'onSelectionEnd': function() { return true; },
+            'onAppointmentRendered': function() { return true; },
+            'onAppointmentClick': function() { return true; },
+            'onAppointmentDblClick': function() { return true; },
+            'onAppointmentContextMenu': function() { return true; },
         });
 
         $.each(scheduler.instance.getActions(), function(name, action) {

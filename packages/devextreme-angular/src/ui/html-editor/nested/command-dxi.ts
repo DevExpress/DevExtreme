@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_commands } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-command',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

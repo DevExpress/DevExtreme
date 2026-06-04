@@ -1,6 +1,6 @@
 {
   "name": "devextreme-metadata",
-  "version": "26.1.0",
+  "version": "26.1.2",
   "private": true,
   "scripts": {
     "format:check": "prettier --check .",

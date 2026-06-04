@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-html-editor-table-context-menu',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -539,7 +539,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
         that.component.getView('columnChooserView').showColumnChooser();
       };
       const onInitialized = function (e) {
-        $(e.element).addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
+        $(e.element).addClass(that.getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
       };
       const hintText = that.option('columnChooser.title');
       const toolbarItem = {

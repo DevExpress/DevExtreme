@@ -313,14 +313,6 @@ declare global {
     dxRangeSlider(options: string): any;
     dxRangeSlider(options: string, ...params: any[]): any;
 
-    dxRecurrenceEditor(): JQuery;
-    dxRecurrenceEditor(options: 'instance'): DevExpress.ui.dxRecurrenceEditor;
-    dxRecurrenceEditor(
-      options: DevExpress.ui.dxRecurrenceEditor.Properties
-    ): JQuery;
-    dxRecurrenceEditor(options: string): any;
-    dxRecurrenceEditor(options: string, ...params: any[]): any;
-
     dxResizable(): JQuery;
     dxResizable(options: 'instance'): DevExpress.ui.dxResizable;
     dxResizable(options: DevExpress.ui.dxResizable.Properties): JQuery;
@@ -915,6 +907,10 @@ declare module DevExpress.aiIntegration {
       params: GenerateGridColumnCommandParams,
       callbacks: RequestCallbacks<GenerateGridColumnCommandResult>
     ): () => void;
+    executeGridAssistant(
+      params: ExecuteGridAssistantCommandParams,
+      callbacks: RequestCallbacks<ExecuteGridAssistantCommandResult>
+    ): () => void;
   }
   /**
    * [descr:AIIntegrationOptions]
@@ -970,6 +966,39 @@ declare module DevExpress.aiIntegration {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type ExecuteCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteGridAssistantAction = {
+    name: string;
+    args: Record<string, unknown>;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteGridAssistantCommandParams = {
+    text: string;
+    context: Record<string, unknown>;
+    responseSchema: Record<string, unknown>;
+    additionalInfo?: Record<PropertyKey, unknown>;
+  };
+  /**
+   * [descr:ExecuteGridAssistantCommandResponse]
+   */
+  export type ExecuteGridAssistantCommandResponse =
+    | string
+    | {
+        /**
+         * [descr:ExecuteGridAssistantCommandResponse.actions]
+         */
+        actions: ExecuteGridAssistantAction[] | string;
+      };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteGridAssistantCommandResult = {
+    actions: ExecuteGridAssistantAction[];
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -1269,6 +1298,8 @@ declare module DevExpress.common {
     | 'object'
     | 'datetime';
   export type DateLike = Date | number | string | null;
+
+  export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
@@ -1303,7 +1334,11 @@ declare module DevExpress.common {
    */
   type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
   export type FieldChooserLayout = 0 | 1 | 2;
-  export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+  /**
+   * @deprecated Use the DayOfWeek type instead
+   */
+  export type FirstDayOfWeek = DayOfWeek;
   export type Format =
     | 'billions'
     | 'currency'
@@ -1367,6 +1402,38 @@ declare module DevExpress.common {
    */
   export type GlobalConfig = {
     versionAssertions?: VersionAssertion[];
+    /**
+     * [descr:GlobalConfig.dateFormat]
+     */
+    dateFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.timeFormat]
+     */
+    timeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.dateTimeFormat]
+     */
+    dateTimeFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.numberFormat]
+     */
+    numberFormat?:
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>;
+    /**
+     * [descr:GlobalConfig.dateTimeFormatPresets]
+     */
+    dateTimeFormatPresets?: Record<
+      string,
+      | DevExpress.common.core.localization.Format
+      | Record<string, DevExpress.common.core.localization.Format>
+    >;
     /**
      * [descr:GlobalConfig.decimalSeparator]
      * @deprecated [depNote:GlobalConfig.decimalSeparator]
@@ -4555,6 +4622,54 @@ declare module DevExpress.common.grids {
      */
     readonly formOptions: any;
   };
+  /**
+   * [descr:AIAssistant]
+   */
+  export type AIAssistant<
+    TCommands extends PredefinedCommands = PredefinedCommands
+  > = {
+    /**
+     * [descr:AIAssistant.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration;
+    /**
+     * [descr:AIAssistant.chat]
+     */
+    chat?: DevExpress.ui.dxChat.Properties;
+    /**
+     * [descr:AIAssistant.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:AIAssistant.popup]
+     */
+    popup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:AIAssistant.title]
+     */
+    title?: string;
+    /**
+     * [descr:AIAssistant.customizeResponseTitle]
+     */
+    customizeResponseTitle?: (
+      status: ResponseStatus,
+      commandNames: (keyof TCommands)[]
+    ) => string;
+    /**
+     * [descr:AIAssistant.customizeResponseText]
+     */
+    customizeResponseText?: (
+      command: CommandInfo<TCommands>
+    ) => ResponseStatusTexts;
+  };
+  /**
+   * [descr:AIAssistantRequestCreatingInfo]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type AIAssistantRequestCreatingInfo = Pick<
+    DevExpress.aiIntegration.ExecuteGridAssistantCommandParams,
+    'context' | 'responseSchema' | 'additionalInfo'
+  >;
   export type AIColumnMode = 'auto' | 'manual';
   /**
    * [descr:AIColumnRequestCreatingInfo]
@@ -4584,6 +4699,15 @@ declare module DevExpress.common.grids {
   };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * [descr:BasicFilterExpr]
+   */
+  export type BasicFilterExpr = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.SearchOperation;
+    value: string | number | boolean | null | Date;
+  };
   /**
    * [descr:ColumnAIOptions]
    */
@@ -5127,6 +5251,33 @@ declare module DevExpress.common.grids {
   };
   export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**
+   * [descr:CombinedFilterExpr]
+   */
+  export type CombinedFilterExpr = {
+    type: 'combined';
+    combiner: 'and' | 'or';
+    leftId: string;
+    rightId: string;
+  };
+  /**
+   * [descr:CommandInfo]
+   */
+  export type CommandInfo<
+    TCommands extends PredefinedCommands = PredefinedCommands
+  > = {
+    [K in keyof TCommands]: {
+      name: K;
+      args: TCommands[K];
+    };
+  }[keyof TCommands];
+  /**
+   * [descr:CompositeKeyPair]
+   */
+  export type CompositeKeyPair = {
+    field: string;
+    value: string | number;
+  };
+  /**
    * [descr:DataChange]
    */
   export type DataChange<TRowData = any, TKey = any> = {
@@ -5301,6 +5452,27 @@ declare module DevExpress.common.grids {
   }
   export type EnterKeyAction = 'startEdit' | 'moveFocus';
   export type EnterKeyDirection = 'none' | 'column' | 'row';
+  /**
+   * [descr:FilterExpr]
+   */
+  export type FilterExpr =
+    | BasicFilterExpr
+    | CombinedFilterExpr
+    | NegatedFilterExpr;
+  /**
+   * [descr:FilterExprNode]
+   */
+  interface FilterExprNode {
+    id: string;
+    expr: FilterExpr;
+  }
+  /**
+   * [descr:FilterExprTree]
+   */
+  interface FilterExprTree {
+    rootId: string;
+    nodes: FilterExprNode[];
+  }
   export type FilterOperation =
     | '='
     | '<>'
@@ -5771,6 +5943,10 @@ declare module DevExpress.common.grids {
     'focusStateEnabled'
   > & {
     /**
+     * [descr:GridBaseOptions.aiAssistant]
+     */
+    aiAssistant?: AIAssistant;
+    /**
      * [descr:GridBaseOptions.aiIntegration]
      */
     aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
@@ -5902,6 +6078,14 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.noDataText]
      */
     noDataText?: string;
+    /**
+     * [descr:GridBaseOptions.onAIAssistantRequestCreating]
+     */
+    onAIAssistantRequestCreating?: (
+      e: DevExpress.common.core.events.EventInfo<TComponent> &
+        DevExpress.common.core.events.Cancelable &
+        AIAssistantRequestCreatingInfo
+    ) => void;
     /**
      * [descr:GridBaseOptions.onAdaptiveDetailRowPreparing]
      */
@@ -6314,6 +6498,13 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
+   * [descr:NegatedFilterExpr]
+   */
+  export type NegatedFilterExpr = {
+    type: 'negated';
+    expressionId: string;
+  };
+  /**
    * [descr:NewRowInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6367,6 +6558,81 @@ declare module DevExpress.common.grids {
      */
     pageSize?: number;
   }
+  /**
+   * [descr:PredefinedCommandNames]
+   */
+  export type PredefinedCommandNames = keyof PredefinedCommands;
+  /**
+   * [descr:PredefinedCommands]
+   */
+  export type PredefinedCommands = {
+    columnsVisibility: {
+      dataField: string;
+      visible: boolean;
+    };
+    columnsReorder: {
+      dataField: string;
+      visibleIndex: number;
+    };
+    columnsPinning: {
+      dataField: string;
+      fixed: boolean;
+      fixedPosition?: 'left' | 'right';
+    };
+    columnsResize: {
+      dataField: string;
+      width: number | string;
+    };
+    filterValue: {
+      expression: FilterExprTree | null;
+    };
+    clearFilter: {};
+    focusRowByKey: {
+      key: string | number | Array<CompositeKeyPair>;
+    };
+    focusRowByIndex: {
+      index: number;
+    };
+    paging: {
+      enabled: boolean;
+    };
+    pageSize: {
+      pageSize: number;
+    };
+    pageIndex: {
+      pageIndex: number;
+    };
+    searching: {
+      text: string;
+    };
+    selectByKeys: {
+      keys: Array<string | number | Array<CompositeKeyPair>>;
+      preserve: boolean;
+    };
+    selectByIndexes: {
+      indexes: number[];
+      mode: 'select' | 'deselect';
+    };
+    selectAll: {};
+    deselectAll: {};
+    clearSelection: {};
+    sorting: {
+      dataField: string;
+      sortOrder: SortOrder | 'none';
+    };
+    clearSorting: {};
+  };
+  /**
+   * [descr:ResponseStatus]
+   */
+  export type ResponseStatus = 'success' | 'failure';
+  /**
+   * [descr:ResponseStatusTexts]
+   */
+  export type ResponseStatusTexts = {
+    success?: string;
+    failure?: string;
+  };
   /**
    * [descr:RowDragging]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7000,6 +7266,7 @@ declare module DevExpress.core {
     after(element: Element | dxElementWrapper): this;
 
     append(element: Element | dxElementWrapper | string): this;
+    append(element: Element[] | dxElementWrapper[] | string[]): this;
 
     appendTo(element: Element | dxElementWrapper): this;
 
@@ -7112,6 +7379,7 @@ declare module DevExpress.core {
 
     trim(): this;
 
+    val(): string;
     val(value?: string | string[] | number): this;
 
     wrap(wrappingElement: this | Element | string): this;
@@ -8514,27 +8782,27 @@ declare module DevExpress.fileManagement {
     /**
      * [descr:FileSystemProviderBaseOptions.dateModifiedExpr]
      */
-    dateModifiedExpr?: string | Function;
+    dateModifiedExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.isDirectoryExpr]
      */
-    isDirectoryExpr?: string | Function;
+    isDirectoryExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.nameExpr]
      */
-    nameExpr?: string | Function;
+    nameExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.sizeExpr]
      */
-    sizeExpr?: string | Function;
+    sizeExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:FileSystemProviderBaseOptions.thumbnailExpr]
      */
-    thumbnailExpr?: string | Function;
+    thumbnailExpr?: string | ((item: any, value?: any) => any);
   }
   /**
    * [descr:ObjectFileSystemProvider]
@@ -8557,7 +8825,7 @@ declare module DevExpress.fileManagement {
     /**
      * [descr:ObjectFileSystemProviderOptions.contentExpr]
      */
-    contentExpr?: string | Function;
+    contentExpr?: string | ((item: any, value?: any) => any);
     /**
      * [descr:ObjectFileSystemProviderOptions.data]
      */
@@ -8565,7 +8833,9 @@ declare module DevExpress.fileManagement {
     /**
      * [descr:ObjectFileSystemProviderOptions.itemsExpr]
      */
-    itemsExpr?: string | Function;
+    itemsExpr?:
+      | string
+      | ((item: any, value: any[] | undefined) => any[] | undefined);
   }
   /**
    * [descr:RemoteFileSystemProvider]
@@ -8779,7 +9049,7 @@ declare module DevExpress.ui {
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
@@ -9947,7 +10217,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: any) => any);
     /**
      * [descr:dxButtonGroupOptions.onItemClick]
      */
@@ -10127,7 +10397,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
      */
@@ -11333,6 +11603,15 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxChat> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
+    export type SendButtonAction = 'send' | 'custom';
+    /**
+     * [descr:_ui_chat_SendButtonClickEvent]
+     */
+    export type SendButtonClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxButton,
+        DevExpress.events.InteractionEvent
+      >;
     /**
      * [descr:_ui_chat_TypingEndEvent]
      */
@@ -11367,45 +11646,34 @@ declare module DevExpress.ui {
      */
     activeStateEnabled?: boolean;
     /**
-     * [descr:dxChatOptions.fileUploaderOptions]
+     * [descr:dxChatOptions.alerts]
      */
-    fileUploaderOptions?: Omit<
-      DevExpress.ui.dxFileUploader.Properties,
-      'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'
-    >;
+    alerts?: Array<DevExpress.ui.dxChat.Alert>;
     /**
-     * [descr:dxChatOptions.focusStateEnabled]
+     * [descr:dxChatOptions.dataSource]
      */
-    focusStateEnabled?: boolean;
+    dataSource?: DevExpress.data.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
-     * [descr:dxChatOptions.hoverStateEnabled]
+     * [descr:dxChatOptions.dayHeaderFormat]
      */
-    hoverStateEnabled?: boolean;
-    /**
-     * [descr:dxChatOptions.user]
-     */
-    user?: DevExpress.ui.dxChat.User;
-    /**
-     * [descr:dxChatOptions.items]
-     */
-    items?: Array<DevExpress.ui.dxChat.Message>;
+    dayHeaderFormat?: DevExpress.common.core.localization.Format;
     /**
      * [descr:dxChatOptions.editing]
      */
     editing?: {
       /**
-       * [descr:dxChatOptions.editing.allowUpdating]
+       * [descr:dxChatOptions.editing.allowDeleting]
        */
-      allowUpdating?:
+      allowDeleting?:
         | boolean
         | ((options: {
             component?: dxChat;
             message?: DevExpress.ui.dxChat.Message;
           }) => boolean);
       /**
-       * [descr:dxChatOptions.editing.allowDeleting]
+       * [descr:dxChatOptions.editing.allowUpdating]
        */
-      allowDeleting?:
+      allowUpdating?:
         | boolean
         | ((options: {
             component?: dxChat;
@@ -11423,25 +11691,28 @@ declare module DevExpress.ui {
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
-     * [descr:dxChatOptions.dataSource]
+     * [descr:dxChatOptions.fileUploaderOptions]
      */
-    dataSource?: DevExpress.data.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
+    fileUploaderOptions?: Omit<
+      DevExpress.ui.dxFileUploader.Properties,
+      'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'
+    >;
     /**
-     * [descr:dxChatOptions.dayHeaderFormat]
+     * [descr:dxChatOptions.focusStateEnabled]
      */
-    dayHeaderFormat?: DevExpress.common.core.localization.Format;
+    focusStateEnabled?: boolean;
     /**
-     * [descr:dxChatOptions.reloadOnChange]
+     * [descr:dxChatOptions.hoverStateEnabled]
      */
-    reloadOnChange?: boolean;
-    /**
-     * [descr:dxChatOptions.alerts]
-     */
-    alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    hoverStateEnabled?: boolean;
     /**
      * [descr:dxChatOptions.inputFieldText]
      */
     inputFieldText?: DevExpress.ui.dxTextArea.Properties['value'];
+    /**
+     * [descr:dxChatOptions.items]
+     */
+    items?: Array<DevExpress.ui.dxChat.Message>;
     /**
      * [descr:dxChatOptions.messageTemplate]
      */
@@ -11457,25 +11728,29 @@ declare module DevExpress.ui {
      */
     messageTimestampFormat?: DevExpress.common.core.localization.Format;
     /**
-     * [descr:dxChatOptions.typingUsers]
+     * [descr:dxChatOptions.reloadOnChange]
      */
-    typingUsers?: Array<DevExpress.ui.dxChat.User>;
+    reloadOnChange?: boolean;
     /**
-     * [descr:dxChatOptions.showDayHeaders]
+     * [descr:dxChatOptions.sendButtonOptions]
      */
-    showDayHeaders?: boolean;
-    /**
-     * [descr:dxChatOptions.showUserName]
-     */
-    showUserName?: boolean;
+    sendButtonOptions?: DevExpress.ui.dxChat.SendButtonProperties;
     /**
      * [descr:dxChatOptions.showAvatar]
      */
     showAvatar?: boolean;
     /**
+     * [descr:dxChatOptions.showDayHeaders]
+     */
+    showDayHeaders?: boolean;
+    /**
      * [descr:dxChatOptions.showMessageTimestamp]
      */
     showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.showUserName]
+     */
+    showUserName?: boolean;
     /**
      * [descr:dxChatOptions.speechToTextEnabled]
      */
@@ -11487,6 +11762,24 @@ declare module DevExpress.ui {
       DevExpress.ui.dxSpeechToText.Properties,
       'stylingMode' | 'type'
     >;
+    /**
+     * [descr:dxChatOptions.suggestions]
+     */
+    suggestions?: Omit<
+      DevExpress.ui.dxButtonGroup.Properties,
+      | 'selectionMode'
+      | 'selectedItemKeys'
+      | 'selectedItems'
+      | 'onSelectionChanged'
+    >;
+    /**
+     * [descr:dxChatOptions.typingUsers]
+     */
+    typingUsers?: Array<DevExpress.ui.dxChat.User>;
+    /**
+     * [descr:dxChatOptions.user]
+     */
+    user?: DevExpress.ui.dxChat.User;
     /**
      * [descr:dxChatOptions.onAttachmentDownloadClick]
      */
@@ -11500,22 +11793,10 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.InputFieldTextChangedEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageEntered]
+     * [descr:dxChatOptions.onMessageDeleted]
      */
-    onMessageEntered?:
-      | ((e: DevExpress.ui.dxChat.MessageEnteredEvent) => void)
-      | undefined;
-    /**
-     * [descr:dxChatOptions.onTypingStart]
-     */
-    onTypingStart?:
-      | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
-      | undefined;
-    /**
-     * [descr:dxChatOptions.onTypingEnd]
-     */
-    onTypingEnd?:
-      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+    onMessageDeleted?:
+      | ((e: DevExpress.ui.dxChat.MessageDeletedEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageDeleting]
@@ -11524,10 +11805,10 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.MessageDeletingEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageDeleted]
+     * [descr:dxChatOptions.onMessageEditCanceled]
      */
-    onMessageDeleted?:
-      | ((e: DevExpress.ui.dxChat.MessageDeletedEvent) => void)
+    onMessageEditCanceled?:
+      | ((e: DevExpress.ui.dxChat.MessageEditCanceledEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEditingStart]
@@ -11536,10 +11817,16 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.MessageEditingStartEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageEditCanceled]
+     * [descr:dxChatOptions.onMessageEntered]
      */
-    onMessageEditCanceled?:
-      | ((e: DevExpress.ui.dxChat.MessageEditCanceledEvent) => void)
+    onMessageEntered?:
+      | ((e: DevExpress.ui.dxChat.MessageEnteredEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageUpdated]
+     */
+    onMessageUpdated?:
+      | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageUpdating]
@@ -11548,10 +11835,16 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.MessageUpdatingEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageUpdated]
+     * [descr:dxChatOptions.onTypingEnd]
      */
-    onMessageUpdated?:
-      | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent) => void)
+    onTypingEnd?:
+      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onTypingStart]
+     */
+    onTypingStart?:
+      | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
       | undefined;
   }
   /**
@@ -12241,6 +12534,20 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:AIAssistant]
+     */
+    export type AIAssistant =
+      DevExpress.common.grids.AIAssistant<DataGridPredefinedCommands>;
+    /**
+     * [descr:_ui_data_grid_AIAssistantRequestCreatingEvent]
+     */
+    export type AIAssistantRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.core.events.Cancelable &
+      DevExpress.common.grids.AIAssistantRequestCreatingInfo;
+    /**
      * [descr:_ui_data_grid_AIColumnRequestCreatingEvent]
      */
     export type AIColumnRequestCreatingEvent<
@@ -12648,6 +12955,11 @@ declare module DevExpress.ui {
       | 'groupExpand'
       | 'selection'
       | 'drag';
+    /**
+     * [descr:DataGridCommandInfo]
+     */
+    export type DataGridCommandInfo =
+      DevExpress.common.grids.CommandInfo<DataGridPredefinedCommands>;
     export type DataGridExportFormat = 'pdf' | 'xlsx';
     export type DataGridPredefinedColumnButton =
       | 'cancel'
@@ -12655,8 +12967,30 @@ declare module DevExpress.ui {
       | 'edit'
       | 'save'
       | 'undelete';
+    /**
+     * [descr:DataGridPredefinedCommandNames]
+     */
+    export type DataGridPredefinedCommandNames =
+      keyof DataGridPredefinedCommands;
+    /**
+     * [descr:DataGridPredefinedCommands]
+     */
+    export type DataGridPredefinedCommands =
+      DevExpress.common.grids.PredefinedCommands & {
+        grouping: {
+          dataField: string;
+          groupIndex: number;
+        };
+        clearGrouping: {};
+        summary: {
+          totalItems: Array<SummaryCommandTotalItem>;
+          groupItems: Array<SummaryCommandGroupItem>;
+        };
+        clearSummary: {};
+      };
     export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
+      | 'aiAssistantButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
       | 'exportButton'
@@ -12892,6 +13226,10 @@ declare module DevExpress.ui {
       readonly row?: Row<TRowData, TKey>;
     };
     export type ExplicitTypes<TRowData, TKey> = {
+      AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<
+        TRowData,
+        TKey
+      >;
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
         TKey
@@ -13329,6 +13667,7 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     type OverriddenKeys =
+      | 'aiAssistant'
       | 'columns'
       | 'customizeColumns'
       | 'dataRowTemplate'
@@ -13839,6 +14178,26 @@ declare module DevExpress.ui {
       totalItems?: Array<SummaryTotalItem> | undefined;
     };
     /**
+     * [descr:SummaryCommandGroupItem]
+     */
+    export type SummaryCommandGroupItem = Pick<
+      SummaryGroupItem,
+      'showInColumn' | 'displayFormat' | 'showInGroupFooter' | 'alignByColumn'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
+    };
+    /**
+     * [descr:SummaryCommandTotalItem]
+     */
+    export type SummaryCommandTotalItem = Pick<
+      SummaryTotalItem,
+      'showInColumn' | 'displayFormat'
+    > & {
+      column: string;
+      summaryType: DevExpress.common.grids.SummaryType;
+    };
+    /**
      * [descr:SummaryGroupItem]
      */
     export type SummaryGroupItem = {
@@ -14141,6 +14500,10 @@ declare module DevExpress.ui {
     >,
     DevExpress.ui.dxDataGrid.OverriddenKeys
   > & {
+    /**
+     * [descr:dxDataGridOptions.aiAssistant]
+     */
+    aiAssistant?: DevExpress.ui.dxDataGrid.AIAssistant;
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -16902,7 +17265,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxDropDownEditorOptions.onClosed]
      */
@@ -20651,19 +21014,19 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.dependencies.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((dependency: any) => any);
       /**
        * [descr:dxGanttOptions.dependencies.predecessorIdExpr]
        */
-      predecessorIdExpr?: string | Function;
+      predecessorIdExpr?: string | ((dependency: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.dependencies.successorIdExpr]
        */
-      successorIdExpr?: string | Function;
+      successorIdExpr?: string | ((dependency: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.dependencies.typeExpr]
        */
-      typeExpr?: string | Function;
+      typeExpr?: string | ((dependency: any, value?: any) => any);
     };
     /**
      * [descr:dxGanttOptions.editing]
@@ -20891,15 +21254,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resourceAssignments.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((resourceAssignment: any) => any);
       /**
        * [descr:dxGanttOptions.resourceAssignments.resourceIdExpr]
        */
-      resourceIdExpr?: string | Function;
+      resourceIdExpr?: string | ((resourceAssignment: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.resourceAssignments.taskIdExpr]
        */
-      taskIdExpr?: string | Function;
+      taskIdExpr?: string | ((resourceAssignment: any, value?: any) => any);
     };
     /**
      * [descr:dxGanttOptions.resources]
@@ -20908,7 +21271,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resources.colorExpr]
        */
-      colorExpr?: string | Function;
+      colorExpr?: string | ((resource: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.resources.dataSource]
        */
@@ -20916,11 +21279,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resources.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((resource: any) => any);
       /**
        * [descr:dxGanttOptions.resources.textExpr]
        */
-      textExpr?: string | Function;
+      textExpr?: string | ((resource: any, value?: any) => string);
     };
     /**
      * [descr:dxGanttOptions.scaleType]
@@ -20966,7 +21329,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
     /**
      * [descr:dxGanttOptions.tasks]
      */
@@ -20974,7 +21337,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.tasks.colorExpr]
        */
-      colorExpr?: string | Function;
+      colorExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.dataSource]
        */
@@ -20982,27 +21345,27 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.tasks.endExpr]
        */
-      endExpr?: string | Function;
+      endExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.keyExpr]
        */
-      keyExpr?: string | Function;
+      keyExpr?: string | ((task: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.parentIdExpr]
        */
-      parentIdExpr?: string | Function;
+      parentIdExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.progressExpr]
        */
-      progressExpr?: string | Function;
+      progressExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.startExpr]
        */
-      startExpr?: string | Function;
+      startExpr?: string | ((task: any, value?: any) => any);
       /**
        * [descr:dxGanttOptions.tasks.titleExpr]
        */
-      titleExpr?: string | Function;
+      titleExpr?: string | ((task: any, value?: any) => any);
     };
     /**
      * [descr:dxGanttOptions.toolbar]
@@ -25506,54 +25869,6 @@ declare module DevExpress.ui {
     value?: Array<number>;
   }
   /**
-   * [descr:dxRecurrenceEditor]
-   */
-  export class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions> {}
-  module dxRecurrenceEditor {
-    /**
-     * [descr:_ui_recurrence_editor_ContentReadyEvent]
-     */
-    export type ContentReadyEvent =
-      DevExpress.common.core.events.EventInfo<dxRecurrenceEditor>;
-    /**
-     * [descr:_ui_recurrence_editor_DisposingEvent]
-     */
-    export type DisposingEvent =
-      DevExpress.common.core.events.EventInfo<dxRecurrenceEditor>;
-    /**
-     * [descr:_ui_recurrence_editor_InitializedEvent]
-     */
-    export type InitializedEvent =
-      DevExpress.common.core.events.InitializedEventInfo<dxRecurrenceEditor>;
-    /**
-     * [descr:_ui_recurrence_editor_OptionChangedEvent]
-     */
-    export type OptionChangedEvent =
-      DevExpress.common.core.events.EventInfo<dxRecurrenceEditor> &
-        DevExpress.common.core.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type Properties = dxRecurrenceEditorOptions;
-    /**
-     * [descr:_ui_recurrence_editor_ValueChangedEvent]
-     */
-    export type ValueChangedEvent =
-      DevExpress.common.core.events.NativeEventInfo<dxRecurrenceEditor, Event> &
-        DevExpress.ui.Editor.ValueChangedInfo;
-  }
-  /**
-   * [descr:dxRecurrenceEditorOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxRecurrenceEditorOptions
-    extends EditorOptions<dxRecurrenceEditor> {
-    /**
-     * [descr:dxRecurrenceEditorOptions.value]
-     */
-    value?: string;
-  }
-  /**
    * [descr:dxResizable]
    */
   export class dxResizable extends DOMComponent<dxResizableOptions> {}
@@ -26330,6 +26645,16 @@ declare module DevExpress.ui {
       | 'dateNavigator'
       | 'viewSwitcher';
     export type SchedulerScrollToAlign = 'start' | 'center';
+    /**
+     * [descr:_ui_scheduler_SelectionEndEvent]
+     */
+    export type SelectionEndEvent =
+      DevExpress.common.core.events.EventInfo<dxScheduler> & {
+        /**
+         * [descr:_ui_scheduler_SelectionEndEvent.selectedCellData]
+         */
+        readonly selectedCellData: Array<any>;
+      };
     export type SnapToCellsMode = 'always' | 'auto' | 'never';
     /**
      * [descr:TargetedAppointmentInfo]
@@ -26620,7 +26945,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
+    /**
+     * [descr:dxSchedulerOptions.hiddenWeekDays]
+     */
+    hiddenWeekDays?: Array<DevExpress.common.DayOfWeek> | undefined;
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
@@ -26734,6 +27063,12 @@ declare module DevExpress.ui {
     onCellClick?:
       | ((e: DevExpress.ui.dxScheduler.CellClickEvent) => void)
       | string;
+    /**
+     * [descr:dxSchedulerOptions.onSelectionEnd]
+     */
+    onSelectionEnd?:
+      | ((e: DevExpress.ui.dxScheduler.SelectionEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onCellContextMenu]
      */
@@ -26951,7 +27286,11 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.firstDayOfWeek]
            */
-          firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
+          firstDayOfWeek?: DevExpress.common.DayOfWeek | undefined;
+          /**
+           * [descr:dxSchedulerOptions.views.hiddenWeekDays]
+           */
+          hiddenWeekDays?: Array<DevExpress.common.DayOfWeek> | undefined;
           /**
            * [descr:dxSchedulerOptions.views.groupByDate]
            */
@@ -27468,7 +27807,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
@@ -29005,7 +29344,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabPanelOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:dxTabPanelOptions.onTitleClick]
      */
@@ -30713,6 +31052,15 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:_ui_tree_list_AIAssistantRequestCreatingEvent]
+     */
+    export type AIAssistantRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.core.events.Cancelable &
+      DevExpress.common.grids.AIAssistantRequestCreatingInfo;
+    /**
      * [descr:_ui_tree_list_AIColumnRequestCreatingEvent]
      */
     export type AIColumnRequestCreatingEvent<
@@ -30899,9 +31247,6 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
     export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
       readonly component: dxTreeList<TRowData, TKey>;
       readonly columnIndex: number;
@@ -31171,6 +31516,10 @@ declare module DevExpress.ui {
         readonly row?: Row<TRowData, TKey>;
       };
     export type ExplicitTypes<TRowData, TKey> = {
+      AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<
+        TRowData,
+        TKey
+      >;
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
         TKey
@@ -31917,6 +32266,7 @@ declare module DevExpress.ui {
       | 'undelete';
     export type TreeListPredefinedToolbarItem =
       | 'addRowButton'
+      | 'aiAssistantButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
       | 'revertButton'
@@ -32091,15 +32441,22 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
-    hasItemsExpr?: string | Function;
+    hasItemsExpr?:
+      | string
+      | ((item: TRowData, value: boolean | undefined) => boolean | undefined);
     /**
      * [descr:dxTreeListOptions.itemsExpr]
      */
-    itemsExpr?: string | Function;
+    itemsExpr?:
+      | string
+      | ((
+          item: TRowData,
+          value: undefined | TRowData[]
+        ) => TRowData[] | undefined);
     /**
      * [descr:dxTreeListOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TRowData, value?: TKey) => TKey);
     /**
      * [descr:dxTreeListOptions.onCellClick]
      */
@@ -32203,7 +32560,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.parentIdExpr]
      */
-    parentIdExpr?: string | Function;
+    parentIdExpr?:
+      | string
+      | ((item: TRowData, value?: TKey) => TKey | undefined);
     /**
      * [descr:dxTreeListOptions.remoteOperations]
      */
@@ -32681,11 +33040,13 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.expandedExpr]
      */
-    expandedExpr?: string | Function;
+    expandedExpr?:
+      | string
+      | ((item: TItem, value: boolean | undefined) => boolean | undefined);
     /**
      * [descr:dxTreeViewOptions.hasItemsExpr]
      */
-    hasItemsExpr?: string | Function;
+    hasItemsExpr?: string | ((item: TItem) => boolean | undefined);
     /**
      * [descr:dxTreeViewOptions.items]
      */
@@ -32747,7 +33108,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
      */
-    parentIdExpr?: string | Function;
+    parentIdExpr?: string | ((item: TItem) => TKey | undefined);
     /**
      * [descr:dxTreeViewOptions.rootValue]
      */
@@ -33308,7 +33669,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
      */
-    disabledExpr?: string | Function;
+    disabledExpr?: string | ((item: TItem) => boolean | undefined);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
      */
@@ -33324,15 +33685,17 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
      */
-    itemsExpr?: string | Function;
+    itemsExpr?: string | ((item: TItem) => TItem[] | undefined);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
      */
-    selectedExpr?: string | Function;
+    selectedExpr?:
+      | string
+      | ((item: TItem, value: boolean | undefined) => boolean | undefined);
   }
   /**
    * [descr:MapLocation]
@@ -34167,6 +34530,23 @@ declare module DevExpress.ui.dxChat {
     [key: string]: any;
   };
   /**
+   * [descr:SendButtonProperties]
+   */
+  export type SendButtonProperties = {
+    /**
+     * [descr:SendButtonProperties.action]
+     */
+    action?: SendButtonAction;
+    /**
+     * [descr:SendButtonProperties.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:SendButtonProperties.onClick]
+     */
+    onClick?: (e: SendButtonClickEvent) => void;
+  };
+  /**
    * [descr:TextMessage]
    */
   export type TextMessage = MessageBase & {
@@ -34711,7 +35091,6 @@ declare module DevExpress.ui.dxTreeList {
   };
   /**
    * [descr:dxTreeListToolbarItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ToolbarItem extends dxToolbarItem {
     /**

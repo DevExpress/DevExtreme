@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_panes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-chart-pane',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

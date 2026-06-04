@@ -1,4 +1,5 @@
 export {
+  DayOfWeek,
   FirstDayOfWeek,
   Orientation,
   ScrollMode,
@@ -31,6 +32,7 @@ export {
   DisposingEvent,
   InitializedEvent,
   OptionChangedEvent,
+  SelectionEndEvent,
   AppointmentDraggingAddEvent,
   AppointmentDraggingEndEvent,
   AppointmentDraggingMoveEvent,

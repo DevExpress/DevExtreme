@@ -41,46 +41,50 @@ import {
 } from '../localization';
 
 import {
-    AdaptiveDetailRowPreparingInfo,
-    ColumnBase as ComponentColumnBase,
-    ColumnButtonBase as ComponentColumnButtonBase,
-    GridsContextMenuTarget,
-    EditingBase as ComponentEditingBase,
-    EditingTextsBase as ComponentEditingTextsBase,
-    DataChangeInfo,
-    DataErrorOccurredInfo,
-    DragDropInfo,
-    DragReorderInfo,
-    DragStartEventInfo,
-    FilterPanel as ComponentFilterPanel,
-    FilterPanelCustomizeTextArg as ComponentFilterPanelCustomizeTextArg,
-    GridBase,
-    GridBaseOptions,
-    GroupExpandMode,
-    KeyDownInfo,
-    NewRowInfo,
-    NewRowPosition,
-    PagingBase as ComponentPaging,
-    ReducedNativeEventInfo,
-    RowDragging as ComponentRowDragging,
-    RowDraggingEventInfo,
-    RowDraggingTemplateData,
-    RowInsertedInfo,
-    RowInsertingInfo,
-    RowKeyInfo,
-    RowRemovedInfo,
-    RowRemovingInfo,
-    RowUpdatedInfo,
-    RowUpdatingInfo,
-    RowValidatingInfo,
-    SavingInfo,
-    ScrollingBase as ComponentScrollingBase,
-    SelectionBase as ComponentSelectionBase,
-    SelectionChangedInfo,
-    SelectionColumnDisplayMode,
-    SummaryType,
-    ToolbarPreparingInfo,
-    AIColumnRequestCreatingInfo,
+  AdaptiveDetailRowPreparingInfo,
+  ColumnBase as ComponentColumnBase,
+  ColumnButtonBase as ComponentColumnButtonBase,
+  GridsContextMenuTarget,
+  EditingBase as ComponentEditingBase,
+  EditingTextsBase as ComponentEditingTextsBase,
+  DataChangeInfo,
+  DataErrorOccurredInfo,
+  DragDropInfo,
+  DragReorderInfo,
+  DragStartEventInfo,
+  FilterPanel as ComponentFilterPanel,
+  FilterPanelCustomizeTextArg as ComponentFilterPanelCustomizeTextArg,
+  GridBase,
+  GridBaseOptions,
+  GroupExpandMode,
+  KeyDownInfo,
+  NewRowInfo,
+  NewRowPosition,
+  PagingBase as ComponentPaging,
+  ReducedNativeEventInfo,
+  RowDragging as ComponentRowDragging,
+  RowDraggingEventInfo,
+  RowDraggingTemplateData,
+  RowInsertedInfo,
+  RowInsertingInfo,
+  RowKeyInfo,
+  RowRemovedInfo,
+  RowRemovingInfo,
+  RowUpdatedInfo,
+  RowUpdatingInfo,
+  RowValidatingInfo,
+  SavingInfo,
+  ScrollingBase as ComponentScrollingBase,
+  SelectionBase as ComponentSelectionBase,
+  SelectionChangedInfo,
+  SelectionColumnDisplayMode,
+  SummaryType,
+  ToolbarPreparingInfo,
+  AIColumnRequestCreatingInfo,
+  AIAssistantRequestCreatingInfo,
+  AIAssistant as BaseAIAssistant,
+  PredefinedCommands,
+  CommandInfo,
 } from '../common/grids';
 
 export {
@@ -144,6 +148,7 @@ export {
     StateStoreType,
     StateStoring,
     SummaryType,
+    ResponseStatusTexts,
 } from '../common/grids';
 
 export {
@@ -193,7 +198,7 @@ export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
 /** @public */
 export type DataGridPredefinedColumnButton = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 /** @public */
-export type DataGridPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type DataGridPredefinedToolbarItem = 'addRowButton' | 'aiAssistantButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 type GroupKey = any[];
 
@@ -257,6 +262,14 @@ export type GridBaseColumn<TRowData = any> = ColumnBase<TRowData>;
  * @deprecated Use ColumnButton instead
  */
 export type GridBaseColumnButton = ColumnButtonBase;
+
+/**
+ * @docid _ui_data_grid_AIAssistantRequestCreatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,Cancelable,AIAssistantRequestCreatingInfo
+ */
+export type AIAssistantRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & Cancelable & AIAssistantRequestCreatingInfo;
 
 /**
  * @docid _ui_data_grid_AdaptiveDetailRowPreparingEvent
@@ -1160,7 +1173,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
   readonly isExpanded?: boolean;
 };
 
-type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
+type OverriddenKeys = 'aiAssistant' | 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
 
 /**
  * @deprecated use Properties instead
@@ -1170,6 +1183,11 @@ type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'edit
  * @type object
  */
 export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
+    /**
+     * @docid
+     * @public
+     */
+    aiAssistant?: AIAssistant;
     /**
      * @docid
      * @type Array<dxDataGridColumn|string>
@@ -1923,6 +1941,61 @@ export type Toolbar = {
 };
 
 /**
+ * @docid
+ * @public
+ */
+export type SummaryCommandTotalItem = Pick<SummaryTotalItem, 'showInColumn' | 'displayFormat'> & {
+  column: string;
+  summaryType: SummaryType;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type SummaryCommandGroupItem = Pick<SummaryGroupItem, 'showInColumn' | 'displayFormat' | 'showInGroupFooter' | 'alignByColumn'> & {
+  column: string;
+  summaryType: SummaryType;
+};
+
+/**
+ * @docid
+ * @public
+ * @inherits PredefinedCommands
+ */
+export type DataGridPredefinedCommands = PredefinedCommands & {
+  grouping: {
+    dataField: string;
+    groupIndex: number;
+  };
+  clearGrouping: {};
+  summary: {
+    totalItems: Array<SummaryCommandTotalItem>;
+    groupItems: Array<SummaryCommandGroupItem>;
+
+  };
+  clearSummary: {};
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type DataGridCommandInfo = CommandInfo<DataGridPredefinedCommands>;
+
+/**
+ * @docid
+ * @public
+ */
+export type DataGridPredefinedCommandNames = keyof DataGridPredefinedCommands;
+
+/**
+ * @docid
+ * @public
+ */
+export type AIAssistant = BaseAIAssistant<DataGridPredefinedCommands>;
+
+/**
  * @namespace DevExpress.ui
  * @deprecated Use Editing instead
  */
@@ -2446,6 +2519,7 @@ export type Row<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ExplicitTypes<TRowData, TKey> = {
+  AIAssistantRequestCreatingEvent: AIAssistantRequestCreatingEvent<TRowData, TKey>;
   AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
   CellClickEvent: CellClickEvent<TRowData, TKey>;
   CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
@@ -2546,6 +2620,11 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 * @hidden
 */
 type Events = {
+/**
+ * @docid dxDataGridOptions.onAIAssistantRequestCreating
+ * @type_function_param1 e:{ui/data_grid:AIAssistantRequestCreatingEvent}
+ */
+onAIAssistantRequestCreating?: ((e: AIAssistantRequestCreatingEvent) => void);
 /**
  * @docid dxDataGridOptions.onAdaptiveDetailRowPreparing
  * @type_function_param1 e:{ui/data_grid:AdaptiveDetailRowPreparingEvent}

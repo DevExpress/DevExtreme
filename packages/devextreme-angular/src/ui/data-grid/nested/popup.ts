@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-popup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

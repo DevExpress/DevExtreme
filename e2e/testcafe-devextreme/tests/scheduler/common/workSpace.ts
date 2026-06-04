@@ -5,7 +5,7 @@ import Scheduler, { CLASS } from 'devextreme-testcafe-models/scheduler';
 import { extend } from 'devextreme/core/utils/extend';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { hasHorizontalScroll, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Workspace`
@@ -285,13 +285,9 @@ test('Check cell active state', async (t) => {
 ].forEach((viewName) => {
   test(`[T1225772]: should not have the horizontal scroll in horizontal views when the crossScrollingEnabled: true (view:${viewName})`, async (t) => {
     const scheduler = new Scheduler('#container');
+    const hasHScroll = await hasHorizontalScroll(scheduler.dateTableScrollableContainer);
 
-    const scrollableContainer = scheduler.dateTableScrollableContainer;
-    const scrollWidth = await scrollableContainer.scrollWidth;
-    const clientWidth = await scrollableContainer.clientWidth;
-    const hasHorizontalScroll = scrollWidth > clientWidth;
-
-    await t.expect(hasHorizontalScroll).notOk('workspace has the horizontal scrollbar');
+    await t.expect(hasHScroll).notOk('workspace has the horizontal scrollbar');
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: [],
@@ -306,13 +302,9 @@ test('Check cell active state', async (t) => {
 // NOTE: Moved "as is" from the QUnit integration.resources.tests (see history)
 test('[T716993]: should has horizontal scrollbar with multiple resources and fixed height container', async (t) => {
   const scheduler = new Scheduler('#container');
+  const hasHScroll = await hasHorizontalScroll(scheduler.dateTableScrollableContainer);
 
-  const scrollableContainer = scheduler.dateTableScrollableContainer;
-  const scrollWidth = await scrollableContainer.scrollWidth;
-  const clientWidth = await scrollableContainer.clientWidth;
-  const hasHorizontalScroll = scrollWidth > clientWidth;
-
-  await t.expect(hasHorizontalScroll).ok('workspace hasn\'t the horizontal scrollbar');
+  await t.expect(hasHScroll).ok('workspace hasn\'t the horizontal scrollbar');
 }).before(async () => {
   const resourcesDataSource = getResourcesDataSource(10);
 

@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-form-async-rule',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

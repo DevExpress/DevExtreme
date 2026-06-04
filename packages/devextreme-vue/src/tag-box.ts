@@ -207,7 +207,7 @@ const componentConfig = {
     dropDownButtonTemplate: {},
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
-    fieldAddons: Object as PropType<FieldAddons | Record<string, any>>,
+    fieldAddons: Object as PropType<FieldAddons | null | Record<string, any>>,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
     grouped: Boolean,

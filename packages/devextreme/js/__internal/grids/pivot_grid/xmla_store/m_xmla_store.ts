@@ -233,7 +233,12 @@ class XmlaStore {
 
       if (i < path.length) {
         if (isLastDimensionInGroup) {
-          arg = `(${dataField}.${preparePathValue(path[i], dataField)})`;
+          const pathValue = path[i];
+          if (hierarchyName && isString(pathValue) && pathValue.startsWith(`${hierarchyName}.`)) {
+            arg = `(${pathValue})`;
+          } else {
+            arg = `(${dataField}.${preparePathValue(pathValue, dataField)})`;
+          }
         }
       } else if (i <= expandAllIndex) {
         if (i === 0 && expandAllCount === 0) {
@@ -529,7 +534,12 @@ class XmlaStore {
         || dimension.hierarchyName !== options[headerName][index + 1]
           .hierarchyName
       ) {
-        slices.push(`${dimension.dataField}.${this.preparePathValue(value, dimension.dataField)}`);
+        const { hierarchyName } = dimension;
+        if (hierarchyName && isString(value) && value.startsWith(`${hierarchyName}.`)) {
+          slices.push(value);
+        } else {
+          slices.push(`${dimension.dataField}.${this.preparePathValue(value, dimension.dataField)}`);
+        }
       }
     });
   }
@@ -580,7 +590,12 @@ class XmlaStore {
       if (field.hierarchyName && (fields[index + 1] || {}).hierarchyName === field.hierarchyName) {
         return;
       }
-      slice.push(`${field.dataField}.${this.preparePathValue(value, field.dataField)}`);
+      const { hierarchyName } = field;
+      if (hierarchyName && isString(value) && value.startsWith(`${hierarchyName}.`)) {
+        slice.push(value);
+      } else {
+        slice.push(`${field.dataField}.${this.preparePathValue(value, field.dataField)}`);
+      }
     });
   }
 

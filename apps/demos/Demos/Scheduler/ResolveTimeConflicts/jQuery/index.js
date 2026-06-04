@@ -109,10 +109,10 @@ $(() => {
       },
     },
     onAppointmentAdding(e) {
-      alertConflictIfNeeded(e, e.appointmentData);
+      handleConflict(e, e.appointmentData);
     },
     onAppointmentUpdating(e) {
-      alertConflictIfNeeded(e, e.newData);
+      handleConflict(e, e.newData);
     },
   }).dxScheduler('instance');
 
@@ -121,7 +121,7 @@ $(() => {
     form?.option('elementAttr.class', show ? '' : 'hide-informer');
   }
 
-  function alertConflictIfNeeded(e, appointmentData) {
+  function handleConflict(e, appointmentData) {
     if (!detectConflict(appointmentData)) {
       setConflictError(false);
       return;
@@ -198,8 +198,8 @@ $(() => {
 
   $('#overlapping-rule').dxSelectBox({
     items: [
-      { value: 'sameResource', text: 'Allow across resources' },
-      { value: 'allResources', text: 'Disallow all overlaps' },
+      { value: 'sameResource', text: 'Different Resources' },
+      { value: 'allResources', text: 'Never' },
     ],
     valueExpr: 'value',
     displayExpr: 'text',

@@ -1,33 +1,37 @@
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { when } from '@js/core/utils/deferred';
+import type { DxEvent } from '@js/events';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils';
+import type { AppointmentRenderedEvent } from '@js/ui/scheduler';
 import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
-import DOMComponent from '@ts/core/widget/dom_component';
+import { dxClick } from '@ts/events/m_short';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
-import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
+import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, FOCUSED_STATE_CLASS } from '../const';
 import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
+import { EVENTS_NAMESPACE, ViewItem, type ViewItemProperties } from '../view_item';
+
+const DOUBLE_CLICK_EVENT_NAME = addNamespace('dxdblclick', EVENTS_NAMESPACE.namespace);
+const CONTEXT_MENU_EVENT_NAME = addNamespace('dxcontextmenu', EVENTS_NAMESPACE.namespace);
 
 export interface BaseAppointmentViewProperties
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  extends DOMComponentProperties<BaseAppointmentView<any>> {
+  extends ViewItemProperties {
+  index: number;
   appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
 
-  onAppointmentRendered: (e: {
-    element: DxElement;
-    appointmentData: SafeAppointment;
-    targetedAppointmentData: TargetedAppointment;
-  }) => void;
+  onRendered: (e: AppointmentRenderedEvent) => void;
+  onClick: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
+  onDblClick: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
+  onContextMenu: (appointmentView: BaseAppointmentView, event: DxEvent) => void;
 
   getDataAccessor: () => AppointmentDataAccessor;
   getResourceColor: () => Promise<string | undefined>;
@@ -35,16 +39,27 @@ export interface BaseAppointmentViewProperties
 
 export class BaseAppointmentView<
   TProperties extends BaseAppointmentViewProperties = BaseAppointmentViewProperties,
-> extends DOMComponent<BaseAppointmentView<TProperties>, TProperties> {
-  protected get targetedAppointmentData(): TargetedAppointment {
+> extends ViewItem<TProperties> {
+  public get targetedAppointmentData(): TargetedAppointment {
     return this.option().targetedAppointmentData;
   }
 
-  protected get appointmentData(): SafeAppointment {
+  public get appointmentData(): SafeAppointment {
     return this.option().appointmentData;
   }
 
   private defaultAppointmentTemplate!: FunctionTemplate;
+
+  override _setOptionsByReference(): void {
+    super._setOptionsByReference();
+
+    // Note: appointmentData object is used as a key in dataSource
+    this._optionsByReference = {
+      ...this._optionsByReference,
+      appointmentData: true,
+      targetedAppointmentData: true,
+    };
+  }
 
   override _init(): void {
     super._init();
@@ -60,10 +75,21 @@ export class BaseAppointmentView<
     this.resize();
     this.applyElementClasses();
     this.applyAria();
+    this.attachFocusEvents();
+    this.attachClickEvent();
+    this.attachDblClickEvent();
+    this.attachContextMenuEvent();
+    this.attachKeydownEvents();
     this.renderContentTemplate();
   }
 
-  public resize(): void { }
+  override _dispose(): void {
+    super._dispose();
+
+    dxClick.off(this.$element(), EVENTS_NAMESPACE);
+    eventsEngine.off(this.$element(), DOUBLE_CLICK_EVENT_NAME);
+    eventsEngine.off(this.$element(), CONTEXT_MENU_EVENT_NAME);
+  }
 
   protected applyElementClasses(): void {
     this.$element()
@@ -74,7 +100,53 @@ export class BaseAppointmentView<
 
   protected applyAria(): void {
     this.$element()
-      .attr('role', 'button');
+      .attr('role', 'button')
+      .attr('tabindex', this.option().tabIndex);
+  }
+
+  private attachClickEvent(): void {
+    dxClick.off(this.$element(), EVENTS_NAMESPACE);
+    dxClick.on(
+      this.$element(),
+      (event: DxEvent<MouseEvent>) => this.option().onClick(this, event),
+      EVENTS_NAMESPACE,
+    );
+  }
+
+  private attachDblClickEvent(): void {
+    eventsEngine.off(this.$element(), DOUBLE_CLICK_EVENT_NAME);
+    eventsEngine.on(
+      this.$element(),
+      DOUBLE_CLICK_EVENT_NAME,
+      (event: DxEvent<MouseEvent>) => this.option().onDblClick(this, event),
+    );
+  }
+
+  private attachContextMenuEvent(): void {
+    eventsEngine.off(this.$element(), CONTEXT_MENU_EVENT_NAME);
+    eventsEngine.on(
+      this.$element(),
+      CONTEXT_MENU_EVENT_NAME,
+      (event: DxEvent) => this.option().onContextMenu(this, event),
+    );
+  }
+
+  protected override onFocusIn(): void {
+    this.$element().addClass(FOCUSED_STATE_CLASS);
+
+    super.onFocusIn();
+  }
+
+  protected override onFocusOut(e: DxEvent): void {
+    this.$element().removeClass(FOCUSED_STATE_CLASS);
+
+    super.onFocusOut(e);
+  }
+
+  public override setTabIndex(tabIndex: number | undefined): void {
+    super.setTabIndex(tabIndex);
+
+    this.$element().attr('tabindex', tabIndex ?? null);
   }
 
   protected getTitleText(): string {
@@ -120,20 +192,21 @@ export class BaseAppointmentView<
       ? this.defaultAppointmentTemplate
       : this.option().appointmentTemplate;
 
-    const $renderPromise = template.render({
+    template.render({
       container: getPublicElement($content),
       model: {
         appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       },
-    });
-
-    when($renderPromise).done(() => {
-      this.option().onAppointmentRendered({
-        element: getPublicElement(this.$element()),
-        appointmentData: this.appointmentData,
-        targetedAppointmentData: this.targetedAppointmentData,
-      });
+      index: this.option().index,
+      onRendered: () => {
+        // @ts-expect-error 'component' and 'element' are set by action
+        this.option().onRendered({
+          appointmentElement: getPublicElement(this.$element()),
+          appointmentData: this.appointmentData,
+          targetedAppointmentData: this.targetedAppointmentData,
+        });
+      },
     });
   }
 

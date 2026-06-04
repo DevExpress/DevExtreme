@@ -26,7 +26,6 @@ import { PROPERTY_TOKEN_legends } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-legend',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

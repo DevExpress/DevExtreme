@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-form-tabbed-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

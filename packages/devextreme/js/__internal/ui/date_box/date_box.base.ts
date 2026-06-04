@@ -290,6 +290,14 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     }
   }
 
+  _updatePopupWidth(): void {
+    if (this._strategy instanceof Calendar || this._strategy instanceof CalendarWithTime) {
+      return;
+    }
+
+    super._updatePopupWidth();
+  }
+
   _refreshFormatClass(): void {
     const $element = this.$element();
     const types = Object.values(TYPE);
@@ -491,6 +499,16 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _isClearButtonVisible(): boolean {
     return super._isClearButtonVisible() && !this._isNativeType();
+  }
+
+  _toggleEmptinessEventHandler(): void {
+    if (this._isNativeType()) {
+      this._toggleEmptiness(false);
+
+      return;
+    }
+
+    super._toggleEmptinessEventHandler();
   }
 
   _renderValue(): DeferredObj<unknown> {
@@ -816,7 +834,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const isValueChanged = this._isValueChanged(value);
 
     if (isValueChanged && dxEvent) {
-      // @ts-expect-error editor's ValueChangedEvent should be extended
       this._saveValueChangeEvent(dxEvent);
     }
 

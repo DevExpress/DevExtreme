@@ -3242,20 +3242,20 @@ QUnit.module('adaptivity: render', {
     });
 
     QUnit.test('maxHeight should be 90% of maximum of top or bottom offsets when height of overlay content more windows height', function(assert) {
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(700);
+        const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
+
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
         });
 
-        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(700);
-        const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
-
         try {
             const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
             const maxHeight = overlay.option('maxHeight');
 
-            assert.ok(Math.floor(maxHeight()) < windowHeight(), 'maxHeight is correct');
+            assert.ok(Math.floor(maxHeight) < windowHeight(), 'maxHeight is correct');
             assert.ok(overlay.$wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), 'special class for overlay wrapper');
         } finally {
             scrollTop.restore();

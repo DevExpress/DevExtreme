@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-diagram-toolbox',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

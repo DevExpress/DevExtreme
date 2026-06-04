@@ -7,7 +7,6 @@ import Color from 'color';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import browser from 'core/utils/browser';
-import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_legacy_form';
 import {
     initTestMarkup,
     createWrapper,
@@ -383,93 +382,6 @@ module('Integration: Appointments in Month view', {
                 const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointment.length, 2, 'appointment is rendered');
-            });
-
-            test('Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)', async function(assert) {
-                const tasks = [{
-                    text: 'Recurrence task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30),
-                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
-                }];
-
-                const scheduler = await createInstance({
-                    dataSource: tasks,
-                    currentDate: new Date(2017, 2, 13),
-                    currentView: 'month',
-                    views: ['month'],
-                    startDateExpr: 'start',
-                    endDateExpr: 'end',
-                    editing: {
-                        legacyForm: true,
-                    }
-                });
-
-                scheduler.instance.showAppointmentPopup(tasks[0]);
-                $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-                const form = scheduler.instance.getAppointmentDetailsForm();
-                const descriptionEditor = form.getEditor('description');
-
-                descriptionEditor.option('value', 'Recurrence task 1');
-
-                scheduler.instance.hideAppointmentPopup();
-                scheduler.instance.showAppointmentPopup(tasks[0]);
-
-                $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-
-                const popup = scheduler.instance.appointmentPopup.popup;
-                const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
-
-                assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
-            });
-
-            test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', async function(assert) {
-                const tasks = [{
-                    text: 'Task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30)
-                }, {
-                    text: 'Recurrence task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30),
-                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
-                }];
-
-                const scheduler = await createInstance({
-                    dataSource: tasks,
-                    currentDate: new Date(2017, 2, 13),
-                    currentView: 'month',
-                    views: ['month'],
-                    startDateExpr: 'start',
-                    endDateExpr: 'end',
-                    editing: {
-                        legacyForm: true,
-                    }
-                });
-
-                scheduler.instance.showAppointmentPopup(tasks[0]);
-
-                let form = scheduler.instance.getAppointmentDetailsForm();
-                const descriptionEditor = form.getEditor('description');
-
-                descriptionEditor.option('value', 'Task 1');
-
-                scheduler.instance.hideAppointmentPopup();
-                scheduler.instance.showAppointmentPopup(tasks[1]);
-
-                $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-
-                const popup = scheduler.instance.appointmentPopup.popup;
-                const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
-
-                $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';
-
-                scheduler.instance.hideAppointmentPopup();
-                scheduler.instance.showAppointmentPopup(tasks[0]);
-
-                form = scheduler.instance.getAppointmentDetailsForm();
-
-                assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).visible, false, 'Recurrence editor is hidden. Popup is correct');
             });
 
             test('Long term appoinment inflict index shift in other appointments (T737780)', async function(assert) {

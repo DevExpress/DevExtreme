@@ -1,4 +1,7 @@
 {
+  "$schema": "https://json-schema.org/schema",
+  "title": "Prepare Submodules Executor Schema",
+  "description": "Prepare submodule entry points with package.json files",
   "type": "object",
   "properties": {
     "distDirectory": {
@@ -6,7 +9,5 @@
       "description": "Distribution directory containing ESM and CJS builds. This directory will be scanned to generate submodule package.json files.",
       "default": "./npm"
     }
-  },
-  "additionalProperties": true,
-  "required": []
+  }
 }

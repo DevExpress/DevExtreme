@@ -1,5 +1,5 @@
 const weekData = [{
-  date: new Date('2013/12/23'),
+  date: new Date('2024/12/23'),
   open: {
     value: 3563.19,
     diff: 92.76,
@@ -20,19 +20,19 @@ const weekData = [{
   adjClose: 3574.02,
   dayClose: [{
     close: 3569.4,
-    date: new Date('2013/12/23'),
+    date: new Date('2024/12/23'),
   }, {
     close: 3572.8,
-    date: new Date('2013/12/24'),
+    date: new Date('2024/12/24'),
   }, {
     close: 3584.58,
-    date: new Date('2013/12/26'),
+    date: new Date('2024/12/26'),
   }, {
     close: 3574.02,
-    date: new Date('2013/12/27'),
+    date: new Date('2024/12/27'),
   }],
 }, {
-  date: new Date('2013/12/16'),
+  date: new Date('2024/12/16'),
   open: {
     value: 3470.43,
     diff: -45.24,
@@ -53,22 +53,22 @@ const weekData = [{
   adjClose: 3531.19,
   dayClose: [{
     close: 3475.79,
-    date: new Date('2013/12/16'),
+    date: new Date('2024/12/16'),
   }, {
     close: 3469.32,
-    date: new Date('2013/12/17'),
+    date: new Date('2024/12/17'),
   }, {
     close: 3509.63,
-    date: new Date('2013/12/18'),
+    date: new Date('2024/12/18'),
   }, {
     close: 3498.63,
-    date: new Date('2013/12/19'),
+    date: new Date('2024/12/19'),
   }, {
     close: 3531.19,
-    date: new Date('2013/12/20'),
+    date: new Date('2024/12/20'),
   }],
 }, {
-  date: new Date('2013/12/09'),
+  date: new Date('2024/12/09'),
   open: {
     value: 3515.67,
     diff: 19.48,
@@ -89,22 +89,22 @@ const weekData = [{
   adjClose: 3456.4,
   dayClose: [{
     close: 3516.17,
-    date: new Date('2013/12/09'),
+    date: new Date('2024/12/09'),
   }, {
     close: 3514.2,
-    date: new Date('2013/12/10'),
+    date: new Date('2024/12/10'),
   }, {
     close: 3468.99,
-    date: new Date('2013/12/11'),
+    date: new Date('2024/12/11'),
   }, {
     close: 3460.29,
-    date: new Date('2013/12/12'),
+    date: new Date('2024/12/12'),
   }, {
     close: 3456.4,
-    date: new Date('2013/12/13'),
+    date: new Date('2024/12/13'),
   }],
 }, {
-  date: new Date('2013/12/02'),
+  date: new Date('2024/12/02'),
   open: {
     value: 3496.19,
     diff: 62.27,
@@ -125,22 +125,22 @@ const weekData = [{
   adjClose: 3504.26,
   dayClose: [{
     close: 3481.15,
-    date: new Date('2013/12/02'),
+    date: new Date('2024/12/02'),
   }, {
     close: 3479.34,
-    date: new Date('2013/12/03'),
+    date: new Date('2024/12/03'),
   }, {
     close: 3483.01,
-    date: new Date('2013/12/04'),
+    date: new Date('2024/12/04'),
   }, {
     close: 3477.73,
-    date: new Date('2013/12/05'),
+    date: new Date('2024/12/05'),
   }, {
     close: 3504.26,
-    date: new Date('2013/12/06'),
+    date: new Date('2024/12/06'),
   }],
 }, {
-  date: new Date('2013/11/25'),
+  date: new Date('2024/11/25'),
   open: {
     value: 3433.92,
     diff: 10.45,
@@ -161,19 +161,19 @@ const weekData = [{
   adjClose: 3487.82,
   dayClose: [{
     close: 3427.49,
-    date: new Date('2013/11/25'),
+    date: new Date('2024/11/25'),
   }, {
     close: 3445.76,
-    date: new Date('2013/11/26'),
+    date: new Date('2024/11/26'),
   }, {
     close: 3470.48,
-    date: new Date('2013/11/27'),
+    date: new Date('2024/11/27'),
   }, {
     close: 3487.82,
-    date: new Date('2013/11/29'),
+    date: new Date('2024/11/29'),
   }],
 }, {
-  date: new Date('2013/11/18'),
+  date: new Date('2024/11/18'),
   open: {
     value: 3423.47,
     diff: 63.64,
@@ -194,22 +194,22 @@ const weekData = [{
   adjClose: 3422.02,
   dayClose: [{
     close: 3388.87,
-    date: new Date('2013/11/18'),
+    date: new Date('2024/11/18'),
   }, {
     close: 3378.13,
-    date: new Date('2013/11/19'),
+    date: new Date('2024/11/19'),
   }, {
     close: 3367.17,
-    date: new Date('2013/11/20'),
+    date: new Date('2024/11/20'),
   }, {
     close: 3402.74,
-    date: new Date('2013/11/21'),
+    date: new Date('2024/11/21'),
   }, {
     close: 3422.02,
-    date: new Date('2013/11/22'),
+    date: new Date('2024/11/22'),
   }],
 }, {
-  date: new Date('2013/11/11'),
+  date: new Date('2024/11/11'),
   open: {
     value: 3359.83,
     diff: -28.87,
@@ -230,22 +230,22 @@ const weekData = [{
   adjClose: 3422.58,
   dayClose: [{
     close: 3362.98,
-    date: new Date('2013/11/11'),
+    date: new Date('2024/11/11'),
   }, {
     close: 3365.23,
-    date: new Date('2013/11/12'),
+    date: new Date('2024/11/12'),
   }, {
     close: 3405.56,
-    date: new Date('2013/11/13'),
+    date: new Date('2024/11/13'),
   }, {
     close: 3415.14,
-    date: new Date('2013/11/14'),
+    date: new Date('2024/11/14'),
   }, {
     close: 3422.58,
-    date: new Date('2013/11/15'),
+    date: new Date('2024/11/15'),
   }],
 }, {
-  date: new Date('2013/11/04'),
+  date: new Date('2024/11/04'),
   open: {
     value: 3388.7,
     diff: 6.52,
@@ -266,22 +266,22 @@ const weekData = [{
   adjClose: 3366.84,
   dayClose: [{
     close: 3384.75,
-    date: new Date('2013/11/04'),
+    date: new Date('2024/11/04'),
   }, {
     close: 3388.82,
-    date: new Date('2013/11/05'),
+    date: new Date('2024/11/05'),
   }, {
     close: 3385.38,
-    date: new Date('2013/11/06'),
+    date: new Date('2024/11/06'),
   }, {
     close: 3321.41,
-    date: new Date('2013/11/07'),
+    date: new Date('2024/11/07'),
   }, {
     close: 3366.84,
-    date: new Date('2013/11/08'),
+    date: new Date('2024/11/08'),
   }],
 }, {
-  date: new Date('2013/10/28'),
+  date: new Date('2024/10/28'),
   open: {
     value: 3382.18,
     diff: 20.42,
@@ -302,22 +302,22 @@ const weekData = [{
   adjClose: 3379.76,
   dayClose: [{
     close: 3382.68,
-    date: new Date('2013/10/28'),
+    date: new Date('2024/10/28'),
   }, {
     close: 3391.75,
-    date: new Date('2013/10/29'),
+    date: new Date('2024/10/29'),
   }, {
     close: 3385.38,
-    date: new Date('2013/10/30'),
+    date: new Date('2024/10/30'),
   }, {
     close: 3377.73,
-    date: new Date('2013/10/31'),
+    date: new Date('2024/10/31'),
   }, {
     close: 3379.76,
-    date: new Date('2013/11/01'),
+    date: new Date('2024/11/01'),
   }],
 }, {
-  date: new Date('2013/10/21'),
+  date: new Date('2024/10/21'),
   open: {
     value: 3361.76,
     diff: 148.38,
@@ -338,22 +338,22 @@ const weekData = [{
   adjClose: 3383.83,
   dayClose: [{
     close: 3361.18,
-    date: new Date('2013/10/21'),
+    date: new Date('2024/10/21'),
   }, {
     close: 3366.93,
-    date: new Date('2013/10/22'),
+    date: new Date('2024/10/22'),
   }, {
     close: 3346.05,
-    date: new Date('2013/10/23'),
+    date: new Date('2024/10/23'),
   }, {
     close: 3362.38,
-    date: new Date('2013/10/24'),
+    date: new Date('2024/10/24'),
   }, {
     close: 3383.83,
-    date: new Date('2013/10/25'),
+    date: new Date('2024/10/25'),
   }],
 }, {
-  date: new Date('2013/10/14'),
+  date: new Date('2024/10/14'),
   open: {
     value: 3213.38,
     diff: -2.39,
@@ -374,22 +374,22 @@ const weekData = [{
   adjClose: 3353.88,
   dayClose: [{
     close: 3256.02,
-    date: new Date('2013/10/14'),
+    date: new Date('2024/10/14'),
   }, {
     close: 3244.66,
-    date: new Date('2013/10/15'),
+    date: new Date('2024/10/15'),
   }, {
     close: 3281.67,
-    date: new Date('2013/10/16'),
+    date: new Date('2024/10/16'),
   }, {
     close: 3301.28,
-    date: new Date('2013/10/17'),
+    date: new Date('2024/10/17'),
   }, {
     close: 3353.88,
-    date: new Date('2013/10/18'),
+    date: new Date('2024/10/18'),
   }],
 }, {
-  date: new Date('2013/10/07'),
+  date: new Date('2024/10/07'),
   open: {
     value: 3215.77,
     diff: 25.37,
@@ -410,22 +410,22 @@ const weekData = [{
   adjClose: 3233.83,
   dayClose: [{
     close: 3215.69,
-    date: new Date('2013/10/07'),
+    date: new Date('2024/10/07'),
   }, {
     close: 3153.87,
-    date: new Date('2013/10/08'),
+    date: new Date('2024/10/08'),
   }, {
     close: 3142.54,
-    date: new Date('2013/10/09'),
+    date: new Date('2024/10/09'),
   }, {
     close: 3210.84,
-    date: new Date('2013/10/10'),
+    date: new Date('2024/10/10'),
   }, {
     close: 3233.83,
-    date: new Date('2013/10/11'),
+    date: new Date('2024/10/11'),
   }],
 }, {
-  date: new Date('2013/09/30'),
+  date: new Date('2024/09/30'),
   open: {
     value: 3190.4,
     diff: -51.92,
@@ -446,22 +446,22 @@ const weekData = [{
   adjClose: 3242.57,
   dayClose: [{
     close: 3218.2,
-    date: new Date('2013/09/30'),
+    date: new Date('2024/09/30'),
   }, {
     close: 3253.05,
-    date: new Date('2013/10/01'),
+    date: new Date('2024/10/01'),
   }, {
     close: 3253.26,
-    date: new Date('2013/10/02'),
+    date: new Date('2024/10/02'),
   }, {
     close: 3213.83,
-    date: new Date('2013/10/03'),
+    date: new Date('2024/10/03'),
   }, {
     close: 3242.57,
-    date: new Date('2013/10/04'),
+    date: new Date('2024/10/04'),
   }],
 }, {
-  date: new Date('2013/09/23'),
+  date: new Date('2024/09/23'),
   open: {
     value: 3242.32,
     diff: 39.13,
@@ -482,22 +482,22 @@ const weekData = [{
   adjClose: 3230.3,
   dayClose: [{
     close: 3219.34,
-    date: new Date('2013/09/23'),
+    date: new Date('2024/09/23'),
   }, {
     close: 3218.66,
-    date: new Date('2013/09/24'),
+    date: new Date('2024/09/24'),
   }, {
     close: 3208.55,
-    date: new Date('2013/09/25'),
+    date: new Date('2024/09/25'),
   }, {
     close: 3234.04,
-    date: new Date('2013/09/26'),
+    date: new Date('2024/09/26'),
   }, {
     close: 3230.3,
-    date: new Date('2013/09/27'),
+    date: new Date('2024/09/27'),
   }],
 }, {
-  date: new Date('2013/09/16'),
+  date: new Date('2024/09/16'),
   open: {
     value: 3203.19,
     diff: 57.17,
@@ -518,22 +518,22 @@ const weekData = [{
   adjClose: 3224.73,
   dayClose: [{
     close: 3168.69,
-    date: new Date('2013/09/16'),
+    date: new Date('2024/09/16'),
   }, {
     close: 3190.83,
-    date: new Date('2013/09/17'),
+    date: new Date('2024/09/17'),
   }, {
     close: 3231.31,
-    date: new Date('2013/09/18'),
+    date: new Date('2024/09/18'),
   }, {
     close: 3237.61,
-    date: new Date('2013/09/19'),
+    date: new Date('2024/09/19'),
   }, {
     close: 3224.73,
-    date: new Date('2013/09/20'),
+    date: new Date('2024/09/20'),
   }],
 }, {
-  date: new Date('2013/09/09'),
+  date: new Date('2024/09/09'),
   open: {
     value: 3146.02,
     diff: 48.37,
@@ -554,22 +554,22 @@ const weekData = [{
   adjClose: 3178.28,
   dayClose: [{
     close: 3169.93,
-    date: new Date('2013/09/09'),
+    date: new Date('2024/09/09'),
   }, {
     close: 3185.07,
-    date: new Date('2013/09/10'),
+    date: new Date('2024/09/10'),
   }, {
     close: 3179.86,
-    date: new Date('2013/09/11'),
+    date: new Date('2024/09/11'),
   }, {
     close: 3175.57,
-    date: new Date('2013/09/12'),
+    date: new Date('2024/09/12'),
   }, {
     close: 3178.28,
-    date: new Date('2013/09/13'),
+    date: new Date('2024/09/13'),
   }],
 }, {
-  date: new Date('2013/09/03'),
+  date: new Date('2024/09/03'),
   open: {
     value: 3097.65,
     diff: -29.36,
@@ -590,19 +590,19 @@ const weekData = [{
   adjClose: 3133.38,
   dayClose: [{
     close: 3091.76,
-    date: new Date('2013/09/03'),
+    date: new Date('2024/09/03'),
   }, {
     close: 3124.54,
-    date: new Date('2013/09/04'),
+    date: new Date('2024/09/04'),
   }, {
     close: 3129.94,
-    date: new Date('2013/09/05'),
+    date: new Date('2024/09/05'),
   }, {
     close: 3133.38,
-    date: new Date('2013/09/06'),
+    date: new Date('2024/09/06'),
   }],
 }, {
-  date: new Date('2013/08/26'),
+  date: new Date('2024/08/26'),
   open: {
     value: 3127.01,
     diff: 52.63,
@@ -623,22 +623,22 @@ const weekData = [{
   adjClose: 3073.81,
   dayClose: [{
     close: 3122.67,
-    date: new Date('2013/08/26'),
+    date: new Date('2024/08/26'),
   }, {
     close: 3059.58,
-    date: new Date('2013/08/27'),
+    date: new Date('2024/08/27'),
   }, {
     close: 3072.17,
-    date: new Date('2013/08/28'),
+    date: new Date('2024/08/28'),
   }, {
     close: 3093.36,
-    date: new Date('2013/08/29'),
+    date: new Date('2024/08/29'),
   }, {
     close: 3073.81,
-    date: new Date('2013/08/30'),
+    date: new Date('2024/08/30'),
   }],
 }, {
-  date: new Date('2013/08/19'),
+  date: new Date('2024/08/19'),
   open: {
     value: 3074.38,
     diff: -32.68,
@@ -659,22 +659,22 @@ const weekData = [{
   adjClose: 3124.27,
   dayClose: [{
     close: 3069.76,
-    date: new Date('2013/08/19'),
+    date: new Date('2024/08/19'),
   }, {
     close: 3082.17,
-    date: new Date('2013/08/20'),
+    date: new Date('2024/08/20'),
   }, {
     close: 3071.47,
-    date: new Date('2013/08/21'),
+    date: new Date('2024/08/21'),
   }, {
     close: 3101.82,
-    date: new Date('2013/08/22'),
+    date: new Date('2024/08/22'),
   }, {
     close: 3124.27,
-    date: new Date('2013/08/23'),
+    date: new Date('2024/08/23'),
   }],
 }, {
-  date: new Date('2013/08/12'),
+  date: new Date('2024/08/12'),
   open: {
     value: 3107.06,
     diff: -29.71,
@@ -695,22 +695,22 @@ const weekData = [{
   adjClose: 3073.91,
   dayClose: [{
     close: 3125.93,
-    date: new Date('2013/08/12'),
+    date: new Date('2024/08/12'),
   }, {
     close: 3141.06,
-    date: new Date('2013/08/13'),
+    date: new Date('2024/08/13'),
   }, {
     close: 3129.45,
-    date: new Date('2013/08/14'),
+    date: new Date('2024/08/14'),
   }, {
     close: 3076.23,
-    date: new Date('2013/08/15'),
+    date: new Date('2024/08/15'),
   }, {
     close: 3073.91,
-    date: new Date('2013/08/16'),
+    date: new Date('2024/08/16'),
   }],
 }, {
-  date: new Date('2013/08/05'),
+  date: new Date('2024/08/05'),
   open: {
     value: 3136.77,
     diff: 69.29,
@@ -731,22 +731,22 @@ const weekData = [{
   adjClose: 3118.57,
   dayClose: [{
     close: 3143.19,
-    date: new Date('2013/08/05'),
+    date: new Date('2024/08/05'),
   }, {
     close: 3122.2,
-    date: new Date('2013/08/06'),
+    date: new Date('2024/08/06'),
   }, {
     close: 3118.69,
-    date: new Date('2013/08/07'),
+    date: new Date('2024/08/07'),
   }, {
     close: 3130.13,
-    date: new Date('2013/08/08'),
+    date: new Date('2024/08/08'),
   }, {
     close: 3118.57,
-    date: new Date('2013/08/09'),
+    date: new Date('2024/08/09'),
   }],
 }, {
-  date: new Date('2013/07/29'),
+  date: new Date('2024/07/29'),
   open: {
     value: 3067.48,
     diff: 5.98,
@@ -767,22 +767,22 @@ const weekData = [{
   adjClose: 3143.52,
   dayClose: [{
     close: 3068.95,
-    date: new Date('2013/07/29'),
+    date: new Date('2024/07/29'),
   }, {
     close: 3085.33,
-    date: new Date('2013/07/30'),
+    date: new Date('2024/07/30'),
   }, {
     close: 3090.19,
-    date: new Date('2013/07/31'),
+    date: new Date('2024/07/31'),
   }, {
     close: 3126.3,
-    date: new Date('2013/08/01'),
+    date: new Date('2024/08/01'),
   }, {
     close: 3143.52,
-    date: new Date('2013/08/02'),
+    date: new Date('2024/08/02'),
   }],
 }, {
-  date: new Date('2013/07/22'),
+  date: new Date('2024/07/22'),
   open: {
     value: 3061.5,
     diff: -15.52,
@@ -803,22 +803,22 @@ const weekData = [{
   adjClose: 3076.23,
   dayClose: [{
     close: 3055.23,
-    date: new Date('2013/07/22'),
+    date: new Date('2024/07/22'),
   }, {
     close: 3031.4,
-    date: new Date('2013/07/23'),
+    date: new Date('2024/07/23'),
   }, {
     close: 3041.16,
-    date: new Date('2013/07/24'),
+    date: new Date('2024/07/24'),
   }, {
     close: 3061.67,
-    date: new Date('2013/07/25'),
+    date: new Date('2024/07/25'),
   }, {
     close: 3076.23,
-    date: new Date('2013/07/26'),
+    date: new Date('2024/07/26'),
   }],
 }, {
-  date: new Date('2013/07/15'),
+  date: new Date('2024/07/15'),
   open: {
     value: 3077.02,
     diff: 100.41,
@@ -839,22 +839,22 @@ const weekData = [{
   adjClose: 3044.93,
   dayClose: [{
     close: 3079.85,
-    date: new Date('2013/07/15'),
+    date: new Date('2024/07/15'),
   }, {
     close: 3077.47,
-    date: new Date('2013/07/16'),
+    date: new Date('2024/07/16'),
   }, {
     close: 3085.28,
-    date: new Date('2013/07/17'),
+    date: new Date('2024/07/17'),
   }, {
     close: 3077.82,
-    date: new Date('2013/07/18'),
+    date: new Date('2024/07/18'),
   }, {
     close: 3044.93,
-    date: new Date('2013/07/19'),
+    date: new Date('2024/07/19'),
   }],
 }, {
-  date: new Date('2013/07/08'),
+  date: new Date('2024/07/08'),
   open: {
     value: 2976.61,
     diff: 43.13,
@@ -875,22 +875,22 @@ const weekData = [{
   adjClose: 3079.07,
   dayClose: [{
     close: 2966.13,
-    date: new Date('2013/07/08'),
+    date: new Date('2024/07/08'),
   }, {
     close: 2984.32,
-    date: new Date('2013/07/09'),
+    date: new Date('2024/07/09'),
   }, {
     close: 3000.66,
-    date: new Date('2013/07/10'),
+    date: new Date('2024/07/10'),
   }, {
     close: 3059.46,
-    date: new Date('2013/07/11'),
+    date: new Date('2024/07/11'),
   }, {
     close: 3079.07,
-    date: new Date('2013/07/12'),
+    date: new Date('2024/07/12'),
   }],
 }, {
-  date: new Date('2013/07/01'),
+  date: new Date('2024/07/01'),
   open: {
     value: 2933.48,
     diff: 80.83,
@@ -911,19 +911,19 @@ const weekData = [{
   adjClose: 2963.22,
   dayClose: [{
     close: 2927.35,
-    date: new Date('2013/07/01'),
+    date: new Date('2024/07/01'),
   }, {
     close: 2929.63,
-    date: new Date('2013/07/02'),
+    date: new Date('2024/07/02'),
   }, {
     close: 2941.41,
-    date: new Date('2013/07/03'),
+    date: new Date('2024/07/03'),
   }, {
     close: 2963.22,
-    date: new Date('2013/07/05'),
+    date: new Date('2024/07/05'),
   }],
 }, {
-  date: new Date('2013/06/24'),
+  date: new Date('2024/06/24'),
   open: {
     value: 2852.65,
     diff: -114.68,
@@ -944,22 +944,22 @@ const weekData = [{
   adjClose: 2909.6,
   dayClose: [{
     close: 2848.2,
-    date: new Date('2013/06/24'),
+    date: new Date('2024/06/24'),
   }, {
     close: 2866.5,
-    date: new Date('2013/06/25'),
+    date: new Date('2024/06/25'),
   }, {
     close: 2893.85,
-    date: new Date('2013/06/26'),
+    date: new Date('2024/06/26'),
   }, {
     close: 2906.84,
-    date: new Date('2013/06/27'),
+    date: new Date('2024/06/27'),
   }, {
     close: 2909.6,
-    date: new Date('2013/06/28'),
+    date: new Date('2024/06/28'),
   }],
 }, {
-  date: new Date('2013/06/17'),
+  date: new Date('2024/06/17'),
   open: {
     value: 2967.33,
     diff: -27.7,
@@ -980,22 +980,22 @@ const weekData = [{
   adjClose: 2877.94,
   dayClose: [{
     close: 2971.26,
-    date: new Date('2013/06/17'),
+    date: new Date('2024/06/17'),
   }, {
     close: 2996.09,
-    date: new Date('2013/06/18'),
+    date: new Date('2024/06/18'),
   }, {
     close: 2959.5,
-    date: new Date('2013/06/19'),
+    date: new Date('2024/06/19'),
   }, {
     close: 2890.33,
-    date: new Date('2013/06/20'),
+    date: new Date('2024/06/20'),
   }, {
     close: 2877.94,
-    date: new Date('2013/06/21'),
+    date: new Date('2024/06/21'),
   }],
 }, {
-  date: new Date('2013/06/10'),
+  date: new Date('2024/06/10'),
   open: {
     value: 2995.03,
     diff: 10.44,
@@ -1016,22 +1016,22 @@ const weekData = [{
   adjClose: 2943.86,
   dayClose: [{
     close: 2990.49,
-    date: new Date('2013/06/10'),
+    date: new Date('2024/06/10'),
   }, {
     close: 2959.84,
-    date: new Date('2013/06/11'),
+    date: new Date('2024/06/11'),
   }, {
     close: 2926.14,
-    date: new Date('2013/06/12'),
+    date: new Date('2024/06/12'),
   }, {
     close: 2962.9,
-    date: new Date('2013/06/13'),
+    date: new Date('2024/06/13'),
   }, {
     close: 2943.86,
-    date: new Date('2013/06/14'),
+    date: new Date('2024/06/14'),
   }],
 }, {
-  date: new Date('2013/06/03'),
+  date: new Date('2024/06/03'),
   open: {
     value: 2984.59,
     diff: -39.79,
@@ -1052,22 +1052,22 @@ const weekData = [{
   adjClose: 2990.87,
   dayClose: [{
     close: 2990.79,
-    date: new Date('2013/06/03'),
+    date: new Date('2024/06/03'),
   }, {
     close: 2973.69,
-    date: new Date('2013/06/04'),
+    date: new Date('2024/06/04'),
   }, {
     close: 2937.14,
-    date: new Date('2013/06/05'),
+    date: new Date('2024/06/05'),
   }, {
     close: 2950.3,
-    date: new Date('2013/06/06'),
+    date: new Date('2024/06/06'),
   }, {
     close: 2990.87,
-    date: new Date('2013/06/07'),
+    date: new Date('2024/06/07'),
   }],
 }, {
-  date: new Date('2013/05/28'),
+  date: new Date('2024/05/28'),
   open: {
     value: 3024.38,
     diff: 5.1,
@@ -1088,19 +1088,19 @@ const weekData = [{
   adjClose: 2981.76,
   dayClose: [{
     close: 3011.94,
-    date: new Date('2013/05/28'),
+    date: new Date('2024/05/28'),
   }, {
     close: 2994.82,
-    date: new Date('2013/05/29'),
+    date: new Date('2024/05/29'),
   }, {
     close: 3011.83,
-    date: new Date('2013/05/30'),
+    date: new Date('2024/05/30'),
   }, {
     close: 2981.76,
-    date: new Date('2013/05/31'),
+    date: new Date('2024/05/31'),
   }],
 }, {
-  date: new Date('2013/05/20'),
+  date: new Date('2024/05/20'),
   open: {
     value: 3019.28,
     diff: 46.32,
@@ -1121,22 +1121,22 @@ const weekData = [{
   adjClose: 2991.02,
   dayClose: [{
     close: 3020.97,
-    date: new Date('2013/05/20'),
+    date: new Date('2024/05/20'),
   }, {
     close: 3026.45,
-    date: new Date('2013/05/21'),
+    date: new Date('2024/05/21'),
   }, {
     close: 2999.13,
-    date: new Date('2013/05/22'),
+    date: new Date('2024/05/22'),
   }, {
     close: 2991.45,
-    date: new Date('2013/05/23'),
+    date: new Date('2024/05/23'),
   }, {
     close: 2991.02,
-    date: new Date('2013/05/24'),
+    date: new Date('2024/05/24'),
   }],
 }, {
-  date: new Date('2013/05/13'),
+  date: new Date('2024/05/13'),
   open: {
     value: 2972.96,
     diff: 24.06,
@@ -1157,22 +1157,22 @@ const weekData = [{
   adjClose: 3028.96,
   dayClose: [{
     close: 2982.09,
-    date: new Date('2013/05/13'),
+    date: new Date('2024/05/13'),
   }, {
     close: 2996.05,
-    date: new Date('2013/05/14'),
+    date: new Date('2024/05/14'),
   }, {
     close: 3002.62,
-    date: new Date('2013/05/15'),
+    date: new Date('2024/05/15'),
   }, {
     close: 2999.34,
-    date: new Date('2013/05/16'),
+    date: new Date('2024/05/16'),
   }, {
     close: 3028.96,
-    date: new Date('2013/05/17'),
+    date: new Date('2024/05/17'),
   }],
 }, {
-  date: new Date('2013/05/06'),
+  date: new Date('2024/05/06'),
   open: {
     value: 2948.9,
     diff: 99.36,
@@ -1193,22 +1193,22 @@ const weekData = [{
   adjClose: 2981.02,
   dayClose: [{
     close: 2955.36,
-    date: new Date('2013/05/06'),
+    date: new Date('2024/05/06'),
   }, {
     close: 2952.88,
-    date: new Date('2013/05/07'),
+    date: new Date('2024/05/07'),
   }, {
     close: 2968.24,
-    date: new Date('2013/05/08'),
+    date: new Date('2024/05/08'),
   }, {
     close: 2961.12,
-    date: new Date('2013/05/09'),
+    date: new Date('2024/05/09'),
   }, {
     close: 2981.02,
-    date: new Date('2013/05/10'),
+    date: new Date('2024/05/10'),
   }],
 }, {
-  date: new Date('2013/04/29'),
+  date: new Date('2024/04/29'),
   open: {
     value: 2849.54,
     diff: 57.77,
@@ -1229,22 +1229,22 @@ const weekData = [{
   adjClose: 2944.59,
   dayClose: [{
     close: 2866.95,
-    date: new Date('2013/04/29'),
+    date: new Date('2024/04/29'),
   }, {
     close: 2887.44,
-    date: new Date('2013/04/30'),
+    date: new Date('2024/04/30'),
   }, {
     close: 2873.35,
-    date: new Date('2013/05/01'),
+    date: new Date('2024/05/01'),
   }, {
     close: 2911.14,
-    date: new Date('2013/05/02'),
+    date: new Date('2024/05/02'),
   }, {
     close: 2944.59,
-    date: new Date('2013/05/03'),
+    date: new Date('2024/05/03'),
   }],
 }, {
-  date: new Date('2013/04/22'),
+  date: new Date('2024/04/22'),
   open: {
     value: 2791.77,
     diff: -49.49,
@@ -1265,22 +1265,22 @@ const weekData = [{
   adjClose: 2840.55,
   dayClose: [{
     close: 2810.07,
-    date: new Date('2013/04/22'),
+    date: new Date('2024/04/22'),
   }, {
     close: 2835.37,
-    date: new Date('2013/04/23'),
+    date: new Date('2024/04/23'),
   }, {
     close: 2834.12,
-    date: new Date('2013/04/24'),
+    date: new Date('2024/04/24'),
   }, {
     close: 2848.66,
-    date: new Date('2013/04/25'),
+    date: new Date('2024/04/25'),
   }, {
     close: 2840.55,
-    date: new Date('2013/04/26'),
+    date: new Date('2024/04/26'),
   }],
 }, {
-  date: new Date('2013/04/15'),
+  date: new Date('2024/04/15'),
   open: {
     value: 2841.26,
     diff: 68.96,
@@ -1301,22 +1301,22 @@ const weekData = [{
   adjClose: 2780.46,
   dayClose: [{
     close: 2797.47,
-    date: new Date('2013/04/15'),
+    date: new Date('2024/04/15'),
   }, {
     close: 2838.41,
-    date: new Date('2013/04/16'),
+    date: new Date('2024/04/16'),
   }, {
     close: 2781.98,
-    date: new Date('2013/04/17'),
+    date: new Date('2024/04/17'),
   }, {
     close: 2741.95,
-    date: new Date('2013/04/18'),
+    date: new Date('2024/04/18'),
   }, {
     close: 2780.46,
-    date: new Date('2013/04/19'),
+    date: new Date('2024/04/19'),
   }],
 }, {
-  date: new Date('2013/04/08'),
+  date: new Date('2024/04/08'),
   open: {
     value: 2772.3,
     diff: -47.48,
@@ -1337,22 +1337,22 @@ const weekData = [{
   adjClose: 2856.48,
   dayClose: [{
     close: 2786.13,
-    date: new Date('2013/04/08'),
+    date: new Date('2024/04/08'),
   }, {
     close: 2804.67,
-    date: new Date('2013/04/09'),
+    date: new Date('2024/04/09'),
   }, {
     close: 2859.21,
-    date: new Date('2013/04/10'),
+    date: new Date('2024/04/10'),
   }, {
     close: 2859.07,
-    date: new Date('2013/04/11'),
+    date: new Date('2024/04/11'),
   }, {
     close: 2856.48,
-    date: new Date('2013/04/12'),
+    date: new Date('2024/04/12'),
   }],
 }, {
-  date: new Date('2013/04/01'),
+  date: new Date('2024/04/01'),
   open: {
     value: 2819.78,
     diff: 9.03,
@@ -1373,22 +1373,22 @@ const weekData = [{
   adjClose: 2771.75,
   dayClose: [{
     close: 2797.07,
-    date: new Date('2013/04/01'),
+    date: new Date('2024/04/01'),
   }, {
     close: 2820.62,
-    date: new Date('2013/04/02'),
+    date: new Date('2024/04/02'),
   }, {
     close: 2795.04,
-    date: new Date('2013/04/03'),
+    date: new Date('2024/04/03'),
   }, {
     close: 2794.92,
-    date: new Date('2013/04/04'),
+    date: new Date('2024/04/04'),
   }, {
     close: 2771.75,
-    date: new Date('2013/04/05'),
+    date: new Date('2024/04/05'),
   }],
 }, {
-  date: new Date('2013/03/25'),
+  date: new Date('2024/03/25'),
   open: {
     value: 2810.75,
     diff: 39.22,
@@ -1409,19 +1409,19 @@ const weekData = [{
   adjClose: 2818.69,
   dayClose: [{
     close: 2789.45,
-    date: new Date('2013/03/25'),
+    date: new Date('2024/03/25'),
   }, {
     close: 2806.5,
-    date: new Date('2013/03/26'),
+    date: new Date('2024/03/26'),
   }, {
     close: 2809.98,
-    date: new Date('2013/03/27'),
+    date: new Date('2024/03/27'),
   }, {
     close: 2818.69,
-    date: new Date('2013/03/28'),
+    date: new Date('2024/03/28'),
   }],
 }, {
-  date: new Date('2013/03/18'),
+  date: new Date('2024/03/18'),
   open: {
     value: 2771.53,
     diff: -26.6,
@@ -1442,22 +1442,22 @@ const weekData = [{
   adjClose: 2800.81,
   dayClose: [{
     close: 2792.3,
-    date: new Date('2013/03/18'),
+    date: new Date('2024/03/18'),
   }, {
     close: 2787.27,
-    date: new Date('2013/03/19'),
+    date: new Date('2024/03/19'),
   }, {
     close: 2805.91,
-    date: new Date('2013/03/20'),
+    date: new Date('2024/03/20'),
   }, {
     close: 2774.85,
-    date: new Date('2013/03/21'),
+    date: new Date('2024/03/21'),
   }, {
     close: 2800.81,
-    date: new Date('2013/03/22'),
+    date: new Date('2024/03/22'),
   }],
 }, {
-  date: new Date('2013/03/11'),
+  date: new Date('2024/03/11'),
   open: {
     value: 2798.13,
     diff: 59.92,
@@ -1478,22 +1478,22 @@ const weekData = [{
   adjClose: 2799.41,
   dayClose: [{
     close: 2811.86,
-    date: new Date('2013/03/11'),
+    date: new Date('2024/03/11'),
   }, {
     close: 2800.81,
-    date: new Date('2013/03/12'),
+    date: new Date('2024/03/12'),
   }, {
     close: 2798.68,
-    date: new Date('2013/03/13'),
+    date: new Date('2024/03/13'),
   }, {
     close: 2807.3,
-    date: new Date('2013/03/14'),
+    date: new Date('2024/03/14'),
   }, {
     close: 2799.41,
-    date: new Date('2013/03/15'),
+    date: new Date('2024/03/15'),
   }],
 }, {
-  date: new Date('2013/03/04'),
+  date: new Date('2024/03/04'),
   open: {
     value: 2738.21,
     diff: -17.98,
@@ -1514,22 +1514,22 @@ const weekData = [{
   adjClose: 2804.11,
   dayClose: [{
     close: 2759.53,
-    date: new Date('2013/03/04'),
+    date: new Date('2024/03/04'),
   }, {
     close: 2799.25,
-    date: new Date('2013/03/05'),
+    date: new Date('2024/03/05'),
   }, {
     close: 2792.56,
-    date: new Date('2013/03/06'),
+    date: new Date('2024/03/06'),
   }, {
     close: 2799.49,
-    date: new Date('2013/03/07'),
+    date: new Date('2024/03/07'),
   }, {
     close: 2804.11,
-    date: new Date('2013/03/08'),
+    date: new Date('2024/03/08'),
   }],
 }, {
-  date: new Date('2013/02/25'),
+  date: new Date('2024/02/25'),
   open: {
     value: 2756.19,
     diff: -14.51,
@@ -1550,22 +1550,22 @@ const weekData = [{
   adjClose: 2747.75,
   dayClose: [{
     close: 2700.97,
-    date: new Date('2013/02/25'),
+    date: new Date('2024/02/25'),
   }, {
     close: 2713.02,
-    date: new Date('2013/02/26'),
+    date: new Date('2024/02/26'),
   }, {
     close: 2741.26,
-    date: new Date('2013/02/27'),
+    date: new Date('2024/02/27'),
   }, {
     close: 2738.58,
-    date: new Date('2013/02/28'),
+    date: new Date('2024/02/28'),
   }, {
     close: 2747.75,
-    date: new Date('2013/03/01'),
+    date: new Date('2024/03/01'),
   }],
 }, {
-  date: new Date('2013/02/19'),
+  date: new Date('2024/02/19'),
   open: {
     value: 2770.7,
     diff: -3.74,
@@ -1586,19 +1586,19 @@ const weekData = [{
   adjClose: 2737.28,
   dayClose: [{
     close: 2782.86,
-    date: new Date('2013/02/19'),
+    date: new Date('2024/02/19'),
   }, {
     close: 2739.99,
-    date: new Date('2013/02/20'),
+    date: new Date('2024/02/20'),
   }, {
     close: 2711.51,
-    date: new Date('2013/02/21'),
+    date: new Date('2024/02/21'),
   }, {
     close: 2737.28,
-    date: new Date('2013/02/22'),
+    date: new Date('2024/02/22'),
   }],
 }, {
-  date: new Date('2013/02/11'),
+  date: new Date('2024/02/11'),
   open: {
     value: 2774.44,
     diff: 25.04,
@@ -1619,22 +1619,22 @@ const weekData = [{
   adjClose: 2764.67,
   dayClose: [{
     close: 2774.64,
-    date: new Date('2013/02/11'),
+    date: new Date('2024/02/11'),
   }, {
     close: 2762.62,
-    date: new Date('2013/02/12'),
+    date: new Date('2024/02/12'),
   }, {
     close: 2773.77,
-    date: new Date('2013/02/13'),
+    date: new Date('2024/02/13'),
   }, {
     close: 2771.43,
-    date: new Date('2013/02/14'),
+    date: new Date('2024/02/14'),
   }, {
     close: 2764.67,
-    date: new Date('2013/02/15'),
+    date: new Date('2024/02/15'),
   }],
 }, {
-  date: new Date('2013/02/04'),
+  date: new Date('2024/02/04'),
   open: {
     value: 2749.4,
     diff: 11.78,
@@ -1655,22 +1655,22 @@ const weekData = [{
   adjClose: 2775.56,
   dayClose: [{
     close: 2715.68,
-    date: new Date('2013/02/04'),
+    date: new Date('2024/02/04'),
   }, {
     close: 2754.99,
-    date: new Date('2013/02/05'),
+    date: new Date('2024/02/05'),
   }, {
     close: 2746.35,
-    date: new Date('2013/02/06'),
+    date: new Date('2024/02/06'),
   }, {
     close: 2746.5,
-    date: new Date('2013/02/07'),
+    date: new Date('2024/02/07'),
   }, {
     close: 2775.56,
-    date: new Date('2013/02/08'),
+    date: new Date('2024/02/08'),
   }],
 }, {
-  date: new Date('2013/01/28'),
+  date: new Date('2024/01/28'),
   open: {
     value: 2737.62,
     diff: -6.65,
@@ -1691,22 +1691,22 @@ const weekData = [{
   adjClose: 2763.96,
   dayClose: [{
     close: 2742.43,
-    date: new Date('2013/01/28'),
+    date: new Date('2024/01/28'),
   }, {
     close: 2743.58,
-    date: new Date('2013/01/29'),
+    date: new Date('2024/01/29'),
   }, {
     close: 2738.71,
-    date: new Date('2013/01/30'),
+    date: new Date('2024/01/30'),
   }, {
     close: 2731.53,
-    date: new Date('2013/01/31'),
+    date: new Date('2024/01/31'),
   }, {
     close: 2763.96,
-    date: new Date('2013/02/01'),
+    date: new Date('2024/02/01'),
   }],
 }, {
-  date: new Date('2013/01/22'),
+  date: new Date('2024/01/22'),
   open: {
     value: 2744.27,
     diff: 10.81,
@@ -1727,19 +1727,19 @@ const weekData = [{
   adjClose: 2736.73,
   dayClose: [{
     close: 2746.19,
-    date: new Date('2013/01/22'),
+    date: new Date('2024/01/22'),
   }, {
     close: 2762.17,
-    date: new Date('2013/01/23'),
+    date: new Date('2024/01/23'),
   }, {
     close: 2723.53,
-    date: new Date('2013/01/24'),
+    date: new Date('2024/01/24'),
   }, {
     close: 2736.73,
-    date: new Date('2013/01/25'),
+    date: new Date('2024/01/25'),
   }],
 }, {
-  date: new Date('2013/01/14'),
+  date: new Date('2024/01/14'),
   open: {
     value: 2733.46,
     diff: 20.02,
@@ -1760,22 +1760,22 @@ const weekData = [{
   adjClose: 2743.24,
   dayClose: [{
     close: 2735.7,
-    date: new Date('2013/01/14'),
+    date: new Date('2024/01/14'),
   }, {
     close: 2722.98,
-    date: new Date('2013/01/15'),
+    date: new Date('2024/01/15'),
   }, {
     close: 2734.73,
-    date: new Date('2013/01/16'),
+    date: new Date('2024/01/16'),
   }, {
     close: 2747.15,
-    date: new Date('2013/01/17'),
+    date: new Date('2024/01/17'),
   }, {
     close: 2743.24,
-    date: new Date('2013/01/18'),
+    date: new Date('2024/01/18'),
   }],
 }, {
-  date: new Date('2013/01/07'),
+  date: new Date('2024/01/07'),
   open: {
     value: 2713.44,
     diff: -14.23,
@@ -1796,18 +1796,18 @@ const weekData = [{
   adjClose: 2748.26,
   dayClose: [{
     close: 2724.22,
-    date: new Date('2013/01/07'),
+    date: new Date('2024/01/07'),
   }, {
     close: 2718.72,
-    date: new Date('2013/01/08'),
+    date: new Date('2024/01/08'),
   }, {
     close: 2727.65,
-    date: new Date('2013/01/09'),
+    date: new Date('2024/01/09'),
   }, {
     close: 2744.18,
-    date: new Date('2013/01/10'),
+    date: new Date('2024/01/10'),
   }, {
     close: 2748.26,
-    date: new Date('2013/01/11'),
+    date: new Date('2024/01/11'),
   }],
 }];

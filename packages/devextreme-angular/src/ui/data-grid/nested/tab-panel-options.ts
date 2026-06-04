@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-tab-panel-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
@@ -177,10 +176,10 @@ export class DxoDataGridTabPanelOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((item: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((item: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 

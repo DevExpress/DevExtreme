@@ -28,7 +28,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-series-settings',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

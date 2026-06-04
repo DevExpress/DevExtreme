@@ -1,7 +1,28 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 import type { TargetedAppointment, ViewType } from '../../types';
+
+const formatTooltipDatePart = (date: Date): string => {
+  const globalFormat = getGlobalFormatByDataType('date');
+
+  if (globalFormat) {
+    return dateLocalization.format(date, globalFormat) as string;
+  }
+
+  return String(dateLocalization.format(date, 'monthandday'));
+};
+
+const formatTooltipTimePart = (date: Date): string => {
+  const globalFormat = getGlobalFormatByDataType('time');
+
+  if (globalFormat) {
+    return dateLocalization.format(date, globalFormat) as string;
+  }
+
+  return String(dateLocalization.format(date, 'shorttime'));
+};
 
 export enum DateFormatType {
   DATETIME = 'DATETIME',
@@ -25,24 +46,21 @@ export const getDateFormatType = (
 };
 
 export const getDateText = (startDate: Date, endDate: Date, formatType: DateFormatType): string => {
-  const dateFormat = 'monthandday';
-  const timeFormat = 'shorttime';
   const isSameDate = dateUtils.sameDate(startDate, endDate);
 
   switch (formatType) {
     case DateFormatType.DATETIME:
       return [
-        dateLocalization.format(startDate, dateFormat),
-        ' ',
-        dateLocalization.format(startDate, timeFormat),
-        ' - ',
-        isSameDate ? '' : `${dateLocalization.format(endDate, dateFormat)} `,
-        dateLocalization.format(endDate, timeFormat),
-      ].join('');
+        formatTooltipDatePart(startDate),
+        formatTooltipTimePart(startDate),
+        '-',
+        !isSameDate && formatTooltipDatePart(endDate),
+        formatTooltipTimePart(endDate),
+      ].filter(Boolean).join(' ');
     case DateFormatType.TIME:
-      return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
+      return `${formatTooltipTimePart(startDate)} - ${formatTooltipTimePart(endDate)}`;
     case DateFormatType.DATE:
-      return `${dateLocalization.format(startDate, dateFormat)}${isSameDate ? '' : ` - ${dateLocalization.format(endDate, dateFormat)}`}`;
+      return `${formatTooltipDatePart(startDate)}${isSameDate ? '' : ` - ${formatTooltipDatePart(endDate)}`}`;
     default:
       return '';
   }

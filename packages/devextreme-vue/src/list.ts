@@ -201,7 +201,7 @@ const componentConfig = {
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any | dxListItem | string>>,
     itemTemplate: {},
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    keyExpr: [Function, String] as PropType<(((item: any) => any)) | string>,
     menuItems: Array as PropType<Array<Record<string, any>>>,
     menuMode: String as PropType<ListMenuMode>,
     nextButtonText: String,

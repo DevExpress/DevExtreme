@@ -11,6 +11,7 @@ const GRID_CONTAINER = '#container';
 test('Don\'t calculate additional filter when filtering column list is empty', async (t) => {
   // arrange
   const dataGrid = new DataGrid(GRID_CONTAINER);
+  await t.expect(dataGrid.isReady()).ok();
   const consoleMessages = await t.getBrowserConsoleMessages();
 
   // act

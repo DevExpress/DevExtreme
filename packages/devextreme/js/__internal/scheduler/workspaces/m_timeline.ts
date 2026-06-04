@@ -6,18 +6,19 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 // NOTE: Renovation component import.
 import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
-import { formatWeekdayAndDay, timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
+import { timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
 
 import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
-  HEADER_CURRENT_TIME_CELL_CLASS,
 } from '../m_classes';
 import tableCreatorModule from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
+import { getFirstVisibleDate } from '../utils/skipped_days';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
@@ -29,7 +30,6 @@ const HORIZONTAL_GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-horizontal-g
 
 const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';
 const HEADER_PANEL_WEEK_CELL_CLASS = 'dx-scheduler-header-panel-week-cell';
-const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
 
 const HORIZONTAL = 'horizontal';
 const toMs = dateUtils.dateToMilliseconds;
@@ -48,7 +48,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getTotalRowCount(groupCount) {
-    if (this._isHorizontalGroupedWorkSpace()) {
+    if (this.isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
     }
     groupCount = groupCount || 1;
@@ -56,12 +56,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getFormat(): any {
-    return 'shorttime';
+    return getGlobalFormatByDataType('time') || 'shorttime';
   }
 
   private getWorkSpaceHeight() {
     if (this.option('crossScrollingEnabled') && hasWindow()) {
-      return getBoundingRect(this._$dateTable.get(0)).height;
+      return getBoundingRect(this.$dateTable.get(0)).height;
     }
 
     return getBoundingRect((this.$element() as any).get(0)).height;
@@ -93,8 +93,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getGroupHeaderContainer() {
-    if (this._isHorizontalGroupedWorkSpace()) {
-      return this._$thead;
+    if (this.isHorizontalGroupedWorkSpace()) {
+      return this.$thead;
     }
     return this.$sidebarTable;
   }
@@ -108,7 +108,21 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected incrementDate(date) {
-    date.setDate(date.getDate() + 1);
+    const skippedDays = this.option('skippedDays') ?? [];
+    const nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const nextVisibleDate = getFirstVisibleDate(
+      nextDate,
+      skippedDays,
+      (currentDate) => {
+        const result = new Date(currentDate);
+        result.setDate(result.getDate() + 1);
+        return result;
+      },
+    );
+
+    date.setTime(nextVisibleDate.getTime());
   }
 
   getIndicationCellCount() {
@@ -133,6 +147,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected calculateDurationInCells(timeDiff) {
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
+    const skippedDaysCount = this.getSkippedDaysCount(
+      this.getIndicationFirstViewDate(),
+      differenceInDays,
+    );
     let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
 
     if (today.getHours() > (this.option('endDayHour') as any)) {
@@ -142,7 +160,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     if (duration < 0) {
       duration = 0;
     }
-    return differenceInDays * this.getCellCountInDay() + duration;
+    return (differenceInDays - skippedDaysCount) * this.getCellCountInDay() + duration;
   }
 
   getIndicationWidth() {
@@ -151,7 +169,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       const integerPart = Math.floor(cellCount);
       const fractionPart = cellCount - integerPart;
 
-      return this.getCellWidth() * (integerPart * this._getGroupCount() + fractionPart);
+      return this.getCellWidth() * (integerPart * this.getGroupCount() + fractionPart);
     }
     return this.getIndicationCellCount() * this.getCellWidth();
   }
@@ -169,7 +187,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     const minHeight = this.getWorkSpaceMinHeight();
     setHeight(this.$sidebarTable, minHeight);
-    setHeight(this._$dateTable, minHeight);
+    setHeight(this.$dateTable, minHeight);
 
     this.virtualScrollingDispatcher.updateDimensions();
   }
@@ -177,7 +195,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   private getWorkSpaceMinHeight() {
     let minHeight = this.getWorkSpaceHeight();
 
-    const workspaceContainerHeight = getOuterHeight(this._$flexContainer, true);
+    const workspaceContainerHeight = getOuterHeight(this.$flexContainer, true);
 
     if (minHeight < workspaceContainerHeight) {
       minHeight = workspaceContainerHeight;
@@ -188,15 +206,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override getCellCoordinatesByIndex(index) {
     return {
-      columnIndex: index % this._getCellCount(),
+      columnIndex: index % this.getCellCount(),
       rowIndex: 0,
     };
   }
 
   protected override getCellElementByPosition(cellCoordinates, groupIndex) {
-    const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+    const indexes = this.groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
-    return this._$dateTable
+    return this.$dateTable
       .find('tr')
       .eq(indexes.rowIndex)
       .find('td')
@@ -204,7 +222,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getWorkSpaceWidth() {
-    return getOuterWidth(this._$dateTable, true);
+    return getOuterWidth(this.$dateTable, true);
   }
 
   private getIndicationFirstViewDate() {
@@ -223,7 +241,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const fullDays = Math.floor(fullInterval / toMs('day'));
     const tailDuration = fullInterval - (fullDays * toMs('day'));
     let tailDelta = 0;
-    const cellCount = this.getCellCountInDay() * (fullDays - this.getWeekendsCount(fullDays));
+    const skippedDaysCount = this.getSkippedDaysCount(firstViewDate, fullDays);
+    const cellCount = this.getCellCountInDay() * (fullDays - skippedDaysCount);
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
     let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
 
@@ -253,11 +272,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return result;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected override getWeekendsCount(argument?: any) {
-    return 0;
-  }
-
   getAllDayContainer() {
     return null;
   }
@@ -282,8 +296,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   renderRAllDayPanel() {}
 
   renderRTimeTable() {}
-
-  protected override renderGroupAllDayPanel() {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   generateRenderOptions(argument?: any) {
@@ -313,7 +325,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override toggleGroupingDirectionClass() {
-    (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
+    (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this.isHorizontalGroupedWorkSpace());
   }
 
   _getDefaultOptions() {
@@ -333,28 +345,18 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override renderView() {
-    let groupCellTemplates;
-    if (!this.isRenovatedRender()) {
-      groupCellTemplates = this.renderGroupHeader();
-    }
-
     this.renderWorkSpace();
+    this.virtualScrollingDispatcher.updateDimensions();
 
-    if (this.isRenovatedRender()) {
-      this.virtualScrollingDispatcher.updateDimensions();
-    }
+    this.shader = new HorizontalShader(this);
 
-    this._shader = new HorizontalShader(this);
+    this.$sidebarTable.appendTo(this.$sidebarScrollable.$content());
 
-    this.$sidebarTable.appendTo(this._sidebarScrollable.$content());
-
-    if (this.isRenovatedRender() && this.isVerticalGroupedWorkSpace()) {
+    if (this.isVerticalGroupedWorkSpace()) {
       this.renderRGroupPanel();
     }
 
     this.updateHeaderEmptyCellWidth();
-
-    this.applyCellTemplates(groupCellTemplates);
   }
 
   protected override setHorizontalGroupHeaderCellsHeight() { return noop(); }
@@ -365,7 +367,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getCurrentTimePanelCellIndices() {
-    const columnCountPerGroup = this._getCellCount();
+    const columnCountPerGroup = this.getCellCount();
     const today = this.getToday();
     const index = this.getCellIndexByDate(today);
     const { columnIndex: currentTimeColumnIndex } = this.getCellCoordinatesByIndex(index);
@@ -374,82 +376,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       return [];
     }
 
-    const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-      ? this._getGroupCount()
+    const horizontalGroupCount = this.isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+      ? this.getGroupCount()
       : 1;
 
     return [...new Array(horizontalGroupCount)]
       .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeColumnIndex);
-  }
-
-  // --------------
-  // These methods should be deleted when we get rid of old render
-  // --------------
-
-  protected override renderTimePanel() { return noop(); }
-
-  protected override renderAllDayPanel() { return noop(); }
-
-  protected override createAllDayPanelElements() { return noop(); }
-
-  protected override renderDateHeader() {
-    const $headerRow = super.renderDateHeader();
-    if (this.needRenderWeekHeader()) {
-      const firstViewDate = new Date(this.getStartViewDate());
-      let currentDate = new Date(firstViewDate);
-
-      const $cells: any[] = [];
-      const groupCount = this._getGroupCount();
-      const cellCountInDay = this.getCellCountInDay();
-      const colSpan = this.isGroupedByDate()
-        ? cellCountInDay * groupCount
-        : cellCountInDay;
-      const cellTemplate: any = this.option('dateCellTemplate');
-
-      const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-        ? groupCount
-        : 1;
-      const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * (this.option('intervalCount') as any);
-
-      const cellsCount = cellsInGroup * horizontalGroupCount;
-
-      for (let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
-        const $th = $('<th>');
-        const text = formatWeekdayAndDay(currentDate);
-
-        if (cellTemplate) {
-          const templateOptions = {
-            model: {
-              text,
-              date: new Date(currentDate),
-              ...this.getGroupsForDateHeaderTemplate(templateIndex, colSpan),
-            },
-            container: $th,
-            index: templateIndex,
-          };
-
-          cellTemplate.render(templateOptions);
-        } else {
-          $th.text(text);
-        }
-
-        $th
-          .addClass(HEADER_PANEL_CELL_CLASS)
-          .addClass(HEADER_PANEL_WEEK_CELL_CLASS)
-          .attr('colSpan', colSpan);
-
-        $cells.push($th);
-
-        if ((templateIndex % cellsInGroup) === (cellsInGroup - 1)) {
-          currentDate = new Date(firstViewDate);
-        } else {
-          this.incrementDate(currentDate);
-        }
-      }
-
-      const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells as any);
-      $headerRow.before($row);
-    }
   }
 
   protected override renderIndicator(height, rtlOffset, $container, groupCount) {
@@ -462,7 +394,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       $indicator.css('left', rtlOffset ? rtlOffset - width : width);
     } else {
       for (let i = 0; i < groupCount; i++) {
-        const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+        const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this.getCellCount() * this.getCellWidth() * i;
         $indicator = this.createIndicator($container);
         setHeight($indicator, getBoundingRect($container.get(0)).height);
 
@@ -483,23 +415,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         groupHeaderClass: this.getGroupHeaderClass.bind(this),
         groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
       },
-      this._getCellCount() || 1,
+      this.getCellCount() || 1,
       this.option('resourceCellTemplate'),
-      this.getTotalRowCount(this._getGroupCount()),
+      this.getTotalRowCount(this.getGroupCount()),
       groupByDate,
     );
-  }
-
-  // Old render methods.
-  // TODO Old render: delete these methods with the old render.
-
-  protected override setCurrentTimeCells(): void {
-    const timePanelCells = this.getTimePanelCells();
-    const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
-    currentTimeCellIndices.forEach((timePanelCellIndex) => {
-      timePanelCells.eq(timePanelCellIndex)
-        .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
-    });
   }
 }
 

@@ -1,10 +1,12 @@
 import type { DataType, Format } from '@js/common';
+import dateLocalization from '@js/common/core/localization/date';
 import { compileGetter, getPathParts } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
 import {
   isDefined,
   isString, type,
 } from '@js/core/utils/type';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { getTreeNodeByPath, setTreeNodeByPath } from '@ts/grids/new/grid_core/utils/tree/index';
 import type { ComponentType } from 'inferno';
 
@@ -18,6 +20,40 @@ type TemplateNormalizationFunc = <T>(
   template: Template<T> | undefined,
 ) => ComponentType<T> | undefined;
 
+const getGlobalFormat = (
+  dataType: 'date' | 'datetime',
+): Format | undefined => {
+  const globalFormat = getGlobalFormatByDataType(dataType);
+
+  if (!globalFormat) {
+    return undefined;
+  }
+
+  if (isString(globalFormat)) {
+    return (
+      (value: Date | string | number) => {
+        const dateValue = value instanceof Date ? value : new Date(value);
+
+        return isNaN(dateValue.getTime())
+          ? ''
+          : dateLocalization.format(dateValue, globalFormat) as string;
+      }
+    ) as unknown as Format;
+  }
+
+  return globalFormat as Format;
+};
+
+const getGlobalColumnFormat = (
+  dataType: DataType | undefined,
+): Format | undefined => {
+  if (dataType === 'date' || dataType === 'datetime') {
+    return getGlobalFormat(dataType);
+  }
+
+  return undefined;
+};
+
 export function normalizeColumn(
   column: PreNormalizedColumn,
   templateNormalizationFunc?: TemplateNormalizationFunc,
@@ -27,9 +63,12 @@ export function normalizeColumn(
     ?? columnFromDataOptions?.dataType
     ?? defaultColumnProperties.dataType;
   const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
+  const shouldUseInferredFormat = column.dataType === undefined
+    || columnFromDataOptions?.dataType === dataType;
   const columnFormat = column.format
-    ?? columnDataTypeDefaultOptions?.format
-    ?? columnFromDataOptions?.format;
+    ?? (shouldUseInferredFormat ? columnFromDataOptions?.format : undefined)
+    ?? getGlobalColumnFormat(dataType)
+    ?? columnDataTypeDefaultOptions?.format;
   const caption = captionize(column.name);
 
   const colWithDefaults = {
@@ -229,8 +268,12 @@ export const getColumnFormat = (
     return column.format;
   }
 
-  if (column.dataType === 'date' || column.dataType === 'datetime') {
-    return 'shortDate';
+  if (column.dataType === 'date') {
+    return getGlobalFormat('date') || 'shortDate';
+  }
+
+  if (column.dataType === 'datetime') {
+    return getGlobalFormat('datetime') || 'shortDateShortTime';
   }
 
   return undefined;

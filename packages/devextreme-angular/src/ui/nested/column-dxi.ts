@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxi-column',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

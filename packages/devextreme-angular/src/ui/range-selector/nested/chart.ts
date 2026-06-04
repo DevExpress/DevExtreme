@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-range-selector-chart',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -240,7 +240,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @default null
      * @public
      */
-    fieldAddons?: FieldAddons;
+    fieldAddons?: FieldAddons | null;
     /**
      * @section Utils
      * @type function

@@ -482,13 +482,6 @@
     }
   },
   {
-    "name": "ui/recurrence_editor",
-    "isInternal": true,
-    "exports": {
-      "default": { "path": "ui.dxRecurrenceEditor", "isWidget": true }
-    }
-  },
-  {
     "name": "ui/responsive_box",
     "exports": {
       "default": { "path": "ui.dxResponsiveBox", "isWidget": true }

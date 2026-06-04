@@ -39,7 +39,6 @@ import {
 
 @Component({
     selector: 'dxo-chart-argument-axis',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

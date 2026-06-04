@@ -2,6 +2,7 @@
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
+import { resolvePresetOverride } from '@ts/core/m_global_format_config';
 import { extend } from '@ts/core/utils/m_extend';
 
 interface DateArgs {
@@ -237,6 +238,19 @@ export default {
       // eslint-disable-next-line no-param-reassign
       format = (format as FormatObject).type ?? format;
     }
+
+    if (typeof format === 'string') {
+      const presetOverride = resolvePresetOverride(format);
+
+      if (presetOverride !== undefined) {
+        if (typeof presetOverride === 'function') {
+          return (presetOverride as DateFormatter)(date);
+        }
+        // eslint-disable-next-line no-param-reassign
+        format = presetOverride as LocalizationFormat;
+      }
+    }
+
     const intlFormat = getIntlFormat(format);
 
     if (intlFormat) {

@@ -1,3 +1,9 @@
+export interface PackageJson {
+  name: string;
+  version: string;
+  repository?: string | { url?: string };
+}
+
 export interface TsConfig {
   compilerOptions?: CompilerOptions;
   extends?: string;

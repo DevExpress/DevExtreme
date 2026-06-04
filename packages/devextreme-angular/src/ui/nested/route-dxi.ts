@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-route',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

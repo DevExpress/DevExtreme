@@ -5297,4 +5297,78 @@ QUnit.module('Accessibility', () => {
         $groupHeader.trigger('dxclick');
         assert.strictEqual($groupHeader.attr('aria-expanded'), 'true', 'aria-expanded is changed');
     });
+
+    QUnit.test('SelectAll checkbox aria-label should reflect selectAllText option on init (T1328637)', function(assert) {
+        const instance = $('#list').dxList({
+            selectionMode: 'all',
+            showSelectionControls: true,
+            selectAllText: 'custom-select-all',
+        }).dxList('instance');
+
+        const $selectAllCheckBox = instance.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'custom-select-all',
+            'checkbox aria-label uses selectAllText');
+    });
+
+    QUnit.test('Select all container aria-label should reflect selectAllText option on init (T1328637)', function(assert) {
+        const instance = $('#list').dxList({
+            selectionMode: 'all',
+            showSelectionControls: true,
+            selectAllText: 'custom-select-all',
+        }).dxList('instance');
+
+        const $selectAll = instance.$element().find(`.${LIST_SELECT_ALL_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'custom-select-all, Not checked',
+            'container aria-label uses selectAllText');
+    });
+
+    QUnit.test('Select all aria-labels should update when selectAllText changes at runtime (T1328637)', function(assert) {
+        const instance = $('#list').dxList({
+            items: ['text 1'],
+            selectionMode: 'all',
+            showSelectionControls: true,
+        }).dxList('instance');
+
+        instance.option('selectAllText', 'custom-select-all');
+
+        const $selectAll = instance.$element().find(`.${LIST_SELECT_ALL_CLASS}`);
+        const $selectAllCheckBox = instance.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'custom-select-all, Not checked',
+            'container aria-label updated after runtime change');
+        assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'custom-select-all',
+            'checkbox aria-label updated after runtime change');
+    });
+
+    [true, false].forEach(repaintChangesOnly => {
+        QUnit.test(`scrollview-content should not have role when dataSource is empty on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), undefined);
+        });
+
+        QUnit.test(`scrollview-content should have role="application" when dataSource has items on init and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
+        });
+
+        QUnit.test(`scrollview-content role should be removed when dataSource is cleared at runtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
+
+            instance.option('dataSource', []);
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), undefined);
+        });
+
+        QUnit.test(`scrollview-content role should be restored when dataSource is set at runtime and repaintChangesOnly=${repaintChangesOnly} (T1329047)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
+
+            instance.option('dataSource', ['Item 1']);
+
+            assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
+        });
+    });
 });

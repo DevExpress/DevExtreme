@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-form-validation-rule',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

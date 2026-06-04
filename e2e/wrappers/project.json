@@ -33,7 +33,7 @@
     "build:angular": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build:angular19"
+        "script": "build:angular"
       },
       "inputs": [
         "{projectRoot}/examples/angular/**/*",

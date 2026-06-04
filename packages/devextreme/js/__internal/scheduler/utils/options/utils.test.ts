@@ -2,18 +2,25 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
+import type { RawViewType } from './types';
 import {
-  getCurrentView, getViewOption, getViews, parseCurrentDate, parseDateOption,
+  getCurrentView,
+  getViewOption,
+  getViews,
+  parseCurrentDate,
+  parseDateOption,
 } from './utils';
 
 describe('views utils', () => {
   describe('getViews', () => {
     it('should filter view with incorrect name', () => {
-      expect(getViews(['unknown'] as any)).toEqual([]);
+      // @ts-expect-error intentionally pass an unsupported view name
+      expect(getViews(['unknown'])).toEqual([]);
     });
 
     it('should filter view with incorrect type', () => {
-      expect(getViews([{ type: 'unknown' }] as any)).toEqual([]);
+      // @ts-expect-error intentionally pass an unsupported view type
+      expect(getViews([{ type: 'unknown' }])).toEqual([]);
     });
 
     it('should not override view options by default options', () => {
@@ -24,7 +31,7 @@ describe('views utils', () => {
         name: 'MyDay',
         groups: ['a', 'b'],
       };
-      expect(getViews([input] as any)).toEqual([{ ...input, skippedDays: [] }]);
+      expect(getViews([input as RawViewType])).toEqual([{ ...input, skippedDays: [] }]);
     });
 
     it.each([
@@ -106,7 +113,7 @@ describe('views utils', () => {
         type: 'agenda',
       },
     }])('should return normalized $input.type view', ({ input, output }) => {
-      expect(getViews([input] as any)).toEqual([{ ...output, skippedDays: [] }]);
+      expect(getViews([input as RawViewType])).toEqual([{ ...output, skippedDays: [] }]);
     });
 
     it.each([
@@ -126,7 +133,7 @@ describe('views utils', () => {
         },
       },
     ])('should return normalized $input.type view', ({ input, output }) => {
-      expect(getViews([input] as any)).toEqual([{ ...output, skippedDays: [0, 6] }]);
+      expect(getViews([input as RawViewType])).toEqual([{ ...output, skippedDays: [0, 6] }]);
     });
   });
 
@@ -178,11 +185,16 @@ describe('views utils', () => {
     });
 
     it('should return first known view if wrong current view requested', () => {
-      expect(getCurrentView('blabla', [{
-        type: 'blabla',
-        name: 'blabla',
-        unknown: 'incorrect view',
-      } as any])).toEqual({
+      expect(getCurrentView(
+        'blabla',
+        [
+          {
+            type: 'blabla',
+            name: 'blabla',
+            unknown: 'incorrect view',
+          } as unknown as RawViewType,
+        ],
+      )).toEqual({
         groupOrientation: 'horizontal',
         intervalCount: 1,
         type: 'day',

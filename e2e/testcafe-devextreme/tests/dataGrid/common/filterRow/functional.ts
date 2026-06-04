@@ -56,7 +56,9 @@ test('Filter Row\'s Reset button does not work after a custom filter is set in F
   const dataGrid = new DataGrid('#container');
   const filterCell = dataGrid.getFilterCell(0);
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await t
     .expect(dataGrid.dataRows.count)
@@ -107,7 +109,9 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
   const dataGrid = new DataGrid('#container');
   const filterCell = dataGrid.getFilterCell(0);
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   const ariaLabel = await filterCell.menuButton.getAttribute('aria-label');
 
@@ -138,7 +142,9 @@ test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)'
   const dataGrid = new DataGrid('#container');
   const filterCell = dataGrid.getFilterCell(0);
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await t
     .expect(filterCell.menuButton.getAttribute('aria-label'))

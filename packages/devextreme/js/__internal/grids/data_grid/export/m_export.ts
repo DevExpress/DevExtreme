@@ -731,7 +731,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
 
     if (exportButton) {
       items.push(exportButton);
-      this._correctItemsPosition(items);
     }
 
     return items;
@@ -838,10 +837,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     });
 
     return items;
-  }
-
-  private _correctItemsPosition(items) {
-    items.sort((itemA, itemB) => itemA.sortIndex - itemB.sortIndex);
   }
 
   private _isExportButtonVisible() {

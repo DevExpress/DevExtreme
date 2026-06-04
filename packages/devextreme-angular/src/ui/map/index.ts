@@ -68,7 +68,6 @@ import {
  */
 @Component({
     selector: 'dx-map',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

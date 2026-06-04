@@ -1,15 +1,15 @@
 import { jest } from '@jest/globals';
+import type { DayOfWeek } from '@js/common';
 import $ from '@js/core/renderer';
 // eslint-disable-next-line devextreme-custom/no-deferred
 import { Deferred } from '@js/core/utils/deferred';
 
-import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
-import { AppointmentForm } from '../../appointment_popup/m_form';
+import { AppointmentForm } from '../../appointment_popup/form';
 import {
-  ACTION_TO_APPOINTMENT,
   APPOINTMENT_POPUP_CLASS,
   AppointmentPopup,
-} from '../../appointment_popup/m_popup';
+} from '../../appointment_popup/popup';
+import { createTimeZoneCalculator } from '../../r1/timezone_calculator/utils';
 import {
   AppointmentDataAccessor,
 } from '../../utils/data_accessor/appointment_data_accessor';
@@ -39,8 +39,9 @@ const DEFAULT_EDITING = {
   allowDeleting: true,
   allowResizing: true,
   allowDragging: true,
-  legacyForm: false,
 };
+
+const NO_TIMEZONE = '';
 
 const DEFAULT_APPOINTMENT = {
   text: 'Test Appointment',
@@ -59,11 +60,14 @@ const resolvedDeferred = (): any => {
 
 interface CreateAppointmentPopupOptions {
   appointmentData?: Record<string, unknown>;
-  action?: number;
   editing?: Record<string, unknown>;
   firstDayOfWeek?: number;
   startDayHour?: number;
+  timeZone?: string;
   onAppointmentFormOpening?: (...args: unknown[]) => void;
+  onSave?: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
+  title?: string;
+  readOnly?: boolean;
   addAppointment?: jest.Mock;
   updateAppointment?: jest.Mock;
 }
@@ -77,7 +81,7 @@ interface CreateAppointmentPopupResult {
     addAppointment: jest.Mock;
     updateAppointment: jest.Mock;
     focus: jest.Mock;
-    updateScrollPosition: jest.Mock;
+    onSave: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   };
   dispose: () => void;
 }
@@ -103,7 +107,7 @@ export const createAppointmentPopup = async (
 
   const dataAccessors = new AppointmentDataAccessor(DEFAULT_FIELDS, false);
   const resourceManager = new ResourceManager([]);
-  const timeZoneCalculator = mockTimeZoneCalculator;
+  const timeZoneCalculator = createTimeZoneCalculator(options.timeZone ?? NO_TIMEZONE);
   const editing = { ...DEFAULT_EDITING, ...options.editing };
 
   const addAppointment = options.addAppointment
@@ -111,27 +115,26 @@ export const createAppointmentPopup = async (
   const updateAppointment = options.updateAppointment
     ?? jest.fn(resolvedDeferred);
   const focus = jest.fn();
-  const updateScrollPosition = jest.fn();
+  const onSave = options.onSave
+    ?? jest.fn<(appointment: Record<string, unknown>) => PromiseLike<unknown>>(resolvedDeferred);
 
-  const formSchedulerProxy = {
-    getResourceById: (): Record<string, unknown> => resourceManager.resourceById,
-    getDataAccessors: (): AppointmentDataAccessor => dataAccessors,
+  const formConfig = {
+    dataAccessors,
+    editing,
+    resourceManager,
+    firstDayOfWeek: (options.firstDayOfWeek ?? 0) as DayOfWeek,
+    startDayHour: options.startDayHour ?? 0,
     createComponent,
-    getEditingConfig: (): typeof editing => editing,
-    getResourceManager: (): ResourceManager => resourceManager,
-    getFirstDayOfWeek: (): number => options.firstDayOfWeek ?? 0,
-    getStartDayHour: (): number => options.startDayHour ?? 0,
     getCalculatedEndDate: (startDate: Date): Date => {
       const endDate = new Date(startDate);
       endDate.setHours(endDate.getHours() + 1);
       return endDate;
     },
-    getTimeZoneCalculator: (): typeof timeZoneCalculator => timeZoneCalculator,
   };
 
-  const form = new AppointmentForm(formSchedulerProxy);
+  const form = new AppointmentForm(formConfig);
 
-  const noop = (): void => {};
+  const noop = (): void => { };
 
   const popupSchedulerProxy = {
     getElement: (): ReturnType<typeof $> => $(container),
@@ -154,30 +157,33 @@ export const createAppointmentPopup = async (
     },
     addAppointment,
     updateAppointment,
-    updateScrollPosition,
   };
 
   const popup = new AppointmentPopup(popupSchedulerProxy, form);
 
   const appointmentData = options.appointmentData
     ?? { ...DEFAULT_APPOINTMENT };
-  const action = options.action ?? ACTION_TO_APPOINTMENT.CREATE;
+  const title = options.title ?? 'New Appointment';
+  const readOnly = options.readOnly ?? false;
 
-  popup.show(appointmentData, { action, allowSaving: true });
-  await new Promise(process.nextTick);
+  const overlaySelector = `.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}`;
 
-  const selector = `.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}`;
-  const overlayWrapper = document.querySelector(
-    selector,
-  ) as HTMLDivElement;
+  const showAndQuery = async (
+    data: Record<string, unknown>,
+  ): Promise<PopupModel> => {
+    popup.show(data, { onSave, title, readOnly });
+    await new Promise(process.nextTick);
 
-  if (!overlayWrapper) {
-    throw new Error(
-      'AppointmentPopup overlay wrapper not found in DOM',
-    );
-  }
+    const wrapper = document.querySelector(overlaySelector) as HTMLDivElement;
 
-  const POM = new PopupModel(overlayWrapper);
+    if (!wrapper) {
+      throw new Error('AppointmentPopup overlay wrapper not found in DOM');
+    }
+
+    return new PopupModel(wrapper);
+  };
+
+  const POM = await showAndQuery(appointmentData);
 
   const dispose = (): void => {
     popup.dispose();
@@ -195,7 +201,7 @@ export const createAppointmentPopup = async (
       addAppointment,
       updateAppointment,
       focus,
-      updateScrollPosition,
+      onSave,
     },
     dispose,
   };

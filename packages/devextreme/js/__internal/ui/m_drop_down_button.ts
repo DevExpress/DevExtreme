@@ -21,7 +21,7 @@ import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import { getElementWidth } from '@ts/ui/drop_down_editor/m_utils';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
 import type { PopupProperties } from '@ts/ui/popup/m_popup';
@@ -391,6 +391,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _popupOptions() {
     const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
+
     return extend({
       dragEnabled: false,
       focusStateEnabled: false,
@@ -409,8 +410,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
           type: 'fade', duration: 400, from: 1, to: 0,
         },
       },
-      _ignoreFunctionValueDeprecation: true,
-      width: () => getElementWidth(this.$element()),
+      width: getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
       position: {
@@ -476,30 +476,33 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     };
   }
 
-  _upDownKeyHandler() {
+  _upDownKeyHandler(): boolean {
     if (this._popup?.option('visible') && this._list) {
       this._list.focus();
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.open();
     }
 
     return true;
   }
 
-  _escHandler() {
+  _escHandler(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.close();
     this._buttonGroup.focus();
 
     return true;
   }
 
-  _tabHandler() {
+  _tabHandler(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.close();
 
     return true;
   }
 
-  _renderPopup() {
+  _renderPopup(): void {
     const $popup = $('<div>');
     this.$element().append($popup);
     this._popup = this._createComponent($popup, Popup, this._popupOptions());
@@ -529,10 +532,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   _dimensionChanged(): void {
-    const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+    const cachedWidth = this._options.cache('dropDownOptions')?.width;
 
-    if (popupWidth === undefined) {
-      this._setPopupOption('width', () => getElementWidth(this.$element()));
+    if (cachedWidth === undefined) {
+      this._setPopupOption('width', getElementWidth(this.$element()));
     }
   }
 
@@ -587,11 +590,16 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _renderButtonGroup(): void {
     const $buttonGroup = this._buttonGroup?.$element() || $('<div>');
+
     if (!this._buttonGroup) {
       this.$element().append($buttonGroup);
     }
 
-    this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._getButtonGroupOptions());
+    this._buttonGroup = this._createComponent(
+      $buttonGroup,
+      ButtonGroup,
+      this._getButtonGroupOptions(),
+    );
 
     this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
     this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
@@ -599,7 +607,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
     this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
-
     this._updateAriaAttributes(this.option('opened'));
   }
 
@@ -792,11 +799,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       case 'showArrowIcon':
         this._updateArrowClass();
         this._renderButtonGroup();
-        this._popup && this._popup.repaint();
+        this._popup?.repaint();
         break;
       case 'width':
       case 'height':
         super._optionChanged(args);
+        this._dimensionChanged();
         this._popup?.repaint();
         break;
       case 'stylingMode':

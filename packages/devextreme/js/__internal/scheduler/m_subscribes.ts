@@ -75,10 +75,12 @@ const subscribes = {
     });
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   getUpdatedData(rawAppointment) {
     return this.getUpdatedData(rawAppointment);
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   updateAppointmentAfterDrag({
     event, element, rawAppointment, isDropToTheSameCell, isDropToSelfScheduler,
   }) {
@@ -110,6 +112,7 @@ const subscribes = {
     }
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   onDeleteButtonPress(options) {
     const targetedData = this.getTargetedAppointment(options.data, $(options.target));
     this.checkAndDeleteAppointment(options.data, targetedData);
@@ -233,7 +236,7 @@ const subscribes = {
   },
 
   getGroupCount() {
-    return this._workSpace._getGroupCount();
+    return this._workSpace.getGroupCount();
   },
 
   // TODO<Appointments>: delete this method when old impl is removed
@@ -297,6 +300,7 @@ const subscribes = {
     return this.option('adaptivityEnabled');
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   removeDroppableCellClass() {
     this._workSpace.removeDroppableCellClass();
   },

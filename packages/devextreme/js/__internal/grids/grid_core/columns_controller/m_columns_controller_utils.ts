@@ -15,7 +15,6 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 
-import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
@@ -1049,7 +1048,7 @@ const isFirstOrLastColumnCore = function (
     .filter((col) => {
       let res = true;
 
-      if (col.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+      if (that.isAdaptiveHiddenColumn(col)) {
         return false;
       }
 

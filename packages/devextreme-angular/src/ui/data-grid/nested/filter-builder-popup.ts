@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-filter-builder-popup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

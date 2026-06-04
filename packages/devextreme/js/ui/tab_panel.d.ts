@@ -215,7 +215,7 @@ export interface dxTabPanelOptions<
      * @docid
      * @public
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | ((item: TItem) => TKey);
     /**
      * @docid
      * @default null

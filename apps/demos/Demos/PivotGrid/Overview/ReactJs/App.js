@@ -63,7 +63,7 @@ const App = () => {
     });
     setTimeout(() => {
       dataSource.expandHeaderItem('row', ['North America']);
-      dataSource.expandHeaderItem('column', [2013]);
+      dataSource.expandHeaderItem('column', [2023]);
     });
   }, []);
   return (

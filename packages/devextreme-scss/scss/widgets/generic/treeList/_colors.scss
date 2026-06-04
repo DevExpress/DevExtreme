@@ -11,42 +11,42 @@ $treelist-selection-spin-icon-color: null !default;
 
 
 @if $color == "carmine" {
-  $treelist-spin-icon-color: $base-icon-color !default;
-  $treelist-selection-spin-icon-color: color.adjust($base-icon-color, $lightness: 100%, $space: hsl) !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
+  $treelist-selection-spin-icon-color: color.adjust($datagrid-spin-icon-color, $lightness: 100%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-inverted-text-color !default;
 }
 
 @if $color == "dark" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $treelist-spin-icon-color !default;
 }
 
 @if $color == "darkmoon" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-bg !default;
 }
 
 @if $color == "darkviolet" {
-  $treelist-spin-icon-color: $base-header-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "greenmist" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: color.adjust($treelist-spin-icon-color, $lightness: 100%, $space: hsl) !default;
 }
 
 @if $color == "light" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $treelist-spin-icon-color !default;
 }
 
 @if $color == "softblue" {
-  $treelist-spin-icon-color: $base-icon-color !default;
+  $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-icon-color !default;
 }
 

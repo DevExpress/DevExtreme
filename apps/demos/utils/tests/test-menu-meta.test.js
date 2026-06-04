@@ -8,10 +8,9 @@ const demos = [];
 const folders = {};
 
 readdirSync(rootDemosFolder, { withFileTypes: true }).forEach((widgetFolder) => {
+  if (!widgetFolder.isDirectory()) { return; }
   const widgetName = widgetFolder.name.toString();
-  if (widgetFolder.isDirectory()) {
-    folders[widgetName] = folders[widgetName] || {};
-  }
+  folders[widgetName] = folders[widgetName] || {};
 
   readdirSync(join(rootDemosFolder, widgetName), { withFileTypes: true }).forEach((demoFolder) => {
     const demoName = demoFolder.name.toString();
@@ -33,6 +32,9 @@ meta.forEach((section) => {
   section.Groups.forEach(collectDemos);
 });
 
+const primaryDemos = demos.filter((d) => !d.TopLevel);
+const duplicateDemos = demos.filter((d) => d.TopLevel);
+
 describe('All demos has corresponding folders', () => {
   demos.forEach((demo) => {
     test(`Demo: ${demo.Title} - ${demo.Widget}/${demo.Name}`, () => {
@@ -45,10 +47,20 @@ describe('All folders has corresponding demos', () => {
   Object.keys(folders).forEach((widgetFolder) => {
     Object.keys(folders[widgetFolder]).forEach((demoFolder) => {
       test(`Folder: ${widgetFolder}/${demoFolder} has demo`, () => {
-        const demosWithFolder = demos
+        const demosWithFolder = primaryDemos
           .filter((d) => d.Widget === widgetFolder && d.Name === demoFolder);
         expect(demosWithFolder).toHaveLength(1);
       });
+    });
+  });
+});
+
+describe('Each duplicate demo has exactly one primary entry', () => {
+  duplicateDemos.forEach((demo) => {
+    test(`Duplicate: ${demo.Title} - ${demo.Widget}/${demo.Name}`, () => {
+      const primaryMatches = primaryDemos
+        .filter((d) => d.Widget === demo.Widget && d.Name === demo.Name);
+      expect(primaryMatches).toHaveLength(1);
     });
   });
 });

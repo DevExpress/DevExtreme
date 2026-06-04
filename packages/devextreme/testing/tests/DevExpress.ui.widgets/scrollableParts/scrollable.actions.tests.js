@@ -404,3 +404,99 @@ QUnit.test('update', function(assert) {
         .move(0, moveDistance)
         .up();
 });
+
+QUnit.module('actions stay functional after callback errors', moduleConfig);
+
+[
+    {
+        callbackName: 'onScroll',
+        message: 'onScroll error does not break subsequent actions',
+        configure: function(callback) {
+            const $scrollable = $('#scrollable').dxScrollable({
+                useNative: false,
+                inertiaEnabled: false,
+                bounceEnabled: false,
+                onScroll: callback,
+            });
+
+            return {
+                trigger: function() {
+                    pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
+                        .start()
+                        .down()
+                        .move(0, -10)
+                        .up();
+                },
+            };
+        },
+    },
+    {
+        callbackName: 'onUpdated',
+        message: 'onUpdated error does not break subsequent actions',
+        configure: function(callback) {
+            const scrollable = $('#scrollable').dxScrollable({
+                useNative: false,
+                onUpdated: callback,
+            }).dxScrollable('instance');
+
+            return {
+                trigger: function() {
+                    scrollable.update();
+                },
+            };
+        },
+    },
+    {
+        callbackName: 'onStart',
+        message: 'onStart error does not break subsequent actions',
+        configure: function(callback) {
+            const scrollable = $('#scrollable').dxScrollable({
+                useNative: false,
+                onStart: callback,
+            }).dxScrollable('instance');
+
+            return {
+                trigger: function() {
+                    scrollable.scrollBy({ top: 10 });
+                },
+            };
+        },
+    },
+    {
+        callbackName: 'onEnd',
+        message: 'onEnd error does not break subsequent actions',
+        configure: function(callback) {
+            const scrollable = $('#scrollable').dxScrollable({
+                useNative: false,
+                onEnd: callback,
+            }).dxScrollable('instance');
+
+            return {
+                trigger: function() {
+                    scrollable.scrollBy({ top: 10 });
+                },
+            };
+        },
+    },
+].forEach((testCase) => {
+    QUnit.test(testCase.message, function(assert) {
+        let callbackCallCount = 0;
+
+        const { trigger } = testCase.configure(function() {
+            callbackCallCount++;
+            throw new Error(testCase.callbackName + ' error');
+        });
+
+        callbackCallCount = 0;
+
+        trigger();
+        trigger();
+
+        assert.strictEqual(
+            callbackCallCount,
+            2,
+            `${testCase.callbackName}: component remained functional and handled both actions after callback errors`,
+        );
+    });
+});
+

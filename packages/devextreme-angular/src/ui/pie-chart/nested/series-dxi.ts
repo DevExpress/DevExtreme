@@ -26,7 +26,6 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-pie-chart-series',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

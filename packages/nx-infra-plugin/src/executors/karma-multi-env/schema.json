@@ -1,7 +1,8 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Karma Multi Env Executor Schema",
+  "description": "Run Karma tests sequentially across multiple Angular environments (client, server, hydration)",
   "type": "object",
-  "title": "Karma Multi-Environment Test Executor",
   "properties": {
     "karmaConfig": {
       "type": "string",

@@ -102,7 +102,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-select-box',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -307,10 +306,10 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get fieldAddons(): FieldAddons {
+    get fieldAddons(): FieldAddons | null {
         return this._getOption('fieldAddons');
     }
-    set fieldAddons(value: FieldAddons) {
+    set fieldAddons(value: FieldAddons | null) {
         this._setOption('fieldAddons', value);
     }
 
@@ -1196,7 +1195,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldAddonsChange: EventEmitter<FieldAddons>;
+    @Output() fieldAddonsChange: EventEmitter<FieldAddons | null>;
 
     /**
     

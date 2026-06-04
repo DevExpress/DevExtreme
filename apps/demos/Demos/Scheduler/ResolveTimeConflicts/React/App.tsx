@@ -22,8 +22,8 @@ const currentDate = new Date(2026, 1, 10);
 const views: SchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 
 const overlappingRuleItems = [
-  { value: 'sameResource', text: 'Allow across resources' },
-  { value: 'allResources', text: 'Disallow all overlaps' },
+  { value: 'sameResource', text: 'Different Resources' },
+  { value: 'allResources', text: 'Never' },
 ];
 
 function getNextDay(date: Date): Date {
@@ -112,7 +112,7 @@ const App = () => {
     formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
   }, []);
 
-  const alertConflictIfNeeded = useCallback((
+  const handleConflict = useCallback((
     e: SchedulerTypes.AppointmentAddingEvent | SchedulerTypes.AppointmentUpdatingEvent,
     appointmentData: Appointment,
   ) => {
@@ -144,12 +144,12 @@ const App = () => {
   }, [setConflictError]);
 
   const onAppointmentAdding = useCallback((e: SchedulerTypes.AppointmentAddingEvent) => {
-    alertConflictIfNeeded(e, e.appointmentData as Appointment);
-  }, [alertConflictIfNeeded]);
+    handleConflict(e, e.appointmentData as Appointment);
+  }, [handleConflict]);
 
   const onAppointmentUpdating = useCallback((e: SchedulerTypes.AppointmentUpdatingEvent) => {
-    alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
-  }, [alertConflictIfNeeded]);
+    handleConflict(e, { ...e.oldData, ...e.newData } as Appointment);
+  }, [handleConflict]);
 
   const popupOptions = useMemo(() => ({
     onInitialized: (e: PopupTypes.InitializedEvent) => {
@@ -254,7 +254,7 @@ const App = () => {
 
       <div className="options">
         <div className="option">
-          <span>Overlapping Rule</span>
+          <span>Allow Overlapping Appointments</span>
           <SelectBox
             items={overlappingRuleItems}
             valueExpr="value"

@@ -249,7 +249,9 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
   const groupRow = dataGrid.getGroupRow(0);
   const groupPanelToggle = groupRow.getCell(0).element;
 
-  await dataGrid.isReady();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await t
     .click(groupPanelToggle);

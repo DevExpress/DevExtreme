@@ -14,7 +14,7 @@ const DATEBOX_CLASS = 'dx-datebox';
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const visibleLabelModes = ['floating', 'static', 'outside'];
 
-fixture.disablePageReloads`DateBox_Label`
+fixture`DateBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 test('Symbol parts in label should not be cropped', async (t) => {
@@ -48,11 +48,7 @@ test('Symbol parts in label should not be cropped', async (t) => {
 test('DateBox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${DATEBOX_CLASS} { width: 220px; margin: 2px; }`);
-
   await testScreenshot(t, takeScreenshot, 'DateBox render with buttons container.png');
-
-  await removeStylesheetRulesFromPage();
 
   await t
     .expect(compareResults.isValid())
@@ -81,4 +77,8 @@ test('DateBox with buttons container', async (t) => {
       }
     }
   }
+
+  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${DATEBOX_CLASS} { width: 220px; margin: 2px; }`);
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });

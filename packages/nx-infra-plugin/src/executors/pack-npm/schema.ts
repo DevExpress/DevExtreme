@@ -1,3 +1,1 @@
-export interface PackNpmExecutorSchema {
-  workingDirectory?: string;
-}
+export interface PackNpmExecutorSchema {}

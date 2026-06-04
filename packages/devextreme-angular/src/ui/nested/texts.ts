@@ -24,7 +24,6 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
 
 @Component({
     selector: 'dxo-texts',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

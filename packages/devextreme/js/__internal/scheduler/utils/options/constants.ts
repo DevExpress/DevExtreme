@@ -54,6 +54,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   maxAppointmentsPerCell: 'auto',
   selectedCellData: [],
   groupByDate: false,
+  hiddenWeekDays: undefined,
   onAppointmentRendered: undefined,
   onAppointmentClick: undefined,
   onAppointmentDblClick: undefined,
@@ -101,14 +102,14 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
 
 export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
   indicatorTime: undefined,
-  renovateRender: true,
   editing: {
-    legacyForm: false,
     // @ts-expect-error copy from default so that you can rewrite it
     ...DEFAULT_SCHEDULER_OPTIONS.editing,
     popup: {},
   },
+  // TODO: legacy option property name
   _draggingMode: 'outlook',
+  // TODO: legacy option property name
   _appointmentTooltipOffset: { x: 0, y: 0 },
   appointmentPopupTemplate: 'appointmentPopup',
   disabledExpr: 'disabled',

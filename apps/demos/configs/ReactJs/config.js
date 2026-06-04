@@ -41,6 +41,12 @@ window.config = {
     'openai': {
       'esModule': true,
     },
+    'zod': {
+      'esModule': true,
+    },
+    'zod-to-json-schema': {
+      'esModule': true,
+    },
   },
   paths: {
     'npm:': '../../../../node_modules/',
@@ -130,6 +136,9 @@ window.config = {
     /** openai */
     'openai': 'externals:openai.bundle.js',
     /**/
+
+    'zod': 'externals:zod.bundle.js',
+    'zod-to-json-schema': 'externals:zod-to-json-schema.bundle.js',
 
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',

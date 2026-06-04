@@ -15,11 +15,11 @@ import pointerMock from '../../helpers/pointerMock.js';
 import support from '__internal/core/utils/m_support';
 import typeUtils from 'core/utils/type';
 import uiDateUtils from '__internal/ui/date_box/date_utils';
+import DateBox from 'ui/date_box';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import '../../helpers/calendarFixtures.js';
 
-import 'ui/date_box';
 import 'ui/validator';
 import 'fluent_blue_light.css!';
 
@@ -62,6 +62,8 @@ const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 const TODAY_BUTTON_SELECTOR = `.${TODAY_BUTTON_CLASS}.${BUTTON_CLASS}`;
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
+const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
+
 
 const widgetName = 'dxDateBox';
 const { module: testModule, test } = QUnit;
@@ -3059,6 +3061,25 @@ testModule('native picker', function() {
             }
         });
     });
+
+    test('empty class should not be attached for native picker with null value (T1328901)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'native',
+            type: 'date',
+            value: null,
+            labelMode: 'floating',
+            label: 'Label',
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+
+        assert.strictEqual($dateBox.hasClass(TEXTEDITOR_EMPTY_INPUT_CLASS), false,
+            'empty class is not attached so floating label does not overlap with browser-rendered date format hint');
+
+        dateBox.option('value', new Date());
+
+        assert.strictEqual($dateBox.hasClass(TEXTEDITOR_EMPTY_INPUT_CLASS), false,
+            'empty class remains absent after value is set');
+    });
 });
 
 QUnit.module('valueChanged handler should receive correct event', {
@@ -3371,5 +3392,192 @@ QUnit.module('validation', {
         });
 
         assert.strictEqual(this.$dateBox.hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is be hidden');
+    });
+});
+
+QUnit.module('Global formatting config (spec)', {
+    beforeEach: function() {
+        const globalConfig = config();
+        this.defaultOptions = DateBox.defaultOptions;
+        this.savedGlobalFormats = {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+            dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+        };
+    },
+    afterEach: function() {
+        const globalConfig = config();
+        Object.keys(this.savedGlobalFormats).forEach((key) => {
+            const value = this.savedGlobalFormats[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
+        DateBox.defaultOptions(this.defaultOptions || {});
+    },
+}, () => {
+    QUnit.test('implicit date displayFormat uses global dateFormat', function(assert) {
+        config({
+            ...config(),
+            dateFormat: 'dd/MM/yyyy',
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '02/01/2020');
+    });
+
+    QUnit.test('implicit datetime displayFormat uses global dateTimeFormat', function(assert) {
+        config({
+            ...config(),
+            dateTimeFormat: 'dd/MM/yyyy, HH:mm',
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            value: new Date(2020, 0, 2, 14, 5),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '02/01/2020, 14:05');
+    });
+
+    QUnit.test('implicit time displayFormat uses global timeFormat', function(assert) {
+        config({
+            ...config(),
+            timeFormat: 'HH:mm:ss',
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'time',
+            value: new Date(2020, 0, 2, 14, 5, 6),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '14:05:06');
+    });
+
+    QUnit.test('timeview number editors ignore global numberFormat', function(assert) {
+        config({
+            ...config(),
+            numberFormat: '+#',
+        });
+
+        $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'calendar',
+            value: new Date(2020, 0, 2, 4, 5, 0),
+            opened: true,
+        });
+
+        const $timeInputs = $(`.dx-timeview .dx-numberbox .${TEXTEDITOR_INPUT_CLASS}`);
+        assert.strictEqual($timeInputs.eq(0).val(), '04', 'hours editor does not use global number format');
+        assert.strictEqual($timeInputs.eq(1).val(), '05', 'minutes editor does not use global number format');
+    });
+
+    QUnit.test('explicit displayFormat keeps priority over global dateFormat', function(assert) {
+        config({
+            ...config(),
+            dateFormat: 'dd/MM/yyyy',
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            displayFormat: 'shortDate',
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '1/2/2020');
+    });
+
+    QUnit.test('implicit DateBox uses dateTimeFormatPresets.shortDate when no dateFormat is set', function(assert) {
+        config({
+            ...config(),
+            dateTimeFormatPresets: {
+                shortDate: 'dd/MM/yyyy',
+            },
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 3),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '03/01/2020');
+    });
+
+    QUnit.test('defaultOptions displayFormat keeps priority over global dateFormat', function(assert) {
+        config({
+            ...config(),
+            dateFormat: 'dd/MM/yyyy',
+        });
+        DateBox.defaultOptions({
+            options: {
+                displayFormat: 'yyyy-MM-dd',
+            },
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '2020-01-02');
+    });
+
+    QUnit.test('dateFormat takes priority over dateTimeFormatPresets.shortDate for implicit DateBox', function(assert) {
+        config({
+            ...config(),
+            dateFormat: 'yyyy-MM-dd',
+            dateTimeFormatPresets: {
+                shortDate: 'dd/MM/yyyy',
+            },
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        // dateFormat wins over dateTimeFormatPresets for implicit case
+        assert.strictEqual($input.val(), '2020-01-02');
+    });
+
+    QUnit.test('explicit displayFormat: "shortDate" uses dateTimeFormatPresets override', function(assert) {
+        config({
+            ...config(),
+            dateTimeFormatPresets: {
+                shortDate: 'dd/MM/yyyy',
+            },
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            displayFormat: 'shortDate',
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '02/01/2020');
     });
 });

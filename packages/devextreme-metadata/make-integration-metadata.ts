@@ -9,6 +9,7 @@ Imd.makeMetadata({
     artifacts: PATHS.artifactsDir,
   },
   mutations: [
+    replaceTypes('common/grids:AIAssistant.chat', ['*'], ['object']),
     replaceTypes('common/grids:ColumnAIOptions.popup', ['*'], ['object']),
     replaceTypes('ui/card_view:dxCardViewOptions.filterBuilderPopup', ['*'], ['object']),
     replaceTypes('ui/card_view:Editing.popup', ['*'], ['object']),

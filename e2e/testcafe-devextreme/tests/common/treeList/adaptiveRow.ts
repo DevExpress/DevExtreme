@@ -7,7 +7,9 @@ fixture.disablePageReloads`Adaptive Row`
 
 test.meta({ browserSize: [400, 400] })('Should be shown and hidden when the window is resized', async (t) => {
   const treeList = new TreeList('#container');
-  await treeList.isReady();
+  await t
+    .expect(treeList.isReady())
+    .ok();
 
   const adaptiveButton = treeList.getAdaptiveButton();
   await t.expect(adaptiveButton.exists).ok();

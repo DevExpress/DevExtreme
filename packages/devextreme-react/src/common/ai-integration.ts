@@ -5,6 +5,7 @@ export type {
     AIIntegrationOptions,
     AIProvider,
     AIResponse,
+    ExecuteGridAssistantCommandResponse,
     GenerateGridColumnCommandResponse,
     Prompt,
     RequestParams,

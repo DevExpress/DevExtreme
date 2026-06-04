@@ -1,9 +1,10 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
-import type { AppointmentViewModelPlain } from './view_model/types';
+import type { AppointmentItemViewModel } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
@@ -19,6 +20,15 @@ export interface TargetedAppointment extends Appointment {
   displayStartDate: Date;
   displayEndDate: Date;
 }
+
+export type CreateComponentFn = <TTComponent, IProperties = Record<string, unknown>>(
+  element: string | HTMLElement | dxElementWrapper | Element,
+  component: string | (new (...args) => TTComponent),
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  componentConfiguration: TTComponent extends Component<any, infer TTProperties>
+    ? TTProperties
+    : IProperties,
+) => TTComponent;
 
 export interface AppointmentDataItem {
   startDate: Date;
@@ -75,6 +85,7 @@ export type CalculateStartViewDate = (
   startDate: Date,
   intervalCount: number,
   firstDayOfWeekOption?: number,
+  skippedDays?: number[],
 ) => Date;
 
 export interface ViewCellData {
@@ -242,7 +253,7 @@ export interface ViewDataProviderType {
   getViewOptions: () => ViewOptions;
   setViewOptions: (options: ViewDataProviderOptions) => void;
   createGroupedDataMapProvider: () => void;
-  isSkippedDate: (date: Date) => boolean;
+  isDateSkipped: (date: Date) => boolean;
   getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
   getCellsBetween: (first: ViewCellData, last: ViewCellData) => ViewCellData[];
   viewType: ViewType;
@@ -252,14 +263,13 @@ export interface AppointmentTooltipItem {
   appointment: Appointment;
   targetedAppointment?: Appointment | TargetedAppointment;
   color: Promise<string | undefined>;
+  settings: AppointmentItemViewModel;
 }
 
 export interface CompactAppointmentOptions {
   $container: dxElementWrapper;
   coordinates: { top: number; left: number };
-  items: (AppointmentTooltipItem & {
-    settings: AppointmentViewModelPlain;
-  })[];
+  items: AppointmentTooltipItem[];
   buttonColor: Promise<string | undefined>;
   sortedIndex: number;
   width: number;

@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-format',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

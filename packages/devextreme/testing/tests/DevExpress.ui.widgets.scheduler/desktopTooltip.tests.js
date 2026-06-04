@@ -1,4 +1,4 @@
-import { DesktopTooltipStrategy } from '__internal/scheduler/tooltip_strategies/m_desktop_tooltip_strategy';
+import { DesktopTooltipStrategy } from '__internal/scheduler/tooltip_strategies/desktop_tooltip_strategy';
 import { FunctionTemplate } from 'core/templates/function_template';
 import { extend } from 'core/utils/extend';
 import Tooltip from 'ui/tooltip';
@@ -116,7 +116,6 @@ QUnit.test('contentTemplate passed to createComponent should work correct', asyn
 
         assert.equal(stubCreateComponent.getCall(1).args[0][0].nodeName, 'DIV');
         assert.equal(stubCreateComponent.getCall(1).args[1], List);
-        assert.equal(Object.keys(stubCreateComponent.getCall(1).args[2]).length, 7);
         assert.equal(stubCreateComponent.getCall(1).args[2].dataSource, dataList);
         assert.equal(stubCreateComponent.getCall(1).args[2].showScrollbar, 'onHover');
         assert.ok(stubCreateComponent.getCall(1).args[2].onContentReady);
@@ -274,7 +273,6 @@ QUnit.test('itemTemplate passed to createComponent should work correct', async f
     stubComponent.option.reset();
     const e = { event: { stopPropagation: sinon.spy() } };
     stubCreateComponent.getCall(2).args[2].onClick(e);
-    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hide');
     assert.ok(e.event.stopPropagation.called);
     assert.deepEqual(stubCheckAndDeleteAppointment.getCall(0).args, [item.appointment, item.targetedAppointment]);
 });
@@ -303,17 +301,17 @@ QUnit.test('Delete button shouldn\'t created, appointment is disabled', async fu
     assert.equal(stubCreateComponent.getCall(2), undefined);
 });
 
-QUnit.test('isAlreadyShown method, tooltip is not created', async function(assert) {
+QUnit.test('isShownForTarget method, tooltip is not created', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
-    const target = ['target'];
+    const target = $('<div>');
 
-    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is not created and haven\'t data');
+    assert.ok(!tooltip.isShownForTarget(target), 'tooltip is not created and haven\'t data');
 });
 
-QUnit.test('isAlreadyShown method, tooltip is created and shown', async function(assert) {
+QUnit.test('isShownForTarget method, tooltip is created and shown', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = [{ data: 'data1' }, { data: 'data2' }];
-    const target = ['target'];
+    const target = $('<div>');
     const callback = sinon.stub();
 
     callback.withArgs('target').returns(target);
@@ -323,14 +321,14 @@ QUnit.test('isAlreadyShown method, tooltip is created and shown', async function
     tooltip.show(target, dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
 
-    assert.ok(tooltip.isAlreadyShown(target), 'tooltip is shown and have the same target');
-    assert.ok(!tooltip.isAlreadyShown(['target_1']), 'tooltip is shown and have another target');
+    assert.ok(tooltip.isShownForTarget(target), 'tooltip is shown and have the same target');
+    assert.ok(!tooltip.isShownForTarget($('<div>')), 'tooltip is shown and have another target');
 });
 
-QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
+QUnit.test('isShownForTarget method, tooltip is hide', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = [{ data: 'data1' }, { data: 'data2' }];
-    const target = ['target'];
+    const target = $('<div>');
     const callback = sinon.stub();
 
     callback.withArgs('target').returns(target);
@@ -338,7 +336,7 @@ QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
     stubComponent.option = callback;
     tooltip.show(target, dataList, this.extraOptions);
 
-    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is hidden');
+    assert.ok(!tooltip.isShownForTarget(target), 'tooltip is hidden');
 });
 
 QUnit.test('appointmentTooltipTemplate equal to "appointmentTooltipTemplate"', async function(assert) {

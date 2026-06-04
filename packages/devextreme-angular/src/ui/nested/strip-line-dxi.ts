@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-strip-line',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

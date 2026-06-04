@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-gantt-context-menu',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

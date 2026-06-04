@@ -15,7 +15,6 @@ import SchedulerWorkSpace from './m_work_space';
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
-const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   private indicatorInterval: any;
@@ -68,7 +67,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         $indicator,
         groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth(),
       );
-      this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
+      this.groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
     }
   }
 
@@ -80,7 +79,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   private getRtlOffset(width) {
-    return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
+    return this.option('rtlEnabled') ? getBoundingRect(this.$dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
   protected setIndicationUpdateInterval() {
@@ -107,7 +106,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   getIndicationWidth() {
-    const cellCount = this._getCellCount();
+    const cellCount = this.getCellCount();
     const cellSpan = Math.min(this.getIndicatorDaysSpan(), cellCount);
     const width = cellSpan * this.getCellWidth();
     const maxWidth = this.getCellWidth() * cellCount;
@@ -127,9 +126,12 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     const viewStartTime = this.getStartViewDate().getTime();
     let timeDiff = today.getTime() - viewStartTime;
 
-    if (this.option('type') === 'workWeek') {
-      const weekendDays = this.getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
-      timeDiff -= weekendDays;
+    if (((this.option('skippedDays')) ?? []).length > 0) {
+      const skippedDaysDuration = this.getSkippedDaysCount(
+        this.getStartViewDate(),
+        Math.round(timeDiff / toMs('day')),
+      ) * toMs('day');
+      timeDiff -= skippedDaysDuration;
     }
 
     return Math.ceil((timeDiff + 1) / toMs('day'));
@@ -158,20 +160,18 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   renderCurrentDateTimeIndication(): void {
     this.renderCurrentDateTimeLineAndShader();
 
-    if (this.isRenovatedRender()) {
-      this.renderWorkSpace({
-        generateNewData: true,
-        renderComponents: {
-          header: true,
-          timePanel: true,
-        },
-      });
-    }
+    this.renderWorkSpace({
+      generateNewData: true,
+      renderComponents: {
+        header: true,
+        timePanel: true,
+      },
+    });
   }
 
   renderCurrentDateTimeLineAndShader(): void {
     this.cleanDateTimeIndicator();
-    this._shader?.clean();
+    this.shader?.clean();
     this.renderDateTimeIndication();
   }
 
@@ -271,7 +271,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     const verticalGroupCount = this.isVerticalGroupedWorkSpace()
-      ? this._getGroupCount()
+      ? this.getGroupCount()
       : 1;
 
     return [...new Array(verticalGroupCount)]
@@ -287,34 +287,23 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     if (this.option('shadeUntilCurrentTime')) {
-      this._shader.render();
+      this.shader.render(
+        this.isHorizontalGroupedWorkSpace(),
+        this.getGroupCount() || 1,
+        this.getCellCount(),
+      );
     }
 
     if (!this.isIndicationOnView() || !this.isIndicatorVisible()) {
       return;
     }
 
-    const groupCount = this._getGroupCount() || 1;
-    const $container = this._dateTableScrollable.$content();
+    const groupCount = this.getGroupCount() || 1;
+    const $container = this.$dateTableScrollable.$content();
     const height = this.getIndicationHeight();
     const rtlOffset = this.getRtlOffset(this.getCellWidth());
 
     this.renderIndicator(height, rtlOffset, $container, groupCount);
-
-    // TODO Old render: delete this code with the old render.
-    if (!this.isRenovatedRender()) {
-      this.setCurrentTimeCells();
-    }
-  }
-
-  // TODO Old render: replace base call methods by these after the deleting of the old render.
-  protected setCurrentTimeCells(): void {
-    const timePanelCells = this.getTimePanelCells();
-    const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
-    currentTimeCellIndices.forEach((timePanelCellIndex) => {
-      timePanelCells.eq(timePanelCellIndex)
-        .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
-    });
   }
 }
 

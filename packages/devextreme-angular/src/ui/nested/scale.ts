@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-scale',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

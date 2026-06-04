@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-form',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

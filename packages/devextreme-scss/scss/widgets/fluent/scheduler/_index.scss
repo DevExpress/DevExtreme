@@ -760,35 +760,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-.dx-scheduler-legacy-appointment-popup {
-  .dx-form {
-    padding: 0 10px 0 10px;
-  }
-
-  .dx-popup-title {
-    background-color: $scheduler-popup-title-bg;
-    border-bottom: none;
-
-    .dx-closebutton,
-    .dx-closebutton.dx-rtl {
-      margin: 0;
-    }
-  }
-
-  .dx-toolbar-after {
-    margin-right: 4px;
-
-    .dx-rtl & {
-      margin-left: 4px;
-      margin-right: 0;
-    }
-  }
-}
-
-.dx-scheduler-legacy-appointment-popup .dx-form-validation-summary {
-  padding: 10px 20px;
-}
-
 .dx-scheduler-header-panel,
 .dx-scheduler-time-panel {
   font-size: $fluent-scheduler-workspace-info-text-size;

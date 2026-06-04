@@ -101,7 +101,7 @@ QUnit.module('focus policy', {
         }
     });
 
-    QUnit.test('hover and focus states for list should be initially disabled on mobile devices only', function(assert) {
+    QUnit.test('hover state for list should be initially disabled on mobile devices, focus state should follow parent', function(assert) {
         this.instance.option('opened', true);
 
         const list = $(`.${LIST_CLASS}`).dxList('instance');
@@ -111,11 +111,11 @@ QUnit.module('focus policy', {
             assert.ok(list.option('focusStateEnabled'), 'focus state should be enabled on desktop');
         } else {
             assert.notOk(list.option('hoverStateEnabled'), 'hover state should be disabled on mobiles');
-            assert.notOk(list.option('focusStateEnabled'), 'focus state should be disabled on mobiles');
+            assert.ok(list.option('focusStateEnabled'), 'focus state should follow parent value on mobiles');
         }
     });
 
-    QUnit.test('changing hover and focus states for list should be enabled on desktop only', function(assert) {
+    QUnit.test('changing hover state for list should be enabled on desktop only, focus state should be enabled on both desktop and mobile', function(assert) {
         this.instance.option('opened', true);
 
         const list = $(`.${LIST_CLASS}`).dxList('instance');
@@ -126,10 +126,13 @@ QUnit.module('focus policy', {
             assert.notOk(list.option('hoverStateEnabled'), 'hover state should be changed to disabled on desktop');
             assert.notOk(list.option('focusStateEnabled'), 'focus state should be changed to disabled on desktop');
         } else {
+            assert.notOk(list.option('hoverStateEnabled'), 'hover state should not be changed on mobiles');
+            assert.notOk(list.option('focusStateEnabled'), 'focus state should be changed on mobiles');
+
             this.instance.option({ hoverStateEnabled: true, focusStateEnabled: true });
 
             assert.notOk(list.option('hoverStateEnabled'), 'hover state should not be changed on mobiles');
-            assert.notOk(list.option('focusStateEnabled'), 'focus state should not be changed on mobiles');
+            assert.ok(list.option('focusStateEnabled'), 'focus state should be changed on mobiles');
         }
     });
 

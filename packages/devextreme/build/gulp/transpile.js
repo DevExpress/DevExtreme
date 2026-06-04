@@ -5,13 +5,15 @@ const gulp = require('gulp');
 const notify = require('gulp-notify');
 const path = require('path');
 const plumber = require('gulp-plumber');
+const replace = require('gulp-replace');
 const watch = require('gulp-watch');
 
-const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 const createTsCompiler = require('./typescript/compiler');
+
+const REMOVE_DEBUG_REGEXP = /\/{2,}\s{0,}#DEBUG[\s\S]*?\/{2,}\s{0,}#ENDDEBUG/g;
 
 const src = [
     'js/**/*.*',
@@ -48,7 +50,7 @@ const watchJsTask = () => {
         .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PATH));
     watchTask
-        .pipe(removeDebug())
+        .pipe(replace(REMOVE_DEBUG_REGEXP, ''))
         .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
     return watchTask;
@@ -67,7 +69,7 @@ const watchTsTask = async() => {
         }))
         .pipe(babel(transpileConfig.tsCjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PATH))
-        .pipe(removeDebug())
+        .pipe(replace(REMOVE_DEBUG_REGEXP, ''))
         .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
 };
 watchTsTask.displayName = 'transpile TS watch';

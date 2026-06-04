@@ -231,31 +231,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
-.dx-scheduler-legacy-appointment-popup {
-  .dx-popup-title {
-    background-color: $scheduler-popup-title-bg;
-
-    .dx-closebutton,
-    .dx-closebutton.dx-rtl {
-      margin: 0;
-    }
-  }
-
-  .dx-popup-bottom {
-    border-top: 1px solid;
-    border-top-color: $scheduler-appointment-form-separator-color;
-  }
-
-  .dx-toolbar-after {
-    margin-right: 4px;
-
-    .dx-rtl & {
-      margin-left: 4px;
-      margin-right: 0;
-    }
-  }
-}
-
 .dx-scheduler-appointment-popup {
   > .dx-overlay-content > .dx-toolbar.dx-widget {
     > .dx-toolbar-items-container {
@@ -332,10 +307,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       }
     }
   }
-}
-
-.dx-scheduler-legacy-appointment-popup .dx-form-validation-summary {
-  padding: 10px 20px;
 }
 
 .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {

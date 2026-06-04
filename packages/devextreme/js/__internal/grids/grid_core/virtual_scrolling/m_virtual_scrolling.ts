@@ -762,7 +762,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
         const { rowType } = item;
         const itemCountable = isItemCountableByDataSource(item, dataSource);
 
-        const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
+        const isNextGroupItem = rowType === 'group' && (prevCountable || (prevRowType !== 'group' && currentIndex > 0));
         const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
 
         if (!item.isNewRow && isDefined(prevCountable)) {
@@ -1004,18 +1004,19 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     };
   }
 
-  private _updateVisiblePageIndex(currentPageIndex?) {
+  private _updateVisiblePageIndex(value?: number): void {
     if (!this._rowsScrollController) {
       return;
     }
-    if (isDefined(currentPageIndex)) {
-      this._silentOption(VISIBLE_PAGE_INDEX, currentPageIndex);
+
+    if (isDefined(value)) {
+      this._silentOption(VISIBLE_PAGE_INDEX, value);
       this.pageChanged.fire();
       return;
     }
 
-    const viewPortItemIndex = this._rowsScrollController.getViewportItemIndex();
-    const newPageIndex = Math.floor(viewPortItemIndex / this.pageSize());
+    const viewportItemIndex = this._rowsScrollController.getViewportItemIndex();
+    const newPageIndex = Math.floor(viewportItemIndex / this.pageSize());
 
     if (this.pageIndex() !== newPageIndex) {
       this._silentOption(VISIBLE_PAGE_INDEX, newPageIndex);

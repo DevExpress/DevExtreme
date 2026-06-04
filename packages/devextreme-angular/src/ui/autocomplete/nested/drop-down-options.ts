@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-autocomplete-drop-down-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

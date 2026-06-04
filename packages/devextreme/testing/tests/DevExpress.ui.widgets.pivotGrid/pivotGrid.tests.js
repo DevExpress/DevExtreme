@@ -907,6 +907,42 @@ QUnit.module('dxPivotGrid', {
         assert.equal($('.dx-header-filter-menu').find('.dx-list-item').text(), 'test <test>', 'encoded');
     });
 
+    QUnit.test('T1325377: Field panel operations should work after dataSource reassignment', function(assert) {
+        const assignedDataSource = new PivotGridDataSource({
+            fields: [
+                { dataField: 'region', area: 'row' },
+                { dataField: 'date', dataType: 'date', area: 'column' },
+                { dataField: 'sales', dataType: 'number', summaryType: 'sum', area: 'data' }
+            ],
+            store: [
+                { region: 'North America', date: '2013/01/06', sales: 1740 },
+                { region: 'South America', date: '2013/01/13', sales: 850 }
+            ]
+        });
+
+        const pivotGrid = createPivotGrid({
+            allowSorting: true,
+            allowFiltering: true,
+            fieldPanel: {
+                visible: true
+            },
+            dataSource: null
+        });
+        pivotGrid.option('dataSource', assignedDataSource);
+        this.clock.tick(500);
+
+        const $pivotGrid = $('#pivotGrid');
+
+        $pivotGrid.find('.dx-area-description-cell .dx-area-field').first().trigger('dxclick');
+        this.clock.tick(500);
+
+        $pivotGrid.find('.dx-header-filter').first().trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.equal(pivotGrid.getDataSource().state().fields[0].sortOrder, 'desc', 'sorting changes current dataSource state');
+        assert.ok($('.dx-header-filter-menu').find('.dx-list-item').length > 0, 'header filter has items');
+    });
+
     QUnit.test('Field chooser inherits encodeHtml option', function(assert) {
         const pivotGrid = createPivotGrid({
             dataSource: {
@@ -1043,7 +1079,7 @@ QUnit.module('dxPivotGrid', {
 
     });
 
-    QUnit.test('T1317109: fieldChooser disposes on dataSource change', function(assert) {
+    QUnit.test('T1317109: FieldChooserBase internal _dataSource matches PivotGrid on dataSource change', function(assert) {
         const pivotGrid = createPivotGrid({
             dataSource: {
                 rows: [],
@@ -1052,13 +1088,17 @@ QUnit.module('dxPivotGrid', {
             }
         });
 
-        const disposeSpy = sinon.spy(pivotGrid._fieldChooserBase, '_dispose');
-
         pivotGrid.option('dataSource', this.testOptions.dataSource);
-
         this.clock.tick(500);
 
-        assert.ok(disposeSpy.calledOnce, '_dispose was called once on dataSource change');
+        const fieldChooserBase = $('#pivotGrid').dxPivotGridFieldChooserBase('instance');
+        const pivotDataSource = pivotGrid.getDataSource();
+
+        assert.strictEqual(
+            fieldChooserBase._dataSource,
+            pivotDataSource,
+            'FieldChooserBase._dataSource must equal getDataSource() after dataSource change'
+        );
     });
 
     QUnit.test('not show field chooser popup on description area click when fieldChooser disabled', function(assert) {

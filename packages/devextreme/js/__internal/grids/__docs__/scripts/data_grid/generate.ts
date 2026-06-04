@@ -29,7 +29,7 @@ function loadGridCoreModules(): GridCoreModuleInfo[] {
   if (!fs.existsSync(GC_JSON_PATH)) {
     console.error(`ERROR: grid_core_architecture.generated.json not found at ${GC_JSON_PATH}`);
     console.error('Please run the grid_core architecture script first:');
-    console.error('  npx tsx __docs__/scripts/grid_core/generate.ts --json');
+    console.error('  tsx __docs__/scripts/grid_core/generate.ts --json');
     process.exit(1);
   }
 

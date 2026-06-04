@@ -40,7 +40,6 @@ import {
  */
 @Component({
     selector: 'dx-speed-dial-action',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

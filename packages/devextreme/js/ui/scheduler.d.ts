@@ -5,6 +5,7 @@ import {
 
 import {
   template,
+  DayOfWeek,
   FirstDayOfWeek,
   Orientation,
   ScrollMode,
@@ -66,6 +67,7 @@ export interface TargetedAppointmentInfo {
 }
 
 export {
+    DayOfWeek,
     FirstDayOfWeek,
     Orientation,
     ScrollMode,
@@ -365,6 +367,17 @@ export type InitializedEvent = InitializedEventInfo<dxScheduler>;
  * @inherits EventInfo,ChangedOptionInfo
  */
 export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
+
+/**
+ * @docid _ui_scheduler_SelectionEndEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type SelectionEndEvent = EventInfo<dxScheduler> & {
+  /** @docid _ui_scheduler_SelectionEndEvent.selectedCellData */
+  readonly selectedCellData: Array<any>;
+};
 
 /** @public */
 export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
@@ -684,7 +697,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek | undefined;
+    firstDayOfWeek?: DayOfWeek | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    hiddenWeekDays?: Array<DayOfWeek> | undefined;
     /**
      * @docid
      * @default true &for(desktop)
@@ -842,6 +861,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     onCellClick?: ((e: CellClickEvent) => void) | string;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/scheduler:SelectionEndEvent}
+     * @action
+     * @public
+     */
+    onSelectionEnd?: ((e: SelectionEndEvent) => void) | undefined;
     /**
      * @docid
      * @default null
@@ -1086,7 +1113,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      firstDayOfWeek?: FirstDayOfWeek | undefined;
+      firstDayOfWeek?: DayOfWeek | undefined;
+      /**
+       * @docid
+       * @default undefined
+       */
+      hiddenWeekDays?: Array<DayOfWeek> | undefined;
       /**
        * @docid
        * @default false
@@ -1500,7 +1532,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAppointmentAdded' | 'onAppointmentAdding' | 'onAppointmentClick' | 'onAppointmentContextMenu' | 'onAppointmentDblClick' | 'onAppointmentDeleted' | 'onAppointmentDeleting' | 'onAppointmentFormOpening' | 'onAppointmentRendered' | 'onAppointmentTooltipShowing' | 'onAppointmentUpdated' | 'onAppointmentUpdating' | 'onCellClick' | 'onCellContextMenu'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAppointmentAdded' | 'onAppointmentAdding' | 'onAppointmentClick' | 'onAppointmentContextMenu' | 'onAppointmentDblClick' | 'onAppointmentDeleted' | 'onAppointmentDeleting' | 'onAppointmentFormOpening' | 'onAppointmentRendered' | 'onAppointmentTooltipShowing' | 'onAppointmentUpdated' | 'onAppointmentUpdating' | 'onCellClick' | 'onCellContextMenu' | 'onSelectionEnd'>;
 
 /**
 * @hidden

@@ -65,10 +65,10 @@ describe('snapToCells', () => {
   });
 
   describe('auto mode', () => {
-    it('should snap both boundaries when cells are covered by more than 50%', () => {
+    it('should stretch appointments that occupy less than two cells', () => {
       const items = [
         {
-          cellIndex: 0, endCellIndex: 1, startDateUTC: 2, endDateUTC: 16, duration: 14,
+          cellIndex: 0, endCellIndex: 1, startDateUTC: 2, endDateUTC: 19, duration: 17,
         },
       ];
 
@@ -79,30 +79,30 @@ describe('snapToCells', () => {
       ]);
     });
 
-    it('should not snap boundary when cell is covered by less than 50%', () => {
+    it('should not stretch appointments that occupy exactly two cells', () => {
       const items = [
         {
-          cellIndex: 0, endCellIndex: 0, startDateUTC: 2, endDateUTC: 7, duration: 5,
+          cellIndex: 0, endCellIndex: 2, startDateUTC: 1, endDateUTC: 21, duration: 20,
         },
       ];
 
       expect(snapToCells(items as any, cells, 'auto')).toEqual([
         expect.objectContaining({
-          startDateUTC: 2, endDateUTC: 7, duration: 5,
+          startDateUTC: 1, endDateUTC: 21, duration: 20,
         }),
       ]);
     });
 
-    it('should not snap boundary when cell is covered by exactly 50%', () => {
+    it('should not stretch appointments that occupy more than two cells', () => {
       const items = [
         {
-          cellIndex: 0, endCellIndex: 0, startDateUTC: 0, endDateUTC: 5, duration: 5,
+          cellIndex: 0, endCellIndex: 2, startDateUTC: 2, endDateUTC: 26, duration: 24,
         },
       ];
 
       expect(snapToCells(items as any, cells, 'auto')).toEqual([
         expect.objectContaining({
-          startDateUTC: 0, endDateUTC: 5, duration: 5,
+          startDateUTC: 2, endDateUTC: 26, duration: 24,
         }),
       ]);
     });

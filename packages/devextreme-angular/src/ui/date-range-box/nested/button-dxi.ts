@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-date-range-box-button',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

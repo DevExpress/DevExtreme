@@ -1,18 +1,17 @@
+import { BaseRowModel } from './base_row';
+
 const SELECTORS = {
   editRow: 'dx-edit-row',
   deleteRowButton: 'dx-link-delete',
   undeleteRowButton: 'dx-link-undelete',
 };
 
-export class DataRowModel {
+export class DataRowModel extends BaseRowModel {
   public readonly isEditRow: boolean;
 
-  constructor(protected readonly root: HTMLElement | null) {
+  constructor(root: HTMLElement | null) {
+    super(root);
     this.isEditRow = !!this.root?.classList.contains(SELECTORS.editRow);
-  }
-
-  public getElement(): HTMLElement | null {
-    return this.root;
   }
 
   public getDeleteButton(): HTMLElement {

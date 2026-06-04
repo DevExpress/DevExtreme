@@ -50,7 +50,7 @@ runs:
     #     node-version: '20'
 
     - name: Download artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-artifacts
         path: packages/devextreme
@@ -62,7 +62,12 @@ runs:
         rm -rf artifacts/npm
         7z x artifacts.zip
 
-    - uses: pnpm/action-setup@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+        
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -71,7 +76,7 @@ runs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       name: Setup pnpm cache
       with:
         path: |
@@ -106,7 +111,7 @@ runs:
 
     - name: Copy RawLog.txt
       if: ${{ always() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
         path: ${{ github.workspace }}/packages/devextreme/testing/RawLog.txt

@@ -1,4 +1,7 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
+import config from '@js/core/config';
 
 import { DataController } from '../data_controller';
 import { getContext } from '../di.test_utils';
@@ -7,8 +10,8 @@ import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnsController } from './columns_controller';
 
-const setup = (config: Options = {}) => {
-  const context = getContext(config);
+const setup = (options: Options = {}) => {
+  const context = getContext(options);
 
   return {
     options: context.get(OptionsControllerMock),
@@ -62,6 +65,33 @@ describe('ColumnsController', () => {
           format: 'shortDate',
         },
       ]);
+    });
+
+    it('should use global format before data type default format', () => {
+      const globalConfig = config();
+      const savedFormat = globalConfig.dateFormat;
+
+      try {
+        config({
+          ...config(),
+          dateFormat: 'dd/MM/yyyy',
+        });
+
+        const { columnsController } = setup({
+          columns: [{ dataField: 'createdAt', dataType: 'date' }],
+        });
+
+        const columns = columnsController.columns.peek();
+
+        expect(columns[0].format).not.toBe('shortDate');
+        expect(typeof columns[0].format).toBe('function');
+      } finally {
+        if (savedFormat === undefined) {
+          delete globalConfig.dateFormat;
+        } else {
+          globalConfig.dateFormat = savedFormat;
+        }
+      }
     });
 
     it('should generate columns from firstItems when no columns config is provided', () => {
@@ -441,6 +471,88 @@ describe('ColumnsController', () => {
       expect(resultThird.dataField).toBe('b');
       expect(resultThird.sortOrder).toBe('asc');
       expect(resultThird.sortIndex).toBeUndefined();
+    });
+  });
+
+  describe('onOptionChanged', () => {
+    it('should be called when a column option changes', () => {
+      const onOptionChanged = jest.fn();
+      const { columnsController } = setup({
+        columns: ['a', 'b'],
+        onOptionChanged,
+      });
+
+      const [col] = columnsController.columns.peek();
+      columnsController.columnOption(col, 'visible', false);
+
+      expect(onOptionChanged).toHaveBeenCalledTimes(1);
+      expect(onOptionChanged).toHaveBeenCalledWith(
+        expect.objectContaining({
+          fullName: 'columns[0].visible',
+          name: 'columns',
+          previousValue: true,
+          value: false,
+        }),
+      );
+    });
+
+    it('should not be called when value is unchanged', () => {
+      const onOptionChanged = jest.fn();
+      const { columnsController } = setup({
+        columns: ['a', 'b'],
+        onOptionChanged,
+      });
+
+      const [col] = columnsController.columns.peek();
+      columnsController.columnOption(col, 'visible', true);
+
+      expect(onOptionChanged).not.toHaveBeenCalled();
+    });
+
+    it('should be called for each changed column in updateColumns', () => {
+      const onOptionChanged = jest.fn();
+      const { columnsController } = setup({
+        columns: ['a', 'b', 'c'],
+        onOptionChanged,
+      });
+
+      let sortIndex = -1;
+      columnsController.updateColumns((columns) => columns.map((col, idx) => {
+        if (idx === 1) {
+          return col;
+        }
+
+        sortIndex += 1;
+
+        return {
+          ...col,
+          sortOrder: 'asc',
+          sortIndex,
+        };
+      }));
+
+      const optionChangeCalls = onOptionChanged.mock.calls;
+      expect(optionChangeCalls).toHaveLength(4);
+      expect(optionChangeCalls[0][0]).toMatchObject({
+        fullName: 'columns[0].sortOrder',
+        name: 'columns',
+        value: 'asc',
+      });
+      expect(optionChangeCalls[1][0]).toMatchObject({
+        fullName: 'columns[0].sortIndex',
+        name: 'columns',
+        value: 0,
+      });
+      expect(optionChangeCalls[2][0]).toMatchObject({
+        fullName: 'columns[2].sortOrder',
+        name: 'columns',
+        value: 'asc',
+      });
+      expect(optionChangeCalls[3][0]).toMatchObject({
+        fullName: 'columns[2].sortIndex',
+        name: 'columns',
+        value: 1,
+      });
     });
   });
 });

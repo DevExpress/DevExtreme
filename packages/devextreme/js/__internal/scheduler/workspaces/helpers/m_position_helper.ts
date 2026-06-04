@@ -76,7 +76,6 @@ export const getGroupWidth = (groupIndex, viewDataProvider, options) => {
 
   const cellWidth = getCellWidth(DOMMetaData);
   let result = viewDataProvider.getCellCount(options) * cellWidth;
-  // TODO: refactor after deleting old render
   if (isVirtualScrolling) {
     const groupedData = viewDataProvider.groupedDataMap.dateTableGroupedMap;
     const groupLength = groupedData[groupIndex][0].length;
@@ -201,7 +200,7 @@ class GroupStrategyBase {
   }
 
   getVerticalMax(options) {
-    let maxAllowedPosition = this._getMaxAllowedVerticalPosition({
+    let maxAllowedPosition = this.getMaxAllowedVerticalPosition({
       ...options,
       viewDataProvider: this.viewDataProvider,
       rtlEnabled: this.rtlEnabled,
@@ -219,7 +218,7 @@ class GroupStrategyBase {
     isGroupedAllDayPanel,
   }) {
     const rowCount = this.viewDataProvider.getRowCountInGroup(groupIndex);
-    const maxVerticalPosition = this._getMaxAllowedVerticalPosition({
+    const maxVerticalPosition = this.getMaxAllowedVerticalPosition({
       groupIndex,
       viewDataProvider: this.viewDataProvider,
       showAllDayPanel,
@@ -231,11 +230,11 @@ class GroupStrategyBase {
     return maxVerticalPosition - getCellHeight(this.DOMMetaData) * rowCount;
   }
 
-  _getAllDayHeight(showAllDayPanel) {
+  protected getAllDayHeight(showAllDayPanel) {
     return getAllDayHeight(showAllDayPanel, true, this.DOMMetaData);
   }
 
-  _getMaxAllowedVerticalPosition({
+  protected getMaxAllowedVerticalPosition({
     groupIndex,
     showAllDayPanel,
     isGroupedAllDayPanel,
@@ -250,7 +249,7 @@ class GroupStrategyBase {
 
     // Should decrease allDayPanel amount due to the dual calculation corrections.
     if (isGroupedAllDayPanel) {
-      result -= (groupIndex + 1) * this._getAllDayHeight(showAllDayPanel);
+      result -= (groupIndex + 1) * this.getAllDayHeight(showAllDayPanel);
     }
 
     return result;
@@ -272,7 +271,7 @@ class GroupStrategyHorizontal extends GroupStrategyBase {
       ? groupIndex
       : 0;
 
-    return this._getMaxAllowedVerticalPosition({
+    return this.getMaxAllowedVerticalPosition({
       ...options,
       groupIndex: correctedGroupIndex,
     });
@@ -282,7 +281,7 @@ class GroupStrategyHorizontal extends GroupStrategyBase {
     return 0;
   }
 
-  _getAllDayHeight(showAllDayPanel) {
+  protected getAllDayHeight(showAllDayPanel) {
     return getAllDayHeight(showAllDayPanel, false, this.DOMMetaData);
   }
 }

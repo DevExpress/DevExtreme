@@ -80,6 +80,7 @@ module('Integration: Appointment scroll', {
                     try {
                         scheduler.instance.showAppointmentPopup(appointment);
                         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                        await Promise.resolve();
 
                         assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                     } finally {
@@ -105,6 +106,7 @@ module('Integration: Appointment scroll', {
                     try {
                         scheduler.instance.showAppointmentPopup(appointment);
                         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                        await Promise.resolve();
 
                         assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                     } finally {
@@ -131,6 +133,7 @@ module('Integration: Appointment scroll', {
                 try {
                     scheduler.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                    await Promise.resolve();
 
                     assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
                 } finally {
@@ -156,6 +159,7 @@ module('Integration: Appointment scroll', {
                 try {
                     scheduler.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                    await Promise.resolve();
 
                     assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
@@ -182,6 +186,7 @@ module('Integration: Appointment scroll', {
                 try {
                     scheduler.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                    await Promise.resolve();
 
                     assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
@@ -211,6 +216,7 @@ module('Integration: Appointment scroll', {
                 try {
                     scheduler.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                    await Promise.resolve();
 
                     assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
@@ -239,6 +245,7 @@ module('Integration: Appointment scroll', {
                 try {
                     scheduler.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                    await Promise.resolve();
 
                     assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {

@@ -40,6 +40,10 @@
 }
 
 .dx-datebox-wrapper {
+  > .dx-overlay-content:first-child {
+    overflow: visible;
+  }
+
   .dx-popup-content {
     padding-top: 20px;
     padding-bottom: 20px;

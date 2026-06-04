@@ -10,8 +10,8 @@ import { data, assignees } from './data.js';
 const currentDate = new Date(2026, 1, 10);
 const views = ['day', 'week', 'workWeek', 'month'];
 const overlappingRuleItems = [
-  { value: 'sameResource', text: 'Allow across resources' },
-  { value: 'allResources', text: 'Disallow all overlaps' },
+  { value: 'sameResource', text: 'Different Resources' },
+  { value: 'allResources', text: 'Never' },
 ];
 function getNextDay(date) {
   const next = new Date(date);
@@ -80,7 +80,7 @@ const App = () => {
     showConflictErrorRef.current = show;
     formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
   }, []);
-  const alertConflictIfNeeded = useCallback(
+  const handleConflict = useCallback(
     (e, appointmentData) => {
       if (!detectConflict(e.component, appointmentData, overlappingRuleRef.current)) {
         setConflictError(false);
@@ -113,15 +113,15 @@ const App = () => {
   );
   const onAppointmentAdding = useCallback(
     (e) => {
-      alertConflictIfNeeded(e, e.appointmentData);
+      handleConflict(e, e.appointmentData);
     },
-    [alertConflictIfNeeded],
+    [handleConflict],
   );
   const onAppointmentUpdating = useCallback(
     (e) => {
-      alertConflictIfNeeded(e, { ...e.oldData, ...e.newData });
+      handleConflict(e, { ...e.oldData, ...e.newData });
     },
-    [alertConflictIfNeeded],
+    [handleConflict],
   );
   const popupOptions = useMemo(
     () => ({
@@ -238,7 +238,7 @@ const App = () => {
 
       <div className="options">
         <div className="option">
-          <span>Overlapping Rule</span>
+          <span>Allow Overlapping Appointments</span>
           <SelectBox
             items={overlappingRuleItems}
             valueExpr="value"

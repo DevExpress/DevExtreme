@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_resources } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-scheduler-resource',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

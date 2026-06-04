@@ -48,7 +48,6 @@ export const componentNames = [
     'radio-group',
     'range-selector',
     'range-slider',
-    'recurrence-editor',
     'resizable',
     'responsive-box',
     'sankey',

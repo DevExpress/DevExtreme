@@ -48,7 +48,8 @@
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
       "options": {
         "targetDirectory": "./npm",
-        "packageJsonPath": "./package.json"
+        "packageJsonPath": "./package.json",
+        "mode": "mit"
       }
     },
     "npm:prepare-modules": {
@@ -75,9 +76,6 @@
     },
     "npm:pack": {
       "executor": "devextreme-nx-infra-plugin:pack-npm",
-      "options": {
-        "workingDirectory": "./npm"
-      },
       "outputs": ["{projectRoot}/npm/*.tgz"],
       "inputs": ["default"]
    },

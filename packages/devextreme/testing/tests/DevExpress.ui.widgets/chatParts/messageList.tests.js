@@ -1869,6 +1869,44 @@ QUnit.module('MessageList', () => {
                 }, this._resizeTimeout);
             }, this._resizeTimeout);
         });
+
+        QUnit.test('should be scrolled down to companion reply rendered immediately after current user message', function(assert) {
+            const done = assert.async();
+            const items = generateMessages(67);
+
+            this.reinit({
+                width: 300,
+                height: 500,
+                items,
+                currentUserId: MOCK_CURRENT_USER_ID,
+            });
+
+            const userMessage = {
+                author: { id: MOCK_CURRENT_USER_ID },
+                timestamp: NOW,
+                text: 'User message',
+            };
+
+            const replyMessage = {
+                author: { id: MOCK_COMPANION_USER_ID },
+                timestamp: NOW,
+                text: 'Reply',
+            };
+
+            setTimeout(() => {
+                const scrollTopBefore = this.getScrollView().scrollTop();
+                assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom before test');
+
+                this.instance.option('items', [...items, userMessage]);
+                this.instance.option('items', [...items, userMessage, replyMessage]);
+
+                setTimeout(() => {
+                    const scrollTop = this.getScrollView().scrollTop();
+                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after the companion reply');
+                    done();
+                });
+            }, this._resizeTimeout);
+        });
     });
 
     QUnit.module('localization', moduleConfig, () => {

@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-tree-list-tabbed-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -13,6 +13,72 @@ describe('Summary', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
+  describe('alignByColumn with virtual column rendering (T1324988)', () => {
+    const COLUMN_COUNT = 100;
+
+    const dynamicColumns = Array.from({ length: COLUMN_COUNT }, (_, i) => ({
+      dataField: `field${i}`,
+      width: 100,
+    }));
+
+    const columns = [
+      {
+        dataField: 'company', width: 100, fixed: true, fixedPosition: 'left' as const,
+      },
+      { dataField: 'state', width: 100, groupIndex: 0 },
+      ...dynamicColumns,
+    ];
+
+    const groupItems = dynamicColumns.map((col) => ({
+      column: col.dataField,
+      summaryType: 'sum' as const,
+      alignByColumn: true,
+    }));
+
+    const dataSource = [
+      {
+        id: 1,
+        company: 'Company A',
+        state: 'Arkansas',
+        ...Object.fromEntries(dynamicColumns.map((col, i) => [col.dataField, i])),
+      },
+    ];
+
+    it('group row cell colSpan should be 1 after horizontal scroll', async () => {
+      const { component } = await createDataGrid({
+        dataSource,
+        keyExpr: 'id',
+        width: 500,
+        showBorders: true,
+        columns,
+        summary: { groupItems },
+        scrolling: {
+          columnRenderingMode: 'virtual',
+        },
+      });
+
+      await flushAsync();
+
+      const beforeScrollCell = component.getDataCell(1, 3);
+      expect(beforeScrollCell.getText()).toBe('1');
+
+      const scrollContainer = component.getScrollableContainer();
+      scrollContainer.scrollLeft = 5000;
+      scrollContainer.dispatchEvent(new Event('scroll'));
+      await flushAsync();
+
+      expect(scrollContainer.scrollLeft).toBe(5000);
+
+      const afterScrollCell = component.getDataCell(1, 3);
+      expect(afterScrollCell.getText()).toBe('48');
+
+      const groupCells = component.getGroupRow(0).getCells();
+      const colSpan = Number(groupCells[1].getAttribute('colSpan')) || 1;
+
+      expect(colSpan).toBe(1);
+    });
+  });
+
   describe('column lookup map performance optimization (T1316562)', () => {
     const SUMMARY_COUNT = 100;
     const GROUP_COUNT = 4;

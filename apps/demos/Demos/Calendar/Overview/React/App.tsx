@@ -31,7 +31,7 @@ export default function App() {
   const [useCellTemplate, setUseCellTemplate] = useState<boolean | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [showWeekNumbers, setShowWeekNumbers] = useState<boolean>(false);
-  const [firstDay, setFirstDay] = useState<CalendarTypes.FirstDayOfWeek>(0);
+  const [firstDay, setFirstDay] = useState<CalendarTypes.DayOfWeek>(0);
   const [weekNumberRule, setWeekNumberRule] = useState<CalendarTypes.WeekNumberRule>('auto');
 
   const onCurrentValueChange = useCallback(

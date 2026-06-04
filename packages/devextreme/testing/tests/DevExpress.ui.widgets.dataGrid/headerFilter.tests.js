@@ -17,9 +17,33 @@ import viewPortUtils from 'core/utils/view_port';
 import fx from 'common/core/animation/fx';
 import messageLocalization from 'common/core/localization/message';
 import dateSerialization from 'core/utils/date_serialization';
+import config from 'core/config';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
 
 const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
+
+const saveGlobalFormats = () => {
+    const globalConfig = config();
+    return {
+        dateFormat: globalConfig.dateFormat,
+        timeFormat: globalConfig.timeFormat,
+        dateTimeFormat: globalConfig.dateTimeFormat,
+        numberFormat: globalConfig.numberFormat,
+        dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+    };
+};
+
+const restoreGlobalFormats = (savedConfig) => {
+    const globalConfig = config();
+    Object.keys(savedConfig).forEach((key) => {
+        const value = savedConfig[key];
+        if(value === undefined) {
+            delete globalConfig[key];
+        } else {
+            globalConfig[key] = value;
+        }
+    });
+};
 
 function getListOrTreeView() {
     const $popupContent = this.headerFilterView.getPopupContainer().$content();
@@ -801,6 +825,47 @@ QUnit.module('Header Filter', {
         assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 5, 'has treeview items');
         assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(3).text(), '1', 'text the nested treeview item');
         assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(4).text(), '4', 'text the nested treeview item');
+    });
+
+    QUnit.test('Header filter date groupInterval levels do not use global numberFormat (T day level)', function(assert) {
+        const that = this;
+        const testElement = $('#container');
+        const savedConfig = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                numberFormat: '#,##0.00',
+            });
+
+            that.columns[0].dataType = 'date';
+            that.items = [{ Test1: new Date(1986, 0, 1), Test2: 'test2' }, { Test1: new Date(1986, 0, 4), Test2: 'test4' }];
+            that.setupDataGrid();
+            that.columnHeadersView.render(testElement);
+            that.headerFilterView.render(testElement);
+
+            that.headerFilterController.showHeaderFilterMenu(0);
+
+            const $popupContent = that.headerFilterView.getPopupContainer().$content();
+
+            const getItemTexts = () => $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`)
+                .toArray()
+                .map((item) => item.textContent.trim())
+                .filter(Boolean);
+
+            assert.ok(getItemTexts().includes('1986'), 'year level is not formatted as number');
+
+            let $toggles = $popupContent.find('.dx-treeview-toggle-item-visibility');
+            $($toggles.eq(0)).trigger('dxclick');
+            $toggles = $popupContent.find('.dx-treeview-node-container-opened .dx-treeview-toggle-item-visibility');
+            $($toggles.eq(0)).trigger('dxclick');
+
+            const texts = getItemTexts();
+            assert.ok(texts.includes('1'), 'day level value "1" is not formatted as number');
+            assert.ok(texts.includes('4'), 'day level value "4" is not formatted as number');
+        } finally {
+            restoreGlobalFormats(savedConfig);
+        }
     });
 
     // T274290
@@ -2749,6 +2814,34 @@ QUnit.module('Header Filter with real columnsController', {
         items = that.dataController.items();
         assert.equal(items.length, 1, 'count items');
         assert.deepEqual(items[0].data, { Test2: 'value1' }, 'data of the first item');
+    });
+
+    QUnit.test('Blank item text should not be formatted by global numberFormat', function(assert) {
+        // arrange
+        const that = this;
+        const testElement = $('#container');
+        const savedConfig = saveGlobalFormats();
+
+        try {
+            config({
+                ...config(),
+                numberFormat: '+#'
+            });
+            that.options.dataSource = [{ Test2: 'value1' }, { Test1: 6, Test2: 'value2' }];
+            that.options.columns[0] = { dataField: 'Test1', dataType: 'number', allowHeaderFiltering: true };
+            that.setupDataGrid();
+            that.columnHeadersView.render(testElement);
+            that.headerFilterView.render(testElement);
+
+            // act
+            that.headerFilterController.showHeaderFilterMenu(0);
+            const $popupContent = that.headerFilterView.getPopupContainer().$content();
+
+            // assert
+            assert.strictEqual($popupContent.find('.dx-list-item').first().text(), '(Blanks)', 'empty text item');
+        } finally {
+            restoreGlobalFormats(savedConfig);
+        }
     });
 
     // T372825

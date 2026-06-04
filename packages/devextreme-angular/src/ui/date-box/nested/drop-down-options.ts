@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxo-date-box-drop-down-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -12,6 +12,7 @@ export interface DiffItem {
   needToRemove?: boolean;
   needToResize?: boolean;
   item: AppointmentItemViewModel | AppointmentCollectorViewModel;
+  oldSortedIndex?: number;
 }
 
 const getObjectToCompare = (item: Item, includeDimensions: boolean): object => {
@@ -92,9 +93,9 @@ function getArraysDiff(options: {
 
     if (match(ai, bj)) {
       if (equal(ai, bj)) {
-        result.push({ item: bj });
+        result.push({ item: bj, oldSortedIndex: ai.sortedIndex });
       } else if (canResize(ai, bj)) {
-        result.push({ item: bj, needToResize: true });
+        result.push({ item: bj, needToResize: true, oldSortedIndex: ai.sortedIndex });
       } else {
         result.push({ item: ai, needToRemove: true });
         result.push({ item: bj, needToAdd: true });

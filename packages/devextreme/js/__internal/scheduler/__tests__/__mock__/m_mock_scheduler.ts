@@ -70,4 +70,8 @@ export const setupSchedulerTestEnvironment = ({
 
     return defaultRect;
   });
+
+  Element.prototype.getClientRects = jest.fn(function (): DOMRectList {
+    return [Element.prototype.getBoundingClientRect.call(this)] as unknown as DOMRectList;
+  });
 };

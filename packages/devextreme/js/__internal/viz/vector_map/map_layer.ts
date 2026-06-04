@@ -415,20 +415,29 @@ strategiesByType[TYPE_MARKER] = {
   },
 };
 
-strategiesByGeometry[TYPE_AREA] = function (sample) {
-  return {
-    project(projection, coordinates) {
-      return coordinates[0]
-            && coordinates[0][0]
-            && coordinates[0][0][0]
-            && typeof coordinates[0][0][0][0] === 'number' ? projectMultiPolygon(projection, coordinates) : projectPolygon(projection, coordinates);
-    },
-  };
+function projectAreaByGeometry(projection, coordinates) {
+  return coordinates[0]
+    && coordinates[0][0]
+    && coordinates[0][0][0]
+    && typeof coordinates[0][0][0][0] === 'number'
+    ? projectMultiPolygon(projection, coordinates)
+    : projectPolygon(projection, coordinates);
+}
+
+strategiesByGeometry[TYPE_AREA] = function () {
+  return { project: projectAreaByGeometry };
 };
 
-strategiesByGeometry[TYPE_LINE] = function (sample) {
-  const coordinates = sample.coordinates;
-  return { project: coordinates[0] && coordinates[0][0] && typeof coordinates[0][0][0] === 'number' ? projectPolygon : projectLineString };
+function projectLineByGeometry(projection, coordinates) {
+  return coordinates[0]
+    && coordinates[0][0]
+    && typeof coordinates[0][0][0] === 'number'
+    ? projectPolygon(projection, coordinates)
+    : projectLineString(projection, coordinates);
+}
+
+strategiesByGeometry[TYPE_LINE] = function () {
+  return { project: projectLineByGeometry };
 };
 
 strategiesByElementType[TYPE_MARKER] = {

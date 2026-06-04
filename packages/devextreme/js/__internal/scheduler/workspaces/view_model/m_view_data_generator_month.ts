@@ -51,7 +51,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
   }
 
-  _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+  protected calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
     return monthUtils.calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
   }
 
@@ -63,7 +63,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return toMs('day');
   }
 
-  _calculateStartViewDate(options) {
+  protected calculateStartViewDate(options) {
     return monthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
@@ -73,7 +73,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     );
   }
 
-  _setVisibilityDates(options) {
+  protected setVisibilityDates(options) {
     const {
       intervalCount,
       startDate,
@@ -90,7 +90,11 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
   }
 
   getCellCount() {
-    return DAYS_IN_WEEK;
+    return DAYS_IN_WEEK - this.skippedDays.length;
+  }
+
+  protected usesMonthDayLayout(): boolean {
+    return true;
   }
 
   getRowCount(options) {

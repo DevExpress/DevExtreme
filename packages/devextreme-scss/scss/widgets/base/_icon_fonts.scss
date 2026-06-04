@@ -195,7 +195,11 @@
 .dx-icon-checkmarkcirclefilled,
 .dx-icon-botoutline,
 .dx-icon-botfilled,
-.dx-icon-copyfilled {
+.dx-icon-copyfilled,
+.dx-icon-gridkanban,
+.dx-icon-chatdismiss,
+.dx-icon-listbartreeoffset,
+.dx-icon-clearhistory {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -605,6 +609,10 @@ $icons: (
     "botoutline": "\f236",
     "botfilled": "\f237",
     "copyfilled": "\f238",
+    "chatdismiss": "\f239",
+    "gridkanban": "\f240",
+    "listbartreeoffset": "\f241",
+    "clearhistory": "\f242",
 );
 
 // stylelint-enable

@@ -25,12 +25,12 @@ import domUtils from '@ts/core/utils/m_dom';
 import type { PopupProperties } from '@ts/ui/popup/m_popup';
 import Popup from '@ts/ui/popup/m_popup';
 
-interface BaseDialog {
+export interface BaseDialog {
   show: () => Promise<unknown>;
   hide: (value: boolean) => void;
 }
 
-interface DialogParams extends CustomDialogOptions, PopupProperties {
+export interface DialogParams extends CustomDialogOptions, PopupProperties {
   popupOptions?: PopupProperties;
 }
 
