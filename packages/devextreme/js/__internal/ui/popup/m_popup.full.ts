@@ -7,7 +7,7 @@ import type { PopupProperties } from './m_popup';
 
 const TOOLBAR_WIDGET_NAME = 'dxToolbar';
 
-class PopupFull extends Popup {
+export default class PopupFull extends Popup {
   _getDefaultOptions(): PopupProperties {
     return {
       ...super._getDefaultOptions(),
@@ -27,5 +27,3 @@ PopupFull.defaultOptions = function (rule): void {
 };
 
 registerComponent('dxPopup', PopupFull);
-
-export default PopupFull;
