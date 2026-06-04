@@ -43,12 +43,8 @@ export default class Chat extends Widget {
     return new Scrollable(this.element.find(`.${CLASS.scrollable}`));
   }
 
-  getMessageBubbles(): Selector {
-    return this.element.find(`.${CLASS.messageBubble}`);
-  }
-
   getMessage(index: number): Selector {
-    return this.getMessageBubbles().nth(index);
+    return this.element.find(`.${CLASS.messageBubble}`).nth(index);
   }
 
   getContextMenuContent(): Selector {
