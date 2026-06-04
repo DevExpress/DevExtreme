@@ -7,7 +7,7 @@ import type { PopupProperties } from './m_popup';
 
 const TOOLBAR_WIDGET_NAME = 'dxToolbar';
 
-export default class PopupFull extends Popup {
+class PopupFull extends Popup {
   protected readonly _toolbarName: string = TOOLBAR_WIDGET_NAME;
 
   _getDefaultOptions(): PopupProperties {
@@ -18,4 +18,11 @@ export default class PopupFull extends Popup {
   }
 }
 
+// eslint-disable-next-line func-names
+PopupFull.defaultOptions = function (rule): void {
+  Popup.defaultOptions(rule);
+};
+
 registerComponent('dxPopup', PopupFull);
+
+export default PopupFull;
