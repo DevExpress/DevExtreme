@@ -10,8 +10,8 @@ import { calculateRows } from './agenda';
 const createDate = (year: number, month: number, day: number, hours: number) => {
   const date = timeZoneUtils.createUTCDateWithLocalOffset(
     new Date(year, month, day, hours),
-  );
-  return date ? date.getTime() : 0;
+  ) as Date;
+  return date.getTime();
 };
 
 describe('calculateRows', () => {
