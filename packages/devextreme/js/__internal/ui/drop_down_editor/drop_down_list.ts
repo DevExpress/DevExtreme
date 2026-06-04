@@ -698,7 +698,6 @@ class DropDownList<
   ): void;
   _setListOption(optionName: string, value?: unknown): void;
   _setListOption(...args: [string, unknown?]): void {
-    // @ts-expect-error fix on Widget level
     this._setWidgetOption('_list', args);
   }
 

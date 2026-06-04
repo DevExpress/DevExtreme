@@ -6,6 +6,7 @@ import type { DxEvent, PointerInteractionEvent } from '@js/events/events.types';
 import type { Properties } from '@js/ui/autocomplete';
 import type { ItemClickEvent, PageLoadMode } from '@js/ui/list';
 import { Deferred } from '@ts/core/utils/m_deferred';
+import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { isCommandKeyPressed } from '@ts/events/utils/index';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';

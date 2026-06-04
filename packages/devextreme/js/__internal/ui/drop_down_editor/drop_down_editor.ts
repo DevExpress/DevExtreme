@@ -906,6 +906,7 @@ class DropDownEditor<
       showCloseButton: false,
       dragEnabled: false,
       toolbarItems: this._getPopupToolbarItems(),
+      // @ts-expect-error Should be updated on PopupProperties level
       onPositioned: this._popupPositionedHandler.bind(this),
       fullScreen: false,
       contentTemplate: null,
@@ -1039,7 +1040,6 @@ class DropDownEditor<
   }
 
   _setPopupOption(...args: [string, unknown?]): void {
-    // @ts-expect-error Should be fixed on Widget level
     this._setWidgetOption('_popup', args);
   }
 
