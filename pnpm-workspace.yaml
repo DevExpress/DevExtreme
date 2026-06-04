@@ -146,3 +146,23 @@ allowBuilds:
   nx: true
   puppeteer: true
   unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - '@angular-devkit/architect@0.2200.0'
+  - '@angular-devkit/build-angular@22.0.0'
+  - '@angular-devkit/build-webpack@0.2200.0'
+  - '@angular-devkit/core@22.0.0'
+  - '@angular-devkit/schematics@22.0.0'
+  - '@angular/animations@22.0.0'
+  - '@angular/build@22.0.0'
+  - '@angular/cli@22.0.0'
+  - '@angular/common@22.0.0'
+  - '@angular/compiler-cli@22.0.0'
+  - '@angular/compiler@22.0.0'
+  - '@angular/core@22.0.0'
+  - '@angular/forms@22.0.0'
+  - '@angular/platform-browser-dynamic@22.0.0'
+  - '@angular/platform-browser@22.0.0'
+  - '@angular/platform-server@22.0.0'
+  - '@ngtools/webpack@22.0.0'
+  - '@schematics/angular@22.0.0'
