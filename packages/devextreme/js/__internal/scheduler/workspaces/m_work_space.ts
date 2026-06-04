@@ -3049,7 +3049,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return {};
   }
 
-  protected getHeaderPanelCellClass(i) {
+  protected getHeaderPanelCellClass(i: number): string {
     const cellClass = `${HEADER_PANEL_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS}`;
 
     return this.groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1, undefined, undefined, this.isGroupedByDate());
