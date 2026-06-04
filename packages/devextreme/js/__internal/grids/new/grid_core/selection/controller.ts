@@ -154,16 +154,14 @@ export class SelectionController {
       Need to get rid of `selectionHelper.peek()` inside of selectCards()
       and pass selectionHelper from here
       */
-      const selectionHelper = this.selectionHelper.value;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.selectionHelper.value;
+
       const isLoaded = this.dataController.isLoaded.value;
       if (isLoaded) {
-        const selectedCardKeys = this.selectedCardKeys.value;
-        const previousSelectedKeys = selectionHelper?.getSelectedItemKeys() ?? [];
-        const areKeysEqual = selectionHelper?.areKeysEqual(selectedCardKeys, previousSelectedKeys);
+        const selectedCardKeys = this.selectedCardKeys.peek();
 
-        if (!areKeysEqual) {
-          this.selectCards(selectedCardKeys);
-        }
+        this.selectCards(selectedCardKeys);
       }
     });
 
@@ -172,7 +170,16 @@ export class SelectionController {
       this.dataController.items.value;
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.dataController.isLoaded.value;
-      this.updateSelectionToolbarButtons(this.normalizedSelectedCardKeys.value);
+
+      const selectedCardKeys = this.normalizedSelectedCardKeys.value;
+      this.updateSelectionToolbarButtons(selectedCardKeys);
+
+      const selectionHelper = this.selectionHelper.peek();
+      const previousSelectedKeys = selectionHelper?.getSelectedItemKeys() ?? [];
+      const areKeysEqual = selectionHelper?.areKeysEqual(selectedCardKeys, previousSelectedKeys);
+      if (!areKeysEqual) {
+        this.selectCards(selectedCardKeys);
+      }
     });
   }
 
