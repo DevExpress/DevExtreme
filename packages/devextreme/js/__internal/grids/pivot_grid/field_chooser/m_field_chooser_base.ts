@@ -503,9 +503,11 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   private focusFieldElement(fieldIndex: number): void {
-    const $fields = this.$element().find(`.${CLASSES.area.field}`);
+    const fieldElements = this.$element()
+      .find(`.${CLASSES.area.field}.${CLASSES.area.box}`)
+      .get();
 
-    $fields.get().forEach((fieldElement) => {
+    fieldElements?.forEach((fieldElement) => {
       const field: any = $(fieldElement).data('field');
 
       if (field.index === fieldIndex) {
