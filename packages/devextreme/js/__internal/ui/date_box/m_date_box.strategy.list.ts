@@ -324,7 +324,8 @@ class ListStrategy extends DateBoxStrategy {
   }
 
   _updatePopupHeight(): void {
-    const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
+    const { dropDownOptions } = this.dateBox.option();
+    const dropDownOptionsHeight = getSizeValue(dropDownOptions?.height);
 
     if (dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
       this.dateBox._setPopupOption('height', 'auto');

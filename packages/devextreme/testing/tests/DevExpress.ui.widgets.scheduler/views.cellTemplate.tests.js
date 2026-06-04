@@ -215,7 +215,7 @@ module('CellTemplate tests', moduleConfig, () => {
         assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
     };
 
-    function getBaseConfig(renovateRender) {
+    function getBaseConfig() {
         return {
             currentView: 'day',
             currentDate: new Date(2020, 10, 19),
@@ -225,7 +225,6 @@ module('CellTemplate tests', moduleConfig, () => {
             }],
             startDayHour: 10,
             endDayHour: 12,
-            renovateRender,
         };
     }
 
@@ -376,62 +375,52 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.ok($element.find('.new-custom-class').length > 0, 'class after option changing is ok');
         });
 
-        [true, false].forEach((renovateRender) => {
-            const description = renovateRender
-                ? 'Renovated Render'
-                : 'Old Render';
+        test('dataCellTemplate should have correct options', async function(assert) {
+            let templateOptions;
 
-            module(description, {}, () => {
-                test('dataCellTemplate should have correct options', async function(assert) {
-                    let templateOptions;
+            await createWrapper({
+                currentView: 'week',
+                startDayHour: 5,
+                currentDate: new Date(2016, 8, 5),
+                firstDayOfWeek: 0,
+                groups: ['ownerId'],
+                resources,
+                dataCellTemplate: function(itemData, index, $container) {
+                    if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell') && !templateOptions) {
+                        templateOptions = itemData;
+                    }
+                },
+            });
 
-                    await createWrapper({
-                        currentView: 'week',
-                        startDayHour: 5,
-                        currentDate: new Date(2016, 8, 5),
-                        firstDayOfWeek: 0,
-                        groups: ['ownerId'],
-                        resources,
-                        dataCellTemplate: function(itemData, index, $container) {
-                            if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell') && !templateOptions) {
-                                templateOptions = itemData;
-                            }
-                        },
-                        renovateRender,
-                    });
+            assert.equal(templateOptions.text, '', 'text options is ok');
+            assert.equal(templateOptions.startDate.getTime(), new Date(2016, 8, 7, 5).getTime(), 'startDate option is ok');
+            assert.equal(templateOptions.endDate.getTime(), new Date(2016, 8, 7, 5, 30).getTime(), 'endDate option is ok');
+            assert.deepEqual(templateOptions.groups, {
+                'ownerId': 1
+            }, 'Resources option is ok');
+        });
 
-                    assert.equal(templateOptions.text, '', 'text options is ok');
-                    assert.equal(templateOptions.startDate.getTime(), new Date(2016, 8, 7, 5).getTime(), 'startDate option is ok');
-                    assert.equal(templateOptions.endDate.getTime(), new Date(2016, 8, 7, 5, 30).getTime(), 'endDate option is ok');
-                    assert.deepEqual(templateOptions.groups, {
-                        'ownerId': 1
-                    }, 'Resources option is ok');
-                });
+        test('dataCellTemplate should take cellElement with correct geometry (T453520)', async function(assert) {
+            assert.expect(4);
+            await createWrapper({
+                currentView: 'week',
+                views: ['week'],
+                height: 700,
+                width: 700,
+                dataSource: [],
+                dataCellTemplate: function(cellData, cellIndex, cellElement) {
+                    // all-day table cell size
+                    if(cellData.allDay && !cellIndex) {
+                        assert.roughEqual(getOuterWidth($(cellElement)), 89, 2, 'Data cell width is OK');
+                        assert.roughEqual(getOuterHeight($(cellElement)), 32, 1.001, 'Data cell height is OK');
+                    }
 
-                test('dataCellTemplate should take cellElement with correct geometry (T453520)', async function(assert) {
-                    assert.expect(4);
-                    await createWrapper({
-                        currentView: 'week',
-                        views: ['week'],
-                        height: 700,
-                        width: 700,
-                        dataSource: [],
-                        dataCellTemplate: function(cellData, cellIndex, cellElement) {
-                            // all-day table cell size
-                            if(cellData.allDay && !cellIndex) {
-                                assert.roughEqual(getOuterWidth($(cellElement)), 89, 2, 'Data cell width is OK');
-                                assert.roughEqual(getOuterHeight($(cellElement)), 32, 1.001, 'Data cell height is OK');
-                            }
-
-                            // scheduler table cell size
-                            if(!cellData.allDay && !cellIndex) {
-                                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 90, 1.001, 'Data cell width is OK');
-                                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 38, 'Data cell height is OK');
-                            }
-                        },
-                        renovateRender,
-                    });
-                });
+                    // scheduler table cell size
+                    if(!cellData.allDay && !cellIndex) {
+                        assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 90, 1.001, 'Data cell width is OK');
+                        assert.equal($(cellElement).get(0).getBoundingClientRect().height, 38, 'Data cell height is OK');
+                    }
+                },
             });
         });
 
@@ -595,7 +584,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 4,
                     firstDayOfWeek: 0,
                     currentDate: new Date(2021, 7, 1),
-                    renovateRender: true,
+
                     dataCellTemplate: (data) => {
                         actualDates.push(
                             {
@@ -651,7 +640,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 4,
                     firstDayOfWeek: 0,
                     currentDate: new Date(2021, 7, 1),
-                    renovateRender: true,
+
                     dataCellTemplate: (data) => {
                         actualDates.push(
                             {
@@ -727,7 +716,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 4,
                     firstDayOfWeek: 0,
                     currentDate: currentDate || new Date(2021, 7, 1),
-                    renovateRender: true,
+
                     dataCellTemplate: (data) => {
                         actualDates.push(
                             {
@@ -786,7 +775,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     firstDayOfWeek: 0,
                     currentDate: new Date(2021, 7, 1),
-                    renovateRender: true,
+
                     dataCellTemplate: (data) => {
                         if(data.allDay) {
                             assert.equal(
@@ -850,7 +839,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     firstDayOfWeek: 0,
                     currentDate: new Date(2021, 7, 1),
-                    renovateRender: true,
+
                     dataCellTemplate: (data) => {
                         if(data.allDay) {
                             assert.equal(
@@ -901,7 +890,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     firstDayOfWeek: 0,
                     currentDate: new Date(2021, 7, 1),
-                    renovateRender: true,
+
                     dataCellTemplate: (data) => {
                         if(data.allDay) {
                             assert.equal(
@@ -986,7 +975,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2021, 7, 23),
-                    renovateRender: true,
+
                     dataCellTemplate: (data, index) => {
                         if(index === 0) {
                             assert.equal(data.startDate.getTime(), firstCellDate.getTime(), 'First cell has correct startDate');
@@ -1033,7 +1022,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     dataCellTemplate: (data, index) => {
                         templateOptions.push({ data, index });
                     },
@@ -1095,7 +1084,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     dataCellTemplate: (data, index) => {
                         templateOptions.push({ data, index });
                     },
@@ -1138,7 +1127,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     dataCellTemplate: (data, index) => {
                         templateOptions.push({ ...data, index });
                     },
@@ -1183,7 +1172,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     dataCellTemplate: (data, index) => {
                         templateOptions.push({ ...data, index });
                     },
@@ -1234,7 +1223,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     dataCellTemplate: (data, index) => {
                         templateOptions.push({ ...data, index });
                     },
@@ -1354,7 +1343,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     views: [view],
                     currentView: view,
                     currentDate: new Date(2020, 11, 1),
-                    renovateRender: true,
+
                     dataCellTemplate: (data, index) => {
                         templateOptions.push({ ...data, index });
                     },
@@ -1524,18 +1513,13 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        [true, false].forEach((renovateRender) => {
-            const description = renovateRender
-                ? 'Renovated Render'
-                : 'Old Render';
+        {
+            const baseConfig = getBaseConfig();
 
-            const baseConfig = getBaseConfig(renovateRender);
-
-            module(description, {
+            module('Date Cell template', {
                 beforeEach: function() {
                     this.createInstance = async(options = {}) => {
                         this.scheduler = await createWrapper({
-                            renovateRender,
                             ...options,
                         });
                         this.instance = this.scheduler.instance;
@@ -1619,7 +1603,6 @@ module('CellTemplate tests', moduleConfig, () => {
                         cellDuration: 60,
                         groups: ['ownerId'],
                         resources,
-                        renovateRender,
                         dateCellTemplate: function(data, index, element) {
                             const d = data;
                             $('<div>').appendTo(element).dxButton({
@@ -1836,7 +1819,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     }
                 });
             });
-        });
+        }
     });
 
     module('Time Cell template', {}, function() {
@@ -1998,7 +1981,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     timeCellTemplate: (data, index) => {
                         templateOptions.push({ data, index });
                     },
@@ -2026,7 +2009,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     timeCellTemplate: (data, index) => {
                         templateOptions.push({ ...data, index });
                     },
@@ -2060,7 +2043,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDayHour: 1,
                     cellDuration: 60,
                     currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
+
                     timeCellTemplate: (data, index) => {
                         templateOptions.push({ ...data, index });
                     },
@@ -2104,14 +2087,10 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        [true, false].forEach((renovateRender) => {
-            const description = renovateRender
-                ? 'Renovated Render'
-                : 'Old Render';
+        {
+            const baseConfig = getBaseConfig();
 
-            const baseConfig = getBaseConfig(renovateRender);
-
-            module(description, {}, () => {
+            module('Time Cell template groups', {}, () => {
                 [
                     {
                         description: '"groups" and "groupIndex" should be correct in timeCellTemplate',
@@ -2242,7 +2221,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     }
                 });
             });
-        });
+        }
     });
 
     module('Template Change', () => {

@@ -449,7 +449,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
         break;
       case 'onAppointmentContextMenu':
-        this._appointments.option('onItemContextMenu', this._createActionByOption(name));
+        if (this.option('_newAppointments')) {
+          this.actions.onAppointmentContextMenu = this._createActionByOption('onAppointmentContextMenu');
+        } else {
+          this._appointments.option('onItemContextMenu', this._createActionByOption(name));
+        }
         this.appointmentTooltip._options.onItemContextMenu = this._createActionByOption(name);
         break;
       case 'noDataText':
@@ -593,9 +597,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'allDayPanelMode':
         this.updateAppointmentDataSource();
         this.updateOption('workSpace', args.fullName, value);
-        break;
-      case 'renovateRender':
-        this.updateOption('workSpace', name, value);
         break;
       case '_draggingMode':
         this.updateOption('workSpace', 'draggingMode', value);
@@ -1038,6 +1039,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onAppointmentRendered: this._createActionByOption('onAppointmentRendered'),
       onAppointmentClick: this._createActionByOption('onAppointmentClick'),
       onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
+      onAppointmentContextMenu: this._createActionByOption('onAppointmentContextMenu'),
     };
   }
 
@@ -1107,6 +1109,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         onAppointmentRendered: (...args) => this.actions.onAppointmentRendered(...args),
         onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
         onAppointmentDblClick: (...args) => this.actions.onAppointmentDblClick(...args),
+        onAppointmentContextMenu: (...args) => this.actions.onAppointmentContextMenu(...args),
         onDeleteKeyPress: (e) => {
           this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
         },
@@ -1563,8 +1566,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
       },
 
-      // TODO: SSR does not work correctly with renovated render
-      renovateRender: this.isRenovatedRender(isVirtualScrolling),
     }, currentViewOptions);
 
     result.notifyScheduler = this.notifyScheduler;
@@ -1581,10 +1582,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
 
     return result;
-  }
-
-  private isRenovatedRender(isVirtualScrolling) {
-    return (this.option('renovateRender') && hasWindow()) || isVirtualScrolling;
   }
 
   private waitAsyncTemplate(callback) {

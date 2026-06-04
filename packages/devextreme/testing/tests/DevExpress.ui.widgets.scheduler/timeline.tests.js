@@ -113,63 +113,59 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', a
     assert.equal(dateTableWidth, 1440, 'Width is OK');
 });
 
-[true, false].forEach((renovateRender) => {
-    QUnit.test(`Sidebar scrollable should update position if date scrollable position is changed when renovateRender is ${renovateRender}`, async function(assert) {
-        const done = assert.async();
+QUnit.test('Sidebar scrollable should update position if date scrollable position is changed', async function(assert) {
+    const done = assert.async();
 
-        const resourceConfig = await getWorkspaceResourceConfig([{
-            label: 'one',
-            fieldExpr: 'one',
-            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
-        }]);
-        this.instance.option({
-            crossScrollingEnabled: true,
-            width: 400,
-            height: 150,
-            ...resourceConfig,
-            renovateRender,
-        });
-
-        const $element = this.instance.$element();
-        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-        triggerHidingEvent($element);
-        triggerShownEvent($element);
-
-        dateTableScrollable.scrollTo({ top: 102 });
-
-        setTimeout(() => {
-            assert.equal(groupPanelScrollable.scrollTop(), 87, 'Scroll position is OK');
-            done();
-        }, 100);
+    const resourceConfig = await getWorkspaceResourceConfig([{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
+    }]);
+    this.instance.option({
+        crossScrollingEnabled: true,
+        width: 400,
+        height: 150,
+        ...resourceConfig,
     });
 
-    QUnit.test(`Date table scrollable should update position if sidebar position is changed when renovateRender is ${renovateRender}`, async function(assert) {
-        const resourceConfig = await getWorkspaceResourceConfig([{
-            label: 'one',
-            fieldExpr: 'one',
-            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
-        }]);
-        this.instance.option({
-            crossScrollingEnabled: true,
-            width: 400,
-            height: 150,
-            ...resourceConfig,
-            renovateRender,
-        });
+    const $element = this.instance.$element();
+    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-        const $element = this.instance.$element();
-        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
-        triggerHidingEvent($element);
-        triggerShownEvent($element);
+    dateTableScrollable.scrollTo({ top: 102 });
 
-        groupPanelScrollable.scrollTo({ top: 102 });
+    setTimeout(() => {
+        assert.equal(groupPanelScrollable.scrollTop(), 87, 'Scroll position is OK');
+        done();
+    }, 100);
+});
 
-        assert.equal(dateTableScrollable.scrollTop(), 87, 'Scroll position is OK');
+QUnit.test('Date table scrollable should update position if sidebar position is changed', async function(assert) {
+    const resourceConfig = await getWorkspaceResourceConfig([{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
+    }]);
+    this.instance.option({
+        crossScrollingEnabled: true,
+        width: 400,
+        height: 150,
+        ...resourceConfig,
     });
+
+    const $element = this.instance.$element();
+    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
+
+    groupPanelScrollable.scrollTo({ top: 102 });
+
+    assert.equal(dateTableScrollable.scrollTop(), 87, 'Scroll position is OK');
 });
 
 QUnit.test('Date table scrollable should update position if header scrollable position is changed', async function(assert) {
@@ -482,7 +478,6 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         e.component.initDragBehavior();
                         e.component.attachTablesEvents();
                     },
-                    renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
                     getResourceManager: getEmptyResourceManager,
                 }).dxSchedulerTimelineMonth('instance');
@@ -637,7 +632,6 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                             ...resourceConfig,
                             allowMultipleCellSelection: true,
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: true,
                         });
 
                         const $element = this.instance.$element();
@@ -759,11 +753,9 @@ QUnit.test('Group header should be rendered correct, groupByDate = true and cros
 });
 
 QUnit.test('Date table cells shoud have right cellData, groupByDate = true', async function(assert) {
-    this.instance.option('renovateRender', false);
-
     const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
-    assert.deepEqual($cells.eq(0).data('dxCellData'), {
+    assert.deepEqual(this.instance.getCellData($cells.eq(0)), {
         startDate: new Date(2018, 1, 25, 9, 0),
         endDate: new Date(2018, 1, 25, 9, 30),
         allDay: false,
@@ -773,7 +765,7 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', asy
         groupIndex: 0,
     });
 
-    assert.deepEqual($cells.eq(1).data('dxCellData'), {
+    assert.deepEqual(this.instance.getCellData($cells.eq(1)), {
         startDate: new Date(2018, 1, 25, 9, 0),
         endDate: new Date(2018, 1, 25, 9, 30),
         allDay: false,
@@ -783,7 +775,7 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', asy
         groupIndex: 1,
     });
 
-    assert.deepEqual($cells.eq(50).data('dxCellData'), {
+    assert.deepEqual(this.instance.getCellData($cells.eq(50)), {
         startDate: new Date(2018, 2, 1, 9, 30),
         endDate: new Date(2018, 2, 1, 10),
         allDay: false,
@@ -793,7 +785,7 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', asy
         groupIndex: 0,
     });
 
-    assert.deepEqual($cells.eq(51).data('dxCellData'), {
+    assert.deepEqual(this.instance.getCellData($cells.eq(51)), {
         startDate: new Date(2018, 2, 1, 9, 30),
         endDate: new Date(2018, 2, 1, 10),
         allDay: false,
@@ -803,7 +795,7 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', asy
         groupIndex: 1,
     });
 
-    assert.deepEqual($cells.eq(82).data('dxCellData'), {
+    assert.deepEqual(this.instance.getCellData($cells.eq(82)), {
         startDate: new Date(2018, 2, 3, 11, 30),
         endDate: new Date(2018, 2, 3, 12),
         allDay: false,
@@ -813,7 +805,7 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', asy
         groupIndex: 0,
     });
 
-    assert.deepEqual($cells.eq(83).data('dxCellData'), {
+    assert.deepEqual(this.instance.getCellData($cells.eq(83)), {
         startDate: new Date(2018, 2, 3, 11, 30),
         endDate: new Date(2018, 2, 3, 12),
         allDay: false,
@@ -900,7 +892,6 @@ QUnit.module('Renovated Render', {
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerTimelineDay') => {
             this.instance = $('#scheduler-timeline')[workSpace]({
-                renovateRender: true,
                 currentDate: new Date(2020, 11, 21),
                 startDayHour: 0,
                 endDayHour: 1,

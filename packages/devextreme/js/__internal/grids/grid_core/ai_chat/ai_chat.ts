@@ -223,6 +223,7 @@ export class AIChat {
     $('<span>')
       .addClass(CLASSES.actionListItemText)
       .text(command.message)
+      .attr('title', command.message)
       .appendTo($item);
   }
 

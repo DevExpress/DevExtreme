@@ -65,6 +65,7 @@
       {
         "Name": "Chat",
         "Equivalents": "dxChat, dx-chat, chat",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "AI and Chatbot Integration",
@@ -88,6 +89,21 @@
               {
                 "Title": "Message Streaming",
                 "Name": "MessageStreaming",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "html-react-parser,openai,unified",
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Prompt Suggestions",
+            "Equivalents": "Prompt Suggestions, Question Suggestions, Suggested Prompts, Message Suggestions, Quick Prompts",
+            "Demos": [
+              {
+                "Title": "Prompt Suggestions",
+                "Name": "PromptSuggestions",
                 "Widget": "Chat",
                 "Badge": "AI",
                 "TopLevel": true,
@@ -4418,7 +4434,7 @@
                 "Title": "Prompt Suggestions",
                 "Name": "PromptSuggestions",
                 "Widget": "Chat",
-                "Badge": "New",
+                "Badge": "AI",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }
