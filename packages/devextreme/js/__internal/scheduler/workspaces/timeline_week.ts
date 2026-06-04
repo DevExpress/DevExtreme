@@ -1,12 +1,13 @@
 import registerComponent from '@js/core/component_registrator';
+import type { ViewType } from '@js/ui/scheduler';
 
 import { VIEWS } from '../utils/options/constants_view';
-import SchedulerTimeline from './m_timeline';
+import SchedulerTimeline from './timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 
 export default class SchedulerTimelineWeek extends SchedulerTimeline {
-  get type() { return VIEWS.TIMELINE_WEEK; }
+  get type(): ViewType { return VIEWS.TIMELINE_WEEK; }
 
   protected override getElementClass(): string {
     return TIMELINE_CLASS;

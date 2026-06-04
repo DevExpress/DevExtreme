@@ -72,7 +72,7 @@ import {
 } from '../m_classes';
 import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
-import tableCreatorModule from '../m_table_creator';
+import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import { utils } from '../m_utils';
 import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ViewCellData } from '../types';
@@ -2960,10 +2960,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
-    elements: dxElementWrapper | dxElementWrapper[];
-    cellTemplates: (() => dxElementWrapper)[];
-  } {
+  protected makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): GroupRows {
     const tableCreatorStrategy = this.isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
