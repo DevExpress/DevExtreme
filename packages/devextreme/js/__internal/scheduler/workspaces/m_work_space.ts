@@ -73,7 +73,7 @@ import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule, { type GroupRows } from '../m_table_creator';
-import { utils } from '../m_utils';
+import { utils } from '../utils';
 import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ViewCellData } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';

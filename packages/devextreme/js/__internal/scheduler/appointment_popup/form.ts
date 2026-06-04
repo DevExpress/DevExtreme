@@ -27,7 +27,6 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type Popup from '@ts/ui/popup/m_popup';
 
-import timeZoneUtils from '../m_utils_time_zone';
 import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
 import type { CreateComponentFn, SafeAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -35,6 +34,7 @@ import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import timeZoneUtils from '../utils_time_zone';
 import { customizeFormItems } from './customize_form_items';
 import { getRepeatSelectItems, REPEAT_NEVER_VALUE } from './localized_items';
 import type { AppointmentPopupContext } from './popup';
