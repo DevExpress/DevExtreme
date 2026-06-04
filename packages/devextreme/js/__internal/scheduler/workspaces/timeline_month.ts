@@ -27,6 +27,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return TIMELINE_CLASS;
   }
 
+  // @ts-expect-error
   protected override getDateHeaderTemplate(): template | undefined | null {
     return this.option('dateCellTemplate');
   }
@@ -39,6 +40,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return true;
   }
 
+  // @ts-expect-error
   protected override getFormat(): (date: Date) => string {
     return formatWeekdayAndDay;
   }
