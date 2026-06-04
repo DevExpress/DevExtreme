@@ -27,6 +27,16 @@ export interface PopupDragConfig<TPositionController> {
 
 type MoveEvent = DxEvent<PointerInteractionEvent | KeyboardEvent>;
 
+interface ElementPosition {
+  top: number;
+  left: number;
+}
+
+interface Delta {
+  x: number;
+  y: number;
+}
+
 export default class PopupDrag<TPositionController extends PopupPositionController> {
   _draggableElement?: PopupDragConfig<TPositionController>['draggableElement'];
 
@@ -38,7 +48,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
 
   _positionController?: PopupDragConfig<TPositionController>['positionController'];
 
-  _prevOffset?: { x: number; y: number };
+  _prevOffset?: Delta;
 
   constructor(configuration: PopupDragConfig<TPositionController>) {
     this.init(configuration);
@@ -176,10 +186,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     this._dragEndHandler(e);
   }
 
-  _fitOffsetIntoAllowedRange(top: number, left: number): {
-    top: number;
-    left: number;
-  } {
+  _fitOffsetIntoAllowedRange(top: number, left: number): ElementPosition {
     const allowedOffsets = this._getAllowedOffsets();
 
     return {
@@ -209,10 +216,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     };
   }
 
-  _getContainerPosition(): {
-    top: number;
-    left: number;
-  } {
+  _getContainerPosition(): ElementPosition {
     const container = this._positionController?.$dragResizeContainer?.get(0);
 
     return isWindow(container)
@@ -220,17 +224,11 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
       : getOffset(container);
   }
 
-  _getElementPosition(): {
-    top: number;
-    left: number;
-  } {
+  _getElementPosition(): ElementPosition {
     return getOffset(this._draggableElement);
   }
 
-  _getInnerDelta(): {
-    x: number;
-    y: number;
-  } {
+  _getInnerDelta(): Delta {
     const containerDimensions = this._getContainerDimensions();
     const elementDimensions = this._getElementDimensions();
 
@@ -240,10 +238,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     };
   }
 
-  _getOuterDelta(): {
-    x: number;
-    y: number;
-  } {
+  _getOuterDelta(): Delta {
     const { width = 0, height = 0 } = this._getElementDimensions();
     const { outsideDragFactor = 0 } = this._positionController ?? {};
 
@@ -253,10 +248,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     };
   }
 
-  _getFullDelta(): {
-    x: number;
-    y: number;
-  } {
+  _getFullDelta(): Delta {
     const fullDelta = this._getInnerDelta();
     const outerDelta = this._getOuterDelta();
 
@@ -306,10 +298,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     };
   }
 
-  _moveByOffset(offset: {
-    top: number;
-    left: number;
-  }): void {
+  _moveByOffset(offset: ElementPosition): void {
     const currentPosition = locate(this._draggableElement);
     const newPosition = {
       left: currentPosition.left + offset.left,
