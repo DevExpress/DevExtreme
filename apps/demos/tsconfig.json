@@ -10,6 +10,7 @@
     "module": "CommonJS"
   },
   "include": [
+    "playwright.*.ts",
     "utils/**/*.ts",
     "testing/**/*.ts"
   ],
