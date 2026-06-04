@@ -34,7 +34,9 @@ export function hide(): Promise<boolean | undefined> {
 
   const instance = loading;
   return instance.hide().then((result) => {
-    removeLoadPanel();
+    if (loading === instance) {
+      removeLoadPanel();
+    }
     return result;
   });
 }

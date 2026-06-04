@@ -689,20 +689,22 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (this._dataSource) {
       this._dataSource.load().done(() => {
-        hideLoading();
+        hideLoading().catch(noop);
 
         this._fireContentReadyAction(result);
       }).fail(() => {
-        hideLoading();
+        hideLoading().catch(noop);
         result.reject();
       });
 
-      this._dataSource.isLoading() && showLoading({
-        container: this.$element().get(0),
-        position: {
-          of: this.$element() as any,
-        },
-      });
+      if (this._dataSource.isLoading()) {
+        showLoading({
+          container: this.$element().get(0),
+          position: {
+            of: this.$element() as any,
+          },
+        }).catch(noop);
+      }
     } else {
       this._fireContentReadyAction(result);
     }
