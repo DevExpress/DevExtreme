@@ -75,7 +75,12 @@ function findChrome() {
 
 const CHROME_PATH = findChrome();
 
-const DEBUG_PORT = 20222;
+const DEBUG_PORT = (() => {
+  const fromEnv = parseInt(process.env.CSP_DEBUG_PORT, 10);
+  if (fromEnv > 0) return fromEnv;
+  const shardIndex = parseInt(process.env.CSP_SHARD_INDEX, 10) || 1;
+  return 20222 + ((shardIndex - 1) % 20);
+})();
 const CHROME_USER_DATA_DIR = process.env.CSP_CHROME_USER_DATA_DIR
   || join(os.tmpdir(), 'csp-chrome-shared');
 const CHROME_DISK_CACHE_DIR = process.env.CSP_CHROME_DISK_CACHE_DIR
