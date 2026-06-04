@@ -402,4 +402,16 @@ export default class Selection<
   loadSelectedItemsWithFilter(): DeferredObj<unknown> {
     return this._selectionStrategy.loadSelectedItemsWithFilter();
   }
+
+  areKeysEqual(keys1: TKey[], keys2: TKey[]): boolean {
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+    for (let i = 0; i < keys1.length; i += 1) {
+      if (!this._selectionStrategy.equalKeys(keys1[i], keys2[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
