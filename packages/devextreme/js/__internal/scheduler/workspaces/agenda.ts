@@ -20,7 +20,7 @@ import {
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
 } from '../m_classes';
-import tableCreatorModule from '../m_table_creator';
+import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
 import type { ResourceId } from '../utils/loader/types';
 import { VIEWS } from '../utils/options/constants_view';
@@ -251,10 +251,7 @@ class SchedulerAgenda extends WorkSpace {
     return this.$groupTable;
   }
 
-  protected override makeGroupRows(): {
-    elements: dxElementWrapper;
-    cellTemplates: (() => dxElementWrapper)[];
-  } {
+  protected override makeGroupRows(): GroupRows {
     const resourceManager = this.option('getResourceManager')();
     const allAppointments = (this.option('getFilteredItems') as () => ListEntity[])();
     const tree = reduceResourcesTree(

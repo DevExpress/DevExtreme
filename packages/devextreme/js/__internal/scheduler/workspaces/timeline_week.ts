@@ -1,7 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 
 import { VIEWS } from '../utils/options/constants_view';
-import SchedulerTimeline from './m_timeline';
+import SchedulerTimeline from './timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 const TIMELINE_WORK_WEEK_CLASS = 'dx-scheduler-timeline-work-week';

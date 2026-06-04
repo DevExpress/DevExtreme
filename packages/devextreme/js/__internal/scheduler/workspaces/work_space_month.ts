@@ -9,7 +9,7 @@ import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 import { utils } from '../m_utils';
 import { VIEWS } from '../utils/options/constants_view';
 import type { ViewDateGenerationOptions } from './m_work_space';
-import SchedulerWorkSpace from './m_work_space_indicator';
+import SchedulerWorkSpace from './work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
