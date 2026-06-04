@@ -1210,7 +1210,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.groupedStrategy.getTotalCellCount(groupCount);
   }
 
-  protected getTotalRowCount(groupCount, includeAllDayPanelRows?: any) {
+  protected getTotalRowCount(groupCount: number, includeAllDayPanelRows?: boolean) {
     let result = this.groupedStrategy.getTotalRowCount(groupCount);
 
     if (includeAllDayPanelRows && this.isAllDayPanelVisible) {
@@ -3011,7 +3011,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected renderGroupHeader() {
     const $container = this.getGroupHeaderContainer();
     const groupCount = this.getGroupCount();
-    let cellTemplates = [];
+    let cellTemplates: (() => dxElementWrapper)[] = [];
     if (groupCount) {
       const groupRows = this.makeGroupRows(this.option('groups'), this.option('groupByDate'));
       this.attachGroupCountClass();
@@ -3030,7 +3030,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected makeGroupRows(groups, groupByDate): any {
+  protected makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
+    elements: dxElementWrapper | dxElementWrapper[];
+    cellTemplates: (() => dxElementWrapper)[];
+  } {
     const tableCreatorStrategy = this.isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
