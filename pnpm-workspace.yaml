@@ -99,7 +99,7 @@ catalog:
   stylelint: 16.22.0
   zod: 3.24.4
   zod-to-json-schema: 3.24.6
-  "@babel/eslint-parser": 7.28.6
+  "@babel/eslint-parser": 7.29.7
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.5
   "@stylistic/eslint-plugin": 5.10.0
