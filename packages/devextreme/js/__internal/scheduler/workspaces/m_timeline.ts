@@ -10,7 +10,7 @@ import type { dxSchedulerOptions } from '@js/ui/scheduler';
 // NOTE: Renovation component import.
 import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
 import { timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
-import type { ResourceLoader } from '@ts/scheduler/utils/loader/resource_loader';
+import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
 import {
   GROUP_HEADER_CONTENT_CLASS,
@@ -19,7 +19,7 @@ import {
 import tableCreatorModule from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
-import type { WorkspaceDateTableScrollableConfig, WorkspaceHeaderScrollableConfig } from './m_work_space';
+import type { ResourceLoader } from '../utils/loader/resource_loader';
 import SchedulerWorkSpace, { type WorkSpaceIndicatorDefaultOptions } from './m_work_space_indicator';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 
@@ -79,25 +79,25 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return getBoundingRect(this.$element().get(0)).height as number;
   }
 
-  protected override dateTableScrollableConfig(): WorkspaceDateTableScrollableConfig {
+  protected override dateTableScrollableConfig(): ScrollableProperties {
     const config = super.dateTableScrollableConfig();
     const timelineConfig = {
       direction: HORIZONTAL,
     };
 
-    return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig) as WorkspaceDateTableScrollableConfig;
+    return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig) as ScrollableProperties;
   }
 
   protected override needCreateCrossScrolling(): boolean {
     return true;
   }
 
-  protected override headerScrollableConfig(): WorkspaceHeaderScrollableConfig {
+  protected override headerScrollableConfig(): ScrollableProperties {
     const config = super.headerScrollableConfig();
 
     return extend(config, {
       scrollByContent: true,
-    }) as WorkspaceHeaderScrollableConfig;
+    }) as ScrollableProperties;
   }
 
   supportAllDayRow(): boolean {
