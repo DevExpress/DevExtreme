@@ -888,19 +888,28 @@ class PivotGrid extends Widget {
     if (e.repeat) {
       return;
     }
-    if (e.key === 'Enter' || e.key === ' ') {
-      const args = this._createEventArgs(e.currentTarget, e);
-      if (args.cell && isDefined(args.cell.expanded)) {
-        e.preventDefault();
-        saveFocusedElementInfo(e.currentTarget, this);
-        const onReady = () => {
-          this.off('contentReady', onReady);
-          restoreFocus(this);
-        };
-        this.on('contentReady', onReady);
-        this._handleCellClick(e);
-      }
+    if (e.key !== 'Enter' && e.key !== ' ') {
+      return;
     }
+    const args = this._createEventArgs(e.currentTarget, e);
+    const { cell } = args;
+    if (!cell || !isDefined(cell.expanded)) {
+      return;
+    }
+    e.preventDefault();
+    this._trigger('onCellClick', args);
+    if (args.cancel) {
+      return;
+    }
+    saveFocusedElementInfo(e.currentTarget, this);
+    const onReady = () => {
+      this.off('contentReady', onReady);
+      restoreFocus(this);
+    };
+    this.on('contentReady', onReady);
+    setTimeout(() => {
+      this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+    });
   }
 
   _getNoDataText() {
