@@ -3,6 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -53,7 +54,7 @@ interface AgendaRenderOptions {
   cellCount?: number;
   rowClass?: string;
   cellClass?: string;
-  cellTemplate?: unknown;
+  cellTemplate?: TemplateBase;
   getStartDate?: (rowIndex: number) => Date;
 }
 
@@ -175,7 +176,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   private recalculateAgenda(rows: number[][]): void {
-    let cellTemplates: unknown[] = [];
+    let cellTemplates: (() => dxElementWrapper)[] = [];
     this.cleanView();
 
     if (this.rowsIsEmpty(rows)) {
@@ -247,7 +248,10 @@ class SchedulerAgenda extends WorkSpace {
     return this.$groupTable as dxElementWrapper | null;
   }
 
-  protected override makeGroupRows(): { elements: dxElementWrapper; cellTemplates: unknown[] } {
+  protected override makeGroupRows(): {
+    elements: dxElementWrapper;
+    cellTemplates: (() => dxElementWrapper)[];
+  } {
     const resourceManager = this.option('getResourceManager')();
     const allAppointments = (this.option('getFilteredItems') as () => ListEntity[])();
     const tree = reduceResourcesTree(
@@ -256,11 +260,9 @@ class SchedulerAgenda extends WorkSpace {
       allAppointments,
     );
 
-    const cellTemplate = this.option('resourceCellTemplate') as {
-      render?: (model: unknown) => unknown;
-    };
+    const cellTemplate = this.option('resourceCellTemplate') as TemplateBase | undefined;
     const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
-    const cellTemplates: unknown[] = [];
+    const cellTemplates: (() => dxElementWrapper)[] = [];
 
     const table = tableCreator.makeGroupedTableFromJSON(tree, {
       cellTag: 'th',
@@ -394,10 +396,8 @@ class SchedulerAgenda extends WorkSpace {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     delayCellTemplateRendering?: unknown,
   ): void {
-    const cellTemplates: unknown[] = [];
-    const cellTemplateOpt = options.cellTemplate as {
-      render?: (templateOptions: unknown) => unknown;
-    } | undefined;
+    const cellTemplates: (() => dxElementWrapper)[] = [];
+    const cellTemplateOpt = options.cellTemplate;
 
     this.$rows = [];
     let i = 0;
@@ -466,7 +466,7 @@ class SchedulerAgenda extends WorkSpace {
       cellCount: 1,
       rowClass: TIME_PANEL_ROW_CLASS,
       cellClass: TIME_PANEL_CELL_CLASS,
-      cellTemplate: this.option('dateCellTemplate'),
+      cellTemplate: this.option('dateCellTemplate') as TemplateBase | undefined,
       getStartDate: this.getTimePanelStartDate.bind(this),
     });
   }
