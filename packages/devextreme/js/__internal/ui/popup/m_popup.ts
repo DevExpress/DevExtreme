@@ -2,6 +2,7 @@ import '@js/ui/toolbar/ui.toolbar.base';
 
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
+import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -164,19 +165,21 @@ const getHeightStrategyChangeOffset = (
 ): number => (currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0);
 
 export interface PopupProperties extends Properties {
+  autoResizeEnabled?: boolean;
+
   outsideDragFactor?: number;
 
-  forceApplyBindings?: () => void;
-
   preventScrollEvents?: boolean;
-
-  _wrapperClassExternal?: string;
 
   useResizeObserver?: boolean;
 
   useDefaultToolbarButtons?: boolean;
 
   useFlatToolbarButtons?: boolean;
+
+  _wrapperClassExternal?: string;
+
+  forceApplyBindings?: () => void;
 }
 
 class Popup<
@@ -196,7 +199,7 @@ class Popup<
 
   _bottomToolbar?: Toolbar;
 
-  _$popupContent?: dxElementWrapper;
+  _$popupContent?: dxElementWrapper | null;
 
   _resizable!: Resizable;
 
@@ -249,25 +252,31 @@ class Popup<
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
-    // @ts-expect-error ts-error
-    return super._defaultOptionsRules().concat([
+    const defaultOptionsRules = super._defaultOptionsRules();
+    const popupSpecificDefaultOptionsRules = [
       {
-        device: { platform: 'ios' },
+        device: {
+          platform: 'ios' as const,
+        },
         options: {
           animation: this._iosAnimation,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
-        device: { platform: 'android' },
+        device: {
+          platform: 'android' as const,
+        },
         options: {
           animation: this._androidAnimation,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
-        device: { platform: 'generic' },
+        device: {
+          platform: 'generic' as const,
+        },
         options: {
           showCloseButton: true,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(device): boolean {
@@ -275,7 +284,7 @@ class Popup<
         },
         options: {
           dragEnabled: true,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(): boolean {
@@ -283,7 +292,7 @@ class Popup<
         },
         options: {
           focusStateEnabled: true,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(): boolean {
@@ -291,7 +300,7 @@ class Popup<
         },
         options: {
           useFlatToolbarButtons: true,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(): boolean {
@@ -300,16 +309,21 @@ class Popup<
         options: {
           useDefaultToolbarButtons: true,
           showCloseButton: false,
-        },
+        } as DeepPartial<TProperties>,
       },
-    ]);
+    ];
+
+    return [
+      ...defaultOptionsRules,
+      ...popupSpecificDefaultOptionsRules,
+    ];
   }
 
   // eslint-disable-next-line class-methods-use-this
   _iosAnimation(): dxPopupAnimation {
     return {
       show: {
-        type: 'slide',
+        type: 'slide' as const,
         duration: 400,
         from: {
           position: {
@@ -325,7 +339,7 @@ class Popup<
         },
       },
       hide: {
-        type: 'slide',
+        type: 'slide' as const,
         duration: 400,
         from: {
           opacity: 1,
@@ -346,24 +360,39 @@ class Popup<
   }
 
   _androidAnimation(): dxPopupAnimation {
+    const { fullScreen } = this.option();
+
     const fullScreenConfig = {
       show: {
-        type: 'slide', duration: 300, from: { top: '30%', opacity: 0 }, to: { top: 0, opacity: 1 },
+        type: 'slide' as const,
+        duration: 300,
+        from: { top: '30%', opacity: 0 },
+        to: { top: 0, opacity: 1 },
       },
       hide: {
-        type: 'slide', duration: 300, from: { top: 0, opacity: 1 }, to: { top: '30%', opacity: 0 },
+        type: 'slide' as const,
+        duration: 300,
+        from: { top: 0, opacity: 1 },
+        to: { top: '30%', opacity: 0 },
       },
     };
+
     const defaultConfig = {
       show: {
-        type: 'fade', duration: 400, from: 0, to: 1,
+        type: 'fade' as const,
+        duration: 400,
+        from: 0,
+        to: 1,
       },
       hide: {
-        type: 'fade', duration: 400, from: 1, to: 0,
+        type: 'fade' as const,
+        duration: 400,
+        from: 1,
+        to: 0,
       },
     };
-    // @ts-expect-error ts-error
-    return this.option('fullScreen') ? fullScreenConfig : defaultConfig;
+
+    return fullScreen ? fullScreenConfig : defaultConfig;
   }
 
   _init(): void {
@@ -425,11 +454,11 @@ class Popup<
   }
 
   _isShowAnimationResizing(): boolean {
-    const animation = this.option('animation');
+    const { animation } = this.option();
 
     return ['to', 'from'].some((prop) => {
-      // @ts-expect-error ts-error
       const config = animation?.show?.[prop];
+
       return isObject(config) && ('width' in config || 'height' in config);
     });
   }
@@ -445,7 +474,9 @@ class Popup<
   }
 
   _observeContentResize(shouldObserve: boolean): void {
-    if (!this.option('useResizeObserver')) {
+    const { useResizeObserver } = this.option();
+
+    if (!useResizeObserver) {
       return;
     }
 
@@ -462,18 +493,26 @@ class Popup<
 
   _areContentDimensionsRendered(entry: ResizeObserverEntry): boolean {
     const contentBox = entry.contentBoxSize?.[0];
+
     if (contentBox) {
-      // @ts-expect-error ts-error
-      return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
-        // @ts-expect-error ts-error
-        && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
+      const isWidthEqualContentBoxInlineSize = parseInt(String(contentBox.inlineSize), 10)
+        === this._renderedDimensions?.width;
+
+      const isHeightEqualContentBoxBlockSize = parseInt(String(contentBox.blockSize), 10)
+        === this._renderedDimensions?.height;
+
+      return isWidthEqualContentBoxInlineSize && isHeightEqualContentBoxBlockSize;
     }
 
     const { contentRect } = entry;
-    // @ts-expect-error ts-error
-    return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
-      // @ts-expect-error ts-error
-      && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
+
+    const isWidthEqualContentBoxWidth = parseInt(String(contentRect.width), 10)
+        === this._renderedDimensions?.width;
+
+    const isHeightEqualContentBoxHeight = parseInt(String(contentRect.height), 10)
+        === this._renderedDimensions?.height;
+
+    return isWidthEqualContentBoxWidth && isHeightEqualContentBoxHeight;
   }
 
   _renderContent(): void {
@@ -771,7 +810,7 @@ class Popup<
         icon: 'close',
         onClick: this._createToolbarItemAction(undefined),
         stylingMode: 'text',
-        // @ts-expect-error ts-error
+        // @ts-expect-error integrationOptions
         integrationOptions: {},
       });
 
@@ -834,11 +873,16 @@ class Popup<
       return shortcut === 'done' ? BUTTON_CONTAINED_MODE : BUTTON_OUTLINED_MODE;
     }
 
-    return this.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE;
+    const { useFlatToolbarButtons } = this.option();
+
+    return useFlatToolbarButtons ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE;
   }
 
   _getToolbarButtonType(shortcut: string): typeof BUTTON_DEFAULT_TYPE | typeof BUTTON_NORMAL_TYPE {
-    if ((isFluent(current()) && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
+    const isFluentTheme = isFluent(current());
+    const { useDefaultToolbarButtons } = this.option();
+
+    if ((isFluentTheme && shortcut === 'done') || useDefaultToolbarButtons) {
       return BUTTON_DEFAULT_TYPE;
     }
 
@@ -879,12 +923,14 @@ class Popup<
   }
 
   _createToolbarItemAction(clickAction?: () => void): (e) => void {
-    return this._createAction(clickAction, {
+    const action = this._createAction(clickAction, {
       afterExecute(e) {
-        // @ts-expect-error ts-error
+        // @ts-expect-error ActionConfig
         e.component.hide();
       },
     });
+
+    return action;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -928,7 +974,8 @@ class Popup<
   }
 
   _toggleContentScrollClass(): void {
-    const isNativeScrollingEnabled = !this.option('preventScrollEvents');
+    const { preventScrollEvents } = this.option();
+    const isNativeScrollingEnabled = !preventScrollEvents;
 
     this.$content()?.toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
   }
@@ -1005,7 +1052,9 @@ class Popup<
   }
 
   _cacheDimensions(): void {
-    if (!this.option('useResizeObserver')) {
+    const { useResizeObserver } = this.option();
+
+    if (!useResizeObserver) {
       return;
     }
 
@@ -1069,6 +1118,10 @@ class Popup<
 
     this._resizable = this._createComponent(this._$content, Resizable, {
       handles: this.option('resizeEnabled') ? 'all' : 'none',
+      minHeight: 100,
+      minWidth: 100,
+      area: this._positionController.$dragResizeContainer,
+      keepAspectRatio: false,
       onResizeStart: (e: ResizeStartEvent) => {
         this._observeContentResize(false);
         this._actions?.onResizeStart?.(e);
@@ -1081,10 +1134,6 @@ class Popup<
         this._resizeEndHandler(e);
         this._observeContentResize(true);
       },
-      minHeight: 100,
-      minWidth: 100,
-      area: this._positionController.$dragResizeContainer,
-      keepAspectRatio: false,
     });
   }
 
@@ -1121,11 +1170,13 @@ class Popup<
   }
 
   _chooseHeightStrategy(overlayContent: HTMLElement): HeightStrategiesType {
+    const { autoResizeEnabled } = this.option();
+
     const isAutoWidth = overlayContent.style.width === 'auto' || overlayContent.style.width === '';
 
     let currentHeightStrategyClass: HeightStrategiesType = HEIGHT_STRATEGIES.static;
 
-    if (this._isAutoHeight() && this.option('autoResizeEnabled')) {
+    if (this._isAutoHeight() && autoResizeEnabled) {
       if (isAutoWidth) {
         currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
       } else {
@@ -1211,8 +1262,7 @@ class Popup<
   }
 
   _isAutoHeight(): boolean {
-    // @ts-expect-error ts-error
-    return this.$overlayContent().get(0).style.height === 'auto';
+    return (this.$overlayContent().get(0) as HTMLElement).style.height === 'auto';
   }
 
   _splitPopupHeight(): Record<string, number> {
@@ -1235,7 +1285,9 @@ class Popup<
   }
 
   _renderDimensions(): void {
-    if (this.option('fullScreen')) {
+    const { fullScreen } = this.option();
+
+    if (fullScreen) {
       this.$overlayContent().css({
         width: '100%',
         height: '100%',
@@ -1269,7 +1321,6 @@ class Popup<
 
     this._$topToolbar = null;
     this._$bottomToolbar = null;
-    // @ts-expect-error _$popupContent can be null
     this._$popupContent = null;
   }
 
@@ -1279,7 +1330,9 @@ class Popup<
   }
 
   _toggleSafariScrolling(): void {
-    if (!this.option('enableBodyScroll')) {
+    const { enableBodyScroll } = this.option();
+
+    if (!enableBodyScroll) {
       return;
     }
 
@@ -1324,8 +1377,7 @@ class Popup<
         break;
       case 'enableBodyScroll':
         if (this.option('visible')) {
-          // @ts-expect-error ts-error
-          this._toggleBodyScroll(value);
+          this._toggleBodyScroll(Boolean(value));
         }
         break;
       case 'showTitle':
