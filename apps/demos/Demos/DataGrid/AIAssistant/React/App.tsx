@@ -109,7 +109,7 @@ export default function App() {
       <FilterRow visible />
       <Selection mode="multiple" />
       <Sorting mode="multiple" />
-      <Paging pageSize={10} />
+      <Paging defaultPageSize={10} />
       <Pager
         visible
         allowedPageSizes={allowedPageSizes}
