@@ -204,7 +204,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   protected override getHeaderPanelCellClass(i: number): string {
-    const cellClass = super.getHeaderPanelCellClass(i) as string;
+    const cellClass = super.getHeaderPanelCellClass(i);
 
     if (this.isCurrentTimeHeaderCell(i)) {
       return `${cellClass} ${HEADER_CURRENT_TIME_CELL_CLASS}`;
