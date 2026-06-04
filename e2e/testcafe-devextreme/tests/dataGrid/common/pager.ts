@@ -238,6 +238,85 @@ test('Page index should not reset when scrolling while the grid is being refresh
   height: 440,
 }));
 
+test('Pager info should show page 1 of 1 after changing pageSize to \'all\' with virtual scrolling (T1327238)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = dataGrid.getPager();
+
+  await t
+    .expect(pager.getInfoText().textContent)
+    .eql('Page 5 of 10 (100 items)');
+
+  await t
+    .click(pager.getPageSize(1).element)
+    .expect(pager.getInfoText().textContent)
+    .eql('Page 1 of 1 (100 items)');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(100).keys()].map((i) => ({ id: i })),
+  keyExpr: 'id',
+  showBorders: true,
+  scrolling: {
+    mode: 'virtual',
+  },
+  paging: {
+    pageSize: 10,
+    pageIndex: 4,
+  },
+  pager: {
+    visible: true,
+    allowedPageSizes: [10, 'all'],
+    showPageSizeSelector: true,
+    showInfo: true,
+    showNavigationButtons: true,
+  },
+  height: 400,
+}));
+
+test('Pager info should show page 1 of 1 after changing pageSize to \'all\' and enabling virtual scrolling (T1327238)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = dataGrid.getPager();
+
+  await t
+    .expect(pager.getInfoText().textContent)
+    .eql('Page 5 of 10 (100 items)');
+
+  await t
+    .click(pager.getPageSize(1).element)
+    .expect(pager.getInfoText().textContent)
+    .eql('Page 1 of 1 (100 items)');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(100).keys()].map((i) => ({ id: i })),
+  keyExpr: 'id',
+  showBorders: true,
+  scrolling: {
+    mode: 'standard',
+  },
+  paging: {
+    pageSize: 10,
+    pageIndex: 4,
+  },
+  pager: {
+    visible: true,
+    allowedPageSizes: [10, 'all'],
+    showPageSizeSelector: true,
+    showInfo: true,
+    showNavigationButtons: true,
+  },
+  height: 400,
+  onOptionChanged: (e) => {
+    if (e.fullName === 'paging.pageSize') {
+      const setVirtual = e.value === 0;
+      const targetRenderingMode = setVirtual ? 'virtual' : 'standard';
+      const currentRenderingMode = e.component.option('scrolling.mode');
+      if (currentRenderingMode !== targetRenderingMode) {
+        e.component.beginUpdate();
+        e.component.option('scrolling.mode', targetRenderingMode);
+        e.component.repaint();
+        e.component.endUpdate();
+      }
+    }
+  },
+}));
+
 test('No error should occur if dataSource is not defined and pageIndex is promise chained (T1256070)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
