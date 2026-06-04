@@ -28,7 +28,7 @@
                 "apps/demos/package.json"
             ],
             "rangeStrategy": "replace"
-        }
+        },
         {
             "matchPackageNames": [
                 "openai",
