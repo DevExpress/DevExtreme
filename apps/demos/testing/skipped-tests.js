@@ -1,7 +1,7 @@
 export const skippedTests = {
   jQuery: {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
-    DataGrid: ['RemoteVirtualScrolling', 'CustomDataSource',],
+    DataGrid: ['RemoteVirtualScrolling', 'CustomDataSource'],
     PivotGrid: ['WebAPIService'],
   },
   Angular: {
