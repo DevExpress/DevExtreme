@@ -21,7 +21,7 @@ import type {
 } from '@js/ui/date_box';
 import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
-import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 
 import type { PopupProperties } from '../popup/m_popup';
