@@ -700,7 +700,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this._dataSource.isLoading() && showLoading({
         container: this.$element().get(0),
         position: {
-          of: this.$element().get(0),
+          of: this.$element() as any,
         },
       });
     } else {
