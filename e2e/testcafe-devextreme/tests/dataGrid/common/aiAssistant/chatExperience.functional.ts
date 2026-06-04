@@ -24,11 +24,9 @@ const baseGrid = {
 const setupAIState = ClientFunction((
   base: Record<string, unknown>,
   responses: unknown[],
-  aiAssistantExtra: Record<string, unknown>,
 ) => {
   (window as any).__aiBase = base;
   (window as any).__aiResponses = responses;
-  (window as any).__aiAssistantExtra = aiAssistantExtra;
   (window as any).__aiCallCount = 0;
   (window as any).__aiRequests = [];
 });
@@ -63,12 +61,22 @@ const aiGridOptions = (): any => ({
   },
 });
 
+const setAIAssistantExtra = (
+  aiAssistantExtra: Record<string, unknown>,
+): Promise<void> => ClientFunction(
+  () => {
+    (window as any).__aiAssistantExtra = aiAssistantExtra;
+  },
+  { dependencies: { aiAssistantExtra } },
+)();
+
 const createGridWithAIAssistant = async (
   base: Record<string, unknown>,
   responses: unknown[],
   aiAssistantExtra: Record<string, unknown> = {},
 ): Promise<void> => {
-  await setupAIState(base, responses, aiAssistantExtra);
+  await setupAIState(base, responses);
+  await setAIAssistantExtra(aiAssistantExtra);
 
   return createWidget('dxDataGrid', aiGridOptions);
 };

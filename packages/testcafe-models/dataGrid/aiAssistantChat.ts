@@ -25,7 +25,7 @@ const CLASS = {
   actionListItemIcon: 'dx-ai-chat__action-list-item-icon',
   actionListItemText: 'dx-ai-chat__action-list-item-text',
   closeButton: 'dx-closebutton',
-  clearChatButton: 'dx-icon-clearhistory',
+  clearChatButton: 'dx-ai-chat__clear-button',
   suggestion: 'dx-chat-suggestions',
   suggestionButton: 'dx-button',
 };
