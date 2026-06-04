@@ -45,7 +45,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type_function_return string|Element|jQuery
      * @public
      */
-    contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default true

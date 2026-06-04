@@ -908,7 +908,6 @@ class DropDownEditor<
       toolbarItems: this._getPopupToolbarItems(),
       onPositioned: this._popupPositionedHandler.bind(this),
       fullScreen: false,
-      // @ts-expect-error should be added on Popup level
       contentTemplate: null,
       _hideOnParentScrollTarget: this.$element(),
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,

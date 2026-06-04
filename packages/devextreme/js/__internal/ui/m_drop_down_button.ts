@@ -1,4 +1,6 @@
+import type { PositionConfig } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { compileGetter } from '@js/core/utils/data';
@@ -13,6 +15,8 @@ import type {
 } from '@js/ui/button_group';
 import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
+import type { ItemClickEvent } from '@js/ui/list';
+import type { PositionAlignment } from '@js/ui/popup';
 import messageLocalization from '@ts/core/localization/message';
 import { getPublicElement } from '@ts/core/m_element';
 import { Guid } from '@ts/core/m_guid';
@@ -50,6 +54,15 @@ export interface DropDownButtonProperties extends Properties {
   _cached_dropDownOptions?: PopupProperties;
 }
 
+export interface AriaAttributes {
+  expanded?: boolean;
+  haspopup?: string;
+  label?: string;
+  owns?: string;
+}
+
+type ItemClickActionType = (event?: Partial<ItemClickEvent>) => Partial<ItemClickEvent> | boolean;
+
 class DropDownButton extends Widget<DropDownButtonProperties> {
   _popup?: Popup;
 
@@ -67,15 +80,15 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _selectionChangedAction!: (event?: Record<string, unknown>) => void;
 
-  _itemClickAction!: (event?: Record<string, unknown>) => void;
+  _itemClickAction!: ItemClickActionType;
 
   _actionClickAction!: (event?: Record<string, unknown>) => void;
 
   _actionItem?: unknown;
 
-  _keyGetter?: unknown;
+  _keyGetter?: (obj: unknown) => unknown;
 
-  _displayGetter?: unknown;
+  _displayGetter?: (obj: unknown) => unknown;
 
   _getDefaultOptions(): DropDownButtonProperties {
     return {
@@ -136,9 +149,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   _initDataController(): void {
-    const dataSource = this.option('dataSource');
-    // @ts-expect-error ts-error
-    this._dataController = new DataController(dataSource ?? this.option('items'), { key: this.option('keyExpr') });
+    const { dataSource, items, keyExpr } = this.option();
+    this._dataController = new DataController(
+      // @ts-expect-error datacontroller constructor typing need to be fixed
+      dataSource ?? items,
+      { key: keyExpr },
+    );
   }
 
   _initTemplates(): void {
@@ -161,13 +177,13 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   _compileKeyGetter(): void {
     const key = this._dataController.key();
     if (key !== undefined) {
-      this._keyGetter = compileGetter(key);
+      this._keyGetter = compileGetter(key) as (obj: unknown) => unknown;
     }
   }
 
   _compileDisplayGetter(): void {
     const { displayExpr } = this.option();
-    // @ts-expect-error ts-error
+    // @ts-expect-error core/utils compileGetter fn typing needs to be fixed
     this._displayGetter = compileGetter(displayExpr);
   }
 
@@ -183,6 +199,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   // T977758
+  // eslint-disable-next-line class-methods-use-this
   _renderFocusTarget(): void {}
 
   _render(): void {
@@ -193,7 +210,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     super._render();
   }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void | Promise<void> {
     if (this._popup) {
       this._renderPopupContent();
     }
@@ -211,43 +228,49 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }
     this._lastSelectedItemData = undefined;
 
-    const selectedItemKey = this.option('selectedItemKey');
-    // @ts-expect-error ts-error
-    this._dataController.loadSingle(selectedItemKey)
-      .then((item) => { d.resolve(item); })
-      .catch(() => {
-        d.reject(null);
-      });
+    const { selectedItemKey } = this.option();
+
+    if (isDefined(selectedItemKey)) {
+      this._dataController.loadSingle(this._dataController.key() as string, selectedItemKey)
+        .then((item) => { d.resolve(item); })
+        .catch(() => {
+          d.reject(null);
+        });
+    } else {
+      d.reject(null);
+    }
 
     this._loadSingleDeferred = d;
-    // @ts-expect-error ts-error
-    return d.promise();
+
+    return d;
   }
 
-  _createActionClickAction() {
+  _createActionClickAction(): void {
     this._actionClickAction = this._createActionByOption('onButtonClick');
   }
 
-  _createSelectionChangedAction() {
+  _createSelectionChangedAction(): void {
     this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
   }
 
-  _createItemClickAction() {
-    this._itemClickAction = this._createActionByOption('onItemClick');
+  _createItemClickAction(): void {
+    this._itemClickAction = this._createActionByOption('onItemClick') as ItemClickActionType;
   }
 
-  _fireSelectionChangedAction({ previousValue, value }) {
+  _fireSelectionChangedAction({ previousValue, value }): void {
     this._selectionChangedAction({
       item: value,
       previousItem: previousValue,
     });
   }
 
-  _fireItemClickAction({ event, itemElement, itemData }) {
+  _fireItemClickAction(
+    { event, itemElement, itemData }: ItemClickEvent,
+  ): Partial<ItemClickEvent> | boolean {
     return this._itemClickAction({
       event,
       itemElement,
-      itemData: this._actionItem || itemData,
+      itemData: this._actionItem ?? itemData,
     });
   }
 
@@ -259,18 +282,22 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }
 
     return splitButton || !showArrowIcon
-      ? 'content' : ({ text, icon }, buttonContent) => {
+      ? 'content' : ({ text, icon }: ButtonGroupItem, buttonContent: DxElement): void => {
         const $firstIcon = getImageContainer(icon);
         const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
-        // @ts-expect-error ts-error
-        const $secondIcon = getImageContainer('spindown').addClass(DX_ICON_RIGHT_CLASS);
+        const $secondIcon = getImageContainer('spindown');
+        if ($secondIcon !== null) {
+          $secondIcon.addClass(DX_ICON_RIGHT_CLASS);
+        }
 
-        // @ts-expect-error ts-error
-        $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
+        const $container = $(buttonContent);
+        if ($firstIcon) $container.append($firstIcon);
+        if ($textContainer) $container.append($textContainer);
+        if ($secondIcon) $container.append($secondIcon);
       };
   }
 
-  _getActionButtonConfig() {
+  _getActionButtonConfig(): ButtonGroupItem {
     const {
       icon, text, type, splitButton,
     } = this.option();
@@ -280,18 +307,16 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       icon,
       type,
       template: this._getButtonTemplate(),
-      elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS },
+      elementAttr: {
+        class: DROP_DOWN_BUTTON_ACTION_CLASS,
+        role: splitButton ? 'menuitem' : undefined,
+      },
     };
-
-    if (splitButton) {
-      // @ts-expect-error ts-error
-      actionButtonConfig.elementAttr.role = 'menuitem';
-    }
 
     return actionButtonConfig;
   }
 
-  _getSpinButtonConfig() {
+  _getSpinButtonConfig(): ButtonGroupItem {
     const { type } = this.option();
 
     const config = {
@@ -312,7 +337,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const items = [this._getActionButtonConfig()];
 
     if (splitButton) {
-      // @ts-expect-error ts-error
       items.push(this._getSpinButtonConfig());
     }
 
@@ -385,14 +409,27 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     return result;
   }
 
-  _popupOptions() {
+  _popupOptions(): PopupProperties {
     const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
 
-    return extend({
+    const {
+      deferRendering,
+      opened,
+      _cached_dropDownOptions: cachedDropDownOptions,
+    } = this.option();
+
+    const position: PositionConfig = {
+      of: getPublicElement(this.$element()),
+      collision: 'flipfit',
+      my: `${horizontalAlignment} top` as PositionAlignment,
+      at: `${horizontalAlignment} bottom` as PositionAlignment,
+    };
+
+    return {
       dragEnabled: false,
       focusStateEnabled: false,
-      deferRendering: this.option('deferRendering'),
-      hideOnOutsideClick: (e) => {
+      deferRendering,
+      hideOnOutsideClick: (e): boolean => {
         const $element = this.$element();
         const $buttonClicked = $(e.target).closest(`.${DROP_DOWN_BUTTON_CLASS}`);
         return !$buttonClicked.is($element);
@@ -409,15 +446,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       width: getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
-      position: {
-        of: this.$element(),
-        collision: 'flipfit',
-        my: `${horizontalAlignment} top`,
-        at: `${horizontalAlignment} bottom`,
-      },
+      position,
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY_CLASS,
       contentTemplate: null,
-    }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
+      ...cachedDropDownOptions,
+      ...{ visible: opened },
+    };
   }
 
   _listOptions(): ListBaseProperties {
@@ -443,7 +477,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       focusStateEnabled,
       hoverStateEnabled,
       useItemTextAsTitle,
-      // eslint-disable-next-line
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onContentReady: () => this._fireContentReadyAction(),
       selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],
       grouped,
@@ -454,16 +488,14 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       itemTemplate,
       items,
       dataSource: this._dataController.getDataSource() as DataSourceLike<Item> | null,
-      onItemClick: (e) => {
+      onItemClick: (e): void => {
         if (!this.option('useSelectMode')) {
           this._lastSelectedItemData = e.itemData;
         }
-        // @ts-expect-error ts-error
-        this.option('selectedItemKey', this._keyGetter(e.itemData));
-        // @ts-expect-error ts-error
+        this.option('selectedItemKey', this._keyGetter?.(e.itemData));
         const actionResult = this._fireItemClickAction(e);
-        // @ts-expect-error ts-error
         if (actionResult !== false) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.toggle(false);
           this._buttonGroup.focus();
         }
@@ -534,10 +566,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _setPopupOption(optionName, value?): void {
-    // @ts-expect-error ts-error
-    this._setWidgetOption('_popup', arguments);
+  _setPopupOption(...args: unknown[]): void {
+    this._setWidgetOption('_popup', args as unknown as Record<string, unknown>);
   }
 
   _popupShowingHandler(): void {
@@ -553,24 +583,24 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this.setAria(elementAria, this.$element());
   }
 
-  _setButtonsAria(value): void {
-    const commonButtonAria = {
+  _setButtonsAria(value: boolean): void {
+    const commonButtonAria: AriaAttributes = {
       expanded: value,
       haspopup: 'listbox',
     };
-    const firstButtonAria = {};
+    const firstButtonAria: AriaAttributes = {};
 
     if (!this.option('text')) {
-      // @ts-expect-error ts-error
       firstButtonAria.label = 'dropdownbutton';
     }
-    // @ts-expect-error ts-error
+
     this._getButtons().each((index, $button) => {
       if (index === 0) {
         this.setAria({ ...firstButtonAria, ...commonButtonAria }, $($button));
       } else {
         this.setAria(commonButtonAria, $($button));
       }
+      return true;
     });
   }
 
@@ -607,8 +637,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _updateArrowClass(): void {
     const hasArrow = this.option('splitButton') || this.option('showArrowIcon');
-    // @ts-expect-error ts-error
-    this.$element().toggleClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS, hasArrow);
+    this.$element().toggleClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS, Boolean(hasArrow));
   }
 
   toggle(visible?: boolean): Promise<unknown> | undefined {
@@ -632,10 +661,9 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._list?.option(name, value);
   }
 
-  _getDisplayValue(item): string {
+  _getDisplayValue(item: Item): string {
     const isPrimitiveItem = !isObject(item);
-    // @ts-expect-error ts-error
-    const displayValue = isPrimitiveItem ? item : this._displayGetter(item);
+    const displayValue = isPrimitiveItem ? item : this._displayGetter?.(item);
     return !isObject(displayValue) ? String(ensureDefined(displayValue, '')) : '';
   }
 
@@ -648,8 +676,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }
 
     this._setOptionWithoutOptionChange('selectedItem', selectedItem);
-    // @ts-expect-error ts-error
-    this._setOptionWithoutOptionChange('selectedItemKey', this._keyGetter(selectedItem));
+    this._setOptionWithoutOptionChange('selectedItemKey', this._keyGetter?.(selectedItem));
   }
 
   _clean(): void {
@@ -659,11 +686,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _selectedItemKeyChanged(value): void {
     this._setListOption('selectedItemKeys', this.option('useSelectMode') && isDefined(value) ? [value] : []);
-    const previousItem = this.option('selectedItem');
+    const { selectedItem: previousItem } = this.option();
     this._loadSelectedItem().always((selectedItem) => {
       this._updateActionButton(selectedItem);
-      // @ts-expect-error ts-error
-      if (this._displayGetter(previousItem) !== this._displayGetter(selectedItem)) {
+      if (this._displayGetter?.(previousItem) !== this._displayGetter?.(selectedItem)) {
         this._fireSelectionChangedAction({
           previousValue: previousItem,
           value: selectedItem,
@@ -680,11 +706,18 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   _actionButtonOptionChanged({ name, value }): void {
     const newConfig = {};
     newConfig[name] = value;
-    this._updateButtonGroup('items[0]', extend({}, this._getActionButtonConfig(), newConfig));
+    this._updateButtonGroup(
+      'items[0]',
+      extend(
+        {},
+        this._getActionButtonConfig(),
+        newConfig,
+      ),
+    );
     this._popup && this._popup.repaint();
   }
 
-  _selectModeChanged(value): void {
+  _selectModeChanged(value: unknown): void {
     if (value) {
       this._setListOption('selectionMode', 'single');
       const selectedItemKey = this.option('selectedItemKey');
@@ -696,15 +729,14 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         selectedItemKey: undefined,
         selectedItem: undefined,
       });
-      // @ts-expect-error ts-error
-      this._actionButtonOptionChanged({ text: this.option('text') });
+      const { text } = this.option();
+      this._actionButtonOptionChanged({ name: 'text', value: text });
     }
   }
 
-  _updateItemCollection(optionName): void {
+  _updateItemCollection(optionName: string): void {
     const { selectedItemKey, useSelectMode } = this.option();
     this._setListOption('selectedItem', null);
-    // @ts-expect-error ts-error
     this._setWidgetOption('_list', [optionName]);
 
     if (isDefined(selectedItemKey)) {
@@ -714,17 +746,16 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
             this._setListOption('selectedItemKeys', [selectedItemKey]);
             this._setListOption('selectedItem', selectedItem);
           }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }).fail((error) => {
+        }).fail(() => {
           this._setListOption('selectedItemKeys', []);
         })
         .always(this._updateActionButton.bind(this));
     }
   }
 
-  _updateDataController(items?): void {
-    // @ts-expect-error ts-error
-    this._dataController.updateDataSource(items, this.option('keyExpr'));
+  _updateDataController(items?: unknown[] | DataSourceType): void {
+    const { keyExpr } = this.option();
+    this._dataController.updateDataSource(items, keyExpr);
     this._updateKeyExpr();
   }
 
@@ -769,6 +800,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         this._innerWidgetOptionChanged(this._popup, args);
         break;
       case 'opened':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.toggle(value);
         break;
       case 'focusStateEnabled':
@@ -778,12 +810,13 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         super._optionChanged(args);
         break;
       case 'items':
-        this._updateDataController(this.option('items'));
+        // eslint-disable-next-line no-case-declarations
+        const { items } = this.option();
+        this._updateDataController(items);
         this._updateItemCollection(name);
         break;
       case 'dataSource':
-        // @ts-expect-error ts-error
-        this._dataController.updateDataSource(value);
+        this._dataController.updateDataSource(value as unknown[] | DataSourceType);
         this._updateKeyExpr();
         this._updateItemCollection(name);
         break;
@@ -835,7 +868,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         break;
       case 'deferRendering': {
         const { opened } = this.option();
-
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.toggle(opened);
         break;
       }
