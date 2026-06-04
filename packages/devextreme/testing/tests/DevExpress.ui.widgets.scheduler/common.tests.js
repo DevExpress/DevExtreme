@@ -104,7 +104,7 @@ QUnit.module('Loading', {
         scheduler.instance.option('currentView', 'week');
         await waitAsync(0);
         const loadingInstance = $('.dx-loadpanel').last().dxLoadPanel('instance');
-        assert.deepEqual(loadingInstance.option('position.of').get(0), scheduler.instance.$element().get(0), 'loading panel is shown in right place');
+        assert.deepEqual($(loadingInstance.option('position.of')).get(0), scheduler.instance.$element().get(0), 'loading panel is shown in right place');
         await waitForAsync(() => count === 2);
     });
 });
