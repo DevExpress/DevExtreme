@@ -7,7 +7,7 @@ import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 import {
   HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
 } from '../../constants';
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../utils_time_zone';
 import type {
   AllDayPanelModeType,
   AppointmentGeometry,

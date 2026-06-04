@@ -3,7 +3,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import timezoneUtils from '../../m_utils_time_zone';
+import timezoneUtils from '../../utils_time_zone';
 import {
   calculateCellIndex,
   calculateDayDuration,

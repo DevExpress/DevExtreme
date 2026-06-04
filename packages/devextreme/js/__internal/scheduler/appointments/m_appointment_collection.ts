@@ -27,7 +27,7 @@ import {
   APPOINTMENT_ITEM_CLASS,
 } from '../classes';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
-import timeZoneUtils from '../m_utils_time_zone';
+import timeZoneUtils from '../utils_time_zone';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';

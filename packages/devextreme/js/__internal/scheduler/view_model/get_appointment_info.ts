@@ -1,4 +1,4 @@
-import timeZoneUtils from '../m_utils_time_zone';
+import timeZoneUtils from '../utils_time_zone';
 import type {
   AppointmentAgendaViewModel,
   AppointmentItemViewModel,

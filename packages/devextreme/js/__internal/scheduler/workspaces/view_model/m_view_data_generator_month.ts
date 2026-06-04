@@ -4,7 +4,7 @@ import {
   getToday, isFirstCellInMonthWithIntervalCount, monthUtils, setOptionHour,
 } from '@ts/scheduler/r1/utils/index';
 
-import timezoneUtils from '../../m_utils_time_zone';
+import timezoneUtils from '../../utils_time_zone';
 import type { MonthViewCellDataSimple, ViewDataProviderExtendedOptions } from './m_types';
 import { ViewDataGenerator } from './m_view_data_generator';
 import { calculateAlignedWeeksBetweenDates } from './utils/view_generator_utils';
