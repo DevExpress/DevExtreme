@@ -4,6 +4,7 @@
     "Groups": [
       {
         "Name": "Data Grid",
+        "Badge": "Updated",
         "Equivalents": "dxDataGrid, dx-data-grid",
         "Groups": [
           {
@@ -155,6 +156,7 @@
     "Groups": [
       {
         "Name": "Data Grid",
+        "Badge": "Updated",
         "Equivalents": "dxDataGrid, dx-data-grid",
         "Groups": [
           {
