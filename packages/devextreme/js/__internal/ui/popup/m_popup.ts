@@ -53,16 +53,16 @@ import type {
   ControllerProperties,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
-import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
-
-import PopupDrag from './m_popup_drag';
-import type { OverflowManager } from './m_popup_overflow_manager';
-import { createBodyOverflowManager } from './m_popup_overflow_manager';
+import type { PopupDragConfig } from '@ts/ui/popup/m_popup_drag';
+import PopupDrag from '@ts/ui/popup/m_popup_drag';
+import type { OverflowManager } from '@ts/ui/popup/m_popup_overflow_manager';
+import { createBodyOverflowManager } from '@ts/ui/popup/m_popup_overflow_manager';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
-} from './popup_position_controller';
-import { PopupPositionController } from './popup_position_controller';
+} from '@ts/ui/popup/popup_position_controller';
+import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
+import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 // STYLE popup
 
@@ -96,7 +96,7 @@ const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 const BUTTON_OUTLINED_MODE = 'outlined';
 
-const TOOLBAR_NAME_BASE = 'dxToolbarBase';
+const TOOLBAR_BASE_WIDGET_NAME = 'dxToolbarBase';
 
 const HEIGHT_STRATEGIES = {
   static: '',
@@ -203,7 +203,7 @@ class Popup<
 
   _resizable!: Resizable;
 
-  _drag?: PopupDrag;
+  _drag?: PopupDrag<PopupPositionController>;
 
   _renderedDimensions?: {
     width: number;
@@ -935,7 +935,7 @@ class Popup<
 
   // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
-    return TOOLBAR_NAME_BASE;
+    return TOOLBAR_BASE_WIDGET_NAME;
   }
 
   _toggleDisabledState(value: boolean): void {
@@ -1095,7 +1095,7 @@ class Popup<
       return;
     }
 
-    const config = {
+    const config: PopupDragConfig<PopupPositionController> = {
       dragEnabled,
       handle: $dragTarget.get(0),
       draggableElement: this._$content?.get(0),
@@ -1105,7 +1105,7 @@ class Popup<
     if (this._drag) {
       this._drag.init(config);
     } else {
-      this._drag = new PopupDrag(config);
+      this._drag = new PopupDrag<PopupPositionController>(config);
     }
 
     this.$overlayContent().toggleClass(POPUP_DRAGGABLE_CLASS, dragEnabled);
