@@ -58,7 +58,7 @@
     "@angular-devkit/build-angular": "catalog:angular",
     "@angular/cli": "catalog:angular",
     "@angular/compiler-cli": "catalog:angular",
-    "@eslint/js": "9.39.4",
+    "@eslint/js": "catalog:",
     "@types/jasmine": "5.1.4",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.3",

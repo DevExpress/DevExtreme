@@ -842,6 +842,7 @@ class TagBox<
   }
 
   _getFilter(creator) {
+    // @ts-expect-error fix argument type in m_data_controller.ts
     const dataSourceFilter = this._dataController.filter();
     const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
     const filterQueryLength = encodeURI(JSON.stringify(filterExpr)).length;
@@ -1614,6 +1615,7 @@ class TagBox<
       const filter = this._dataSourceFilterExpr();
 
       if (this._userFilter === undefined) {
+        // @ts-expect-error
         this._userFilter = dataController.filter() || null;
       }
       // @ts-expect-error ts-error
@@ -1672,6 +1674,7 @@ class TagBox<
     const currentValue = value || [];
     const existedItems = listValues.length ? getIntersection(currentValue, listValues) : [];
     const newItems = existedItems.length
+      // @ts-expect-error fix on core/m_array level
       ? removeDuplicates(listValues, currentValue)
       : listValues;
 
@@ -1683,8 +1686,10 @@ class TagBox<
       return [];
     }
 
+    const { selectedItems } = this._list.option();
+
     return this
-      ._getPlainItems(this._list.option('selectedItems'))
+      ._getPlainItems(selectedItems)
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       .map((item) => this._valueGetter(item));
   }

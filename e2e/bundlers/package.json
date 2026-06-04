@@ -21,6 +21,7 @@
     "devextreme": "workspace:*",
     "eslint": "catalog:",
     "@eslint/eslintrc": "catalog:",
+    "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "eslint-config-devextreme": "catalog:",

@@ -79,12 +79,18 @@
     "ts-jest": "29.1.3",
     "typescript": "4.9.5",
     "eslint": "catalog:",
+    "@babel/eslint-parser": "catalog:",
+    "@eslint/eslintrc": "catalog:",
+    "@eslint/js": "catalog:",
+    "@stylistic/eslint-plugin": "catalog:",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "catalog:",
+    "eslint-config-devextreme": "catalog:",
+    "eslint-migration-utils": "workspace:*",
+    "eslint-plugin-i18n": "catalog:",
     "eslint-plugin-import": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
-    "eslint-config-devextreme": "catalog:"
+    "@typescript-eslint/parser": "catalog:"
   },
   "publishConfig": {
     "directory": "npm",

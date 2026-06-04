@@ -146,8 +146,9 @@ export type PositioningEvent<
 
 interface VisualPositionChangedEvent<
   TPosition = OverlayProperties['position'],
-> extends PositioningEvent<TPosition> {
+> extends Omit<PositioningEvent<TPosition>, 'event'> {
   readonly previousPosition: OverlayProperties['position'];
+  readonly event?: DxEvent<PointerInteractionEvent | KeyboardEvent>;
 }
 
 export interface OverlayActions<

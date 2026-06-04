@@ -254,10 +254,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             { view: 'timelineWeek', times: expectedAllTimes, dates: expectedDateResults }
         ];
 
-        [true, false].forEach((renovateRender) => {
+        {
             module('timeCellTemplate', () => {
                 testCases.forEach(testCase => {
-                    test(`arguments should be valid in '${testCase.view}' view when renovateRender is ${renovateRender}`, async function(assert) {
+                    test(`arguments should be valid in '${testCase.view}' view`, async function(assert) {
                         let index = 0;
 
                         await createWrapper({
@@ -275,13 +275,13 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                             startDayHour: 0,
                             currentDate: summerDSTDate,
                             height: 600,
-                            renovateRender,
+
                         });
 
                         assert.expect(expectedAllTimes.length * 2);
                     });
 
-                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, async function(assert) {
+                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
                         let index = 0;
 
                         const validExpectedDateResults = testCase.dates.slice(4);
@@ -302,7 +302,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                             startDayHour: 2,
                             currentDate: summerDSTDate,
                             height: 600,
-                            renovateRender,
+
                         });
 
                         assert.expect(times.length * 2);
@@ -319,7 +319,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                         });
                     })
                     .forEach((testCase) => {
-                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, async function(assert) {
+                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
                             let index = 0;
 
                             const validExpectedDateResults = expectedDateResults.slice(4);
@@ -348,14 +348,14 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                                 startDayHour: 2,
                                 currentDate: summerDSTDate,
                                 height: 600,
-                                renovateRender,
+
                             });
 
                             assert.expect(validExpectedDateResults.length);
                         });
                     });
             });
-        });
+        }
 
         module('Time panel render', () => {
             testCases.forEach(testCase => {

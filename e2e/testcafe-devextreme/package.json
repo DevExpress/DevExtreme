@@ -7,8 +7,8 @@
     "update-failed-etalons": "node update_failed_etalons.mjs"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "catalog:eslint8",
-    "@babel/plugin-transform-runtime": "7.29.0",
+    "@babel/eslint-parser": "catalog:",
+    "@babel/plugin-transform-runtime": "7.29.7",
     "@testcafe-community/axe": "3.5.0",
     "@types/jquery": "catalog:",
     "axe-core": "catalog:",
@@ -24,6 +24,7 @@
     "ts-node": "10.9.2",
     "eslint": "catalog:",
     "@eslint/eslintrc": "catalog:",
+    "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
