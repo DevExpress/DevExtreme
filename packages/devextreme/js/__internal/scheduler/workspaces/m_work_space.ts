@@ -11,7 +11,6 @@ import {
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
-import type { OptionChangedEventInfo } from '@js/core/dom_component';
 import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -31,7 +30,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { InitializedEventInfo } from '@js/events';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -56,7 +54,7 @@ import {
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
 import type { ViewType } from '@ts/scheduler/types';
-import Scrollable from '@ts/ui/scroll_view/scrollable';
+import Scrollable, { type ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/widget_notify_scheduler';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
@@ -126,28 +124,6 @@ export interface ViewDateGenerationOptions {
   skippedDays?: number[];
   viewOffset: number;
   viewType: ViewType;
-}
-
-export interface WorkspaceDateTableScrollableConfig {
-  useKeyboard: boolean;
-  bounceEnabled: boolean;
-  updateManually: boolean;
-  onScroll: (event: ScrollEvent) => void;
-  onInitialized: (args: InitializedEventInfo<Scrollable>) => void;
-  onOptionChanged: (args: OptionChangedEventInfo<Scrollable>) => void;
-  direction?: 'horizontal' | 'vertical' | 'both';
-  onEnd?: () => void;
-}
-
-export interface WorkspaceHeaderScrollableConfig {
-  useKeyboard: boolean;
-  showScrollbar: 'never';
-  direction: 'horizontal';
-  useNative: false;
-  updateManually: true;
-  bounceEnabled: false;
-  scrollByContent?: boolean;
-  onScroll: (event: ScrollEvent) => void;
 }
 
 const { tableCreator } = tableCreatorModule;
@@ -733,8 +709,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.$allDayTitle = $('<div>').appendTo(this.$headerPanelEmptyCell);
   }
 
-  protected dateTableScrollableConfig(): WorkspaceDateTableScrollableConfig {
-    let config: WorkspaceDateTableScrollableConfig = {
+  protected dateTableScrollableConfig(): ScrollableProperties {
+    let config: ScrollableProperties = {
       useKeyboard: false,
       bounceEnabled: false,
       updateManually: true,
@@ -783,8 +759,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected createCrossScrollingConfig(
-    { onScroll }: Pick<WorkspaceDateTableScrollableConfig, 'onScroll'>,
-  ): Pick<WorkspaceDateTableScrollableConfig, 'direction' | 'onScroll' | 'onEnd'> {
+    { onScroll }: Pick<ScrollableProperties, 'onScroll'>,
+  ): Pick<ScrollableProperties, 'direction' | 'onScroll' | 'onEnd'> {
     return {
       direction: 'both',
       onScroll: (event: ScrollEvent) => {
@@ -807,7 +783,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
   }
 
-  protected headerScrollableConfig(): WorkspaceHeaderScrollableConfig {
+  protected headerScrollableConfig(): ScrollableProperties {
     return {
       useKeyboard: false,
       showScrollbar: 'never',
