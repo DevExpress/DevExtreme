@@ -72,7 +72,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default false
      * @public
      */
-    hideOnParentScroll?: boolean;
+    hideOnParentScroll?: boolean | (() => boolean);
     /**
      * @docid
      * @default '80vh'

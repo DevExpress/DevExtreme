@@ -98,7 +98,7 @@ export const isPointerEvent = (e) => eventSource(e) === 'pointer';
 export const isMouseEvent = (e) => isNativeMouseEvent(e)
   || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === 'mouse');
 
-export const isDxMouseWheelEvent = (e) => e && e.type === 'dxmousewheel';
+export const isDxMouseWheelEvent = (e) => e?.type === 'dxmousewheel';
 
 export const isTouchEvent = (e) => isNativeTouchEvent(e)
   || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === 'touch');
