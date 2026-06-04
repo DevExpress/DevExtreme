@@ -330,7 +330,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private contextMenuAction: any;
 
-  protected $groupTable: any;
+  protected $groupTable: dxElementWrapper | null | undefined;
 
   protected $thead: any;
 
