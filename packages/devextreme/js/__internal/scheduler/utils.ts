@@ -15,10 +15,9 @@ export const utils = {
   },
   DOM: {
     getHeaderHeight: (header: unknown): number => {
-      const $element = (header as Record<string, unknown>)
-        ?._$element as dxElementWrapper | undefined;
-      return $element
-        ? parseInt(getOuterHeight($element), 10)
+      const h = header as Record<string, unknown> | null | undefined;
+      return h?._$element
+        ? parseInt(getOuterHeight(h._$element as dxElementWrapper), 10)
         : 0;
     },
   },
@@ -30,28 +29,20 @@ export const utils = {
       componentName: string,
       viewModel: Record<string, unknown>,
     ): void => {
-      const w = widget as Record<string, unknown>;
-      let component = w[componentName] as
-        Record<string, Function> | undefined;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const w = widget as any;
+      let component = w[componentName];
       if (!component) {
         const container = getPublicElement(parentElement);
-        const createComponent = w._createComponent as Function;
-        component = createComponent(
-          container,
-          componentClass,
-          viewModel,
-        ) as Record<string, Function>;
+        component = w._createComponent(container, componentClass, viewModel);
         w[componentName] = component;
       } else {
-        const $element = component.$element() as
-          dxElementWrapper;
-        const elementStyle = (
-          $element.get(0) as HTMLElement
-        ).style;
+        const $element = component.$element() as dxElementWrapper;
+        const elementStyle = ($element.get(0) as HTMLElement).style;
         const { height } = elementStyle;
         const { width } = elementStyle;
 
-        (component.option)(viewModel);
+        component.option(viewModel);
 
         if (height) {
           setHeight($element, height);
