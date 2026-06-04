@@ -10,6 +10,7 @@ import type { dxSchedulerOptions } from '@js/ui/scheduler';
 // NOTE: Renovation component import.
 import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
 import { timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
+import type { ResourceLoader } from '@ts/scheduler/utils/loader/resource_loader';
 
 import {
   GROUP_HEADER_CONTENT_CLASS,
@@ -57,7 +58,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected override getTotalRowCount(
     groupCount: number,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    includeAllDayPanelRows?: unknown,
+    includeAllDayPanelRows?: boolean,
   ): number {
     if (this.isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
@@ -414,7 +415,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  protected override makeGroupRows(groups: unknown[], groupByDate: boolean): unknown {
+  protected override makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
+    elements: dxElementWrapper | dxElementWrapper[];
+    cellTemplates: (() => dxElementWrapper)[];
+  } {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
