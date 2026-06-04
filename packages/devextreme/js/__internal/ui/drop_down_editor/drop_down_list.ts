@@ -31,7 +31,7 @@ import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type DataController from '@ts/ui/collection/m_data_controller';
-import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
 
@@ -252,7 +252,6 @@ class DropDownList<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _fitIntoRange(value: number, start: number, end: number): number {
     if (value > end) {
       return start;
@@ -312,7 +311,6 @@ class DropDownList<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _popupWrapperClass(): string {
     return DROPDOWNLIST_POPUP_WRAPPER_CLASS;
   }
@@ -576,7 +574,6 @@ class DropDownList<
     this.setAria('owns', this._popup && this._popupContentId);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAriaHasPopup(): string {
     return 'listbox';
   }
@@ -593,7 +590,6 @@ class DropDownList<
     return Boolean(dataSource) !== this._needPassDataSourceToList();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isDesktopDevice(): boolean {
     return devices.real().deviceType === 'desktop';
   }
@@ -646,7 +642,6 @@ class DropDownList<
     return options;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _canListHaveFocus(): boolean {
     return false;
   }
@@ -655,7 +650,6 @@ class DropDownList<
     return this._needPassDataSourceToList() ? this._dataSource : null;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dataSourceOptions(): Partial<DataSourceOptions<Item>> {
     return {
       paginate: false,
@@ -675,7 +669,6 @@ class DropDownList<
     return dataSource;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dataSourceFromUrlLoadMode(): string {
     return 'raw';
   }
@@ -712,7 +705,7 @@ class DropDownList<
     this._itemClickAction(e);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _listItemClickHandler(e?: ItemClickEvent<Item>): void { }
 
   _setListDataSource(): void {

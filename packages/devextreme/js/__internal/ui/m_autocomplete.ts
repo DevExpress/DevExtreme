@@ -6,7 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import type { Properties } from '@js/ui/autocomplete';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
-import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
+import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
