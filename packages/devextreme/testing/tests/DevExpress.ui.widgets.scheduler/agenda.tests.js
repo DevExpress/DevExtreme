@@ -186,8 +186,12 @@ module('Agenda', {}, () => {
         assert.deepEqual(
             instance.getDOMElementsMetaData(),
             {
-                dateTableCellsMeta: [[{}]],
-                allDayPanelCellsMeta: [{}],
+                dateTableCellsMeta: [[{
+                    top: 0, left: 0, width: 0, height: 0,
+                }]],
+                allDayPanelCellsMeta: [{
+                    top: 0, left: 0, width: 0, height: 0,
+                }],
             },
             'Correct DOM meta data',
         );
