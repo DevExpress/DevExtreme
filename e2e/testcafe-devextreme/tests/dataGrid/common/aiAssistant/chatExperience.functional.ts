@@ -384,7 +384,7 @@ test('customizeResponseText returning undefined should use default message', asy
   },
 }));
 
-// 1.8.4 — only the fulfilled title is asserted; per-status titles are inconsistent
+// 1.8.4
 test('customizeResponseTitle at init should override message header', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -399,15 +399,24 @@ test('customizeResponseTitle at init should override message header', async (t) 
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getMessageHeader(0).textContent).eql('Custom Title');
+  await t.expect(aiChat.getMessageHeader(0).textContent).eql('success: sorting');
+  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by invalid')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getMessageHeader(1).textContent).eql('failure: sorting');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
 }, [
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
+  { actions: [{ name: 'sorting', args: { dataField: 'nonExistent', sortOrder: 'asc' } }] },
 ], {
-  customizeResponseTitle() {
-    return 'Custom Title';
+  customizeResponseTitle(status: string, commandNames: string[]) {
+    return `${status}: ${commandNames.join(', ')}`;
   },
 }));
 
