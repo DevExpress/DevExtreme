@@ -12,6 +12,7 @@ import { setHeight, setOuterHeight } from '@js/core/utils/size';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { EMPTY_ACTIVE_STATE_UNIT } from '@ts/core/widget/widget';
 
+import type { Rect } from '../appointments/resizing/types';
 import {
   DATE_TABLE_CLASS,
   DATE_TABLE_ROW_CLASS,
@@ -21,6 +22,7 @@ import {
 } from '../m_classes';
 import tableCreatorModule from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
+import type { ResourceId } from '../utils/loader/types';
 import { VIEWS } from '../utils/options/constants_view';
 import { reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
 import type { GroupNode } from '../utils/resource_manager/types';
@@ -366,7 +368,7 @@ class SchedulerAgenda extends WorkSpace {
     model: {
       text: string;
       date: Date | undefined;
-      groups: Record<string, unknown>;
+      groups: Record<string, ResourceId>;
       groupIndex: number | undefined;
     };
     container: Element;
@@ -391,7 +393,7 @@ class SchedulerAgenda extends WorkSpace {
   protected renderTableBody(
     options: AgendaRenderOptions,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    delayCellTemplateRendering?: unknown,
+    delayCellTemplateRendering?: boolean,
   ): void {
     const cellTemplates: (() => dxElementWrapper)[] = [];
     const cellTemplateOpt = options.cellTemplate;
@@ -559,12 +561,16 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   getDOMElementsMetaData(): {
-    dateTableCellsMeta: Record<string, unknown>[][];
-    allDayPanelCellsMeta: Record<string, unknown>[];
+    dateTableCellsMeta: Rect[][];
+    allDayPanelCellsMeta: Rect[];
   } {
     return {
-      dateTableCellsMeta: [[{}]],
-      allDayPanelCellsMeta: [{}],
+      dateTableCellsMeta: [[{
+        top: 0, left: 0, width: 0, height: 0,
+      }]],
+      allDayPanelCellsMeta: [{
+        top: 0, left: 0, width: 0, height: 0,
+      }],
     };
   }
 }
