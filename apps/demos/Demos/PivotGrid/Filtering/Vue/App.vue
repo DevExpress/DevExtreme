@@ -67,12 +67,12 @@ const dataSource = new PivotGridDataSource({
     {
       dataField: '[Ship Date].[Calendar Year]',
       area: 'filter',
-      filterValues: ['[Ship Date].[Calendar Year].&[2004]'],
+      filterValues: ['[Ship Date].[Calendar Year].&[2024]'],
     },
   ],
   store: new XmlaStore({
     url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
-    catalog: 'Adventure Works DW Standard Edition',
+    catalog: 'Adventure Works DW Standard Edition 2026',
     cube: 'Adventure Works',
   }),
 });
