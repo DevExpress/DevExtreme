@@ -16,11 +16,19 @@
     "packageRules": [
         {
             "matchPackageNames": [
-                "postcss",
-                "@angular/platform-server"
+                "postcss"
             ],
             "rangeStrategy": "replace"
         },
+        {
+            "matchPackageNames": [
+                "@angular/platform-server"
+            ],
+            "matchFileNames": [
+                "apps/demos/package.json"
+            ],
+            "rangeStrategy": "replace"
+        }
         {
             "matchPackageNames": [
                 "openai",
