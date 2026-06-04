@@ -114,7 +114,9 @@ class SchedulerAgenda extends WorkSpace {
           }
         } else if (!this.$groupTable) {
           this.initGroupTable();
-          this.$dateTableScrollable.$content().prepend(this.$groupTable);
+          if (this.$groupTable) {
+            this.$dateTableScrollable.$content().prepend(this.$groupTable);
+          }
         }
         super._optionChanged(args);
         break;
@@ -243,8 +245,8 @@ class SchedulerAgenda extends WorkSpace {
     return rows.filter((row) => row.length && !isEmpty(row));
   }
 
-  protected override getGroupHeaderContainer(): dxElementWrapper | null {
-    return this.$groupTable as dxElementWrapper | null;
+  protected override getGroupHeaderContainer(): dxElementWrapper | null | undefined {
+    return this.$groupTable;
   }
 
   protected override makeGroupRows(): {
