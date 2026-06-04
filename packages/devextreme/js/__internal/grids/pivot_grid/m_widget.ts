@@ -1063,7 +1063,9 @@ class PivotGrid extends Widget {
     that._dataFields.render(dataHeaderContainer, dataSource.getAreaFields('data'));
 
     // @ts-expect-error ts-error
-    that.$element().dxPivotGridFieldChooserBase('instance').renderSortable();
+    const fieldChooser = that.$element().dxPivotGridFieldChooserBase('instance');
+    fieldChooser.renderSortable();
+    fieldChooser.restoreFieldFocus();
   }
 
   _createTableElement() {
@@ -1559,6 +1561,11 @@ class PivotGrid extends Widget {
         when.apply($, updateScrollableResults).done(() => {
           that._updateScrollPosition(that._columnsArea, that._rowsArea, that._dataArea, true);
           that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
+
+          // @ts-expect-error
+          const fieldChooser = that.$element().dxPivotGridFieldChooserBase('instance');
+          fieldChooser.restoreFieldFocus();
+
           d.resolve();
         });
       });

@@ -34,6 +34,10 @@ export default class FieldChooser extends Widget {
     return this.getAreas().nth(3).find(`.${CLASS.field}.${CLASS.box}`).nth(idx);
   }
 
+  getDataAreaItem(idx = 0): Selector {
+    return this.getAreas().nth(4).find(`.${CLASS.field}.${CLASS.box}`).nth(idx);
+  }
+
   getDataFields(): Selector {
     return this.getAreas().nth(4).find(`.${CLASS.fields} .${CLASS.field}`);
   }
