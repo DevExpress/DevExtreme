@@ -4,6 +4,9 @@
   [dataSource]="sales"
   [showBorders]="true"
   [filterSyncEnabled]="true"
+  [allowColumnResizing]="true"
+  [allowColumnReordering]="true"
+  [focusedRowEnabled]="true"
 >
   <dxo-data-grid-search-panel
     [visible]="true"
@@ -13,6 +16,8 @@
   <dxo-data-grid-group-panel [visible]="true" />
   <dxo-data-grid-header-filter [visible]="true" />
   <dxo-data-grid-filter-row [visible]="true" />
+  <dxo-data-grid-selection mode="multiple" />
+  <dxo-data-grid-sorting mode="multiple" />
   <dxo-data-grid-paging [pageSize]="10" />
   <dxo-data-grid-pager
     [visible]="true"
