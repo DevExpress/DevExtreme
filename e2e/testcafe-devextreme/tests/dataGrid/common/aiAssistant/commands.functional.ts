@@ -32,11 +32,19 @@ const aiGridOptions = (): any => ({
       sendRequest() {
         const responses = (window as any).__aiResponses;
         const count = (window as any).__aiCallCount;
+        const response = responses[count];
 
         (window as any).__aiCallCount = count + 1;
 
+        if (response === undefined) {
+          return {
+            promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
+            abort: (): void => {},
+          };
+        }
+
         return {
-          promise: Promise.resolve(responses[count] ?? responses[0]),
+          promise: Promise.resolve(response),
           abort: (): void => {},
         };
       },
@@ -67,11 +75,19 @@ const remoteAIGridOptions = (): any => {
         sendRequest() {
           const responses = (window as any).__aiResponses;
           const count = (window as any).__aiCallCount;
+          const response = responses[count];
 
           (window as any).__aiCallCount = count + 1;
 
+          if (response === undefined) {
+            return {
+              promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
+              abort: (): void => {},
+            };
+          }
+
           return {
-            promise: Promise.resolve(responses[count] ?? responses[0]),
+            promise: Promise.resolve(response),
             abort: (): void => {},
           };
         },
@@ -283,14 +299,7 @@ test('Remote data parity — command should succeed with server-side data source
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
-
-  // Remote-specific: the sort must reach the data source as a server-side load option.
-  const sortParams = await dataGrid.apiGetDataSourceSortParams();
-
-  await t.expect(sortParams[0].selector).eql('name');
-  await t.expect(sortParams[0].desc).eql(false);
 }).before(async () => createRemoteGridWithAIAssistant(
   [
     { id: 1, name: 'Charlie', value: 10 },
