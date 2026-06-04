@@ -1,4 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
+import type { InternalElement } from '@js/core/element';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -9,7 +10,7 @@ import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 import { utils } from '../m_utils';
 import { VIEWS } from '../utils/options/constants_view';
 import type { ViewDateGenerationOptions } from './m_work_space';
-import SchedulerWorkSpace from './m_work_space_indicator';
+import SchedulerWorkSpace from './work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -42,7 +43,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override getDateGenerationOptions(): ViewDateGenerationOptions
-  & { cellCountInDay: number } {
+    & { cellCountInDay: number } {
     return {
       ...super.getDateGenerationOptions(),
       cellCountInDay: 1,
@@ -135,9 +136,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return this.getViewStartByOptions();
   }
 
-  renderRAllDayPanel(): void {}
+  renderRAllDayPanel(): void { }
 
-  renderRTimeTable(): void {}
+  renderRTimeTable(): void { }
 
   renderRDateTable(): void {
     utils.renovation.renderComponent(
@@ -167,24 +168,28 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // These methods should be deleted when we get rid of old render
   // --------------
 
-  protected override renderTimePanel() { return noop(); }
+  protected override renderTimePanel(): void { return noop(); }
 
-  protected override renderAllDayPanel() { return noop(); }
+  protected override renderAllDayPanel(): void { return noop(); }
 
-  private setMonthClassesToCell($cell, data) {
+  private setMonthClassesToCell($cell: InternalElement<Element>, data): void {
     $cell
       .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
       .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.isFirstDayMonthHighlighting)
       .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
   }
 
-  protected override createAllDayPanelElements() {}
+  protected override createAllDayPanelElements(): void { }
 
-  protected override renderTableBody(options) {
-    options.getCellText = (rowIndex, columnIndex) => {
+  /*
+  eslint-disable-next-line @typescript-eslint/no-explicit-any,
+  @typescript-eslint/explicit-module-boundary-types
+  */
+  protected override renderTableBody(options: any): void {
+    options.getCellText = (rowIndex: number, columnIndex: number): string => {
       const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
 
-      return monthUtils.getCellText(date, this.option('intervalCount') as any);
+      return monthUtils.getCellText(date, this.option('intervalCount'));
     };
     options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
     options.setAdditionalClasses = this.setMonthClassesToCell.bind(this);

@@ -12,8 +12,10 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
     return DAY_CLASS;
   }
 
-  protected override renderDateHeader() {
-    return this.option('intervalCount') === 1 ? null : super.renderDateHeader();
+  protected override renderDateHeader(): void {
+    if (this.option('intervalCount') !== 1) {
+      super.renderDateHeader();
+    }
   }
 
   renderRHeaderPanel(): void {

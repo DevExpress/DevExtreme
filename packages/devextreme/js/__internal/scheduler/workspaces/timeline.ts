@@ -7,6 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import type { TemplateBase } from '@ts/core/templates/m_template_base';
 // NOTE: Renovation component import.
 import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekdayAndDay, timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
@@ -17,12 +18,12 @@ import {
   GROUP_ROW_CLASS,
   HEADER_CURRENT_TIME_CELL_CLASS,
 } from '../m_classes';
-import tableCreatorModule from '../m_table_creator';
+import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
-import SchedulerWorkSpace, { type WorkSpaceIndicatorDefaultOptions } from './m_work_space_indicator';
 import type { ViewDataProviderOptions } from './view_model/m_types';
+import SchedulerWorkSpace, { type WorkSpaceIndicatorDefaultOptions } from './work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -273,7 +274,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected override getWeekendsCount(argument?: any) {
+  protected override getWeekendsCount(days: number): number {
     return 0;
   }
 
@@ -302,7 +303,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   renderRTimeTable(): void {}
 
-  protected override renderGroupAllDayPanel() {}
+  protected override renderGroupAllDayPanel(): void {}
 
   generateRenderOptions(isProvideVirtualCellsWidth?: boolean): ViewDataProviderOptions {
     const options = super.generateRenderOptions(isProvideVirtualCellsWidth ?? true);
@@ -354,7 +355,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override renderView(): void {
-    let groupCellTemplates;
+    let groupCellTemplates: (() => dxElementWrapper)[] = [];
     if (!this.isRenovatedRender()) {
       groupCellTemplates = this.renderGroupHeader();
     }
@@ -406,34 +407,34 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   // These methods should be deleted when we get rid of old render
   // --------------
 
-  protected override renderTimePanel() { return noop(); }
+  protected override renderTimePanel(): void { return noop(); }
 
-  protected override renderAllDayPanel() { return noop(); }
+  protected override renderAllDayPanel(): void { return noop(); }
 
-  protected override createAllDayPanelElements() { return noop(); }
+  protected override createAllDayPanelElements(): void { return noop(); }
 
-  protected override renderDateHeader() {
+  protected override renderDateHeader(): void {
     const $headerRow = super.renderDateHeader();
     if (this.needRenderWeekHeader()) {
       const firstViewDate = new Date(this.getStartViewDate());
       let currentDate = new Date(firstViewDate);
 
-      const $cells: any[] = [];
+      const $cells: dxElementWrapper[] = [];
       const groupCount = this.getGroupCount();
       const cellCountInDay = this.getCellCountInDay();
       const colSpan = this.isGroupedByDate()
         ? cellCountInDay * groupCount
         : cellCountInDay;
-      const cellTemplate: any = this.option('dateCellTemplate');
+      const cellTemplate = this.option('dateCellTemplate') as TemplateBase | null | undefined;
 
       const horizontalGroupCount = this.isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
         ? groupCount
         : 1;
-      const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * (this.option('intervalCount') as any);
+      const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * (this.option('intervalCount'));
 
       const cellsCount = cellsInGroup * horizontalGroupCount;
 
-      for (let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
+      for (let templateIndex = 0; templateIndex < cellsCount; templateIndex += 1) {
         const $th = $('<th>');
         const text = formatWeekdayAndDay(currentDate);
 
@@ -467,7 +468,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
       }
 
-      const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells as any);
+      const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells as unknown as dxElementWrapper);
       $headerRow.before($row);
     }
   }
@@ -498,10 +499,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  protected override makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
-    elements: dxElementWrapper | dxElementWrapper[];
-    cellTemplates: (() => dxElementWrapper)[];
-  } {
+  protected override makeGroupRows(
+    groups: ResourceLoader[],
+    groupByDate: boolean,
+  ): GroupRows {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(

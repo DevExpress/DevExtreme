@@ -5,7 +5,7 @@ import { HeaderPanelComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekdayAndDay, monthUtils } from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../utils/options/constants_view';
-import SchedulerTimeline from './m_timeline';
+import SchedulerTimeline from './timeline';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
@@ -39,6 +39,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return true;
   }
 
+  // @ts-expect-error
   protected override getFormat(): (date: Date) => string {
     return formatWeekdayAndDay;
   }

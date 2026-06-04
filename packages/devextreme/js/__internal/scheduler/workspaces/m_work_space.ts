@@ -14,7 +14,9 @@ import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
@@ -73,7 +75,7 @@ import {
 } from '../m_classes';
 import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
-import tableCreatorModule from '../m_table_creator';
+import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import { utils } from '../m_utils';
 import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ViewCellData } from '../types';
@@ -2889,7 +2891,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.$thead.empty();
       this.$dateTable.empty();
       this.$timePanel.empty();
-      this.$groupTable.empty();
+      this.$groupTable?.empty();
 
       this.$allDayTable?.empty();
       this.$sidebarTable?.empty();
@@ -3038,10 +3040,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
-    elements: dxElementWrapper | dxElementWrapper[];
-    cellTemplates: (() => dxElementWrapper)[];
-  } {
+  protected makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): GroupRows {
     const tableCreatorStrategy = this.isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
@@ -3060,7 +3059,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     );
   }
 
-  protected renderDateHeader(): any {
+  protected renderDateHeader(): dxElementWrapper | undefined {
     const container = this.getDateHeaderContainer();
     const $headerRow = $('<tr>').addClass(HEADER_ROW_CLASS);
     const count = this.getCellCount();
@@ -3095,7 +3094,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return $headerRow;
   }
 
-  private renderDateHeaderTemplate(container, panelCellIndex, templateIndex, cellTemplate, templateCallbacks) {
+  private renderDateHeaderTemplate(container, panelCellIndex, templateIndex, cellTemplate, templateCallbacks): dxElementWrapper {
     const validTemplateIndex = this.isGroupedByDate()
       ? Math.floor(templateIndex / this.getGroupCount())
       : templateIndex;
@@ -3159,7 +3158,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       cellCount,
       cellClass: this.getAllDayPanelCellClass.bind(this),
       rowClass: ALL_DAY_TABLE_ROW_CLASS,
-      cellTemplate: this.option('dataCellTemplate'),
+      cellTemplate: this.option('dataCellTemplate') as TemplateBase | undefined,
       // TODO: remove along with old render
       getCellData: this.oldRenderGetAllDayCellData(index),
       groupIndex: index,
@@ -3245,7 +3244,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       cellCount: this.getTotalCellCount(groupCount),
       cellClass: this.getDateTableCellClass.bind(this),
       rowClass: DATE_TABLE_ROW_CLASS,
-      cellTemplate: this.option('dataCellTemplate'),
+      cellTemplate: this.option('dataCellTemplate') as TemplateBase | undefined,
       // TODO: remove along with old render
       getCellData: (_, rowIndex, columnIndex) => {
         const isGroupedAllDayPanel = this.isGroupedAllDayPanel();
@@ -3275,7 +3274,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.groupedStrategy.insertAllDayRowsIntoDateTable();
   }
 
-  protected renderTableBody(options, delayCellTemplateRendering?: any): any {
+  protected renderTableBody(options: any, delayCellTemplateRendering?: boolean): any {
     let result: any[] = [];
     if (!delayCellTemplateRendering) {
       this.applyCellTemplates(
