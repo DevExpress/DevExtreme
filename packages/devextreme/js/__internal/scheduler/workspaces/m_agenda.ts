@@ -85,7 +85,6 @@ class SchedulerAgenda extends WorkSpace {
 
   _getDefaultOptions(): AgendaDefaultOptions {
     const defaultOptions = extend(super._getDefaultOptions(), {
-      // Number | "month"
       agendaDuration: 7,
       rowHeight: 60,
       noDataText: '',
