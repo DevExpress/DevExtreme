@@ -14,13 +14,12 @@ import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
+import windowUtils from '@ts/core/utils/m_window';
 import swatch from '@ts/core/utils/swatch_container';
 import type {
   OverlayActions,
   OverlayProperties,
 } from '@ts/ui/overlay/overlay';
-
-import windowUtils from '../../core/utils/m_window';
 
 export type OverlayPositionAlignment = | 'top center'
   | 'bottom center'

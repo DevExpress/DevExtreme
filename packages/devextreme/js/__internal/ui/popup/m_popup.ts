@@ -55,16 +55,15 @@ import type {
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
 import type { PopupDragConfig } from '@ts/ui/popup/m_popup_drag';
-import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
-
-import PopupDrag from './m_popup_drag';
-import type { OverflowManager } from './m_popup_overflow_manager';
-import { createBodyOverflowManager } from './m_popup_overflow_manager';
+import PopupDrag from '@ts/ui/popup/m_popup_drag';
+import type { OverflowManager } from '@ts/ui/popup/m_popup_overflow_manager';
+import { createBodyOverflowManager } from '@ts/ui/popup/m_popup_overflow_manager';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
-} from './popup_position_controller';
-import { PopupPositionController } from './popup_position_controller';
+} from '@ts/ui/popup/popup_position_controller';
+import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
+import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 // STYLE popup
 
