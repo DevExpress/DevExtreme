@@ -56,7 +56,12 @@ export class AIAssistantChat extends Popup {
   }
 
   getUserMessages(): Selector {
-    return this.getMessages().filter((node) => !node.querySelector('.dx-ai-chat__message'));
+    const messageClass = CLASS.message;
+
+    return this.getMessages().filter(
+      (node) => !node.querySelector(`.${messageClass}`),
+      { messageClass },
+    );
   }
 
   getAIMessages(): Selector {

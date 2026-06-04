@@ -377,7 +377,6 @@ test('customizeResponseText returning undefined should use default message', asy
 }));
 
 // 1.8.4 — only the fulfilled title is asserted; per-status titles are inconsistent
-// (https://github.com/DevExpress/devextreme-private/issues/4288).
 test('customizeResponseTitle at init should override message header', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
