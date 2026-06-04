@@ -9,8 +9,8 @@ import type { AppointmentViewModelPlain } from './view_model/types';
 export const utils = {
   dataAccessors: {
     getAppointmentSettings: (
-      element: unknown,
-    ): AppointmentViewModelPlain | undefined => $(element as Element)
+      element: dxElementWrapper,
+    ): AppointmentViewModelPlain | undefined => $(element)
       .data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain | undefined,
   },
   DOM: {
