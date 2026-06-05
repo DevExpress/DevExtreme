@@ -6,6 +6,7 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -14,12 +15,12 @@ on:
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
-  RUN_TESTS: true
+  RUN_TESTS: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation') && 'false' || 'true' }}
 
 jobs:
   check-should-run:
     name: Check if tests should run
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
@@ -37,6 +38,45 @@ jobs:
               - 'packages/devextreme-scss/**'
               - 'packages/devextreme/js/**/themes/**'
               - 'e2e/testcafe-devextreme/helpers/accessibility/**'
+
+  renovation-skip-testcafe:
+    name: ${{ matrix.ARGS.name }}${{ !matrix.ARGS.theme && ' - fluent' || '' }}
+    needs: check-should-run
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { componentFolder: "accessibility", name: "accessibility" },
+          { componentFolder: "accessibility", name: "accessibility - fluent.dark", theme: 'fluent.blue.dark', styleDependent: true },
+          { componentFolder: "accessibility", name: "accessibility - material.light", theme: 'material.blue.light', styleDependent: true },
+          { componentFolder: "accessibility", name: "accessibility - material.dark", theme: 'material.blue.dark', styleDependent: true },
+          { componentFolder: "common", name: "common" },
+
+          { name: "generic", theme: 'generic.light' },
+          { name: "material", theme: 'material.blue.light' },
+          { name: "material - compact", theme: 'material.blue.light.compact' },
+
+          { componentFolder: "cardView", name: "cardView" },
+          { componentFolder: "dataGrid", name: "dataGrid (1/4)", indices: "1/4", cache: true },
+          { componentFolder: "dataGrid", name: "dataGrid (2/4)", indices: "2/4", cache: true },
+          { componentFolder: "dataGrid", name: "dataGrid (3/4)", indices: "3/4", cache: true },
+          { componentFolder: "dataGrid", name: "dataGrid (4/4)", indices: "4/4", cache: true },
+
+          { componentFolder: "editors", name: "editors" },
+          { componentFolder: "navigation", name: "navigation" },
+
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/3)", indices: "1/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/3)", indices: "2/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/3)", indices: "3/3" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (1/2)", indices: "1/2" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (2/2)", indices: "2/2" },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin" },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles" },
+        ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Skipped TestCafe component tests for renovation PR."
 
   build:
     name: Build DevExtreme
@@ -229,8 +269,8 @@ jobs:
 
   merge-artifacts:
     runs-on: devextreme-shr2
-    needs: testcafe
-    if: ${{ always() }}
+    needs: [check-should-run, testcafe]
+    if: ${{ always() && needs.check-should-run.outputs.should-run == 'true' }}
 
     steps:
     - name: Merge screenshot artifacts
