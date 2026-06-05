@@ -22,7 +22,7 @@ import {
   REDUCED_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
-} from '../../m_classes';
+} from '../../classes';
 import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
 import { validateRRule } from '../../recurrence/validate_rule';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
