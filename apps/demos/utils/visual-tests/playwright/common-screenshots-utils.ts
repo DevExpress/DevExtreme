@@ -241,6 +241,18 @@ function getClientScripts(): (ClientScript | string)[] {
       content: injectStyle(testStyles),
     },
     {
+      content: injectStyle(`
+        html {
+          overflow: clip;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+          display: none;
+        }
+      `),
+    },
+    {
       content: `
         window.addEventListener('error', function (e) {
           console.error(e.message);
@@ -322,19 +334,24 @@ export function ensureDir(path: string): void {
   }
 }
 
+function getDemosBaseUrl(): string {
+  return (process.env.PLAYWRIGHT_DEMOS_BASE_URL || 'http://127.0.0.1:8080').replace(/\/$/, '');
+}
+
 export function getPageUrl(widgetName: string, demoName: string, approach: Framework): string | null {
   const isGitHubDemos = process.env.ISGITHUBDEMOS;
   const theme = (process.env.THEME || THEME.generic).replace('generic.', '');
+  const baseUrl = getDemosBaseUrl();
 
   if (isGitHubDemos) {
     if (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName)) {
       return null;
     }
 
-    return `http://127.0.0.1:8080/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
+    return `${baseUrl}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
   }
 
-  return `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+  return `${baseUrl}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
 }
 
 export function prepareDemoPage(widgetName: string, demoName: string, approach: Framework): void {
