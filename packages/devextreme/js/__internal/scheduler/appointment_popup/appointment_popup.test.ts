@@ -1201,6 +1201,348 @@ describe('Isolated AppointmentPopup environment', () => {
       expect(formHeight).toBe(500);
       expect(elementAttr.class).toBe('dx-scheduler-form');
       expect(elementAttr.id).toBe('custom-form');
+  describe('Resources', () => {
+    it('should create resourceEditorsGroup when resources have no custom icons', async () => {
+      const { POM } = await createAppointmentPopup({
+        resources: [
+          { fieldExpr: 'roomId' },
+          { fieldExpr: 'ownerId' },
+        ],
+      });
+
+      const resourcesGroup = POM.dxForm.itemOption('mainGroup.resourcesGroup') as GroupItem;
+
+      expect(resourcesGroup).toBeDefined();
+      expect(resourcesGroup?.items?.length).toBe(2);
+      expect(resourcesGroup?.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'resourcesGroupIcon',
+          }),
+          expect.objectContaining({
+            name: 'resourceEditorsGroup',
+            itemType: 'group',
+            items: expect.arrayContaining([
+              expect.objectContaining({ name: 'roomIdEditor' }),
+              expect.objectContaining({ name: 'ownerIdEditor' }),
+            ]),
+          }),
+        ]),
+      );
+    });
+
+    it('should create individual resource groups when resources have custom icons', async () => {
+      const { POM } = await createAppointmentPopup({
+        resources: [
+          { fieldExpr: 'roomId', icon: 'home' },
+          { fieldExpr: 'ownerId', icon: 'user' },
+        ],
+      });
+
+      const resourcesGroup = POM.dxForm.itemOption('mainGroup.resourcesGroup') as GroupItem;
+
+      expect(resourcesGroup).toBeDefined();
+      expect(resourcesGroup?.items?.length).toBe(2);
+      expect(resourcesGroup?.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'roomIdGroup',
+            itemType: 'group',
+            items: expect.arrayContaining([
+              expect.objectContaining({ name: 'roomIdIcon' }),
+              expect.objectContaining({ name: 'roomIdEditor' }),
+            ]),
+          }),
+          expect.objectContaining({
+            name: 'ownerIdGroup',
+            itemType: 'group',
+            items: expect.arrayContaining([
+              expect.objectContaining({ name: 'ownerIdIcon' }),
+              expect.objectContaining({ name: 'ownerIdEditor' }),
+            ]),
+          }),
+        ]),
+      );
+    });
+
+    it('should render FontAwesome icon with correct CSS classes (T1322161)', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: {
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 1,
+        },
+        resources: [{
+          fieldExpr: 'roomId',
+          icon: 'fas fa-home',
+          dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
+        }],
+      });
+
+      const { resourceIcon } = POM;
+
+      expect(resourceIcon.classList.contains('fas')).toBe(true);
+      expect(resourceIcon.classList.contains('fa-home')).toBe(true);
+    });
+
+    it('should create dxTagBox for resource with multiple selection', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: {
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          ownerId: [1, 2],
+        },
+        resources: [{
+          fieldExpr: 'ownerId',
+          allowMultiple: true,
+          dataSource: [
+            { text: 'Owner 1', id: 1 },
+            { text: 'Owner 2', id: 2 },
+            { text: 'Owner 3', id: 3 },
+          ],
+        }],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resourceEditor = POM.dxForm.getEditor('ownerId') as any;
+      expect(resourceEditor.NAME).toBe('dxTagBox');
+      expect(resourceEditor.option('value')).toEqual([1, 2]);
+    });
+
+    it('should create dxSelectBox for resource with single selection', async () => {
+      const { POM } = await createAppointmentPopup({
+        appointmentData: {
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          ownerId: 2,
+        },
+        resources: [{
+          fieldExpr: 'ownerId',
+          allowMultiple: false,
+          dataSource: [
+            { text: 'Owner 1', id: 1 },
+            { text: 'Owner 2', id: 2 },
+            { text: 'Owner 3', id: 3 },
+          ],
+        }],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resourceEditor = POM.dxForm.getEditor('ownerId') as any;
+      expect(resourceEditor.NAME).toBe('dxSelectBox');
+      expect(resourceEditor.option('value')).toEqual(2);
+    });
+  });
+
+  describe('Icons', () => {
+    describe('Subject icon', () => {
+      it('has default color when appointment has no resources', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData: {
+            text: 'common-app',
+            startDate: new Date(2017, 4, 9, 9, 30),
+            endDate: new Date(2017, 4, 9, 11),
+          },
+        });
+
+        expect(POM.subjectIcon.style.color).toBe('');
+      });
+
+      it('has resource color when appointment has resource', async () => {
+        const resourceColor1 = 'rgb(255, 0, 0)';
+        const resourceColor2 = 'rgb(0, 0, 255)';
+
+        const { POM } = await createAppointmentPopup({
+          appointmentData: {
+            text: 'common-app',
+            startDate: new Date(2017, 4, 9, 9, 30),
+            endDate: new Date(2017, 4, 9, 11),
+            roomId: 1,
+          },
+          resources: [{
+            fieldExpr: 'roomId',
+            dataSource: [
+              { id: 1, text: 'Room 1', color: resourceColor1 },
+              { id: 2, text: 'Room 2', color: resourceColor2 },
+            ],
+          }],
+        });
+        await new Promise(process.nextTick);
+
+        expect(POM.subjectIcon.style.color).toBe(resourceColor1);
+
+        POM.setInputValue('roomId', 2);
+        await new Promise(process.nextTick);
+
+        expect(POM.subjectIcon.style.color).toBe(resourceColor2);
+      });
+    });
+  });
+
+  describe('Changes saving/canceling', () => {
+    const commonAppointment = {
+      text: 'common-app',
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+    };
+    const recurringAppointment = {
+      text: 'recurring-app',
+      startDate: new Date(2017, 4, 1, 9, 30),
+      endDate: new Date(2017, 4, 1, 11),
+      recurrenceRule: 'FREQ=DAILY;COUNT=5',
+    };
+
+    it('should pass updated text to onSave on save button click', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: { ...commonAppointment },
+      });
+
+      POM.setInputValue('subjectEditor', 'New Subject');
+      POM.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onSave).toHaveBeenCalledTimes(1);
+      expect(callbacks.onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ ...commonAppointment, text: 'New Subject' }),
+      );
+    });
+
+    it('should not call onSave on cancel button click', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: { ...commonAppointment },
+      });
+
+      POM.setInputValue('subjectEditor', 'New Subject');
+      POM.cancelButton.click();
+
+      expect(callbacks.onSave).not.toHaveBeenCalled();
+    });
+
+    it('should pass updated text to onSave from recurrence form', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: { ...recurringAppointment },
+      });
+
+      POM.setInputValue('subjectEditor', 'New Subject');
+      POM.recurrenceSettingsButton.click();
+      POM.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onSave).toHaveBeenCalledTimes(1);
+      expect(callbacks.onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ ...recurringAppointment, text: 'New Subject' }),
+      );
+    });
+
+    it('should not call onSave on cancel from recurrence form', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: { ...recurringAppointment },
+      });
+
+      POM.setInputValue('subjectEditor', 'New Subject');
+      POM.recurrenceSettingsButton.click();
+      POM.cancelButton.click();
+
+      expect(callbacks.onSave).not.toHaveBeenCalled();
+    });
+
+    it('should pass recurrence rule changes to onSave on save button click', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: { ...commonAppointment },
+      });
+
+      POM.selectRepeatValue('daily');
+      POM.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ ...commonAppointment, recurrenceRule: 'FREQ=DAILY' }),
+      );
+    });
+
+    it('should not modify recurrence rule on save if it was not changed', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: { ...recurringAppointment },
+      });
+
+      POM.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ recurrenceRule: recurringAppointment.recurrenceRule }),
+      );
+    });
+
+    it('should clear recurrence rule on save when repeat is set to never', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: { ...recurringAppointment },
+      });
+
+      POM.selectRepeatValue('never');
+      POM.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ recurrenceRule: '' }),
+      );
+    });
+
+    it('should pass updated resource value to onSave on save button click', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: {
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 1,
+        },
+        resources: [{
+          fieldExpr: 'roomId',
+          dataSource: [
+            { text: 'Room 1', id: 1, color: '#00af2c' },
+            { text: 'Room 2', id: 2, color: '#56ca85' },
+            { text: 'Room 3', id: 3, color: '#8ecd3c' },
+          ],
+        }],
+      });
+
+      POM.setInputValue('roomId', 2);
+      POM.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ roomId: 2 }),
+      );
+    });
+
+    it('should pass all form fields to onSave including description and dates', async () => {
+      const { POM, callbacks } = await createAppointmentPopup({
+        appointmentData: {
+          text: '',
+          startDate: new Date(2017, 4, 25, 9, 0),
+          endDate: new Date(2017, 4, 25, 10, 0),
+        },
+      });
+
+      POM.setInputValue('subjectEditor', 'New subject');
+      POM.setInputValue('descriptionEditor', 'New appointment description');
+      POM.setInputValue('startDateEditor', new Date(2017, 4, 26, 9, 0));
+      POM.setInputValue('startTimeEditor', new Date(2017, 4, 26, 9, 0));
+      POM.setInputValue('endDateEditor', new Date(2017, 4, 26, 10, 0));
+      POM.setInputValue('endTimeEditor', new Date(2017, 4, 26, 10, 0));
+      POM.saveButton.click();
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onSave).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text: 'New subject',
+          startDate: new Date(2017, 4, 26, 9, 0),
+          endDate: new Date(2017, 4, 26, 10, 0),
+          description: 'New appointment description',
+        }),
+      );
     });
   });
 });

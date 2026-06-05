@@ -4,12 +4,12 @@ import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'common/core/localization/date';
 
-import '__internal/scheduler/workspaces/m_work_space_day';
-import '__internal/scheduler/workspaces/m_work_space_week';
-import '__internal/scheduler/workspaces/m_work_space_month';
-import '__internal/scheduler/workspaces/m_timeline_day';
-import '__internal/scheduler/workspaces/m_timeline_week';
-import '__internal/scheduler/workspaces/m_timeline_month';
+import '__internal/scheduler/workspaces/work_space_day';
+import '__internal/scheduler/workspaces/work_space_week';
+import '__internal/scheduler/workspaces/work_space_month';
+import '__internal/scheduler/workspaces/timeline_day';
+import '__internal/scheduler/workspaces/timeline_week';
+import '__internal/scheduler/workspaces/timeline_month';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 

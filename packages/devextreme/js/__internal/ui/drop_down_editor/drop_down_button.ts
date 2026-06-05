@@ -3,20 +3,34 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import type { DxEvent } from '@js/events';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 
+import type TextEditorBase from '../text_box/text_editor.base';
 import TextEditorButton from '../text_box/texteditor_button_collection/button';
+import type DropDownEditor from './drop_down_editor';
+import type { DropDownEditorProperties } from './drop_down_editor';
 
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
+const STATE_FOCUSED_CLASS = 'dx-state-focused';
+const BUTTON_CLASS = 'dx-button';
+const BUTTON_MODE_CONTAINED_CLASS = 'dx-button-mode-contained';
 
 const BUTTON_MESSAGE = 'dxDropDownEditor-selectLabel';
 
-export default class DropDownButton extends TextEditorButton {
-  currentTemplate: any;
+type DropDownButtonOptions = Pick<ButtonProperties, 'focusStateEnabled' | 'hoverStateEnabled' | 'activeStateEnabled' | 'disabled' | 'visible' | 'template'> & { useInkRipple: boolean };
 
-  constructor(name, editor, options) {
+export default class DropDownButton extends TextEditorButton {
+  // @ts-expect-error narrow type to enable DropDownEditor-specific options
+  declare editor: DropDownEditor | null;
+
+  declare instance: Button | null;
+
+  currentTemplate: DropDownEditorProperties['dropDownButtonTemplate'] | null;
+
+  constructor(name: string, editor: TextEditorBase, options: ButtonProperties) {
     super(name, editor, options);
 
     this.currentTemplate = null;
@@ -32,7 +46,6 @@ export default class DropDownButton extends TextEditorButton {
         return;
       }
 
-      // @ts-expect-error openOnFieldClick should be typed
       const { openOnFieldClick } = this.editor?.option() ?? {};
 
       if (!openOnFieldClick) {
@@ -41,8 +54,8 @@ export default class DropDownButton extends TextEditorButton {
       }
     });
 
-    eventsEngine.on(instance.$element(), 'mousedown', (e) => {
-      if (this.editor?.$element().is('.dx-state-focused')) {
+    eventsEngine.on(instance.$element(), 'mousedown', (e: DxEvent<MouseEvent>) => {
+      if (this.editor?.$element().is(`.${STATE_FOCUSED_CLASS}`)) {
         e.preventDefault();
       }
     });
@@ -85,55 +98,68 @@ export default class DropDownButton extends TextEditorButton {
     };
   }
 
-  _getOptions() {
+  _getOptions(): DropDownButtonOptions {
     const { editor } = this;
-
     const visible = this._isVisible();
-    const isReadOnly = editor?.option('readOnly');
+    const { readOnly } = editor?.option() ?? {};
 
     const options = {
       focusStateEnabled: false,
       hoverStateEnabled: false,
       activeStateEnabled: false,
       useInkRipple: false,
-      disabled: isReadOnly,
+      disabled: readOnly,
       visible,
     };
 
     this._addTemplate(options);
+
     return options;
   }
 
   _isVisible(): boolean {
     const { editor } = this;
-    // @ts-expect-error
-    return super._isVisible() && editor?.option('showDropDownButton');
+    const { showDropDownButton } = editor?.option() ?? {};
+
+    return super._isVisible() && !!showDropDownButton;
   }
 
   // TODO: get rid of it
-  _legacyRender($editor, $element, isVisible) {
-    $editor.toggleClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE, isVisible);
+  _legacyRender(
+    $editor?: dxElementWrapper,
+    $element?: dxElementWrapper,
+    isVisible?: boolean,
+  ): void {
+    $editor?.toggleClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE, isVisible);
 
     if ($element) {
       $element
-        .removeClass('dx-button')
-        .removeClass('dx-button-mode-contained')
+        .removeClass(BUTTON_CLASS)
+        .removeClass(BUTTON_MODE_CONTAINED_CLASS)
         .addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
     }
   }
 
-  _isSameTemplate() {
-    return this.editor?.option('dropDownButtonTemplate') === this.currentTemplate;
+  _isSameTemplate(): boolean {
+    const { editor } = this;
+    const { dropDownButtonTemplate } = editor?.option() ?? {};
+
+    return dropDownButtonTemplate === this.currentTemplate;
   }
 
-  _addTemplate(options): void {
-    if (!this._isSameTemplate()) {
-      options.template = this.editor?._getTemplateByOption('dropDownButtonTemplate');
-      this.currentTemplate = this.editor?.option('dropDownButtonTemplate');
+  _addTemplate(options: DropDownButtonOptions): void {
+    if (this._isSameTemplate()) {
+      return;
     }
+
+    const { editor } = this;
+    const { dropDownButtonTemplate } = editor?.option() ?? {};
+
+    options.template = this.editor?._getTemplateByOption('dropDownButtonTemplate');
+    this.currentTemplate = dropDownButtonTemplate;
   }
 
-  // @ts-expect-error
+  // @ts-expect-error inconsistent return type, fix in TextEditorButton
   update(): void {
     const shouldUpdate = super.update();
 
@@ -143,9 +169,8 @@ export default class DropDownButton extends TextEditorButton {
       const $editor = editor?.$element();
       const options = this._getOptions();
 
-      // @ts-expect-error
       instance?.option(options);
-      this._legacyRender($editor, (instance as Button)?.$element(), options.visible);
+      this._legacyRender($editor, instance?.$element(), options.visible);
     }
   }
 }

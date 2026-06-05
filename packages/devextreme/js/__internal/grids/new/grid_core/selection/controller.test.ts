@@ -42,6 +42,29 @@ describe('SelectionController', () => {
       selectionController.selectCards([1]);
       expect(itemsController.items).toMatchSnapshot();
     });
+
+    it('should only be called once when selectedCardKeys are updated', () => {
+      const {
+        selectionController,
+        optionsController,
+      } = setup({
+        keyExpr: 'id',
+        dataSource: [{ id: 1, value: 'test' }, { id: 2, value: 'test2' }],
+        selection: {
+          mode: 'multiple',
+        },
+      });
+
+      const selectCardsSpy = jest.spyOn(selectionController, 'selectCards');
+
+      optionsController.option('selectedCardKeys', [1]);
+
+      expect(selectCardsSpy).toHaveBeenCalledTimes(1);
+
+      optionsController.option('selectedCardKeys', []);
+
+      expect(selectCardsSpy).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe('deselectCards', () => {

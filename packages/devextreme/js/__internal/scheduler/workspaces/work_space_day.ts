@@ -6,13 +6,13 @@ import SchedulerWorkSpaceVertical from './m_work_space_vertical';
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
 class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
-  get type() { return VIEWS.DAY; }
+  get type(): string { return VIEWS.DAY; }
 
-  protected override getElementClass() {
+  protected override getElementClass(): string {
     return DAY_CLASS;
   }
 
-  renderRHeaderPanel() {
+  renderRHeaderPanel(): void {
     if (this.option('intervalCount') === 1) {
       super.renderRHeaderPanel(false);
     } else {
@@ -21,6 +21,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 registerComponent('dxSchedulerWorkSpaceDay', SchedulerWorkSpaceDay as any);
 
 export default SchedulerWorkSpaceDay;

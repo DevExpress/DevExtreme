@@ -19,7 +19,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPromise } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/select_box';
-import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
+import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 
 import type { ValueChangedEvent } from './editor/editor';
 
@@ -398,8 +398,9 @@ class SelectBox<
     }
   }
 
-  _isCustomValueAllowed() {
-    return this.option('acceptCustomValue') || super._isCustomValueAllowed();
+  _isCustomValueAllowed(): boolean {
+    const { acceptCustomValue } = this.option();
+    return Boolean(acceptCustomValue) || super._isCustomValueAllowed();
   }
 
   _displayValue(item) {
@@ -471,6 +472,7 @@ class SelectBox<
   }
 
   _getActualSearchValue() {
+    // @ts-expect-error fix argument type in m_data_controller.ts
     return this._dataController.searchValue();
   }
 
@@ -785,11 +787,12 @@ class SelectBox<
     const that = this;
     const deferred = Deferred();
 
-    super._loadItem(value, cache)
+    (super._loadItem(value, cache) as DeferredObj<unknown>)
       .done((item) => {
         deferred.resolve(item);
       })
       .fail((args) => {
+        // @ts-expect-error add shouldSkipCallback to args
         if (args?.shouldSkipCallback) {
           return;
         }
@@ -900,7 +903,6 @@ class SelectBox<
     return undefined;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _searchHandler(e?): void {
     if (this._preventFiltering) {
       delete this._preventFiltering;
@@ -911,7 +913,7 @@ class SelectBox<
       this._wasSearch(true);
     }
 
-    super._searchHandler(arguments);
+    super._searchHandler(e);
   }
 
   _dataSourceFiltered(searchValue?): void {
@@ -943,7 +945,8 @@ class SelectBox<
       return;
     }
 
-    const item = this._list && this._getPlainItems(this._list.option('items'))[0];
+    const { items } = this._list?.option() ?? {};
+    const item = this._list && this._getPlainItems(items)[0];
 
     if (!item) {
       return;

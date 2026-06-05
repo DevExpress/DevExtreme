@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import ArrayStore from '@js/common/data/array_store';
 import registerComponent from '@js/core/component_registrator';
@@ -91,6 +92,8 @@ const mixinWidget = headerFilterMixin(
 );
 
 export class FieldChooserBase extends mixinWidget {
+  private _focusedFieldIndex = -1;
+
   _getDefaultOptions() {
     return {
       ...super._getDefaultOptions(),
@@ -179,6 +182,7 @@ export class FieldChooserBase extends mixinWidget {
     const $fieldElement = $(DIV)
       .addClass(CLASSES.area.field)
       .addClass(CLASSES.area.box)
+      .attr('tabIndex', 0)
       .data('field', field)
       .append($fieldContent);
     const mainGroupField = getMainGroupField(that._dataSource, field);
@@ -350,83 +354,166 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   subscribeToEvents(element?) {
-    const that = this;
-    const func = function (e) {
+    const fieldSelector = `.${CLASSES.area.field}.${CLASSES.area.box}`;
+    const targetElement = element ?? this.$element();
+
+    const handler = (e) => {
+      const shouldHandle = e.type === clickEventName
+        || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '));
+
+      if (!shouldHandle) {
+        return;
+      }
+
       const field: any = $(e.currentTarget).data('field');
-      const mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field));
       const isHeaderFilter = $(e.target).hasClass(CLASSES.headerFilter);
-      const dataSource = that._dataSource;
-      const type = mainGroupField.groupName ? 'tree' : 'list';
-      const paginate = dataSource.paginate() && type === 'list';
 
       if (isHeaderFilter) {
-        that._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
-          type,
-          encodeHtml: that.option('encodeHtml'),
-          dataSource: {
-            useDefaultSearch: !paginate,
-            // paginate: false,
-            load(options) {
-              const { userData } = options;
-              if (userData.store) {
-                return userData.store.load(options);
-              }
-              // @ts-expect-error
-              const d = new Deferred();
-              dataSource.getFieldValues(
-                mainGroupField.index,
-                that.option('headerFilter.showRelevantValues'),
-                paginate
-                  ? options
-                  : undefined,
-              ).done((data) => {
-                const emptyValue = that.option('headerFilter.texts.emptyValue');
-
-                data.forEach((element) => {
-                  if (!element.text) {
-                    element.text = emptyValue;
-                  }
-                });
-
-                if (paginate) {
-                  d.resolve(data);
-                } else {
-                  userData.store = new ArrayStore(data);
-                  userData.store.load(options).done(d.resolve).fail(d.reject);
-                }
-              }).fail(d.reject);
-              return d;
-            },
-            postProcess(data) {
-              processItems(data, mainGroupField);
-              return data;
-            },
-          },
-
-          apply() {
-            that._applyChanges([mainGroupField], {
-              filterValues: this.filterValues,
-              filterType: this.filterType,
-            });
-          },
-        }));
+        e.preventDefault();
+        this.handleHeaderFilterIconClick(e, field);
       } else if (field.allowSorting && field.area !== 'data') {
-        const isRemoteSort = that.option('remoteSort');
-        const sortOrder = reverseSortOrder(field.sortOrder);
-
-        if (isRemoteSort) {
-          that._applyChanges([field], { sortOrder });
-        } else {
-          that._applyLocalSortChanges(field.index, sortOrder);
-        }
+        e.preventDefault();
+        this.handleFieldClick(field);
       }
     };
 
-    if (element) {
-      eventsEngine.on(element, clickEventName, `.${CLASSES.area.field}.${CLASSES.area.box}`, func);
-      return;
+    const focusInHandler = (e) => {
+      const $field = $(e.currentTarget);
+      const field: any = $field.data('field');
+
+      if (!field) {
+        return;
+      }
+
+      this._focusedFieldIndex = field.index;
+    };
+
+    const focusOutHandler = (e) => {
+      const relatedTarget = e.relatedTarget as Node | null;
+
+      if (relatedTarget) {
+        this._focusedFieldIndex = -1;
+      }
+    };
+
+    eventsEngine.on(
+      targetElement,
+      addNamespace(clickEventName, 'dxPivotGridFieldChooserBase'),
+      fieldSelector,
+      handler,
+    );
+    eventsEngine.on(
+      targetElement,
+      addNamespace('keydown', 'dxPivotGridFieldChooserBase'),
+      fieldSelector,
+      handler,
+    );
+    eventsEngine.on(
+      targetElement,
+      addNamespace('focusin', 'dxPivotGridFieldChooserBase'),
+      fieldSelector,
+      focusInHandler,
+    );
+    eventsEngine.on(
+      targetElement,
+      addNamespace('focusout', 'dxPivotGridFieldChooserBase'),
+      fieldSelector,
+      focusOutHandler,
+    );
+  }
+
+  restoreFieldFocus(): void {
+    if (this._focusedFieldIndex !== -1) {
+      this.focusFieldElement(this._focusedFieldIndex);
     }
-    eventsEngine.on(that.$element(), clickEventName, `.${CLASSES.area.field}.${CLASSES.area.box}`, func);
+  }
+
+  private handleHeaderFilterIconClick(e, field): void {
+    const that = this;
+
+    const mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field));
+    const type = mainGroupField.groupName ? 'tree' : 'list';
+    const paginate = this._dataSource.paginate() && type === 'list';
+
+    this._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
+      type,
+      encodeHtml: this.option('encodeHtml'),
+      dataSource: {
+        useDefaultSearch: !paginate,
+        // paginate: false,
+        load(options) {
+          const { userData } = options;
+          if (userData.store) {
+            return userData.store.load(options);
+          }
+          // @ts-expect-error
+          const d = new Deferred();
+          that._dataSource.getFieldValues(
+            mainGroupField.index,
+            that.option('headerFilter.showRelevantValues'),
+            paginate
+              ? options
+              : undefined,
+          ).done((data) => {
+            const emptyValue = that.option('headerFilter.texts.emptyValue');
+
+            data.forEach((element) => {
+              if (!element.text) {
+                element.text = emptyValue;
+              }
+            });
+
+            if (paginate) {
+              d.resolve(data);
+            } else {
+              userData.store = new ArrayStore(data);
+              userData.store.load(options).done(d.resolve).fail(d.reject);
+            }
+          }).fail(d.reject);
+          return d;
+        },
+        postProcess(data) {
+          processItems(data, mainGroupField);
+          return data;
+        },
+      },
+      onHidden: () => {
+        this.focusFieldElement(field.index);
+      },
+      apply() {
+        that._focusedFieldIndex = field.index;
+
+        that._applyChanges([mainGroupField], {
+          filterValues: this.filterValues,
+          filterType: this.filterType,
+        });
+      },
+    }));
+  }
+
+  private handleFieldClick(field): void {
+    const isRemoteSort = this.option('remoteSort');
+    const sortOrder = reverseSortOrder(field.sortOrder);
+
+    if (isRemoteSort) {
+      this._applyChanges([field], { sortOrder });
+    } else {
+      this._applyLocalSortChanges(field.index, sortOrder);
+    }
+  }
+
+  private focusFieldElement(fieldIndex: number): void {
+    const fieldElements = this.$element()
+      .find(`.${CLASSES.area.field}.${CLASSES.area.box}`)
+      .get();
+
+    fieldElements?.forEach((fieldElement) => {
+      const field: any = $(fieldElement).data('field');
+
+      if (field.index === fieldIndex) {
+        fieldElement.focus();
+      }
+    });
   }
 
   _initTemplates() {

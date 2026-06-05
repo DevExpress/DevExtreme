@@ -11,7 +11,7 @@ import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ItemClickEvent } from '@js/ui/list';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
-import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import { getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import List from '@ts/ui/list/list.edit.search';
 
 import type { PopupProperties } from '../popup/m_popup';
@@ -324,7 +324,8 @@ class ListStrategy extends DateBoxStrategy {
   }
 
   _updatePopupHeight(): void {
-    const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
+    const { dropDownOptions } = this.dateBox.option();
+    const dropDownOptionsHeight = getSizeValue(dropDownOptions?.height);
 
     if (dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
       this.dateBox._setPopupOption('height', 'auto');
