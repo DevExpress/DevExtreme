@@ -71,7 +71,7 @@ export class AppComponent {
   }
 
   prepareContextMenu(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
-    if (e.field && e.field.dataField === 'amount') {
+    if (e.field?.dataField === 'amount') {
       this.summaryDisplayModes.forEach((mode) => {
         e.items.push({
           text: mode.text,

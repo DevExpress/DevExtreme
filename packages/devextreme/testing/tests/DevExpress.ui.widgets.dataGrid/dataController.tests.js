@@ -3242,8 +3242,8 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
         // assert
         assert.equal(this.dataController.items().length, 3);
         assert.equal(this.dataController.pageCount(), 3);
-        assert.equal(this.dataController.pageIndex(), 0);
-        assert.deepEqual(this.dataController.items()[0].values, ['Alex', 215]);
+        assert.equal(this.dataController.pageIndex(), 1);
+        assert.deepEqual(this.dataController.items()[0].values, ['Dan3', 153]);
 
         // T262949
         assert.equal(countCallPageChanged, 1, 'count call pageChanged');

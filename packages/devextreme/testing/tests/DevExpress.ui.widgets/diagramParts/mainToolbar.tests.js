@@ -5,7 +5,7 @@ import 'ui/diagram';
 import { DiagramCommand } from 'devexpress-diagram';
 import { Consts, getMainToolbarInstance, findMainToolbarItem, getToolbarIcon, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
 import { getActiveElement } from '../../../helpers/shadowDom.js';
-import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/m_drop_down_editor';
+import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/drop_down_editor';
 
 const moduleConfig = {
     beforeEach: function() {
