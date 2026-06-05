@@ -60,6 +60,10 @@ describe('SelectionController', () => {
       optionsController.option('selectedCardKeys', [1]);
 
       expect(selectCardsSpy).toHaveBeenCalledTimes(1);
+
+      optionsController.option('selectedCardKeys', []);
+
+      expect(selectCardsSpy).toHaveBeenCalledTimes(2);
     });
   });
 
