@@ -49,7 +49,6 @@
     "jspdf-autotable": "3.8.4",
     "lint-staged": "14.0.1",
     "nx": "22.4.5",
-    "nx-cloud": "19.1.0",
     "postcss": "~8.5.10",
     "shelljs": "0.8.5",
     "shx": "0.4.0",
