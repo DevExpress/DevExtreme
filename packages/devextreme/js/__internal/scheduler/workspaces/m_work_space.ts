@@ -85,7 +85,7 @@ import {
   getCellWidth,
   getMaxAllowedPosition,
   PositionHelper,
-} from './helpers/m_position_helper';
+} from './helpers/position_helper';
 import { CellsSelectionController } from './m_cells_selection_controller';
 import CellsSelectionState from './m_cells_selection_state';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
