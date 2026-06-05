@@ -4,13 +4,13 @@ import {
 import { logger } from '@ts/core/utils/m_console';
 
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
-import SchedulerTimelineDay from '../workspaces/m_timeline_day';
-import SchedulerTimelineMonth from '../workspaces/m_timeline_month';
-import SchedulerTimelineWeek from '../workspaces/m_timeline_week';
 import type SchedulerWorkSpace from '../workspaces/m_work_space';
-import SchedulerWorkSpaceDay from '../workspaces/m_work_space_day';
-import SchedulerWorkSpaceMonth from '../workspaces/m_work_space_month';
-import SchedulerWorkSpaceWeek from '../workspaces/m_work_space_week';
+import SchedulerTimelineDay from '../workspaces/timeline_day';
+import SchedulerTimelineMonth from '../workspaces/timeline_month';
+import SchedulerTimelineWeek from '../workspaces/timeline_week';
+import SchedulerWorkSpaceDay from '../workspaces/work_space_day';
+import SchedulerWorkSpaceMonth from '../workspaces/work_space_month';
+import SchedulerWorkSpaceWeek from '../workspaces/work_space_week';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 jest.mock('@ts/core/m_devices', () => {

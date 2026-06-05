@@ -3,7 +3,7 @@ import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
-import '__internal/scheduler/workspaces/m_work_space_week';
+import '__internal/scheduler/workspaces/work_space_week';
 
 import {
     applyWorkspaceGroups,

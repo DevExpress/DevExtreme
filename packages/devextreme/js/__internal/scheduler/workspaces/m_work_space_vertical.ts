@@ -1,6 +1,6 @@
 import { formatWeekdayAndDay } from '@ts/scheduler/r1/utils/index';
 
-import SchedulerWorkSpaceIndicator from './m_work_space_indicator';
+import SchedulerWorkSpaceIndicator from './work_space_indicator';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
   protected override getFormat() {
