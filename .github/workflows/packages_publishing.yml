@@ -68,7 +68,7 @@ jobs:
           mkdir -p "$tool_dir"
           curl -fsSL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v${{ env.CYCLONEDX_CLI_VERSION }}/cyclonedx-linux-x64" -o "$tool_dir/cyclonedx"
           echo "${{ env.CYCLONEDX_CLI_LINUX_X64_SHA256 }}  $tool_dir/cyclonedx" | sha256sum -c -
-          chmod +x "$tool_dir/cyclonedx.exe" || true
+          chmod +x "$tool_dir/cyclonedx"
           echo "$tool_dir" >> "$GITHUB_PATH"
 
       - name: Validate SBOMs
