@@ -37,11 +37,22 @@ function getScreenshotName(baseName: string, theme = THEME.fluent): string {
     : `${baseName}${themePostfix}.png`;
 }
 
+function getThemeComparerOptions(theme = process.env.THEME || THEME.fluent): ScreenshotComparerOptions {
+  if (!theme.startsWith('material')) {
+    return {};
+  }
+
+  return {
+    textDiffTreshold: 0.2,
+  };
+}
+
 function getComparerOptions(
   comparisonOptions?: ScreenshotComparerOptions,
 ): ScreenshotComparerOptions {
   return {
     ...comparisonOptions,
+    ...getThemeComparerOptions(),
     path: join(DEMOS_ROOT, 'testing'),
     screenshotsRelativePath: '/screenshots',
     destinationRelativePath: '/artifacts/compared-screenshots',

@@ -138,12 +138,12 @@ function getExplicitTestsFromChangedFiles(): ExplicitTests | undefined {
       result.masks.push(patternGroupFromValues(
         groups.product,
         groups.demo,
-        groups.framework,
+        undefined,
       ));
     }
   }
 
-  return result.masks.length ? result : undefined;
+  return result;
 }
 
 export function updateConfig(): void {

@@ -218,7 +218,11 @@ snapshot_demo_indexes() {
     return
   fi
 
-  git ls-files -z 'apps/demos/Demos/**/jQuery/index.html' \
+  git ls-files -z -- \
+    'apps/demos/Demos/**/jQuery/index.html' \
+    'apps/demos/Demos/**/React/index.html' \
+    'apps/demos/Demos/**/Vue/index.html' \
+    'apps/demos/Demos/**/Angular/index.html' \
     | tar --null -T - -cf "${snapshot_tar}"
 }
 
@@ -241,7 +245,11 @@ restore_demo_indexes() {
       tar -xf "${snapshot_tar}" "${changed_file}"
       log "Restored generated demo theme change: ${changed_file}"
     fi
-  done < <(git diff --name-only -- 'apps/demos/Demos/**/jQuery/index.html')
+  done < <(git diff --name-only -- \
+    'apps/demos/Demos/**/jQuery/index.html' \
+    'apps/demos/Demos/**/React/index.html' \
+    'apps/demos/Demos/**/Vue/index.html' \
+    'apps/demos/Demos/**/Angular/index.html')
 }
 
 run_container() {
@@ -266,7 +274,7 @@ run_container() {
   export BROWSERS="${BROWSERS:-$(get_chrome_flags)}"
 
   tmp_dir="$(mktemp -d)"
-  snapshot_tar="${tmp_dir}/jquery-indexes.tar"
+  snapshot_tar="${tmp_dir}/demo-indexes.tar"
   baseline_dirty="${tmp_dir}/dirty-demo-files.txt"
 
   cleanup() {
@@ -285,7 +293,11 @@ run_container() {
   }
   trap cleanup EXIT
 
-  git status --short -- 'apps/demos/Demos/**/jQuery/index.html' \
+  git status --short -- \
+    'apps/demos/Demos/**/jQuery/index.html' \
+    'apps/demos/Demos/**/React/index.html' \
+    'apps/demos/Demos/**/Vue/index.html' \
+    'apps/demos/Demos/**/Angular/index.html' \
     | sed -E 's/^.. //' > "${baseline_dirty}" || true
   snapshot_demo_indexes "${snapshot_tar}" || true
 
