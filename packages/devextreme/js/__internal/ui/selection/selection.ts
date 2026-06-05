@@ -404,8 +404,7 @@ export default class Selection<
   }
 
   isKeyHaveData(key: TKey): boolean {
-    const { equalKeys } = this._selectionStrategy;
     const { selectedItems, keyOf } = this.options;
-    return selectedItems.some((item) => equalKeys(keyOf(item), key));
+    return selectedItems.some((item) => this._selectionStrategy.equalKeys(keyOf(item), key));
   }
 }
