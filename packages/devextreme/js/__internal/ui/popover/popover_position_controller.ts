@@ -9,13 +9,14 @@ import { isDefined, isString } from '@js/core/utils/type';
 import type {
   ControllerOverlayElements,
   OverlayPosition,
+  Position as OverlayBasePosition,
 } from '@ts/ui/overlay/overlay_position_controller';
-import { OverlayPositionController } from '@ts/ui/overlay/overlay_position_controller';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
 } from '@ts/ui/popup/popup_position_controller';
+import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
 export interface PopoverControllerElements extends ControllerOverlayElements {
@@ -31,7 +32,7 @@ export interface PopoverPosition extends OverlayPosition {
   collision?: CollisionResolutionCombination;
 }
 
-export type Position = PopoverPosition | CommonPosition;
+export type Position = PopoverPosition | CommonPosition | OverlayBasePosition;
 
 export type PopoverPositionControllerConstructor<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
@@ -81,7 +82,7 @@ export class PopoverPositionController<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
   TElements extends PopoverControllerElements = PopoverControllerElements,
   TPosition extends Position = Position,
-> extends OverlayPositionController<
+> extends PopupPositionController<
     TProperties,
     TElements,
     TPosition
@@ -220,11 +221,13 @@ export class PopoverPositionController<
 
   _positionToObject(position: TPosition): PopoverPosition {
     if (isCommonPosition(position)) {
-      const configuration = {
+      return {
         ...POPOVER_POSITION_ALIASES[position],
       };
+    }
 
-      return configuration;
+    if (isString(position)) {
+      return { my: position, at: position };
     }
 
     return position;

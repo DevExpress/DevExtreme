@@ -82,7 +82,6 @@ export interface PopoverProperties extends Omit<Properties,
 class Popover<
   TProperties extends PopoverProperties = PopoverProperties,
 > extends Popup<TProperties> {
-  // @ts-expect-error ts-error
   _positionController!: PopoverPositionController;
 
   _$arrow!: dxElementWrapper;
@@ -601,7 +600,6 @@ class Popover<
     }
   }
 
-  // @ts-expect-error Override parent method with more specific type
   _getPositionControllerConfig(): PopoverPositionControllerConstructor {
     const superConfiguration = super._getPositionControllerConfig();
 
@@ -626,13 +624,13 @@ class Popover<
     return configuration;
   }
 
-  _initPositionController() {
+  _initPositionController(): void {
     this._positionController = new PopoverPositionController(
       this._getPositionControllerConfig(),
     );
   }
 
-  _renderWrapperDimensions() {
+  _renderWrapperDimensions(): void {
     if (this.option('shading')) {
       this.$wrapper()?.css({
         width: '100%',
@@ -696,7 +694,9 @@ class Popover<
         const event = this._getEventNameByOption(previousValue);
 
         this.hide();
+
         const { target } = this.option();
+
         this._detachEvent(target, eventName, event);
         this._attachEvent(eventName);
 
