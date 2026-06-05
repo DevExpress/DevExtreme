@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 
-import { APPOINTMENT_CONTENT_CLASSES } from '../m_classes';
+import { APPOINTMENT_CONTENT_CLASSES } from '../classes';
 
 const allDayText = ` ${messageLocalization.format('dxScheduler-allDay')}: `;
 const recurringText = messageLocalization.format('dxScheduler-appointmentAriaLabel-recurring');

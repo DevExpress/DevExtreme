@@ -19,7 +19,7 @@ import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { current, isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 
-import { hide as hideLoading, show as showLoading } from '../m_loading';
+import { hide as hideLoading, show as showLoading } from '../loading';
 import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
 import type { SafeAppointment } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
@@ -338,7 +338,7 @@ export class AppointmentPopup {
 
         return this.config.onSave(appointment);
       })
-      .then(() => { hideLoading(); })
+      .then(() => { hideLoading().catch(noop); })
       .catch(noop);
   }
 
@@ -357,14 +357,14 @@ export class AppointmentPopup {
   }
 
   private showLoadPanel(): void {
-    const container = this.popupInstance?.$overlayContent();
+    const container = this.popupInstance?.$overlayContent().get(0);
 
     showLoading({
       container,
       position: {
         of: container,
       },
-    });
+    }).catch(noop);
   }
 
   private tryLockSaveChanges(): boolean {

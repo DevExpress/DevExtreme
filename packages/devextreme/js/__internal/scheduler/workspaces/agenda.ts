@@ -19,7 +19,7 @@ import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
-} from '../m_classes';
+} from '../classes';
 import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
 import type { ResourceId } from '../utils/loader/types';
