@@ -72,7 +72,7 @@ import {
 } from '../m_classes';
 import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
-import tableCreatorModule from '../m_table_creator';
+import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import { utils } from '../m_utils';
 import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ViewCellData } from '../types';
@@ -216,6 +216,8 @@ export type WorkspaceOptionsInternal = Omit<SafeSchedulerOptions, 'groups'> & {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
+  viewOffset: number;
+  viewType?: ViewType;
 };
 
 export type WorkspaceOptionChangedOptions = WorkspaceOptionsInternal & {
@@ -1332,13 +1334,17 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
   }
 
-  protected getDateGenerationOptions(): any {
+  protected getDateGenerationOptions(): ViewDateGenerationOptions {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
       interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this.firstDayOfWeek(),
+      viewOffset: this.option('viewOffset'),
+      viewType: this.type as ViewType,
+      hoursInterval: this.option('hoursInterval'),
+      intervalCount: this.option('intervalCount'),
     };
   }
 
@@ -1364,7 +1370,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getWeekendsCount(argument?: any) {
+  protected getWeekendsCount(days?: number): number {
     return 0;
   }
 
@@ -1887,7 +1893,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private isValidScrollDate(date, throwWarning = true) {
-    const viewOffset = this.option('viewOffset') as number;
+    const viewOffset = this.option('viewOffset');
     const min = new Date(this.getStartViewDate().getTime() + viewOffset);
     const max = new Date(this.getEndViewDate().getTime() + viewOffset);
 
@@ -2959,10 +2965,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
-    elements: dxElementWrapper | dxElementWrapper[];
-    cellTemplates: (() => dxElementWrapper)[];
-  } {
+  protected makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): GroupRows {
     const tableCreatorStrategy = this.isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(

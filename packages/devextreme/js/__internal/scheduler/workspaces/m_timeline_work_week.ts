@@ -4,7 +4,7 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../utils/options/constants_view';
-import SchedulerTimelineWeek from './m_timeline_week';
+import SchedulerTimelineWeek from './timeline_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
 const LAST_DAY_WEEK_INDEX = 5;

@@ -16,12 +16,12 @@ import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
 } from '../m_classes';
-import tableCreatorModule from '../m_table_creator';
+import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
-import SchedulerWorkSpace, { type WorkSpaceIndicatorDefaultOptions } from './m_work_space_indicator';
 import type { ViewDataProviderOptions } from './view_model/m_types';
+import SchedulerWorkSpace, { type WorkSpaceIndicatorDefaultOptions } from './work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -119,7 +119,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return false;
   }
 
-  protected incrementDate(date) {
+  protected incrementDate(date: Date): void {
     date.setDate(date.getDate() + 1);
   }
 
@@ -271,7 +271,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected override getWeekendsCount(argument?: any) {
+  protected getWeekendsCount(days?: number): number {
     return 0;
   }
 
@@ -415,10 +415,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  protected override makeGroupRows(groups: ResourceLoader[], groupByDate: boolean): {
-    elements: dxElementWrapper | dxElementWrapper[];
-    cellTemplates: (() => dxElementWrapper)[];
-  } {
+  protected override makeGroupRows(
+    groups: ResourceLoader[],
+    groupByDate: boolean,
+  ): GroupRows {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(

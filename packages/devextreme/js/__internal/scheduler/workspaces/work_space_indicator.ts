@@ -31,8 +31,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   private indicatorInterval?: ReturnType<typeof setInterval>;
 
   protected getToday(): Date {
-    const viewOffset = this.option('viewOffset') as number;
-    const today = getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator);
+    const viewOffset = this.option('viewOffset');
+    const today = getToday(this.option('indicatorTime'), this.timeZoneCalculator);
     return dateUtilsTs.addOffsets(today, -viewOffset);
   }
 

@@ -86,15 +86,15 @@ import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';
-import SchedulerAgenda from './workspaces/m_agenda';
-import SchedulerTimelineDay from './workspaces/m_timeline_day';
-import SchedulerTimelineMonth from './workspaces/m_timeline_month';
-import SchedulerTimelineWeek from './workspaces/m_timeline_week';
+import SchedulerAgenda from './workspaces/agenda';
 import SchedulerTimelineWorkWeek from './workspaces/m_timeline_work_week';
-import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
-import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
-import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
+import SchedulerTimelineDay from './workspaces/timeline_day';
+import SchedulerTimelineMonth from './workspaces/timeline_month';
+import SchedulerTimelineWeek from './workspaces/timeline_week';
+import SchedulerWorkSpaceDay from './workspaces/work_space_day';
+import SchedulerWorkSpaceMonth from './workspaces/work_space_month';
+import SchedulerWorkSpaceWeek from './workspaces/work_space_week';
 
 const toMs = dateUtils.dateToMilliseconds;
 

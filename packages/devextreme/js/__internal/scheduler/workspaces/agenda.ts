@@ -20,7 +20,7 @@ import {
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
 } from '../m_classes';
-import tableCreatorModule from '../m_table_creator';
+import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
 import type { ResourceId } from '../utils/loader/types';
 import { VIEWS } from '../utils/options/constants_view';
@@ -174,7 +174,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override renderView(): void {
-    this.startViewDate = agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
+    this.startViewDate = agendaUtils.calculateStartViewDate(this.option('currentDate'), this.option('startDayHour'));
     this.rows = [];
   }
 
@@ -248,10 +248,7 @@ class SchedulerAgenda extends WorkSpace {
     return this.$groupTable;
   }
 
-  protected override makeGroupRows(): {
-    elements: dxElementWrapper;
-    cellTemplates: (() => dxElementWrapper)[];
-  } {
+  protected override makeGroupRows(): GroupRows {
     const resourceManager = this.option('getResourceManager')();
     const allAppointments = (this.option('getFilteredItems') as () => ListEntity[])();
     const tree = reduceResourcesTree(
@@ -472,7 +469,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   private getTimePanelStartDate(rowIndex: number): Date {
-    const current = new Date(this.option('currentDate') as any);
+    const current = new Date(this.option('currentDate'));
     const cellDate = new Date(current.setDate(current.getDate() + rowIndex));
 
     return cellDate;
