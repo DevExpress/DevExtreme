@@ -24,7 +24,7 @@ env:
 jobs:
   build:
     name: Build packages
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
@@ -56,23 +56,6 @@ jobs:
         env:
           BUILD_INTERNAL_PACKAGE: true
         run: pnpm run all:build
-
-      - name: Clone deps scanner
-        uses: actions/checkout@v6
-        with:
-          repository: DevExpress/npmdeps-scanner
-          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
-          path: deps-scanner
-
-      - name: Build deps scanner
-        working-directory: deps-scanner
-        run: dotnet build npmDepsScanner.csproj /p:Configuration=Release
-
-      - name: Run deps scanner
-        run: |
-          ./deps-scanner/bin/Release/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
-          mkdir -p ./artifacts/deps-scanner
-          cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build SBOMs
         env:
