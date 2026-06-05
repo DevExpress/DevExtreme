@@ -1,13 +1,14 @@
 import { formatWeekdayAndDay } from '@ts/scheduler/r1/utils/index';
 
 import SchedulerWorkSpaceIndicator from './m_work_space_indicator';
+import type { ViewDataProviderOptions } from './view_model/m_types';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
-  protected override getFormat() {
+  protected override getFormat(): (date: Date) => string {
     return formatWeekdayAndDay;
   }
 
-  generateRenderOptions() {
+  generateRenderOptions(): ViewDataProviderOptions {
     const options = super.generateRenderOptions();
 
     return {
@@ -16,7 +17,7 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     };
   }
 
-  protected override isRenderHeaderPanelEmptyCell() {
+  protected override isRenderHeaderPanelEmptyCell(): boolean {
     return true;
   }
 }

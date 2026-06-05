@@ -1,7 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 
 import { VIEWS } from '../utils/options/constants_view';
-import SchedulerWorkSpaceVertical from './m_work_space_vertical';
+import SchedulerWorkSpaceVertical from './work_space_vertical';
 
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
