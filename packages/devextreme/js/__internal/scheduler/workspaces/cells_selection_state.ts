@@ -1,4 +1,4 @@
-import type { ViewCellData } from '@ts/scheduler/types';
+import type { CellPositionData, ViewCellData } from '@ts/scheduler/types';
 
 import type { CellPosition } from './view_model/m_types';
 import type ViewDataProvider from './view_model/m_view_data_provider';
@@ -18,7 +18,10 @@ export default class CellsSelectionState {
 
   constructor(public viewDataProvider: ViewDataProvider) {}
 
-  getFocusedCell(): { coordinates: CellPosition | undefined; cellData: ViewCellData } | undefined {
+  getFocusedCell(): {
+    coordinates: CellPositionData | undefined,
+    cellData: ViewCellData,
+  } | undefined {
     const { focusedCell } = this;
 
     if (!focusedCell) {
