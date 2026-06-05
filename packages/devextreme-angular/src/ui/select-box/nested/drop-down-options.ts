@@ -164,10 +164,10 @@ export class DxoSelectBoxDropDownOptionsComponent extends NestedOption implement
     }
 
     @Input()
-    get hideOnParentScroll(): boolean {
+    get hideOnParentScroll(): boolean | (() => boolean) {
         return this._getOption('hideOnParentScroll');
     }
-    set hideOnParentScroll(value: boolean) {
+    set hideOnParentScroll(value: boolean | (() => boolean)) {
         this._setOption('hideOnParentScroll', value);
     }
 

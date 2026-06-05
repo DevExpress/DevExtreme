@@ -323,7 +323,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   container?: any | string | undefined;
-  contentTemplate?: ((contentElement: any) => string | any) | template;
+  contentTemplate?: ((contentElement: any) => string | any) | null | template;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string | undefined;
@@ -334,7 +334,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   fullScreen?: boolean;
   height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
-  hideOnParentScroll?: boolean;
+  hideOnParentScroll?: boolean | (() => boolean);
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: number | string;

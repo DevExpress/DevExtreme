@@ -487,7 +487,7 @@ const DxDropDownOptionsConfig = {
     fullScreen: Boolean,
     height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
-    hideOnParentScroll: Boolean,
+    hideOnParentScroll: [Boolean, Function] as PropType<boolean | ((() => boolean))>,
     hint: String,
     hoverStateEnabled: Boolean,
     maxHeight: [Number, String],

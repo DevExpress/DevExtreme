@@ -212,10 +212,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hideOnParentScroll(): boolean {
+    get hideOnParentScroll(): boolean | (() => boolean) {
         return this._getOption('hideOnParentScroll');
     }
-    set hideOnParentScroll(value: boolean) {
+    set hideOnParentScroll(value: boolean | (() => boolean)) {
         this._setOption('hideOnParentScroll', value);
     }
 
@@ -566,7 +566,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideOnParentScrollChange: EventEmitter<boolean>;
+    @Output() hideOnParentScrollChange: EventEmitter<boolean | (() => boolean)>;
 
     /**
     

@@ -24293,7 +24293,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
      */
-    hideOnParentScroll?: boolean;
+    hideOnParentScroll?: boolean | (() => boolean);
     /**
      * [descr:dxOverlayOptions.height]
      */

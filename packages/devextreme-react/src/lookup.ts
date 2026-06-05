@@ -200,7 +200,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   container?: any | string | undefined;
-  contentTemplate?: ((contentElement: any) => string | any) | template;
+  contentTemplate?: ((contentElement: any) => string | any) | null | template;
   deferRendering?: boolean;
   disabled?: boolean;
   enableBodyScroll?: boolean;
