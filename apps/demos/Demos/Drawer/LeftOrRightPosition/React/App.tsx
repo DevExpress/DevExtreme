@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import Drawer from 'devextreme-react/drawer';
 import type { DrawerTypes } from 'devextreme-react/drawer';
 import RadioGroup from 'devextreme-react/radio-group';
+import 'devextreme/ui/button';
 import type { RadioGroupTypes } from 'devextreme-react/radio-group';
 import Toolbar from 'devextreme-react/toolbar';
 import HTMLReactParser from 'html-react-parser';

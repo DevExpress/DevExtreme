@@ -6,10 +6,7 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import {
-  DxCheckBoxModule,
-  DxSelectBoxModule,
   DxNumberBoxModule,
-  DxAutocompleteModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
@@ -19,6 +16,9 @@ import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { DxDateBoxTypes } from 'devextreme-angular/ui/date-box';
 import { DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
 import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
+import 'devextreme/ui/date_range_box';
+import 'devextreme/ui/select_box';
+import 'devextreme/ui/autocomplete';
 import { Customer, Service } from './app.service';
 
 type EditorOptions = DxTextBoxTypes.Properties;
@@ -48,11 +48,8 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   imports: [
-    DxCheckBoxModule,
-    DxSelectBoxModule,
     DxNumberBoxModule,
     DxButtonModule,
-    DxAutocompleteModule,
     DxFormModule,
   ],
 })

@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import 'devextreme-react/text-area';
 import Form, {
   GroupItem, SimpleItem, Label, ButtonItem,
 } from 'devextreme-react/form';

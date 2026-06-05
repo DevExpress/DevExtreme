@@ -11,7 +11,8 @@ import type { ITextBoxOptions } from 'devextreme-react/text-box';
 import type { ISelectBoxOptions } from 'devextreme-react/select-box';
 import type { IDateBoxOptions } from 'devextreme-react/date-box';
 import type { ITextAreaOptions } from 'devextreme-react/text-area';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
+import 'devextreme/ui/select_box';
 
 import { employee, positions } from './data.ts';
 

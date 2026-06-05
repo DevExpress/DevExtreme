@@ -23,7 +23,8 @@ import type { IDateRangeBoxOptions } from 'devextreme-react/date-range-box';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import 'devextreme-react/autocomplete';
-import 'devextreme-react/date-range-box';
+import 'devextreme/ui/date_range_box';
+import 'devextreme/ui/select_box';
 import { customer, cities, countries } from './data.ts';
 
 const checkBoxOptions = {

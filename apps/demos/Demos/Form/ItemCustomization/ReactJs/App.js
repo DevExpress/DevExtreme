@@ -2,7 +2,8 @@ import React, { useCallback } from 'react';
 import {
   Form, Item, GroupItem, Label,
 } from 'devextreme-react/form';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
+import 'devextreme/ui/select_box';
 import { employee, positions } from './data.js';
 import LabelTemplate from './LabelTemplate.js';
 import LabelNotesTemplate from './LabelNotesTemplate.js';

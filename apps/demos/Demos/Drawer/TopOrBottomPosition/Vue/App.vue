@@ -59,6 +59,7 @@
 import { ref } from 'vue';
 import DxDrawer, { type DxDrawerTypes } from 'devextreme-vue/drawer';
 import DxRadioGroup from 'devextreme-vue/radio-group';
+import 'devextreme/ui/button';
 import DxToolbar from 'devextreme-vue/toolbar';
 import NavigationList from './NavigationList.vue';
 import { text } from './data.ts';

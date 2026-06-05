@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import Drawer, { type DrawerTypes } from 'devextreme-react/drawer';
 import RadioGroup, { type RadioGroupTypes } from 'devextreme-react/radio-group';
+import 'devextreme/ui/button';
 import Toolbar from 'devextreme-react/toolbar';
 import HTMLReactParser from 'html-react-parser';
 import { text } from './data.ts';
