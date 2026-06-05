@@ -419,7 +419,7 @@ class DropDownList<
     this.option('displayValue', displayValue);
   }
 
-  _displayValue(item): string {
+  _displayValue(item: Item): string {
     return this._displayGetter(item);
   }
 

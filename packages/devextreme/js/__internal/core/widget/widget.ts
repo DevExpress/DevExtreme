@@ -569,7 +569,7 @@ class Widget<
     this.$element().toggleClass('dx-state-independent', ignoreParentReadOnly);
   }
 
-  _setWidgetOption(widgetName: string, args: [string, unknown?] | Record<string, unknown>): void {
+  _setWidgetOption(widgetName: string, args: [string, unknown?] | [Record<string, unknown>]): void {
     if (!this[widgetName]) {
       return;
     }
