@@ -4,7 +4,7 @@ import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dateLocalization from 'common/core/localization/date';
 
-import '__internal/scheduler/workspaces/m_work_space_day';
+import '__internal/scheduler/workspaces/work_space_day';
 
 import {
     applyWorkspaceGroups,

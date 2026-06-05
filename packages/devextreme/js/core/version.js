@@ -1,2 +1,2 @@
-export const version = '26.1.2';
-export const fullVersion = '26.1.2';
+export const version = '26.1.3';
+export const fullVersion = '26.1.3';
