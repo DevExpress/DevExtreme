@@ -20,13 +20,13 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
-import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import {
   AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_ITEM_CLASS,
-} from '../m_classes';
+} from '../classes';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import timeZoneUtils from '../m_utils_time_zone';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
