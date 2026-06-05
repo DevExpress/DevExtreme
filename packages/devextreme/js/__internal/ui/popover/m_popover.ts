@@ -450,7 +450,7 @@ class Popover<
     const { target } = this.option();
 
     if (!target) {
-      return false;
+      return true;
     }
 
     return !$(e.target).closest(target).length;
