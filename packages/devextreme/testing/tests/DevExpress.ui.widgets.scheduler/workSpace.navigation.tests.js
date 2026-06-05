@@ -3,8 +3,8 @@ import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import $ from 'jquery';
 
-import '__internal/scheduler/workspaces/m_work_space_day';
-import '__internal/scheduler/workspaces/m_work_space_month';
+import '__internal/scheduler/workspaces/work_space_day';
+import '__internal/scheduler/workspaces/work_space_month';
 import '__internal/scheduler/workspaces/m_work_space_work_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
