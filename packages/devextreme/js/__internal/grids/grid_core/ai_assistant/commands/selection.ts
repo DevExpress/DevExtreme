@@ -119,6 +119,7 @@ export const selectByIndexesCommand = defineGridCommand({
     + 'Always set scope to choose how indexes are interpreted: '
     + '"allPages" — indexes are positions within the currently filtered and sorted dataset, NOT limited to the current page; index 1 is the first row of the dataset, regardless of pageIndex/pageSize. Use this when the user does NOT explicitly refer to the visible page (e.g. "select rows 1 to 100"). '
     + '"page" — indexes are positions within the currently rendered page; index 1 is the first row on the visible page and group/header rows are not addressable. Use this ONLY when the user explicitly mentions the current/visible page (e.g. "select the first 3 rows on the current page", "deselect row 2 on this page"). '
+    + 'This ALSO covers "select/deselect ALL rows on the current/visible page" when selection.selectAllMode is "allPages" (in that case selectAll/deselectAll cannot target a single page, so use this command instead): list every 1-based index on the current page. The page holds up to pageSize rows and the last page may hold fewer, so use the paging context (pageIndex, pageSize, totalCount) to determine the exact count. '
     + 'Use this command for a SINGLE contiguous range per call. When the user asks for several non-contiguous ranges (e.g. "select rows 1 to 50 and 70 to 100"), invoke this command separately for EACH range — once with indexes [1, 2, ..., 50] and once with indexes [70, 71, ..., 100]. '
     + 'Set mode to "select" to add the listed rows to the current selection (multiple calls accumulate, so previously selected ranges are kept); set mode to "deselect" to remove the listed rows from the current selection (e.g. "unselect row 1"). '
     + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection. '
@@ -158,7 +159,9 @@ export const selectByIndexesCommand = defineGridCommand({
 
 export const selectAllCommand = defineGridCommand({
   name: 'selectAll',
-  description: 'Select rows. Scope depends on selection.selectAllMode: "allPages" (default) selects across every page; "page" selects only the currently rendered page. If a filter is applied, only rows matching the filter are selected.',
+  description: 'Select rows. Scope depends on selection.selectAllMode: "allPages" (default) selects across every page; "page" selects only the currently rendered page. If a filter is applied, only rows matching the filter are selected. '
+    + 'Use this command ONLY when the scope the user asks for matches selection.selectAllMode: for an unqualified "select all rows" request when selectAllMode is "allPages", or for "select all rows on the current/visible page" when selectAllMode is "page". '
+    + 'If the user asks to select all rows on the CURRENT/VISIBLE page but selectAllMode is "allPages", do NOT use this command (it would select every page) — instead use selectByIndexes with scope "page", mode "select", and indexes listing every row on the current page.',
   schema: z.object({}).strict(),
   execute: (component, { success, failure }) => async (): Promise<CommandResult> => {
     const defaultMessage = 'Select all rows.';
@@ -179,7 +182,10 @@ export const selectAllCommand = defineGridCommand({
 
 export const deselectAllCommand = defineGridCommand({
   name: 'deselectAll',
-  description: 'Deselect rows. Scope depends on selection.selectAllMode: "allPages" (default) deselects across every page; "page" deselects only the currently rendered page. If a filter is applied, only rows matching the filter are deselected.',
+  description: 'Deselect rows. Scope depends on selection.selectAllMode: "allPages" (default) deselects across every page; "page" deselects only the currently rendered page. If a filter is applied, only rows matching the filter are deselected. '
+    + 'Use this command ONLY when the scope the user asks for matches selection.selectAllMode: for an unqualified "deselect all rows" request when selectAllMode is "allPages", or for "deselect all rows on the current/visible page" when selectAllMode is "page". '
+    + 'If the user asks to deselect all rows on the CURRENT/VISIBLE page but selectAllMode is "allPages", do NOT use this command (it would deselect every page) — instead use selectByIndexes with scope "page", mode "deselect", and indexes listing every row on the current page. '
+    + 'To clear selection across all pages regardless of selectAllMode, use clearSelection.',
   schema: z.object({}).strict(),
   execute: (component, { success, failure }) => async (): Promise<CommandResult> => {
     const defaultMessage = 'Deselect all rows.';
