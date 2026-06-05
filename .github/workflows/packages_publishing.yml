@@ -120,9 +120,9 @@ jobs:
           PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
-          pnpm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version --workspaces=false | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version --workspaces=false | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
 
         # --ignore-scripts is required for publishing devextreme-angular which fails with error:
         # 'Trying to publish a package that has been compiled by Ivy in full compilation mode.'
