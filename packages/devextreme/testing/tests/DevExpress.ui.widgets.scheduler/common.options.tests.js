@@ -7,7 +7,7 @@ import 'fluent_blue_light.css!';
 
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
-import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/m_work_space_day';
+import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/work_space_day';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';

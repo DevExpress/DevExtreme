@@ -9,8 +9,8 @@ import Button from '@js/ui/button';
 
 import type TextEditorBase from '../text_box/text_editor.base';
 import TextEditorButton from '../text_box/texteditor_button_collection/button';
-import type DropDownEditor from './m_drop_down_editor';
-import type { DropDownEditorProperties } from './m_drop_down_editor';
+import type DropDownEditor from './drop_down_editor';
+import type { DropDownEditorProperties } from './drop_down_editor';
 
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
@@ -125,7 +125,6 @@ export default class DropDownButton extends TextEditorButton {
   }
 
   // TODO: get rid of it
-  // eslint-disable-next-line class-methods-use-this
   _legacyRender(
     $editor?: dxElementWrapper,
     $element?: dxElementWrapper,

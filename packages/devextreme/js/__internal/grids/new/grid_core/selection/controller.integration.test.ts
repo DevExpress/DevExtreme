@@ -13,6 +13,7 @@ const SELECTORS = {
   card: '.dx-cardview-card',
   cardCheckbox: '.dx-checkbox-container',
   selectAllButton: '[aria-label="Select all"]',
+  clearSelectionButton: '[aria-label="Clear selection"]',
 };
 
 const setup = (options: GridCoreOptions = {}): CardView => {
@@ -30,6 +31,8 @@ const getCardElements = (): NodeListOf<Element> => document.querySelectorAll(SEL
 const getCardCheckboxes = (): NodeListOf<Element> => document.querySelectorAll(SELECTORS.cardCheckbox);
 
 const getSelectAllButton = (): Element | null => document.querySelector(SELECTORS.selectAllButton);
+
+const getClearSelectionButton = (): Element | null => document.querySelector(SELECTORS.clearSelectionButton);
 
 const checkError = (): void => expect(throwError).toHaveBeenCalledWith('E1042', 'CardView');
 
@@ -172,6 +175,30 @@ describe('when keyExpr is missing', () => {
 
       checkError();
     });
+  });
+});
+
+describe('clear selection toolbar button', () => {
+  it('should clear selection after runtime selectedCardKeys option update', () => {
+    const cardView = setup({
+      keyExpr: 'id',
+      dataSource: [{ id: 1 }, { id: 2 }],
+      selection: {
+        mode: 'multiple',
+      },
+      selectedCardKeys: [],
+    });
+
+    expect(cardView.getSelectedCardKeys()).toEqual([]);
+
+    cardView.option('selectedCardKeys', [2]);
+
+    expect(cardView.getSelectedCardKeys()).toEqual([2]);
+
+    const clearSelectionButton = getClearSelectionButton();
+    clearSelectionButton?.dispatchEvent(new MouseEvent('click'));
+
+    expect(cardView.getSelectedCardKeys()).toEqual([]);
   });
 });
 

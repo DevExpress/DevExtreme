@@ -1,11 +1,11 @@
 import $ from 'jquery';
 
 // workspace imports
-import '__internal/scheduler/workspaces/m_work_space_day';
-import '__internal/scheduler/workspaces/m_work_space_week';
-import '__internal/scheduler/workspaces/m_work_space_month';
-import '__internal/scheduler/workspaces/m_timeline_day';
-import '__internal/scheduler/workspaces/m_timeline_month';
+import '__internal/scheduler/workspaces/work_space_day';
+import '__internal/scheduler/workspaces/work_space_week';
+import '__internal/scheduler/workspaces/work_space_month';
+import '__internal/scheduler/workspaces/timeline_day';
+import '__internal/scheduler/workspaces/timeline_month';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 

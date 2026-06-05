@@ -1,7 +1,7 @@
 import sh from 'shelljs';
 import path from 'path';
 
-import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS, DEPS_SCANNER_ARTIFACTS, MENU_META } from './common/paths';
+import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS, MENU_META } from './common/paths';
 import { ensureEmptyDir } from './common/monorepo-tools';
 
 import { version, license, author } from '../../package.json';
@@ -11,7 +11,7 @@ const ARTIFACTS_PACKAGE_DIR = path.join(ARTIFACTS_DIR, 'devextreme-artifacts');
 
 ensureEmptyDir(ARTIFACTS_PACKAGE_DIR);
 
-sh.cp('-r', [JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS, DEPS_SCANNER_ARTIFACTS], ARTIFACTS_PACKAGE_DIR);
+sh.cp('-r', [JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS], ARTIFACTS_PACKAGE_DIR);
 sh.cp('-r', INTERNAL_TOOLS_ARTIFACTS, path.join(ARTIFACTS_PACKAGE_DIR, 'internal-tools'));
 // sh.cp('-r', SBOM_ARTIFACTS, path.join(ARTIFACTS_PACKAGE_DIR, 'sbom'));
 
