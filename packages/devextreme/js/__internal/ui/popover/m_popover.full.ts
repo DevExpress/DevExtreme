@@ -19,6 +19,7 @@ export default class PopoverFull extends Popover {
     return TOOLBAR_WIDGET_NAME;
   }
 }
+
 // eslint-disable-next-line func-names
 PopoverFull.defaultOptions = function (rule): void {
   Popover.defaultOptions(rule);
