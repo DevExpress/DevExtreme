@@ -53,6 +53,7 @@ jobs:
         run: pnpm run all:build
 
       - name: Build SBOMs
+        continue-on-error: true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
