@@ -21,7 +21,7 @@ import type {
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
-import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './m_types';
+import type { CellPosition, ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './m_types';
 import type { ViewDataGenerator } from './m_view_data_generator';
 import { getViewDataGeneratorByViewType } from './utils/view_provider_utils';
 
@@ -198,7 +198,7 @@ export default class ViewDataProvider {
     return this.groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
 
-  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): any {
+  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): CellPosition | undefined {
     return this.groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
 
