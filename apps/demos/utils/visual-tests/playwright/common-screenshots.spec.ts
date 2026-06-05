@@ -18,6 +18,7 @@ import {
   shouldSkipDemo,
   updateConfig,
   waitForAngularLoading,
+  waitForStableRendering,
 } from './common-screenshots-utils';
 import { compareDemoScreenshot } from './screenshot-comparer';
 
@@ -105,6 +106,8 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         if (testCafeCodeSource) {
           await execTestCafeCode(page, testCafeCodeSource);
         }
+
+        await waitForStableRendering(page);
 
         const compareResult = await compareDemoScreenshot(
           page,

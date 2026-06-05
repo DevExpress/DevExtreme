@@ -328,6 +328,25 @@ export async function resetPageState(page: Page): Promise<void> {
   await page.locator('html').hover({ position: { x: 1, y: 1 } });
 }
 
+export async function waitForStableRendering(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    const fonts = (document as Document & { fonts?: { ready: Promise<unknown> } }).fonts;
+
+    if (fonts?.ready) {
+      await Promise.race([
+        fonts.ready,
+        new Promise((resolve) => { setTimeout(resolve, 5000); }),
+      ]);
+    }
+
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => resolve());
+      });
+    });
+  });
+}
+
 export function ensureDir(path: string): void {
   if (!existsSync(path)) {
     mkdirSync(path, { recursive: true });

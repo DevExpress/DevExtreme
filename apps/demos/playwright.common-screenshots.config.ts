@@ -15,9 +15,35 @@ const DEFAULT_CHROMIUM_ARGS = [
   '--use-gl=swiftshader',
   '--disable-features=PaintHolding',
   '--js-flags=--random-seed=2147483647',
+];
+
+const FONT_RENDERING_CHROMIUM_ARGS = [
   '--font-render-hinting=none',
   '--disable-font-subpixel-positioning',
 ];
+
+function isMaterialTheme(theme = process.env.THEME || ''): boolean {
+  return theme.includes('material');
+}
+
+function getDefaultChromiumArgs(theme = process.env.THEME || ''): string[] {
+  if (isMaterialTheme(theme)) {
+    return DEFAULT_CHROMIUM_ARGS;
+  }
+
+  return [
+    ...DEFAULT_CHROMIUM_ARGS,
+    ...FONT_RENDERING_CHROMIUM_ARGS,
+  ];
+}
+
+function normalizeBrowserArgs(browserArgs: string[], theme = process.env.THEME || ''): string[] {
+  if (!isMaterialTheme(theme)) {
+    return browserArgs;
+  }
+
+  return browserArgs.filter((arg) => !FONT_RENDERING_CHROMIUM_ARGS.includes(arg));
+}
 
 function parseBrowserArgs(browserEnv = ''): string[] {
   const browserArgs = browserEnv
@@ -25,7 +51,9 @@ function parseBrowserArgs(browserEnv = ''): string[] {
     .map((value) => value.replace(/^"|"$/g, ''))
     .filter((value) => value.startsWith('--'));
 
-  return browserArgs.length ? browserArgs : DEFAULT_CHROMIUM_ARGS;
+  return normalizeBrowserArgs(
+    browserArgs.length ? browserArgs : getDefaultChromiumArgs(),
+  );
 }
 
 function parseHeadless(browserEnv = ''): boolean {
