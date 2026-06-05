@@ -270,6 +270,8 @@ export interface WorkspaceOptionsInternal {
   type?: ViewType;
   groupOrientation: GroupOrientation;
   width?: number | string | undefined;
+
+  rtlEnabled: boolean;
 }
 
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
@@ -2583,14 +2585,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private initPositionHelper() {
     this.positionHelper = new PositionHelper({
-      key: this.option('key'),
       viewDataProvider: this.viewDataProvider,
-      viewStartDayHour: this.option('startDayHour'),
-      viewEndDayHour: this.option('endDayHour'),
-      cellDuration: this.getCellDuration(),
       isGroupedByDate: this.isGroupedByDate(),
       rtlEnabled: this.option('rtlEnabled'),
-      startViewDate: this.getStartViewDate(),
       isVerticalGrouping: this.isVerticalGroupedWorkSpace(),
       groupCount: this.getGroupCount(),
       isVirtualScrolling: this.isVirtualScrolling(),
