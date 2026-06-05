@@ -127,7 +127,7 @@ export class GroupedDataMapProvider {
 
         if (this.isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
           if (this.isStartDateInCell(startDate, isAllDay, cellData, originCellData)) {
-            return cell.position;
+            return { ...cell.position, allDay: isAllDay };
           }
         }
       }

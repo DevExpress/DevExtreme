@@ -1,5 +1,6 @@
 import type { TimeZoneCalculator } from '../../r1/timezone_calculator/calculator';
 import type {
+  CellPositionData,
   CountGenerationConfig,
   GetDateForHeaderText,
   GroupOrientation,
@@ -72,8 +73,6 @@ export interface ViewCellKey {
 
 export type ViewCellGeneratedData = ViewCellDataSimple & ViewCellIndex & ViewCellKey;
 
-export interface CellPosition {
-  rowIndex: number;
-  columnIndex: number;
+export interface CellPosition extends CellPositionData {
   allDay: boolean;
 }
