@@ -273,55 +273,55 @@ describe('selectByIndexesCommand', () => {
   describe('schema', () => {
     it('accepts an array of positive integers with mode deselect', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1, 2, 3], mode: 'deselect', scope: 'dataset',
+        indexes: [1, 2, 3], mode: 'deselect', scope: 'allPages',
       }).success).toBe(true);
     });
 
     it('accepts mode select', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1], mode: 'select', scope: 'dataset',
+        indexes: [1], mode: 'select', scope: 'allPages',
       }).success).toBe(true);
     });
 
     it('rejects when indexes is missing', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        mode: 'select', scope: 'dataset',
+        mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects when mode is missing', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1], scope: 'dataset',
+        indexes: [1], scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects an invalid mode value', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1], mode: 'toggle', scope: 'dataset',
+        indexes: [1], mode: 'toggle', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects when indexes is an empty array', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [], mode: 'select', scope: 'dataset',
+        indexes: [], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects zero (indexes are 1-based)', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [0], mode: 'select', scope: 'dataset',
+        indexes: [0], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects negative indexes', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [-1], mode: 'select', scope: 'dataset',
+        indexes: [-1], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects non-integer indexes', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1.5], mode: 'select', scope: 'dataset',
+        indexes: [1.5], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
@@ -329,7 +329,7 @@ describe('selectByIndexesCommand', () => {
       expect(selectByIndexesCommand.schema.safeParse({
         indexes: [1],
         mode: 'select',
-        scope: 'dataset',
+        scope: 'allPages',
         extra: 1,
       }).success).toBe(false);
     });
@@ -340,9 +340,9 @@ describe('selectByIndexesCommand', () => {
       }).success).toBe(false);
     });
 
-    it('accepts scope "dataset"', () => {
+    it('accepts scope "allPages"', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1], mode: 'select', scope: 'dataset',
+        indexes: [1], mode: 'select', scope: 'allPages',
       }).success).toBe(true);
     });
 
@@ -366,7 +366,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select', scope: 'dataset',
+        indexes: [1], mode: 'select', scope: 'allPages',
       });
 
       expect(result.status).toBe('failure');
@@ -380,14 +380,14 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select', scope: 'dataset',
+        indexes: [1], mode: 'select', scope: 'allPages',
       });
 
       expect(result.status).toBe('failure');
       expect(selectSpy).not.toHaveBeenCalled();
     });
 
-    it('returns failure (without loading) when no key is configured in dataset scope', async () => {
+    it('returns failure (without loading) when no key is configured in allPages scope', async () => {
       const instance = await createGrid();
       const realOption = instance.option.bind(instance);
       jest.spyOn(instance, 'option').mockImplementation(((...callArgs: unknown[]): unknown => {
@@ -403,7 +403,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 2], mode: 'select', scope: 'dataset',
+        indexes: [1, 2], mode: 'select', scope: 'allPages',
       });
 
       expect(result.status).toBe('failure');
@@ -421,7 +421,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [2, 3], mode: 'select', scope: 'dataset',
+        indexes: [2, 3], mode: 'select', scope: 'allPages',
       });
 
       expect(loadSpy).toHaveBeenCalledTimes(1);
@@ -449,7 +449,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 2, 5], mode: 'select', scope: 'dataset',
+        indexes: [1, 2, 5], mode: 'select', scope: 'allPages',
       });
 
       expect(loadSpy).toHaveBeenCalledTimes(2);
@@ -468,7 +468,7 @@ describe('selectByIndexesCommand', () => {
 
       // Three rows in createGrid; range 1..10 cannot be fully resolved.
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], mode: 'select', scope: 'dataset',
+        indexes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], mode: 'select', scope: 'allPages',
       });
 
       expect(result.status).toBe('failure');
@@ -486,7 +486,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'deselect', scope: 'dataset',
+        indexes: [1], mode: 'deselect', scope: 'allPages',
       });
 
       expect(deselectSpy).toHaveBeenCalledWith([1]);
@@ -501,7 +501,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select', scope: 'dataset',
+        indexes: [1], mode: 'select', scope: 'allPages',
       });
 
       expect(result.status).toBe('failure');
@@ -517,7 +517,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select', scope: 'dataset',
+        indexes: [1], mode: 'select', scope: 'allPages',
       });
 
       expect(result.status).toBe('failure');
@@ -533,7 +533,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'deselect', scope: 'dataset',
+        indexes: [1], mode: 'deselect', scope: 'allPages',
       });
 
       expect(result.status).toBe('failure');
@@ -614,7 +614,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 3], mode: 'select', scope: 'dataset',
+        indexes: [1, 3], mode: 'select', scope: 'allPages',
       });
 
       expect(callbacks.success).toHaveBeenCalledWith('Select row(s) number 1, 3.');
@@ -629,7 +629,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'deselect', scope: 'dataset',
+        indexes: [1], mode: 'deselect', scope: 'allPages',
       });
 
       expect(callbacks.success).toHaveBeenCalledWith('Deselect row(s) number 1.');
@@ -640,7 +640,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select', scope: 'dataset',
+        indexes: [1], mode: 'select', scope: 'allPages',
       });
 
       expect(callbacks.failure).toHaveBeenCalledWith('Select row(s) number 1.');

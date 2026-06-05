@@ -6612,7 +6612,7 @@ declare module DevExpress.common.grids {
     selectByIndexes: {
       indexes: number[];
       mode: 'select' | 'deselect';
-      scope: 'dataset' | 'page';
+      scope: 'page' | 'allPages';
     };
     selectAll: {};
     deselectAll: {};
