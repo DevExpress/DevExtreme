@@ -83,6 +83,12 @@ const resolveKeysFromDataset = async (
     return null;
   }
 
+  const keyExpr = component.option('keyExpr') ?? store.key();
+
+  if (!keyExpr) {
+    return null;
+  }
+
   const ranges = splitIntoContiguousRanges(indexes);
   const baseLoadOptions = { ...dataSource.loadOptions() };
 

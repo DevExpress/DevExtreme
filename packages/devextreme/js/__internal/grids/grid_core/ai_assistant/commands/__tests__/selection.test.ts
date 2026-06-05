@@ -387,6 +387,30 @@ describe('selectByIndexesCommand', () => {
       expect(selectSpy).not.toHaveBeenCalled();
     });
 
+    it('returns failure (without loading) when no key is configured in dataset scope', async () => {
+      const instance = await createGrid();
+      const realOption = instance.option.bind(instance);
+      jest.spyOn(instance, 'option').mockImplementation(((...callArgs: unknown[]): unknown => {
+        if (callArgs.length === 1 && callArgs[0] === 'keyExpr') {
+          return undefined;
+        }
+        return (realOption as (...a: unknown[]) => unknown)(...callArgs);
+      }) as never);
+      const store = instance.getDataSource().store();
+      jest.spyOn(store, 'key').mockReturnValue(undefined as never);
+      const loadSpy = jest.spyOn(store, 'load');
+      const selectSpy = jest.spyOn(instance, 'selectRows');
+      const callbacks = createCallbacks();
+
+      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1, 2], mode: 'select', scope: 'dataset',
+      });
+
+      expect(result.status).toBe('failure');
+      expect(loadSpy).not.toHaveBeenCalled();
+      expect(selectSpy).not.toHaveBeenCalled();
+    });
+
     it('loads a contiguous range via store.load with skip/take and selects resolved keys with preserve=true', async () => {
       const instance = await createGrid();
       const store = instance.getDataSource().store();
