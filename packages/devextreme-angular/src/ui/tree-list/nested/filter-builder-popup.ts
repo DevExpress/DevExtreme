@@ -164,10 +164,10 @@ export class DxoTreeListFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get hideOnParentScroll(): boolean | (() => boolean) {
+    get hideOnParentScroll(): boolean {
         return this._getOption('hideOnParentScroll');
     }
-    set hideOnParentScroll(value: boolean | (() => boolean)) {
+    set hideOnParentScroll(value: boolean) {
         this._setOption('hideOnParentScroll', value);
     }
 

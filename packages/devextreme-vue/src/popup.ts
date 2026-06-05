@@ -112,7 +112,7 @@ const componentConfig = {
     fullScreen: Boolean,
     height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
-    hideOnParentScroll: [Boolean, Function] as PropType<boolean | ((() => boolean))>,
+    hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
     maxHeight: [Number, String],

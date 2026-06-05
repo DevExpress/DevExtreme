@@ -317,6 +317,7 @@ class DropDownBox<
       dragEnabled: false,
       focusStateEnabled,
       contentTemplate: ANONYMOUS_TEMPLATE_NAME,
+      // @ts-expect-error hideOnParentScroll public overlay.d.ts needs fix
       hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
       position: extend(this.option('popupPosition'), {
         of: this.$element(),

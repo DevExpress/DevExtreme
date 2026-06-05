@@ -1662,7 +1662,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   container?: any | string | undefined;
-  contentTemplate?: ((contentElement: any) => string | any) | null | template;
+  contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string | undefined;
@@ -1673,7 +1673,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   fullScreen?: boolean;
   height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
-  hideOnParentScroll?: boolean | (() => boolean);
+  hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: number | string;
@@ -2856,7 +2856,7 @@ type IPopupProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   container?: any | string | undefined;
-  contentTemplate?: ((contentElement: any) => string | any) | null | template;
+  contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string | undefined;
@@ -2867,7 +2867,7 @@ type IPopupProps = React.PropsWithChildren<{
   fullScreen?: boolean;
   height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
-  hideOnParentScroll?: boolean | (() => boolean);
+  hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: number | string;

@@ -45,7 +45,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type_function_return string|Element|jQuery
      * @public
      */
-    contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement) | null;
+    contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -72,7 +72,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default false
      * @public
      */
-    hideOnParentScroll?: boolean | (() => boolean);
+    hideOnParentScroll?: boolean;
     /**
      * @docid
      * @default '80vh'

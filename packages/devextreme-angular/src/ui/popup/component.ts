@@ -283,10 +283,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get hideOnParentScroll(): boolean | (() => boolean) {
+    get hideOnParentScroll(): boolean {
         return this._getOption('hideOnParentScroll');
     }
-    set hideOnParentScroll(value: boolean | (() => boolean)) {
+    set hideOnParentScroll(value: boolean) {
         this._setOption('hideOnParentScroll', value);
     }
 
@@ -772,7 +772,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideOnParentScrollChange: EventEmitter<boolean | (() => boolean)>;
+    @Output() hideOnParentScrollChange: EventEmitter<boolean>;
 
     /**
     

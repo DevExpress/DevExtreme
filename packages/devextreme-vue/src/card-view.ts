@@ -2292,7 +2292,7 @@ const DxLoadPanelConfig = {
     focusStateEnabled: Boolean,
     height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
-    hideOnParentScroll: [Boolean, Function] as PropType<boolean | ((() => boolean))>,
+    hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
     indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,

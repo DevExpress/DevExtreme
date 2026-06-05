@@ -194,6 +194,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @type Array<dxDropDownButtonItem | any>
+     * @default null
      * @public
      */
     items?: Array<Item | any>;
@@ -211,6 +212,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     noDataText?: string;
     /**
      * @docid
+     * @default null
      * @type function
      * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
      * @action
@@ -219,6 +221,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onButtonClick?: ((e: ButtonClickEvent) => void) | string;
     /**
      * @docid
+     * @default null
      * @type function
      * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
      * @action
@@ -227,6 +230,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
      * @docid
+     * @default null
      * @type function
      * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
      * @action
@@ -245,13 +249,13 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @readonly
      * @public
      */
-    selectedItem?: string | number | any | null;
+    selectedItem?: string | number | any;
     /**
      * @docid
      * @default null
      * @public
      */
-    selectedItemKey?: string | number | null;
+    selectedItemKey?: string | number;
     /**
      * @docid
      * @default true
@@ -275,7 +279,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_return string|Element|jQuery
      * @public
      */
-    template?: null | template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
+    template?: template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default ""

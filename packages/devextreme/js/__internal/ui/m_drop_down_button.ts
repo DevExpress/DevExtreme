@@ -97,6 +97,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       itemTemplate: 'item',
       keyExpr: 'this',
       selectedItem: null,
+      // @ts-expect-error public API needs to be fixed
       selectedItemKey: null,
       stylingMode: 'outlined',
       deferRendering: true,
@@ -104,6 +105,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       useSelectMode: false,
       splitButton: false,
       showArrowIcon: true,
+      // @ts-expect-error public API needs to be fixed
       template: null,
       text: '',
       type: 'normal',
@@ -421,7 +423,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
     const { deferRendering, opened } = this.option();
 
-    const cachedDropDownOptions = this._options.cache('dropDownOptions');
+    const cachedDropDownOptions: PopupProperties = this._options.cache('dropDownOptions');
 
     const position: PositionConfig = {
       of: getPublicElement(this.$element()),
@@ -453,6 +455,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       shading: false,
       position,
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY_CLASS,
+      // @ts-expect-error public API needs to be fixed
       contentTemplate: null,
       ...cachedDropDownOptions,
       ...{ visible: opened },

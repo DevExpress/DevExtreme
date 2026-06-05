@@ -36,10 +36,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('container', value);
     }
 
-    get contentTemplate(): null {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: null) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -113,10 +113,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('hideOnOutsideClick', value);
     }
 
-    get hideOnParentScroll(): boolean | Function {
+    get hideOnParentScroll(): boolean {
         return this._getOption('hideOnParentScroll');
     }
-    set hideOnParentScroll(value: boolean | Function) {
+    set hideOnParentScroll(value: boolean) {
         this._setOption('hideOnParentScroll', value);
     }
 

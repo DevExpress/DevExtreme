@@ -1861,7 +1861,7 @@ type ILoadPanelProps = React.PropsWithChildren<{
   focusStateEnabled?: boolean;
   height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
-  hideOnParentScroll?: boolean | (() => boolean);
+  hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   indicatorOptions?: LoadPanelIndicatorProperties;

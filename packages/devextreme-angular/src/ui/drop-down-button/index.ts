@@ -371,10 +371,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get selectedItem(): any | null | number | string {
+    get selectedItem(): any | number | string {
         return this._getOption('selectedItem');
     }
-    set selectedItem(value: any | null | number | string) {
+    set selectedItem(value: any | number | string) {
         this._setOption('selectedItem', value);
     }
 
@@ -384,10 +384,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get selectedItemKey(): null | number | string {
+    get selectedItemKey(): number | string {
         return this._getOption('selectedItemKey');
     }
-    set selectedItemKey(value: null | number | string) {
+    set selectedItemKey(value: number | string) {
         this._setOption('selectedItemKey', value);
     }
 
@@ -748,14 +748,14 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemChange: EventEmitter<any | null | number | string>;
+    @Output() selectedItemChange: EventEmitter<any | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemKeyChange: EventEmitter<null | number | string>;
+    @Output() selectedItemKeyChange: EventEmitter<number | string>;
 
     /**
     

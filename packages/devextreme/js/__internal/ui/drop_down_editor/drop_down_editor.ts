@@ -906,9 +906,9 @@ class DropDownEditor<
       showCloseButton: false,
       dragEnabled: false,
       toolbarItems: this._getPopupToolbarItems(),
-      // @ts-expect-error Should be updated on PopupProperties level
       onPositioned: this._popupPositionedHandler.bind(this),
       fullScreen: false,
+      // @ts-expect-error Should be updated on public PopupProperties level
       contentTemplate: null,
       _hideOnParentScrollTarget: this.$element(),
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
