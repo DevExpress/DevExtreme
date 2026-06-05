@@ -21,7 +21,7 @@ env:
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
   CYCLONEDX_CLI_VERSION: 0.32.0
-  CYCLONEDX_CLI_WIN_X64_SHA256: b1c00dbb40e628ec8c1252771871341ac4d4aaf032f832d83bd22cb2b1d258ae
+  CYCLONEDX_CLI_LINUX_X64_SHA256: 454879e6a4a405c8a13bff49b8982adcb0596f3019b26b0811c66e4d7f0783e1
 
 jobs:
   build:
@@ -66,8 +66,8 @@ jobs:
         run: |
           tool_dir="$RUNNER_TEMP/cyclonedx-cli"
           mkdir -p "$tool_dir"
-          curl -fsSL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v${{ env.CYCLONEDX_CLI_VERSION }}/cyclonedx-win-x64.exe" -o "$tool_dir/cyclonedx.exe"
-          echo "${{ env.CYCLONEDX_CLI_WIN_X64_SHA256 }}  $tool_dir/cyclonedx.exe" | sha256sum -c -
+          curl -fsSL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v${{ env.CYCLONEDX_CLI_VERSION }}/cyclonedx-linux-x64" -o "$tool_dir/cyclonedx"
+          echo "${{ env.CYCLONEDX_CLI_LINUX_X64_SHA256 }}  $tool_dir/cyclonedx" | sha256sum -c -
           chmod +x "$tool_dir/cyclonedx.exe" || true
           echo "$tool_dir" >> "$GITHUB_PATH"
 
