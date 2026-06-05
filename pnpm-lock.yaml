@@ -236,9 +236,6 @@ importers:
       nx:
         specifier: 19.4.2
         version: 19.4.2(@swc/core@1.15.30(@swc/helpers@0.5.21))
-      nx-cloud:
-        specifier: 19.0.0
-        version: 19.0.0
       postcss:
         specifier: ~8.5.10
         version: 8.5.10
@@ -5358,9 +5355,6 @@ packages:
   '@nrwl/js@19.4.2':
     resolution: {integrity: sha512-jp1VuNEWhAIDe13rqtQPxq/aw1OF+GCBJe3RKQxElZSiphFnE8PNVqFRusEsowpPVkgt40qlnsqymEa+61eczw==}
 
-  '@nrwl/nx-cloud@19.0.0':
-    resolution: {integrity: sha512-3WuXq3KKXwKnbjOkYK0OXosjD02LIjC3kEkyMIbaE36O9dMp3k/sa4ZtDVC3tAoIrj17VLVmjKfoDYbED1rapw==}
-
   '@nrwl/tao@19.4.2':
     resolution: {integrity: sha512-bRCRWWqR86ckji7tK4xRl9czB2WSZG4qSGqvttQMmxCvQc+njnG/QhnoGXYueaz2xr5Z1z7RJWNEqTYEAILh5Q==}
     hasBin: true
@@ -9660,10 +9654,6 @@ packages:
     resolution: {integrity: sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA==}
     engines: {node: '>=12'}
 
-  dotenv@10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
-
   dotenv@16.4.7:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
@@ -13784,10 +13774,6 @@ packages:
 
   nwsapi@2.2.23:
     resolution: {integrity: sha512-7wfH4sLbt4M0gCDzGE6vzQBo0bfTKjU7Sfpqy/7gs1qBfYz2vEJH6vXcBKpO3+6Yu1telwd0t9HpyOoLEQQbIQ==}
-
-  nx-cloud@19.0.0:
-    resolution: {integrity: sha512-Aq1vQD8yBIdb5jLVpzsqmu8yDmMvRVdjaM30Pp1hghhlSvorGBlpTwY+TccZJv/hBtVO+SpXK8SnnegRZMrxdw==}
-    hasBin: true
 
   nx@19.4.2:
     resolution: {integrity: sha512-h4NMoy9uvSHuM+kyioZXb5G4hfBZ7E4a5dswG2RPe3g/GcY9wdpkUMd/EJJ0cHQwv36kRZOMCflhounYCd7OeA==}
@@ -23526,12 +23512,6 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nrwl/nx-cloud@19.0.0':
-    dependencies:
-      nx-cloud: 19.0.0
-    transitivePeerDependencies:
-      - debug
-
   '@nrwl/tao@19.4.2(@swc/core@1.15.30(@swc/helpers@0.5.21))':
     dependencies:
       nx: 19.4.2(@swc/core@1.15.30(@swc/helpers@0.5.21))
@@ -29491,8 +29471,6 @@ snapshots:
   dotenv-expand@11.0.7:
     dependencies:
       dotenv: 16.6.1
-
-  dotenv@10.0.0: {}
 
   dotenv@16.4.7: {}
 
@@ -35844,21 +35822,6 @@ snapshots:
   number-is-nan@1.0.1: {}
 
   nwsapi@2.2.23: {}
-
-  nx-cloud@19.0.0:
-    dependencies:
-      '@nrwl/nx-cloud': 19.0.0
-      axios: 1.16.0
-      chalk: 4.1.2
-      dotenv: 10.0.0
-      fs-extra: 11.2.0
-      node-machine-id: 1.1.12
-      open: 8.4.2
-      strip-json-comments: 3.1.1
-      tar: 7.5.13
-      yargs-parser: 22.0.0
-    transitivePeerDependencies:
-      - debug
 
   nx@19.4.2(@swc/core@1.15.30(@swc/helpers@0.5.21)):
     dependencies:
