@@ -5,6 +5,8 @@ import Popup from '@js/ui/popup/ui.popup';
 
 import type { PopupProperties } from './m_popup';
 
+const TOOLBAR_WIDGET_NAME = 'dxToolbar';
+
 export default class PopupFull extends Popup {
   _getDefaultOptions(): PopupProperties {
     return {
@@ -15,11 +17,12 @@ export default class PopupFull extends Popup {
 
   // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
-    return 'dxToolbar';
+    return TOOLBAR_WIDGET_NAME;
   }
 }
 
-PopupFull.defaultOptions = function (rule) {
+// eslint-disable-next-line func-names
+PopupFull.defaultOptions = function (rule): void {
   Popup.defaultOptions(rule);
 };
 

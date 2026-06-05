@@ -18,7 +18,7 @@ import type { Properties } from '@js/ui/drop_down_box';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import { tabbable } from '@ts/core/utils/m_selectors';
-import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
 const { getActiveElement } = domAdapter;

@@ -19,7 +19,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPromise } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/select_box';
-import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
+import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 
 import type { ValueChangedEvent } from './editor/editor';
 
