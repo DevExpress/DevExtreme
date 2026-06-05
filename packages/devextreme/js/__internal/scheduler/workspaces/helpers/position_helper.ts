@@ -142,7 +142,7 @@ export const getGroupWidth = (
   let result = viewDataProvider.getCellCount(options) * cellWidth;
   if (isVirtualScrolling) {
     const groupedData = viewDataProvider.groupedDataMap.dateTableGroupedMap;
-    const groupLength = (groupedData[groupIndex][0] as unknown[]).length;
+    const groupLength = groupedData[groupIndex][0].length;
 
     result = groupLength * cellWidth;
   }

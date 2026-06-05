@@ -14,6 +14,7 @@ import type {
   CellPositionData,
   CountGenerationConfig,
   DateHeaderData,
+  GroupedDataMap,
   TimePanelData,
   ViewCellData,
   ViewDataMap, ViewOptions,
@@ -62,7 +63,9 @@ export default class ViewDataProvider {
     this.groupedDataMapProvider = null as unknown as GroupedDataMapProvider;
   }
 
-  get groupedDataMap() { return this.groupedDataMapProvider.groupedDataMap; }
+  get groupedDataMap(): GroupedDataMap {
+    return this.groupedDataMapProvider.groupedDataMap as GroupedDataMap;
+  }
 
   get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
 
