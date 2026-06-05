@@ -296,9 +296,6 @@ importers:
       nx:
         specifier: 22.4.5
         version: 22.4.5(@swc/core@1.15.30(@swc/helpers@0.5.21))
-      nx-cloud:
-        specifier: 19.1.0
-        version: 19.1.0
       postcss:
         specifier: ~8.5.10
         version: 8.5.12
@@ -5561,9 +5558,6 @@ packages:
     resolution: {integrity: sha512-aoNSbxtkePXUlbZB+anS1LqsJdctG5n3UVhfU47+CDdwMi6uNTBMF9gPcQRnqghQd2FGzcwwIFBruFMxjhBewg==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  '@nrwl/nx-cloud@19.1.0':
-    resolution: {integrity: sha512-krngXVPfX0Zf6+zJDtcI59/Pt3JfcMPMZ9C/+/x6rvz4WGgyv1s0MI4crEUM0Lx5ZpS4QI0WNDCFVQSfGEBXUg==}
-
   '@nx/devkit@22.4.5':
     resolution: {integrity: sha512-mw5G6k/XTkL675eVIcFpyZdfdIc3wQMSSGWzfA6tQGmANDYc/NFGeZR9wDqXDceHXnYKoRO6g6GhKTOHUCW23Q==}
     peerDependencies:
@@ -10124,10 +10118,6 @@ packages:
     resolution: {integrity: sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA==}
     engines: {node: '>=12'}
 
-  dotenv@10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
-
   dotenv@16.4.7:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
@@ -12110,10 +12100,6 @@ packages:
   ini@2.0.0:
     resolution: {integrity: sha512-7PnF4oN3CvZF23ADhA5wRaYEQpJ8qygSkbtTXWBeXWXmEVRXK+1ITciHWwHhsjv1TmW0MgacIv6hEi5pX5NQdA==}
     engines: {node: '>=10'}
-
-  ini@4.1.3:
-    resolution: {integrity: sha512-X7rqawQBvfdjS10YU1y1YVreA3SsLrW9dX2CewP2EbBJM4ypVNLDkO5y04gejPwKIY9lR+7r9gn3rFPt/kmWFg==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
   ini@5.0.0:
     resolution: {integrity: sha512-+N0ngpO3e7cRUWOJAS7qw0IZIVc6XPrW4MlFBdD066F2L4k1L6ker3hLqSq7iXxU5tgS4WGkIUElWn5vogAEnw==}
@@ -14262,10 +14248,6 @@ packages:
 
   nwsapi@2.2.23:
     resolution: {integrity: sha512-7wfH4sLbt4M0gCDzGE6vzQBo0bfTKjU7Sfpqy/7gs1qBfYz2vEJH6vXcBKpO3+6Yu1telwd0t9HpyOoLEQQbIQ==}
-
-  nx-cloud@19.1.0:
-    resolution: {integrity: sha512-f24vd5/57/MFSXNMfkerdDiK0EvScGOKO71iOWgJNgI1xVweDRmOA/EfjnPMRd5m+pnoPs/4A7DzuwSW0jZVyw==}
-    hasBin: true
 
   nx@22.4.5:
     resolution: {integrity: sha512-l68kzhnemXXGCDS9/W8eccZ7Bzse9pw1oJ466pzDM89MbA6hEaOQ0p+eDXZI++iWl0T+lYJ56EDhO23syKzt9g==}
@@ -23801,12 +23783,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nrwl/nx-cloud@19.1.0':
-    dependencies:
-      nx-cloud: 19.1.0
-    transitivePeerDependencies:
-      - debug
-
   '@nx/devkit@22.4.5(nx@22.4.5(@swc/core@1.15.30(@swc/helpers@0.5.21)))':
     dependencies:
       '@zkochan/js-yaml': 0.0.7
@@ -29831,8 +29807,6 @@ snapshots:
     dependencies:
       dotenv: 16.4.7
 
-  dotenv@10.0.0: {}
-
   dotenv@16.4.7: {}
 
   dotenv@16.6.1: {}
@@ -32999,8 +32973,6 @@ snapshots:
   ini@1.3.8: {}
 
   ini@2.0.0: {}
-
-  ini@4.1.3: {}
 
   ini@5.0.0: {}
 
@@ -36234,21 +36206,6 @@ snapshots:
   number-is-nan@1.0.1: {}
 
   nwsapi@2.2.23: {}
-
-  nx-cloud@19.1.0:
-    dependencies:
-      '@nrwl/nx-cloud': 19.1.0
-      axios: 1.16.0
-      chalk: 4.1.2
-      dotenv: 10.0.0
-      fs-extra: 11.2.0
-      ini: 4.1.3
-      node-machine-id: 1.1.12
-      open: 8.4.2
-      tar: 7.5.13
-      yargs-parser: 22.0.0
-    transitivePeerDependencies:
-      - debug
 
   nx@22.4.5(@swc/core@1.15.30(@swc/helpers@0.5.21)):
     dependencies:
