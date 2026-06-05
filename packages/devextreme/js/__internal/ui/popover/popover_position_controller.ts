@@ -76,7 +76,8 @@ const POPOVER_DEFAULT_BOUNDARY_OFFSET = { h: 10, v: 10 };
 
 export const isCommonPosition = (
   position: unknown,
-): position is CommonPosition => isString(position);
+): position is CommonPosition => isString(position)
+  && Object.prototype.hasOwnProperty.call(POPOVER_POSITION_ALIASES, position);
 
 export class PopoverPositionController<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
