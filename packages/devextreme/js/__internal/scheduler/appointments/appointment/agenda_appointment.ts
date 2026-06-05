@@ -3,7 +3,7 @@ import $ from '@js/core/renderer';
 
 import {
   APPOINTMENT_CONTENT_CLASSES,
-} from '../../m_classes';
+} from '../../classes';
 import { Appointment } from './m_appointment';
 
 export class AgendaAppointment extends Appointment {

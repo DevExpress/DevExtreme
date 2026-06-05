@@ -15,7 +15,7 @@ import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
-} from '../m_classes';
+} from '../classes';
 import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
