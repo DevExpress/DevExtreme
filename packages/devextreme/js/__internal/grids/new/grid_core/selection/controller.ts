@@ -157,12 +157,11 @@ export class SelectionController {
       const selectionHelper = this.selectionHelper.value;
       const isLoaded = this.dataController.isLoaded.value;
       if (isLoaded) {
-        const selectedCardKeys = this.selectedCardKeys.value;
-        const previousSelectedKeys = selectionHelper?.getSelectedItemKeys() ?? [];
-        const areKeysEqual = selectionHelper?.areKeysEqual(selectedCardKeys, previousSelectedKeys);
+        const keys = this.selectedCardKeys.value;
+        const allKeysHaveData = keys.every((key) => selectionHelper?.isKeyHaveData(key));
 
-        if (!areKeysEqual) {
-          this.selectCards(selectedCardKeys);
+        if (!allKeysHaveData) {
+          this.selectCards(keys);
         }
       }
     });
