@@ -68,6 +68,13 @@ function applyLegacyScreenshot(args: string[]): string[] {
     return args;
   }
 
+  if (!args.some((arg) => arg.startsWith('--disable-features='))) {
+    return [
+      ...args,
+      '--disable-features=CDPScreenshotNewSurface',
+    ];
+  }
+
   return args.map((arg) => (arg.startsWith('--disable-features=')
     ? `${arg},CDPScreenshotNewSurface`
     : arg));
