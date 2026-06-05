@@ -21,7 +21,7 @@ async function getAIResponse(messages, signal) {
   const result = response.choices[0].message?.content;
   return result ?? '';
 }
-async function getAIResponseRecursive(messages, signal) {
+function getAIResponseRecursive(messages, signal) {
   return getAIResponse(messages, signal).catch(async (error) => {
     if (!error.message.includes('Connection error')) {
       return Promise.reject(error);

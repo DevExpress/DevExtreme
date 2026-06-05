@@ -10,31 +10,57 @@ import domAdapter from '@js/core/dom_adapter';
 import { fitIntoRange } from '@js/core/utils/math';
 import { getOffset, getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isWindow } from '@js/core/utils/type';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
+import type { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
 
 const KEYBOARD_DRAG_STEP = 5;
 
-class PopupDrag {
-  _positionController: any;
+export interface PopupDragConfig<TPositionController> {
+  dragEnabled?: boolean;
+  draggableElement?: HTMLElement | Element;
+  handle?: HTMLElement | Element;
+  positionController: TPositionController;
+}
 
-  _draggableElement: any;
+type MoveEvent = DxEvent<PointerInteractionEvent | KeyboardEvent>;
 
-  _handle: any;
+interface ElementPosition {
+  top: number;
+  left: number;
+}
 
-  _dragEnabled: any;
+interface Delta {
+  x: number;
+  y: number;
+}
 
-  _prevOffset!: { x: number; y: number };
+export default class PopupDrag<TPositionController extends PopupPositionController> {
+  _draggableElement?: PopupDragConfig<TPositionController>['draggableElement'];
 
-  constructor(config) {
-    this.init(config);
+  _dragEnabled?: PopupDragConfig<TPositionController>['dragEnabled'];
+
+  _handle?: PopupDragConfig<TPositionController>['handle'];
+
+  protected readonly _namespace: string = 'overlayDrag';
+
+  _positionController?: PopupDragConfig<TPositionController>['positionController'];
+
+  _prevOffset?: Delta;
+
+  constructor(configuration: PopupDragConfig<TPositionController>) {
+    this.init(configuration);
   }
 
-  init({
-    dragEnabled,
-    handle,
-    draggableElement,
-    positionController,
-  }) {
-    // TODO: get rid of dragEnabled
+  init(configuration: PopupDragConfig<TPositionController>): void {
+    const {
+      positionController,
+      draggableElement,
+      handle,
+      dragEnabled,
+    } = configuration;
 
     this._positionController = positionController;
     this._draggableElement = draggableElement;
@@ -50,31 +76,39 @@ class PopupDrag {
     this.subscribe();
   }
 
-  moveDown(e) {
+  moveDown(e: MoveEvent): void {
     this._moveTo(KEYBOARD_DRAG_STEP, 0, e);
   }
 
-  moveUp(e) {
+  moveUp(e: MoveEvent): void {
     this._moveTo(-KEYBOARD_DRAG_STEP, 0, e);
   }
 
-  moveLeft(e) {
+  moveLeft(e: MoveEvent): void {
     this._moveTo(0, -KEYBOARD_DRAG_STEP, e);
   }
 
-  moveRight(e) {
+  moveRight(e: MoveEvent): void {
     this._moveTo(0, KEYBOARD_DRAG_STEP, e);
   }
 
-  subscribe() {
+  subscribe(): void {
     const eventNames = this._getEventNames();
 
-    eventsEngine.on(this._handle, eventNames.startEventName, (e) => { this._dragStartHandler(e); });
-    eventsEngine.on(this._handle, eventNames.updateEventName, (e) => { this._dragUpdateHandler(e); });
-    eventsEngine.on(this._handle, eventNames.endEventName, (e) => { this._dragEndHandler(e); });
+    eventsEngine.on(this._handle, eventNames.startEventName, (e) => {
+      this._dragStartHandler(e);
+    });
+
+    eventsEngine.on(this._handle, eventNames.updateEventName, (e) => {
+      this._dragUpdateHandler(e);
+    });
+
+    eventsEngine.on(this._handle, eventNames.endEventName, (e) => {
+      this._dragEndHandler(e);
+    });
   }
 
-  unsubscribe() {
+  unsubscribe(): void {
     const eventNames = this._getEventNames();
 
     eventsEngine.off(this._handle, eventNames.startEventName);
@@ -82,11 +116,14 @@ class PopupDrag {
     eventsEngine.off(this._handle, eventNames.endEventName);
   }
 
-  _getEventNames() {
-    const namespace = 'overlayDrag';
-    const startEventName = addNamespace(dragStartEvent, namespace);
-    const updateEventName = addNamespace(dragMoveEvent, namespace);
-    const endEventName = addNamespace(dragEndEvent, namespace);
+  _getEventNames(): {
+    startEventName: string;
+    updateEventName: string;
+    endEventName: string;
+  } {
+    const startEventName = addNamespace(dragStartEvent, this._namespace);
+    const updateEventName = addNamespace(dragMoveEvent, this._namespace);
+    const endEventName = addNamespace(dragEndEvent, this._namespace);
 
     return {
       startEventName,
@@ -95,7 +132,13 @@ class PopupDrag {
     };
   }
 
-  _dragStartHandler(e) {
+  _dragStartHandler(e: MoveEvent & {
+    targetElements: unknown[];
+    maxTopOffset: number;
+    maxBottomOffset: number;
+    maxLeftOffset: number;
+    maxRightOffset: number;
+  }): void {
     const allowedOffsets = this._getAllowedOffsets();
 
     this._prevOffset = { x: 0, y: 0 };
@@ -107,10 +150,12 @@ class PopupDrag {
     e.maxRightOffset = allowedOffsets.right;
   }
 
-  _dragUpdateHandler(e) {
+  _dragUpdateHandler(e: MoveEvent & {
+    offset: { y: number; x: number }
+  }): void {
     const targetOffset = {
-      top: e.offset.y - this._prevOffset.y,
-      left: e.offset.x - this._prevOffset.x,
+      top: e.offset.y - (this._prevOffset?.y ?? 0),
+      left: e.offset.x - (this._prevOffset?.x ?? 0),
     };
 
     this._moveByOffset(targetOffset);
@@ -118,12 +163,16 @@ class PopupDrag {
     this._prevOffset = e.offset;
   }
 
-  _dragEndHandler(event) {
-    this._positionController.dragHandled();
-    this._positionController.detectVisualPositionChange(event);
+  _dragEndHandler(event: MoveEvent): void {
+    this._positionController?.dragHandled();
+    this._positionController?.detectVisualPositionChange(event);
   }
 
-  _moveTo(top, left, e) {
+  _moveTo(
+    top: number,
+    left: number,
+    e: MoveEvent,
+  ): void {
     if (!this._dragEnabled) {
       return;
     }
@@ -137,7 +186,7 @@ class PopupDrag {
     this._dragEndHandler(e);
   }
 
-  _fitOffsetIntoAllowedRange(top, left) {
+  _fitOffsetIntoAllowedRange(top: number, left: number): ElementPosition {
     const allowedOffsets = this._getAllowedOffsets();
 
     return {
@@ -146,12 +195,16 @@ class PopupDrag {
     };
   }
 
-  _getContainerDimensions() {
+  _getContainerDimensions(): {
+    width: number;
+    height: number;
+  } {
     const document = domAdapter.getDocument();
-    const container = this._positionController.$dragResizeContainer.get(0);
+    const container = this._positionController?.$dragResizeContainer?.get(0);
 
     let containerWidth = getOuterWidth(container);
     let containerHeight = getOuterHeight(container);
+
     if (isWindow(container)) {
       containerHeight = Math.max(document.body.clientHeight, containerHeight);
       containerWidth = Math.max(document.body.clientWidth, containerWidth);
@@ -163,31 +216,31 @@ class PopupDrag {
     };
   }
 
-  _getContainerPosition() {
-    const container = this._positionController.$dragResizeContainer.get(0);
+  _getContainerPosition(): ElementPosition {
+    const container = this._positionController?.$dragResizeContainer?.get(0);
 
     return isWindow(container)
       ? { top: 0, left: 0 }
       : getOffset(container);
   }
 
-  _getElementPosition() {
+  _getElementPosition(): ElementPosition {
     return getOffset(this._draggableElement);
   }
 
-  _getInnerDelta() {
+  _getInnerDelta(): Delta {
     const containerDimensions = this._getContainerDimensions();
     const elementDimensions = this._getElementDimensions();
 
     return {
-      x: containerDimensions.width - elementDimensions.width,
-      y: containerDimensions.height - elementDimensions.height,
+      x: containerDimensions.width - (elementDimensions.width ?? 0),
+      y: containerDimensions.height - (elementDimensions.height ?? 0),
     };
   }
 
-  _getOuterDelta() {
-    const { width, height } = this._getElementDimensions();
-    const { outsideDragFactor } = this._positionController;
+  _getOuterDelta(): Delta {
+    const { width = 0, height = 0 } = this._getElementDimensions();
+    const { outsideDragFactor = 0 } = this._positionController ?? {};
 
     return {
       x: width * outsideDragFactor,
@@ -195,7 +248,7 @@ class PopupDrag {
     };
   }
 
-  _getFullDelta() {
+  _getFullDelta(): Delta {
     const fullDelta = this._getInnerDelta();
     const outerDelta = this._getOuterDelta();
 
@@ -205,16 +258,25 @@ class PopupDrag {
     };
   }
 
-  _getElementDimensions() {
+  _getElementDimensions(): {
+    width: number | undefined;
+    height: number | undefined;
+  } {
     return {
-      width: this._draggableElement.offsetWidth,
-      height: this._draggableElement.offsetHeight,
+      width: (this._draggableElement as HTMLElement)?.offsetWidth,
+      height: (this._draggableElement as HTMLElement)?.offsetHeight,
     };
   }
 
-  _getAllowedOffsets() {
+  _getAllowedOffsets(): {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  } {
     const fullDelta = this._getFullDelta();
     const isDragAllowed = fullDelta.y >= 0 && fullDelta.x >= 0;
+
     if (!isDragAllowed) {
       return {
         top: 0,
@@ -236,7 +298,7 @@ class PopupDrag {
     };
   }
 
-  _moveByOffset(offset) {
+  _moveByOffset(offset: ElementPosition): void {
     const currentPosition = locate(this._draggableElement);
     const newPosition = {
       left: currentPosition.left + offset.left,
@@ -246,5 +308,3 @@ class PopupDrag {
     move(this._draggableElement, newPosition);
   }
 }
-
-export default PopupDrag;

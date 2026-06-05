@@ -21,7 +21,7 @@ import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
 import type { PopupProperties } from '@ts/ui/popup/m_popup';
@@ -529,7 +529,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   _dimensionChanged(): void {
-    const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+    const { dropDownOptions } = this.option();
+    const popupWidth = getSizeValue(dropDownOptions?.width);
 
     if (popupWidth === undefined) {
       this._setPopupOption('width', () => getElementWidth(this.$element()));

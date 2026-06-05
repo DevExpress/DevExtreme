@@ -4,7 +4,7 @@ import fs from 'fs';
 const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
 
-const wait = async (
+const wait = (
   timeout: number,
 ): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
 

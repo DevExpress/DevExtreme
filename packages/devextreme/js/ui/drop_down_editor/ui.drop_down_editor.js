@@ -1,4 +1,4 @@
-import DropDownEditor from '../../__internal/ui/drop_down_editor/m_drop_down_editor';
+import DropDownEditor from '../../__internal/ui/drop_down_editor/drop_down_editor';
 
 export default DropDownEditor;
 

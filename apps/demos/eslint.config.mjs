@@ -224,7 +224,6 @@ export default [
 
       '@typescript-eslint/naming-convention': 0,
       '@typescript-eslint/no-throw-literal': 0,
-      '@typescript-eslint/only-throw-error': 'warn',
       '@typescript-eslint/no-use-before-define': 0,
       '@typescript-eslint/no-shadow': 0,
       '@typescript-eslint/no-loop-func': 0,
@@ -262,6 +261,7 @@ export default [
       '@typescript-eslint/ban-ts-comment': 0,
       '@typescript-eslint/no-extraneous-class': 0,
       '@typescript-eslint/no-floating-promises': 0,
+      '@typescript-eslint/only-throw-error': 'warn',
     },
   },
 
@@ -476,6 +476,7 @@ export default [
     rules: {
       ...changeRulesToStylistic(config.rules || {}),
       'require-await': 'warn',
+
     },
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
@@ -509,7 +510,25 @@ export default [
   // utils directory
   {
     files: [
-      'utils/**/*.{js,ts}',
+      'utils/**/*.js',
+    ],
+    ignores: [
+      'utils/testing/',
+      'utils/visual-tests/',
+      'utils/templates/',
+    ],
+    rules: {
+      'no-console': 0,
+      'no-await-in-loop': 0,
+      'no-restricted-syntax': 0,
+      '@typescript-eslint/await-thenable': 0,
+      'spellcheck/spell-checker': 0,
+      'consistent-return': 0,
+    },
+  },
+  {
+    files: [
+      'utils/**/*.ts',
     ],
     ignores: [
       'utils/testing/',
@@ -518,7 +537,7 @@ export default [
     ],
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        project: './tsconfig.json',
       },
     },
     rules: {

@@ -46,7 +46,7 @@ function itemTextStyleExpr(obj: { level: string; }) {
 }
 
 function itemStyleExpr(obj: { type: string; }) {
-  const style: React.CSSProperties = { stroke: '#444444' };
+  const style: { stroke: string; fill?: string } = { stroke: '#444444' };
   if (obj.type === 'group') {
     style.fill = '#f3f3f3';
   }

@@ -2,6 +2,7 @@ import { move } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { originalViewPort } from '@js/core/utils/view_port';
+import windowUtils from '@ts/core/utils/m_window';
 import type {
   BaseControllerProperties,
   ControllerOverlayElements,
@@ -11,8 +12,6 @@ import type {
 } from '@ts/ui/overlay/overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/overlay_position_controller';
 import type { PopupProperties } from '@ts/ui/popup/m_popup';
-
-import windowUtils from '../../core/utils/m_window';
 
 export interface PopupControllerProperties extends BaseControllerProperties {
   fullScreen?: PopupProperties['fullScreen'];

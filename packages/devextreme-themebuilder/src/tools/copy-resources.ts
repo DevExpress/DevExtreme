@@ -9,6 +9,7 @@ const copyResources = async (): Promise<void> => {
   await readJson('package.json').then(async (json) => {
     const packageConfig = json;
     packageConfig.version = version;
+    delete packageConfig.devDependencies;
     await outputJson('dist/package.json', packageConfig, { spaces: 2 });
   });
   await copy('src/data/scss', 'dist/data/scss');
