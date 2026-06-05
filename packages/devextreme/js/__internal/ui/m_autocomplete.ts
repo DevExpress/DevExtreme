@@ -1,15 +1,17 @@
 import registerComponent from '@js/core/component_registrator'; // couldn't change import due inconsistent typings for registerComponent
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import type { DataSourceOptions } from '@js/data/data_source';
 import type { DxEvent, PointerInteractionEvent } from '@js/events/events.types';
 import type { Properties } from '@js/ui/autocomplete';
 import type { ItemClickEvent, PageLoadMode } from '@js/ui/list';
-import { Deferred } from '@ts/core/utils/m_deferred';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { isCommandKeyPressed } from '@ts/events/utils/index';
+import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
+import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
@@ -32,7 +34,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
 
     return {
       ...parent,
-      upArrow: (e): boolean => {
+      upArrow(e): boolean {
         if (parent.upArrow.call(this, e) && !isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
@@ -43,7 +45,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
         }
         return true;
       },
-      downArrow: (e): boolean => {
+      downArrow(e): boolean {
         if (parent.downArrow.call(this, e) && !isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
@@ -54,7 +56,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
         }
         return true;
       },
-      enter: (e): boolean => {
+      enter(e): boolean {
         if (!item) {
           this.close();
         }
@@ -151,10 +153,10 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     this.close();
   }
 
-  _loadItem(value: unknown, cache: Record<string, unknown>): ReturnType<typeof Deferred> {
-    const selectedItem = this._getItemFromPlain(value, cache) as unknown;
+  _loadItem(value: unknown, cache?: ItemCache): DeferredObj<unknown> {
+    const selectedItem = this._getItemFromPlain(value, cache);
 
-    return Deferred().resolve(selectedItem);
+    return Deferred().resolve(selectedItem as unknown);
   }
 
   _dataSourceOptions(): DataSourceOptions {
@@ -185,7 +187,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     return 'input keyup';
   }
 
-  _valueChangeEventHandler(e: KeyboardEvent): void {
+  _valueChangeEventHandler(e: ValueChangedEvent): void {
     const value = this._input().val() || null;
     return super._valueChangeEventHandler(e, value);
   }

@@ -403,19 +403,22 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _renderPopupContent(): unknown {
     const $content = this._popup?.$content();
+
+    if (!$content) {
+      return undefined;
+    }
+
     const template = this._getTemplateByOption('dropDownContentTemplate');
 
-    $content?.empty();
+    $content.empty();
 
     this._popupContentId = `dx-${new Guid()}`;
     this.setAria('id', this._popupContentId, $content);
 
-    const result = template.render({
-      container: $content ? getPublicElement($content) : undefined,
+    return template.render({
+      container: getPublicElement($content),
       model: this.option('items') || this._dataController.getDataSource(),
     });
-
-    return result;
   }
 
   _popupOptions(): PopupProperties {
