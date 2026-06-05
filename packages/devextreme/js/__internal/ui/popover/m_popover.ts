@@ -1,7 +1,10 @@
+import type { Position } from '@js/common';
+import type { AnimationConfig } from '@js/common/core/animation';
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
+import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -16,21 +19,23 @@ import {
 } from '@js/core/utils/size';
 import { isObject, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { Properties } from '@js/ui/popover';
-import { isMaterial, isMaterialBased } from '@js/ui/themes';
+import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Popup from '@ts/ui/popup/m_popup';
-
 import type {
+  DisplaySide,
   PopoverControllerElements,
   PopoverControllerProperties,
+  PopoverPosition,
   PopoverPositionControllerConstructor,
-} from './popover_position_controller';
+} from '@ts/ui/popover/popover_position_controller';
 import {
   POPOVER_POSITION_ALIASES,
   PopoverPositionController,
-} from './popover_position_controller';
+} from '@ts/ui/popover/popover_position_controller';
+import Popup from '@ts/ui/popup/m_popup';
 
 // STYLE popover
 
@@ -39,7 +44,7 @@ const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
 const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
 
-const POSITION_FLIP_MAP = {
+const POSITION_FLIP_MAP: Record<DisplaySide, DisplaySide> = {
   left: 'right',
   top: 'bottom',
   right: 'left',
@@ -48,6 +53,16 @@ const POSITION_FLIP_MAP = {
 };
 
 type PopoverTarget = string | dxElementWrapper | Element | undefined;
+type PopoverEventOption = 'showEvent' | 'hideEvent';
+
+interface PositionAxisResult {
+  flip: boolean;
+}
+
+interface PositionCalculationResult {
+  h: PositionAxisResult;
+  v: PositionAxisResult;
+}
 
 export interface PopoverProperties extends Omit<Properties,
 'onTitleRendered' | 'onHidden' | 'onHiding' | 'onShowing' | 'onShown'
@@ -65,7 +80,6 @@ export interface PopoverProperties extends Omit<Properties,
 class Popover<
   TProperties extends PopoverProperties = PopoverProperties,
 > extends Popup<TProperties> {
-  // @ts-expect-error ts-error
   _positionController!: PopoverPositionController;
 
   _$arrow!: dxElementWrapper;
@@ -99,7 +113,6 @@ class Popover<
       hideOnParentScroll: true,
       arrowPosition: '',
       arrowOffset: 0,
-
       _fixWrapperPosition: true,
     };
   }
@@ -109,42 +122,37 @@ class Popover<
     return [
       {
         device: { platform: 'ios' },
-        // @ts-expect-error ts-error
         options: {
           arrowPosition: {
             boundaryOffset: { h: 20, v: -10 },
             collision: 'fit',
           },
-        },
-      }, {
+        } as DeepPartial<TProperties>,
+      },
+      {
         device(): boolean {
           return !hasWindow();
         },
-        // @ts-expect-error ts-error
         options: {
           animation: null,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterialBased();
+          return isMaterialBased(current());
         },
-        // @ts-expect-error ts-error
         options: {
           useFlatToolbarButtons: true,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterial();
+          return isMaterial(current());
         },
-        // @ts-expect-error ts-error
         options: {
           useDefaultToolbarButtons: true,
           showCloseButton: false,
-        },
+        } as DeepPartial<TProperties>,
       },
     ];
   }
@@ -165,13 +173,15 @@ class Popover<
   }
 
   _render(): void {
-    // @ts-expect-error ts-error
-    super._render.apply(this, arguments);
-    this._detachEvents(this.option('target'));
+    super._render();
+
+    const { target } = this.option();
+
+    this._detachEvents(target);
     this._attachEvents();
   }
 
-  _detachEvents(target): void {
+  _detachEvents(target: PopoverTarget): void {
     this._detachEvent(target, 'show');
     this._detachEvent(target, 'hide');
   }
@@ -181,12 +191,13 @@ class Popover<
     this._attachEvent('hide');
   }
 
-  _createEventHandler(name) {
+  _createEventHandler(name: string) {
     const action = this._createAction(() => {
-      const delay = this._getEventDelay(`${name}Event`);
+      const delay = this._getEventDelay(`${name}Event` as PopoverEventOption);
       this._clearEventsTimeouts();
 
       if (delay) {
+        // eslint-disable-next-line no-restricted-globals
         this._timeouts[name] = setTimeout(() => {
           this[name]();
         }, delay);
@@ -195,7 +206,7 @@ class Popover<
       }
     }, { validatingTargetName: 'target' });
 
-    return (e): void => {
+    return (e: DxEvent): void => {
       action({ event: e, target: $(e.currentTarget) });
     };
   }
@@ -206,21 +217,26 @@ class Popover<
     } = this.option();
 
     const shouldIgnoreHideEvent = shading && name === 'hide';
+
     if (shouldIgnoreHideEvent && hideEvent) {
       errors.log('W1020');
     }
 
     const event = shouldIgnoreHideEvent ? null : this._getEventName(`${name}Event`);
+
     if (!event || disabled) {
       return;
     }
 
     const EVENT_HANDLER_NAME = this._getEventHandlerName(name);
+
     this[EVENT_HANDLER_NAME] = this._createEventHandler(name);
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const eventName = addNamespace(event, this.NAME!);
 
     const isSelector = isString(target);
+
     if (isSelector) {
       eventsEngine.on(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
     } else {
@@ -228,46 +244,55 @@ class Popover<
     }
   }
 
-  _detachEvent(target: PopoverTarget, name: string, event?: unknown) {
+  _detachEvent(
+    target: PopoverTarget,
+    name: string,
+    event?: string,
+  ): void {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    let eventName: string = event || this._getEventName(`${name}Event`);
+    let eventName: string | undefined = event || this._getEventName(`${name}Event`);
 
     if (!eventName) {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     eventName = addNamespace(eventName, this.NAME!);
 
     const EVENT_HANDLER_NAME = this._getEventHandlerName(name);
-
     const isSelector = isString(target);
+
     if (isSelector) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error eventsEngine typing
       eventsEngine.off(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
     } else {
       eventsEngine.off(getPublicElement($(target)), eventName, this[EVENT_HANDLER_NAME]);
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getEventHandlerName(name: string): string {
     return `_${name}EventHandler`;
   }
 
-  _getEventNameByOption(optionValue) {
-    // @ts-expect-error
+  // eslint-disable-next-line class-methods-use-this
+  _getEventNameByOption(
+    optionValue: { name?: string | undefined } | string | undefined,
+  ): string | undefined {
     return isObject(optionValue) ? optionValue.name : optionValue;
   }
 
-  _getEventName(optionName) {
-    const optionValue = this.option(optionName);
+  _getEventName(optionName: string): string | undefined {
+    const options = this.option();
+    const optionValue = options[optionName];
 
     return this._getEventNameByOption(optionValue);
   }
 
-  _getEventDelay(optionName) {
-    const optionValue = this.option(optionName);
-    // @ts-expect-error
-    return isObject(optionValue) && optionValue.delay;
+  _getEventDelay(optionName: PopoverEventOption): number | undefined {
+    const { [optionName]: optionValue } = this.option();
+
+    return isObject(optionValue) ? (optionValue.delay) : undefined;
   }
 
   _renderArrow(): void {
@@ -276,7 +301,7 @@ class Popover<
       .prependTo(this.$overlayContent());
   }
 
-  _documentDownHandler(e): boolean {
+  _documentDownHandler(e: DxEvent<PointerInteractionEvent>): boolean {
     if (this._isOutsideClick(e)) {
       return super._documentDownHandler(e);
     }
@@ -284,25 +309,32 @@ class Popover<
     return true;
   }
 
-  _isOutsideClick(e): boolean {
+  _isOutsideClick(e: DxEvent<PointerInteractionEvent>): boolean {
     const { target } = this.option();
-    // @ts-expect-error ts-error
+
+    if (!target) {
+      return true;
+    }
+
     return !$(e.target).closest(target).length;
   }
 
-  _animate(animation): void {
+  _animate(
+    animation: AnimationConfig | undefined,
+    completeCallback: (element: HTMLElement, config: AnimationConfig) => void,
+    startCallback?: (element: HTMLElement, config: AnimationConfig) => void,
+  ): void {
     if (animation?.to && typeof animation.to === 'object') {
       extend(animation.to, {
         position: this._getContainerPosition(),
       });
     }
-    // @ts-expect-error ts-error
-    super._animate.apply(this, arguments);
+
+    super._animate(animation, completeCallback, startCallback);
   }
 
   _stopAnimation(): void {
-    // @ts-expect-error ts-error
-    super._stopAnimation.apply(this, arguments);
+    super._stopAnimation();
   }
 
   _renderTopToolbar(): void {
@@ -332,12 +364,12 @@ class Popover<
 
     const isArrowVisible = this._isHorizontalSide() || this._isVerticalSide();
 
-    if (isArrowVisible) {
+    if (isArrowVisible && positionSide && positionSide !== 'center') {
       this._renderArrowPosition(positionSide);
     }
   }
 
-  _resetOverlayPosition(shouldUpdateDimensions): void {
+  _resetOverlayPosition(shouldUpdateDimensions: boolean): void {
     this._setContentHeight(shouldUpdateDimensions);
     this._togglePositionClass(`dx-position-${this._positionController._positionSide}`);
 
@@ -348,28 +380,39 @@ class Popover<
     });
   }
 
-  _updateContentSize(shouldUpdateDimensions) {
+  _updateContentSize(shouldUpdateDimensions: boolean): void {
     if (!this.$content() || !shouldUpdateDimensions) {
       return;
     }
-    const containerLocation = positionUtils.calculate(this.$overlayContent(), this._getContainerPosition());
 
-    if ((containerLocation.h.oversize > 0) && this._isHorizontalSide() && !containerLocation.h.fit) {
+    const containerLocation = positionUtils.calculate(
+      this.$overlayContent(),
+      this._getContainerPosition(),
+    );
+
+    if (
+      (containerLocation.h.oversize > 0)
+      && this._isHorizontalSide()
+      && !containerLocation.h.fit
+    ) {
       const newContainerWidth = getWidth(this.$overlayContent()) - containerLocation.h.oversize;
 
       setWidth(this.$overlayContent(), newContainerWidth);
     }
 
     if ((containerLocation.v.oversize > 0) && this._isVerticalSide() && !containerLocation.v.fit) {
-      const newOverlayContentHeight = getHeight(this.$overlayContent()) - containerLocation.v.oversize;
-      const newPopupContentHeight = getHeight(this.$content()) - containerLocation.v.oversize;
+      const overlayContentHeight = getHeight(this.$overlayContent());
+      const contentHeight = getHeight(this.$content());
+
+      const newOverlayContentHeight = overlayContentHeight - containerLocation.v.oversize;
+      const newPopupContentHeight = contentHeight - containerLocation.v.oversize;
 
       setHeight(this.$overlayContent(), newOverlayContentHeight);
       setHeight(this.$content(), newPopupContentHeight);
     }
   }
 
-  _getContainerPosition() {
+  _getContainerPosition(): PopoverPosition {
     return this._positionController._getContainerPosition();
   }
 
@@ -378,7 +421,7 @@ class Popover<
     return $(this._positionController._position?.of || super._getHideOnParentScrollTarget());
   }
 
-  _getSideByLocation(location) {
+  _getSideByLocation(location: PositionCalculationResult): DisplaySide | undefined {
     const isFlippedByVertical = location.v.flip;
     const isFlippedByHorizontal = location.h.flip;
 
@@ -386,7 +429,6 @@ class Popover<
     const isHorizontal = this._isHorizontalSide() && isFlippedByHorizontal;
     const isInside = this._isPopoverInside();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const condition = isVertical || isHorizontal || isInside;
     const positionSide = this._positionController._positionSide;
 
@@ -401,19 +443,22 @@ class Popover<
     return undefined;
   }
 
-  _togglePositionClass(positionClass) {
+  _togglePositionClass(positionClass: string): void {
     this.$wrapper()
       ?.removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
       .addClass(positionClass);
   }
 
-  _toggleFlippedClass(isFlippedHorizontal, isFlippedVertical) {
+  _toggleFlippedClass(
+    isFlippedHorizontal: boolean,
+    isFlippedVertical: boolean,
+  ): void {
     this.$wrapper()
       ?.toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
       .toggleClass('dx-popover-flipped-vertical', isFlippedVertical);
   }
 
-  _renderArrowPosition(side) {
+  _renderArrowPosition(side: Position): void {
     const arrowRect = getBoundingRect(this._$arrow.get(0));
     const arrowFlip = -(this._isVerticalSide(side) ? arrowRect.height : arrowRect.width);
 
@@ -438,7 +483,7 @@ class Popover<
     const min = Math.max(contentLocation, targetLocation);
     const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
 
-    let arrowLocation;
+    let arrowLocation = 0;
 
     const { arrowPosition } = this.option();
 
@@ -473,7 +518,6 @@ class Popover<
     }
   }
 
-  // @ts-expect-error Override parent method with more specific type
   _getPositionControllerConfig(): PopoverPositionControllerConstructor {
     const superConfiguration = super._getPositionControllerConfig();
 
@@ -498,13 +542,13 @@ class Popover<
     return configuration;
   }
 
-  _initPositionController() {
+  _initPositionController(): void {
     this._positionController = new PopoverPositionController(
       this._getPositionControllerConfig(),
     );
   }
 
-  _renderWrapperDimensions() {
+  _renderWrapperDimensions(): void {
     if (this.option('shading')) {
       this.$wrapper()?.css({
         width: '100%',
@@ -513,15 +557,15 @@ class Popover<
     }
   }
 
-  _isVerticalSide(side?): boolean {
+  _isVerticalSide(side?: Position): boolean {
     return this._positionController._isVerticalSide(side);
   }
 
-  _isHorizontalSide(side?): boolean {
+  _isHorizontalSide(side?: Position): boolean {
     return this._positionController._isHorizontalSide(side);
   }
 
-  _clearEventTimeout(name): void {
+  _clearEventTimeout(name: string): void {
     clearTimeout(this._timeouts[name]);
   }
 
@@ -531,9 +575,11 @@ class Popover<
   }
 
   _clean(): void {
-    this._detachEvents(this.option('target'));
-    // @ts-expect-error ts-error
-    super._clean.apply(this, arguments);
+    const { target } = this.option();
+
+    this._detachEvents(target);
+
+    super._clean();
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
@@ -550,7 +596,7 @@ class Popover<
         break;
       case 'target':
         if (previousValue) {
-          this._detachEvents(previousValue);
+          this._detachEvents(previousValue as PopoverTarget);
         }
         this._positionController.updateTarget(value as TProperties['target']);
         this._invalidate();
@@ -558,10 +604,15 @@ class Popover<
       case 'showEvent':
       case 'hideEvent': {
         const eventName = name.substring(0, 4);
-        const event = this._getEventNameByOption(previousValue);
+        const event = this._getEventNameByOption(
+          previousValue as string | { name?: string } | undefined,
+        );
 
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.hide();
+
         const { target } = this.option();
+
         this._detachEvent(target, eventName, event);
         this._attachEvent(eventName);
         break;
@@ -570,17 +621,20 @@ class Popover<
         this._clearEventTimeout(value ? 'show' : 'hide');
         super._optionChanged(args);
         break;
-      case 'disabled':
-        this._detachEvents(this.option('target'));
+      case 'disabled': {
+        const { target } = this.option();
+
+        this._detachEvents(target);
         this._attachEvents();
         super._optionChanged(args);
         break;
+      }
       default:
         super._optionChanged(args);
     }
   }
 
-  show(target?): Promise<boolean> {
+  show(target?: PopoverTarget): Promise<boolean> {
     if (target) {
       this.option('target', target);
     }
