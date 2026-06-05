@@ -12,7 +12,6 @@ import { getToday } from '@ts/scheduler/r1/utils/index';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../m_classes';
 import timezoneUtils from '../m_utils_time_zone';
 import SchedulerWorkSpace, {
-  type WorkspaceOptionChangedOptions,
   type WorkspaceOptionsInternal,
 } from './m_work_space';
 
@@ -20,19 +19,12 @@ const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 
-export interface WorkSpaceIndicatorDefaultOptions extends WorkspaceOptionsInternal {
-  showCurrentTimeIndicator: boolean;
-  indicatorTime: Date;
-  indicatorUpdateInterval: number;
-  shadeUntilCurrentTime: boolean;
-}
-
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   private indicatorInterval?: ReturnType<typeof setInterval>;
 
   protected getToday(): Date {
-    const viewOffset = this.option('viewOffset') as number;
-    const today = getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator);
+    const viewOffset = this.option('viewOffset');
+    const today = getToday(this.option('indicatorTime'), this.timeZoneCalculator);
     return dateUtilsTs.addOffsets(today, -viewOffset);
   }
 
@@ -236,7 +228,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     this.setIndicationUpdateInterval();
   }
 
-  _optionChanged(args: OptionChanged<WorkspaceOptionChangedOptions>): void {
+  _optionChanged(args: OptionChanged<WorkspaceOptionsInternal>): void {
     switch (args.name) {
       case 'showCurrentTimeIndicator':
       case 'indicatorTime':
@@ -259,13 +251,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
   }
 
-  _getDefaultOptions(): WorkSpaceIndicatorDefaultOptions {
+  _getDefaultOptions(): WorkspaceOptionsInternal {
     return extend(super._getDefaultOptions(), {
       showCurrentTimeIndicator: true,
       indicatorTime: new Date(),
       indicatorUpdateInterval: 5 * toMs('minute'),
       shadeUntilCurrentTime: true,
-    }) as WorkSpaceIndicatorDefaultOptions;
+    }) as WorkspaceOptionsInternal;
   }
 
   protected getCurrentTimePanelCellIndices(): number[] {

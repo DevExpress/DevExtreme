@@ -27,7 +27,7 @@ import { VIEWS } from '../utils/options/constants_view';
 import { reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
 import type { GroupNode } from '../utils/resource_manager/types';
 import type { ListEntity } from '../view_model/types';
-import WorkSpace, { type WorkspaceOptionChangedOptions, type WorkspaceOptionsInternal } from './m_work_space';
+import WorkSpace, { type WorkspaceOptionsInternal } from './m_work_space';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -44,19 +44,13 @@ const LAST_ROW_CLASS = 'dx-scheduler-date-table-last-row';
 const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
-interface AgendaDefaultOptions extends WorkspaceOptionsInternal {
-  agendaDuration: number;
-  rowHeight: number;
-  noDataText: string;
-}
-
 interface AgendaRenderOptions {
   container: Element;
   rowCount?: number;
   cellCount?: number;
   rowClass?: string;
   cellClass?: string;
-  cellTemplate?: TemplateBase;
+  cellTemplate?: TemplateBase | null;
   getStartDate?: (rowIndex: number) => Date;
 }
 
@@ -83,17 +77,15 @@ class SchedulerAgenda extends WorkSpace {
     super._init();
   }
 
-  _getDefaultOptions(): AgendaDefaultOptions {
-    const defaultOptions = extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): WorkspaceOptionsInternal {
+    return extend(super._getDefaultOptions(), {
       agendaDuration: 7,
       rowHeight: 60,
       noDataText: '',
-    }) as AgendaDefaultOptions;
-
-    return defaultOptions;
+    }) as WorkspaceOptionsInternal;
   }
 
-  _optionChanged(args: OptionChanged<WorkspaceOptionChangedOptions>): void {
+  _optionChanged(args: OptionChanged<WorkspaceOptionsInternal>): void {
     const { name } = args;
     const { value } = args;
 
@@ -143,7 +135,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override getRowCount(): number {
-    return this.option('agendaDuration') as number;
+    return this.option('agendaDuration');
   }
 
   getCellCount(): number {
@@ -151,7 +143,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override getTimePanelRowCount(): number {
-    return this.option('agendaDuration') as number;
+    return this.option('agendaDuration');
   }
 
   protected renderAllDayPanel(): void { return noop(); }
@@ -260,7 +252,7 @@ class SchedulerAgenda extends WorkSpace {
       allAppointments,
     );
 
-    const cellTemplate = this.option('resourceCellTemplate') as TemplateBase | undefined;
+    const cellTemplate = this.option('resourceCellTemplate');
     const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
     const cellTemplates: (() => dxElementWrapper)[] = [];
 
@@ -466,7 +458,7 @@ class SchedulerAgenda extends WorkSpace {
       cellCount: 1,
       rowClass: TIME_PANEL_ROW_CLASS,
       cellClass: TIME_PANEL_CELL_CLASS,
-      cellTemplate: this.option('dateCellTemplate') as TemplateBase | undefined,
+      cellTemplate: this.option('dateCellTemplate'),
       getStartDate: this.getTimePanelStartDate.bind(this),
     });
   }
@@ -479,7 +471,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   private getRowHeight(rowSize: number): number {
-    const baseHeight = this.option('rowHeight') as number;
+    const baseHeight = this.option('rowHeight');
     const innerOffset = (rowSize - 1) * INNER_CELL_MARGIN;
 
     return rowSize ? (baseHeight * rowSize) + innerOffset + OUTER_CELL_MARGIN : 0;
@@ -498,7 +490,7 @@ class SchedulerAgenda extends WorkSpace {
 
     const rows = agendaUtils.calculateRows(
       appointments,
-      this.option('agendaDuration') as number,
+      this.option('agendaDuration'),
       this.getStartViewDate(),
       this.resourceManager.groupCount(),
     );
@@ -506,14 +498,14 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   getAgendaVerticalStepHeight(): number {
-    return this.option('rowHeight') as number;
+    return this.option('rowHeight');
   }
 
   getEndViewDate(): Date {
     return agendaUtils.calculateEndViewDate(
       this.getStartViewDate(),
       this.option('endDayHour'),
-      this.option('agendaDuration') as number,
+      this.option('agendaDuration'),
     );
   }
 
