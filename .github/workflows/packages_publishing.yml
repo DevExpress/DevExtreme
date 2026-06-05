@@ -93,14 +93,14 @@ jobs:
       - name: Upload SBOMs
         uses: actions/upload-artifact@v7
         with:
-          name: sbom
+          name: sbom-packages
           path: packages/sbom/dist
           retention-days: 7
 
       - name: Upload packages
         uses: actions/upload-artifact@v7
         with:
-          name: packages
+          name: npm-packages
           path: artifacts/npm/*.tgz
           retention-days: 2
 
@@ -122,10 +122,17 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v6
 
-      - name: Download artifacts
+      - name: Download packages
         uses: actions/download-artifact@v8
         with:
-          name: packages
+          name: npm-packages
+          path: npm-packages
+
+      - name: Download SBOMs
+        uses: actions/download-artifact@v8
+        with:
+          name: sbom-packages
+          path: sbom-packages
 
       - name: Use Node.js
         uses: actions/setup-node@v6
@@ -145,9 +152,45 @@ jobs:
           PACKAGE: ${{ matrix.package }}
         run: |
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
+          PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz npm-packages/$PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
+          pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
+
+      - name: Build SBOM package
+        id: scopedSbomPackage
+        env:
+          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
+        run: |
+          UNSCOPED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed -r 's#^@[^/]+/##');
+          SBOM_FILE="sbom-packages/$UNSCOPED_PACKAGE_NAME.sbom.json";
+
+          # if [ ! -f "$SBOM_FILE" ]; then
+          #   echo "No SBOM found for $UNSCOPED_PACKAGE_NAME"
+          #   echo "hasSbom=false" >> "$GITHUB_OUTPUT";
+          #   exit 0;
+          # fi
+
+          SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
+          SBOM_PACKAGE_NAME="$UNSCOPED_PACKAGE_NAME-sbom";
+          SBOM_PACKAGE_DIR="sbom-package/$SBOM_PACKAGE_NAME";
+          SBOM_TGZ_DIR="sbom-package-tgz";
+          PACKAGE_LICENSE=$(node -p "require('./package.json').license");
+          PACKAGE_AUTHOR=$(node -p "require('./package.json').author");
+
+          mkdir -p "$SBOM_PACKAGE_DIR" "$SBOM_TGZ_DIR";
+          cp "$SBOM_FILE" "$SBOM_PACKAGE_DIR/";
+          cd "$SBOM_PACKAGE_DIR";
+          node -e "const fs = require('fs'); const [name, version, license, author] = process.argv.slice(1); fs.writeFileSync('package.json', JSON.stringify({ name, version, license, author }, null, 2));" "$SBOM_PACKAGE_NAME" "$PACKAGE_VERSION" "$PACKAGE_LICENSE" "$PACKAGE_AUTHOR";
+          npm pack --pack-destination "../../$SBOM_TGZ_DIR";
+          cd ../..;
+
+          SCOPED_SBOM_PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz "$SBOM_TGZ_DIR/$SBOM_PACKAGE_NAME-$PACKAGE_VERSION.tgz" --scope "$SCOPE");
+          echo "packageDir=$SCOPED_SBOM_PACKAGE_DIR" >> "$GITHUB_OUTPUT";
+          cd "$SCOPED_SBOM_PACKAGE_DIR";
           pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
@@ -162,6 +205,19 @@ jobs:
           PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
           PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
           PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
+        run: |
+          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
+          pnpm publish --no-git-checks --quiet --ignore-scripts --tag $PACKAGE_VERSION_MAJOR-${{ inputs.tag }} --registry https://npm.pkg.github.com;
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
+
+        # --ignore-scripts - like above, should be removed, check if could be removed everywhere
+      - name: Publish SBOM to npm.pkg.github.com
+        working-directory: ${{ steps.scopedSbomPackage.outputs.packageDir }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_NAME: ${{ steps.scopedSbomPackage.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.scopedSbomPackage.outputs.version }}
+          PACKAGE_VERSION_MAJOR: ${{ steps.scopedSbomPackage.outputs.majorVersion }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm publish --no-git-checks --quiet --ignore-scripts --tag $PACKAGE_VERSION_MAJOR-${{ inputs.tag }} --registry https://npm.pkg.github.com;
