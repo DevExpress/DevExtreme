@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import Popup from 'devextreme-react/popup';
+import 'devextreme/ui/button';
 import { markup } from './data.js';
 
 const headerValues = [false, 1, 2, 3, 4, 5];

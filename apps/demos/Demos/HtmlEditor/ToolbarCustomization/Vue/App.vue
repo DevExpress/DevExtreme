@@ -47,6 +47,7 @@ import {
   DxItem,
 } from 'devextreme-vue/html-editor';
 import { DxPopup } from 'devextreme-vue/popup';
+import 'devextreme/ui/button';
 import { markup } from './data.ts';
 
 const value = ref(markup);
