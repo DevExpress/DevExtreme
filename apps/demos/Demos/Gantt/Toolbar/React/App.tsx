@@ -4,6 +4,7 @@ import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item,
 } from 'devextreme-react/gantt';
 import { Popup } from 'devextreme-react/popup';
+import 'devextreme/ui/button';
 
 import {
   tasks, dependencies, resources, resourceAssignments,

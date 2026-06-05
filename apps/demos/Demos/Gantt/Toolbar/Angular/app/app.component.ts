@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxGanttModule, DxPopupModule } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import 'devextreme/ui/button';
 import {
   Service, Task, Dependency, Resource, ResourceAssignment,
 } from './app.service';

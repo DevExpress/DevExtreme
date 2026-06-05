@@ -83,6 +83,7 @@ import {
   DxItem,
 } from 'devextreme-vue/gantt';
 import { DxPopup } from 'devextreme-vue/popup';
+import 'devextreme/ui/button';
 import {
   tasks,
   dependencies,

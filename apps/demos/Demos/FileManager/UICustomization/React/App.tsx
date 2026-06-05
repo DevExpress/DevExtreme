@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import FileManager, {
   Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column,
 } from 'devextreme-react/file-manager';
+import 'devextreme/ui/menu';
 import type { FileManagerRef } from 'devextreme-react/file-manager';
 import { fileItems, getItemInfo } from './data.ts';
 

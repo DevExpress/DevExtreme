@@ -14,6 +14,7 @@ import {
   Toolbar,
   Item,
 } from 'devextreme-react/gantt';
+import 'devextreme/ui/button';
 import * as pdfExporter from 'devextreme-react/common/export/pdf';
 import { jsPDF } from 'jspdf';
 import { applyPlugin } from 'jspdf-autotable';

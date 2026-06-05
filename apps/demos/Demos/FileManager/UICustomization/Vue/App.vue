@@ -95,6 +95,7 @@ import {
   DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
   DxFileSelectionItem, DxItemView, DxDetails, DxColumn, type DxFileManagerTypes,
 } from 'devextreme-vue/file-manager';
+import 'devextreme/ui/menu';
 import FileSystemItem from 'devextreme/file_management/file_system_item';
 import { fileItems, getItemInfo } from './data.ts';
 
