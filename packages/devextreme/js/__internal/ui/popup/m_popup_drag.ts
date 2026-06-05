@@ -5,7 +5,7 @@ import {
   move as dragMoveEvent,
   start as dragStartEvent,
 } from '@js/common/core/events/drag';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import domAdapter from '@js/core/dom_adapter';
 import { fitIntoRange } from '@js/core/utils/math';
 import { getOffset, getOuterHeight, getOuterWidth } from '@js/core/utils/size';
