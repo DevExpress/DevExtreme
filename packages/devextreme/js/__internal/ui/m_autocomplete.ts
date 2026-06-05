@@ -137,7 +137,6 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     super._setListDataSource();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _refreshSelected(): void {
     // Autocomplete has no persistent selection state — suppress parent behavior
     // _refreshSelected is called in parent, so we need to override here
@@ -163,7 +162,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     };
   }
 
-  _searchDataSource(searchValue): void {
+  _searchDataSource(searchValue: string): void {
     const { maxItemCount } = this.option();
     if (isDefined(maxItemCount)) {
       this._dataSource.pageSize(maxItemCount);
@@ -179,7 +178,6 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderValueEventName(): string {
     return 'input keyup';
   }
