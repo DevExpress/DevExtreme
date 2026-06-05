@@ -6,6 +6,7 @@ window.config = {
     emitDecoratorMetadata: true,
     experimentalDecorators: true,
     jsx: 'react',
+    ignoreDeprecations: '6.0'
   },
   meta: {
     'react': {
