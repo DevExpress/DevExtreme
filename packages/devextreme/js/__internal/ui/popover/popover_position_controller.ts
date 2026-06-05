@@ -34,6 +34,8 @@ export interface PopoverPosition extends OverlayPosition {
 
 export type Position = PopoverPosition | CommonPosition | OverlayBasePosition;
 
+export type DisplaySide = CommonPosition | 'center';
+
 export type PopoverPositionControllerConstructor<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
   TElements extends PopoverControllerElements = PopoverControllerElements,
@@ -88,7 +90,7 @@ export class PopoverPositionController<
     TElements,
     TPosition
   > {
-  _positionSide?: CommonPosition;
+  _positionSide?: DisplaySide;
 
   _$arrow?: TElements['$arrow'];
 
@@ -164,8 +166,12 @@ export class PopoverPositionController<
     return position;
   }
 
-  _getContentBorderWidth(side?: CommonPosition): number {
-    const borderWidth = side ? this._$content?.css(borderWidthStyles[side]) ?? '' : '';
+  _getContentBorderWidth(side?: DisplaySide): number {
+    if (!side || side === 'center') {
+      return 0;
+    }
+
+    const borderWidth = this._$content?.css(borderWidthStyles[side]) ?? '';
 
     return parseInt(borderWidth, 10) || 0;
   }
@@ -177,15 +183,15 @@ export class PopoverPositionController<
     return my.h === at.h && my.v === at.v;
   }
 
-  _isVerticalSide(side = this._positionSide): boolean {
+  _isVerticalSide(side: DisplaySide | undefined = this._positionSide): boolean {
     return side === 'top' || side === 'bottom';
   }
 
-  _isHorizontalSide(side = this._positionSide): boolean {
+  _isHorizontalSide(side: DisplaySide | undefined = this._positionSide): boolean {
     return side === 'left' || side === 'right';
   }
 
-  _getDisplaySide(position: PopoverPosition): CommonPosition {
+  _getDisplaySide(position: PopoverPosition): DisplaySide {
     const my = positionUtils.setup.normalizeAlign(position.my);
     const at = positionUtils.setup.normalizeAlign(position.at);
 
@@ -195,7 +201,7 @@ export class PopoverPositionController<
     const horizontalWeight = Math.abs(WEIGHT_OF_SIDES[my.h] - weightSign * WEIGHT_OF_SIDES[at.h]);
     const verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
 
-    return (horizontalWeight > verticalWeight ? at.h : at.v) as CommonPosition;
+    return (horizontalWeight > verticalWeight ? at.h : at.v) as DisplaySide;
   }
 
   _normalizePosition(position?: TPosition): PopoverPosition {

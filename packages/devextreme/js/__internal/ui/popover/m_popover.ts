@@ -25,6 +25,7 @@ import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
+  DisplaySide,
   PopoverControllerElements,
   PopoverControllerProperties,
   PopoverPosition,
@@ -43,11 +44,12 @@ const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
 const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
 
-const POSITION_FLIP_MAP: Record<Position, Position> = {
+const POSITION_FLIP_MAP: Record<DisplaySide, DisplaySide> = {
   left: 'right',
   top: 'bottom',
   right: 'left',
   bottom: 'top',
+  center: 'center',
 };
 
 const HOVER_EVENT_PAIRS: Record<string, string> = {
@@ -501,7 +503,7 @@ class Popover<
 
     const isArrowVisible = this._isHorizontalSide() || this._isVerticalSide();
 
-    if (isArrowVisible && positionSide) {
+    if (isArrowVisible && positionSide && positionSide !== 'center') {
       this._renderArrowPosition(positionSide);
     }
   }
@@ -558,7 +560,7 @@ class Popover<
     return $(this._positionController._position?.of || super._getHideOnParentScrollTarget());
   }
 
-  _getSideByLocation(location: PositionCalculationResult): Position | undefined {
+  _getSideByLocation(location: PositionCalculationResult): DisplaySide | undefined {
     const isFlippedByVertical = location.v.flip;
     const isFlippedByHorizontal = location.h.flip;
 
