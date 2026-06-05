@@ -273,53 +273,55 @@ describe('selectByIndexesCommand', () => {
   describe('schema', () => {
     it('accepts an array of positive integers with mode deselect', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1, 2, 3], mode: 'deselect',
+        indexes: [1, 2, 3], mode: 'deselect', scope: 'dataset',
       }).success).toBe(true);
     });
 
     it('accepts mode select', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1], mode: 'select',
+        indexes: [1], mode: 'select', scope: 'dataset',
       }).success).toBe(true);
     });
 
     it('rejects when indexes is missing', () => {
-      expect(selectByIndexesCommand.schema.safeParse({ mode: 'select' }).success).toBe(false);
+      expect(selectByIndexesCommand.schema.safeParse({
+        mode: 'select', scope: 'dataset',
+      }).success).toBe(false);
     });
 
     it('rejects when mode is missing', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1],
+        indexes: [1], scope: 'dataset',
       }).success).toBe(false);
     });
 
     it('rejects an invalid mode value', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1], mode: 'toggle',
+        indexes: [1], mode: 'toggle', scope: 'dataset',
       }).success).toBe(false);
     });
 
     it('rejects when indexes is an empty array', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [], mode: 'select',
+        indexes: [], mode: 'select', scope: 'dataset',
       }).success).toBe(false);
     });
 
     it('rejects zero (indexes are 1-based)', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [0], mode: 'select',
+        indexes: [0], mode: 'select', scope: 'dataset',
       }).success).toBe(false);
     });
 
     it('rejects negative indexes', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [-1], mode: 'select',
+        indexes: [-1], mode: 'select', scope: 'dataset',
       }).success).toBe(false);
     });
 
     it('rejects non-integer indexes', () => {
       expect(selectByIndexesCommand.schema.safeParse({
-        indexes: [1.5], mode: 'select',
+        indexes: [1.5], mode: 'select', scope: 'dataset',
       }).success).toBe(false);
     });
 
@@ -327,7 +329,32 @@ describe('selectByIndexesCommand', () => {
       expect(selectByIndexesCommand.schema.safeParse({
         indexes: [1],
         mode: 'select',
+        scope: 'dataset',
         extra: 1,
+      }).success).toBe(false);
+    });
+
+    it('rejects when scope is missing', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1], mode: 'select',
+      }).success).toBe(false);
+    });
+
+    it('accepts scope "dataset"', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1], mode: 'select', scope: 'dataset',
+      }).success).toBe(true);
+    });
+
+    it('accepts scope "page"', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1], mode: 'select', scope: 'page',
+      }).success).toBe(true);
+    });
+
+    it('rejects an invalid scope value', () => {
+      expect(selectByIndexesCommand.schema.safeParse({
+        indexes: [1], mode: 'select', scope: 'global',
       }).success).toBe(false);
     });
   });
@@ -339,7 +366,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select',
+        indexes: [1], mode: 'select', scope: 'dataset',
       });
 
       expect(result.status).toBe('failure');
@@ -353,7 +380,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select',
+        indexes: [1], mode: 'select', scope: 'dataset',
       });
 
       expect(result.status).toBe('failure');
@@ -370,7 +397,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [2, 3], mode: 'select',
+        indexes: [2, 3], mode: 'select', scope: 'dataset',
       });
 
       expect(loadSpy).toHaveBeenCalledTimes(1);
@@ -398,7 +425,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 2, 5], mode: 'select',
+        indexes: [1, 2, 5], mode: 'select', scope: 'dataset',
       });
 
       expect(loadSpy).toHaveBeenCalledTimes(2);
@@ -417,7 +444,7 @@ describe('selectByIndexesCommand', () => {
 
       // Three rows in createGrid; range 1..10 cannot be fully resolved.
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], mode: 'select',
+        indexes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], mode: 'select', scope: 'dataset',
       });
 
       expect(result.status).toBe('failure');
@@ -435,7 +462,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'deselect',
+        indexes: [1], mode: 'deselect', scope: 'dataset',
       });
 
       expect(deselectSpy).toHaveBeenCalledWith([1]);
@@ -450,7 +477,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select',
+        indexes: [1], mode: 'select', scope: 'dataset',
       });
 
       expect(result.status).toBe('failure');
@@ -466,7 +493,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select',
+        indexes: [1], mode: 'select', scope: 'dataset',
       });
 
       expect(result.status).toBe('failure');
@@ -482,10 +509,74 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       const result = await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'deselect',
+        indexes: [1], mode: 'deselect', scope: 'dataset',
       });
 
       expect(result.status).toBe('failure');
+    });
+
+    describe('scope "page"', () => {
+      it('resolves keys from the current page items (no store.load) and selects with preserve=true', async () => {
+        const instance = await createGrid();
+        const loadSpy = jest.spyOn(instance.getDataSource().store(), 'load');
+        const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
+        const callbacks = createCallbacks();
+
+        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+          indexes: [1, 3], mode: 'select', scope: 'page',
+        });
+
+        expect(loadSpy).not.toHaveBeenCalled();
+        expect(selectSpy).toHaveBeenCalledWith([1, 3], true);
+        expect(result.status).toBe('success');
+      });
+
+      it('resolves keys from the current page items and calls deselectRows when deselecting', async () => {
+        const instance = await createGrid();
+        const deselectSpy = jest.spyOn(instance, 'deselectRows').mockReturnValue(Promise.resolve([]) as never);
+        const callbacks = createCallbacks();
+
+        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+          indexes: [1], mode: 'deselect', scope: 'page',
+        });
+
+        expect(deselectSpy).toHaveBeenCalledWith([1]);
+        expect(result.status).toBe('success');
+      });
+
+      it('returns failure when any index has no row on the current page', async () => {
+        const instance = await createGrid();
+        const selectSpy = jest.spyOn(instance, 'selectRows');
+        const callbacks = createCallbacks();
+
+        // Three rows in createGrid; 1-based index 100 has no row on the current page.
+        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+          indexes: [1, 100], mode: 'select', scope: 'page',
+        });
+
+        expect(result.status).toBe('failure');
+        expect(selectSpy).not.toHaveBeenCalled();
+      });
+
+      it('returns failure when any index points at a non-data row (e.g. group row)', async () => {
+        // Grouping by `name` produces group rows interleaved with data rows.
+        // 1-based index 1 (→ 0 after normalization) is a group row → command rejects the entire set
+        const instance = await createGrid({
+          columns: [
+            { dataField: 'id', dataType: 'number' },
+            { dataField: 'name', dataType: 'string', groupIndex: 0 },
+          ],
+        });
+        const selectSpy = jest.spyOn(instance, 'selectRows');
+        const callbacks = createCallbacks();
+
+        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+          indexes: [1], mode: 'select', scope: 'page',
+        });
+
+        expect(result.status).toBe('failure');
+        expect(selectSpy).not.toHaveBeenCalled();
+      });
     });
   });
 
@@ -499,7 +590,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1, 3], mode: 'select',
+        indexes: [1, 3], mode: 'select', scope: 'dataset',
       });
 
       expect(callbacks.success).toHaveBeenCalledWith('Select row(s) number 1, 3.');
@@ -514,7 +605,7 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'deselect',
+        indexes: [1], mode: 'deselect', scope: 'dataset',
       });
 
       expect(callbacks.success).toHaveBeenCalledWith('Deselect row(s) number 1.');
@@ -525,10 +616,22 @@ describe('selectByIndexesCommand', () => {
       const callbacks = createCallbacks();
 
       await selectByIndexesCommand.execute(instance, callbacks)({
-        indexes: [1], mode: 'select',
+        indexes: [1], mode: 'select', scope: 'dataset',
       });
 
       expect(callbacks.failure).toHaveBeenCalledWith('Select row(s) number 1.');
+    });
+
+    it('appends "on the current page" when scope is "page"', async () => {
+      const instance = await createGrid();
+      jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
+      const callbacks = createCallbacks();
+
+      await selectByIndexesCommand.execute(instance, callbacks)({
+        indexes: [1, 2], mode: 'select', scope: 'page',
+      });
+
+      expect(callbacks.success).toHaveBeenCalledWith('Select row(s) number 1, 2 on the current page.');
     });
   });
 });

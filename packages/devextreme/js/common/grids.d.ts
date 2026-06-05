@@ -223,6 +223,7 @@ export type PredefinedCommands = {
   selectByIndexes: {
     indexes: number[];
     mode: 'select' | 'deselect';
+    scope: 'dataset' | 'page';
   };
   selectAll: {};
   deselectAll: {};

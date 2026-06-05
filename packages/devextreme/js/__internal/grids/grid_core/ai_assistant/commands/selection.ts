@@ -1,4 +1,5 @@
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
+import type { InternalGrid, RowKey } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
@@ -51,12 +52,67 @@ export const selectByKeysCommand = defineGridCommand({
 const selectByIndexesCommandSchema = z.object({
   indexes: z.array(z.number().int().min(1)).min(1),
   mode: z.enum(['select', 'deselect']),
+  scope: z.enum(['dataset', 'page']),
 }).strict();
+
+const resolveKeysFromCurrentPage = (
+  component: InternalGrid,
+  indexes: number[],
+): RowKey[] | null => {
+  const items = component.getController('data').items();
+  const normalizedRowIndexes = indexes.map((index) => index - 1);
+  const allIndexesValid = normalizedRowIndexes.every(
+    (index) => items[index]?.rowType === 'data',
+  );
+
+  if (!allIndexesValid) {
+    return null;
+  }
+
+  return normalizedRowIndexes.map((index) => items[index].key);
+};
+
+const resolveKeysFromDataset = async (
+  component: InternalGrid,
+  indexes: number[],
+): Promise<RowKey[] | null> => {
+  const dataSource = component.getDataSource();
+  const store = dataSource?.store();
+
+  if (!dataSource || !store) {
+    return null;
+  }
+
+  const ranges = splitIntoContiguousRanges(indexes);
+  const baseLoadOptions = { ...dataSource.loadOptions() };
+
+  const loadedRanges = await Promise.all(ranges.map((range) => {
+    const skip = range[0] - 1;
+    const take = range.length;
+    return store.load({ ...baseLoadOptions, skip, take })
+      .then((result) => {
+        const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
+        return { rows, take };
+      });
+  }));
+
+  const allRowsResolved = loadedRanges.every(
+    ({ rows, take }) => Array.isArray(rows) && rows.length >= take,
+  );
+
+  if (!allRowsResolved) {
+    return null;
+  }
+
+  return loadedRanges.flatMap(({ rows }) => rows.map((row) => store.keyOf(row)));
+};
 
 export const selectByIndexesCommand = defineGridCommand({
   name: 'selectByIndexes',
-  description: 'Select or deselect rows by their 1-based indexes within the currently filtered and sorted dataset. '
-    + 'Index 1 is the first row of the dataset (NOT the first row on the visible page); indexes are NOT limited to the current page — any index up to the total row count is addressable, regardless of pageIndex/pageSize. '
+  description: 'Select or deselect rows by their 1-based indexes. '
+    + 'Always set scope to choose how indexes are interpreted: '
+    + '"dataset" — indexes are positions within the currently filtered and sorted dataset, NOT limited to the current page; index 1 is the first row of the dataset, regardless of pageIndex/pageSize. Use this when the user does NOT explicitly refer to the visible page (e.g. "select rows 1 to 100"). '
+    + '"page" — indexes are positions within the currently rendered page; index 1 is the first row on the visible page and group/header rows are not addressable. Use this ONLY when the user explicitly mentions the current/visible page (e.g. "select the first 3 rows on the current page", "deselect row 2 on this page"). '
     + 'Use this command for a SINGLE contiguous range per call. When the user asks for several non-contiguous ranges (e.g. "select rows 1 to 50 and 70 to 100"), invoke this command separately for EACH range — once with indexes [1, 2, ..., 50] and once with indexes [70, 71, ..., 100]. '
     + 'Set mode to "select" to add the listed rows to the current selection (multiple calls accumulate, so previously selected ranges are kept); set mode to "deselect" to remove the listed rows from the current selection (e.g. "unselect row 1"). '
     + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection. '
@@ -65,43 +121,21 @@ export const selectByIndexesCommand = defineGridCommand({
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const rowIndexes = args.indexes.join(', ');
     const action = args.mode === 'deselect' ? 'Deselect' : 'Select';
-    const defaultMessage = `${action} row(s) number ${rowIndexes}.`;
+    const scopeSuffix = args.scope === 'page' ? ' on the current page' : '';
+    const defaultMessage = `${action} row(s) number ${rowIndexes}${scopeSuffix}.`;
 
     if (component.option('selection.mode') === 'none') {
       return failure(defaultMessage);
     }
 
-    const dataSource = component.getDataSource();
-    const store = dataSource?.store();
-
-    if (!dataSource || !store) {
-      return failure(defaultMessage);
-    }
-
-    const ranges = splitIntoContiguousRanges(args.indexes);
-
     try {
-      const baseLoadOptions = { ...dataSource.loadOptions() };
+      const keys = args.scope === 'page'
+        ? resolveKeysFromCurrentPage(component, args.indexes)
+        : await resolveKeysFromDataset(component, args.indexes);
 
-      const loadedRanges = await Promise.all(ranges.map((range) => {
-        const skip = range[0] - 1;
-        const take = range.length;
-        return store.load({ ...baseLoadOptions, skip, take })
-          .then((result) => {
-            const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
-            return { rows, take };
-          });
-      }));
-
-      const allRowsResolved = loadedRanges.every(
-        ({ rows, take }) => Array.isArray(rows) && rows.length >= take,
-      );
-
-      if (!allRowsResolved) {
+      if (keys === null) {
         return failure(defaultMessage);
       }
-
-      const keys = loadedRanges.flatMap(({ rows }) => rows.map((row) => store.keyOf(row)));
 
       if (args.mode === 'deselect') {
         await component.deselectRows(keys);
