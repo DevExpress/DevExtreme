@@ -617,9 +617,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       index: nextCellData.index,
     });
 
+    if (!nextCellPosition) {
+      return;
+    }
+
     if (!this.viewDataProvider.isSameCell(focusedCellData, nextCellData)) {
       const $cell = nextCellData.allDay && !this.isVerticalGroupedWorkSpace()
-        ? this.domGetAllDayPanelCell(nextCellPosition?.columnIndex)
+        ? this.domGetAllDayPanelCell(nextCellPosition.columnIndex)
         : this.domGetDateCell(nextCellPosition);
       const isNextCellAllDay = nextCellData.allDay;
 
