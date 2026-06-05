@@ -15,8 +15,15 @@ test('Expandable cell should have a visible focus outline when focused by keyboa
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 
-  // Focus the first expandable cell using the keyboard so the :focus-visible outline applies.
-  await t.pressKey('tab');
+  // Tab through the grid until an expandable cell is focused by keyboard
+  // so that the :focus-visible outline is applied.
+  for (let i = 0; i < 10; i += 1) {
+    await t.pressKey('tab');
+
+    if (await Selector(':focus').hasAttribute('aria-expanded')) {
+      break;
+    }
+  }
 
   await t
     .expect(Selector(':focus').hasAttribute('aria-expanded'))
@@ -30,6 +37,9 @@ test('Expandable cell should have a visible focus outline when focused by keyboa
 }).before(async () => createWidget('dxPivotGrid', {
   width: 600,
   allowExpandAll: true,
+  fieldChooser: {
+    enabled: false,
+  },
   dataSource: {
     fields: [{
       dataField: 'region',
