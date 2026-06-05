@@ -1,3 +1,4 @@
+import type { template } from '@js/common';
 import type { PositionConfig } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
@@ -199,7 +200,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   // T977758
-  // eslint-disable-next-line class-methods-use-this
+
   _renderFocusTarget(): void {}
 
   _render(): void {
@@ -257,7 +258,9 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._itemClickAction = this._createActionByOption('onItemClick') as ItemClickActionType;
   }
 
-  _fireSelectionChangedAction({ previousValue, value }): void {
+  _fireSelectionChangedAction(
+    { previousValue, value }: { previousValue: unknown; value: unknown },
+  ): void {
     this._selectionChangedAction({
       item: value,
       previousItem: previousValue,
@@ -274,27 +277,29 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     });
   }
 
-  _getButtonTemplate() {
+  _formButtonTemplateFn({ text, icon }: ButtonGroupItem, buttonContent: DxElement): void {
+    const $firstIcon = getImageContainer(icon);
+    const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
+    const $secondIcon = getImageContainer('spindown');
+    if ($secondIcon !== null) {
+      $secondIcon.addClass(DX_ICON_RIGHT_CLASS);
+    }
+
+    const $container = $(buttonContent);
+    if ($firstIcon) $container.append($firstIcon);
+    if ($textContainer) $container.append($textContainer);
+    if ($secondIcon) $container.append($secondIcon);
+  }
+
+  _getButtonTemplate(): template {
     const { template, splitButton, showArrowIcon } = this.option();
 
     if (template) {
       return template;
     }
 
-    return splitButton || !showArrowIcon
-      ? 'content' : ({ text, icon }: ButtonGroupItem, buttonContent: DxElement): void => {
-        const $firstIcon = getImageContainer(icon);
-        const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
-        const $secondIcon = getImageContainer('spindown');
-        if ($secondIcon !== null) {
-          $secondIcon.addClass(DX_ICON_RIGHT_CLASS);
-        }
-
-        const $container = $(buttonContent);
-        if ($firstIcon) $container.append($firstIcon);
-        if ($textContainer) $container.append($textContainer);
-        if ($secondIcon) $container.append($secondIcon);
-      };
+    return splitButton || !showArrowIcon ? 'content'
+      : this._formButtonTemplateFn.bind(this);
   }
 
   _getActionButtonConfig(): ButtonGroupItem {
@@ -343,11 +348,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     return items;
   }
 
-  _buttonGroupItemClick({ event, itemData }): void {
-    const isActionButton = itemData.elementAttr.class === DROP_DOWN_BUTTON_ACTION_CLASS;
-    const isToggleButton = itemData.elementAttr.class === DROP_DOWN_BUTTON_TOGGLE_CLASS;
+  _buttonGroupItemClick({ event, itemData }: { event: Event; itemData: ButtonGroupItem }): void {
+    const isActionButton = itemData.elementAttr?.class === DROP_DOWN_BUTTON_ACTION_CLASS;
+    const isToggleButton = itemData.elementAttr?.class === DROP_DOWN_BUTTON_TOGGLE_CLASS;
 
     if (isToggleButton) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.toggle();
     } else if (isActionButton) {
       this._actionClickAction({
@@ -356,6 +362,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       });
 
       if (!this.option('splitButton')) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.toggle();
       }
     }
@@ -371,7 +378,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       tabIndex,
     } = this.option();
 
-    const buttonGroupOptions = {
+    const buttonGroupOptions: ButtonGroupProperties = {
       items: this._getButtonGroupItems(),
       width: '100%',
       height: '100%',
@@ -385,15 +392,15 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         role: splitButton ? 'menu' : 'group',
       },
       onItemClick: this._buttonGroupItemClick.bind(this),
-      onKeyboardHandled: (e) => this._keyboardHandler(e),
+      onKeyboardHandled: (e): boolean => this._keyboardHandler(e),
       ...this._options.cache('buttonGroupOptions'),
     };
 
     return buttonGroupOptions;
   }
 
-  _renderPopupContent() {
-    const $content = this._popup!.$content();
+  _renderPopupContent(): unknown {
+    const $content = this._popup?.$content();
     const template = this._getTemplateByOption('dropDownContentTemplate');
 
     $content?.empty();
@@ -547,7 +554,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._updateAriaAttributes(false);
   }
 
-  _popupOptionChanged(args): void {
+  _popupOptionChanged(args: OptionChanged<DropDownButtonProperties>): void {
     const options = Widget.getOptionsFromContainer(args);
 
     this._setPopupOption(options);
@@ -575,7 +582,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._updateAriaAttributes(true);
   }
 
-  _setElementAria(value): void {
+  _setElementAria(value: boolean): void {
     const elementAria = {
       owns: value ? this._popupContentId : undefined,
     };
@@ -604,7 +611,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     });
   }
 
-  _updateAriaAttributes(value): void {
+  _updateAriaAttributes(value: boolean): void {
     this._setElementAria(value);
     this._setButtonsAria(value);
   }
@@ -632,7 +639,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
     this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
-    this._updateAriaAttributes(this.option('opened'));
+    const { opened } = this.option();
+    this._updateAriaAttributes(opened ?? false);
   }
 
   _updateArrowClass(): void {
@@ -657,7 +665,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     return this.toggle(false);
   }
 
-  _setListOption(name, value): void {
+  _setListOption(name: string, value: unknown): void {
     this._list?.option(name, value);
   }
 
@@ -667,11 +675,11 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     return !isObject(displayValue) ? String(ensureDefined(displayValue, '')) : '';
   }
 
-  _updateActionButton(selectedItem): void {
+  _updateActionButton(selectedItem: unknown): void {
     if (this.option('useSelectMode')) {
       this.option({
-        text: this._getDisplayValue(selectedItem),
-        icon: isPlainObject(selectedItem) ? selectedItem.icon : undefined,
+        text: this._getDisplayValue(selectedItem as Item),
+        icon: isPlainObject(selectedItem) ? (selectedItem as Item).icon : undefined,
       });
     }
 
@@ -684,7 +692,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._popup?.$element().remove();
   }
 
-  _selectedItemKeyChanged(value): void {
+  _selectedItemKeyChanged(value: unknown): void {
     this._setListOption('selectedItemKeys', this.option('useSelectMode') && isDefined(value) ? [value] : []);
     const { selectedItem: previousItem } = this.option();
     this._loadSelectedItem().always((selectedItem) => {
@@ -698,13 +706,14 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     });
   }
 
-  _updateButtonGroup(name, value): void {
+  _updateButtonGroup(name: string, value: unknown): void {
     this._buttonGroup.option(name, value);
-    this._updateAriaAttributes(this.option('opened'));
+    const { opened } = this.option();
+    this._updateAriaAttributes(opened ?? false);
   }
 
-  _actionButtonOptionChanged({ name, value }): void {
-    const newConfig = {};
+  _actionButtonOptionChanged({ name, value }: { name: string; value: unknown }): void {
+    const newConfig: Record<string, unknown> = {};
     newConfig[name] = value;
     this._updateButtonGroup(
       'items[0]',
@@ -714,7 +723,9 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         newConfig,
       ),
     );
-    this._popup && this._popup.repaint();
+    if (this._popup) {
+      this._popup.repaint();
+    }
   }
 
   _selectModeChanged(value: unknown): void {
