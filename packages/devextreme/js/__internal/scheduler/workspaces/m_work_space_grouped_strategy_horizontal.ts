@@ -188,7 +188,7 @@ class HorizontalGroupedStrategy {
   getShaderOffset(i: number, width: number): number {
     const offset = this.config.getCellCount() * this.config.getCellWidth() * i;
 
-    if (this.config.isRtlEnabled()) {
+    if (this.config.rtlEnabled) {
       const containerWidth = getBoundingRect(this.config.getScrollable().$content().get(0)).width;
       return containerWidth - offset - this.config.getTimePanelWidth() - width;
     }

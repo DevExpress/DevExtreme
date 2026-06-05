@@ -299,15 +299,15 @@ export interface GroupBoundsOffset {
 }
 
 export interface GroupedStrategyOptions {
-  getHeaderPanelContainer: () => dxElementWrapper;
-  getStartDayHour: () => number;
-  getEndDayHour: () => number;
-  getHoursInterval: () => number;
+  $headerPanelContainer: dxElementWrapper;
+  startDayHour: number;
+  endDayHour: number;
+  hoursInterval: number;
   getRowCount: () => number;
   getCellCount: () => number;
   supportAllDayRow: () => boolean;
   getGroupCount: () => number;
-  isShowAllDayPanel: () => boolean;
+  showAllDayPanel: boolean;
   getTimePanelWidth: () => number;
   getGroupTableWidth: () => number;
   getWorkSpaceWidth: () => number;
@@ -318,8 +318,8 @@ export interface GroupedStrategyOptions {
   getIndicationHeight: () => number;
   getCellHeight: () => number;
   getHeaderHeight: () => number;
-  isCrossScrollingEnabled: () => boolean;
-  isRtlEnabled: () => boolean;
+  crossScrollingEnabled: boolean;
+  rtlEnabled: boolean;
   getWorkSpaceLeftOffset: () => number;
   isGroupedByDate: () => boolean;
   getCellIndexByCoordinates: (coordinates: CellPositionData, allDay?: boolean) => number;
