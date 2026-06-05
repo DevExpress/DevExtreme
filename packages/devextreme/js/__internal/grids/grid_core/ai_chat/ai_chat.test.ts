@@ -43,6 +43,8 @@ const mockChatElement = $('<div>');
 const mockDataSource = {
   store: jest.fn(),
   reload: jest.fn(),
+  items: jest.fn(() => [] as unknown[]),
+  on: jest.fn(),
 };
 
 const mockChatInstance = {
@@ -138,6 +140,7 @@ const beforeTest = (): void => {
   mockWidgetInstance.option.mockClear();
   mockClearChatButtonInstance.option.mockClear();
   mockChatInstance.getDataSource.mockReturnValue(mockDataSource);
+  mockDataSource.items.mockReturnValue([]);
 };
 
 const afterTest = (): void => {
@@ -232,10 +235,53 @@ describe('AIChat', () => {
           location: 'after',
           options: expect.objectContaining({
             icon: CLEAR_CHAT_ICON,
+            disabled: true,
             onClick: expect.any(Function),
           }),
         }),
       ]);
+    });
+
+    it('should keep the clear button disabled when chat has no messages', () => {
+      mockDataSource.items.mockReturnValue([]);
+
+      createAIChat();
+      triggerContentTemplate();
+
+      expect(mockClearChatButtonInstance.option)
+        .toHaveBeenLastCalledWith('disabled', true);
+    });
+
+    it('should enable the clear button on data source change when messages exist', () => {
+      createAIChat();
+      triggerContentTemplate();
+
+      const changedHandler = (mockDataSource.on.mock.calls.find(
+        ([eventName]) => eventName === 'changed',
+      ) as any)?.[1] as () => void;
+
+      mockClearChatButtonInstance.option.mockClear();
+      mockDataSource.items.mockReturnValue([{ id: 1 }]);
+      changedHandler();
+
+      expect(mockClearChatButtonInstance.option)
+        .toHaveBeenCalledWith('disabled', false);
+    });
+
+    it('should disable the clear button on data source change when no messages remain', () => {
+      createAIChat();
+      triggerContentTemplate();
+
+      const changedHandler = (mockDataSource.on.mock.calls.find(
+        ([eventName]) => eventName === 'changed',
+      ) as any)?.[1] as () => void;
+
+      mockClearChatButtonInstance.option.mockClear();
+      mockDataSource.items.mockReturnValue([]);
+      changedHandler();
+
+      expect(mockClearChatButtonInstance.option)
+        .toHaveBeenCalledWith('disabled', true);
     });
 
     it('should call clear when clear chat button is clicked', () => {
@@ -823,7 +869,9 @@ describe('AIChat', () => {
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', true);
       });
 
-      it('should enable clear button via popup toolbarItems option', () => {
+      it('should enable clear button via popup toolbarItems option when chat has messages', () => {
+        mockDataSource.items.mockReturnValue([{ id: 1 }]);
+
         const { aiChat } = createAIChat();
         triggerContentTemplate();
 
@@ -831,6 +879,20 @@ describe('AIChat', () => {
         aiChat.setDisabled(false);
 
         expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', false);
+      });
+
+      it('should keep clear button disabled after enabling chat when there are no messages', () => {
+        mockDataSource.items.mockReturnValue([]);
+
+        const { aiChat } = createAIChat();
+        triggerContentTemplate();
+
+        aiChat.setDisabled(true);
+        mockClearChatButtonInstance.option.mockClear();
+        aiChat.setDisabled(false);
+
+        expect(mockClearChatButtonInstance.option).toHaveBeenCalledWith('disabled', true);
+        expect(mockClearChatButtonInstance.option).not.toHaveBeenCalledWith('disabled', false);
       });
 
       it('should disable chat suggestions via chatInstance option', () => {
@@ -950,6 +1012,7 @@ describe('AIChat', () => {
       const { aiChat } = createAIChat();
       triggerContentTemplate();
 
+      mockChatInstance.getDataSource.mockClear();
       aiChat.clear();
 
       expect(mockChatInstance.getDataSource).toHaveBeenCalledTimes(1);
