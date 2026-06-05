@@ -64,6 +64,17 @@ function parseHeadless(browserEnv = ''): boolean {
   return browserEnv.includes('headless');
 }
 
+function isAccessibilityStrategy(strategy = process.env.STRATEGY || ''): boolean {
+  return strategy === 'accessibility';
+}
+
+function getViewport(strategy = process.env.STRATEGY || ''): { width: number; height: number } {
+  return isAccessibilityStrategy(strategy)
+    ? { width: 1200, height: 800 }
+    : { width: 1000, height: 800 };
+}
+
+const strategy = process.env.STRATEGY || 'screenshots';
 const workers = (process.env.CONCURRENCY && Number(process.env.CONCURRENCY)) || 1;
 const browserEnv = process.env.BROWSERS || '';
 
@@ -73,9 +84,9 @@ export default defineConfig({
   timeout: 3 * 60 * 1000,
   fullyParallel: true,
   workers,
-  retries: process.env.TCQUARANTINE ? 2 : 0,
+  retries: process.env.TCQUARANTINE ? 0 : 0, // 2 : 0
   forbidOnly: Boolean(process.env.CI || process.env.CI_ENV),
-  outputDir: './testing/artifacts/playwright-common-screenshots',
+  outputDir: `./testing/artifacts/playwright-common-${strategy}`,
   reporter: process.env.CI || process.env.CI_ENV
     ? [
       ['list'],
@@ -86,7 +97,7 @@ export default defineConfig({
     browserName: 'chromium',
     channel: process.env.PLAYWRIGHT_CHROMIUM_CHANNEL || 'chrome',
     headless: parseHeadless(browserEnv),
-    viewport: { width: 1000, height: 800 },
+    viewport: getViewport(strategy),
     deviceScaleFactor: 1,
     actionTimeout: 10000,
     navigationTimeout: 10000,

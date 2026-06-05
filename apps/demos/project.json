@@ -74,6 +74,32 @@
         "{projectRoot}/testing/artifacts"
       ]
     },
+    "test-playwright-common-accessibility": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test-playwright-common-accessibility"
+      },
+      "dependsOn": [
+        // NOTE: uncomment me when the NX cache is fixed to work in GHA
+        // "devextreme:build"
+      ],
+      "inputs": [
+        { "env": "STRATEGY" },
+        { "env": "CHANGEDFILEINFOSPATH" },
+        { "env": "BROWSERS" },
+        { "env": "DEBUG" },
+        { "env": "TCQUARANTINE" },
+        { "env": "CONSTEL" },
+        { "env": "THEME" },
+        { "env": "DISABLE_DEMO_TEST_SETTINGS" },
+        { "env": "CI_ENV" },
+        "default",
+        "test"
+      ],
+      "outputs": [
+        "{projectRoot}/testing/artifacts"
+      ]
+    },
     "prepare-bundles": {
       "executor": "nx:run-script",
       "options": {

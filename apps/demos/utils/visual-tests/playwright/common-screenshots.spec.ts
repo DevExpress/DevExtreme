@@ -9,6 +9,7 @@ import {
   getDemoParts,
   getDemoPaths,
   getPageUrl,
+  isAccessibilityStrategy,
   prepareDemoPage,
   readDemoFile,
   resetPageState,
@@ -20,11 +21,14 @@ import {
   waitForAngularLoading,
   waitForStableRendering,
 } from './common-screenshots-utils';
+import { checkDemoAccessibility } from './accessibility';
 import { compareDemoScreenshot } from './screenshot-comparer';
 
 updateConfig();
 
 test.describe.configure({ mode: 'parallel' });
+
+const isAccessibility = isAccessibilityStrategy();
 
 Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) {
@@ -81,7 +85,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         }
       }
 
-      if (shouldSkipDemo(approach, widgetName, demoName)) {
+      if (!isAccessibility && shouldSkipDemo(approach, widgetName, demoName)) {
         return;
       }
 
@@ -109,6 +113,13 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
         await waitForStableRendering(page);
 
+        if (isAccessibility) {
+          const accessibilityResult = await checkDemoAccessibility(page, testName);
+
+          expect(accessibilityResult.isValid, accessibilityResult.errorMessage).toBe(true);
+          return;
+        }
+
         const compareResult = await compareDemoScreenshot(
           page,
           `${testName}.png`,
@@ -122,5 +133,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 });
 
 test.afterAll(() => {
-  console.log(`Playwright common screenshots root: ${DEMOS_ROOT}`);
+  const strategyName = isAccessibility ? 'accessibility' : 'screenshots';
+
+  console.log(`Playwright common ${strategyName} root: ${DEMOS_ROOT}`);
 });

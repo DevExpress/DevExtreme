@@ -216,6 +216,10 @@ export function shouldSkipDemo(framework: Framework, component: string, demoName
   return false;
 }
 
+export function isAccessibilityStrategy(): boolean {
+  return process.env.STRATEGY === 'accessibility';
+}
+
 export function getDemoPaths(platform: Framework): string[] {
   return glob.sync('Demos/*/*', { cwd: DEMOS_ROOT })
     .map((path) => join(path, platform));
@@ -234,8 +238,15 @@ function getClientScripts(): (ClientScript | string)[] {
     (x) => x,
   ) || '';
 
-  return [
+  const scripts: (ClientScript | string)[] = [
     { module: 'mockdate' },
+  ];
+
+  if (isAccessibilityStrategy()) {
+    scripts.push({ module: 'axe-core/axe.min.js' });
+  }
+
+  scripts.push(
     join(DEMOS_ROOT, 'utils/visual-tests/inject/test-utils.js'),
     {
       content: injectStyle(testStyles),
@@ -258,7 +269,9 @@ function getClientScripts(): (ClientScript | string)[] {
           console.error(e.message);
         });`,
     },
-  ];
+  );
+
+  return scripts;
 }
 
 export async function addClientScripts(

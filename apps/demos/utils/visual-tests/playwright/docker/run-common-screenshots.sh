@@ -151,6 +151,7 @@ run_host() {
     PLAYWRIGHT_DOCKER_RESTORE_DEMOS \
     PLAYWRIGHT_GREP \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD \
+    STRATEGY \
     TCQUARANTINE \
     THEME; do
     if [ -n "${!name+x}" ]; then
@@ -158,7 +159,7 @@ run_host() {
     fi
   done
 
-  log "Running common screenshots in Docker."
+  log "Running Playwright common tests in Docker."
   docker run --rm "${tty_args[@]}" --init \
     "${platform_args[@]}" \
     --shm-size="${PLAYWRIGHT_DOCKER_SHM_SIZE:-2g}" \
@@ -258,6 +259,7 @@ run_container() {
   local tmp_dir
   local snapshot_tar
   local baseline_dirty
+  local playwright_target
   local -a test_args=()
 
   cd "${CONTAINER_REPO_ROOT}"
@@ -265,13 +267,21 @@ run_container() {
   export CI=true
   export CI_ENV="${CI_ENV:-true}"
   export CONCURRENCY="${CONCURRENCY:-4}"
-  export CONSTEL="${CONSTEL:-jquery(1/3)}"
   export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=8192}"
   export NX_SKIP_NX_CACHE="${NX_SKIP_NX_CACHE:-true}"
   export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD="${PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD:-1}"
+  export STRATEGY="${STRATEGY:-screenshots}"
   export TCQUARANTINE="${TCQUARANTINE:-true}"
   export THEME="${THEME:-fluent.blue.light}"
   export BROWSERS="${BROWSERS:-$(get_chrome_flags)}"
+
+  if [ "${STRATEGY}" = "accessibility" ]; then
+    export CONSTEL="${CONSTEL:-jquery}"
+    playwright_target="test-playwright-common-accessibility"
+  else
+    export CONSTEL="${CONSTEL:-jquery(1/3)}"
+    playwright_target="test-playwright-common-screenshots"
+  fi
 
   tmp_dir="$(mktemp -d)"
   snapshot_tar="${tmp_dir}/demo-indexes.tar"
@@ -306,6 +316,7 @@ run_container() {
 
   log "Chrome: $(google-chrome-stable --version)"
   log "Node/pnpm: $(mise exec -- node --version) / $(mise exec -- pnpm --version)"
+  log "STRATEGY=${STRATEGY}"
   log "CONSTEL=${CONSTEL}"
   log "THEME=${THEME}"
 
@@ -337,20 +348,24 @@ run_container() {
   fi
   test_args+=("$@")
 
-  log "Running Playwright common screenshots."
+  log "Running Playwright common ${STRATEGY}."
   cd "${CONTAINER_REPO_ROOT}/apps/demos"
   set +e
   if [ "${#test_args[@]}" -gt 0 ]; then
-    mise exec -- pnpm exec nx test-playwright-common-screenshots -- "${test_args[@]}"
+    mise exec -- pnpm exec nx "${playwright_target}" -- "${test_args[@]}"
     test_status=$?
   else
-    mise exec -- pnpm exec nx test-playwright-common-screenshots
+    mise exec -- pnpm exec nx "${playwright_target}"
     test_status=$?
   fi
   set -e
 
-  log "Screenshots: apps/demos/testing/screenshots"
-  log "Compared artifacts: apps/demos/testing/artifacts/compared-screenshots"
+  if [ "${STRATEGY}" = "accessibility" ]; then
+    log "Axe reports: apps/demos/testing/artifacts/axe-reports"
+  else
+    log "Screenshots: apps/demos/testing/screenshots"
+    log "Compared artifacts: apps/demos/testing/artifacts/compared-screenshots"
+  fi
   log "Playwright report: apps/demos/testing/artifacts/playwright-report"
 
   return "${test_status}"

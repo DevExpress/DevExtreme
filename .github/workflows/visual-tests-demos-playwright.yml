@@ -336,6 +336,11 @@ jobs:
           CONSTEL: ${{ matrix.CONSTEL }}
           THEME: ${{ matrix.THEME }}
           CI_ENV: true
+          # Use Chrome's legacy CDP screenshot surface so screenshots match the
+          # etalons generated under TestCafe (which doesn't enable Playwright's
+          # CDPScreenshotNewSurface feature). Without this, Material text in
+          # particular renders with visibly different antialiasing/glyph metrics.
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
         run: mise exec -- pnpm exec nx test-playwright-common-screenshots
 
       - name: Sanitize job name
@@ -355,6 +360,166 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright-report/**/*
+          if-no-files-found: ignore
+
+  common-accessibility:
+    needs: [determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [jquery]
+        THEME: ['material.blue.light', 'fluent.blue.light', 'material.blue.dark', 'fluent.blue.dark']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-accessibility-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme
+
+      - name: Unpack artifacts
+        working-directory: ./packages/devextreme
+        run: 7z x artifacts.zip -aoa
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '145.0.7632.67'
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: Set Roboto font directory
+        if: contains(matrix.THEME, 'material')
+        run: echo "ROBOTO_FONT_DIR=${HOME}/.local/share/fonts/roboto" >> $GITHUB_ENV
+
+      - name: Cache Roboto font
+        if: contains(matrix.THEME, 'material')
+        id: cache-roboto
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.ROBOTO_FONT_DIR }}
+          key: roboto-font-${{ runner.os }}-8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
+
+      - name: Install Roboto font for Material theme
+        if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
+        env:
+          GOOGLE_FONTS_COMMIT: 8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
+          ROBOTO_SHA256: d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134
+        run: |
+          echo "Installing Roboto font from google/fonts (pinned commit)..."
+          mkdir -p "$ROBOTO_FONT_DIR"
+          BASE_URL="https://raw.githubusercontent.com/google/fonts/${GOOGLE_FONTS_COMMIT}/ofl/roboto"
+
+          curl -fsSL "${BASE_URL}/Roboto%5Bwdth%2Cwght%5D.ttf" -o /tmp/Roboto.ttf
+          echo "${ROBOTO_SHA256}  /tmp/Roboto.ttf" | sha256sum -c -
+
+          mv /tmp/Roboto.ttf "$ROBOTO_FONT_DIR/"
+          echo "Roboto font installed"
+
+      - name: Refresh font cache
+        if: contains(matrix.THEME, 'material')
+        run: fc-cache -f > /dev/null 2>&1
+
+      - name: Run Web Server
+        shell: bash
+        run: |
+          if command -v python3 > /dev/null; then
+            python3 -m http.server 8080 &
+          else
+            python -m http.server 8080 &
+          fi
+
+      - name: Set Chrome flags
+        id: chrome-flags
+        shell: bash
+        run: |
+          BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
+
+          if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
+            BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
+          fi
+
+          echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
+
+      - name: Run Playwright common accessibility
+        if: ${{ !contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
+          CONCURRENCY: 4
+          TCQUARANTINE: true
+          STRATEGY: accessibility
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-common-accessibility
+
+      - name: Sanitize job name
+        if: ${{ always() }}
+        run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Show accessibility warnings
+        if: ${{ always() && (!contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none') }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -d testing/artifacts/axe-reports ]; then
+            REPORT_COUNT=$(find testing/artifacts/axe-reports -name '*.md' | wc -l | tr -d ' ')
+          else
+            REPORT_COUNT=0
+          fi
+
+          if [ "$REPORT_COUNT" -gt 0 ]; then
+            echo "::warning ::Axe reports: ${REPORT_COUNT} demos have accessibility violations"
+          else
+            echo "No accessibility reports found."
+          fi
+
+      - name: Copy accessibility reports
+        if: ${{ always() && (!contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-reports-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/axe-reports/**/*
+          if-no-files-found: ignore
+
+      - name: Copy Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-report-${{ env.JOB_NAME }}
           path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright-report/**/*
           if-no-files-found: ignore
 

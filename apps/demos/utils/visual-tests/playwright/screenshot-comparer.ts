@@ -37,22 +37,17 @@ function getScreenshotName(baseName: string, theme = THEME.fluent): string {
     : `${baseName}${themePostfix}.png`;
 }
 
-function getThemeComparerOptions(theme = process.env.THEME || THEME.fluent): ScreenshotComparerOptions {
-  if (!theme.startsWith('material')) {
-    return {};
-  }
-
-  return {
-    textDiffTreshold: 0.2,
-  };
-}
-
 function getComparerOptions(
   comparisonOptions?: ScreenshotComparerOptions,
 ): ScreenshotComparerOptions {
+  // Mirror apps/demos/utils/visual-tests/helpers/theme-utils.js#testScreenshot
+  // so the Playwright comparer applies the same tolerances and text-mask
+  // threshold for every theme (fluent and material). Material is the most
+  // visible offender because of Roboto antialiasing, but fluent diffs are
+  // sensitive to the same defaults — both fail without this parity.
   return {
     ...comparisonOptions,
-    ...getThemeComparerOptions(),
+    textDiffTreshold: 0.2,
     path: join(DEMOS_ROOT, 'testing'),
     screenshotsRelativePath: '/screenshots',
     destinationRelativePath: '/artifacts/compared-screenshots',
