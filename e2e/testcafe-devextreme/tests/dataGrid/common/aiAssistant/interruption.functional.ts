@@ -1,15 +1,84 @@
+/* eslint-disable no-underscore-dangle */
 import { ClientFunction, Selector } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { AIAssistantChat } from 'devextreme-testcafe-models/dataGrid/aiAssistantChat';
 import { createWidget } from '../../../../helpers/createWidget';
-import { AI_INTEGRATION_PAGE, formatMessage, GRID_SELECTOR } from './testHelpers';
+import { AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
 
-const disposeGrid = ClientFunction(() => { (window as any).widget.dispose(); });
+const gridOptions = {
+  dataSource: [
+    { id: 1, name: 'Alice', value: 30 },
+    { id: 2, name: 'Bob', value: 20 },
+    { id: 3, name: 'Charlie', value: 10 },
+  ],
+  keyExpr: 'id',
+  columns: ['id', 'name', 'value'],
+  showBorders: true,
+};
+
+const sortNameAsc = [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }];
+
+const formatMessage = ClientFunction(
+  (key: string) => (window as any).DevExpress.localization.formatMessage(key),
+);
 
 const abortMessage = (): Promise<string> => formatMessage('dxDataGrid-aiAssistantAbortMessage');
 
+const disposeGrid = ClientFunction(() => { (window as any).widget.dispose(); });
+
+const wasAbortCalled = ClientFunction(() => (window as any).__aiAbortCalled === true);
+
+const setupAIState = ClientFunction((config: any) => {
+  (window as any).__aiConfig = config;
+  (window as any).__aiAbortCalled = false;
+});
+
+const aiGridOptions = (): any => {
+  const {
+    options, mode, actions, delay,
+  } = (window as any).__aiConfig;
+
+  const sendRequest = (): any => {
+    const abort = (): void => { (window as any).__aiAbortCalled = true; };
+
+    if (mode === 'never') {
+      return { promise: new Promise(() => {}), abort };
+    }
+
+    if (mode === 'delayed') {
+      return {
+        promise: new Promise((resolve) => { setTimeout(() => resolve({ actions }), delay); }),
+        abort,
+      };
+    }
+
+    return { promise: Promise.resolve({ actions }), abort };
+  };
+
+  return {
+    ...options,
+    aiAssistant: {
+      enabled: true,
+      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({ sendRequest }),
+    },
+  };
+};
+
+const createGridWithAI = async (config: Record<string, unknown>): Promise<void> => {
+  await setupAIState(config);
+
+  return createWidget('dxDataGrid', aiGridOptions);
+};
+
+const closeAndConfirmAbort = async (t: TestController, aiChat: AIAssistantChat): Promise<void> => {
+  await t.click(aiChat.getCloseButton().element);
+  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
+  await t.click(aiChat.getAbortConfirmYesButton());
+};
+
 // === §5.2 Popup close mid-request (before any command executes) ===
 
-fixture.disablePageReloads`AI Assistant - Popup Close Mid-Request`
+fixture`AI Assistant - Popup Close Mid-Request`
   .page(AI_INTEGRATION_PAGE);
 
 // 5.2.1
@@ -28,35 +97,11 @@ test('Closing the popup mid-request should abort and leave the grid unchanged', 
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
 
-  await t.click(aiChat.getCloseButton().element);
+  await closeAndConfirmAbort(t, aiChat);
 
-  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
-
-  await t.click(aiChat.getAbortConfirmYesButton());
-
-  // No command ran: the grid is unchanged.
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
-}).before(async () => createWidget('dxDataGrid', () => ({
-  dataSource: [
-    { id: 1, name: 'Alice', value: 30 },
-    { id: 2, name: 'Bob', value: 20 },
-    { id: 3, name: 'Charlie', value: 10 },
-  ],
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest() {
-        return {
-          promise: new Promise(() => {}),
-          abort: (): void => {},
-        };
-      },
-    }),
-  },
-})));
+  await t.expect(wasAbortCalled()).ok();
+  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+}).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
 
 // 5.2.2
 test('Re-opening after a mid-request close shows the aborted response and re-enables input', async (t) => {
@@ -74,11 +119,7 @@ test('Re-opening after a mid-request close shows the aborted response and re-ena
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
 
-  await t.click(aiChat.getCloseButton().element);
-
-  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
-
-  await t.click(aiChat.getAbortConfirmYesButton());
+  await closeAndConfirmAbort(t, aiChat);
 
   await t.click(dataGrid.getAIAssistantButton());
 
@@ -86,27 +127,7 @@ test('Re-opening after a mid-request close shows the aborted response and re-ena
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.getMessageErrorText(0).innerText).eql(await abortMessage());
   await t.expect(aiChat.isInputDisabled()).notOk();
-}).before(async () => createWidget('dxDataGrid', () => ({
-  dataSource: [
-    { id: 1, name: 'Alice', value: 30 },
-    { id: 2, name: 'Bob', value: 20 },
-    { id: 3, name: 'Charlie', value: 10 },
-  ],
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest() {
-        return {
-          promise: new Promise(() => {}),
-          abort: (): void => {},
-        };
-      },
-    }),
-  },
-})));
+}).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
 
 // 5.2.3
 test('Late LLM resolution after abort should be ignored', async (t) => {
@@ -124,44 +145,15 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
 
-  await t.click(aiChat.getCloseButton().element);
+  await closeAndConfirmAbort(t, aiChat);
 
-  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
-
-  await t.click(aiChat.getAbortConfirmYesButton());
-
-  await t.click(dataGrid.getAIAssistantButton());
-
-  // Wait past the mocked resolution delay: the late result must not run any command.
   await t.wait(2000);
 
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
-}).before(async () => createWidget('dxDataGrid', () => ({
-  dataSource: [
-    { id: 1, name: 'Alice', value: 30 },
-    { id: 2, name: 'Bob', value: 20 },
-    { id: 3, name: 'Charlie', value: 10 },
-  ],
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest() {
-        return {
-          promise: new Promise((resolve) => {
-            setTimeout(() => resolve({
-              actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
-            }), 1500);
-          }),
-          abort: (): void => {},
-        };
-      },
-    }),
-  },
-})));
+}).before(async () => createGridWithAI({
+  options: gridOptions, mode: 'delayed', actions: sortNameAsc, delay: 1500,
+}));
 
 // === §5.3 / §5.4 are not covered as e2e ===
 // §5.3 (close popup mid-execution) and §5.4 (re-open after a mid-execution close) cannot be
@@ -171,7 +163,7 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
 
 // === §5.5 Grid destroyed (dispose) mid-request / mid-execution ===
 
-fixture.disablePageReloads`AI Assistant - Dispose`
+fixture`AI Assistant - Dispose`
   .page(AI_INTEGRATION_PAGE);
 
 // 5.5.1
@@ -192,35 +184,12 @@ test('Disposing the grid mid-request should not throw and ignore the late resolu
 
   await disposeGrid();
 
-  // Allow the mocked resolution to fire after dispose; it must not touch the destroyed grid.
   await t.wait(2000);
 
   await t.expect(Selector('#container').find('.dx-datagrid').exists).notOk();
-}).before(async () => createWidget('dxDataGrid', () => ({
-  dataSource: [
-    { id: 1, name: 'Alice', value: 30 },
-    { id: 2, name: 'Bob', value: 20 },
-    { id: 3, name: 'Charlie', value: 10 },
-  ],
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest() {
-        return {
-          promise: new Promise((resolve) => {
-            setTimeout(() => resolve({
-              actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
-            }), 1500);
-          }),
-          abort: (): void => {},
-        };
-      },
-    }),
-  },
-})));
+}).before(async () => createGridWithAI({
+  options: gridOptions, mode: 'delayed', actions: sortNameAsc, delay: 1500,
+}));
 
 // 5.5.2
 test('Disposing the grid mid-execution should not throw', async (t) => {
@@ -236,7 +205,6 @@ test('Disposing the grid mid-execution should not throw', async (t) => {
     .typeText(aiChat.getInput(), 'Select all rows')
     .pressKey('enter');
 
-  // The selectAll command is awaiting a server key-load that never resolves — mid-execution.
   await t.expect(aiChat.isInputDisabled()).ok();
 
   await disposeGrid();
@@ -306,30 +274,7 @@ test('Re-creating the grid after a dispose-during-flight yields a usable instanc
 
   await disposeGrid();
 
-  // Re-create a fresh instance in the same container with a normal (resolving) integration.
-  await createWidget('dxDataGrid', () => ({
-    dataSource: [
-      { id: 1, name: 'Alice', value: 30 },
-      { id: 2, name: 'Bob', value: 20 },
-      { id: 3, name: 'Charlie', value: 10 },
-    ],
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return {
-            promise: Promise.resolve({
-              actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }],
-            }),
-            abort: (): void => {},
-          };
-        },
-      }),
-    },
-  }));
+  await createGridWithAI({ options: gridOptions, mode: 'resolved', actions: sortNameAsc });
 
   dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -344,25 +289,6 @@ test('Re-creating the grid after a dispose-during-flight yields a usable instanc
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
-}).before(async () => createWidget('dxDataGrid', () => ({
-  dataSource: [
-    { id: 1, name: 'Alice', value: 30 },
-    { id: 2, name: 'Bob', value: 20 },
-    { id: 3, name: 'Charlie', value: 10 },
-  ],
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest() {
-        return {
-          promise: new Promise(() => {}),
-          abort: (): void => {},
-        };
-      },
-    }),
-  },
-})));
+  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+}).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
