@@ -12,6 +12,7 @@ engineStrict: true
 
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"
+  "rollup@<4.59.0": "^4.59.0"
   "json5@<1.0.2": ^2.2.3
   "axios@<1.15.2": ^1.15.2
   "braces@<3.0.3": ^3.0.3
