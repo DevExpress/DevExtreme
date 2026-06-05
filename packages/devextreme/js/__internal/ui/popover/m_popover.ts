@@ -144,7 +144,8 @@ class Popover<
             collision: 'fit',
           },
         } as DeepPartial<TProperties>,
-      }, {
+      },
+      {
         device(): boolean {
           return !hasWindow();
         },
@@ -386,7 +387,7 @@ class Popover<
     event?: string,
   ): void {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    let eventName: string = event || this._getEventName(`${name}Event`);
+    let eventName: string | undefined = event || this._getEventName(`${name}Event`);
 
     if (!eventName) {
       return;
@@ -412,11 +413,13 @@ class Popover<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getEventNameByOption(optionValue: { name: string } | string): string {
+  _getEventNameByOption(
+    optionValue: { name?: string | undefined } | string | undefined,
+  ): string | undefined {
     return isObject(optionValue) ? optionValue.name : optionValue;
   }
 
-  _getEventName(optionName: string): string {
+  _getEventName(optionName: string): string | undefined {
     const options = this.option();
     const optionValue = options[optionName];
 
@@ -745,7 +748,9 @@ class Popover<
       case 'showEvent':
       case 'hideEvent': {
         const eventName = name.substring(0, 4);
-        const event = this._getEventNameByOption(previousValue as string | { name: string });
+        const event = this._getEventNameByOption(
+          previousValue as string | { name?: string } | undefined,
+        );
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.hide();
