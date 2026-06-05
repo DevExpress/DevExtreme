@@ -2580,8 +2580,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     // @ts-expect-error
     super._init();
 
-    this.initGrouping();
-
     this.toggleHorizontalScrollClass();
     this.toggleWorkSpaceCountClass();
     this.toggleGroupByDateClass();
@@ -2624,15 +2622,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       : HorizontalGroupedStrategy;
 
     this.groupedStrategy = new Strategy({
-      $headerPanelContainer: this.$headerPanelContainer,
-      startDayHour: this.option('startDayHour'),
-      endDayHour: this.option('endDayHour'),
-      hoursInterval: this.option('hoursInterval'),
+      getHeaderPanelContainer: () => this.$headerPanelContainer,
+      getStartDayHour: () => this.option('startDayHour'),
+      getEndDayHour: () => this.option('endDayHour'),
+      getHoursInterval: () => this.option('hoursInterval'),
       getRowCount: this.getRowCount.bind(this),
       getCellCount: this.getCellCount.bind(this),
       supportAllDayRow: this.supportAllDayRow.bind(this),
       getGroupCount: this.getGroupCount.bind(this),
-      showAllDayPanel: this.option('showAllDayPanel'),
+      isShowAllDayPanel: () => this.option('showAllDayPanel'),
       getTimePanelWidth: this.getTimePanelWidth.bind(this),
       getGroupTableWidth: this.getGroupTableWidth.bind(this),
       getWorkSpaceWidth: this.getWorkSpaceWidth.bind(this),
@@ -2642,11 +2640,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       getIndicatorOffset: this.getIndicatorOffset.bind(this),
       getIndicationWidth: this.getIndicationWidth.bind(this),
       getIndicationHeight: this.getIndicationHeight.bind(this),
-      getHeaderHeight: this.option('getHeaderHeight'),
+      getHeaderHeight: () => this.option('getHeaderHeight')?.() ?? 0,
 
       getCellHeight: this.getCellHeight.bind(this),
-      crossScrollingEnabled: this.option('crossScrollingEnabled'),
-      rtlEnabled: this.option('rtlEnabled'),
+      isCrossScrollingEnabled: () => this.option('crossScrollingEnabled'),
+      isRtlEnabled: () => this.option('rtlEnabled'),
       getWorkSpaceLeftOffset: this.getWorkSpaceLeftOffset.bind(this),
 
       isGroupedByDate: this.isGroupedByDate.bind(this),
@@ -2865,6 +2863,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.cache.clear();
 
     this.initWorkSpaceUnits();
+
+    this.initGrouping();
 
     this.initVirtualScrolling();
 

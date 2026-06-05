@@ -24,7 +24,7 @@ class VerticalGroupedStrategy {
   : CellPositionData {
     let rowIndex = cellCoordinates.rowIndex + groupIndex * this.config.getRowCount();
 
-    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
+    if (this.config.supportAllDayRow() && this.config.isShowAllDayPanel()) {
       rowIndex += groupIndex;
 
       if (!inAllDayRow) {
@@ -47,7 +47,7 @@ class VerticalGroupedStrategy {
   }
 
   insertAllDayRowsIntoDateTable(): boolean {
-    return this.config.showAllDayPanel;
+    return this.config.isShowAllDayPanel();
   }
 
   getTotalCellCount(): number {
@@ -92,17 +92,23 @@ class VerticalGroupedStrategy {
   getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [DxElement, DxElement])
   : GroupBoundsOffset {
     return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
-      const { startDayHour, endDayHour, hoursInterval } = this.config;
+      const startDayHour = this.config.getStartDayHour();
+      const endDayHour = this.config.getEndDayHour();
+      const hoursInterval = this.config.getHoursInterval();
 
       const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval)
        * this.config.getCellHeight();
       const scrollTop = this.getScrollableScrollTop();
-      const headerRowHeight = getBoundingRect(this.config.$headerPanelContainer.get(0)).height;
+      const $headerPanelContainer = this.config.getHeaderPanelContainer();
+      const headerPanelElement = $headerPanelContainer?.get(0);
+      const headerRowHeight = headerPanelElement
+        ? getBoundingRect(headerPanelElement).height
+        : 0;
 
       let topOffset = groupIndex * dayHeight + headerRowHeight
         + this.config.getHeaderHeight() - scrollTop;
 
-      if (this.config.showAllDayPanel && this.config.supportAllDayRow()) {
+      if (this.config.isShowAllDayPanel() && this.config.supportAllDayRow()) {
         topOffset += this.config.getCellHeight() * (groupIndex + 1);
       }
 
@@ -123,11 +129,11 @@ class VerticalGroupedStrategy {
 
   shiftIndicator($indicator: dxElementWrapper, height: number, rtlOffset: number, i: number): void {
     const offset = this.config.getIndicatorOffset(0);
-    const tableOffset = this.config.crossScrollingEnabled ? 0 : this.config.getGroupTableWidth();
+    const tableOffset = this.config.isCrossScrollingEnabled() ? 0 : this.config.getGroupTableWidth();
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
     let verticalOffset = this.config.getRowCount() * this.config.getCellHeight() * i;
 
-    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
+    if (this.config.supportAllDayRow() && this.config.isShowAllDayPanel()) {
       verticalOffset += this.config.getAllDayHeight() * (i + 1);
     }
 
@@ -136,9 +142,9 @@ class VerticalGroupedStrategy {
   }
 
   getShaderOffset(i: number, width: number): number {
-    const offset = this.config.crossScrollingEnabled ? 0 : this.config.getGroupTableWidth();
+    const offset = this.config.isCrossScrollingEnabled() ? 0 : this.config.getGroupTableWidth();
 
-    if (this.config.rtlEnabled) {
+    if (this.config.isRtlEnabled()) {
       const containerWidth = getBoundingRect(this.config.getScrollable().$content().get(0)).width;
       return containerWidth - offset - this.config.getWorkSpaceLeftOffset() - width;
     }
@@ -154,7 +160,7 @@ class VerticalGroupedStrategy {
   getShaderHeight(): number {
     let height = this.config.getIndicationHeight();
 
-    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
+    if (this.config.supportAllDayRow() && this.config.isShowAllDayPanel()) {
       height += this.config.getCellHeight();
     }
 
@@ -164,7 +170,7 @@ class VerticalGroupedStrategy {
   getShaderMaxHeight(): number {
     let height = this.config.getRowCount() * this.config.getCellHeight();
 
-    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
+    if (this.config.supportAllDayRow() && this.config.isShowAllDayPanel()) {
       height += this.config.getCellHeight();
     }
 
