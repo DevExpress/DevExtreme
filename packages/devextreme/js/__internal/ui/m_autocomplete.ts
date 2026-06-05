@@ -154,7 +154,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
   _loadItem(value: unknown, cache: Record<string, unknown>): ReturnType<typeof Deferred> {
     const selectedItem = this._getItemFromPlain(value, cache) as unknown;
 
-    return Deferred().resolve(selectedItem).promise();
+    return Deferred().resolve(selectedItem);
   }
 
   _dataSourceOptions(): DataSourceOptions {
