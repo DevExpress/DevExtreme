@@ -403,8 +403,14 @@ export default class Selection<
     return this._selectionStrategy.loadSelectedItemsWithFilter();
   }
 
-  isKeyHaveData(key: TKey): boolean {
+  hasMatchingSelectedItems(keys: TKey[]): boolean {
     const { selectedItems, keyOf } = this.options;
-    return selectedItems.some((item) => this._selectionStrategy.equalKeys(keyOf(item), key));
+    if (keys.length === selectedItems.length) {
+      return keys.every((key) => selectedItems.some((item) => {
+        const isKeysEqual = this._selectionStrategy.equalKeys(keyOf(item), key);
+        return isKeysEqual;
+      }));
+    }
+    return false;
   }
 }

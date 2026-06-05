@@ -158,9 +158,9 @@ export class SelectionController {
       const isLoaded = this.dataController.isLoaded.value;
       if (isLoaded) {
         const keys = this.selectedCardKeys.value;
-        const allKeysHaveData = keys.every((key) => selectionHelper?.isKeyHaveData(key));
+        const hasMatchingSelectedItems = selectionHelper?.hasMatchingSelectedItems(keys);
 
-        if (!allKeysHaveData) {
+        if (!hasMatchingSelectedItems) {
           this.selectCards(keys);
         }
       }
