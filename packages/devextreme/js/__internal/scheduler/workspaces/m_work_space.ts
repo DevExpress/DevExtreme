@@ -86,6 +86,7 @@ import type { ResourceManager } from '../utils/resource_manager/resource_manager
 import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
 import { getSkippedDaysCount as countSkippedDays } from '../utils/skipped_days';
 import type { ListEntity } from '../view_model/types';
+import { CellsSelectionController } from './cells_selection_controller';
 import CellsSelectionState from './cells_selection_state';
 import {
   getAllDayHeight,
@@ -94,7 +95,6 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/position_helper';
-import { CellsSelectionController } from './m_cells_selection_controller';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
