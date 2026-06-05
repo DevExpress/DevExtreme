@@ -56,23 +56,24 @@ export default class CellsSelectionState {
       return;
     }
 
-    const firstCell = firstCellCoordinates
-      ? viewDataProvider.getCellData(
-        firstCellCoordinates.rowIndex,
-        firstCellCoordinates.columnIndex,
-        firstCellCoordinates.allDay,
-      )
-      : this.firstSelectedCell;
     const lastCell = viewDataProvider.getCellData(
       lastRowIndex,
       lastColumnIndex,
       isLastCellAllDay,
     );
 
+    const firstCell = firstCellCoordinates
+      ? viewDataProvider.getCellData(
+        firstCellCoordinates.rowIndex,
+        firstCellCoordinates.columnIndex,
+        firstCellCoordinates.allDay,
+      )
+      : (this.firstSelectedCell ?? lastCell);
+
     this.firstSelectedCell = firstCell;
 
     this.selectedCells = this.viewDataProvider.getCellsBetween(
-      firstCell as ViewCellData,
+      firstCell,
       lastCell,
     );
   }
