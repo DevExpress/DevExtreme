@@ -56,6 +56,13 @@ const getCellSize = (DOMMetaData: DOMMetaData): { width: number; height: number 
   const cellIndex = length > 1 ? 1 : 0;
   const cellSize = dateTableCellsMeta[cellIndex][0];
 
+  if (!cellSize?.width && !cellSize?.height) {
+    return {
+      width: 0,
+      height: 0,
+    };
+  }
+
   return {
     width: cellSize.width,
     height: cellSize.height,
@@ -135,7 +142,6 @@ export const getGroupWidth = (
 ): number => {
   const {
     isVirtualScrolling,
-    rtlEnabled,
     DOMMetaData,
   } = options;
 
@@ -146,25 +152,6 @@ export const getGroupWidth = (
     const groupLength = (groupedData[groupIndex][0] as unknown[]).length;
 
     result = groupLength * cellWidth;
-  }
-
-  const position = getMaxAllowedPosition(
-    groupIndex,
-    viewDataProvider,
-    rtlEnabled,
-    DOMMetaData,
-  );
-
-  const currentPosition = (position as unknown as number[])[groupIndex];
-
-  if (currentPosition) {
-    if (rtlEnabled) {
-      result = currentPosition - (position as unknown as number[])[groupIndex + 1];
-    } else if (groupIndex === 0) {
-      result = currentPosition;
-    } else {
-      result = currentPosition - (position as unknown as number[])[groupIndex - 1];
-    }
   }
 
   return result;

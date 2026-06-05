@@ -15,7 +15,7 @@ interface EdgeIndices {
 
 interface ArrowClickOptions {
   key: 'up' | 'down' | 'left' | 'right';
-  focusedCellPosition: GridPosition;
+  focusedCellPosition?: GridPosition;
   focusedCellData: ViewCellData;
   edgeIndices: EdgeIndices;
   getCellDataByPosition: (rowIndex: number, columnIndex: number, isAllDay: boolean) => ViewCellData;
@@ -30,6 +30,7 @@ interface ArrowClickOptions {
 
 interface NextColumnPositionOptions extends ArrowClickOptions {
   direction: 'next' | 'prev';
+  focusedCellPosition: GridPosition;
 }
 
 interface ProcessEdgeCellOptions {
@@ -59,7 +60,12 @@ export class CellsSelectionController {
       edgeIndices,
       getCellDataByPosition,
       isAllDayPanelCell,
+      focusedCellData,
     } = options;
+
+    if (!focusedCellPosition) {
+      return focusedCellData;
+    }
 
     let nextCellIndices: GridPosition = focusedCellPosition;
 
@@ -73,12 +79,14 @@ export class CellsSelectionController {
       case 'left':
         nextCellIndices = this.getCellFromNextColumnPosition({
           ...options,
+          focusedCellPosition,
           direction: 'prev',
         });
         break;
       case 'right':
         nextCellIndices = this.getCellFromNextColumnPosition({
           ...options,
+          focusedCellPosition,
           direction: 'next',
         });
         break;
