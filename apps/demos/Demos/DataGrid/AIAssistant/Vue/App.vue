@@ -5,6 +5,9 @@
     :showBorders="true"
     keyExpr="Id"
     :filterSyncEnabled="true"
+    :allowColumnResizing="true"
+    :allowColumnReordering="true"
+    :focusedRowEnabled="true"
   >
     <DxSearchPanel
       :visible="true"
@@ -14,6 +17,8 @@
     <DxGroupPanel :visible="true"/>
     <DxHeaderFilter :visible="true"/>
     <DxFilterRow :visible="true"/>
+    <DxSelection mode="multiple"/>
+    <DxSorting mode="multiple"/>
     <DxPaging :pageSize="10"/>
     <DxPager
       :visible="true"
@@ -65,6 +70,8 @@ import {
   DxFilterRow,
   DxPaging,
   DxPager,
+  DxSelection,
+  DxSorting,
   DxAIAssistant,
 } from 'devextreme-vue/data-grid';
 import type dxChat from 'devextreme/ui/chat';
