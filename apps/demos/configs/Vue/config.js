@@ -1,6 +1,9 @@
 window.exports = window.exports || {};
 window.config = {
   transpiler: 'plugin-babel',
+  typescriptOptions: {
+    ignoreDeprecations: '6.0',
+  },
   meta: {
     '*.vue': {
       loader: 'vue-loader',
