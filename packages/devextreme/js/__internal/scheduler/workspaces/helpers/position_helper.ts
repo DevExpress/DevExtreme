@@ -1,12 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
-import type { CountGenerationConfig } from '../../types';
+import type { CountGenerationConfig, DOMMetaData } from '../../types';
 import type ViewDataProvider from '../view_model/m_view_data_provider';
-
-export interface DOMMetaData {
-  dateTableCellsMeta: DOMRect[][];
-  allDayPanelCellsMeta: DOMRect[];
-}
 
 export interface PositionHelperOptions {
   viewDataProvider: ViewDataProvider;
