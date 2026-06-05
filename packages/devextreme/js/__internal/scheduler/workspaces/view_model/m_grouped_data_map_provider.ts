@@ -1,9 +1,9 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
-import type { CellPosition } from '@ts/scheduler/workspaces/view_model/m_types';
 
 import timezoneUtils from '../../m_utils_time_zone';
+import type { CellPositionData } from '../../types';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -94,7 +94,7 @@ export class GroupedDataMapProvider {
     return cellData?.startDate as Date ?? null;
   }
 
-  findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): CellPosition | undefined {
+  findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): CellPositionData | undefined {
     const {
       groupIndex, startDate, isAllDay, index,
     } = cellInfo;
@@ -127,7 +127,7 @@ export class GroupedDataMapProvider {
 
         if (this.isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
           if (this.isStartDateInCell(startDate, isAllDay, cellData, originCellData)) {
-            return { ...cell.position, allDay: isAllDay };
+            return cell.position;
           }
         }
       }
