@@ -133,13 +133,11 @@ fixture`AI Assistant - Unknown Field`
 test('Sorting by non-existent dataField should show failure message and leave grid unchanged', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by Salary');
 
-  const dataSourceSortParams = await dataGrid.apiGetDataSourceSortParams();
-
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
-  await t.expect(dataSourceSortParams).eql(null);
+  await t.expect(await dataGrid.apiGetDataSourceSortParams()).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid, {
   kind: 'resolve',
   value: { actions: [{ name: 'sorting', args: { dataField: 'Salary', sortOrder: 'asc' } }] },
