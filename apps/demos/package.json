@@ -186,6 +186,7 @@
         "test-testcafe:accessibility": "cross-env STRATEGY=accessibility CONSTEL=jquery node utils/visual-tests/testcafe-runner.ts",
         "test-playwright-common-screenshots": "playwright test --config=playwright.common-screenshots.config.ts",
         "test-playwright-common-accessibility": "cross-env STRATEGY=accessibility playwright test --config=playwright.common-screenshots.config.ts",
+        "test-playwright-common-csp": "cross-env STRATEGY=csp playwright test --config=playwright.common-screenshots.config.ts",
         "test-playwright-common-screenshots:docker": "bash utils/visual-tests/playwright/docker/run-common-screenshots.sh",
         "test-playwright-common-accessibility:docker": "cross-env STRATEGY=accessibility CONSTEL=jquery bash utils/visual-tests/playwright/docker/run-common-screenshots.sh",
         "csp-server": "node utils/server/csp-server.js 8080",

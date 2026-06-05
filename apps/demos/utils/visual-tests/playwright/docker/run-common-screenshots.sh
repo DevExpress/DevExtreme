@@ -97,6 +97,45 @@ get_volume_prefix() {
   printf '%s\n' "${PLAYWRIGHT_DOCKER_VOLUME_PREFIX:-devextreme-playwright-${repo_hash}}"
 }
 
+# Named volumes start root-owned, so a `--user $uid:$gid` container cannot
+# write to them. Pre-chown each volume to the host UID/GID via a throwaway
+# root container so subsequent pnpm/nx writes succeed.
+prepare_volume_ownership() {
+  local uid="$1"
+  local gid="$2"
+  shift 2
+  local -a chown_mounts=("$@")
+  local platform_arg
+  local -a platform_args=()
+  local -a mount_args=()
+  local mount_arg
+  local mount_path
+  local -a chown_paths=()
+
+  if [ "${#chown_mounts[@]}" -eq 0 ]; then
+    return
+  fi
+
+  while IFS= read -r platform_arg; do
+    platform_args+=("${platform_arg}")
+  done < <(docker_platform_args)
+
+  # chown_mounts is a flat list alternating "-v" "name:path". Extract paths.
+  local idx
+  for ((idx = 1; idx < ${#chown_mounts[@]}; idx += 2)); do
+    mount_arg="${chown_mounts[$idx]}"
+    mount_path="${mount_arg#*:}"
+    chown_paths+=("${mount_path}")
+    mount_args+=(-v "${mount_arg}")
+  done
+
+  log "Preparing named-volume ownership (uid=${uid} gid=${gid})."
+  docker run --rm "${platform_args[@]}" \
+    "${mount_args[@]}" \
+    busybox:latest \
+    chown -R "${uid}:${gid}" "${chown_paths[@]}" > /dev/null
+}
+
 run_host() {
   local runner_image="${PLAYWRIGHT_DOCKER_IMAGE:-devextreme-playwright-common-screenshots:ubuntu-20.04}"
   local uid
@@ -134,7 +173,14 @@ run_host() {
     node_modules_volume_args+=(-v "${volume_name}:${CONTAINER_REPO_ROOT}/${node_modules_target}")
   done < <(cd "${REPO_ROOT}" && get_node_modules_targets)
 
+  # Dedicated named volume for pnpm's content-addressable store. Without this,
+  # pnpm falls back to <workspace>/.pnpm-store inside the bind-mounted repo,
+  # leaking a multi-GB store directory onto the host.
+  node_modules_volume_args+=(-v "${volume_prefix}---pnpm-store:${CONTAINER_REPO_ROOT}/.pnpm-store")
+
   build_runner_image
+
+  prepare_volume_ownership "${uid}" "${gid}" "${node_modules_volume_args[@]}"
 
   for name in \
     BROWSERS \
@@ -150,6 +196,7 @@ run_host() {
     PLAYWRIGHT_DOCKER_INSTALL \
     PLAYWRIGHT_DOCKER_RESTORE_DEMOS \
     PLAYWRIGHT_GREP \
+    PLAYWRIGHT_LEGACY_SCREENSHOT \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD \
     STRATEGY \
     TCQUARANTINE \
@@ -269,6 +316,15 @@ run_container() {
   export CONCURRENCY="${CONCURRENCY:-4}"
   export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=8192}"
   export NX_SKIP_NX_CACHE="${NX_SKIP_NX_CACHE:-true}"
+  # Pin pnpm's content-addressable store to the dedicated named volume mounted
+  # at <repo>/.pnpm-store. Without this, pnpm picks a HOME-relative default
+  # that ends up on a different filesystem than the workspace and falls back
+  # to writing the store under <repo>/.pnpm-store on the bind mount, leaking
+  # multi-GB of cache onto the host.
+  export NPM_CONFIG_STORE_DIR="${NPM_CONFIG_STORE_DIR:-${CONTAINER_REPO_ROOT}/.pnpm-store}"
+  # Match the CI workflow: opt out of Playwright's CDPScreenshotNewSurface so
+  # screenshots match TestCafe-generated etalons (esp. for Material text).
+  export PLAYWRIGHT_LEGACY_SCREENSHOT="${PLAYWRIGHT_LEGACY_SCREENSHOT:-1}"
   export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD="${PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD:-1}"
   export STRATEGY="${STRATEGY:-screenshots}"
   export TCQUARANTINE="${TCQUARANTINE:-true}"
@@ -290,14 +346,14 @@ run_container() {
   cleanup() {
     local cleanup_status=$?
 
-    if [ -n "${server_pid}" ] && kill -0 "${server_pid}" > /dev/null 2>&1; then
+    if [ -n "${server_pid:-}" ] && kill -0 "${server_pid}" > /dev/null 2>&1; then
       kill "${server_pid}" > /dev/null 2>&1 || true
       wait "${server_pid}" > /dev/null 2>&1 || true
     fi
 
     cd "${CONTAINER_REPO_ROOT}" || true
-    restore_demo_indexes "${snapshot_tar}" "${baseline_dirty}" || true
-    rm -rf "${tmp_dir}"
+    restore_demo_indexes "${snapshot_tar:-}" "${baseline_dirty:-}" || true
+    rm -rf "${tmp_dir:-}"
 
     exit "${cleanup_status}"
   }

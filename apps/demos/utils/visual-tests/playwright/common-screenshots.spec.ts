@@ -10,6 +10,7 @@ import {
   getDemoPaths,
   getPageUrl,
   isAccessibilityStrategy,
+  isCspStrategy,
   prepareDemoPage,
   readDemoFile,
   resetPageState,
@@ -22,6 +23,7 @@ import {
   waitForStableRendering,
 } from './common-screenshots-utils';
 import { checkDemoAccessibility } from './accessibility';
+import { collectCspViolations, writeCspReport } from './csp';
 import { compareDemoScreenshot } from './screenshot-comparer';
 
 updateConfig();
@@ -29,6 +31,7 @@ updateConfig();
 test.describe.configure({ mode: 'parallel' });
 
 const isAccessibility = isAccessibilityStrategy();
+const isCsp = isCspStrategy();
 
 Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) {
@@ -67,7 +70,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         `,
       );
 
-      let comparisonOptions;
+      let comparisonOptions: Parameters<typeof compareDemoScreenshot>[2];
       if (process.env.DISABLE_DEMO_TEST_SETTINGS !== 'all') {
         const approachLowerCase = approach.toLowerCase();
         const mergedTestSettings = (visualTestSettings && {
@@ -120,6 +123,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           return;
         }
 
+        if (isCsp) {
+          const violations = await collectCspViolations(page);
+          writeCspReport(testName, approach, violations);
+          return;
+        }
+
         const compareResult = await compareDemoScreenshot(
           page,
           `${testName}.png`,
@@ -133,7 +142,8 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 });
 
 test.afterAll(() => {
-  const strategyName = isAccessibility ? 'accessibility' : 'screenshots';
+  // eslint-disable-next-line no-nested-ternary
+  const strategyName = isAccessibility ? 'accessibility' : isCsp ? 'csp' : 'screenshots';
 
   console.log(`Playwright common ${strategyName} root: ${DEMOS_ROOT}`);
 });

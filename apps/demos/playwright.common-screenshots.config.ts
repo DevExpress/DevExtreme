@@ -45,15 +45,28 @@ function normalizeBrowserArgs(browserArgs: string[], theme = process.env.THEME |
   return browserArgs.filter((arg) => !FONT_RENDERING_CHROMIUM_ARGS.includes(arg));
 }
 
+// CDPScreenshotNewSurface (Chrome ≥132) changes how CDP takes screenshots and
+// produces different Roboto/Material text antialiasing vs. TestCafe etalons.
+// When PLAYWRIGHT_LEGACY_SCREENSHOT=1 is set, disable it so captures match.
+function applyLegacyScreenshot(args: string[]): string[] {
+  if (process.env.PLAYWRIGHT_LEGACY_SCREENSHOT !== '1') {
+    return args;
+  }
+
+  return args.map((arg) => (arg.startsWith('--disable-features=')
+    ? `${arg},CDPScreenshotNewSurface`
+    : arg));
+}
+
 function parseBrowserArgs(browserEnv = ''): string[] {
   const browserArgs = browserEnv
     .split(/\s+/)
     .map((value) => value.replace(/^"|"$/g, ''))
     .filter((value) => value.startsWith('--'));
 
-  return normalizeBrowserArgs(
+  return applyLegacyScreenshot(normalizeBrowserArgs(
     browserArgs.length ? browserArgs : getDefaultChromiumArgs(),
-  );
+  ));
 }
 
 function parseHeadless(browserEnv = ''): boolean {

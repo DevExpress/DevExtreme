@@ -220,6 +220,10 @@ export function isAccessibilityStrategy(): boolean {
   return process.env.STRATEGY === 'accessibility';
 }
 
+export function isCspStrategy(): boolean {
+  return process.env.STRATEGY === 'csp';
+}
+
 export function getDemoPaths(platform: Framework): string[] {
   return glob.sync('Demos/*/*', { cwd: DEMOS_ROOT })
     .map((path) => join(path, platform));
@@ -244,6 +248,10 @@ function getClientScripts(): (ClientScript | string)[] {
 
   if (isAccessibilityStrategy()) {
     scripts.push({ module: 'axe-core/axe.min.js' });
+  }
+
+  if (isCspStrategy()) {
+    scripts.push(join(DEMOS_ROOT, 'utils/visual-tests/inject/csp-listener.js'));
   }
 
   scripts.push(
