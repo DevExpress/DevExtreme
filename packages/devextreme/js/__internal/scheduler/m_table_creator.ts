@@ -1,12 +1,28 @@
+import type { Orientation } from '@js/common';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { isFunction } from '@js/core/utils/type';
 
+import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { GroupNode } from './utils/resource_manager/types';
 
 const ROW_SELECTOR = 'tr';
+
+export interface GroupCssClasses {
+  groupHeaderRowClass?: string;
+  groupRowClass?: string;
+  groupHeaderClass: string | ((index: number) => string);
+  groupHeaderContentClass?: string;
+}
+
+export interface GroupRows {
+  elements: dxElementWrapper | dxElementWrapper[];
+  cellTemplates: (() => dxElementWrapper)[];
+}
 
 class SchedulerTableCreator {
   readonly VERTICAL = 'vertical';
@@ -129,16 +145,20 @@ class SchedulerTableCreator {
     return templateCallbacks;
   }
 
-  makeGroupedTable(type, groups, cssClasses, cellCount, cellTemplate, rowCount, groupByDate) {
-    let rows: any = [];
-
+  makeGroupedTable(
+    type: Orientation,
+    groups: ResourceLoader[],
+    cssClasses: GroupCssClasses,
+    cellCount: number,
+    cellTemplate: TemplateBase | null | undefined,
+    rowCount: number,
+    groupByDate: boolean,
+  ): GroupRows {
     if (type === this.VERTICAL) {
-      rows = this.makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
-    } else {
-      rows = this.makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
+      return this.makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
     }
 
-    return rows;
+    return this.makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
   }
 
   makeGroupedTableFromJSON(tree: GroupNode[], config?) {
