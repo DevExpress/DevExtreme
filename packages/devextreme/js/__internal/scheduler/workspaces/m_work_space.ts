@@ -2005,7 +2005,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private getDateTableDOMElementsInfo() {
     const dateTableCells = this.getAllCells(false);
     if (!dateTableCells.length || !hasWindow()) {
-      return [[{}]];
+      return [[{
+        top: 0, left: 0, width: 0, height: 0,
+      }]];
     }
 
     const dateTable = this.getDateTable();
@@ -2036,7 +2038,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const allDayCells = this.getAllCells(true);
 
       if (!allDayCells.length) {
-        return [{}];
+        return [{
+          top: 0, left: 0, width: 0, height: 0,
+        }];
       }
 
       const allDayAppointmentContainer = this.$allDayPanel;

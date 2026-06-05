@@ -56,13 +56,6 @@ const getCellSize = (DOMMetaData: DOMMetaData): { width: number; height: number 
   const cellIndex = length > 1 ? 1 : 0;
   const cellSize = dateTableCellsMeta[cellIndex][0];
 
-  if (!cellSize?.width && !cellSize?.height) {
-    return {
-      width: 0,
-      height: 0,
-    };
-  }
-
   return {
     width: cellSize.width,
     height: cellSize.height,
@@ -108,14 +101,14 @@ export const getAllDayHeight = (
     const { length } = dateTableCellsMeta;
 
     return length
-      ? dateTableCellsMeta[0][0].height ?? 0
+      ? dateTableCellsMeta[0][0].height
       : 0;
   }
 
   const { allDayPanelCellsMeta } = DOMMetaData;
 
   return allDayPanelCellsMeta?.length
-    ? allDayPanelCellsMeta[0].height ?? 0
+    ? allDayPanelCellsMeta[0].height
     : 0;
 };
 
