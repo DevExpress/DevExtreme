@@ -18,7 +18,6 @@ $pivotgrid-grandtotalcolor: null !default;
 $pivotgrid-accent-color: null !default;
 $pivotgrid-empty-area-text-padding: null !default;
 $pivotgrid-button-top-padding: null !default;
-$base-focus-color: null !default;
 
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
@@ -130,7 +129,7 @@ $pivotgrid-expand-icon-text-offset: 0;
 .dx-pivotgrid {
   td[aria-expanded]:focus-visible {
     outline: 2px solid;
-    outline-color: $base-focus-color;
+    outline-color: $pivotgrid-accent-color;
     outline-offset: -2px;
   }
 
