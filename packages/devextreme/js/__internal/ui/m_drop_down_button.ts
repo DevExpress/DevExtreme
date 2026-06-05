@@ -419,11 +419,9 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   _popupOptions(): PopupProperties {
     const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
 
-    const {
-      deferRendering,
-      opened,
-      _cached_dropDownOptions: cachedDropDownOptions,
-    } = this.option();
+    const { deferRendering, opened } = this.option();
+
+    const cachedDropDownOptions = this._options.cache('dropDownOptions');
 
     const position: PositionConfig = {
       of: getPublicElement(this.$element()),
@@ -573,8 +571,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }
   }
 
-  _setPopupOption(...args: unknown[]): void {
-    this._setWidgetOption('_popup', args as unknown as Record<string, unknown>);
+  _setPopupOption(...args: [string, unknown?] | [Record<string, unknown>]): void {
+    this._setWidgetOption('_popup', args);
   }
 
   _popupShowingHandler(): void {

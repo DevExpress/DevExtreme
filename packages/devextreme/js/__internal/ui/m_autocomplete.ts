@@ -86,7 +86,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
   _getAriaAutocomplete(): string {
     const { disabled, readOnly } = this.option();
 
-    const isInputEditable = !(readOnly ?? disabled);
+    const isInputEditable = !((readOnly ?? false) || (disabled ?? false));
 
     return isInputEditable ? 'list' : 'none';
   }
