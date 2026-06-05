@@ -89,7 +89,7 @@ const gridBase = {
 
 // === §1.12 Regenerate button ===
 
-fixture.disablePageReloads`AI Assistant - Regenerate`
+fixture`AI Assistant - Regenerate`
   .page(AI_INTEGRATION_PAGE);
 
 // 1.12.1
@@ -384,7 +384,7 @@ test('Regenerate is visible after a popup-close-driven abort', async (t) => {
 
 // === §3.8.2 Sequential resends after pre-execution failures ===
 
-fixture.disablePageReloads`AI Assistant - Regenerate (sequential)`
+fixture`AI Assistant - Regenerate (sequential)`
   .page(AI_INTEGRATION_PAGE);
 
 // 3.8.2
