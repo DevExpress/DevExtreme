@@ -1142,11 +1142,11 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  _currentSelectedItem(): Item {
+  _currentSelectedItem(): Item | undefined {
     const { grouped } = this.option();
     const { selectedItems: [firstSelectedItem] = [] } = this._list?.option() ?? {};
     // @ts-expect-error should be fixed on List level
-    return grouped ? firstSelectedItem.items[0] as Item : firstSelectedItem;
+    return grouped ? firstSelectedItem?.items[0] as Item : firstSelectedItem;
   }
 
   _resetValue(e: ButtonClickEvent): void {
