@@ -177,6 +177,11 @@ export interface ViewDataMap {
   allDayPanelMap: CellInfo[];
 }
 
+export interface GroupedDataMap {
+  dateTableGroupedMap: CellInfo[][][];
+  allDayPanelGroupedMap: CellInfo[][];
+}
+
 export interface DateHeaderCellData extends ViewCellData {
   colSpan: number;
 }
