@@ -86,6 +86,7 @@ import type { ResourceManager } from '../utils/resource_manager/resource_manager
 import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
 import { getSkippedDaysCount as countSkippedDays } from '../utils/skipped_days';
 import type { ListEntity } from '../view_model/types';
+import CellsSelectionState from './cells_selection_state';
 import {
   getAllDayHeight,
   getCellHeight,
@@ -94,7 +95,6 @@ import {
   PositionHelper,
 } from './helpers/m_position_helper';
 import { CellsSelectionController } from './m_cells_selection_controller';
-import CellsSelectionState from './m_cells_selection_state';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
@@ -617,7 +617,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     if (!this.viewDataProvider.isSameCell(focusedCellData, nextCellData)) {
       const $cell = nextCellData.allDay && !this.isVerticalGroupedWorkSpace()
-        ? this.domGetAllDayPanelCell(nextCellPosition.columnIndex)
+        ? this.domGetAllDayPanelCell(nextCellPosition?.columnIndex)
         : this.domGetDateCell(nextCellPosition);
       const isNextCellAllDay = nextCellData.allDay;
 
