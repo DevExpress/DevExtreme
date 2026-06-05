@@ -1,6 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
+import type { CellPosition } from '@ts/scheduler/workspaces/view_model/m_types';
 
 import timezoneUtils from '../../m_utils_time_zone';
 
@@ -93,7 +94,7 @@ export class GroupedDataMapProvider {
     return cellData?.startDate as Date ?? null;
   }
 
-  findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): any {
+  findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): CellPosition | undefined {
     const {
       groupIndex, startDate, isAllDay, index,
     } = cellInfo;

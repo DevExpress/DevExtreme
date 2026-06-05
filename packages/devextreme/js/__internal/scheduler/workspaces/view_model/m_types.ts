@@ -71,3 +71,9 @@ export interface ViewCellKey {
 }
 
 export type ViewCellGeneratedData = ViewCellDataSimple & ViewCellIndex & ViewCellKey;
+
+export interface CellPosition {
+  rowIndex: number;
+  columnIndex: number;
+  allDay: boolean;
+}
