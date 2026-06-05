@@ -3830,6 +3830,8 @@ declare module DevExpress.common.data {
      */
     name?: string;
   };
+  export type MultiValueSearchOperation =
+    DevExpress.data.MultiValueSearchOperation;
   /**
    * [descr:ODataContext]
    */
@@ -4706,7 +4708,7 @@ declare module DevExpress.common.grids {
     type: 'basic';
     field: string;
     operator: DevExpress.common.data.SearchOperation;
-    value: string | number | boolean | null | Date;
+    value: FilterScalarValue;
   };
   /**
    * [descr:ColumnAIOptions]
@@ -5457,6 +5459,7 @@ declare module DevExpress.common.grids {
    */
   export type FilterExpr =
     | BasicFilterExpr
+    | MultiValueFilterExpr
     | CombinedFilterExpr
     | NegatedFilterExpr;
   /**
@@ -5626,6 +5629,10 @@ declare module DevExpress.common.grids {
      */
     startsWith?: string;
   };
+  /**
+   * [descr:FilterScalarValue]
+   */
+  export type FilterScalarValue = string | number | boolean | null | Date;
   export type FilterType = 'exclude' | 'include';
   export type FixedPosition = 'left' | 'right' | 'sticky';
   /**
@@ -6496,6 +6503,15 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.loadPanel.width]
      */
     width?: number | string;
+  };
+  /**
+   * [descr:MultiValueFilterExpr]
+   */
+  export type MultiValueFilterExpr = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.MultiValueSearchOperation;
+    value: FilterScalarValue[];
   };
   /**
    * [descr:NegatedFilterExpr]
@@ -7709,6 +7725,10 @@ declare module DevExpress.data {
      */
     userData?: any;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type MultiValueSearchOperation = 'anyof' | 'noneof';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */

@@ -232,6 +232,7 @@ export namespace Data {
     export const LocalStore = DataModule.LocalStore;
     export type LocalStore<TItem = any, TKey = any> = DataModule.LocalStore<TItem, TKey>;
     export type LocalStoreOptions<TItem = any, TKey = any> = DataModule.LocalStoreOptions<TItem, TKey>;
+    export type MultiValueSearchOperation = DataModule.MultiValueSearchOperation;
     export const ODataContext = DataModule.ODataContext;
     export type ODataContext = DataModule.ODataContext;
     export type ODataContextOptions = DataModule.ODataContextOptions;
@@ -317,6 +318,7 @@ export namespace Grids {
     export type FilterPanelTexts = GridsModule.FilterPanelTexts;
     export type FilterRow = GridsModule.FilterRow;
     export type FilterRowOperationDescriptions = GridsModule.FilterRowOperationDescriptions;
+    export type FilterScalarValue = GridsModule.FilterScalarValue;
     export type FilterType = GridsModule.FilterType;
     export type FixedPosition = GridsModule.FixedPosition;
     export type GridBase<TRowData = any, TKey = any> = GridsModule.GridBase<TRowData, TKey>;
@@ -332,6 +334,7 @@ export namespace Grids {
     export type KeyboardNavigation = GridsModule.KeyboardNavigation;
     export type KeyDownInfo = GridsModule.KeyDownInfo;
     export type LoadPanel = GridsModule.LoadPanel;
+    export type MultiValueFilterExpr = GridsModule.MultiValueFilterExpr;
     export type NegatedFilterExpr = GridsModule.NegatedFilterExpr;
     export type NewRowInfo<TRowData = any> = GridsModule.NewRowInfo<TRowData>;
     export type NewRowPosition = GridsModule.NewRowPosition;
