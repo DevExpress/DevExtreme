@@ -49,8 +49,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
    *   getCellWidth method need remove. Details in T712431 there is a test for this bug,
    *   when changing the layout, the test will also be useless
    */
-  getCellWidth(): number | undefined {
-    const cellWidth = this.cache.memo('cellWidth', (): number | undefined => {
+  getCellWidth(): number {
+    const cellWidth = this.cache.memo('cellWidth', (): number => {
       const DAYS_IN_WEEK = 7;
 
       let averageWidth = 0;
@@ -59,10 +59,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
       });
 
-      return cells.length === 0 ? undefined : averageWidth / DAYS_IN_WEEK;
+      return cells.length === 0 ? 0 : averageWidth / DAYS_IN_WEEK;
     });
 
-    return cellWidth as number | undefined;
+    return cellWidth as number;
   }
 
   protected override insertAllDayRowsIntoDateTable(): boolean {
