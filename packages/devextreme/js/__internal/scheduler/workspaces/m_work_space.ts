@@ -1686,6 +1686,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     );
   }
 
+  // Overridden in SchedulerWorkSpaceIndicator for views with a current-time indicator.
+  // The base implementation returns 0 (no indicator) and is never called on Agenda,
+  // which does not call initGroupedStrategy.
+  protected getIndicatorOffset(): number { return 0; }
+
+  protected getIndicationWidth(): number { return 0; }
+
+  protected getIndicationHeight(): number { return 0; }
+
   getMaxAllowedPosition(groupIndex) {
     return getMaxAllowedPosition(
       groupIndex,
@@ -2614,7 +2623,37 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       ? VerticalGroupedStrategy
       : HorizontalGroupedStrategy;
 
-    this.groupedStrategy = new Strategy(this);
+    this.groupedStrategy = new Strategy({
+      $headerPanelContainer: this.$headerPanelContainer,
+      startDayHour: this.option('startDayHour'),
+      endDayHour: this.option('endDayHour'),
+      hoursInterval: this.option('hoursInterval'),
+      getRowCount: this.getRowCount.bind(this),
+      getCellCount: this.getCellCount.bind(this),
+      supportAllDayRow: this.supportAllDayRow.bind(this),
+      getGroupCount: this.getGroupCount.bind(this),
+      showAllDayPanel: this.option('showAllDayPanel'),
+      getTimePanelWidth: this.getTimePanelWidth.bind(this),
+      getGroupTableWidth: this.getGroupTableWidth.bind(this),
+      getWorkSpaceWidth: this.getWorkSpaceWidth.bind(this),
+      $element: this.$element.bind(this),
+      getAllDayHeight: this.getAllDayHeight.bind(this),
+
+      getIndicatorOffset: this.getIndicatorOffset.bind(this),
+      getIndicationWidth: this.getIndicationWidth.bind(this),
+      getIndicationHeight: this.getIndicationHeight.bind(this),
+      getHeaderHeight: this.option('getHeaderHeight'),
+
+      getCellHeight: this.getCellHeight.bind(this),
+      crossScrollingEnabled: this.option('crossScrollingEnabled'),
+      rtlEnabled: this.option('rtlEnabled'),
+      getWorkSpaceLeftOffset: this.getWorkSpaceLeftOffset.bind(this),
+
+      isGroupedByDate: this.isGroupedByDate.bind(this),
+      getCellIndexByCoordinates: this.getCellIndexByCoordinates.bind(this),
+      getCellWidth: this.getCellWidth.bind(this),
+      getScrollable: this.getScrollable.bind(this),
+    });
   }
 
   protected getDefaultGroupStrategy() {

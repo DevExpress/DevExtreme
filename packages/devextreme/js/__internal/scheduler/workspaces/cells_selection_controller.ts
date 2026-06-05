@@ -1,10 +1,5 @@
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
-import type { ViewCellData, ViewType } from '@ts/scheduler/types';
-
-interface GridPosition {
-  rowIndex: number;
-  columnIndex: number;
-}
+import type { CellPositionData, ViewCellData, ViewType } from '@ts/scheduler/types';
 
 interface EdgeIndices {
   firstColumnIndex: number;
@@ -15,7 +10,7 @@ interface EdgeIndices {
 
 interface ArrowClickOptions {
   key: 'up' | 'down' | 'left' | 'right';
-  focusedCellPosition: GridPosition;
+  focusedCellPosition: CellPositionData;
   focusedCellData: ViewCellData;
   edgeIndices: EdgeIndices;
   getCellDataByPosition: (rowIndex: number, columnIndex: number, isAllDay: boolean) => ViewCellData;
@@ -61,7 +56,7 @@ export class CellsSelectionController {
       isAllDayPanelCell,
     } = options;
 
-    let nextCellIndices: GridPosition = focusedCellPosition;
+    let nextCellIndices: CellPositionData = focusedCellPosition;
 
     switch (key) {
       case 'down':
@@ -99,10 +94,10 @@ export class CellsSelectionController {
   }
 
   getCellFromNextRowPosition(
-    focusedCellPosition: GridPosition,
+    focusedCellPosition: CellPositionData,
     direction: 'next' | 'prev',
     edgeIndices: EdgeIndices,
-  ): GridPosition {
+  ): CellPositionData {
     const {
       columnIndex,
       rowIndex,
@@ -121,7 +116,7 @@ export class CellsSelectionController {
     };
   }
 
-  getCellFromNextColumnPosition(options: NextColumnPositionOptions): GridPosition {
+  getCellFromNextColumnPosition(options: NextColumnPositionOptions): CellPositionData {
     const {
       focusedCellPosition,
       direction,
@@ -170,7 +165,7 @@ export class CellsSelectionController {
     });
   }
 
-  private processEdgeCell(options: ProcessEdgeCellOptions): GridPosition {
+  private processEdgeCell(options: ProcessEdgeCellOptions): CellPositionData {
     const {
       nextColumnIndex,
       rowIndex,

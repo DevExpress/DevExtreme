@@ -1,25 +1,30 @@
+import type { DxElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
+import type { CellPositionData, GroupBoundsOffset, GroupedStrategyOptions } from '@ts/scheduler/types';
 import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
 import { Cache } from '../global_cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../m_classes';
+import type { ResourceLoader } from '../utils/loader/resource_loader';
 
 class VerticalGroupedStrategy {
   cache = new Cache();
 
-  private groupBoundsOffset: any;
+  private groupBoundsOffset!: GroupBoundsOffset;
 
-  private readonly $container: any;
+  config: GroupedStrategyOptions;
 
-  // TODO: make private once external usages in current_time_shader.ts, current_time_shader_vertical.ts are removed
-  constructor(public _workSpace) {
+  constructor(options: GroupedStrategyOptions) {
+    this.config = options;
   }
 
-  prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
-    let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace.getRowCount();
+  prepareCellIndexes(cellCoordinates: CellPositionData, groupIndex: number, inAllDayRow: boolean)
+  : CellPositionData {
+    let rowIndex = cellCoordinates.rowIndex + groupIndex * this.config.getRowCount();
 
-    if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
+    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
       rowIndex += groupIndex;
 
       if (!inAllDayRow) {
@@ -33,36 +38,36 @@ class VerticalGroupedStrategy {
     };
   }
 
-  getGroupIndex(rowIndex) {
-    return Math.floor(rowIndex / this._workSpace.getRowCount());
+  getGroupIndex(rowIndex: number): number {
+    return Math.floor(rowIndex / this.config.getRowCount());
   }
 
-  calculateHeaderCellRepeatCount() {
+  calculateHeaderCellRepeatCount(): number {
     return 1;
   }
 
-  insertAllDayRowsIntoDateTable() {
-    return this._workSpace.option('showAllDayPanel');
+  insertAllDayRowsIntoDateTable(): boolean {
+    return this.config.showAllDayPanel;
   }
 
-  getTotalCellCount() {
-    return this._workSpace.getCellCount();
+  getTotalCellCount(): number {
+    return this.config.getCellCount();
   }
 
-  getTotalRowCount() {
-    return this._workSpace.getRowCount() * this._workSpace.getGroupCount();
+  getTotalRowCount(): number {
+    return this.config.getRowCount() * this.config.getGroupCount();
   }
 
-  calculateTimeCellRepeatCount() {
-    return this._workSpace.getGroupCount() || 1;
+  calculateTimeCellRepeatCount(): number {
+    return this.config.getGroupCount() || 1;
   }
 
-  getWorkSpaceMinWidth() {
-    let minWidth = this._workSpace.getWorkSpaceWidth();
-    const workSpaceElementWidth = getBoundingRect(this._workSpace.$element().get(0)).width;
+  getWorkSpaceMinWidth(): number {
+    let minWidth = this.config.getWorkSpaceWidth();
+    const workSpaceElementWidth = getBoundingRect(this.config.$element().get(0)).width;
     const workspaceContainerWidth = workSpaceElementWidth
-      - this._workSpace.getTimePanelWidth()
-      - this._workSpace.getGroupTableWidth()
+      - this.config.getTimePanelWidth()
+      - this.config.getGroupTableWidth()
       - 2 * WORK_SPACE_BORDER_PX;
 
     if (minWidth < workspaceContainerWidth) {
@@ -72,32 +77,33 @@ class VerticalGroupedStrategy {
     return minWidth;
   }
 
-  getAllDayOffset() {
+  getAllDayOffset(): number {
     return 0;
   }
 
-  getGroupCountClass(groups) {
+  getGroupCountClass(groups: ResourceLoader[]): string | undefined {
     return getVerticalGroupCountClass(groups);
   }
 
-  getLeftOffset() {
-    return this._workSpace.getTimePanelWidth() + this._workSpace.getGroupTableWidth();
+  getLeftOffset(): number {
+    return this.config.getTimePanelWidth() + this.config.getGroupTableWidth();
   }
 
-  getGroupBoundsOffset(groupIndex, [$firstCell, $lastCell]) {
+  getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [DxElement, DxElement])
+  : GroupBoundsOffset {
     return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
-      const startDayHour = this._workSpace.option('startDayHour');
-      const endDayHour = this._workSpace.option('endDayHour');
-      const hoursInterval = this._workSpace.option('hoursInterval');
+      const { startDayHour, endDayHour, hoursInterval } = this.config;
 
-      const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
+      const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval)
+       * this.config.getCellHeight();
       const scrollTop = this.getScrollableScrollTop();
-      const headerRowHeight = getBoundingRect(this._workSpace.$headerPanelContainer.get(0)).height;
+      const headerRowHeight = getBoundingRect(this.config.$headerPanelContainer.get(0)).height;
 
-      let topOffset = groupIndex * dayHeight + headerRowHeight + this._workSpace.option('getHeaderHeight')() - scrollTop;
+      let topOffset = groupIndex * dayHeight + headerRowHeight
+        + this.config.getHeaderHeight() - scrollTop;
 
-      if (this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
-        topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);
+      if (this.config.showAllDayPanel && this.config.supportAllDayRow()) {
+        topOffset += this.config.getCellHeight() * (groupIndex + 1);
       }
 
       const bottomOffset = topOffset + dayHeight;
@@ -115,56 +121,62 @@ class VerticalGroupedStrategy {
     });
   }
 
-  shiftIndicator($indicator, height, rtlOffset, i) {
-    const offset = this._workSpace.getIndicatorOffset(0);
-    const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
+  shiftIndicator($indicator: dxElementWrapper, height: number, rtlOffset: number, i: number): void {
+    const offset = this.config.getIndicatorOffset(0);
+    const tableOffset = this.config.crossScrollingEnabled ? 0 : this.config.getGroupTableWidth();
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
-    let verticalOffset = this._workSpace.getRowCount() * this._workSpace.getCellHeight() * i;
+    let verticalOffset = this.config.getRowCount() * this.config.getCellHeight() * i;
 
-    if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-      verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
+    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
+      verticalOffset += this.config.getAllDayHeight() * (i + 1);
     }
 
     $indicator.css('left', horizontalOffset + tableOffset);
     $indicator.css('top', height + verticalOffset);
   }
 
-  getShaderOffset(i, width) {
-    const offset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
-    return this._workSpace.option('rtlEnabled') ? getBoundingRect(this.$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
+  getShaderOffset(i: number, width: number): number {
+    const offset = this.config.crossScrollingEnabled ? 0 : this.config.getGroupTableWidth();
+
+    if (this.config.rtlEnabled) {
+      const containerWidth = getBoundingRect(this.config.getScrollable().$content().get(0)).width;
+      return containerWidth - offset - this.config.getWorkSpaceLeftOffset() - width;
+    }
+
+    return offset;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getShaderTopOffset(i) {
+  getShaderTopOffset(i: number): number {
     return 0;
   }
 
-  getShaderHeight() {
-    let height = this._workSpace.getIndicationHeight();
+  getShaderHeight(): number {
+    let height = this.config.getIndicationHeight();
 
-    if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-      height += this._workSpace.getCellHeight();
+    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
+      height += this.config.getCellHeight();
     }
 
     return height;
   }
 
-  getShaderMaxHeight() {
-    let height = this._workSpace.getRowCount() * this._workSpace.getCellHeight();
+  getShaderMaxHeight(): number {
+    let height = this.config.getRowCount() * this.config.getCellHeight();
 
-    if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-      height += this._workSpace.getCellHeight();
+    if (this.config.supportAllDayRow() && this.config.showAllDayPanel) {
+      height += this.config.getCellHeight();
     }
 
     return height;
   }
 
-  getShaderWidth() {
-    return this._workSpace.getIndicationWidth();
+  getShaderWidth(): number {
+    return this.config.getIndicationWidth();
   }
 
-  getScrollableScrollTop() {
-    return this._workSpace.getScrollable().scrollTop();
+  getScrollableScrollTop(): number {
+    return this.config.getScrollable().scrollTop();
   }
 
   // ------------
@@ -172,22 +184,22 @@ class VerticalGroupedStrategy {
   // ------------
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addAdditionalGroupCellClasses(cellClass, index, i, j) {
-    cellClass = this.addLastGroupCellClass(cellClass, i + 1);
+  addAdditionalGroupCellClasses(cellClass: string, index: number, i: number, j: number): string {
+    const newCellClass = this.addLastGroupCellClass(cellClass, i + 1);
 
-    return this.addFirstGroupCellClass(cellClass, i + 1);
+    return this.addFirstGroupCellClass(newCellClass, i + 1);
   }
 
-  private addLastGroupCellClass(cellClass, index) {
-    if (index % this._workSpace.getRowCount() === 0) {
+  private addLastGroupCellClass(cellClass: string, index: number): string {
+    if (index % this.config.getRowCount() === 0) {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
     return cellClass;
   }
 
-  private addFirstGroupCellClass(cellClass, index) {
-    if ((index - 1) % this._workSpace.getRowCount() === 0) {
+  private addFirstGroupCellClass(cellClass: string, index: number): string {
+    if ((index - 1) % this.config.getRowCount() === 0) {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 

@@ -19,6 +19,7 @@ import {
 import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
+import type { CellPositionData } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import type { WorkspaceOptionsInternal } from './m_work_space';
@@ -224,7 +225,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getCellElementByPosition(
-    cellCoordinates: { rowIndex: number; columnIndex: number },
+    cellCoordinates: CellPositionData,
     groupIndex: number,
   ): dxElementWrapper {
     const indexes = this.groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
