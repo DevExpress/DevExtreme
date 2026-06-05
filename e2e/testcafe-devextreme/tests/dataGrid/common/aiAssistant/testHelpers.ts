@@ -103,12 +103,3 @@ export const createGridWithAIAssistant = async (
 };
 
 export const getRequests = ClientFunction(() => (window as any).__aiRequests);
-
-export const getRequestColumnNames = ClientFunction(
-  (index: number) => (window as any).__aiRequests[index].data.context.columns
-    .map((c: any) => c.dataField),
-);
-
-export const formatMessage = ClientFunction(
-  (key: string) => (window as any).DevExpress.localization.formatMessage(key),
-);
