@@ -939,6 +939,271 @@ describe('Isolated AppointmentPopup environment', () => {
     });
   });
 
+  describe('Popup Customization (editing.popup)', () => {
+    it('should apply custom options from editing.popup to the popup instance', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          popup: {
+            showTitle: true,
+            title: 'Custom Appointment Form',
+            maxHeight: '80%',
+            dragEnabled: true,
+          },
+        },
+      });
+
+      const showTitle = POM.component.option('showTitle');
+      const title = POM.component.option('title');
+      const maxHeight = POM.component.option('maxHeight');
+      const dragEnabled = POM.component.option('dragEnabled');
+
+      expect(showTitle).toBe(true);
+      expect(title).toBe('Custom Appointment Form');
+      expect(maxHeight).toBe('80%');
+      expect(dragEnabled).toBe(true);
+    });
+
+    it('should use default popup options when editing.popup is not specified', async () => {
+      const { POM } = await createAppointmentPopup();
+
+      const showTitle = POM.component.option('showTitle');
+      const height = POM.component.option('height');
+      const maxHeight = POM.component.option('maxHeight');
+
+      expect(showTitle).toBe(false);
+      expect(height).toBe('auto');
+      expect(maxHeight).toBe('90%');
+    });
+
+    it('should merge custom options with defaults preserving unspecified defaults', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          popup: {
+            showTitle: true,
+            title: 'My Form',
+          },
+        },
+      });
+
+      const showTitle = POM.component.option('showTitle');
+      const title = POM.component.option('title');
+      const showCloseButton = POM.component.option('showCloseButton');
+      const enableBodyScroll = POM.component.option('enableBodyScroll');
+      const preventScrollEvents = POM.component.option('preventScrollEvents');
+
+      expect(showTitle).toBe(true);
+      expect(title).toBe('My Form');
+      expect(showCloseButton).toBe(false);
+      expect(enableBodyScroll).toBe(false);
+      expect(preventScrollEvents).toBe(false);
+    });
+
+    it('should allow overriding default popup options', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          popup: {
+            showCloseButton: true,
+            enableBodyScroll: true,
+          },
+        },
+      });
+
+      const showCloseButton = POM.component.option('showCloseButton');
+      const enableBodyScroll = POM.component.option('enableBodyScroll');
+
+      expect(showCloseButton).toBe(true);
+      expect(enableBodyScroll).toBe(true);
+    });
+
+    it('should apply wrapperAttr and preserve default class', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          popup: {
+            wrapperAttr: { id: 'test' },
+          },
+        },
+      });
+
+      const wrapperAttr = POM.component.option('wrapperAttr');
+
+      expect(wrapperAttr.id).toBe('test');
+      expect(wrapperAttr.class).toBeDefined();
+    });
+
+    it('should call onInitialized callback and preserve popup initialization', async () => {
+      const onInitialized = jest.fn();
+
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          popup: { onInitialized },
+        },
+      });
+
+      const isVisible = POM.component.option('visible');
+
+      expect(onInitialized).toHaveBeenCalledTimes(1);
+      expect(isVisible).toBe(true);
+    });
+
+    it('should call onShowing callback and trigger onAppointmentFormOpening', async () => {
+      const onShowing = jest.fn();
+      const onAppointmentFormOpening = jest.fn();
+
+      await createAppointmentPopup({
+        editing: {
+          popup: { onShowing },
+        },
+        onAppointmentFormOpening,
+      });
+
+      expect(onShowing).toHaveBeenCalledTimes(1);
+      expect(onAppointmentFormOpening).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onHiding callback and preserve default focus behavior on close', async () => {
+      const onHiding = jest.fn();
+
+      const { POM, callbacks } = await createAppointmentPopup({
+        editing: {
+          popup: { onHiding },
+        },
+      });
+
+      const hidingCallsBefore = onHiding.mock.calls.length;
+      const focusCallsBefore = callbacks.focus.mock.calls.length;
+
+      POM.cancelButton.click();
+
+      const hidingCallsAfter = onHiding.mock.calls.length;
+      const focusCallsAfter = callbacks.focus.mock.calls.length;
+
+      expect(hidingCallsBefore).toBe(0);
+      expect(focusCallsBefore).toBe(0);
+      expect(hidingCallsAfter).toBe(1);
+      expect(focusCallsAfter).toBe(1);
+    });
+
+    it('should use custom toolbarItems instead of default ones', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          popup: {
+            toolbarItems: [{
+              toolbar: 'top', location: 'before', text: 'Custom Title', cssClass: 'custom-title',
+            }, {
+              toolbar: 'top', location: 'after', widget: 'dxButton', options: { text: 'Custom Save' },
+            }],
+          },
+        },
+      });
+
+      const toolbarItems = POM.component.option('toolbarItems');
+
+      expect(toolbarItems).toHaveLength(2);
+      expect(toolbarItems).toContainEqual(expect.objectContaining({
+        cssClass: 'custom-title', location: 'before', text: 'Custom Title', toolbar: 'top',
+      }));
+      expect(toolbarItems).toContainEqual(expect.objectContaining({
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: expect.objectContaining({ text: 'Custom Save' }),
+      }));
+    });
+
+    it('should render popup when deferRendering is false', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          popup: { deferRendering: false },
+        },
+      });
+
+      const isVisible = POM.component.option('visible');
+
+      expect(isVisible).toBe(true);
+    });
+
+    describe('width and maxWidth', () => {
+      beforeEach(() => {
+        Object.defineProperty(document.documentElement, 'clientWidth', {
+          value: 1280,
+          configurable: true,
+        });
+      });
+
+      it('should use custom maxWidth when specified', async () => {
+        const { POM } = await createAppointmentPopup({
+          editing: {
+            popup: { maxWidth: 500 },
+          },
+        });
+
+        const maxWidth = POM.component.option('maxWidth');
+
+        expect(maxWidth).toBe(500);
+      });
+
+      it('should use width as maxWidth when only width is specified', async () => {
+        const { POM } = await createAppointmentPopup({
+          editing: {
+            popup: { width: 600 },
+          },
+        });
+
+        const width = POM.component.option('width');
+        const maxWidth = POM.component.option('maxWidth');
+
+        expect(width).toBe(600);
+        expect(maxWidth).toBe(600);
+      });
+
+      it('should use maxWidth value when both width and maxWidth are specified', async () => {
+        const { POM } = await createAppointmentPopup({
+          editing: {
+            popup: { width: 600, maxWidth: 500 },
+          },
+        });
+
+        const width = POM.component.option('width');
+        const maxWidth = POM.component.option('maxWidth');
+
+        expect(width).toBe(600);
+        expect(maxWidth).toBe(500);
+      });
+    });
+  });
+
+  describe('Form Customization (editing.form)', () => {
+    it('should propagate editing.form options to the form instance', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          form: { height: 500 },
+        },
+      });
+
+      const formHeight = POM.dxForm.option('height');
+
+      expect(formHeight).toBe(500);
+    });
+
+    it('should merge editing.form options with defaults preserving elementAttr.class', async () => {
+      const { POM } = await createAppointmentPopup({
+        editing: {
+          form: {
+            height: 500,
+            elementAttr: { id: 'custom-form' },
+          },
+        },
+      });
+
+      const formHeight = POM.dxForm.option('height') as number;
+      const elementAttr = POM.dxForm.option('elementAttr') as { class?: string; id?: string };
+
+      expect(formHeight).toBe(500);
+      expect(elementAttr.class).toBe('dx-scheduler-form');
+      expect(elementAttr.id).toBe('custom-form');
+    });
+  });
+
   describe('Resources', () => {
     it('should create resourceEditorsGroup when resources have no custom icons', async () => {
       const { POM } = await createAppointmentPopup({
