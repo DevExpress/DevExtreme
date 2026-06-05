@@ -84,7 +84,7 @@ export class Service {
     return data;
   }
 
-  async saveChange(change: Change<Order>): Promise<Order> {
+  saveChange(change: Change<Order>): Promise<Order> {
     switch (change.type) {
       case 'insert':
         return this.insert(change);

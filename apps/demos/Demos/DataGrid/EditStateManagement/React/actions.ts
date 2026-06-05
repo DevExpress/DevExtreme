@@ -64,7 +64,7 @@ export async function saveChange(dispatch: dispatchType, change: DataGridTypes.D
   }
 }
 
-async function sendChange(url: string, change: DataGridTypes.DataChange) {
+function sendChange(url: string, change: DataGridTypes.DataChange) {
   switch (change.type) {
     case 'insert':
       return sendRequest(`${url}/InsertOrder`, 'POST', {

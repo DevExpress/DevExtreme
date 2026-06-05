@@ -58,7 +58,7 @@ export class AppComponent {
     this.clientsStore = new CustomStore({
       key: 'Value',
       useDefaultSearch: true,
-      async load(loadOptions) {
+      load(loadOptions) {
         let params: HttpParams = new HttpParams();
         [
           'skip',
@@ -73,7 +73,7 @@ export class AppComponent {
           .then(({ data }: { data: Record<string, unknown>[] }) => ({
             data,
           }))
-          .catch(() => { throw 'Data Loading Error'; });
+          .catch(() => { throw new Error('Data Loading Error'); });
       },
     });
     this.states = AspNetData.createStore({

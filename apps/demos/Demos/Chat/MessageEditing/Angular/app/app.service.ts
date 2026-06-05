@@ -72,8 +72,8 @@ export class AppService {
   initDataSource() {
     this.customStore = new CustomStore({
       key: 'id',
-      load: async () => this.messages,
-      insert: async (message) => {
+      load: () => this.messages,
+      insert: (message) => {
         this.messages.push(message);
         return message;
       },

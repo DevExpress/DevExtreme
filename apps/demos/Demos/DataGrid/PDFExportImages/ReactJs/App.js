@@ -25,12 +25,7 @@ const onExporting = ({ component }) => {
       }
     },
     customDrawCell: (e) => {
-      if (
-        e.gridCell &&
-        e.gridCell.rowType === 'data' &&
-        e.gridCell.column?.dataField === 'Picture' &&
-        e.rect
-      ) {
+      if (e.gridCell?.rowType === 'data' && e.gridCell.column?.dataField === 'Picture' && e.rect) {
         doc.addImage(e.gridCell.value, 'PNG', e.rect.x, e.rect.y, e.rect.w, e.rect.h);
         e.cancel = true;
       }
