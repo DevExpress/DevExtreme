@@ -116,6 +116,11 @@ export class AIChat {
           Chat,
           this.getChatConfig(),
         );
+
+        this.chatInstance?.getDataSource()?.on('changed', () => {
+          this.updateClearChatButtonDisabled();
+        });
+        this.updateClearChatButtonDisabled();
       },
       ...this.options.popupOptions,
     };
@@ -129,6 +134,7 @@ export class AIChat {
       cssClass: `${CLASSES.clearChatButton}`,
       options: {
         icon: CLEAR_CHAT_ICON,
+        disabled: true,
         hint: messageLocalization.format('dxDataGrid-aiAssistantClearButtonText'),
         onClick: (): void => {
           this.clear();
@@ -274,6 +280,12 @@ export class AIChat {
     this.clearChatButtonInstance?.option('disabled', disabled);
   }
 
+  private updateClearChatButtonDisabled(): void {
+    const hasMessages = !!this.chatInstance?.getDataSource()?.items().length;
+
+    this.setClearChatButtonDisabled(this.disabled || !hasMessages);
+  }
+
   private setChatSuggestionsDisabled(disabled: boolean): void {
     this.chatInstance?.option({ suggestions: { disabled } });
   }
@@ -312,7 +324,7 @@ export class AIChat {
 
     this.setTextAreaDisabled(disabled);
     this.setSpeechToTextDisabled(disabled);
-    this.setClearChatButtonDisabled(disabled);
+    this.updateClearChatButtonDisabled();
     this.setChatSuggestionsDisabled(disabled);
   }
 
