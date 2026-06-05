@@ -1,4 +1,6 @@
-import type { BasicFilterExpr, CompositeKeyPair } from '@js/common/grids';
+import type {
+  BasicFilterExpr, CompositeKeyPair, FilterScalarValue, MultiValueFilterExpr,
+} from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateType } from '@ts/grids/grid_core/m_utils';
@@ -67,12 +69,10 @@ export const isKeyShapeValid = (
   return keyExpr.every((field) => field in key);
 };
 
-type FilterExprValue = BasicFilterExpr['value'];
-
 export function resolveFilterValue(
   dataType: string | undefined,
-  value: FilterExprValue,
-): FilterExprValue {
+  value: FilterScalarValue,
+): FilterScalarValue {
   if (typeof value === 'string' && isDateType(dataType)) {
     if (!dateUtilsTs.isValidDate(value)) {
       return value;
@@ -80,4 +80,10 @@ export function resolveFilterValue(
     return new Date(value);
   }
   return value;
+}
+
+export function isMultiValueExpr(
+  expr: BasicFilterExpr | MultiValueFilterExpr,
+): expr is MultiValueFilterExpr {
+  return Array.isArray(expr.value);
 }

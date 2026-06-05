@@ -29,6 +29,7 @@ import {
 import {
   DataSource,
   DataSourceOptions,
+  MultiValueSearchOperation,
   SearchOperation,
 } from './data';
 
@@ -105,11 +106,30 @@ export type ResponseStatusTexts = {
  * @public
  * @namespace DevExpress.common.grids
  */
+export type FilterScalarValue = string | number | boolean | null | Date;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export type BasicFilterExpr = {
   type: 'basic';
   field: string;
   operator: SearchOperation;
-  value: string | number | boolean | null | Date;
+  value: FilterScalarValue;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type MultiValueFilterExpr = {
+  type: 'basic';
+  field: string;
+  operator: MultiValueSearchOperation;
+  value: FilterScalarValue[];
 };
 
 /**
@@ -139,7 +159,7 @@ export type NegatedFilterExpr = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type FilterExpr = BasicFilterExpr | CombinedFilterExpr | NegatedFilterExpr;
+export type FilterExpr = BasicFilterExpr | MultiValueFilterExpr | CombinedFilterExpr | NegatedFilterExpr;
 
 /**
  * @docid

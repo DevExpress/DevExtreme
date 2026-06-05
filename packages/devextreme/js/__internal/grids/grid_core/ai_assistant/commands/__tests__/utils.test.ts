@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import {
   // eslint-disable-next-line spellcheck/spell-checker
-  isKeyShapeValid, normalizeKey, optionalNullish, resolveFilterValue,
+  isKeyShapeValid, isMultiValueExpr, normalizeKey, optionalNullish, resolveFilterValue,
 } from '../utils';
 
 describe('normalizeKey', () => {
@@ -166,5 +166,73 @@ describe('resolveFilterValue', () => {
 
   it('returns boolean values as-is regardless of dataType', () => {
     expect(resolveFilterValue('date', true)).toBe(true);
+  });
+});
+
+describe('isMultiValueExpr', () => {
+  it('returns true for an expression with an array value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'status',
+      operator: 'anyof' as const,
+      value: ['open', 'closed'],
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(true);
+  });
+
+  it('returns true for an expression with an empty array value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'status',
+      operator: 'noneof' as const,
+      value: [] as string[],
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(true);
+  });
+
+  it('returns false for an expression with a string value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'name',
+      operator: '=' as const,
+      value: 'Alice',
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
+  });
+
+  it('returns false for an expression with a number value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'age',
+      operator: '>' as const,
+      value: 18,
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
+  });
+
+  it('returns false for an expression with a null value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'name',
+      operator: '=' as const,
+      value: null,
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
+  });
+
+  it('returns false for an expression with a boolean value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'active',
+      operator: '=' as const,
+      value: true,
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
   });
 });
