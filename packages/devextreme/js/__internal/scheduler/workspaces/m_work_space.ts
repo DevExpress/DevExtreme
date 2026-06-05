@@ -265,7 +265,7 @@ export interface WorkspaceOptionsInternal {
   startDate?: Date;
   type?: ViewType;
   groupOrientation: GroupOrientation;
-  width: number
+  width?: number | string | undefined;
 }
 
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
