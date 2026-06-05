@@ -28,9 +28,11 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { dxSchedulerOptions } from '@js/ui/scheduler';
+import type { CellClickEvent } from '@js/ui/data_grid';
+import type { AllDayPanelMode, CellContextMenuEvent } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import type { TemplateBase } from '@ts/core/templates/m_template_base';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import {
   AllDayPanelTitleComponent,
@@ -41,6 +43,7 @@ import {
   TimePanelComponent,
 } from '@ts/scheduler/r1/components/index';
 import type { ViewContext } from '@ts/scheduler/r1/components/types';
+import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate,
@@ -49,7 +52,8 @@ import {
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
-import type { ViewType } from '@ts/scheduler/types';
+import type { GroupOrientation, ViewCellData, ViewType } from '@ts/scheduler/types';
+import type { ListEntity } from '@ts/scheduler/view_model/types';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/widget_notify_scheduler';
@@ -188,16 +192,71 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
   generateNewData: true,
 };
 
-type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
-  groups: ResourceLoader[];
+export interface WorkspaceOptionsInternal {
+  newAppointments: boolean;
+  resources: ResourceLoader[];
   getResourceManager: () => ResourceManager;
-  startDate?: Date;
-  currentDate: Date;
-  intervalCount: number;
-  hoursInterval: number;
+  getFilteredItems: () => ListEntity[];
+  noDataText: string;
+  firstDayOfWeek: number;
   startDayHour: number;
   endDayHour: number;
-};
+  viewOffset: number;
+  tabIndex: number;
+  accessKey: string;
+  focusStateEnabled: boolean;
+  showAllDayPanel: boolean;
+  showCurrentTimeIndicator: boolean;
+  indicatorTime: Date;
+  indicatorUpdateInterval: number;
+  shadeUntilCurrentTime: boolean;
+  crossScrollingEnabled: boolean;
+  dataCellTemplate: TemplateBase | null;
+  timeCellTemplate: TemplateBase | null;
+  resourceCellTemplate: TemplateBase | null;
+  dateCellTemplate: TemplateBase | null;
+  allowMultipleCellSelection: boolean;
+  selectedCellData: ViewCellData[];
+  onSelectionChanged: ((args: { selectedCellData: ViewCellData[] }) => void);
+  onSelectionEnd: ((args: { selectedCellData: ViewCellData[] }) => void);
+  groupByDate: boolean;
+  skippedDays: number[];
+  scrolling: {
+    mode: 'standard' | 'virtual';
+    orientation: 'horizontal' | 'vertical' | 'both';
+  };
+  draggingMode: 'outlook' | 'default';
+  timeZoneCalculator: TimeZoneCalculator;
+  schedulerHeight: string | number | undefined;
+  schedulerWidth: string | number | undefined;
+  allDayPanelMode: AllDayPanelMode;
+  onSelectedCellsClick: (result: object, groups: GroupValues) => void;
+  renderAppointments: () => void;
+  onShowAllDayPanel: (isVisible: boolean) => void;
+  getHeaderHeight: (() => number);
+  onScrollEnd: () => void;
+  onInitialized: (e: { element: dxElementWrapper }) => void;
+  onDisposing: () => void;
+
+  notifyScheduler: NotifyScheduler;
+  groups: ResourceLoader[];
+  onCellClick: ((e: CellClickEvent) => void) | undefined;
+  onCellContextMenu: ((e: CellContextMenuEvent) => void) | undefined;
+  currentDate: Date;
+  hoursInterval: number;
+  allDayExpanded: boolean;
+
+  agendaDuration: number;
+  intervalCount: number;
+  rowHeight: number;
+  startDate?: Date;
+  type?: ViewType;
+  groupOrientation: GroupOrientation;
+  width?: number | string | undefined;
+
+  rtlEnabled: boolean;
+}
+
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private viewDataProviderValue: any;
 
@@ -1829,7 +1888,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private isValidScrollDate(date, throwWarning = true) {
-    const viewOffset = this.option('viewOffset') as number;
+    const viewOffset = this.option('viewOffset');
     const min = new Date(this.getStartViewDate().getTime() + viewOffset);
     const max = new Date(this.getEndViewDate().getTime() + viewOffset);
 
@@ -2447,14 +2506,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private initPositionHelper() {
     this.positionHelper = new PositionHelper({
-      key: this.option('key'),
       viewDataProvider: this.viewDataProvider,
-      viewStartDayHour: this.option('startDayHour'),
-      viewEndDayHour: this.option('endDayHour'),
-      cellDuration: this.getCellDuration(),
       isGroupedByDate: this.isGroupedByDate(),
       rtlEnabled: this.option('rtlEnabled'),
-      startViewDate: this.getStartViewDate(),
       isVerticalGrouping: this.isVerticalGroupedWorkSpace(),
       groupCount: this.getGroupCount(),
       isVirtualScrolling: this.isVirtualScrolling(),
