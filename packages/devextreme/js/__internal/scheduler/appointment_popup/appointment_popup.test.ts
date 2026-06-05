@@ -1199,6 +1199,9 @@ describe('Isolated AppointmentPopup environment', () => {
       expect(formHeight).toBe(500);
       expect(elementAttr.class).toBe('dx-scheduler-form');
       expect(elementAttr.id).toBe('custom-form');
+    });
+  });
+
   describe('Resources', () => {
     it('should create resourceEditorsGroup when resources have no custom icons', async () => {
       const { POM } = await createAppointmentPopup({
