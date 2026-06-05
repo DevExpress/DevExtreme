@@ -403,7 +403,7 @@ export default class Selection<
     return this._selectionStrategy.loadSelectedItemsWithFilter();
   }
 
-  hasMatchingSelectedItems(keys: TKey[]): boolean {
+  selectedItemsMatchAllKeys(keys: TKey[]): boolean {
     const { selectedItems, keyOf } = this.options;
     if (keys.length === selectedItems.length) {
       return keys.every((key) => selectedItems.some((item) => {
