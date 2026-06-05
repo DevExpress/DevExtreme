@@ -1,9 +1,10 @@
-import type { Orientation, template } from '@js/common';
+import type { Orientation } from '@js/common';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { isFunction } from '@js/core/utils/type';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
@@ -149,7 +150,7 @@ class SchedulerTableCreator {
     groups: ResourceLoader[],
     cssClasses: GroupCssClasses,
     cellCount: number,
-    cellTemplate: template | null | undefined,
+    cellTemplate: TemplateBase | null | undefined,
     rowCount: number,
     groupByDate: boolean,
   ): GroupRows {

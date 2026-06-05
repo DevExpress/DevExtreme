@@ -1,6 +1,6 @@
-import type { template } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import $, { type dxElementWrapper } from '@js/core/renderer';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -10,6 +10,7 @@ import { hasWindow } from '@js/core/utils/window';
 // NOTE: Renovation component import.
 import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
 import { timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
+import type { WorkspaceOptionsInternal } from '@ts/scheduler/workspaces/m_work_space';
 import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
 import {
@@ -21,7 +22,7 @@ import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import type { ViewDataProviderOptions } from './view_model/m_types';
-import SchedulerWorkSpace, { type WorkSpaceIndicatorDefaultOptions } from './work_space_indicator';
+import SchedulerWorkSpace from './work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -35,10 +36,6 @@ const HEADER_PANEL_WEEK_CELL_CLASS = 'dx-scheduler-header-panel-week-cell';
 
 const HORIZONTAL = 'horizontal';
 const toMs = dateUtils.dateToMilliseconds;
-
-interface TimelineDefaultOptions extends WorkSpaceIndicatorDefaultOptions {
-  groupOrientation: 'vertical';
-}
 
 class SchedulerTimeline extends SchedulerWorkSpace {
   protected override $sidebarTable!: dxElementWrapper;
@@ -333,10 +330,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     );
   }
 
-  _getDefaultOptions(): TimelineDefaultOptions {
+  _getDefaultOptions(): WorkspaceOptionsInternal {
     return extend(super._getDefaultOptions(), {
       groupOrientation: 'vertical',
-    }) as TimelineDefaultOptions;
+    }) as WorkspaceOptionsInternal;
   }
 
   protected override createWorkSpaceElements(): void {
@@ -345,7 +342,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override updateAllDayVisibility(): void { return noop(); }
 
-  protected override getDateHeaderTemplate(): template | undefined | null {
+  protected override getDateHeaderTemplate(): TemplateBase | null | undefined {
     return this.option('timeCellTemplate');
   }
 

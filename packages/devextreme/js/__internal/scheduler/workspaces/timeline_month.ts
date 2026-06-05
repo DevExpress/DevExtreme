@@ -1,5 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
-import type { template } from '@js/core/templates/template';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import dateUtils from '@js/core/utils/date';
 import { HeaderPanelComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekdayAndDay, monthUtils } from '@ts/scheduler/r1/utils/index';
@@ -27,7 +27,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return TIMELINE_CLASS;
   }
 
-  protected override getDateHeaderTemplate(): template | undefined | null {
+  protected override getDateHeaderTemplate(): TemplateBase | null | undefined {
     return this.option('dateCellTemplate');
   }
 
