@@ -86,7 +86,9 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
   _getAriaAutocomplete(): string {
     const { disabled, readOnly } = this.option();
 
-    const isInputEditable = !((readOnly ?? false) || (disabled ?? false));
+    // ?? would short-circuit on `false`, missing the other operand
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const isInputEditable = !(readOnly || disabled);
 
     return isInputEditable ? 'list' : 'none';
   }
@@ -123,6 +125,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
 
   _listItemClickHandler(e: ItemClickEvent): void {
     this._saveValueChangeEvent(e.event);
+    // @ts-expect-error DataExpressionMixin must be typed
     const value = this._displayGetter(e.itemData);
     this.option('value', value);
     this.close();
@@ -198,6 +201,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
         this._searchDataSource(this._searchValue());
         break;
       case 'valueExpr':
+        // @ts-expect-error DataExpressionMixin must be typed
         this._compileDisplayGetter();
         this._setListOption('displayExpr', this._displayGetterExpr());
         super._optionChanged(args);

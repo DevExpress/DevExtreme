@@ -60,10 +60,6 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 class DropDownList<
   TProperties extends DropDownListProperties = DropDownListProperties,
 > extends DropDownEditor<TProperties> {
-  declare _displayGetter: (item: unknown) => string; // DataExpressionMixin workaround
-
-  declare _compileDisplayGetter: () => void; // DataExpressionMixin workaround
-
   _list?: List;
 
   _$list?: dxElementWrapper;
@@ -420,7 +416,8 @@ class DropDownList<
   }
 
   _displayValue(item: Item): string {
-    return this._displayGetter(item);
+    // @ts-expect-error DataExpressionMixin must be typed
+    return this._displayGetter(item) as string;
   }
 
   _refreshSelected(): void {
@@ -1027,6 +1024,7 @@ class DropDownList<
 
   _setSubmitValue(): void {
     const { value } = this.option();
+    // @ts-expect-error DataExpressionMixin must be typed
     const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
 
     this._getSubmitElement().val(submitValue);

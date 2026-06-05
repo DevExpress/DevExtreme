@@ -439,6 +439,7 @@ class TagBox<
 
         $container.append($tagContent);
       }, ['text'], this.option('integrationOptions.watchMethod'), {
+        // @ts-expect-error DataExpressionMixin must be typed
         text: this._displayGetter,
       }),
     });
@@ -487,6 +488,7 @@ class TagBox<
 
       $options.push(
         $('<option>')
+        // @ts-expect-error DataExpressionMixin must be typed
           .val(useDisplayText ? this._displayGetter(value[i]) : value[i])
           .attr('selected', 'selected'),
       );
@@ -1302,6 +1304,7 @@ class TagBox<
     }
 
     let $tag = this._getTag(value);
+    // @ts-expect-error DataExpressionMixin must be typed
     const displayValue = this._displayGetter(item);
     const itemModel = this._getItemModel(item, displayValue);
 

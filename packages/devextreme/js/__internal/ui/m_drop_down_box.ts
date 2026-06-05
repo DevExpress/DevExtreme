@@ -1,7 +1,6 @@
 import type { PositionConfig } from '@js/common/core/animation';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
-import type { DataSource } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -46,26 +45,6 @@ class DropDownBox<
   TProperties extends DropDownBoxProperties = DropDownBoxProperties,
 > extends DropDownEditor<TProperties> {
   _popupPosition?: PositionConfig;
-
-  declare _displayGetter: (item: unknown) => string; // DataExpressionMixin workaround
-
-  declare _compileDisplayGetter: () => void; // DataExpressionMixin workaround
-
-  declare _initDataExpressions: () => void;
-
-  declare _rejectValueLoading: () => void;
-
-  declare _dataSource: DataSource | undefined;
-
-  declare _getCurrentValue: () => unknown;
-
-  declare _isValueEquals: (value1: unknown, value2: unknown) => boolean;
-
-  declare _valueGetter: (item: unknown) => unknown;
-
-  declare _loadValue: (value: unknown) => DeferredObj<unknown>;
-
-  declare _dataExpressionOptionChanged: (args: OptionChanged<TProperties>) => void;
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
@@ -121,6 +100,7 @@ class DropDownBox<
   }
 
   _initMarkup(): void {
+    // @ts-expect-error DataExpressionMixin must be typed
     this._initDataExpressions();
     this.$element().addClass(DROP_DOWN_BOX_CLASS);
 
@@ -130,6 +110,7 @@ class DropDownBox<
   _setSubmitValue(): void {
     const { value } = this.option();
     const submitValue = this._shouldUseDisplayValue(value)
+    // @ts-expect-error DataExpressionMixin must be typed
       ? this._displayGetter(value)
       : value;
 
@@ -151,13 +132,16 @@ class DropDownBox<
   }
 
   _renderInputValue({ renderOnly }: { renderOnly?: boolean } = {}): DeferredObj<unknown> {
+    // @ts-expect-error DataExpressionMixin must be typed
     this._rejectValueLoading();
     const values: ItemWithKey[] = [];
+    // @ts-expect-error DataExpressionMixin must be typed
     if (!this._dataSource) {
       super._renderInputValue({ renderOnly, value: values });
 
       return Deferred().resolve();
     }
+    // @ts-expect-error DataExpressionMixin must be typed
     const rawValue = this._getCurrentValue() ?? [];
     const keys: unknown[] = Array.isArray(rawValue) ? rawValue : [rawValue];
 
@@ -166,6 +150,7 @@ class DropDownBox<
       this
         ._loadItem(key)
         .always((item) => {
+          // @ts-expect-error DataExpressionMixin must be typed
           const displayValue = this._displayGetter(item);
           const { acceptCustomValue } = this.option();
           if (isDefined(displayValue)) {
@@ -195,6 +180,7 @@ class DropDownBox<
     const deferred = Deferred();
     const selectedItem = grep(
       this.option('items') || [],
+      // @ts-expect-error DataExpressionMixin must be typed
       (item) => this._isValueEquals(this._valueGetter(item), value),
       false,
     )[0];
@@ -202,12 +188,12 @@ class DropDownBox<
     if (selectedItem !== undefined) {
       deferred.resolve(selectedItem);
     } else {
+      // @ts-expect-error DataExpressionMixin must be typed
       this._loadValue(value)
         .done((item) => {
           deferred.resolve(item);
         })
         .fail((args) => {
-          // @ts-expect-error args type is not defined
           if (args?.shouldSkipCallback) {
             return;
           }
@@ -349,6 +335,7 @@ class DropDownBox<
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
+    // @ts-expect-error DataExpressionMixin must be typed
     this._dataExpressionOptionChanged(args);
     switch (args.name) {
       case 'dataSource':
