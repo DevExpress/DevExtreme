@@ -3,37 +3,41 @@ import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { getBoundingRect } from '@js/core/utils/position';
 import { hasWindow } from '@js/core/utils/window';
-// NOTE: Renovation component import.
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
 import { utils } from '../m_utils';
 import { VIEWS } from '../utils/options/constants_view';
-import SchedulerWorkSpace from './m_work_space_indicator';
+import type { ViewDateGenerationOptions } from './m_work_space';
+import SchedulerWorkSpace from './work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
-  get type() { return VIEWS.MONTH; }
+  get type(): string { return VIEWS.MONTH; }
 
-  protected override getElementClass() {
+  protected override getElementClass(): string {
     return MONTH_CLASS;
   }
 
-  protected override getFormat() {
+  protected override getFormat(): (date: Date) => string {
     return formatWeekday;
   }
 
-  protected override getIntervalBetween(currentDate) {
+  protected override getIntervalBetween(currentDate: Date): number {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
+    const startDayHour = this.option('startDayHour');
 
-    return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
+    return currentDate.getTime()
+      - (firstViewDate.getTime() - startDayHour * 3600000)
+      - timeZoneOffset;
   }
 
-  protected override getDateGenerationOptions() {
+  protected override getDateGenerationOptions(): ViewDateGenerationOptions
+  & { cellCountInDay: number } {
     return {
       ...super.getDateGenerationOptions(),
       cellCountInDay: 1,
@@ -45,8 +49,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
    *   getCellWidth method need remove. Details in T712431 there is a test for this bug,
    *   when changing the layout, the test will also be useless
    */
-  getCellWidth() {
-    return this.cache.memo('cellWidth', () => {
+  getCellWidth(): number | undefined {
+    const cellWidth = this.cache.memo('cellWidth', (): number | undefined => {
       const DAYS_IN_WEEK = 7;
 
       let averageWidth = 0;
@@ -57,13 +61,17 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
       return cells.length === 0 ? undefined : averageWidth / DAYS_IN_WEEK;
     });
+
+    return cellWidth as number | undefined;
   }
 
-  protected override insertAllDayRowsIntoDateTable() {
+  protected override insertAllDayRowsIntoDateTable(): boolean {
     return false;
   }
 
-  protected override getCellCoordinatesByIndex(index) {
+  protected override getCellCoordinatesByIndex(
+    index: number,
+  ): { rowIndex: number; columnIndex: number } {
     const rowIndex = Math.floor(index / this.getCellCount());
     const columnIndex = index - this.getCellCount() * rowIndex;
 
@@ -73,61 +81,60 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     };
   }
 
-  protected override needCreateCrossScrolling() {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  protected override needCreateCrossScrolling(): boolean {
     return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
   }
 
-  protected override getViewStartByOptions() {
+  protected override getViewStartByOptions(): Date {
     return monthUtils.getViewStartByOptions(
-      this.option('startDate') as any,
-      this.option('currentDate') as any,
-      this.option('intervalCount') as any,
-      dateUtils.getFirstMonthDate(this.option('startDate')) as any,
+      this.option('startDate'),
+      this.option('currentDate'),
+      this.option('intervalCount'),
+      dateUtils.getFirstMonthDate(this.option('startDate')) as Date,
     );
   }
 
-  protected override updateIndex(index) {
+  protected override updateIndex(index: number): number {
     return index;
   }
 
-  isIndicationAvailable() {
+  isIndicationAvailable(): boolean {
     return false;
   }
 
-  getIntervalDuration() {
+  getIntervalDuration(): number {
     return toMs('day');
   }
 
-  getTimePanelWidth() {
+  getTimePanelWidth(): number {
     return 0;
   }
 
-  supportAllDayRow() {
+  supportAllDayRow(): boolean {
     return false;
   }
 
-  keepOriginalHours() {
+  keepOriginalHours(): boolean {
     return true;
   }
 
-  getWorkSpaceLeftOffset() {
+  getWorkSpaceLeftOffset(): number {
     return 0;
   }
 
-  needApplyCollectorOffset() {
+  needApplyCollectorOffset(): boolean {
     return true;
   }
 
-  protected override getHeaderDate() {
+  protected override getHeaderDate(): Date {
     return this.getViewStartByOptions();
   }
 
-  renderRAllDayPanel() {}
+  renderRAllDayPanel(): void {}
 
-  renderRTimeTable() {}
+  renderRTimeTable(): void {}
 
-  renderRDateTable() {
+  renderRDateTable(): void {
     utils.renovation.renderComponent(
       this,
       this.$dateTable,
@@ -141,7 +148,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // We need these methods for now but they are useless for renovation
   // -------------
 
-  protected override createWorkSpaceElements() {
+  protected override createWorkSpaceElements(): void {
     if (this.isVerticalGroupedWorkSpace()) {
       this.createWorkSpaceScrollableElements();
     } else {
@@ -149,9 +156,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
   }
 
-  protected override updateAllDayVisibility() { return noop(); }
+  protected override updateAllDayVisibility(): void { return noop(); }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth as any);
 
 export default SchedulerWorkSpaceMonth;

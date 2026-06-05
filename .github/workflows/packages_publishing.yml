@@ -24,7 +24,7 @@ env:
 jobs:
   build:
     name: Build packages
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
@@ -40,11 +40,6 @@ jobs:
         with:
           run_install: false
 
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -57,28 +52,11 @@ jobs:
           BUILD_INTERNAL_PACKAGE: true
         run: pnpm run all:build
 
-      - name: Clone deps scanner
-        uses: actions/checkout@v6
-        with:
-          repository: DevExpress/npmdeps-scanner
-          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
-          path: deps-scanner
-
-      - name: Build deps scanner
-        working-directory: deps-scanner
-        run: dotnet build npmDepsScanner.csproj /p:Configuration=Release
-
-      - name: Run deps scanner
-        run: |
-          ./deps-scanner/bin/Release/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
-          mkdir -p ./artifacts/deps-scanner
-          cp reportGithub.json ./artifacts/deps-scanner/
-
       - name: Build SBOMs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm set "//npm.pkg.github.com/:_authToken" "$env:NODE_AUTH_TOKEN"
+          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm nx build sbom;
 
       - name: Build artifacts package
@@ -142,9 +120,9 @@ jobs:
           PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
-          pnpm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version --workspaces=false | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version --workspaces=false | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
+          pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
 
         # --ignore-scripts is required for publishing devextreme-angular which fails with error:
         # 'Trying to publish a package that has been compiled by Ivy in full compilation mode.'

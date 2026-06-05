@@ -7,6 +7,8 @@ import DataGrid, {
   GroupPanel,
   HeaderFilter,
   FilterRow,
+  Selection,
+  Sorting,
   AIAssistant,
 } from 'devextreme-react/data-grid';
 import { sales } from './data.js';
@@ -84,6 +86,9 @@ export default function App() {
       showBorders
       keyExpr="Id"
       filterSyncEnabled
+      allowColumnResizing
+      allowColumnReordering
+      focusedRowEnabled
     >
       <SearchPanel
         visible
@@ -93,7 +98,9 @@ export default function App() {
       <GroupPanel visible />
       <HeaderFilter visible />
       <FilterRow visible />
-      <Paging pageSize={10} />
+      <Selection mode="multiple" />
+      <Sorting mode="multiple" />
+      <Paging defaultPageSize={10} />
       <Pager
         visible
         allowedPageSizes={allowedPageSizes}
