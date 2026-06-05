@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
+import { Selector } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -14,12 +15,12 @@ test('Expandable cell should have a visible focus outline when focused by keyboa
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 
-  const expandableCell = pivotGrid.getRowsArea().getCell(0);
+  // Focus the first expandable cell using the keyboard so the :focus-visible outline applies.
+  await t.pressKey('tab');
 
   await t
-    .click(expandableCell)
-    .pressKey('tab')
-    .pressKey('shift+tab');
+    .expect(Selector(':focus').hasAttribute('aria-expanded'))
+    .ok('an expandable cell is focused');
 
   await testScreenshot(t, takeScreenshot, 'pivotgrid_kbn_expandable_cell_focused.png', { element: pivotGrid.element });
 
