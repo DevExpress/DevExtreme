@@ -108,14 +108,14 @@ export const getAllDayHeight = (
     const { length } = dateTableCellsMeta;
 
     return length
-      ? dateTableCellsMeta[0][0].height
+      ? dateTableCellsMeta[0][0].height ?? 0
       : 0;
   }
 
   const { allDayPanelCellsMeta } = DOMMetaData;
 
   return allDayPanelCellsMeta?.length
-    ? allDayPanelCellsMeta[0].height
+    ? allDayPanelCellsMeta[0].height ?? 0
     : 0;
 };
 
