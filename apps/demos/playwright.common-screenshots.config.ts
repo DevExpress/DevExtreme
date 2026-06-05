@@ -22,13 +22,26 @@ const FONT_RENDERING_CHROMIUM_ARGS = [
   '--disable-font-subpixel-positioning',
 ];
 
+// Applied for Material theme only.
+// --disable-lcd-text: disables LCD/ClearType subpixel colour antialiasing on
+//   coloured glyphs (Roboto headings, links). TestCafe screenshots use grayscale
+//   antialiasing; without this flag Playwright renders coloured fringes that
+//   differ from the etalons.
+// --force-color-profile=srgb: locks Chrome to sRGB so coloured elements
+//   (sliders, icons, links) render at the same hue as TestCafe etalons,
+//   regardless of the CI machine's ICC display profile.
+const MATERIAL_CHROMIUM_ARGS = [
+  '--disable-lcd-text',
+  '--force-color-profile=srgb',
+];
+
 function isMaterialTheme(theme = process.env.THEME || ''): boolean {
   return theme.includes('material');
 }
 
 function getDefaultChromiumArgs(theme = process.env.THEME || ''): string[] {
   if (isMaterialTheme(theme)) {
-    return DEFAULT_CHROMIUM_ARGS;
+    return [...DEFAULT_CHROMIUM_ARGS, ...MATERIAL_CHROMIUM_ARGS];
   }
 
   return [
@@ -42,7 +55,9 @@ function normalizeBrowserArgs(browserArgs: string[], theme = process.env.THEME |
     return browserArgs;
   }
 
-  return browserArgs.filter((arg) => !FONT_RENDERING_CHROMIUM_ARGS.includes(arg));
+  const filtered = browserArgs.filter((arg) => !FONT_RENDERING_CHROMIUM_ARGS.includes(arg));
+  const missing = MATERIAL_CHROMIUM_ARGS.filter((arg) => !filtered.includes(arg));
+  return [...filtered, ...missing];
 }
 
 // CDPScreenshotNewSurface (Chrome ≥132) changes how CDP takes screenshots and

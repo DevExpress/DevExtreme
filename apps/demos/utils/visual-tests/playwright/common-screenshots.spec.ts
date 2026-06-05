@@ -106,12 +106,17 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           await waitForAngularLoading(page);
         }
 
-        if (testCodeSource) {
-          await execCode(page, testCodeSource);
-        }
+        // For CSP checking, skip test-code execution: those scripts manipulate
+        // widget state for screenshots and may throw if CSP blocked demo scripts.
+        // CSP violations are collected from page load, not from test interactions.
+        if (!isCsp) {
+          if (testCodeSource) {
+            await execCode(page, testCodeSource);
+          }
 
-        if (testCafeCodeSource) {
-          await execTestCafeCode(page, testCafeCodeSource);
+          if (testCafeCodeSource) {
+            await execTestCafeCode(page, testCafeCodeSource);
+          }
         }
 
         await waitForStableRendering(page);
