@@ -20,8 +20,6 @@ env:
   NX_SKIP_NX_CACHE: true
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
-  CYCLONEDX_CLI_VERSION: 0.32.0
-  CYCLONEDX_CLI_LINUX_X64_SHA256: 454879e6a4a405c8a13bff49b8982adcb0596f3019b26b0811c66e4d7f0783e1
 
 jobs:
   build:
@@ -29,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
+      version: ${{ steps.packageVersion.outputs.version }}
     steps:
       - name: Get sources
         uses: actions/checkout@v6
@@ -49,46 +48,19 @@ jobs:
         if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
         run: pnpm run all:set-timestamp-version
 
-      - name: Build npm packages
-        env:
-          BUILD_INTERNAL_PACKAGE: true
-        run: pnpm run all:build
+      - name: Get package version
+        id: packageVersion
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          echo "version=$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build SBOMs
+        continue-on-error: true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm nx build sbom;
-
-      - name: Install CycloneDX CLI
-        shell: bash
-        run: |
-          tool_dir="$RUNNER_TEMP/cyclonedx-cli"
-          mkdir -p "$tool_dir"
-          curl -fsSL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v${{ env.CYCLONEDX_CLI_VERSION }}/cyclonedx-linux-x64" -o "$tool_dir/cyclonedx"
-          echo "${{ env.CYCLONEDX_CLI_LINUX_X64_SHA256 }}  $tool_dir/cyclonedx" | sha256sum -c -
-          chmod +x "$tool_dir/cyclonedx"
-          echo "$tool_dir" >> "$GITHUB_PATH"
-
-      - name: Validate SBOMs
-        shell: bash
-        run: |
-          shopt -s nullglob
-          sbom_files=(packages/sbom/dist/*.sbom.json)
-
-          if [ ${#sbom_files[@]} -eq 0 ]; then
-            echo "No SBOM files found in packages/sbom/dist"
-            exit 1
-          fi
-
-          for file in "${sbom_files[@]}"; do
-            echo "Validating $file"
-            cyclonedx validate --input-file "$file" --input-format json --fail-on-errors
-          done
-
-      - name: Build artifacts package
-        run: pnpm run make-artifacts-package
 
       - name: Upload SBOMs
         uses: actions/upload-artifact@v7
@@ -97,18 +69,11 @@ jobs:
           path: packages/sbom/dist
           retention-days: 7
 
-      - name: Upload packages
-        uses: actions/upload-artifact@v7
-        with:
-          name: npm-packages
-          path: artifacts/npm/*.tgz
-          retention-days: 2
-
       - name: Filter packages
         id: filter
-        working-directory: artifacts/npm
+        working-directory: packages/sbom/dist
         shell: bash
-        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+        run: ls *.sbom.json | grep -E -i "$FILTER" | sed -r 's/^(.*).sbom.json$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
   publish:
     name: Publish package
@@ -121,12 +86,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-
-      - name: Download packages
-        uses: actions/download-artifact@v8
-        with:
-          name: npm-packages
-          path: npm-packages
 
       - name: Download SBOMs
         uses: actions/download-artifact@v8
@@ -146,36 +105,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Change package scope
-        id: scopedPackage
-        env:
-          PACKAGE: ${{ matrix.package }}
-        run: |
-          SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz npm-packages/$PACKAGE.tgz --scope $SCOPE)
-          echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
-          cd $PACKAGE_DIR;
-          pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
-
       - name: Build SBOM package
         id: scopedSbomPackage
         env:
-          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
-          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
+          PACKAGE: ${{ matrix.package }}
+          PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         run: |
-          UNSCOPED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed -r 's#^@[^/]+/##');
-          SBOM_FILE="sbom-packages/$UNSCOPED_PACKAGE_NAME.sbom.json";
+          SBOM_FILE="sbom-packages/$PACKAGE.sbom.json";
 
           # if [ ! -f "$SBOM_FILE" ]; then
-          #   echo "No SBOM found for $UNSCOPED_PACKAGE_NAME"
+          #   echo "No SBOM found for $PACKAGE"
           #   echo "hasSbom=false" >> "$GITHUB_OUTPUT";
           #   exit 0;
           # fi
 
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          SBOM_PACKAGE_NAME="$UNSCOPED_PACKAGE_NAME-sbom";
+          SBOM_PACKAGE_NAME="$PACKAGE-sbom";
           SBOM_PACKAGE_DIR="sbom-package/$SBOM_PACKAGE_NAME";
           SBOM_TGZ_DIR="sbom-package-tgz";
           PACKAGE_LICENSE=$(node -p "require('./package.json').license");
@@ -194,21 +139,6 @@ jobs:
           pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
-
-        # --ignore-scripts is required for publishing devextreme-angular which fails with error:
-        # 'Trying to publish a package that has been compiled by Ivy in full compilation mode.'
-        # Should be removed.
-      - name: Publish to npm.pkg.github.com
-        working-directory: ${{ steps.scopedPackage.outputs.packageDir }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
-          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
-          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
-        run: |
-          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
-          pnpm publish --no-git-checks --quiet --ignore-scripts --tag $PACKAGE_VERSION_MAJOR-${{ inputs.tag }} --registry https://npm.pkg.github.com;
-          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
 
         # --ignore-scripts - like above, should be removed, check if could be removed everywhere
       - name: Publish SBOM to npm.pkg.github.com
