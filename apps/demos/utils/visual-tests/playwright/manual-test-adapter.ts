@@ -276,6 +276,7 @@ class TestCafeControllerAdapter implements PromiseLike<undefined> {
           path: join(DEMOS_ROOT, 'testing'),
           screenshotsRelativePath: '/screenshots',
           destinationRelativePath: '/artifacts/compared-screenshots',
+          ...(isMaterialTheme() ? { textMaskRadius: 2 } : {}),
         },
         disableScreenshots: false,
       },
@@ -520,6 +521,10 @@ let adaptersInstalled = false;
 let currentFixture: FixtureState | null = null;
 let currentTestFilePath = '';
 let activeController: TestCafeControllerAdapter | null = null;
+
+function isMaterialTheme(theme = process.env.THEME || ''): boolean {
+  return theme.startsWith('material');
+}
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');

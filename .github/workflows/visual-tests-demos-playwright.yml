@@ -344,6 +344,7 @@ jobs:
         run: mise exec -- pnpm exec nx test-playwright-common-screenshots
 
       - name: Run Playwright widget screenshots
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         env:
@@ -430,7 +431,7 @@ jobs:
       - name: Run CSP server
         shell: bash
         working-directory: apps/demos
-        run: node utils/server/csp-server.js 8080 &
+        run: mise exec -- node utils/server/csp-server.js 8080 &
 
       - name: Set Chrome flags
         id: chrome-flags
@@ -457,7 +458,7 @@ jobs:
         working-directory: apps/demos
         run: |
           if [ -f csp-reports/csp-violations.jsonl ]; then
-            node utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+            mise exec -- node utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
           else
             echo "No CSP violations detected." >> $GITHUB_STEP_SUMMARY
           fi
@@ -764,6 +765,7 @@ jobs:
         run: mise exec -- pnpm exec nx test-playwright-common-screenshots
 
       - name: Run Playwright widget screenshots
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         env:
@@ -777,8 +779,89 @@ jobs:
         run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots
 
       - name: Sanitize job name
-        if: ${{ failure() }}
+        if: ${{ always() }}
         run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Run CSP server
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          rm -rf csp-reports
+          mise exec -- node utils/server/csp-server.js 8081 &
+
+      - name: Run Playwright common CSP
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          PLAYWRIGHT_DEMOS_BASE_URL: http://127.0.0.1:8081
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+          TCQUARANTINE: true
+          STRATEGY: csp
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-common-csp
+
+      - name: Show CSP violations summary
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -f csp-reports/csp-violations.jsonl ]; then
+            mise exec -- node utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No CSP violations detected." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload CSP violations
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-csp-violations-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/csp-reports/csp-violations.jsonl
+          if-no-files-found: ignore
+
+      - name: Run Playwright common accessibility
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+          TCQUARANTINE: true
+          STRATEGY: accessibility
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-common-accessibility
+
+      - name: Show accessibility warnings
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -d testing/artifacts/axe-reports ]; then
+            REPORT_COUNT=$(find testing/artifacts/axe-reports -name '*.md' | wc -l | tr -d ' ')
+          else
+            REPORT_COUNT=0
+          fi
+
+          if [ "$REPORT_COUNT" -gt 0 ]; then
+            echo "::warning ::Axe reports: ${REPORT_COUNT} demos have accessibility violations"
+          else
+            echo "No accessibility reports found."
+          fi
+
+      - name: Copy accessibility reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-reports-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/axe-reports/**/*
+          if-no-files-found: ignore
 
       - name: Copy screenshots artifacts
         if: ${{ failure() }}
@@ -897,6 +980,7 @@ jobs:
         run: mise exec -- pnpm exec nx test-playwright-common-screenshots -- --pass-with-no-tests
 
       - name: Run Playwright widget screenshots
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         env:
@@ -911,8 +995,91 @@ jobs:
         run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots -- --pass-with-no-tests
 
       - name: Sanitize job name
-        if: ${{ failure() }}
+        if: ${{ always() }}
         run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Run CSP server
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          rm -rf csp-reports
+          mise exec -- node utils/server/csp-server.js 8081 &
+
+      - name: Run Playwright common CSP
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          CHANGEDFILEINFOSPATH: changed-files.json
+          PLAYWRIGHT_DEMOS_BASE_URL: http://127.0.0.1:8081
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          STRATEGY: csp
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-common-csp -- --pass-with-no-tests
+
+      - name: Show CSP violations summary
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -f csp-reports/csp-violations.jsonl ]; then
+            mise exec -- node utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No CSP violations detected." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload CSP violations
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-csp-violations-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/csp-reports/csp-violations.jsonl
+          if-no-files-found: ignore
+
+      - name: Run Playwright common accessibility
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          CHANGEDFILEINFOSPATH: changed-files.json
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          STRATEGY: accessibility
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-common-accessibility -- --pass-with-no-tests
+
+      - name: Show accessibility warnings
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -d testing/artifacts/axe-reports ]; then
+            REPORT_COUNT=$(find testing/artifacts/axe-reports -name '*.md' | wc -l | tr -d ' ')
+          else
+            REPORT_COUNT=0
+          fi
+
+          if [ "$REPORT_COUNT" -gt 0 ]; then
+            echo "::warning ::Axe reports: ${REPORT_COUNT} demos have accessibility violations"
+          else
+            echo "No accessibility reports found."
+          fi
+
+      - name: Copy accessibility reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-reports-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/axe-reports/**/*
+          if-no-files-found: ignore
 
       - name: Copy screenshots artifacts
         if: ${{ failure() }}
