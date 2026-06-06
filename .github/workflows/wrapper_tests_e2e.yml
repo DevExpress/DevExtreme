@@ -6,6 +6,7 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -16,7 +17,15 @@ env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
 
 jobs:
+  renovation-skip-build-packages:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: Build DevExtreme and Wrappers
+    steps:
+      - run: echo "Skipped Wrappers E2E build for renovation PR."
+
   build-packages:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     name: Build DevExtreme and Wrappers
     timeout-minutes: 40
@@ -70,6 +79,7 @@ jobs:
           retention-days: 1
 
   test-wrappers:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     needs: build-packages
     runs-on: devextreme-shr2
     name: Test ${{ matrix.framework }}

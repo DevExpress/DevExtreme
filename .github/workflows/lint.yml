@@ -6,6 +6,7 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -16,6 +17,7 @@ env:
 
 jobs:
   TS:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
@@ -70,7 +72,22 @@ jobs:
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint
 
+  renovation-skip-TS:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: TS
+    steps:
+      - run: echo "Skipped Lint TS for renovation PR."
+
+  renovation-skip-JS:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: JS
+    steps:
+      - run: echo "Skipped Lint JS for renovation PR."
+
   JS:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
@@ -113,6 +130,7 @@ jobs:
       run: pnpm exec nx lint-js
 
   texts:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
@@ -148,7 +166,15 @@ jobs:
       working-directory: ./packages/devextreme
       run: pnpm exec nx lint-texts
 
+  renovation-skip-texts:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: texts
+    steps:
+      - run: echo "Skipped Lint texts for renovation PR."
+
   component_exports:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 10
     steps:
@@ -194,7 +220,15 @@ jobs:
             exit 1
         fi
 
+  renovation-skip-component-exports:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: component_exports
+    steps:
+      - run: echo "Skipped Lint component_exports for renovation PR."
+
   wrappers:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 10
 
@@ -229,6 +263,13 @@ jobs:
 
     - name: Lint wrappers
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
+
+  renovation-skip-wrappers:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: wrappers
+    steps:
+      - run: echo "Skipped Lint wrappers for renovation PR."
 
   notify:
     runs-on: devextreme-shr2

@@ -462,7 +462,7 @@ class TestCafeControllerAdapter implements PromiseLike<undefined> {
     await waitForStableRendering(this.page);
     await this.page.screenshot({
       path: filePath,
-      fullPage: false,
+      fullPage: true,
     });
   }
 
@@ -470,8 +470,21 @@ class TestCafeControllerAdapter implements PromiseLike<undefined> {
     await this.flush();
     await waitForStableRendering(this.page);
     const target = await this.resolveForAction(selector);
+    const box = await target.boundingBox();
 
-    await target.screenshot({ path: filePath });
+    if (!box) {
+      throw new Error('Unable to screenshot an invisible element');
+    }
+
+    await this.page.screenshot({
+      path: filePath,
+      clip: {
+        x: Math.floor(box.x),
+        y: Math.floor(box.y),
+        width: Math.max(1, Math.floor(box.width)),
+        height: Math.max(1, Math.floor(box.height)),
+      },
+    });
   }
 
   async evaluateClientFunction<T>(

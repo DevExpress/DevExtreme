@@ -6,6 +6,7 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -16,7 +17,15 @@ env:
   RUN_TESTS: true
 
 jobs:
+  renovation-skip-test:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: Run unit tests
+    steps:
+      - run: echo "Skipped Demos unit tests for renovation PR."
+
   check-should-run:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     name: Check if tests should run
     runs-on: devextreme-shr2
     outputs:

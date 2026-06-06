@@ -2,6 +2,7 @@ name: Wrappers Tests
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -12,6 +13,7 @@ env:
 
 jobs:
   build:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 30
 
@@ -48,6 +50,7 @@ jobs:
         run: pnpm exec nx build devextreme -c testing
 
   check-regenerate:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 10
 
@@ -95,7 +98,19 @@ jobs:
             exit 1
           fi
 
+  renovation-skip-test:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: test (${{ matrix.framework }})
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [angular, react, vue]
+    steps:
+      - run: echo "Skipped Wrappers Tests for renovation PR."
+
   test:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     timeout-minutes: 30
     needs: build
     runs-on: devextreme-shr2

@@ -2,6 +2,7 @@ name: Build and pack DevExtreme npm packages
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -17,9 +18,9 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ github.ref_name == github.event.repository.default_branch && secrets.NX_CLOUD_ACCESS_TOKEN || '' }}
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
-
 jobs:
   build:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
 
     steps:
@@ -79,7 +80,15 @@ jobs:
             packages/sbom/dist/**/*
           retention-days: 1
 
+  renovation-skip-build:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: build
+    steps:
+      - run: echo "Skipped build for renovation PR."
+
   custom_bundles:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     needs: build
 

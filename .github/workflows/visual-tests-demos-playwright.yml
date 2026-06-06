@@ -1,8 +1,8 @@
 name: Demos Visual Tests Playwright
 
-concurrency:
-  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
-  cancel-in-progress: true
+# concurrency:
+  # group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  # cancel-in-progress: true
 
 on:
   pull_request:
@@ -783,6 +783,7 @@ jobs:
         run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
 
       - name: Run CSP server
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         run: |
@@ -790,6 +791,7 @@ jobs:
           mise exec -- node utils/server/csp-server.js 8081 &
 
       - name: Run Playwright common CSP
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         env:
@@ -824,6 +826,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Run Playwright common accessibility
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         env:
@@ -999,6 +1002,7 @@ jobs:
         run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
 
       - name: Run CSP server
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         run: |
@@ -1006,6 +1010,7 @@ jobs:
           mise exec -- node utils/server/csp-server.js 8081 &
 
       - name: Run Playwright common CSP
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         env:
@@ -1041,6 +1046,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Run Playwright common accessibility
+        if: ${{ !cancelled() }}
         shell: bash
         working-directory: apps/demos
         env:
