@@ -109,13 +109,19 @@ function getViewport(strategy = process.env.STRATEGY || ''): { width: number; he
     : { width: 1000, height: 800 };
 }
 
+function getTestMatch(strategy = process.env.STRATEGY || ''): string {
+  return strategy === 'widgets'
+    ? 'manual-widgets.spec.ts'
+    : 'common-screenshots.spec.ts';
+}
+
 const strategy = process.env.STRATEGY || 'screenshots';
 const workers = (process.env.CONCURRENCY && Number(process.env.CONCURRENCY)) || 1;
 const browserEnv = process.env.BROWSERS || '';
 
 export default defineConfig({
   testDir: './utils/visual-tests/playwright',
-  testMatch: 'common-screenshots.spec.ts',
+  testMatch: getTestMatch(strategy),
   timeout: 3 * 60 * 1000,
   fullyParallel: true,
   workers,

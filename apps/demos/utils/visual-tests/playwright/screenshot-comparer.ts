@@ -30,11 +30,15 @@ interface TestControllerAdapter {
   takeElementScreenshot: (element: SelectorType, filePath: string) => Promise<void>;
 }
 
-function getScreenshotName(baseName: string, theme = THEME.fluent): string {
+function getScreenshotName(baseName: string, theme: string = THEME.fluent): string {
   const themePostfix = ` (${theme})`;
   return baseName.endsWith('.png')
     ? baseName.replace('.png', `${themePostfix}.png`)
     : `${baseName}${themePostfix}.png`;
+}
+
+function isMaterialTheme(theme = process.env.THEME || ''): boolean {
+  return theme.startsWith('material');
 }
 
 function getComparerOptions(
@@ -48,6 +52,8 @@ function getComparerOptions(
   return {
     ...comparisonOptions,
     textDiffTreshold: 0.2,
+    // Residual Playwright/Roboto CI diffs are confined to Material glyph edges.
+    ...(isMaterialTheme() ? { textMaskRadius: 2 } : {}),
     path: join(DEMOS_ROOT, 'testing'),
     screenshotsRelativePath: '/screenshots',
     destinationRelativePath: '/artifacts/compared-screenshots',

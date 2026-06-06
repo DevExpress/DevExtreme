@@ -334,6 +334,9 @@ run_container() {
   if [ "${STRATEGY}" = "accessibility" ]; then
     export CONSTEL="${CONSTEL:-jquery}"
     playwright_target="test-playwright-common-accessibility"
+  elif [ "${STRATEGY}" = "widgets" ]; then
+    export CONSTEL="${CONSTEL:-jquery(1/3)}"
+    playwright_target="test-playwright-widgets-screenshots"
   else
     export CONSTEL="${CONSTEL:-jquery(1/3)}"
     playwright_target="test-playwright-common-screenshots"
@@ -404,7 +407,7 @@ run_container() {
   fi
   test_args+=("$@")
 
-  log "Running Playwright common ${STRATEGY}."
+  log "Running Playwright ${STRATEGY}."
   cd "${CONTAINER_REPO_ROOT}/apps/demos"
   set +e
   if [ "${#test_args[@]}" -gt 0 ]; then

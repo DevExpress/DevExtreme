@@ -32,7 +32,7 @@ jobs:
         uses: DevExpress/github-actions/get-changed-files@v1
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
-          paths: 'apps/demos/Demos/**/*'
+          paths: 'apps/demos/Demos/**/*;apps/demos/testing/widgets/**/*'
           output: apps/demos/changed-files.json
 
       - name: Display changed files
@@ -342,6 +342,20 @@ jobs:
           # particular renders with visibly different antialiasing/glyph metrics.
           PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
         run: mise exec -- pnpm exec nx test-playwright-common-screenshots
+
+      - name: Run Playwright widget screenshots
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
+          CONCURRENCY: 4
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots
 
       - name: Sanitize job name
         if: ${{ failure() }}
@@ -749,6 +763,19 @@ jobs:
           CI_ENV: true
         run: mise exec -- pnpm exec nx test-playwright-common-screenshots
 
+      - name: Run Playwright widget screenshots
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots
+
       - name: Sanitize job name
         if: ${{ failure() }}
         run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
@@ -868,6 +895,20 @@ jobs:
           THEME: ${{ matrix.THEME }}
           CI_ENV: true
         run: mise exec -- pnpm exec nx test-playwright-common-screenshots -- --pass-with-no-tests
+
+      - name: Run Playwright widget screenshots
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          CHANGEDFILEINFOSPATH: changed-files.json
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots -- --pass-with-no-tests
 
       - name: Sanitize job name
         if: ${{ failure() }}

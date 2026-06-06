@@ -1,219 +1,58 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { createRequire } from 'module';
 import { join, resolve } from 'path';
 import { glob } from 'glob';
 import type { Page } from '@playwright/test';
 
+import {
+  changeTheme,
+  createMatrixTestSettings,
+  FRAMEWORKS,
+  getDemoParts as getMatrixDemoParts,
+  globalReadFrom,
+  injectStyle,
+  shouldRunFramework as shouldRunMatrixFramework,
+  shouldRunTestAtIndex as shouldRunMatrixTestAtIndex,
+  shouldRunTestExplicitly as shouldRunMatrixTestExplicitly,
+  shouldSkipDemo as shouldSkipMatrixDemo,
+  THEME,
+  updateMatrixTestSettings,
+  type Framework,
+} from '../matrix-test-helper-core';
 import { gitHubIgnored } from '../github-ignored-list';
 import { skippedTests } from '../../../testing/skipped-tests';
 
 const nodeRequire = createRequire(__filename);
 
 export const DEMOS_ROOT = resolve(__dirname, '../../..');
-
-export const FRAMEWORKS = {
-  jquery: 'jQuery',
-  react: 'React',
-  vue: 'Vue',
-  angular: 'Angular',
+export {
+  changeTheme,
+  FRAMEWORKS,
+  globalReadFrom,
+  injectStyle,
+  THEME,
 };
 
-export const THEME = {
-  generic: 'generic.light',
-  fluent: 'fluent.blue.light',
-  material: 'material.blue.light',
-};
-
-type Framework = typeof FRAMEWORKS[keyof typeof FRAMEWORKS];
-
-interface ExplicitTests {
-  masks: {
-    product: RegExp;
-    demo: RegExp;
-    framework: RegExp;
-  }[];
-}
-
-const settings: {
-  targetFramework?: string;
-  total?: number;
-  current?: number;
-  explicitTests?: ExplicitTests;
-  ignoreChangesPathPatterns: RegExp[];
-} = {
-  ignoreChangesPathPatterns: [
-    /mvcdemos.*/i,
-    /netcoredemos.*/i,
-    /menumeta.json/i,
-    /.*.md/i,
-  ],
-};
-
-export function globalReadFrom<T = string>(
-  basePath: string,
-  relativePath: string,
-  mapCallback?: (data: string) => T,
-): T | string | null {
-  const absolute = join(basePath, relativePath);
-  if (existsSync(absolute)) {
-    const result = readFileSync(absolute, 'utf8');
-    return (mapCallback && result && mapCallback(result)) || result;
-  }
-  return null;
-}
-
-export function injectStyle(style: string): string {
-  return `
-    var style = document.createElement('style');
-    style.innerHTML = \`${style}\`;
-    document.getElementsByTagName('head')[0].appendChild(style);
-  `;
-}
-
-export function changeTheme(dirName: string, demoPath: string, theme?: string): void {
-  if (!theme || theme === THEME.generic) {
-    return;
-  }
-
-  const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
-    let result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
-
-    result = result.replace(/dx\.[^"]+\.css/g, `dx.${theme}.css`);
-
-    return result;
-  });
-
-  const indexFilePath = join(dirName, demoPath);
-
-  if (existsSync(indexFilePath) && typeof updatedContent === 'string') {
-    writeFileSync(indexFilePath, updatedContent, 'utf8');
-  }
-}
-
-function patternGroupFromValues(product?: string, demo?: string, framework?: string) {
-  const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
-  const wrap = (value?: string): RegExp => RegExp(value ? escapeRegExp(value) : '.*', 'i');
-
-  return {
-    product: wrap(product),
-    demo: wrap(demo),
-    framework: wrap(framework),
-  };
-}
-
-function getChangedFiles(): { filename: string }[] | undefined {
-  const changedFilesPath = process.env.CHANGEDFILEINFOSPATH;
-
-  return changedFilesPath
-    && existsSync(changedFilesPath)
-    && JSON.parse(readFileSync(changedFilesPath, 'utf8'));
-}
-
-function getExplicitTestsFromChangedFiles(): ExplicitTests | undefined {
-  const changedFiles = getChangedFiles();
-  if (!changedFiles) {
-    return undefined;
-  }
-  if (!Array.isArray(changedFiles)) {
-    console.log('Running all tests. Changed files are not iterable: ', JSON.stringify(changedFiles));
-    return undefined;
-  }
-
-  const result: ExplicitTests = { masks: [] };
-
-  for (const changedFile of changedFiles) {
-    const fileName = changedFile.filename;
-
-    if (!settings.ignoreChangesPathPatterns.some((pattern) => pattern.test(fileName))) {
-      const parseResult = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|jquery|react|vue)\/.*/i.exec(fileName)
-        || /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<data>.*)/i.exec(fileName)
-        || /testing\/etalons\/(?<product>\w+)-(?<demo>\w+)(?<suffix>.*).png/i.exec(fileName);
-
-      if (!parseResult) {
-        console.log('Unable to parse changed file, running all tests: ', fileName);
-        return undefined;
-      }
-
-      const groups = parseResult.groups || {};
-      result.masks.push(patternGroupFromValues(
-        groups.product,
-        groups.demo,
-        undefined,
-      ));
-    }
-  }
-
-  return result;
-}
+const settings = createMatrixTestSettings();
 
 export function updateConfig(): void {
-  if (process.env.CONSTEL) {
-    const match = process.env.CONSTEL.match(/(?<name>\w+)(?<parallel>\((?<current>\d+)\/(?<total>\d+)\))?/);
-    if (match?.groups) {
-      settings.targetFramework = match.groups.name;
-      if (match.groups.parallel) {
-        settings.total = Number(match.groups.total);
-        settings.current = Number(match.groups.current);
-      }
-    }
-  }
-
-  settings.explicitTests = getExplicitTestsFromChangedFiles();
+  updateMatrixTestSettings(settings);
 }
 
 export function shouldRunFramework(currentFramework: Framework): boolean {
-  return !settings.targetFramework
-    || currentFramework.toLowerCase() === settings.targetFramework.toLowerCase();
+  return shouldRunMatrixFramework(settings, currentFramework);
 }
 
 export function shouldRunTestAtIndex(testIndex: number): boolean {
-  if (!settings.total || !settings.current) {
-    return true;
-  }
-
-  const part = testIndex % settings.total;
-  const currentPart = settings.current - 1;
-
-  return part === currentPart;
+  return shouldRunMatrixTestAtIndex(settings, testIndex);
 }
 
 export function shouldRunTestExplicitly(demoUrl: string): boolean {
-  if (!settings.explicitTests) {
-    return true;
-  }
-
-  const parts = demoUrl.split('/').filter((x) => x?.length);
-  const framework = parts[parts.length - 1];
-  const product = parts[parts.length - 3];
-  const demo = parts[parts.length - 2];
-
-  return settings.explicitTests.masks.some((mask) => mask.framework.test(framework)
-    && mask.demo.test(demo)
-    && mask.product.test(product));
+  return shouldRunMatrixTestExplicitly(settings, demoUrl);
 }
 
 export function shouldSkipDemo(framework: Framework, component: string, demoName: string): boolean {
-  const frameworkTests = skippedTests[framework];
-  if (!frameworkTests) {
-    return false;
-  }
-
-  const componentTests = frameworkTests[component];
-  if (!componentTests) {
-    return false;
-  }
-
-  for (const test of componentTests) {
-    if (typeof test === 'string' && test === demoName) {
-      return true;
-    }
-    if (test.demo === demoName
-      && test.themes.includes(process.env.THEME || THEME.generic)) {
-      return true;
-    }
-  }
-
-  return false;
+  return shouldSkipMatrixDemo(framework, component, demoName, skippedTests);
 }
 
 export function isAccessibilityStrategy(): boolean {
@@ -405,15 +244,7 @@ export function getDemoParts(demoPath: string): {
   demoName: string;
   testName: string;
 } {
-  const testParts = demoPath.split(/[/\\]/);
-  const widgetName = testParts[1];
-  const demoName = testParts[2];
-
-  return {
-    widgetName,
-    demoName,
-    testName: `${widgetName}-${demoName}`,
-  };
+  return getMatrixDemoParts(demoPath);
 }
 
 export function readDemoFile<T = string>(
