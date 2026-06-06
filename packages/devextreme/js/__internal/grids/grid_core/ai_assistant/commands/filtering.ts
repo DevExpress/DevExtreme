@@ -192,8 +192,6 @@ export const filterValueCommand = defineGridCommand({
   To express "not and" / "not or", add a negated node whose expressionId points at a combined node.
   Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node):
   {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.
-  
-  
   `,
   schema: filterValueCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
