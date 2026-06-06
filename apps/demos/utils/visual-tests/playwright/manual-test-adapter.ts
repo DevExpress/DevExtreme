@@ -520,7 +520,7 @@ class TestCafeControllerAdapter implements PromiseLike<undefined> {
     }
 
     if (typeof selector === 'string') {
-      return Promise.resolve(this.page.locator(selector));
+      return Promise.resolve(this.page.locator(selector).first());
     }
 
     return new TestCafeSelector(selector).resolveForAction(this.page);

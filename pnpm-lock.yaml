@@ -1151,6 +1151,9 @@ importers:
       '@babel/plugin-transform-runtime':
         specifier: 7.29.7
         version: 7.29.7(@babel/core@7.29.7)
+      '@playwright/test':
+        specifier: 1.60.0
+        version: 1.60.0
       '@eslint/eslintrc':
         specifier: 'catalog:'
         version: 3.3.5
