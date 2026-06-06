@@ -196,7 +196,11 @@ class TestCafeSelector {
 
   async resolveForAction(page: Page): Promise<Locator | ElementHandle<Element>> {
     if (typeof this.base !== 'function') {
-      return this.toLocator(page);
+      // TestCafe actions always operate on the first matching element when
+      // multiple elements match a selector (non-strict by default). Use
+      // .first() so the Playwright adapter replicates that behaviour instead
+      // of failing with a strict-mode violation.
+      return this.toLocator(page).first();
     }
 
     if (this.operations.length) {
@@ -324,7 +328,10 @@ class TestCafeControllerAdapter implements PromiseLike<undefined> {
       const actionOptions = toPlaywrightActionOptions(options);
 
       if ('click' in target) {
-        await target.click(actionOptions);
+        // TestCafe does not check for overlay elements intercepting the click.
+        // force:true replicates that: Playwright still checks visibility but
+        // skips the overlay/actionability check, matching TestCafe behaviour.
+        await target.click({ ...actionOptions, force: true });
       }
     });
   }
