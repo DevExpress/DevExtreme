@@ -37,6 +37,10 @@ const invalidResponse = (): Promise<string> => formatMessage(
   'dxDataGrid-aiAssistantInvalidResponseMessage',
 );
 
+const getSelectedRowsCount = ClientFunction(
+  () => (window as any).widget.getSelectedRowsData().length,
+);
+
 const setupAIMock = ClientFunction((base: Record<string, unknown>, mock: AIResponseMock) => {
   (window as any).__aiBase = base;
   (window as any).__aiMock = mock;
@@ -176,19 +180,18 @@ test('Grouping by non-groupable column should show failure entry', async (t) => 
   value: { actions: [{ name: 'grouping', args: { dataField: 'name', groupIndex: 0 } }] },
 }));
 
-// 2.4.3 — selectByKeys with keys absent from the data selects nothing. The response is reported
-// as a failure at the message level, but renders no per-action error entry (no row matched).
-test('Selecting non-existent keys should show failure or no incorrect rows selected', async (t) => {
-  const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Select rows 999 and 1000');
+// 2.4.3
+test('Selecting non-existent keys should succeed and select no rows', async (t) => {
+  const { aiChat } = await openChatAndSubmit(t, 'Select rows 999 and 1000');
 
   await t.expect(aiChat.getMessages().count).eql(2);
-  await t.expect(aiChat.getSuccessMessages().count).eql(0);
-  await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(0);
-  await t.expect(dataGrid.apiOption('selectedRowKeys')).eql([]);
+  await t.expect(aiChat.getErrorMessages().count).eql(0);
+  await t.expect(aiChat.getSuccessMessages().count).eql(1);
+  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(getSelectedRowsCount()).eql(0);
 }).before(async () => createGridWithAIAssistant({ ...baseGrid, selection: { mode: 'multiple' } }, {
   kind: 'resolve',
-  value: { actions: [{ name: 'selectByKeys', args: { keys: [999, 1000] } }] },
+  value: { actions: [{ name: 'selectByKeys', args: { keys: [999, 1000], preserve: false } }] },
 }));
 
 // === §2.6 Excessively long prompt / provider error ===
