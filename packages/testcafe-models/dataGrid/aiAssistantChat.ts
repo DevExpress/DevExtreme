@@ -59,7 +59,7 @@ export class AIAssistantChat extends Popup {
 
   // eslint-disable-next-line class-methods-use-this
   getAbortConfirmYesButton(): Selector {
-    return Selector(`.${CLASS.abortConfirmDialog} .dx-button`).withExactText('Yes');
+    return Selector(`.${CLASS.abortConfirmDialog} .dx-button`).nth(1);
   }
 
   getClearChatButton(): Selector {
