@@ -155,11 +155,198 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
   options: gridOptions, mode: 'delayed', actions: sortNameAsc, delay: 1500,
 }));
 
-// === §5.3 / §5.4 are not covered as e2e ===
-// §5.3 (close popup mid-execution) and §5.4 (re-open after a mid-execution close) cannot be
-// reproduced deterministically: the popup cannot be closed while commands execute (issue 4282),
-// and every non-selection command resolves within microtasks, so there is no observable
-// "mid-execution" window to close into. These remain manual-only / unit-test scenarios.
+// === §5.3 Popup close mid-execution / §5.4 Re-open after a mid-execution close ===
+
+const releaseSelectAll = ClientFunction(() => { (window as any).__resolveSelectAll(); });
+const selectAllStarted = ClientFunction(() => (window as any).__selectAllStarted === true);
+
+fixture`AI Assistant - Popup Close Mid-Execution`
+  .page(AI_INTEGRATION_PAGE);
+
+// 5.3.1 / 5.3.4 / 5.3.5 / 5.4.1 / 5.4.2
+test('Closing the popup mid-execution aborts the remaining commands and keeps the completed ones', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name, select all, then sort by value')
+    .pressKey('enter');
+
+  // Command #1 (sort by name) has applied; command #2 (selectAll) is now in flight and gated.
+  await t.expect(selectAllStarted()).ok();
+  await t.expect(aiChat.isInputDisabled()).ok();
+
+  // Close the popup mid-execution → confirm dialog → abort.
+  await closeAndConfirmAbort(t, aiChat);
+
+  // Let the gated selectAll resolve; the loop then sees the abort flag and stops before #3.
+  await releaseSelectAll();
+
+  // Re-open to inspect the resulting response.
+  await t.click(dataGrid.getAIAssistantButton());
+
+  // An aborted command makes the whole message a failure: 2 successes + 1 aborted entry.
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getActionItems(0).count).eql(3);
+  await t.expect(aiChat.getSuccessActionItems(0).count).eql(2);
+  await t.expect(aiChat.getAbortedActionItems(0).count).eql(1);
+
+  // the grid reflects only completed commands: #1 applied, #3 (sort by value) skipped.
+  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(await dataGrid.apiColumnOption('value', 'sortOrder')).notOk();
+
+  // no Regenerate button (commands were attempted; the grid was mutated).
+  await t.expect(aiChat.getMessageRegenerateButton(0).count).eql(0);
+
+  // the in-flight lock has been released.
+  await t.expect(aiChat.isInputDisabled()).notOk();
+}).before(async () => createWidget('dxDataGrid', () => {
+  const w = window as any;
+
+  w.__selectAllStarted = false;
+
+  const data = Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    name: `Name ${i + 1}`,
+    value: (i + 1) * 10,
+  }));
+
+  const store = new w.DevExpress.data.CustomStore({
+    key: 'id',
+    load(opts: any) {
+      if (opts.take !== undefined) {
+        const skip = opts.skip ?? 0;
+
+        return Promise.resolve({
+          data: data.slice(skip, skip + opts.take),
+          totalCount: data.length,
+        });
+      }
+
+      w.__selectAllStarted = true;
+
+      return new Promise((resolve) => {
+        w.__resolveSelectAll = resolve.bind(resolve, data);
+      });
+    },
+    totalCount: () => data.length,
+  });
+
+  return {
+    dataSource: store,
+    remoteOperations: true,
+    columns: ['id', 'name', 'value'],
+    showBorders: true,
+    selection: { mode: 'multiple' },
+    aiAssistant: {
+      enabled: true,
+      aiIntegration: new w.DevExpress.aiIntegration.AIIntegration({
+        sendRequest() {
+          return {
+            promise: Promise.resolve({
+              actions: [
+                { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
+                { name: 'selectAll', args: {} },
+                { name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } },
+              ],
+            }),
+            abort: (): void => {},
+          };
+        },
+      }),
+    },
+  };
+}));
+
+// 5.4.3
+test('Customized response title is applied to the partial (aborted) result', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name, select all, then sort by value')
+    .pressKey('enter');
+
+  await t.expect(selectAllStarted()).ok();
+
+  await closeAndConfirmAbort(t, aiChat);
+
+  await releaseSelectAll();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getMessageHeader(0).innerText).eql('Stopped before finishing');
+}).before(async () => createWidget('dxDataGrid', () => {
+  const w = window as any;
+
+  w.__selectAllStarted = false;
+
+  const data = Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    name: `Name ${i + 1}`,
+    value: (i + 1) * 10,
+  }));
+
+  const store = new w.DevExpress.data.CustomStore({
+    key: 'id',
+    load(opts: any) {
+      if (opts.take !== undefined) {
+        const skip = opts.skip ?? 0;
+
+        return Promise.resolve({
+          data: data.slice(skip, skip + opts.take),
+          totalCount: data.length,
+        });
+      }
+
+      w.__selectAllStarted = true;
+
+      return new Promise((resolve) => {
+        w.__resolveSelectAll = resolve.bind(resolve, data);
+      });
+    },
+    totalCount: () => data.length,
+  });
+
+  return {
+    dataSource: store,
+    remoteOperations: true,
+    columns: ['id', 'name', 'value'],
+    showBorders: true,
+    selection: { mode: 'multiple' },
+    aiAssistant: {
+      enabled: true,
+      customizeResponseTitle: (status: string) => (status === 'failure'
+        ? 'Stopped before finishing'
+        : 'All done'),
+      aiIntegration: new w.DevExpress.aiIntegration.AIIntegration({
+        sendRequest() {
+          return {
+            promise: Promise.resolve({
+              actions: [
+                { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
+                { name: 'selectAll', args: {} },
+                { name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } },
+              ],
+            }),
+            abort: (): void => {},
+          };
+        },
+      }),
+    },
+  };
+}));
 
 // === §5.5 Grid destroyed (dispose) mid-request / mid-execution ===
 
