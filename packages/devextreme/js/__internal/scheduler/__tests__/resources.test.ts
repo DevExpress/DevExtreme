@@ -5,7 +5,7 @@ import { DataSource } from '@ts/data/data_source/m_data_source';
 import CustomStore from '@ts/data/m_custom_store';
 import { createScheduler } from '@ts/scheduler/__tests__/__mock__/create_scheduler';
 
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 const dataSource = [
   {

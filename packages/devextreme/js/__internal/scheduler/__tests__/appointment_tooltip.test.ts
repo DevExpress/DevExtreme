@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 
 import type Scheduler from '../m_scheduler';
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 import type { SchedulerModel } from './__mock__/model/scheduler';
 
 const getDataSource = (): object[] => [
