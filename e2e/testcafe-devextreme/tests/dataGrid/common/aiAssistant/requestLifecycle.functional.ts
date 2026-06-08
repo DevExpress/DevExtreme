@@ -1,64 +1,34 @@
 /* eslint-disable no-underscore-dangle */
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction } from 'testcafe';
-import { AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
 import { createWidget } from '../../../../helpers/createWidget';
-
-// Sentinels recognised by the mocked `sendRequest` queue:
-//   HANG — return a never-resolving promise (keeps the request in the LLM phase),
-//   FAIL — reject the request (LLM-phase failure).
-// Any other queue entry is resolved as a canned `{ actions: [...] }` response.
-const HANG = '__HANG__';
-const FAIL = '__FAIL__';
-
-const setupAIState = ClientFunction((
-  base: Record<string, unknown>,
-  responses: unknown[],
-  assistant: Record<string, unknown>,
-) => {
-  (window as any).__aiBase = base;
-  (window as any).__aiResponses = responses;
-  (window as any).__aiAssistant = assistant;
-  (window as any).__aiCallCount = 0;
-});
+import {
+  AI_INTEGRATION_PAGE,
+  FAIL,
+  GRID_SELECTOR,
+  HANG,
+  baseGrid as gridDefaults,
+  createGridWithAIAssistant,
+  setupAIState,
+  threeRows,
+  twoRows,
+} from './testHelpers';
 
 const getAICallCount = ClientFunction(
   () => (window as any).__aiCallCount as number,
 );
 
-const aiGridOptions = (): any => ({
-  ...(window as any).__aiBase,
-  aiAssistant: {
-    enabled: true,
-    ...(window as any).__aiAssistant,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest() {
-        const responses = (window as any).__aiResponses;
-        const count = (window as any).__aiCallCount;
-        const response = responses[count];
-
-        (window as any).__aiCallCount = count + 1;
-
-        if (response === '__HANG__') {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        }
-
-        if (response === '__FAIL__') {
-          return { promise: Promise.reject(new Error('AI error')), abort: (): void => {} };
-        }
-
-        if (response === undefined) {
-          return {
-            promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
-            abort: (): void => {},
-          };
-        }
-
-        return { promise: Promise.resolve(response), abort: (): void => {} };
-      },
-    }),
-  },
+const baseGrid = (rows: unknown[]): Record<string, unknown> => ({
+  ...gridDefaults,
+  dataSource: rows,
 });
+
+const setAssistantExtra = (
+  assistant: Record<string, unknown>,
+): Promise<void> => ClientFunction(
+  () => { (window as any).__aiAssistantExtra = assistant; },
+  { dependencies: { assistant } },
+)();
 
 const hangingCommandGridOptions = (): any => {
   const data = Array.from({ length: 50 }, (_, i) => ({
@@ -93,7 +63,6 @@ const hangingCommandGridOptions = (): any => {
     selection: { mode: 'multiple' },
     aiAssistant: {
       enabled: true,
-      ...(window as any).__aiAssistant,
       aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
         sendRequest() {
           const responses = (window as any).__aiResponses;
@@ -112,46 +81,20 @@ const hangingCommandGridOptions = (): any => {
           return { promise: Promise.resolve(response), abort: (): void => {} };
         },
       }),
+      ...((window as any).__aiAssistantExtra ?? {}),
     },
   };
-};
-
-const createGridWithAIAssistant = async (
-  base: Record<string, unknown>,
-  responses: unknown[],
-  assistant: Record<string, unknown> = {},
-): Promise<void> => {
-  await setupAIState(base, responses, assistant);
-
-  return createWidget('dxDataGrid', aiGridOptions);
 };
 
 const createGridWithHangingCommand = async (
   responses: unknown[],
   assistant: Record<string, unknown> = {},
 ): Promise<void> => {
-  await setupAIState({}, responses, assistant);
+  await setupAIState({}, responses);
+  await setAssistantExtra(assistant);
 
   return createWidget('dxDataGrid', hangingCommandGridOptions);
 };
-
-const twoRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-];
-
-const threeRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-  { id: 3, name: 'Charlie', value: 10 },
-];
-
-const baseGrid = (rows: unknown[]): Record<string, unknown> => ({
-  dataSource: rows,
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-});
 
 const sortByName = { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] };
 const selectAll = { actions: [{ name: 'selectAll', args: {} }] };
