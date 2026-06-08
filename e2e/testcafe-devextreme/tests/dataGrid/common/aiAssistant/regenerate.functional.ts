@@ -17,10 +17,10 @@ const getAIRequests = ClientFunction(() => ((window as any).__aiRequests ?? []).
   columns: (r.data.context.columns ?? []).map((c: any) => c.dataField),
 })));
 
-// === §1.12 Regenerate button ===
-
 fixture`AI Assistant - Regenerate`
   .page(AI_INTEGRATION_PAGE);
+
+// === §1.12 Regenerate button ===
 
 // 1.12.1
 test('Regenerate should be visible after AI integration failure', async (t) => {
@@ -309,9 +309,6 @@ test('Regenerate is visible after a popup-close-driven abort', async (t) => {
 ));
 
 // === §3.8.2 Sequential resends after pre-execution failures ===
-
-fixture`AI Assistant - Regenerate (sequential)`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.8.2
 test('Sequential regenerate after pre-execution failures keeps exactly one response', async (t) => {
