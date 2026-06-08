@@ -1726,10 +1726,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.viewDataProvider.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
   }
 
-  getGroupBounds(coordinates) {
+  getGroupBounds(coordinates, allDay?: boolean) {
     const groupBounds = this.groupedStrategy instanceof VerticalGroupedStrategy
       ? this.getGroupBoundsVertical(coordinates.groupIndex)
-      : this.getGroupBoundsHorizontal(coordinates);
+      : this.getGroupBoundsHorizontal(coordinates, allDay);
 
     return this.isRTL()
       ? this.getGroupBoundsRtlCorrection(groupBounds)
@@ -1741,14 +1741,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.groupedStrategy.getGroupBoundsOffset(groupIndex, $firstAndLastCells);
   }
 
-  getGroupBoundsHorizontal(coordinates) {
+  getGroupBoundsHorizontal(coordinates, allDay?: boolean) {
     const cellCount = this.getCellCount();
-    const $cells = this.getCells();
+    const $cells = this.getCells(allDay);
     const cellWidth = this.getCellWidth();
 
     const { groupedDataMap } = this.viewDataProvider;
     return this.groupedStrategy
-      .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
+      .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap, allDay);
   }
 
   getGroupBoundsRtlCorrection(groupBounds) {
