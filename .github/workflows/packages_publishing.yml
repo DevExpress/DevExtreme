@@ -55,7 +55,6 @@ jobs:
           echo "version=$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build SBOMs
-        continue-on-error: true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
