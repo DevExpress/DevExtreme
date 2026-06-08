@@ -18,7 +18,7 @@
             "matchPackageNames": [
                 "postcss"
             ],
-            "rangeStrategy": "replace"
+            "rangeStrategy": "bump"
         },
         {
             "matchPackageNames": [
@@ -27,7 +27,7 @@
             "matchFileNames": [
                 "apps/demos/package.json"
             ],
-            "rangeStrategy": "replace"
+            "rangeStrategy": "bump"
         },
         {
             "matchPackageNames": [
