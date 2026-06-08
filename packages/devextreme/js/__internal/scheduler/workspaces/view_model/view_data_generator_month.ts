@@ -1,8 +1,10 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
+import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 import {
   getToday, isFirstCellInMonthWithIntervalCount, monthUtils, setOptionHour,
 } from '@ts/scheduler/r1/utils/index';
+import type { ViewDataProviderOptions } from '@ts/scheduler/types';
 
 import timezoneUtils from '../../utils_time_zone';
 import { ViewDataGenerator } from './m_view_data_generator';
@@ -14,11 +16,9 @@ const toMs = dateUtils.dateToMilliseconds;
 const DAYS_IN_WEEK = 7;
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
-  private minVisibleDate: any;
+  private minVisibleDate: Date | undefined;
 
-  private maxVisibleDate: any;
-
-  tableAllDay: any = undefined;
+  private maxVisibleDate: Date | undefined;
 
   getCellData(
     rowIndex: number,
@@ -32,30 +32,47 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
       viewOffset,
     } = options;
 
-    const data = super.getCellData(rowIndex, columnIndex, options, false) as MonthViewCellDataSimple;
+    const data = super.getCellData(
+      rowIndex,
+      columnIndex,
+      options,
+      false,
+    ) as MonthViewCellDataSimple;
     const startDate = timezoneUtils.addOffsetsWithoutDST(data.startDate, -viewOffset);
 
-    data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
+    data.today = this.isCurrentDate(
+      startDate,
+      indicatorTime as Date,
+      timeZoneCalculator as TimeZoneCalculator,
+    );
     data.otherMonth = this.isOtherMonth(startDate, this.minVisibleDate, this.maxVisibleDate);
-    data.isFirstDayMonthHighlighting = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
+    data.isFirstDayMonthHighlighting = isFirstCellInMonthWithIntervalCount(
+      startDate,
+      intervalCount,
+    );
     data.text = monthUtils.getCellText(startDate, intervalCount);
 
     return data;
   }
 
-  isCurrentDate(date, indicatorTime, timeZoneCalculator) {
+  isCurrentDate(date: Date, indicatorTime: Date, timeZoneCalculator: TimeZoneCalculator): boolean {
     return dateUtils.sameDate(date, getToday(indicatorTime, timeZoneCalculator));
   }
 
-  isOtherMonth(cellDate, minDate, maxDate) {
+  isOtherMonth(cellDate: Date, minDate: Date, maxDate: Date): boolean {
     return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
   }
 
-  protected calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+  protected calculateCellIndex(
+    rowIndex: number,
+    columnIndex: number,
+    rowCount: number,
+    columnCount: number,
+  ): number {
     return monthUtils.calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
   }
 
-  calculateEndDate(startDate, interval, endDayHour) {
+  calculateEndDate(startDate: Date, interval: number, endDayHour: number): Date {
     return setOptionHour(startDate, endDayHour);
   }
 
@@ -63,7 +80,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return toMs('day');
   }
 
-  protected calculateStartViewDate(options) {
+  protected calculateStartViewDate(options: ViewDataProviderOptions): Date {
     return monthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
@@ -73,15 +90,21 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     );
   }
 
-  protected setVisibilityDates(options) {
+  protected setVisibilityDates(options: ViewDataProviderOptions): void {
     const {
       intervalCount,
       startDate,
       currentDate,
     } = options;
 
-    const firstMonthDate: any = dateUtils.getFirstMonthDate(startDate);
-    const viewStart = monthUtils.getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
+    const firstMonthDate = dateUtils.getFirstMonthDate(startDate);
+
+    const viewStart = monthUtils.getViewStartByOptions(
+      startDate,
+      currentDate,
+      intervalCount,
+      firstMonthDate,
+    );
 
     this.minVisibleDate = new Date(viewStart.setDate(1));
 
@@ -89,11 +112,11 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     this.maxVisibleDate = new Date(nextMonthDate.setDate(0));
   }
 
-  getCellCount() {
+  getCellCount(): number {
     return DAYS_IN_WEEK;
   }
 
-  getRowCount(options) {
+  getRowCount(options: ViewDataProviderOptions): number {
     const startDate = new Date(options.currentDate);
     startDate.setDate(1);
 
@@ -108,15 +131,15 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     );
   }
 
-  getCellCountInDay() {
+  getCellCountInDay(): number {
     return 1;
   }
 
-  setHiddenInterval() {
+  setHiddenInterval(): void {
     this.hiddenInterval = 0;
   }
 
-  protected getCellEndDate(cellStartDate: Date, options: any): Date {
+  protected getCellEndDate(cellStartDate: Date, options: ViewDataProviderOptions): Date {
     const { startDayHour, endDayHour } = options;
     const durationMs = (endDayHour - startDayHour) * toMs('hour');
     return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);

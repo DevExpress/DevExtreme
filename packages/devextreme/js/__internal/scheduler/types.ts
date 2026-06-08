@@ -84,7 +84,7 @@ export type CalculateStartViewDate = (
   startDayHour: number,
   startDate: Date | undefined,
   intervalCount: number,
-  firstDayOfWeekOption: number | undefined,
+  firstDayOfWeekOption?: number | undefined,
 ) => Date;
 
 export interface ViewCellData {
@@ -162,7 +162,6 @@ export interface ViewDataProviderOptions {
   startDate?: Date;
   firstDayOfWeek: number;
   today: Date;
-
   isGenerateTimePanelData?: boolean;
   isGenerateWeekDaysHeaderData?: boolean;
 }
