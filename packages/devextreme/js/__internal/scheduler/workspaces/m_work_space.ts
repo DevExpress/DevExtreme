@@ -98,8 +98,8 @@ import {
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
-import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
+import type { ViewDataProviderOptions } from './view_model/types';
 
 interface RenderComponentOptions {
   header?: boolean;

@@ -1,7 +1,7 @@
 import type { CellPositionData, ViewCellData } from '@ts/scheduler/types';
 
-import type { CellPosition } from './view_model/m_types';
 import type ViewDataProvider from './view_model/m_view_data_provider';
+import type { CellPosition } from './view_model/types';
 
 export default class CellsSelectionState {
   private focusedCell: ViewCellData | null = null;

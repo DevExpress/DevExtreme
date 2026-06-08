@@ -5,8 +5,8 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 
 import timezoneUtils from '../../utils_time_zone';
-import type { MonthViewCellDataSimple, ViewDataProviderExtendedOptions } from './m_types';
 import { ViewDataGenerator } from './m_view_data_generator';
+import type { MonthViewCellDataSimple, ViewDataProviderExtendedOptions } from './types';
 import { calculateAlignedWeeksBetweenDates } from './utils/view_generator_utils';
 
 const toMs = dateUtils.dateToMilliseconds;

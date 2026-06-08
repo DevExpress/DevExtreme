@@ -5,7 +5,7 @@ import {
   getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
 } from '@ts/scheduler/r1/utils/index';
 
-import type { ViewDataProviderExtendedOptions } from './m_types';
+import type { ViewDataProviderExtendedOptions } from './types';
 
 const toMs = dateUtils.dateToMilliseconds;
 

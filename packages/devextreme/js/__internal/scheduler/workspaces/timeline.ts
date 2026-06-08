@@ -22,7 +22,7 @@ import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import timezoneUtils from '../utils_time_zone';
 import type { WorkspaceOptionsInternal } from './m_work_space';
-import type { ViewDataProviderOptions } from './view_model/m_types';
+import type { ViewDataProviderOptions } from './view_model/types';
 import SchedulerWorkSpace from './work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;

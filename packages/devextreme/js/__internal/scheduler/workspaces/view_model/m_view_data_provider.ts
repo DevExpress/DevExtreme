@@ -23,8 +23,8 @@ import timeZoneUtils from '../../utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
-import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './m_types';
 import type { ViewDataGenerator } from './m_view_data_generator';
+import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './types';
 import { getViewDataGeneratorByViewType } from './utils/view_provider_utils';
 
 // TODO: Vinogradov types refactoring.
