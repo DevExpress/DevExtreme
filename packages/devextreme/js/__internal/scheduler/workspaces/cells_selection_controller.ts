@@ -1,16 +1,73 @@
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
+import type { ViewCellData, ViewType } from '@ts/scheduler/types';
+
+interface GridPosition {
+  rowIndex: number;
+  columnIndex: number;
+}
+
+interface EdgeIndices {
+  firstColumnIndex: number;
+  lastColumnIndex: number;
+  firstRowIndex: number;
+  lastRowIndex: number;
+}
+
+interface ArrowClickOptions {
+  key: 'up' | 'down' | 'left' | 'right';
+  focusedCellPosition?: GridPosition;
+  focusedCellData: ViewCellData;
+  edgeIndices: EdgeIndices;
+  getCellDataByPosition: (rowIndex: number, columnIndex: number, isAllDay: boolean) => ViewCellData;
+  isAllDayPanelCell: boolean;
+  isRTL: boolean;
+  isGroupedByDate: boolean;
+  groupCount: number;
+  isMultiSelection: boolean;
+  isMultiSelectionAllowed: boolean;
+  viewType: ViewType;
+}
+
+interface NextColumnPositionOptions extends ArrowClickOptions {
+  direction: 'next' | 'prev';
+  focusedCellPosition: GridPosition;
+}
+
+interface ProcessEdgeCellOptions {
+  nextColumnIndex: number;
+  rowIndex: number;
+  columnIndex: number;
+  firstColumnIndex: number;
+  lastColumnIndex: number;
+  firstRowIndex: number;
+  lastRowIndex: number;
+  step: number;
+}
+
+interface MoveToCellOptions {
+  isMultiSelection: boolean;
+  isMultiSelectionAllowed: boolean;
+  focusedCellData: ViewCellData;
+  currentCellData: ViewCellData;
+  isVirtualCell?: boolean;
+}
 
 export class CellsSelectionController {
-  handleArrowClick(options) {
+  handleArrowClick(options: ArrowClickOptions): ViewCellData {
     const {
       key,
       focusedCellPosition,
       edgeIndices,
       getCellDataByPosition,
       isAllDayPanelCell,
+      focusedCellData,
     } = options;
 
-    let nextCellIndices;
+    if (!focusedCellPosition) {
+      return focusedCellData;
+    }
+
+    let nextCellIndices: GridPosition = focusedCellPosition;
 
     switch (key) {
       case 'down':
@@ -22,12 +79,14 @@ export class CellsSelectionController {
       case 'left':
         nextCellIndices = this.getCellFromNextColumnPosition({
           ...options,
+          focusedCellPosition,
           direction: 'prev',
         });
         break;
       case 'right':
         nextCellIndices = this.getCellFromNextColumnPosition({
           ...options,
+          focusedCellPosition,
           direction: 'next',
         });
         break;
@@ -47,7 +106,11 @@ export class CellsSelectionController {
     });
   }
 
-  getCellFromNextRowPosition(focusedCellPosition, direction, edgeIndices) {
+  getCellFromNextRowPosition(
+    focusedCellPosition: GridPosition,
+    direction: 'next' | 'prev',
+    edgeIndices: EdgeIndices,
+  ): GridPosition {
     const {
       columnIndex,
       rowIndex,
@@ -66,7 +129,7 @@ export class CellsSelectionController {
     };
   }
 
-  getCellFromNextColumnPosition(options) {
+  getCellFromNextColumnPosition(options: NextColumnPositionOptions): GridPosition {
     const {
       focusedCellPosition,
       direction,
@@ -115,7 +178,7 @@ export class CellsSelectionController {
     });
   }
 
-  private processEdgeCell(options) {
+  private processEdgeCell(options: ProcessEdgeCellOptions): GridPosition {
     const {
       nextColumnIndex,
       rowIndex,
@@ -133,7 +196,7 @@ export class CellsSelectionController {
     const isRightEdgeCell = nextColumnIndex > lastColumnIndex;
 
     if (isLeftEdgeCell) {
-      const columnIndexInNextRow = lastColumnIndex - (step - columnIndex % step - 1);
+      const columnIndexInNextRow = lastColumnIndex - (step - (columnIndex % step) - 1);
       const nextRowIndex = rowIndex - 1;
       const isValidRowIndex = nextRowIndex >= firstRowIndex;
 
@@ -142,7 +205,7 @@ export class CellsSelectionController {
     }
 
     if (isRightEdgeCell) {
-      const columnIndexInNextRow = firstColumnIndex + columnIndex % step;
+      const columnIndexInNextRow = firstColumnIndex + (columnIndex % step);
       const nextRowIndex = rowIndex + 1;
       const isValidRowIndex = nextRowIndex <= lastRowIndex;
 
@@ -156,34 +219,45 @@ export class CellsSelectionController {
     };
   }
 
-  moveToCell(options) {
+  moveToCell(options: MoveToCellOptions): ViewCellData {
     const {
       isMultiSelection,
       isMultiSelectionAllowed,
       focusedCellData,
       currentCellData,
+      isVirtualCell,
     } = options;
 
     const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
 
     const nextFocusedCellData = isValidMultiSelection
-      ? this.getNextCellData(currentCellData, focusedCellData)
+      ? this.getNextCellData(currentCellData, focusedCellData, isVirtualCell)
       : currentCellData;
 
     return nextFocusedCellData;
   }
 
-  private getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell?: any) {
+  private getNextCellData(
+    nextFocusedCellData: ViewCellData,
+    focusedCellData: ViewCellData,
+    isVirtualCell?: boolean,
+  ): ViewCellData {
     if (isVirtualCell) {
       return focusedCellData;
     }
 
-    const isValidNextFocusedCell = this.isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
+    const isValidNextFocusedCell = this.isValidNextFocusedCell(
+      nextFocusedCellData,
+      focusedCellData,
+    );
 
     return isValidNextFocusedCell ? nextFocusedCellData : focusedCellData;
   }
 
-  private isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
+  private isValidNextFocusedCell(
+    nextFocusedCellData: ViewCellData,
+    focusedCellData: ViewCellData | null | undefined,
+  ): boolean {
     if (!focusedCellData) {
       return true;
     }
