@@ -12,7 +12,7 @@ permissions:
   actions: read
 
 env:
-  SOURCE_DIR: ./apps/react-storybook/storybook-static
+  SOURCE_DIR: dist/static
 
 jobs:
   prepare:
@@ -39,7 +39,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          META="artifacts/preview_meta/meta.json"
+          META="artifacts/meta.json"
           echo "Meta:"
           cat "$META"
 
@@ -73,7 +73,7 @@ jobs:
         with:
           run-id: ${{ github.event.workflow_run.id }}
           name: preview-static
-          path: .
+          path: ${{ env.SOURCE_DIR }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
 
