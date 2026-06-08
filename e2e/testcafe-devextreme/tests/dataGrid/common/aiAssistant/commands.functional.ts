@@ -64,10 +64,10 @@ const createRemoteGridWithAIAssistant = async (
   return createWidget('dxDataGrid', remoteAIGridOptions);
 };
 
-// === §1.2 Single-command request, successful execution ===
-
-fixture`AI Assistant - Single Command`
+fixture`AI Assistant - Commands`
   .page(AI_INTEGRATION_PAGE);
+
+// === §1.2 Single-command request, successful execution ===
 
 // 1.2.1
 test('Single sorting command should execute successfully and update grid', async (t) => {
@@ -128,9 +128,6 @@ test('No-args command (clearSorting) should execute successfully', async (t) => 
 ]));
 
 // === §1.3 Multi-command request ===
-
-fixture`AI Assistant - Multi Command`
-  .page(AI_INTEGRATION_PAGE);
 
 // 1.3.1
 test('Multi-command request should show all success entries', async (t) => {
@@ -202,9 +199,6 @@ test('Multi-command sequential ordering should be reflected in grid state', asyn
 
 // === §1.4 Local vs remote data parity ===
 
-fixture`AI Assistant - Data Parity`
-  .page(AI_INTEGRATION_PAGE);
-
 // 1.4.1
 test('Single command should succeed with local array data source', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -265,9 +259,6 @@ test('Remote data parity — command should succeed with server-side data source
 ));
 
 // === §3.7 Stacked operations ===
-
-fixture`AI Assistant - Stacked Operations`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.7.1
 test('Group then ungroup across two prompts should both succeed', async (t) => {
@@ -409,9 +400,6 @@ test('Sort, group, page combined across three prompts should all succeed', async
 
 // === §3.1 Empty dataset ===
 
-fixture`AI Assistant - Empty Dataset`
-  .page(AI_INTEGRATION_PAGE);
-
 // 3.1.1
 test('Sort on empty grid should succeed with no rows', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -513,9 +501,6 @@ test('SelectAll on empty grid should succeed', async (t) => {
 
 // === §3.2 Single-row dataset ===
 
-fixture`AI Assistant - Single Row`
-  .page(AI_INTEGRATION_PAGE);
-
 // 3.2.1
 test('Sort on single-row grid should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -601,9 +586,6 @@ test('selectByIndexes [5] out of range on single-row grid should not crash', asy
 ]));
 
 // === §3.3 Large dataset ===
-
-fixture`AI Assistant - Large Dataset`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.3.1
 test('Page navigation on large dataset should succeed', async (t) => {
@@ -703,9 +685,6 @@ test('Page size change on large dataset should succeed', async (t) => {
 
 // === §3.4 Single-column grid ===
 
-fixture`AI Assistant - Single Column`
-  .page(AI_INTEGRATION_PAGE);
-
 // 3.4.1
 test('Sort on single-column grid should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -797,9 +776,6 @@ test('Hide the only column should succeed', async (t) => {
 ]));
 
 // === §3.5 All columns hidden before request ===
-
-fixture`AI Assistant - All Columns Hidden`
-  .page(AI_INTEGRATION_PAGE);
 
 const allHiddenColumns = [
   { dataField: 'id', visible: false },
@@ -906,9 +882,6 @@ test('Filter while all columns hidden should succeed', async (t) => {
 ]));
 
 // === §3.6 Feature already in target state ===
-
-fixture`AI Assistant - Already In Target State`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.6.1
 test('Sort by X when already sorted by X should succeed', async (t) => {
