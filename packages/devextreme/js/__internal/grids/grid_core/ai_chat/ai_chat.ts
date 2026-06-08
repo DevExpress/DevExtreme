@@ -281,7 +281,8 @@ export class AIChat {
   }
 
   private updateClearChatButtonDisabled(): void {
-    const hasMessages = !!this.chatInstance?.getDataSource()?.items().length;
+    const dataSource = this.chatInstance?.getDataSource();
+    const hasMessages = (dataSource?.items?.() ?? []).length > 0;
 
     this.setClearChatButtonDisabled(this.disabled || !hasMessages);
   }
