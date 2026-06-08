@@ -110,7 +110,7 @@ interface TemplateRenderPayload {
   onRendered?: () => void;
 }
 
-interface FieldTemplate {
+export interface FieldTemplate {
   render: (payload: TemplateRenderPayload) => void
 }
 

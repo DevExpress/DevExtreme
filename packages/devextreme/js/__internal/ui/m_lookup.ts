@@ -4,27 +4,42 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { getFieldName } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { DataSourceOptions } from '@js/data/data_source';
+import type { DxEvent } from '@js/events';
+import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
+import type {
+  Item,
+  ItemClickEvent,
+  PageLoadingEvent,
+  PullRefreshEvent,
+  ScrollEvent,
+} from '@js/ui/list';
 import type { Properties } from '@js/ui/lookup';
 import Popover from '@js/ui/popover/ui.popover';
-import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import { current, isMaterial } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 import { getElementWidth } from '@ts/ui/drop_down_editor/utils';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import TextBox from '@ts/ui/text_box/text_box';
+
+import type { FieldTemplate } from './drop_down_editor/drop_down_editor';
 
 const window = getWindow();
 
@@ -55,6 +70,11 @@ export interface LookupProperties extends Omit<Properties, 'onItemClick' | 'onSe
   _scrollToSelectedItemEnabled?: boolean;
 }
 
+type LookupButtonConfig = ToolbarItem & {
+  shortcut: string;
+  onClick?: (e: ButtonClickEvent) => void
+};
+
 class Lookup extends DropDownList<LookupProperties> {
   _$field!: dxElementWrapper;
 
@@ -66,35 +86,35 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _$searchWrapper?: dxElementWrapper;
 
-  _hideOnParentScrollTimer?: ReturnType<typeof setTimeout>;
+  _hideOnParentScrollTimer?: ReturnType<typeof setTimeout> | null;
 
-  _scrollAction?: (e) => void;
+  _scrollAction?: (e: ScrollEvent) => void;
 
-  _pullRefreshAction?: (e) => void;
+  _pullRefreshAction?: (e: PullRefreshEvent) => void;
 
-  _pageLoadingAction?: (e) => void;
+  _pageLoadingAction?: (e: PageLoadingEvent) => void;
 
-  _supportedKeys() {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
     return {
       ...super._supportedKeys(),
-      space(e) {
+      space(e: KeyboardEvent): void {
         e.preventDefault();
         this._validatedOpening();
       },
-      enter() {
+      enter(): void {
         this._validatedOpening();
       },
     };
   }
 
   _getDefaultOptions(): LookupProperties {
-    const getSize = (side) => {
-      let size;
+    const getSize = (side: 'width' | 'height'): number => {
       if (devices.real().deviceType === 'phone' && window.visualViewport) {
-        size = window.visualViewport[side];
-      } else {
-        size = side === 'width' ? getWidth(window) : getHeight(window);
+        return window.visualViewport[side] * WINDOW_RATIO;
       }
+
+      const size = side === 'width' ? getWidth(window) : getHeight(window);
+
       return size * WINDOW_RATIO;
     };
 
@@ -115,11 +135,11 @@ class Lookup extends DropDownList<LookupProperties> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error ts-error
+      // @ts-expect-error public API
       onScroll: null,
-      // @ts-expect-error ts-error
+      // @ts-expect-error public API
       onPullRefresh: null,
-      // @ts-expect-error ts-error
+      // @ts-expect-error public API
       onPageLoading: null,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
@@ -151,13 +171,12 @@ class Lookup extends DropDownList<LookupProperties> {
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<LookupProperties>[] {
     const themeName = current();
 
-    // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return !supportUtils.nativeScrolling;
         },
         options: {
@@ -165,7 +184,7 @@ class Lookup extends DropDownList<LookupProperties> {
         },
       },
       {
-        device(device) {
+        device(device): boolean {
           return !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
         },
         options: {
@@ -188,7 +207,7 @@ class Lookup extends DropDownList<LookupProperties> {
         device: { platform: 'ios', tablet: true },
         options: {
           dropDownOptions: {
-            width() { return Math.min(getWidth(window), getHeight(window)) * 0.4; },
+            width(): number { return Math.min(getWidth(window), getHeight(window)) * 0.4; },
             height: 'auto',
           },
 
@@ -196,7 +215,7 @@ class Lookup extends DropDownList<LookupProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -204,7 +223,7 @@ class Lookup extends DropDownList<LookupProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isMaterial(themeName);
         },
         options: {
@@ -224,7 +243,7 @@ class Lookup extends DropDownList<LookupProperties> {
           },
         },
       },
-    ]);
+    ] as DefaultOptionsRule<LookupProperties>[]);
   }
 
   _init(): void {
@@ -253,15 +272,15 @@ class Lookup extends DropDownList<LookupProperties> {
     this._scrollAction = this._createActionByOption('onScroll');
   }
 
-  _scrollHandler(e): void {
+  _scrollHandler(e: ScrollEvent): void {
     this._scrollAction?.(e);
   }
 
-  _pullRefreshHandler(e): void {
+  _pullRefreshHandler(e: PullRefreshEvent): void {
     this._pullRefreshAction?.(e);
   }
 
-  _pageLoadingHandler(e): void {
+  _pageLoadingHandler(e: PageLoadingEvent): void {
     this._pageLoadingAction?.(e);
   }
 
@@ -286,19 +305,19 @@ class Lookup extends DropDownList<LookupProperties> {
     return this.$element().find(`.${LOOKUP_FIELD_WRAPPER_CLASS}`);
   }
 
-  _dataSourceOptions() {
-    return extend(super._dataSourceOptions(), {
-      paginate: true,
-    });
+  _dataSourceOptions(): Partial<DataSourceOptions<Item>> {
+    return { ...super._dataSourceOptions(), paginate: true };
   }
 
-  _fireContentReadyAction() { }
+  // eslint-disable-next-line class-methods-use-this
+  _fireContentReadyAction(): void { }
 
-  _popupWrapperClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _popupWrapperClass(): string {
     return '';
   }
 
-  _renderInput() {
+  _renderInput(): void {
     const { inputAttr } = this.option();
     this._$field = $('<div>');
     this._applyInputAttributes(inputAttr);
@@ -312,16 +331,17 @@ class Lookup extends DropDownList<LookupProperties> {
       .appendTo(this.$element());
   }
 
-  _applyInputAttributes(attributes) {
+  _applyInputAttributes(attributes: unknown): void {
+    // @ts-expect-error fix on renderer level
     this._$field.attr(attributes);
   }
 
-  _getInputContainer() {
+  _getInputContainer(): dxElementWrapper {
     return this._$fieldWrapper;
   }
 
-  _renderField() {
-    const { fieldTemplate: fieldTemplateOption } = this.option();
+  _renderField(): void {
+    const { fieldTemplate: fieldTemplateOption, displayValue, selectedItem } = this.option();
 
     const fieldTemplate = this._getTemplate(fieldTemplateOption);
 
@@ -330,21 +350,20 @@ class Lookup extends DropDownList<LookupProperties> {
       return;
     }
 
-    const displayValue = this.option('displayValue');
     this._updateField(displayValue);
 
-    const isFieldEmpty = !this.option('selectedItem');
+    const isFieldEmpty = !selectedItem;
 
     this.$element()
       .toggleClass(LOOKUP_EMPTY_CLASS, isFieldEmpty)
       .toggleClass(TEXTEDITOR_EMPTY_CLASS, isFieldEmpty);
   }
 
-  _getLabelContainer() {
+  _getLabelContainer(): dxElementWrapper {
     return this._$field;
   }
 
-  _renderDisplayText(text): void {
+  _renderDisplayText(text: string | undefined): void {
     if (this._input().length) {
       super._renderDisplayText(text);
     } else {
@@ -352,26 +371,28 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  _updateField(text): void {
-    text = isDefined(text) && String(text);
+  _updateField(text: string | undefined): void {
+    const displayText: string | false = isDefined(text) && String(text);
 
     this._$field.empty();
 
-    if (text) {
-      this._$field.text(text);
+    if (displayText) {
+      this._$field.text(displayText);
     } else {
+      const { placeholder } = this.option();
       const $placeholder = $('<div>')
-        // @ts-expect-error ts-error
-        .attr({ 'data-dx_placeholder': this.option('placeholder') });
+        // @ts-expect-error fix on renderer level
+        .attr({ 'data-dx_placeholder': placeholder });
 
       this._$field.append($placeholder);
       $placeholder.addClass('dx-placeholder');
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderButtonContainers(): void { }
 
-  _renderFieldTemplate(template) {
+  _renderFieldTemplate(template: FieldTemplate): void {
     this._$field.empty();
     const data = this._fieldRenderData();
     template.render({
@@ -380,31 +401,47 @@ class Lookup extends DropDownList<LookupProperties> {
     });
   }
 
-  _fieldRenderData() {
-    return this.option('selectedItem');
+  _fieldRenderData(): Item | undefined {
+    const { selectedItem } = this.option();
+
+    return selectedItem as Item | undefined;
   }
 
   _popupShowingHandler(): void {
-    // @ts-expect-error ts-error
-    super._popupShowingHandler.apply(this, arguments);
+    super._popupShowingHandler();
 
-    if (this.option('cleanSearchOnOpening')) {
-      if (this.option('searchEnabled') && this._searchBox?.option('value')) {
-        this._searchBox.option('value', '');
+    const {
+      cleanSearchOnOpening,
+      searchEnabled,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _scrollToSelectedItemEnabled,
+      dropDownOptions: { fullScreen } = {},
+    } = this.option();
+    const { value: searchBoxValue } = this._searchBox?.option() ?? {};
+
+    if (cleanSearchOnOpening) {
+      if (searchEnabled && searchBoxValue) {
+        this._searchBox?.option('value', '');
         this._searchCanceled();
       }
       this._list?.option('focusedElement', null);
     }
 
-    if (this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
-      // @ts-expect-error ts-error
-      this._popup.option('position').of = $(window);
+    if (fullScreen && _scrollToSelectedItemEnabled) {
+      const { position } = this._popup?.option() ?? {};
+      if (position) {
+        // @ts-expect-error PositionConfig
+        position.of = $(window);
+      }
     }
   }
 
   _popupShownHandler(): void {
-    const scrollToSelectedItemEnabled = this.option('_scrollToSelectedItemEnabled');
-    const fullScreen = this.option('dropDownOptions.fullScreen');
+    const {
+
+      _scrollToSelectedItemEnabled: scrollToSelectedItemEnabled,
+      dropDownOptions: { fullScreen } = {},
+    } = this.option();
 
     if (!fullScreen && scrollToSelectedItemEnabled) {
       this._setPopupPosition();
@@ -414,14 +451,18 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _scrollToSelectedItem(): void {
-    const { selectedIndex, items: listItems } = this._list?.option() ?? {};
-    // @ts-expect-error ts-error
-    const itemsCount = listItems.length;
+    const { selectedIndex, items: listItems, grouped } = this._list?.option() ?? {};
+
+    const itemsCount = listItems?.length ?? 0;
 
     if (itemsCount !== 0) {
-      if (this._list?.option('grouped')) {
-        // @ts-expect-error ts-error
-        this._list?.scrollToItem({ group: itemsCount - 1, item: listItems[itemsCount - 1].items.length - 1 });
+      if (grouped) {
+        this._list?.scrollToItem({
+          // @ts-expect-error fix on List level
+          group: itemsCount - 1,
+          // @ts-expect-error fix on List item level
+          item: (listItems?.[itemsCount - 1].items.length ?? 0) - 1,
+        });
       } else {
         this._list?.scrollToItem(itemsCount - 1);
       }
@@ -430,28 +471,30 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  _getDifferenceOffsets(selectedListItem) {
-    // @ts-expect-error ts-error
-    return selectedListItem.offset().top - $(this.element()).offset().top;
+  _getDifferenceOffsets(selectedListItem: dxElementWrapper): number {
+    return (selectedListItem.offset()?.top ?? 0) - ($(this.element()).offset()?.top ?? 0);
   }
 
-  _isCenteringEnabled(index, count) {
+  // eslint-disable-next-line class-methods-use-this
+  _isCenteringEnabled(index: number, count: number): boolean {
     return index > 1 && index < (count - 2);
   }
 
-  _getPopupOffset() {
+  _getPopupOffset(): number | undefined {
     const listItemsCount = this._listItemElements().length;
 
-    if (listItemsCount === 0) return;
-    // @ts-expect-error ts-error
-    const selectedListItem = $(this._list.element()).find(`.${LIST_ITEM_SELECTED_CLASS}`);
+    if (listItemsCount === 0) return undefined;
+
+    const selectedListItem = $(this._list?.element()).find(`.${LIST_ITEM_SELECTED_CLASS}`);
     const selectedIndex = this._listItemElements().index(selectedListItem);
     const differenceOfHeights = (getHeight(selectedListItem) - getHeight(this.element())) / 2;
-    // @ts-expect-error
-    const lookupOffset = $(this._list.element()).offset().top;
-    const dropDownHeightOption = this.option('dropDownOptions.height');
-    // @ts-expect-error ts-error
-    const popupHeight = typeof dropDownHeightOption === 'function' ? dropDownHeightOption() : dropDownHeightOption;
+
+    const lookupOffset = $(this._list?.element()).offset()?.top ?? 0;
+    const { dropDownOptions: { height: dropDownHeightOption } = {} } = this.option();
+    const popupHeight = (
+      // @ts-expect-error fix on PopupProperties height typing
+      typeof dropDownHeightOption === 'function' ? dropDownHeightOption() : dropDownHeightOption
+    ) as number;
     const windowHeight = getHeight(window);
 
     let offsetTop = 0;
@@ -460,20 +503,28 @@ class Lookup extends DropDownList<LookupProperties> {
       if (this._isCenteringEnabled(selectedIndex, listItemsCount)) {
         this._scrollToSelectedItem();
 
-        const scrollOffsetTop = (popupHeight - getHeight(selectedListItem)) / 2 - this._getDifferenceOffsets(selectedListItem);
-        // @ts-expect-error ts-error
-        this._list.scrollTo(this._list.scrollTop() + MATERIAL_LOOKUP_LIST_PADDING / 2 - scrollOffsetTop);
+        const differenceOffset = this._getDifferenceOffsets(selectedListItem);
+        const scrollOffsetTop = (popupHeight - getHeight(selectedListItem)) / 2 - differenceOffset;
+        // @ts-expect-error fix on List level
+        this._list.scrollTo(
+          // @ts-expect-error fix on List level
+          this._list.scrollTop() + MATERIAL_LOOKUP_LIST_PADDING / 2 - scrollOffsetTop,
+        );
 
         offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
 
         if (lookupOffset < offsetTop && selectedIndex !== (listItemsCount - 3)) {
-          // @ts-expect-error ts-error
-          this._list.scrollTo(this._list.scrollTop() + this._getDifferenceOffsets(selectedListItem) / 2);
+          const updatedDifferenceOffset = this._getDifferenceOffsets(selectedListItem);
+          // @ts-expect-error fix on List level
+          this._list.scrollTo(
+            // @ts-expect-error fix on List level
+            this._list.scrollTop() + updatedDifferenceOffset / 2,
+          );
 
           offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
         }
       } else if (selectedIndex <= 1) {
-        // @ts-expect-error ts-error
+        // @ts-expect-error fix on List level
         this._list.scrollTo(0);
 
         offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
@@ -492,8 +543,11 @@ class Lookup extends DropDownList<LookupProperties> {
     const offsetBottom = popupHeight - offsetTop - getHeight(this.element());
 
     if (windowHeight - lookupOffset < offsetBottom) {
-      // @ts-expect-error ts-error
-      this._list.scrollTo(this._list.scrollTop() + differenceOfHeights - offsetBottom);
+      // @ts-expect-error fix on List level
+      this._list.scrollTo(
+        // @ts-expect-error fix on List level
+        this._list.scrollTop() + differenceOfHeights - offsetBottom,
+      );
       offsetTop = popupHeight - getHeight(this.element()) - MATERIAL_LOOKUP_LIST_PADDING;
     }
 
@@ -501,69 +555,65 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _setPopupPosition(): void {
-    if (!this.option('dropDownCentered')) return;
-    // @ts-expect-error ts-error
-    const flipped = this._popup.$wrapper().hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
-    if (flipped) return;
-    // @ts-expect-error ts-error
-    const popupContentParent = $(this._popup.$content()).parent();
-    const popupOffset = this._getPopupOffset();
+    const { dropDownCentered } = this.option();
 
+    if (!dropDownCentered) return;
+
+    const flipped = this._popup?.$wrapper()?.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
+
+    if (flipped) return;
+
+    const popupContentParent = $(this._popup?.$content()).parent();
+    const popupOffset = this._getPopupOffset() ?? 0;
     const position = locate(popupContentParent);
 
     move(popupContentParent, {
-      // @ts-expect-error ts-error
       top: position.top - popupOffset,
     });
   }
 
-  _listItemGroupedElements() {
-    // @ts-expect-error ts-error
-    const groups = this._list._getItemsContainer().children();
+  _listItemGroupedElements(): dxElementWrapper {
+    const groupsContainer = this._list
+      ? this._list._getItemsContainer().children() as unknown as ArrayLike<Element>
+      : [];
+    const groups = Array.from(groupsContainer);
     const items: Element[] = [];
 
-    // @ts-expect-error ts-error
-    groups.each((_, group) => {
+    groups.forEach((group) => {
       items.push($(group).find(`.${GROUP_LIST_HEADER_CLASS}`)[0]);
 
-      const groupedItems = $(group).find(`.${LIST_ITEM_CLASS}`);
-      // @ts-expect-error
-      groupedItems.each((_, item) => {
-        items.push(item);
-      });
+      const groupedItems = Array.from($(group).find(`.${LIST_ITEM_CLASS}`) as unknown as ArrayLike<Element>);
+      items.push(...groupedItems);
     });
 
     return $(items);
   }
 
-  _calculateListHeight(grouped) {
+  _calculateListHeight(grouped?: boolean): number {
     const listItems = grouped ? this._listItemGroupedElements() : this._listItemElements();
     const selectedListItem = $(`.${LIST_ITEM_SELECTED_CLASS}`);
     const selectedIndex = listItems.index(selectedListItem);
     let listHeight = 0;
-    let requireListItems = [];
 
     if (listItems.length === 0) {
       listHeight += MATERIAL_LOOKUP_LIST_PADDING;
     } else if (listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
-      // @ts-expect-error ts-error
-      listItems.each((_, item) => {
+      Array.from(listItems as unknown as ArrayLike<Element>).forEach((item) => {
         listHeight += getOuterHeight(item);
       });
     } else {
+      let requireListItems: dxElementWrapper = $([]);
+
       if (selectedIndex <= 1) {
-        // @ts-expect-error ts-error
         requireListItems = listItems.slice(0, MATERIAL_LOOKUP_LIST_ITEMS_COUNT);
       } else if (this._isCenteringEnabled(selectedIndex, listItems.length)) {
-        // @ts-expect-error ts-error
         requireListItems = listItems.slice(selectedIndex - 2, selectedIndex + 3);
       } else {
-        // @ts-expect-error ts-error
-        requireListItems = listItems.slice(listItems.length - MATERIAL_LOOKUP_LIST_ITEMS_COUNT, listItems.length);
+        const start = listItems.length - MATERIAL_LOOKUP_LIST_ITEMS_COUNT;
+        requireListItems = listItems.slice(start, listItems.length);
       }
 
-      // @ts-expect-error
-      requireListItems.each((_, item) => {
+      Array.from(requireListItems as unknown as ArrayLike<Element>).forEach((item) => {
         listHeight += getOuterHeight(item);
       });
     }
@@ -571,23 +621,29 @@ class Lookup extends DropDownList<LookupProperties> {
     return listHeight + (grouped ? MATERIAL_LOOKUP_LIST_PADDING : MATERIAL_LOOKUP_LIST_PADDING * 2);
   }
 
-  _getPopupHeight() {
-    if (this._list?.itemElements().length) {
-      return this._calculateListHeight(this.option('grouped'))
-        + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0)
-        // @ts-expect-error ts-error
-        + (this._popup.bottomToolbar() ? getOuterHeight(this._popup.bottomToolbar()) : 0)
-        // @ts-expect-error ts-error
-        + (this._popup.topToolbar() ? getOuterHeight(this._popup.topToolbar()) : 0);
+  _getPopupHeight(): number | string {
+    const { grouped } = this.option();
+    if (!this._list?.itemElements().length) {
+      return 'auto';
     }
-    return 'auto';
+
+    const bottomToolbar = this._popup?.bottomToolbar();
+    const topToolbar = this._popup?.topToolbar();
+
+    return (
+      this._calculateListHeight(grouped)
+      + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0)
+      + (bottomToolbar ? getOuterHeight(bottomToolbar) : 0)
+      + (topToolbar ? getOuterHeight(topToolbar) : 0)
+    ) as number;
   }
 
-  _allowSelectItemByTab() {
+  // eslint-disable-next-line class-methods-use-this
+  _allowSelectItemByTab(): boolean {
     return false;
   }
 
-  _popupTabHandler(e) {
+  _popupTabHandler(e: DxEvent<KeyboardEvent>): void {
     const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
 
     if (!shouldLoopFocusInsidePopup) {
@@ -596,8 +652,14 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _renderPopup(): void {
-    if (this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
-      if (this.option('_scrollToSelectedItemEnabled')) {
+    const {
+      usePopover,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _scrollToSelectedItemEnabled,
+      dropDownOptions: { fullScreen } = {},
+    } = this.option();
+    if (usePopover && !fullScreen) {
+      if (_scrollToSelectedItemEnabled) {
         super._renderPopup();
       } else {
         this._renderPopover();
@@ -607,11 +669,11 @@ class Lookup extends DropDownList<LookupProperties> {
       super._renderPopup();
     }
 
-    this._$popup!.addClass(LOOKUP_POPUP_CLASS);
-    this._popup!.$wrapper()?.addClass(LOOKUP_POPUP_WRAPPER_CLASS);
+    this._$popup?.addClass(LOOKUP_POPUP_CLASS);
+    this._popup?.$wrapper()?.addClass(LOOKUP_POPUP_WRAPPER_CLASS);
   }
 
-  _renderPopover() {
+  _renderPopover(): void {
     const popupConfig = this._popupConfig();
 
     const options = extend(
@@ -626,11 +688,11 @@ class Lookup extends DropDownList<LookupProperties> {
         hideOnParentScroll: true,
         _fixWrapperPosition: false,
         width: this._isInitialOptionValue('dropDownOptions.width')
-          ? () => getOuterWidth(this.$element())
+          ? (): number => getOuterWidth(this.$element()) as number
           : popupConfig.width,
       },
     );
-    // @ts-expect-error ts-error
+    // @ts-expect-error fix on Dom Component level
     this._popup = this._createComponent(this._$popup, Popover, options);
 
     this._popup.$overlayContent().attr('role', 'dialog');
@@ -643,7 +705,8 @@ class Lookup extends DropDownList<LookupProperties> {
       contentReady: this._contentReadyHandler.bind(this),
     });
 
-    if (this.option('_scrollToSelectedItemEnabled')) {
+    const { _scrollToSelectedItemEnabled: scrollToSelectedItemEnabledInPopover } = this.option();
+    if (scrollToSelectedItemEnabledInPopover) {
       this._popup._$arrow.remove();
     }
 
@@ -658,17 +721,25 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _popupHidingHandler(): void {
     super._popupHidingHandler();
-    this.option('focusStateEnabled') && this.focus();
+    const { focusStateEnabled } = this.option();
+
+    if (focusStateEnabled) {
+      this.focus();
+    }
   }
 
   _popupHiddenHandler(): void {
     super._popupHiddenHandler();
 
-    if (this.option('_scrollToSelectedItemEnabled')) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _scrollToSelectedItemEnabled } = this.option();
+
+    if (_scrollToSelectedItemEnabled) {
       resetPosition($(this._popup?.content()).parent());
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _preventFocusOnPopup(): void { }
 
   _shouldLoopFocusInsidePopup(): boolean {
@@ -678,19 +749,25 @@ class Lookup extends DropDownList<LookupProperties> {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _scrollToSelectedItemEnabled,
     } = this.option();
-    // @ts-expect-error ts-error
+
     const result: boolean = _scrollToSelectedItemEnabled
-      ? dropDownCentered
+      ? Boolean(dropDownCentered)
       : !usePopover;
 
     return result;
   }
 
   _popupConfig(): PopupProperties {
-    const { dropDownOptions = {} } = this.option();
+    const {
+      dropDownOptions = {},
+      dropDownCentered,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _scrollToSelectedItemEnabled,
+    } = this.option();
     const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
 
-    const result = extend(super._popupConfig(), {
+    const result: PopupProperties = {
+      ...super._popupConfig(),
       toolbarItems: this._getPopupToolbarItems(),
       hideOnParentScroll: false,
       onPositioned: null,
@@ -698,18 +775,19 @@ class Lookup extends DropDownList<LookupProperties> {
       showTitle: dropDownOptions.showTitle,
       title: dropDownOptions.title,
       titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
+      // @ts-expect-error fix on PopoverProperties level
       onTitleRendered: dropDownOptions.onTitleRendered,
       fullScreen: dropDownOptions.fullScreen,
       shading: dropDownOptions.shading,
       hideOnOutsideClick: dropDownOptions.hideOnOutsideClick,
       tabFocusLoopEnabled: shouldLoopFocusInsidePopup,
-    });
+    };
 
     delete result.animation;
     delete result.position;
 
-    if (this.option('_scrollToSelectedItemEnabled')) {
-      result.position = this.option('dropDownCentered') ? {
+    if (_scrollToSelectedItemEnabled) {
+      result.position = dropDownCentered ? {
         my: 'left top',
         at: 'left top',
         of: this.element(),
@@ -722,10 +800,11 @@ class Lookup extends DropDownList<LookupProperties> {
       result.hideOnParentScroll = true;
     }
 
-    each(['position', 'animation', 'width', 'height'], (_, optionName) => {
+    (['position', 'animation', 'width', 'height'] as const).forEach((optionName) => {
       const popupOptionValue = dropDownOptions[optionName];
 
       if (popupOptionValue !== undefined) {
+        // @ts-expect-error fix on PopoverProperties level
         result[optionName] = popupOptionValue;
       }
     });
@@ -733,29 +812,27 @@ class Lookup extends DropDownList<LookupProperties> {
     return result;
   }
 
-  _getPopupToolbarItems() {
+  _getPopupToolbarItems(): ToolbarItem[] {
     const { applyValueMode } = this.option();
 
-    const buttonsConfig = applyValueMode === 'useButtons'
+    const buttonsConfig: LookupButtonConfig[] = applyValueMode === 'useButtons'
       ? this._popupToolbarItemsConfig()
       : [];
 
     const cancelButton = this._getCancelButtonConfig();
     if (cancelButton) {
-      // @ts-expect-error ts-error
       buttonsConfig.push(cancelButton);
     }
 
     const clearButton = this._getClearButtonConfig();
     if (clearButton) {
-      // @ts-expect-error ts-error
       buttonsConfig.push(clearButton);
     }
 
     return this._applyButtonsLocation(buttonsConfig);
   }
 
-  _popupToolbarItemsConfig() {
+  _popupToolbarItemsConfig(): LookupButtonConfig[] {
     const { focusStateEnabled, applyButtonText: text } = this.option();
 
     return [
@@ -770,7 +847,7 @@ class Lookup extends DropDownList<LookupProperties> {
     ];
   }
 
-  _getCancelButtonConfig() {
+  _getCancelButtonConfig(): LookupButtonConfig | null {
     const { focusStateEnabled, cancelButtonText: text, showCancelButton } = this.option();
 
     return showCancelButton ? {
@@ -783,7 +860,7 @@ class Lookup extends DropDownList<LookupProperties> {
     } : null;
   }
 
-  _getClearButtonConfig() {
+  _getClearButtonConfig(): LookupButtonConfig | null {
     const { showClearButton, clearButtonText: text, focusStateEnabled } = this.option();
 
     return showClearButton ? {
@@ -796,11 +873,11 @@ class Lookup extends DropDownList<LookupProperties> {
     } : null;
   }
 
-  _applyButtonHandler(args?): void {
+  _applyButtonHandler(args?: ButtonClickEvent): void {
     if (args) {
       this._saveValueChangeEvent(args.event);
     }
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin
     this.option('value', this._valueGetter(this._currentSelectedItem()));
     super._applyButtonHandler();
   }
@@ -811,20 +888,22 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _refreshPopupVisibility(): void {
-    if (this.option('opened')) {
+    const { opened } = this.option();
+    if (opened) {
       this._updateListDimensions();
     }
   }
 
   _dimensionChanged(): void {
-    if (this.option('usePopover') && !this.option('dropDownOptions.width')) {
+    const { usePopover, dropDownOptions: { width: dropDownWidth } = {} } = this.option();
+    if (usePopover && !dropDownWidth) {
       this.option('dropDownOptions.width', getWidth(this.$element()));
     }
 
     this._updateListDimensions();
   }
 
-  _input() {
+  _input(): dxElementWrapper {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this._$searchBox || super._input();
   }
@@ -834,64 +913,63 @@ class Lookup extends DropDownList<LookupProperties> {
     this._renderSearch();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderValueChangeEvent(): void { }
 
   _renderSearch(): void {
-    const isSearchEnabled = this.option('searchEnabled');
+    const { searchEnabled: isSearchEnabled, searchStartEvent } = this.option();
 
     this._toggleSearchClass(isSearchEnabled);
 
     if (isSearchEnabled) {
-      const $searchWrapper = this._$searchWrapper = $('<div>').addClass(LOOKUP_SEARCH_WRAPPER_CLASS);
+      this._$searchWrapper = $('<div>').addClass(LOOKUP_SEARCH_WRAPPER_CLASS);
+      const $searchWrapper = this._$searchWrapper;
 
-      const $searchBox = this._$searchBox = $('<div>').addClass(LOOKUP_SEARCH_CLASS)
+      this._$searchBox = $('<div>').addClass(LOOKUP_SEARCH_CLASS)
         .appendTo($searchWrapper);
+      const $searchBox = this._$searchBox;
 
       const currentDevice = devices.current();
       const searchMode = currentDevice.android ? 'text' : 'search';
 
       let isKeyboardListeningEnabled = false;
 
-      const { searchStartEvent } = this.option();
-
       const textBoxOptions = {
         mode: searchMode,
         showClearButton: true,
         valueChangeEvent: searchStartEvent,
         inputAttr: { 'aria-label': messageLocalization.format('Search') },
-        // eslint-disable-next-line no-return-assign
-        onDisposing: () => isKeyboardListeningEnabled = false,
-        // eslint-disable-next-line no-return-assign
-        onFocusIn: () => isKeyboardListeningEnabled = true,
-        onFocusOut: () => {
+        onDisposing: (): void => { isKeyboardListeningEnabled = false; },
+        onFocusIn: (): void => { isKeyboardListeningEnabled = true; },
+        onFocusOut: (): void => {
           isKeyboardListeningEnabled = false;
           this._list?.option('focusedElement', null);
         },
-        // @ts-expect-error ts-error
-        onKeyboardHandled: (opts) => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
-        onValueChanged: (e) => this._searchHandler(e),
+        onKeyboardHandled: (opts: KeyboardKeyDownEvent): void => {
+          if (isKeyboardListeningEnabled) { this._list?._keyboardHandler(opts); }
+        },
+        onValueChanged: (): void => { this._searchHandler(); },
       };
 
       this._searchBox = this._createComponent($searchBox, TextBox, textBoxOptions);
 
       this._registerSearchKeyHandlers();
-      // @ts-expect-error ts-error
+      // @ts-expect-error _$list is a List component; insertBefore expects a dxElementWrapper
       $searchWrapper.insertBefore(this._$list);
 
       this._setSearchPlaceholder();
     }
   }
 
-  _filterDataSource(...args): void {
+  _filterDataSource(searchValue: string | null): void {
     if (this._list && !this._list._dataSource && this._isMinSearchLengthExceeded()) {
       this._list?._scrollView.startLoading();
     }
-    // @ts-expect-error ts-error
-    super._filterDataSource(...args);
+    super._filterDataSource(searchValue);
   }
 
-  _dataSourceFiltered(...args) {
-    super._dataSourceFiltered(...args);
+  _dataSourceFiltered(searchValue?: string | null): void {
+    super._dataSourceFiltered(searchValue);
     this._list?._scrollView.finishLoading();
   }
 
@@ -914,8 +992,8 @@ class Lookup extends DropDownList<LookupProperties> {
     delete this._searchBox;
   }
 
-  _selectListItemHandler(e) {
-    const { focusedElement } = this._list!.option();
+  _selectListItemHandler(e: DxEvent<KeyboardEvent>): void {
+    const { focusedElement } = this._list?.option() ?? {};
 
     const $itemElement = $(focusedElement);
 
@@ -926,7 +1004,7 @@ class Lookup extends DropDownList<LookupProperties> {
     e.preventDefault();
     e.target = $itemElement.get(0);
     this._saveValueChangeEvent(e);
-    this._selectListItem(e.itemData, $itemElement);
+    this._selectListItem(undefined, $itemElement);
   }
 
   _registerSearchKeyHandlers(): void {
@@ -936,7 +1014,7 @@ class Lookup extends DropDownList<LookupProperties> {
     this._searchBox?.registerKeyHandler('home', noop);
   }
 
-  _toggleSearchClass(isSearchEnabled) {
+  _toggleSearchClass(isSearchEnabled: boolean | undefined): void {
     if (this._popup) {
       this._popup.$wrapper()?.toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
     }
@@ -947,57 +1025,74 @@ class Lookup extends DropDownList<LookupProperties> {
       return;
     }
 
-    const minSearchLength = this.option('minSearchLength');
-    let placeholder = this.option('searchPlaceholder');
+    const { minSearchLength, searchPlaceholder } = this.option();
+    let placeholder = searchPlaceholder;
 
     if (minSearchLength && placeholder === messageLocalization.format('Search')) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error getFormatter return type does not accept a numeric argument
       placeholder = messageLocalization.getFormatter('dxLookup-searchPlaceholder')(minSearchLength);
     }
 
     this._searchBox?.option('placeholder', placeholder);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _setAriaTargetForList(): void { }
 
-  _listConfig() {
-    return extend(super._listConfig(), {
-      tabIndex: this.option('searchEnabled') ? -1 : 0,
-      grouped: this.option('grouped'),
-      groupTemplate: this._getTemplateByOption('groupTemplate'),
-      pullRefreshEnabled: this.option('pullRefreshEnabled'),
-      useNativeScrolling: this.option('useNativeScrolling'),
-      pullingDownText: this.option('pullingDownText'),
-      pulledDownText: this.option('pulledDownText'),
-      refreshingText: this.option('refreshingText'),
-      pageLoadingText: this.option('pageLoadingText'),
-      onScroll: this._scrollHandler.bind(this),
-      onPullRefresh: this._pullRefreshHandler.bind(this),
-      onPageLoading: this._pageLoadingHandler.bind(this),
-      pageLoadMode: this.option('pageLoadMode'),
-      nextButtonText: this.option('nextButtonText'),
-      indicateLoading: this.option('searchEnabled'),
-    });
+  _listConfig(): ListBaseProperties {
+    const {
+      searchEnabled,
+      grouped,
+      pullRefreshEnabled,
+      useNativeScrolling,
+      pullingDownText,
+      pulledDownText,
+      refreshingText,
+      pageLoadingText,
+      pageLoadMode,
+      nextButtonText,
+    } = this.option();
+
+    return {
+      ...super._listConfig(),
+      ...{
+        tabIndex: searchEnabled ? -1 : 0,
+        grouped,
+        groupTemplate: this._getTemplateByOption('groupTemplate'),
+        pullRefreshEnabled,
+        useNativeScrolling,
+        pullingDownText,
+        pulledDownText,
+        refreshingText,
+        pageLoadingText,
+        onScroll: this._scrollHandler.bind(this),
+        onPullRefresh: this._pullRefreshHandler.bind(this),
+        onPageLoading: this._pageLoadingHandler.bind(this),
+        pageLoadMode,
+        nextButtonText,
+        indicateLoading: searchEnabled,
+      },
+    };
   }
 
   _listContentReadyHandler(): void {
-    // @ts-expect-error ts-error
-    super._listContentReadyHandler(...arguments);
+    super._listContentReadyHandler();
     this._refreshSelected();
   }
 
-  _runWithoutCloseOnScroll(callback) {
+  _runWithoutCloseOnScroll(callback: () => void): void {
     // NOTE: Focus can trigger "scroll" event
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _scrollToSelectedItemEnabled } = this.option();
-    const hideOnParentScroll = this._popup?.option('hideOnParentScroll');
+    const { hideOnParentScroll } = this._popup?.option() ?? {};
 
     if (!_scrollToSelectedItemEnabled) {
       callback();
     } else {
       this._popup?.option('hideOnParentScroll', false);
       callback();
+      // eslint-disable-next-line no-restricted-globals
       this._hideOnParentScrollTimer = setTimeout(() => { // T1018037
         this._popup?.option('hideOnParentScroll', hideOnParentScroll);
       });
@@ -1005,12 +1100,13 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _setFocusPolicy(): void {
-    if (!this.option('focusStateEnabled')) {
+    const { focusStateEnabled, searchEnabled } = this.option();
+    if (!focusStateEnabled) {
       return;
     }
 
     this._runWithoutCloseOnScroll(() => {
-      if (this.option('searchEnabled')) {
+      if (searchEnabled) {
         this._searchBox?.focus();
       } else {
         this._list?.focus();
@@ -1018,21 +1114,24 @@ class Lookup extends DropDownList<LookupProperties> {
     });
   }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._$field;
   }
 
-  _keyboardEventBindingTarget() {
+  _keyboardEventBindingTarget(): dxElementWrapper {
     return this._$field;
   }
 
-  _listItemClickHandler(e): void {
+  _listItemClickHandler(e?: ItemClickEvent<Item>): void {
+    if (!e) return;
     this._saveValueChangeEvent(e.event);
-    this._selectListItem(e.itemData, e.event.currentTarget);
+    this._selectListItem(e.itemData, e.event?.currentTarget);
   }
 
-  _selectListItem(itemData, target): void {
-    this._list?.selectItem(target);
+  _selectListItem(itemData: unknown, target?: Element | dxElementWrapper): void {
+    if (target) {
+      this._list?.selectItem(target as Element);
+    }
 
     const { applyValueMode } = this.option();
 
@@ -1041,26 +1140,27 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  _currentSelectedItem() {
-    return this.option('grouped')
-      // @ts-expect-error ts-error
-      ? this._list.option('selectedItems[0]').items[0]
-      : this._list?.option('selectedItems[0]');
+  _currentSelectedItem(): Item | undefined {
+    const { grouped } = this.option();
+    const { selectedItems: [firstSelectedItem] = [] } = this._list?.option() ?? {};
+    // @ts-expect-error should be fixed on List level
+    return grouped ? firstSelectedItem?.items[0] as Item : firstSelectedItem;
   }
 
-  _resetValue(e): void {
+  _resetValue(e: ButtonClickEvent): void {
     this._saveValueChangeEvent(e.event);
     this.option('value', null);
     this.option('opened', false);
   }
 
-  // @ts-expect-error ts-error
-  _searchValue() {
-    return this.option('searchEnabled') && this._searchBox ? this._searchBox.option('value') : '';
+  _searchValue(): string {
+    const { searchEnabled } = this.option();
+    const { value: searchBoxValue } = this._searchBox?.option() ?? {};
+    return searchEnabled && this._searchBox ? (searchBoxValue as string) : '';
   }
 
-  _renderInputValue(...args) {
-    return super._renderInputValue(...args).always(() => {
+  _renderInputValue(arg: { value?: unknown; renderOnly?: boolean } = {}): DeferredObj<unknown> {
+    return super._renderInputValue(arg).always(() => {
       this._refreshSelected();
     });
   }
@@ -1075,8 +1175,9 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _clean(): void {
     this._$fieldWrapper.remove();
-    clearTimeout(this._hideOnParentScrollTimer);
-    // @ts-expect-error ts-error
+    if (this._hideOnParentScrollTimer) {
+      clearTimeout(this._hideOnParentScrollTimer);
+    }
     this._hideOnParentScrollTimer = null;
     this._$searchBox = null;
 
@@ -1088,8 +1189,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
     switch (name) {
       case 'dataSource':
-        // @ts-expect-error ts-error
-        super._optionChanged(...arguments);
+        super._optionChanged(args);
         this._renderField();
         break;
       case 'searchEnabled':
@@ -1104,8 +1204,7 @@ class Lookup extends DropDownList<LookupProperties> {
         break;
       case 'minSearchLength':
         this._setSearchPlaceholder();
-        // @ts-expect-error ts-error
-        super._optionChanged(...arguments);
+        super._optionChanged(args);
         break;
       case 'inputAttr':
         this._applyInputAttributes(value);
@@ -1116,8 +1215,7 @@ class Lookup extends DropDownList<LookupProperties> {
         break;
       case 'focusStateEnabled':
         this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
-        // @ts-expect-error ts-error
-        super._optionChanged(...arguments);
+        super._optionChanged(args);
         break;
       case 'clearButtonText':
       case 'showClearButton':
@@ -1125,8 +1223,7 @@ class Lookup extends DropDownList<LookupProperties> {
         this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
         break;
       case 'applyValueMode':
-        // @ts-expect-error ts-error
-        super._optionChanged(...arguments);
+        super._optionChanged(args);
         break;
       case 'onPageLoading':
         this._initPageLoadingAction();
@@ -1151,9 +1248,11 @@ class Lookup extends DropDownList<LookupProperties> {
       case 'onScroll':
         this._initScrollAction();
         break;
-      case 'pageLoadMode':
-        this._setListOption('pageLoadMode', this.option('pageLoadMode'));
+      case 'pageLoadMode': {
+        const { pageLoadMode } = this.option();
+        this._setListOption('pageLoadMode', pageLoadMode);
         break;
+      }
       case 'cleanSearchOnOpening':
       case '_scrollToSelectedItemEnabled':
         break;
@@ -1173,25 +1272,34 @@ class Lookup extends DropDownList<LookupProperties> {
             super._optionChanged(args);
         }
         break;
-      case 'dropDownCentered':
-        if (this.option('_scrollToSelectedItemEnabled')) {
+      case 'dropDownCentered': {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { _scrollToSelectedItemEnabled } = this.option();
+        if (_scrollToSelectedItemEnabled) {
           this.option('dropDownOptions.position', undefined);
           this._renderPopup();
         }
         break;
+      }
       default:
-        // @ts-expect-error ts-error
-        super._optionChanged(...arguments);
+        super._optionChanged(args);
     }
   }
 
-  focus() {
-    // @ts-expect-error
-    this.option('opened') ? this._setFocusPolicy() : eventsEngine.trigger(this._focusTarget(), 'focus');
+  focus(): void {
+    const { opened } = this.option();
+    if (opened) {
+      this._setFocusPolicy();
+
+      return;
+    }
+
+    // @ts-expect-error EventsEngine
+    eventsEngine.trigger(this._focusTarget(), 'focus');
   }
 
-  // @ts-expect-error ts-error
-  field() {
+  // @ts-expect-error not compatible with base class
+  field(): dxElementWrapper {
     return this._$field;
   }
 }
