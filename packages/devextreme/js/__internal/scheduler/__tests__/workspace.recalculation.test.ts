@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import fx from '../../../common/core/animation/fx';
 import CustomStore from '../../../data/custom_store';
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 const CLASSES = {
   scheduler: 'dx-scheduler',

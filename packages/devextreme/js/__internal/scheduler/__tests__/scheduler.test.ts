@@ -4,7 +4,7 @@ import {
 import { logger } from '@ts/core/utils/m_console';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 jest.mock('@ts/core/m_devices', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
