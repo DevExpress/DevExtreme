@@ -627,10 +627,8 @@ class Lookup extends DropDownList<LookupProperties> {
       return 'auto';
     }
 
-    // @ts-expect-error fix on Popup level
-    const bottomToolbar = this._popup.bottomToolbar();
-    // @ts-expect-error fix on Popup level
-    const topToolbar = this._popup.topToolbar();
+    const bottomToolbar = this._popup?.bottomToolbar();
+    const topToolbar = this._popup?.topToolbar();
 
     return (
       this._calculateListHeight(grouped)
