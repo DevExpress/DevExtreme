@@ -1,4 +1,4 @@
-import tableCreatorModule from '__internal/scheduler/m_table_creator';
+import tableCreatorModule from '__internal/scheduler/table_creator';
 
 const { tableCreator } = tableCreatorModule;
 
