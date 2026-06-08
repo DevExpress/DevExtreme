@@ -117,7 +117,7 @@
         "dxDataGrid-aiAssistantExecutionAbortMessage": "Execuție întreruptă",
         "dxDataGrid-aiAssistantExecutionInProgressMessage": "Execuția este deja în desfășurare. Așteptați.",
         "dxDataGrid-aiAssistantRequestInProgressMessage": "Solicitarea este deja în curs. Așteptați.",
-        "dxDataGrid-aiAssistantUnexpectedErrorMessage": "A apărut o eroare neașteptată. Reîncercați.",
+        "dxDataGrid-aiAssistantUnexpectedErrorMessage": "A apărut o eroare neașteptată. Încercați din nou.",
         "dxDataGrid-aiAssistantInvalidResponseMessage": "Răspuns nevalid de la serviciul AI. Reîncercați.",
         "dxDataGrid-aiAssistantClearButtonText": "Golire",
         "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerare",
