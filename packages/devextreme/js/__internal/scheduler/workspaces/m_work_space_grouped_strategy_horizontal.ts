@@ -127,7 +127,7 @@ class HorizontalGroupedStrategy {
     cellCount: number,
     $cells: dxElementWrapper,
     cellWidth: number,
-    coordinates: CellPositionData & { groupIndex?: number },
+    coordinates: { top: number; left: number; groupIndex?: number },
     groupedDataMap: { dateTableGroupedMap: CellInfo[][][] },
     allDay?: boolean,
   ): GroupBoundsOffset {
