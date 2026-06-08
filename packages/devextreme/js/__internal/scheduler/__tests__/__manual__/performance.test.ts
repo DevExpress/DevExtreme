@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from '../__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from '../__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from '../__mock__/mock_scheduler';
 
 describe.skip('scheduler manual testing', () => {
   it('should work with good performance for 1000 recurrence appointments', async () => {
