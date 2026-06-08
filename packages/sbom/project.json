@@ -22,6 +22,19 @@
         ]
       }
     },
+    "built-hashes": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["install-dependencies"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "parallel": false,
+        "commands": [
+          "rm -rf dist/",
+          "pnpm dx-make-sbom ../../ dist/ \"$SBOM_PACKAGES\"",
+          "cp dist/devextreme.cdx.json dist/devextreme-dist.cdx.json"
+        ]
+      }
+    },
     "make": {
       "executor": "nx:run-commands",
       "dependsOn": ["install-dependencies"],

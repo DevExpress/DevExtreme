@@ -20,6 +20,7 @@ env:
   NX_SKIP_NX_CACHE: true
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
+  SBOM_PACKAGE_NAMES: devextreme,devextreme-angular,devextreme-react,devextreme-vue,devextreme-themebuilder
   CYCLONEDX_CLI_VERSION: 0.32.0
   CYCLONEDX_CLI_LINUX_X64_SHA256: 454879e6a4a405c8a13bff49b8982adcb0596f3019b26b0811c66e4d7f0783e1
 
@@ -54,12 +55,34 @@ jobs:
           BUILD_INTERNAL_PACKAGE: true
         run: pnpm run all:build
 
+      - name: Prepare SBOM package inputs
+        shell: bash
+        run: |
+          package_version=$(node -p "require('./package.json').version")
+          IFS=',' read -ra package_names <<< "$SBOM_PACKAGE_NAMES"
+          sbom_packages=()
+
+          for package_name in "${package_names[@]}"; do
+            tgz_path="artifacts/npm/$package_name-$package_version.tgz"
+
+            if [ ! -f "$tgz_path" ]; then
+              echo "Expected package tarball not found: $tgz_path"
+              exit 1
+            fi
+
+            sbom_packages+=("$package_name(../../$tgz_path)")
+          done
+
+          sbom_packages_value=$(IFS=,; echo "${sbom_packages[*]}")
+          echo "SBOM_PACKAGES=$sbom_packages_value" >> "$GITHUB_ENV"
+          echo "$sbom_packages_value"
+
       - name: Build SBOMs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
-          pnpm nx build sbom;
+          pnpm nx built-hashes sbom;
 
       - name: Install CycloneDX CLI
         shell: bash
