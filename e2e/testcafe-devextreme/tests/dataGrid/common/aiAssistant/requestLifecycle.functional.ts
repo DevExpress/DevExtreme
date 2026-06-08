@@ -116,10 +116,10 @@ test('N distinct prompts back-to-back should each execute once, in order, and ap
   const aiChat = dataGrid.getAIAssistantChat();
 
   const steps = [
-    { prompt: 'Sort by name', verify: async () => t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc') },
-    { prompt: 'Sort by value', verify: async () => t.expect(await dataGrid.apiColumnOption('value', 'sortOrder')).eql('desc') },
-    { prompt: 'Clear sorting', verify: async () => t.expect(await dataGrid.apiColumnOption('value', 'sortOrder')).notOk() },
-    { prompt: 'Group by name', verify: async () => t.expect(await dataGrid.apiColumnOption('name', 'groupIndex')).eql(0) },
+    { prompt: 'Sort by name', verify: async () => t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc') },
+    { prompt: 'Sort by value', verify: async () => t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).eql('desc') },
+    { prompt: 'Clear sorting', verify: async () => t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).notOk() },
+    { prompt: 'Group by name', verify: async () => t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(0) },
   ];
 
   for (let i = 0; i < steps.length; i += 1) {
@@ -134,7 +134,7 @@ test('N distinct prompts back-to-back should each execute once, in order, and ap
     await steps[i].verify();
   }
 
-  await t.expect(await getAICallCount()).eql(steps.length);
+  await t.expect(getAICallCount()).eql(steps.length);
   await t.expect(aiChat.getMessages().count).eql(steps.length * 2);
 }).before(async () => createGridWithAIAssistant(baseGrid(threeRows), [
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
@@ -199,7 +199,7 @@ test('Input should be re-enabled after fulfillment', async (t) => {
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
   await t.expect(aiChat.isInputDisabled()).notOk();
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));
 
 // 3.9.4
@@ -218,7 +218,7 @@ test('Input should be re-enabled after failure', async (t) => {
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.isInputDisabled()).notOk();
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [FAIL]));
 
 // 3.9.5
@@ -365,12 +365,12 @@ test('Clear-chat should remove all messages from chat and leave grid state uncha
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await t.click(aiChat.getClearChatButton());
 
   await t.expect(aiChat.getMessages().count).eql(0);
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));
 
 // === §3.11 Suggestions disabled while in flight ===
@@ -391,7 +391,7 @@ test('Suggestions should be disabled during LLM phase and dispatch no second req
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
   await t.expect(aiChat.isSuggestionDisabled(0)).ok();
-  await t.expect(await getAICallCount()).eql(1);
+  await t.expect(getAICallCount()).eql(1);
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG], suggestionConfig));
 
 // 3.11.2
@@ -411,7 +411,7 @@ test('Suggestions should be disabled during command execution phase and dispatch
   await t.expect(aiChat.isSuggestionDisabled(0)).ok();
   await t.expect(aiChat.getAIMessages().count).eql(1);
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-  await t.expect(await getAICallCount()).eql(1);
+  await t.expect(getAICallCount()).eql(1);
 }).before(async () => createGridWithHangingCommand([selectAll], suggestionConfig));
 
 // 3.11.3
@@ -430,5 +430,5 @@ test('Suggestions should be re-enabled after resolution', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.isSuggestionDisabled(0)).notOk();
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName], suggestionConfig));
