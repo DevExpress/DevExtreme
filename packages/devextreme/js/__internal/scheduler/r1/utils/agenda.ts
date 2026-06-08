@@ -1,4 +1,4 @@
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../utils_time_zone';
 import type { ListEntity } from '../../view_model/types';
 import { setOptionHour } from './base';
 
@@ -49,7 +49,8 @@ export const calculateRows = (
 
   for (let i = 0; i < agendaDuration; i += 1) {
     const date = getDateByIndex(startViewDate, i);
-    const dayStart = getDayStart(timeZoneUtils.createUTCDateWithLocalOffset(date));
+    const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+    const dayStart = getDayStart(utcDate as Date);
     intervalsStartMap.set(dayStart, i);
   }
 

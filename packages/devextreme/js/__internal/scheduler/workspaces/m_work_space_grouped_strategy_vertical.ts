@@ -3,11 +3,11 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
 import type { CellPositionData, GroupBoundsOffset, GroupedStrategyOptions } from '@ts/scheduler/types';
+import type { ResourceLoader } from '@ts/scheduler/utils/loader/resource_loader';
 import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import { Cache } from '../global_cache';
-import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../m_classes';
-import type { ResourceLoader } from '../utils/loader/resource_loader';
 
 class VerticalGroupedStrategy {
   cache = new Cache();

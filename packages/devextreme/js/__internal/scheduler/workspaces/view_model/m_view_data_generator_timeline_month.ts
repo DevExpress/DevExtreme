@@ -1,8 +1,8 @@
 import dateUtils from '@js/core/utils/date';
 import { setOptionHour, timelineMonthUtils } from '@ts/scheduler/r1/utils/index';
 
-import timezoneUtils from '../../m_utils_time_zone';
 import type { CountGenerationConfig } from '../../types';
+import timezoneUtils from '../../utils_time_zone';
 import { ViewDataGenerator } from './m_view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;

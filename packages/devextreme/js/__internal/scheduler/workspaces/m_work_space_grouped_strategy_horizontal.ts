@@ -8,7 +8,7 @@ import type {
 } from '@ts/scheduler/types';
 import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
-import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../m_classes';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 
 class HorizontalGroupedStrategy {
