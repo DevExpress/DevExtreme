@@ -108,7 +108,7 @@
 
 
         "dxDataGrid-aiAssistantTitle": "AI asistents",
-        "dxDataGrid-aiAssistantProcessingMessageHeader": "Pieprasījums tiek apstrādāts",
+        "dxDataGrid-aiAssistantProcessingMessageHeader": "Pieprasījums tiek izpildīts",
         "dxDataGrid-aiAssistantProcessingMessage": "Apstrādā...",
         "dxDataGrid-aiAssistantErrorMessageHeader": "Neizdevās apstrādāt pieprasījumu",
         "dxDataGrid-aiAssistantAbortMessage": "Pieprasījums apturēts.",
