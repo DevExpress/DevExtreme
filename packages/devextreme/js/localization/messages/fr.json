@@ -69,7 +69,7 @@
 
         "dxDateRangeBox-invalidStartDateMessage": "La valeur de départ doit être une date",
         "dxDateRangeBox-invalidEndDateMessage": "La valeur de fin doit être une date",
-        "dxDateRangeBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateRangeBox-startDateOutOfRangeMessage": "La date de début est hors limites",
         "dxDateRangeBox-endDateOutOfRangeMessage": "La date de fin est hors limite",
         "dxDateRangeBox-startDateLabel": "Date de début",
         "dxDateRangeBox-endDateLabel": "Date de fin",
@@ -99,9 +99,9 @@
 
         "dxForm-optionalMark": "optionnel",
         "dxForm-requiredMessage": "{0} est obligatoire",
-        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-smartPasteButtonText": "Collage intelligent",
         "dxForm-resetButtonText": "Réinitialiser",
-        "dxForm-submitButtonText": "Submit",
+        "dxForm-submitButtonText": "Envoyer",
 
         "dxNumberBox-invalidValueMessage": "La valeur doit être un nombre",
         "dxNumberBox-noDataText": "Pas de données",
@@ -185,7 +185,7 @@
         "dxDataGrid-selectedRows": "Lignes sélectionnées",
         "dxDataGrid-exportSelectedRows": "Exporter les lignes sélectionnées vers {0}",
         "dxDataGrid-exportAll": "Exporter tout vers {0}",
-        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterLabel": "Options de filtre",
         "dxDataGrid-headerFilterIndicatorLabel": "Montrer les options de filtre de la colonne '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(aucune valeur)",
         "dxDataGrid-headerFilterOK": "OK",
@@ -201,7 +201,7 @@
         "dxDataGrid-ariaCollapse": "Réduire",
         "dxDataGrid-ariaModifiedCell": "Modifié",
         "dxDataGrid-ariaDeletedCell": "Supprimé",
-        "dxDataGrid-ariaEditableCell": "Editable",
+        "dxDataGrid-ariaEditableCell": "Modifiable",
         "dxDataGrid-ariaExpand": "Etendre",
         "dxDataGrid-ariaCollapsedRow": "Ligne réduite",
         "dxDataGrid-ariaExpandedRow": "Ligne développée",
@@ -272,7 +272,7 @@
         "dxScheduler-ariaLabel-currentIndicator-present": "L'indicateur de temps actuel est visible dans la vue",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "L'indicateur de l'heure actuelle n'est pas visible sur l'écran",
 
-        "dxScheduler-appointmentAriaLabel-group": "Groupe : {0}",
+        "dxScheduler-appointmentAriaLabel-group": "Groupe : {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Rendez-vous récurrent",
 
         "dxScheduler-appointmentListAriaLabel": "Liste des rendez-vous ",
@@ -282,13 +282,13 @@
 
         "dxScheduler-editorLabelTitle": "Titre",
         "dxScheduler-editorLabelStartDate": "Date de début",
-        "dxScheduler-editorAriaLabelStartTime": "Start time",
+        "dxScheduler-editorAriaLabelStartTime": "Heure de début",
         "dxScheduler-editorLabelEndDate": "Date de fin",
-        "dxScheduler-editorAriaLabelEndTime": "End time",
+        "dxScheduler-editorAriaLabelEndTime": "Heure de fin",
         "dxScheduler-editorLabelDescription": "Description",
         "dxScheduler-editorLabelRecurrence": "Récurrence",
 
-        "dxScheduler-noSubject": "(No subject)",
+        "dxScheduler-noSubject": "(Sans objet)",
 
         "dxScheduler-navigationToday": "Aujourd'hui",
         "dxScheduler-navigationPrevious": "Page précédente",
@@ -314,7 +314,7 @@
         "dxScheduler-recurrenceOccurrenceLabel": "Nombre d'occurrences",
 
         "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
-        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
+        "dxScheduler-recurrenceRepeatHourly": "heure(s)",
         "dxScheduler-recurrenceRepeatDaily": "Jour(s)",
         "dxScheduler-recurrenceRepeatWeekly": "Semaine(s)",
         "dxScheduler-recurrenceRepeatMonthly": "Mois(s)",
@@ -539,7 +539,7 @@
         "dxHtmlEditor-width": "Largeur",
         "dxHtmlEditor-height": "Hauteur",
         "dxHtmlEditor-borderColor": "Couleur",
-        "dxHtmlEditor-borderWidth": "Border Width",
+        "dxHtmlEditor-borderWidth": "Largeur de la bordure",
         "dxHtmlEditor-tableBackground": "Arrière plan",
         "dxHtmlEditor-dimensions": "Dimensions",
         "dxHtmlEditor-alignment": "Alignement",
@@ -588,7 +588,6 @@
         "dxHtmlEditor-aiCommandChangeTone": "Changer le ton",
         "dxHtmlEditor-aiCommandTranslate": "Traduire",
         "dxHtmlEditor-aiCommandAskAI": "Demander à l’IA",
-        
         "dxHtmlEditor-aiCommandChangeStyleFormal": "Formel",
         "dxHtmlEditor-aiCommandChangeStyleInformal": "Informel",
         "dxHtmlEditor-aiCommandChangeStyleTechnical": "Technique",
@@ -601,13 +600,11 @@
         "dxHtmlEditor-aiCommandChangeStyleExpository": "Expositif",
         "dxHtmlEditor-aiCommandChangeStyleDescriptive": "Descriptif",
         "dxHtmlEditor-aiCommandChangeStyleConversational": "Conversationnel",
-        
         "dxHtmlEditor-aiCommandChangeToneProfessional": "Professionnel",
         "dxHtmlEditor-aiCommandChangeToneCasual": "Décontracté",
         "dxHtmlEditor-aiCommandChangeToneStraightforward": "Direct",
         "dxHtmlEditor-aiCommandChangeToneConfident": "Confiant",
         "dxHtmlEditor-aiCommandChangeToneFriendly": "Amical",
-        
         "dxHtmlEditor-aiCommandTranslateArabic": "Arabe",
         "dxHtmlEditor-aiCommandTranslateChinese": "Chinois",
         "dxHtmlEditor-aiCommandTranslateEnglish": "Anglais",
@@ -825,7 +822,7 @@
         "dxDiagram-shapeArrowLeftRight": "Flèche gauche droite",
         "dxDiagram-shapeProcess": "Processus",
         "dxDiagram-shapeDecision": "Décision",
-        "dxDiagram-shapeTerminator": "Terminator",
+        "dxDiagram-shapeTerminator": "Terminateur",
         "dxDiagram-shapePredefinedProcess": "Processus prédéfini",
         "dxDiagram-shapeDocument": "Document",
         "dxDiagram-shapeMultipleDocuments": "Documents multiples",
