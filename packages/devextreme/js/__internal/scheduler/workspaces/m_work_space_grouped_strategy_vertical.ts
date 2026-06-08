@@ -21,9 +21,8 @@ class VerticalGroupedStrategy {
   : CellPositionData {
     // @ts-expect-error
     let rowIndex = cellCoordinates.rowIndex + groupIndex * this.workspace.getRowCount();
-    // @ts-expect-error
 
-    if (this.workspace.supportAllDayRow() && this.workspace.showAllDayPanel) {
+    if (this.workspace.supportAllDayRow() && this.workspace.option('showAllDayPanel')) {
       rowIndex += groupIndex;
 
       if (!inAllDayRow) {
