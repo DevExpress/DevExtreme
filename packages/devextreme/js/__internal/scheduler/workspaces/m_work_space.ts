@@ -1,3 +1,4 @@
+import type { ScrollDirection } from '@js/common';
 import { locate, resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
@@ -29,7 +30,9 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { AllDayPanelMode, CellClickEvent, CellContextMenuEvent } from '@js/ui/scheduler';
+import type {
+  AllDayPanelMode, CellClickEvent, CellContextMenuEvent, ScrollMode,
+} from '@js/ui/scheduler';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -239,8 +242,8 @@ export interface WorkspaceOptionsInternal {
   groupByDate: boolean;
   skippedDays: number[];
   scrolling: {
-    mode: 'standard' | 'virtual';
-    orientation: 'horizontal' | 'vertical' | 'both';
+    mode: ScrollMode;
+    orientation: ScrollDirection;
   };
   draggingMode: 'outlook' | 'default';
   timeZoneCalculator: TimeZoneCalculator;
@@ -575,7 +578,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  private isRTL() {
+  private isRTL(): boolean {
     return this.option('rtlEnabled');
   }
 
