@@ -579,12 +579,22 @@ export class VirtualScrollingDispatcher {
     this.options = options;
 
     if (this.verticalVirtualScrolling) {
-      this.verticalVirtualScrolling.options = options as VirtualScrollingBaseOptions;
+      this.verticalVirtualScrolling.options = {
+        ...options,
+        itemSize: this.rowHeight,
+        viewportSize: this.viewportHeight,
+        outlineCount: this.outlineCount,
+      };
       this.verticalVirtualScrolling.itemSize = this.rowHeight;
       this.verticalVirtualScrolling.viewportSize = this.viewportHeight;
     }
     if (this.horizontalVirtualScrolling) {
-      this.horizontalVirtualScrolling.options = options as VirtualScrollingBaseOptions;
+      this.horizontalVirtualScrolling.options = {
+        ...options,
+        itemSize: this.cellWidth,
+        viewportSize: this.viewportWidth,
+        outlineCount: this.outlineCount,
+      };
       this.horizontalVirtualScrolling.itemSize = this.cellWidth;
       this.horizontalVirtualScrolling.viewportSize = this.viewportWidth;
     }
