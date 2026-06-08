@@ -21,7 +21,7 @@ import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import timezoneUtils from '../utils_time_zone';
-import type { ViewDataProviderOptions } from './view_model/m_types';
+import type { ViewDataProviderOptions } from './view_model/types';
 import SchedulerWorkSpace from './work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;

@@ -23,7 +23,7 @@ import type {
   ViewCellGeneratedData,
   ViewCellIndex,
   ViewDataProviderExtendedOptions,
-} from './m_types';
+} from './types';
 
 const toMs = dateUtils.dateToMilliseconds;
 

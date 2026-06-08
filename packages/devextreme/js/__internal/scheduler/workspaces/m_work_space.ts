@@ -97,8 +97,8 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/position_helper';
-import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
+import type { ViewDataProviderOptions } from './view_model/types';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './virtual_scrolling';
 import HorizontalGroupedStrategy from './work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
