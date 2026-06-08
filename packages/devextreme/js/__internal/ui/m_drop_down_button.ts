@@ -350,9 +350,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     return items;
   }
 
-  _buttonGroupItemClick({ event, itemData }: { event: Event; itemData: ButtonGroupItem }): void {
-    const isActionButton = itemData.elementAttr?.class === DROP_DOWN_BUTTON_ACTION_CLASS;
-    const isToggleButton = itemData.elementAttr?.class === DROP_DOWN_BUTTON_TOGGLE_CLASS;
+  _buttonGroupItemClick({ event, itemData }: import('@js/ui/button_group').ItemClickEvent): void {
+    const itemClass = (itemData as ButtonGroupItem | undefined)?.elementAttr?.class;
+    const isActionButton = itemClass === DROP_DOWN_BUTTON_ACTION_CLASS;
+    const isToggleButton = itemClass === DROP_DOWN_BUTTON_TOGGLE_CLASS;
 
     if (isToggleButton) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
