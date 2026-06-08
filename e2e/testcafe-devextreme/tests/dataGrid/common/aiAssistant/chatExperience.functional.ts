@@ -1,87 +1,13 @@
-/* eslint-disable no-underscore-dangle */
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClientFunction } from 'testcafe';
-import { AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
-import { createWidget } from '../../../../helpers/createWidget';
-
-const threeRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-  { id: 3, name: 'Charlie', value: 10 },
-];
-
-const twoRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-];
-
-const baseGrid = {
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-};
-
-const setupAIState = ClientFunction((
-  base: Record<string, unknown>,
-  responses: unknown[],
-) => {
-  (window as any).__aiBase = base;
-  (window as any).__aiResponses = responses;
-  (window as any).__aiCallCount = 0;
-  (window as any).__aiRequests = [];
-});
-
-const aiGridOptions = (): any => ({
-  ...(window as any).__aiBase,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest(params: any) {
-        const responses = (window as any).__aiResponses;
-        const count = (window as any).__aiCallCount;
-        const response = responses[count];
-
-        (window as any).__aiCallCount = count + 1;
-        (window as any).__aiRequests.push(params);
-
-        if (response === undefined) {
-          return {
-            promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
-            abort: (): void => {},
-          };
-        }
-
-        return {
-          promise: Promise.resolve(response),
-          abort: (): void => {},
-        };
-      },
-    }),
-    ...((window as any).__aiAssistantExtra ?? {}),
-  },
-});
-
-const setAIAssistantExtra = (
-  aiAssistantExtra: Record<string, unknown>,
-): Promise<void> => ClientFunction(
-  () => {
-    (window as any).__aiAssistantExtra = aiAssistantExtra;
-  },
-  { dependencies: { aiAssistantExtra } },
-)();
-
-const createGridWithAIAssistant = async (
-  base: Record<string, unknown>,
-  responses: unknown[],
-  aiAssistantExtra: Record<string, unknown> = {},
-): Promise<void> => {
-  await setupAIState(base, responses);
-  await setAIAssistantExtra(aiAssistantExtra);
-
-  return createWidget('dxDataGrid', aiGridOptions);
-};
-
-const getRequests = ClientFunction(() => (window as any).__aiRequests);
+import {
+  AI_INTEGRATION_PAGE,
+  GRID_SELECTOR,
+  baseGrid,
+  createGridWithAIAssistant,
+  getRequests,
+  threeRows,
+  twoRows,
+} from './testHelpers';
 
 // === §1.5 Chat history accumulation ===
 
