@@ -53,6 +53,7 @@ export class AIChat {
 
     container.addClass(CLASSES.aiChat);
     this.popupInstance = createComponent(container, Popup, this.getPopupConfig());
+    this.updateClearChatButtonDisabled = this.updateClearChatButtonDisabled.bind(this);
   }
 
   private getChatConfig(): ChatProperties {
@@ -117,10 +118,8 @@ export class AIChat {
           this.getChatConfig(),
         );
 
-        this.chatInstance?.getDataSource()?.on('changed', () => {
-          this.updateClearChatButtonDisabled();
-        });
-        this.updateClearChatButtonDisabled();
+        this.unsubscribeStoreChanges();
+        this.subscribeStoreChanges();
       },
       ...this.options.popupOptions,
     };
@@ -291,6 +290,15 @@ export class AIChat {
     this.chatInstance?.option({ suggestions: { disabled } });
   }
 
+  private subscribeStoreChanges(): void {
+    this.chatInstance?.getDataSource()?.on('changed', this.updateClearChatButtonDisabled);
+    this.updateClearChatButtonDisabled();
+  }
+
+  private unsubscribeStoreChanges(): void {
+    this.chatInstance?.getDataSource()?.off('changed', this.updateClearChatButtonDisabled);
+  }
+
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
     this.options = options;
 
@@ -355,5 +363,11 @@ export class AIChat {
 
   public getUserId(): string {
     return this.chatInstance?.option('user.id') as string ?? '';
+  }
+
+  public dispose(): void {
+    this.unsubscribeStoreChanges();
+    this.chatInstance?.dispose();
+    this.popupInstance.dispose();
   }
 }
