@@ -20,6 +20,8 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
   private maxVisibleDate!: Date;
 
+  protected override tableAllDay = undefined;
+
   getCellData(
     rowIndex: number,
     columnIndex: number,

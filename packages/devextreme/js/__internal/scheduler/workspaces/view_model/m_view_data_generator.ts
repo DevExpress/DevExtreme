@@ -30,7 +30,7 @@ const toMs = dateUtils.dateToMilliseconds;
 export class ViewDataGenerator {
   readonly daysInInterval: number = 1;
 
-  protected tableAllDay = false;
+  protected tableAllDay: boolean | undefined = false;
 
   public hiddenInterval = 0;
 
