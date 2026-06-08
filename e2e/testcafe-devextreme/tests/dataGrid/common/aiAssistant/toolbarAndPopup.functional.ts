@@ -24,9 +24,10 @@ const gridWithoutAssistant = (): any => ({
   showBorders: true,
 });
 
-// === §1.1 Toolbar entry point & popup lifecycle ===
-fixture`AI Assistant - Toolbar`
+fixture`AI Assistant - Toolbar & Popup`
   .page(AI_INTEGRATION_PAGE);
+
+// === §1.1 Toolbar entry point & popup lifecycle ===
 
 // 1.1.1
 test('Toolbar button should be visible when aiAssistant.enabled is true', async (t) => {
@@ -110,8 +111,6 @@ test('Custom title should be rendered in popup header', async (t) => {
 ));
 
 // === §1.10 A11y / KBN ===
-fixture`AI Assistant - A11y`
-  .page(AI_INTEGRATION_PAGE);
 
 // 1.10.2 (Enter) — focus the toolbar button and activate it with Enter.
 test('Toolbar button should activate via Enter key', async (t) => {
