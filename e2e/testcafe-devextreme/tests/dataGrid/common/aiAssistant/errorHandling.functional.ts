@@ -79,10 +79,10 @@ const expectInvalidResponse = async (
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 };
 
-// === §2.1 Unsupported / unknown intent ===
-
-fixture`AI Assistant - Empty Actions`
+fixture`AI Assistant - Error Handling`
   .page(AI_INTEGRATION_PAGE);
+
+// === §2.1 Unsupported / unknown intent ===
 
 // 2.1.3 — empty actions reject through the same "invalid response" path (§4.5).
 test('Empty actions array should show no-action message and leave grid unchanged', async (t) => {
@@ -95,9 +95,6 @@ test('Empty actions array should show no-action message and leave grid unchanged
 ));
 
 // === §2.3 Unknown field ===
-
-fixture`AI Assistant - Unknown Field`
-  .page(AI_INTEGRATION_PAGE);
 
 // 2.3.2 — schema-valid action, executor fails at runtime → per-action error entry.
 test('Sorting by non-existent dataField should show failure message and leave grid unchanged', async (t) => {
@@ -114,9 +111,6 @@ test('Sorting by non-existent dataField should show failure message and leave gr
 ));
 
 // === §2.4 Request impossible in current state ===
-
-fixture`AI Assistant - Impossible State`
-  .page(AI_INTEGRATION_PAGE);
 
 // 2.4.1
 test('Page index out of range should show failure status', async (t) => {
@@ -162,9 +156,6 @@ test('Selecting non-existent keys should succeed and select no rows', async (t) 
 
 // === §2.6 Excessively long prompt / provider error ===
 
-fixture`AI Assistant - Provider Error`
-  .page(AI_INTEGRATION_PAGE);
-
 // 2.6.2
 test('sendRequest rejection should show error message and leave grid unchanged', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
@@ -176,9 +167,6 @@ test('sendRequest rejection should show error message and leave grid unchanged',
 ));
 
 // === §4.1 AI integration failures → "unexpected error" / "invalid response" ===
-
-fixture`AI Assistant - Integration Failure`
-  .page(AI_INTEGRATION_PAGE);
 
 // 4.1.1
 
@@ -219,9 +207,6 @@ test('Empty string response should show invalid-response error', async (t) => {
 ));
 
 // === §4.2 Response format failure → "invalid response" ===
-
-fixture`AI Assistant - Response Format`
-  .page(AI_INTEGRATION_PAGE);
 
 // 4.2.1
 test('Response missing actions should show invalid-response error', async (t) => {
@@ -274,9 +259,6 @@ test('Null response should show invalid-response error', async (t) => {
 ));
 
 // === §4.3 Validation failure (GridCommands.validate) → "invalid response" ===
-
-fixture`AI Assistant - Validation`
-  .page(AI_INTEGRATION_PAGE);
 
 // 4.3.1
 test('Unknown command name should show invalid-response error', async (t) => {
@@ -386,9 +368,6 @@ test('No-arg command with non-empty args should show invalid-response error', as
 ));
 
 // === §4.4 Execution failure → per-command failure message ===
-
-fixture`AI Assistant - Execution Failure`
-  .page(AI_INTEGRATION_PAGE);
 
 // 4.4.4
 test('Partial failure should report each action status and apply successes', async (t) => {
