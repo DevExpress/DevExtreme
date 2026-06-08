@@ -120,7 +120,7 @@
         "dxDataGrid-aiAssistantUnexpectedErrorMessage": "Ett oväntat fel inträffade. Försök igen.",
         "dxDataGrid-aiAssistantInvalidResponseMessage": "Ogiltigt svar från AI-tjänsten. Försök igen.",
         "dxDataGrid-aiAssistantClearButtonText": "Rensa",
-        "dxDataGrid-aiAssistantRegenerateButtonText": "Regenerera",
+        "dxDataGrid-aiAssistantRegenerateButtonText": "Generera igen",
         "dxDataGrid-aiAssistantAbortConfirmText": "Om du stänger AI-assistentens chatt avbryts pågående begäranden. Vill du stänga chatten?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chatten är tom",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI-assistenten är redo att svara på dina frågor.",
