@@ -9,10 +9,10 @@ import {
   twoRows,
 } from './testHelpers';
 
-// === §1.5 Chat history accumulation ===
-
-fixture`AI Assistant - Chat History`
+fixture`AI Assistant - Chat Experience`
   .page(AI_INTEGRATION_PAGE);
+
+// === §1.5 Chat history accumulation ===
 
 // 1.5.1
 test('Chat history should accumulate across multiple prompts', async (t) => {
@@ -89,9 +89,6 @@ test('Request payload should contain only the latest message', async (t) => {
 ]));
 
 // === §1.6 Suggestions ===
-
-fixture`AI Assistant - Suggestions`
-  .page(AI_INTEGRATION_PAGE);
 
 const suggestionItems = { items: [{ text: 'Sort by name' }, { text: 'Clear filter' }] };
 
@@ -198,9 +195,6 @@ test('Suggestion click should send message and execute command', async (t) => {
 }));
 
 // === §1.8 customizeResponseText / customizeResponseTitle — set at init ===
-
-fixture`AI Assistant - CustomizeResponse`
-  .page(AI_INTEGRATION_PAGE);
 
 // 1.8.1
 test('customizeResponseText at init should override success and failure messages', async (t) => {
@@ -348,9 +342,6 @@ test('customizeResponseTitle at init should override message header', async (t) 
 
 // === §1.9 customizeResponseText / customizeResponseTitle — changed at runtime ===
 
-fixture`AI Assistant - CustomizeResponse Runtime`
-  .page(AI_INTEGRATION_PAGE);
-
 // 1.9.1
 test('customizeResponseText changed at runtime should apply to subsequent messages only', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -430,9 +421,6 @@ test('customizeResponseTitle changed at runtime should apply to subsequent messa
 }));
 
 // === §3.12 Re-open popup — chat history preserved ===
-
-fixture`AI Assistant - History Preservation`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.12.1
 test('Chat history should be preserved after close and re-open', async (t) => {
