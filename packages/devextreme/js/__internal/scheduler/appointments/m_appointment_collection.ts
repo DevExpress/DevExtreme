@@ -27,7 +27,6 @@ import {
   APPOINTMENT_ITEM_CLASS,
 } from '../classes';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
-import timeZoneUtils from '../m_utils_time_zone';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -38,6 +37,7 @@ import {
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import timeZoneUtils from '../utils_time_zone';
 import type {
   AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,

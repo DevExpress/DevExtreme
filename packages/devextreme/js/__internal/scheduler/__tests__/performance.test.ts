@@ -2,7 +2,7 @@ import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
-import timezoneUtils from '../m_utils_time_zone';
+import timezoneUtils from '../utils_time_zone';
 import { createScheduler } from './__mock__/create_scheduler';
 
 const startDate = new Date(2025, 0, 6);

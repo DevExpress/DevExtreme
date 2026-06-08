@@ -18,9 +18,9 @@ import {
   GROUP_ROW_CLASS,
 } from '../classes';
 import tableCreatorModule, { type GroupRows } from '../m_table_creator';
-import timezoneUtils from '../m_utils_time_zone';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import timezoneUtils from '../utils_time_zone';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 import SchedulerWorkSpace from './work_space_indicator';
 

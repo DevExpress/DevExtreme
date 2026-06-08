@@ -9,7 +9,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
-import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
+import timeZoneUtils from '__internal/scheduler/utils_time_zone';
 import { CustomStore } from 'common/data/custom_store';
 import { noop } from 'core/utils/common';
 import dragEvents from 'common/core/events/drag';

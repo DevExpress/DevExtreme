@@ -1,4 +1,4 @@
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../utils_time_zone';
 import type { ListEntity } from '../../view_model/types';
 import { setOptionHour } from './base';
 
@@ -17,7 +17,7 @@ export const calculateRows = (
   groupCount: number,
 ): number[][] => {
   const dayMs = getDayStart(
-    timeZoneUtils.createUTCDateWithLocalOffset(currentDate),
+    timeZoneUtils.createUTCDateWithLocalOffset(currentDate) as Date,
   );
   const intervalsStartMap = new Map<number, number>();
   const result = Array.from(
