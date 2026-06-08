@@ -1,7 +1,7 @@
 {
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "nxCloudAccessToken": "ZDFmMzkyZTYtZmU5MC00MDMyLWI3NDktYjhhYWUxZWM4YTg3fHJlYWQ=",
+  "neverConnectToCloud": true,
   "namedInputs": {
     "metadataToolsCommonInputs": [
       "{projectRoot}/**/*.ts",
@@ -38,5 +38,8 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "tui": {
+    "enabled": false
+  }
 }
