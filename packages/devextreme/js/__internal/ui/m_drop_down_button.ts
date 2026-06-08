@@ -235,8 +235,9 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
     if (isDefined(selectedItemKey)) {
       this._dataController.loadSingle(this._dataController.key() as string, selectedItemKey)
-        .then((item) => { d.resolve(item); })
-        .catch(() => {
+        // @ts-expect-error DataController loadSingle method typing needs to be fixed
+        .done((item) => { d.resolve(item); })
+        .fail(() => {
           d.reject(null);
         });
     } else {
@@ -245,7 +246,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
     this._loadSingleDeferred = d;
 
-    return d;
+    // @ts-expect-error ts-expect-error
+    return d.promise();
   }
 
   _createActionClickAction(): void {

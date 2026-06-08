@@ -156,7 +156,8 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
   _loadItem(value: unknown, cache?: ItemCache): DeferredObj<unknown> {
     const selectedItem = this._getItemFromPlain(value, cache);
 
-    return Deferred().resolve(selectedItem as unknown);
+    // @ts-expect-error DefferedObj typings and refactor
+    return Deferred().resolve(selectedItem as unknown).promise();
   }
 
   _dataSourceOptions(): DataSourceOptions {
