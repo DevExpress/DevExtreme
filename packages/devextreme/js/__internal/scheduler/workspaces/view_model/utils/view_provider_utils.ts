@@ -4,7 +4,7 @@ import { ViewDataGenerator } from '../m_view_data_generator';
 import { ViewDataGeneratorDay } from '../m_view_data_generator_day';
 import { ViewDataGeneratorMonth } from '../m_view_data_generator_month';
 import { ViewDataGeneratorTimelineMonth } from '../m_view_data_generator_timeline_month';
-import { ViewDataGeneratorWeek } from '../m_view_data_generator_week';
+import { ViewDataGeneratorWeek } from '../view_data_generator_week';
 
 type ViewDataGeneratorConstructor = new (viewType: ViewType) => ViewDataGenerator;
 
