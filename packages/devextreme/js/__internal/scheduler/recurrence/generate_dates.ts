@@ -1,7 +1,7 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { RRule, RRuleSet } from 'rrule';
 
-import timeZoneUtils from '../m_utils_time_zone';
+import timeZoneUtils from '../utils_time_zone';
 import { getDateByAsciiString, parseRecurrenceRule } from './base';
 import type { ProcessorOptions, RRuleParams } from './types';
 import { validateRRuleObject } from './validate_rule';

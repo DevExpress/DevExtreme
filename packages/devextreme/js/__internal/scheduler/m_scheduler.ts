@@ -51,8 +51,6 @@ import { hide as hideLoading, show as showLoading } from './loading';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
-import { utils } from './m_utils';
-import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
 import { combineRemoteFilter } from './r1/filterting/remote';
 import { createTimeZoneCalculator } from './r1/timezone_calculator/index';
 import {
@@ -73,6 +71,7 @@ import type {
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
   ViewType,
 } from './types';
+import { utils } from './utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
@@ -83,6 +82,7 @@ import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView, SafeSchedulerOptions } from './utils/options/types';
 import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
+import timeZoneUtils, { type TimezoneLabel } from './utils_time_zone';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';

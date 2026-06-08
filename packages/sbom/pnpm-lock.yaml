@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.11.0
-        version: 0.11.0
+        specifier: 0.11.1
+        version: 0.11.1
 
 packages:
 
@@ -51,11 +51,6 @@ packages:
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/parser@7.29.2':
-    resolution: {integrity: sha512-4GgRzy/+fsBa72/RZVJmGKPmZu9Byn8o4MoLpmNe1m8ZfYnz5emHLQz3U4gLud6Zwl0RZIcgiLD7Uq7ySFuDLA==}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
-
   '@babel/parser@7.29.3':
     resolution: {integrity: sha512-b3ctpQwp+PROvU/cttc4OYl4MzfJUWy6FZg+PMXfzmt/+39iHVF0sDfqay8TQM3JA2EUOyKcFZt75jWriQijsA==}
     engines: {node: '>=6.0.0'}
@@ -80,71 +75,71 @@ packages:
     resolution: {integrity: sha512-Zk4GIHsWHvs6eD+7w3v+ctA0WdukitaQjrkdM7CePkDE7J7ib8GPE20Bre63iK1Knmr3vFLIYRdXulvC2qHZzQ==}
     engines: {node: '>=20'}
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.2.3':
-    resolution: {integrity: sha512-wp1lfNBxkxR/Yy0MQbneE97FfuG2eqnPypX0Y/WyTarXZrJpr3HbdHUVEhuAPz7b598i54eVifuWiVE4MAQ97g==}
+  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.3.0':
+    resolution: {integrity: sha512-4OqBlnOUgQ9zRxHC6RXEU1lvYBtTeykxh6Bc6Ipl0GvXEist03Q1VZSndht1qoOCalsoEC68RFnwBRZqR286LA==}
     cpu: [x64]
     os: [darwin]
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@2.2.3':
-    resolution: {integrity: sha512-TOvA/zHFAV3lat3UmWvyrr4ph/TgnEzeK3qQhdmUsMyZBV4mPQFgJuDwaHgBQwvZx76sIStMpVd/+DfNauw50A==}
+  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@2.3.0':
+    resolution: {integrity: sha512-qR9zmK+YljLPh2IKYuhCuPFmqgEI9qWZdZnbtE0IqmaWJFeDBHpspnE26e1jrju3GaIqOhFKNxa8abAkmhxATg==}
     cpu: [arm64]
     os: [darwin]
 
-  '@cdxgen/cdxgen-plugins-bin-linux-amd64@2.2.3':
-    resolution: {integrity: sha512-53a2XMwRAKizzifgvoJBg0wajVmAhJ9YL01jBH8ytQzRXifkWGqswJnO5rWjwHvXwLZYwvkZgLyHij7VgKgwQg==}
+  '@cdxgen/cdxgen-plugins-bin-linux-amd64@2.3.0':
+    resolution: {integrity: sha512-IvyH8KGnG7Gg0Vm9s+4SCZZdUuWFlrO6qwHEtUDoRSioq0mkO7bBX/xBZbGAJ4V7ZC3IUIqFCxtyktZiQF0Htw==}
     cpu: [x64]
     os: [linux]
     libc: glibc
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm64@2.2.3':
-    resolution: {integrity: sha512-ApUh9azkKlBm1rXkH01Oby/f/3SfHGHFziywFkBifg/BGy/Tw7it/RTRSGlf2MHRWefGttSXB41HVJBpjPrLjw==}
+  '@cdxgen/cdxgen-plugins-bin-linux-arm64@2.3.0':
+    resolution: {integrity: sha512-Ey2CrO/RqgfTeg4SIsw+GHU94NKM3LY4OTXz76eRIhEO/Xd6yfZgmDnRfyNFuFoSn0okcyzR7fTOeBuLSMgxuA==}
     cpu: [arm64]
     os: [linux]
     libc: glibc
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm@2.2.3':
-    resolution: {integrity: sha512-2EZo7LX8KGEz/JeW59N36UGJK6lFj7knukYlR7/fLvwQd0ZI2k77Ke4hrU4v6bN9L1rpoXpChvroW3/K3FFhZA==}
+  '@cdxgen/cdxgen-plugins-bin-linux-arm@2.3.0':
+    resolution: {integrity: sha512-NtY4lIN4OUJohJEKZ+646c1tgma4WRa31wWbd/7DI8aJaWcfnBXYjuMrPBvDBPW/G6AYNJs5b5Ze6+6IigmBlQ==}
     cpu: [arm]
     os: [linux]
     libc: glibc
 
-  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@2.2.3':
-    resolution: {integrity: sha512-EmI2jx5ukVBsPD5FE7BzFR9X5+6w9BHlNkpU6pugFXuGHFa+Ea2DwdnGtGkZvXSQC3ZtNPPwQZ/NuTw1hUJh1w==}
+  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@2.3.0':
+    resolution: {integrity: sha512-F8LnXkhvXQDrg6wfwL3JUbSnSn/MadO95z5CMXKA8BmLYNhAbYa6ybACgKpB/QV4wPObU5rsBDbHsKMYcDf81A==}
     cpu: [ppc64]
     os: [linux]
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@2.2.3':
-    resolution: {integrity: sha512-825RAkv9azRPJcVB1RacVnaSHH8ld0Ox1p9mW+6oldJkn7XL/JZV84fvMcw7WlobVu9JoXTkC3k1y+Bu/ND1uA==}
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@2.3.0':
+    resolution: {integrity: sha512-9iIE0tSB6drYThLlYfUyS9Z2TbYdMFTHKi2usoAAgRjK/tr43mEcMxcKtqCMWRy5Jpe4dVVMcT6e3a3ySa9aXg==}
     cpu: [x64]
     os: [linux]
     libc: musl
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@2.2.3':
-    resolution: {integrity: sha512-Cmxthq8dijknN65PJ1R9eQLbw2JcruMkZ9oFg7p95jRqMhy/ElDLmw7Cn2JT5PbngX4eRMe79pUxwaDygDzG+w==}
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@2.3.0':
+    resolution: {integrity: sha512-xHvoyd4s/W2MGVp+dRbD3bdo5faYS7AfOPtd6hgo2hy5i5l2Wv812uYEtqPrPlL+7r1OD0dND3MGpC83+I6a4Q==}
     cpu: [arm64]
     os: [linux]
     libc: musl
 
-  '@cdxgen/cdxgen-plugins-bin-windows-amd64@2.2.3':
-    resolution: {integrity: sha512-JhJnWTZMasOAnd7KODvXtT7G1d2FCBhncVujfbgACo3UPp72iWA92Jma72INyK7Z99LCDxXkhkcJIfrUC3v/vQ==}
+  '@cdxgen/cdxgen-plugins-bin-windows-amd64@2.3.0':
+    resolution: {integrity: sha512-rCzHWF+oJhEf9Tl9tWOIMYnhvlkbAhKVF+rTdoPBZWQ0iFk/LmzP6fotjWB+d23AKofC1DjxWOVlE/HyHBTmTQ==}
     cpu: [x64]
     os: [win32]
 
-  '@cdxgen/cdxgen-plugins-bin-windows-arm64@2.2.3':
-    resolution: {integrity: sha512-xxRsTkRK13gcTl5Fs58x85cMqQjILLbwtGhKztX1j5DIDEH4gFh86zNCjmflf2JDsc7ul4a0kCWF3S+EbpymLQ==}
+  '@cdxgen/cdxgen-plugins-bin-windows-arm64@2.3.0':
+    resolution: {integrity: sha512-LhPtrKIObVe99fL9mmsWa1yVPD6zhp1F77i1Cb0j2Dd1MCNUoQXlbWxs3cQC57c5tkDs1UczV6HPPVfmnqt6SA==}
     cpu: [arm64]
     os: [win32]
 
-  '@cdxgen/cdxgen-plugins-bin@2.2.3':
-    resolution: {integrity: sha512-82d8bt2sAYR6krvMRs77A4Qf48ObDr6NyWcQKI1gBCsr9Cxp2DJlMLSex/0SLEO8BWcCkaMds5W9gGHeH0rxMA==}
+  '@cdxgen/cdxgen-plugins-bin@2.3.0':
+    resolution: {integrity: sha512-2E9fs28nCVoNCsGG/P9DRKfowTxWaFOdClBAj7+9r3Y2GEl9P3fy/QaKDznw3gCsbD2t2rHhwFJx8B9mWNGdZA==}
 
-  '@cyclonedx/cdxgen@12.5.0':
-    resolution: {integrity: sha512-AGQ/QeIjut5XYARu5bS4FmmBf6ROPJr68dcbQ3CkrunmX6sR9d6ar3SjzQdNmHS/2iriRwBVtAzjdQxUMyLEcw==}
+  '@cyclonedx/cdxgen@12.5.1':
+    resolution: {integrity: sha512-Sh1XuKenE5OxoMbttM3Q2UNRsw16L4KE7Rj9ayRGFjfdrlaHu5arnB03qU2nUQ3vXyE3E5e/FDX5kQNhUmoLBQ==}
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.11.0':
-    resolution: {integrity: sha512-e9Ew5Pdxbwruhc8ELDJ5f2GtMA0ep2RHP0vRXligjADBJ/eQ4OEefmHp4q5PxaxNg9jHbmRozdPGgMd5V3r+Fw==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.0/89c6b464ca38c1815fb246781a92d7fb5f5e6608}
+  '@devexpress/sbom-toolkit@0.11.1':
+    resolution: {integrity: sha512-OfTykaea0qop433TxYZB8oh3eW1BBjk9nyyKfMMikntznFsLNQrEIN885+OzTBDPqqWiHCm37N0vsgO+MDZIzA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.1/2196468147511fa831d1252bbf4f1cc0c96d1461}
     hasBin: true
 
   '@gar/promise-retry@1.0.3':
@@ -724,11 +719,6 @@ packages:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
     engines: {node: '>=11.0.0'}
 
-  semver@7.7.4:
-    resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   semver@7.8.1:
     resolution: {integrity: sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==}
     engines: {node: '>=10'}
@@ -921,7 +911,7 @@ snapshots:
 
   '@babel/generator@7.29.1':
     dependencies:
-      '@babel/parser': 7.29.2
+      '@babel/parser': 7.29.3
       '@babel/types': 7.29.0
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
@@ -933,10 +923,6 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
-  '@babel/parser@7.29.2':
-    dependencies:
-      '@babel/types': 7.29.0
-
   '@babel/parser@7.29.3':
     dependencies:
       '@babel/types': 7.29.0
@@ -944,7 +930,7 @@ snapshots:
   '@babel/template@7.28.6':
     dependencies:
       '@babel/code-frame': 7.29.0
-      '@babel/parser': 7.29.2
+      '@babel/parser': 7.29.3
       '@babel/types': 7.29.0
 
   '@babel/traverse@7.29.0':
@@ -952,7 +938,7 @@ snapshots:
       '@babel/code-frame': 7.29.0
       '@babel/generator': 7.29.1
       '@babel/helper-globals': 7.28.0
-      '@babel/parser': 7.29.2
+      '@babel/parser': 7.29.3
       '@babel/template': 7.28.6
       '@babel/types': 7.29.0
       debug: 4.4.3
@@ -970,40 +956,40 @@ snapshots:
   '@cdxgen/cdx-hbom@0.5.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-amd64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-linux-amd64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-linux-arm64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-linux-arm@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-windows-amd64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-windows-amd64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-windows-arm64@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin-windows-arm64@2.3.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin@2.2.3':
+  '@cdxgen/cdxgen-plugins-bin@2.3.0':
     optional: true
 
-  '@cyclonedx/cdxgen@12.5.0':
+  '@cyclonedx/cdxgen@12.5.1':
     dependencies:
       '@babel/parser': 7.29.3
       '@babel/traverse': 7.29.0
@@ -1046,17 +1032,17 @@ snapshots:
       '@appthreat/cdx-proto': 2.0.1
       '@bufbuild/protobuf': 2.12.0
       '@cdxgen/cdx-hbom': 0.5.0
-      '@cdxgen/cdxgen-plugins-bin': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-darwin-amd64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-darwin-arm64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-linux-amd64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-linux-arm': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-linux-arm64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-linux-ppc64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-windows-amd64': 2.2.3
-      '@cdxgen/cdxgen-plugins-bin-windows-arm64': 2.2.3
+      '@cdxgen/cdxgen-plugins-bin': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-darwin-amd64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-darwin-arm64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-linux-amd64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-linux-arm': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-linux-arm64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-linux-ppc64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-windows-amd64': 2.3.0
+      '@cdxgen/cdxgen-plugins-bin-windows-arm64': 2.3.0
       body-parser: 2.2.2
       compression: 1.8.1
       connect: 3.7.0
@@ -1064,9 +1050,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@devexpress/sbom-toolkit@0.11.0':
+  '@devexpress/sbom-toolkit@0.11.1':
     dependencies:
-      '@cyclonedx/cdxgen': 12.5.0
+      '@cyclonedx/cdxgen': 12.5.1
       spdx-license-ids: 3.0.23
     transitivePeerDependencies:
       - supports-color
@@ -1105,7 +1091,7 @@ snapshots:
 
   '@npmcli/fs@5.0.0':
     dependencies:
-      semver: 7.7.4
+      semver: 7.8.1
 
   '@npmcli/git@7.0.2':
     dependencies:
@@ -1115,7 +1101,7 @@ snapshots:
       lru-cache: 11.3.5
       npm-pick-manifest: 11.0.3
       proc-log: 6.1.0
-      semver: 7.7.4
+      semver: 7.8.1
       which: 6.0.1
 
   '@npmcli/map-workspaces@5.0.3':
@@ -1134,7 +1120,7 @@ snapshots:
       hosted-git-info: 9.0.2
       json-parse-even-better-errors: 5.0.0
       proc-log: 6.1.0
-      semver: 7.7.4
+      semver: 7.8.1
       spdx-expression-parse: 4.0.0
 
   '@npmcli/promise-spawn@9.0.1':
@@ -1578,7 +1564,7 @@ snapshots:
 
   npm-install-checks@8.0.0:
     dependencies:
-      semver: 7.7.4
+      semver: 7.8.1
 
   npm-normalize-package-bin@5.0.0: {}
 
@@ -1586,7 +1572,7 @@ snapshots:
     dependencies:
       hosted-git-info: 9.0.2
       proc-log: 6.1.0
-      semver: 7.7.4
+      semver: 7.8.1
       validate-npm-package-name: 7.0.2
 
   npm-pick-manifest@11.0.3:
@@ -1594,7 +1580,7 @@ snapshots:
       npm-install-checks: 8.0.0
       npm-normalize-package-bin: 5.0.0
       npm-package-arg: 13.0.2
-      semver: 7.7.4
+      semver: 7.8.1
 
   nth-check@2.1.1:
     dependencies:
@@ -1694,8 +1680,6 @@ snapshots:
   safer-buffer@2.1.2: {}
 
   sax@1.6.0: {}
-
-  semver@7.7.4: {}
 
   semver@7.8.1: {}
 
