@@ -1669,7 +1669,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   // NOTE: refactor leftIndex calculation
-  getCellIndexByCoordinates(coordinates, allDay) {
+  getCellIndexByCoordinates(coordinates, allDay?) {
     const { horizontalScrollingState, verticalScrollingState } = this.virtualScrollingDispatcher;
 
     const cellCount = horizontalScrollingState?.itemCount ?? this.getTotalCellCount(this.getGroupCount());
@@ -1726,10 +1726,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.viewDataProvider.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
   }
 
-  getGroupBounds(coordinates, allDay?: boolean) {
+  getGroupBounds(coordinates) {
     const groupBounds = this.groupedStrategy instanceof VerticalGroupedStrategy
       ? this.getGroupBoundsVertical(coordinates.groupIndex)
-      : this.getGroupBoundsHorizontal(coordinates, allDay);
+      : this.getGroupBoundsHorizontal(coordinates);
 
     return this.isRTL()
       ? this.getGroupBoundsRtlCorrection(groupBounds)
@@ -1741,14 +1741,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.groupedStrategy.getGroupBoundsOffset(groupIndex, $firstAndLastCells);
   }
 
-  getGroupBoundsHorizontal(coordinates, allDay?: boolean) {
+  getGroupBoundsHorizontal(coordinates) {
     const cellCount = this.getCellCount();
-    const $cells = this.getCells(allDay);
+    const $cells = this.getCells();
     const cellWidth = this.getCellWidth();
 
     const { groupedDataMap } = this.viewDataProvider;
     return this.groupedStrategy
-      .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap, allDay);
+      .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
   }
 
   getGroupBoundsRtlCorrection(groupBounds) {

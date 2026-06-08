@@ -129,13 +129,12 @@ class HorizontalGroupedStrategy {
     cellWidth: number,
     coordinates: CellPositionData & { groupIndex?: number },
     groupedDataMap: { dateTableGroupedMap: CellInfo[][][] },
-    allDay?: boolean,
   ): GroupBoundsOffset {
     if (this.workspace.isGroupedByDate()) {
       return this.getGroupedByDateBoundOffset($cells, cellWidth);
     }
 
-    const cellIndex = this.workspace.getCellIndexByCoordinates(coordinates, allDay);
+    const cellIndex = this.workspace.getCellIndexByCoordinates(coordinates);
     const groupIndex = coordinates.groupIndex ?? Math.floor(cellIndex / cellCount);
 
     const currentCellGroup = groupedDataMap.dateTableGroupedMap[groupIndex];
