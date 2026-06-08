@@ -16,9 +16,9 @@ const toMs = dateUtils.dateToMilliseconds;
 const DAYS_IN_WEEK = 7;
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
-  private minVisibleDate: Date | undefined;
+  private minVisibleDate!: Date;
 
-  private maxVisibleDate: Date | undefined;
+  private maxVisibleDate!: Date;
 
   getCellData(
     rowIndex: number,
