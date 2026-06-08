@@ -191,11 +191,17 @@ jobs:
           UNSCOPED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed -r 's#^@[^/]+/##');
           SBOM_FILE="sbom-packages/$UNSCOPED_PACKAGE_NAME.cdx.json";
 
-          # if [ ! -f "$SBOM_FILE" ]; then
-          #   echo "No SBOM found for $UNSCOPED_PACKAGE_NAME"
-          #   echo "hasSbom=false" >> "$GITHUB_OUTPUT";
-          #   exit 0;
-          # fi
+          if [[ ",$SBOM_PACKAGE_NAMES," != *",$UNSCOPED_PACKAGE_NAME,"* ]]; then
+            echo "SBOM publishing is not configured for $UNSCOPED_PACKAGE_NAME"
+            echo "hasSbom=false" >> "$GITHUB_OUTPUT";
+            exit 0;
+          fi
+
+          if [ ! -f "$SBOM_FILE" ]; then
+            echo "No SBOM found for $UNSCOPED_PACKAGE_NAME"
+            echo "hasSbom=false" >> "$GITHUB_OUTPUT";
+            exit 0;
+          fi
 
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
           SBOM_PACKAGE_NAME="$UNSCOPED_PACKAGE_NAME-sbom";
@@ -212,6 +218,7 @@ jobs:
           cd ../..;
 
           SCOPED_SBOM_PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz "$SBOM_TGZ_DIR/$SBOM_PACKAGE_NAME-$PACKAGE_VERSION.tgz" --scope "$SCOPE");
+          echo "hasSbom=true" >> "$GITHUB_OUTPUT";
           echo "packageDir=$SCOPED_SBOM_PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd "$SCOPED_SBOM_PACKAGE_DIR";
           pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
@@ -235,6 +242,7 @@ jobs:
 
         # --ignore-scripts - like above, should be removed, check if could be removed everywhere
       - name: Publish SBOM to npm.pkg.github.com
+        if: ${{ steps.scopedSbomPackage.outputs.hasSbom == 'true' }}
         working-directory: ${{ steps.scopedSbomPackage.outputs.packageDir }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
