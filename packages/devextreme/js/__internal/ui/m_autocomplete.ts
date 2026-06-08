@@ -88,7 +88,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
   _getAriaAutocomplete(): string {
     const { disabled, readOnly } = this.option();
 
-    // ?? would short-circuit on `false`, missing the other operand
+    // `||` is required here — `??` would ignore `disabled` when `readOnly` is `false`
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const isInputEditable = !(readOnly || disabled);
 
