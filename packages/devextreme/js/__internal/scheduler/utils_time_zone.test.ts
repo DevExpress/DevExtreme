@@ -4,8 +4,8 @@ import {
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import { globalCache } from './global_cache';
-import timeZoneUtils from './m_utils_time_zone';
 import timeZoneList from './timezones/timezone_list';
+import timeZoneUtils from './utils_time_zone';
 
 const defaultTimeZones = timeZoneList.value;
 

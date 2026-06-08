@@ -6,7 +6,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import timeZoneUtils from './m_utils_time_zone';
+import timeZoneUtils from './utils_time_zone';
 
 describe('isLocalTimeMidnightDST', () => {
   it('should return false for summer DST', () => {

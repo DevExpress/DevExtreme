@@ -1,7 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import timeZoneUtils from '../../m_utils_time_zone';
 import {
   calculateIsGroupedAllDayPanel,
   getGroupPanelData,
@@ -18,6 +17,7 @@ import type {
   ViewDataMap, ViewOptions,
   ViewType,
 } from '../../types';
+import timeZoneUtils from '../../utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
