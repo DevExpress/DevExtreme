@@ -163,6 +163,17 @@ function getActiveController(): TestControllerAdapter {
   return activeController;
 }
 
+// TestCafe exposes a singleton test controller `t` that page-models import at
+// module scope. There is no such singleton in Playwright (the controller is
+// created per test), so proxy property access to whichever controller is active.
+const testControllerProxy = new Proxy({} as TestControllerAdapter, {
+  get(_target, prop) {
+    const controller = getActiveController() as unknown as Record<string | symbol, unknown>;
+    const value = controller[prop];
+    return typeof value === 'function' ? value.bind(controller) : value;
+  },
+});
+
 function getTheme(): string {
   return process.env.theme || process.env.THEME || 'fluent.blue.light';
 }
@@ -607,6 +618,41 @@ class SelectorSnapshot implements PromiseLike<unknown> {
   }
 }
 
+// TestCafe's `eql` uses chai-style deep equality, which treats `-0` and `+0` as
+// equal. Playwright's `toEqual` distinguishes them via `Object.is`, so a value
+// like a `getBoundingClientRect` coordinate that comes back as `-0` would fail
+// against an etalon of `0`. Normalize `-0` to `0` (recursively, only inside
+// plain objects/arrays — leaving Date/RegExp/etc. intact) to match TestCafe.
+function normalizeEqlValue(value: unknown, seen = new WeakSet()): unknown {
+  if (Object.is(value, -0)) {
+    return 0;
+  }
+
+  if (value === null || typeof value !== 'object') {
+    return value;
+  }
+
+  if (seen.has(value)) {
+    return value;
+  }
+  seen.add(value);
+
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeEqlValue(item, seen));
+  }
+
+  const proto = Object.getPrototypeOf(value);
+  if (proto !== Object.prototype && proto !== null) {
+    return value;
+  }
+
+  const result: Record<string, unknown> = {};
+  for (const key of Object.keys(value as Record<string, unknown>)) {
+    result[key] = normalizeEqlValue((value as Record<string, unknown>)[key], seen);
+  }
+  return result;
+}
+
 class AssertionAdapter {
   constructor(
     private readonly controller: TestControllerAdapter,
@@ -627,13 +673,17 @@ class AssertionAdapter {
 
   eql(expected: unknown, message?: string): TestControllerAdapter {
     return this.controller.enqueue(async () => {
-      expect(await this.controller.resolveActual(this.actual), message).toEqual(await this.controller.resolveActual(expected));
+      const actual = normalizeEqlValue(await this.controller.resolveActual(this.actual));
+      const expectedValue = normalizeEqlValue(await this.controller.resolveActual(expected));
+      expect(actual, message).toEqual(expectedValue);
     });
   }
 
   notEql(expected: unknown, message?: string): TestControllerAdapter {
     return this.controller.enqueue(async () => {
-      expect(await this.controller.resolveActual(this.actual), message).not.toEqual(await this.controller.resolveActual(expected));
+      const actual = normalizeEqlValue(await this.controller.resolveActual(this.actual));
+      const expectedValue = normalizeEqlValue(await this.controller.resolveActual(expected));
+      expect(actual, message).not.toEqual(expectedValue);
     });
   }
 
@@ -1030,7 +1080,32 @@ class TestControllerAdapter implements PromiseLike<undefined> {
     await this.flush();
     await waitForStableRendering(this.page);
     const target = await this.resolveForAction(selector);
-    const box = await target.boundingBox();
+    // Match TestCafe's `t.takeElementScreenshot` crop logic: expand the bounding
+    // box to include scrollable overflow (scrollWidth/scrollHeight). Without this,
+    // an element clipped by a parent (e.g. a `#container` div narrower than the
+    // widget it hosts because of a viewport scrollbar) would screenshot at the
+    // clipped width and not match etalons captured under TestCafe.
+    const box = await target.evaluate((el: Element) => {
+      const rect = el.getBoundingClientRect();
+      if (!rect.width && !rect.height) {
+        return null;
+      }
+      const styles = window.getComputedStyle(el);
+      const borderLeft = parseFloat(styles.borderLeftWidth) || 0;
+      const borderRight = parseFloat(styles.borderRightWidth) || 0;
+      const borderTop = parseFloat(styles.borderTopWidth) || 0;
+      const borderBottom = parseFloat(styles.borderBottomWidth) || 0;
+      const scrollRight = rect.left + el.scrollWidth + borderLeft + borderRight;
+      const scrollBottom = rect.top + el.scrollHeight + borderTop + borderBottom;
+      const right = Math.max(rect.right, scrollRight);
+      const bottom = Math.max(rect.bottom, scrollBottom);
+      return {
+        x: rect.left,
+        y: rect.top,
+        width: right - rect.left,
+        height: bottom - rect.top,
+      };
+    });
 
     if (!box) {
       throw new Error('Unable to screenshot an invisible element');
@@ -1251,6 +1326,25 @@ function toPlaywrightKey(testCafeKey: string): string {
           return 'Tab';
         case 'enter':
           return 'Enter';
+        case 'space':
+          return 'Space';
+        case 'backspace':
+          return 'Backspace';
+        case 'delete':
+          return 'Delete';
+        case 'ins':
+        case 'insert':
+          return 'Insert';
+        case 'home':
+          return 'Home';
+        case 'end':
+          return 'End';
+        case 'pageup':
+          return 'PageUp';
+        case 'pagedown':
+          return 'PageDown';
+        case 'capslock':
+          return 'CapsLock';
         default:
           return part;
       }
@@ -1822,6 +1916,7 @@ export function installComponentTestAdapters(): void {
         RequestMock: () => new RequestMockAdapter(),
         Role: () => ({}),
         Selector: (selector: SelectorBase) => createSelector(selector),
+        t: testControllerProxy,
       };
     }
 

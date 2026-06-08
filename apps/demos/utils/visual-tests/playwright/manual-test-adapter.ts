@@ -454,7 +454,20 @@ class TestCafeControllerAdapter implements PromiseLike<undefined> {
   }
 
   eval<T>(callback: () => T | Promise<T>): Promise<T> {
-    return this.page.evaluate(callback);
+    return this.page.evaluate(callback).catch(async (err: Error) => {
+      // location.reload() and similar navigation-triggering evals destroy the
+      // execution context before Playwright can read a return value.
+      // Wait for the new page to load and return undefined, matching TestCafe
+      // behaviour where eval() implicitly waits for the resulting navigation.
+      if (
+        err.message?.includes('Execution context was destroyed')
+        || err.message?.includes('Most likely the page has been closed')
+      ) {
+        await this.page.waitForLoadState('domcontentloaded');
+        return undefined as T;
+      }
+      throw err;
+    });
   }
 
   async takeScreenshot(filePath: string): Promise<void> {
@@ -462,7 +475,6 @@ class TestCafeControllerAdapter implements PromiseLike<undefined> {
     await waitForStableRendering(this.page);
     await this.page.screenshot({
       path: filePath,
-      fullPage: true,
     });
   }
 
@@ -723,6 +735,22 @@ async function prepareManualTestPage(
   if (approach === FRAMEWORKS.angular) {
     await waitForAngularLoading(page);
   }
+
+  // Disable DevExtreme animations so screenshots are taken after the widget
+  // has fully settled, matching TestCafe's built-in stability detection. Wait
+  // for the framework bootstrap so that DevExpress global is available and the
+  // setting is applied before the first user-driven action runs.
+  await page.waitForFunction(
+    () => Boolean((window as unknown as { DevExpress?: unknown }).DevExpress),
+    undefined,
+    { timeout: 30000 },
+  ).catch(() => {});
+  await page.evaluate(() => {
+    const dx = (window as unknown as { DevExpress?: { fx?: { off?: boolean } } }).DevExpress;
+    if (dx?.fx) {
+      dx.fx.off = true;
+    }
+  });
 
   return pageUrl;
 }

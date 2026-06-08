@@ -37,12 +37,14 @@ function applyLegacyScreenshot(args: string[]): string[] {
     : arg));
 }
 
+const DEFAULT_WORKERS = 4;
+
 function getWorkers(): number {
   const rawValue = process.env.CONCURRENCY
     ?? process.env.PLAYWRIGHT_COMPONENT_CONCURRENCY
-    ?? 1;
+    ?? DEFAULT_WORKERS;
   const value = Number(rawValue);
-  return Number.isFinite(value) && value > 0 ? value : 1;
+  return Number.isFinite(value) && value > 0 ? value : DEFAULT_WORKERS;
 }
 
 function normalizeBrowserArgs(): string[] {
@@ -76,7 +78,7 @@ export default defineConfig({
     timeout: 5_000,
   },
   workers: getWorkers(),
-  retries: process.env.TCQUARANTINE ? 2 : 0,
+  retries: process.env.TCQUARANTINE ? 0 : 0, // 2 : 0,
   reporter: process.env.CI ? [['github'], ['list']] : [['list']],
   use: {
     browserName: 'chromium',
