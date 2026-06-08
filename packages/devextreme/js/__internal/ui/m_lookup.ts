@@ -767,6 +767,7 @@ class Lookup extends DropDownList<LookupProperties> {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _scrollToSelectedItemEnabled,
     } = this.option();
+
     const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
 
     const result: PopupProperties = {
@@ -783,7 +784,7 @@ class Lookup extends DropDownList<LookupProperties> {
       fullScreen: dropDownOptions.fullScreen,
       shading: dropDownOptions.shading,
       hideOnOutsideClick: dropDownOptions.hideOnOutsideClick,
-      tabFocusLoopEnabled: shouldLoopFocusInsidePopup,
+      _loopFocus: shouldLoopFocusInsidePopup,
     };
 
     delete result.animation;
