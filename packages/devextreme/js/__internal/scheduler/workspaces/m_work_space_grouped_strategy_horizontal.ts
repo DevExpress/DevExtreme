@@ -179,7 +179,7 @@ class HorizontalGroupedStrategy {
 
   private calculateOffset(groupIndex: number): number {
     // @ts-expect-error
-    const indicatorStartPosition = this.options.getIndicatorOffset(groupIndex) as number;
+    const indicatorStartPosition = this.options.getIndicatorOffset(groupIndex);
     // @ts-expect-error
     const offset = this.options.getCellCount() * this.options.getCellWidth() * groupIndex;
 
@@ -210,7 +210,7 @@ class HorizontalGroupedStrategy {
 
   getShaderHeight(): number {
     // @ts-expect-error
-    return this.options.getIndicationHeight() as number;
+    return this.options.getIndicationHeight();
   }
 
   getShaderMaxHeight(): number {
@@ -219,7 +219,7 @@ class HorizontalGroupedStrategy {
 
   getShaderWidth(): number {
     // @ts-expect-error
-    return this.options.getIndicationWidth() as number;
+    return this.options.getIndicationWidth();
   }
 
   getScrollableScrollTop(allDay: boolean): number {

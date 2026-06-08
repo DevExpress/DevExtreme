@@ -96,10 +96,10 @@ import {
   PositionHelper,
 } from './helpers/m_position_helper';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
+import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
+import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
-import HorizontalGroupedStrategy from './work_space_grouped_strategy_horizontal';
-import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
 
 interface RenderComponentOptions {
   header?: boolean;
@@ -1363,11 +1363,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.$headerPanel && getOuterHeight(this.$headerPanel, true);
   }
 
-  getTimePanelWidth(): number {
+  getTimePanelWidth() {
     return this.$timePanel && getBoundingRect(this.$timePanel.get(0)).width;
   }
 
-  getGroupTableWidth(): number {
+  getGroupTableWidth() {
     return this.$groupTable ? getOuterWidth(this.$groupTable) : 0;
   }
 
@@ -1441,7 +1441,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.getDateTables().find(`.${DATE_TABLE_DROPPABLE_CELL_CLASS}`);
   }
 
-  protected getWorkSpaceWidth(): number {
+  protected getWorkSpaceWidth() {
     return this.cache.memo('workspaceWidth', () => {
       if (this.needCreateCrossScrolling()) {
         return getBoundingRect(this.$dateTable.get(0)).width;
@@ -1676,7 +1676,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return getCellHeight(this.getDOMElementsMetaData());
   }
 
-  getAllDayHeight(): number {
+  getAllDayHeight() {
     return getAllDayHeight(
       this.option('showAllDayPanel'),
       this.isVerticalGroupedWorkSpace(),

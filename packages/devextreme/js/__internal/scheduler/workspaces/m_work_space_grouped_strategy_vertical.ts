@@ -161,7 +161,7 @@ class VerticalGroupedStrategy {
 
   getShaderHeight(): number {
     // @ts-expect-error
-    let height = this.options.getIndicationHeight() as number;
+    let height = this.options.getIndicationHeight();
 
     if (this.options.supportAllDayRow() && this.options.option('showAllDayPanel')) {
       height += this.options.getCellHeight();
@@ -183,7 +183,7 @@ class VerticalGroupedStrategy {
 
   getShaderWidth(): number {
     // @ts-expect-error
-    return this.options.getIndicationWidth() as number;
+    return this.options.getIndicationWidth();
   }
 
   getScrollableScrollTop(): number {
