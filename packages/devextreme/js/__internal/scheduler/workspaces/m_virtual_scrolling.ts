@@ -758,7 +758,7 @@ export class VirtualScrollingDispatcher {
     }
   }
 
-  updateDimensions(isForce: boolean): void {
+  updateDimensions(isForce = false): void {
     const cellHeight = this.getCellHeight();
     const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
     if ((needUpdateVertical || isForce) && this.verticalVirtualScrolling) {
