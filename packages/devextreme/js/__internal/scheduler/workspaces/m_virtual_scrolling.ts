@@ -813,7 +813,15 @@ export class VirtualScrollingRenderer {
 
   // TODO: make private once external usage in m_work_space.ts is removed
   _renderGrid(): void {
-    this.workspace.renderWorkSpace();
+    this.workspace.renderWorkSpace({
+      generateNewData: false,
+      renderComponents: {
+        header: true,
+        timePanel: true,
+        dateTable: true,
+        allDayPanel: true,
+      },
+    });
   }
 
   private renderAppointments(): void {
