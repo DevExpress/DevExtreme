@@ -16,8 +16,8 @@ import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
 } from '../classes';
-import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
+import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import timezoneUtils from '../utils_time_zone';
