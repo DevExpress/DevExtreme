@@ -203,9 +203,11 @@ abstract class VirtualScrollingBase {
   }
 
   private correctPosition(position: number): number {
-    return position >= 0
-      ? Math.min(position, this.maxScrollPosition)
-      : -1;
+    if (position < 0) {
+      return -1;
+    }
+
+    return Math.max(0, Math.min(position, this.maxScrollPosition));
   }
 
   updateState(rawPosition: number, isForce?: boolean): boolean {
