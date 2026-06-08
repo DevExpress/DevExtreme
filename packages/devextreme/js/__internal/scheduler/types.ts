@@ -82,10 +82,10 @@ export type CalculateCellIndex = (
 export type CalculateStartViewDate = (
   currentDate: Date,
   startDayHour: number,
-  startDate: Date,
+  startDate: Date | undefined,
   intervalCount: number,
-  firstDayOfWeekOption?: number,
-  skippedDays?: number[],
+  firstDayOfWeekOption: number | undefined,
+  skippedDays: number[],
 ) => Date;
 
 export interface ViewCellData {
@@ -163,7 +163,7 @@ export interface ViewDataProviderOptions {
   startDate?: Date;
   firstDayOfWeek: number;
   today: Date;
-
+  skippedDays: number[];
   isGenerateTimePanelData?: boolean;
   isGenerateWeekDaysHeaderData?: boolean;
 }

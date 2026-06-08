@@ -65,7 +65,7 @@ export class ViewDataGenerator {
     firstDayOfWeekOption: number | undefined,
     startViewDate: Date, // eslint-disable-line @typescript-eslint/no-unused-vars
   ): number {
-    return this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
+    return this.getFirstDayOfWeek(firstDayOfWeekOption ?? 0);
   }
 
   private getVisibleDayOffset(
@@ -846,7 +846,7 @@ export class ViewDataGenerator {
     return hoursInterval * cellCountInDay * toMs('hour');
   }
 
-  public getFirstDayOfWeek(firstDayOfWeekOption) {
+  public getFirstDayOfWeek(firstDayOfWeekOption: number): number {
     return firstDayOfWeekOption;
   }
 
