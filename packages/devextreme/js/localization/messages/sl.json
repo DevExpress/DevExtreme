@@ -107,10 +107,10 @@
         "dxNumberBox-noDataText": "Ni podatkov",
 
 
-        "dxDataGrid-aiAssistantTitle": "Asistent z umetno inteligenco",
+        "dxDataGrid-aiAssistantTitle": "Pomočnik UI",
         "dxDataGrid-aiAssistantProcessingMessageHeader": "Zahteva v teku",
         "dxDataGrid-aiAssistantProcessingMessage": "Obdelava...",
-        "dxDataGrid-aiAssistantErrorMessageHeader": "Obdelave zahteve ni bilo mogoče dokončati",
+        "dxDataGrid-aiAssistantErrorMessageHeader": "Obdelava zahteve ni uspela",
         "dxDataGrid-aiAssistantAbortMessage": "Zahteva ustavljena.",
         "dxDataGrid-aiAssistantSuccessMessage": "Uspešno",
         "dxDataGrid-aiAssistantErrorMessage": "Napaka",
@@ -123,7 +123,7 @@
         "dxDataGrid-aiAssistantRegenerateButtonText": "Znova ustvari",
         "dxDataGrid-aiAssistantAbortConfirmText": "Zapiranje klepeta asistenta AI bo prekinilo zahteve v teku. Ali želite zapreti klepet?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Klepet je prazen",
-        "dxDataGrid-aiChatEmptyViewPrompt": "Asistent z umetno inteligenco je pripravljen na odgovarjanje na vaša vprašanja.",
+        "dxDataGrid-aiChatEmptyViewPrompt": "Pomočnik UI je pripravljen odgovoriti na vaša vprašanja.",
         "dxDataGrid-aiPromptEditorTitle": "Urejevalnik pozivov AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Pošlji poziv AI za generiranje vrednosti stolpcev...",
         "dxDataGrid-aiPromptEditorApplyButton": "Uporabi",
