@@ -100,10 +100,10 @@ const sortByName = { actions: [{ name: 'sorting', args: { dataField: 'name', sor
 const selectAll = { actions: [{ name: 'selectAll', args: {} }] };
 const suggestionConfig = { chat: { suggestions: { items: [{ text: 'Sort by name' }] } } };
 
-// === §3.8 Rapid sequential prompts ===
-
-fixture.disablePageReloads`AI Assistant - Sequential Prompts`
+fixture`AI Assistant - Request Lifecycle`
   .page(AI_INTEGRATION_PAGE);
+
+// === §3.8 Rapid sequential prompts ===
 
 // 3.8.1
 test('N distinct prompts back-to-back should each execute once, in order, and apply to the grid', async (t) => {
@@ -144,9 +144,6 @@ test('N distinct prompts back-to-back should each execute once, in order, and ap
 ]));
 
 // === §3.9 Input disabled while in flight ===
-
-fixture.disablePageReloads`AI Assistant - Input In Flight`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.9.1
 test('Input should be disabled during LLM phase', async (t) => {
@@ -253,9 +250,6 @@ test('Input should be re-enabled after abort via popup close', async (t) => {
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG]));
 
 // === §3.10 Clear-chat disabled while in flight ===
-
-fixture.disablePageReloads`AI Assistant - Clear Chat In Flight`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.10.1
 test('Clear-chat button should be disabled during LLM phase', async (t) => {
@@ -380,9 +374,6 @@ test('Clear-chat should remove all messages from chat and leave grid state uncha
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));
 
 // === §3.11 Suggestions disabled while in flight ===
-
-fixture.disablePageReloads`AI Assistant - Suggestions In Flight`
-  .page(AI_INTEGRATION_PAGE);
 
 // 3.11.1
 test('Suggestions should be disabled during LLM phase and dispatch no second request', async (t) => {
