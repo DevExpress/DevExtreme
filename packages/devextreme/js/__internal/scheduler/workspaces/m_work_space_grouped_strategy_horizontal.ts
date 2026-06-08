@@ -99,13 +99,12 @@ class HorizontalGroupedStrategy {
     cellWidth: number,
   ): GroupBoundsOffset {
     const extraOffset = cellWidth / 2;
-
-    const startOffset = startCell ? (startCell.offset()?.left ?? 0) - extraOffset : 0;
-    const endOffset = endCell ? (endCell.offset()?.left ?? 0) + cellWidth + extraOffset : 0;
+    const startLeft = startCell?.length ? (startCell.offset()?.left ?? 0) : undefined;
+    const endLeft = endCell?.length ? (endCell.offset()?.left ?? 0) : undefined;
 
     return {
-      left: startOffset,
-      right: endOffset,
+      left: startLeft !== undefined ? startLeft - extraOffset : 0,
+      right: endLeft !== undefined ? endLeft + cellWidth + extraOffset : 0,
       top: 0,
       bottom: 0,
     };
