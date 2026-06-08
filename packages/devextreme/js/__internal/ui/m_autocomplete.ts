@@ -1,4 +1,4 @@
-import registerComponent from '@js/core/component_registrator'; // couldn't change import due inconsistent typings for registerComponent
+import registerComponent from '@js/core/component_registrator'; // couldn't change import due to inconsistent typings for registerComponent
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';

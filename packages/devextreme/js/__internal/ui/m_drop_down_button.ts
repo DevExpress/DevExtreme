@@ -154,7 +154,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   _initDataController(): void {
     const { dataSource, items, keyExpr } = this.option();
     this._dataController = new DataController(
-      // @ts-expect-error datacontroller constructor typing need to be fixed
+      // @ts-expect-error DataController constructor typing needs to be fixed
       dataSource ?? items,
       { key: keyExpr },
     );
