@@ -25,9 +25,8 @@ env:
 jobs:
   build:
     name: Build preview artifacts
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     timeout-minutes: 20
-    environment: github-pages
 
     steps:
       - name: Decide action (deploy/remove/none)

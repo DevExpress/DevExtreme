@@ -18,7 +18,7 @@ jobs:
   prepare:
     name: Read build meta
     if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     timeout-minutes: 5
     outputs:
       action: ${{ steps.meta.outputs.action }}
@@ -50,12 +50,14 @@ jobs:
           echo "action=$ACTION" >> "$GITHUB_OUTPUT"
 
   deploy:
-    name: Deploy/remove preview
+    name: "Deploy/remove preview — PR #${{ needs.prepare.outputs.pr_number }}"
     needs: prepare
     if: needs.prepare.outputs.action != 'none'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: github-pages
+    environment:
+      name: github-pages
+      url: https://github.com/${{ github.repository }}/pull/${{ needs.prepare.outputs.pr_number }}
 
     concurrency:
       group: preview-deploy-${{ needs.prepare.outputs.pr_number }}
