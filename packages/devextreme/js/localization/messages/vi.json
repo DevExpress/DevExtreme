@@ -108,15 +108,15 @@
 
 
         "dxDataGrid-aiAssistantTitle": "Trợ lý AI",
-        "dxDataGrid-aiAssistantProcessingMessageHeader": "Yêu cầu đang xử lý",
+        "dxDataGrid-aiAssistantProcessingMessageHeader": "Yêu cầu đang được xử lý",
         "dxDataGrid-aiAssistantProcessingMessage": "Đang xử lý...",
         "dxDataGrid-aiAssistantErrorMessageHeader": "Xử lý yêu cầu thất bại",
         "dxDataGrid-aiAssistantAbortMessage": "Yêu cầu đã dừng.",
         "dxDataGrid-aiAssistantSuccessMessage": "Thành công",
         "dxDataGrid-aiAssistantErrorMessage": "Lỗi",
         "dxDataGrid-aiAssistantExecutionAbortMessage": "Thực thi bị gián đoạn",
-        "dxDataGrid-aiAssistantExecutionInProgressMessage": "Thực thi đang tiến hành. Vui lòng đợi.",
-        "dxDataGrid-aiAssistantRequestInProgressMessage": "Yêu cầu đang tiến hành. Vui lòng đợi.",
+        "dxDataGrid-aiAssistantExecutionInProgressMessage": "Quá trình thực thi đang diễn ra. Vui lòng đợi.",
+        "dxDataGrid-aiAssistantRequestInProgressMessage": "Yêu cầu đang được xử lý. Vui lòng đợi.",
         "dxDataGrid-aiAssistantUnexpectedErrorMessage": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
         "dxDataGrid-aiAssistantInvalidResponseMessage": "Phản hồi không hợp lệ từ dịch vụ AI. Vui lòng thử lại.",
         "dxDataGrid-aiAssistantClearButtonText": "Xóa",
