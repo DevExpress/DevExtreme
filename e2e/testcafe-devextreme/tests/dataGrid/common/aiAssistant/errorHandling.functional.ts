@@ -104,7 +104,7 @@ test('Sorting by non-existent dataField should show failure message and leave gr
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
-  await t.expect(await dataGrid.apiGetDataSourceSortParams()).notOk();
+  await t.expect(dataGrid.apiGetDataSourceSortParams()).notOk();
 }).before(async () => createGridWithAIAssistant(
   baseGrid,
   [{ actions: [{ name: 'sorting', args: { dataField: 'Salary', sortOrder: 'asc' } }] }],
