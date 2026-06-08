@@ -265,7 +265,7 @@ importers:
         specifier: 19.1.0
         version: 19.1.0
       postcss:
-        specifier: ~8.5.10
+        specifier: 8.5.10
         version: 8.5.10
       shelljs:
         specifier: 0.8.5
@@ -603,7 +603,7 @@ importers:
         version: 0.15.1
     devDependencies:
       '@angular/platform-server':
-        specifier: ~21.2.15
+        specifier: 21.2.15
         version: 21.2.15(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.2.15)(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.15(@angular/animations@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@21.2.15(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.15(@angular/compiler@21.2.15)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       '@babel/core':
         specifier: 7.29.7
@@ -1500,7 +1500,7 @@ importers:
         version: 0.14.2
       autoprefixer:
         specifier: 10.5.0
-        version: 10.5.0(postcss@8.5.12)
+        version: 10.5.0(postcss@8.5.10)
       axe-core:
         specifier: 'catalog:'
         version: 4.11.3
@@ -2172,7 +2172,7 @@ importers:
         version: 16.22.0(typescript@5.9.3)
       stylelint-config-standard-scss:
         specifier: 14.0.0
-        version: 14.0.0(postcss@8.5.12)(stylelint@16.22.0(typescript@5.9.3))
+        version: 14.0.0(postcss@8.5.10)(stylelint@16.22.0(typescript@5.9.3))
       stylelint-scss:
         specifier: 6.10.0
         version: 6.10.0(stylelint@16.22.0(typescript@5.9.3))
@@ -27910,15 +27910,6 @@ snapshots:
       postcss: 8.5.10
       postcss-value-parser: 4.2.0
 
-  autoprefixer@10.5.0(postcss@8.5.12):
-    dependencies:
-      browserslist: 4.28.2
-      caniuse-lite: 1.0.30001788
-      fraction.js: 5.3.4
-      picocolors: 1.1.1
-      postcss: 8.5.12
-      postcss-value-parser: 4.2.0
-
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
@@ -37575,9 +37566,9 @@ snapshots:
     dependencies:
       postcss: 8.5.10
 
-  postcss-scss@4.0.9(postcss@8.5.12):
+  postcss-scss@4.0.9(postcss@8.5.10):
     dependencies:
-      postcss: 8.5.12
+      postcss: 8.5.10
 
   postcss-selector-parser@6.1.2:
     dependencies:
@@ -39517,14 +39508,14 @@ snapshots:
       postcss-html: 1.8.1
       stylelint: 16.22.0(typescript@5.9.3)
 
-  stylelint-config-recommended-scss@14.1.0(postcss@8.5.12)(stylelint@16.22.0(typescript@5.9.3)):
+  stylelint-config-recommended-scss@14.1.0(postcss@8.5.10)(stylelint@16.22.0(typescript@5.9.3)):
     dependencies:
-      postcss-scss: 4.0.9(postcss@8.5.12)
+      postcss-scss: 4.0.9(postcss@8.5.10)
       stylelint: 16.22.0(typescript@5.9.3)
       stylelint-config-recommended: 14.0.1(stylelint@16.22.0(typescript@5.9.3))
       stylelint-scss: 6.10.0(stylelint@16.22.0(typescript@5.9.3))
     optionalDependencies:
-      postcss: 8.5.12
+      postcss: 8.5.10
 
   stylelint-config-recommended-vue@1.6.1(postcss-html@1.8.1)(stylelint@16.22.0(typescript@5.9.3)):
     dependencies:
@@ -39550,13 +39541,13 @@ snapshots:
     dependencies:
       stylelint: 16.22.0(typescript@5.9.3)
 
-  stylelint-config-standard-scss@14.0.0(postcss@8.5.12)(stylelint@16.22.0(typescript@5.9.3)):
+  stylelint-config-standard-scss@14.0.0(postcss@8.5.10)(stylelint@16.22.0(typescript@5.9.3)):
     dependencies:
       stylelint: 16.22.0(typescript@5.9.3)
-      stylelint-config-recommended-scss: 14.1.0(postcss@8.5.12)(stylelint@16.22.0(typescript@5.9.3))
+      stylelint-config-recommended-scss: 14.1.0(postcss@8.5.10)(stylelint@16.22.0(typescript@5.9.3))
       stylelint-config-standard: 36.0.1(stylelint@16.22.0(typescript@5.9.3))
     optionalDependencies:
-      postcss: 8.5.12
+      postcss: 8.5.10
 
   stylelint-config-standard@36.0.1(stylelint@16.22.0(typescript@5.9.3)):
     dependencies:
