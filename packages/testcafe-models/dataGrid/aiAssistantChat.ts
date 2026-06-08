@@ -52,6 +52,10 @@ export class AIAssistantChat extends Popup {
     return this.topToolbar;
   }
 
+  getClearChatButton(): Selector {
+    return this.element.find(`.${CLASS.clearChatButton}`);
+  }
+
   // eslint-disable-next-line class-methods-use-this
   getAbortConfirmDialog(): Selector {
     return Selector(`.${CLASS.abortConfirmDialog}`);
@@ -60,10 +64,6 @@ export class AIAssistantChat extends Popup {
   // eslint-disable-next-line class-methods-use-this
   getAbortConfirmYesButton(): Selector {
     return Selector(`.${CLASS.abortConfirmDialog} .dx-button`).nth(1);
-  }
-
-  getClearChatButton(): Selector {
-    return this.element.find(`.${CLASS.clearChatButton}`);
   }
 
   getMessages(): Selector {
