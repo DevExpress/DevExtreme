@@ -1,91 +1,21 @@
 /* eslint-disable no-underscore-dangle */
 import { ClientFunction } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../../helpers/createWidget';
-import { AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
-
-const threeRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-  { id: 3, name: 'Charlie', value: 10 },
-];
-
-const twoRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-];
-
-// A mocked AI response is described declaratively:
-//   { resolve: <value> } → sendRequest resolves with <value>
-//   { reject: <message> } → sendRequest rejects with new Error(<message>)
-//   { hang: true }        → sendRequest never settles (request stays in flight)
-type AIResponse = { resolve: unknown } | { reject: string } | { hang: true };
-
-const setupAIState = ClientFunction((base: Record<string, unknown>, responses: AIResponse[]) => {
-  (window as any).__aiBase = base;
-  (window as any).__aiResponses = responses;
-  (window as any).__aiCallCount = 0;
-  (window as any).__aiRequests = [];
-});
-
-const aiGridOptions = (): any => ({
-  ...(window as any).__aiBase,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest(params: any) {
-        const responses = (window as any).__aiResponses;
-        const count = (window as any).__aiCallCount;
-
-        (window as any).__aiCallCount = count + 1;
-        (window as any).__aiRequests.push(params);
-
-        const response = count < responses.length
-          ? responses[count]
-          : responses[responses.length - 1];
-
-        if ('reject' in response) {
-          return {
-            promise: Promise.reject(new Error(response.reject)),
-            abort: (): void => {},
-          };
-        }
-
-        if ('hang' in response) {
-          return {
-            promise: new Promise(() => {}),
-            abort: (): void => {},
-          };
-        }
-
-        return {
-          promise: Promise.resolve(response.resolve),
-          abort: (): void => {},
-        };
-      },
-    }),
-  },
-});
-
-const createGridWithAIAssistant = async (
-  base: Record<string, unknown>,
-  responses: AIResponse[],
-): Promise<void> => {
-  await setupAIState(base, responses);
-
-  return createWidget('dxDataGrid', aiGridOptions);
-};
+import {
+  AI_INTEGRATION_PAGE,
+  FAIL,
+  GRID_SELECTOR,
+  HANG,
+  baseGrid,
+  createGridWithAIAssistant,
+  threeRows,
+  twoRows,
+} from './testHelpers';
 
 const getAIRequests = ClientFunction(() => ((window as any).__aiRequests ?? []).map((r: any) => ({
   text: r.data.text,
   columns: (r.data.context.columns ?? []).map((c: any) => c.dataField),
 })));
-
-const gridBase = {
-  keyExpr: 'id',
-  columns: ['id', 'name', 'value'],
-  showBorders: true,
-};
 
 // === §1.12 Regenerate button ===
 
@@ -112,8 +42,8 @@ test('Regenerate should be visible after AI integration failure', async (t) => {
   // Pre-execution failure: nothing was applied to the grid.
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
-  [{ reject: 'HTTP 500 Internal Server Error' }],
+  { dataSource: threeRows, ...baseGrid },
+  [FAIL],
 ));
 
 // 1.12.2
@@ -135,8 +65,8 @@ test('Regenerate should be visible after response format failure', async (t) => 
 
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
-  [{ resolve: {} }],
+  { dataSource: threeRows, ...baseGrid },
+  [{}],
 ));
 
 // 1.12.3
@@ -158,8 +88,8 @@ test('Regenerate should be visible after validation failure', async (t) => {
 
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
-  [{ resolve: { actions: [{ name: 'unknownCommand', args: { foo: 'bar' } }] } }],
+  { dataSource: threeRows, ...baseGrid },
+  [{ actions: [{ name: 'unknownCommand', args: { foo: 'bar' } }] }],
 ));
 
 // 1.12.4
@@ -182,8 +112,8 @@ test('Regenerate should be visible after empty actions', async (t) => {
 
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
-  [{ resolve: { actions: [] } }],
+  { dataSource: threeRows, ...baseGrid },
+  [{ actions: [] }],
 ));
 
 // 1.12.5
@@ -206,8 +136,8 @@ test('Regenerate should NOT be visible after full success', async (t) => {
   // The successful command actually changed the grid state.
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
-  [{ resolve: { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] } }],
+  { dataSource: threeRows, ...baseGrid },
+  [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] }],
 ));
 
 // 1.12.6
@@ -233,14 +163,12 @@ test('Regenerate should NOT be visible after partial-execution failure', async (
   // No Regenerate because action #1 already mutated the grid.
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
+  { dataSource: threeRows, ...baseGrid },
   [{
-    resolve: {
-      actions: [
-        { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
-        { name: 'sorting', args: { dataField: 'nonExistent', sortOrder: 'asc' } },
-      ],
-    },
+    actions: [
+      { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
+      { name: 'sorting', args: { dataField: 'nonExistent', sortOrder: 'asc' } },
+    ],
   }],
 ));
 
@@ -265,14 +193,12 @@ test('Regenerate should NOT be visible after all-execution failure', async (t) =
   // Both commands targeted non-existent columns, so real columns stay unsorted.
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
+  { dataSource: threeRows, ...baseGrid },
   [{
-    resolve: {
-      actions: [
-        { name: 'sorting', args: { dataField: 'nonExistent1', sortOrder: 'asc' } },
-        { name: 'sorting', args: { dataField: 'nonExistent2', sortOrder: 'desc' } },
-      ],
-    },
+    actions: [
+      { name: 'sorting', args: { dataField: 'nonExistent1', sortOrder: 'asc' } },
+      { name: 'sorting', args: { dataField: 'nonExistent2', sortOrder: 'desc' } },
+    ],
   }],
 ));
 
@@ -309,10 +235,10 @@ test('Regenerate should resend the same prompt and replace the previous response
   await t.expect(requests[1].text).eql('Sort by name');
   await t.expect(requests[1].columns).eql(['id', 'name', 'value']);
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
+  { dataSource: threeRows, ...baseGrid },
   [
-    { reject: 'AI service error' },
-    { resolve: { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] } },
+    FAIL,
+    { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
   ],
 ));
 
@@ -340,10 +266,10 @@ test('Regenerate should be disabled while request is in flight', async (t) => {
   // Nothing was applied while the regenerate request is still pending.
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
+  { dataSource: threeRows, ...baseGrid },
   [
-    { reject: 'AI service error' },
-    { hang: true },
+    FAIL,
+    HANG,
   ],
 ));
 
@@ -378,8 +304,8 @@ test('Regenerate is visible after a popup-close-driven abort', async (t) => {
 
   await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...gridBase },
-  [{ hang: true }],
+  { dataSource: threeRows, ...baseGrid },
+  [HANG],
 ));
 
 // === §3.8.2 Sequential resends after pre-execution failures ===
@@ -425,6 +351,6 @@ test('Sequential regenerate after pre-execution failures keeps exactly one respo
   await t.expect(requests.length).eql(3);
   await t.expect(requests[2].text).eql('Sort by name');
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: twoRows, ...gridBase },
-  [{ reject: 'AI service error' }],
+  { dataSource: twoRows, ...baseGrid },
+  [FAIL],
 ));
