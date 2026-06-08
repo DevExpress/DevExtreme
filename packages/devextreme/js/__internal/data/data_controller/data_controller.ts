@@ -124,7 +124,6 @@ class DataController {
 
   loadNextPage(): Promise<unknown> {
     // @ts-expect-error
-
     this.pageIndex(1 + this.pageIndex());
 
     return this.load();

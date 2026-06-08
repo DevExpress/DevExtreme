@@ -429,7 +429,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const cachedDropDownOptions: PopupProperties = this._options.cache('dropDownOptions');
 
     const position: PositionConfig = {
-      of: getPublicElement(this.$element()),
+      of: this.$element() as unknown as DxElement,
       collision: 'flipfit',
       my: `${horizontalAlignment} top` as PositionAlignment,
       at: `${horizontalAlignment} bottom` as PositionAlignment,
