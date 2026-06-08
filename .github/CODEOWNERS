@@ -809,7 +809,7 @@
 /packages/devextreme/js/ui/lookup.d.ts                               @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/lookup_types.d.ts                         @DevExpress/devextreme-editors
 
-/packages/devextreme/js/__internal/ui/m_lookup.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/lookup.ts                    @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/lookup.ts        @DevExpress/devextreme-editors
 
