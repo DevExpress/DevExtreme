@@ -797,7 +797,7 @@ export class ViewDataGenerator {
     return hoursInterval * cellCountInDay * toMs('hour');
   }
 
-  public getFirstDayOfWeek(firstDayOfWeekOption) {
+  public getFirstDayOfWeek(firstDayOfWeekOption: number): number {
     return firstDayOfWeekOption;
   }
 
