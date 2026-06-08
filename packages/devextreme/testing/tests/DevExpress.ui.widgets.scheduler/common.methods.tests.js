@@ -3,7 +3,7 @@ import fx from 'common/core/animation/fx';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
-import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
+import timeZoneUtils from '__internal/scheduler/utils_time_zone';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 

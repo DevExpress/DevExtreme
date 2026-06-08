@@ -103,7 +103,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare configs
       working-directory: apps/demos
@@ -203,7 +203,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare configs
       working-directory: apps/demos

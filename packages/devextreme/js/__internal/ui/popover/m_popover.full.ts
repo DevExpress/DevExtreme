@@ -2,8 +2,9 @@ import '@js/ui/toolbar';
 
 import registerComponent from '@js/core/component_registrator';
 import Popover from '@js/ui/popover/ui.popover';
+import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 
-import type { PopoverProperties } from './m_popover';
+const TOOLBAR_WIDGET_NAME = 'dxToolbar';
 
 export default class PopoverFull extends Popover {
   _getDefaultOptions(): PopoverProperties {
@@ -15,11 +16,12 @@ export default class PopoverFull extends Popover {
 
   // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
-    return 'dxToolbar';
+    return TOOLBAR_WIDGET_NAME;
   }
 }
 
-PopoverFull.defaultOptions = function (rule) {
+// eslint-disable-next-line func-names
+PopoverFull.defaultOptions = function (rule): void {
   Popover.defaultOptions(rule);
 };
 

@@ -1,6 +1,6 @@
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import timeZoneUtils from '../../../m_utils_time_zone';
+import timeZoneUtils from '../../../utils_time_zone';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 

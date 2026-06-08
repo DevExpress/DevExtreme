@@ -33,10 +33,10 @@ const store: ChatTypes.Message[] = [...initialMessages];
 
 const customStore = new CustomStore({
   key: 'id',
-  load: async (): Promise<ChatTypes.Message[]> => store,
-  insert: async (message: ChatTypes.Message): Promise<ChatTypes.Message> => {
+  load: (): Promise<ChatTypes.Message[]> => Promise.resolve(store),
+  insert: (message: ChatTypes.Message): Promise<ChatTypes.Message> => {
     store.push(message);
-    return message;
+    return Promise.resolve(message);
   },
 });
 

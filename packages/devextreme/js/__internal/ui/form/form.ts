@@ -51,7 +51,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
 import type { Button } from '@ts/ui/button/button';
-import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/drop_down_editor';
 import Editor from '@ts/ui/editor/editor';
 import { setLabelWidthByMaxLabelWidth } from '@ts/ui/form/components/label';
 import {

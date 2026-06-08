@@ -2,8 +2,8 @@ import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
-import timezoneUtils from '../../m_utils_time_zone';
 import type { CellPositionData } from '../../types';
+import timezoneUtils from '../../utils_time_zone';
 
 const toMs = dateUtils.dateToMilliseconds;
 

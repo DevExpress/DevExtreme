@@ -15,7 +15,7 @@ import type {
 import type {
   FormItemComponent, FormLabelMode, LabelLocation, SimpleItem,
 } from '@js/ui/form';
-import type { DropDownEditorProperties } from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import type { DropDownEditorProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import type Editor from '@ts/ui/editor/editor';
 import type { LabelOptions } from '@ts/ui/form/components/label';

@@ -7,7 +7,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import { getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import List from '@ts/ui/list/list.edit.search';
 
 import type { PopupProperties } from '../popup/m_popup';

@@ -11,10 +11,10 @@ const store: ChatTypes.Message[] = [...initialMessages];
 
 const customStore = new CustomStore({
   key: 'id',
-  load: async () => store,
-  insert: async (message: ChatTypes.Message) => {
+  load: () => Promise.resolve(store),
+  insert: (message: ChatTypes.Message) => {
     store.push(message);
-    return message;
+    return Promise.resolve(message);
   },
 });
 

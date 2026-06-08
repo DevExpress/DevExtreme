@@ -154,14 +154,15 @@ export class SelectionController {
       Need to get rid of `selectionHelper.peek()` inside of selectCards()
       and pass selectionHelper from here
       */
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.selectionHelper.value;
-
+      const selectionHelper = this.selectionHelper.value;
       const isLoaded = this.dataController.isLoaded.value;
       if (isLoaded) {
-        const selectedCardKeys = this.selectedCardKeys.peek();
+        const keys = this.selectedCardKeys.value;
+        const hasExactSelectedItems = selectionHelper?.hasExactSelectedItems(keys);
 
-        this.selectCards(selectedCardKeys);
+        if (!hasExactSelectedItems) {
+          this.selectCards(keys);
+        }
       }
     });
 

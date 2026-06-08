@@ -9,13 +9,14 @@ import { isDefined, isString } from '@js/core/utils/type';
 import type {
   ControllerOverlayElements,
   OverlayPosition,
+  Position as OverlayBasePosition,
 } from '@ts/ui/overlay/overlay_position_controller';
-import { OverlayPositionController } from '@ts/ui/overlay/overlay_position_controller';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
 } from '@ts/ui/popup/popup_position_controller';
+import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
 export interface PopoverControllerElements extends ControllerOverlayElements {
@@ -31,7 +32,9 @@ export interface PopoverPosition extends OverlayPosition {
   collision?: CollisionResolutionCombination;
 }
 
-export type Position = PopoverPosition | CommonPosition;
+export type Position = PopoverPosition | CommonPosition | OverlayBasePosition;
+
+export type DisplaySide = CommonPosition | 'center';
 
 export type PopoverPositionControllerConstructor<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
@@ -75,18 +78,19 @@ const POPOVER_DEFAULT_BOUNDARY_OFFSET = { h: 10, v: 10 };
 
 export const isCommonPosition = (
   position: unknown,
-): position is CommonPosition => isString(position);
+): position is CommonPosition => isString(position)
+  && Object.prototype.hasOwnProperty.call(POPOVER_POSITION_ALIASES, position);
 
 export class PopoverPositionController<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
   TElements extends PopoverControllerElements = PopoverControllerElements,
   TPosition extends Position = Position,
-> extends OverlayPositionController<
+> extends PopupPositionController<
     TProperties,
     TElements,
     TPosition
   > {
-  _positionSide?: CommonPosition;
+  _positionSide?: DisplaySide;
 
   _$arrow?: TElements['$arrow'];
 
@@ -162,8 +166,12 @@ export class PopoverPositionController<
     return position;
   }
 
-  _getContentBorderWidth(side?: CommonPosition): number {
-    const borderWidth = side ? this._$content?.css(borderWidthStyles[side]) ?? '' : '';
+  _getContentBorderWidth(side?: DisplaySide): number {
+    if (!side || side === 'center') {
+      return 0;
+    }
+
+    const borderWidth = this._$content?.css(borderWidthStyles[side]) ?? '';
 
     return parseInt(borderWidth, 10) || 0;
   }
@@ -175,15 +183,15 @@ export class PopoverPositionController<
     return my.h === at.h && my.v === at.v;
   }
 
-  _isVerticalSide(side = this._positionSide): boolean {
+  _isVerticalSide(side: DisplaySide | undefined = this._positionSide): boolean {
     return side === 'top' || side === 'bottom';
   }
 
-  _isHorizontalSide(side = this._positionSide): boolean {
+  _isHorizontalSide(side: DisplaySide | undefined = this._positionSide): boolean {
     return side === 'left' || side === 'right';
   }
 
-  _getDisplaySide(position: PopoverPosition): CommonPosition {
+  _getDisplaySide(position: PopoverPosition): DisplaySide {
     const my = positionUtils.setup.normalizeAlign(position.my);
     const at = positionUtils.setup.normalizeAlign(position.at);
 
@@ -193,7 +201,7 @@ export class PopoverPositionController<
     const horizontalWeight = Math.abs(WEIGHT_OF_SIDES[my.h] - weightSign * WEIGHT_OF_SIDES[at.h]);
     const verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
 
-    return (horizontalWeight > verticalWeight ? at.h : at.v) as CommonPosition;
+    return (horizontalWeight > verticalWeight ? at.h : at.v) as DisplaySide;
   }
 
   _normalizePosition(position?: TPosition): PopoverPosition {
@@ -220,11 +228,13 @@ export class PopoverPositionController<
 
   _positionToObject(position: TPosition): PopoverPosition {
     if (isCommonPosition(position)) {
-      const configuration = {
+      return {
         ...POPOVER_POSITION_ALIASES[position],
       };
+    }
 
-      return configuration;
+    if (isString(position)) {
+      return { my: position, at: position };
     }
 
     return position;
