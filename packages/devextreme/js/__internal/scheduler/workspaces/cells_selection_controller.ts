@@ -6,7 +6,7 @@ interface GridPosition {
   columnIndex: number;
 }
 
-interface EdgeIndices {
+export interface EdgeIndices {
   firstColumnIndex: number;
   lastColumnIndex: number;
   firstRowIndex: number;

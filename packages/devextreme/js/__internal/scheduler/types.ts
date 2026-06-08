@@ -173,6 +173,13 @@ export interface CellInfo {
   position: CellPositionData;
 }
 
+export interface GroupInfo {
+  allDay: boolean;
+  startDate: Date;
+  endDate: Date;
+  groupIndex: number;
+}
+
 export interface ViewDataMap {
   dateTableMap: CellInfo[][];
   allDayPanelMap: CellInfo[];
