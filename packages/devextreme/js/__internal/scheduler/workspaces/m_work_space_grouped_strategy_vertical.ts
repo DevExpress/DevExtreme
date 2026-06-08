@@ -15,15 +15,15 @@ class VerticalGroupedStrategy {
 
   private groupBoundsOffset!: GroupBoundsOffset;
 
-  constructor(private readonly options: SchedulerWorkSpace) {}
+  constructor(private readonly workspace: SchedulerWorkSpace) {}
 
   prepareCellIndexes(cellCoordinates: CellPositionData, groupIndex: number, inAllDayRow: boolean)
   : CellPositionData {
     // @ts-expect-error
-    let rowIndex = cellCoordinates.rowIndex + groupIndex * this.options.getRowCount();
+    let rowIndex = cellCoordinates.rowIndex + groupIndex * this.workspace.getRowCount();
     // @ts-expect-error
 
-    if (this.options.supportAllDayRow() && this.options.showAllDayPanel) {
+    if (this.workspace.supportAllDayRow() && this.workspace.showAllDayPanel) {
       rowIndex += groupIndex;
 
       if (!inAllDayRow) {
@@ -39,7 +39,7 @@ class VerticalGroupedStrategy {
 
   getGroupIndex(rowIndex: number): number {
     // @ts-expect-error
-    return Math.floor(rowIndex / this.options.getRowCount());
+    return Math.floor(rowIndex / this.workspace.getRowCount());
   }
 
   calculateHeaderCellRepeatCount(): number {
@@ -47,31 +47,31 @@ class VerticalGroupedStrategy {
   }
 
   insertAllDayRowsIntoDateTable(): boolean {
-    return this.options.option('showAllDayPanel');
+    return this.workspace.option('showAllDayPanel');
   }
 
   getTotalCellCount(): number {
     // @ts-expect-error
-    return this.options.getCellCount();
+    return this.workspace.getCellCount();
   }
 
   getTotalRowCount(): number {
     // @ts-expect-error
-    return this.options.getRowCount() * this.options.getGroupCount();
+    return this.workspace.getRowCount() * this.workspace.getGroupCount();
   }
 
   calculateTimeCellRepeatCount(): number {
     // @ts-expect-error
-    return this.options.getGroupCount() || 1;
+    return this.workspace.getGroupCount() || 1;
   }
 
   getWorkSpaceMinWidth(): number {
     // @ts-expect-error
-    let minWidth = this.options.getWorkSpaceWidth();
-    const workSpaceElementWidth = getBoundingRect(this.options.$element().get(0)).width;
+    let minWidth = this.workspace.getWorkSpaceWidth();
+    const workSpaceElementWidth = getBoundingRect(this.workspace.$element().get(0)).width;
     const workspaceContainerWidth = workSpaceElementWidth
-      - this.options.getTimePanelWidth()
-      - this.options.getGroupTableWidth()
+      - this.workspace.getTimePanelWidth()
+      - this.workspace.getGroupTableWidth()
       - 2 * WORK_SPACE_BORDER_PX;
 
     if (minWidth < workspaceContainerWidth) {
@@ -90,26 +90,26 @@ class VerticalGroupedStrategy {
   }
 
   getLeftOffset(): number {
-    return this.options.getTimePanelWidth() + this.options.getGroupTableWidth();
+    return this.workspace.getTimePanelWidth() + this.workspace.getGroupTableWidth();
   }
 
   getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [DxElement, DxElement])
   : GroupBoundsOffset {
     return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
-      const startDayHour = this.options.option('startDayHour');
-      const endDayHour = this.options.option('endDayHour');
-      const hoursInterval = this.options.option('hoursInterval');
+      const startDayHour = this.workspace.option('startDayHour');
+      const endDayHour = this.workspace.option('endDayHour');
+      const hoursInterval = this.workspace.option('hoursInterval');
 
       const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval)
-       * this.options.getCellHeight();
+       * this.workspace.getCellHeight();
       const scrollTop = this.getScrollableScrollTop();
       // @ts-expect-error
-      const headerRowHeight = getBoundingRect(this.options.$headerPanelContainer.get(0)).height;
+      const headerRowHeight = getBoundingRect(this.workspace.$headerPanelContainer.get(0)).height;
 
-      let topOffset = groupIndex * dayHeight + headerRowHeight + this.options.option('getHeaderHeight')() - scrollTop;
+      let topOffset = groupIndex * dayHeight + headerRowHeight + this.workspace.option('getHeaderHeight')() - scrollTop;
 
-      if (this.options.option('showAllDayPanel') && this.options.supportAllDayRow()) {
-        topOffset += this.options.getCellHeight() * (groupIndex + 1);
+      if (this.workspace.option('showAllDayPanel') && this.workspace.supportAllDayRow()) {
+        topOffset += this.workspace.getCellHeight() * (groupIndex + 1);
       }
 
       const bottomOffset = topOffset + dayHeight;
@@ -129,14 +129,14 @@ class VerticalGroupedStrategy {
 
   shiftIndicator($indicator: dxElementWrapper, height: number, rtlOffset: number, i: number): void {
     // @ts-expect-error
-    const offset = this.options.getIndicatorOffset(0);
-    const tableOffset = this.options.option('crossScrollingEnabled') ? 0 : this.options.getGroupTableWidth();
+    const offset = this.workspace.getIndicatorOffset(0);
+    const tableOffset = this.workspace.option('crossScrollingEnabled') ? 0 : this.workspace.getGroupTableWidth();
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
     // @ts-expect-error
-    let verticalOffset = this.options.getRowCount() * this.options.getCellHeight() * i;
+    let verticalOffset = this.workspace.getRowCount() * this.workspace.getCellHeight() * i;
 
-    if (this.options.supportAllDayRow() && this.options.option('showAllDayPanel')) {
-      verticalOffset += this.options.getAllDayHeight() * (i + 1);
+    if (this.workspace.supportAllDayRow() && this.workspace.option('showAllDayPanel')) {
+      verticalOffset += this.workspace.getAllDayHeight() * (i + 1);
     }
 
     $indicator.css('left', horizontalOffset + tableOffset);
@@ -144,11 +144,11 @@ class VerticalGroupedStrategy {
   }
 
   getShaderOffset(i: number, width: number): number {
-    const offset = this.options.option('crossScrollingEnabled') ? 0 : this.options.getGroupTableWidth();
+    const offset = this.workspace.option('crossScrollingEnabled') ? 0 : this.workspace.getGroupTableWidth();
 
-    if (this.options.option('rtlEnabled')) {
-      const containerWidth = getBoundingRect(this.options.getScrollable().$content().get(0)).width;
-      return containerWidth - offset - this.options.getWorkSpaceLeftOffset() - width;
+    if (this.workspace.option('rtlEnabled')) {
+      const containerWidth = getBoundingRect(this.workspace.getScrollable().$content().get(0)).width;
+      return containerWidth - offset - this.workspace.getWorkSpaceLeftOffset() - width;
     }
 
     return offset;
@@ -161,10 +161,10 @@ class VerticalGroupedStrategy {
 
   getShaderHeight(): number {
     // @ts-expect-error
-    let height = this.options.getIndicationHeight();
+    let height = this.workspace.getIndicationHeight();
 
-    if (this.options.supportAllDayRow() && this.options.option('showAllDayPanel')) {
-      height += this.options.getCellHeight();
+    if (this.workspace.supportAllDayRow() && this.workspace.option('showAllDayPanel')) {
+      height += this.workspace.getCellHeight();
     }
 
     return height;
@@ -172,10 +172,10 @@ class VerticalGroupedStrategy {
 
   getShaderMaxHeight(): number {
     // @ts-expect-error
-    let height = this.options.getRowCount() * this.options.getCellHeight();
+    let height = this.workspace.getRowCount() * this.workspace.getCellHeight();
 
-    if (this.options.supportAllDayRow() && this.options.option('showAllDayPanel')) {
-      height += this.options.getCellHeight();
+    if (this.workspace.supportAllDayRow() && this.workspace.option('showAllDayPanel')) {
+      height += this.workspace.getCellHeight();
     }
 
     return height;
@@ -183,11 +183,11 @@ class VerticalGroupedStrategy {
 
   getShaderWidth(): number {
     // @ts-expect-error
-    return this.options.getIndicationWidth();
+    return this.workspace.getIndicationWidth();
   }
 
   getScrollableScrollTop(): number {
-    return this.options.getScrollable().scrollTop();
+    return this.workspace.getScrollable().scrollTop();
   }
 
   // ------------
@@ -203,7 +203,7 @@ class VerticalGroupedStrategy {
 
   private addLastGroupCellClass(cellClass: string, index: number): string {
     // @ts-expect-error
-    if (index % this.options.getRowCount() === 0) {
+    if (index % this.workspace.getRowCount() === 0) {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
@@ -212,7 +212,7 @@ class VerticalGroupedStrategy {
 
   private addFirstGroupCellClass(cellClass: string, index: number): string {
     // @ts-expect-error
-    if ((index - 1) % this.options.getRowCount() === 0) {
+    if ((index - 1) % this.workspace.getRowCount() === 0) {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 

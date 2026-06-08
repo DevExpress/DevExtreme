@@ -12,7 +12,7 @@ import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 
 class HorizontalGroupedStrategy {
-  constructor(private readonly options: SchedulerWorkSpace) {}
+  constructor(private readonly workspace: SchedulerWorkSpace) {}
 
   prepareCellIndexes(
     cellCoordinates: CellPositionData,
@@ -20,37 +20,37 @@ class HorizontalGroupedStrategy {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     inAllDay?: boolean,
   ): CellPositionData {
-    const groupByDay = this.options.isGroupedByDate();
+    const groupByDay = this.workspace.isGroupedByDate();
 
     if (!groupByDay) {
       return {
         rowIndex: cellCoordinates.rowIndex,
         // @ts-expect-error
-        columnIndex: cellCoordinates.columnIndex + groupIndex * this.options.getCellCount(),
+        columnIndex: cellCoordinates.columnIndex + groupIndex * this.workspace.getCellCount(),
       };
     }
     return {
       rowIndex: cellCoordinates.rowIndex,
       // @ts-expect-error
-      columnIndex: cellCoordinates.columnIndex * this.options.getGroupCount() + groupIndex,
+      columnIndex: cellCoordinates.columnIndex * this.workspace.getGroupCount() + groupIndex,
     };
   }
 
   getGroupIndex(rowIndex: number, columnIndex: number): number {
-    const groupByDay = this.options.isGroupedByDate();
+    const groupByDay = this.workspace.isGroupedByDate();
     // @ts-expect-error
-    const groupCount = this.options.getGroupCount();
+    const groupCount = this.workspace.getGroupCount();
 
     if (groupByDay) {
       return columnIndex % groupCount;
     }
     // @ts-expect-error
-    return Math.floor(columnIndex / this.options.getCellCount());
+    return Math.floor(columnIndex / this.workspace.getCellCount());
   }
 
   calculateHeaderCellRepeatCount(): number {
     // @ts-expect-error
-    return this.options.getGroupCount() || 1;
+    return this.workspace.getGroupCount() || 1;
   }
 
   insertAllDayRowsIntoDateTable(): boolean {
@@ -61,12 +61,12 @@ class HorizontalGroupedStrategy {
     const effectiveGroupCount = groupCount || 1;
 
     // @ts-expect-error
-    return this.options.getCellCount() * effectiveGroupCount;
+    return this.workspace.getCellCount() * effectiveGroupCount;
   }
 
   getTotalRowCount(): number {
     // @ts-expect-error
-    return this.options.getRowCount();
+    return this.workspace.getRowCount();
   }
 
   calculateTimeCellRepeatCount(): number {
@@ -74,14 +74,14 @@ class HorizontalGroupedStrategy {
   }
 
   getWorkSpaceMinWidth(): number {
-    const workSpaceElementWidth = getBoundingRect(this.options.$element().get(0)).width;
+    const workSpaceElementWidth = getBoundingRect(this.workspace.$element().get(0)).width;
     return workSpaceElementWidth
-      - this.options.getTimePanelWidth()
+      - this.workspace.getTimePanelWidth()
       - 2 * WORK_SPACE_BORDER_PX;
   }
 
   getAllDayOffset(): number {
-    return this.options.getAllDayHeight();
+    return this.workspace.getAllDayHeight();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -90,7 +90,7 @@ class HorizontalGroupedStrategy {
   }
 
   getLeftOffset(): number {
-    return this.options.getTimePanelWidth();
+    return this.workspace.getTimePanelWidth();
   }
 
   private createGroupBoundOffset(
@@ -132,11 +132,11 @@ class HorizontalGroupedStrategy {
     groupedDataMap: { dateTableGroupedMap: CellInfo[][][] },
     allDay?: boolean,
   ): GroupBoundsOffset {
-    if (this.options.isGroupedByDate()) {
+    if (this.workspace.isGroupedByDate()) {
       return this.getGroupedByDateBoundOffset($cells, cellWidth);
     }
 
-    const cellIndex = this.options.getCellIndexByCoordinates(coordinates, allDay);
+    const cellIndex = this.workspace.getCellIndexByCoordinates(coordinates, allDay);
     const groupIndex = coordinates.groupIndex ?? Math.floor(cellIndex / cellCount);
 
     const currentCellGroup = groupedDataMap.dateTableGroupedMap[groupIndex];
@@ -170,7 +170,7 @@ class HorizontalGroupedStrategy {
   }
 
   private getIndicatorOffset(groupIndex: number): number {
-    const groupByDay = this.options.isGroupedByDate();
+    const groupByDay = this.workspace.isGroupedByDate();
 
     return groupByDay
       ? this.calculateGroupByDateOffset(groupIndex)
@@ -179,26 +179,26 @@ class HorizontalGroupedStrategy {
 
   private calculateOffset(groupIndex: number): number {
     // @ts-expect-error
-    const indicatorStartPosition = this.options.getIndicatorOffset(groupIndex);
+    const indicatorStartPosition = this.workspace.getIndicatorOffset(groupIndex);
     // @ts-expect-error
-    const offset = this.options.getCellCount() * this.options.getCellWidth() * groupIndex;
+    const offset = this.workspace.getCellCount() * this.workspace.getCellWidth() * groupIndex;
 
     return indicatorStartPosition + offset;
   }
 
   private calculateGroupByDateOffset(groupIndex: number): number {
     // @ts-expect-error
-    return this.options.getIndicatorOffset(0) * this.options.getGroupCount()
-      + this.options.getCellWidth() * groupIndex;
+    return this.workspace.getIndicatorOffset(0) * this.workspace.getGroupCount()
+      + this.workspace.getCellWidth() * groupIndex;
   }
 
   getShaderOffset(i: number, width: number): number {
     // @ts-expect-error
-    const offset = this.options.getCellCount() * this.options.getCellWidth() * i;
+    const offset = this.workspace.getCellCount() * this.workspace.getCellWidth() * i;
 
-    if (this.options.option('rtlEnabled')) {
-      const containerWidth = getBoundingRect(this.options.getScrollable().$content().get(0)).width;
-      return containerWidth - offset - this.options.getTimePanelWidth() - width;
+    if (this.workspace.option('rtlEnabled')) {
+      const containerWidth = getBoundingRect(this.workspace.getScrollable().$content().get(0)).width;
+      return containerWidth - offset - this.workspace.getTimePanelWidth() - width;
     }
 
     return offset;
@@ -210,20 +210,20 @@ class HorizontalGroupedStrategy {
 
   getShaderHeight(): number {
     // @ts-expect-error
-    return this.options.getIndicationHeight();
+    return this.workspace.getIndicationHeight();
   }
 
   getShaderMaxHeight(): number {
-    return (getBoundingRect(this.options.getScrollable().$content().get(0)) as DOMRect).height;
+    return (getBoundingRect(this.workspace.getScrollable().$content().get(0)) as DOMRect).height;
   }
 
   getShaderWidth(): number {
     // @ts-expect-error
-    return this.options.getIndicationWidth();
+    return this.workspace.getIndicationWidth();
   }
 
   getScrollableScrollTop(allDay: boolean): number {
-    return !allDay ? this.options.getScrollable().scrollTop() : 0;
+    return !allDay ? this.workspace.getScrollable().scrollTop() : 0;
   }
 
   // ---------------
@@ -251,15 +251,15 @@ class HorizontalGroupedStrategy {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
-    const groupByDate = this.options.isGroupedByDate();
+    const groupByDate = this.workspace.isGroupedByDate();
 
     if (groupByDate) {
       // @ts-expect-error
-      if (index % this.options.getGroupCount() === 0) {
+      if (index % this.workspace.getGroupCount() === 0) {
         return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
       }
       // @ts-expect-error
-    } else if (index % this.options.getCellCount() === 0) {
+    } else if (index % this.workspace.getCellCount() === 0) {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
@@ -275,15 +275,15 @@ class HorizontalGroupedStrategy {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 
-    const groupByDate = this.options.isGroupedByDate();
+    const groupByDate = this.workspace.isGroupedByDate();
 
     if (groupByDate) {
       // @ts-expect-error
-      if ((index - 1) % this.options.getGroupCount() === 0) {
+      if ((index - 1) % this.workspace.getGroupCount() === 0) {
         return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
       }
       // @ts-expect-error
-    } else if ((index - 1) % this.options.getCellCount() === 0) {
+    } else if ((index - 1) % this.workspace.getCellCount() === 0) {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 
