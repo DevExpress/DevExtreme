@@ -19,7 +19,7 @@ export const deferredCache = <TArgs, TResult>(
   ): DeferredObj<TResult> => {
     const hasPreviousCall = lastArgs !== null && cachedResult !== null;
     const isArgsSame = hasPreviousCall
-      ? equalByValue(lastArgs, args)
+      ? equalByValue(lastArgs, args, { maxDepth: 5 })
       : false;
 
     if (hasPreviousCall && isArgsSame) {
