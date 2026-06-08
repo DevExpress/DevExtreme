@@ -20,8 +20,8 @@ import {
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
 } from '../classes';
-import tableCreatorModule, { type GroupRows } from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
+import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ResourceId } from '../utils/loader/types';
 import { VIEWS } from '../utils/options/constants_view';
 import { reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
@@ -262,8 +262,8 @@ class SchedulerAgenda extends WorkSpace {
       groupRowClass: GROUP_ROW_CLASS,
       groupCellClass: this.getGroupHeaderClass(),
       groupCellCustomContent(
-        cell: HTMLDivElement,
-        cellTextElement: HTMLElement,
+        cell: HTMLElement,
+        cellTextElement: Text,
         index: number,
         node: GroupNode,
       ) {
@@ -295,7 +295,6 @@ class SchedulerAgenda extends WorkSpace {
 
         cell.appendChild(container);
       },
-      cellTemplate,
     });
 
     return {
