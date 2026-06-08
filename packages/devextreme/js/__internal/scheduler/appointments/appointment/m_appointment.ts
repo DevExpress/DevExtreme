@@ -249,7 +249,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, () => {
       show({
-        target: $icon,
+        target: $icon.get(0),
         content: getReducedIconTooltip(this.option()),
       });
     });
