@@ -86,15 +86,15 @@ import type { ResourceManager } from '../utils/resource_manager/resource_manager
 import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
 import { getSkippedDaysCount as countSkippedDays } from '../utils/skipped_days';
 import type { ListEntity } from '../view_model/types';
+import { CellsSelectionController } from './cells_selection_controller';
+import CellsSelectionState from './cells_selection_state';
 import {
   getAllDayHeight,
   getCellHeight,
   getCellWidth,
   getMaxAllowedPosition,
   PositionHelper,
-} from './helpers/m_position_helper';
-import { CellsSelectionController } from './m_cells_selection_controller';
-import CellsSelectionState from './m_cells_selection_state';
+} from './helpers/position_helper';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
@@ -270,6 +270,8 @@ export interface WorkspaceOptionsInternal {
   type?: ViewType;
   groupOrientation: GroupOrientation;
   width?: number | string | undefined;
+
+  rtlEnabled: boolean;
 }
 
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
@@ -614,6 +616,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       isAllDay: nextCellData.allDay,
       index: nextCellData.index,
     });
+
+    if (!nextCellPosition) {
+      return;
+    }
 
     if (!this.viewDataProvider.isSameCell(focusedCellData, nextCellData)) {
       const $cell = nextCellData.allDay && !this.isVerticalGroupedWorkSpace()
@@ -2068,7 +2074,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private getDateTableDOMElementsInfo() {
     const dateTableCells = this.getAllCells(false);
     if (!dateTableCells.length || !hasWindow()) {
-      return [[{}]];
+      return [[{
+        top: 0, left: 0, width: 0, height: 0,
+      }]];
     }
 
     const dateTable = this.getDateTable();
@@ -2099,7 +2107,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const allDayCells = this.getAllCells(true);
 
       if (!allDayCells.length) {
-        return [{}];
+        return [{
+          top: 0, left: 0, width: 0, height: 0,
+        }];
       }
 
       const allDayAppointmentContainer = this.$allDayPanel;
@@ -2583,14 +2593,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private initPositionHelper() {
     this.positionHelper = new PositionHelper({
-      key: this.option('key'),
       viewDataProvider: this.viewDataProvider,
-      viewStartDayHour: this.option('startDayHour'),
-      viewEndDayHour: this.option('endDayHour'),
-      cellDuration: this.getCellDuration(),
       isGroupedByDate: this.isGroupedByDate(),
       rtlEnabled: this.option('rtlEnabled'),
-      startViewDate: this.getStartViewDate(),
       isVerticalGrouping: this.isVerticalGroupedWorkSpace(),
       groupCount: this.getGroupCount(),
       isVirtualScrolling: this.isVirtualScrolling(),

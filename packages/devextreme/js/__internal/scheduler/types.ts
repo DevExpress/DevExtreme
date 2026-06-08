@@ -178,6 +178,23 @@ export interface ViewDataMap {
   allDayPanelMap: CellInfo[];
 }
 
+export interface GroupedDataMap {
+  dateTableGroupedMap: CellInfo[][][];
+  allDayPanelGroupedMap: CellInfo[][];
+}
+
+export interface CellRect {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+export interface DOMMetaData {
+  dateTableCellsMeta: CellRect[][];
+  allDayPanelCellsMeta: CellRect[];
+}
+
 export interface DateHeaderCellData extends ViewCellData {
   colSpan: number;
 }

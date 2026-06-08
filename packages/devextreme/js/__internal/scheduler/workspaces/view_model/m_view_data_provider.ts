@@ -10,8 +10,10 @@ import {
   isVerticalGroupingApplied,
 } from '../../r1/utils/index';
 import type {
+  CellPositionData,
   CountGenerationConfig,
   DateHeaderData,
+  GroupedDataMap,
   TimePanelData,
   ViewCellData,
   ViewDataMap, ViewOptions,
@@ -61,7 +63,9 @@ export default class ViewDataProvider {
     this.groupedDataMapProvider = null as unknown as GroupedDataMapProvider;
   }
 
-  get groupedDataMap() { return this.groupedDataMapProvider.groupedDataMap; }
+  get groupedDataMap(): GroupedDataMap {
+    return this.groupedDataMapProvider.groupedDataMap as GroupedDataMap;
+  }
 
   get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
 
@@ -198,7 +202,7 @@ export default class ViewDataProvider {
     return this.groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
 
-  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): any {
+  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): CellPositionData | undefined {
     return this.groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
 
