@@ -21,6 +21,10 @@ const CLASS = {
 };
 
 export class AIAssistantChat extends Popup {
+  getWrapper(): Selector {
+    return this.element;
+  }
+
   getChat(): Chat {
     return new Chat(this.element.find(`.${CLASS.aiChatContent}`));
   }

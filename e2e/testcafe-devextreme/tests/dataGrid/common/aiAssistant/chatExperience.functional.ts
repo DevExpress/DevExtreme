@@ -30,7 +30,7 @@ test('Chat history should accumulate across multiple prompts', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await t
     .typeText(aiChat.getInput(), 'Clear sorting')
@@ -40,7 +40,7 @@ test('Chat history should accumulate across multiple prompts', async (t) => {
   await t.expect(aiChat.getAIMessages().count).eql(2);
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
@@ -163,7 +163,7 @@ test('Suggestion click should send message and execute command', async (t) => {
   await t.expect(aiChat.getUserMessages().nth(0).textContent).eql('Sort by name');
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
 
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
@@ -179,7 +179,7 @@ test('Suggestion click should send message and execute command', async (t) => {
         const chatEl = e.element.closest('.dx-chat');
         const chatInstance = (window as any).DevExpress.ui.dxChat.getInstance(chatEl);
         const message = {
-          id: Date.now(),
+          id: `${Date.now()}`,
           timestamp: new Date(),
           author: chatInstance.option('user'),
           text: e.itemData.text,
@@ -216,7 +216,7 @@ test('customizeResponseText at init should override success and failure messages
   await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
   await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Custom success for sorting');
   await t.expect(aiChat.getActionItemText(0, 1).textContent).eql('Custom failure for sorting');
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
@@ -320,7 +320,7 @@ test('customizeResponseTitle at init should override message header', async (t) 
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getMessageHeader(0).textContent).eql('success: sorting');
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await t
     .typeText(aiChat.getInput(), 'Sort by invalid')
@@ -358,7 +358,7 @@ test('customizeResponseText changed at runtime should apply to subsequent messag
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Original message');
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await dataGrid.apiOption('aiAssistant.customizeResponseText', () => ({ success: 'Updated message' }));
 
@@ -369,7 +369,7 @@ test('customizeResponseText changed at runtime should apply to subsequent messag
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(aiChat.getActionItemText(1, 0).textContent).eql('Updated message');
   await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Original message');
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
