@@ -4,8 +4,8 @@ import SchedulerTimelineDay from '__internal/scheduler/workspaces/timeline_day';
 import SchedulerTimelineWeek from '__internal/scheduler/workspaces/timeline_week';
 import SchedulerTimelineMonth from '__internal/scheduler/workspaces/timeline_month';
 import dateLocalization from 'common/core/localization/date';
-import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/m_work_space_grouped_strategy_vertical';
-import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspaces/m_work_space_grouped_strategy_horizontal';
+import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/work_space_grouped_strategy_vertical';
+import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspaces/work_space_grouped_strategy_horizontal';
 import '__internal/scheduler/m_scheduler';
 
 import {
