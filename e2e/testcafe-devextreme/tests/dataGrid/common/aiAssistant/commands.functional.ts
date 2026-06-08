@@ -1,56 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClientFunction } from 'testcafe';
+import { createWidget } from '../../../../helpers/createWidget';
 import {
   AI_INTEGRATION_PAGE,
   GRID_SELECTOR,
+  createGridWithAIAssistant,
+  setupAIState,
+  threeRows,
+  twoRows,
 } from './testHelpers';
-import { createWidget } from '../../../../helpers/createWidget';
-
-const threeRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-  { id: 3, name: 'Charlie', value: 10 },
-];
-
-const twoRows = [
-  { id: 1, name: 'Alice', value: 30 },
-  { id: 2, name: 'Bob', value: 20 },
-];
-
-const setupAIState = ClientFunction((base: Record<string, unknown>, responses: unknown[]) => {
-  (window as any).__aiBase = base;
-  (window as any).__aiResponses = responses;
-  (window as any).__aiCallCount = 0;
-});
-
-const aiGridOptions = (): any => ({
-  ...(window as any).__aiBase,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest() {
-        const responses = (window as any).__aiResponses;
-        const count = (window as any).__aiCallCount;
-        const response = responses[count];
-
-        (window as any).__aiCallCount = count + 1;
-
-        if (response === undefined) {
-          return {
-            promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
-            abort: (): void => {},
-          };
-        }
-
-        return {
-          promise: Promise.resolve(response),
-          abort: (): void => {},
-        };
-      },
-    }),
-  },
-});
 
 const remoteAIGridOptions = (): any => {
   const { data, options } = (window as any).__aiBase;
@@ -94,15 +52,6 @@ const remoteAIGridOptions = (): any => {
       }),
     },
   };
-};
-
-const createGridWithAIAssistant = async (
-  base: Record<string, unknown>,
-  responses: unknown[],
-): Promise<void> => {
-  await setupAIState(base, responses);
-
-  return createWidget('dxDataGrid', aiGridOptions);
 };
 
 const createRemoteGridWithAIAssistant = async (

@@ -31,8 +31,6 @@ export const FAIL = '__FAIL__';
 export const setupAIState = ClientFunction((
   base: Record<string, unknown>,
   responses: unknown[],
-  hangMarker?: string,
-  failMarker?: string,
 ) => {
   (window as any).__aiBase = base;
   (window as any).__aiResponses = responses;
@@ -41,8 +39,6 @@ export const setupAIState = ClientFunction((
   (window as any).__aiAbortCalled = false;
   (window as any).__aiAssistantExtra = {};
   (window as any).__aiGridExtra = {};
-  (window as any).__aiHangMarker = hangMarker;
-  (window as any).__aiFailMarker = failMarker;
 });
 
 const aiGridOptions = (): any => ({
@@ -60,11 +56,11 @@ const aiGridOptions = (): any => ({
 
         const abort = (): void => { (window as any).__aiAbortCalled = true; };
 
-        if (response === (window as any).__aiHangMarker) {
+        if (response === '__HANG__') {
           return { promise: new Promise(() => {}), abort };
         }
 
-        if (response === (window as any).__aiFailMarker) {
+        if (response === '__FAIL__') {
           return { promise: Promise.reject(new Error('AI error')), abort };
         }
 
@@ -96,7 +92,7 @@ export const createGridWithAIAssistant = async (
   assistantExtra: Record<string, unknown> = {},
   gridExtra: Record<string, unknown> = {},
 ): Promise<void> => {
-  await setupAIState(base, responses, HANG, FAIL);
+  await setupAIState(base, responses);
   await setAIExtras(assistantExtra, gridExtra);
 
   return createWidget('dxDataGrid', aiGridOptions);
