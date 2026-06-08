@@ -93,7 +93,7 @@ export const getOverflowIndicatorColor = (color: string, colors: string[]): stri
     : undefined
 );
 
-export const getVerticalGroupCountClass = (groups: unknown[]): string | undefined => {
+export const getVerticalGroupCountClass = (groups: ResourceLoader[]): string | undefined => {
   switch (groups?.length) {
     case 1:
       return VERTICAL_GROUP_COUNT_CLASSES[0];
