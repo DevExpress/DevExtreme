@@ -112,7 +112,7 @@
         "dxDataGrid-aiAssistantProcessingMessage": "Verwerken...",
         "dxDataGrid-aiAssistantErrorMessageHeader": "Verwerken van verzoek mislukt",
         "dxDataGrid-aiAssistantAbortMessage": "Verzoek gestopt.",
-        "dxDataGrid-aiAssistantSuccessMessage": "Geslaagd",
+        "dxDataGrid-aiAssistantSuccessMessage": "Gelukt",
         "dxDataGrid-aiAssistantErrorMessage": "Fout",
         "dxDataGrid-aiAssistantExecutionAbortMessage": "Uitvoering onderbroken",
         "dxDataGrid-aiAssistantExecutionInProgressMessage": "Uitvoering is al bezig. Een ogenblik geduld.",
