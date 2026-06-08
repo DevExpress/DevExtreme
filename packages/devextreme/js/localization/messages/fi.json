@@ -117,7 +117,7 @@
         "dxDataGrid-aiAssistantExecutionAbortMessage": "Suoritus keskeytyi",
         "dxDataGrid-aiAssistantExecutionInProgressMessage": "Suoritus on jo käynnissä. Odota.",
         "dxDataGrid-aiAssistantRequestInProgressMessage": "Pyyntö on jo käynnissä. Odota.",
-        "dxDataGrid-aiAssistantUnexpectedErrorMessage": "Odottamaton virhe tapahtui. Yritä uudelleen.",
+        "dxDataGrid-aiAssistantUnexpectedErrorMessage": "Tapahtui odottamaton virhe. Yritä uudelleen.",
         "dxDataGrid-aiAssistantInvalidResponseMessage": "Virheellinen vastaus tekoälypalvelulta. Yritä uudelleen.",
         "dxDataGrid-aiAssistantClearButtonText": "Tyhjennä",
         "dxDataGrid-aiAssistantRegenerateButtonText": "Luo uudelleen",
