@@ -75,7 +75,7 @@ jobs:
         shell: bash
         run: |
           shopt -s nullglob
-          sbom_files=(packages/sbom/dist/*.sbom.json)
+          sbom_files=(packages/sbom/dist/*.cdx.json)
 
           if [ ${#sbom_files[@]} -eq 0 ]; then
             echo "No SBOM files found in packages/sbom/dist"
@@ -166,7 +166,7 @@ jobs:
           PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
         run: |
           UNSCOPED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed -r 's#^@[^/]+/##');
-          SBOM_FILE="sbom-packages/$UNSCOPED_PACKAGE_NAME.sbom.json";
+          SBOM_FILE="sbom-packages/$UNSCOPED_PACKAGE_NAME.cdx.json";
 
           # if [ ! -f "$SBOM_FILE" ]; then
           #   echo "No SBOM found for $UNSCOPED_PACKAGE_NAME"
