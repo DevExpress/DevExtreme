@@ -11,7 +11,7 @@ import SchedulerTimelineWeek from '../workspaces/timeline_week';
 import SchedulerWorkSpaceDay from '../workspaces/work_space_day';
 import SchedulerWorkSpaceMonth from '../workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from '../workspaces/work_space_week';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 jest.mock('@ts/core/m_devices', () => {
   const originalModule: any = jest.requireActual('@ts/core/m_devices');

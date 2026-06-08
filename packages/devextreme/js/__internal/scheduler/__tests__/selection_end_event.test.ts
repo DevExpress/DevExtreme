@@ -7,7 +7,7 @@ import support from '@ts/core/utils/m_support';
 
 import fx from '../../../common/core/animation/fx';
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 const defaultOptions = {
   currentView: 'week',

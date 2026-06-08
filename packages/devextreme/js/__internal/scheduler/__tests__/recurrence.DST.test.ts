@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 import type { AppointmentModel } from './__mock__/model/appointment';
 
 const ChicagoDST = [new Date('2025-03-08T00:00:00.000Z'), new Date('2025-11-01T00:00:00.000Z')]; // +1, -1

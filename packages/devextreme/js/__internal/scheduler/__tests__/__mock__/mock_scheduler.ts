@@ -23,7 +23,9 @@ export const setupSchedulerTestEnvironment = ({
 }: SetupSchedulerTestEnvironmentOptions = {}): void => {
   jest.spyOn(logger, 'warn').mockImplementation(() => {});
   DOMComponent.prototype._isVisible = jest.fn((): boolean => true);
-  (SchedulerWorkSpace.prototype as any).createCrossScrollingConfig = (): {
+  const workspaceProto = SchedulerWorkSpace.prototype as
+    unknown as Record<string, unknown>;
+  workspaceProto.createCrossScrollingConfig = (): {
     direction: string;
     onScroll: jest.Mock;
     onEnd: jest.Mock;
@@ -34,7 +36,10 @@ export const setupSchedulerTestEnvironment = ({
   });
 
   const { getComputedStyle } = window;
-  window.getComputedStyle = jest.fn(function (element: Element, pseudoElement?: string | null): any {
+  window.getComputedStyle = jest.fn(function (
+    element: Element,
+    pseudoElement?: string | null,
+  ): CSSStyleDeclaration {
     const styles = getComputedStyle.call(this, element, pseudoElement);
 
     if (element.classList.contains('dx-scheduler-appointment-collector')) {
