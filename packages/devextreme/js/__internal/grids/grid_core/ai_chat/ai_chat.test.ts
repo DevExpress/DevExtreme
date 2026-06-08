@@ -36,6 +36,7 @@ const mockPopupInstance = {
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   option: jest.fn<(name: string) => unknown>().mockReturnValue(false),
+  dispose: jest.fn(),
 };
 
 const mockChatElement = $('<div>');
@@ -45,12 +46,14 @@ const mockDataSource = {
   reload: jest.fn(),
   items: jest.fn(() => [] as unknown[]),
   on: jest.fn(),
+  off: jest.fn(),
 };
 
 const mockChatInstance = {
   option: jest.fn(),
   $element: jest.fn(() => mockChatElement),
   getDataSource: jest.fn(() => mockDataSource),
+  dispose: jest.fn(),
 };
 
 const mockClearChatButtonInstance = {
@@ -297,6 +300,53 @@ describe('AIChat', () => {
 
       expect(mockStore.clear).toHaveBeenCalledTimes(1);
       expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw and keep the clear button disabled when chat data source is missing on init', () => {
+      mockChatInstance.getDataSource.mockReturnValue(undefined as any);
+
+      createAIChat();
+
+      expect(() => triggerContentTemplate()).not.toThrow();
+      expect(mockClearChatButtonInstance.option)
+        .toHaveBeenLastCalledWith('disabled', true);
+    });
+
+    it('should preserve AIChat context for the data source change handler when contentTemplate runs synchronously during popup creation', () => {
+      const syncCreateComponentMock = jest.fn((
+        _el: any,
+        Widget: any,
+        options?: any,
+      ): any => {
+        if (Widget === Popup) {
+          const toolbarItems = options?.toolbarItems;
+
+          toolbarItems?.forEach((item: any) => {
+            item.options?.onInitialized?.({ component: mockClearChatButtonInstance });
+          });
+
+          options?.contentTemplate?.($('<div>'));
+
+          return mockPopupInstance;
+        }
+        if (Widget === Chat) {
+          return mockChatInstance;
+        }
+        return {};
+      });
+
+      createAIChat({ createComponent: syncCreateComponentMock as any });
+
+      const changedHandler = (mockDataSource.on.mock.calls.find(
+        ([eventName]) => eventName === 'changed',
+      ) as any)?.[1] as () => void;
+
+      mockClearChatButtonInstance.option.mockClear();
+      mockDataSource.items.mockReturnValue([{ id: 1 }]);
+
+      expect(() => changedHandler()).not.toThrow();
+      expect(mockClearChatButtonInstance.option)
+        .toHaveBeenCalledWith('disabled', false);
     });
   });
 
@@ -795,6 +845,140 @@ describe('AIChat', () => {
         }, false, true);
       }).not.toThrow();
     });
+
+    describe('chat data source rebinding', () => {
+      it('should subscribe to changes of the new data source when chatOptions contains dataSource', () => {
+        const { aiChat, $container } = createAIChat();
+        triggerContentTemplate();
+
+        const newDataSource = {
+          store: jest.fn(),
+          reload: jest.fn(),
+          items: jest.fn(() => [] as unknown[]),
+          on: jest.fn(),
+          off: jest.fn(),
+        };
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+
+        aiChat.updateOptions({
+          container: $container,
+          createComponent: createComponentMock as any,
+          chatOptions: { dataSource: [] as any },
+        }, false, true);
+
+        expect(newDataSource.on)
+          .toHaveBeenCalledWith('changed', expect.any(Function));
+      });
+
+      it('should unsubscribe from the previous data source when chatOptions contains dataSource', () => {
+        const { aiChat, $container } = createAIChat();
+        triggerContentTemplate();
+
+        const previousChangedHandler = (mockDataSource.on.mock.calls.find(
+          ([eventName]) => eventName === 'changed',
+        ) as any)?.[1];
+
+        const newDataSource = {
+          store: jest.fn(),
+          reload: jest.fn(),
+          items: jest.fn(() => [] as unknown[]),
+          on: jest.fn(),
+          off: jest.fn(),
+        };
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+
+        aiChat.updateOptions({
+          container: $container,
+          createComponent: createComponentMock as any,
+          chatOptions: { dataSource: [] as any },
+        }, false, true);
+
+        expect(mockDataSource.off)
+          .toHaveBeenCalledWith('changed', previousChangedHandler);
+      });
+
+      it('should enable the clear button when the new data source has messages', () => {
+        const { aiChat, $container } = createAIChat();
+        triggerContentTemplate();
+
+        const newDataSource = {
+          store: jest.fn(),
+          reload: jest.fn(),
+          items: jest.fn(() => [{ id: 1 }] as unknown[]),
+          on: jest.fn(),
+          off: jest.fn(),
+        };
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+
+        mockClearChatButtonInstance.option.mockClear();
+        aiChat.updateOptions({
+          container: $container,
+          createComponent: createComponentMock as any,
+          chatOptions: { dataSource: [{ id: 1 }] as any },
+        }, false, true);
+
+        expect(mockClearChatButtonInstance.option)
+          .toHaveBeenLastCalledWith('disabled', false);
+      });
+
+      it('should keep the clear button disabled when the new data source is empty', () => {
+        const { aiChat, $container } = createAIChat();
+        triggerContentTemplate();
+
+        const newDataSource = {
+          store: jest.fn(),
+          reload: jest.fn(),
+          items: jest.fn(() => [] as unknown[]),
+          on: jest.fn(),
+          off: jest.fn(),
+        };
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+
+        mockClearChatButtonInstance.option.mockClear();
+        aiChat.updateOptions({
+          container: $container,
+          createComponent: createComponentMock as any,
+          chatOptions: { dataSource: [] as any },
+        }, false, true);
+
+        expect(mockClearChatButtonInstance.option)
+          .toHaveBeenLastCalledWith('disabled', true);
+      });
+
+      it('should not rebind chat data source when chatOptions does not contain dataSource', () => {
+        const { aiChat, $container } = createAIChat();
+        triggerContentTemplate();
+
+        mockDataSource.off.mockClear();
+        mockDataSource.on.mockClear();
+
+        aiChat.updateOptions({
+          container: $container,
+          createComponent: createComponentMock as any,
+          chatOptions: { showAvatar: true },
+        }, false, true);
+
+        expect(mockDataSource.off).not.toHaveBeenCalled();
+        expect(mockDataSource.on).not.toHaveBeenCalled();
+      });
+
+      it('should not rebind chat data source when updateChat is false', () => {
+        const { aiChat, $container } = createAIChat();
+        triggerContentTemplate();
+
+        mockDataSource.off.mockClear();
+        mockDataSource.on.mockClear();
+
+        aiChat.updateOptions({
+          container: $container,
+          createComponent: createComponentMock as any,
+          chatOptions: { dataSource: [] as any },
+        }, false, false);
+
+        expect(mockDataSource.off).not.toHaveBeenCalled();
+        expect(mockDataSource.on).not.toHaveBeenCalled();
+      });
+    });
   });
 
   describe('disabled state', () => {
@@ -1012,10 +1196,10 @@ describe('AIChat', () => {
       const { aiChat } = createAIChat();
       triggerContentTemplate();
 
-      mockChatInstance.getDataSource.mockClear();
+      mockDataSource.store.mockClear();
+      mockDataSource.reload.mockClear();
       aiChat.clear();
 
-      expect(mockChatInstance.getDataSource).toHaveBeenCalledTimes(1);
       expect(mockDataSource.store).toHaveBeenCalledTimes(1);
       expect(mockStore.clear).toHaveBeenCalledTimes(1);
       expect(mockDataSource.reload).toHaveBeenCalledTimes(1);
@@ -1067,6 +1251,49 @@ describe('AIChat', () => {
       triggerContentTemplate();
 
       expect(aiChat.getUserId()).toBe('');
+    });
+  });
+
+  describe('dispose', () => {
+    it('should unsubscribe the clear button handler from the data source changes', () => {
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      const changedHandler = (mockDataSource.on.mock.calls.find(
+        ([eventName]) => eventName === 'changed',
+      ) as any)?.[1];
+
+      aiChat.dispose();
+
+      expect(mockDataSource.off)
+        .toHaveBeenCalledWith('changed', changedHandler);
+    });
+
+    it('should dispose chat instance', () => {
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      aiChat.dispose();
+
+      expect(mockChatInstance.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('should dispose popup instance', () => {
+      const { aiChat } = createAIChat();
+      triggerContentTemplate();
+
+      aiChat.dispose();
+
+      expect(mockPopupInstance.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw when chatInstance is not created', () => {
+      const { aiChat } = createAIChat();
+
+      expect(() => {
+        aiChat.dispose();
+      }).not.toThrow();
+      expect(mockPopupInstance.dispose).toHaveBeenCalledTimes(1);
     });
   });
 });

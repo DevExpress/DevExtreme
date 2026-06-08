@@ -180,7 +180,7 @@ export class AIAssistantView extends View {
   public dispose(): void {
     this.unsubscribeMessageStorePush();
     this.messageStore = undefined;
-    this.aiChatInstance.dispose();
+    this.aiChatInstance?.dispose();
     super.dispose();
   }
 
