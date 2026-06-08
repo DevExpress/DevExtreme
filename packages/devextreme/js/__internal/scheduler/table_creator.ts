@@ -344,7 +344,7 @@ class SchedulerTableCreator {
     for (let i = 0; i < repeatCount * repeatByDate; i += 1) {
       for (let j = 0; j < itemCount; j += 1) {
         let $container = $('<div>');
-        const cell: GroupCell = { element: $('<div>') };
+        let boundTemplate: TemplateCallback | null = null;
 
         if (cellTemplate?.render) {
           const model = group.data
@@ -356,7 +356,7 @@ class SchedulerTableCreator {
             index: i * itemCount + j,
           };
 
-          cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
+          boundTemplate = cellTemplate.render.bind(cellTemplate, templateOptions);
         } else {
           $container
             .text(items[j].text)
@@ -368,7 +368,11 @@ class SchedulerTableCreator {
         const cssClass = isFunction(cssClasses.groupHeaderClass)
           ? cssClasses.groupHeaderClass(j)
           : cssClasses.groupHeaderClass;
-        cell.element = $container.addClass(cssClass);
+
+        const cell: GroupCell = { element: $container.addClass(cssClass) };
+        if (boundTemplate) {
+          cell.template = boundTemplate;
+        }
 
         cells.push(cell);
       }
@@ -507,7 +511,7 @@ class SchedulerTableCreator {
     for (let i = 0; i < totalRepeatCount; i += 1) {
       for (let j = 0; j < itemCount; j += 1) {
         let $container = $('<div>');
-        const cell: GroupCell = { element: $('<th>') };
+        let boundTemplate: TemplateCallback | null = null;
 
         if (cellTemplate?.render) {
           const model = group.data
@@ -519,7 +523,7 @@ class SchedulerTableCreator {
             index: i * itemCount + j,
           };
 
-          cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
+          boundTemplate = cellTemplate.render.bind(cellTemplate, templateOptions);
         } else {
           $container.text(items[j].text);
           $container = $('<div>').append($container);
@@ -530,7 +534,11 @@ class SchedulerTableCreator {
         const cssClass = isFunction(cssClasses.groupHeaderClass)
           ? cssClasses.groupHeaderClass(j)
           : cssClasses.groupHeaderClass;
-        cell.element = $('<th>').addClass(cssClass).append($container);
+
+        const cell: GroupCell = { element: $('<th>').addClass(cssClass).append($container) };
+        if (boundTemplate) {
+          cell.template = boundTemplate;
+        }
 
         cells.push(cell);
       }
