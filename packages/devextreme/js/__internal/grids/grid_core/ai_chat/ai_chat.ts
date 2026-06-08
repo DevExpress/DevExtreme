@@ -1,7 +1,7 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
-import type { ArrayStore } from '@js/common/data';
+import type { ArrayStore, DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { InitializedEvent } from '@js/ui/button';
@@ -46,14 +46,16 @@ export class AIChat {
 
   private disabled = false;
 
+  private chatDataSource?: DataSource<Message, string>;
+
   constructor(
     private options: AIChatOptions,
   ) {
     const { container, createComponent } = options;
 
+    this.updateClearChatButtonDisabled = this.updateClearChatButtonDisabled.bind(this);
     container.addClass(CLASSES.aiChat);
     this.popupInstance = createComponent(container, Popup, this.getPopupConfig());
-    this.updateClearChatButtonDisabled = this.updateClearChatButtonDisabled.bind(this);
   }
 
   private getChatConfig(): ChatProperties {
@@ -118,8 +120,8 @@ export class AIChat {
           this.getChatConfig(),
         );
 
-        this.unsubscribeStoreChanges();
-        this.subscribeStoreChanges();
+        this.rebindChatDataSource();
+        this.updateClearChatButtonDisabled();
       },
       ...this.options.popupOptions,
     };
@@ -280,8 +282,7 @@ export class AIChat {
   }
 
   private updateClearChatButtonDisabled(): void {
-    const dataSource = this.chatInstance?.getDataSource();
-    const hasMessages = (dataSource?.items?.() ?? []).length > 0;
+    const hasMessages = (this.chatDataSource?.items?.() ?? []).length > 0;
 
     this.setClearChatButtonDisabled(this.disabled || !hasMessages);
   }
@@ -290,13 +291,18 @@ export class AIChat {
     this.chatInstance?.option({ suggestions: { disabled } });
   }
 
-  private subscribeStoreChanges(): void {
-    this.chatInstance?.getDataSource()?.on('changed', this.updateClearChatButtonDisabled);
-    this.updateClearChatButtonDisabled();
+  private subscribeDataSourceChanges(): void {
+    this.chatDataSource?.on('changed', this.updateClearChatButtonDisabled);
   }
 
-  private unsubscribeStoreChanges(): void {
-    this.chatInstance?.getDataSource()?.off('changed', this.updateClearChatButtonDisabled);
+  private unsubscribeDataSourceChanges(): void {
+    this.chatDataSource?.off('changed', this.updateClearChatButtonDisabled);
+  }
+
+  private rebindChatDataSource(): void {
+    this.unsubscribeDataSourceChanges();
+    this.chatDataSource = this.chatInstance?.getDataSource();
+    this.subscribeDataSourceChanges();
   }
 
   public updateOptions(options: AIChatOptions, updatePopup: boolean, updateChat: boolean): void {
@@ -308,6 +314,14 @@ export class AIChat {
 
     if (updateChat && this.options.chatOptions) {
       this.chatInstance?.option(this.options.chatOptions);
+
+      // @ts-expect-error ts-error
+      const hasDataSourceOption = Object.hasOwn(this.options.chatOptions, 'dataSource');
+
+      if (hasDataSourceOption) {
+        this.rebindChatDataSource();
+        this.updateClearChatButtonDisabled();
+      }
     }
   }
 
@@ -353,12 +367,11 @@ export class AIChat {
   }
 
   public clear(): void {
-    const dataSource = this.chatInstance?.getDataSource();
-    const store = dataSource?.store() as ArrayStore<Message, string>;
+    const store = this.chatDataSource?.store() as ArrayStore<Message, string>;
 
     store?.clear();
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    dataSource?.reload();
+    this.chatDataSource?.reload();
   }
 
   public getUserId(): string {
@@ -366,7 +379,8 @@ export class AIChat {
   }
 
   public dispose(): void {
-    this.unsubscribeStoreChanges();
+    this.unsubscribeDataSourceChanges();
+    this.chatDataSource = undefined;
     this.chatInstance?.dispose();
     this.popupInstance.dispose();
   }
