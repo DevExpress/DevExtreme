@@ -47,15 +47,15 @@
         "dxList-pageLoadingText": "Laden...",
         "dxList-nextButtonText": "Mehr",
         "dxList-selectAll": "Alles auswählen",
-        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel": "Elemente",
         "dxList-listAriaLabel-deletable": "Löschbare Elemente",
         "dxListEditDecorator-delete": "Entfernen",
         "dxListEditDecorator-more": "Mehr",
-        "dxList-selectAll-indeterminate": "Half-checked",
-        "dxList-selectAll-checked": "Checked",
-        "dxList-selectAll-notChecked": "Not checked",
-        "dxList-ariaRoleDescription": "List",
-        "dxList-listAriaLabel-itemContent": "List item content",
+        "dxList-selectAll-indeterminate": "Halb ausgewählt",
+        "dxList-selectAll-checked": "Ausgewählt",
+        "dxList-selectAll-notChecked": "Nicht ausgewählt",
+        "dxList-ariaRoleDescription": "Liste",
+        "dxList-listAriaLabel-itemContent": "Listenelementinhalt",
 
         "dxScrollView-pullingDownText": "Zum Aktualisieren nach unten ziehen",
         "dxScrollView-pulledDownText": "Zum Aktualisieren loslassen",
@@ -181,7 +181,7 @@
         "dxDataGrid-ariaColumn": "Spalte",
         "dxDataGrid-ariaColumnHeader": "Spaltenüberschrift",
         "dxDataGrid-ariaValue": "Wert",
-        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaError": "Fehler",
         "dxDataGrid-ariaRevertButton": "Escape-Taste drücken, um die Änderungen zu verwerfen",
         "dxDataGrid-ariaFilterCell": "Filterzelle",
         "dxDataGrid-ariaCollapse": "Zusammenklappen",
@@ -196,12 +196,12 @@
         "dxDataGrid-ariaSelectAll": "Alle auswählen",
         "dxDataGrid-ariaSelectRow": "Zeile auswählen",
         "dxDataGrid-ariaToolbar": "Symbolleiste der Datentabelle",
-        "dxDataGrid-ariaEditForm": "Edit form",
+        "dxDataGrid-ariaEditForm": "Bearbeitungsformular",
         "dxDataGrid-filterBuilderPopupTitle": "Filter-Generator",
         "dxDataGrid-filterPanelCreateFilter": "Filter erzeugen",
         "dxDataGrid-filterPanelClearFilter": "Zurücksetzen",
         "dxDataGrid-filterPanelFilterEnabledHint": "Filter aktivieren",
-        "dxDataGrid-masterDetail": "Cell with details",
+        "dxDataGrid-masterDetail": "Zelle mit Details",
         "dxDataGrid-moveColumnToTheRight": "Nach rechts verschieben",
         "dxDataGrid-moveColumnToTheLeft": "Nach links verschieben",
 
@@ -254,7 +254,7 @@
         "dxPivotGrid-filterFieldArea": "Filterfelder hierher ziehen",
 
         "dxScheduler-dateRange": "von {0} bis {1}",
-        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
+        "dxScheduler-ariaLabel": "Planer. {0} Ansicht: {1} mit {2} Terminen",
         "dxScheduler-ariaLabel-currentIndicator-present": "Die aktuelle Zeitanzeige ist in der Ansicht sichtbar",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "Die aktuelle Zeitanzeige ist auf dem Bildschirm nicht sichtbar",
 
@@ -316,7 +316,7 @@
         "dxScheduler-recurrenceRepeatCount": "Ereignisse",
         "dxScheduler-allDay": "Ganztägig",
 
-        "dxScheduler-ariaEditForm": "Edit form",
+        "dxScheduler-ariaEditForm": "Bearbeitungsformular",
 
         "dxScheduler-confirmRecurrenceEditTitle": "Wiederkehrenden Termin bearbeiten",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Wiederkehrenden Termin löschen",
@@ -410,7 +410,7 @@
         "dxTagBox-allSelected": "Alle ausgewählt ({0})",
         "dxTagBox-moreSelected": "{0} weitere",
         "dxTagBox-tagRoleDescription": "Tag. Löschtaste drücken, um dieses Tag zu entfernen",
-        "dxTagBox-ariaRoleDescription": "Tag box",
+        "dxTagBox-ariaRoleDescription": "Tag-Box",
 
         "vizExport-printingButtonText": "Drucken",
         "vizExport-titleMenuText": "Export/Druck",
@@ -439,14 +439,14 @@
         "dxFilterBuilder-filterOperationAnyOf": "Ist enthalten in",
         "dxFilterBuilder-filterOperationNoneOf": "Ist nicht enthalten in",
         "dxFilterBuilder-filterAriaRootElement": "Filter erstellen",
-        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupLevel": "Ebene {0}",
         "dxFilterBuilder-filterAriaGroupItem": "Gruppen item",
         "dxFilterBuilder-filterAriaOperationButton": "Operation",
         "dxFilterBuilder-filterAriaAddButton": "Hinzufügen",
         "dxFilterBuilder-filterAriaRemoveButton": "Entfernen {0}",
         "dxFilterBuilder-filterAriaItemField": "Item Feld",
         "dxFilterBuilder-filterAriaItemOperation": "Item Operation",
-        "dxFilterBuilder-filterAriaItemValue": "Item value",
+        "dxFilterBuilder-filterAriaItemValue": "Elementwert",
 
         "dxHtmlEditor-dialogColorCaption": "Schriftfarbe ändern",
         "dxHtmlEditor-dialogBackgroundCaption": "Hintergrundfarbe ändern",
@@ -516,7 +516,7 @@
         "dxHtmlEditor-width": "Breite",
         "dxHtmlEditor-height": "Höhe",
         "dxHtmlEditor-borderColor": "Farbe",
-        "dxHtmlEditor-borderWidth": "Border Width",
+        "dxHtmlEditor-borderWidth": "Rahmenbreite",
         "dxHtmlEditor-tableBackground": "Hintergrund",
         "dxHtmlEditor-dimensions": "Abmessungen",
         "dxHtmlEditor-alignment": "Ausrichtung",
@@ -842,11 +842,11 @@
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",
         "dxMultiView-elementAriaLabel": "Pfeiltasten verwenden oder wischen, um zwischen den Ansichten zu navigieren",
-        "dxMultiView-itemAriaRoleDescription": "View",
+        "dxMultiView-itemAriaRoleDescription": "Ansicht",
         "dxMultiView-itemAriaLabel": "{0} von {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Geteilter Balken",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Trennlinie",
 
         "dxStepper-optionalMark": "(Optional)"
     }
