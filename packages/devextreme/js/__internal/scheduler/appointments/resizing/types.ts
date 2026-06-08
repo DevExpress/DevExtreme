@@ -1,5 +1,5 @@
 import type { TimeZoneCalculator } from '../../r1/timezone_calculator';
-import type { ViewDataProviderType } from '../../types';
+import type { DOMMetaData, ViewDataProviderType } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentItemViewModel } from '../../view_model/types';
 
@@ -21,10 +21,7 @@ export interface GetAppointmentDateRangeOptions {
   timeZoneCalculator: TimeZoneCalculator;
   dataAccessors: AppointmentDataAccessor;
   rtlEnabled?: boolean;
-  DOMMetaData: {
-    allDayPanelCellsMeta: Rect[];
-    dateTableCellsMeta: Rect[][];
-  };
+  DOMMetaData: DOMMetaData;
   viewOffset: number;
 }
 

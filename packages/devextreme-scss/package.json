@@ -26,5 +26,5 @@
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
     "watch": "gulp watch"
   },
-  "version": "26.1.2"
+  "version": "26.1.3"
 }

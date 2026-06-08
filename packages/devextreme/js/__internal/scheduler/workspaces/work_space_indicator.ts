@@ -9,8 +9,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { getToday } from '@ts/scheduler/r1/utils/index';
 
-import { HEADER_CURRENT_TIME_CELL_CLASS } from '../m_classes';
-import timezoneUtils from '../m_utils_time_zone';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
+import timezoneUtils from '../utils_time_zone';
 import SchedulerWorkSpace, {
   type WorkspaceOptionsInternal,
 } from './m_work_space';

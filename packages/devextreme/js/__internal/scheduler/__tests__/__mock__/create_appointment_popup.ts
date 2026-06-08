@@ -14,6 +14,7 @@ import {
   AppointmentDataAccessor,
 } from '../../utils/data_accessor/appointment_data_accessor';
 import type { IFieldExpr } from '../../utils/data_accessor/types';
+import type { ResourceConfig } from '../../utils/loader/types';
 import {
   ResourceManager,
 } from '../../utils/resource_manager/resource_manager';
@@ -64,6 +65,7 @@ interface CreateAppointmentPopupOptions {
   firstDayOfWeek?: number;
   startDayHour?: number;
   timeZone?: string;
+  resources?: ResourceConfig[];
   onAppointmentFormOpening?: (...args: unknown[]) => void;
   onSave?: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   title?: string;
@@ -106,9 +108,15 @@ export const createAppointmentPopup = async (
   document.body.appendChild(container);
 
   const dataAccessors = new AppointmentDataAccessor(DEFAULT_FIELDS, false);
-  const resourceManager = new ResourceManager([]);
+  const resourceManager = new ResourceManager(options.resources ?? []);
   const timeZoneCalculator = createTimeZoneCalculator(options.timeZone ?? NO_TIMEZONE);
   const editing = { ...DEFAULT_EDITING, ...options.editing };
+
+  if (options.resources?.length) {
+    await Promise.all(
+      resourceManager.resources.map((r) => r.load()),
+    );
+  }
 
   const addAppointment = options.addAppointment
     ?? jest.fn(resolvedDeferred);
@@ -187,6 +195,7 @@ export const createAppointmentPopup = async (
 
   const dispose = (): void => {
     popup.dispose();
+    resourceManager.dispose();
     container.remove();
   };
 

@@ -1,21 +1,27 @@
+import type { CellPositionData, ViewCellData } from '@ts/scheduler/types';
+
+import type { CellPosition } from './view_model/m_types';
 import type ViewDataProvider from './view_model/m_view_data_provider';
 
 export default class CellsSelectionState {
-  private focusedCell: any = null;
+  private focusedCell: ViewCellData | null = null;
 
-  private selectedCells: any = null;
+  private selectedCells: ViewCellData[] | null = null;
 
-  private firstSelectedCell: any = null;
+  private firstSelectedCell: ViewCellData | null = null;
 
-  private prevFocusedCell: any = null;
+  private prevFocusedCell: ViewCellData | null = null;
 
-  private prevFirstSelectedCell: any;
+  private prevFirstSelectedCell: ViewCellData | null | undefined;
 
-  private prevSelectedCells: any = null;
+  private prevSelectedCells: ViewCellData[] | null = null;
 
   constructor(public viewDataProvider: ViewDataProvider) {}
 
-  getFocusedCell() {
+  getFocusedCell(): {
+    coordinates: CellPositionData | undefined,
+    cellData: ViewCellData,
+  } | undefined {
     const { focusedCell } = this;
 
     if (!focusedCell) {
@@ -31,14 +37,16 @@ export default class CellsSelectionState {
     return { coordinates: cellPosition, cellData: focusedCell };
   }
 
-  setFocusedCell(rowIndex, columnIndex, isAllDay) {
+  setFocusedCell(rowIndex: number, columnIndex: number, isAllDay: boolean): void {
     if (rowIndex >= 0) {
-      const cell = this.viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
-      this.focusedCell = cell;
+      this.focusedCell = this.viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
     }
   }
 
-  setSelectedCells(lastCellCoordinates, firstCellCoordinates: any = undefined) {
+  setSelectedCells(
+    lastCellCoordinates: CellPosition,
+    firstCellCoordinates?: CellPosition,
+  ): void {
     const { viewDataProvider } = this;
     const {
       rowIndex: lastRowIndex, columnIndex: lastColumnIndex, allDay: isLastCellAllDay,
@@ -48,34 +56,42 @@ export default class CellsSelectionState {
       return;
     }
 
+    const lastCell = viewDataProvider.getCellData(
+      lastRowIndex,
+      lastColumnIndex,
+      isLastCellAllDay,
+    );
+
     const firstCell = firstCellCoordinates
       ? viewDataProvider.getCellData(
         firstCellCoordinates.rowIndex,
         firstCellCoordinates.columnIndex,
         firstCellCoordinates.allDay,
       )
-      : this.firstSelectedCell;
-    const lastCell = viewDataProvider.getCellData(lastRowIndex, lastColumnIndex, isLastCellAllDay);
+      : (this.firstSelectedCell ?? lastCell);
 
     this.firstSelectedCell = firstCell;
 
-    this.selectedCells = this.viewDataProvider.getCellsBetween(firstCell, lastCell);
+    this.selectedCells = this.viewDataProvider.getCellsBetween(
+      firstCell,
+      lastCell,
+    );
   }
 
-  setSelectedCellsByData(selectedCellsData) {
+  setSelectedCellsByData(selectedCellsData: ViewCellData[]): void {
     this.selectedCells = selectedCellsData;
   }
 
-  getSelectedCells() {
+  getSelectedCells(): ViewCellData[] | null {
     return this.selectedCells;
   }
 
-  releaseSelectedAndFocusedCells() {
+  releaseSelectedAndFocusedCells(): void {
     this.releaseSelectedCells();
     this.releaseFocusedCell();
   }
 
-  releaseSelectedCells() {
+  releaseSelectedCells(): void {
     this.prevSelectedCells = this.selectedCells;
     this.prevFirstSelectedCell = this.firstSelectedCell;
 
@@ -83,22 +99,22 @@ export default class CellsSelectionState {
     this.firstSelectedCell = null;
   }
 
-  releaseFocusedCell() {
+  releaseFocusedCell(): void {
     this.prevFocusedCell = this.focusedCell;
     this.focusedCell = null;
   }
 
-  restoreSelectedAndFocusedCells() {
-    this.selectedCells = this.selectedCells || this.prevSelectedCells;
-    this.focusedCell = this.focusedCell || this.prevFocusedCell;
-    this.firstSelectedCell = this.firstSelectedCell || this.prevFirstSelectedCell;
+  restoreSelectedAndFocusedCells(): void {
+    this.selectedCells = this.selectedCells ?? this.prevSelectedCells;
+    this.focusedCell = this.focusedCell ?? this.prevFocusedCell;
+    this.firstSelectedCell = this.firstSelectedCell ?? this.prevFirstSelectedCell ?? null;
 
     this.prevSelectedCells = null;
     this.prevFirstSelectedCell = null;
     this.prevFocusedCell = null;
   }
 
-  clearSelectedAndFocusedCells() {
+  clearSelectedAndFocusedCells(): void {
     this.prevSelectedCells = null;
     this.selectedCells = null;
 
