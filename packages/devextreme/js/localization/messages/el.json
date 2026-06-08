@@ -111,7 +111,7 @@
         "dxDataGrid-aiAssistantProcessingMessageHeader": "Αίτημα σε εξέλιξη",
         "dxDataGrid-aiAssistantProcessingMessage": "Επεξεργασία...",
         "dxDataGrid-aiAssistantErrorMessageHeader": "Αποτυχία επεξεργασίας αιτήματος",
-        "dxDataGrid-aiAssistantAbortMessage": "Αίτημα διακόπηκε.",
+        "dxDataGrid-aiAssistantAbortMessage": "Το αίτημα διακόπηκε.",
         "dxDataGrid-aiAssistantSuccessMessage": "Επιτυχία",
         "dxDataGrid-aiAssistantErrorMessage": "Σφάλμα",
         "dxDataGrid-aiAssistantExecutionAbortMessage": "Η εκτέλεση διακόπηκε",
