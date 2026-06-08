@@ -84,8 +84,8 @@ export type CalculateStartViewDate = (
   startDayHour: number,
   startDate: Date | undefined,
   intervalCount: number,
-  firstDayOfWeekOption: number | undefined,
-  skippedDays: number[],
+  firstDayOfWeekOption?: number | undefined,
+  skippedDays?: number[],
 ) => Date;
 
 export interface ViewCellData {

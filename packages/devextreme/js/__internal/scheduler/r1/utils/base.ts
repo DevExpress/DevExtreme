@@ -24,6 +24,7 @@ import type { ResourceLoader } from '../../utils/loader/resource_loader';
 import type { ResourceId } from '../../utils/loader/types';
 import { VIEWS } from '../../utils/options/constants_view';
 import timeZoneUtils from '../../utils_time_zone';
+import type { TimeZoneCalculator } from '../timezone_calculator';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;
@@ -335,9 +336,10 @@ export const getKeyByGroup = (
   return '0';
 };
 
-export const getToday = (indicatorTime: Date | undefined, timeZoneCalculator: {
-  createDate: (todayDate: Date, path: unknown) => Date;
-}): Date => {
+export const getToday = (
+  indicatorTime: Date | undefined,
+  timeZoneCalculator: TimeZoneCalculator,
+): Date => {
   const todayDate = indicatorTime ?? new Date();
 
   return timeZoneCalculator?.createDate(todayDate, 'toGrid') || todayDate;
