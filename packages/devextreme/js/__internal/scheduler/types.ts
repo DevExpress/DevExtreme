@@ -1,6 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 import type { Component } from '@ts/core/widget/component';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
@@ -305,3 +306,39 @@ export type ScrollToGroupValuesOrOptions = RawGroupValues
   | GroupValues
   | ScrollToOptions
   | undefined;
+
+export interface GroupBoundsOffset {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
+export interface GroupedStrategyOptions {
+  $headerPanelContainer: dxElementWrapper;
+  startDayHour: number;
+  endDayHour: number;
+  hoursInterval: number;
+  getRowCount: () => number;
+  getCellCount: () => number;
+  supportAllDayRow: () => boolean;
+  getGroupCount: () => number;
+  showAllDayPanel: boolean;
+  getTimePanelWidth: () => number;
+  getGroupTableWidth: () => number;
+  getWorkSpaceWidth: () => number;
+  $element: () => dxElementWrapper;
+  getAllDayHeight: () => number;
+  getIndicatorOffset: (i: number) => number;
+  getIndicationWidth: () => number;
+  getIndicationHeight: () => number;
+  getCellHeight: () => number;
+  getHeaderHeight: () => number;
+  crossScrollingEnabled: boolean;
+  rtlEnabled: boolean;
+  getWorkSpaceLeftOffset: () => number;
+  isGroupedByDate: () => boolean;
+  getCellIndexByCoordinates: (coordinates: CellPositionData, allDay?: boolean) => number;
+  getCellWidth: () => number;
+  getScrollable: () => Scrollable;
+}
