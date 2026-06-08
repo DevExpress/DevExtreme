@@ -19,19 +19,22 @@ const removeTooltipElement = (): void => {
 };
 
 const createTooltip = (configuration: CreateTooltipConfig): void => {
+  const { content } = configuration;
+
   const options = {
     position: 'top',
     ...configuration,
   };
 
-  const { content } = options;
   delete options.content;
 
-  $tooltip = $('<div>')
-    .html(content)
-    .appendTo(viewPort());
+  if (content) {
+    $tooltip = $('<div>')
+      .html(content)
+      .appendTo(viewPort());
 
-  tooltip = new Tooltip($tooltip.get(0), options as Properties);
+    tooltip = new Tooltip($tooltip.get(0), options as Properties);
+  }
 };
 
 const removeTooltip = (): void => {
@@ -58,7 +61,7 @@ export function show(options: CreateTooltipConfig): Promise<boolean> {
 export function hide(): Promise<boolean> {
   if (!tooltip) {
     return Deferred<boolean>()
-      .resolve()
+      .resolve(false)
       .promise();
   }
 
