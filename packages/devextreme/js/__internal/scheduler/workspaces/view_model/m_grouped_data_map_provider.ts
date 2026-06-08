@@ -2,7 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
-import type { CellPositionData } from '../../types';
+import type { CellPositionData, GroupInfo } from '../../types';
 import timezoneUtils from '../../utils_time_zone';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -96,7 +96,7 @@ export class GroupedDataMapProvider {
 
   findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): CellPositionData | undefined {
     const {
-      groupIndex, startDate, isAllDay, index,
+      groupIndex, startDate, allDay, index,
     } = cellInfo;
     const {
       allDayPanelGroupedMap,
@@ -104,7 +104,7 @@ export class GroupedDataMapProvider {
     } = this.groupedDataMap;
     const { viewOffset } = this.viewOptions;
 
-    const rows = isAllDay && !this.viewOptions.isVerticalGrouping
+    const rows = allDay && !this.viewOptions.isVerticalGrouping
       ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : []
       : dateTableGroupedMap[groupIndex] || [];
 
@@ -126,7 +126,7 @@ export class GroupedDataMapProvider {
           : originCellData;
 
         if (this.isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
-          if (this.isStartDateInCell(startDate, isAllDay, cellData, originCellData)) {
+          if (this.isStartDateInCell(startDate, allDay, cellData, originCellData)) {
             return cell.position;
           }
         }
@@ -227,12 +227,7 @@ export class GroupedDataMapProvider {
     }
   }
 
-  getCompletedGroupsInfo(): ({
-    allDay: boolean;
-    startDate: Date;
-    endDate: Date;
-    groupIndex: number;
-  })[] {
+  getCompletedGroupsInfo(): GroupInfo[] {
     const { dateTableGroupedMap } = this.groupedDataMap;
     return dateTableGroupedMap.map((groupData) => {
       const firstCell = groupData[0][0];
