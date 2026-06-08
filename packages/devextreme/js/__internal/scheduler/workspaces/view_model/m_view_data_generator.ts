@@ -32,7 +32,7 @@ import type {
 const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGenerator {
-  protected tableAllDay = false;
+  protected tableAllDay: boolean | undefined = false;
 
   public hiddenInterval = 0;
 
