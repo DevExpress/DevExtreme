@@ -2,8 +2,7 @@ import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import { noop } from '@js/core/utils/common';
 import { isDefined } from '@js/core/utils/type';
-
-import windowUtils from '../../core/utils/m_window';
+import windowUtils from '@ts/core/utils/m_window';
 
 export interface OverflowManager {
   setOverflow: () => void;
@@ -83,12 +82,14 @@ export const createBodyOverflowManager = (): OverflowManager => {
 
   const setBodyPaddingRight = (): void => {
     const scrollBarWidth = window.innerWidth - documentElement.clientWidth;
+
     if (prevSettings.paddingRight || scrollBarWidth <= 0) {
       return;
     }
 
     const paddingRight = window.getComputedStyle(body).getPropertyValue('padding-right');
     const computedBodyPaddingRight = parseInt(paddingRight, 10);
+
     prevSettings.paddingRight = computedBodyPaddingRight;
 
     body.style.setProperty('padding-right', `${computedBodyPaddingRight + scrollBarWidth}px`);
@@ -129,12 +130,18 @@ export const createBodyOverflowManager = (): OverflowManager => {
       if (!isDefined(prevSettings[property])) {
         return;
       }
-      const propertyInKebabCase = property.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
+
+      const propertyInKebabCase = property.replace(
+        /(X)|(Y)/,
+        (symbol) => `-${symbol.toLowerCase()}`,
+      );
+
       if (prevSettings[property]) {
         body.style.setProperty(propertyInKebabCase, prevSettings[property]);
       } else {
         body.style.removeProperty(propertyInKebabCase);
       }
+
       prevSettings[property] = null;
     });
   };
