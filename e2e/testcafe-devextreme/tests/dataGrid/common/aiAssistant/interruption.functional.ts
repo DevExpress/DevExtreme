@@ -100,7 +100,7 @@ test('Closing the popup mid-request should abort and leave the grid unchanged', 
   await closeAndConfirmAbort(t, aiChat);
 
   await t.expect(wasAbortCalled()).ok();
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
 
 // 5.2.2
@@ -149,7 +149,7 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
 
   await t.wait(2000);
 
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
 }).before(async () => createGridWithAI({
   options: gridOptions, mode: 'delayed', actions: sortNameAsc, delay: 1500,
@@ -194,8 +194,8 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
   await t.expect(aiChat.getAbortedActionItems(0).count).eql(1);
 
   // the grid reflects only completed commands: #1 applied, #3 (sort by value) skipped.
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
-  await t.expect(await dataGrid.apiColumnOption('value', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).notOk();
 
   // no Regenerate button (commands were attempted; the grid was mutated).
   await t.expect(aiChat.getMessageRegenerateButton(0).count).eql(0);
@@ -471,5 +471,5 @@ test('Re-creating the grid after a dispose-during-flight yields a usable instanc
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-  await t.expect(await dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
