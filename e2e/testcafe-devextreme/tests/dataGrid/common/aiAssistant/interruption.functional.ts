@@ -76,10 +76,10 @@ const closeAndConfirmAbort = async (t: TestController, aiChat: AIAssistantChat):
   await t.click(aiChat.getAbortConfirmYesButton());
 };
 
-// === §5.2 Popup close mid-request (before any command executes) ===
-
-fixture`AI Assistant - Popup Close Mid-Request`
+fixture`AI Assistant - Interruption`
   .page(AI_INTEGRATION_PAGE);
+
+// === §5.2 Popup close mid-request (before any command executes) ===
 
 // 5.2.1
 test('Closing the popup mid-request should abort and leave the grid unchanged', async (t) => {
@@ -159,9 +159,6 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
 
 const releaseSelectAll = ClientFunction(() => { (window as any).__resolveSelectAll(); });
 const selectAllStarted = ClientFunction(() => (window as any).__selectAllStarted === true);
-
-fixture`AI Assistant - Popup Close Mid-Execution`
-  .page(AI_INTEGRATION_PAGE);
 
 // 5.3.1 / 5.3.4 / 5.3.5 / 5.4.1 / 5.4.2
 test('Closing the popup mid-execution aborts the remaining commands and keeps the completed ones', async (t) => {
@@ -349,9 +346,6 @@ test('Customized response title is applied to the partial (aborted) result', asy
 }));
 
 // === §5.5 Grid destroyed (dispose) mid-request / mid-execution ===
-
-fixture`AI Assistant - Dispose`
-  .page(AI_INTEGRATION_PAGE);
 
 // 5.5.1
 test('Disposing the grid mid-request should not throw and ignore the late resolution', async (t) => {
