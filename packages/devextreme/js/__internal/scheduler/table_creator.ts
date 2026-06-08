@@ -168,13 +168,16 @@ class SchedulerTableCreator {
               ? options.getCellDate(rowIndex)
               : undefined,
             ...additionalTemplateData,
-            ...(dataValue && {
-              startDate: dataValue.startDate,
-              endDate: dataValue.endDate,
-              groups: dataValue.groups,
-              allDay: dataValue.allDay,
-            }),
           };
+
+          /* eslint-disable max-depth */
+          if (dataValue) {
+            if (dataValue.startDate) { model.startDate = dataValue.startDate; }
+            if (dataValue.endDate) { model.endDate = dataValue.endDate; }
+            if (dataValue.groups) { model.groups = dataValue.groups; }
+            if (dataValue.allDay) { model.allDay = dataValue.allDay; }
+          }
+          /* eslint-enable max-depth */
 
           templateCallbacks.push(options.cellTemplate.render.bind(
             options.cellTemplate,
