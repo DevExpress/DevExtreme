@@ -1,10 +1,10 @@
 import type { ViewType } from '../../../types';
 import { VIEWS } from '../../../utils/options/constants_view';
 import { ViewDataGenerator } from '../m_view_data_generator';
-import { ViewDataGeneratorTimelineMonth } from '../m_view_data_generator_timeline_month';
 import { ViewDataGeneratorWorkWeek } from '../m_view_data_generator_work_week';
 import { ViewDataGeneratorDay } from '../view_data_generator_day';
 import { ViewDataGeneratorMonth } from '../view_data_generator_month';
+import { ViewDataGeneratorTimelineMonth } from '../view_data_generator_timeline_month';
 import { ViewDataGeneratorWeek } from '../view_data_generator_week';
 
 export const getViewDataGeneratorByViewType = (viewType: ViewType): ViewDataGenerator => {
