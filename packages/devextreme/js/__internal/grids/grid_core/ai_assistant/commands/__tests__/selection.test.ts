@@ -19,8 +19,8 @@ import {
   clearSelectionCommand,
   deselectAllCommand,
   selectAllCommand,
-  selectByIndexesCommand,
   selectByKeysCommand,
+  selectionByIndexesCommand,
 } from '../selection';
 
 const createCallbacks = (): {
@@ -284,67 +284,67 @@ describe('selectByKeysCommand', () => {
   });
 });
 
-describe('selectByIndexesCommand', () => {
+describe('selectionByIndexesCommand', () => {
   beforeEach(() => beforeTest());
   afterEach(() => afterTest());
 
   describe('schema', () => {
     it('accepts an array of positive integers with mode deselect', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1, 2, 3], mode: 'deselect', scope: 'allPages',
       }).success).toBe(true);
     });
 
     it('accepts mode select', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1], mode: 'select', scope: 'allPages',
       }).success).toBe(true);
     });
 
     it('rejects when indexes is missing', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects when mode is missing', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1], scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects an invalid mode value', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1], mode: 'toggle', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects when indexes is an empty array', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects zero (indexes are 1-based)', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [0], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects negative indexes', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [-1], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects non-integer indexes', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1.5], mode: 'select', scope: 'allPages',
       }).success).toBe(false);
     });
 
     it('rejects unknown properties', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1],
         mode: 'select',
         scope: 'allPages',
@@ -353,25 +353,25 @@ describe('selectByIndexesCommand', () => {
     });
 
     it('rejects when scope is missing', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1], mode: 'select',
       }).success).toBe(false);
     });
 
     it('accepts scope "allPages"', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1], mode: 'select', scope: 'allPages',
       }).success).toBe(true);
     });
 
     it('accepts scope "page"', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1], mode: 'select', scope: 'page',
       }).success).toBe(true);
     });
 
     it('rejects an invalid scope value', () => {
-      expect(selectByIndexesCommand.schema.safeParse({
+      expect(selectionByIndexesCommand.schema.safeParse({
         indexes: [1], mode: 'select', scope: 'global',
       }).success).toBe(false);
     });
@@ -383,7 +383,7 @@ describe('selectByIndexesCommand', () => {
       const selectSpy = jest.spyOn(instance, 'selectRows');
       const callbacks = createCallbacks();
 
-      const result = await selectByIndexesCommand.execute(instance, callbacks)({
+      const result = await selectionByIndexesCommand.execute(instance, callbacks)({
         indexes: [1], mode: 'select', scope: 'allPages',
       });
 
@@ -398,7 +398,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows');
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'select', scope: 'allPages',
         });
 
@@ -421,7 +421,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows');
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1, 2], mode: 'select', scope: 'allPages',
         });
 
@@ -439,7 +439,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [2, 3], mode: 'select', scope: 'allPages',
         });
 
@@ -468,7 +468,7 @@ describe('selectByIndexesCommand', () => {
         jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
 
-        await selectByIndexesCommand.execute(instance, callbacks)({
+        await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'select', scope: 'allPages',
         });
 
@@ -491,7 +491,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1, 2, 5], mode: 'select', scope: 'allPages',
         });
 
@@ -516,7 +516,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1, 5000], mode: 'select', scope: 'allPages',
         });
 
@@ -536,7 +536,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows');
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'select', scope: 'allPages',
         });
 
@@ -555,7 +555,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         // Three rows in createGrid; range 1..10 cannot be fully resolved.
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], mode: 'select', scope: 'allPages',
         });
 
@@ -573,7 +573,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows');
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'deselect', scope: 'allPages',
         });
 
@@ -588,7 +588,7 @@ describe('selectByIndexesCommand', () => {
           .mockReturnValue(Promise.reject(new Error('Error')) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'select', scope: 'allPages',
         });
 
@@ -604,7 +604,7 @@ describe('selectByIndexesCommand', () => {
           .mockReturnValue(Promise.reject(new Error('Error')) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'select', scope: 'allPages',
         });
 
@@ -620,7 +620,7 @@ describe('selectByIndexesCommand', () => {
           .mockReturnValue(Promise.reject(new Error('Error')) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'deselect', scope: 'allPages',
         });
 
@@ -637,7 +637,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         const result = await executeWithTimers(
-          () => selectByIndexesCommand.execute(instance, callbacks)({
+          () => selectionByIndexesCommand.execute(instance, callbacks)({
             indexes: [1, 3], mode: 'select', scope: 'allPages',
           }),
         );
@@ -654,7 +654,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         const result = await executeWithTimers(
-          () => selectByIndexesCommand.execute(instance, callbacks)({
+          () => selectionByIndexesCommand.execute(instance, callbacks)({
             indexes: [2], mode: 'deselect', scope: 'allPages',
           }),
         );
@@ -669,7 +669,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         const result = await executeWithTimers(
-          () => selectByIndexesCommand.execute(instance, callbacks)({
+          () => selectionByIndexesCommand.execute(instance, callbacks)({
             indexes: [1, 100], mode: 'select', scope: 'allPages',
           }),
         );
@@ -689,7 +689,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         const result = await executeWithTimers(
-          () => selectByIndexesCommand.execute(instance, callbacks)({
+          () => selectionByIndexesCommand.execute(instance, callbacks)({
             indexes: [1], mode: 'select', scope: 'allPages',
           }),
         );
@@ -712,7 +712,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         const result = await executeWithTimers(
-          () => selectByIndexesCommand.execute(instance, callbacks)({
+          () => selectionByIndexesCommand.execute(instance, callbacks)({
             indexes: [1], mode: 'select', scope: 'allPages',
           }),
         );
@@ -728,7 +728,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         const result = await executeWithTimers(
-          () => selectByIndexesCommand.execute(instance, callbacks)({
+          () => selectionByIndexesCommand.execute(instance, callbacks)({
             indexes: [1], mode: 'select', scope: 'allPages',
           }),
         );
@@ -744,7 +744,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1, 3], mode: 'select', scope: 'page',
         });
 
@@ -758,7 +758,7 @@ describe('selectByIndexesCommand', () => {
         const deselectSpy = jest.spyOn(instance, 'deselectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'deselect', scope: 'page',
         });
 
@@ -772,7 +772,7 @@ describe('selectByIndexesCommand', () => {
         const callbacks = createCallbacks();
 
         // Three rows in createGrid; 1-based index 100 has no row on the current page.
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1, 100], mode: 'select', scope: 'page',
         });
 
@@ -790,7 +790,7 @@ describe('selectByIndexesCommand', () => {
         const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
 
-        const result = await selectByIndexesCommand.execute(instance, callbacks)({
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
           indexes: [1], mode: 'select', scope: 'page',
         });
 
@@ -806,7 +806,7 @@ describe('selectByIndexesCommand', () => {
       jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
       const callbacks = createCallbacks();
 
-      await executeWithTimers(() => selectByIndexesCommand.execute(instance, callbacks)({
+      await executeWithTimers(() => selectionByIndexesCommand.execute(instance, callbacks)({
         indexes: [1, 3], mode: 'select', scope: 'allPages',
       }));
 
@@ -818,7 +818,7 @@ describe('selectByIndexesCommand', () => {
       jest.spyOn(instance, 'deselectRows').mockReturnValue(Promise.resolve([]) as never);
       const callbacks = createCallbacks();
 
-      await executeWithTimers(() => selectByIndexesCommand.execute(instance, callbacks)({
+      await executeWithTimers(() => selectionByIndexesCommand.execute(instance, callbacks)({
         indexes: [1], mode: 'deselect', scope: 'allPages',
       }));
 
@@ -829,7 +829,7 @@ describe('selectByIndexesCommand', () => {
       const instance = await createGrid({ selection: { mode: 'none' } });
       const callbacks = createCallbacks();
 
-      await selectByIndexesCommand.execute(instance, callbacks)({
+      await selectionByIndexesCommand.execute(instance, callbacks)({
         indexes: [1], mode: 'select', scope: 'allPages',
       });
 
@@ -841,7 +841,7 @@ describe('selectByIndexesCommand', () => {
       jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
       const callbacks = createCallbacks();
 
-      await selectByIndexesCommand.execute(instance, callbacks)({
+      await selectionByIndexesCommand.execute(instance, callbacks)({
         indexes: [1, 2], mode: 'select', scope: 'page',
       });
 

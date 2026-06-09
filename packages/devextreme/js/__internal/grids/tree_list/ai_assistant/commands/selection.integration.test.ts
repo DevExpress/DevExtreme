@@ -4,7 +4,7 @@ import {
 import $ from '@js/core/renderer';
 import type { Properties as TreeListProperties } from '@js/ui/tree_list';
 import TreeList from '@js/ui/tree_list';
-import { selectByIndexesCommand } from '@ts/grids/grid_core/ai_assistant/commands/selection';
+import { selectionByIndexesCommand } from '@ts/grids/grid_core/ai_assistant/commands/selection';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
@@ -44,7 +44,7 @@ const createTreeList = (
   resolve(instance as unknown as InternalGrid);
 });
 
-describe('selectByIndexesCommand on TreeList — "allPages" scope', () => {
+describe('selectionByIndexesCommand on TreeList — "allPages" scope', () => {
   beforeEach(async () => jest.useFakeTimers());
 
   afterEach(() => {
@@ -61,7 +61,7 @@ describe('selectByIndexesCommand on TreeList — "allPages" scope', () => {
     const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
     const callbacks = createCallbacks();
 
-    const result = await selectByIndexesCommand.execute(instance, callbacks)({
+    const result = await selectionByIndexesCommand.execute(instance, callbacks)({
       indexes: [1, 3], mode: 'select', scope: 'allPages',
     });
 
@@ -75,7 +75,7 @@ describe('selectByIndexesCommand on TreeList — "allPages" scope', () => {
     const selectSpy = jest.spyOn(instance, 'selectRows');
     const callbacks = createCallbacks();
 
-    const result = await selectByIndexesCommand.execute(instance, callbacks)({
+    const result = await selectionByIndexesCommand.execute(instance, callbacks)({
       indexes: [99], mode: 'select', scope: 'allPages',
     });
 

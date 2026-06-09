@@ -51,7 +51,7 @@ export const selectByKeysCommand = defineGridCommand({
   },
 });
 
-const selectByIndexesCommandSchema = z.object({
+const selectionByIndexesCommandSchema = z.object({
   indexes: z.array(z.number().int().min(1)).min(1),
   mode: z.enum(['select', 'deselect']),
   scope: z.enum(['allPages', 'page']),
@@ -178,8 +178,8 @@ const resolveKeysFromAllPages = (
     : resolveKeysFromAllPagesLocal(component, indexes);
 };
 
-export const selectByIndexesCommand = defineGridCommand({
-  name: 'selectByIndexes',
+export const selectionByIndexesCommand = defineGridCommand({
+  name: 'selectionByIndexes',
   description: 'Select or deselect rows by their 1-based indexes. '
     + 'Always set scope to choose how indexes are interpreted: '
     + '"allPages" — indexes are positions within the currently filtered and sorted dataset, NOT limited to the current page; index 1 is the first row of the dataset, regardless of pageIndex/pageSize. Use this when the user does NOT explicitly refer to the visible page (e.g. "select rows 1 to 100"). '
@@ -188,7 +188,7 @@ export const selectByIndexesCommand = defineGridCommand({
     + 'Set mode to "select" to add the listed rows to the current selection (multiple calls accumulate, so previously selected ranges are kept); set mode to "deselect" to remove the listed rows from the current selection (e.g. "unselect row 1"). '
     + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection. '
     + 'To target rows by key value rather than by index, use selectByKeys.',
-  schema: selectByIndexesCommandSchema,
+  schema: selectionByIndexesCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const rowIndexes = args.indexes.join(', ');
     const action = args.mode === 'deselect' ? 'Deselect' : 'Select';
