@@ -1,7 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { value as viewPort } from '@js/core/utils/view_port';
 import type { Properties } from '@js/ui/tooltip';
 import Tooltip from '@js/ui/tooltip';
@@ -14,18 +13,20 @@ let tooltip: Tooltip | null = null;
 let clean: (() => void) | null = null;
 
 const createTooltip = (configuration: CreateTooltipConfig): void => {
-  // Note: The configuration object is mutated within the extend. This is expected behavior.
-  // eslint-disable-next-line no-param-reassign
-  configuration = extend({ position: 'top' }, configuration);
-  const { content } = configuration;
+  const options = {
+    position: 'top',
+    ...configuration,
+  };
 
-  delete configuration.content;
+  const { content } = options;
+
+  delete options.content;
 
   let $tooltip: dxElementWrapper | null = $('<div>')
     .html(content)
     .appendTo(viewPort());
 
-  tooltip = new Tooltip($tooltip.get(0), configuration as Properties);
+  tooltip = new Tooltip($tooltip?.get(0), options as Properties);
 
   clean = (): void => {
     $tooltip?.remove();
@@ -48,7 +49,7 @@ export function show(options: CreateTooltipConfig): Promise<boolean> {
 
   if (!tooltip) {
     return Deferred<boolean>()
-      .resolve()
+      .resolve(false)
       .promise();
   }
 
