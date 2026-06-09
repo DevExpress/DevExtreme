@@ -1,5 +1,4 @@
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { Item } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { InternalGrid, RowKey } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
@@ -58,32 +57,35 @@ const selectByIndexesCommandSchema = z.object({
   scope: z.enum(['allPages', 'page']),
 }).strict();
 
-// Maps 1-based indexes to row keys. Group/footer rows are not counted, so an
-// index addresses the Nth data row; an index past the last data row rejects the whole set
-const resolveKeysFromItems = (
-  items: Item[],
+// Maps 1-based indexes to the keys at those positions;
+// an index past the last entry rejects the whole set.
+const pickKeysByIndex = (
+  keys: RowKey[],
   indexes: number[],
 ): RowKey[] | null => {
-  const dataItems = items.filter((item) => item.rowType === 'data');
   const normalizedRowIndexes = indexes.map((index) => index - 1);
   const allIndexesValid = normalizedRowIndexes.every(
-    (index) => dataItems[index] !== undefined,
+    (index) => index < keys.length,
   );
 
   if (!allIndexesValid) {
     return null;
   }
 
-  return normalizedRowIndexes.map((index) => dataItems[index].key);
+  return normalizedRowIndexes.map((index) => keys[index]);
 };
 
 const resolveKeysFromCurrentPage = (
   component: InternalGrid,
   indexes: number[],
-): RowKey[] | null => resolveKeysFromItems(
-  component.getController('data').items(),
-  indexes,
-);
+): RowKey[] | null => {
+  // Group/footer rows are not counted, so indexes address the Nth data row.
+  const items = component.getController('data').items();
+  const dataItems = items.filter((item) => item.rowType === 'data');
+  const dataKeys = dataItems.map((item) => item.key);
+
+  return pickKeysByIndex(dataKeys, indexes);
+};
 
 const resolveKeysFromAllPagesRemote = async (
   component: InternalGrid,
@@ -156,9 +158,9 @@ const resolveKeysFromAllPagesLocal = async (
   component: InternalGrid,
   indexes: number[],
 ): Promise<RowKey[] | null> => {
-  const items = await (component.getController('data').loadAll(undefined) as unknown as Promise<Item[]>);
+  const keys = await component.getController('data').getAllDataRowKeys();
 
-  return resolveKeysFromItems(items, indexes);
+  return pickKeysByIndex(keys, indexes);
 };
 
 // Picks the "allPages" strategy by paging mode:
