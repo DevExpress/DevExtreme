@@ -432,9 +432,9 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
 }
 
 export class VirtualScrollingDispatcher {
-  private rowHeightValue: number | undefined;
+  private rowHeightValue: number;
 
-  private cellWidthValue: number | undefined;
+  private cellWidthValue: number;
 
   private verticalVirtualScrollingValue: VerticalVirtualScrolling | undefined;
 
@@ -477,13 +477,13 @@ export class VirtualScrollingDispatcher {
     return this.options.getSchedulerWidth();
   }
 
-  get rowHeight(): number { return this.rowHeightValue as number; }
+  get rowHeight(): number { return this.rowHeightValue; }
 
   set rowHeight(value: number) { this.rowHeightValue = value; }
 
   get outlineCount(): number | undefined { return this.options.getScrolling().outlineCount; }
 
-  get cellWidth(): number { return this.cellWidthValue as number; }
+  get cellWidth(): number { return this.cellWidthValue; }
 
   set cellWidth(value: number) { this.cellWidthValue = value; }
 
