@@ -97,11 +97,11 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/position_helper';
-import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
+import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './virtual_scrolling';
 
 interface RenderComponentOptions {
   header?: boolean;
