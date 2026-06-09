@@ -162,6 +162,28 @@ QUnit.module('PivotGrid markup tests', () => {
         }
     });
 
+    QUnit.test('Expandable td aria-label matches the displayed text, not the raw value', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
+        const clock = sinon.useFakeTimers();
+        try {
+            const dataSource = createExpandableDataSource();
+            dataSource.fields[0].customizeText = (cellInfo) => `${cellInfo.valueText} region`;
+            const pivotGrid = createPivotGrid({ dataSource });
+            clock.tick(10);
+
+            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+            const displayedText = $collapsedTd.text().trim();
+
+            assert.notStrictEqual($collapsedTd.attr('aria-label').indexOf(' region'), -1, 'aria-label uses customized display text');
+            assert.strictEqual($collapsedTd.attr('aria-label'), displayedText, 'aria-label equals the visible cell text');
+        } finally {
+            clock.restore();
+        }
+    });
+
     QUnit.test('Non-expandable td has no role, aria-expanded, or tabindex', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
