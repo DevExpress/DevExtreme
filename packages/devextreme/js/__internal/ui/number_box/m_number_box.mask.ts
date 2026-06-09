@@ -769,10 +769,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     const caret = this._caret();
     const textWithoutMinus = this._removeMinusFromText(normalizedText, caret);
     const wasMinusRemoved = textWithoutMinus !== normalizedText;
+    const isFromPaste = this._isInputFromPaste(e);
 
     normalizedText = textWithoutMinus;
 
-    if (!this._isInputFromPaste(e) && this._isValueIncomplete(textWithoutMinus)) {
+    if (!isFromPaste && this._isValueIncomplete(textWithoutMinus)) {
       this._formattedValue = normalizedText;
       if (wasMinusRemoved) {
         this._setTextByParsedValue();
@@ -789,6 +790,25 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     }
 
     this._setTextByParsedValue();
+
+    if (isFromPaste) {
+      // NOTE: When a long value is pasted into a narrow input, the browser
+      // auto-scrolls horizontally to keep the caret (placed at the end of the
+      // formatted text by `_setInputText`) in view. As a result, the leading
+      // characters of the value, including a minus sign for negative numbers,
+      // may end up offscreen and stay hidden during subsequent arrow key
+      // navigation. Resetting `scrollLeft` ensures the start of the value
+      // (and the sign) remains visible right after the paste operation.
+      this._resetInputScrollPosition();
+    }
+  }
+
+  _resetInputScrollPosition(): void {
+    const input = this._input().get(0);
+
+    if (input) {
+      input.scrollLeft = 0;
+    }
   }
 
   _renderDisplayText(): void {
