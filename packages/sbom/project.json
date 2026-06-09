@@ -22,7 +22,7 @@
         ]
       }
     },
-    "built-hashes": {
+    "build-hashed": {
       "executor": "nx:run-commands",
       "dependsOn": ["install-dependencies"],
       "options": {
