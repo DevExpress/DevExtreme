@@ -1,3 +1,3 @@
-import PopoverFull from '../../__internal/ui/popover/m_popover.full';
+import PopoverFull from '@ts/ui/popover/popover.full';
 
 export default PopoverFull;
