@@ -181,7 +181,7 @@ class DropDownBox<
     const selectedItem = grep(
       this.option('items') || [],
       // @ts-expect-error DataExpressionMixin must be typed
-      (item) => this._isValueEquals(this._valueGetter(item), value),
+      (item) => this._isValueEquals(this._valueGetter(item), value) as boolean,
       false,
     )[0];
 
