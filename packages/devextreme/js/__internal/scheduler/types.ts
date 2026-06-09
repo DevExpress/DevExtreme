@@ -225,7 +225,7 @@ export interface GroupPanelData {
 }
 
 export interface ViewDataBase {
-  groupIndex: number;
+  groupIndex: number | undefined;
   isGroupedAllDayPanel?: boolean;
   key: string;
 }
