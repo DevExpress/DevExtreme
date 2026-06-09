@@ -1,4 +1,4 @@
-import ViewDataProvider from '__internal/scheduler/workspaces/view_model/m_view_data_provider';
+import ViewDataProvider from '__internal/scheduler/workspaces/view_model/view_data_provider';
 import { supportedViews } from '../../helpers/scheduler/helpers.js';
 import { getEmptyResourceManager, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
 
