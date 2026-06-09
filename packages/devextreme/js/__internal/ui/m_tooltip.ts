@@ -8,10 +8,11 @@ import type { PopoverProperties } from './popover/m_popover';
 
 // STYLE tooltip
 
+export interface TooltipProperties extends PopoverProperties {}
+
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 
-export interface TooltipProperties extends PopoverProperties {}
 class Tooltip<
   TProperties extends TooltipProperties = TooltipProperties,
 > extends Popover<TProperties> {
@@ -57,7 +58,8 @@ class Tooltip<
 
   _toggleAriaAttributes(): void {
     this._contentId = `dx-${new Guid()}`;
-    // @ts-expect-error ts-error
+
+    // @ts-expect-error dxElementWrapper typings
     this.$overlayContent().attr({
       id: this._contentId,
     });

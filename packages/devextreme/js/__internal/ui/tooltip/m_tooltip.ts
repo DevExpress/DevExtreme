@@ -1,52 +1,72 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { value as viewPort } from '@js/core/utils/view_port';
+import type { Properties } from '@js/ui/tooltip';
 import Tooltip from '@js/ui/tooltip';
 
-let tooltip = null;
-let removeTooltipElement = null;
+type CreateTooltipConfig = Properties & {
+  content?: string;
+};
 
-const createTooltip = function (options) {
-  options = extend({ position: 'top' }, options);
+let tooltip: Tooltip | null = null;
+let clean: (() => void) | null = null;
+
+const createTooltip = (configuration: CreateTooltipConfig): void => {
+  const options = {
+    position: 'top',
+    ...configuration,
+  };
 
   const { content } = options;
+
   delete options.content;
 
-  const $tooltip = $('<div>')
+  let $tooltip: dxElementWrapper | null = $('<div>')
     .html(content)
     .appendTo(viewPort());
 
-  // @ts-expect-error
-  removeTooltipElement = function () {
-    $tooltip.remove();
+  tooltip = new Tooltip($tooltip?.get(0), options as Properties);
+
+  clean = (): void => {
+    $tooltip?.remove();
+    $tooltip = null;
+    tooltip = null;
   };
-  // @ts-expect-error
-  tooltip = new Tooltip($tooltip, options);
 };
 
-const removeTooltip = function () {
+const removeTooltip = (): void => {
   if (!tooltip) {
     return;
   }
-  // @ts-expect-error
-  removeTooltipElement();
-  tooltip = null;
+
+  clean?.();
 };
 
-export function show(options) {
+export function show(options: CreateTooltipConfig): Promise<boolean> {
   removeTooltip();
   createTooltip(options);
-  // @ts-expect-error
+
+  if (!tooltip) {
+    return Deferred<boolean>()
+      .resolve(false)
+      .promise();
+  }
+
   return tooltip.show();
 }
 
-export function hide() {
+export function hide(): Promise<boolean> {
   if (!tooltip) {
-    return Deferred().resolve();
+    return Deferred<boolean>()
+      .resolve(false)
+      .promise();
   }
-  // @ts-expect-error
-  return tooltip.hide()
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return tooltip
+    .hide()
+    // @ts-expect-error Deferred.promise() typings
     .done(removeTooltip)
     .promise();
 }
