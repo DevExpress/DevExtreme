@@ -14,7 +14,7 @@ import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import List from '@ts/ui/list/list.edit.search';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import type { DateBoxBaseProperties } from './date_box.base';
 import type DateBox from './date_box.base';
 import dateUtils from './date_utils';

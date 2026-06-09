@@ -3,8 +3,7 @@ import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { isWindow } from '@js/core/utils/type';
 import Popover from '@js/ui/popover/ui.popover';
-
-import type { PopoverProperties } from './popover/m_popover';
+import type { PopoverProperties } from '@ts/ui/popover/popover';
 
 // STYLE tooltip
 

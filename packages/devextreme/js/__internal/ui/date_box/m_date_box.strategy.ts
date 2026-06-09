@@ -10,8 +10,8 @@ import type { ToolbarItem } from '@js/ui/popup';
 import type Calendar from '@ts/ui/calendar/calendar';
 import type List from '@ts/ui/list/list.edit.search';
 
-import type { PopupProperties } from '../popup/m_popup';
-import type Popup from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
+import type Popup from '../popup/popup';
 import type { DateBoxBaseProperties } from './date_box.base';
 import type DateBox from './date_box.base';
 import type DateView from './date_view';

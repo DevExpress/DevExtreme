@@ -9,7 +9,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Resizable from '@js/ui/resizable';
-import { hide, show } from '@ts/ui/tooltip/m_tooltip';
+import { hide, show } from '@ts/ui/tooltip/tooltip';
 
 import {
   ALL_DAY_APPOINTMENT_CLASS,

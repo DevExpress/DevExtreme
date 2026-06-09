@@ -2,7 +2,7 @@ import '@js/ui/toolbar';
 
 import registerComponent from '@js/core/component_registrator';
 import Popup from '@js/ui/popup/ui.popup';
-import type { PopupProperties } from '@ts/ui/popup/m_popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 const TOOLBAR_WIDGET_NAME = 'dxToolbar';
 
@@ -14,7 +14,6 @@ export default class PopupFull extends Popup {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
     return TOOLBAR_WIDGET_NAME;
   }
