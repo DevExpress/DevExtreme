@@ -305,12 +305,12 @@ export const calculateCellIndex: CalculateCellIndex = (
 ) => columnIndex * rowCount + rowIndex;
 
 export const getTotalRowCountByCompleteData = (
-  completeData: unknown[][],
+  completeData: unknown[] | unknown[][],
 ): number => completeData.length;
 
 export const getDisplayedRowCount = (
   displayedRowCount: number | undefined,
-  completeData: unknown[][],
+  completeData: unknown[] | unknown[][],
 ): number => displayedRowCount ?? getTotalRowCountByCompleteData(completeData);
 
 export const getStartViewDateWithoutDST = (startViewDate: Date, startDayHour: number): Date => {
