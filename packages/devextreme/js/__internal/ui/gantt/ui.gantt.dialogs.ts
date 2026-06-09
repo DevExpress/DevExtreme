@@ -7,7 +7,8 @@ import '@ts/ui/list/modules/deleting';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import Form from '@ts/ui/form/form';
-import Popup from '@ts/ui/popup/m_popup';
+
+import Popup from '../popup/popup';
 
 class DialogInfoBase {
   _form?: Form;

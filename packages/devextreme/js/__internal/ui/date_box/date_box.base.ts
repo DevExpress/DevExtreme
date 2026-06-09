@@ -24,7 +24,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import uiDateUtils from './date_utils';
 import Calendar from './m_date_box.strategy.calendar';
 import CalendarWithTime from './m_date_box.strategy.calendar_with_time';
@@ -410,6 +410,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _popupConfig(): PopupProperties {
     const popupConfig = super._popupConfig();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return {
       ...this._strategy.popupConfig(popupConfig),
       title: this._getPopupTitle(),

@@ -35,7 +35,8 @@ import {
   POPOVER_POSITION_ALIASES,
   PopoverPositionController,
 } from '@ts/ui/popover/popover_position_controller';
-import Popup from '@ts/ui/popup/m_popup';
+
+import Popup from '../popup/popup';
 
 // STYLE popover
 

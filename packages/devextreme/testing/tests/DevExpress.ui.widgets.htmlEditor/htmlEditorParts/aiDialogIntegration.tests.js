@@ -14,7 +14,7 @@ import {
     getResultTextAreaValue,
 } from '../../../helpers/aiDialog.js';
 import { AI_DIALOG_CLASS } from '__internal/ui/html_editor/ui/aiDialog';
-import { POPUP_TITLE_CLOSEBUTTON_CLASS } from '__internal/ui/popup/m_popup';
+import { POPUP_TITLE_CLOSEBUTTON_CLASS } from '@ts/ui/popup/popup';
 import { DX_MENU_ITEM_CLASS } from '__internal/ui/menu/menu';
 import uiErrors from 'ui/widget/ui.errors';
 import keyboardMock from '../../../helpers/keyboardMock.js';
