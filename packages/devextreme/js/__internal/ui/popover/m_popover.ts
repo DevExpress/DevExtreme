@@ -87,7 +87,7 @@ export interface PopoverProperties extends Omit<Properties,
 
   useFlatToolbarButtons?: boolean;
 
-  arrowOffset: number;
+  arrowOffset?: number;
 
   arrowPosition?: string;
 
@@ -636,7 +636,7 @@ class Popover<
 
     const borderWidth = this._positionController._getContentBorderWidth(side);
 
-    const { arrowOffset } = this.option();
+    const { arrowOffset = 0 } = this.option();
 
     const finalArrowLocation = fitIntoRange(
       arrowLocation - borderWidth + arrowOffset,
