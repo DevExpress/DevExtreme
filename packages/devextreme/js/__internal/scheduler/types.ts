@@ -306,3 +306,10 @@ export type ScrollToGroupValuesOrOptions = RawGroupValues
   | GroupValues
   | ScrollToOptions
   | undefined;
+
+export interface GroupBoundsOffset {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
