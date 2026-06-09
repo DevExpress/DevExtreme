@@ -15,7 +15,6 @@ export default class PopupFull extends Popup {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
     return TOOLBAR_WIDGET_NAME;
   }
