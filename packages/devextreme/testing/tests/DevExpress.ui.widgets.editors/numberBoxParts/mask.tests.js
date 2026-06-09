@@ -1180,6 +1180,75 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         }
     });
 
+    // T_____ NumberBox - Minus sign disappears after pasting a large negative number
+    // into a narrow field and moving the caret. After a paste the browser auto-scrolls
+    // the input horizontally to keep the caret (placed at the end of the formatted
+    // text) visible, which hides the leading minus sign. The fix resets `scrollLeft`
+    // after the paste-driven format so the start of the value (and the sign) stays
+    // visible. Arrow-key navigation does not trigger _formatValue, so this is the
+    // only place we can correct the scroll position.
+    QUnit.test('scrollLeft should be reset after paste so leading sign stays visible (T_____)', function(assert) {
+        this.instance.option({
+            format: '#,##0.00',
+            value: null
+        });
+
+        this.input.val('-4589999.89');
+        // Emulate browser horizontal auto-scroll caused by setSelectionRange.
+        this.inputElement.scrollLeft = 50;
+
+        this.keyboard.caret(11).input('-4589999.89', 'insertFromPaste');
+
+        assert.strictEqual(this.input.val(), '-4,589,999.89', 'value is formatted on paste');
+        assert.strictEqual(this.instance.option('value'), -4589999.89, 'parsed value is negative');
+        assert.strictEqual(this.inputElement.scrollLeft, 0, 'scrollLeft is reset so minus sign is visible');
+    });
+
+    QUnit.test('scrollLeft should be reset after pasting a long positive value (T_____)', function(assert) {
+        this.instance.option({
+            format: '#,##0.00',
+            value: null
+        });
+
+        this.input.val('1234567890.12');
+        this.inputElement.scrollLeft = 50;
+
+        this.keyboard.caret(12).input('1234567890.12', 'insertFromPaste');
+
+        assert.strictEqual(this.input.val(), '1,234,567,890.12', 'value is formatted on paste');
+        assert.strictEqual(this.inputElement.scrollLeft, 0, 'scrollLeft is reset so the start of the value is visible');
+    });
+
+    QUnit.test('scrollLeft should NOT be reset on regular keyboard input (T_____)', function(assert) {
+        this.instance.option({
+            format: '#,##0.00',
+            value: 1000
+        });
+
+        // Imitate a horizontal scroll caused by the previous user interaction.
+        this.inputElement.scrollLeft = 25;
+
+        this.keyboard.caret(5).type('5');
+
+        assert.strictEqual(this.inputElement.scrollLeft, 25, 'scrollLeft is not changed on regular typing');
+    });
+
+    QUnit.test('scrollLeft reset after paste does not break value parsing (T_____)', function(assert) {
+        this.instance.option({
+            format: '#,##0.00',
+            value: null
+        });
+
+        this.input.val('-4589999.89');
+        this.inputElement.scrollLeft = 50;
+
+        this.keyboard.caret(11).input('-4589999.89', 'insertFromPaste');
+        this.keyboard.change();
+
+        assert.strictEqual(this.instance.option('value'), -4589999.89, 'value is correctly set after paste with scroll reset');
+        assert.strictEqual(this.input.val(), '-4,589,999.89', 'formatted value includes minus sign');
+    });
+
     QUnit.test('incomplete values should be limited by max precision', function(assert) {
         this.instance.option({
             format: '$ #0.### kg',
