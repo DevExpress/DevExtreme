@@ -177,7 +177,7 @@ class HorizontalGroupedStrategy {
 
   private calculateOffset(groupIndex: number): number {
     // @ts-expect-error
-    const indicatorStartPosition = this.workspace.getIndicatorOffset(groupIndex);
+    const indicatorStartPosition = this.workspace.getIndicatorOffset(groupIndex) as number;
     // @ts-expect-error
     const offset = this.workspace.getCellCount() * this.workspace.getCellWidth() * groupIndex;
 
@@ -195,7 +195,9 @@ class HorizontalGroupedStrategy {
     const offset = this.workspace.getCellCount() * this.workspace.getCellWidth() * i;
 
     if (this.workspace.option('rtlEnabled')) {
-      const containerWidth = getBoundingRect(this.workspace.getScrollable().$content().get(0)).width;
+      const containerWidth = getBoundingRect(
+        this.workspace.getScrollable().$content().get(0),
+      ).width;
       return containerWidth - offset - this.workspace.getTimePanelWidth() - width;
     }
 
@@ -208,7 +210,7 @@ class HorizontalGroupedStrategy {
 
   getShaderHeight(): number {
     // @ts-expect-error
-    return this.workspace.getIndicationHeight();
+    return this.workspace.getIndicationHeight() as number;
   }
 
   getShaderMaxHeight(): number {
@@ -217,7 +219,7 @@ class HorizontalGroupedStrategy {
 
   getShaderWidth(): number {
     // @ts-expect-error
-    return this.workspace.getIndicationWidth();
+    return this.workspace.getIndicationWidth() as number;
   }
 
   getScrollableScrollTop(allDay: boolean): number {
