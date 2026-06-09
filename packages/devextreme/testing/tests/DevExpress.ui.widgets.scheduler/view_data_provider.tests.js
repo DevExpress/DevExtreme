@@ -1036,8 +1036,8 @@ module('View Data Provider', {
         });
     });
 
-    function createCellInfo(groupIndex, startDate, isAllDay, index) {
-        return { groupIndex, startDate, isAllDay, index };
+    function createCellInfo(groupIndex, startDate, allDay, index) {
+        return { groupIndex, startDate, allDay, index };
     }
 
     module('Data generation', () => {

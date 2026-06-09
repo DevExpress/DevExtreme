@@ -182,7 +182,7 @@ export class GroupedDataMapProvider {
 
   private isStartDateInCell(
     startDate: Date,
-    inAllDayRow: boolean,
+    inAllDayRow: boolean | undefined,
     {
       startDate: cellStartDate,
       endDate: cellEndDate,
