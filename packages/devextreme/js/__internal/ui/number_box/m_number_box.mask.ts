@@ -187,7 +187,30 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       nextCaret = step === MOVE_FORWARD ? nextCaret.end : nextCaret.start;
       e.preventDefault();
       this._caret(getCaretInBoundaries(nextCaret, text, format));
+      this._scrollInputTo(step === MOVE_FORWARD ? 'end' : 'start');
     }
+  }
+
+  _scrollInputTo(edge: 'start' | 'end'): void {
+    // When the caret has reached a format boundary (e.g. the minus sign or
+    // another prefix stub on the left edge), `_arrowHandler` and
+    // `_moveCaretToBoundaryEventHandler` call `preventDefault` to keep the
+    // caret out of the stub zone. This also suppresses the browser's
+    // auto-scroll-to-caret, which would normally bring the boundary stub into
+    // view. As a result, for values wider than the input (for example pasting
+    // `-4589999.89` into a narrow field), the minus sign stays hidden no
+    // matter how many times the user presses ArrowLeft — the caret stops
+    // moving and the visible window does not advance (T1316XXX).
+    //
+    // Compensate by manually scrolling the input so that the corresponding
+    // edge becomes visible: 0 for the start edge and `scrollWidth` for the
+    // end edge. The browser clamps the value, so for short text that fits
+    // the input there is no visual effect.
+    const inputElement = this._input().get(0);
+    if (!inputElement) {
+      return;
+    }
+    inputElement.scrollLeft = edge === 'end' ? inputElement.scrollWidth : 0;
   }
 
   _moveCaretToBoundary(direction) {
@@ -204,6 +227,9 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
     this._moveCaretToBoundary(direction);
     e?.preventDefault();
+    // Home (`direction === MOVE_FORWARD`) places the caret at the start
+    // boundary, End (`direction === MOVE_BACKWARD`) at the end boundary.
+    this._scrollInputTo(direction === MOVE_FORWARD ? 'start' : 'end');
   }
 
   _shouldMoveCaret(text, caret) {
