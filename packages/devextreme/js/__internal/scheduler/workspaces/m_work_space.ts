@@ -1,3 +1,4 @@
+import type { ScrollDirection } from '@js/common';
 import { locate, resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
@@ -29,7 +30,9 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { AllDayPanelMode, CellClickEvent, CellContextMenuEvent } from '@js/ui/scheduler';
+import type {
+  AllDayPanelMode, CellClickEvent, CellContextMenuEvent, ScrollMode,
+} from '@js/ui/scheduler';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -95,11 +98,11 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/position_helper';
-import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
-import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
-import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
 import type { ViewDataProviderOptions } from './view_model/types';
 import ViewDataProvider from './view_model/view_data_provider';
+import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './virtual_scrolling';
+import HorizontalGroupedStrategy from './work_space_grouped_strategy_horizontal';
+import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
 
 interface RenderComponentOptions {
   header?: boolean;
@@ -239,8 +242,8 @@ export interface WorkspaceOptionsInternal {
   groupByDate: boolean;
   skippedDays: number[];
   scrolling: {
-    mode: 'standard' | 'virtual';
-    orientation: 'horizontal' | 'vertical' | 'both';
+    mode: ScrollMode;
+    orientation: ScrollDirection;
   };
   draggingMode: 'outlook' | 'default';
   timeZoneCalculator: TimeZoneCalculator;
@@ -572,7 +575,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  private isRTL() {
+  private isRTL(): boolean {
     return this.option('rtlEnabled');
   }
 
@@ -1361,11 +1364,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.$headerPanel && getOuterHeight(this.$headerPanel, true);
   }
 
-  getTimePanelWidth() {
+  getTimePanelWidth(): number {
     return this.$timePanel && getBoundingRect(this.$timePanel.get(0)).width;
   }
 
-  getGroupTableWidth() {
+  getGroupTableWidth(): number {
     return this.$groupTable ? getOuterWidth(this.$groupTable) : 0;
   }
 
@@ -1439,7 +1442,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.getDateTables().find(`.${DATE_TABLE_DROPPABLE_CELL_CLASS}`);
   }
 
-  protected getWorkSpaceWidth() {
+  protected getWorkSpaceWidth(): number {
     return this.cache.memo('workspaceWidth', () => {
       if (this.needCreateCrossScrolling()) {
         return getBoundingRect(this.$dateTable.get(0)).width;
@@ -1696,7 +1699,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   // NOTE: refactor leftIndex calculation
-  getCellIndexByCoordinates(coordinates, allDay) {
+  getCellIndexByCoordinates(coordinates, allDay?) {
     const { horizontalScrollingState, verticalScrollingState } = this.virtualScrollingDispatcher;
 
     const cellCount = horizontalScrollingState?.itemCount ?? this.getTotalCellCount(this.getGroupCount());

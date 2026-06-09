@@ -3,15 +3,15 @@ import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { isWindow } from '@js/core/utils/type';
 import Popover from '@js/ui/popover/ui.popover';
-
-import type { PopoverProperties } from './popover/m_popover';
+import type { PopoverProperties } from '@ts/ui/popover/popover';
 
 // STYLE tooltip
+
+export interface TooltipProperties extends PopoverProperties {}
 
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 
-export interface TooltipProperties extends PopoverProperties {}
 class Tooltip<
   TProperties extends TooltipProperties = TooltipProperties,
 > extends Popover<TProperties> {
@@ -57,7 +57,8 @@ class Tooltip<
 
   _toggleAriaAttributes(): void {
     this._contentId = `dx-${new Guid()}`;
-    // @ts-expect-error ts-error
+
+    // @ts-expect-error dxElementWrapper typings
     this.$overlayContent().attr({
       id: this._contentId,
     });

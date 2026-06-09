@@ -35,7 +35,7 @@ import {
   POPOVER_POSITION_ALIASES,
   PopoverPositionController,
 } from '@ts/ui/popover/popover_position_controller';
-import Popup from '@ts/ui/popup/m_popup';
+import Popup from '@ts/ui/popup/popup';
 
 // STYLE popover
 
@@ -87,7 +87,7 @@ export interface PopoverProperties extends Omit<Properties,
 
   useFlatToolbarButtons?: boolean;
 
-  arrowOffset: number;
+  arrowOffset?: number;
 
   arrowPosition?: string;
 
@@ -135,7 +135,6 @@ class Popover<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return [
       {
@@ -260,7 +259,6 @@ class Popover<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isHoverHideEventName(eventName: string): boolean {
     return HOVER_HIDE_EVENTS.some((hoverEvent) => eventName.split(/\s+/).includes(hoverEvent));
   }
@@ -409,12 +407,10 @@ class Popover<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getEventHandlerName(name: string): string {
     return `_${name}EventHandler`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getEventNameByOption(
     optionValue: { name?: string | undefined } | string | undefined,
   ): string | undefined {
@@ -636,7 +632,7 @@ class Popover<
 
     const borderWidth = this._positionController._getContentBorderWidth(side);
 
-    const { arrowOffset } = this.option();
+    const { arrowOffset = 0 } = this.option();
 
     const finalArrowLocation = fitIntoRange(
       arrowLocation - borderWidth + arrowOffset,

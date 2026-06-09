@@ -309,10 +309,8 @@ class Lookup extends DropDownList<LookupProperties> {
     return { ...super._dataSourceOptions(), paginate: true };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _fireContentReadyAction(): void { }
 
-  // eslint-disable-next-line class-methods-use-this
   _popupWrapperClass(): string {
     return '';
   }
@@ -389,7 +387,6 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderButtonContainers(): void { }
 
   _renderFieldTemplate(template: FieldTemplate): void {
@@ -475,7 +472,6 @@ class Lookup extends DropDownList<LookupProperties> {
     return (selectedListItem.offset()?.top ?? 0) - ($(this.element()).offset()?.top ?? 0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isCenteringEnabled(index: number, count: number): boolean {
     return index > 1 && index < (count - 2);
   }
@@ -638,7 +634,6 @@ class Lookup extends DropDownList<LookupProperties> {
     ) as number;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _allowSelectItemByTab(): boolean {
     return false;
   }
@@ -739,7 +734,6 @@ class Lookup extends DropDownList<LookupProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _preventFocusOnPopup(): void { }
 
   _shouldLoopFocusInsidePopup(): boolean {
@@ -913,7 +907,6 @@ class Lookup extends DropDownList<LookupProperties> {
     this._renderSearch();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderValueChangeEvent(): void { }
 
   _renderSearch(): void {
@@ -1036,7 +1029,6 @@ class Lookup extends DropDownList<LookupProperties> {
     this._searchBox?.option('placeholder', placeholder);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setAriaTargetForList(): void { }
 
   _listConfig(): ListBaseProperties {

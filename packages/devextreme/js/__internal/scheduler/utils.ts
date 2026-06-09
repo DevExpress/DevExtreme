@@ -6,6 +6,17 @@ import { getOuterHeight, setHeight, setWidth } from '@js/core/utils/size';
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
 import type { AppointmentViewModelPlain } from './view_model/types';
 
+interface RenovationWidget {
+  $element: () => dxElementWrapper;
+  option: (options: Record<string, unknown>) => void;
+}
+
+type CreateComponentFn = (
+  element: string | HTMLElement | dxElementWrapper | Element,
+  component: unknown,
+  config: Record<string, unknown>,
+) => RenovationWidget;
+
 export const utils = {
   dataAccessors: {
     getAppointmentSettings: (
@@ -16,8 +27,9 @@ export const utils = {
   DOM: {
     getHeaderHeight: (header: unknown): number => {
       const h = header as Record<string, unknown> | null | undefined;
-      return h?._$element
-        ? parseInt(getOuterHeight(h._$element as dxElementWrapper), 10)
+      const $element = h?._$element as dxElementWrapper | undefined;
+      return $element
+        ? parseInt(getOuterHeight($element), 10)
         : 0;
     },
   },
@@ -29,15 +41,15 @@ export const utils = {
       componentName: string,
       viewModel: Record<string, unknown>,
     ): void => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const w = widget as any;
-      let component = w[componentName];
+      const w = widget as Record<string, unknown>;
+      let component = w[componentName] as RenovationWidget | undefined;
       if (!component) {
         const container = getPublicElement(parentElement);
-        component = w._createComponent(container, componentClass, viewModel);
+        const createFn = w._createComponent as CreateComponentFn;
+        component = createFn.call(w, container, componentClass, viewModel);
         w[componentName] = component;
       } else {
-        const $element = component.$element() as dxElementWrapper;
+        const $element = component.$element();
         const elementStyle = ($element.get(0) as HTMLElement).style;
         const { height } = elementStyle;
         const { width } = elementStyle;
