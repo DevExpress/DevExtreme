@@ -25,8 +25,8 @@ import {
   clearSelectionCommand,
   deselectAllCommand,
   selectAllCommand,
-  selectByIndexesCommand,
   selectByKeysCommand,
+  selectionByIndexesCommand,
 } from './selection';
 import {
   clearSortingCommand,
@@ -49,7 +49,7 @@ export const coreCommands = [
   clearSelectionCommand,
   deselectAllCommand,
   selectAllCommand,
-  selectByIndexesCommand,
+  selectionByIndexesCommand,
   selectByKeysCommand,
   clearSortingCommand,
   sortingCommand,
