@@ -11,7 +11,7 @@ import {
   // eslint-disable-next-line spellcheck/spell-checker
   optionalNullish,
   resolveFilterValue,
-  splitIntoContiguousRanges,
+  splitIntoLoadWindows,
 } from '../utils';
 
 describe('normalizeKey', () => {
@@ -173,36 +173,32 @@ describe('resolveFilterValue', () => {
   });
 });
 
-describe('splitIntoContiguousRanges', () => {
+describe('splitIntoLoadWindows', () => {
   it('returns an empty array for an empty input', () => {
-    expect(splitIntoContiguousRanges([])).toEqual([]);
+    expect(splitIntoLoadWindows([], 10)).toEqual([]);
   });
 
-  it('wraps a single index into a single range', () => {
-    expect(splitIntoContiguousRanges([5])).toEqual([[5]]);
+  it('wraps a single index into a single window', () => {
+    expect(splitIntoLoadWindows([5], 10)).toEqual([[5]]);
   });
 
-  it('keeps a fully contiguous input as one range', () => {
-    expect(splitIntoContiguousRanges([1, 2, 3, 4])).toEqual([[1, 2, 3, 4]]);
+  it('merges across gaps while the span stays within the window', () => {
+    expect(splitIntoLoadWindows([1, 3, 5], 10)).toEqual([[1, 3, 5]]);
   });
 
-  it('splits non-contiguous indexes into multiple ranges', () => {
-    expect(splitIntoContiguousRanges([1, 2, 5, 6, 7, 10])).toEqual([
-      [1, 2], [5, 6, 7], [10],
+  it('starts a new window when the span would exceed the limit', () => {
+    expect(splitIntoLoadWindows([1, 2, 4, 5, 6, 10], 3)).toEqual([
+      [1, 2], [4, 5, 6], [10],
     ]);
   });
 
-  it('sorts unsorted input before splitting', () => {
-    expect(splitIntoContiguousRanges([5, 1, 6, 2, 10, 7])).toEqual([
+  it('sorts unsorted input before windowing', () => {
+    expect(splitIntoLoadWindows([5, 1, 6, 2, 10, 7], 3)).toEqual([
       [1, 2], [5, 6, 7], [10],
     ]);
   });
 
   it('deduplicates repeated indexes', () => {
-    expect(splitIntoContiguousRanges([1, 1, 2, 2, 3])).toEqual([[1, 2, 3]]);
-  });
-
-  it('treats a one-step gap as a boundary', () => {
-    expect(splitIntoContiguousRanges([1, 3])).toEqual([[1], [3]]);
+    expect(splitIntoLoadWindows([1, 1, 2, 2, 3], 10)).toEqual([[1, 2, 3]]);
   });
 });

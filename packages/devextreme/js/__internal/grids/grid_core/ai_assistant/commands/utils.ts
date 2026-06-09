@@ -67,25 +67,25 @@ export const isKeyShapeValid = (
   return keyExpr.every((field) => field in key);
 };
 
-export const splitIntoContiguousRanges = (indexes: number[]): number[][] => {
+export const splitIntoLoadWindows = (
+  indexes: number[],
+  maxWindowSize: number,
+): number[][] => {
   const sorted = [...new Set(indexes)].sort((a, b) => a - b);
-  const ranges: number[][] = [];
-  let current: number[] = [];
+  const windows: number[][] = [];
 
-  sorted.forEach((value) => {
-    if (current.length === 0 || value === current[current.length - 1] + 1) {
-      current.push(value);
+  sorted.forEach((index) => {
+    const current = windows.at(-1);
+
+    // Sorted indexes are merged into the same window within maxWindowSize
+    if (current && index - current[0] + 1 <= maxWindowSize) {
+      current.push(index);
     } else {
-      ranges.push(current);
-      current = [value];
+      windows.push([index]);
     }
   });
 
-  if (current.length > 0) {
-    ranges.push(current);
-  }
-
-  return ranges;
+  return windows;
 };
 
 type FilterExprValue = BasicFilterExpr['value'];

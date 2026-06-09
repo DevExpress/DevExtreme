@@ -1,4 +1,5 @@
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
+import type { Item } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { InternalGrid, RowKey } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
@@ -7,8 +8,10 @@ import {
   compositeKeyPairSchema,
   isKeyShapeValid,
   normalizeKey,
-  splitIntoContiguousRanges,
+  splitIntoLoadWindows,
 } from './utils';
+
+const MAX_LOAD_WINDOW_PAGES = 5;
 
 const selectByKeysCommandSchema = z.object({
   keys: z.array(z.union([
@@ -55,24 +58,34 @@ const selectByIndexesCommandSchema = z.object({
   scope: z.enum(['allPages', 'page']),
 }).strict();
 
-const resolveKeysFromCurrentPage = (
-  component: InternalGrid,
+// Maps 1-based indexes to row keys. Group/footer rows are not counted, so an
+// index addresses the Nth data row; an index past the last data row rejects the whole set
+const resolveKeysFromItems = (
+  items: Item[],
   indexes: number[],
 ): RowKey[] | null => {
-  const items = component.getController('data').items();
+  const dataItems = items.filter((item) => item.rowType === 'data');
   const normalizedRowIndexes = indexes.map((index) => index - 1);
   const allIndexesValid = normalizedRowIndexes.every(
-    (index) => items[index]?.rowType === 'data',
+    (index) => dataItems[index] !== undefined,
   );
 
   if (!allIndexesValid) {
     return null;
   }
 
-  return normalizedRowIndexes.map((index) => items[index].key);
+  return normalizedRowIndexes.map((index) => dataItems[index].key);
 };
 
-const resolveKeysFromAllPages = async (
+const resolveKeysFromCurrentPage = (
+  component: InternalGrid,
+  indexes: number[],
+): RowKey[] | null => resolveKeysFromItems(
+  component.getController('data').items(),
+  indexes,
+);
+
+const resolveKeysFromAllPagesRemote = async (
   component: InternalGrid,
   indexes: number[],
 ): Promise<RowKey[] | null> => {
@@ -89,28 +102,78 @@ const resolveKeysFromAllPages = async (
     return null;
   }
 
-  const ranges = splitIntoContiguousRanges(indexes);
-  const baseLoadOptions = { ...dataSource.loadOptions() };
+  // Under grouping store.load returns group structures rather than flat rows,
+  // so an index no longer maps to a single data row. Fail instead of resolving meaningless keys
+  const grouping = dataSource.group();
+  const isGrouped = Array.isArray(grouping) ? grouping.length > 0 : !!grouping;
 
-  const loadedRanges = await Promise.all(ranges.map((range) => {
-    const skip = range[0] - 1;
-    const take = range.length;
-    return store.load({ ...baseLoadOptions, skip, take })
-      .then((result) => {
-        const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
-        return { rows, take };
-      });
-  }));
-
-  const allRowsResolved = loadedRanges.every(
-    ({ rows, take }) => Array.isArray(rows) && rows.length >= take,
-  );
-
-  if (!allRowsResolved) {
+  if (isGrouped) {
     return null;
   }
 
-  return loadedRanges.flatMap(({ rows }) => rows.map((row) => store.keyOf(row)));
+  const dataController = component.getController('data');
+  const filter = dataController.getCombinedFilter(true);
+  const baseLoadOptions = {
+    ...dataSource.loadOptions(),
+    filter,
+  };
+
+  const windows = splitIntoLoadWindows(indexes, dataSource.pageSize() * MAX_LOAD_WINDOW_PAGES);
+
+  const loadedWindows = await Promise.all(windows.map((window) => {
+    const skip = window[0] - 1;
+    const take = window[window.length - 1] - window[0] + 1;
+    return store.load({ ...baseLoadOptions, skip, take })
+      .then((result) => {
+        const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
+        return { window, rows };
+      });
+  }));
+
+  const keys: RowKey[] = [];
+
+  for (const { window, rows } of loadedWindows) {
+    if (!Array.isArray(rows)) {
+      return null;
+    }
+
+    for (const index of window) {
+      // The requested index maps to `window[0]` offset within the loaded rows
+      const row = rows[index - window[0]];
+
+      if (row === undefined) {
+        return null;
+      }
+
+      keys.push(store.keyOf(row));
+    }
+  }
+
+  return keys;
+};
+
+const resolveKeysFromAllPagesLocal = async (
+  component: InternalGrid,
+  indexes: number[],
+): Promise<RowKey[] | null> => {
+  const items = await (component.getController('data').loadAll(undefined) as unknown as Promise<Item[]>);
+
+  return resolveKeysFromItems(items, indexes);
+};
+
+// Picks the "allPages" strategy by paging mode:
+// with local paging the full dataset is already on the client, so read the cache;
+// with remote paging rows are fetched by position.
+const resolveKeysFromAllPages = (
+  component: InternalGrid,
+  indexes: number[],
+): Promise<RowKey[] | null> => {
+  const dataController = component.getController('data');
+  const isRemotePaging = !!dataController.dataSource()?.remoteOperations()?.paging;
+
+  return isRemotePaging
+    ? resolveKeysFromAllPagesRemote(component, indexes)
+    : resolveKeysFromAllPagesLocal(component, indexes);
 };
 
 export const selectByIndexesCommand = defineGridCommand({
@@ -118,7 +181,7 @@ export const selectByIndexesCommand = defineGridCommand({
   description: 'Select or deselect rows by their 1-based indexes. '
     + 'Always set scope to choose how indexes are interpreted: '
     + '"allPages" — indexes are positions within the currently filtered and sorted dataset, NOT limited to the current page; index 1 is the first row of the dataset, regardless of pageIndex/pageSize. Use this when the user does NOT explicitly refer to the visible page (e.g. "select rows 1 to 100"). '
-    + '"page" — indexes are positions within the currently rendered page; index 1 is the first row on the visible page and group/header rows are not addressable. Use this ONLY when the user explicitly mentions the current/visible page (e.g. "select the first 3 rows on the current page", "deselect row 2 on this page"). '
+    + '"page" — indexes are positions within the currently rendered page; index 1 is the first data row on the visible page and group/header rows are not counted. Use this ONLY when the user explicitly mentions the current/visible page (e.g. "select the first 3 rows on the current page", "deselect row 2 on this page"). '
     + 'Use this command for a SINGLE contiguous range per call. When the user asks for several non-contiguous ranges (e.g. "select rows 1 to 50 and 70 to 100"), invoke this command separately for EACH range — once with indexes [1, 2, ..., 50] and once with indexes [70, 71, ..., 100]. '
     + 'Set mode to "select" to add the listed rows to the current selection (multiple calls accumulate, so previously selected ranges are kept); set mode to "deselect" to remove the listed rows from the current selection (e.g. "unselect row 1"). '
     + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection. '
