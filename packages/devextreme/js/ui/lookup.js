@@ -1,4 +1,4 @@
-import Lookup from '../__internal/ui/m_lookup';
+import Lookup from '../__internal/ui/lookup';
 
 export default Lookup;
 
