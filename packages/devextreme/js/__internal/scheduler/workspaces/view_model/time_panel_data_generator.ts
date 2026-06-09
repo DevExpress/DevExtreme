@@ -185,15 +185,15 @@ export class TimePanelDataGenerator {
     timePanelMap: ViewCellData[],
     isVerticalGrouping: boolean,
   ): {
-    previousGroupIndex: number;
+    previousGroupIndex: number | undefined;
     previousGroupedData: TimePanelCellsData[];
   } {
     return timePanelMap.reduce<{
-      previousGroupIndex: number;
+      previousGroupIndex: number | undefined;
       previousGroupedData: TimePanelCellsData[];
     }>(
       ({ previousGroupIndex, previousGroupedData }, cellData) => {
-        const currentGroupIndex = cellData.groupIndex ?? 0;
+        const currentGroupIndex = cellData.groupIndex;
         if (currentGroupIndex !== previousGroupIndex) {
           previousGroupedData.push({
             dateTable: [],
