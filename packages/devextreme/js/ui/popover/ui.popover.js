@@ -1,4 +1,4 @@
-import Popover from '../../__internal/ui/popover/m_popover';
+import Popover from '@ts/ui/popover/popover';
 
 export default Popover;
 

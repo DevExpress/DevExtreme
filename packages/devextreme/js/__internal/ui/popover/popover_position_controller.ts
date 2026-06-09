@@ -11,13 +11,14 @@ import type {
   OverlayPosition,
   Position as OverlayBasePosition,
 } from '@ts/ui/overlay/overlay_position_controller';
-import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
 } from '@ts/ui/popup/popup_position_controller';
 import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
+
+import type { PopoverProperties } from './popover';
 
 export interface PopoverControllerElements extends ControllerOverlayElements {
   $arrow?: dxElementWrapper;

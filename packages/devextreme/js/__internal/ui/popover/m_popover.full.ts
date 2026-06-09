@@ -2,7 +2,8 @@ import '@js/ui/toolbar';
 
 import registerComponent from '@js/core/component_registrator';
 import Popover from '@js/ui/popover/ui.popover';
-import type { PopoverProperties } from '@ts/ui/popover/m_popover';
+
+import type { PopoverProperties } from './popover';
 
 const TOOLBAR_WIDGET_NAME = 'dxToolbar';
 

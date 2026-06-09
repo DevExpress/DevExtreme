@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import { isWindow } from '@js/core/utils/type';
 import Popover from '@js/ui/popover/ui.popover';
 
-import type { PopoverProperties } from './popover/m_popover';
+import type { PopoverProperties } from './popover/popover';
 
 // STYLE tooltip
 
