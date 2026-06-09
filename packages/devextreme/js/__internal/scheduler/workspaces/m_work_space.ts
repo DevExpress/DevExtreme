@@ -1,3 +1,4 @@
+import type { ScrollDirection } from '@js/common';
 import { locate, resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
@@ -29,7 +30,9 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { AllDayPanelMode, CellClickEvent, CellContextMenuEvent } from '@js/ui/scheduler';
+import type {
+  AllDayPanelMode, CellClickEvent, CellContextMenuEvent, ScrollMode,
+} from '@js/ui/scheduler';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -94,9 +97,9 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/position_helper';
-import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
+import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './virtual_scrolling';
 import HorizontalGroupedStrategy from './work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
 
@@ -235,8 +238,8 @@ export interface WorkspaceOptionsInternal {
   onSelectionChanged: ((args: { selectedCellData: ViewCellData[] }) => void);
   groupByDate: boolean;
   scrolling: {
-    mode: 'standard' | 'virtual';
-    orientation: 'horizontal' | 'vertical' | 'both';
+    mode: ScrollMode;
+    orientation: ScrollDirection;
   };
   draggingMode: 'outlook' | 'default';
   timeZoneCalculator: TimeZoneCalculator;
@@ -565,7 +568,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  private isRTL() {
+  private isRTL(): boolean {
     return this.option('rtlEnabled');
   }
 
