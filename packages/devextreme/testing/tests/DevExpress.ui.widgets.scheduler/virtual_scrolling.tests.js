@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { VirtualScrollingDispatcher } from '__internal/scheduler/workspaces/m_virtual_scrolling';
+import { VirtualScrollingDispatcher } from '__internal/scheduler/workspaces/virtual_scrolling';
 import domAdapter from '__internal/core/m_dom_adapter';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { addNamespace } from 'common/core/events/utils/index';
