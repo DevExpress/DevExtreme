@@ -267,6 +267,26 @@ describe('AIAssistantView', () => {
       offSpy.mockRestore();
       onSpy.mockRestore();
     });
+
+    it('should dispose AIChat instance', () => {
+      const { aiAssistantView } = createAIAssistantView();
+
+      const aiChatInstance = (AIChat as jest.Mock)
+        .mock.results[0].value as { dispose: jest.Mock };
+
+      aiAssistantView.dispose();
+
+      expect(aiChatInstance.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw when AIChat instance is not created', () => {
+      const { aiAssistantView } = createAIAssistantView({ initialEnabled: false });
+
+      expect(AIChat).not.toHaveBeenCalled();
+      expect(() => {
+        aiAssistantView.dispose();
+      }).not.toThrow();
+    });
   });
 
   describe('isShown', () => {

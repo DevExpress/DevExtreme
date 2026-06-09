@@ -7,7 +7,7 @@ import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import type { dxPopupAnimation } from '@js/ui/popup';
 import DiagramCommandsManager from '@ts/ui/diagram/diagram.commands_manager';
 import DiagramFloatingPanel from '@ts/ui/diagram/ui.diagram.floating_panel';
-import type { PopupProperties } from '@ts/ui/popup/m_popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import TabPanel from '@ts/ui/tab_panel/tab_panel';
 

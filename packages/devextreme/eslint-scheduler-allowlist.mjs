@@ -84,7 +84,7 @@ const schedulerLegacyMembers = [
     // workspaces/virtual_scrolling.ts
     '_renderGrid',
 
-    // appointment_popup/m_popup.ts
+    // appointment_popup/popup.ts
     '_popup',
 
     // appointment_popup/m_legacy_popup.ts

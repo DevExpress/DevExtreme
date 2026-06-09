@@ -7,8 +7,6 @@ import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error ts-error
-import { grep } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -17,8 +15,11 @@ import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/drop_down_box';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties as PopupProperties } from '@js/ui/popup';
+import { grep } from '@ts/core/utils/m_common';
 import { tabbable } from '@ts/core/utils/m_selectors';
+import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
+import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
 const { getActiveElement } = domAdapter;
@@ -26,10 +27,18 @@ const { getActiveElement } = domAdapter;
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
+interface ItemWithKey { itemKey: unknown; itemDisplayValue: unknown }
+
 export interface DropDownBoxProperties extends Omit<Properties,
 'onClosed' | 'onOpened'
-| 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+| 'onCopy' | 'onCut' | 'onEnterKey'
+| 'onFocusIn' | 'onFocusOut'
+| 'onInput' | 'onKeyDown'
+| 'onKeyUp' | 'onPaste'
+| 'onValueChanged'
+| 'validationMessagePosition'
+| 'onContentReady' | 'onDisposing'
+| 'onOptionChanged' | 'onInitialized'> {
 }
 
 class DropDownBox<
@@ -42,7 +51,8 @@ class DropDownBox<
     return {
       ...super._supportedKeys(),
       tab(e): void {
-        if (!this.option('opened')) {
+        const { opened } = this.option();
+        if (!opened) {
           return;
         }
 
@@ -50,7 +60,7 @@ class DropDownBox<
         const $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
         if ($focusableElement) {
-          // @ts-expect-error ts-error
+          // @ts-expect-error should be added on EventsEngine level
           eventsEngine.trigger($focusableElement, 'focus');
         }
 
@@ -59,8 +69,8 @@ class DropDownBox<
     };
   }
 
-  _getTabbableElements() {
-    // @ts-expect-error ts-error
+  _getTabbableElements(): dxElementWrapper {
+    // @ts-expect-error filter callback overload should be added on dxElementWrapper level
     return this._getElements().filter(tabbable);
   }
 
@@ -90,7 +100,7 @@ class DropDownBox<
   }
 
   _initMarkup(): void {
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     this._initDataExpressions();
     this.$element().addClass(DROP_DOWN_BOX_CLASS);
 
@@ -98,53 +108,55 @@ class DropDownBox<
   }
 
   _setSubmitValue(): void {
-    const value = this.option('value');
+    const { value } = this.option();
     const submitValue = this._shouldUseDisplayValue(value)
-      // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
       ? this._displayGetter(value)
       : value;
 
     this._getSubmitElement().val(submitValue);
   }
 
-  _shouldUseDisplayValue(value): boolean {
-    // @ts-expect-error ts-error
-    return this.option('valueExpr') === 'this' && isObject(value);
+  _shouldUseDisplayValue(value: unknown): boolean {
+    const { valueExpr } = this.option();
+
+    return valueExpr === 'this' && isObject(value);
   }
 
-  _sortValuesByKeysOrder(orderedKeys, values) {
-    const sortedValues = values.sort((a, b) => orderedKeys.indexOf(a.itemKey) - orderedKeys.indexOf(b.itemKey));
+  _sortValuesByKeysOrder(orderedKeys: unknown[], values: ItemWithKey[]): unknown[] {
+    const sortedValues = values.sort(
+      (a, b) => orderedKeys.indexOf(a.itemKey) - orderedKeys.indexOf(b.itemKey),
+    );
 
     return sortedValues.map((x) => x.itemDisplayValue);
   }
 
-  _renderInputValue({ renderOnly }: { renderOnly?: boolean } = {}) {
-    // @ts-expect-error ts-error
+  _renderInputValue({ renderOnly }: { renderOnly?: boolean } = {}): DeferredObj<unknown> {
+    // @ts-expect-error DataExpressionMixin must be typed
     this._rejectValueLoading();
-    const values = [];
-    // @ts-expect-error ts-error
+    const values: ItemWithKey[] = [];
+    // @ts-expect-error DataExpressionMixin must be typed
     if (!this._dataSource) {
       super._renderInputValue({ renderOnly, value: values });
 
       return Deferred().resolve();
     }
-    // @ts-expect-error ts-error
-    const currentValue = this._getCurrentValue();
-    let keys = currentValue ?? [];
-
-    keys = Array.isArray(keys) ? keys : [keys];
+    // @ts-expect-error DataExpressionMixin must be typed
+    const rawValue = this._getCurrentValue() ?? [];
+    const keys: unknown[] = Array.isArray(rawValue) ? rawValue : [rawValue];
 
     const itemLoadDeferreds = map(keys, (key) => {
       const deferred = Deferred();
       this
         ._loadItem(key)
         .always((item) => {
-          // @ts-expect-error ts-error
+          // @ts-expect-error DataExpressionMixin must be typed
           const displayValue = this._displayGetter(item);
+          const { acceptCustomValue } = this.option();
           if (isDefined(displayValue)) {
-            values.push({ itemKey: key, itemDisplayValue: displayValue } as never);
-          } else if (this.option('acceptCustomValue')) {
-            values.push({ itemKey: key, itemDisplayValue: key } as never);
+            values.push({ itemKey: key, itemDisplayValue: displayValue });
+          } else if (acceptCustomValue) {
+            values.push({ itemKey: key, itemDisplayValue: key });
           }
           deferred.resolve();
         });
@@ -164,16 +176,19 @@ class DropDownBox<
       });
   }
 
-  _loadItem(value): DeferredObj<unknown> {
+  _loadItem(value: unknown): DeferredObj<unknown> {
     const deferred = Deferred();
-    const that = this;
-    // @ts-expect-error ts-error
-    const selectedItem = grep(this.option('items') || [], (item) => this._isValueEquals(this._valueGetter(item), value))[0];
+    const selectedItem = grep(
+      this.option('items') || [],
+      // @ts-expect-error DataExpressionMixin must be typed
+      (item) => this._isValueEquals(this._valueGetter(item), value) as boolean,
+      false,
+    )[0];
 
     if (selectedItem !== undefined) {
       deferred.resolve(selectedItem);
     } else {
-      // @ts-expect-error ts-error
+      // @ts-expect-error DataExpressionMixin must be typed
       this._loadValue(value)
         .done((item) => {
           deferred.resolve(item);
@@ -183,18 +198,17 @@ class DropDownBox<
             return;
           }
 
-          if (that.option('acceptCustomValue')) {
+          if (this.option('acceptCustomValue')) {
             deferred.resolve(value);
           } else {
             deferred.reject();
           }
         });
     }
-    // @ts-expect-error
-    return deferred.promise();
+    return deferred;
   }
 
-  _popupTabHandler(e): void {
+  _popupTabHandler(e: KeyboardEvent): void {
     if (normalizeKeyName(e) !== 'tab') return;
 
     const $firstTabbable = this._getTabbableElements().first().get(0);
@@ -205,7 +219,7 @@ class DropDownBox<
 
     if (moveBackward || moveForward) {
       this.close();
-      // @ts-expect-error ts-error
+      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this._input(), 'focus');
 
       if (moveBackward) {
@@ -215,14 +229,14 @@ class DropDownBox<
   }
 
   _renderPopupContent(): void {
-    // @ts-expect-error ts-error
-    if (this.option('contentTemplate') === ANONYMOUS_TEMPLATE_NAME) {
+    const { contentTemplate: optionContentTemplate } = this.option();
+    if (optionContentTemplate === ANONYMOUS_TEMPLATE_NAME) {
       return;
     }
 
     const contentTemplate = this._getTemplateByOption('contentTemplate');
 
-    if (!(contentTemplate && this.option('contentTemplate'))) {
+    if (!(contentTemplate && optionContentTemplate)) {
       return;
     }
 
@@ -246,14 +260,12 @@ class DropDownBox<
   }
 
   _canShowVirtualKeyboard(): boolean {
-    // @ts-expect-error ts-error
-    return devices.real().mac; // T845484
+    return !!(devices.real() as unknown as { mac?: boolean }).mac; // T845484
   }
 
   _isNestedElementActive(): boolean {
     const activeElement = getActiveElement();
-    // @ts-expect-error ts-error
-    return activeElement && this._popup.$content().get(0).contains(activeElement);
+    return !!(activeElement && this._popup?.$content()?.get(0)?.contains(activeElement));
   }
 
   _shouldHideOnParentScroll(): boolean {
@@ -265,7 +277,7 @@ class DropDownBox<
     this._popupPosition = undefined;
   }
 
-  _popupPositionedHandler(e): void {
+  _popupPositionedHandler(e: Partial<PositioningEvent>): void {
     super._popupPositionedHandler(e);
     this._popupPosition = e.position;
   }
@@ -276,7 +288,7 @@ class DropDownBox<
     return {
       my,
       at,
-      // @ts-expect-error ts-error
+      // @ts-expect-error Should be updated on PositionConfig level
       offset: { v: -1 },
       collision: 'flipfit',
     };
@@ -291,7 +303,7 @@ class DropDownBox<
       dragEnabled: false,
       focusStateEnabled,
       contentTemplate: ANONYMOUS_TEMPLATE_NAME,
-      // @ts-expect-error ts-error
+      // @ts-expect-error hideOnParentScroll public overlay.d.ts needs fix
       hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
       position: extend(this.option('popupPosition'), {
         of: this.$element(),
@@ -312,20 +324,18 @@ class DropDownBox<
   _popupShownHandler(): void {
     super._popupShownHandler();
     const $firstElement = this._getTabbableElements().first();
-    // @ts-expect-error ts-error
+    // @ts-expect-error should be added on EventsEngine level
     eventsEngine.trigger($firstElement, 'focus');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setCollectionWidgetOption(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldLogFieldTemplateDeprecationWarning(): boolean {
     return true;
   }
 
-  _optionChanged(args) {
-    // @ts-expect-error ts-error
+  _optionChanged(args: OptionChanged<TProperties>): void {
+    // @ts-expect-error DataExpressionMixin must be typed
     this._dataExpressionOptionChanged(args);
     switch (args.name) {
       case 'dataSource':
@@ -346,7 +356,7 @@ class DropDownBox<
   }
 }
 
-// @ts-expect-error ts-error
+// @ts-expect-error DataExpressionMixin is not typed
 DropDownBox.include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);

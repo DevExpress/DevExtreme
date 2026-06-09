@@ -54,10 +54,10 @@ import type {
   ControllerProperties,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
-import type { PopupDragConfig } from '@ts/ui/popup/m_popup_drag';
-import PopupDrag from '@ts/ui/popup/m_popup_drag';
-import type { OverflowManager } from '@ts/ui/popup/m_popup_overflow_manager';
-import { createBodyOverflowManager } from '@ts/ui/popup/m_popup_overflow_manager';
+import type { PopupDragConfig } from '@ts/ui/popup/popup_drag';
+import PopupDrag from '@ts/ui/popup/popup_drag';
+import type { OverflowManager } from '@ts/ui/popup/popup_overflow_manager';
+import { createBodyOverflowManager } from '@ts/ui/popup/popup_overflow_manager';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
@@ -343,7 +343,6 @@ class Popup<
     ];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _iosAnimation(): dxPopupAnimation {
     return {
       show: {
@@ -744,7 +743,6 @@ class Popup<
     return $toolbar;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderByTemplate(
     template: TemplateBase,
     $container: dxElementWrapper,
@@ -864,7 +862,7 @@ class Popup<
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       item.toolbar = data.toolbar || item.toolbar || 'top';
 
-      if (item && item.toolbar === toolbar) {
+      if (item?.toolbar === toolbar) {
         if (isShortcut) {
           extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
         }
@@ -957,7 +955,6 @@ class Popup<
     return action;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
     return TOOLBAR_BASE_WIDGET_NAME;
   }
@@ -1271,7 +1268,6 @@ class Popup<
     return cssStyles;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setHeightClasses($container: dxElementWrapper, currentClass: string): void {
     let excessClasses = '';
 
