@@ -146,7 +146,9 @@ class VerticalGroupedStrategy {
     const offset = this.workspace.option('crossScrollingEnabled') ? 0 : this.workspace.getGroupTableWidth();
 
     if (this.workspace.option('rtlEnabled')) {
-      const containerWidth = getBoundingRect(this.workspace.getScrollable().$content().get(0)).width;
+      const containerWidth = getBoundingRect(
+        this.workspace.getScrollable().$content().get(0),
+      ).width;
       return containerWidth - offset - this.workspace.getWorkSpaceLeftOffset() - width;
     }
 
@@ -160,7 +162,7 @@ class VerticalGroupedStrategy {
 
   getShaderHeight(): number {
     // @ts-expect-error
-    let height = this.workspace.getIndicationHeight();
+    let height = this.workspace.getIndicationHeight() as number;
 
     if (this.workspace.supportAllDayRow() && this.workspace.option('showAllDayPanel')) {
       height += this.workspace.getCellHeight();
@@ -182,7 +184,7 @@ class VerticalGroupedStrategy {
 
   getShaderWidth(): number {
     // @ts-expect-error
-    return this.workspace.getIndicationWidth();
+    return this.workspace.getIndicationWidth() as number;
   }
 
   getScrollableScrollTop(): number {
