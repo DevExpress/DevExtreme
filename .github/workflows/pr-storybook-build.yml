@@ -44,7 +44,9 @@ jobs:
 
           # Cleanup cases
           if [[ "$EVENT_ACTION" == "closed" ]]; then
-            ACTION="remove"
+            if [[ "$HAS_LABEL" == "true" ]]; then
+              ACTION="remove"
+            fi
           elif [[ "$EVENT_ACTION" == "unlabeled" && "$CHANGED_LABEL" == "storybook" ]]; then
             ACTION="remove"
           # Deploy cases
