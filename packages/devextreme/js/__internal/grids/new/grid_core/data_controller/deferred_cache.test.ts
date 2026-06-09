@@ -83,6 +83,22 @@ describe('DataController', () => {
       expect(originFn).toHaveBeenCalledTimes(2);
     });
 
+    it('should call origin fn if args differ on deep value (maxDepth=5)', async () => {
+      const firstArgs = { filter: [['text', 'contains', 'tra']] };
+      const secondArgs = { filter: [['text', 'contains', 'travel']] };
+      const originFn = jest
+        .fn()
+        .mockImplementation(() => createDeferred().resolve());
+      const decoratedFn = deferredCache(
+        originFn as (args: (typeof firstArgs | typeof secondArgs)) => DeferredObj<void>,
+      );
+
+      await decoratedFn(firstArgs);
+      await decoratedFn(secondArgs);
+
+      expect(originFn).toHaveBeenCalledTimes(2);
+    });
+
     it('should return result from origin fn', async () => {
       const expectedResult = { a: 'A' };
       const originFn = jest
