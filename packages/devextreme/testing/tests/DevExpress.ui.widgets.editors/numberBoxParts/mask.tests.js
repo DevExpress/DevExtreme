@@ -1187,7 +1187,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
     // after the paste-driven format so the start of the value (and the sign) stays
     // visible. Arrow-key navigation does not trigger _formatValue, so this is the
     // only place we can correct the scroll position.
-    QUnit.test('scrollLeft should be reset after paste so leading sign stays visible (T_____)', function(assert) {
+    QUnit.test('scrollLeft should be reset after paste so leading sign stays visible (T1330133)', function(assert) {
         this.instance.option({
             format: '#,##0.00',
             value: null
@@ -1204,7 +1204,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         assert.strictEqual(this.inputElement.scrollLeft, 0, 'scrollLeft is reset so minus sign is visible');
     });
 
-    QUnit.test('scrollLeft should be reset after pasting a long positive value (T_____)', function(assert) {
+    QUnit.test('scrollLeft should be reset after pasting a long positive value (T1330133)', function(assert) {
         this.instance.option({
             format: '#,##0.00',
             value: null
@@ -1219,7 +1219,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         assert.strictEqual(this.inputElement.scrollLeft, 0, 'scrollLeft is reset so the start of the value is visible');
     });
 
-    QUnit.test('scrollLeft should NOT be reset on regular keyboard input (T_____)', function(assert) {
+    QUnit.test('scrollLeft should NOT be reset on regular keyboard input (T1330133)', function(assert) {
         this.instance.option({
             format: '#,##0.00',
             value: 1000
@@ -1233,7 +1233,7 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         assert.strictEqual(this.inputElement.scrollLeft, 25, 'scrollLeft is not changed on regular typing');
     });
 
-    QUnit.test('scrollLeft reset after paste does not break value parsing (T_____)', function(assert) {
+    QUnit.test('scrollLeft reset after paste does not break value parsing (T1330133)', function(assert) {
         this.instance.option({
             format: '#,##0.00',
             value: null
