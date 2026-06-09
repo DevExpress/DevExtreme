@@ -11,8 +11,7 @@ import type {
   PositionControllerConstructor,
 } from '@ts/ui/overlay/overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/overlay_position_controller';
-
-import type { PopupProperties } from './popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 export interface PopupControllerProperties extends BaseControllerProperties {
   fullScreen?: PopupProperties['fullScreen'];

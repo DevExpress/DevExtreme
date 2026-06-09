@@ -1,4 +1,4 @@
-import Tooltip from '@ts/ui/tooltip';
+import Tooltip from '../__internal/ui/tooltip';
 export default Tooltip;
 
 /**

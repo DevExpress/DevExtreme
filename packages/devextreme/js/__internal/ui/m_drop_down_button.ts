@@ -31,9 +31,8 @@ import DataController from '@ts/data/data_controller/data_controller';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
-
-import type { PopupProperties } from './popup/popup';
-import Popup from './popup/popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
+import Popup from '@ts/ui/popup/popup';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';

@@ -37,7 +37,7 @@ import {
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
 } from '__internal/ui/chat/message_box/editing_preview';
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
-import { POPUP_CLASS } from '@ts/ui/popup/popup';
+import { POPUP_CLASS } from '__internal/ui/popup/popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { CHAT_FILE_CLASS } from '__internal/ui/chat/file_view/file';
 

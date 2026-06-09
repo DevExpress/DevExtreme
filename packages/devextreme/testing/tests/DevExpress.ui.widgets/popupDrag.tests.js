@@ -1,6 +1,6 @@
 
 import $ from 'jquery';
-import PopupDrag from '@ts/ui/popup/popup_drag';
+import PopupDrag from '__internal/ui/popup/popup_drag';
 import { PopupPositionController } from '__internal/ui/popup/popup_position_controller';
 
 const KEYBOARD_DRAG_STEP = 5;

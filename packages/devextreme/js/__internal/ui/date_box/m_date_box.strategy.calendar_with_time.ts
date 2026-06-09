@@ -6,8 +6,8 @@ import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import Box from '@ts/ui/box';
 import TimeView from '@ts/ui/date_box/time_view';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
-import type { PopupProperties } from '../popup/popup';
 import type DateBox from './date_box.base';
 import uiDateUtils from './date_utils';
 import CalendarStrategy from './m_date_box.strategy.calendar';

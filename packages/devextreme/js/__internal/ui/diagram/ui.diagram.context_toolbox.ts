@@ -7,8 +7,7 @@ import type { ShownEvent } from '@js/ui/popover';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import { getDiagram } from '@ts/ui/diagram/diagram.importer';
-
-import Popover from '../popover/popover';
+import Popover from '@ts/ui/popover/popover';
 
 const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = 'dx-diagram-context-toolbox-target';
 const DIAGRAM_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-context-toolbox';
