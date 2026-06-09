@@ -310,7 +310,7 @@ class DropDownBox<
       }),
       _ignoreFunctionValueDeprecation: true,
       // @ts-expect-error ts-error
-      maxHeight: function () {
+      maxHeight: function (): number | undefined {
         const popupLocation = this._popupPosition?.v.location;
 
         return getElementMaxHeightByWindow(this.$element(), popupLocation);
