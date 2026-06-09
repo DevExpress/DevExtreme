@@ -16,8 +16,8 @@ import {
   CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS,
 } from '@ts/ui/chat/messagelist';
 import ProgressBar from '@ts/ui/m_progress_bar';
-import Popup from '@ts/ui/popup/m_popup';
 
+import Popup from '../../../ui/popup/popup';
 import type { AIMessage } from '../ai_assistant/types';
 import { isAIMessage } from '../ai_assistant/utils';
 import gridCoreUtils from '../m_utils';

@@ -5,8 +5,9 @@ import { extend } from '@js/core/utils/extend';
 import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import type { PopupProperties } from '@ts/ui/popup/m_popup';
-import Popup from '@ts/ui/popup/m_popup';
+
+import type { PopupProperties } from '../popup/popup';
+import Popup from '../popup/popup';
 
 interface Properties extends PopupProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

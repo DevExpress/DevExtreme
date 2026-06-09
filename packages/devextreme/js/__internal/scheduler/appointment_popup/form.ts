@@ -25,8 +25,8 @@ import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import { current, isFluent } from '@js/ui/themes';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
-import type Popup from '@ts/ui/popup/m_popup';
 
+import type Popup from '../../ui/popup/popup';
 import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
 import type { CreateComponentFn, SafeAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';

@@ -16,8 +16,9 @@ import Button from '@ts/ui/button/wrapper';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import Popover from '@ts/ui/popover/m_popover';
-import type { PopupProperties } from '@ts/ui/popup/m_popup';
-import Popup from '@ts/ui/popup/m_popup';
+
+import type { PopupProperties } from './popup/popup';
+import Popup from './popup/popup';
 
 // STYLE actionSheet
 

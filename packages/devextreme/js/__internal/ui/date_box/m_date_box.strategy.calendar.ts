@@ -14,7 +14,7 @@ import { splitPair } from '@ts/core/utils/m_common';
 import Calendar from '@ts/ui/calendar/calendar';
 
 import type { CellEvent } from '../calendar/calendar.base_view';
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import type { DateBoxBaseProperties } from './date_box.base';
 import type DateBox from './date_box.base';
 import DateBoxStrategy from './m_date_box.strategy';
