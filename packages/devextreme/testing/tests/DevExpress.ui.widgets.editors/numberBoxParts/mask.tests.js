@@ -2142,8 +2142,8 @@ QUnit.module('format: scroll position on boundary keys (T1330133)', {
         };
     },
     afterEach: function() {
-        this.inputElement.scrollLeft = null;
-        this.inputElement.scrollWidth = null;
+        delete this.inputElement.scrollLeft;
+        delete this.inputElement.scrollWidth;
         moduleConfig.afterEach.call(this);
     }
 }, () => {
