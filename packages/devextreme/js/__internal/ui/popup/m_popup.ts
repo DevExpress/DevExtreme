@@ -54,8 +54,6 @@ import type {
   ControllerProperties,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
-import type { PopupDragConfig } from '@ts/ui/popup/m_popup_drag';
-import PopupDrag from '@ts/ui/popup/m_popup_drag';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
@@ -63,6 +61,8 @@ import type {
 import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
+import type { PopupDragConfig } from './popup_drag';
+import PopupDrag from './popup_drag';
 import type { OverflowManager } from './popup_overflow_manager';
 import { createBodyOverflowManager } from './popup_overflow_manager';
 
