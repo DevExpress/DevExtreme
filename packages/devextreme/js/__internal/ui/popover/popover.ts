@@ -35,7 +35,7 @@ import {
   POPOVER_POSITION_ALIASES,
   PopoverPositionController,
 } from '@ts/ui/popover/popover_position_controller';
-import Popup from '@ts/ui/popup/m_popup';
+import Popup from '@ts/ui/popup/popup';
 
 // STYLE popover
 
@@ -71,7 +71,7 @@ export interface PopoverProperties extends Omit<Properties,
 
   useFlatToolbarButtons?: boolean;
 
-  arrowOffset: number;
+  arrowOffset?: number;
 
   arrowPosition?: string;
 
@@ -497,7 +497,7 @@ class Popover<
 
     const borderWidth = this._positionController._getContentBorderWidth(side);
 
-    const { arrowOffset } = this.option();
+    const { arrowOffset = 0 } = this.option();
 
     const finalArrowLocation = fitIntoRange(
       arrowLocation - borderWidth + arrowOffset,

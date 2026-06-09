@@ -5,7 +5,7 @@ import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import type { ToolbarItem } from '@js/ui/popup';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 
 // @ts-expect-error dxClass inheritance issue
 class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
