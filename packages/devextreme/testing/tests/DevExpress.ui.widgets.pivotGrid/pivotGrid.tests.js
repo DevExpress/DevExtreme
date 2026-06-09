@@ -555,10 +555,11 @@ QUnit.module('dxPivotGrid', {
 
         const $collapsedTd = $('#pivotGrid').find('.dx-pivotgrid-collapsed').closest('td');
         assert.strictEqual($collapsedTd.length, 1);
-        const ariaLabelBefore = $collapsedTd.attr('aria-label');
-        $collapsedTd.get(0).focus();
+        const $control = $collapsedTd.find('.dx-expand-icon-container');
+        const ariaLabelBefore = $control.attr('aria-label');
+        $control.get(0).focus();
 
-        $collapsedTd.trigger($.Event('keydown', { key: 'Enter' }));
+        $control.trigger($.Event('keydown', { key: 'Enter' }));
 
         this.clock.tick(100);
 
@@ -568,7 +569,7 @@ QUnit.module('dxPivotGrid', {
             expanded: true,
             needExpandData: true
         });
-        assert.strictEqual($(document.activeElement).attr('aria-label'), ariaLabelBefore, 'focus restored to the same cell after expand');
+        assert.strictEqual($(document.activeElement).attr('aria-label'), ariaLabelBefore, 'focus restored to the same control after expand');
     });
 
     QUnit.test('onCellClick cancel prevents keyboard expansion', function(assert) {
