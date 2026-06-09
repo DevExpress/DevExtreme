@@ -53,10 +53,12 @@ jobs:
         run: |
           PR_NUMBER="${{ steps.meta.outputs.pr_number }}"
           ACTION="${{ steps.meta.outputs.action }}"
+          BUILD_RUN_ID="${{ github.event.workflow_run.id }}"
           {
             echo "### PR Storybook Preview"
             echo "- **PR:** [#${PR_NUMBER}](https://github.com/${{ github.repository }}/pull/${PR_NUMBER})"
             echo "- **Action:** \`${ACTION}\`"
+            echo "- **Build run:** [#${BUILD_RUN_ID}](https://github.com/${{ github.repository }}/actions/runs/${BUILD_RUN_ID})"
           } >> "$GITHUB_STEP_SUMMARY"
 
   deploy:

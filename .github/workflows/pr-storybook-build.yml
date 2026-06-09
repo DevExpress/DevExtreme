@@ -130,3 +130,15 @@ jobs:
           name: preview-static
           path: ${{ env.SOURCE_DIR }}
           retention-days: 1
+
+      - name: Summarize
+        if: always()
+        shell: bash
+        run: |
+          PR_NUMBER="${{ steps.meta.outputs.pr_number }}"
+          ACTION="${{ steps.meta.outputs.action }}"
+          {
+            echo "### PR Storybook Build"
+            echo "- **PR:** [#${PR_NUMBER}](https://github.com/${{ github.repository }}/pull/${PR_NUMBER})"
+            echo "- **Action:** \`${ACTION}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
