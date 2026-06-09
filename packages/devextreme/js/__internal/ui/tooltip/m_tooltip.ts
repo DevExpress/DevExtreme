@@ -1,4 +1,3 @@
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { value as viewPort } from '@js/core/utils/view_port';
@@ -10,13 +9,7 @@ type CreateTooltipConfig = Properties & {
 };
 
 let tooltip: Tooltip | null = null;
-let $tooltip: dxElementWrapper | null = null;
-
-const removeTooltipElement = (): void => {
-  $tooltip?.remove();
-  $tooltip = null;
-  tooltip = null;
-};
+let removeTooltipElement: (() => void) | null = null;
 
 const createTooltip = (configuration: CreateTooltipConfig): void => {
   const { content } = configuration;
@@ -28,13 +21,15 @@ const createTooltip = (configuration: CreateTooltipConfig): void => {
 
   delete options.content;
 
-  if (content) {
-    $tooltip = $('<div>')
-      .html(content)
-      .appendTo(viewPort());
+  const $tooltip = $('<div>')
+    .html(content)
+    .appendTo(viewPort());
 
-    tooltip = new Tooltip($tooltip.get(0), options as Properties);
-  }
+  removeTooltipElement = (): void => {
+    $tooltip?.remove();
+  };
+
+  tooltip = new Tooltip($tooltip.get(0), options as Properties);
 };
 
 const removeTooltip = (): void => {
@@ -42,7 +37,7 @@ const removeTooltip = (): void => {
     return;
   }
 
-  removeTooltipElement();
+  removeTooltipElement?.();
 };
 
 export function show(options: CreateTooltipConfig): Promise<boolean> {
