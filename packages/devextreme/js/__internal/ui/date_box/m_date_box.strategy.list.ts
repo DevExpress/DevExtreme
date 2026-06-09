@@ -10,7 +10,7 @@ import { getWindow } from '@js/core/utils/window';
 import { getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import List from '@ts/ui/list/list.edit.search';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
 

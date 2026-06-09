@@ -28,7 +28,7 @@ import domAdapter from '__internal/core/m_dom_adapter';
 import {
     TEMPLATE_WRAPPER_CLASS,
     POPUP_CONTENT_SCROLLABLE_CLASS,
-} from '__internal/ui/popup/m_popup';
+} from '__internal/ui/popup/popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 import 'fluent_blue_light.css!';

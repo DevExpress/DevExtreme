@@ -4,7 +4,7 @@ import type {
   ContentReadyEvent, InitializedEvent, ItemContextMenuEvent, Properties as ListProperties,
 } from '@js/ui/list';
 import supportUtils from '@ts/core/utils/m_support';
-import Tooltip from '@ts/ui/m_tooltip';
+import Tooltip from '@ts/ui/tooltip';
 
 import type { AppointmentTooltipItem } from '../types';
 import { TooltipStrategyBase } from './tooltip_strategy_base';
