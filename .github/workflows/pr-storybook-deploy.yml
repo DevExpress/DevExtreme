@@ -17,7 +17,7 @@ jobs:
   prepare:
     name: Read build meta
     if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
       action: ${{ steps.meta.outputs.action }}
@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Download meta artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@v8
         with:
           run-id: ${{ github.event.workflow_run.id }}
           name: preview-meta
@@ -65,14 +65,14 @@ jobs:
     name: "Deploy/remove preview — PR #${{ needs.prepare.outputs.pr_number }}"
     needs: prepare
     if: needs.prepare.outputs.action != 'none'
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       actions: read
     timeout-minutes: 10
     environment:
       name: github-pages
-      url: https://devexpress.github.com/DevExtreme/preview/pr-${{ needs.prepare.outputs.pr_number }}
+      url: https://devexpress.github.io/DevExtreme/preview/pr-${{ needs.prepare.outputs.pr_number }}
 
     concurrency:
       group: preview-deploy-${{ needs.prepare.outputs.pr_number }}
