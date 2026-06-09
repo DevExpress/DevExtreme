@@ -39,7 +39,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import TextBox from '@ts/ui/text_box/text_box';
 
-import type Popover from '../popover/m_popover';
+import type Popover from '../popover/popover';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
 import DropDownButton from './drop_down_button';
 import { getElementWidth } from './utils';

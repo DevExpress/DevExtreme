@@ -136,7 +136,6 @@ class Popover<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return [
       {
@@ -261,7 +260,6 @@ class Popover<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isHoverHideEventName(eventName: string): boolean {
     return HOVER_HIDE_EVENTS.some((hoverEvent) => eventName.split(/\s+/).includes(hoverEvent));
   }
@@ -410,12 +408,10 @@ class Popover<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getEventHandlerName(name: string): string {
     return `_${name}EventHandler`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getEventNameByOption(
     optionValue: { name?: string | undefined } | string | undefined,
   ): string | undefined {
