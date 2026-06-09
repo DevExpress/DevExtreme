@@ -11,7 +11,7 @@ type CreateTooltipConfig = Properties & {
 };
 
 let tooltip: Tooltip | null = null;
-let removeTooltipElement: (() => void) | null = null;
+let clean: (() => void) | null = null;
 
 const createTooltip = (configuration: CreateTooltipConfig): void => {
   // Note: The configuration object is mutated within the extend. This is expected behavior.
@@ -25,12 +25,13 @@ const createTooltip = (configuration: CreateTooltipConfig): void => {
     .html(content)
     .appendTo(viewPort());
 
-  removeTooltipElement = (): void => {
+  tooltip = new Tooltip($tooltip.get(0), configuration as Properties);
+
+  clean = (): void => {
     $tooltip?.remove();
     $tooltip = null;
+    tooltip = null;
   };
-
-  tooltip = new Tooltip($tooltip.get(0), configuration as Properties);
 };
 
 const removeTooltip = (): void => {
@@ -38,7 +39,7 @@ const removeTooltip = (): void => {
     return;
   }
 
-  removeTooltipElement?.();
+  clean?.();
 };
 
 export function show(options: CreateTooltipConfig): Promise<boolean> {
