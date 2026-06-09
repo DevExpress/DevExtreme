@@ -61,7 +61,7 @@ jobs:
 
       - name: Checkout repository
         if: steps.meta.outputs.action == 'deploy'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
           fetch-depth: 1
@@ -77,13 +77,13 @@ jobs:
 
       - name: Use Node.js
         if: steps.meta.outputs.action == 'deploy'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
       - name: Setup pnpm
         if: steps.meta.outputs.action == 'deploy'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -95,7 +95,7 @@ jobs:
 
       - name: Setup pnpm + nx cache
         if: steps.meta.outputs.action == 'deploy'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ env.STORE_PATH }}
@@ -115,7 +115,7 @@ jobs:
 
       - name: Upload meta artifact (always)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: preview-meta
           path: preview_meta/meta.json
@@ -123,7 +123,7 @@ jobs:
 
       - name: Upload static artifact (deploy only)
         if: steps.meta.outputs.action == 'deploy'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: preview-static
           path: ${{ env.SOURCE_DIR }}
