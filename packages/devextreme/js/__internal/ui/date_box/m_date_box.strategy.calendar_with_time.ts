@@ -11,8 +11,8 @@ import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import TimeView from '@ts/ui/date_box/time_view';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
-import type { PopupProperties } from '../popup/popup';
 import type DateBox from './date_box.base';
 import type { DateBoxBaseProperties } from './date_box.base';
 import uiDateUtils from './date_utils';

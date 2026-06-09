@@ -12,7 +12,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
 import dateLocalization from 'common/core/localization/date';
 import translator from 'common/core/animation/translator';
-import { hide } from '@ts/ui/tooltip/tooltip';
+import { hide } from '__internal/ui/tooltip/tooltip';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
 import dragEvents from 'common/core/events/drag';

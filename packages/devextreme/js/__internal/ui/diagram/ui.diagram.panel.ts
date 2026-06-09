@@ -5,8 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-
-import type { PopupProperties } from '../popup/popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxDiagramPanel');
 const PREVENT_REFOCUS_SELECTOR = '.dx-textbox';

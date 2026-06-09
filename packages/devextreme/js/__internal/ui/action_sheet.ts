@@ -14,11 +14,10 @@ import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Button from '@ts/ui/button/wrapper';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
-
-import type { PopoverProperties } from './popover/popover';
-import Popover from './popover/popover';
-import type { PopupProperties } from './popup/popup';
-import Popup from './popup/popup';
+import type { PopoverProperties } from '@ts/ui/popover/popover';
+import Popover from '@ts/ui/popover/popover';
+import type { PopupProperties } from '@ts/ui/popup/popup';
+import Popup from '@ts/ui/popup/popup';
 
 // STYLE actionSheet
 

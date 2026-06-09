@@ -15,7 +15,7 @@ import AIDialog, {
     TEXT_AREA_MAX_HEIGHT
 } from '__internal/ui/html_editor/ui/aiDialog';
 import { BUTTON_GROUP_CLASS } from '__internal/ui/button_group';
-import { POPUP_CLASS } from '@ts/ui/popup/popup';
+import { POPUP_CLASS } from '__internal/ui/popup/popup';
 import { TEXTAREA_CLASS } from '__internal/ui/text_area';
 import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/text_editor.base';
 import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';

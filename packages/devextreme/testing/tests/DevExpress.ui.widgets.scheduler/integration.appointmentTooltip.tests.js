@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dateSerialization from 'core/utils/date_serialization';
 import config from 'core/config';
 import Tooltip from 'ui/tooltip';
-import { hide } from '@ts/ui/tooltip/tooltip';
+import { hide } from '__internal/ui/tooltip/tooltip';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import fx from 'common/core/animation/fx';
 import dateLocalization from 'common/core/localization/date';

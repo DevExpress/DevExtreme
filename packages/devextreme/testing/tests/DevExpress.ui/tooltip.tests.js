@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Tooltip from 'ui/tooltip';
-import { show } from '@ts/ui/tooltip/tooltip';
+import { show } from '__internal/ui/tooltip/tooltip';
 import viewPort from 'core/utils/view_port';
 import fx from 'common/core/animation/fx';
 

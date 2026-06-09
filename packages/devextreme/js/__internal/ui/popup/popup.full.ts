@@ -2,8 +2,7 @@ import '@js/ui/toolbar';
 
 import registerComponent from '@js/core/component_registrator';
 import Popup from '@js/ui/popup/ui.popup';
-
-import type { PopupProperties } from './popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 const TOOLBAR_WIDGET_NAME = 'dxToolbar';
 

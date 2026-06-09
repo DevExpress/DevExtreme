@@ -12,9 +12,9 @@ import { current, isMaterial } from '@js/ui/themes';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { splitPair } from '@ts/core/utils/m_common';
 import Calendar from '@ts/ui/calendar/calendar';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import type { CellEvent } from '../calendar/calendar.base_view';
-import type { PopupProperties } from '../popup/popup';
 import type { DateBoxBaseProperties } from './date_box.base';
 import type DateBox from './date_box.base';
 import DateBoxStrategy from './m_date_box.strategy';
