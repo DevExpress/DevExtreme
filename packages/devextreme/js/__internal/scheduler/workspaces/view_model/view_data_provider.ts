@@ -20,6 +20,7 @@ import type {
   GroupedDataMap,
   GroupInfo,
   GroupPanelData,
+  TimePanelCellData,
   TimePanelData,
   ViewCellData,
   ViewDataMap,
@@ -51,7 +52,7 @@ export default class ViewDataProvider {
 
   private options!: ViewDataProviderExtendedOptions;
 
-  completeTimePanelMap!: ViewCellData[];
+  completeTimePanelMap!: TimePanelCellData[];
 
   dateHeaderData!: DateHeaderData;
 

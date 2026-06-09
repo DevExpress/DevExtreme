@@ -106,6 +106,8 @@ export interface ViewCellData {
   highlighted?: boolean;
 }
 
+export type TimePanelCellData = Omit<ViewCellData, 'endDate'>;
+
 export interface CountGenerationConfig {
   intervalCount: number;
   currentDate: Date;
@@ -239,12 +241,18 @@ export interface GroupedViewDataBase {
   bottomVirtualRowCount: number;
 }
 
-export interface TimePanelCellsData extends ViewDataBase {
-  dateTable: ViewCellData[];
-  allDayPanel?: ViewCellData;
+export interface TimePanelDataBase {
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  isGroupedAllDayPanel: boolean;
 }
 
-export interface TimePanelData extends GroupedViewDataBase {
+export interface TimePanelCellsData extends ViewDataBase {
+  dateTable: TimePanelCellData[];
+  allDayPanel?: TimePanelCellData;
+}
+
+export interface TimePanelData extends TimePanelDataBase {
   groupedData: TimePanelCellsData[];
 }
 

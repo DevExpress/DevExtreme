@@ -21,10 +21,7 @@ export interface TimePanelTableProps extends PropsWithViewContext {
 export const TimePanelTableDefaultProps: DefaultProps<TimePanelTableProps> = {
   timePanelData: {
     groupedData: [],
-    leftVirtualCellCount: 0,
-    rightVirtualCellCount: 0,
-    topVirtualRowCount: 0,
-    bottomVirtualRowCount: 0,
+    isGroupedAllDayPanel: false,
   },
 };
 

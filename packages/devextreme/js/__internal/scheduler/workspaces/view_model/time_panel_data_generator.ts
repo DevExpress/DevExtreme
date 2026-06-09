@@ -6,6 +6,7 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 
 import type {
+  TimePanelCellData,
   TimePanelCellsData,
   TimePanelData,
   ViewCellData,
@@ -42,7 +43,7 @@ export class TimePanelDataGenerator {
   getCompleteTimePanelMap(
     options: ViewDataProviderExtendedOptions,
     completeViewDataMap: ViewCellData[][],
-  ): ViewCellData[] {
+  ): TimePanelCellData[] {
     const {
       startViewDate,
       cellDuration,
@@ -126,7 +127,6 @@ export class TimePanelDataGenerator {
       return {
         ...restCellProps,
         startDate,
-        endDate,
         allDay,
         highlighted,
         text: weekUtils.getTimePanelCellText(
@@ -147,7 +147,7 @@ export class TimePanelDataGenerator {
   }
 
   generateTimePanelData(
-    completeTimePanelMap: ViewCellData[],
+    completeTimePanelMap: TimePanelCellData[],
     options: TimePanelGenerateOptions,
   ): TimePanelData {
     const {
@@ -155,6 +155,7 @@ export class TimePanelDataGenerator {
       rowCount,
       topVirtualRowHeight,
       bottomVirtualRowHeight,
+      isGroupedAllDayPanel,
       isVerticalGrouping,
       isAllDayPanelVisible,
     } = options;
@@ -173,16 +174,13 @@ export class TimePanelDataGenerator {
     return {
       topVirtualRowHeight,
       bottomVirtualRowHeight,
+      isGroupedAllDayPanel,
       groupedData,
-      leftVirtualCellCount: 0,
-      rightVirtualCellCount: 0,
-      topVirtualRowCount: 0,
-      bottomVirtualRowCount: 0,
     };
   }
 
   private generateTimePanelDataFromMap(
-    timePanelMap: ViewCellData[],
+    timePanelMap: TimePanelCellData[],
     isVerticalGrouping: boolean,
   ): {
     previousGroupIndex: number | undefined;
