@@ -71,7 +71,7 @@ jobs:
       actions: read
     timeout-minutes: 10
     environment:
-      name: github-pages
+      name: storybook
       url: https://devexpress.github.io/DevExtreme/preview/pr-${{ needs.prepare.outputs.pr_number }}
 
     concurrency:
