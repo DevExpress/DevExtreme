@@ -3,7 +3,7 @@ import type { Appointment, Properties } from '@js/ui/scheduler';
 import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
-import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
+import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import type { AppointmentItemViewModel } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
@@ -95,7 +95,7 @@ export interface ViewCellData {
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
-  groups?: Record<string, unknown>;
+  groups?: GroupLeaf['grouped'];
   groupIndex?: number;
   index: number;
   isFirstGroupCell: boolean;

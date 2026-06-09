@@ -1,5 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import type { GroupedViewData } from '../../r1/components/types';
 import {
@@ -27,8 +28,8 @@ import type {
 } from '../../types';
 import timeZoneUtils from '../../utils_time_zone';
 import type { EdgeIndices } from '../cells_selection_controller';
+import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
-import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import type { ViewDataGenerator } from './m_view_data_generator';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
 import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './types';
@@ -77,7 +78,7 @@ export default class ViewDataProvider {
   }
 
   get groupedDataMap(): GroupedDataMap {
-    return this.groupedDataMapProvider.groupedDataMap as GroupedDataMap;
+    return this.groupedDataMapProvider.groupedDataMap;
   }
 
   get hiddenInterval(): number { return this.viewDataGenerator.hiddenInterval; }
@@ -141,6 +142,7 @@ export default class ViewDataProvider {
       {
         isVerticalGrouping: this.options.isVerticalGrouping,
         viewType: this.options.viewType,
+        viewOffset: this.options.viewOffset,
       },
     );
   }
@@ -213,7 +215,7 @@ export default class ViewDataProvider {
   }
 
   getGroupEndDate(groupIndex: number): Date | undefined {
-    return this.groupedDataMapProvider.getGroupEndDate(groupIndex) as Date | undefined;
+    return this.groupedDataMapProvider.getGroupEndDate(groupIndex);
   }
 
   findGroupCellStartDate(
@@ -223,7 +225,7 @@ export default class ViewDataProvider {
     isFindByDate = false,
   ): Date | undefined {
     return this.groupedDataMapProvider
-      .findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate) as Date | undefined;
+      .findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
   }
 
   findAllDayGroupCellStartDate(groupIndex: number): Date | null {
@@ -237,9 +239,8 @@ export default class ViewDataProvider {
     return this.groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
 
-  getCellsGroup(groupIndex: number): Record<string, unknown> | undefined {
-    return this.groupedDataMapProvider.getCellsGroup(groupIndex) as
-      Record<string, unknown> | undefined;
+  getCellsGroup(groupIndex: number): GroupLeaf['grouped'] | undefined {
+    return this.groupedDataMapProvider.getCellsGroup(groupIndex);
   }
 
   getCompletedGroupsInfo(): GroupInfo[] {
@@ -251,8 +252,7 @@ export default class ViewDataProvider {
   }
 
   getLastGroupCellPosition(groupIndex: number): CellPositionData | undefined {
-    return this.groupedDataMapProvider.getLastGroupCellPosition(groupIndex) as
-      CellPositionData | undefined;
+    return this.groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
   }
 
   getRowCountInGroup(groupIndex: number): number {
