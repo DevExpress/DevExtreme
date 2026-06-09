@@ -98,6 +98,7 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/position_helper';
+import type { WorkspaceGroupedStrategyConfig } from './types';
 import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './virtual_scrolling';
@@ -922,6 +923,18 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
     });
+  }
+
+  protected getIndicatorOffset(): number {
+    return 0;
+  }
+
+  protected getIndicationHeight(): number {
+    return 0;
+  }
+
+  protected getIndicationWidth(): number {
+    return 0;
   }
 
   private isVirtualModeOn() {
@@ -2625,7 +2638,37 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       ? VerticalGroupedStrategy
       : HorizontalGroupedStrategy;
 
-    this.groupedStrategy = new Strategy(this);
+    const config: WorkspaceGroupedStrategyConfig = {
+      isGroupedByDate: this.isGroupedByDate.bind(this),
+      getCellCount: this.getCellCount.bind(this),
+      getGroupCount: this.getGroupCount.bind(this),
+      getRowCount: this.getRowCount.bind(this),
+      getCellWidth: this.getCellWidth.bind(this),
+      getCellHeight: this.getCellHeight.bind(this),
+      getAllDayHeight: this.getAllDayHeight.bind(this),
+      getTimePanelWidth: this.getTimePanelWidth.bind(this),
+      getGroupTableWidth: this.getGroupTableWidth.bind(this),
+      getWorkSpaceWidth: this.getWorkSpaceWidth.bind(this),
+      getWorkSpaceLeftOffset: this.getWorkSpaceLeftOffset.bind(this),
+      getIndicatorOffset: () => this.getIndicatorOffset(),
+      getIndicationHeight: () => this.getIndicationHeight(),
+      getIndicationWidth: () => this.getIndicationWidth(),
+      getCellIndexByCoordinates: this.getCellIndexByCoordinates.bind(this),
+      supportAllDayRow: this.supportAllDayRow.bind(this),
+      getScrollableScrollTop: () => this.getScrollable().scrollTop(),
+      getScrollableContentElement: () => this.getScrollable().$content().get(0) as HTMLElement,
+      getElement: () => (this.$element() as any).get(0) as HTMLElement,
+      getHeaderPanelContainerElement: () => this.$headerPanelContainer.get(0) as HTMLElement,
+      isRtlEnabled: () => this.option('rtlEnabled'),
+      isShowAllDayPanel: () => this.option('showAllDayPanel'),
+      isCrossScrollingEnabled: () => this.option('crossScrollingEnabled'),
+      getStartDayHour: () => this.option('startDayHour'),
+      getEndDayHour: () => this.option('endDayHour'),
+      getHoursInterval: () => this.option('hoursInterval'),
+      getHeaderHeight: () => this.option('getHeaderHeight')(),
+    };
+
+    this.groupedStrategy = new Strategy(config);
   }
 
   protected getDefaultGroupStrategy() {

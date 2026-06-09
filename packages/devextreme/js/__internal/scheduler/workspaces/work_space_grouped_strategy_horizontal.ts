@@ -6,13 +6,13 @@ import type {
   GroupBoundsOffset,
 } from '@ts/scheduler/types';
 import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
-import type SchedulerWorkSpace from '@ts/scheduler/workspaces/m_work_space';
 
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import type { WorkspaceGroupedStrategyConfig } from './types';
 
 class HorizontalGroupedStrategy {
-  constructor(private readonly workspace: SchedulerWorkSpace) {}
+  constructor(private readonly config: WorkspaceGroupedStrategyConfig) {}
 
   prepareCellIndexes(
     cellCoordinates: CellPositionData,
@@ -20,37 +20,32 @@ class HorizontalGroupedStrategy {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     inAllDay?: boolean,
   ): CellPositionData {
-    const groupByDay = this.workspace.isGroupedByDate();
+    const groupByDay = this.config.isGroupedByDate();
 
     if (!groupByDay) {
       return {
         rowIndex: cellCoordinates.rowIndex,
-        // @ts-expect-error
-        columnIndex: cellCoordinates.columnIndex + groupIndex * this.workspace.getCellCount(),
+        columnIndex: cellCoordinates.columnIndex + groupIndex * this.config.getCellCount(),
       };
     }
     return {
       rowIndex: cellCoordinates.rowIndex,
-      // @ts-expect-error
-      columnIndex: cellCoordinates.columnIndex * this.workspace.getGroupCount() + groupIndex,
+      columnIndex: cellCoordinates.columnIndex * this.config.getGroupCount() + groupIndex,
     };
   }
 
   getGroupIndex(rowIndex: number, columnIndex: number): number {
-    const groupByDay = this.workspace.isGroupedByDate();
-    // @ts-expect-error
-    const groupCount = this.workspace.getGroupCount();
+    const groupByDay = this.config.isGroupedByDate();
+    const groupCount = this.config.getGroupCount();
 
     if (groupByDay) {
       return columnIndex % groupCount;
     }
-    // @ts-expect-error
-    return Math.floor(columnIndex / this.workspace.getCellCount());
+    return Math.floor(columnIndex / this.config.getCellCount());
   }
 
   calculateHeaderCellRepeatCount(): number {
-    // @ts-expect-error
-    return this.workspace.getGroupCount() || 1;
+    return this.config.getGroupCount() || 1;
   }
 
   insertAllDayRowsIntoDateTable(): boolean {
@@ -60,13 +55,11 @@ class HorizontalGroupedStrategy {
   getTotalCellCount(groupCount: number): number {
     const effectiveGroupCount = groupCount || 1;
 
-    // @ts-expect-error
-    return this.workspace.getCellCount() * effectiveGroupCount;
+    return this.config.getCellCount() * effectiveGroupCount;
   }
 
   getTotalRowCount(): number {
-    // @ts-expect-error
-    return this.workspace.getRowCount();
+    return this.config.getRowCount();
   }
 
   calculateTimeCellRepeatCount(): number {
@@ -74,14 +67,16 @@ class HorizontalGroupedStrategy {
   }
 
   getWorkSpaceMinWidth(): number {
-    const workSpaceElementWidth = getBoundingRect(this.workspace.$element().get(0)).width;
+    const workSpaceElementWidth = getBoundingRect(
+      this.config.getElement(),
+    ).width;
     return workSpaceElementWidth
-      - this.workspace.getTimePanelWidth()
+      - this.config.getTimePanelWidth()
       - 2 * WORK_SPACE_BORDER_PX;
   }
 
   getAllDayOffset(): number {
-    return this.workspace.getAllDayHeight();
+    return this.config.getAllDayHeight();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -90,7 +85,7 @@ class HorizontalGroupedStrategy {
   }
 
   getLeftOffset(): number {
-    return this.workspace.getTimePanelWidth();
+    return this.config.getTimePanelWidth();
   }
 
   private createGroupBoundOffset(
@@ -130,11 +125,11 @@ class HorizontalGroupedStrategy {
     coordinates: { top: number; left: number; groupIndex?: number },
     groupedDataMap: { dateTableGroupedMap: CellInfo[][][] },
   ): GroupBoundsOffset {
-    if (this.workspace.isGroupedByDate()) {
+    if (this.config.isGroupedByDate()) {
       return this.getGroupedByDateBoundOffset($cells, cellWidth);
     }
 
-    const cellIndex = this.workspace.getCellIndexByCoordinates(coordinates);
+    const cellIndex = this.config.getCellIndexByCoordinates(coordinates);
     const groupIndex = coordinates.groupIndex ?? Math.floor(cellIndex / cellCount);
 
     const currentCellGroup = groupedDataMap.dateTableGroupedMap[groupIndex];
@@ -168,7 +163,7 @@ class HorizontalGroupedStrategy {
   }
 
   private getIndicatorOffset(groupIndex: number): number {
-    const groupByDay = this.workspace.isGroupedByDate();
+    const groupByDay = this.config.isGroupedByDate();
 
     return groupByDay
       ? this.calculateGroupByDateOffset(groupIndex)
@@ -176,29 +171,25 @@ class HorizontalGroupedStrategy {
   }
 
   private calculateOffset(groupIndex: number): number {
-    // @ts-expect-error
-    const indicatorStartPosition = this.workspace.getIndicatorOffset(groupIndex) as number;
-    // @ts-expect-error
-    const offset = this.workspace.getCellCount() * this.workspace.getCellWidth() * groupIndex;
+    const indicatorStartPosition = this.config.getIndicatorOffset();
+    const offset = this.config.getCellCount() * this.config.getCellWidth() * groupIndex;
 
     return indicatorStartPosition + offset;
   }
 
   private calculateGroupByDateOffset(groupIndex: number): number {
-    // @ts-expect-error
-    return this.workspace.getIndicatorOffset(0) * this.workspace.getGroupCount()
-      + this.workspace.getCellWidth() * groupIndex;
+    return this.config.getIndicatorOffset() * this.config.getGroupCount()
+      + this.config.getCellWidth() * groupIndex;
   }
 
   getShaderOffset(i: number, width: number): number {
-    // @ts-expect-error
-    const offset = this.workspace.getCellCount() * this.workspace.getCellWidth() * i;
+    const offset = this.config.getCellCount() * this.config.getCellWidth() * i;
 
-    if (this.workspace.option('rtlEnabled')) {
+    if (this.config.isRtlEnabled()) {
       const containerWidth = getBoundingRect(
-        this.workspace.getScrollable().$content().get(0),
+        this.config.getScrollableContentElement(),
       ).width;
-      return containerWidth - offset - this.workspace.getTimePanelWidth() - width;
+      return containerWidth - offset - this.config.getTimePanelWidth() - width;
     }
 
     return offset;
@@ -209,21 +200,21 @@ class HorizontalGroupedStrategy {
   }
 
   getShaderHeight(): number {
-    // @ts-expect-error
-    return this.workspace.getIndicationHeight() as number;
+    return this.config.getIndicationHeight();
   }
 
   getShaderMaxHeight(): number {
-    return (getBoundingRect(this.workspace.getScrollable().$content().get(0)) as DOMRect).height;
+    return (getBoundingRect(
+      this.config.getScrollableContentElement(),
+    ) as DOMRect).height;
   }
 
   getShaderWidth(): number {
-    // @ts-expect-error
-    return this.workspace.getIndicationWidth() as number;
+    return this.config.getIndicationWidth();
   }
 
   getScrollableScrollTop(allDay: boolean): number {
-    return !allDay ? this.workspace.getScrollable().scrollTop() : 0;
+    return !allDay ? this.config.getScrollableScrollTop() : 0;
   }
 
   // ---------------
@@ -251,15 +242,13 @@ class HorizontalGroupedStrategy {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
-    const groupByDate = this.workspace.isGroupedByDate();
+    const groupByDate = this.config.isGroupedByDate();
 
     if (groupByDate) {
-      // @ts-expect-error
-      if (index % this.workspace.getGroupCount() === 0) {
+      if (index % this.config.getGroupCount() === 0) {
         return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
       }
-      // @ts-expect-error
-    } else if (index % this.workspace.getCellCount() === 0) {
+    } else if (index % this.config.getCellCount() === 0) {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
@@ -275,15 +264,13 @@ class HorizontalGroupedStrategy {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 
-    const groupByDate = this.workspace.isGroupedByDate();
+    const groupByDate = this.config.isGroupedByDate();
 
     if (groupByDate) {
-      // @ts-expect-error
-      if ((index - 1) % this.workspace.getGroupCount() === 0) {
+      if ((index - 1) % this.config.getGroupCount() === 0) {
         return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
       }
-      // @ts-expect-error
-    } else if ((index - 1) % this.workspace.getCellCount() === 0) {
+    } else if ((index - 1) % this.config.getCellCount() === 0) {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 
