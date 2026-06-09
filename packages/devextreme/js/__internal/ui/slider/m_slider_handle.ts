@@ -80,7 +80,6 @@ class SliderHandle extends Widget<SliderHandlerProperties> {
 
   _updateTooltipOptions(args): void {
     const tooltipOptions = Widget.getOptionsFromContainer(args);
-    // @ts-expect-error ts-error
     this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
     this._sliderTooltip?.option('visible', tooltipOptions.enabled);
   }

@@ -427,8 +427,7 @@ class Widget<
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     keyboardListeners.forEach((listener) => listener?._keyboardHandler(options));
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    onKeyboardHandled && onKeyboardHandled(options);
+    onKeyboardHandled?.(options);
 
     return true;
   }
@@ -570,13 +569,12 @@ class Widget<
     this.$element().toggleClass('dx-state-independent', ignoreParentReadOnly);
   }
 
-  _setWidgetOption(widgetName: string, args: Record<string, unknown>): void {
+  _setWidgetOption(widgetName: string, args: [string, unknown?] | [Record<string, unknown>]): void {
     if (!this[widgetName]) {
       return;
     }
 
     if (isPlainObject(args[0])) {
-      // @ts-expect-error
       each(args[0], (option, value) => this._setWidgetOption(widgetName, [option, value]));
 
       return;
