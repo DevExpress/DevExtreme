@@ -250,7 +250,7 @@ describe('selectByKeysCommand', () => {
 
     it('returns failure when selectRows rejects', async () => {
       const instance = await createGrid();
-      jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.reject(new Error('Error')) as never);
+      jest.spyOn(instance, 'selectRows').mockRejectedValue(new Error('Error') as never);
       const callbacks = createCallbacks();
 
       const result = await selectByKeysCommand.execute(instance, callbacks)({
@@ -585,7 +585,7 @@ describe('selectionByIndexesCommand', () => {
       it('returns failure when store.load rejects', async () => {
         const instance = await createRemoteGrid();
         jest.spyOn(instance.getDataSource().store(), 'load')
-          .mockReturnValue(Promise.reject(new Error('Error')) as never);
+          .mockRejectedValue(new Error('Error') as never);
         const callbacks = createCallbacks();
 
         const result = await selectionByIndexesCommand.execute(instance, callbacks)({
@@ -601,7 +601,7 @@ describe('selectionByIndexesCommand', () => {
           Promise.resolve([{ id: 1, name: 'Alpha' }]) as never,
         );
         jest.spyOn(instance, 'selectRows')
-          .mockReturnValue(Promise.reject(new Error('Error')) as never);
+          .mockRejectedValue(new Error('Error') as never);
         const callbacks = createCallbacks();
 
         const result = await selectionByIndexesCommand.execute(instance, callbacks)({
@@ -617,7 +617,7 @@ describe('selectionByIndexesCommand', () => {
           Promise.resolve([{ id: 1, name: 'Alpha' }]) as never,
         );
         jest.spyOn(instance, 'deselectRows')
-          .mockReturnValue(Promise.reject(new Error('Error')) as never);
+          .mockRejectedValue(new Error('Error') as never);
         const callbacks = createCallbacks();
 
         const result = await selectionByIndexesCommand.execute(instance, callbacks)({
@@ -724,7 +724,7 @@ describe('selectionByIndexesCommand', () => {
       it('returns failure when selectRows rejects', async () => {
         const instance = await createGrid();
         jest.spyOn(instance, 'selectRows')
-          .mockReturnValue(Promise.reject(new Error('Error')) as never);
+          .mockRejectedValue(new Error('Error') as never);
         const callbacks = createCallbacks();
 
         const result = await executeWithTimers(

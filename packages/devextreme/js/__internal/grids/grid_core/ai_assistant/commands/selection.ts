@@ -181,10 +181,10 @@ const resolveKeysFromAllPages = (
 export const selectionByIndexesCommand = defineGridCommand({
   name: 'selectionByIndexes',
   description: 'Select or deselect rows by their 1-based indexes. '
+    + 'Indexes start at 1: "the first row" is index 1 and "the 5th row" is index 5. Do NOT use 0-based counting here, this command is 1-based. '
     + 'Always set scope to choose how indexes are interpreted: '
     + '"allPages" — indexes are positions within the currently filtered and sorted dataset, NOT limited to the current page; index 1 is the first row of the dataset, regardless of pageIndex/pageSize. Use this when the user does NOT explicitly refer to the visible page (e.g. "select rows 1 to 100"). '
     + '"page" — indexes are positions within the currently rendered page; index 1 is the first data row on the visible page and group/header rows are not counted. Use this ONLY when the user explicitly mentions the current/visible page (e.g. "select the first 3 rows on the current page", "deselect row 2 on this page"). '
-    + 'Use this command for a SINGLE contiguous range per call. When the user asks for several non-contiguous ranges (e.g. "select rows 1 to 50 and 70 to 100"), invoke this command separately for EACH range — once with indexes [1, 2, ..., 50] and once with indexes [70, 71, ..., 100]. '
     + 'Set mode to "select" to add the listed rows to the current selection (multiple calls accumulate, so previously selected ranges are kept); set mode to "deselect" to remove the listed rows from the current selection (e.g. "unselect row 1"). '
     + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection. '
     + 'To target rows by key value rather than by index, use selectByKeys.',
