@@ -100,7 +100,7 @@ QUnit.module('PivotGrid markup tests', () => {
         ]
     });
 
-    QUnit.test('Expandable td has aria-expanded reflecting expanded state', function(assert) {
+    QUnit.test('Expand control has aria-expanded reflecting expanded state', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
             return;
@@ -110,19 +110,19 @@ QUnit.module('PivotGrid markup tests', () => {
             const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
             clock.tick(10);
 
-            const $expandedTd = pivotGrid.$element().find('.dx-pivotgrid-expanded').first().closest('td');
-            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+            const $expandedControl = pivotGrid.$element().find('.dx-pivotgrid-expanded').first().find('.dx-expand-icon-container');
+            const $collapsedControl = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().find('.dx-expand-icon-container');
 
-            assert.ok($expandedTd.length > 0, 'expanded td present');
-            assert.ok($collapsedTd.length > 0, 'collapsed td present');
-            assert.strictEqual($expandedTd.attr('aria-expanded'), 'true', 'expanded td has aria-expanded="true"');
-            assert.strictEqual($collapsedTd.attr('aria-expanded'), 'false', 'collapsed td has aria-expanded="false"');
+            assert.ok($expandedControl.length > 0, 'expanded control present');
+            assert.ok($collapsedControl.length > 0, 'collapsed control present');
+            assert.strictEqual($expandedControl.attr('aria-expanded'), 'true', 'expanded control has aria-expanded="true"');
+            assert.strictEqual($collapsedControl.attr('aria-expanded'), 'false', 'collapsed control has aria-expanded="false"');
         } finally {
             clock.restore();
         }
     });
 
-    QUnit.test('Expandable td has tabindex="0"', function(assert) {
+    QUnit.test('Expand control is a focusable button, td keeps native cell semantics', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
             return;
@@ -132,37 +132,20 @@ QUnit.module('PivotGrid markup tests', () => {
             const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
             clock.tick(10);
 
-            const $expandedTd = pivotGrid.$element().find('.dx-pivotgrid-expanded').first().closest('td');
-            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first();
+            const $collapsedControl = $collapsedTd.find('.dx-expand-icon-container');
 
-            assert.strictEqual($expandedTd.attr('tabindex'), '0', 'expanded td is focusable');
-            assert.strictEqual($collapsedTd.attr('tabindex'), '0', 'collapsed td is focusable');
+            assert.strictEqual($collapsedControl.attr('role'), 'button', 'control has role="button"');
+            assert.strictEqual($collapsedControl.attr('tabindex'), '0', 'control is focusable');
+            assert.strictEqual($collapsedTd.attr('role'), undefined, 'td keeps native cell role');
+            assert.strictEqual($collapsedTd.attr('tabindex'), undefined, 'td is not in the tab order');
+            assert.strictEqual($collapsedTd.attr('aria-expanded'), undefined, 'td has no aria-expanded');
         } finally {
             clock.restore();
         }
     });
 
-    QUnit.test('Expandable td has role="button"', function(assert) {
-        if(!windowUtils.hasWindow()) {
-            assert.ok(true, 'skipped on serverSide');
-            return;
-        }
-        const clock = sinon.useFakeTimers();
-        try {
-            const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
-            clock.tick(10);
-
-            const $expandedTd = pivotGrid.$element().find('.dx-pivotgrid-expanded').first().closest('td');
-            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
-
-            assert.strictEqual($expandedTd.attr('role'), 'button', 'expanded td has role="button"');
-            assert.strictEqual($collapsedTd.attr('role'), 'button', 'collapsed td has role="button"');
-        } finally {
-            clock.restore();
-        }
-    });
-
-    QUnit.test('Expandable td aria-label matches the displayed text, not the raw value', function(assert) {
+    QUnit.test('Expand control aria-label matches the displayed text, not the raw value', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
             return;
@@ -175,16 +158,17 @@ QUnit.module('PivotGrid markup tests', () => {
             clock.tick(10);
 
             const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+            const $collapsedControl = $collapsedTd.find('.dx-expand-icon-container');
             const displayedText = $collapsedTd.text().trim();
 
-            assert.notStrictEqual($collapsedTd.attr('aria-label').indexOf(' region'), -1, 'aria-label uses customized display text');
-            assert.strictEqual($collapsedTd.attr('aria-label'), displayedText, 'aria-label equals the visible cell text');
+            assert.notStrictEqual($collapsedControl.attr('aria-label').indexOf(' region'), -1, 'aria-label uses customized display text');
+            assert.strictEqual($collapsedControl.attr('aria-label'), displayedText, 'aria-label equals the visible cell text');
         } finally {
             clock.restore();
         }
     });
 
-    QUnit.test('Non-expandable td has no role, aria-expanded, or tabindex', function(assert) {
+    QUnit.test('Non-expandable cell has no expand control', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
             return;
@@ -194,12 +178,12 @@ QUnit.module('PivotGrid markup tests', () => {
             const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
             clock.tick(10);
 
-            const $nonExpandableTd = pivotGrid.$element().find('td:not([aria-expanded])').first();
+            const $dataCell = pivotGrid.$element().find('.dx-area-data-cell td').first();
 
-            assert.ok($nonExpandableTd.length > 0, 'non-expandable td exists');
-            assert.strictEqual($nonExpandableTd.attr('role'), undefined, 'no role attribute');
-            assert.strictEqual($nonExpandableTd.attr('aria-expanded'), undefined, 'no aria-expanded attribute');
-            assert.strictEqual($nonExpandableTd.attr('tabindex'), undefined, 'no tabindex attribute');
+            assert.ok($dataCell.length > 0, 'data cell exists');
+            assert.strictEqual($dataCell.find('.dx-expand-icon-container').length, 0, 'no expand control in a non-expandable cell');
+            assert.strictEqual($dataCell.attr('role'), undefined, 'data cell has no role');
+            assert.strictEqual($dataCell.attr('tabindex'), undefined, 'data cell is not focusable');
         } finally {
             clock.restore();
         }

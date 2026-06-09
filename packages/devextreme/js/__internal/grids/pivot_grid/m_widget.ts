@@ -901,7 +901,8 @@ class PivotGrid extends Widget {
     if (args.cancel) {
       return;
     }
-    saveFocusedElementInfo(e.currentTarget, this);
+    const $control = $(e.currentTarget).find('.dx-expand-icon-container');
+    saveFocusedElementInfo($control.get(0), this);
     const onReady = () => {
       this.off('contentReady', onReady);
       restoreFocus(this);
