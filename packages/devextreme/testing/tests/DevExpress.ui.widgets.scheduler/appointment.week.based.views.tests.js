@@ -6,7 +6,7 @@ import dateLocalization from 'common/core/localization/date';
 import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import { hide } from '__internal/ui/tooltip/m_tooltip';
+import { hide } from '@ts/ui/tooltip/tooltip';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
