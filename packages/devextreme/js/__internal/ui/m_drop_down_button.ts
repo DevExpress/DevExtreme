@@ -457,6 +457,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         },
       },
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error 25_2 public API wrong types
       width: () => getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
