@@ -442,20 +442,14 @@ export class VirtualScrollingDispatcher {
 
   private onScrollHandler: (() => void) | undefined;
 
-  constructor(public options?: VirtualScrollingDispatcherOptions) {
-    if (options) {
-      this.rowHeightValue = this.getCellHeight();
-      this.cellWidthValue = this.getCellWidth();
+  constructor(public options: VirtualScrollingDispatcherOptions) {
+    this.rowHeightValue = this.getCellHeight();
+    this.cellWidthValue = this.getCellWidth();
 
-      this.createVirtualScrollingBase();
-    }
+    this.createVirtualScrollingBase();
   }
 
-  private get opts(): VirtualScrollingDispatcherOptions {
-    return this.options as VirtualScrollingDispatcherOptions;
-  }
-
-  get isRTL(): boolean { return this.opts.isRTL(); }
+  get isRTL(): boolean { return this.options.isRTL(); }
 
   get verticalVirtualScrolling(): VerticalVirtualScrolling | undefined {
     return this.verticalVirtualScrollingValue;
@@ -476,18 +470,18 @@ export class VirtualScrollingDispatcher {
   get document(): Document { return domAdapter.getDocument(); }
 
   get height(): number | string | undefined {
-    return this.opts.getSchedulerHeight();
+    return this.options.getSchedulerHeight();
   }
 
   get width(): number | string | undefined {
-    return this.opts.getSchedulerWidth();
+    return this.options.getSchedulerWidth();
   }
 
   get rowHeight(): number { return this.rowHeightValue as number; }
 
   set rowHeight(value: number) { this.rowHeightValue = value; }
 
-  get outlineCount(): number | undefined { return this.opts.getScrolling().outlineCount; }
+  get outlineCount(): number | undefined { return this.options.getScrolling().outlineCount; }
 
   get cellWidth(): number { return this.cellWidthValue as number; }
 
@@ -495,20 +489,20 @@ export class VirtualScrollingDispatcher {
 
   get viewportWidth(): number {
     const schedulerWidth = this.width;
-    const width = schedulerWidth ? this.opts.getViewWidth() : 0;
+    const width = schedulerWidth ? this.options.getViewWidth() : 0;
 
     return width > 0
       ? width
-      : this.opts.getWindowWidth();
+      : this.options.getWindowWidth();
   }
 
   get viewportHeight(): number {
     const schedulerHeight = this.height;
-    const height = schedulerHeight ? this.opts.getViewHeight() : 0;
+    const height = schedulerHeight ? this.options.getViewHeight() : 0;
 
     return height > 0
       ? height
-      : this.opts.getWindowHeight();
+      : this.options.getWindowHeight();
   }
 
   get cellCountInsideTopVirtualRow(): number {
@@ -564,13 +558,13 @@ export class VirtualScrollingDispatcher {
   }
 
   get verticalScrollingAllowed(): boolean {
-    const { mode, orientation = 'both' } = this.opts.getScrolling();
+    const { mode, orientation = 'both' } = this.options.getScrolling();
 
     return mode === 'virtual' && (orientation === 'vertical' || orientation === 'both');
   }
 
   get horizontalScrollingAllowed(): boolean {
-    const { mode, orientation = 'both' } = this.opts.getScrolling();
+    const { mode, orientation = 'both' } = this.options.getScrolling();
 
     return mode === 'virtual' && (orientation === 'horizontal' || orientation === 'both');
   }
@@ -611,7 +605,7 @@ export class VirtualScrollingDispatcher {
   }
 
   getCellHeight(): number {
-    const cellHeight = this.opts.getCellHeight();
+    const cellHeight = this.options.getCellHeight();
     const result = cellHeight > 0
       ? cellHeight
       : DEFAULT_CELL_HEIGHT;
@@ -620,8 +614,8 @@ export class VirtualScrollingDispatcher {
   }
 
   getCellWidth(): number {
-    let cellWidth = this.opts.getCellWidth();
-    const minCellWidth = this.opts.getCellMinWidth();
+    let cellWidth = this.options.getCellWidth();
+    const minCellWidth = this.options.getCellMinWidth();
 
     if (!cellWidth || cellWidth < minCellWidth) {
       cellWidth = minCellWidth;
@@ -668,7 +662,7 @@ export class VirtualScrollingDispatcher {
       : (columnIndex + scrollInCell) * cellWidth;
 
     if (this.isRTL) {
-      left = this.opts.getScrollableOuterWidth() - left;
+      left = this.options.getScrollableOuterWidth() - left;
     }
 
     return { top, left };
@@ -699,7 +693,7 @@ export class VirtualScrollingDispatcher {
   private createVirtualScrollingBase(): void {
     if (this.verticalScrollingAllowed) {
       this.verticalVirtualScrolling = new VerticalVirtualScrolling({
-        ...this.opts,
+        ...this.options,
         viewportHeight: this.viewportHeight,
         rowHeight: this.rowHeight,
         outlineCount: this.outlineCount,
@@ -708,7 +702,7 @@ export class VirtualScrollingDispatcher {
 
     if (this.horizontalScrollingAllowed) {
       this.horizontalVirtualScrolling = new HorizontalVirtualScrolling({
-        ...this.opts,
+        ...this.options,
         viewportWidth: this.viewportWidth,
         cellWidth: this.cellWidth,
         outlineCount: this.outlineCount,
@@ -729,7 +723,7 @@ export class VirtualScrollingDispatcher {
   private attachWindowScroll(): void {
     const window = getWindow();
 
-    this.onScrollHandler = this.opts.createAction(() => {
+    this.onScrollHandler = this.options.createAction(() => {
       const {
         scrollX,
         scrollY,
@@ -763,7 +757,7 @@ export class VirtualScrollingDispatcher {
         && this.horizontalVirtualScrolling?.updateState(left);
 
       if (verticalStateChanged || horizontalStateChanged) {
-        this.opts.updateRender?.();
+        this.options.updateRender?.();
       }
     }
   }
@@ -788,7 +782,7 @@ export class VirtualScrollingDispatcher {
     }
 
     if (needUpdateVertical || needUpdateHorizontal) {
-      this.opts.updateGrid?.();
+      this.options.updateGrid?.();
     }
   }
 }
