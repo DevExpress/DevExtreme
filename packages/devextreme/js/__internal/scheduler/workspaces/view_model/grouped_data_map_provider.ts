@@ -303,7 +303,7 @@ export class GroupedDataMapProvider {
         startDate: this.getGroupStartDate(groupIndex ?? 0),
         endDate: this.getGroupEndDate(groupIndex ?? 0),
       };
-    }).filter((info): info is GroupInfo => Boolean(info.startDate) && info.endDate !== undefined);
+    }).filter((info): info is GroupInfo => Boolean(info.startDate) && Boolean(info.endDate));
   }
 
   getGroupIndices(): number[] {
