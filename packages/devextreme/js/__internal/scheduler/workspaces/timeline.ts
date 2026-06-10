@@ -21,8 +21,8 @@ import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import timezoneUtils from '../utils_time_zone';
-import type { WorkspaceOptionsInternal } from './m_work_space';
 import type { ViewDataProviderOptions } from './view_model/types';
+import type { WorkspaceOptionsInternal } from './work_space';
 import SchedulerWorkSpace from './work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
@@ -104,7 +104,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override getGroupHeaderContainer(): dxElementWrapper {
     if (this.isHorizontalGroupedWorkSpace()) {
-      return this.$thead as dxElementWrapper;
+      return this.$thead;
     }
     return this.$sidebarTable;
   }
@@ -227,13 +227,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     cellCoordinates: { rowIndex: number; columnIndex: number },
     groupIndex: number,
   ): dxElementWrapper {
-    const indexes = this.groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+    const indexes = this.groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, false);
 
     return this.$dateTable
       .find('tr')
       .eq(indexes.rowIndex)
       .find('td')
-      .eq(indexes.columnIndex) as dxElementWrapper;
+      .eq(indexes.columnIndex);
   }
 
   protected override getWorkSpaceWidth(): number {

@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
-import type SchedulerWorkSpace from '../workspaces/m_work_space';
+import type SchedulerWorkSpace from '../workspaces/work_space';
 
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
