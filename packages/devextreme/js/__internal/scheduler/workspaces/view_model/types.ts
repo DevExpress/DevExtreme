@@ -6,6 +6,7 @@ import type {
   CountGenerationConfig,
   GetDateForHeaderText,
   GroupOrientation,
+  ViewCellData,
   ViewOptions,
   ViewType,
 } from '../../types';
@@ -18,6 +19,7 @@ interface CommonOptions extends CountGenerationConfig {
   viewOffset: number;
   hoursInterval: number;
   viewType: ViewType;
+  startDate?: Date;
   skippedDays?: number[];
   cellCount: number;
   isProvideVirtualCellsWidth: boolean;
@@ -46,6 +48,16 @@ export interface ViewDataProviderExtendedOptions extends CommonOptions, ViewOpti
   isGroupedByDate: boolean;
   isGroupedAllDayPanel: boolean;
   interval: number;
+}
+
+export interface ViewDataMapOptions extends ViewDataProviderExtendedOptions {
+  rowCount?: number;
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
+  selectedCells?: ViewCellData[] | null;
+  focusedCell?: { cellData: ViewCellData } | null;
 }
 
 export interface ViewCellDataSimple {
