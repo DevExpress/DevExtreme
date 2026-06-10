@@ -11,8 +11,8 @@ import {
 } from '../../r1/utils/index';
 import { VIEWS } from '../../utils/options/constants_view';
 import timeZoneUtils from '../../utils_time_zone';
-import type { ViewDataGenerator } from './m_view_data_generator';
 import type { ViewDataProviderExtendedOptions } from './types';
+import type { ViewDataGenerator } from './view_data_generator';
 
 interface DateHeaderGenerateOptions extends ViewDataProviderExtendedOptions {
   cellWidth?: number;
