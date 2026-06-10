@@ -13,7 +13,7 @@ import type {
   ViewType,
 } from '../../types';
 import timezoneUtils from '../../utils_time_zone';
-import type { ViewDataGenerator } from './m_view_data_generator';
+import type { ViewDataGenerator } from './view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
