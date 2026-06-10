@@ -418,11 +418,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
-        specifier: 5.0.0
-        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.1.0
+        version: 5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-aspnet-data-nojquery:
-        specifier: 5.0.0
-        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.1.0
+        version: 5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-cldr-data:
         specifier: 1.0.3
         version: 1.0.3
@@ -1396,8 +1396,8 @@ importers:
         specifier: 2.2.2
         version: 2.2.2
       devextreme-aspnet-data:
-        specifier: 5.0.0
-        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.1.0
+        version: 5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-cldr-data:
         specifier: 1.0.3
         version: 1.0.3
@@ -9508,13 +9508,13 @@ packages:
   devexpress-gantt@4.1.67:
     resolution: {integrity: sha512-sO9zNsOUk4lasHaUqjbDMUgi3CGO2t5OkGPWZH1tCthzSePSYAbfgYL86F214+aB/a+GYU87vXOAWyju0rh5EA==}
 
-  devextreme-aspnet-data-nojquery@5.0.0:
-    resolution: {integrity: sha512-WC1JBUocjD7lxy2bMFlUTF0Z3GCUNYveucgarERJ85SO+h7czqAyYwnYCJT845Vyabfw5Ta9mOJ0y0fB/wWzwA==}
+  devextreme-aspnet-data-nojquery@5.1.0:
+    resolution: {integrity: sha512-YJ7HxOLJTzz6bmpp1uOjXdhUL71THR6IidVONjJRF1R1loTyNVesa6s86gU+mUeNN044UnJKQhtCADc0+TmARQ==}
     peerDependencies:
       devextreme: '>=18.1.0'
 
-  devextreme-aspnet-data@5.0.0:
-    resolution: {integrity: sha512-JtI8qOPGcKWIa06rMS335lpE+HhttygJzMG1Y1x0PoQ6RIxJ5NfD/R7cFiE2hsRXqJYIV6MLV1/qkMs169oR1A==}
+  devextreme-aspnet-data@5.1.0:
+    resolution: {integrity: sha512-8jlAmBq+KcxMwVd5ukAhhia/JWx5fAdZ3qSaATdnCHlYxCCuIL50dBQw9Qd7khk8E0zj3UHwuA/lbhHCxZZxKg==}
     peerDependencies:
       devextreme: '>=18.1.0'
 
@@ -29297,11 +29297,11 @@ snapshots:
       '@devexpress/utils': 1.4.8
       tslib: 2.3.1
 
-  devextreme-aspnet-data-nojquery@5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
+  devextreme-aspnet-data-nojquery@5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
     dependencies:
       devextreme: link:packages/devextreme/artifacts/npm/devextreme
 
-  devextreme-aspnet-data@5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
+  devextreme-aspnet-data@5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
     dependencies:
       devextreme: link:packages/devextreme/artifacts/npm/devextreme
 
