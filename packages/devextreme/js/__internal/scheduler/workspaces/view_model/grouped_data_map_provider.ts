@@ -147,10 +147,10 @@ export class GroupedDataMapProvider {
     } = cellInfo;
     const { viewOffset } = this.viewOptions;
 
-    // eslint-disable-next-line no-undef-init
-    let foundPosition: CellPositionData | undefined = undefined;
-    this.getRowsForCellSearch(allDay, groupIndex).some(
-      (row) => row.some((cell) => {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let foundPosition: CellPositionData | undefined;
+    this.getRowsForCellSearch(allDay, groupIndex).forEach((row) => {
+      row.forEach((cell) => {
         const originCellData = cell.cellData;
         // NOTE: If this is appointment's render call
         // we should shift the real cellData dates by viewOffset
@@ -168,11 +168,9 @@ export class GroupedDataMapProvider {
           && this.isStartDateInCell(startDate, allDay, cellData, originCellData)
         ) {
           foundPosition = cell.position;
-          return true;
         }
-        return false;
-      }),
-    );
+      });
+    });
 
     return foundPosition;
   }
