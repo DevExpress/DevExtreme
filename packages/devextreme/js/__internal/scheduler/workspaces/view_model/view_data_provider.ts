@@ -29,8 +29,8 @@ import type {
 } from '../../types';
 import timeZoneUtils from '../../utils_time_zone';
 import type { EdgeIndices } from '../cells_selection_controller';
+import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
-import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import type { ViewDataGenerator } from './m_view_data_generator';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
 import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './types';
