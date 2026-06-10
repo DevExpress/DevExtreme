@@ -30,24 +30,14 @@ jobs:
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
       (
-        contains(github.event.pull_request.labels.*.name, 'storybook') ||
-        (github.event.action == 'unlabeled' && github.event.label.name == 'storybook')
+        (github.event.action == 'labeled' && github.event.label.name == 'storybook') ||
+        (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'storybook'))
       )
+    environment:
+      name: storybook-pr-${{ github.event.pull_request.number }}
+      url: https://devexpress.github.io/DevExtreme/preview/pr-${{ github.event.pull_request.number }}
 
     steps:
-      - name: Determine action
-        id: meta
-        shell: bash
-        run: |
-          set -euo pipefail
-          EVENT_ACTION="${{ github.event.action }}"
-          CHANGED_LABEL="${{ github.event.label.name || '' }}"
-          if [[ "$EVENT_ACTION" == "closed" ]] || [[ "$EVENT_ACTION" == "unlabeled" && "$CHANGED_LABEL" == "storybook" ]]; then
-            echo "action=remove" >> "$GITHUB_OUTPUT"
-          else
-            echo "action=deploy" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
@@ -55,25 +45,21 @@ jobs:
           fetch-depth: 1
 
       - name: Use Node.js
-        if: steps.meta.outputs.action == 'deploy'
         uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
       - name: Setup pnpm
-        if: steps.meta.outputs.action == 'deploy'
         uses: pnpm/action-setup@v6
         with:
           run_install: false
 
       - name: Get pnpm store directory
-        if: steps.meta.outputs.action == 'deploy'
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - name: Setup pnpm + nx cache
-        if: steps.meta.outputs.action == 'deploy'
         uses: actions/cache@v5
         with:
           path: |
@@ -84,17 +70,15 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        if: steps.meta.outputs.action == 'deploy'
         run: pnpm install --frozen-lockfile
 
       - name: Build Storybook preview (static)
-        if: steps.meta.outputs.action == 'deploy'
         run: pnpm nx build devextreme-react-storybook
 
-      - name: Deploy/remove PR preview
+      - name: Deploy PR preview
         uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
         with:
-          action: ${{ steps.meta.outputs.action }}
+          action: deploy
           pr-number: ${{ github.event.pull_request.number }}
           source-dir: ${{ env.SOURCE_DIR }}
           preview-branch: gh-pages
@@ -102,3 +86,29 @@ jobs:
           comment: false
           token: ${{ github.token }}
           wait-for-pages-deployment: true
+
+  remove:
+    name: "Remove preview — PR #${{ github.event.pull_request.number }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'storybook')) ||
+        (github.event.action == 'unlabeled' && github.event.label.name == 'storybook')
+      )
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Remove PR preview
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
+        with:
+          action: remove
+          pr-number: ${{ github.event.pull_request.number }}
+          source-dir: ${{ env.SOURCE_DIR }}
+          preview-branch: gh-pages
+          umbrella-dir: preview
+          comment: false
+          token: ${{ github.token }}
