@@ -44,8 +44,8 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
     data.today = this.isCurrentDate(
       startDate,
-      indicatorTime as Date,
-      timeZoneCalculator as TimeZoneCalculator,
+      indicatorTime,
+      timeZoneCalculator,
     );
     data.otherMonth = this.isOtherMonth(startDate, this.minVisibleDate, this.maxVisibleDate);
     data.isFirstDayMonthHighlighting = isFirstCellInMonthWithIntervalCount(
@@ -57,7 +57,11 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return data;
   }
 
-  isCurrentDate(date: Date, indicatorTime: Date, timeZoneCalculator: TimeZoneCalculator): boolean {
+  isCurrentDate(
+    date: Date,
+    indicatorTime: Date | undefined,
+    timeZoneCalculator: TimeZoneCalculator | undefined,
+  ): boolean {
     return dateUtils.sameDate(date, getToday(indicatorTime, timeZoneCalculator));
   }
 

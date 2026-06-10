@@ -143,9 +143,10 @@ export class GroupedDataMapProvider {
     } = cellInfo;
     const { viewOffset } = this.viewOptions;
 
-    const matchingCell = this.getRowsForCellSearch(allDay, groupIndex)
-      .flatMap((row) => row)
-      .find((cell) => {
+    // eslint-disable-next-line no-undef-init
+    let foundPosition: CellPositionData | undefined = undefined;
+    this.getRowsForCellSearch(allDay, groupIndex).some(
+      (row) => row.some((cell) => {
         const originCellData = cell.cellData;
         // NOTE: If this is appointment's render call
         // we should shift the real cellData dates by viewOffset
@@ -158,11 +159,18 @@ export class GroupedDataMapProvider {
           }
           : originCellData;
 
-        return this.isSameGroupIndexAndIndex(cellData, groupIndex, index)
-          && this.isStartDateInCell(startDate, allDay ?? false, cellData, originCellData);
-      });
+        if (
+          this.isSameGroupIndexAndIndex(cellData, groupIndex, index)
+          && this.isStartDateInCell(startDate, allDay, cellData, originCellData)
+        ) {
+          foundPosition = cell.position;
+          return true;
+        }
+        return false;
+      }),
+    );
 
-    return matchingCell?.position;
+    return foundPosition;
   }
 
   private getRowsForCellSearch(
