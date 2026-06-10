@@ -645,7 +645,7 @@
 /packages/devextreme/js/ui/autocomplete.d.ts                         @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/autocomplete_types.d.ts                   @DevExpress/devextreme-editors
 
-/packages/devextreme/js/__internal/ui/m_autocomplete.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/autocomplete.ts              @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/autocomplete/**  @DevExpress/devextreme-editors
 
@@ -736,7 +736,7 @@
 /packages/devextreme/js/ui/drop_down_box.d.ts                        @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/drop_down_box_types.d.ts                  @DevExpress/devextreme-editors
 
-/packages/devextreme/js/__internal/ui/m_drop_down_box.ts             @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/drop_down_box.ts             @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/dropDownBox/**   @DevExpress/devextreme-editors
 
@@ -746,7 +746,7 @@
 /packages/devextreme/js/ui/drop_down_button.d.ts                     @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/drop_down_button_types.d.ts               @DevExpress/devextreme-editors
 
-/packages/devextreme/js/__internal/ui/m_drop_down_button.ts          @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/drop_down_button.ts          @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/**/dropDownButton/**          @DevExpress/devextreme-editors
 

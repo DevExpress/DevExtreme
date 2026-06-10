@@ -519,30 +519,33 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     };
   }
 
-  _upDownKeyHandler() {
+  _upDownKeyHandler(): boolean {
     if (this._popup?.option('visible') && this._list) {
       this._list.focus();
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.open();
     }
 
     return true;
   }
 
-  _escHandler() {
+  _escHandler(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.close();
     this._buttonGroup.focus();
 
     return true;
   }
 
-  _tabHandler() {
+  _tabHandler(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.close();
 
     return true;
   }
 
-  _renderPopup() {
+  _renderPopup(): void {
     const $popup = $('<div>');
     this.$element().append($popup);
     this._popup = this._createComponent($popup, Popup, this._popupOptions());
@@ -633,7 +636,11 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       this.$element().append($buttonGroup);
     }
 
-    this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._getButtonGroupOptions());
+    this._buttonGroup = this._createComponent(
+      $buttonGroup,
+      ButtonGroup,
+      this._getButtonGroupOptions(),
+    );
 
     this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
     this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
@@ -840,7 +847,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       case 'showArrowIcon':
         this._updateArrowClass();
         this._renderButtonGroup();
-        this._popup && this._popup.repaint();
+        this._popup?.repaint();
         break;
       case 'width':
       case 'height':

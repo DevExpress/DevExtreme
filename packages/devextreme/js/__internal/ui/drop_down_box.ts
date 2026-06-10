@@ -181,7 +181,7 @@ class DropDownBox<
     const selectedItem = grep(
       this.option('items') || [],
       // @ts-expect-error DataExpressionMixin must be typed
-      (item) => this._isValueEquals(this._valueGetter(item), value),
+      (item) => this._isValueEquals(this._valueGetter(item), value) as boolean,
       false,
     )[0];
 
@@ -310,7 +310,7 @@ class DropDownBox<
       }),
       _ignoreFunctionValueDeprecation: true,
       // @ts-expect-error ts-error
-      maxHeight: function () {
+      maxHeight: function (): number | undefined {
         const popupLocation = this._popupPosition?.v.location;
 
         return getElementMaxHeightByWindow(this.$element(), popupLocation);
