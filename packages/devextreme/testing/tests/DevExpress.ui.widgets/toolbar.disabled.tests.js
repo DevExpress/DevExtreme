@@ -486,7 +486,7 @@ const openDropDownMenuIfExist = (toolbar) => {
                 assert.equal(selectBoxDisabled.option('value'), 'item1', 'selectbox state saved');
             });
 
-            QUnit.test('Changing toolbar.disable saves the current value in selectbox', function(assert) {
+            QUnit.test('Changing toolbar.disabled saves the current value in selectbox', function(assert) {
                 const initialToolbarOptions = {
                     allowKeyboardNavigation,
                     items: [{

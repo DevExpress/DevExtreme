@@ -232,6 +232,7 @@ export default class ToolbarMenuList extends ListBase {
   }
 
   _focusInHandler(e: DxEvent): void {
+    super._focusInHandler(e);
     this._navigator?.focusInHandler(e);
   }
 
