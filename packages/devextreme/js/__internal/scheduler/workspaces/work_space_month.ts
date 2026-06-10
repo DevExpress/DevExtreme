@@ -55,10 +55,13 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
       let averageWidth = 0;
       const cells = this.getCells().slice(0, DAYS_IN_WEEK);
-      interface EachCells { each: (fn: (index: number, el: Element) => void) => void; }
-      (cells as unknown as EachCells).each((_, element) => {
-        averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
-      });
+
+      cells.each(
+        (index: number, element: Element): boolean => {
+          averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
+          return true;
+        },
+      );
 
       return cells.length === 0 ? 0 : averageWidth / DAYS_IN_WEEK;
     });
