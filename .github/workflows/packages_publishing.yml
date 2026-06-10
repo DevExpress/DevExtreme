@@ -21,8 +21,6 @@ env:
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
   SBOM_PACKAGE_NAMES: devextreme,devextreme-angular,devextreme-react,devextreme-vue,devextreme-themebuilder
-  CYCLONEDX_CLI_VERSION: 0.32.0
-  CYCLONEDX_CLI_LINUX_X64_SHA256: 454879e6a4a405c8a13bff49b8982adcb0596f3019b26b0811c66e4d7f0783e1
 
 jobs:
   build:
@@ -84,17 +82,8 @@ jobs:
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm nx build-hashed sbom;
 
-      - name: Install CycloneDX CLI
-        shell: bash
-        run: |
-          tool_dir="$RUNNER_TEMP/cyclonedx-cli"
-          mkdir -p "$tool_dir"
-          curl -fsSL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v${{ env.CYCLONEDX_CLI_VERSION }}/cyclonedx-linux-x64" -o "$tool_dir/cyclonedx"
-          echo "${{ env.CYCLONEDX_CLI_LINUX_X64_SHA256 }}  $tool_dir/cyclonedx" | sha256sum -c -
-          chmod +x "$tool_dir/cyclonedx"
-          echo "$tool_dir" >> "$GITHUB_PATH"
-
-      - name: Validate SBOMs
+      - name: Collect SBOM files
+        id: sbomFiles
         shell: bash
         run: |
           shopt -s nullglob
@@ -105,10 +94,17 @@ jobs:
             exit 1
           fi
 
-          for file in "${sbom_files[@]}"; do
-            echo "Validating $file"
-            cyclonedx validate --input-file "$file" --input-format json --fail-on-errors
-          done
+          {
+            echo "files<<EOF"
+            printf '%s\n' "${sbom_files[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate SBOMs
+        uses: mpreyskurantov/github-actions/validate-sbom@sbom-val-dev
+        with:
+          input-format: json
+          input-files: ${{ steps.sbomFiles.outputs.files }}
 
       - name: Build artifacts package
         run: pnpm run make-artifacts-package
