@@ -83,7 +83,7 @@ describe('DataController', () => {
       expect(originFn).toHaveBeenCalledTimes(2);
     });
 
-    it('should call origin fn if args differ on deep value (maxDepth=5)', async () => {
+    it('should call origin fn if args differ on deep value', async () => {
       const firstArgs = { filter: [['text', 'contains', 'tra']] };
       const secondArgs = { filter: [['text', 'contains', 'travel']] };
       const originFn = jest
