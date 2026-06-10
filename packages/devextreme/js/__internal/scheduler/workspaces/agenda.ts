@@ -27,7 +27,7 @@ import { VIEWS } from '../utils/options/constants_view';
 import { reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
 import type { GroupNode } from '../utils/resource_manager/types';
 import type { ListEntity } from '../view_model/types';
-import WorkSpace, { type WorkspaceOptionsInternal } from './m_work_space';
+import WorkSpace, { type WorkspaceOptionsInternal } from './work_space';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -210,7 +210,9 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   private setGroupHeaderCellsHeight(): void {
-    const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
+    const $cells = $(
+      this.getGroupHeaderCells().toArray().filter((element) => !element.getAttribute('rowSpan')),
+    );
     const rows = this.removeEmptyRows(this.rows);
 
     if (!rows.length) {
@@ -331,7 +333,7 @@ class SchedulerAgenda extends WorkSpace {
       this.$dateTableScrollableContent.prepend(this.$groupTable);
     }
 
-    this.$dateTableScrollableContent.append(this.$timePanel, this.$dateTableContainer);
+    this.$dateTableScrollableContent.append([this.$timePanel, this.$dateTableContainer]);
     this.$element().append(this.$dateTableScrollable.$element());
   }
 
@@ -513,7 +515,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   updateScrollPosition(date: Date): void {
-    const newDate = this.timeZoneCalculator.createDate(date, 'toGrid');
+    const newDate = this.timeZoneCalculator?.createDate(date, 'toGrid') ?? date;
 
     if (this.needUpdateScrollPosition(newDate)) {
       this.scrollTo(newDate);

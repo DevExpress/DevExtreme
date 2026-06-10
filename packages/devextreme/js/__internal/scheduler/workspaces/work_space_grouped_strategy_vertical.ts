@@ -1,4 +1,3 @@
-import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
@@ -8,7 +7,7 @@ import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import { Cache } from '../global_cache';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
-import type SchedulerWorkSpace from './m_work_space';
+import type SchedulerWorkSpace from './work_space';
 
 class VerticalGroupedStrategy {
   cache = new Cache();
@@ -92,7 +91,7 @@ class VerticalGroupedStrategy {
     return this.workspace.getTimePanelWidth() + this.workspace.getGroupTableWidth();
   }
 
-  getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [DxElement, DxElement])
+  getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [Element, Element])
   : GroupBoundsOffset {
     return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
       const startDayHour = this.workspace.option('startDayHour');

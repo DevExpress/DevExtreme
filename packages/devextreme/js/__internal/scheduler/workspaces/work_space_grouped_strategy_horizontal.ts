@@ -6,7 +6,7 @@ import type {
   GroupBoundsOffset,
 } from '@ts/scheduler/types';
 import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
-import type SchedulerWorkSpace from '@ts/scheduler/workspaces/m_work_space';
+import type SchedulerWorkSpace from '@ts/scheduler/workspaces/work_space';
 
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
