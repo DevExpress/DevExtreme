@@ -35,7 +35,7 @@ jobs:
         (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'storybook'))
       )
     environment:
-      name: storybook-pr-${{ github.event.pull_request.number }}
+      name: storybook
       url: https://devexpress.github.io/DevExtreme/preview/pr-${{ github.event.pull_request.number }}
 
     steps:
