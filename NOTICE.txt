@@ -1,122 +1,95 @@
 The following open source libraries are used and included within this product:
 
-.NET Runtime (System.Text.Json) (Open Source - MIT License)
+.NET (System.Drawing.Common, System.Text.Json) (Open Source - MIT License)
 Copyright (c) .NET Foundation and Contributors
-https://github.com/dotnet/runtime/blob/main/LICENSE.TXT
+https://github.com/dotnet/dotnet/blob/main/LICENSE.TXT
 
-ANTLR 3 C# (Open Source - BSD License)
-Copyright (c) 2011 The ANTLR Project. All rights reserved.
-https://github.com/antlr/antlrcs/blob/master/LICENSE.txt
+AspNetWebStack (Microsoft.AspNet.Mvc, Microsoft.AspNet.WebApi.Core) (Open Source - Apache 2.0)
+Copyright (c) .NET Foundation. All rights reserved.
+https://github.com/aspnet/AspNetWebStack/blob/main/LICENSE.txt
 
-ASP.NET Core SignalR (Open Source - Apache 2.0)
-Copyright (c) .NET Foundation and Contributors
-https://github.com/SignalR/SignalR/blob/main/LICENSE.txt
+autoprefixer (Open Source - MIT License)
+Copyright (c) 2013 Andrey Sitnik (andrey@sitnik.es)
+https://github.com/postcss/autoprefixer/blob/main/LICENSE
 
-babel (Open Source - MIT License)
-Copyright (c) 2014-present Sebastian McKenzie and other contributors.
+Babel (@babel/runtime) (Open Source - MIT License)
+Copyright (c) 2014-present Sebastian McKenzie and other contributors
 https://github.com/babel/babel/blob/main/LICENSE
 
 Bootstrap (Open Source - MIT License)
 Copyright (c) 2011-2018 Twitter, Inc. / Copyright (c) 2011-2018 The Bootstrap Authors
 https://github.com/twbs/bootstrap/blob/main/LICENSE
 
-canvg (Open Source - MIT License)
-Copyright (c) 2010 - present Gabe Lerner (gabelerner@gmail.com)
-https://github.com/canvg/canvg/blob/master/LICENSE
+clean-css (Open Source - MIT License)
+Copyright (C) 2017 JakubPawlowicz.com
+https://github.com/clean-css/clean-css/blob/master/LICENSE
 
-cldr-core
-Copyright (c) 1991-2017 Unicode, Inc
-https://github.com/unicode-org/cldr-json/blob/main/LICENSE
+core-js (Open Source - MIT License)
+Copyright (c) 2013-2025 Denis Pushkarev (zloirock.ru)
+Copyright (c) 2025-2026 CoreJS Company (core-js.io)
+https://github.com/zloirock/core-js/blob/master/LICENSE
 
-cldr-dates-full
-Copyright (c) 1991-2017 Unicode, Inc
-https://github.com/unicode-org/cldr-json/blob/main/LICENSE
-
-cldrjs (Open Source - MIT License)
-Copyright (c) Rafael Xavier de Souza http://rafael.xavier.blog.br
-https://github.com/rxaviers/cldrjs/blob/master/LICENSE
-
-cldr-numbers-full
-Copyright (c) 1991-2017 Unicode, Inc
-https://github.com/unicode-org/cldr-json/blob/main/LICENSE
+csstype (Open Source - MIT License)
+Copyright (c) 2017-2018 Fredrik Nicol
+https://github.com/frenic/csstype/blob/master/LICENSE
 
 DevExtreme ASP.NET Data (Open Source - MIT License)
 Copyright (c) Developer Express Inc.
 https://github.com/DevExpress/DevExtreme.AspNet.Data/blob/master/LICENSE
-
-DevExtreme ExcelJS JavaScript Library (Open Source - MIT License)
-Copyright (c) 2025 Developer Express Inc.
-Copyright (c) 2014-2019 Guyon Roche
-https://github.com/DevExpress/devextreme-exceljs-fork/blob/master/LICENSE
 
 DevExtreme Quill (Open Source - BSD 3-clause)
 Copyright (c) 2020, Developer Express Inc.
 Copyright (c) 2017, Slab
 Copyright (c) 2014, Jason Chen
 Copyright (c) 2013, salesforce.com
-All rights reserved.
 https://github.com/DevExpress/devextreme-quill/blob/master/LICENSE
 
-FileSaver.js JavaScript Library (Open Source - MIT License)
-Copyright (c) 2016 Eli Grey
-https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
+es6-object-assign (Open Source - MIT License)
+Copyright (c) 2015-2017 Rubén Norte (rubennorte@gmail.com)
+https://github.com/rubennorte/es6-object-assign/blob/master/LICENSE
+
+eventemitter3 (Open Source - MIT License)
+Copyright (c) 2014 Arnout Kazemier
+https://github.com/primus/eventemitter3/blob/master/LICENSE
 
 Fluent UI System Icons (Open Source - MIT License)
 Copyright (c) 2020 Microsoft Corporation
 https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE
 
-Highlight.js (Open Source - BSD License)
-Copyright (c) 2006, Ivan Sagalaev. All rights reserved.
-https://github.com/isagalaev/highlight.js/blob/master/LICENSE
+immutable-js (Open Source - MIT License)
+Copyright (c) 2014-present, Lee Byron and other contributors.
+https://github.com/immutable-js/immutable-js/blob/main/LICENSE
 
-inferno (Open Source - MIT License)
-Copyright (c) 2015-2021 Dominic Gannaway
+infernojs/inferno (inferno, inferno-create-element, inferno-hydrate) (Open Source - MIT License)
+Copyright (c) 2015-2022 Dominic Gannaway
 https://github.com/infernojs/inferno/blob/master/LICENSE.md
-
-jQuery JavaScript Library (Open Source - MIT License)
-Copyright (c) jQuery Foundation and other contributors
-https://github.com/jquery/jquery/blob/main/LICENSE.txt
-
-js-beautify (MIT License)
-Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-https://github.com/beautifier/js-beautify/blob/main/LICENSE
-
-Json.NET (Open Source - MIT License)
-Copyright (c) 2007 James Newton-King
-https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md
-
-jsPDF (Open Source - MIT License)
-(c) 2010-2021 James Hall, https://github.com/MrRio/jsPDF
-(c) 2015-2021 yWorks GmbH, https://www.yworks.com/
-https://github.com/parallax/jsPDF/blob/master/LICENSE
-
-jsPDF-AutoTable (Open Source - MIT License)
-Copyright (c) 2014 Simon Bengtsson, https://github.com/simonbengtsson/jspdf-autotable
-https://github.com/simonbengtsson/jsPDF-AutoTable/blob/master/LICENSE.txt
 
 JSZip JavaScript Library (Open Source - MIT License)
 Copyright (c) Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
 https://github.com/Stuk/jszip/blob/main/LICENSE.markdown
 
-Knockout JavaScript Library (Open Source - MIT License)
-Copyright (c) 2010 Steven Sanderson, the Knockout.js team, and other contributors http://knockoutjs.com/
-https://github.com/knockout/knockout/blob/master/LICENSE
-
-Less.js (Open Source - Apache 2.0)
-Copyright (c) 2009-2017 Alexis Sellier and The Core Less Team
-https://github.com/less/less.js/blob/master/LICENSE
+lodash (lodash.clonedeep, lodash.merge) (Open Source)
+Copyright (c) OpenJS Foundation and other contributors (https://openjsf.org/)
+https://github.com/lodash/lodash/blob/main/LICENSE
 
 Material Design Icons/Symbols (Open Source - Apache 2.0)
 Copyright (c) Google, Inc.
 https://github.com/google/material-design-icons/blob/master/LICENSE
 
-MPF for Projects (Open Source - MS-PL)
-Copyright (c) Microsoft Corporation. All rights reserved.
-https://github.com/tunnelvisionlabs/MPFProj10/blob/master/LICENSE.txt
+Parchment (Open Source - BSD-3-Clause License)
+Copyright (c) 2015-2021, Jason Chen
+Copyright (c) 2022-2024, Slab, Inc.
+https://github.com/slab/parchment/blob/main/LICENSE
 
-NuGet Client Tools (Open Source - Apache 2.0)
-Copyright (c) .NET Foundation and Contributors.
-https://github.com/NuGet/NuGet.Client/blob/dev/LICENSE.txt
+postcss (Open Source - MIT License)
+Copyright 2013 Andrey Sitnik (andrey@sitnik.es)
+https://github.com/postcss/postcss/blob/main/LICENSE
+
+Quill Delta (Open Source - BSD-3-Clause License)
+Copyright (c) 2017-2024, Slab
+Copyright (c) 2014, Jason Chen
+Copyright (c) 2013, salesforce.com
+https://github.com/slab/quill/blob/main/LICENSE
 
 Roboto Font (Open Source - Apache 2.0)
 https://github.com/google/roboto/blob/master/LICENSE
@@ -125,7 +98,11 @@ rrule (Open Source - BSD-3-Clause License)
 Copyright 2010, Jakub Roztocil (jakub@roztocil.name) and Lars Sch&ouml;ning
 https://github.com/jakubroztocil/rrule/blob/master/LICENCE
 
-Signals (Open Source - MIT License)
+sass-embedded (Open Source - MIT License)
+Copyright (c) 2019, Google LLC
+https://github.com/sass/embedded-host-node/blob/main/LICENSE
+
+Signals (@preact/signals-core) (Open Source - MIT License)
 Copyright (c) 2022-present Preact Team
 https://github.com/preactjs/signals/blob/main/LICENSE
 
@@ -133,8 +110,16 @@ tslib (Open Source - BSD Zero Clause License)
 Copyright (c) Microsoft Corporation.
 https://github.com/microsoft/tslib/blob/master/LICENSE.txt
 
-XDT (Open Source - MIT License)
-Copyright (c) .NET Foundation and Contributors
-https://github.com/dotnet/xdt/blob/main/LICENSE.txt
+Unplugin (Open Source - MIT License)
+Copyright (c) 2021-PRESENT Nuxt Contrib
+https://github.com/unjs/unplugin/blob/main/LICENSE
+
+Zod (Open Source - MIT License)
+Copyright (c) 2025 Colin McDonnell
+https://github.com/colinhacks/zod/blob/main/LICENSE
+
+zod-to-json-schema (Open Source - ISC License)
+Copyright (c) 2020, Stefan Terdell
+https://github.com/StefanTerdell/zod-to-json-schema/blob/master/LICENSE
 
 The open source libraries included in this product are done so pursuant to each individual open source library license and subject to the disclaimers and limitations on liability set forth in each open source library license.
