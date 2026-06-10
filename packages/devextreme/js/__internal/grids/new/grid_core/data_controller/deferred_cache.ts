@@ -2,6 +2,8 @@ import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 
+import { FILTER_OBJ_COMPARE_DEPTH } from './const';
+
 // @ts-expect-error bad deferred ctor type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createDeferred = (): any => new Deferred();
@@ -19,7 +21,7 @@ export const deferredCache = <TArgs, TResult>(
   ): DeferredObj<TResult> => {
     const hasPreviousCall = lastArgs !== null && cachedResult !== null;
     const isArgsSame = hasPreviousCall
-      ? equalByValue(lastArgs, args, { maxDepth: 5 })
+      ? equalByValue(lastArgs, args, { maxDepth: FILTER_OBJ_COMPARE_DEPTH })
       : false;
 
     if (hasPreviousCall && isArgsSame) {
