@@ -1,9 +1,10 @@
 import dateUtils from '@js/core/utils/date';
 import { setOptionHour, timelineMonthUtils } from '@ts/scheduler/r1/utils/index';
 
-import type { CountGenerationConfig, ViewDataProviderOptions } from '../../types';
+import type { CountGenerationConfig } from '../../types';
 import timezoneUtils from '../../utils_time_zone';
-import { ViewDataGenerator } from './m_view_data_generator';
+import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './types';
+import { ViewDataGenerator } from './view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -41,7 +42,7 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
     this.hiddenInterval = 0;
   }
 
-  protected getCellEndDate(cellStartDate: Date, options: ViewDataProviderOptions): Date {
+  protected getCellEndDate(cellStartDate: Date, options: ViewDataProviderExtendedOptions): Date {
     const { startDayHour, endDayHour } = options;
     const durationMs = (endDayHour - startDayHour) * toMs('hour');
     return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);
