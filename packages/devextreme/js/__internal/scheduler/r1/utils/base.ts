@@ -338,7 +338,7 @@ export const getKeyByGroup = (
 
 export const getToday = (
   indicatorTime: Date | undefined,
-  timeZoneCalculator: TimeZoneCalculator,
+  timeZoneCalculator: TimeZoneCalculator | undefined,
 ): Date => {
   const todayDate = indicatorTime ?? new Date();
 
