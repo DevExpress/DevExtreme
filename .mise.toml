@@ -4,4 +4,3 @@ pnpm = "11.5.1"
 
 [hooks]
 enter = "mise install"
-
