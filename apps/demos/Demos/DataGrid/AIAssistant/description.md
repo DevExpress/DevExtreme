@@ -29,5 +29,3 @@ To enable the AI Assistant, configure the [aiIntegration](/Documentation/ApiRefe
 Our Chat implementation supports [speech-to-text input](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled), ideal for hands-free interaction or entering longer prompts.
 
 This demo also configures [suggestions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#suggestions) for the AI Assistant Chat. These buttons allow you to interact with the assistant in one click using predefined prompts. For additional information about suggestions, refer to the following demo: [DevExtreme Chat - Prompt Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/).
-
-[note] This functionality is available as a [community technology preview (CTP)](https://www.devexpress.com/aboutus/pre-release.xml). Should you have any questions or suggestions prior to its official release, please create a new ticket in the [DevExpress Support Center](https://supportcenter.devexpress.com/ticket/create).

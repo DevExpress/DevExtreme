@@ -5,10 +5,10 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
-import '__internal/scheduler/workspaces/m_timeline';
-import '__internal/scheduler/workspaces/m_timeline_day';
-import '__internal/scheduler/workspaces/m_timeline_month';
-import '__internal/scheduler/workspaces/m_timeline_week';
+import '__internal/scheduler/workspaces/timeline';
+import '__internal/scheduler/workspaces/timeline_day';
+import '__internal/scheduler/workspaces/timeline_month';
+import '__internal/scheduler/workspaces/timeline_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import {

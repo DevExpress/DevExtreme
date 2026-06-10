@@ -6,7 +6,7 @@ import { createScheduler } from './__mock__/create_scheduler';
 import {
   DEFAULT_CELL_HEIGHT,
   setupSchedulerTestEnvironment,
-} from './__mock__/m_mock_scheduler';
+} from './__mock__/mock_scheduler';
 
 describe('snapToCellsMode', () => {
   beforeEach(() => {

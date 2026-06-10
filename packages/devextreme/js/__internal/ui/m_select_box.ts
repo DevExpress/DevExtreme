@@ -19,7 +19,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPromise } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/select_box';
-import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
+import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 
 import type { ValueChangedEvent } from './editor/editor';
 
@@ -449,7 +449,7 @@ class SelectBox<
     const fieldTemplate = this._getTemplate(fieldTemplateOption);
 
     if (!(fieldTemplate && fieldTemplateOption)) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error DataExpressionMixin must be typed
       const text = this._displayGetter(item);
 
       this.option('text', text);
@@ -558,8 +558,7 @@ class SelectBox<
     if (initialSelectedItem === null) {
       return false;
     }
-
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     const value = this._displayGetter(initialSelectedItem);
     const displayValue = value ? String(value) : '';
     const inputText = this._searchValue();
@@ -693,7 +692,7 @@ class SelectBox<
 
   _clearTextValue(): void {
     const selectedItem = this.option('selectedItem');
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     const selectedItemText = this._displayGetter(selectedItem);
     const shouldRestoreValue = selectedItem && selectedItemText !== '';
 
@@ -815,10 +814,10 @@ class SelectBox<
     return this._loadItemDeferred;
   }
 
-  _isCustomItemSelected() {
+  _isCustomItemSelected(): boolean {
     const selectedItem = this.option('selectedItem');
     const searchValue = this._searchValue();
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     const selectedItemText = this._displayGetter(selectedItem);
 
     return !selectedItemText || searchValue !== selectedItemText.toString();
@@ -881,7 +880,7 @@ class SelectBox<
     this._cancelSearchIfNeed();
     // @ts-expect-error ts-error
     this._setValue(this._valueGetter(item));
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     this._renderDisplayText(this._displayGetter(item));
     this._isValueChanging = false;
   }
@@ -960,7 +959,7 @@ class SelectBox<
     }
 
     const inputElement = $input.get(0) as HTMLInputElement;
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     const displayValue = this._displayGetter(item).toString();
     inputElement.value = displayValue;
     this._caret({ start: valueLength, end: displayValue.length });

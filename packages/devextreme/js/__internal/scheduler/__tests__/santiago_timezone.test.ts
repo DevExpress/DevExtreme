@@ -7,7 +7,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { DEFAULT_TIMELINE_CELL_HEIGHT, setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { DEFAULT_TIMELINE_CELL_HEIGHT, setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 const dataSource = [
   {

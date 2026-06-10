@@ -1,7 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import timeZoneUtils from '../../m_utils_time_zone';
 import {
   calculateIsGroupedAllDayPanel,
   getGroupPanelData,
@@ -11,13 +10,16 @@ import {
   isVerticalGroupingApplied,
 } from '../../r1/utils/index';
 import type {
+  CellPositionData,
   CountGenerationConfig,
   DateHeaderData,
+  GroupedDataMap,
   TimePanelData,
   ViewCellData,
   ViewDataMap, ViewOptions,
   ViewType,
 } from '../../types';
+import timeZoneUtils from '../../utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
@@ -61,7 +63,9 @@ export default class ViewDataProvider {
     this.groupedDataMapProvider = null as unknown as GroupedDataMapProvider;
   }
 
-  get groupedDataMap() { return this.groupedDataMapProvider.groupedDataMap; }
+  get groupedDataMap(): GroupedDataMap {
+    return this.groupedDataMapProvider.groupedDataMap as GroupedDataMap;
+  }
 
   get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
 
@@ -198,7 +202,7 @@ export default class ViewDataProvider {
     return this.groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
 
-  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): any {
+  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): CellPositionData | undefined {
     return this.groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
 

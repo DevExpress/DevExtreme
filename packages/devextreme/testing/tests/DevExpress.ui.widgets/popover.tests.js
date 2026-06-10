@@ -140,6 +140,44 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
+    QUnit.test('non-alias string position is treated as overlay alignment (my/at)', function(assert) {
+        fixtures.simple.create();
+        try {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                visible: true,
+                position: 'top center'
+            });
+
+            const internalPosition = popover._positionController._position;
+
+            assert.strictEqual(internalPosition.my, 'top center', 'my is taken from the alignment string');
+            assert.strictEqual(internalPosition.at, 'top center', 'at is taken from the alignment string');
+            assert.strictEqual(internalPosition.collision, undefined, 'no alias collision is applied');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+
+    QUnit.test('alias string position is resolved to predefined alias config', function(assert) {
+        fixtures.simple.create();
+        try {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                visible: true,
+                position: 'top'
+            });
+
+            const internalPosition = popover._positionController._position;
+
+            assert.strictEqual(internalPosition.my, 'bottom center', 'alias my is applied');
+            assert.strictEqual(internalPosition.at, 'top center', 'alias at is applied');
+            assert.strictEqual(internalPosition.collision, 'fit flip', 'alias collision is applied');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+
     QUnit.test('popover should not render arrow when the position side is center (T701940)', function(assert) {
         fixtures.simple.create();
 

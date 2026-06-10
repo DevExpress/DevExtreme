@@ -6,7 +6,7 @@ import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
 import $ from 'jquery';
-import '__internal/scheduler/workspaces/m_work_space_week';
+import '__internal/scheduler/workspaces/work_space_week';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
 import dblclickEvent from 'common/core/events/dblclick';
 import translator from 'common/core/animation/translator';

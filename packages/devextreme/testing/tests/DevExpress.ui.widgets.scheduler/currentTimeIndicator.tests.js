@@ -17,11 +17,11 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 
 import 'fluent_blue_light.css!';
 
-import '__internal/scheduler/workspaces/m_work_space_day';
-import '__internal/scheduler/workspaces/m_work_space_week';
-import '__internal/scheduler/workspaces/m_timeline_day';
-import '__internal/scheduler/workspaces/m_timeline_week';
-import '__internal/scheduler/workspaces/m_timeline_month';
+import '__internal/scheduler/workspaces/work_space_day';
+import '__internal/scheduler/workspaces/work_space_week';
+import '__internal/scheduler/workspaces/timeline_day';
+import '__internal/scheduler/workspaces/timeline_week';
+import '__internal/scheduler/workspaces/timeline_month';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space"></div></div>');

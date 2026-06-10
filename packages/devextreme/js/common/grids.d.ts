@@ -220,8 +220,10 @@ export type PredefinedCommands = {
     keys: Array<string | number | Array<CompositeKeyPair>>;
     preserve: boolean;
   };
-  selectByIndexes: {
-    indexes: number[]
+  selectionByIndexes: {
+    indexes: number[];
+    mode: 'select' | 'deselect';
+    scope: 'page' | 'allPages';
   };
   selectAll: {};
   deselectAll: {};

@@ -1,6 +1,7 @@
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { setHeight, setWidth } from '@js/core/utils/size';
 
+import type SchedulerWorkSpace from '../workspaces/m_work_space';
 import CurrentTimeShader from './current_time_shader';
 
 const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
@@ -16,6 +17,10 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   private $bottomShader!: dxElementWrapper;
 
   private $allDayIndicator!: dxElementWrapper;
+
+  constructor(protected readonly workSpace: SchedulerWorkSpace) {
+    super({ $container: workSpace.getScrollable().$content() });
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   renderShader(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {
