@@ -32,7 +32,7 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository &&
       (
         (github.event.action == 'labeled' && github.event.label.name == 'storybook') ||
-        (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'storybook'))
+        (github.event.action != 'labeled' && github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'storybook'))
       )
     environment:
       name: storybook
@@ -113,3 +113,4 @@ jobs:
           umbrella-dir: preview
           comment: false
           token: ${{ github.token }}
+          wait-for-pages-deployment: true
