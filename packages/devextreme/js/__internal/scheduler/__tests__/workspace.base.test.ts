@@ -5,11 +5,11 @@ import { logger } from '@ts/core/utils/m_console';
 
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import SchedulerTimelineWorkWeek from '../workspaces/m_timeline_work_week';
-import type SchedulerWorkSpace from '../workspaces/m_work_space';
 import SchedulerWorkSpaceWorkWeek from '../workspaces/m_work_space_work_week';
 import SchedulerTimelineDay from '../workspaces/timeline_day';
 import SchedulerTimelineMonth from '../workspaces/timeline_month';
 import SchedulerTimelineWeek from '../workspaces/timeline_week';
+import type SchedulerWorkSpace from '../workspaces/work_space';
 import SchedulerWorkSpaceDay from '../workspaces/work_space_day';
 import SchedulerWorkSpaceMonth from '../workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from '../workspaces/work_space_week';
