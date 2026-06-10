@@ -164,7 +164,8 @@ export class GroupedDataMapProvider {
           : originCellData;
 
         if (
-          this.isSameGroupIndexAndIndex(cellData, groupIndex, index)
+          foundPosition === undefined
+          && this.isSameGroupIndexAndIndex(cellData, groupIndex, index)
           && this.isStartDateInCell(startDate, allDay, cellData, originCellData)
         ) {
           foundPosition = cell.position;
