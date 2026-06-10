@@ -2,6 +2,7 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { RowKey } from '@ts/grids/grid_core/m_types';
 
 import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
 import treeListCore from '../m_core';
@@ -194,6 +195,18 @@ export class TreeListDataController extends DataController {
 
   private forEachNode() {
     this._dataSource.forEachNode.apply(this, arguments);
+  }
+
+  // Collect keys by walking the loaded node tree (depth-first, parent before
+  // children) — the order rows appear in when fully expanded.
+  public getAllDataRowKeys(): Promise<RowKey[]> {
+    const keys: RowKey[] = [];
+
+    this._dataSource?.forEachNode((node) => {
+      keys.push(node.key);
+    });
+
+    return Promise.resolve(keys);
   }
 }
 
