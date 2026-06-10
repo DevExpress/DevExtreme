@@ -58,6 +58,9 @@ const App = () => {
     }),
     [],
   );
+  const onToolbarPreparing = useCallback((e) => {
+    e.toolbarOptions.allowKeyboardNavigation = false;
+  }, []);
   return (
     <DataGrid
       id="gridContainer"
@@ -65,6 +68,7 @@ const App = () => {
       dataSource={orders}
       keyExpr="ID"
       showBorders={true}
+      onToolbarPreparing={onToolbarPreparing}
     >
       <Grouping autoExpandAll={expandAll} />
       <ColumnChooser enabled={true} />

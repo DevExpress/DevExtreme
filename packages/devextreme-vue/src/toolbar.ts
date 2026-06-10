@@ -30,6 +30,7 @@ import {
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
+  "allowKeyboardNavigation" |
   "dataSource" |
   "disabled" |
   "elementAttr" |
@@ -60,6 +61,7 @@ interface DxToolbar extends AccessibleOptions {
 
 const componentConfig = {
   props: {
+    allowKeyboardNavigation: Boolean,
     dataSource: [Array, Object, String] as PropType<(Array<any | dxToolbarItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
@@ -86,6 +88,7 @@ const componentConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:allowKeyboardNavigation": null,
     "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,

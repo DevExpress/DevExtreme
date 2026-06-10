@@ -3,6 +3,7 @@
   [dataSource]="orders"
   keyExpr="ID"
   [showBorders]="true"
+  (onToolbarPreparing)="onToolbarPreparing($event)"
 >
   <dxo-data-grid-grouping [autoExpandAll]="expandAll"></dxo-data-grid-grouping>
   <dxo-data-grid-column-chooser [enabled]="true"></dxo-data-grid-column-chooser>

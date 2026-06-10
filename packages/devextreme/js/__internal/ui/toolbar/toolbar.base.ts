@@ -3,10 +3,10 @@ import { fx } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import {
   current,
   isMaterial,
@@ -15,17 +15,39 @@ import {
   waitWebFont,
 } from '@js/ui/themes';
 import type { Item, Properties } from '@js/ui/toolbar';
+import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type { CollectionItemKey, CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
+import type { FocusRestoreTarget, RovingTabIndexController } from '@ts/ui/toolbar/internal/keyboard.navigation';
+import {
+  setupRovingKeyboard,
+} from '@ts/ui/toolbar/internal/keyboard.navigation';
+import {
+  afterRovingMoveFocus,
+  beforeRovingMoveFocus,
+  getAvailableItems,
+  handleMenuActivation,
+  isItemComponentOpened,
+  releaseNavigationKeys,
+  wrapSpaceKey,
+} from '@ts/ui/toolbar/internal/roving.utils';
+import {
+  getItemFocusTarget,
+} from '@ts/ui/toolbar/toolbar.utils';
 
-import { TOOLBAR_CLASS } from './constants';
+import {
+  DROP_DOWN_MENU_BUTTON_CLASS,
+  TOOLBAR_CLASS,
+  TOOLBAR_FOCUS_MODE_CLASS,
+} from './constants';
 
 export const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
 const TOOLBAR_CENTER_CLASS = 'dx-toolbar-center';
 export const TOOLBAR_AFTER_CLASS = 'dx-toolbar-after';
 const TOOLBAR_MINI_CLASS = 'dx-toolbar-mini';
-const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
+export const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 const TOOLBAR_BUTTON_CLASS = 'dx-toolbar-button';
 const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
@@ -49,6 +71,7 @@ export interface ToolbarBaseProperties<
     CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
   keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
   > {
+  allowKeyboardNavigation: boolean;
   grouped: boolean;
   renderAs: 'topToolbar';
   useFlatButtons: boolean;
@@ -58,7 +81,7 @@ export interface ToolbarBaseProperties<
 
 class ToolbarBase<
   TProperties extends ToolbarBaseProperties = ToolbarBaseProperties,
-> extends CollectionWidgetAsync<TProperties> {
+> extends CollectionWidgetAsync<TProperties, Item> {
   _$toolbarItemsContainer!: dxElementWrapper;
 
   _$beforeSection!: dxElementWrapper;
@@ -69,6 +92,10 @@ class ToolbarBase<
 
   _waitParentAnimationTimeout?: ReturnType<typeof setTimeout>;
 
+  _navigator?: RovingTabIndexController;
+
+  _pendingFocusTarget?: FocusRestoreTarget;
+
   _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
     return super._getSynchronizableOptionsForCreateComponent().filter((item) => item !== 'disabled');
   }
@@ -76,9 +103,11 @@ class ToolbarBase<
   _initTemplates(): void {
     super._initTemplates();
 
+    const { integrationOptions } = this.option();
     const template = new BindableTemplate(($container, data, rawModel) => {
       if (isPlainObject(data)) {
         const { text, html, widget } = data;
+        const { useFlatButtons, useDefaultButtons } = this.option();
 
         if (text) {
           $container.text(text).wrapInner('<div>');
@@ -92,19 +121,19 @@ class ToolbarBase<
           data.options = data.options ?? {};
 
           if (!isDefined(data.options.stylingMode)) {
-            data.options.stylingMode = this.option('useFlatButtons')
+            data.options.stylingMode = useFlatButtons
               ? TEXT_BUTTON_MODE
               : DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
           }
         }
 
         if (widget === 'dxButton') {
-          if (this.option('useFlatButtons')) {
+          if (useFlatButtons) {
             data.options = data.options ?? {};
             data.options.stylingMode = data.options.stylingMode ?? TEXT_BUTTON_MODE;
           }
 
-          if (this.option('useDefaultButtons')) {
+          if (useDefaultButtons) {
             data.options = data.options ?? {};
             data.options.type = data.options.type ?? DEFAULT_BUTTON_TYPE;
           }
@@ -118,12 +147,20 @@ class ToolbarBase<
         model: rawModel,
         parent: this,
       });
-    }, ['text', 'html', 'widget', 'options'], this.option('integrationOptions.watchMethod'));
+    }, ['text', 'html', 'widget', 'options'], integrationOptions?.watchMethod);
 
     this._templateManager.addDefaultTemplates({
       item: template,
       menuItem: template,
     });
+  }
+
+  _init(): void {
+    super._init();
+
+    if (!this.option('allowKeyboardNavigation')) {
+      this.option('focusStateEnabled', false);
+    }
   }
 
   _getDefaultOptions(): TProperties {
@@ -133,6 +170,8 @@ class ToolbarBase<
       grouped: false,
       useFlatButtons: false,
       useDefaultButtons: false,
+      focusStateEnabled: true,
+      allowKeyboardNavigation: true,
     };
   }
 
@@ -148,6 +187,146 @@ class ToolbarBase<
         },
       },
     ]);
+  }
+
+  _toggleFocusClass(): void { }
+
+  _supportedKeys(): SupportedKeys {
+    const keys = super._supportedKeys();
+
+    wrapSpaceKey(keys);
+    releaseNavigationKeys(keys);
+
+    keys.upArrow = (e: DxEvent<KeyboardEvent>): void => this._handleOverflowOpenAtNavLevel(e);
+    keys.downArrow = (e: DxEvent<KeyboardEvent>): void => this._handleOverflowOpenAtNavLevel(e);
+
+    return keys;
+  }
+
+  _getItemFocusTarget($item: dxElementWrapper): dxElementWrapper | undefined {
+    return getItemFocusTarget($item);
+  }
+
+  _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
+    const { focusedElement } = this.option();
+
+    this._navigator?.handleEnterKey(e, {
+      focusedElement,
+      activateAtNavLevel: ($focused, event) => this._handleActivationAtNavLevel($focused, event),
+    });
+
+    super._enterKeyHandler(e);
+  }
+
+  _setFocusedItem($target: dxElementWrapper): void {
+    super._setFocusedItem($target);
+
+    this._navigator?.updateRovingTabIndex($target);
+  }
+
+  _focusOutHandler(e: DxEvent<FocusEvent>): void {
+    if (!this._navigator || this._navigator.shouldDelegateFocusOut(e)) {
+      super._focusOutHandler(e);
+    }
+  }
+
+  _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
+    return getAvailableItems(
+      this._getVisibleItems($itemElements),
+      !!this.option().disabled,
+      ($item) => this._getItemFocusTarget($item),
+    );
+  }
+
+  _focusInHandler(e: DxEvent): void {
+    super._focusInHandler(e);
+    this._navigator?.focusInHandler(e);
+  }
+
+  _renderFocusTarget(): void {
+    this._focusTarget().removeAttr('tabIndex');
+  }
+
+  _refreshActiveDescendant(): void { }
+
+  _refreshItemId(): void { }
+
+  _attachKeyboardEvents(): void {
+    const { allowKeyboardNavigation } = this.option();
+    if (!allowKeyboardNavigation) {
+      super._attachKeyboardEvents();
+      return;
+    }
+
+    this._detachKeyboardEvents();
+
+    const { listenerId, navigator } = setupRovingKeyboard(this, {
+      itemsSelector: `${this._itemSelector()}, .${DROP_DOWN_MENU_BUTTON_CLASS}`,
+      direction: 'horizontal',
+    });
+    this._keyboardListenerId = listenerId;
+    this._navigator = navigator;
+  }
+
+  _detachKeyboardEvents(): void {
+    this._navigator?.detach();
+    this._navigator = undefined;
+    super._detachKeyboardEvents();
+  }
+
+  _isOverflowItem($item: dxElementWrapper): boolean {
+    return $item.hasClass(DROP_DOWN_MENU_BUTTON_CLASS);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _openOverflowMenu(focusTarget: 'first' | 'last'): void {
+    // overridden in Toolbar
+  }
+
+  _getVisibleItems($itemElements?: dxElementWrapper): dxElementWrapper {
+    const $items = $itemElements ?? this._itemContainer().find(`${this._itemSelector()}, .${DROP_DOWN_MENU_BUTTON_CLASS}`);
+    return $items.filter(':visible');
+  }
+
+  _resetRovingTabIndex(): void {
+    this._navigator?.resetRovingTabIndex(this._itemContainer());
+  }
+
+  _handleActivationAtNavLevel($focused: dxElementWrapper, e: KeyboardEvent): void {
+    if ($focused.length && !isItemComponentOpened($focused) && this._isOverflowItem($focused)) {
+      e.preventDefault();
+      e.stopPropagation();
+      this._openOverflowMenu('first');
+      return;
+    }
+
+    handleMenuActivation($focused, e);
+  }
+
+  _handleOverflowOpenAtNavLevel(e: KeyboardEvent): void {
+    const { focusedElement } = this.option();
+    const $focused = $(focusedElement);
+
+    if (!$focused.length || !this._isOverflowItem($focused)) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+    this._openOverflowMenu(e.key === 'ArrowUp' ? 'last' : 'first');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _moveFocus(location: string, e?: DxEvent<KeyboardEvent>): boolean | undefined | void {
+    if (!this._navigator) {
+      const { focusedElement } = this.option();
+      return focusedElement ? super._moveFocus(location, e) : undefined;
+    }
+
+    beforeRovingMoveFocus(this);
+    const result = super._moveFocus(location, e);
+    afterRovingMoveFocus(this);
+    return result;
   }
 
   _itemContainer(): dxElementWrapper {
@@ -191,11 +370,36 @@ class ToolbarBase<
 
   _postProcessRenderItems(): void {
     this._arrangeItems();
+
+    this._updateFocusableItemsTabIndex();
+
+    const target = this._pendingFocusTarget;
+    this._pendingFocusTarget = undefined;
+    if (target !== undefined) {
+      this._navigator?.restoreFocus(target);
+    }
+  }
+
+  _updateFocusableItemsTabIndex(): void {
+    this._resetRovingTabIndex();
+  }
+
+  _invalidate(): void {
+    const captured = this._navigator?.captureFocusedItem();
+    if (captured === null) {
+      this._pendingFocusTarget = undefined;
+    } else if (captured !== undefined) {
+      this._pendingFocusTarget = captured;
+    }
+
+    super._invalidate();
   }
 
   _renderToolbar(): void {
+    const { allowKeyboardNavigation } = this.option();
     this.$element()
-      .addClass(TOOLBAR_CLASS);
+      .addClass(TOOLBAR_CLASS)
+      .toggleClass(TOOLBAR_FOCUS_MODE_CLASS, !!allowKeyboardNavigation);
 
     this._$toolbarItemsContainer = $('<div>')
       .addClass(TOOLBAR_ITEMS_CONTAINER_CLASS)
@@ -270,7 +474,7 @@ class ToolbarBase<
 
     this._alignSection(this._$centerSection, elementWidth - beforeWidth - afterWidth);
 
-    const isRTL = this.option('rtlEnabled');
+    const { rtlEnabled: isRTL } = this.option();
     const leftWidth = isRTL ? afterWidth : beforeWidth;
     const rightWidth = isRTL ? beforeWidth : afterWidth;
 
@@ -353,7 +557,8 @@ class ToolbarBase<
     const $element = $(this.element());
     $element.removeClass(TOOLBAR_COMPACT_CLASS);
 
-    if (this.option('compactMode') && this._getSummaryItemsSize('width', this._itemElements(), true) > getWidth($element)) {
+    const { compactMode } = this.option();
+    if (compactMode && this._getSummaryItemsSize('width', this._itemElements(), true) > getWidth($element)) {
       $element.addClass(TOOLBAR_COMPACT_CLASS);
     }
   }
@@ -398,7 +603,8 @@ class ToolbarBase<
   }
 
   _renderGroupedItems(): void {
-    each(this.option('items'), (groupIndex, group) => {
+    const { items: groups = [] } = this.option();
+    each(groups, (groupIndex, group) => {
       const groupItems = group.items;
       const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
       const location = group.location ?? 'center';
@@ -416,8 +622,9 @@ class ToolbarBase<
   }
 
   _renderItems(items: Item[]): void {
+    const { grouped: isGroupedOption } = this.option();
     // @ts-expect-error ts-error
-    const grouped = this.option('grouped') && items.length && items[0].items;
+    const grouped = isGroupedOption && items.length && items[0].items;
 
     if (grouped) {
       this._renderGroupedItems();
@@ -450,6 +657,8 @@ class ToolbarBase<
   }
 
   _clean(): void {
+    super._clean();
+
     this._$toolbarItemsContainer.children().empty();
 
     this.$element().empty();
@@ -486,7 +695,7 @@ class ToolbarBase<
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'width':
@@ -500,6 +709,11 @@ class ToolbarBase<
         break;
       case 'compactMode':
         this._applyCompactMode();
+        break;
+      case 'allowKeyboardNavigation':
+        this.$element().toggleClass(TOOLBAR_FOCUS_MODE_CLASS, !!value);
+        this.option('focusStateEnabled', !!value);
+        this._updateFocusableItemsTabIndex();
         break;
       case 'grouped':
         break;

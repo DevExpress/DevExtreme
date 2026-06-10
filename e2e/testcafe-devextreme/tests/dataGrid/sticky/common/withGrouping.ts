@@ -207,6 +207,9 @@ test.meta({ browserSize: [900, 800] })('The header row should be highlighted cor
       visible: true,
     },
     allowColumnReordering: false,
+    onToolbarPreparing(e): void {
+      e.toolbarOptions.allowKeyboardNavigation = false;
+    },
   });
 }).after(async () => {
   await MouseUpEvents.enable(MouseAction.dragToOffset);

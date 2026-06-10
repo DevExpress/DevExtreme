@@ -85,6 +85,9 @@ test('allowExportSelectedData: false, menu: true', async (t) => {
     enabled: true,
   },
   width: 30,
+  onToolbarPreparing(e): void {
+    e.toolbarOptions.allowKeyboardNavigation = false;
+  },
 }));
 
 test('allowExportSelectedData: true, menu: true', async (t) => {
@@ -109,6 +112,9 @@ test('allowExportSelectedData: true, menu: true', async (t) => {
     formats: ['xlsx', 'pdf'],
   },
   width: 30,
+  onToolbarPreparing(e): void {
+    e.toolbarOptions.allowKeyboardNavigation = false;
+  },
 }));
 
 test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns is in grid header, menu: false', async (t) => {

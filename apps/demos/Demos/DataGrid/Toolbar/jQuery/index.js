@@ -90,6 +90,9 @@ $(() => {
         'columnChooserButton',
       ],
     },
+    onToolbarPreparing(e) {
+      e.toolbarOptions.allowKeyboardNavigation = false;
+    },
   }).dxDataGrid('instance');
 
   function getGroupCount(groupField) {

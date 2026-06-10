@@ -5,6 +5,7 @@
     :data-source="orders"
     key-expr="ID"
     :show-borders="true"
+    @toolbar-preparing="onToolbarPreparing"
   >
     <DxGrouping :auto-expand-all="expandAll"/>
     <DxColumnChooser :enabled="true"/>
@@ -86,6 +87,7 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/data-grid';
+import type { DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { query } from 'devextreme-vue/common/data';
 import { orders } from './data.ts';
@@ -129,6 +131,10 @@ const refreshButtonOptions = {
   onClick: () => {
     dataGridRef.value!.instance!.refresh();
   },
+};
+
+const onToolbarPreparing = (e: DxDataGridTypes.ToolbarPreparingEvent) => {
+  e.toolbarOptions.allowKeyboardNavigation = false;
 };
 </script>
 <style>

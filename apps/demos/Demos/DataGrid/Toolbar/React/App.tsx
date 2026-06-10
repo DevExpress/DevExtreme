@@ -4,7 +4,7 @@ import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
   Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item,
 } from 'devextreme-react/data-grid';
-import type { DataGridRef } from 'devextreme-react/data-grid';
+import type { DataGridRef, DataGridTypes } from 'devextreme-react/data-grid';
 import { query } from 'devextreme-react/common/data';
 
 import { orders } from './data.ts';
@@ -54,13 +54,18 @@ const App = () => {
     },
   }), []);
 
+  const onToolbarPreparing = useCallback((e: DataGridTypes.ToolbarPreparingEvent) => {
+    e.toolbarOptions.allowKeyboardNavigation = false;
+  }, []);
+
   return (
     <DataGrid
       id="gridContainer"
       ref={dataGridRef}
       dataSource={orders}
       keyExpr="ID"
-      showBorders={true}>
+      showBorders={true}
+      onToolbarPreparing={onToolbarPreparing}>
       <Grouping autoExpandAll={expandAll} />
       <ColumnChooser enabled={true} />
       <LoadPanel enabled={true} />

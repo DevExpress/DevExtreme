@@ -6,6 +6,7 @@ import {
   DxButtonModule,
 } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { query } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Order } from './app.service';
@@ -87,6 +88,10 @@ export class AppComponent {
 
   toggleExpandAll() {
     this.expandAll = !this.expandAll;
+  }
+
+  onToolbarPreparing(e: DxDataGridTypes.ToolbarPreparingEvent) {
+    e.toolbarOptions.allowKeyboardNavigation = false;
   }
 }
 
