@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 
-import type SchedulerWorkSpace from '../workspaces/m_work_space';
+import type SchedulerWorkSpace from '../workspaces/work_space';
 import CurrentTimeShader from './current_time_shader';
 
 class HorizontalCurrentTimeShader extends CurrentTimeShader {

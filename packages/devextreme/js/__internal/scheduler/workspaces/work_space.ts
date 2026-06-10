@@ -330,13 +330,13 @@ export interface WorkspaceOptionsInternal {
 }
 
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
-  private viewDataProviderValue: ViewDataProvider | null = null;
+  private viewDataProviderValue!: ViewDataProvider | null;
 
-  private cacheValue: Cache | null = null;
+  private cacheValue!: Cache | null;
 
-  private cellsSelectionStateValue: CellsSelectionState | null = null;
+  private cellsSelectionStateValue!: CellsSelectionState | null;
 
-  private cellsSelectionControllerValue: CellsSelectionController | null = null;
+  private cellsSelectionControllerValue!: CellsSelectionController | null;
 
   protected $dateTableScrollable!: Scrollable;
 
