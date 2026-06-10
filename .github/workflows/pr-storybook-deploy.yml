@@ -1,5 +1,5 @@
 name: PR Storybook - Preview
-run-name: "PR Storybook — PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+run-name: "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
 
 on:
   pull_request:
