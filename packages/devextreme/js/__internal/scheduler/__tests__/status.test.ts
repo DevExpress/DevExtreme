@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 import type { SchedulerModel } from './__mock__/model/scheduler';
 
 const today = '2025-04-30T15:00:00.000Z';

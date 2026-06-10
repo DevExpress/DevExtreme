@@ -1,7 +1,6 @@
 import Widget from '@js/ui/widget/ui.widget';
 import { extend } from '@ts/core/utils/m_extend';
 
-import timeZoneUtils from './m_utils_time_zone';
 import {
   DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
   DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
@@ -15,6 +14,7 @@ import type {
 } from './utils/options/types';
 import { getCurrentView, getViewOption, getViews } from './utils/options/utils';
 import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './utils/options_validator/index';
+import timeZoneUtils from './utils_time_zone';
 
 export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
   protected views: NormalizedView[] = [];

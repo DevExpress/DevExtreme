@@ -3,11 +3,10 @@ import dateUtils from '@js/core/utils/date';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 import {
   HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
 } from '../../constants';
-import { VERTICAL_GROUP_COUNT_CLASSES } from '../../m_classes';
-import timeZoneUtils from '../../m_utils_time_zone';
 import type {
   AllDayPanelModeType,
   AppointmentGeometry,
@@ -24,6 +23,7 @@ import type {
 import type { ResourceLoader } from '../../utils/loader/resource_loader';
 import type { ResourceId } from '../../utils/loader/types';
 import { VIEWS } from '../../utils/options/constants_view';
+import timeZoneUtils from '../../utils_time_zone';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;

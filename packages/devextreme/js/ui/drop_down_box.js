@@ -1,4 +1,4 @@
-import DropDownBox from '../__internal/ui/m_drop_down_box';
+import DropDownBox from '../__internal/ui/drop_down_box';
 
 export default DropDownBox;
 

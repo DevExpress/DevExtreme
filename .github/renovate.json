@@ -16,6 +16,21 @@
     "packageRules": [
         {
             "matchPackageNames": [
+                "postcss"
+            ],
+            "rangeStrategy": "bump"
+        },
+        {
+            "matchPackageNames": [
+                "@angular/platform-server"
+            ],
+            "matchFileNames": [
+                "apps/demos/package.json"
+            ],
+            "rangeStrategy": "bump"
+        },
+        {
+            "matchPackageNames": [
                 "openai",
                 "rehype-minify-whitespace",
                 "rehype-parse",

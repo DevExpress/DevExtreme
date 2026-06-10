@@ -5,11 +5,11 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties } from '@js/ui/color_box';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Color from '@ts/m_color';
-import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { PopupProperties } from '@ts/ui/popup/popup';
+import type Popup from '@ts/ui/popup/popup';
 
-import type { PopupProperties } from '../popup/m_popup';
-import type Popup from '../popup/m_popup';
 import type { ColorViewProperties } from './color_view';
 import ColorView from './color_view';
 

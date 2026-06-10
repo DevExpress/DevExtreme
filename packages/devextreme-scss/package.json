@@ -16,5 +16,5 @@
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
     "watch": "pnpm nx run devextreme-scss --target=watch"
   },
-  "version": "26.1.2"
+  "version": "26.1.3"
 }

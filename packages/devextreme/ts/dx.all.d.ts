@@ -4706,7 +4706,7 @@ declare module DevExpress.common.grids {
     type: 'basic';
     field: string;
     operator: DevExpress.common.data.SearchOperation;
-    value: string | number | boolean | null;
+    value: string | number | boolean | null | Date;
   };
   /**
    * [descr:ColumnAIOptions]
@@ -6609,8 +6609,10 @@ declare module DevExpress.common.grids {
       keys: Array<string | number | Array<CompositeKeyPair>>;
       preserve: boolean;
     };
-    selectByIndexes: {
+    selectionByIndexes: {
       indexes: number[];
+      mode: 'select' | 'deselect';
+      scope: 'page' | 'allPages';
     };
     selectAll: {};
     deselectAll: {};

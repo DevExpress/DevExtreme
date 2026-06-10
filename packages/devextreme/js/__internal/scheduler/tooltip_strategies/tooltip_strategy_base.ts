@@ -17,7 +17,7 @@ import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type { Appointment, AppointmentClickEvent, Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
-import type Tooltip from '@ts/ui/m_tooltip';
+import type Tooltip from '@ts/ui/tooltip';
 
 import type { AppointmentTooltipItem, TargetedAppointment } from '../types';
 
