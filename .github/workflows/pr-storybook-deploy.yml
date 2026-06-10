@@ -1,102 +1,101 @@
-name: PR Storybook - Deploy
+name: PR Storybook - Preview
 
 on:
-  workflow_run:
-    workflows:
-      - PR Storybook - Build
+  pull_request:
+    branches:
+      - 26_1
     types:
-      - completed
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+      - closed
 
 permissions:
-  actions: read
+  contents: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 env:
-  SOURCE_DIR: dist/static
+  SOURCE_DIR: ./apps/react-storybook/storybook-static
 
 jobs:
-  prepare:
-    name: Read build meta
-    if: github.event.workflow_run.conclusion == 'success'
+  deploy:
+    name: "Build & Deploy — PR #${{ github.event.pull_request.number }}"
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      action: ${{ steps.meta.outputs.action }}
-      pr_number: ${{ steps.meta.outputs.pr_number }}
+    timeout-minutes: 20
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        contains(github.event.pull_request.labels.*.name, 'storybook') ||
+        (github.event.action == 'unlabeled' && github.event.label.name == 'storybook')
+      )
 
     steps:
-      - name: Download meta artifact
-        uses: actions/download-artifact@v8
-        with:
-          run-id: ${{ github.event.workflow_run.id }}
-          name: preview-meta
-          path: artifacts
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-
-      - name: Read meta
+      - name: Determine action
         id: meta
         shell: bash
         run: |
           set -euo pipefail
-          META="artifacts/meta.json"
-          echo "Meta:"
-          cat "$META"
+          EVENT_ACTION="${{ github.event.action }}"
+          CHANGED_LABEL="${{ github.event.label.name || '' }}"
+          if [[ "$EVENT_ACTION" == "closed" ]] || [[ "$EVENT_ACTION" == "unlabeled" && "$CHANGED_LABEL" == "storybook" ]]; then
+            echo "action=remove" >> "$GITHUB_OUTPUT"
+          else
+            echo "action=deploy" >> "$GITHUB_OUTPUT"
+          fi
 
-          PR_NUMBER="$(jq -r '.pr_number' "$META")"
-          ACTION="$(jq -r '.action' "$META")"
-
-          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
-          echo "action=$ACTION" >> "$GITHUB_OUTPUT"
-
-      - name: Summarize
-        shell: bash
-        run: |
-          PR_NUMBER="${{ steps.meta.outputs.pr_number }}"
-          ACTION="${{ steps.meta.outputs.action }}"
-          BUILD_RUN_ID="${{ github.event.workflow_run.id }}"
-          {
-            echo "### PR Storybook Preview"
-            echo "- **PR:** [#${PR_NUMBER}](https://github.com/${{ github.repository }}/pull/${PR_NUMBER})"
-            echo "- **Action:** \`${ACTION}\`"
-            echo "- **Build run:** [#${BUILD_RUN_ID}](https://github.com/${{ github.repository }}/actions/runs/${BUILD_RUN_ID})"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-  deploy:
-    name: "Deploy/remove preview — PR #${{ needs.prepare.outputs.pr_number }}"
-    needs: prepare
-    if: needs.prepare.outputs.action != 'none'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: read
-    timeout-minutes: 10
-    environment:
-      name: storybook
-      url: https://devexpress.github.io/DevExtreme/preview/pr-${{ needs.prepare.outputs.pr_number }}
-
-    concurrency:
-      group: preview-deploy-${{ needs.prepare.outputs.pr_number }}
-      cancel-in-progress: true
-
-    steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-
-      - name: Download static artifact
-        if: needs.prepare.outputs.action == 'deploy'
-        uses: actions/download-artifact@v8
         with:
-          run-id: ${{ github.event.workflow_run.id }}
-          name: preview-static
-          path: ${{ env.SOURCE_DIR }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
+          submodules: true
+          fetch-depth: 1
+
+      - name: Use Node.js
+        if: steps.meta.outputs.action == 'deploy'
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+
+      - name: Setup pnpm
+        if: steps.meta.outputs.action == 'deploy'
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        if: steps.meta.outputs.action == 'deploy'
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm + nx cache
+        if: steps.meta.outputs.action == 'deploy'
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        if: steps.meta.outputs.action == 'deploy'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook preview (static)
+        if: steps.meta.outputs.action == 'deploy'
+        run: pnpm nx build devextreme-react-storybook
 
       - name: Deploy/remove PR preview
         uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
         with:
-          action: ${{ needs.prepare.outputs.action }}
-          pr-number: ${{ needs.prepare.outputs.pr_number }}
+          action: ${{ steps.meta.outputs.action }}
+          pr-number: ${{ github.event.pull_request.number }}
           source-dir: ${{ env.SOURCE_DIR }}
           preview-branch: gh-pages
           umbrella-dir: preview
