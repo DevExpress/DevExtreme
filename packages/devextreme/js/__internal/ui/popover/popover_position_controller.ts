@@ -11,7 +11,7 @@ import type {
   OverlayPosition,
   Position as OverlayBasePosition,
 } from '@ts/ui/overlay/overlay_position_controller';
-import type { PopoverProperties } from '@ts/ui/popover/m_popover';
+import type { PopoverProperties } from '@ts/ui/popover/popover';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,

@@ -67,6 +67,27 @@ export const isKeyShapeValid = (
   return keyExpr.every((field) => field in key);
 };
 
+export const splitIntoLoadWindows = (
+  indexes: number[],
+  maxWindowSize: number,
+): number[][] => {
+  const sorted = [...new Set(indexes)].sort((a, b) => a - b);
+  const windows: number[][] = [];
+
+  sorted.forEach((index) => {
+    const current = windows.at(-1);
+
+    // Sorted indexes are merged into the same window within maxWindowSize
+    if (current && index - current[0] + 1 <= maxWindowSize) {
+      current.push(index);
+    } else {
+      windows.push([index]);
+    }
+  });
+
+  return windows;
+};
+
 type FilterExprValue = BasicFilterExpr['value'];
 
 export function resolveFilterValue(

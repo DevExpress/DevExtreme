@@ -1,30 +1,41 @@
-import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
-import registerComponent from '@js/core/component_registrator';
+import registerComponent from '@js/core/component_registrator'; // couldn't change import due to inconsistent typings for registerComponent
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
+import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
+import type { DataSourceOptions } from '@js/data/data_source';
+import type { DxEvent, PointerInteractionEvent } from '@js/events/events.types';
 import type { Properties } from '@js/ui/autocomplete';
+import type { ItemClickEvent, PageLoadMode } from '@js/ui/list';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { isCommandKeyPressed } from '@ts/events/utils/index';
+import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
+import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
-export interface AutocompleteProperties extends Omit<Properties, 'onItemClick' | 'onSelectionChanged'> {}
+export interface AutocompleteProperties extends Omit<
+  Properties, 'onItemClick' | 'onSelectionChanged'
+> {
+
+}
 
 class Autocomplete extends DropDownList<AutocompleteProperties> {
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean> {
-    let item = this._list ? this._list.option('focusedElement') : null;
+    let item: dxElementWrapper | null = null;
+    if (this._list) {
+      const { focusedElement } = this._list.option();
+      item = focusedElement ? $(focusedElement) : null;
+    }
     const parent = super._supportedKeys();
-    // @ts-expect-error ts-error
-    item = item && $(item);
 
     return {
       ...parent,
       upArrow(e): boolean {
-        // @ts-expect-error ts-error
-        if (parent.upArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
+        if (parent.upArrow.call(this, e) && !isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
           if (item && !this._calcNextItem(-1)) {
@@ -35,8 +46,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
         return true;
       },
       downArrow(e): boolean {
-        // @ts-expect-error ts-error
-        if (parent.downArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
+        if (parent.downArrow.call(this, e) && !isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
           if (item && !this._calcNextItem(1)) {
@@ -54,7 +64,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
         if (opened) {
           e.preventDefault();
         }
-        return opened;
+        return Boolean(opened);
       },
     };
   }
@@ -78,17 +88,19 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
   _getAriaAutocomplete(): string {
     const { disabled, readOnly } = this.option();
 
+    // `||` is required here — `??` would ignore `disabled` when `readOnly` is `false`
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const isInputEditable = !(readOnly || disabled);
 
     return isInputEditable ? 'list' : 'none';
   }
 
-  _displayGetterExpr() {
-    return this.option('valueExpr');
+  _displayGetterExpr(): undefined | string | ((item: unknown) => string | number | boolean) {
+    const { valueExpr } = this.option();
+    return valueExpr;
   }
 
-  _closeOutsideDropDownHandler({ target }): boolean {
+  _closeOutsideDropDownHandler({ target }: DxEvent<PointerInteractionEvent>): boolean {
     return !$(target).closest(this.$element()).length;
   }
 
@@ -103,18 +115,19 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     return `${super._popupWrapperClass()} ${AUTOCOMPLETE_POPUP_WRAPPER_CLASS}`;
   }
 
-  _listConfig() {
-    return extend(super._listConfig(), {
-      pageLoadMode: 'none',
-      onSelectionChanged: (e) => {
+  _listConfig(): ListBaseProperties {
+    return {
+      ...super._listConfig(),
+      pageLoadMode: 'none' as PageLoadMode,
+      onSelectionChanged: (e): void => {
         this._setSelectedItem(e.addedItems[0]);
       },
-    });
+    };
   }
 
-  _listItemClickHandler(e) {
+  _listItemClickHandler(e: ItemClickEvent): void {
     this._saveValueChangeEvent(e.event);
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     const value = this._displayGetter(e.itemData);
     this.option('value', value);
     this.close();
@@ -129,20 +142,25 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     super._setListDataSource();
   }
 
-  _refreshSelected(): void {}
+  _refreshSelected(): void {
+    // Autocomplete has no persistent selection state — suppress parent behavior
+    // _refreshSelected is called in parent, so we need to override here
+    // hence we don't need this functionality in Autocomplete
+  }
 
   _searchCanceled(): void {
     super._searchCanceled();
     this.close();
   }
 
-  _loadItem(value, cache) {
+  _loadItem(value: unknown, cache?: ItemCache): DeferredObj<unknown> {
     const selectedItem = this._getItemFromPlain(value, cache);
 
-    return Deferred().resolve(selectedItem).promise();
+    // @ts-expect-error DefferedObj typings and refactor
+    return Deferred().resolve(selectedItem as unknown).promise();
   }
 
-  _dataSourceOptions() {
+  _dataSourceOptions(): DataSourceOptions {
     const { maxItemCount } = this.option();
     return {
       paginate: true,
@@ -150,7 +168,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     };
   }
 
-  _searchDataSource(searchValue): void {
+  _searchDataSource(searchValue: string): void {
     const { maxItemCount } = this.option();
     if (isDefined(maxItemCount)) {
       this._dataSource.pageSize(maxItemCount);
@@ -166,12 +184,11 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderValueEventName(): string {
     return 'input keyup';
   }
 
-  _valueChangeEventHandler(e): void {
+  _valueChangeEventHandler(e: ValueChangedEvent): void {
     const value = this._input().val() || null;
     return super._valueChangeEventHandler(e, value);
   }
@@ -184,11 +201,10 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
         this._setDefaultAria();
         break;
       case 'maxItemCount':
-        // @ts-expect-error ts-error
-        this._searchDataSource();
+        this._searchDataSource(this._searchValue());
         break;
       case 'valueExpr':
-        // @ts-expect-error ts-error
+        // @ts-expect-error DataExpressionMixin must be typed
         this._compileDisplayGetter();
         this._setListOption('displayExpr', this._displayGetterExpr());
         super._optionChanged(args);
