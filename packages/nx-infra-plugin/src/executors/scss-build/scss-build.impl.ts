@@ -61,10 +61,6 @@ function readFileDataUri(filePath: string, svgEncoding?: string): string {
   return encodeDataUriContent(buffer, filePath, svgEncoding);
 }
 
-/**
- * Same shape as `packages/devextreme/build/gulp/license-header.txt` with
- * `gulp-header` `commentType: '*'` (starLicense) — matches legacy Gulp output.
- */
 function createStarLicenseHeader(fileName: string, version: string): string {
   return [
     '/**',
