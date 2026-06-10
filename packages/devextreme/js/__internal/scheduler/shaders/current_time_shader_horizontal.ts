@@ -2,9 +2,14 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 
+import type SchedulerWorkSpace from '../workspaces/m_work_space';
 import CurrentTimeShader from './current_time_shader';
 
 class HorizontalCurrentTimeShader extends CurrentTimeShader {
+  constructor(protected readonly workSpace: SchedulerWorkSpace) {
+    super({ $container: workSpace.getScrollable().$content() });
+  }
+
   renderShader(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {
     const effectiveGroupCount = isHorizontalGroupedWorkSpace ? groupCount : 1;
 
