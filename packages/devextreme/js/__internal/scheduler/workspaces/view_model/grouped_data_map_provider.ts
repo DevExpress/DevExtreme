@@ -68,6 +68,10 @@ export class GroupedDataMapProvider {
   ): Date | undefined {
     const groupData = this.getGroupFromDateTableGroupMap(groupIndex);
 
+    if (!groupData) {
+      return undefined;
+    }
+
     const checkCellStartDate = (rowIndex: number, columnIndex: number): Date | undefined => {
       const { cellData } = groupData[rowIndex][columnIndex];
       let {
@@ -273,8 +277,7 @@ export class GroupedDataMapProvider {
   }
 
   getCellsGroup(groupIndex: number): GroupLeaf['grouped'] | undefined {
-    const { dateTableGroupedMap } = this.groupedDataMap;
-    const groupData = dateTableGroupedMap[groupIndex];
+    const groupData = this.getGroupFromDateTableGroupMap(groupIndex);
 
     if (groupData) {
       const { cellData } = groupData[0][0];
@@ -308,7 +311,7 @@ export class GroupedDataMapProvider {
       .map(({ groupIndex }) => groupIndex);
   }
 
-  getGroupFromDateTableGroupMap(groupIndex: number): CellInfo[][] {
+  getGroupFromDateTableGroupMap(groupIndex: number): CellInfo[][] | undefined {
     const { dateTableGroupedMap } = this.groupedDataMap;
 
     return dateTableGroupedMap[groupIndex];
@@ -329,8 +332,7 @@ export class GroupedDataMapProvider {
   }
 
   getLastGroupRow(groupIndex: number): CellInfo[] | undefined {
-    const { dateTableGroupedMap } = this.groupedDataMap;
-    const groupedData = dateTableGroupedMap[groupIndex];
+    const groupedData = this.getGroupFromDateTableGroupMap(groupIndex);
 
     if (groupedData) {
       const lastRowIndex = groupedData.length - 1;
@@ -343,9 +345,9 @@ export class GroupedDataMapProvider {
 
   getLastGroupCellPosition(groupIndex: number): CellPositionData | undefined {
     const groupRow = this.getLastGroupRow(groupIndex);
+    const lastCell = groupRow?.[groupRow.length - 1];
 
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    return groupRow?.[groupRow?.length - 1].position;
+    return lastCell?.position;
   }
 
   getRowCountInGroup(groupIndex: number): number {
