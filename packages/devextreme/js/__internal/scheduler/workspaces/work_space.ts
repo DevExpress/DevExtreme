@@ -2908,7 +2908,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getGroupHeaderClass(i?: number): string {
     const cellClass = GROUP_HEADER_CLASS;
 
-    return this.groupedStrategy.addAdditionalGroupCellClasses(cellClass, (i ?? 0) + 1, 0, 0);
+    if (i === undefined) {
+      return cellClass;
+    }
+
+    return this.groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1, 0, 0);
   }
 
   protected initWorkSpaceUnits(): void {
