@@ -12,9 +12,6 @@ import {
 fixture`AI Assistant - Chat Experience`
   .page(AI_INTEGRATION_PAGE);
 
-// === §1.5 Chat history accumulation ===
-
-// 1.5.1
 test('Chat history should accumulate across multiple prompts', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -49,7 +46,6 @@ test('Chat history should accumulate across multiple prompts', async (t) => {
   { actions: [{ name: 'clearSorting', args: {} }] },
 ]));
 
-// 1.5.2
 test('Request payload should contain only the latest message', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -88,11 +84,8 @@ test('Request payload should contain only the latest message', async (t) => {
   { actions: [{ name: 'clearSorting', args: {} }] },
 ]));
 
-// === §1.6 Suggestions ===
-
 const suggestionItems = { items: [{ text: 'Sort by name' }, { text: 'Clear filter' }] };
 
-// 1.6.1
 test('Suggestions should be shown in empty chat', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -113,7 +106,6 @@ test('Suggestions should be shown in empty chat', async (t) => {
   chat: { suggestions: suggestionItems },
 }));
 
-// 1.6.2
 test('Suggestions should be shown in non-empty chat', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -143,7 +135,6 @@ test('Suggestions should be shown in non-empty chat', async (t) => {
   chat: { suggestions: suggestionItems },
 }));
 
-// 1.6.3
 test('Suggestion click should send message and execute command', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -174,7 +165,6 @@ test('Suggestion click should send message and execute command', async (t) => {
     user: { id: 'user' },
     suggestions: {
       ...suggestionItems,
-      // Suggestions are render-only; the consumer wires submission via onItemClick.
       onItemClick(e: any) {
         const chatEl = e.element.closest('.dx-chat');
         const chatInstance = (window as any).DevExpress.ui.dxChat.getInstance(chatEl);
@@ -194,9 +184,6 @@ test('Suggestion click should send message and execute command', async (t) => {
   },
 }));
 
-// === §1.8 customizeResponseText / customizeResponseTitle — set at init ===
-
-// 1.8.1
 test('customizeResponseText at init should override success and failure messages', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -236,7 +223,6 @@ test('customizeResponseText at init should override success and failure messages
   },
 }));
 
-// 1.8.2
 test('customizeResponseText partial override should keep failure message default', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -275,7 +261,6 @@ test('customizeResponseText partial override should keep failure message default
   },
 }));
 
-// 1.8.3
 test('customizeResponseText returning undefined should use default message', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -304,7 +289,6 @@ test('customizeResponseText returning undefined should use default message', asy
   },
 }));
 
-// 1.8.4
 test('customizeResponseTitle at init should override message header', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -340,9 +324,6 @@ test('customizeResponseTitle at init should override message header', async (t) 
   },
 }));
 
-// === §1.9 customizeResponseText / customizeResponseTitle — changed at runtime ===
-
-// 1.9.1
 test('customizeResponseText changed at runtime should apply to subsequent messages only', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -382,7 +363,6 @@ test('customizeResponseText changed at runtime should apply to subsequent messag
   },
 }));
 
-// 1.9.2
 test('customizeResponseTitle changed at runtime should apply to subsequent messages only', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -420,9 +400,6 @@ test('customizeResponseTitle changed at runtime should apply to subsequent messa
   },
 }));
 
-// === §3.12 Re-open popup — chat history preserved ===
-
-// 3.12.1
 test('Chat history should be preserved after close and re-open', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -459,7 +436,6 @@ test('Chat history should be preserved after close and re-open', async (t) => {
   { actions: [{ name: 'clearSorting', args: {} }] },
 ]));
 
-// 3.12.2
 test('History should be preserved across multiple close/re-opens', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -475,7 +451,6 @@ test('History should be preserved across multiple close/re-opens', async (t) => 
 
   await t.expect(aiChat.getMessages().count).eql(2);
 
-  // Close and re-open 3 times
   for (let i = 0; i < 3; i += 1) {
     await t.click(aiChat.getCloseButton().element);
 
@@ -494,7 +469,6 @@ test('History should be preserved across multiple close/re-opens', async (t) => 
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 3.12.3
 test('Clear-chat after re-open should remove all history', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
