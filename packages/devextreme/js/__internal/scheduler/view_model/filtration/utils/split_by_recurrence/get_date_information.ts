@@ -1,7 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 
 import { globalCache } from '../../../../global_cache';
-import timeZoneUtils from '../../../../m_utils_time_zone';
+import timeZoneUtils from '../../../../utils_time_zone';
 
 export interface DateInformation {
   offsetMs: number;

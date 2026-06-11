@@ -1,4 +1,4 @@
-import Autocomplete from '../__internal/ui/m_autocomplete';
+import Autocomplete from '../__internal/ui/autocomplete';
 
 export default Autocomplete;
 

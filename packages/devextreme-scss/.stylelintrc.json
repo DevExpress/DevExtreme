@@ -1,6 +1,7 @@
 {
     "plugins": [
-        "stylelint-scss"
+        "stylelint-scss",
+        "@stylistic/stylelint-plugin"
     ],
     "extends": "stylelint-config-standard-scss",
     "ignoreFiles": "!**/*.{css,scss}",
@@ -12,10 +13,9 @@
         "declaration-block-no-redundant-longhand-properties": null,
         "declaration-no-important": true,
         "font-family-name-quotes": "always-unless-keyword",
-        "indentation": [2, { "ignore": ["inside-parens"] }],
+        "@stylistic/indentation": [2, { "ignore": ["inside-parens"] }],
         "keyframes-name-pattern": "dx-[a-z0-9-]+",
-        "max-empty-lines": 2,
-        "max-line-length": null,
+        "@stylistic/max-empty-lines": 2,
         "media-feature-name-no-vendor-prefix": true,
         "no-descending-specificity": null,
         "no-empty-source": null,
@@ -26,14 +26,13 @@
         "selector-no-vendor-prefix": true,
         "selector-pseudo-element-colon-notation": "double",
         "shorthand-property-no-redundant-values": null,
-        "string-quotes": null,
         "value-no-vendor-prefix": true,
         "value-keyword-case": null,
         "selector-not-notation": null,
         "keyframe-selector-notation": null,
         "media-feature-range-notation": null,
-        "no-eol-whitespace": true,
-        "no-missing-end-of-source-newline": true,
+        "@stylistic/no-eol-whitespace": true,
+        "@stylistic/no-missing-end-of-source-newline": true,
 
         "scss/at-else-empty-line-before": null,
         "scss/at-if-closing-brace-newline-after": null,

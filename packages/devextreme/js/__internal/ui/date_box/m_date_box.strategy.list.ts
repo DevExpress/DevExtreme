@@ -7,10 +7,10 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import { getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import List from '@ts/ui/list/list.edit.search';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
 
@@ -288,7 +288,9 @@ class ListStrategy extends DateBoxStrategy {
   }
 
   _updatePopupHeight(): void {
-    const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
+    const { dropDownOptions } = this.dateBox.option();
+    const dropDownOptionsHeight = getSizeValue(dropDownOptions?.height);
+
     if (dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
       this.dateBox._setPopupOption('height', 'auto');
       const popupHeight = getOuterHeight(this._widget.$element());

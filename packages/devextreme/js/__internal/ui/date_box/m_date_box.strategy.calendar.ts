@@ -8,7 +8,7 @@ import type { ToolbarItem } from '@js/ui/popup';
 import { isMaterial } from '@js/ui/themes';
 import { splitPair } from '@ts/core/utils/m_common';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import DateBoxStrategy from './m_date_box.strategy';
 
 const TODAY_BUTTON_CLASS = 'dx-button-today';

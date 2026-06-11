@@ -48,7 +48,7 @@ export async function saveChange(dispatch, change) {
     return null;
   }
 }
-async function sendChange(url, change) {
+function sendChange(url, change) {
   switch (change.type) {
     case 'insert':
       return sendRequest(`${url}/InsertOrder`, 'POST', {

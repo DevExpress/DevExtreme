@@ -51,7 +51,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
 import type { Button } from '@ts/ui/button/button';
-import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/drop_down_editor';
 import Editor from '@ts/ui/editor/editor';
 import { setLabelWidthByMaxLabelWidth } from '@ts/ui/form/components/label';
 import {
@@ -109,7 +109,7 @@ import type { ScreenSizeQualifier } from '@ts/ui/responsive_box';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { TabPanelProperties } from '@ts/ui/tab_panel/tab_panel';
 import TabPanel from '@ts/ui/tab_panel/tab_panel';
-import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/m_text_editor.base';
+import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/text_editor.base';
 import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
 
 export type FormAICommandName = 'smartPaste';

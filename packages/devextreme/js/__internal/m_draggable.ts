@@ -439,7 +439,7 @@ class Draggable extends DOMComponent<Draggable, Properties> {
   }
 
   _stopAnimator() {
-    this._scrollAnimator.stop();
+    this._scrollAnimator?.stop();
   }
 
   _addWidgetPrefix(className?) {

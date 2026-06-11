@@ -3,14 +3,13 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import messageLocalization from 'common/core/localization/message';
-
 import ChatTextArea, { CHAT_TEXT_AREA_ATTACH_BUTTON, DEFAULT_ALLOWED_FILE_EXTENSIONS } from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import FileUploader, { FILEUPLOADER_CLASS, FILEUPLOADER_CANCEL_BUTTON_CLASS } from '__internal/ui/file_uploader/file_uploader';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import Informer, { INFORMER_CLASS, INFORMER_TEXT_CLASS } from '__internal/ui/informer/informer';
-import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/m_text_editor.base';
-import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/m_text_area';
+import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/text_editor.base';
+import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/text_area';
 
 const fakeFile = {
     name: 'fakefile.png',

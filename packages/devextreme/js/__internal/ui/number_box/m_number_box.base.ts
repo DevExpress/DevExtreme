@@ -17,9 +17,9 @@ import {
 import { Deferred } from '@js/core/utils/deferred';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import { isDefined } from '@js/core/utils/type';
-import TextEditor from '@ts/ui/text_box/m_text_editor';
+import TextEditor from '@ts/ui/text_box/text_editor';
 
-import type { TextEditorBaseProperties } from '../text_box/m_text_editor.base';
+import type { TextEditorBaseProperties } from '../text_box/text_editor.base';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
 import SpinButtons from './m_number_box.spins';
 

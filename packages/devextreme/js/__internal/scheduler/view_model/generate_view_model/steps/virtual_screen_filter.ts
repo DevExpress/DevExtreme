@@ -1,4 +1,4 @@
-import timeZoneUtils from '../../../m_utils_time_zone';
+import timeZoneUtils from '../../../utils_time_zone';
 import type ViewDataProvider from '../../../workspaces/view_model/m_view_data_provider';
 import { isAppointmentMatchedIntervals } from '../../common/is_appointment_matched_intervals';
 import type { ListEntity } from '../../types';
@@ -16,8 +16,8 @@ export const filterByVirtualScreen = <T extends ListEntity>(
   const groupIntervalsMap = new Map<number, { min: number; max: number }>();
   groupsInfo.forEach((group) => {
     groupIntervalsMap.set(group.groupIndex, {
-      min: timeZoneUtils.createUTCDateWithLocalOffset(group.startDate).getTime(),
-      max: timeZoneUtils.createUTCDateWithLocalOffset(group.endDate).getTime(),
+      min: (timeZoneUtils.createUTCDateWithLocalOffset(group.startDate) as Date).getTime(),
+      max: (timeZoneUtils.createUTCDateWithLocalOffset(group.endDate) as Date).getTime(),
     });
   });
 

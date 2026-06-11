@@ -2,7 +2,7 @@ import devices from '@js/core/devices';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { inputType } from '@js/core/utils/support';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
 
