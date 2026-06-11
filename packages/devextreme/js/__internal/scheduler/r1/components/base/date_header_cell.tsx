@@ -9,7 +9,7 @@ import type { CellBaseProps } from './cell';
 import { CellBaseDefaultProps } from './cell';
 import { DateHeaderText } from './date_header_text';
 
-export interface DateHeaderCellProps extends CellBaseProps {
+export interface DateHeaderCellProps extends Omit<CellBaseProps, 'endDate'> {
   today: boolean;
   colSpan: number;
   isWeekDayCell: boolean;
