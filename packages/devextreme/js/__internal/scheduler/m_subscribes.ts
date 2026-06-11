@@ -8,7 +8,6 @@ import { getDeltaTime } from './appointments/resizing/get_delta_time';
 import { getDateFormatType, getDateText } from './appointments_new/utils/get_date_text';
 import { VERTICAL_VIEW_TYPES } from './constants';
 import type Scheduler from './m_scheduler';
-import { utils } from './m_utils';
 import { isAppointmentTakesAllDay } from './r1/utils/base';
 import type {
   AppointmentTooltipItem,
@@ -16,6 +15,7 @@ import type {
   SafeAppointment,
   TargetedAppointment,
 } from './types';
+import { utils } from './utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import type { AppointmentItemViewModel } from './view_model/types';
 

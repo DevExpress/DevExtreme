@@ -8,7 +8,7 @@ import {
 
 import fx from '../../../common/core/animation/fx';
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 describe('DST/STD for recurrence appointments, T804886 and T856624', () => {
   beforeEach(() => {

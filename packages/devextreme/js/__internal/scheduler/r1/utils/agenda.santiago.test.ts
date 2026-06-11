@@ -4,14 +4,14 @@
 
 import { describe, expect, it } from '@jest/globals';
 
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../utils_time_zone';
 import { calculateRows } from './agenda';
 
 const createDate = (year: number, month: number, day: number, hours: number) => {
-  const dateUTC = timeZoneUtils.createUTCDateWithLocalOffset(
+  const date = timeZoneUtils.createUTCDateWithLocalOffset(
     new Date(year, month, day, hours),
-  ).getTime();
-  return dateUTC;
+  ) as Date;
+  return date.getTime();
 };
 
 describe('calculateRows', () => {

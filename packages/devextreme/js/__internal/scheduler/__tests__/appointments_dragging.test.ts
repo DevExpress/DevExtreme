@@ -7,7 +7,7 @@ import type { Properties } from '@js/ui/scheduler';
 import eventsEngine from '@ts/events/core/m_events_engine';
 
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 import type { SchedulerModel } from './__mock__/model/scheduler';
 
 const createScheduler = (config: Properties) => baseCreateScheduler({

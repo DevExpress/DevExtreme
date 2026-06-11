@@ -532,3 +532,53 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await clearRemoteOperations();
   });
 });
+
+test('remote operations: true -> should load data for each search value in header filter', async (t) => {
+  // arrange
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const filterIcon = cardView
+    .getHeaderPanel()
+    .getHeaderItem()
+    .getFilterIcon();
+
+  // act
+  await t.click(filterIcon);
+
+  // assert
+  const list = cardView.getHeaderFilterList();
+  await t.expect(list.getItems().count).eql(10);
+
+  // act
+  await t.typeText(list.searchInput, 'A_1');
+
+  // assert
+  await t.expect(list.getItems().count).eql(1);
+  await t.expect(list.getItem(0).text).eql('A_1');
+
+  // act
+  await t.typeText(list.searchInput, '1');
+
+  // assert
+  await t.expect(list.getItems().count).eql(0);
+}).before(async (t) => {
+  await t.addRequestHooks(remoteApiMock);
+  await createWidget('dxCardView', () => ({
+    dataSource: {
+      store: (window as any).DevExpress.data.AspNet.createStore({
+        key: 'id',
+        loadUrl: 'https://api/data',
+      }),
+    },
+    columns: ['A'],
+    remoteOperations: true,
+    headerFilter: {
+      visible: true,
+      search: {
+        enabled: true,
+      },
+    },
+    height: 600,
+  }));
+}).after(async (t) => {
+  await t.removeRequestHooks(remoteApiMock);
+});

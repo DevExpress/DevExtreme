@@ -1,7 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import type { DateHeaderData } from '@ts/scheduler/types';
 
-import timeZoneUtils from '../../m_utils_time_zone';
 import {
   formatWeekdayAndDay,
   getDisplayedCellCount,
@@ -11,7 +10,8 @@ import {
   isTimelineView,
 } from '../../r1/utils/index';
 import { VIEWS } from '../../utils/options/constants_view';
-import type { ViewDataProviderExtendedOptions } from './m_types';
+import timeZoneUtils from '../../utils_time_zone';
+import type { ViewDataProviderExtendedOptions } from './types';
 
 export class DateHeaderDataGenerator {
   constructor(private readonly viewDataGenerator) {

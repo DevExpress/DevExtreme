@@ -11,7 +11,7 @@ import {
   createAppointmentPopup,
   disposeAppointmentPopups,
 } from '../__tests__/__mock__/create_appointment_popup';
-import { setupSchedulerTestEnvironment } from '../__tests__/__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from '../__tests__/__mock__/mock_scheduler';
 
 describe('Isolated AppointmentPopup environment', () => {
   beforeEach(() => {

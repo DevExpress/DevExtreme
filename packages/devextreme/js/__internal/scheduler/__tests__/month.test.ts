@@ -7,7 +7,7 @@ import {
   DEFAULT_CELL_WIDTH,
   DEFAULT_TIMELINE_CELL_HEIGHT,
   setupSchedulerTestEnvironment,
-} from './__mock__/m_mock_scheduler';
+} from './__mock__/mock_scheduler';
 
 describe('month', () => {
   it('should render long appointments with parts and hide smaller ones into spread collectors', async () => {

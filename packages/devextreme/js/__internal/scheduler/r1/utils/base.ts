@@ -7,7 +7,6 @@ import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 import {
   HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
 } from '../../constants';
-import timeZoneUtils from '../../m_utils_time_zone';
 import type {
   AllDayPanelModeType,
   AppointmentGeometry,
@@ -24,6 +23,8 @@ import type {
 import type { ResourceLoader } from '../../utils/loader/resource_loader';
 import type { ResourceId } from '../../utils/loader/types';
 import { VIEWS } from '../../utils/options/constants_view';
+import timeZoneUtils from '../../utils_time_zone';
+import type { TimeZoneCalculator } from '../timezone_calculator';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;
@@ -304,12 +305,12 @@ export const calculateCellIndex: CalculateCellIndex = (
 ) => columnIndex * rowCount + rowIndex;
 
 export const getTotalRowCountByCompleteData = (
-  completeData: unknown[][],
+  completeData: unknown[] | unknown[][],
 ): number => completeData.length;
 
 export const getDisplayedRowCount = (
   displayedRowCount: number | undefined,
-  completeData: unknown[][],
+  completeData: unknown[] | unknown[][],
 ): number => displayedRowCount ?? getTotalRowCountByCompleteData(completeData);
 
 export const getStartViewDateWithoutDST = (startViewDate: Date, startDayHour: number): Date => {
@@ -335,9 +336,10 @@ export const getKeyByGroup = (
   return '0';
 };
 
-export const getToday = (indicatorTime: Date | undefined, timeZoneCalculator: {
-  createDate: (todayDate: Date, path: unknown) => Date;
-}): Date => {
+export const getToday = (
+  indicatorTime: Date | undefined,
+  timeZoneCalculator: TimeZoneCalculator | undefined,
+): Date => {
   const todayDate = indicatorTime ?? new Date();
 
   return timeZoneCalculator?.createDate(todayDate, 'toGrid') || todayDate;

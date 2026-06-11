@@ -23,7 +23,7 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
 import type {
-  Controllers, Module,
+  Controllers, Module, RowKey,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
@@ -1540,6 +1540,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       d.resolve([]);
     }
     return d;
+  }
+
+  public getAllDataRowKeys(): Promise<RowKey[]> {
+    return Promise.resolve(this.loadAll(undefined) as unknown as Promise<Item[]>)
+      .then((items) => items
+        .filter((item) => item.rowType === 'data')
+        .map((item) => item.key));
   }
 
   public getKeyByRowIndex(rowIndex, byLoaded?) {

@@ -1,18 +1,21 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
-import type SchedulerWorkSpace from '../workspaces/m_work_space';
+export interface CurrentTimeShaderConfig {
+  $container: dxElementWrapper;
+}
 
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
 class CurrentTimeShader {
-  protected $container = this.workSpace.getScrollable().$content();
+  protected readonly $container: dxElementWrapper;
 
   protected shader!: dxElementWrapper[];
 
   protected $shader!: dxElementWrapper;
 
-  constructor(protected workSpace: SchedulerWorkSpace) {
+  constructor(config: CurrentTimeShaderConfig) {
+    this.$container = config.$container;
   }
 
   render(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {

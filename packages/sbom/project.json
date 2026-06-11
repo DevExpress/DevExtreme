@@ -18,7 +18,7 @@
         "commands": [
           "rm -rf dist/",
           "pnpm dx-make-sbom ../../ dist/ devextreme,devextreme-react,devextreme-angular,devextreme-vue,devextreme-themebuilder",
-          "cp dist/devextreme.sbom.json dist/devextreme-dist.sbom.json"
+          "cp dist/devextreme.cdx.json dist/devextreme-dist.cdx.json"
         ]
       }
     },

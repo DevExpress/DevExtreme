@@ -21,7 +21,7 @@ Generates SBOM files for all public packages:
 - `devextreme-vue`
 - `devextreme-themebuilder`
 
-**Output:** `dist/*.sbom.json`
+**Output:** `dist/*.cdx.json`
 
 ### Generate SBOM for Specific Package (development)
 
@@ -41,4 +41,4 @@ pnpm nx make sbom devextreme --debug
 
 - This workspace operates as an isolated pnpm workspace due to GitHub Packages access constraints and requires separate `pnpm install` or `pnpm add` commands
 - Dependencies are installed automatically before each build via the `install-dependencies` target
-- The `devextreme-dist.sbom.json` file is identical to `devextreme.sbom.json`
+- The `devextreme-dist.cdx.json` file is identical to `devextreme.cdx.json`
