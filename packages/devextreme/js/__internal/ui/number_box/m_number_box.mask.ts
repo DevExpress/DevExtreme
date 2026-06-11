@@ -25,14 +25,16 @@ import {
 } from './m_utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
-const MOVE_FORWARD = 1;
-const MOVE_BACKWARD = -1;
+const MOVE_FORWARD = 1 as const;
+const MOVE_BACKWARD = -1 as const;
 const MINUS = '-';
 const MINUS_KEY = 'minus';
 const INPUT_EVENT = 'input';
 const NUMPAD_DOT_KEY_CODE = 110;
 
 const CARET_TIMEOUT_DURATION = 0;
+
+type CaretMoveDirection = typeof MOVE_FORWARD | typeof MOVE_BACKWARD;
 
 export interface NumberBoxMaskProperties extends Omit<Properties, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput'
 | 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing'
@@ -86,9 +88,9 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       backspace: that._removeHandler.bind(that),
       leftArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
       rightArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
-      home: that._moveCaretToBoundaryEventHandler.bind(that, MOVE_FORWARD),
+      home: that._boundaryKeyHandler.bind(that, MOVE_FORWARD),
       enter: that._updateFormattedValue.bind(that),
-      end: that._moveCaretToBoundaryEventHandler.bind(that, MOVE_BACKWARD),
+      end: that._boundaryKeyHandler.bind(that, MOVE_BACKWARD),
     };
   }
 
@@ -112,7 +114,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
           if (decimalSeparatorIndex >= 0) {
             this._caret({ start: decimalSeparatorIndex, end: decimalSeparatorIndex });
           } else {
-            this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+            this._moveCaretToBoundary(MOVE_BACKWARD);
           }
         }
       }, CARET_TIMEOUT_DURATION);
@@ -189,20 +191,29 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     inputElement.scrollLeft = edge === 'end' ? inputElement.scrollWidth : 0;
   }
 
-  _moveCaretToBoundary(direction) {
-    const boundaries = getCaretBoundaries(this._getInputVal(), this._getFormatPattern());
-    const newCaret = getCaretWithOffset(direction === MOVE_FORWARD ? boundaries.start : boundaries.end, 0);
+  _moveCaretToBoundary(direction: CaretMoveDirection): void {
+    const boundaries = getCaretBoundaries(
+      this._getInputVal(),
+      this._getFormatPattern(),
+    );
+
+    const newCaret = getCaretWithOffset(
+      direction === MOVE_FORWARD
+        ? boundaries.start
+        : boundaries.end,
+      0,
+    );
 
     this._caret(newCaret);
   }
 
-  _moveCaretToBoundaryEventHandler(direction, e) {
-    if (!this._useMaskBehavior() || e?.shiftKey) {
+  _boundaryKeyHandler(direction: CaretMoveDirection, e: KeyboardEvent): void {
+    if (!this._useMaskBehavior() || e.shiftKey) {
       return;
     }
 
     this._moveCaretToBoundary(direction);
-    e?.preventDefault();
+    e.preventDefault();
     this._scrollInputTo(direction === MOVE_FORWARD ? 'start' : 'end');
   }
 
