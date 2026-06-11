@@ -51,3 +51,6 @@ catalogs:
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8
+
+minimumReleaseAgeExclude:
+  - "eslint-config-devextreme"
