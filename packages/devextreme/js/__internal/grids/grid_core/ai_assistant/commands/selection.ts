@@ -1,12 +1,17 @@
+import type { DataSource } from '@js/common/data';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid, RowKey } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
+import type { LoadedWindow } from './types';
 import {
   compositeKeyPairSchema,
+  createKeyGetter,
+  extractKeysFromWindows,
   isKeyShapeValid,
   normalizeKey,
+  pickKeysByIndex,
   splitIntoLoadWindows,
 } from './utils';
 
@@ -57,24 +62,6 @@ const selectionByIndexesCommandSchema = z.object({
   scope: z.enum(['allPages', 'page']),
 }).strict();
 
-// Maps 1-based indexes to the keys at those positions;
-// an index past the last entry rejects the whole set.
-const pickKeysByIndex = (
-  keys: RowKey[],
-  indexes: number[],
-): RowKey[] | null => {
-  const normalizedRowIndexes = indexes.map((index) => index - 1);
-  const allIndexesValid = normalizedRowIndexes.every(
-    (index) => index < keys.length,
-  );
-
-  if (!allIndexesValid) {
-    return null;
-  }
-
-  return normalizedRowIndexes.map((index) => keys[index]);
-};
-
 const resolveKeysFromCurrentPage = (
   component: InternalGrid,
   indexes: number[],
@@ -85,6 +72,33 @@ const resolveKeysFromCurrentPage = (
   const dataKeys = dataItems.map((item) => item.key);
 
   return pickKeysByIndex(dataKeys, indexes);
+};
+
+const isDataSourceGrouped = (
+  dataSource: DataSource,
+): boolean => {
+  const grouping = dataSource.group();
+
+  return Array.isArray(grouping) ? grouping.length > 0 : !!grouping;
+};
+
+const loadIndexWindows = (
+  store: ReturnType<DataSource['store']>,
+  baseLoadOptions: Record<string, unknown>,
+  indexes: number[],
+  maxWindowSize: number,
+): Promise<LoadedWindow[]> => {
+  const windows = splitIntoLoadWindows(indexes, maxWindowSize);
+
+  return Promise.all(windows.map((window) => {
+    const skip = window[0] - 1;
+    const take = window[window.length - 1] - window[0] + 1;
+    return store.load({ ...baseLoadOptions, skip, take })
+      .then((result) => {
+        const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
+        return { window, rows };
+      });
+  }));
 };
 
 const resolveKeysFromAllPagesRemote = async (
@@ -106,52 +120,24 @@ const resolveKeysFromAllPagesRemote = async (
 
   // Under grouping store.load returns group structures rather than flat rows,
   // so an index no longer maps to a single data row. Fail instead of resolving meaningless keys
-  const grouping = dataSource.group();
-  const isGrouped = Array.isArray(grouping) ? grouping.length > 0 : !!grouping;
-
-  if (isGrouped) {
+  if (isDataSourceGrouped(dataSource)) {
     return null;
   }
 
-  const dataController = component.getController('data');
-  const filter = dataController.getCombinedFilter(true);
+  const filter = component.getController('data').getCombinedFilter(true);
   const baseLoadOptions = {
     ...dataSource.loadOptions(),
     filter,
   };
 
-  const windows = splitIntoLoadWindows(indexes, dataSource.pageSize() * MAX_LOAD_WINDOW_PAGES);
+  const loadedWindows = await loadIndexWindows(
+    store,
+    baseLoadOptions,
+    indexes,
+    dataSource.pageSize() * MAX_LOAD_WINDOW_PAGES,
+  );
 
-  const loadedWindows = await Promise.all(windows.map((window) => {
-    const skip = window[0] - 1;
-    const take = window[window.length - 1] - window[0] + 1;
-    return store.load({ ...baseLoadOptions, skip, take })
-      .then((result) => {
-        const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
-        return { window, rows };
-      });
-  }));
-
-  const keys: RowKey[] = [];
-
-  for (const { window, rows } of loadedWindows) {
-    if (!Array.isArray(rows)) {
-      return null;
-    }
-
-    for (const index of window) {
-      // The requested index maps to `window[0]` offset within the loaded rows
-      const row = rows[index - window[0]];
-
-      if (row === undefined) {
-        return null;
-      }
-
-      keys.push(store.keyOf(row));
-    }
-  }
-
-  return keys;
+  return extractKeysFromWindows(loadedWindows, createKeyGetter(keyExpr));
 };
 
 const resolveKeysFromAllPagesLocal = async (

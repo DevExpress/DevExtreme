@@ -6,10 +6,13 @@ import {
 import { z } from 'zod';
 
 import {
+  createKeyGetter,
+  extractKeysFromWindows,
   isKeyShapeValid,
   normalizeKey,
   // eslint-disable-next-line spellcheck/spell-checker
   optionalNullish,
+  pickKeysByIndex,
   resolveFilterValue,
   splitIntoLoadWindows,
 } from '../utils';
@@ -98,6 +101,48 @@ describe('optionalNullish', () => {
   });
 });
 /* eslint-enable spellcheck/spell-checker */
+
+describe('createKeyGetter', () => {
+  describe('single-field keyExpr (string)', () => {
+    it('extracts the primitive key from a row', () => {
+      const getKey = createKeyGetter('id');
+
+      expect(getKey({ id: 42, name: 'Alpha' })).toBe(42);
+    });
+
+    it('extracts a string key', () => {
+      const getKey = createKeyGetter('code');
+
+      expect(getKey({ code: 'abc', name: 'Alpha' })).toBe('abc');
+    });
+
+    it('resolves a nested path expression', () => {
+      const getKey = createKeyGetter('meta.id');
+
+      expect(getKey({ meta: { id: 7 } })).toBe(7);
+    });
+
+    it('returns undefined when the field is absent', () => {
+      const getKey = createKeyGetter('id');
+
+      expect(getKey({ name: 'Alpha' })).toBeUndefined();
+    });
+  });
+
+  describe('composite keyExpr (array)', () => {
+    it('extracts an object containing only the listed fields', () => {
+      const getKey = createKeyGetter(['a', 'b']);
+
+      expect(getKey({ a: 1, b: 10, name: 'Alpha' })).toEqual({ a: 1, b: 10 });
+    });
+
+    it('omits fields that are absent from the row', () => {
+      const getKey = createKeyGetter(['a', 'b']);
+
+      expect(getKey({ a: 1, name: 'Alpha' })).toEqual({ a: 1 });
+    });
+  });
+});
 
 describe('isKeyShapeValid', () => {
   describe('single-field keyExpr (string)', () => {
@@ -200,5 +245,77 @@ describe('splitIntoLoadWindows', () => {
 
   it('deduplicates repeated indexes', () => {
     expect(splitIntoLoadWindows([1, 1, 2, 2, 3], 10)).toEqual([[1, 2, 3]]);
+  });
+});
+
+describe('pickKeysByIndex', () => {
+  it('maps 1-based indexes to the keys at those positions', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [1, 3])).toEqual(['a', 'c']);
+  });
+
+  it('preserves the requested index order', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [3, 1])).toEqual(['c', 'a']);
+  });
+
+  it('resolves a single index', () => {
+    expect(pickKeysByIndex([10, 20, 30], [2])).toEqual([20]);
+  });
+
+  it('accepts the last valid index', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [3])).toEqual(['c']);
+  });
+
+  it('returns null when any index exceeds the key count', () => {
+    expect(pickKeysByIndex(['a', 'b'], [1, 3])).toBeNull();
+  });
+
+  it('returns null for any index against an empty key list', () => {
+    expect(pickKeysByIndex([], [1])).toBeNull();
+  });
+});
+
+describe('extractKeysFromWindows', () => {
+  const idGetter = (row: unknown): number => (row as { id: number }).id;
+
+  it('maps each window index to its row key via keyGetter', () => {
+    const loaded = [
+      { window: [2, 3], rows: [{ id: 20 }, { id: 30 }] },
+    ];
+
+    expect(extractKeysFromWindows(loaded, idGetter)).toEqual([20, 30]);
+  });
+
+  it('offsets each index by the window start', () => {
+    // window starts at 3, so index 3 -> rows[0] and index 5 -> rows[2]
+    const loaded = [
+      { window: [3, 5], rows: [{ id: 30 }, { id: 40 }, { id: 50 }] },
+    ];
+
+    expect(extractKeysFromWindows(loaded, idGetter)).toEqual([30, 50]);
+  });
+
+  it('concatenates keys across multiple windows', () => {
+    const loaded = [
+      { window: [1], rows: [{ id: 10 }] },
+      { window: [4], rows: [{ id: 40 }] },
+    ];
+
+    expect(extractKeysFromWindows(loaded, idGetter)).toEqual([10, 40]);
+  });
+
+  it('returns null when a window failed to load (rows is not an array)', () => {
+    const loaded = [
+      { window: [1], rows: undefined },
+    ];
+
+    expect(extractKeysFromWindows(loaded, idGetter)).toBeNull();
+  });
+
+  it('returns null when an index has no loaded row', () => {
+    const loaded = [
+      { window: [1, 2], rows: [{ id: 10 }] },
+    ];
+
+    expect(extractKeysFromWindows(loaded, idGetter)).toBeNull();
   });
 });
