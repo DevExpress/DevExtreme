@@ -151,11 +151,11 @@ export class GroupedDataMapProvider {
     } = this.groupedDataMap;
     const { viewOffset } = this.viewOptions;
 
-    const gIdx = groupIndex ?? 0;
-    let rows: CellInfo[][] = dateTableGroupedMap[gIdx] || [];
+    const normalizedGroupIndex = groupIndex ?? 0;
+    let rows: CellInfo[][] = dateTableGroupedMap[normalizedGroupIndex] || [];
 
     if (allDay && !this.viewOptions.isVerticalGrouping) {
-      const allDayRow = allDayPanelGroupedMap[gIdx];
+      const allDayRow = allDayPanelGroupedMap[normalizedGroupIndex];
       rows = allDayRow ? [allDayRow] : [];
     }
 
