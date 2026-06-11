@@ -10,7 +10,7 @@ import type { OptionWithChanges } from '@ts/grids/new/grid_core/options_controll
 import { OptionsController } from '../options_controller/options_controller';
 import { getTreeNodeByPath } from '../utils/tree/index';
 import { updateColumnSettings } from './columns_settings/index';
-import { IGNORE_COLUMN_OPTION_NAMES } from './const';
+import { COLUMNS_OBJ_COMPARE_DEPTH, IGNORE_COLUMN_OPTION_NAMES } from './const';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, ColumnsConfigurationFromData, VisibleColumn } from './types';
 import {
@@ -176,7 +176,7 @@ export class ColumnsController {
     newValue: unknown,
     prevValue: unknown,
   ): void {
-    if (!equalByValue(prevValue, newValue, { maxDepth: 5 })) {
+    if (!equalByValue(prevValue, newValue, { maxDepth: COLUMNS_OBJ_COMPARE_DEPTH })) {
       const fullOptionPath = `columns[${columnIndex}].${optionName}`;
       this.options.notifyColumnOptionChanged(fullOptionPath, newValue, prevValue);
     }
