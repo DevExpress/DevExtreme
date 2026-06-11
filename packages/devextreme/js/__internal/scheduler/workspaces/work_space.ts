@@ -308,7 +308,7 @@ export interface WorkspaceOptionsInternal {
   onShowAllDayPanel: (isVisible: boolean) => void;
   getHeaderHeight: (() => number);
   onScrollEnd: () => void;
-  onInitialized: (e: InitializedEventInfo<SchedulerWorkSpace>) => void
+  onInitialized: (e: InitializedEventInfo<SchedulerWorkSpace>) => void;
   onDisposing: () => void;
 
   notifyScheduler: NotifyScheduler;
@@ -544,7 +544,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return undefined;
     }
 
-    // notifyScheduler.invoke delegates to scheduler.fire which is loosely typed
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return notifyScheduler.invoke(funcName, ...args);
   }
@@ -970,7 +969,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.option().crossScrollingEnabled;
   }
 
-  protected getElementClass(): string { noop(); return ''; }
+  protected getElementClass(): string { return ''; }
 
   protected getRowCount(): number {
     return this.viewDataProvider.getRowCount({
@@ -1691,9 +1690,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const window = getWindow();
     const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
     const isOutsideHorizontalScrollable = event.pageX < scrollableSize.left
-    || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
+      || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
     const isOutsideVerticalScrollable = event.pageY < scrollableSize.top
-    || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));
+      || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));
 
     if (isTargetInAllDayPanel && !isOutsideHorizontalScrollable) {
       return false;
@@ -1847,7 +1846,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const { horizontalScrollingState, verticalScrollingState } = this.virtualScrollingDispatcher;
 
     const cellCount = horizontalScrollingState?.itemCount
-    ?? this.getTotalCellCount(this.getGroupCount());
+      ?? this.getTotalCellCount(this.getGroupCount());
 
     const cellWidth = this.getCellWidth();
     const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
@@ -1977,12 +1976,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const result = {
       top: {
         hours: Math.floor(scrolledCellCount * this.option().hoursInterval)
-        + this.option().startDayHour,
+          + this.option().startDayHour,
         minutes: scrolledCellCount % 2 ? 30 : 0,
       },
       bottom: {
         hours: Math.floor(totalCellCount * this.option().hoursInterval)
-        + this.option().startDayHour,
+          + this.option().startDayHour,
         minutes: Math.floor(totalCellCount) % 2 ? 30 : 0,
       },
     };
@@ -2040,7 +2039,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const scrollableScrollLeft = this.getScrollableScrollLeft();
 
     const fullScrolledRowCount = scrollableScrollTop / cellHeight
-    - this.virtualScrollingDispatcher.topVirtualRowsCount;
+      - this.virtualScrollingDispatcher.topVirtualRowsCount;
 
     let scrolledRowCount = Math.floor(fullScrolledRowCount);
     if (scrollableScrollTop % cellHeight !== 0) {
@@ -2112,7 +2111,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       top = 0;
     }
 
-    if (this.option('templatesRenderAsynchronously')) {
+    if (this._options.silent('templatesRenderAsynchronously')) {
       // eslint-disable-next-line no-restricted-globals
       setTimeout(() => {
         scrollable.scrollBy({ left, top });
@@ -2192,7 +2191,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     nextFocusedCell?: dxElementWrapper,
   ): void {
-    this.option('selectedCellData', selectedCellData as ViewCellData[]);
+    this.option().selectedCellData = selectedCellData as ViewCellData[];
     this.selectionChangedAction?.({
       selectedCellData: selectedCellData as ViewCellData[],
     });
@@ -3448,7 +3447,7 @@ const createDragBehaviorConfig = (
 
         e.event.data.itemElement = state.dragElement;
         e.event.data.initialPosition = initialPosition
-        ?? locate($(state.dragElement));
+          ?? locate($(state.dragElement));
         e.event.data.itemData = state.itemData;
         e.event.data.itemSettings = settings;
 
