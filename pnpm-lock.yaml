@@ -98,8 +98,8 @@ catalogs:
       specifier: 18.0.0
       version: 18.0.0
     eslint-config-devextreme:
-      specifier: 1.1.10
-      version: 1.1.10
+      specifier: 1.1.11
+      version: 1.1.11
     eslint-plugin-i18n:
       specifier: 2.4.0
       version: 2.4.0
@@ -689,7 +689,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1)))(eslint@9.39.4(jiti@2.6.1))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(0e9ac29b6f4810c87445357b15d2b1dc)
+        version: 1.1.11(0e9ac29b6f4810c87445357b15d2b1dc)
       eslint-plugin-deprecation:
         specifier: 3.0.0
         version: 3.0.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
@@ -1007,7 +1007,7 @@ importers:
         version: 9.39.4(jiti@2.6.1)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(9562fcc240b05f18c8811986df16bafd)
+        version: 1.1.11(9562fcc240b05f18c8811986df16bafd)
       eslint-plugin-i18n:
         specifier: 'catalog:'
         version: 2.4.0
@@ -1079,7 +1079,7 @@ importers:
         version: 9.39.4(jiti@2.6.1)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(06bb4d754cf50890d3246024b4c52626)
+        version: 1.1.11(06bb4d754cf50890d3246024b4c52626)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../../packages/eslint-migration-utils
@@ -1154,7 +1154,7 @@ importers:
         version: 9.39.4(jiti@2.6.1)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(055279970a77087ef4c7b0df98eac783)
+        version: 1.1.11(055279970a77087ef4c7b0df98eac783)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../../packages/eslint-migration-utils
@@ -1552,7 +1552,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1)))(eslint@9.39.4(jiti@2.6.1))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(c1490e8b9ef6a87150cdc0506b2c4e5e)
+        version: 1.1.11(c1490e8b9ef6a87150cdc0506b2c4e5e)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../eslint-migration-utils
@@ -1941,7 +1941,7 @@ importers:
         version: 9.39.4(jiti@2.6.1)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(0aee4d5f2e39befd644fa08d8203ac6a)
+        version: 1.1.11(0aee4d5f2e39befd644fa08d8203ac6a)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../eslint-migration-utils
@@ -2097,7 +2097,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1)))(eslint@9.39.4(jiti@2.6.1))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(a08ba21ffb24659da3c6462285dc5fef)
+        version: 1.1.11(a08ba21ffb24659da3c6462285dc5fef)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../eslint-migration-utils
@@ -2234,7 +2234,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1)))(eslint@9.39.4(jiti@2.6.1))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(dbcb07078c32d86c4fce4ac459d904a8)
+        version: 1.1.11(dbcb07078c32d86c4fce4ac459d904a8)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../eslint-migration-utils
@@ -2322,7 +2322,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1)))(eslint@9.39.4(jiti@2.6.1))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.10(a08ba21ffb24659da3c6462285dc5fef)
+        version: 1.1.11(a08ba21ffb24659da3c6462285dc5fef)
       eslint-plugin-i18n:
         specifier: 'catalog:'
         version: 2.4.0
@@ -10954,8 +10954,8 @@ packages:
       eslint-plugin-rulesdir: ^0.2.0
       eslint-plugin-spellcheck: ^0.0.19
 
-  eslint-config-devextreme@1.1.10:
-    resolution: {integrity: sha512-jDQ5EdujYQ27cXozUpcF7+sjH3SoErRuwAjJBA2eV98gpL0t25Wh4BEDYbv9W2lRgaO1DWj1iH/zuukUxqPfrA==}
+  eslint-config-devextreme@1.1.11:
+    resolution: {integrity: sha512-hQM6zqwmRT43MES4/nJJJ21CuKrcn1aayq5oPjCW4wEC1UG7H09tZLX41L7Zg2YceRcTgZ2y093vEMG8wlWoEw==}
     peerDependencies:
       '@stylistic/eslint-plugin': ^5.4.0
       '@typescript-eslint/eslint-plugin': ^8.44.0
@@ -19881,15 +19881,15 @@ snapshots:
   '@babel/core@7.28.3':
     dependencies:
       '@ampproject/remapping': 2.3.0
-      '@babel/code-frame': 7.29.0
-      '@babel/generator': 7.29.1
-      '@babel/helper-compilation-targets': 7.28.6
-      '@babel/helper-module-transforms': 7.28.6(@babel/core@7.28.3)
-      '@babel/helpers': 7.29.2
-      '@babel/parser': 7.29.2
-      '@babel/template': 7.28.6
-      '@babel/traverse': 7.29.0
-      '@babel/types': 7.29.0
+      '@babel/code-frame': 7.29.7
+      '@babel/generator': 7.29.7
+      '@babel/helper-compilation-targets': 7.29.7
+      '@babel/helper-module-transforms': 7.29.7(@babel/core@7.28.3)
+      '@babel/helpers': 7.29.7
+      '@babel/parser': 7.29.7
+      '@babel/template': 7.29.7
+      '@babel/traverse': 7.29.7
+      '@babel/types': 7.29.7
       convert-source-map: 2.0.0
       debug: 4.4.3
       gensync: 1.0.0-beta.2
@@ -20171,16 +20171,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-transforms@7.28.6(@babel/core@7.28.3)':
-    dependencies:
-      '@babel/core': 7.28.3
-      '@babel/helper-module-imports': 7.28.6
-      '@babel/helper-validator-identifier': 7.28.5
-      '@babel/traverse': 7.29.0
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   '@babel/helper-module-transforms@7.28.6(@babel/core@7.29.0)':
     dependencies:
       '@babel/core': 7.29.0
@@ -20189,6 +20179,16 @@ snapshots:
       '@babel/traverse': 7.29.0
     transitivePeerDependencies:
       - supports-color
+
+  '@babel/helper-module-transforms@7.29.7(@babel/core@7.28.3)':
+    dependencies:
+      '@babel/core': 7.28.3
+      '@babel/helper-module-imports': 7.29.7
+      '@babel/helper-validator-identifier': 7.29.7
+      '@babel/traverse': 7.29.7
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
 
   '@babel/helper-module-transforms@7.29.7(@babel/core@7.29.7)':
     dependencies:
@@ -30972,7 +30972,7 @@ snapshots:
       eslint-plugin-rulesdir: 0.2.2
       eslint-plugin-spellcheck: 0.0.20(eslint@9.39.4(jiti@2.6.1))
 
-  eslint-config-devextreme@1.1.10(055279970a77087ef4c7b0df98eac783):
+  eslint-config-devextreme@1.1.11(055279970a77087ef4c7b0df98eac783):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
@@ -30991,7 +30991,7 @@ snapshots:
       stylelint: 16.22.0(typescript@5.9.3)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@5.9.3))
 
-  eslint-config-devextreme@1.1.10(06bb4d754cf50890d3246024b4c52626):
+  eslint-config-devextreme@1.1.11(06bb4d754cf50890d3246024b4c52626):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.5.4))(eslint@9.39.4(jiti@2.6.1))(typescript@5.5.4)
@@ -31010,7 +31010,7 @@ snapshots:
       stylelint: 16.22.0(typescript@5.5.4)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@5.5.4))
 
-  eslint-config-devextreme@1.1.10(0aee4d5f2e39befd644fa08d8203ac6a):
+  eslint-config-devextreme@1.1.11(0aee4d5f2e39befd644fa08d8203ac6a):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.5.4))(eslint@9.39.4(jiti@2.6.1))(typescript@5.5.4)
@@ -31029,7 +31029,7 @@ snapshots:
       stylelint: 16.22.0(typescript@5.5.4)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@5.5.4))
 
-  eslint-config-devextreme@1.1.10(0e9ac29b6f4810c87445357b15d2b1dc):
+  eslint-config-devextreme@1.1.11(0e9ac29b6f4810c87445357b15d2b1dc):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
@@ -31048,7 +31048,7 @@ snapshots:
       stylelint: 16.22.0(typescript@5.9.3)
       stylelint-config-standard: 34.0.0(stylelint@16.22.0(typescript@5.9.3))
 
-  eslint-config-devextreme@1.1.10(9562fcc240b05f18c8811986df16bafd):
+  eslint-config-devextreme@1.1.11(9562fcc240b05f18c8811986df16bafd):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
@@ -31067,7 +31067,7 @@ snapshots:
       stylelint: 16.22.0(typescript@5.9.3)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@5.9.3))
 
-  eslint-config-devextreme@1.1.10(a08ba21ffb24659da3c6462285dc5fef):
+  eslint-config-devextreme@1.1.11(a08ba21ffb24659da3c6462285dc5fef):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5)
@@ -31086,7 +31086,7 @@ snapshots:
       stylelint: 16.22.0(typescript@4.9.5)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@4.9.5))
 
-  eslint-config-devextreme@1.1.10(c1490e8b9ef6a87150cdc0506b2c4e5e):
+  eslint-config-devextreme@1.1.11(c1490e8b9ef6a87150cdc0506b2c4e5e):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5)
@@ -31105,7 +31105,7 @@ snapshots:
       stylelint: 16.22.0(typescript@4.9.5)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@4.9.5))
 
-  eslint-config-devextreme@1.1.10(dbcb07078c32d86c4fce4ac459d904a8):
+  eslint-config-devextreme@1.1.11(dbcb07078c32d86c4fce4ac459d904a8):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5))(eslint@9.39.4(jiti@2.6.1))(typescript@4.9.5)
@@ -40768,7 +40768,7 @@ snapshots:
 
   tslint@6.1.3(typescript@5.5.4):
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       builtin-modules: 1.1.1
       chalk: 2.4.2
       commander: 2.20.3
@@ -40785,7 +40785,7 @@ snapshots:
 
   tslint@6.1.3(typescript@5.9.3):
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       builtin-modules: 1.1.1
       chalk: 2.4.2
       commander: 2.20.3

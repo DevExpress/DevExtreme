@@ -55,7 +55,7 @@ catalog:
   "@eslint/js": 9.39.4
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.10
+  eslint-config-devextreme: 1.1.11
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -115,3 +115,6 @@ allowBuilds:
   nx: true
   puppeteer: true
   unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - "eslint-config-devextreme"
