@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import type { CountGenerationConfig, DOMMetaData } from '../../types';
-import type ViewDataProvider from '../view_model/m_view_data_provider';
+import type ViewDataProvider from '../view_model/view_data_provider';
 
 export interface PositionHelperOptions {
   viewDataProvider: ViewDataProvider;
@@ -68,7 +68,11 @@ const getMaxAllowedHorizontalPosition = (
 
   if (!firstRow) return 0;
 
-  const { columnIndex } = viewDataProvider.getLastGroupCellPosition(groupIndex);
+  const lastGroupCellPosition = viewDataProvider.getLastGroupCellPosition(groupIndex);
+
+  if (!lastGroupCellPosition) return 0;
+
+  const { columnIndex } = lastGroupCellPosition;
   const cellPosition = firstRow[columnIndex];
 
   if (!cellPosition) return 0;
@@ -273,7 +277,11 @@ class GroupStrategyBase {
     showAllDayPanel,
     isGroupedAllDayPanel,
   }: GroupTopOptions): number {
-    const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
+    const lastGroupCellPosition = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
+
+    if (!lastGroupCellPosition) return 0;
+
+    const { rowIndex } = lastGroupCellPosition;
     const { dateTableCellsMeta } = this.DOMMetaData;
     const lastGroupRow = dateTableCellsMeta[rowIndex];
 

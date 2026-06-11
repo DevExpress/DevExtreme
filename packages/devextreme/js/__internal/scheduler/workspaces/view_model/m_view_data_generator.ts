@@ -27,12 +27,12 @@ import type {
   ViewCellGeneratedData,
   ViewCellIndex,
   ViewDataProviderExtendedOptions,
-} from './m_types';
+} from './types';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGenerator {
-  protected tableAllDay = false;
+  protected tableAllDay: boolean | undefined = false;
 
   public hiddenInterval = 0;
 
@@ -65,7 +65,7 @@ export class ViewDataGenerator {
     firstDayOfWeekOption: number | undefined,
     startViewDate: Date, // eslint-disable-line @typescript-eslint/no-unused-vars
   ): number {
-    return this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
+    return this.getFirstDayOfWeek(firstDayOfWeekOption ?? 0);
   }
 
   private getVisibleDayOffset(
@@ -789,7 +789,7 @@ export class ViewDataGenerator {
     return hoursInterval * toMs('hour');
   }
 
-  // TODO: used externally in m_view_data_provider.ts
+  // TODO: used externally in view_data_provider.ts
   public _getIntervalDuration(intervalCount) {
     return toMs('day') * intervalCount;
   }
@@ -846,7 +846,7 @@ export class ViewDataGenerator {
     return hoursInterval * cellCountInDay * toMs('hour');
   }
 
-  public getFirstDayOfWeek(firstDayOfWeekOption) {
+  public getFirstDayOfWeek(firstDayOfWeekOption: number): number {
     return firstDayOfWeekOption;
   }
 
