@@ -15,7 +15,7 @@ catalog:
   devextreme-quill: 1.7.9
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.9
+  eslint-config-devextreme: 1.1.11
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -51,3 +51,6 @@ catalogs:
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8
+
+minimumReleaseAgeExclude:
+  - "eslint-config-devextreme"
