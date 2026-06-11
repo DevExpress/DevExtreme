@@ -27,9 +27,6 @@ const gridWithoutAssistant = (): any => ({
 fixture`AI Assistant - Toolbar & Popup`
   .page(AI_INTEGRATION_PAGE);
 
-// === §1.1 Toolbar entry point & popup lifecycle ===
-
-// 1.1.1
 test('Toolbar button should be visible when aiAssistant.enabled is true', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -38,7 +35,6 @@ test('Toolbar button should be visible when aiAssistant.enabled is true', async 
   await t.expect(dataGrid.getAIAssistantButton().exists).ok();
 }).before(async () => createGridWithAIAssistant({ ...baseGrid, dataSource: threeRows }, [HANG]));
 
-// 1.1.2
 test('Toolbar button should be hidden when aiAssistant is not configured', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -47,7 +43,6 @@ test('Toolbar button should be hidden when aiAssistant is not configured', async
   await t.expect(dataGrid.getAIAssistantButton().exists).notOk();
 }).before(async () => createWidget('dxDataGrid', gridWithoutAssistant));
 
-// 1.1.3
 test('Popup should open on toolbar button click without changing grid state', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -66,7 +61,6 @@ test('Popup should open on toolbar button click without changing grid state', as
   await t.expect(aiChat.getInput().visible).ok();
 }).before(async () => createGridWithAIAssistant({ ...baseGrid, dataSource: threeRows }, [HANG]));
 
-// 1.1.4
 test('AI Assistant-applied sorting should persist after popup close', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -93,7 +87,6 @@ test('AI Assistant-applied sorting should persist after popup close', async (t) 
   [sortByNameResponse],
 ));
 
-// 1.1.6
 test('Custom title should be rendered in popup header', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -110,9 +103,6 @@ test('Custom title should be rendered in popup header', async (t) => {
   { title: 'My Custom Assistant' },
 ));
 
-// === §1.10 A11y / KBN ===
-
-// 1.10.2 (Enter) — focus the toolbar button and activate it with Enter.
 test('Toolbar button should activate via Enter key', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -127,7 +117,6 @@ test('Toolbar button should activate via Enter key', async (t) => {
   await t.expect(dataGrid.getAIAssistantChat().element.visible).ok();
 }).before(async () => createGridWithAIAssistant({ ...baseGrid, dataSource: threeRows }, [HANG]));
 
-// 1.10.2 (Space) — same scenario, activated with Space.
 test('Toolbar button should activate via Space key', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
