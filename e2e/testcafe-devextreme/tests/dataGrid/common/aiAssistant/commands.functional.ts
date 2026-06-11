@@ -67,9 +67,6 @@ const createRemoteGridWithAIAssistant = async (
 fixture`AI Assistant - Commands`
   .page(AI_INTEGRATION_PAGE);
 
-// === §1.2 Single-command request, successful execution ===
-
-// 1.2.1
 test('Single sorting command should execute successfully and update grid', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -96,7 +93,6 @@ test('Single sorting command should execute successfully and update grid', async
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 1.2.2
 test('No-args command (clearSorting) should execute successfully', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -127,9 +123,6 @@ test('No-args command (clearSorting) should execute successfully', async (t) => 
   { actions: [{ name: 'clearSorting', args: {} }] },
 ]));
 
-// === §1.3 Multi-command request ===
-
-// 1.3.1
 test('Multi-command request should show all success entries', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -164,7 +157,6 @@ test('Multi-command request should show all success entries', async (t) => {
   },
 ]));
 
-// 1.3.2
 test('Multi-command sequential ordering should be reflected in grid state', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -197,9 +189,6 @@ test('Multi-command sequential ordering should be reflected in grid state', asyn
   },
 ]));
 
-// === §1.4 Local vs remote data parity ===
-
-// 1.4.1
 test('Single command should succeed with local array data source', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -226,7 +215,6 @@ test('Single command should succeed with local array data source', async (t) => 
   { actions: [{ name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } }] },
 ]));
 
-// 1.4.2
 test('Remote data parity — command should succeed with server-side data source', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -258,9 +246,6 @@ test('Remote data parity — command should succeed with server-side data source
   ],
 ));
 
-// === §3.7 Stacked operations ===
-
-// 3.7.1
 test('Group then ungroup across two prompts should both succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -299,7 +284,6 @@ test('Group then ungroup across two prompts should both succeed', async (t) => {
   { actions: [{ name: 'clearGrouping', args: {} }] },
 ]));
 
-// 3.7.2
 test('Filter then clear filter across two prompts should both succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -349,7 +333,6 @@ test('Filter then clear filter across two prompts should both succeed', async (t
   { actions: [{ name: 'clearFilter', args: {} }] },
 ]));
 
-// 3.7.3
 test('Sort, group, page combined across three prompts should all succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -398,9 +381,6 @@ test('Sort, group, page combined across three prompts should all succeed', async
   { actions: [{ name: 'pageIndex', args: { pageIndex: 1 } }] },
 ]));
 
-// === §3.1 Empty dataset ===
-
-// 3.1.1
 test('Sort on empty grid should succeed with no rows', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -428,7 +408,6 @@ test('Sort on empty grid should succeed with no rows', async (t) => {
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 3.1.2
 test('Filter on empty grid should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -471,7 +450,6 @@ test('Filter on empty grid should succeed', async (t) => {
   },
 ]));
 
-// 3.1.3
 test('SelectAll on empty grid should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -499,9 +477,6 @@ test('SelectAll on empty grid should succeed', async (t) => {
   { actions: [{ name: 'selectAll', args: {} }] },
 ]));
 
-// === §3.2 Single-row dataset ===
-
-// 3.2.1
 test('Sort on single-row grid should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -529,7 +504,6 @@ test('Sort on single-row grid should succeed', async (t) => {
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 3.2.2 — `selectByIndexes` is 1-based (index 1 == first row on the current page).
 test('selectByIndexes [1] on single-row grid should select the row', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -557,7 +531,6 @@ test('selectByIndexes [1] on single-row grid should select the row', async (t) =
   { actions: [{ name: 'selectByIndexes', args: { indexes: [1], mode: 'select' } }] },
 ]));
 
-// 3.2.3
 test('selectByIndexes [5] out of range on single-row grid should not crash', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -585,9 +558,6 @@ test('selectByIndexes [5] out of range on single-row grid should not crash', asy
   { actions: [{ name: 'selectByIndexes', args: { indexes: [5], mode: 'select' } }] },
 ]));
 
-// === §3.3 Large dataset ===
-
-// 3.3.1
 test('Page navigation on large dataset should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -619,7 +589,6 @@ test('Page navigation on large dataset should succeed', async (t) => {
   { actions: [{ name: 'pageIndex', args: { pageIndex: 99 } }] },
 ]));
 
-// 3.3.2
 test('Grouping on large dataset should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -651,7 +620,6 @@ test('Grouping on large dataset should succeed', async (t) => {
   { actions: [{ name: 'grouping', args: { dataField: 'name', groupIndex: 0 } }] },
 ]));
 
-// 3.3.3
 test('Page size change on large dataset should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -683,9 +651,6 @@ test('Page size change on large dataset should succeed', async (t) => {
   { actions: [{ name: 'pageSize', args: { pageSize: 200 } }] },
 ]));
 
-// === §3.4 Single-column grid ===
-
-// 3.4.1
 test('Sort on single-column grid should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -715,7 +680,6 @@ test('Sort on single-column grid should succeed', async (t) => {
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 3.4.2
 test('Reorder on single-column grid should succeed without crash', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -745,7 +709,6 @@ test('Reorder on single-column grid should succeed without crash', async (t) => 
   { actions: [{ name: 'columnsReorder', args: { dataField: 'name', visibleIndex: 0 } }] },
 ]));
 
-// 3.4.3
 test('Hide the only column should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -775,15 +738,12 @@ test('Hide the only column should succeed', async (t) => {
   { actions: [{ name: 'columnsVisibility', args: { dataField: 'name', visible: false } }] },
 ]));
 
-// === §3.5 All columns hidden before request ===
-
 const allHiddenColumns = [
   { dataField: 'id', visible: false },
   { dataField: 'name', visible: false },
   { dataField: 'value', visible: false },
 ];
 
-// 3.5.1
 test('Show column from all-hidden state should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -812,7 +772,6 @@ test('Show column from all-hidden state should succeed', async (t) => {
   { actions: [{ name: 'columnsVisibility', args: { dataField: 'name', visible: true } }] },
 ]));
 
-// 3.5.2
 test('Sort while all columns hidden should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -839,7 +798,6 @@ test('Sort while all columns hidden should succeed', async (t) => {
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 3.5.3
 test('Filter while all columns hidden should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -881,9 +839,6 @@ test('Filter while all columns hidden should succeed', async (t) => {
   },
 ]));
 
-// === §3.6 Feature already in target state ===
-
-// 3.6.1
 test('Sort by X when already sorted by X should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -914,7 +869,6 @@ test('Sort by X when already sorted by X should succeed', async (t) => {
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 3.6.2
 test('clearSorting when no sort should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -941,7 +895,6 @@ test('clearSorting when no sort should succeed', async (t) => {
   { actions: [{ name: 'clearSorting', args: {} }] },
 ]));
 
-// 3.6.3
 test('clearFilter when no filter should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -969,7 +922,6 @@ test('clearFilter when no filter should succeed', async (t) => {
   { actions: [{ name: 'clearFilter', args: {} }] },
 ]));
 
-// 3.6.4
 test('clearSelection when no selection should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -997,7 +949,6 @@ test('clearSelection when no selection should succeed', async (t) => {
   { actions: [{ name: 'clearSelection', args: {} }] },
 ]));
 
-// 3.6.5
 test('deselectAll when nothing selected should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -1025,7 +976,6 @@ test('deselectAll when nothing selected should succeed', async (t) => {
   { actions: [{ name: 'deselectAll', args: {} }] },
 ]));
 
-// 3.6.6
 test('Hide already-hidden column should succeed', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
