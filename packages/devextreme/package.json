@@ -249,6 +249,7 @@
     "update-ts-bundle": "dx-tools generate-ts-bundle --sources ./js --output-path ./ts/dx.all.d.ts",
     "regenerate": "pnpm run update-ts-bundle && pnpm run update-ts-reexports",
     "validate-ts": "gulp validate-ts",
+    "check-types": "tsc --noEmit -p js/__internal/tsconfig.json",
     "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",
