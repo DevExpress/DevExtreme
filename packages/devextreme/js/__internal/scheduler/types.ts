@@ -204,7 +204,7 @@ export interface DOMMetaData {
   allDayPanelCellsMeta: CellRect[];
 }
 
-export interface DateHeaderCellData extends Omit<ViewCellData, 'endDate'> {
+export interface DateHeaderCellData extends ViewCellData {
   colSpan: number;
 }
 

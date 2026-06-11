@@ -93,6 +93,7 @@ export class DateHeaderDataGenerator {
       weekDaysRow.push({
         ...restProps,
         startDate,
+        endDate,
         colSpan,
         text: formatWeekdayAndDay(shiftedStartDate),
         isFirstGroupCell: false,
@@ -184,6 +185,7 @@ export class DateHeaderDataGenerator {
       return {
         ...restProps,
         startDate,
+        endDate,
         text,
         today: dateUtils.sameDate(shiftedStartDate, today),
         colSpan,

@@ -1259,6 +1259,7 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1271,6 +1272,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11, 5),
+                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
@@ -1283,6 +1285,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1295,6 +1298,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11, 5),
+                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
@@ -1323,6 +1327,7 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1335,6 +1340,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 11, 5),
+                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
@@ -1414,6 +1420,7 @@ module('View Data Provider', {
                 }], [{
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1426,6 +1433,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10, 6),
+                    endDate: new Date(2021, 0, 10, 7),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
@@ -1438,6 +1446,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11, 5),
+                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
@@ -1450,6 +1459,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11, 6),
+                    endDate: new Date(2021, 0, 11, 7),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 3,
@@ -1462,6 +1472,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1474,6 +1485,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10, 6),
+                    endDate: new Date(2021, 0, 10, 7),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
@@ -1486,6 +1498,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11, 5),
+                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 2,
@@ -1498,6 +1511,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11, 6),
+                    endDate: new Date(2021, 0, 11, 7),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 3,
@@ -1530,6 +1544,7 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 4,
                     startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1541,6 +1556,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 4,
                     startDate: new Date(2021, 0, 11, 5),
+                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
@@ -1552,6 +1568,7 @@ module('View Data Provider', {
                 }], [{
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1564,6 +1581,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10, 6),
+                    endDate: new Date(2021, 0, 10, 7),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
@@ -1576,6 +1594,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 11, 5),
+                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
@@ -1588,6 +1607,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 11, 6),
+                    endDate: new Date(2021, 0, 11, 7),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 3,
