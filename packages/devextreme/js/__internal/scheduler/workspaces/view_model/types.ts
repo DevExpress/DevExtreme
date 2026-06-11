@@ -35,6 +35,8 @@ interface CommonOptions extends CountGenerationConfig {
   cellDuration: number;
   indicatorTime?: Date;
   timeZoneCalculator?: TimeZoneCalculator;
+  selectedCells?: ViewCellData[] | null;
+  focusedCell?: { cellData: ViewCellData } | null;
 }
 
 export interface ViewDataProviderOptions extends CommonOptions {
@@ -56,8 +58,6 @@ export interface ViewDataMapOptions extends ViewDataProviderExtendedOptions {
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
-  selectedCells?: ViewCellData[] | null;
-  focusedCell?: { cellData: ViewCellData } | null;
 }
 
 export interface ViewCellDataSimple {
