@@ -528,7 +528,7 @@ test('selectByIndexes [1] on single-row grid should select the row', async (t) =
   showBorders: true,
   selection: { mode: 'multiple' },
 }, [
-  { actions: [{ name: 'selectByIndexes', args: { indexes: [1], mode: 'select' } }] },
+  { actions: [{ name: 'selectionByIndexes', args: { indexes: [1], mode: 'select', scope: 'allPages' } }] },
 ]));
 
 test('selectByIndexes [5] out of range on single-row grid should not crash', async (t) => {
@@ -555,7 +555,7 @@ test('selectByIndexes [5] out of range on single-row grid should not crash', asy
   showBorders: true,
   selection: { mode: 'multiple' },
 }, [
-  { actions: [{ name: 'selectByIndexes', args: { indexes: [5], mode: 'select' } }] },
+  { actions: [{ name: 'selectionByIndexes', args: { indexes: [5], mode: 'select', scope: 'allPages' } }] },
 ]));
 
 test('Page navigation on large dataset should succeed', async (t) => {
