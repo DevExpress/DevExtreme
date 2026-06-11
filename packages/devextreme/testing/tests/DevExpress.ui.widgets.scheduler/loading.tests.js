@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const loading = require('__internal/scheduler/m_loading');
+const loading = require('__internal/scheduler/loading');
 const viewPort = require('core/utils/view_port').value;
 const fx = require('common/core/animation/fx');
 const LoadPanel = require('ui/load_panel');
@@ -27,7 +27,7 @@ QUnit.test('hide loadPanel', async function(assert) {
         position: { at: 'center' }
     });
 
-    loading.hide();
+    await loading.hide();
     assert.equal($('.dx-loadpanel').length, 0);
 });
 

@@ -1,8 +1,10 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { ContentReadyEvent, ItemContextMenuEvent, Properties as ListProperties } from '@js/ui/list';
+import type {
+  ContentReadyEvent, InitializedEvent, ItemContextMenuEvent, Properties as ListProperties,
+} from '@js/ui/list';
 import supportUtils from '@ts/core/utils/m_support';
-import Tooltip from '@ts/ui/m_tooltip';
+import Tooltip from '@ts/ui/tooltip';
 
 import type { AppointmentTooltipItem } from '../types';
 import { TooltipStrategyBase } from './tooltip_strategy_base';
@@ -68,9 +70,18 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     return tooltip;
   }
 
+  protected override onListInitialized(e: InitializedEvent): void {
+    this._options.onListInitialized(e);
+  }
+
+  // TODO<Appointments>: remove when old impl is removed
   protected override onListRender(
     e: ContentReadyEvent<AppointmentTooltipItem>,
   ): void {
+    if (this._options.newAppointments) {
+      return;
+    }
+
     if (this.extraOptions?.dragBehavior) {
       this.extraOptions.dragBehavior(e);
     }

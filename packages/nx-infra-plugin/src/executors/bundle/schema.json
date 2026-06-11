@@ -1,10 +1,14 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Bundle Executor Schema",
+  "description": "Bundle JavaScript files using webpack with debug or production mode",
   "type": "object",
   "properties": {
     "entries": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Bundle entry point paths relative to sourceDir"
     },
     "sourceDir": {
@@ -17,7 +21,10 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["debug", "production"],
+      "enum": [
+        "debug",
+        "production"
+      ],
       "description": "Bundle mode"
     },
     "webpackConfigPath": {
@@ -29,8 +36,77 @@
       "type": "boolean",
       "description": "Enable eval-source-map devtool in debug mode",
       "default": true
+    },
+    "applyLicenseHeaders": {
+      "type": "object",
+      "description": "Optional post-step that prepends license headers to bundle output files",
+      "additionalProperties": false,
+      "properties": {
+        "licenseTemplateFile": {
+          "type": "string",
+          "description": "Path to custom license template file relative to project root"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "eula",
+            "mit"
+          ],
+          "description": "Selects which bundled license template to use when licenseTemplateFile is omitted"
+        },
+        "eulaUrl": {
+          "type": "string",
+          "description": "EULA URL for template variable <%= eula %>"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version string used in the banner (defaults to pkg.version)"
+        },
+        "commentType": {
+          "type": "string",
+          "enum": [
+            "!",
+            "*"
+          ],
+          "description": "Comment marker placed after /* in the banner opening"
+        },
+        "separator": {
+          "type": "string",
+          "description": "Separator between banner and original file content"
+        },
+        "prependAfterLicense": {
+          "type": "string",
+          "description": "Content prepended after the license banner (e.g. \"\\\"use strict\\\";\\n\\n\")"
+        },
+        "filenameMode": {
+          "type": "string",
+          "enum": [
+            "relative",
+            "basename"
+          ],
+          "description": "Filename token used in the banner template"
+        },
+        "includePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Glob patterns of files within outDir to add headers to"
+        },
+        "excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Glob patterns of files within outDir to skip"
+        }
+      }
     }
   },
-  "required": ["entries", "sourceDir", "outDir", "mode"],
-  "additionalProperties": false
+  "required": [
+    "entries",
+    "sourceDir",
+    "outDir",
+    "mode"
+  ]
 }

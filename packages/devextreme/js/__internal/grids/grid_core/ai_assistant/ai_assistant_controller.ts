@@ -75,24 +75,27 @@ export class AIAssistantController extends Controller {
 
   private processResponse(response: ExecuteGridAssistantCommandResult): Promise<CommandResult[]> {
     if (this.gridCommands?.isExecuting()) {
-      // TODO: need to localize default error message if execution is in progress
-      return Promise.reject(new Error('Unexpected error'));
+      const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantExecutionInProgressMessage');
+      return Promise.reject(new Error(localizedErrorMsg));
     }
 
     if (!response?.actions || !Array.isArray(response.actions) || !response.actions.length) {
-      // TODO: need to localize default error message when there are no commands
-      return Promise.reject(new Error('Default error message'));
+      const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantInvalidResponseMessage');
+      return Promise.reject(new Error(localizedErrorMsg));
     }
 
-    if (!this.gridCommands?.validate(response.actions)) {
-      // TODO: need to localize error message on validation fail
-      return Promise.reject(new Error('Received invalid commands'));
+    const parsedActions = this.gridCommands?.parse(response.actions);
+
+    if (!parsedActions) {
+      const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantInvalidResponseMessage');
+      return Promise.reject(new Error(localizedErrorMsg));
     }
 
     const customizeResponseText = this.option('aiAssistant.customizeResponseText');
+    const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
 
-    return this.gridCommands?.executeCommands(response.actions, customizeResponseText)
-      ?? Promise.reject(new Error('Grid commands not initialized'));
+    return this.gridCommands?.executeCommands(parsedActions, customizeResponseText)
+      ?? Promise.reject(new Error(localizedErrorMsg));
   }
 
   private createPendingAIMessage(message: Message): AIMessage {
@@ -177,8 +180,8 @@ export class AIAssistantController extends Controller {
       const responseSchema = this.gridCommands?.buildResponseSchema();
 
       if (!responseSchema) {
-        // TODO: Change error message
-        const error = new Error('Grid commands not initialized');
+        const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
+        const error = new Error(localizedErrorMsg);
 
         this.failAIMessage(aiMessage.id, error);
         reject(error);
@@ -198,7 +201,6 @@ export class AIAssistantController extends Controller {
                 resolve();
               })
               .fail((errorMessage) => {
-                // TODO: Change error message
                 const error = errorMessage instanceof Error
                   ? errorMessage
                   : new Error(String(errorMessage));
@@ -208,8 +210,9 @@ export class AIAssistantController extends Controller {
               });
           },
           onError: (error: Error): void => {
-            // TODO: Change error message
-            this.failAIMessage(aiMessage.id, error);
+            const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantInvalidResponseMessage');
+
+            this.failAIMessage(aiMessage.id, new Error(localizedErrorMsg));
             reject(error);
           },
           onAbort: (): void => {
@@ -244,8 +247,8 @@ export class AIAssistantController extends Controller {
 
   public sendRequestToAI(message: Message | AIMessage): Promise<void> {
     if (this.processing) {
-      // TODO: need to add localization message when a request is already processing
-      return Promise.reject();
+      const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantRequestInProgressMessage');
+      return Promise.reject(new Error(localizedErrorMsg));
     }
 
     if (isAIMessage(message)) {

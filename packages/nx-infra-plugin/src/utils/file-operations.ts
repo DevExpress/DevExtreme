@@ -3,8 +3,10 @@ import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as os from 'os';
 import { glob } from 'glob';
+import type { PackageJson } from './types';
 
 const ENCODING_UTF8 = 'utf-8';
+const PACKAGE_JSON_FILENAME = 'package.json';
 
 export async function ensureDir(dirPath: string): Promise<void> {
   await fse.ensureDir(dirPath);
@@ -72,4 +74,8 @@ export function normalizeEol(content: string): string {
 
 export function ensureTrailingNewline(content: string): string {
   return content.endsWith(os.EOL) ? content : content + os.EOL;
+}
+
+export async function loadProjectPackageJson(projectRoot: string): Promise<PackageJson> {
+  return readJson<PackageJson>(path.join(projectRoot, PACKAGE_JSON_FILENAME));
 }

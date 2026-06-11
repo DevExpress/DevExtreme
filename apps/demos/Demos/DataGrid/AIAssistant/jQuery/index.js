@@ -1,5 +1,5 @@
 $(() => {
-  const deployment = 'gpt-4o-mini';
+  const deployment = 'demo-mini';
   const apiVersion = '2024-02-01';
   const endpoint = 'https://public-api.devexpress.com/demo-openai';
   const apiKey = 'DEMO';
@@ -16,7 +16,7 @@ $(() => {
     const params = {
       messages,
       model: deployment,
-      max_tokens: 1000,
+      max_completion_tokens: 1000,
       temperature: 0.7,
     };
 
@@ -105,6 +105,7 @@ $(() => {
     filterRow: {
       visible: true,
     },
+    filterSyncEnabled: true,
     paging: {
       pageSize: 10,
     },
@@ -112,6 +113,15 @@ $(() => {
       visible: true,
       allowedPageSizes: [10, 25, 50, 100],
       showPageSizeSelector: true,
+    },
+    allowColumnResizing: true,
+    allowColumnReordering: true,
+    focusedRowEnabled: true,
+    selection: {
+      mode: 'multiple',
+    },
+    sorting: {
+      mode: 'multiple',
     },
     aiAssistant: {
       enabled: true,

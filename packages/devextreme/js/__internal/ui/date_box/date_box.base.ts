@@ -21,10 +21,10 @@ import type {
 } from '@js/ui/date_box';
 import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
-import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
-import type { PopupProperties } from '../popup/m_popup';
 import uiDateUtils from './date_utils';
 import Calendar from './m_date_box.strategy.calendar';
 import CalendarWithTime from './m_date_box.strategy.calendar_with_time';
@@ -501,6 +501,16 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     return super._isClearButtonVisible() && !this._isNativeType();
   }
 
+  _toggleEmptinessEventHandler(): void {
+    if (this._isNativeType()) {
+      this._toggleEmptiness(false);
+
+      return;
+    }
+
+    super._toggleEmptinessEventHandler();
+  }
+
   _renderValue(): DeferredObj<unknown> {
     const value = this.getDateOption('value');
 
@@ -824,7 +834,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const isValueChanged = this._isValueChanged(value);
 
     if (isValueChanged && dxEvent) {
-      // @ts-expect-error editor's ValueChangedEvent should be extended
       this._saveValueChangeEvent(dxEvent);
     }
 

@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get changed files
         uses: DevExpress/github-actions/get-changed-files@v1
@@ -66,7 +66,7 @@ jobs:
           echo "has-changed-demos=${HAS_CHANGED}" >> $GITHUB_OUTPUT
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: changed-demos
           path: apps/demos/changed-files.json
@@ -112,14 +112,14 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -127,7 +127,7 @@ jobs:
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -155,7 +155,7 @@ jobs:
           7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
       - name: Upload build artifacts (for jQuery tests)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-artifacts-jquery
           path: ./packages/devextreme/artifacts.zip
@@ -172,7 +172,7 @@ jobs:
 
       - name: Copy build artifacts
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-sources
           path: |
@@ -199,19 +199,19 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
       - name: Download devextreme sources
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -220,7 +220,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -233,7 +233,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
@@ -250,7 +250,7 @@ jobs:
         run: pnpm exec tsc --noEmit
 
       - name: Copy build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: devextreme-bundles
           path: |
@@ -271,19 +271,19 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download devextreme packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -292,7 +292,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -304,7 +304,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install tgz
-        run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
+        working-directory: apps/demos
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Demos - Check Vue TS
         working-directory: apps/demos
@@ -333,27 +334,27 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
       if: github.event_name == 'pull_request'
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: changed-demos
         path: apps/demos
       continue-on-error: true
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -362,7 +363,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -374,7 +375,8 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Install tgz
-      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
+      working-directory: apps/demos
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Run lint on all demos
       if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
@@ -426,35 +428,67 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download changed demos
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: changed-demos
         path: apps/demos
       continue-on-error: true
 
-    - uses: pnpm/action-setup@v4
+    - name: Detect changed React TS demos
+      id: changed-react-demos
+      working-directory: apps/demos
+      run: |
+        if [ ! -f "changed-files.json" ]; then
+          echo "changed-files.json not found, skipping generated JS demos check"
+          echo "has-react-demos=false" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        jq -r '.[].filename' changed-files.json \
+          | grep '/React/' \
+          | grep -E '\.tsx?$' \
+          | sed 's|^apps/demos/||' \
+          | sed -E 's|/[^/]*\.tsx?$||' \
+          | sort \
+          | uniq > changed-react-demos.txt || true
+
+        if [ -s changed-react-demos.txt ]; then
+          echo "Changed React demos:"
+          cat changed-react-demos.txt
+          echo "has-react-demos=true" >> $GITHUB_OUTPUT
+        else
+          echo "No React demos found in changed files, skipping conversion"
+          echo "has-react-demos=false" >> $GITHUB_OUTPUT
+        fi
+
+    - uses: pnpm/action-setup@v6
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       with:
         run_install: false
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
     - name: Get pnpm store directory
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       shell: bash
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -463,38 +497,25 @@ jobs:
           ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       run: pnpm install --frozen-lockfile
 
     - name: Install tgz
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: pnpm run prepare-js
 
     - name: Check generated JS demos
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
       run: |
-        if [ -f "changed-files.json" ]; then
-          echo "Running convert-to-js on changed files only"
-
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
-
-          if [ -z "$CHANGED_DEMOS" ]; then
-            echo "No React demos found in changed files, skipping conversion"
-          else
-            echo "Changed React demos:"
-            echo "$CHANGED_DEMOS"
-
-            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
-              if [ ! -z "$demo_dir" ]; then
-                echo "Converting: $demo_dir"
-                pnpm run convert-to-js "$demo_dir"
-              fi
-            done
-          fi
-        fi
+        echo "Running convert-to-js on changed files only"
+        xargs -r pnpm run convert-to-js < changed-react-demos.txt
 
         git add ./Demos -N
 
@@ -520,23 +541,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONSTEL: ['1/5', '2/5', '3/5', '4/5', '5/5']
+        CONSTEL: ['1/2', '2/2']
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
@@ -545,7 +566,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -558,7 +579,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -616,10 +637,10 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-artifacts-jquery
         path: ./packages/devextreme
@@ -634,11 +655,11 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -647,7 +668,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -665,7 +686,7 @@ jobs:
     - name: Cache Roboto font
       if: contains(matrix.THEME, 'material')
       id: cache-roboto
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ env.ROBOTO_FONT_DIR }}
         key: roboto-font-${{ runner.os }}-8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
@@ -742,7 +763,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: failure() && matrix.STRATEGY == 'screenshots'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -750,7 +771,7 @@ jobs:
 
     - name: Copy accessibility report
       if: matrix.STRATEGY == 'accessibility'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}
         path: apps/demos/testing/artifacts/axe-reports/*
@@ -795,7 +816,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
@@ -803,16 +824,16 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -821,7 +842,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -834,7 +855,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -848,7 +869,7 @@ jobs:
       run: mkdir -p apps/demos/bundles
 
     - name: Download bundles artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles
         path: apps/demos/bundles
@@ -899,7 +920,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -925,7 +946,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
@@ -933,23 +954,23 @@ jobs:
           chrome-version: '145.0.7632.67'
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
       - name: Download devextreme sources
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-sources
 
       - name: Download changed demos
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: changed-demos
           path: apps/demos
         continue-on-error: true
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
 
@@ -958,7 +979,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -971,7 +992,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Prepare JS
         working-directory: apps/demos
@@ -985,13 +1006,13 @@ jobs:
         run: mkdir -p apps/demos/bundles
 
       - name: Download bundles artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles
           path: apps/demos/bundles
 
       - name: Download changes artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: changed-demos
           path: apps/demos
@@ -1026,7 +1047,7 @@ jobs:
 
       - name: Copy screenshots artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: screenshots-${{ env.JOB_NAME }}
           path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -1040,7 +1061,7 @@ jobs:
     steps:
       - name: Merge jQuery screenshot artifacts
         if: needs.testcafe-jquery.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-jquery
@@ -1049,7 +1070,7 @@ jobs:
 
       - name: Merge React screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-react
@@ -1058,7 +1079,7 @@ jobs:
 
       - name: Merge Vue screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-vue
@@ -1067,7 +1088,7 @@ jobs:
 
       - name: Merge Angular screenshot artifacts
         if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: screenshots-angular
@@ -1076,7 +1097,7 @@ jobs:
 
       - name: Merge jQuery accessibility reports
         if: needs.testcafe-jquery.result == 'failure'
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
           name: accessibility-reports-jquery
@@ -1095,10 +1116,10 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-artifacts-jquery
         path: ./packages/devextreme
@@ -1113,11 +1134,11 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -1125,7 +1146,7 @@ jobs:
       shell: bash
       run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -1148,7 +1169,7 @@ jobs:
 
     - name: Upload CSP report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: csp-violations-jquery
         path: apps/demos/csp-reports/
@@ -1172,10 +1193,10 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
 
@@ -1185,11 +1206,11 @@ jobs:
         chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         run_install: false
 
@@ -1197,7 +1218,7 @@ jobs:
       shell: bash
       run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache/restore@v5
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
@@ -1210,7 +1231,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Start CSP Server
       run: node apps/demos/utils/server/csp-server.js 8080 &
@@ -1224,7 +1245,7 @@ jobs:
 
     - name: Upload CSP report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: csp-violations-${{ matrix.FRAMEWORK }}
         path: apps/demos/csp-reports/
@@ -1239,15 +1260,15 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
 
       - name: Download all CSP reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: csp-violations-*
           path: csp-reports-all
@@ -1295,9 +1316,8 @@ jobs:
 
       - name: Upload merged CSP reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: csp-violations-report
           path: apps/demos/csp-reports/
           if-no-files-found: ignore
-

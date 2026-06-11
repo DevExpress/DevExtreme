@@ -3,8 +3,16 @@ import {
   expect,
   it,
 } from '@jest/globals';
+import { z } from 'zod';
 
-import { isKeyShapeValid, normalizeKey } from '../utils';
+import {
+  isKeyShapeValid,
+  normalizeKey,
+  // eslint-disable-next-line spellcheck/spell-checker
+  optionalNullish,
+  resolveFilterValue,
+  splitIntoLoadWindows,
+} from '../utils';
 
 describe('normalizeKey', () => {
   it('returns a string key as-is', () => {
@@ -32,6 +40,64 @@ describe('normalizeKey', () => {
     expect(normalizeKey([])).toEqual({});
   });
 });
+
+/* eslint-disable spellcheck/spell-checker */
+describe('optionalNullish', () => {
+  it('parses a valid value through unchanged', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.parse('hello')).toBe('hello');
+  });
+
+  it('parses undefined to undefined', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.parse(undefined)).toBeUndefined();
+  });
+
+  it('parses null to undefined', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.parse(null)).toBeUndefined();
+  });
+
+  it('preserves falsy non-nullish values (0, false, "")', () => {
+    expect(optionalNullish(z.number()).parse(0)).toBe(0);
+    expect(optionalNullish(z.boolean()).parse(false)).toBe(false);
+    expect(optionalNullish(z.string()).parse('')).toBe('');
+  });
+
+  it('rejects a value of the wrong type', () => {
+    const schema = optionalNullish(z.string());
+
+    expect(schema.safeParse(123).success).toBe(false);
+  });
+
+  it('transforms null on an object field to undefined', () => {
+    const schema = z.object({
+      required: z.string(),
+      optional: optionalNullish(z.string()),
+    }).strict();
+
+    expect(schema.parse({ required: 'r', optional: null })).toEqual({
+      required: 'r',
+      optional: undefined,
+    });
+  });
+
+  it('accepts an omitted object field', () => {
+    const schema = z.object({
+      required: z.string(),
+      optional: optionalNullish(z.string()),
+    }).strict();
+
+    expect(schema.parse({ required: 'r' })).toEqual({
+      required: 'r',
+      optional: undefined,
+    });
+  });
+});
+/* eslint-enable spellcheck/spell-checker */
 
 describe('isKeyShapeValid', () => {
   describe('single-field keyExpr (string)', () => {
@@ -68,5 +134,71 @@ describe('isKeyShapeValid', () => {
     it('rejects a number key', () => {
       expect(isKeyShapeValid(['a', 'b'], 42)).toBe(false);
     });
+  });
+});
+
+describe('resolveFilterValue', () => {
+  it('converts a valid ISO date string to Date for "date" dataType', () => {
+    const result = resolveFilterValue('date', '2024-05-10T00:00:00');
+    expect(result).toEqual(new Date('2024-05-10T00:00:00'));
+  });
+
+  it('converts a valid ISO date string to Date for "datetime" dataType', () => {
+    const result = resolveFilterValue('datetime', '2024-05-10T14:30:00');
+    expect(result).toEqual(new Date('2024-05-10T14:30:00'));
+  });
+
+  it('returns the original string for an invalid date with "date" dataType', () => {
+    expect(resolveFilterValue('date', 'not-a-date')).toBe('not-a-date');
+  });
+
+  it('returns the original string when dataType is "string"', () => {
+    expect(resolveFilterValue('string', '2024-05-10T00:00:00')).toBe('2024-05-10T00:00:00');
+  });
+
+  it('returns the original string when dataType is undefined', () => {
+    expect(resolveFilterValue(undefined, '2024-05-10T00:00:00')).toBe('2024-05-10T00:00:00');
+  });
+
+  it('returns number values as-is regardless of dataType', () => {
+    expect(resolveFilterValue('date', 42)).toBe(42);
+  });
+
+  it('returns null as-is regardless of dataType', () => {
+    expect(resolveFilterValue('date', null)).toBeNull();
+  });
+
+  it('returns boolean values as-is regardless of dataType', () => {
+    expect(resolveFilterValue('date', true)).toBe(true);
+  });
+});
+
+describe('splitIntoLoadWindows', () => {
+  it('returns an empty array for an empty input', () => {
+    expect(splitIntoLoadWindows([], 10)).toEqual([]);
+  });
+
+  it('wraps a single index into a single window', () => {
+    expect(splitIntoLoadWindows([5], 10)).toEqual([[5]]);
+  });
+
+  it('merges across gaps while the span stays within the window', () => {
+    expect(splitIntoLoadWindows([1, 3, 5], 10)).toEqual([[1, 3, 5]]);
+  });
+
+  it('starts a new window when the span would exceed the limit', () => {
+    expect(splitIntoLoadWindows([1, 2, 4, 5, 6, 10], 3)).toEqual([
+      [1, 2], [4, 5, 6], [10],
+    ]);
+  });
+
+  it('sorts unsorted input before windowing', () => {
+    expect(splitIntoLoadWindows([5, 1, 6, 2, 10, 7], 3)).toEqual([
+      [1, 2], [5, 6, 7], [10],
+    ]);
+  });
+
+  it('deduplicates repeated indexes', () => {
+    expect(splitIntoLoadWindows([1, 1, 2, 2, 3], 10)).toEqual([[1, 2, 3]]);
   });
 });

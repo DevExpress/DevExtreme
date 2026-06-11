@@ -199,6 +199,47 @@ describe('summaryCommand', () => {
         groupItems: [{ column: 'amount', summaryType: 'sum', alignByColumn: 1 }],
       }).success).toBe(false);
     });
+
+    it('accepts null on showInColumn / displayFormat (totalItems) and parses them to undefined', () => {
+      const result = summaryCommand.schema.safeParse({
+        totalItems: [{
+          column: 'amount',
+          summaryType: 'sum',
+          showInColumn: null,
+          displayFormat: null,
+        }],
+        groupItems: [],
+      });
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.totalItems[0].showInColumn).toBeUndefined();
+        expect(result.data.totalItems[0].displayFormat).toBeUndefined();
+      }
+    });
+
+    it('accepts null on showInGroupFooter / alignByColumn (groupItems) and parses them to undefined', () => {
+      const result = summaryCommand.schema.safeParse({
+        totalItems: [],
+        groupItems: [{
+          column: 'amount',
+          summaryType: 'avg',
+          showInColumn: null,
+          displayFormat: null,
+          showInGroupFooter: null,
+          alignByColumn: null,
+        }],
+      });
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        const item = result.data.groupItems[0];
+        expect(item.showInColumn).toBeUndefined();
+        expect(item.displayFormat).toBeUndefined();
+        expect(item.showInGroupFooter).toBeUndefined();
+        expect(item.alignByColumn).toBeUndefined();
+      }
+    });
   });
 
   describe('execute', () => {

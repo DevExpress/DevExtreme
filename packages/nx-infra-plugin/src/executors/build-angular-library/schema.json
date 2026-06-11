@@ -1,8 +1,8 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
+  "title": "Build Angular Library Executor Schema",
+  "description": "Build Angular libraries using ng-packagr",
   "type": "object",
-  "title": "Build Angular Library Executor",
-  "description": "Build Angular libraries using ng-packagr programmatically. This executor invokes ng-packagr to compile Angular components, generate metadata, and package the library for distribution.",
   "properties": {
     "project": {
       "type": "string",
@@ -18,6 +18,7 @@
       "description": "Output directory path relative to project root where the built library will be written. Contains compiled JavaScript, type definitions, and package metadata. If not specified, uses the 'dest' value from ng-package.json configuration."
     }
   },
-  "required": ["project"],
-  "additionalProperties": false
+  "required": [
+    "project"
+  ]
 }

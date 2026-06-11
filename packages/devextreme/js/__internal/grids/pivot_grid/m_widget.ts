@@ -16,11 +16,11 @@ import {
 import { format as formatString } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { Properties } from '@js/ui/button';
+import type { ButtonStyle, Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
-import { current, isFluent } from '@js/ui/themes';
+import { current, isGeneric } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -945,6 +945,8 @@ class PivotGrid extends Widget {
 
     let $targetContainer;
 
+    let buttonStylingMode: ButtonStyle = isGeneric(current()) ? 'contained' : 'text';
+
     // @ts-expect-error ts-error
     if (fieldPanel.visible && fieldPanel.showFilterFields) {
       $targetContainer = $filterHeader;
@@ -953,6 +955,7 @@ class PivotGrid extends Widget {
       $targetContainer = $columnHeader;
     } else {
       $targetContainer = $descriptionCell;
+      buttonStylingMode = 'text';
     }
 
     $columnHeader.toggleClass(
@@ -976,7 +979,6 @@ class PivotGrid extends Widget {
     this.$element().find('.dx-pivotgrid-toolbar').remove();
 
     $toolbarContainer.prependTo($targetContainer);
-    const stylingMode = isFluent(current()) ? 'text' : 'contained';
 
     if (this.option('fieldChooser.enabled')) {
       const $buttonElement = $(DIV)
@@ -986,7 +988,7 @@ class PivotGrid extends Widget {
         icon: 'columnchooser',
         // @ts-expect-error ts-error
         hint: this.option('texts.showFieldChooser'),
-        stylingMode,
+        stylingMode: buttonStylingMode,
         onClick: () => {
           this.getFieldChooserPopup().show();
         },
@@ -1003,7 +1005,7 @@ class PivotGrid extends Widget {
         icon: 'xlsxfile',
         // @ts-expect-error ts-error
         hint: this.option('texts.exportToExcel'),
-        stylingMode,
+        stylingMode: buttonStylingMode,
         onClick: () => {
           // @ts-expect-error ts-error
           this.exportTo();
@@ -1063,7 +1065,9 @@ class PivotGrid extends Widget {
     that._dataFields.render(dataHeaderContainer, dataSource.getAreaFields('data'));
 
     // @ts-expect-error ts-error
-    that.$element().dxPivotGridFieldChooserBase('instance').renderSortable();
+    const fieldChooser = that.$element().dxPivotGridFieldChooserBase('instance');
+    fieldChooser.renderSortable();
+    fieldChooser.restoreFieldFocus();
   }
 
   _createTableElement() {
@@ -1559,6 +1563,11 @@ class PivotGrid extends Widget {
         when.apply($, updateScrollableResults).done(() => {
           that._updateScrollPosition(that._columnsArea, that._rowsArea, that._dataArea, true);
           that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
+
+          // @ts-expect-error
+          const fieldChooser = that.$element().dxPivotGridFieldChooserBase('instance');
+          fieldChooser.restoreFieldFocus();
+
           d.resolve();
         });
       });

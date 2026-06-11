@@ -14,6 +14,22 @@ export const remoteDataGroupedByA = new Array(10)
   }));
 
 export const remoteApiMock = RequestMock()
+  .onRequestTo(/\/api\/data\?.*group=.*filter=.*A_11/)
+  .respond(
+    {
+      data: remoteDataGroupedByA.filter((item) => item.key.includes('A_11')),
+    },
+    200,
+    { 'access-control-allow-origin': '*' },
+  )
+  .onRequestTo(/\/api\/data\?.*group=.*filter=.*A_1/)
+  .respond(
+    {
+      data: remoteDataGroupedByA.filter((item) => item.key.includes('A_1')),
+    },
+    200,
+    { 'access-control-allow-origin': '*' },
+  )
   .onRequestTo(/\/api\/data\?.*group=/)
   .respond(
     {

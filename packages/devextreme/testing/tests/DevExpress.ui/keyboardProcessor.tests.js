@@ -38,6 +38,17 @@ QUnit.module('keyboardProcessor', {
         this.processor.process(this.keyDownEvent);
     });
 
+    test('Calling process should not throw if handler is not defined', function(assert) {
+        this.processor = new KeyboardProcessor({});
+
+        try {
+            this.processor.process(this.keyDownEvent);
+            assert.ok(true, 'exception was not thrown');
+        } catch(e) {
+            assert.ok(false, `exception was thrown: ${e.message}`);
+        }
+    });
+
     test('keyboardProcessor should process keys it does not know about', function(assert) {
         assert.expect(1);
 

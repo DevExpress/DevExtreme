@@ -6,7 +6,7 @@ import dateLocalization from 'common/core/localization/date';
 import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import { hide } from '__internal/ui/tooltip/m_tooltip';
+import { hide } from '__internal/ui/tooltip/tooltip';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
@@ -145,9 +145,7 @@ module('Integration: Appointment Day, Week views', {
 
                 const cell = scheduler.workSpace.getCell(2, 0).get(0);
 
-                const relatedCellData = !scheduler.instance.option('renovateRender')
-                    ? dataUtils.data(cell, 'dxCellData').startDate
-                    : scheduler.instance.getWorkSpace().getCellData($(cell)).startDate;
+                const relatedCellData = scheduler.instance.getWorkSpace().getCellData($(cell)).startDate;
 
                 assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
             } finally {

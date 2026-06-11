@@ -3,8 +3,8 @@ import type { Appointment, Properties } from '@js/ui/scheduler';
 import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
-import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
-import type { AppointmentViewModelPlain } from './view_model/types';
+import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
+import type { AppointmentItemViewModel } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
@@ -82,9 +82,9 @@ export type CalculateCellIndex = (
 export type CalculateStartViewDate = (
   currentDate: Date,
   startDayHour: number,
-  startDate: Date,
+  startDate: Date | undefined,
   intervalCount: number,
-  firstDayOfWeekOption?: number,
+  firstDayOfWeekOption?: number | undefined,
   skippedDays?: number[],
 ) => Date;
 
@@ -95,7 +95,7 @@ export interface ViewCellData {
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
-  groups?: Record<string, unknown>;
+  groups?: GroupLeaf['grouped'];
   groupIndex?: number;
   index: number;
   isFirstGroupCell: boolean;
@@ -106,6 +106,8 @@ export interface ViewCellData {
   isFocused?: boolean;
   highlighted?: boolean;
 }
+
+export type TimePanelCellData = Omit<ViewCellData, 'endDate'>;
 
 export interface CountGenerationConfig {
   intervalCount: number;
@@ -163,7 +165,7 @@ export interface ViewDataProviderOptions {
   startDate?: Date;
   firstDayOfWeek: number;
   today: Date;
-
+  skippedDays: number[];
   isGenerateTimePanelData?: boolean;
   isGenerateWeekDaysHeaderData?: boolean;
 }
@@ -173,9 +175,33 @@ export interface CellInfo {
   position: CellPositionData;
 }
 
+export interface GroupInfo {
+  allDay: boolean;
+  startDate: Date;
+  endDate: Date;
+  groupIndex: number;
+}
+
 export interface ViewDataMap {
   dateTableMap: CellInfo[][];
   allDayPanelMap: CellInfo[];
+}
+
+export interface GroupedDataMap {
+  dateTableGroupedMap: CellInfo[][][];
+  allDayPanelGroupedMap: CellInfo[][];
+}
+
+export interface CellRect {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+export interface DOMMetaData {
+  dateTableCellsMeta: CellRect[][];
+  allDayPanelCellsMeta: CellRect[];
 }
 
 export interface DateHeaderCellData extends ViewCellData {
@@ -201,7 +227,7 @@ export interface GroupPanelData {
 }
 
 export interface ViewDataBase {
-  groupIndex: number;
+  groupIndex: number | undefined;
   isGroupedAllDayPanel?: boolean;
   key: string;
 }
@@ -217,12 +243,18 @@ export interface GroupedViewDataBase {
   bottomVirtualRowCount: number;
 }
 
-export interface TimePanelCellsData extends ViewDataBase {
-  dateTable: ViewCellData[];
-  allDayPanel?: ViewCellData;
+export interface TimePanelDataBase {
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  isGroupedAllDayPanel: boolean;
 }
 
-export interface TimePanelData extends GroupedViewDataBase {
+export interface TimePanelCellsData extends ViewDataBase {
+  dateTable: TimePanelCellData[];
+  allDayPanel?: TimePanelCellData;
+}
+
+export interface TimePanelData extends TimePanelDataBase {
   groupedData: TimePanelCellsData[];
 }
 
@@ -263,14 +295,13 @@ export interface AppointmentTooltipItem {
   appointment: Appointment;
   targetedAppointment?: Appointment | TargetedAppointment;
   color: Promise<string | undefined>;
+  settings: AppointmentItemViewModel;
 }
 
 export interface CompactAppointmentOptions {
   $container: dxElementWrapper;
   coordinates: { top: number; left: number };
-  items: (AppointmentTooltipItem & {
-    settings: AppointmentViewModelPlain;
-  })[];
+  items: AppointmentTooltipItem[];
   buttonColor: Promise<string | undefined>;
   sortedIndex: number;
   width: number;
@@ -290,3 +321,10 @@ export type ScrollToGroupValuesOrOptions = RawGroupValues
   | GroupValues
   | ScrollToOptions
   | undefined;
+
+export interface GroupBoundsOffset {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}

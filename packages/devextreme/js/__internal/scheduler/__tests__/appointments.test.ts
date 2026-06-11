@@ -5,7 +5,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 describe('Appointments', () => {
   beforeEach(() => {

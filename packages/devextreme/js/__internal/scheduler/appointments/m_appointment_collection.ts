@@ -20,14 +20,13 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
-import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import {
   AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_ITEM_CLASS,
-} from '../m_classes';
-import timeZoneUtils from '../m_utils_time_zone';
+} from '../classes';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -38,6 +37,7 @@ import {
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import timeZoneUtils from '../utils_time_zone';
 import type {
   AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,
@@ -1058,7 +1058,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
       const appointmentConfig = {
         itemData: item.itemData,
         groupIndex: appointment.groupIndex,
-        groups: this.option('groups'),
       };
 
       return {

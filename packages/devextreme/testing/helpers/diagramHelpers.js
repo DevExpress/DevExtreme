@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import diagramContextMenuModule from '__internal/ui/diagram/ui.diagram.context_menu';
-import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/m_drop_down_editor';
+import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/drop_down_editor';
 
 export const Consts = {
     SIMPLE_DIAGRAM: '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }',

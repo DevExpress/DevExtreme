@@ -69,6 +69,20 @@ function makeOptions(): VectormapExecutorSchema {
   };
 }
 
+const LICENSE_TEMPLATE = `/*<%= commentType %>
+* Vectormap (<%= file.relative %>)
+* Version: <%= version %>
+*/
+`;
+
+async function setupLicenseTemplate(projectDir: string): Promise<string> {
+  const buildDir = path.join(projectDir, 'build', 'gulp');
+  fs.mkdirSync(buildDir, { recursive: true });
+  const templatePath = path.join(buildDir, 'license-header.txt');
+  await writeFileText(templatePath, LICENSE_TEMPLATE);
+  return './build/gulp/license-header.txt';
+}
+
 describe('VectormapExecutor E2E', () => {
   let tempDir: string;
   let context = createMockContext();
@@ -109,5 +123,24 @@ describe('VectormapExecutor E2E', () => {
     expect(worldData).toContain('"use strict"');
     expect(worldData).toContain('"precision":4');
     expect(worldData).toContain('"firstShpByte":1');
+  }, 30000);
+
+  it('should forward applyLicenseHeaders option to license header pipeline', async () => {
+    const licenseTemplateFile = await setupLicenseTemplate(projectDir);
+    const options: VectormapExecutorSchema = {
+      ...makeOptions(),
+      applyLicenseHeaders: {
+        licenseTemplateFile,
+        separator: '',
+      },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const utilsDir = path.join(projectDir, 'artifacts', 'js', 'vectormap-utils');
+    const productionContent = await readFileText(path.join(utilsDir, 'dx.vectormaputils.js'));
+    expect(productionContent).toMatch(/^\/\*!/);
+    expect(productionContent).toContain('Vectormap (dx.vectormaputils.js)');
   }, 30000);
 });

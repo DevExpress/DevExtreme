@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/schema",
+  "title": "Concatenate Files Executor Schema",
+  "description": "Concatenate files with optional content extraction and transforms",
   "type": "object",
-  "description": "Concatenate files with optional content extraction and transforms.",
   "properties": {
     "sourceFiles": {
       "type": "array",

@@ -55,6 +55,10 @@ describe('PackNpmExecutor E2E', () => {
       version: PACKAGE_VERSION,
       description: 'Test package for pnpm pack',
       main: './npm/index.js',
+      publishConfig: {
+        directory: NPM_DIR_NAME,
+        linkDirectory: true,
+      },
     });
 
     await writeJson(path.join(npmDir, 'package.json'), {
@@ -81,26 +85,20 @@ describe('PackNpmExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  it('should create tarball inside npm directory', async () => {
+  it('should create tarball in publishConfig.directory (like wrapper packages)', async () => {
     if (!pnpmAvailable) {
       console.log('Skipping test: pnpm not available');
       return;
     }
 
-    const options: PackNpmExecutorSchema = {
-      workingDirectory: `./${NPM_DIR_NAME}`,
-    };
+    const options: PackNpmExecutorSchema = {};
 
     const result = await executor(options, context);
 
     expect(result.success).toBe(true);
 
     const projectDir = path.join(tempDir, PACKAGES_DIR, PROJECT_NAME);
-    const expectedTarballPath = path.join(projectDir, EXPECTED_TARBALL_NAME);
-
-    console.log('projectDir:', projectDir);
-    console.log('Files in projectDir:', fs.readdirSync(projectDir));
-    console.log('Expected tarball:', expectedTarballPath);
+    const expectedTarballPath = path.join(projectDir, NPM_DIR_NAME, EXPECTED_TARBALL_NAME);
 
     expect(fs.existsSync(expectedTarballPath)).toBe(true);
 

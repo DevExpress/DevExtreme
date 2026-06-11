@@ -1,5 +1,6 @@
 import type { Orientation } from '@js/common';
 import type Scheduler from '@ts/scheduler/m_scheduler';
+import type { DOMMetaData } from '@ts/scheduler/types';
 
 import type { PanelName } from '../../types';
 import type { CollectorCSS, RealSize } from '../steps/add_geometry/types';
@@ -22,10 +23,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   DOMMetaData,
   panelName,
 }: {
-  DOMMetaData: {
-    dateTableCellsMeta: RealSize[][];
-    allDayPanelCellsMeta: RealSize[];
-  };
+  DOMMetaData: DOMMetaData;
   alwaysReserveSpaceForCollector: boolean;
   isTimelineView: boolean;
   viewOrientation: Orientation;

@@ -1,5 +1,7 @@
-import type { CompositeKeyPair } from '@js/common/grids';
+import type { BasicFilterExpr, CompositeKeyPair } from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
+import { dateUtilsTs } from '@ts/core/utils/date';
+import { isDateType } from '@ts/grids/grid_core/m_utils';
 import { z } from 'zod';
 
 type RowKey = string | number | Record<string, string | number>;
@@ -31,6 +33,22 @@ export const normalizeKey = (
   return key;
 };
 
+/* eslint-disable spellcheck/spell-checker */
+type OptionalNullishSchema<T extends z.ZodTypeAny> = z.ZodEffects<
+  z.ZodOptional<z.ZodNullable<T>>,
+  z.output<T> | undefined,
+  z.input<T> | null | undefined
+>;
+
+// Treats `null` as "absent" for optional schema fields
+export function optionalNullish<T extends z.ZodTypeAny>(
+  schema: T,
+): OptionalNullishSchema<T> {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return schema.nullish().transform((value) => value ?? undefined);
+}
+/* eslint-enable spellcheck/spell-checker */
+
 // Validates the user-supplied key against the grid's keyExpr shape.
 // Caller is responsible for resolving keyExpr first — passing `undefined`
 // would mean "no row key configured", which is a different failure case.
@@ -48,3 +66,39 @@ export const isKeyShapeValid = (
 
   return keyExpr.every((field) => field in key);
 };
+
+export const splitIntoLoadWindows = (
+  indexes: number[],
+  maxWindowSize: number,
+): number[][] => {
+  const sorted = [...new Set(indexes)].sort((a, b) => a - b);
+  const windows: number[][] = [];
+
+  sorted.forEach((index) => {
+    const current = windows.at(-1);
+
+    // Sorted indexes are merged into the same window within maxWindowSize
+    if (current && index - current[0] + 1 <= maxWindowSize) {
+      current.push(index);
+    } else {
+      windows.push([index]);
+    }
+  });
+
+  return windows;
+};
+
+type FilterExprValue = BasicFilterExpr['value'];
+
+export function resolveFilterValue(
+  dataType: string | undefined,
+  value: FilterExprValue,
+): FilterExprValue {
+  if (typeof value === 'string' && isDateType(dataType)) {
+    if (!dateUtilsTs.isValidDate(value)) {
+      return value;
+    }
+    return new Date(value);
+  }
+  return value;
+}

@@ -7,3 +7,7 @@ export function isWindowsOS() {
 export function containsGlobPattern(pattern: string): boolean {
   return /[*?[\]{}]/.test(pattern);
 }
+
+export function escapeRegExpLiteral(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

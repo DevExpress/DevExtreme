@@ -1,7 +1,7 @@
 import {
   Injectable,
   ApplicationRef,
-  ComponentFactoryResolver,
+  createComponent,
   Injector,
   EmbeddedViewRef,
   ComponentRef,
@@ -20,12 +20,10 @@ export class DxPopupService {
   constructor(
     private readonly injector: Injector,
     private readonly applicationRef: ApplicationRef,
-    private readonly componentFactoryResolver: ComponentFactoryResolver,
     private readonly rendererFactory: RendererFactory2,
   ) {}
 
   open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties): DxPopupServiceComponent<T> {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PopupServiceComponent<T>);
     const serviceInjector = Injector.create({
       providers: [
         { provide: 'popupServiceContentComponent', useValue: contentComponent },
@@ -33,7 +31,10 @@ export class DxPopupService {
       ],
       parent: this.injector
     });
-    const componentRef = componentFactory.create(serviceInjector);
+    const componentRef = createComponent(PopupServiceComponent<T>, {
+      environmentInjector: this.applicationRef.injector,
+      elementInjector: serviceInjector,
+    });
     const cmpInstance = componentRef.instance;
 
     cmpInstance.onHidden.subscribe(() => {

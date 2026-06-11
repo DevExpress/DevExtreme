@@ -70,7 +70,6 @@ class Switch extends Editor<Properties> {
     const move = (value: boolean, e: KeyboardEvent): void => {
       e.preventDefault();
       e.stopPropagation();
-      // @ts-expect-error ValueChangedEvent should be compatible with KeyboardEvent
       this._saveValueChangeEvent(e);
       this._animateValue(value);
     };
@@ -255,7 +254,6 @@ class Switch extends Editor<Properties> {
   _clickHandler(args: NativeEventInfo<Switch, MouseEvent | PointerEvent>): void {
     const { event } = args;
 
-    // @ts-expect-error ValueChangedEvent should be compatible with KeyboardEvent
     this._saveValueChangeEvent(event);
 
     if (this._animating || this._swiping) {
@@ -360,7 +358,6 @@ class Switch extends Editor<Properties> {
       complete: () => {
         this._swiping = false;
         const pos = Number(value) + offsetDirection * event.targetOffset;
-        // @ts-expect-error ValueChangedEvent should be compatible with KeyboardEvent
         this._saveValueChangeEvent(event);
         this.option({ value: Boolean(pos) });
         this._feedbackDeferred?.resolve();

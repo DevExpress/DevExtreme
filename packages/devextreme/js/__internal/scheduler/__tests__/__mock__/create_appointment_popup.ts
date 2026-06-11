@@ -4,16 +4,17 @@ import $ from '@js/core/renderer';
 // eslint-disable-next-line devextreme-custom/no-deferred
 import { Deferred } from '@js/core/utils/deferred';
 
-import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
 import { AppointmentForm } from '../../appointment_popup/form';
 import {
   APPOINTMENT_POPUP_CLASS,
   AppointmentPopup,
 } from '../../appointment_popup/popup';
+import { createTimeZoneCalculator } from '../../r1/timezone_calculator/utils';
 import {
   AppointmentDataAccessor,
 } from '../../utils/data_accessor/appointment_data_accessor';
 import type { IFieldExpr } from '../../utils/data_accessor/types';
+import type { ResourceConfig } from '../../utils/loader/types';
 import {
   ResourceManager,
 } from '../../utils/resource_manager/resource_manager';
@@ -41,6 +42,8 @@ const DEFAULT_EDITING = {
   allowDragging: true,
 };
 
+const NO_TIMEZONE = '';
+
 const DEFAULT_APPOINTMENT = {
   text: 'Test Appointment',
   startDate: new Date(2021, 3, 26, 9, 30),
@@ -61,6 +64,8 @@ interface CreateAppointmentPopupOptions {
   editing?: Record<string, unknown>;
   firstDayOfWeek?: number;
   startDayHour?: number;
+  timeZone?: string;
+  resources?: ResourceConfig[];
   onAppointmentFormOpening?: (...args: unknown[]) => void;
   onSave?: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   title?: string;
@@ -103,9 +108,15 @@ export const createAppointmentPopup = async (
   document.body.appendChild(container);
 
   const dataAccessors = new AppointmentDataAccessor(DEFAULT_FIELDS, false);
-  const resourceManager = new ResourceManager([]);
-  const timeZoneCalculator = mockTimeZoneCalculator;
+  const resourceManager = new ResourceManager(options.resources ?? []);
+  const timeZoneCalculator = createTimeZoneCalculator(options.timeZone ?? NO_TIMEZONE);
   const editing = { ...DEFAULT_EDITING, ...options.editing };
+
+  if (options.resources?.length) {
+    await Promise.all(
+      resourceManager.resources.map((r) => r.load()),
+    );
+  }
 
   const addAppointment = options.addAppointment
     ?? jest.fn(resolvedDeferred);
@@ -163,24 +174,28 @@ export const createAppointmentPopup = async (
   const title = options.title ?? 'New Appointment';
   const readOnly = options.readOnly ?? false;
 
-  popup.show(appointmentData, { onSave, title, readOnly });
-  await new Promise(process.nextTick);
+  const overlaySelector = `.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}`;
 
-  const selector = `.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}`;
-  const overlayWrapper = document.querySelector(
-    selector,
-  ) as HTMLDivElement;
+  const showAndQuery = async (
+    data: Record<string, unknown>,
+  ): Promise<PopupModel> => {
+    popup.show(data, { onSave, title, readOnly });
+    await new Promise(process.nextTick);
 
-  if (!overlayWrapper) {
-    throw new Error(
-      'AppointmentPopup overlay wrapper not found in DOM',
-    );
-  }
+    const wrapper = document.querySelector(overlaySelector) as HTMLDivElement;
 
-  const POM = new PopupModel(overlayWrapper);
+    if (!wrapper) {
+      throw new Error('AppointmentPopup overlay wrapper not found in DOM');
+    }
+
+    return new PopupModel(wrapper);
+  };
+
+  const POM = await showAndQuery(appointmentData);
 
   const dispose = (): void => {
     popup.dispose();
+    resourceManager.dispose();
     container.remove();
   };
 

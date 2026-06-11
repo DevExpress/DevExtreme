@@ -4,7 +4,7 @@ import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
 import Button from 'ui/button';
 import 'ui/check_box';
-import Popup from '__internal/ui/popup/m_popup';
+import Popup from '__internal/ui/popup/popup';
 import DropDownMenu from '__internal/ui/toolbar/internal/toolbar.menu';
 import ToolbarMenuList from '__internal/ui/toolbar/internal/toolbar.menu.list';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';

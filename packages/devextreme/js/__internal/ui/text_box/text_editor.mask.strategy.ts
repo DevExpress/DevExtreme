@@ -4,7 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { clipboardText as getClipboardText } from '@js/core/utils/dom';
 import type { DxEvent } from '@js/events';
-import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
+import type { TextEditorBaseProperties } from '@ts/ui/text_box/text_editor.base';
 import type TextEditorMask from '@ts/ui/text_box/text_editor.mask';
 import type { HandlingArgs } from '@ts/ui/text_box/text_editor.mask.rule';
 import type { CaretRange } from '@ts/ui/text_box/utils.caret';
@@ -265,7 +265,6 @@ export default class MaskStrategy {
 
     // eslint-disable-next-line no-restricted-globals
     this._dragTimer = setTimeout(() => {
-      // @ts-expect-error dxElementWrapper.val()
       const value = this.editor._convertToValue(this._editorInput().val());
 
       this._editorOption('value', value);
@@ -309,7 +308,6 @@ export default class MaskStrategy {
       if (this._isAutoFill()) {
         this.editor._maskKeyHandler(event, () => {
           this.editor._handleChain({
-            // @ts-expect-error dxElementWrapper.val()
             text: inputVal,
             start: 0,
             length: inputVal.length,

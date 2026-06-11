@@ -7,6 +7,7 @@ const SRC_DIR_NAME = 'src';
 const TSCONFIG_LIB_NAME = 'tsconfig.lib.json';
 const EXECUTORS_JSON_NAME = 'executors.json';
 const JSON_EXTENSION = '.json';
+const TXT_EXTENSION = '.txt';
 const TSCONFIG_PREFIX = 'tsconfig';
 
 interface PathConfig {
@@ -76,10 +77,11 @@ const compileTypeScript = (configPath: string): CompilationResult => {
   return { success: true };
 };
 
-const isJsonAsset = (filename: string): boolean =>
-  filename.endsWith(JSON_EXTENSION) && !filename.includes(TSCONFIG_PREFIX);
+const isAssetFile = (filename: string): boolean =>
+  (filename.endsWith(JSON_EXTENSION) && !filename.includes(TSCONFIG_PREFIX))
+  || filename.endsWith(TXT_EXTENSION);
 
-const copyJsonAssets = (srcDir: string, destDir: string): AssetCopyResult => {
+const copyAssets = (srcDir: string, destDir: string): AssetCopyResult => {
   if (!fs.existsSync(srcDir)) {
     return { filesCopied: 0 };
   }
@@ -95,9 +97,9 @@ const copyJsonAssets = (srcDir: string, destDir: string): AssetCopyResult => {
       if (!fs.existsSync(destPath)) {
         fs.mkdirSync(destPath, { recursive: true });
       }
-      const result = copyJsonAssets(srcPath, destPath);
+      const result = copyAssets(srcPath, destPath);
       filesCopied += result.filesCopied;
-    } else if (isJsonAsset(entry.name)) {
+    } else if (isAssetFile(entry.name)) {
       fs.copyFileSync(srcPath, destPath);
       filesCopied++;
     }
@@ -144,21 +146,21 @@ const shouldSkipBuild = (distPath: string, forceRebuild: boolean): boolean => {
 
 const buildPlugin = (paths: PathConfig, forceRebuild = false): void => {
   if (shouldSkipBuild(paths.distDir, forceRebuild)) {
-    console.log('✓ Plugin already built, skipping...');
+    console.log('[nx-infra-plugin] Already built, skipping.');
     process.exit(0);
   }
 
-  console.log('  Compiling TypeScript...');
+  console.log('[nx-infra-plugin] Compiling TypeScript...');
   const result = compileTypeScript(paths.tsconfig);
   if (!result.success) {
     throw new Error(result.error);
   }
 
-  console.log('  Copying assets...');
-  copyJsonAssets(paths.srcDir, paths.distDir);
+  console.log('[nx-infra-plugin] Copying assets...');
+  copyAssets(paths.srcDir, paths.distDir);
   copyExecutorsJson(paths.pluginDir, paths.distDir);
 
-  console.log('✓ Plugin built successfully!');
+  console.log('[nx-infra-plugin] Plugin built successfully!');
 };
 
 const parseArgs = (): { forceRebuild: boolean } => {
@@ -169,15 +171,15 @@ const parseArgs = (): { forceRebuild: boolean } => {
 };
 
 const main = (): void => {
-  console.log('🔨 Building nx-infra-plugin...');
+  console.log('[nx-infra-plugin] Building...');
 
   try {
     const { forceRebuild } = parseArgs();
     const paths = buildPathConfig(__dirname);
     buildPlugin(paths, forceRebuild);
   } catch (error) {
-    console.error('⚠ Failed to build plugin:', (error as Error).message);
-    console.error('  The plugin will be built on first use by NX');
+    console.error('[nx-infra-plugin] Build failed:', (error as Error).message);
+    console.error('[nx-infra-plugin] The plugin will be built on first use by NX.');
     process.exit(1);
   }
 };

@@ -1,4 +1,4 @@
-import ColorBox from '../__internal/ui/color_box/m_color_box';
+import ColorBox from '../__internal/ui/color_box/color_box';
 export default ColorBox;
 
 // STYLE colorBox

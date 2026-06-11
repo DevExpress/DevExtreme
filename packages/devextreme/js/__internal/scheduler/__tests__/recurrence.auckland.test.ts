@@ -7,7 +7,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 describe('Recurrence appointments', () => {
   it('Weekly appointment should show in correct day and hours (T1185479)', async () => {

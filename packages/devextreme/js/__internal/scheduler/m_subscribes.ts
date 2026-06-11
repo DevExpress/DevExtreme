@@ -8,7 +8,6 @@ import { getDeltaTime } from './appointments/resizing/get_delta_time';
 import { getDateFormatType, getDateText } from './appointments_new/utils/get_date_text';
 import { VERTICAL_VIEW_TYPES } from './constants';
 import type Scheduler from './m_scheduler';
-import { utils } from './m_utils';
 import { isAppointmentTakesAllDay } from './r1/utils/base';
 import type {
   AppointmentTooltipItem,
@@ -16,6 +15,7 @@ import type {
   SafeAppointment,
   TargetedAppointment,
 } from './types';
+import { utils } from './utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import type { AppointmentItemViewModel } from './view_model/types';
 
@@ -75,10 +75,12 @@ const subscribes = {
     });
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   getUpdatedData(rawAppointment) {
     return this.getUpdatedData(rawAppointment);
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   updateAppointmentAfterDrag({
     event, element, rawAppointment, isDropToTheSameCell, isDropToSelfScheduler,
   }) {
@@ -110,6 +112,7 @@ const subscribes = {
     }
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   onDeleteButtonPress(options) {
     const targetedData = this.getTargetedAppointment(options.data, $(options.target));
     this.checkAndDeleteAppointment(options.data, targetedData);
@@ -297,6 +300,7 @@ const subscribes = {
     return this.option('adaptivityEnabled');
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   removeDroppableCellClass() {
     this._workSpace.removeDroppableCellClass();
   },
