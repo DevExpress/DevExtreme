@@ -113,5 +113,3 @@ allowBuilds:
   puppeteer: true
   unrs-resolver: true
 
-minimumReleaseAgeExclude:
-  - eslint-config-devextreme@1.1.11
