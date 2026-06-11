@@ -87,11 +87,12 @@ export class DateHeaderDataGenerator {
     const weekDaysRow: DateHeaderCellData[] = [];
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-      const cell = completeViewDataMap[index][dayIndex * colSpan];
-      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(cell.startDate, -viewOffset);
+      const { startDate, endDate, ...restProps } = completeViewDataMap[index][dayIndex * colSpan];
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
 
       weekDaysRow.push({
-        ...cell,
+        ...restProps,
+        startDate,
         colSpan,
         text: formatWeekdayAndDay(shiftedStartDate),
         isFirstGroupCell: false,
@@ -152,13 +153,15 @@ export class DateHeaderDataGenerator {
     const shouldShiftDatesForHeaderText = !isTimelineView(viewType)
       || viewType === VIEWS.TIMELINE_MONTH;
 
-    return slicedByColumnsData.map(({
-      startDate,
-      endDate,
-      isFirstGroupCell,
-      isLastGroupCell,
-      ...restProps
-    }, idx: number) => {
+    return slicedByColumnsData.map((cellData, idx: number) => {
+      const {
+        startDate,
+        endDate,
+        isFirstGroupCell,
+        isLastGroupCell,
+        ...restProps
+      } = cellData;
+
       const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
       const shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
         ? shiftedStartDate
@@ -181,7 +184,6 @@ export class DateHeaderDataGenerator {
       return {
         ...restProps,
         startDate,
-        endDate,
         text,
         today: dateUtils.sameDate(shiftedStartDate, today),
         colSpan,

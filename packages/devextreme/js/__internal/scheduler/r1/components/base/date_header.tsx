@@ -62,7 +62,6 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
               {
                 dateHeaderRow.map(({
                   colSpan,
-                  endDate,
                   groupIndex,
                   groups: cellGroups,
                   index,
@@ -77,7 +76,6 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
                     key={key}
                     viewContext={viewContext}
                     startDate={startDate}
-                    endDate={endDate}
                     groups={isHorizontalGrouping ? cellGroups : undefined}
                     groupIndex={isHorizontalGrouping ? groupIndex : undefined}
                     today={today ?? false}
