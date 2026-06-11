@@ -3288,10 +3288,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     if (groupCount && $container) {
       const groupRows = this.makeGroupRows(this.option('groups'), this.option('groupByDate'));
       this.attachGroupCountClass();
-      const elements = Array.isArray(groupRows.elements)
-        ? groupRows.elements
-        : [groupRows.elements];
-      $container.append(elements);
+      const { elements } = groupRows;
+      if (Array.isArray(elements)) {
+        $container.append(elements);
+      } else {
+        $container.append(elements);
+      }
       cellTemplates = groupRows.cellTemplates;
     } else {
       this.detachGroupCountClass();
