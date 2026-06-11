@@ -400,7 +400,7 @@ export class ViewDataGenerator {
     } = dateTableMap.reduce<{
       previousGroupIndex: number | undefined;
       groupedData: GroupedViewData['groupedData'];
-    }>(({ previousGroupIndex, groupedData: accGroupedData }, cellsRow) => {
+    }>(({ previousGroupIndex, groupedData: currentGroupedData }, cellsRow) => {
       const cellDataRow = cellsRow.map(({ cellData }) => cellData);
 
       const firstCell = cellDataRow[0];
@@ -408,7 +408,7 @@ export class ViewDataGenerator {
       const currentGroupIndex = firstCell.groupIndex;
 
       if (currentGroupIndex !== previousGroupIndex) {
-        accGroupedData.push({
+        currentGroupedData.push({
           dateTable: [],
           isGroupedAllDayPanel: getIsGroupedAllDayPanel(Boolean(isAllDayRow), isVerticalGrouping),
           groupIndex: currentGroupIndex,
@@ -417,16 +417,16 @@ export class ViewDataGenerator {
       }
 
       if (isAllDayRow) {
-        accGroupedData[accGroupedData.length - 1].allDayPanel = cellDataRow;
+        currentGroupedData[currentGroupedData.length - 1].allDayPanel = cellDataRow;
       } else {
-        accGroupedData[accGroupedData.length - 1].dateTable.push({
+        currentGroupedData[currentGroupedData.length - 1].dateTable.push({
           cells: cellDataRow,
           key: (cellDataRow[0].key ?? 0) - startCellIndex,
         });
       }
 
       return {
-        groupedData: accGroupedData,
+        groupedData: currentGroupedData,
         previousGroupIndex: currentGroupIndex,
       };
     }, { previousGroupIndex: -1, groupedData: [] });

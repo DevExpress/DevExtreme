@@ -206,7 +206,6 @@ export interface DOMMetaData {
 
 export interface DateHeaderCellData extends Omit<ViewCellData, 'endDate'> {
   colSpan: number;
-  endDate?: Date;
 }
 
 export interface DateHeaderData {

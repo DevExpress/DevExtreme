@@ -87,11 +87,16 @@ export class DateHeaderDataGenerator {
     const weekDaysRow: DateHeaderCellData[] = [];
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-      const cell = completeViewDataMap[index][dayIndex * colSpan];
-      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(cell.startDate, -viewOffset);
+      const {
+        startDate,
+        endDate: _,
+        ...restProps
+      } = completeViewDataMap[index][dayIndex * colSpan];
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
 
       weekDaysRow.push({
-        ...cell,
+        ...restProps,
+        startDate,
         colSpan,
         text: formatWeekdayAndDay(shiftedStartDate),
         isFirstGroupCell: false,
