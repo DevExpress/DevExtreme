@@ -1,6 +1,6 @@
 import { formatWeekdayAndDay } from '@ts/scheduler/r1/utils/index';
 
-import type { ViewDataProviderOptions } from './view_model/m_types';
+import type { ViewDataProviderOptions } from './view_model/types';
 import SchedulerWorkSpaceIndicator from './work_space_indicator';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {

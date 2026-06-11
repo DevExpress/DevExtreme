@@ -6,7 +6,7 @@ import { formatWeekdayAndDay, monthUtils } from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerTimeline from './timeline';
-import type { ViewDataProviderOptions } from './view_model/m_types';
+import type { ViewDataProviderOptions } from './view_model/types';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 
