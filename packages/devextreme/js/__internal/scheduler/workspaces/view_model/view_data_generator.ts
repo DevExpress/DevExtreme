@@ -677,10 +677,9 @@ export class ViewDataGenerator {
     rowIndex: number,
     columnIndex: number,
     rowCount: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     columnCountBase: number,
   ): number {
-    return calculateCellIndex(rowIndex, columnIndex, rowCount, 0);
+    return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCountBase);
   }
 
   public generateGroupedDataMap(viewDataMap: ViewDataMap): GroupedDataMap {
