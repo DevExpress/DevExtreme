@@ -145,12 +145,26 @@ export class GroupedDataMapProvider {
     const {
       groupIndex, startDate, allDay, index,
     } = cellInfo;
+    const {
+      allDayPanelGroupedMap,
+      dateTableGroupedMap,
+    } = this.groupedDataMap;
     const { viewOffset } = this.viewOptions;
 
-    // eslint-disable-next-line @typescript-eslint/init-declarations
-    let foundPosition: CellPositionData | undefined;
-    this.getRowsForCellSearch(allDay, groupIndex).forEach((row) => {
-      row.forEach((cell) => {
+    const gIdx = groupIndex ?? 0;
+    let rows: CellInfo[][] = dateTableGroupedMap[gIdx] || [];
+
+    if (allDay && !this.viewOptions.isVerticalGrouping) {
+      const allDayRow = allDayPanelGroupedMap[gIdx];
+      rows = allDayRow ? [allDayRow] : [];
+    }
+
+    /* eslint-disable @typescript-eslint/prefer-for-of, max-depth */
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
+      const row = rows[rowIndex];
+
+      for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
+        const cell = row[columnIndex];
         const originCellData = cell.cellData;
         // NOTE: If this is appointment's render call
         // we should shift the real cellData dates by viewOffset
@@ -163,32 +177,16 @@ export class GroupedDataMapProvider {
           }
           : originCellData;
 
-        if (
-          foundPosition === undefined
-          && this.isSameGroupIndexAndIndex(cellData, groupIndex, index)
-          && this.isStartDateInCell(startDate, allDay, cellData, originCellData)
-        ) {
-          foundPosition = cell.position;
+        if (this.isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
+          if (this.isStartDateInCell(startDate, allDay, cellData, originCellData)) {
+            return cell.position;
+          }
         }
-      });
-    });
-
-    return foundPosition;
-  }
-
-  private getRowsForCellSearch(
-    allDay: boolean | undefined,
-    groupIndex: number | undefined,
-  ): CellInfo[][] {
-    const { allDayPanelGroupedMap, dateTableGroupedMap } = this.groupedDataMap;
-    const gIdx = groupIndex ?? 0;
-
-    if (allDay && !this.viewOptions.isVerticalGrouping) {
-      const allDayRow = allDayPanelGroupedMap[gIdx];
-      return allDayRow ? [allDayRow] : [];
+      }
     }
+    /* eslint-enable @typescript-eslint/prefer-for-of, max-depth */
 
-    return dateTableGroupedMap[gIdx] ?? [];
+    return undefined;
   }
 
   private isStartDateInCell(
