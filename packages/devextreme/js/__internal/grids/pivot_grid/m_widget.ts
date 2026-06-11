@@ -4,6 +4,7 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender, deferUpdate, noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -160,6 +161,8 @@ class PivotGrid extends Widget {
   __scrollBarWidth: any;
 
   _createActionByOption: any;
+
+  $fieldChooserButton?: dxElementWrapper;
 
   _getDefaultOptions() {
     return extend(super._getDefaultOptions(), {
@@ -644,6 +647,10 @@ class PivotGrid extends Widget {
         const fieldChooser = e.component.$content().dxPivotGridFieldChooser('instance');
         fieldChooser.resetTreeView();
         fieldChooser.cancelChanges();
+
+        if (that.$fieldChooserButton) {
+          (that.$fieldChooserButton.get(0) as HTMLElement).focus();
+        }
       },
     };
 
@@ -981,20 +988,24 @@ class PivotGrid extends Widget {
     $toolbarContainer.prependTo($targetContainer);
 
     if (this.option('fieldChooser.enabled')) {
-      const $buttonElement = $(DIV)
+      this.$fieldChooserButton = $(DIV)
         .appendTo($toolbarContainer)
         .addClass('dx-pivotgrid-field-chooser-button');
       const buttonOptions: Properties = {
         icon: 'columnchooser',
         // @ts-expect-error ts-error
         hint: this.option('texts.showFieldChooser'),
+        elementAttr: {
+          'aria-label': this.option('texts.showFieldChooser'),
+          'aria-haspopup': 'dialog',
+        },
         stylingMode: buttonStylingMode,
         onClick: () => {
           this.getFieldChooserPopup().show();
         },
       };
 
-      this._createComponent($buttonElement, Button, buttonOptions);
+      this._createComponent(this.$fieldChooserButton, Button, buttonOptions);
     }
 
     if (this.option('export.enabled')) {
