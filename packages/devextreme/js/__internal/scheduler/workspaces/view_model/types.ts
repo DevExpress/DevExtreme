@@ -1,3 +1,5 @@
+import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
+
 import type { TimeZoneCalculator } from '../../r1/timezone_calculator/calculator';
 import type {
   CellPositionData,
@@ -8,7 +10,6 @@ import type {
   ViewType,
 } from '../../types';
 import type { ResourceManager } from '../../utils/resource_manager/resource_manager';
-import type { GroupLeaf } from '../../utils/resource_manager/types';
 
 interface CommonOptions extends CountGenerationConfig {
   getResourceManager: () => ResourceManager;

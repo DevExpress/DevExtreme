@@ -3,7 +3,7 @@ import type { Appointment, Properties } from '@js/ui/scheduler';
 import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
-import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
+import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import type { AppointmentItemViewModel } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
@@ -82,9 +82,9 @@ export type CalculateCellIndex = (
 export type CalculateStartViewDate = (
   currentDate: Date,
   startDayHour: number,
-  startDate: Date,
+  startDate: Date | undefined,
   intervalCount: number,
-  firstDayOfWeekOption?: number,
+  firstDayOfWeekOption?: number | undefined,
 ) => Date;
 
 export interface ViewCellData {
@@ -94,7 +94,7 @@ export interface ViewCellData {
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
-  groups?: Record<string, unknown>;
+  groups?: GroupLeaf['grouped'];
   groupIndex?: number;
   index: number;
   isFirstGroupCell: boolean;
@@ -105,6 +105,8 @@ export interface ViewCellData {
   isFocused?: boolean;
   highlighted?: boolean;
 }
+
+export type TimePanelCellData = Omit<ViewCellData, 'endDate'>;
 
 export interface CountGenerationConfig {
   intervalCount: number;
@@ -162,7 +164,6 @@ export interface ViewDataProviderOptions {
   startDate?: Date;
   firstDayOfWeek: number;
   today: Date;
-
   isGenerateTimePanelData?: boolean;
   isGenerateWeekDaysHeaderData?: boolean;
 }
@@ -170,6 +171,13 @@ export interface ViewDataProviderOptions {
 export interface CellInfo {
   cellData: ViewCellData;
   position: CellPositionData;
+}
+
+export interface GroupInfo {
+  allDay: boolean;
+  startDate: Date;
+  endDate: Date;
+  groupIndex: number;
 }
 
 export interface ViewDataMap {
@@ -217,7 +225,7 @@ export interface GroupPanelData {
 }
 
 export interface ViewDataBase {
-  groupIndex: number;
+  groupIndex: number | undefined;
   isGroupedAllDayPanel?: boolean;
   key: string;
 }
@@ -233,12 +241,18 @@ export interface GroupedViewDataBase {
   bottomVirtualRowCount: number;
 }
 
-export interface TimePanelCellsData extends ViewDataBase {
-  dateTable: ViewCellData[];
-  allDayPanel?: ViewCellData;
+export interface TimePanelDataBase {
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  isGroupedAllDayPanel: boolean;
 }
 
-export interface TimePanelData extends GroupedViewDataBase {
+export interface TimePanelCellsData extends ViewDataBase {
+  dateTable: TimePanelCellData[];
+  allDayPanel?: TimePanelCellData;
+}
+
+export interface TimePanelData extends TimePanelDataBase {
   groupedData: TimePanelCellsData[];
 }
 
