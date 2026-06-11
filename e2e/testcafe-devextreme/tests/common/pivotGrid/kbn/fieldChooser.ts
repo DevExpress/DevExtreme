@@ -17,9 +17,8 @@ const PIVOT_GRID_SELECTOR = '#container';
     const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    // Note: several tab presses are needed to focus the field chooser button
     await t
-      .pressKey('tab tab tab')
+      .pressKey('tab')
       .expect(pivotGrid.getFieldChooserButton().focused)
       .ok();
 
