@@ -1,5 +1,6 @@
 import type { PropsWithChildren, PropsWithClassName } from '@ts/core/r1/index';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import { renderUtils } from '../../utils/index';
 import type { ContentTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
@@ -12,7 +13,7 @@ export interface CellBaseProps extends PropsWithClassName,
   startDate: Date;
   endDate: Date;
   allDay?: boolean;
-  groups?: Record<string, unknown>;
+  groups?: GroupLeaf['grouped'];
   groupIndex?: number;
   text?: string;
   index: number;

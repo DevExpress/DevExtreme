@@ -1,4 +1,4 @@
-import ViewDataProvider from '__internal/scheduler/workspaces/view_model/m_view_data_provider';
+import ViewDataProvider from '__internal/scheduler/workspaces/view_model/view_data_provider';
 import { supportedViews } from '../../helpers/scheduler/helpers.js';
 import { getEmptyResourceManager, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
 
@@ -1036,8 +1036,8 @@ module('View Data Provider', {
         });
     });
 
-    function createCellInfo(groupIndex, startDate, isAllDay, index) {
-        return { groupIndex, startDate, isAllDay, index };
+    function createCellInfo(groupIndex, startDate, allDay, index) {
+        return { groupIndex, startDate, allDay, index };
     }
 
     module('Data generation', () => {
