@@ -1530,7 +1530,6 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 4,
                     startDate: new Date(2021, 0, 10, 5),
-                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1542,7 +1541,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 4,
                     startDate: new Date(2021, 0, 11, 5),
-                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
