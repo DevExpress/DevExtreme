@@ -37,3 +37,46 @@ const PIVOT_GRID_SELECTOR = '#container';
     fieldPanel: fieldPanelOptions,
   }, PIVOT_GRID_SELECTOR));
 });
+
+test('Field chooser button should have correct aria attributes', async (t) => {
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+
+  await t
+    .expect(pivotGrid.getFieldChooserButton().getAttribute('aria-haspopup'))
+    .eql('dialog');
+
+  await t
+    .expect(pivotGrid.getFieldChooserButton().getAttribute('aria-label'))
+    .eql('Show Field Chooser');
+}).before(async () => createWidget('dxPivotGrid', {
+  allowFiltering: true,
+  showBorders: true,
+  height: 470,
+  fieldChooser: {
+    enabled: true,
+  },
+}, PIVOT_GRID_SELECTOR));
+
+test('Field chooser button should focused after field chooser popup is closed', async (t) => {
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+
+  await t
+    .pressKey('tab')
+    .pressKey('enter')
+    .expect(pivotGrid.getFieldChooserPopup().isVisible())
+    .ok();
+
+  await t
+    .pressKey('esc')
+    .expect(pivotGrid.getFieldChooserPopup().isVisible())
+    .notOk()
+    .expect(pivotGrid.getFieldChooserButton().focused)
+    .ok();
+}).before(async () => createWidget('dxPivotGrid', {
+  allowFiltering: true,
+  showBorders: true,
+  height: 470,
+  fieldChooser: {
+    enabled: true,
+  },
+}, PIVOT_GRID_SELECTOR));
