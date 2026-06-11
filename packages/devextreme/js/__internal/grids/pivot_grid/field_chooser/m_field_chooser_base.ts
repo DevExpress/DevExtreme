@@ -127,6 +127,16 @@ export class FieldChooserBase extends mixinWidget {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _setAriaSortAttribute(_column, _ariaSortState, _$rootElement) { }
 
+  protected _applyColumnState(options) {
+    const $element = super._applyColumnState(options);
+
+    if (options.name === 'headerFilter' && $element) {
+      $element.removeAttr('tabindex');
+    }
+
+    return $element;
+  }
+
   _init() {
     super._init();
     this._headerFilterView = new HeaderFilterView(this);
@@ -358,6 +368,25 @@ export class FieldChooserBase extends mixinWidget {
     const targetElement = element ?? this.$element();
 
     const handler = (e) => {
+      const field: any = $(e.currentTarget).data('field');
+
+      if (!field) {
+        return;
+      }
+
+      const isAltArrowDown = e.type === 'keydown' && e.altKey && e.key === 'ArrowDown';
+
+      if (isAltArrowDown) {
+        const mainGroupField = getMainGroupField(this._dataSource, field);
+
+        if (mainGroupField.allowFiltering && field.area !== 'data' && !field.groupIndex) {
+          e.preventDefault();
+          this.handleHeaderFilterIconClick(e, field);
+        }
+
+        return;
+      }
+
       const shouldHandle = e.type === clickEventName
         || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '));
 
@@ -365,7 +394,6 @@ export class FieldChooserBase extends mixinWidget {
         return;
       }
 
-      const field: any = $(e.currentTarget).data('field');
       const isHeaderFilter = $(e.target).hasClass(CLASSES.headerFilter);
 
       if (isHeaderFilter) {
