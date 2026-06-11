@@ -2238,6 +2238,24 @@ QUnit.module('format: scroll position on boundary keys (T1330133)', {
             });
         });
     });
+
+    QUnit.module('focus-in semantics', () => {
+        QUnit.test('focus on integer-only format does not force-scroll the input to a boundary', function(assert) {
+            this.instance.option({
+                format: '#,##0',
+                value: -4589999,
+            });
+
+            this.scrollState.scrollLeft = 42;
+
+            this.input.focus();
+            this.clock.tick(CARET_TIMEOUT_DURATION);
+
+            assert.notStrictEqual(this.scrollState.scrollLeft, this.scrollState.scrollWidth, 'scroll is not forced to the end edge on focus');
+            assert.notStrictEqual(this.scrollState.scrollLeft, 0, 'scroll is not forced to the start edge on focus');
+            assert.strictEqual(this.scrollState.scrollLeft, 42, 'scroll position is left to the browser');
+        });
+    });
 });
 
 QUnit.module('format: custom parser and formatter', moduleConfig, () => {
