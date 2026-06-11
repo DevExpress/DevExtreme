@@ -370,7 +370,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   public virtualScrollingDispatcher!: VirtualScrollingDispatcher;
 
-  private scrollSync: Partial<ScrollSync> = {};
+  private scrollSync!: Partial<ScrollSync>;
 
   private $headerPanel!: dxElementWrapper;
 
@@ -1260,15 +1260,22 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const firstCellData = selectedCells[0];
     const lastCellData = selectedCells[selectedCells.length - 1];
 
-    const result: NormalizedCellData = {
+    const result: {
+      startDate: Date;
+      endDate: Date;
+      startDateUTC: NormalizedCellData['startDateUTC'];
+      endDateUTC: NormalizedCellData['endDateUTC'];
+      allDay?: NormalizedCellData['allDay'];
+    } = {
       startDate: firstCellData.startDate,
       endDate: lastCellData.endDate,
       startDateUTC: firstCellData.startDateUTC,
       endDateUTC: lastCellData.endDateUTC,
-      groups: lastCellData.groups,
-      groupIndex: lastCellData.groupIndex,
-      allDay: lastCellData.allDay,
     };
+
+    if (lastCellData.allDay !== undefined) {
+      result.allDay = lastCellData.allDay;
+    }
 
     this.option('onSelectedCellsClick')(result, lastCellData.groups as GroupValues);
   }
@@ -3207,6 +3214,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
 
+    delete this.isCellClick;
+    delete this.showPopup;
+    this.isSelectionStartedOnCell = false;
+
     this.shader?.clean();
 
     delete this.interval;
@@ -3563,7 +3574,7 @@ const createDragBehaviorConfig = (
     }
 
     removeDroppableCellClass();
-    (e.itemElement as unknown as dxElementWrapper)?.removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
+    $(e.itemElement as Element).removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
   };
 
   const cursorOffset = options.isSetCursorOffset
