@@ -57,7 +57,7 @@ test('Field chooser button should have correct aria attributes', async (t) => {
   },
 }, PIVOT_GRID_SELECTOR));
 
-test('Field chooser button should focused after field chooser popup is closed', async (t) => {
+test('Field chooser button should be focused after field chooser popup is closed', async (t) => {
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 
   await t
