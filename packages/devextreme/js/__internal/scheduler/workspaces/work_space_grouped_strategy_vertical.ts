@@ -45,7 +45,7 @@ class VerticalGroupedStrategy {
   }
 
   insertAllDayRowsIntoDateTable(): boolean {
-    return this.workspace.option('showAllDayPanel');
+    return this.workspace.option().showAllDayPanel;
   }
 
   getTotalCellCount(): number {
@@ -94,9 +94,9 @@ class VerticalGroupedStrategy {
   getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [Element, Element])
   : GroupBoundsOffset {
     return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
-      const startDayHour = this.workspace.option('startDayHour');
-      const endDayHour = this.workspace.option('endDayHour');
-      const hoursInterval = this.workspace.option('hoursInterval');
+      const {
+        startDayHour, endDayHour, hoursInterval, getHeaderHeight, showAllDayPanel,
+      } = this.workspace.option();
 
       const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval)
        * this.workspace.getCellHeight();
@@ -104,9 +104,9 @@ class VerticalGroupedStrategy {
       // @ts-expect-error
       const headerRowHeight = getBoundingRect(this.workspace.$headerPanelContainer.get(0)).height;
 
-      let topOffset = groupIndex * dayHeight + headerRowHeight + this.workspace.option('getHeaderHeight')() - scrollTop;
+      let topOffset = groupIndex * dayHeight + headerRowHeight + getHeaderHeight() - scrollTop;
 
-      if (this.workspace.option('showAllDayPanel') && this.workspace.supportAllDayRow()) {
+      if (showAllDayPanel && this.workspace.supportAllDayRow()) {
         topOffset += this.workspace.getCellHeight() * (groupIndex + 1);
       }
 

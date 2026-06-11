@@ -394,8 +394,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private showPopup?: boolean;
 
-  private readonly NAME!: string;
-
   private contextMenuAction:
     | ((args: WorkspaceOptionActionMap['onCellContextMenu']) => void)
     | undefined;
@@ -1271,7 +1269,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const cellSelector = `.${DATE_TABLE_CELL_CLASS},.${ALL_DAY_TABLE_CELL_CLASS}`;
     const $element = this.$element();
-    const eventName = addNamespace(contextMenuEventName, this.NAME);
+    const eventName = addNamespace(contextMenuEventName, this.NAME as string);
 
     eventsEngine.off($element, eventName, cellSelector);
     eventsEngine.on($element, eventName, cellSelector, this.contextMenuHandler.bind(this));

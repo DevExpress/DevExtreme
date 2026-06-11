@@ -29,7 +29,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   protected override getIntervalBetween(currentDate: Date): number {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
-    const startDayHour = this.option('startDayHour');
+    const { startDayHour } = this.option();
 
     return currentDate.getTime()
       - (firstViewDate.getTime() - startDayHour * 3600000)
@@ -86,15 +86,15 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override needCreateCrossScrolling(): boolean {
-    return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
+    return this.option().crossScrollingEnabled || this.isVerticalGroupedWorkSpace();
   }
 
   protected override getViewStartByOptions(): Date {
     return monthUtils.getViewStartByOptions(
-      this.option('startDate'),
-      this.option('currentDate'),
-      this.option('intervalCount'),
-      dateUtils.getFirstMonthDate(this.option('startDate')) as Date,
+      this.option().startDate,
+      this.option().currentDate,
+      this.option().intervalCount,
+      dateUtils.getFirstMonthDate(this.option().startDate) as Date,
     );
   }
 

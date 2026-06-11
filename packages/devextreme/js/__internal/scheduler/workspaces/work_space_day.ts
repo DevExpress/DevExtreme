@@ -13,7 +13,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
   }
 
   renderRHeaderPanel(): void {
-    if (this.option('intervalCount') === 1) {
+    if (this.option().intervalCount === 1) {
       super.renderRHeaderPanel(false);
     } else {
       super.renderRHeaderPanel(true);
