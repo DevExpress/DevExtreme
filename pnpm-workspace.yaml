@@ -115,3 +115,6 @@ allowBuilds:
   nx: true
   puppeteer: true
   unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - "eslint-config-devextreme"
