@@ -142,9 +142,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected calculateDurationInCells(timeDiff: number): number {
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
-    let duration = (timeDiff - differenceInDays * toMs('day') - this.option('startDayHour') * toMs('hour')) / this.getCellDuration();
+    let duration = (timeDiff - differenceInDays * toMs('day') - this.option().startDayHour * toMs('hour')) / this.getCellDuration();
 
-    if (today.getHours() > this.option('endDayHour')) {
+    if (today.getHours() > this.option().endDayHour) {
       duration = this.getCellCountInDay();
     }
 
@@ -226,8 +226,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getIntervalBetween(currentDate: Date, allDay?: boolean): number {
-    const startDayHour = this.option('startDayHour');
-    const endDayHour = this.option('endDayHour');
+    const { startDayHour, endDayHour } = this.option();
     const firstViewDate = this.getStartViewDate();
     const firstViewDateTime = firstViewDate.getTime();
     const hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour');
@@ -239,7 +238,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     let tailDelta = 0;
     const cellCount = this.getCellCountInDay() * (fullDays - this.getWeekendsCount(fullDays));
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
-    let result = cellCount * this.option('hoursInterval') * toMs('hour');
+    let result = cellCount * this.option().hoursInterval * toMs('hour');
 
     if (!allDay) {
       const hour = currentDate.getHours();
@@ -343,7 +342,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   protected override updateAllDayVisibility(): void { return noop(); }
 
   protected override getDateHeaderTemplate(): TemplateBase | null | undefined {
-    return this.option('timeCellTemplate');
+    return this.option().timeCellTemplate;
   }
 
   protected override renderView(): void {
@@ -396,7 +395,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     let $indicator: dxElementWrapper | undefined;
     const width = this.getIndicationWidth();
 
-    if (this.option('groupOrientation') === 'vertical') {
+    if (this.option().groupOrientation === 'vertical') {
       $indicator = this.createIndicator($container);
       setHeight($indicator, getBoundingRect($container.get(0)).height);
       $indicator.css('left', rtlOffset ? rtlOffset - width : width);
@@ -416,7 +415,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     groups: ResourceLoader[],
     groupByDate: boolean,
   ): GroupRows {
-    const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+    const tableCreatorStrategy = this.option().groupOrientation === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
       tableCreatorStrategy,
@@ -428,7 +427,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
       },
       this.getCellCount() || 1,
-      this.option('resourceCellTemplate'),
+      this.option().resourceCellTemplate,
       this.getTotalRowCount(this.getGroupCount()),
       groupByDate,
     );
