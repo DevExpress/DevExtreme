@@ -46,6 +46,7 @@ import type { TranslateVector } from '@ts/common/core/animation/translator';
 import { getMemoizeScrollTo, type ScrollToFunc } from '@ts/core/utils/scroll';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import {
   AllDayPanelTitleComponent,
@@ -536,7 +537,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return notifyScheduler.invoke(funcName, ...args);
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  _supportedKeys(): SupportedKeys {
     const clickHandler = function clickHandler(
       this: SchedulerWorkSpace,
       e: { preventDefault: () => void; stopPropagation: () => void; target: unknown },
@@ -627,7 +628,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       leftArrow: (e) => {
         onArrowPressed(e, 'left');
       },
-    }) as Record<string, (e: KeyboardEvent) => void>;
+    }) as SupportedKeys;
   }
 
   private isRTL(): boolean {
@@ -1346,13 +1347,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       event: { pageX: number; pageY: number },
     ): boolean => !this.isOutsideScrollable(target, event);
 
-    // eventsEngine.on supports 5-arg (element, event, selector, data, handler) form at runtime
-    const onFivePlusArgs = eventsEngine.on as (...args: unknown[]) => void;
-    onFivePlusArgs(
+    eventsEngine.on(
       element,
       DragEventNames.ENTER,
       DRAG_AND_DROP_SELECTOR,
       { checkDropTarget: onCheckDropTarget },
+      // @ts-expect-error
       onDragEnter,
     );
     eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
