@@ -4,7 +4,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture.disablePageReloads`PivotGrid_KBN_fields`
+fixture.disablePageReloads`PivotGrid_KBN_fieldChooser`
   .page(url(__dirname, '../../../container.html'));
 
 const PIVOT_GRID_SELECTOR = '#container';
