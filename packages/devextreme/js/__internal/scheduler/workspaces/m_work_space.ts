@@ -101,6 +101,7 @@ import {
 import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './virtual_scrolling';
+import type { GroupedStrategyConfig } from './work_space_grouped_strategy_config';
 import HorizontalGroupedStrategy from './work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
 
@@ -1693,6 +1694,18 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     );
   }
 
+  getIndicatorOffset(): number {
+    return 0;
+  }
+
+  getIndicationHeight(): number {
+    return 0;
+  }
+
+  getIndicationWidth(): number {
+    return 0;
+  }
+
   getMaxAllowedPosition(groupIndex) {
     return getMaxAllowedPosition(
       groupIndex,
@@ -2625,7 +2638,39 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       ? VerticalGroupedStrategy
       : HorizontalGroupedStrategy;
 
-    this.groupedStrategy = new Strategy(this);
+    this.groupedStrategy = new Strategy(this.createGroupedStrategyConfig());
+  }
+
+  private createGroupedStrategyConfig(): GroupedStrategyConfig {
+    return {
+      getRowCount: () => this.getRowCount(),
+      getCellCount: () => this.getCellCount(),
+      getGroupCount: () => this.getGroupCount(),
+      getCellHeight: () => this.getCellHeight(),
+      getCellWidth: () => this.getCellWidth(),
+      getTimePanelWidth: () => this.getTimePanelWidth(),
+      getGroupTableWidth: () => this.getGroupTableWidth(),
+      getAllDayHeight: () => this.getAllDayHeight(),
+      getWorkSpaceWidth: () => this.getWorkSpaceWidth(),
+      getWorkSpaceLeftOffset: () => this.getWorkSpaceLeftOffset(),
+      getIndicatorOffset: () => this.getIndicatorOffset(),
+      getIndicationHeight: () => this.getIndicationHeight(),
+      getIndicationWidth: () => this.getIndicationWidth(),
+      getScrollableScrollTop: () => this.getScrollable().scrollTop(),
+      getScrollableContentElement: () => this.getScrollable().$content().get(0),
+      getElement: () => this.$element().get(0),
+      getHeaderPanelContainerElement: () => this.$headerPanelContainer.get(0),
+      getCellIndexByCoordinates: (coordinates) => this.getCellIndexByCoordinates(coordinates),
+      supportAllDayRow: () => this.supportAllDayRow(),
+      isGroupedByDate: () => this.isGroupedByDate(),
+      showAllDayPanel: () => this.option('showAllDayPanel'),
+      startDayHour: () => this.option('startDayHour'),
+      endDayHour: () => this.option('endDayHour'),
+      hoursInterval: () => this.option('hoursInterval'),
+      crossScrollingEnabled: () => this.option('crossScrollingEnabled'),
+      rtlEnabled: () => this.option('rtlEnabled'),
+      getHeaderHeight: () => this.option('getHeaderHeight')?.() ?? 0,
+    };
   }
 
   protected getDefaultGroupStrategy() {
