@@ -125,6 +125,16 @@ $pivotgrid-expand-icon-text-offset: 0;
 }
 
 .dx-pivotgrid {
+  td:has(> .dx-expand-icon-container:focus-visible) {
+    outline: 2px solid;
+    outline-color: $pivotgrid-accent-color;
+    outline-offset: -2px;
+  }
+
+  .dx-expand-icon-container:focus-visible {
+    outline: none;
+  }
+
   .dx-column-header,
   .dx-filter-header {
     .dx-pivotgrid-toolbar {
