@@ -73,7 +73,6 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                 {
                   dateHeaderRow.map(({
                     colSpan,
-                    endDate,
                     groupIndex,
                     groups: cellGroups,
                     index,
@@ -88,7 +87,6 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                       key={key}
                       viewContext={viewContext}
                       startDate={startDate}
-                      endDate={endDate}
                       groups={isHorizontalGrouping ? cellGroups : undefined}
                       groupIndex={isHorizontalGrouping ? groupIndex : undefined}
                       today={today ?? DateHeaderCellDefaultProps.today}

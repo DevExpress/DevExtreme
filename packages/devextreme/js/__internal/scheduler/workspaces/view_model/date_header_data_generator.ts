@@ -154,7 +154,7 @@ export class DateHeaderDataGenerator {
 
     return slicedByColumnsData.map(({
       startDate,
-      endDate,
+      endDate: _,
       isFirstGroupCell,
       isLastGroupCell,
       ...restProps
@@ -181,7 +181,6 @@ export class DateHeaderDataGenerator {
       return {
         ...restProps,
         startDate,
-        endDate,
         text,
         today: dateUtils.sameDate(shiftedStartDate, today),
         colSpan,

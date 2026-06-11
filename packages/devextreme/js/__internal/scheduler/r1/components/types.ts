@@ -62,23 +62,6 @@ export interface ViewCellData {
   highlighted?: boolean;
 }
 
-export interface DateHeaderCellData extends ViewCellData {
-  colSpan: number;
-}
-
-export interface DateHeaderData {
-  dataMap: DateHeaderCellData[][];
-  leftVirtualCellWidth: number;
-  rightVirtualCellWidth: number;
-  leftVirtualCellCount: number;
-  rightVirtualCellCount: number;
-  weekDayLeftVirtualCellWidth?: number;
-  weekDayRightVirtualCellWidth?: number;
-  weekDayLeftVirtualCellCount?: number;
-  weekDayRightVirtualCellCount?: number;
-  isMonthDateHeader?: boolean;
-}
-
 interface DataCellTemplateData extends BaseTemplateData {
   startDate: Date;
   endDate: Date;
