@@ -2846,6 +2846,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getDateTableCellClass(rowIndex?: number, columnIndex?: number): string {
     const cellClass = `${DATE_TABLE_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS} ${VERTICAL_SIZES_CLASS}`;
 
+    if (rowIndex === undefined && columnIndex === undefined) {
+      return cellClass;
+    }
+
     return this.groupedStrategy
       .addAdditionalGroupCellClasses(
         cellClass,
