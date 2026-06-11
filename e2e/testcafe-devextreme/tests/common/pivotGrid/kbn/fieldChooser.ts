@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
@@ -13,9 +14,14 @@ const PIVOT_GRID_SELECTOR = '#container';
   ['description-cell', { visible: false }],
 ].forEach(([areaName, fieldPanelOptions]) => {
   test(`Field chooser button should have visible focus state when placed in ${areaName}`, async (t) => {
+    const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.pressKey('tab');
+    // Note: several tab presses are needed to focus the field chooser button
+    await t
+      .pressKey('tab tab tab')
+      .expect(pivotGrid.getFieldChooserButton().focused)
+      .ok();
 
     await testScreenshot(t, takeScreenshot, `field-chooser-button_focus_${areaName}.png`);
 
