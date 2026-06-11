@@ -40,7 +40,6 @@ const hangingCommandGridOptions = (): any => {
   const store = new (window as any).DevExpress.data.CustomStore({
     key: 'id',
     load(loadOptions: any) {
-      // Paged render load carries `take`; selectAll's all-pages key-load does not.
       if (loadOptions.take !== undefined) {
         const skip = loadOptions.skip ?? 0;
 
@@ -103,9 +102,6 @@ const suggestionConfig = { chat: { suggestions: { items: [{ text: 'Sort by name'
 fixture`AI Assistant - Request Lifecycle`
   .page(AI_INTEGRATION_PAGE);
 
-// === §3.8 Rapid sequential prompts ===
-
-// 3.8.1
 test('N distinct prompts back-to-back should each execute once, in order, and apply to the grid', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -143,9 +139,6 @@ test('N distinct prompts back-to-back should each execute once, in order, and ap
   { actions: [{ name: 'grouping', args: { dataField: 'name', groupIndex: 0 } }] },
 ]));
 
-// === §3.9 Input disabled while in flight ===
-
-// 3.9.1
 test('Input should be disabled during LLM phase', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -163,7 +156,6 @@ test('Input should be disabled during LLM phase', async (t) => {
   await t.expect(aiChat.isInputDisabled()).ok();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG]));
 
-// 3.9.2
 test('Input should be disabled during command execution phase', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -182,7 +174,6 @@ test('Input should be disabled during command execution phase', async (t) => {
   await t.expect(aiChat.getPendingMessages().count).eql(1);
 }).before(async () => createGridWithHangingCommand([selectAll]));
 
-// 3.9.3
 test('Input should be re-enabled after fulfillment', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -202,7 +193,6 @@ test('Input should be re-enabled after fulfillment', async (t) => {
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));
 
-// 3.9.4
 test('Input should be re-enabled after failure', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -221,7 +211,6 @@ test('Input should be re-enabled after failure', async (t) => {
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [FAIL]));
 
-// 3.9.5
 test('Input should be re-enabled after abort via popup close', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -249,9 +238,6 @@ test('Input should be re-enabled after abort via popup close', async (t) => {
   await t.expect(aiChat.isInputDisabled()).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG]));
 
-// === §3.10 Clear-chat disabled while in flight ===
-
-// 3.10.1
 test('Clear-chat button should be disabled during LLM phase', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -269,7 +255,6 @@ test('Clear-chat button should be disabled during LLM phase', async (t) => {
   await t.expect(aiChat.isClearChatDisabled()).ok();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG]));
 
-// 3.10.2
 test('Clear-chat button should be disabled during command execution phase', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -288,7 +273,6 @@ test('Clear-chat button should be disabled during command execution phase', asyn
   await t.expect(aiChat.getPendingMessages().count).eql(1);
 }).before(async () => createGridWithHangingCommand([selectAll]));
 
-// 3.10.3 — after fulfillment
 test('Clear-chat button should be re-enabled after fulfillment', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -306,7 +290,6 @@ test('Clear-chat button should be re-enabled after fulfillment', async (t) => {
   await t.expect(aiChat.isClearChatDisabled()).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));
 
-// 3.10.3 — after failure
 test('Clear-chat button should be re-enabled after failure', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -324,7 +307,6 @@ test('Clear-chat button should be re-enabled after failure', async (t) => {
   await t.expect(aiChat.isClearChatDisabled()).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [FAIL]));
 
-// 3.10.3 — after abort
 test('Clear-chat button should be re-enabled after abort via popup close', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -350,7 +332,6 @@ test('Clear-chat button should be re-enabled after abort via popup close', async
   await t.expect(aiChat.isClearChatDisabled()).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG]));
 
-// 3.10.4
 test('Clear-chat should remove all messages from chat and leave grid state unchanged', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -373,9 +354,6 @@ test('Clear-chat should remove all messages from chat and leave grid state uncha
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));
 
-// === §3.11 Suggestions disabled while in flight ===
-
-// 3.11.1
 test('Suggestions should be disabled during LLM phase and dispatch no second request', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -394,7 +372,6 @@ test('Suggestions should be disabled during LLM phase and dispatch no second req
   await t.expect(getAICallCount()).eql(1);
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG], suggestionConfig));
 
-// 3.11.2
 test('Suggestions should be disabled during command execution phase and dispatch no second request', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -414,7 +391,6 @@ test('Suggestions should be disabled during command execution phase and dispatch
   await t.expect(getAICallCount()).eql(1);
 }).before(async () => createGridWithHangingCommand([selectAll], suggestionConfig));
 
-// 3.11.3
 test('Suggestions should be re-enabled after resolution', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
