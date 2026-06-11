@@ -17,6 +17,7 @@ import { normalizeFilterWithSelectors } from '../filtering/utils';
 import { LifeCycleController } from '../lifecycle/controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/index';
+import { FILTER_OBJ_COMPARE_DEPTH } from './const';
 import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
 import {
@@ -29,8 +30,6 @@ import {
   normalizeRemoteOptions,
   updateItemsImmutable,
 } from './utils';
-
-const FILTER_OBJ_COMPARE_DEPTH = 6;
 
 export class DataController {
   private readonly pendingLocalOperations = {};

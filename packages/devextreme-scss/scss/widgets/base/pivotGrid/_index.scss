@@ -232,12 +232,6 @@ $pivotgrid-expand-icon-text-offset: 0;
       .dx-button {
         margin: 1px;
       }
-
-      .dx-button:not(.dx-state-hover):not(.dx-state-active) {
-        border-color: transparent;
-        background-color: transparent;
-        box-shadow: none;
-      }
     }
   }
 

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SchedulerAgenda from '__internal/scheduler/workspaces/m_agenda';
+import SchedulerAgenda from '__internal/scheduler/workspaces/agenda';
 import dateLocalization from 'common/core/localization/date';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
@@ -186,8 +186,12 @@ module('Agenda', {}, () => {
         assert.deepEqual(
             instance.getDOMElementsMetaData(),
             {
-                dateTableCellsMeta: [[{}]],
-                allDayPanelCellsMeta: [{}],
+                dateTableCellsMeta: [[{
+                    top: 0, left: 0, width: 0, height: 0,
+                }]],
+                allDayPanelCellsMeta: [{
+                    top: 0, left: 0, width: 0, height: 0,
+                }],
             },
             'Correct DOM meta data',
         );

@@ -9,7 +9,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Resizable from '@js/ui/resizable';
-import { hide, show } from '@ts/ui/tooltip/m_tooltip';
+import { hide, show } from '@ts/ui/tooltip/tooltip';
 
 import {
   ALL_DAY_APPOINTMENT_CLASS,
@@ -22,7 +22,7 @@ import {
   REDUCED_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
-} from '../../m_classes';
+} from '../../classes';
 import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
 import { validateRRule } from '../../recurrence/validate_rule';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
@@ -249,7 +249,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, () => {
       show({
-        target: $icon,
+        target: $icon.get(0),
         content: getReducedIconTooltip(this.option()),
       });
     });

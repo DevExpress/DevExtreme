@@ -436,6 +436,38 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('failure');
     });
 
+    it('returns failure when a field has no corresponding column', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('nonexistent', '=', 'Alpha'),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('succeeds when a field maps to a hidden but existing column', async () => {
+      const instance = await createGrid({
+        columns: [
+          { dataField: 'id', dataType: 'number' },
+          { dataField: 'name', dataType: 'string' },
+          { dataField: 'age', dataType: 'number', visible: false },
+        ],
+      });
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('age', '>', 10),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', ['age', '>', 10]);
+      expect(result.status).toBe('success');
+    });
+
     it('tolerates unreachable extra nodes', async () => {
       const instance = await createGrid();
       const spy = jest.spyOn(instance, 'option');
