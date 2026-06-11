@@ -98,8 +98,8 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/position_helper';
-import type { ViewDataProviderOptions } from './view_model/m_types';
-import ViewDataProvider from './view_model/m_view_data_provider';
+import type { ViewDataProviderOptions } from './view_model/types';
+import ViewDataProvider from './view_model/view_data_provider';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './virtual_scrolling';
 import HorizontalGroupedStrategy from './work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
@@ -527,10 +527,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         const groupCount = this.getGroupCount();
         const isGroupedByDate = this.isGroupedByDate();
         const isHorizontalGrouping = this.isHorizontalGroupedWorkSpace();
-        const focusedCellPosition = this.viewDataProvider.findCellPositionInMap({
-          ...focusedCellData,
-          isAllDay: focusedCellData.allDay,
-        });
+        const focusedCellPosition = this.viewDataProvider.findCellPositionInMap(focusedCellData);
 
         const edgeIndices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
           ? this.viewDataProvider.getGroupEdgeIndices(focusedCellData.groupIndex, isAllDayPanelCell)
@@ -613,12 +610,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection) {
-    const nextCellPosition = this.viewDataProvider.findCellPositionInMap({
-      startDate: nextCellData.startDate,
-      groupIndex: nextCellData.groupIndex,
-      isAllDay: nextCellData.allDay,
-      index: nextCellData.index,
-    });
+    const nextCellPosition = this.viewDataProvider.findCellPositionInMap(nextCellData);
 
     if (!nextCellPosition) {
       return;
@@ -2033,16 +2025,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private getCellByData(cellData) {
-    const {
-      startDate, groupIndex, allDay, index,
-    } = cellData;
-
-    const position = this.viewDataProvider.findCellPositionInMap({
-      startDate,
-      groupIndex,
-      isAllDay: allDay,
-      index,
-    });
+    const { allDay } = cellData;
+    const position = this.viewDataProvider.findCellPositionInMap(cellData);
 
     if (!position) {
       return undefined;
