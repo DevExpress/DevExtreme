@@ -417,11 +417,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private $sidebarScrollableContent!: dxElementWrapper;
 
-  private allDayTitles!: dxElementWrapper[];
-
   private allDayTables!: dxElementWrapper[];
-
-  private allDayPanels!: dxElementWrapper[];
 
   protected $flexContainer!: dxElementWrapper;
 
@@ -795,12 +791,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private isWorkspaceWithOddCells(): boolean {
     return this.option().hoursInterval === 0.5 && !this.isVirtualScrolling();
-  }
-
-  private getRealGroupOrientation(): 'vertical' | 'horizontal' {
-    return this.isVerticalGroupedWorkSpace()
-      ? 'vertical'
-      : 'horizontal';
   }
 
   createRAllDayPanelElements(): void {
@@ -1268,14 +1258,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.$thead;
   }
 
-  private getDateHeaderContainer(): dxElementWrapper {
-    return this.$thead;
-  }
-
-  private getCalculateHeaderCellRepeatCount(): number {
-    return this.groupedStrategy.calculateHeaderCellRepeatCount();
-  }
-
   protected updateScrollable(): void {
     this.$dateTableScrollable.update();
     this.headerScrollable?.update();
@@ -1714,14 +1696,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     return undefined;
-  }
-
-  private getVirtualRowOffset(): number {
-    return this.virtualScrollingDispatcher.virtualRowOffset;
-  }
-
-  private getVirtualCellOffset(): number {
-    return this.virtualScrollingDispatcher.virtualCellOffset;
   }
 
   private getDataByCell($cell: dxElementWrapper): ViewCellData | undefined {
@@ -2916,9 +2890,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private initAllDayPanelElements(): void {
-    this.allDayTitles = [];
     this.allDayTables = [];
-    this.allDayPanels = [];
   }
 
   private initDateTableScrollable(): void {
