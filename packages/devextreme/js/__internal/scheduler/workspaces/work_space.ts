@@ -157,9 +157,9 @@ interface ScrollSync {
 interface NormalizedCellData {
   startDate: Date;
   endDate: Date;
-  startDateUTC: Date | false | undefined;
-  endDateUTC: Date | false | undefined;
-  groups: ViewCellData['groups'];
+  startDateUTC?: Date | false | undefined;
+  endDateUTC?: Date | false | undefined;
+  groups?: ViewCellData['groups'];
   groupIndex: ViewCellData['groupIndex'];
   allDay: ViewCellData['allDay'];
   index?: ViewCellData['index'];
@@ -1663,14 +1663,18 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private normalizeCellData(cellData: Partial<ViewCellData>): NormalizedCellData {
+    const startDateUTC = cellData.startDate
+      && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid');
+    const endDateUTC = cellData.endDate
+      && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid');
     return {
       startDate: cellData.startDate ?? new Date(),
       endDate: cellData.endDate ?? new Date(),
-      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid'),
-      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid'),
-      groups: cellData.groups ? extend(true, {}, cellData.groups) : cellData.groups,
-      groupIndex: cellData.groupIndex,
+      ...(startDateUTC !== undefined && { startDateUTC }),
+      ...(endDateUTC !== undefined && { endDateUTC }),
       allDay: cellData.allDay,
+      ...(cellData.groups !== undefined && { groups: { ...cellData.groups } }),
+      groupIndex: cellData.groupIndex,
     };
   }
 
