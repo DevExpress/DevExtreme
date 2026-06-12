@@ -100,6 +100,14 @@ async function main() {
     .concurrency(concurrency || 1)
     .run({
       quarantineMode: getQuarantineMode(),
+      skipJsErrors: (err) => {
+        console.log('[DX-PAGE-JS-ERROR]', JSON.stringify({
+          message: err?.message,
+          pageUrl: err?.pageUrl,
+          stack: err?.stack,
+        }));
+        return false;
+      },
       // @ts-expect-error ts-error
       hooks: {
         test: {

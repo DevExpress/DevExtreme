@@ -314,6 +314,22 @@ export function runManualTestCore(
   const testStyles = getTestStyles(demo);
 
   const clientScripts = [
+    {
+      content: `
+        window.__dxTestErrors = [];
+        window.addEventListener('error', function(e) {
+          window.__dxTestErrors.push({
+            message: e.message,
+            filename: e.filename,
+            lineno: e.lineno,
+            colno: e.colno,
+            targetTag: e.target && e.target.tagName,
+            targetSrc: e.target && (e.target.src || e.target.href),
+          });
+          console.error('[DX-TEST-JS-ERROR]', JSON.stringify(window.__dxTestErrors[window.__dxTestErrors.length - 1]));
+        }, true);
+      `,
+    },
     { module: 'mockdate' },
     join(__dirname, './inject/test-utils.js'),
     { content: injectStyle(globalReadFrom(__dirname, './inject/test-styles.css', (x) => x)) },
