@@ -9,10 +9,15 @@ const CLASS = {
   messagePending: 'dx-ai-chat__message--pending',
   messageSuccess: 'dx-ai-chat__message--success',
   messageError: 'dx-ai-chat__message--error',
+  messageHeader: 'dx-ai-chat__message-header',
   actionListItem: 'dx-ai-chat__action-list-item',
   actionListItemSuccess: 'dx-ai-chat__action-list-item--success',
   actionListItemError: 'dx-ai-chat__action-list-item--error',
+  actionListItemText: 'dx-ai-chat__action-list-item-text',
   closeButton: 'dx-closebutton',
+  clearChatButton: 'dx-ai-chat__clear-button',
+  suggestion: 'dx-chat-suggestions',
+  suggestionButton: 'dx-button',
 };
 
 export class AIAssistantChat extends Popup {
@@ -36,6 +41,23 @@ export class AIAssistantChat extends Popup {
     return this.topToolbar;
   }
 
+  getClearChatButton(): Selector {
+    return this.element.find(`.${CLASS.clearChatButton}`);
+  }
+
+  getMessages(): Selector {
+    return this.getChat().getMessageBubbles();
+  }
+
+  getUserMessages(): Selector {
+    const messageClass = CLASS.message;
+
+    return this.getMessages().filter(
+      (node) => !node.querySelector(`.${messageClass}`),
+      { messageClass },
+    );
+  }
+
   getAIMessages(): Selector {
     return this.element.find(`.${CLASS.message}`);
   }
@@ -56,6 +78,10 @@ export class AIAssistantChat extends Popup {
     return this.element.find(`.${CLASS.messageError}`);
   }
 
+  getMessageHeader(index: number): Selector {
+    return this.getAIMessage(index).find(`.${CLASS.messageHeader}`);
+  }
+
   getActionItems(messageIndex: number): Selector {
     return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItem}`);
   }
@@ -66,5 +92,13 @@ export class AIAssistantChat extends Popup {
 
   getErrorActionItems(messageIndex: number): Selector {
     return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItemError}`);
+  }
+
+  getActionItemText(messageIndex: number, actionIndex: number): Selector {
+    return this.getActionItems(messageIndex).nth(actionIndex).find(`.${CLASS.actionListItemText}`);
+  }
+
+  getSuggestions(): Selector {
+    return this.element.find(`.${CLASS.suggestion} .${CLASS.suggestionButton}`);
   }
 }
