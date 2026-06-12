@@ -144,8 +144,13 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     this.hiddenInterval = 0;
   }
 
-  protected getCellEndDate(cellStartDate: Date, options: ViewDataProviderExtendedOptions): Date {
-    const { startDayHour, endDayHour } = options;
+  protected getCellEndDate(
+    cellStartDate: Date,
+    startDayHour: number,
+    endDayHour: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interval: number,
+  ): Date {
     const durationMs = (endDayHour - startDayHour) * toMs('hour');
     return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);
   }
