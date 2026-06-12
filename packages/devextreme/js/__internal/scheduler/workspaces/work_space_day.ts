@@ -1,4 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
+import type { ViewType } from '@js/ui/scheduler';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpaceVertical from './work_space_vertical';
@@ -6,7 +7,7 @@ import SchedulerWorkSpaceVertical from './work_space_vertical';
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
 class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
-  get type(): string { return VIEWS.DAY; }
+  get type(): ViewType { return VIEWS.DAY; }
 
   protected override getElementClass(): string {
     return DAY_CLASS;
