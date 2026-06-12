@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Tamaño de página",
         "dxPagination-ariaPageNumber": "Número de página",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Gran total",
         "dxPivotGrid-total": "{0} Total",
         "dxPivotGrid-fieldChooserTitle": "Selector de Campos",

@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Oldal mérete",
         "dxPagination-ariaPageNumber": "Oldalszám",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Teljes összeg",
         "dxPivotGrid-total": "{0} összesen",
         "dxPivotGrid-fieldChooserTitle": "Mezőválasztó",

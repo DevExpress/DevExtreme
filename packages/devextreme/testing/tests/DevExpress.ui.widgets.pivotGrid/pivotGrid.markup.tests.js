@@ -3,6 +3,26 @@ import windowUtils from 'core/utils/window';
 
 import '__internal/grids/pivot_grid/m_widget';
 
+const createPivotGrid = function(options) {
+    const pivotGridElement = $('#pivotGrid').dxPivotGrid(options);
+    return pivotGridElement.dxPivotGrid('instance');
+};
+
+const createExpandableDataSource = () => ({
+    fields: [
+        { dataField: 'region', area: 'row' },
+        { dataField: 'city', area: 'row' },
+        { dataField: 'year', area: 'column', expanded: true },
+        { dataField: 'quarter', area: 'column' },
+        { dataField: 'amount', area: 'data', summaryType: 'sum', dataType: 'number' }
+    ],
+    store: [
+        { region: 'N', city: 'B', year: 2020, quarter: 'Q1', amount: 100 },
+        { region: 'N', city: 'NY', year: 2020, quarter: 'Q2', amount: 200 },
+        { region: 'S', city: 'M', year: 2021, quarter: 'Q1', amount: 300 }
+    ]
+});
+
 QUnit.module('PivotGrid markup tests', () => {
 
     QUnit.testStart(function() {
@@ -10,10 +30,6 @@ QUnit.module('PivotGrid markup tests', () => {
         $('#qunit-fixture').html(markup);
     });
 
-    const createPivotGrid = function(options) {
-        const pivotGridElement = $('#pivotGrid').dxPivotGrid(options);
-        return pivotGridElement.dxPivotGrid('instance');
-    };
 
     QUnit.test('Init markup with sizes', function(assert) {
     // arrange
@@ -83,21 +99,6 @@ QUnit.module('PivotGrid markup tests', () => {
         assert.equal(pivotGrid.$element().children().length > 0, windowUtils.hasWindow(), 'empty rectangle');
 
         clock.restore();
-    });
-
-    const createExpandableDataSource = () => ({
-        fields: [
-            { dataField: 'region', area: 'row' },
-            { dataField: 'city', area: 'row' },
-            { dataField: 'year', area: 'column', expanded: true },
-            { dataField: 'quarter', area: 'column' },
-            { dataField: 'amount', area: 'data', summaryType: 'sum', dataType: 'number' }
-        ],
-        store: [
-            { region: 'N', city: 'B', year: 2020, quarter: 'Q1', amount: 100 },
-            { region: 'N', city: 'NY', year: 2020, quarter: 'Q2', amount: 200 },
-            { region: 'S', city: 'M', year: 2021, quarter: 'Q1', amount: 300 }
-        ]
     });
 
     QUnit.test('Expand control has aria-expanded reflecting expanded state', function(assert) {
@@ -188,6 +189,110 @@ QUnit.module('PivotGrid markup tests', () => {
             clock.restore();
         }
     });
-
 });
 
+QUnit.module('PivotGrid accessibility markup', {
+    beforeEach() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach() {
+        this.clock.restore();
+    }
+}, () => {
+
+    QUnit.testStart(function() {
+        $('#qunit-fixture').html('<div id=\'pivotGrid\' />');
+    });
+
+    QUnit.test('Root element has role="group"', function(assert) {
+        const pivotGrid = createPivotGrid({});
+
+        assert.strictEqual(pivotGrid.$element().attr('role'), 'group', 'root role');
+    });
+
+    QUnit.test('Root element has aria-label after render', function(assert) {
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const ariaLabel = pivotGrid.$element().attr('aria-label');
+        assert.equal(ariaLabel, 'Pivot grid');
+    });
+
+    QUnit.test('Outer table has role="presentation"', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $outerTable = pivotGrid.$element().find('.dx-pivotgrid-container > table');
+
+        assert.ok($outerTable.length > 0);
+        assert.equal($outerTable.attr('role'), 'presentation');
+    });
+
+    QUnit.test('Field-area tables have role="group" and localized aria-label', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            fieldPanel: {
+                visible: true,
+                showRowFields: true,
+                showColumnFields: true,
+                showDataFields: true,
+                showFilterFields: true
+            },
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const expectedLabels = {
+            row: 'Row Fields',
+            column: 'Column Fields',
+            data: 'Data Fields',
+            filter: 'Filter Fields'
+        };
+
+        Object.keys(expectedLabels).forEach((area) => {
+            const $table = pivotGrid.$element()
+                .find(`.dx-area-fields[group="${area}"] > table`);
+
+            assert.strictEqual($table.length, 1, `${area} field table exists`);
+            assert.strictEqual($table.attr('role'), 'group');
+            assert.strictEqual($table.attr('aria-label'), expectedLabels[area]);
+        });
+    });
+
+    QUnit.test('Scrollable containers have no tabindex', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $scrollableContainers = pivotGrid.$element().find('.dx-pivotgrid-area .dx-scrollable-container');
+
+        assert.equal($scrollableContainers.length, 3);
+
+        $scrollableContainers.each((_, container) => {
+            assert.strictEqual(container.getAttribute('tabindex'), null);
+        });
+    });
+});

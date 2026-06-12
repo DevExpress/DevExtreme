@@ -1114,6 +1114,7 @@ class PivotGrid extends Widget {
   _createTableElement() {
     const that = this;
     const $table = ($('<table>') as any)
+      .attr('role', 'presentation')
       .css({ width: '100%' })
       .toggleClass(BORDERS_CLASS, !!that.option('showBorders'))
       .toggleClass('dx-word-wrap', !!that.option('wordWrapEnabled'));
@@ -1154,7 +1155,10 @@ class PivotGrid extends Widget {
   _initMarkup() {
     const that = this;
     super._initMarkup();
-    that.$element().addClass(PIVOTGRID_CLASS);
+    that.$element()
+      .addClass(PIVOTGRID_CLASS)
+      .attr('role', 'group')
+      .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
   }
 
   _renderContentImpl() {

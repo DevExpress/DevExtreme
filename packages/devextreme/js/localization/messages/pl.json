@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Rozmiar strony",
         "dxPagination-ariaPageNumber": "Numer strony",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Łącznie",
         "dxPivotGrid-total": "{0} Łącznie",
         "dxPivotGrid-fieldChooserTitle": "Wybór pola",
