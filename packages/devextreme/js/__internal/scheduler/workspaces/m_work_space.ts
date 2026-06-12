@@ -390,7 +390,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   get type(): ViewType {
-    return '' as ViewType;
+    return abstract();
   }
 
   get viewDataProvider(): ViewDataProvider {
