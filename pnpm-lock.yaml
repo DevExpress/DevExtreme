@@ -1534,9 +1534,6 @@ importers:
       del:
         specifier: 2.2.2
         version: 2.2.2
-      devextreme-aspnet-data:
-        specifier: 5.1.0
-        version: 5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-cldr-data:
         specifier: 1.0.3
         version: 1.0.3
