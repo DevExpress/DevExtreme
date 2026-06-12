@@ -178,6 +178,7 @@ class SelectBox<
             e.preventDefault();
 
             if (isCustomText) {
+              // eslint-disable-next-line max-depth
               if (opened) this._toggleOpenState();
               this._valueChangeEventHandler(e);
             }
@@ -702,7 +703,6 @@ class SelectBox<
     return value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isOverlayNestedTarget(target?: EventTarget | null): boolean {
     return !!$(target as Element).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
   }
@@ -732,7 +732,6 @@ class SelectBox<
     return super._isFocused() && $(activeElement).closest(this._input()).length > 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getValueChangeEventOptionName(): keyof TProperties {
     return 'customItemCreateEvent';
   }
@@ -839,7 +838,7 @@ class SelectBox<
     // @ts-expect-error DataExpressionMixin must be typed
     const selectedItemText = this._displayGetter(selectedItem);
 
-    return !selectedItemText || searchValue !== selectedItemText.toString();
+    return searchValue !== selectedItemText?.toString();
   }
 
   _valueChangeEventHandler(e: KeyboardEvent | DxEvent<InputEvent>): void {
@@ -994,7 +993,6 @@ class SelectBox<
     this._caret({ start: valueLength, end: displayValue.length });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldLogFieldTemplateDeprecationWarning(): boolean {
     return true;
   }
