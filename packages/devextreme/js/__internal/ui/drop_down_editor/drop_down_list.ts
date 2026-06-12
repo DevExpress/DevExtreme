@@ -410,13 +410,13 @@ class DropDownList<
     }, $target);
   }
 
-  _setSelectedItem(item: Item): void {
+  _setSelectedItem(item?: Item | null): void {
     const displayValue = this._displayValue(item);
     this.option('selectedItem', ensureDefined(item, null));
     this.option('displayValue', displayValue);
   }
 
-  _displayValue(item: Item): string {
+  _displayValue(item?: Item | null): string {
     // @ts-expect-error DataExpressionMixin must be typed
     return this._displayGetter(item) as string;
   }
