@@ -2228,15 +2228,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }));
   }
 
-  private toRealSize(element: Element | undefined): RealSize {
-    const { width, height } = getBoundingRect(element) as Pick<DOMRect, 'width' | 'height'>;
-    return { width, height };
-  }
-
   getPanelDOMSize(panelName: PanelName): RealSize {
+    const getElementSize = (element: Element | undefined): RealSize => {
+      const { width, height } = getBoundingRect(element) as Pick<DOMRect, 'width' | 'height'>;
+      return { width, height };
+    };
+
     return panelName === 'allDayPanel'
-      ? this.cache.memo('allDayPanelSize', () => this.toRealSize(this.$allDayPanel.get(0)))
-      : this.cache.memo('regularPanelSize', () => this.toRealSize(this.getDateTable().get(0)));
+      ? this.cache.memo('allDayPanelSize', () => getElementSize(this.$allDayPanel.get(0)))
+      : this.cache.memo('regularPanelSize', () => getElementSize(this.getDateTable().get(0)));
   }
 
   getCollectorDimension(isCollectorCompact: boolean, panelName: PanelName): CollectorCSS {
