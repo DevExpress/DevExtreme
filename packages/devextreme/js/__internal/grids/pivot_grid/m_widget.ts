@@ -21,6 +21,7 @@ import type { ButtonStyle, Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
+import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isGeneric } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -890,6 +891,35 @@ class PivotGrid extends Widget {
     });
   }
 
+  _handleCellKeyDown(e) {
+    if (e.repeat) {
+      return;
+    }
+    if (e.key !== 'Enter' && e.key !== ' ') {
+      return;
+    }
+    const args = this._createEventArgs(e.currentTarget, e);
+    const { cell } = args;
+    if (!cell || !isDefined(cell.expanded)) {
+      return;
+    }
+    e.preventDefault();
+    this._trigger('onCellClick', args);
+    if (args.cancel) {
+      return;
+    }
+    const $control = $(e.currentTarget).find('.dx-expand-icon-container');
+    saveFocusedElementInfo($control.get(0), this);
+    const onReady = () => {
+      this.off('contentReady', onReady);
+      restoreFocus(this);
+    };
+    this.on('contentReady', onReady);
+    setTimeout(() => {
+      this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+    });
+  }
+
   _getNoDataText() {
     return this.option('texts.noData');
   }
@@ -1089,6 +1119,7 @@ class PivotGrid extends Widget {
       .toggleClass('dx-word-wrap', !!that.option('wordWrapEnabled'));
 
     eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', that._handleCellClick.bind(that));
+    eventsEngine.on($table, addNamespace('keydown', 'dxPivotGrid'), 'td', that._handleCellKeyDown.bind(that));
 
     return $table;
   }
