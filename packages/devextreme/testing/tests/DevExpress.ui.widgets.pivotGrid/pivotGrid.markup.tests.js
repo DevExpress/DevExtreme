@@ -122,6 +122,11 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('Root element has aria-label after render', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
             dataSource: dataSourceWithStore
@@ -134,6 +139,11 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('aria-label uses leaf row/column counts', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
             dataSource: {
@@ -169,6 +179,11 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('aria-label excludes hidden fields from counts', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
             dataSource: {
@@ -188,6 +203,11 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('Outer table has role="presentation"', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
             dataSource: dataSourceWithStore
@@ -201,6 +221,11 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('Field-area tables have role="group" and localized aria-label', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
             fieldPanel: {
@@ -232,6 +257,11 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('Scrollable containers have no tabindex', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
             dataSource: dataSourceWithStore
@@ -248,6 +278,11 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('aria-label updates when a field is moved to another area', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
             dataSource: dataSourceWithStore
