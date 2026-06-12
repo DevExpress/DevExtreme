@@ -865,7 +865,7 @@ export class ViewDataGenerator {
     } = options;
 
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-    const columnCountInDay = isHorizontalView(viewType as ViewType)
+    const columnCountInDay = isHorizontalView(viewType)
       ? cellCountInDay
       : 1;
 
@@ -881,7 +881,7 @@ export class ViewDataGenerator {
     } = options;
 
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-    const rowCountInDay = !isHorizontalView(viewType as ViewType)
+    const rowCountInDay = !isHorizontalView(viewType)
       ? cellCountInDay
       : 1;
 
