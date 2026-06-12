@@ -581,13 +581,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         const isHorizontalGrouping = this.isHorizontalGroupedWorkSpace();
         const focusedCellPosition = this.viewDataProvider.findCellPositionInMap(focusedCellData);
 
-        const isAllDayPanelCellBool = Boolean(isAllDayPanelCell);
         const edgeIndices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
           ? this.viewDataProvider.getGroupEdgeIndices(
             focusedCellData.groupIndex ?? 0,
-            isAllDayPanelCellBool,
+            Boolean(isAllDayPanelCell),
           )
-          : this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCellBool);
+          : this.viewDataProvider.getViewEdgeIndices(Boolean(isAllDayPanelCell));
 
         const nextCellData = this.cellsSelectionController.handleArrowClick({
           focusedCellPosition,
@@ -600,7 +599,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           viewType: this.type,
           key,
           getCellDataByPosition: this.viewDataProvider.getCellData.bind(this.viewDataProvider),
-          isAllDayPanelCell: isAllDayPanelCellBool,
+          isAllDayPanelCell: Boolean(isAllDayPanelCell),
           focusedCellData,
         });
 
@@ -2934,8 +2933,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.$dateTableScrollable.$content().append(this.$dateTableScrollableContent);
 
       this.$headerTablesContainer.append([this.$headerPanel, this.$allDayPanel]);
-      if (this.$allDayPanel && this.$allDayTable) {
-        this.$allDayPanel.append([this.$allDayContainer, this.$allDayTable]);
+      if (this.$allDayPanel) {
+        this.$allDayPanel.append(
+          [this.$allDayContainer, this.$allDayTable].filter(Boolean) as dxElementWrapper[],
+        );
       }
     }
 
@@ -2977,8 +2978,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       );
     } else {
       this.headerScrollable.$content().append(this.$allDayPanel);
-      if (this.$allDayPanel && this.$allDayTable) {
-        this.$allDayPanel.append([this.$allDayContainer, this.$allDayTable]);
+      if (this.$allDayPanel) {
+        this.$allDayPanel.append(
+          [this.$allDayContainer, this.$allDayTable].filter(Boolean) as dxElementWrapper[],
+        );
       }
       this.$sidebarScrollableContent.append(this.$timePanel);
     }
