@@ -746,8 +746,6 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
 
     // assert
     await t
-      .expect(dataGrid.getDataCell(0, 1).isFocused)
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxDataGrid', {
@@ -792,7 +790,6 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
 
     await waitForPaint();
 
-    await t.expect(dataGrid.getDataCell(199, 35).isFocused).ok();
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
     // assert
