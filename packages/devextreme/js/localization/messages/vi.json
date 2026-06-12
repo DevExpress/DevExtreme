@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Kích thước trang",
         "dxPagination-ariaPageNumber": "Số trang",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid with {0} rows and {1} columns. There are {2} filter fields, {3} data fields, {4} column fields, {5} row fields",
         "dxPivotGrid-grandTotal": "Tổng tất cả",
         "dxPivotGrid-total": "{0} Tổng",
         "dxPivotGrid-fieldChooserTitle": "Trình lựa chọn Trường",

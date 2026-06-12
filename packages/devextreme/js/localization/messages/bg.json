@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Размер на страницата",
         "dxPagination-ariaPageNumber": "Номер на страница",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid with {0} rows and {1} columns. There are {2} filter fields, {3} data fields, {4} column fields, {5} row fields",
         "dxPivotGrid-grandTotal": "Обща сума",
         "dxPivotGrid-total": "{0} общо",
         "dxPivotGrid-fieldChooserTitle": "Избор на полета",

@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "頁面大小",
         "dxPagination-ariaPageNumber": "頁碼",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid with {0} rows and {1} columns. There are {2} filter fields, {3} data fields, {4} column fields, {5} row fields",
         "dxPivotGrid-grandTotal": "合計",
         "dxPivotGrid-total": "{0} 總計",
         "dxPivotGrid-fieldChooserTitle": "欄位選擇器",
