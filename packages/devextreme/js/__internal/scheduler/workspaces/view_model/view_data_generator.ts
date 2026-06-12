@@ -504,11 +504,10 @@ export class ViewDataGenerator {
       rowIndex,
       columnIndex,
     );
-    const endDate = this.getCellEndDate(
+    const endDate = this.calculateEndDate(
       startDate,
-      options.startDayHour,
-      options.endDayHour,
       options.interval,
+      options.endDayHour,
     );
 
     const data: ViewCellDataSimple = {
@@ -917,14 +916,5 @@ export class ViewDataGenerator {
 
   public getFirstDayOfWeek(firstDayOfWeekOption: number): number {
     return firstDayOfWeekOption;
-  }
-
-  protected getCellEndDate(
-    cellStartDate: Date,
-    startDayHour: number,
-    endDayHour: number,
-    interval: number,
-  ): Date {
-    return timezoneUtils.addOffsetsWithoutDST(cellStartDate, Math.round(interval));
   }
 }
