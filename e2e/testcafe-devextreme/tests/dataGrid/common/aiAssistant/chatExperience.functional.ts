@@ -37,7 +37,7 @@ test('Chat history should accumulate across multiple prompts', async (t) => {
   await t.expect(aiChat.getAIMessages().count).eql(2);
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
@@ -350,7 +350,7 @@ test('customizeResponseText changed at runtime should apply to subsequent messag
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(aiChat.getActionItemText(1, 0).textContent).eql('Updated message');
   await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Original message');
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,

@@ -114,7 +114,7 @@ test('N distinct prompts back-to-back should each execute once, in order, and ap
   const steps = [
     { prompt: 'Sort by name', verify: async () => t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc') },
     { prompt: 'Sort by value', verify: async () => t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).eql('desc') },
-    { prompt: 'Clear sorting', verify: async () => t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).notOk() },
+    { prompt: 'Clear sorting', verify: async () => t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).eql(undefined) },
     { prompt: 'Group by name', verify: async () => t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(0) },
   ];
 
@@ -208,7 +208,7 @@ test('Input should be re-enabled after failure', async (t) => {
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.isInputDisabled()).notOk();
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [FAIL]));
 
 test('Input should be re-enabled after abort via popup close', async (t) => {
