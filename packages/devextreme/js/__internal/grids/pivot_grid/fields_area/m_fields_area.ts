@@ -1,5 +1,6 @@
 import '../field_chooser/m_field_chooser_base';
 
+import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
@@ -43,6 +44,19 @@ class FieldsArea extends AreaItem {
       .addClass('dx-area-fields')
       .addClass(AREA_DRAG_CLASS)
       .attr('group', this._area);
+  }
+
+  _createTableElement() {
+    const localizationMessageMap = {
+      row: 'dxPivotGrid-rowFields',
+      column: 'dxPivotGrid-columnFields',
+      data: 'dxPivotGrid-dataFields',
+      filter: 'dxPivotGrid-filterFields',
+    };
+
+    return $('<table>')
+      .attr('role', 'group')
+      .attr('aria-label', localizationMessage.format(localizationMessageMap[this._area]));
   }
 
   isVisible() {

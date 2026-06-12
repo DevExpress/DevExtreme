@@ -1071,6 +1071,7 @@ class PivotGrid extends Widget {
   _createTableElement() {
     const that = this;
     const $table = ($('<table>') as any)
+      .attr('role', 'presentation')
       .css({ width: '100%' })
       .toggleClass(BORDERS_CLASS, !!that.option('showBorders'))
       .toggleClass('dx-word-wrap', !!that.option('wordWrapEnabled'));
@@ -1110,7 +1111,34 @@ class PivotGrid extends Widget {
   _initMarkup() {
     const that = this;
     super._initMarkup();
-    that.$element().addClass(PIVOTGRID_CLASS);
+    that.$element()
+      .addClass(PIVOTGRID_CLASS)
+      .attr('role', 'group');
+  }
+
+  _updateAriaLabel() {
+    const that = this;
+    const dataController = that._dataController;
+    const dataSource = that.getDataSource();
+
+    const rowsCount = dataController?.totalRowCount() ?? 0;
+    const columnsCount = dataController?.totalColumnCount() ?? 0;
+
+    const countVisibleFields = (area: string): number => {
+      const fields = dataSource?.getAreaFields(area) ?? [];
+      return fields.filter((field) => field.visible !== false).length;
+    };
+
+    const filterFieldsCount = countVisibleFields('filter');
+    const dataFieldsCount = countVisibleFields('data');
+    const columnFieldsCount = countVisibleFields('column');
+    const rowFieldsCount = countVisibleFields('row');
+
+    const ariaLabel = localizationMessage
+      // @ts-expect-error Badly typed format method
+      .format('dxPivotGrid-ariaLabel', rowsCount, columnsCount, filterFieldsCount, dataFieldsCount, columnFieldsCount, rowFieldsCount);
+
+    that.$element().attr('aria-label', ariaLabel);
   }
 
   _renderContentImpl() {
@@ -1223,6 +1251,8 @@ class PivotGrid extends Widget {
       filterHeaderContainer,
       dataHeaderContainer,
     );
+
+    that._updateAriaLabel();
 
     that._update(isFirstDrawing);
   }
