@@ -264,7 +264,7 @@
         "dxPagination-ariaPageSize": "Размер страницы",
         "dxPagination-ariaPageNumber": "Номер страницы",
 
-        "dxPivotGrid-ariaLabel": "Pivot grid with {0} rows and {1} columns. There are {2} filter fields, {3} data fields, {4} column fields, {5} row fields",
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Итого",
         "dxPivotGrid-total": "{0} Всего",
         "dxPivotGrid-fieldChooserTitle": "Выбор полей",

@@ -264,7 +264,7 @@
         "dxPagination-ariaPageSize": "Velikost strani",
         "dxPagination-ariaPageNumber": "Številka strani",
 
-        "dxPivotGrid-ariaLabel": "Pivot grid with {0} rows and {1} columns. There are {2} filter fields, {3} data fields, {4} column fields, {5} row fields",
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Skupna vsota",
         "dxPivotGrid-total": "{0} skupaj",
         "dxPivotGrid-fieldChooserTitle": "Izbirnik polj",

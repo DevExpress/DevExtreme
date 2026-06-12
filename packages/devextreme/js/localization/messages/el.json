@@ -264,7 +264,7 @@
         "dxPagination-ariaPageSize": "Μέγεθος σελίδας",
         "dxPagination-ariaPageNumber": "Αριθμός σελίδας",
 
-        "dxPivotGrid-ariaLabel": "Pivot grid with {0} rows and {1} columns. There are {2} filter fields, {3} data fields, {4} column fields, {5} row fields",
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Σύνολο",
         "dxPivotGrid-total": "{0} Σύνολο",
         "dxPivotGrid-fieldChooserTitle": "Επιλογέας πεδίου",

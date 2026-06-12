@@ -8,6 +8,21 @@ const createPivotGrid = function(options) {
     return pivotGridElement.dxPivotGrid('instance');
 };
 
+const createExpandableDataSource = () => ({
+    fields: [
+        { dataField: 'region', area: 'row' },
+        { dataField: 'city', area: 'row' },
+        { dataField: 'year', area: 'column', expanded: true },
+        { dataField: 'quarter', area: 'column' },
+        { dataField: 'amount', area: 'data', summaryType: 'sum', dataType: 'number' }
+    ],
+    store: [
+        { region: 'N', city: 'B', year: 2020, quarter: 'Q1', amount: 100 },
+        { region: 'N', city: 'NY', year: 2020, quarter: 'Q2', amount: 200 },
+        { region: 'S', city: 'M', year: 2021, quarter: 'Q1', amount: 300 }
+    ]
+});
+
 QUnit.module('PivotGrid markup tests', () => {
 
     QUnit.testStart(function() {
@@ -84,21 +99,6 @@ QUnit.module('PivotGrid markup tests', () => {
         assert.equal(pivotGrid.$element().children().length > 0, windowUtils.hasWindow(), 'empty rectangle');
 
         clock.restore();
-    });
-
-    const createExpandableDataSource = () => ({
-        fields: [
-            { dataField: 'region', area: 'row' },
-            { dataField: 'city', area: 'row' },
-            { dataField: 'year', area: 'column', expanded: true },
-            { dataField: 'quarter', area: 'column' },
-            { dataField: 'amount', area: 'data', summaryType: 'sum', dataType: 'number' }
-        ],
-        store: [
-            { region: 'N', city: 'B', year: 2020, quarter: 'Q1', amount: 100 },
-            { region: 'N', city: 'NY', year: 2020, quarter: 'Q2', amount: 200 },
-            { region: 'S', city: 'M', year: 2021, quarter: 'Q1', amount: 300 }
-        ]
     });
 
     QUnit.test('Expand control has aria-expanded reflecting expanded state', function(assert) {
@@ -204,21 +204,6 @@ QUnit.module('PivotGrid accessibility markup', {
         $('#qunit-fixture').html('<div id=\'pivotGrid\' />');
     });
 
-    const dataSourceWithStore = {
-        fields: [
-            { dataField: 'region', area: 'row' },
-            { dataField: 'city', area: 'row' },
-            { dataField: 'date', dataType: 'date', area: 'column' },
-            { dataField: 'amount', area: 'data' },
-            { dataField: 'category', area: 'filter' }
-        ],
-        store: [
-            { region: 'NA', city: 'NY', date: '2026/01/06', category: 'A', amount: 100 },
-            { region: 'NA', city: 'LA', date: '2026/02/06', category: 'B', amount: 200 },
-            { region: 'EU', city: 'PR', date: '2026/01/06', category: 'A', amount: 300 }
-        ]
-    };
-
     QUnit.test('Root element has role="group"', function(assert) {
         const pivotGrid = createPivotGrid({});
 
@@ -226,84 +211,14 @@ QUnit.module('PivotGrid accessibility markup', {
     });
 
     QUnit.test('Root element has aria-label after render', function(assert) {
-        if(!windowUtils.hasWindow()) {
-            assert.expect(0);
-            return;
-        }
-
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
-            dataSource: dataSourceWithStore
+            dataSource: createExpandableDataSource()
         });
         this.clock.tick(10);
 
         const ariaLabel = pivotGrid.$element().attr('aria-label');
-        assert.ok(ariaLabel, 'aria-label is set');
-        assert.equal(ariaLabel, 'Pivot grid with 3 rows and 2 columns. There are 1 filter fields, 1 data fields, 3 column fields, 2 row fields');
-    });
-
-    QUnit.test('aria-label uses leaf row/column counts', function(assert) {
-        if(!windowUtils.hasWindow()) {
-            assert.expect(0);
-            return;
-        }
-
-        const pivotGrid = createPivotGrid({
-            width: 600, height: 400,
-            dataSource: {
-                fields: [
-                    { dataField: 'region', area: 'row' },
-                    { dataField: 'country', area: 'row' },
-                    { dataField: 'year', area: 'column' },
-                    { dataField: 'month', area: 'column' },
-                    { dataField: 'amount', area: 'data' }
-                ],
-                store: [
-                    { region: 'NA', country: 'USA', year: 2025, month: 1, amount: 100 },
-                    { region: 'NA', country: 'USA', year: 2025, month: 2, amount: 200 },
-                    { region: 'NA', country: 'Canada', year: 2025, month: 2, amount: 200 },
-                    { region: 'EU', country: 'France', year: 2026, month: 1, amount: 300 }
-                ]
-            },
-        });
-        this.clock.tick(10);
-
-        const before = pivotGrid.$element().attr('aria-label');
-        assert.equal(before, 'Pivot grid with 3 rows and 3 columns. There are 0 filter fields, 1 data fields, 2 column fields, 2 row fields');
-
-        const dataSource = pivotGrid.getDataSource();
-        dataSource.expandHeaderItem('row', ['NA']);
-        dataSource.expandHeaderItem('row', ['EU']);
-        dataSource.expandHeaderItem('column', [2025]);
-        dataSource.load();
-        this.clock.tick(10);
-
-        const after = pivotGrid.$element().attr('aria-label');
-        assert.equal(after, 'Pivot grid with 6 rows and 5 columns. There are 0 filter fields, 1 data fields, 2 column fields, 2 row fields');
-    });
-
-    QUnit.test('aria-label excludes hidden fields from counts', function(assert) {
-        if(!windowUtils.hasWindow()) {
-            assert.expect(0);
-            return;
-        }
-
-        const pivotGrid = createPivotGrid({
-            width: 600, height: 400,
-            dataSource: {
-                fields: [
-                    { dataField: 'region', area: 'row' },
-                    { dataField: 'city', area: 'row', visible: false },
-                    { dataField: 'date', area: 'column' },
-                    { dataField: 'amount', area: 'data' }
-                ],
-                store: [{ region: 'NA', city: 'NY', date: '2026/01/06', amount: 100 }]
-            }
-        });
-        this.clock.tick(10);
-
-        const ariaLabel = pivotGrid.$element().attr('aria-label');
-        assert.equal(ariaLabel, 'Pivot grid with 2 rows and 2 columns. There are 0 filter fields, 1 data fields, 1 column fields, 1 row fields');
+        assert.equal(ariaLabel, 'Pivot grid');
     });
 
     QUnit.test('Outer table has role="presentation"', function(assert) {
@@ -314,7 +229,7 @@ QUnit.module('PivotGrid accessibility markup', {
 
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
-            dataSource: dataSourceWithStore
+            dataSource: createExpandableDataSource()
         });
         this.clock.tick(10);
 
@@ -339,7 +254,7 @@ QUnit.module('PivotGrid accessibility markup', {
                 showDataFields: true,
                 showFilterFields: true
             },
-            dataSource: dataSourceWithStore
+            dataSource: createExpandableDataSource()
         });
         this.clock.tick(10);
 
@@ -368,7 +283,7 @@ QUnit.module('PivotGrid accessibility markup', {
 
         const pivotGrid = createPivotGrid({
             width: 600, height: 400,
-            dataSource: dataSourceWithStore
+            dataSource: createExpandableDataSource()
         });
         this.clock.tick(10);
 
@@ -380,30 +295,4 @@ QUnit.module('PivotGrid accessibility markup', {
             assert.strictEqual(container.getAttribute('tabindex'), null);
         });
     });
-
-    QUnit.test('aria-label updates when a field is moved to another area', function(assert) {
-        if(!windowUtils.hasWindow()) {
-            assert.expect(0);
-            return;
-        }
-
-        const pivotGrid = createPivotGrid({
-            width: 600, height: 400,
-            dataSource: dataSourceWithStore
-        });
-        this.clock.tick(10);
-
-        const before = pivotGrid.$element().attr('aria-label');
-
-        const dataSource = pivotGrid.getDataSource();
-        const cityField = dataSource.field('city');
-        dataSource.field(cityField.index, { area: 'column' });
-        dataSource.load();
-        this.clock.tick(10);
-
-        const after = pivotGrid.$element().attr('aria-label');
-        assert.notStrictEqual(after, before);
-        assert.equal(after, 'Pivot grid with 3 rows and 2 columns. There are 1 filter fields, 1 data fields, 4 column fields, 1 row fields');
-    });
-
 });

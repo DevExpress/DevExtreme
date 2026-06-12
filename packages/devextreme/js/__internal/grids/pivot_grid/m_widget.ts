@@ -1157,32 +1157,8 @@ class PivotGrid extends Widget {
     super._initMarkup();
     that.$element()
       .addClass(PIVOTGRID_CLASS)
-      .attr('role', 'group');
-  }
-
-  _updateAriaLabel() {
-    const that = this;
-    const dataController = that._dataController;
-    const dataSource = that.getDataSource();
-
-    const rowsCount = dataController?.totalRowCount() ?? 0;
-    const columnsCount = dataController?.totalColumnCount() ?? 0;
-
-    const countVisibleFields = (area: string): number => {
-      const fields = dataSource?.getAreaFields(area) ?? [];
-      return fields.filter((field) => field.visible !== false).length;
-    };
-
-    const filterFieldsCount = countVisibleFields('filter');
-    const dataFieldsCount = countVisibleFields('data');
-    const columnFieldsCount = countVisibleFields('column');
-    const rowFieldsCount = countVisibleFields('row');
-
-    const ariaLabel = localizationMessage
-      // @ts-expect-error Badly typed format method
-      .format('dxPivotGrid-ariaLabel', rowsCount, columnsCount, filterFieldsCount, dataFieldsCount, columnFieldsCount, rowFieldsCount);
-
-    that.$element().attr('aria-label', ariaLabel);
+      .attr('role', 'group')
+      .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
   }
 
   _renderContentImpl() {
@@ -1295,8 +1271,6 @@ class PivotGrid extends Widget {
       filterHeaderContainer,
       dataHeaderContainer,
     );
-
-    that._updateAriaLabel();
 
     that._update(isFirstDrawing);
   }
