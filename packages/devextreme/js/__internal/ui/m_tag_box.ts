@@ -126,7 +126,6 @@ class TagBox<
         if ($tagToDelete.length === 0) {
           return;
         }
-
         this._preserveFocusedTag = true;
         this._removeTagElement($tagToDelete);
         delete this._preserveFocusedTag;
