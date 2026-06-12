@@ -7,19 +7,25 @@ import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import errors from '@js/core/errors';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import {
   Deferred,
-  // @ts-expect-error ts-error
+  // @ts-expect-error type on Deferred level
   fromPromise,
 } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { isDefined, isPromise } from '@js/core/utils/type';
+import type { DxEvent, EventInfo } from '@js/events';
+import type dxList from '@js/ui/list';
+import { type Item, type ItemClickEvent, type SelectionChangedEvent } from '@js/ui/list';
 import type { Properties } from '@js/ui/select_box';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
 
 import type { ValueChangedEvent } from './editor/editor';
 
@@ -31,6 +37,8 @@ const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 
+interface RenderInputValueArgs { value?: unknown; renderOnly?: boolean }
+
 interface SelectBoxProperties extends Omit<Properties,
 'onItemClick' | 'onSelectionChanged'
 | 'onOpened' | 'onClosed'
@@ -39,6 +47,10 @@ interface SelectBoxProperties extends Omit<Properties,
   selectionMode?: SingleOrMultiple;
 
   tooltipEnabled?: boolean;
+
+  allowClearing?: boolean;
+
+  focusedElement?: dxElementWrapper | null;
 }
 
 class SelectBox<
@@ -58,106 +70,102 @@ class SelectBox<
 
   _customItemCreatingAction!: (event?: Record<string, unknown>) => void;
 
-  _savedTextRemoveEvent?: ValueChangedEvent;
+  _savedTextRemoveEvent?: KeyboardEvent;
 
   _preventInputValueRender?: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
-    const that = this;
     const parent = super._supportedKeys();
-    const clearSelectBox = function (e) {
+    const clearSelectBox = (e: KeyboardEvent): void => {
+      const { showClearButton } = this.option();
       const isEditable = this._isEditable();
 
       if (!isEditable) {
-        if (this.option('showClearButton')) {
+        if (showClearButton) {
           e.preventDefault();
           this.clear();
         }
       } else if (this._valueSubstituted()) {
         this._preventFiltering = true;
       }
+
       this._savedTextRemoveEvent = e;
       this._preventSubstitution = true;
     };
 
-    const searchIfNeeded = function () {
-      if (that.option('searchEnabled') && that._valueSubstituted()) {
-        that._searchHandler();
+    const searchIfNeeded = (): void => {
+      const { searchEnabled } = this.option();
+      if (searchEnabled && this._valueSubstituted()) {
+        this._searchHandler();
       }
     };
 
     return {
       ...parent,
-      tab(): void {
+      tab: (e: KeyboardEvent): void => {
         const { opened } = this.option();
-        const popupHasFocusableElements = opened && !!this._popup.getFocusableElements().length;
+        const popupHasFocusableElements = opened && !!this._popup?.getFocusableElements().length;
         if (!popupHasFocusableElements) {
           this._resetCaretPosition(true);
         }
-        // @ts-expect-error ts-error
-        parent.tab && parent.tab.apply(this, arguments);
+        parent.tab?.call(this, e);
 
         if (!popupHasFocusableElements) {
           this._cancelSearchIfNeed();
         }
       },
-      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-      upArrow(e): boolean | void {
-        // @ts-expect-error ts-error
-        if (parent.upArrow.apply(this, arguments)) {
-          if (!this.option('opened')) {
+      upArrow: (e: KeyboardEvent): boolean | undefined => {
+        if (parent.upArrow.call(this, e)) {
+          const { opened } = this.option();
+          if (!opened) {
             this._setNextValue(e);
           }
           return true;
         }
         return undefined;
       },
-      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-      downArrow(e): boolean | void {
-        // @ts-expect-error ts-error
-        if (parent.downArrow.apply(this, arguments)) {
-          if (!this.option('opened')) {
+      downArrow: (e: KeyboardEvent): boolean | undefined => {
+        if (parent.downArrow.call(this, e)) {
+          const { opened } = this.option();
+          if (!opened) {
             this._setNextValue(e);
           }
           return true;
         }
         return undefined;
       },
-      leftArrow(): void {
+      leftArrow: (e: KeyboardEvent): void => {
         searchIfNeeded();
-        // @ts-expect-error ts-error
-        parent.leftArrow?.apply(this, arguments);
+        parent.leftArrow?.call(this, e);
       },
-      rightArrow(): void {
+      rightArrow: (e: KeyboardEvent): void => {
         searchIfNeeded();
-        // @ts-expect-error ts-error
-        parent.rightArrow?.apply(this, arguments);
+        parent.rightArrow?.call(this, e);
       },
-      home(): void {
+      home: (e: KeyboardEvent): void => {
         searchIfNeeded();
-        // @ts-expect-error ts-error
-        parent.home?.apply(this, arguments);
+        parent.home?.call(this, e);
       },
-      end(): void {
+      end: (e: KeyboardEvent): void => {
         searchIfNeeded();
-        // @ts-expect-error ts-error
-        parent.end?.apply(this, arguments);
+        parent.end?.call(this, e);
       },
-      escape() {
-        // @ts-expect-error ts-error
-        const result = parent.escape?.apply(this, arguments);
+      escape: (e: KeyboardEvent): boolean => {
+        const result = parent.escape?.call(this, e);
         this._cancelEditing();
 
         return result ?? true;
       },
-      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-      enter(e): boolean | void {
-        const isOpened = this.option('opened');
+      enter: (e: KeyboardEvent): boolean | undefined => {
+        const {
+          opened, value, acceptCustomValue, allowClearing,
+        } = this.option();
         const inputText = this._input().val().trim();
-        const isCustomText = inputText && this._list && !this._list.option('focusedElement');
+        const { focusedElement } = this._list?.option() ?? {};
+        const isCustomText = inputText && this._list && !focusedElement;
 
-        if (!inputText && isDefined(this.option('value')) && this.option('allowClearing')) {
+        if (!inputText && isDefined(value) && allowClearing) {
           this._saveValueChangeEvent(e);
           this.option({
             selectedItem: null,
@@ -166,33 +174,32 @@ class SelectBox<
 
           this.close();
         } else {
-          if (this.option('acceptCustomValue')) {
+          if (acceptCustomValue) {
             e.preventDefault();
 
             if (isCustomText) {
-              if (isOpened) this._toggleOpenState();
+              if (opened) this._toggleOpenState();
               this._valueChangeEventHandler(e);
             }
 
-            return isOpened;
+            return opened;
           }
-          // @ts-expect-error ts-error
-          if (parent.enter?.apply(this, arguments)) {
-            return isOpened;
+          if (parent.enter?.call(this, e)) {
+            return opened;
           }
         }
+
+        return undefined;
       },
-      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-      space(e): boolean | void {
-        const isOpened = this.option('opened');
-        const isSearchEnabled = this.option('searchEnabled');
-        const acceptCustomValue = this.option('acceptCustomValue');
-        if (!isOpened || isSearchEnabled || acceptCustomValue) {
-          return;
+      space: (e: KeyboardEvent): boolean | undefined => {
+        const { opened, searchEnabled, acceptCustomValue } = this.option();
+        if (!opened || searchEnabled || acceptCustomValue) {
+          return undefined;
         }
 
         e.preventDefault();
         this._valueChangeEventHandler(e);
+
         return true;
       },
       backspace: clearSelectBox,
@@ -237,10 +244,8 @@ class SelectBox<
 
   _createPopup(): void {
     super._createPopup();
-    // @ts-expect-error ts-error
-    this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
-    // @ts-expect-error ts-error
-    this._popup.$overlayContent().attr('tabindex', -1);
+    this._popup?.$element().addClass(SELECTBOX_POPUP_CLASS);
+    this._popup?.$overlayContent().attr('tabindex', -1);
   }
 
   _popupWrapperClass(): string {
@@ -248,16 +253,20 @@ class SelectBox<
   }
 
   _cancelEditing(): void {
-    if (!this.option('searchEnabled') && this._list) {
+    const { searchEnabled, selectedItem } = this.option();
+
+    if (!searchEnabled && this._list) {
       this._focusListElement(null);
-      this._updateField(this.option('selectedItem'));
+      this._updateField(selectedItem);
     }
   }
 
   _renderOpenedState(): void {
     super._renderOpenedState();
 
-    if (this.option('opened')) {
+    const { opened } = this.option();
+
+    if (opened) {
       this._scrollToSelectedItem();
       this._focusSelectedElement();
     }
@@ -272,10 +281,12 @@ class SelectBox<
     }
 
     const { items, selectedItem } = this.option();
-    // @ts-expect-error ts-error
-    const $listItems = this._list._itemElements();
+
+    const $listItems = this._list?._itemElements();
     const index = items?.indexOf(selectedItem) ?? -1;
-    const focusedElement = index !== -1 && !this._isCustomItemSelected() ? $listItems.eq(index) : null;
+    const focusedElement = index !== -1 && !this._isCustomItemSelected()
+      ? $listItems?.eq(index)
+      : null;
 
     this._focusListElement(focusedElement);
   }
@@ -285,9 +296,10 @@ class SelectBox<
       return;
     }
 
+    const { acceptCustomValue } = this.option();
     const searchValue = this._searchValue();
 
-    if (!searchValue || this.option('acceptCustomValue')) {
+    if (!searchValue || acceptCustomValue) {
       this._focusListElement(null);
       return;
     }
@@ -297,10 +309,9 @@ class SelectBox<
     this._focusListElement(focusedElement);
   }
 
-  _focusListElement(element): void {
+  _focusListElement(element?: dxElementWrapper | null): void {
     this._preventInputValueRender = true;
-    // @ts-expect-error ts-error
-    this._list.option('focusedElement', getPublicElement(element));
+    this._list?.option('focusedElement', element ? getPublicElement(element) : null);
     delete this._preventInputValueRender;
   }
 
@@ -332,8 +343,8 @@ class SelectBox<
     return Deferred().resolve();
   }
 
-  _renderInputValue(...args) {
-    return super._renderInputValue(...args).always(() => {
+  _renderInputValue(args: RenderInputValueArgs = {}): DeferredObj<unknown> {
+    return super._renderInputValue(args).always(() => {
       this._renderInputValueAsync();
     });
   }
@@ -351,15 +362,15 @@ class SelectBox<
     return Deferred().resolve();
   }
 
-  _setNextItem(step): void {
+  _setNextItem(step: number): void {
     const item = this._calcNextItem(step);
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin
     const value = this._valueGetter(item);
 
     this._setValue(value);
   }
 
-  _setNextValue(e): void {
+  _setNextValue(e: KeyboardEvent): void {
     const dataSourceIsLoaded = this._dataController.isLoaded()
       ? Deferred().resolve()
       : this._dataController.load();
@@ -379,8 +390,7 @@ class SelectBox<
         }
 
         if (!this._dataController.isLoading()) {
-          // @ts-expect-error ts-error
-          this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+          this._list?._loadNextPage().done(this._setNextItem.bind(this, step));
         }
       } else {
         this._setNextItem(step);
@@ -388,13 +398,14 @@ class SelectBox<
     });
   }
 
-  _setSelectedItem(item): void {
+  _setSelectedItem(item?: Item | null): void {
     const isUnknownItem = !this._isCustomValueAllowed() && (item === undefined);
 
     super._setSelectedItem(isUnknownItem ? null : item);
 
     if (!isUnknownItem && (!this._isEditable() || this._isCustomItemSelected())) {
-      this._setListOption('selectedItem', this.option('selectedItem'));
+      const { selectedItem } = this.option();
+      this._setListOption('selectedItem', selectedItem);
     }
   }
 
@@ -403,48 +414,47 @@ class SelectBox<
     return Boolean(acceptCustomValue) || super._isCustomValueAllowed();
   }
 
-  _displayValue(item) {
-    item = !isDefined(item) && this._isCustomValueAllowed() ? this.option('value') : item;
-    return super._displayValue(item);
+  _displayValue(item?: Item | null): string {
+    const { value } = this.option();
+    const normalizedItem = !isDefined(item) && this._isCustomValueAllowed() ? value : item;
+    return super._displayValue(normalizedItem as Item);
   }
 
-  _listConfig() {
+  _listConfig(): ListBaseProperties {
+    const { selectedItem, showSelectionControls } = this.option();
     const result = extend(super._listConfig(), {
       pageLoadMode: 'scrollBottom',
       onSelectionChanged: this._getSelectionChangeHandler(),
-      selectedItem: this.option('selectedItem'),
+      selectedItem,
       onFocusedItemChanged: this._listFocusedItemChangeHandler.bind(this),
       _onItemsRendered: (): void => {
-        this._popup!.repaint();
+        this._popup?.repaint();
         if (this.option('opened')) {
           this._scrollToSelectedItem();
         }
       },
     });
 
-    if (this.option('showSelectionControls')) {
-      extend(result, {
-        showSelectionControls: true,
-        selectByClick: true,
-      });
-    }
-
-    return result;
+    return {
+      ...result,
+      ...(showSelectionControls && { showSelectionControls: true, selectByClick: true }),
+    } as ListBaseProperties;
   }
 
-  _listFocusedItemChangeHandler(e): void {
+  _listFocusedItemChangeHandler(e: EventInfo<dxList>): void {
     if (this._preventInputValueRender) {
       return;
     }
 
     const list = e.component;
-    const focusedElement = $(list.option('focusedElement'));
+    const focusedElement = $(list.option('focusedElement') as Element);
+    // @ts-expect-error _getItemData is an internal method not in the public dxList API
     const focusedItem = list._getItemData(focusedElement);
 
     this._updateField(focusedItem);
   }
 
-  _updateField(item): void {
+  _updateField(item: unknown): void {
     const { fieldTemplate: fieldTemplateOption } = this.option();
     const fieldTemplate = this._getTemplate(fieldTemplateOption);
 
@@ -460,20 +470,21 @@ class SelectBox<
     this._renderField();
   }
 
-  _getSelectionChangeHandler() {
-    return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
+  _getSelectionChangeHandler(): ((e: SelectionChangedEvent<Item>) => void) | typeof noop {
+    const { showSelectionControls } = this.option();
+    return showSelectionControls ? this._selectionChangeHandler.bind(this) : noop;
   }
 
-  _selectionChangeHandler(e): void {
-    each(e.addedItems || [], (_, addedItem) => {
-      // @ts-expect-error ts-error
+  _selectionChangeHandler(e: SelectionChangedEvent<Item>): void {
+    (e.addedItems ?? []).forEach((addedItem) => {
+      // @ts-expect-error DataExpressionMixin must be typed
       this._setValue(this._valueGetter(addedItem));
     });
   }
 
-  _getActualSearchValue() {
+  _getActualSearchValue(): string | null {
     // @ts-expect-error fix argument type in m_data_controller.ts
-    return this._dataController.searchValue();
+    return this._dataController.searchValue() as string | null;
   }
 
   _isInlineAutocompleteEnabled(): boolean | undefined {
@@ -503,45 +514,48 @@ class SelectBox<
   }
 
   _toggleOpenState(isVisible?: boolean): void {
-    if (this.option('disabled')) {
+    const { disabled, opened, showDataBeforeSearch } = this.option();
+    if (disabled) {
       return;
     }
 
-    isVisible = arguments.length ? isVisible : !this.option('opened');
+    const resolvedVisible = arguments.length ? isVisible : !opened;
 
-    if (!isVisible && !this._shouldClearFilter()) {
+    if (!resolvedVisible && !this._shouldClearFilter()) {
       this._restoreInputText(true);
     }
 
-    if (this._wasSearch() && isVisible) {
+    if (this._wasSearch() && resolvedVisible) {
       this._wasSearch(false);
-      const showDataImmediately = this.option('showDataBeforeSearch')
-                || this._isMinSearchLengthExceeded();
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const showDataImmediately = showDataBeforeSearch || this._isMinSearchLengthExceeded();
 
       if (showDataImmediately && this._dataController.getDataSource()) {
         if (this._searchTimer) return;
 
         const searchValue = this._getActualSearchValue();
-        searchValue && this._wasSearch(true);
+        if (searchValue) {
+          this._wasSearch(true);
+        }
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         this._filterDataSource(searchValue || null);
       } else {
         this._setListOption('items', []);
       }
     }
 
-    if (isVisible) {
+    if (resolvedVisible) {
       this._scrollToSelectedItem();
     }
 
-    super._toggleOpenState(isVisible);
+    super._toggleOpenState(resolvedVisible);
   }
 
   _renderTooltip(): void {
     const { tooltipEnabled, displayValue } = this.option();
 
     if (tooltipEnabled) {
-      // @ts-expect-error ts-error
-      this.$element().attr('title', displayValue);
+      this.$element().attr('title', displayValue ?? '');
     }
   }
 
@@ -553,7 +567,7 @@ class SelectBox<
   }
 
   _isValueEqualInputText(): boolean {
-    const initialSelectedItem = this.option('selectedItem');
+    const { selectedItem: initialSelectedItem } = this.option();
 
     if (initialSelectedItem === null) {
       return false;
@@ -565,14 +579,14 @@ class SelectBox<
     return displayValue === inputText;
   }
 
-  _popupHidingHandler() {
+  _popupHidingHandler(): void {
     if (this._isValueEqualInputText()) {
       this._cancelEditing();
     }
     super._popupHidingHandler();
   }
 
-  _popupHiddenHandler() {
+  _popupHiddenHandler(): void {
     super._popupHiddenHandler();
 
     if (this._shouldCancelSearch()) {
@@ -582,8 +596,10 @@ class SelectBox<
     }
   }
 
-  _restoreInputText(saveEditingValue?) {
-    if (this.option('readOnly')) {
+  _restoreInputText(saveEditingValue?: boolean): void {
+    const { readOnly, searchEnabled, allowClearing } = this.option();
+
+    if (readOnly) {
       return;
     }
 
@@ -597,12 +613,12 @@ class SelectBox<
 
       if (acceptCustomValue) {
         if (!saveEditingValue && !this._isValueChanging) {
-          let initialItem = null;
+          let initialItem: unknown = null;
 
           if (isDefined(initialSelectedItem)) {
             initialItem = initialSelectedItem;
           } else if (customItemCreateEvent !== '') {
-            initialItem = this._createCustomItem(text);
+            initialItem = this._createCustomItem(text ?? '');
           }
 
           this._updateField(initialItem);
@@ -611,8 +627,8 @@ class SelectBox<
         return;
       }
 
-      if (this.option('searchEnabled')) {
-        if (!this._searchValue() && this.option('allowClearing')) {
+      if (searchEnabled) {
+        if (!this._searchValue() && allowClearing) {
           this._clearTextValue();
           return;
         }
@@ -631,17 +647,17 @@ class SelectBox<
     });
   }
 
-  _valueChangeEventIncludesBlur() {
-    const valueChangeEvent = this.option(this._getValueChangeEventOptionName());
-    // @ts-expect-error
-    return valueChangeEvent.includes('blur');
+  _valueChangeEventIncludesBlur(): boolean {
+    const { [this._getValueChangeEventOptionName()]: valueChangeEvent } = this.option();
+
+    return (valueChangeEvent as string).includes('blur');
   }
 
-  _isPreventedFocusOutEvent(e) {
+  _isPreventedFocusOutEvent(e: DxEvent<FocusEvent>): boolean {
     return this._preventNestedFocusEvent(e) || this._valueChangeEventIncludesBlur();
   }
 
-  _focusOutHandler(e): void {
+  _focusOutHandler(e: DxEvent<FocusEvent>): void {
     if (!this._isPreventedFocusOutEvent(e)) {
       const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
@@ -657,7 +673,7 @@ class SelectBox<
     super._focusOutHandler(e);
   }
 
-  _cancelSearchIfNeed(e?): void {
+  _cancelSearchIfNeed(e?: DxEvent<FocusEvent>): void {
     const { searchEnabled } = this.option();
     const isOverlayTarget = this._isOverlayNestedTarget(e?.relatedTarget);
 
@@ -677,21 +693,22 @@ class SelectBox<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  _shouldCancelSearch(value?): boolean | void {
-    if (!arguments.length) {
-      return this._shouldCancelSearchValue;
+  _shouldCancelSearch(value?: boolean): boolean {
+    if (value === undefined) {
+      return this._shouldCancelSearchValue ?? false;
     }
 
     this._shouldCancelSearchValue = value;
+    return value;
   }
 
-  _isOverlayNestedTarget(target): boolean {
-    return !!$(target).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
+  // eslint-disable-next-line class-methods-use-this
+  _isOverlayNestedTarget(target?: EventTarget | null): boolean {
+    return !!$(target as Element).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
   }
 
   _clearTextValue(): void {
-    const selectedItem = this.option('selectedItem');
+    const { selectedItem } = this.option();
     // @ts-expect-error DataExpressionMixin must be typed
     const selectedItemText = this._displayGetter(selectedItem);
     const shouldRestoreValue = selectedItem && selectedItemText !== '';
@@ -707,8 +724,7 @@ class SelectBox<
   }
 
   _shouldOpenPopup(): boolean {
-    // @ts-expect-error ts-error
-    return this._needPassDataSourceToList() && this._wasSearch();
+    return this._needPassDataSourceToList() && Boolean(this._wasSearch());
   }
 
   _isFocused(): boolean {
@@ -716,6 +732,7 @@ class SelectBox<
     return super._isFocused() && $(activeElement).closest(this._input()).length > 0;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getValueChangeEventOptionName(): keyof TProperties {
     return 'customItemCreateEvent';
   }
@@ -726,46 +743,49 @@ class SelectBox<
     }
   }
 
-  _fieldRenderData() {
-    // @ts-expect-error ts-error
-    const { focusedElement } = this.option();
+  _fieldRenderData(): unknown {
+    const { focusedElement, opened, selectedItem } = this.option();
 
-    const $listFocused = this._list && this.option('opened') && $(focusedElement);
+    const $listFocused = (this._list && opened) ? $(focusedElement) : null;
 
     if ($listFocused?.length) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error internal API
       return this._list._getItemData($listFocused);
     }
 
-    return this.option('selectedItem');
+    return selectedItem;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isSelectedValue(value, cache?) {
-    // @ts-expect-error ts-error
-    return this._isValueEquals(value, this.option('value'));
+  _isSelectedValue(value: unknown, cache?: ItemCache): boolean {
+    const { value: currentValue } = this.option();
+    // @ts-expect-error DataExpressionMixin must be typed
+    return this._isValueEquals(value, currentValue) as boolean;
   }
 
-  _shouldCloseOnItemClick() {
-    const { selectionMode } = this.option();
+  _shouldCloseOnItemClick(): boolean {
+    const { selectionMode, showSelectionControls } = this.option();
 
-    return !(this.option('showSelectionControls') && selectionMode !== 'single');
+    return !(showSelectionControls && selectionMode !== 'single');
   }
 
-  _listItemClickHandler(e) {
-    // @ts-expect-error ts-error
+  _listItemClickHandler(e?: ItemClickEvent<Item>): void {
+    if (!e) return;
+
+    const { searchEnabled } = this.option();
+    // @ts-expect-error DataExpressionMixin must be typed
     const previousValue = this._getCurrentValue();
     this._focusListElement($(e.itemElement));
 
     this._saveValueChangeEvent(e.event);
-    // @ts-expect-error ts-error
+    // @ts-expect-error DataExpressionMixin must be typed
     this._completeSelection(this._valueGetter(e.itemData));
 
     if (this._shouldCloseOnItemClick()) {
       this.option('opened', false);
     }
-    // @ts-expect-error ts-error
-    if (this.option('searchEnabled') && previousValue === this._valueGetter(e.itemData)) {
+    // @ts-expect-error DataExpressionMixin must be typed
+    if (searchEnabled && previousValue === this._valueGetter(e.itemData)) {
       this._updateField(e.itemData);
     }
 
@@ -778,12 +798,11 @@ class SelectBox<
     return this._wasSearch();
   }
 
-  _completeSelection(value): void {
+  _completeSelection(value: unknown): void {
     this._setValue(value);
   }
 
-  _loadItem(value, cache?): DeferredObj<unknown> {
-    const that = this;
+  _loadItem(value: unknown, cache?: ItemCache): DeferredObj<unknown> {
     const deferred = Deferred();
 
     (super._loadItem(value, cache) as DeferredObj<unknown>)
@@ -796,26 +815,26 @@ class SelectBox<
           return;
         }
 
-        const selectedItem = that.option('selectedItem');
-        // @ts-expect-error ts-error
-        if (that.option('acceptCustomValue') && value === that._valueGetter(selectedItem)) {
+        const { selectedItem, acceptCustomValue } = this.option();
+        // @ts-expect-error DataExpressionMixin must be typed
+        if (acceptCustomValue && value === this._valueGetter(selectedItem)) {
           deferred.resolve(selectedItem);
         } else {
           deferred.reject();
         }
       });
-    // @ts-expect-error ts-error
+    // @ts-expect-error type on Deferred level
     return deferred.promise();
   }
 
-  _loadInputValue(value, callback) {
+  _loadInputValue(value: unknown, callback: (...args: [unknown]) => void): DeferredObj<unknown> {
     this._loadItemDeferred = this._loadItem(value).always(callback);
 
     return this._loadItemDeferred;
   }
 
   _isCustomItemSelected(): boolean {
-    const selectedItem = this.option('selectedItem');
+    const { selectedItem } = this.option();
     const searchValue = this._searchValue();
     // @ts-expect-error DataExpressionMixin must be typed
     const selectedItemText = this._displayGetter(selectedItem);
@@ -823,8 +842,9 @@ class SelectBox<
     return !selectedItemText || searchValue !== selectedItemText.toString();
   }
 
-  _valueChangeEventHandler(e): void {
-    if (this.option('acceptCustomValue') && this._isCustomItemSelected() && !this._isValueChanging) {
+  _valueChangeEventHandler(e: KeyboardEvent | DxEvent<InputEvent>): void {
+    const { acceptCustomValue } = this.option();
+    if (acceptCustomValue && this._isCustomItemSelected() && !this._isValueChanging) {
       this._isValueChanging = true;
       this._customItemAddedHandler(e);
     }
@@ -834,12 +854,16 @@ class SelectBox<
     this._customItemCreatingAction = this._createActionByOption('onCustomItemCreating');
   }
 
-  _createCustomItem(text) {
-    const params = {
+  _createCustomItem(text: string): unknown {
+    const params: {
+      text: string;
+      customItem?: unknown;
+    } = {
       text,
     };
+
     const actionResult = this._customItemCreatingAction(params);
-    // @ts-expect-error ts-error
+
     const item = ensureDefined(actionResult, params.customItem);
 
     if (isDefined(actionResult)) {
@@ -849,7 +873,7 @@ class SelectBox<
     return item;
   }
 
-  _customItemAddedHandler(e): void {
+  _customItemAddedHandler(e: KeyboardEvent | DxEvent<InputEvent>): void {
     const searchValue = this._searchValue();
 
     const item = this._createCustomItem(searchValue);
@@ -870,22 +894,22 @@ class SelectBox<
     }
   }
 
-  _setCustomItem(item): void {
+  _setCustomItem(item: unknown): void {
     if (this._disposed) {
       return;
     }
 
-    item = item || null;
-    this.option('selectedItem', item);
+    const normalizedItem = item ?? null;
+    this.option('selectedItem', normalizedItem);
     this._cancelSearchIfNeed();
-    // @ts-expect-error ts-error
-    this._setValue(this._valueGetter(item));
     // @ts-expect-error DataExpressionMixin must be typed
-    this._renderDisplayText(this._displayGetter(item));
+    this._setValue(this._valueGetter(normalizedItem));
+    // @ts-expect-error DataExpressionMixin must be typed
+    this._renderDisplayText(this._displayGetter(normalizedItem));
     this._isValueChanging = false;
   }
 
-  _clearValueHandler(e): boolean {
+  _clearValueHandler(e: ValueChangedEvent & DxEvent): boolean {
     this._preventFiltering = true;
     super._clearValueHandler(e);
     this._searchCanceled();
@@ -893,7 +917,7 @@ class SelectBox<
     return false;
   }
 
-  _wasSearch(value?): boolean | undefined {
+  _wasSearch(value?: boolean): boolean | undefined {
     if (!arguments.length) {
       return !!this._wasSearchValue;
     }
@@ -902,7 +926,7 @@ class SelectBox<
     return undefined;
   }
 
-  _searchHandler(e?): void {
+  _searchHandler(e?: InputEvent | CompositionEvent): void {
     if (this._preventFiltering) {
       delete this._preventFiltering;
       return;
@@ -915,7 +939,7 @@ class SelectBox<
     super._searchHandler(e);
   }
 
-  _dataSourceFiltered(searchValue?): void {
+  _dataSourceFiltered(searchValue?: string | null): void {
     super._dataSourceFiltered();
 
     if (searchValue !== null) {
@@ -924,23 +948,28 @@ class SelectBox<
     }
   }
 
-  _valueSubstituted() {
+  _valueSubstituted(): boolean {
     const input = this._input().get(0) as HTMLInputElement;
     const currentSearchLength = this._searchValue().length;
     const isAllSelected = input.selectionStart === 0 && input.selectionEnd === currentSearchLength;
     const inputHasSelection = input.selectionStart !== input.selectionEnd;
     const isLastSymbolSelected = currentSearchLength === input.selectionEnd;
 
-    return this._wasSearch() && inputHasSelection && !isAllSelected && isLastSymbolSelected && this._shouldSubstitutionBeRendered();
+    return Boolean(this._wasSearch()
+      && inputHasSelection
+      && !isAllSelected
+      && isLastSymbolSelected
+      && this._shouldSubstitutionBeRendered());
   }
 
-  _shouldSubstitutionBeRendered() {
-    return !this._preventSubstitution && this._isInlineAutocompleteEnabled();
+  _shouldSubstitutionBeRendered(): boolean {
+    return !this._preventSubstitution && Boolean(this._isInlineAutocompleteEnabled());
   }
 
-  _renderInputSubstitution() {
+  _renderInputSubstitution(): void {
     if (!this._shouldSubstitutionBeRendered()) {
       delete this._preventSubstitution;
+
       return;
     }
 
@@ -976,7 +1005,7 @@ class SelectBox<
     super._dispose();
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'customItemCreateEvent':
         this._refreshValueChangeEvent();
