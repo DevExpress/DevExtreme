@@ -105,6 +105,10 @@ async function main() {
         test: {
           // eslint-disable-next-line no-undef
           before: async (t: TestController) => {
+            if (process.env.STRATEGY === 'accessibility') {
+              return;
+            }
+
             await ClientFunction(() => {
               if (document.activeElement && document.activeElement !== document.body) {
                 (document.activeElement as HTMLElement).blur();

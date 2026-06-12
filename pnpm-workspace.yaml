@@ -113,5 +113,8 @@ allowBuilds:
   puppeteer: true
   unrs-resolver: true
 
+patchedDependencies:
+  testcafe-hammerhead@31.7.7: patches/testcafe-hammerhead@31.7.7.patch
+
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
