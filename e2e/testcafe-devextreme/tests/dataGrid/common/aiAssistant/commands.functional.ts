@@ -108,8 +108,7 @@ test('No-args command (clearSorting) should execute successfully', async (t) => 
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   dataSource: threeRows,
   keyExpr: 'id',
@@ -307,7 +306,7 @@ test('Filter then clear filter across two prompts should both succeed', async (t
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
-  await t.expect(dataGrid.apiOption('filterValue')).notOk();
+  await t.expect(dataGrid.apiOption('filterValue')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   dataSource: threeRows,
   keyExpr: 'id',
@@ -381,7 +380,7 @@ test('Sort, group, page combined across three prompts should all succeed', async
   { actions: [{ name: 'pageIndex', args: { pageIndex: 1 } }] },
 ]));
 
-test('Sort on empty grid should succeed with no rows', async (t) => {
+test('Sort should succeed with no rows', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.expect(dataGrid.isReady()).ok();
@@ -884,8 +883,7 @@ test('clearSorting when no sort should succeed', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-
-  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   dataSource: twoRows,
   keyExpr: 'id',
@@ -910,8 +908,7 @@ test('clearFilter when no filter should succeed', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-
-  await t.expect(dataGrid.apiOption('filterValue')).notOk();
+  await t.expect(dataGrid.apiOption('filterValue')).eql(undefined);
   await t.expect(dataGrid.getDataRows().count).eql(2);
 }).before(async () => createGridWithAIAssistant({
   dataSource: twoRows,
