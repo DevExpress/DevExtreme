@@ -917,7 +917,7 @@
 /packages/devextreme/js/ui/select_box.d.ts                           @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/select_box_types.d.ts                     @DevExpress/devextreme-editors
 
-/packages/devextreme/js/__internal/ui/m_select_box.ts                @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/select_box.ts                @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/selectBox/**     @DevExpress/devextreme-editors
 

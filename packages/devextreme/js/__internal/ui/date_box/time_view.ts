@@ -8,8 +8,8 @@ import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-import SelectBox from '@ts/ui/m_select_box';
 import NumberBox from '@ts/ui/number_box/m_number_box';
+import SelectBox from '@ts/ui/select_box';
 
 import type { NumberBoxMaskProperties } from '../number_box/m_number_box.mask';
 import dateUtils from './date_utils';
@@ -316,7 +316,6 @@ class TimeView extends Editor<TimeViewProperties> {
     this._silentEditorValueUpdate(this._format12, newValue);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _silentEditorValueUpdate(editor: NumberBox | SelectBox | undefined, value: number): void {
     if (!editor) {
       return;
