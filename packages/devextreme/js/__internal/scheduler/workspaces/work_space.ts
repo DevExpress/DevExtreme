@@ -1663,15 +1663,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private normalizeCellData(cellData: Partial<ViewCellData>): NormalizedCellData {
-    return extend(true, {}, {
-      startDate: cellData.startDate,
-      endDate: cellData.endDate,
+    return {
+      startDate: cellData.startDate ?? new Date(),
+      endDate: cellData.endDate ?? new Date(),
       startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid'),
       endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid'),
-      groups: cellData.groups,
+      groups: cellData.groups ? extend(true, {}, cellData.groups) : cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
-    }) as NormalizedCellData;
+    };
   }
 
   private getSelectedCellsData(): NormalizedCellData[] {
