@@ -140,7 +140,6 @@ class TagBox<
 
         this._processKeyboardEvent(e);
         this._isTagRemoved = true;
-
         const $tagToDelete = this._$focusedTag;
 
         this._moveTagFocus('next', true);
