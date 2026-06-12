@@ -209,11 +209,16 @@ class ToolbarBase<
 
   _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { focusedElement } = this.option();
+    const isOverflowButton = this._isOverflowItem($(focusedElement));
 
     this._navigator?.handleEnterKey(e, {
       focusedElement,
       activateAtNavLevel: ($focused, event) => this._handleActivationAtNavLevel($focused, event),
     });
+
+    if (isOverflowButton) {
+      return;
+    }
 
     super._enterKeyHandler(e);
   }

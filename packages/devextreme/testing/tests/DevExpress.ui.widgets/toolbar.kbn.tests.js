@@ -4143,6 +4143,29 @@ QUnit.module('Enter: plain overflow item', moduleConfig, function() {
         assert.strictEqual(clicked, true,
             'Enter activates plain overflow item with onClick (callSuper in handleEnterKey)');
     });
+
+    QUnit.test('Space on plain overflow item with onClick fires item.onClick', function(assert) {
+        let clicked = false;
+        const toolbar = this.$element.dxToolbar({
+            items: [
+                { widget: 'dxButton', locateInMenu: 'never', options: { text: 'Visible' } },
+                { text: 'Plain', locateInMenu: 'always', onClick: () => { clicked = true; } },
+            ],
+        }).dxToolbar('instance');
+
+        const $overflowBtn = this.$element.find(`.${DROP_DOWN_MENU_BUTTON_CLASS}`);
+        $overflowBtn.get(0).focus();
+
+        helpers.press('ArrowDown', getActiveElement());
+
+        const menu = helpers.getOverflowMenu(toolbar);
+        assert.strictEqual(menu.option('opened'), true, 'overflow popup is opened');
+
+        helpers.press(' ', getActiveElement());
+
+        assert.strictEqual(clicked, true,
+            'Space activates plain overflow list item with onClick (defaultPrevented from supportedKeys.space must not skip super._enterKeyHandler)');
+    });
 });
 
 QUnit.module('Enter: root item-level onClick', moduleConfig, function() {
@@ -4164,6 +4187,76 @@ QUnit.module('Enter: root item-level onClick', moduleConfig, function() {
         assert.strictEqual(widgetClicked, true, 'dxButton.options.onClick fires (handled by dxButton itself)');
         assert.strictEqual(itemClicked, true,
             'item-level onClick fires via super._enterKeyHandler → _itemClickHandler');
+    });
+
+    QUnit.test('Space on widget-wrapped root item with item-level onClick fires onItemClick', function(assert) {
+        let itemClickCount = 0;
+        const toolbar = this.$element.dxToolbar({
+            onItemClick: () => { itemClickCount += 1; },
+            items: [{
+                widget: 'dxButton',
+                options: { text: 'A' },
+                onClick: () => {},
+            }],
+        }).dxToolbar('instance');
+
+        helpers.focusItemAt(toolbar, 0);
+
+        helpers.press(' ', getActiveElement());
+
+        assert.strictEqual(itemClickCount, 1,
+            'onItemClick fires for Space on regular item (Space sets defaultPrevented in supportedKeys, but super._enterKeyHandler must still run)');
+    });
+});
+
+QUnit.module('Enter/Space: overflow button is not an item', moduleConfig, function() {
+    function makeOverflowToolbar(ctx, onItemClick) {
+        return ctx.$element.dxToolbar({
+            onItemClick,
+            items: [
+                { widget: 'dxButton', locateInMenu: 'never', options: { text: 'Visible' } },
+                { widget: 'dxButton', locateInMenu: 'always', options: { text: 'Menu A' } },
+                { widget: 'dxButton', locateInMenu: 'always', options: { text: 'Menu B' } },
+            ],
+        }).dxToolbar('instance');
+    }
+
+    QUnit.test('Enter on overflow button does NOT fire onItemClick', function(assert) {
+        let itemClickArgs;
+        let itemClickCount = 0;
+        const toolbar = makeOverflowToolbar(this, (e) => {
+            itemClickCount += 1;
+            itemClickArgs = e;
+        });
+
+        const $overflowBtn = this.$element.find(`.${DROP_DOWN_MENU_BUTTON_CLASS}`);
+        toolbar.option('focusedElement', $overflowBtn.get(0));
+        helpers.press('Enter', $overflowBtn.get(0));
+
+        const menu = helpers.getOverflowMenu(toolbar);
+        assert.strictEqual(menu.option('opened'), true,
+            'sanity: Enter still opens the overflow menu');
+        assert.strictEqual(itemClickCount, 0,
+            `onItemClick is not fired for the overflow button (got ${itemClickCount} call(s) with ${JSON.stringify({
+                itemIndex: itemClickArgs && itemClickArgs.itemIndex,
+                hasItemElement: !!(itemClickArgs && itemClickArgs.itemElement),
+                hasItemData: !!(itemClickArgs && itemClickArgs.itemData),
+            })})`);
+    });
+
+    QUnit.test('Space on overflow button does NOT fire onItemClick', function(assert) {
+        let itemClickCount = 0;
+        const toolbar = makeOverflowToolbar(this, () => { itemClickCount += 1; });
+
+        const $overflowBtn = this.$element.find(`.${DROP_DOWN_MENU_BUTTON_CLASS}`);
+        toolbar.option('focusedElement', $overflowBtn.get(0));
+        helpers.press(' ', $overflowBtn.get(0));
+
+        const menu = helpers.getOverflowMenu(toolbar);
+        assert.strictEqual(menu.option('opened'), true,
+            'sanity: Space still opens the overflow menu');
+        assert.strictEqual(itemClickCount, 0,
+            'onItemClick is not fired for the overflow button on Space');
     });
 });
 

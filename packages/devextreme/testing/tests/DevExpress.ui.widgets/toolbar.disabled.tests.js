@@ -419,7 +419,7 @@ const openDropDownMenuIfExist = (toolbar) => {
                     assert.strictEqual($item.attr('tabIndex'), '2', 'tabIndex');
                 });
 
-                QUnit.test(`Restore default ${widget} tabIndex value on change toolbar.disabled.items[i].options.disabled, locateInMenu: ${locateInMenu}`, function(assert) {
+                QUnit.test(`Restore default ${widget} tabIndex value on change toolbar.items[i].options.disabled, locateInMenu: ${locateInMenu}`, function(assert) {
                     const initialToolbarOptions = {
                         allowKeyboardNavigation,
                         items: [{
