@@ -1482,7 +1482,6 @@ class TagBox<
     }
   }
 
-  // @ts-expect-error ts-error
   _fieldRenderData() {
     // @ts-expect-error ts-error
     return this._selectedItems.slice();
@@ -1568,7 +1567,7 @@ class TagBox<
 
   _searchHandler(e): void {
     if (this.option('searchEnabled') && !!e && !this._isTagRemoved) {
-      super._searchHandler(arguments);
+      super._searchHandler(e);
       this._setListDataSourceFilter();
     }
 

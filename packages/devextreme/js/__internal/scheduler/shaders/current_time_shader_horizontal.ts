@@ -34,8 +34,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     groupIndex: number,
     dateTableCellCount: number,
   ): void {
-    // @ts-expect-error
-    const shaderWidth = this.workSpace.getIndicationWidth() as number;
+    const shaderWidth = this.workSpace.getIndicationWidth();
 
     this.applyShaderWidth($shader, shaderWidth);
 
@@ -68,8 +67,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     const isFirstShaderPart = groupIndex === 0;
     const { workSpace } = this;
     const shaderWidth = isFirstShaderPart
-      // @ts-expect-error
-      ? workSpace.getIndicationWidth() as number
+      ? workSpace.getIndicationWidth()
       : fractionPart * workSpace.getCellWidth();
     let shaderLeft = 0;
 
