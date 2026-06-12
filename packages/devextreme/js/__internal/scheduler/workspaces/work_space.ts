@@ -550,10 +550,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _supportedKeys(): SupportedKeys {
-    const clickHandler = function clickHandler(
-      this: SchedulerWorkSpace,
+    const clickHandler = (
       e: { preventDefault: () => void; stopPropagation: () => void; target: unknown },
-    ): void {
+    ): void => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -625,7 +624,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       }
     };
 
-    return extend(super._supportedKeys(), {
+    const supportedKeys: SupportedKeys = {
       enter: clickHandler,
       space: clickHandler,
       downArrow: (e) => {
@@ -640,7 +639,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       leftArrow: (e) => {
         onArrowPressed(e, 'left');
       },
-    }) as SupportedKeys;
+    };
+
+    return extend(super._supportedKeys(), supportedKeys) as SupportedKeys;
   }
 
   private isRTL(): boolean {
