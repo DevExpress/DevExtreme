@@ -1276,7 +1276,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     eventsEngine.on($element, eventName, cellSelector, this.contextMenuHandler.bind(this));
   }
 
-  private contextMenuHandler(e: { target: EventTarget | null }): void {
+  private contextMenuHandler(e: DxEvent): void {
     const $cell = $(e.target as Element | null);
     this.contextMenuAction?.(
       {
@@ -1312,9 +1312,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected getCellCountInDay(): number {
-    const { hoursInterval } = this.option();
-    const { startDayHour } = this.option();
-    const { endDayHour } = this.option();
+    const { hoursInterval, startDayHour, endDayHour } = this.option();
 
     return this.viewDataProvider.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
   }
@@ -1896,9 +1894,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getVisibleDayDuration(): number {
-    const { startDayHour } = this.option();
-    const { endDayHour } = this.option();
-    const { hoursInterval } = this.option();
+    const { startDayHour, endDayHour, hoursInterval } = this.option();
 
     return this.viewDataProvider.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
   }
@@ -3186,13 +3182,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
 
-    delete this.isCellClick;
-    delete this.showPopup;
+    this.isCellClick = false;
+    this.showPopup = false;
+    this.interval = undefined;
     this.isSelectionStartedOnCell = false;
 
     this.shader?.clean();
-
-    delete this.interval;
   }
 
   _clean(): void {
