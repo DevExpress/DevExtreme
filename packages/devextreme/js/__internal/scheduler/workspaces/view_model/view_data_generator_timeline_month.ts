@@ -3,7 +3,7 @@ import { setOptionHour, timelineMonthUtils } from '@ts/scheduler/r1/utils/index'
 
 import type { CountGenerationConfig } from '../../types';
 import timezoneUtils from '../../utils_time_zone';
-import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './types';
+import type { ViewDataProviderOptions } from './types';
 import { ViewDataGenerator } from './view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -60,8 +60,13 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
     this.hiddenInterval = 0;
   }
 
-  protected getCellEndDate(cellStartDate: Date, options: ViewDataProviderExtendedOptions): Date {
-    const { startDayHour, endDayHour } = options;
+  protected getCellEndDate(
+    cellStartDate: Date,
+    startDayHour: number,
+    endDayHour: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interval: number,
+  ): Date {
     const durationMs = (endDayHour - startDayHour) * toMs('hour');
     return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);
   }

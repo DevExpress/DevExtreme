@@ -558,7 +558,12 @@ export class ViewDataGenerator {
       rowIndex,
       columnIndex,
     );
-    const endDate = this.getCellEndDate(startDate, options);
+    const endDate = this.getCellEndDate(
+      startDate,
+      options.startDayHour,
+      options.endDayHour,
+      options.interval,
+    );
 
     const data: ViewCellDataSimple = {
       startDate,
@@ -956,8 +961,12 @@ export class ViewDataGenerator {
     return firstDayOfWeekOption;
   }
 
-  protected getCellEndDate(cellStartDate: Date, options: ViewDataProviderExtendedOptions): Date {
-    const durationMs = Math.round(options.interval);
-    return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);
+  protected getCellEndDate(
+    cellStartDate: Date,
+    startDayHour: number,
+    endDayHour: number,
+    interval: number,
+  ): Date {
+    return timezoneUtils.addOffsetsWithoutDST(cellStartDate, Math.round(interval));
   }
 }
