@@ -341,6 +341,12 @@ export function runManualTestCore(
     .page(testURL);
 
   test.before?.(async (t) => {
+    const consoleMsgs = await t.getBrowserConsoleMessages();
+    const dxErrors = consoleMsgs.error.filter((m: string) => m.includes('[DX-TEST-JS-ERROR]'));
+    if (dxErrors.length > 0) {
+      console.log('[DX-BROWSER-ERRORS]', dxErrors.join('\n'));
+    }
+
     if (testCodeSource) {
       await execCode(testCodeSource);
     }

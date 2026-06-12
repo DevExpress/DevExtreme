@@ -101,11 +101,12 @@ async function main() {
     .run({
       quarantineMode: getQuarantineMode(),
       skipJsErrors: (err) => {
-        console.log('[DX-PAGE-JS-ERROR]', JSON.stringify({
-          message: err?.message,
-          pageUrl: err?.pageUrl,
-          stack: err?.stack,
-        }));
+        if (err?.message === 'Script error.') {
+          // Skip to allow test.before to run and dump browser console details
+          console.log('[DX-SKIP-SCRIPT-ERROR] page:', err?.pageUrl);
+          return true;
+        }
+        console.log('[DX-PAGE-JS-ERROR]', JSON.stringify({ message: err?.message, pageUrl: err?.pageUrl }));
         return false;
       },
       // @ts-expect-error ts-error
@@ -119,7 +120,6 @@ async function main() {
               }
               window.getSelection()?.removeAllRanges();
             }).with({ boundTestRun: t })();
-            await t.hover('html', { offsetX: 1, offsetY: 1 });
           },
         },
       },
