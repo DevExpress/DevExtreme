@@ -70,7 +70,9 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
     .pressKey('enter tab tab');
   await resolveOnSavingDeferred();
-  await t.expect(dataGrid.getDataCell(2, 0).isFocused).ok();
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(dataGrid.getDataCell(2, 0).isFocused).ok();
 }).before(async () => {
   await ClientFunction(() => {
     (window as any).deferred = $.Deferred();

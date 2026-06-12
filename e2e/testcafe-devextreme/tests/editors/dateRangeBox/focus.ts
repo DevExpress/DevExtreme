@@ -2,6 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { addFocusableElementBefore } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateRangeBox focus state`
   .page(url(__dirname, '../../container.html'));
@@ -260,7 +261,7 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
     (window as any).onFocusOutCounter = 0;
   })();
 
-  return createWidget('dxDateRangeBox', {
+  await createWidget('dxDateRangeBox', {
     value: [new Date('2021/09/17'), new Date('2021/10/24')],
     openOnFieldClick: true,
     width: 500,
@@ -271,8 +272,11 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
       ((window as any).onFocusOutCounter as number) += 1;
     },
   });
+
+  await addFocusableElementBefore('#container');
 }).after(async () => {
   await ClientFunction(() => {
+    document.getElementById('focusable-start')?.remove();
     delete (window as any).onFocusInCounter;
     delete (window as any).onFocusOutCounter;
   })();

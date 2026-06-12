@@ -137,8 +137,8 @@ export const addFocusableElementBefore = ClientFunction((
   return button.id;
 });
 
-export const hasHorizontalScroll = ClientFunction((selector) => {
-  const element = selector();
+export const hasHorizontalScroll = ClientFunction((containerSelector) => {
+  const container = containerSelector();
 
-  return element.scrollWidth > element.clientWidth;
+  return container.scrollWidth > container.clientWidth;
 });

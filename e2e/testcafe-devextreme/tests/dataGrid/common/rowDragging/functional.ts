@@ -798,17 +798,27 @@ test.meta({ unstable: true })('Item should appear in a correct spot when draggin
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
-  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, 32, { speed: 0.95 });
+  const scrollOffsetForAutoScroll = await getOffsetToTriggerAutoScroll(2, 1, 'down');
 
-  const visibleRows = await dataGrid.apiGetVisibleRows();
-  const visibleRowKeys = visibleRows.map((row) => row.key);
+  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, scrollOffsetForAutoScroll, { speed: 0.8 });
+
   const expectedSequence = ['5-1', '3-1', '6-1'];
+  const containsExpectedSequence = ClientFunction(() => {
+    const visibleRowKeys = ($('#container') as any)
+      .dxDataGrid('instance')
+      .getVisibleRows()
+      .map((row: any) => row.key);
 
-  const startIndex = visibleRowKeys.findIndex(
-    (_, i) => expectedSequence.every((val, j) => visibleRowKeys[i + j] === val),
-  );
+    return visibleRowKeys.some(
+      (_: string, i: number) => expectedSequence.every(
+        (val: string, j: number) => visibleRowKeys[i + j] === val,
+      ),
+    );
+  }, { dependencies: { expectedSequence } });
 
-  await t.expect(startIndex).gte(0);
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(containsExpectedSequence()).ok();
 }).before(async () => {
   const items = generateData(20, 1);
   return createWidget('dxDataGrid', {

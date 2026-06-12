@@ -19,6 +19,7 @@ test.meta({ unstable: true })('Alternate rows should be the same size', async (t
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
+  await t.expect(dataGrid.isReady()).ok();
   await testScreenshot(t, takeScreenshot, 'T838734_alternate-rows-same-size.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())

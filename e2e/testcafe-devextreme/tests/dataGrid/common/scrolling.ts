@@ -1097,6 +1097,26 @@ test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table sho
     .drag(scrollbarVerticalThumbTrack, 0, 600)
     .wait(1000);
 
+  const isTargetRowSynchronized = ClientFunction(() => {
+    const rows = Array
+      .from(document.querySelectorAll('tr[aria-rowindex="999"]'))
+      .filter((row) => {
+        const { width, height } = row.getBoundingClientRect();
+
+        return width > 0 && height > 0;
+      });
+
+    if (!rows.length) {
+      return false;
+    }
+
+    const tops = rows.map((row) => row.getBoundingClientRect().top);
+
+    return Math.max(...tops) - Math.min(...tops) < 1;
+  });
+
+  await t.expect(isTargetRowSynchronized()).ok();
+
   await testScreenshot(t, takeScreenshot, 'grid-virtual-scrolling_with_fixed_columns-T1166649.png', { element: 'tr[aria-rowindex="999"]' });
   await t
     .expect(compareResults.isValid())

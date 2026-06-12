@@ -527,6 +527,7 @@ test('Navigate to last cell in the last row when virtual scrolling is enabled', 
     .pressKey('ctrl+end')
     .wait(100);
 
+  await t.expect(dataGrid.getDataCell(199, 14).element.focused).ok();
   await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_last_row_when_virtual_scrolling_is_enabled.png', { element: dataGrid.element });
 
   // assert
@@ -570,6 +571,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
     .pressKey('ctrl+home')
     .wait(1000);
 
+  await t.expect(dataGrid.getDataCell(0, 0).element.focused).ok();
   await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_2.png', { element: dataGrid.element });
 
   // assert
@@ -687,7 +689,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
 
     // assert
     await t
-      .expect(dataGrid.getDataCell(199, 35).element.focused)
+      .expect(dataGrid.getDataCell(199, 35).isFocused)
       .ok();
 
     // act
@@ -700,7 +702,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
 
     // assert
     await t
-      .expect(dataGrid.getDataCell(0, 1).element.focused)
+      .expect(dataGrid.getDataCell(0, 1).isFocused)
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -734,6 +736,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .pressKey('ctrl+end')
       .wait(1000);
 
+    await t.expect(dataGrid.getDataCell(199, 35).isFocused).ok();
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
     // assert
