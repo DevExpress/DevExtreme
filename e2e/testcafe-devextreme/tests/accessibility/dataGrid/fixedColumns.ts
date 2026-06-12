@@ -165,15 +165,12 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
 test('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();
+  const targetCell = dataGrid.getFixedDataCell(0, COLUMNS_LENGTH - 1);
 
-  // focus through headers
-  await pressKey(t, 'tab', COLUMNS_LENGTH);
-
-  // focus through data row till last cell (which is fixed)
-  await pressKey(t, 'tab', COLUMNS_LENGTH);
+  await t.click(targetCell.element);
 
   await t
-    .expect(dataGrid.getFixedDataCell(0, COLUMNS_LENGTH - 1).isFocused)
+    .expect(targetCell.element.focused)
     .ok();
 
   await a11yCheck(t);

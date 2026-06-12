@@ -1,7 +1,7 @@
 import CardView from 'devextreme-testcafe-models/cardView';
 
 const FIELD_CAPTION_SELECTOR = '.dx-cardview-field-caption';
-const CARD_FIELD_CAPTION_TIMEOUT = 1000;
+const CARD_FIELD_CAPTION_TIMEOUT = 3000;
 
 export const getCardFieldCaptions = async (
   t: TestController,

@@ -47,6 +47,9 @@ const getStringDate = (date) => {
 };
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 
+// NOTE: scroll restoration after a height change is driven by an asynchronous
+// ResizeObserver, so a fixed delay races with it under CI load. Poll until the
+// expected condition holds (bounded) instead of guessing a timeout.
 const waitForCondition = (condition, timeout = 3000, interval = 15) => new Promise((resolve) => {
     const startTime = Date.now();
     const timer = setInterval(() => {
@@ -1786,6 +1789,8 @@ QUnit.module('MessageList', () => {
             this.getScrollView().scrollTo({ top: this.getScrollOffsetMax() - 200 });
             this.instance.option('height', 300);
 
+            // Reducing the container height shifts the viewport bottom point, so the scroll
+            // position is expected to settle at (new max scroll offset - 200).
             await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - (this.getScrollOffsetMax() - 200)) <= 1);
 
             assert.roughEqual(this.getScrollView().scrollTop(), this.getScrollOffsetMax() - 200, 1, 'scroll position should be set correctly after reducing height');
@@ -1947,4 +1952,3 @@ QUnit.module('MessageList', () => {
         resizeObserverSingleton.unobserve.restore();
     });
 });
-

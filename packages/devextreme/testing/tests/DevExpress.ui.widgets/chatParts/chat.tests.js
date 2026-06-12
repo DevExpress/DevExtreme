@@ -1050,6 +1050,9 @@ QUnit.module('Chat', () => {
                     const $editButton = this.getContextMenuItems().eq(0);
                     $editButton.trigger('dxclick');
 
+                    // Entering the editing mode is asynchronous. When not cancelled, wait until the
+                    // preview appears; when cancelled, give a bounded window for an erroneous preview
+                    // to appear and then confirm it did not.
                     await waitForCondition(() => this.getEditingPreview().length === 1, cancel ? ANIMATION_TIMEOUT : undefined);
 
                     assert.strictEqual(this.getEditingPreview().length, cancel ? 0 : 1);
@@ -1078,6 +1081,10 @@ QUnit.module('Chat', () => {
                     const $editButton = this.getContextMenuItems().eq(0);
                     $editButton.trigger('dxclick');
 
+                    // Entering the editing mode (setting previewText) runs through the context
+                    // menu click pipeline and is not guaranteed to finish synchronously. Clicking
+                    // send before the editing preview is shown would take the regular-send path and
+                    // leave the preview unmanaged, so wait until the editing mode is established.
                     await waitForCondition(() => this.getEditingPreview().length === 1);
 
                     this.$sendButton.trigger('dxclick');
@@ -1118,6 +1125,9 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            // The rejected cancel promise resolves the editing mode asynchronously, and the
+            // input is focused only after the context menu hides - wait for both instead of
+            // assuming a fixed delay.
             await waitForCondition(() => this.getEditingPreview().length === 1
                 && this.textArea.option('text') === items[1].text
                 && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
@@ -1148,6 +1158,7 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            // Make sure the editing mode is established before deleting the message.
             await waitForCondition(() => this.getEditingPreview().length === 1);
 
             $bubbles.eq(1).trigger('dxcontextmenu');
@@ -1229,7 +1240,11 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
-            await waitForCondition(() => this.getEditingPreview().length === 1);
+            // The input is focused asynchronously, only after the context menu finishes hiding.
+            // Wait until the editing mode is fully established (preview shown and input focused)
+            // before sending, so the focus assertion does not race with the menu hide animation.
+            await waitForCondition(() => this.getEditingPreview().length === 1
+                && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
 
             this.$sendButton.trigger('dxclick');
 
@@ -1264,6 +1279,7 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            // The input value and focus are applied asynchronously after the context menu hides.
             await waitForCondition(() => this.textArea.option('value') === 'b'
                 && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
 
@@ -1293,6 +1309,7 @@ QUnit.module('Chat', () => {
                 .press('down')
                 .press('enter');
 
+            // The input value and focus are applied asynchronously after the context menu hides.
             await waitForCondition(() => this.textArea.option('value') === 'b'
                 && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
 
@@ -1340,6 +1357,7 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            // Wait until the editing mode is established before sending the update.
             await waitForCondition(() => this.getEditingPreview().length === 1);
 
             this.$sendButton.trigger('dxclick');
@@ -1365,6 +1383,7 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            // Wait until the editing mode is established before canceling.
             await waitForCondition(() => this.getEditingPreview().length === 1);
 
             this.getCancelEditingButton().trigger('dxclick');
