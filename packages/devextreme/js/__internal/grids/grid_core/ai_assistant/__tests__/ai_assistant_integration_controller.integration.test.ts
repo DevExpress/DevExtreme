@@ -737,6 +737,7 @@ describe('AIAssistantIntegrationController', () => {
       expect(paging.pageIndex).toBe(0);
       expect(paging.pageSize).toBe(2);
       expect(paging.totalCount).toBe(3);
+      expect(paging.visibleRowCount).toBe(2);
     });
 
     it('should return empty string for search text when not set', async () => {
