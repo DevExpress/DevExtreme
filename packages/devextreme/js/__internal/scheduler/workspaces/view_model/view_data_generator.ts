@@ -807,11 +807,15 @@ export class ViewDataGenerator {
         groupIndex: selectedCellGroupIndex,
         allDay: selectedCellAllDay,
         startDate: selectedCellStartDate,
-      }) => groupIndex === selectedCellGroupIndex
-                && (index === selectedCellIndex
-                    || (selectedCellIndex === undefined
-                        && startDate.getTime() === selectedCellStartDate.getTime()))
-                && Boolean(allDay) === Boolean(selectedCellAllDay)) ?? -1;
+      }) => {
+        const groupIndexMatch = groupIndex === selectedCellGroupIndex;
+        const cellIndexMatch = index === selectedCellIndex
+          || (selectedCellIndex === undefined
+            && startDate.getTime() === selectedCellStartDate.getTime());
+        const allDayMatch = Boolean(allDay) === Boolean(selectedCellAllDay);
+
+        return groupIndexMatch && cellIndexMatch && allDayMatch;
+      }) ?? -1;
 
       const focusedCellData = focusedCell?.cellData;
       const isFocused = focusedCellData?.index === index
