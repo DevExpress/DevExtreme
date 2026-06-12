@@ -113,10 +113,7 @@
             ],
             "dependencyDashboardApproval": true,
             "matchPackageNames": [
-                "*",
-                "!cldr-{/,}**",
-                "!chrome{/,}**",
-                "!firefox{/,}**"
+                "*"
             ]
         },
         {

@@ -1,7 +1,7 @@
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 import type { CellPositionData, ViewCellData, ViewType } from '@ts/scheduler/types';
 
-interface EdgeIndices {
+export interface EdgeIndices {
   firstColumnIndex: number;
   lastColumnIndex: number;
   firstRowIndex: number;

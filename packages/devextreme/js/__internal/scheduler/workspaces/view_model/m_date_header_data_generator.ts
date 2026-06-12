@@ -11,7 +11,7 @@ import {
 } from '../../r1/utils/index';
 import { VIEWS } from '../../utils/options/constants_view';
 import timeZoneUtils from '../../utils_time_zone';
-import type { ViewDataProviderExtendedOptions } from './m_types';
+import type { ViewDataProviderExtendedOptions } from './types';
 
 export class DateHeaderDataGenerator {
   constructor(private readonly viewDataGenerator) {

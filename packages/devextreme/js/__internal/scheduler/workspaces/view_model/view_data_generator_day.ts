@@ -1,9 +1,10 @@
+import type { ViewDataProviderOptions } from '@ts/scheduler/types';
+
 import { dayUtils } from '../../r1/utils/index';
 import { getFirstVisibleDate } from '../../utils/skipped_days';
 import { ViewDataGenerator } from './m_view_data_generator';
 
 export class ViewDataGeneratorDay extends ViewDataGenerator {
-  // eslint-disable-next-line class-methods-use-this
   protected override getSkippedDaysAnchorDay(
     firstDayOfWeekOption: number | undefined,
     startViewDate: Date,
@@ -11,7 +12,7 @@ export class ViewDataGeneratorDay extends ViewDataGenerator {
     return startViewDate.getDay();
   }
 
-  protected override calculateStartViewDate(options: any): Date {
+  protected override calculateStartViewDate(options: ViewDataProviderOptions): Date {
     const startViewDate = dayUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

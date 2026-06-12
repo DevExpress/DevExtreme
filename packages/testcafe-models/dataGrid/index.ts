@@ -1029,7 +1029,20 @@ export default class DataGrid extends GridCore {
       { dependencies: { getInstance } },
     )();
   }
-  
+
+  apiState(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).state(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
   getDraggableHeader() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
   }
@@ -1044,5 +1057,16 @@ export default class DataGrid extends GridCore {
 
   getAIAssistantButton(): Selector {
     return this.getHeaderPanel().element.find(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
+  }
+
+  focusAIAssistantButton(): Promise<void> {
+    const buttonSelector = this.getAIAssistantButton();
+
+    return ClientFunction(
+      () => {
+        (buttonSelector() as unknown as HTMLElement)?.focus();
+      },
+      { dependencies: { buttonSelector } },
+    )();
   }
 }
