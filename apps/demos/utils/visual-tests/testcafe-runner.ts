@@ -111,7 +111,6 @@ async function main() {
               }
               window.getSelection()?.removeAllRanges();
             }).with({ boundTestRun: t })();
-            await t.wait(200);
             await t.hover('html', { offsetX: 1, offsetY: 1 });
           },
         },
