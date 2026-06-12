@@ -451,10 +451,10 @@ describe('selectionByIndexesCommand', () => {
         expect(result.status).toBe('success');
       });
 
-      it('resolves keys via keyExpr (not store.keyOf) when the store has no key', async () => {
+      it('resolves keys from loaded rows via store.keyOf', async () => {
         const instance = await createRemoteGrid();
         const store = instance.getDataSource().store();
-        jest.spyOn(store, 'key').mockReturnValue(undefined as never);
+        const keyOfSpy = jest.spyOn(store, 'keyOf');
         jest.spyOn(store, 'load').mockReturnValue(
           Promise.resolve([{ id: 2, name: 'Beta' }, { id: 3, name: 'Gamma' }]) as never,
         );
@@ -465,16 +465,17 @@ describe('selectionByIndexesCommand', () => {
           indexes: [2, 3], mode: 'select', scope: 'allPages',
         });
 
+        expect(keyOfSpy).toHaveBeenCalled();
         expect(selectSpy).toHaveBeenCalledWith([2, 3], true);
         expect(result.status).toBe('success');
       });
 
-      it('resolves composite keys via keyExpr when the store has no key', async () => {
+      it('resolves composite keys from loaded rows via store.keyOf', async () => {
         const instance = await createCompositeGrid({
           remoteOperations: { paging: true, filtering: true, sorting: true },
         });
         const store = instance.getDataSource().store();
-        jest.spyOn(store, 'key').mockReturnValue(undefined as never);
+        const keyOfSpy = jest.spyOn(store, 'keyOf');
         jest.spyOn(store, 'load').mockReturnValue(
           Promise.resolve([{ a: 1, b: 10, name: 'Alpha' }, { a: 2, b: 20, name: 'Beta' }]) as never,
         );
@@ -485,6 +486,7 @@ describe('selectionByIndexesCommand', () => {
           indexes: [1, 2], mode: 'select', scope: 'allPages',
         });
 
+        expect(keyOfSpy).toHaveBeenCalled();
         expect(selectSpy).toHaveBeenCalledWith([{ a: 1, b: 10 }, { a: 2, b: 20 }], true);
         expect(result.status).toBe('success');
       });

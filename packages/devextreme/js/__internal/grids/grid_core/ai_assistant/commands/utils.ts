@@ -1,13 +1,12 @@
 import type { BasicFilterExpr, CompositeKeyPair } from '@js/common/grids';
-import { compileGetter } from '@js/core/utils/data';
 import { isString } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateType } from '@ts/grids/grid_core/m_utils';
 import { z } from 'zod';
 
-import type { LoadedWindow } from './types';
-
 type RowKey = string | number | Record<string, string | number>;
+
+type FilterExprValue = BasicFilterExpr['value'];
 
 export const compositeKeyPairSchema = z.object({
   field: z.string(),
@@ -70,13 +69,6 @@ export const isKeyShapeValid = (
   return keyExpr.every((field) => field in key);
 };
 
-// Extracts a row's key via keyExpr (single-field or composite).
-// Preferred over store.keyOf: custom stores may lack the grid's keyExpr (W1011),
-// so store.keyOf would return the whole row instead.
-export const createKeyGetter = (
-  keyExpr: string | string[],
-): ((row: unknown) => RowKey) => compileGetter(keyExpr as string) as (row: unknown) => RowKey;
-
 export const splitIntoLoadWindows = (
   indexes: number[],
   maxWindowSize: number,
@@ -114,35 +106,6 @@ export const pickKeysByIndex = <T>(
 
   return normalizedRowIndexes.map((index) => keys[index]);
 };
-
-// Maps each requested index to the key of the row loaded at its offset.
-export const extractKeysFromWindows = <T>(
-  loadedWindows: LoadedWindow[],
-  keyGetter: (row: unknown) => T,
-): T[] | null => {
-  const keys: T[] = [];
-
-  for (const { window, rows } of loadedWindows) {
-    if (!Array.isArray(rows)) {
-      return null;
-    }
-
-    for (const index of window) {
-      // The requested index maps to `window[0]` offset within the loaded rows
-      const row = rows[index - window[0]];
-
-      if (row === undefined) {
-        return null;
-      }
-
-      keys.push(keyGetter(row));
-    }
-  }
-
-  return keys;
-};
-
-type FilterExprValue = BasicFilterExpr['value'];
 
 export function resolveFilterValue(
   dataType: string | undefined,

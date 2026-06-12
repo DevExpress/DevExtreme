@@ -4,11 +4,8 @@ import type { InternalGrid, RowKey } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
-import type { LoadedWindow } from './types';
 import {
   compositeKeyPairSchema,
-  createKeyGetter,
-  extractKeysFromWindows,
   isKeyShapeValid,
   normalizeKey,
   pickKeysByIndex,
@@ -16,6 +13,13 @@ import {
 } from './utils';
 
 const MAX_LOAD_WINDOW_PAGES = 5;
+
+type DataGridStore = ReturnType<DataSource['store']>;
+
+interface LoadedWindow {
+  window: number[];
+  rows: unknown;
+}
 
 const selectByKeysCommandSchema = z.object({
   keys: z.array(z.union([
@@ -83,7 +87,7 @@ const isDataSourceGrouped = (
 };
 
 const loadIndexWindows = (
-  store: ReturnType<DataSource['store']>,
+  store: DataGridStore,
   baseLoadOptions: Record<string, unknown>,
   indexes: number[],
   maxWindowSize: number,
@@ -99,6 +103,33 @@ const loadIndexWindows = (
         return { window, rows };
       });
   }));
+};
+
+// Maps each requested index to the key of the row loaded at its offset.
+const extractKeysFromWindows = (
+  loadedWindows: LoadedWindow[],
+  store: DataGridStore,
+): RowKey[] | null => {
+  const keys: RowKey[] = [];
+
+  for (const { window, rows } of loadedWindows) {
+    if (!Array.isArray(rows)) {
+      return null;
+    }
+
+    for (const index of window) {
+      // The requested index maps to `window[0]` offset within the loaded rows
+      const row = rows[index - window[0]];
+
+      if (row === undefined) {
+        return null;
+      }
+
+      keys.push(store.keyOf(row));
+    }
+  }
+
+  return keys;
 };
 
 const resolveKeysFromAllPagesRemote = async (
@@ -137,7 +168,7 @@ const resolveKeysFromAllPagesRemote = async (
     dataSource.pageSize() * MAX_LOAD_WINDOW_PAGES,
   );
 
-  return extractKeysFromWindows(loadedWindows, createKeyGetter(keyExpr));
+  return extractKeysFromWindows(loadedWindows, store);
 };
 
 const resolveKeysFromAllPagesLocal = async (
