@@ -99,7 +99,7 @@ const sortByName = { actions: [{ name: 'sorting', args: { dataField: 'name', sor
 const selectAll = { actions: [{ name: 'selectAll', args: {} }] };
 const suggestionConfig = { chat: { suggestions: { items: [{ text: 'Sort by name' }] } } };
 
-fixture`AI Assistant - Request Lifecycle`
+fixture`AI Assistant - Chat Controls State`
   .page(AI_INTEGRATION_PAGE);
 
 test('N distinct prompts back-to-back should each execute once, in order, and apply to the grid', async (t) => {
