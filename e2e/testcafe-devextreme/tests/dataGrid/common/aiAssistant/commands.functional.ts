@@ -306,7 +306,7 @@ test('Filter then clear filter across two prompts should both succeed', async (t
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
-  await t.expect(dataGrid.apiOption('filterValue')).eql(undefined);
+  await t.expect(dataGrid.apiOption('filterValue')).eql(null);
 }).before(async () => createGridWithAIAssistant({
   dataSource: threeRows,
   keyExpr: 'id',
@@ -908,7 +908,7 @@ test('clearFilter when no filter should succeed', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-  await t.expect(dataGrid.apiOption('filterValue')).eql(undefined);
+  await t.expect(dataGrid.apiOption('filterValue')).eql(null);
   await t.expect(dataGrid.getDataRows().count).eql(2);
 }).before(async () => createGridWithAIAssistant({
   dataSource: twoRows,
