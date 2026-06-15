@@ -78,7 +78,7 @@ const schedulerLegacyMembers = [
     // appointments/m_appointment_collection.ts
     '_renderAppointmentTemplate',
 
-    // workspaces/view_model/m_view_data_generator.ts
+    // workspaces/view_model/view_data_generator.ts
     '_getIntervalDuration',
 
     // workspaces/virtual_scrolling.ts

@@ -135,7 +135,8 @@ const { tableCreator } = tableCreatorModule;
 const DRAGGING_MOUSE_FAULT = 10;
 
 // @ts-expect-error Widget exposes a static abstract() helper not typed in its d.ts
-const { abstract } = Widget;
+const { abstract: widgetAbstract } = Widget;
+const abstract = widgetAbstract as () => never;
 const toMs = dateUtils.dateToMilliseconds;
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
@@ -388,14 +389,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return CELL_SELECTOR;
   }
 
-  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-  get type(): string {
-    return '';
+  get type(): ViewType {
+    return abstract();
   }
 
   get viewDataProvider(): ViewDataProvider {
     if (!this.viewDataProviderValue) {
-      this.viewDataProviderValue = new ViewDataProvider(this.type as ViewType);
+      this.viewDataProviderValue = new ViewDataProvider(this.type);
     }
     return this.viewDataProviderValue;
   }
@@ -1360,13 +1360,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
+      hoursInterval: this.option('hoursInterval'),
       interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
+      intervalCount: this.option('intervalCount'),
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this.firstDayOfWeek(),
       viewOffset: this.option('viewOffset'),
-      viewType: this.type as ViewType,
-      hoursInterval: this.option('hoursInterval'),
-      intervalCount: this.option('intervalCount'),
+      viewType: this.type,
     };
   }
 
@@ -1374,7 +1374,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getIntervalBetween(currentDate, allDay) {
     const firstViewDate = this.getStartViewDate();
 
-    const startDayTime = (this.option('startDayHour') as any) * HOUR_MS;
+    const startDayTime = this.option('startDayHour') * HOUR_MS;
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
     const fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset;
     const days = this.getDaysOfInterval(fullInterval, startDayTime);
@@ -1983,7 +1983,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getR1ComponentsViewContext(): ViewContext {
     return {
       view: {
-        type: this.type as ViewType,
+        type: this.type,
       },
       crossScrollingEnabled: Boolean(this.option('crossScrollingEnabled')),
     };
