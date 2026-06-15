@@ -1293,19 +1293,19 @@ importers:
         version: 0.15.1
     devDependencies:
       '@analogjs/vite-plugin-angular':
-        specifier: ^1.0.0
+        specifier: 1.22.5
         version: 1.22.5(@angular-devkit/build-angular@19.2.27(b77ee4ad115e80db6dda840f8162ef61))(@angular/build@19.2.27(@angular/compiler-cli@19.2.25(@angular/compiler@19.2.25)(typescript@5.8.3))(@angular/compiler@19.2.25)(@angular/platform-server@19.2.25(@angular/common@19.2.25(@angular/core@19.2.25(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@19.2.25)(@angular/core@19.2.25(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@19.2.25(@angular/common@19.2.25(@angular/core@19.2.25(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@19.2.25(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2))(@types/node@20.14.5)(chokidar@4.0.3)(jiti@2.7.0)(karma@6.4.4)(less@4.6.6)(lightningcss@1.32.0)(ng-packagr@19.2.2(@angular/compiler-cli@19.2.25(@angular/compiler@19.2.25)(typescript@5.8.3))(tslib@2.6.3)(typescript@5.8.3))(postcss@8.5.10)(sass-embedded@1.93.3)(terser@5.48.0)(typescript@5.8.3)(yaml@2.8.3))
       '@angular-devkit/build-angular':
-        specifier: catalog:angular
+        specifier: ^19.2.5
         version: 19.2.27(b77ee4ad115e80db6dda840f8162ef61)
       '@angular/cli':
-        specifier: catalog:angular
+        specifier: ^19.2.5
         version: 19.2.27(@types/node@20.14.5)(chokidar@4.0.3)
       '@angular/compiler-cli':
-        specifier: catalog:angular
+        specifier: ^19.2.0
         version: 19.2.25(@angular/compiler@19.2.25)(typescript@5.8.3)
       '@eslint/js':
-        specifier: 'catalog:'
+        specifier: ^9.39.1
         version: 9.39.4
       '@types/jasmine':
         specifier: 5.1.4
