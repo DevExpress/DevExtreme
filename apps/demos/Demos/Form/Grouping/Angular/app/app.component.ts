@@ -26,7 +26,7 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   employee: Employee;
 
-  groupCaptionTemplates: Object;
+  groupCaptionTemplates: { name: string; icon: string }[];
 
   constructor(service: Service) {
     this.employee = service.getEmployee();

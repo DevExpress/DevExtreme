@@ -75,7 +75,7 @@
         [visible]="selectedIndex !== 0 && !isConfirmed"
         text="Back"
         type="normal"
-        (onClick)="onPrevButtonClick($event)"
+        (onClick)="onPrevButtonClick()"
         [width]="100"
       >
       </dx-button>
@@ -83,7 +83,7 @@
         id="nextButton"
         [text]="getNextButtonText()"
         type="default"
-        (onClick)="onNextButtonClick($event)"
+        (onClick)="onNextButtonClick()"
         [width]="100"
       >
       </dx-button>

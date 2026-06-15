@@ -5,7 +5,7 @@
     [group]="draggingGroupName"
     (onDragStart)="onListDragStart($event)"
   >
-    @for (task of tasks; track task.id) {
+    @for (task of tasks; track task.text) {
     <dx-draggable
       class="item dx-card"
       [clone]="true"
