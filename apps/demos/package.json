@@ -93,7 +93,7 @@
         "express-rate-limit": "^8.3.1"
     },
     "devDependencies": {
-        "@angular/platform-server": "~21.2.15",
+        "@angular/platform-server": "~21.2.16",
         "@babel/core": "7.29.7",
         "@babel/eslint-parser": "catalog:",
         "@babel/preset-env": "7.29.7",
