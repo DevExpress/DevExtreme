@@ -162,7 +162,7 @@ interface NormalizedCellData {
   endDateUTC?: Date | false | undefined;
   groups?: ViewCellData['groups'];
   groupIndex: ViewCellData['groupIndex'];
-  allDay: ViewCellData['allDay'];
+  allDay?: ViewCellData['allDay'];
   index?: ViewCellData['index'];
   isFirstGroupCell?: ViewCellData['isFirstGroupCell'];
   isLastGroupCell?: ViewCellData['isLastGroupCell'];
@@ -1718,7 +1718,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDate: cellData.endDate ?? new Date(),
       ...(startDateUTC !== undefined && { startDateUTC }),
       ...(endDateUTC !== undefined && { endDateUTC }),
-      allDay: cellData.allDay,
+      ...(cellData.allDay !== undefined && { allDay: cellData.allDay }),
       ...(cellData.groups !== undefined && { groups: { ...cellData.groups } }),
       groupIndex: cellData.groupIndex,
     };
