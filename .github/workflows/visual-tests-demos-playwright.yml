@@ -1,0 +1,1104 @@
+name: Demos Visual Tests Playwright
+
+# concurrency:
+  # group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  # cancel-in-progress: true
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'apps/**/*.md'
+  push:
+    branches: [26_1]
+  workflow_dispatch:
+
+env:
+  NX_SKIP_NX_CACHE: true
+
+jobs:
+  get-changes:
+    runs-on: devextreme-shr2
+    if: github.event_name == 'pull_request'
+    name: Get changed demos
+    timeout-minutes: 5
+    outputs:
+      has-changed-demos: ${{ steps.check-changes.outputs.has-changed-demos }}
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Get changed files
+        uses: DevExpress/github-actions/get-changed-files@v1
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          paths: 'apps/demos/Demos/**/*;apps/demos/testing/widgets/**/*'
+          output: apps/demos/changed-files.json
+
+      - name: Display changed files
+        id: check-changes
+        run: |
+          HAS_CHANGED="false"
+          if [ -f "apps/demos/changed-files.json" ]; then
+            DEMO_COUNT=$(jq length apps/demos/changed-files.json)
+            echo "Found changed-files.json"
+            echo "Content of changed-files.json:"
+            cat apps/demos/changed-files.json
+            echo "Number of changed files: $DEMO_COUNT"
+            if [ "$DEMO_COUNT" -gt 0 ]; then
+              HAS_CHANGED="true"
+            fi
+          else
+            echo "changed-files.json not found"
+          fi
+          echo "has-changed-demos=${HAS_CHANGED}" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: changed-demos
+          path: apps/demos/changed-files.json
+          retention-days: 1
+
+  determine-framework-tests-scope:
+    runs-on: devextreme-shr2
+    name: Determine scope for framework tests
+    needs: [get-changes]
+    if: |
+      always() &&
+      (needs.get-changes.result == 'success' || needs.get-changes.result == 'skipped')
+    outputs:
+      framework-tests-scope: ${{ steps.determine.outputs.framework-tests-scope }}
+
+    steps:
+      - name: Determine framework tests scope
+        id: determine
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
+            echo "Framework tests scope: all demos"
+            echo "framework-tests-scope=all" >> $GITHUB_OUTPUT
+          elif [ "${{ needs.get-changes.outputs.has-changed-demos }}" = "true" ]; then
+            echo "Framework tests scope: changed demos"
+            echo "framework-tests-scope=changed" >> $GITHUB_OUTPUT
+          else
+            echo "Framework tests NOT needed"
+            echo "framework-tests-scope=none" >> $GITHUB_OUTPUT
+          fi
+
+  build-devextreme:
+    needs: [determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.determine-framework-tests-scope.result == 'success'
+    runs-on: devextreme-shr2
+    name: Build DevExtreme
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+    timeout-minutes: 30
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v5
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: DevExtreme - Build
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
+        shell: bash
+        run: |
+          mise exec -- pnpm exec nx build devextreme-scss
+          mise exec -- pnpm exec nx build devextreme -c testing
+
+      - name: DevExtreme - Build all packages
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+        run: mise exec -- pnpm exec nx all:build-testing workflows
+
+      - name: Zip artifacts
+        working-directory: ./packages/devextreme
+        run: 7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme/artifacts.zip
+          retention-days: 1
+
+      - name: Move framework package artifacts
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+        run: |
+          mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
+          mv ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+          mv ./packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
+          mv ./packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
+          mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
+
+      - name: Upload framework package artifacts
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+        uses: actions/upload-artifact@v7
+        with:
+          name: devextreme-sources
+          path: |
+            devextreme-installer.tgz
+            devextreme-dist-installer.tgz
+            devextreme-angular-installer.tgz
+            devextreme-react-installer.tgz
+            devextreme-vue-installer.tgz
+          retention-days: 1
+
+  build-demos:
+    runs-on: devextreme-shr2
+    name: Build Demos Bundles
+    timeout-minutes: 30
+    needs: [determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Download devextreme sources
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-sources
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        working-directory: apps/demos
+        run: mise exec -- pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+
+      - name: Prepare bundles
+        working-directory: apps/demos
+        run: mise exec -- pnpm exec nx prepare-bundles
+
+      - name: Demos - Run tsc
+        working-directory: apps/demos
+        run: mise exec -- pnpm exec tsc --noEmit
+
+      - name: Upload demos bundles
+        uses: actions/upload-artifact@v7
+        with:
+          name: devextreme-bundles
+          path: |
+            apps/demos/bundles/
+          retention-days: 1
+
+  common-screenshots:
+    needs: build-devextreme
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [jquery(1/3), jquery(2/3), jquery(3/3)]
+        THEME: ['fluent.blue.light', 'material.blue.light']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-common-screenshots-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme
+
+      - name: Unpack artifacts
+        working-directory: ./packages/devextreme
+        run: 7z x artifacts.zip -aoa
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '145.0.7632.67'
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: Set Roboto font directory
+        if: contains(matrix.THEME, 'material')
+        run: echo "ROBOTO_FONT_DIR=${HOME}/.local/share/fonts/roboto" >> $GITHUB_ENV
+
+      - name: Cache Roboto font
+        if: contains(matrix.THEME, 'material')
+        id: cache-roboto
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.ROBOTO_FONT_DIR }}
+          key: roboto-font-${{ runner.os }}-8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
+
+      - name: Install Roboto font for Material theme
+        if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
+        env:
+          GOOGLE_FONTS_COMMIT: 8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
+          ROBOTO_SHA256: d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134
+        run: |
+          echo "Installing Roboto font from google/fonts (pinned commit)..."
+          mkdir -p "$ROBOTO_FONT_DIR"
+          BASE_URL="https://raw.githubusercontent.com/google/fonts/${GOOGLE_FONTS_COMMIT}/ofl/roboto"
+
+          curl -fsSL "${BASE_URL}/Roboto%5Bwdth%2Cwght%5D.ttf" -o /tmp/Roboto.ttf
+          echo "${ROBOTO_SHA256}  /tmp/Roboto.ttf" | sha256sum -c -
+
+          mv /tmp/Roboto.ttf "$ROBOTO_FONT_DIR/"
+          echo "Roboto font installed"
+
+      - name: Refresh font cache
+        if: contains(matrix.THEME, 'material')
+        run: fc-cache -f > /dev/null 2>&1
+
+      - name: Run Web Server
+        shell: bash
+        run: |
+          if command -v python3 > /dev/null; then
+            python3 -m http.server 8080 &
+          else
+            python -m http.server 8080 &
+          fi
+
+      - name: Set Chrome flags
+        id: chrome-flags
+        shell: bash
+        run: |
+          BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
+
+          if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
+            BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
+          fi
+
+          echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
+
+      - name: Run Playwright common screenshots
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
+          CONCURRENCY: 4
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          # Use Chrome's legacy CDP screenshot surface so screenshots match the
+          # etalons generated under TestCafe (which doesn't enable Playwright's
+          # CDPScreenshotNewSurface feature). Without this, Material text in
+          # particular renders with visibly different antialiasing/glyph metrics.
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-common-screenshots
+
+      - name: Run Playwright widget screenshots
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
+          CONCURRENCY: 4
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots
+
+      - name: Sanitize job name
+        if: ${{ failure() }}
+        run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Copy screenshots artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-screenshots-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+          if-no-files-found: ignore
+
+      - name: Copy Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright-report/**/*
+          if-no-files-found: ignore
+
+  common-csp:
+    needs: build-devextreme
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [jquery]
+        THEME: ['fluent.blue.light']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-common-csp-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme
+
+      - name: Unpack artifacts
+        working-directory: ./packages/devextreme
+        run: 7z x artifacts.zip -aoa
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '145.0.7632.67'
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: Run CSP server
+        shell: bash
+        working-directory: apps/demos
+        run: mise exec -- node utils/server/csp-server.js 8080 &
+
+      - name: Set Chrome flags
+        id: chrome-flags
+        shell: bash
+        run: |
+          echo "flags=chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning" >> $GITHUB_OUTPUT
+
+      - name: Run Playwright common CSP
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
+          CONCURRENCY: 4
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-common-csp
+
+      - name: Show CSP violations summary
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -f csp-reports/csp-violations.jsonl ]; then
+            mise exec -- node utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No CSP violations detected." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload CSP violations
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-csp-violations-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
+          path: ${{ github.workspace }}/apps/demos/csp-reports/csp-violations.jsonl
+          if-no-files-found: ignore
+
+      - name: Copy Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-csp-report-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright-report/**/*
+          if-no-files-found: ignore
+
+  common-accessibility:
+    needs: [determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [jquery]
+        THEME: ['material.blue.light', 'fluent.blue.light', 'material.blue.dark', 'fluent.blue.dark']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-accessibility-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme
+
+      - name: Unpack artifacts
+        working-directory: ./packages/devextreme
+        run: 7z x artifacts.zip -aoa
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '145.0.7632.67'
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: Set Roboto font directory
+        if: contains(matrix.THEME, 'material')
+        run: echo "ROBOTO_FONT_DIR=${HOME}/.local/share/fonts/roboto" >> $GITHUB_ENV
+
+      - name: Cache Roboto font
+        if: contains(matrix.THEME, 'material')
+        id: cache-roboto
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.ROBOTO_FONT_DIR }}
+          key: roboto-font-${{ runner.os }}-8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
+
+      - name: Install Roboto font for Material theme
+        if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
+        env:
+          GOOGLE_FONTS_COMMIT: 8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5
+          ROBOTO_SHA256: d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134
+        run: |
+          echo "Installing Roboto font from google/fonts (pinned commit)..."
+          mkdir -p "$ROBOTO_FONT_DIR"
+          BASE_URL="https://raw.githubusercontent.com/google/fonts/${GOOGLE_FONTS_COMMIT}/ofl/roboto"
+
+          curl -fsSL "${BASE_URL}/Roboto%5Bwdth%2Cwght%5D.ttf" -o /tmp/Roboto.ttf
+          echo "${ROBOTO_SHA256}  /tmp/Roboto.ttf" | sha256sum -c -
+
+          mv /tmp/Roboto.ttf "$ROBOTO_FONT_DIR/"
+          echo "Roboto font installed"
+
+      - name: Refresh font cache
+        if: contains(matrix.THEME, 'material')
+        run: fc-cache -f > /dev/null 2>&1
+
+      - name: Run Web Server
+        shell: bash
+        run: |
+          if command -v python3 > /dev/null; then
+            python3 -m http.server 8080 &
+          else
+            python -m http.server 8080 &
+          fi
+
+      - name: Set Chrome flags
+        id: chrome-flags
+        shell: bash
+        run: |
+          BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
+
+          if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
+            BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
+          fi
+
+          echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
+
+      - name: Run Playwright common accessibility
+        if: ${{ !contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
+          CONCURRENCY: 4
+          TCQUARANTINE: true
+          STRATEGY: accessibility
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-common-accessibility
+
+      - name: Sanitize job name
+        if: ${{ always() }}
+        run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Show accessibility warnings
+        if: ${{ always() && (!contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none') }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -d testing/artifacts/axe-reports ]; then
+            REPORT_COUNT=$(find testing/artifacts/axe-reports -name '*.md' | wc -l | tr -d ' ')
+          else
+            REPORT_COUNT=0
+          fi
+
+          if [ "$REPORT_COUNT" -gt 0 ]; then
+            echo "::warning ::Axe reports: ${REPORT_COUNT} demos have accessibility violations"
+          else
+            echo "No accessibility reports found."
+          fi
+
+      - name: Copy accessibility reports
+        if: ${{ always() && (!contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-reports-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/axe-reports/**/*
+          if-no-files-found: ignore
+
+      - name: Copy Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-report-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright-report/**/*
+          if-no-files-found: ignore
+
+  common-screenshots-frameworks-all:
+    needs: [determine-framework-tests-scope, build-demos]
+    if: |
+      always() &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-demos.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [
+          react(1/3),
+          react(2/3),
+          react(3/3),
+          vue(1/5),
+          vue(2/5),
+          vue(3/5),
+          vue(4/5),
+          vue(5/5),
+          angular(1/10),
+          angular(2/10),
+          angular(3/10),
+          angular(4/10),
+          angular(5/10),
+          angular(6/10),
+          angular(7/10),
+          angular(8/10),
+          angular(9/10),
+          angular(10/10),
+        ]
+        THEME: ['fluent.blue.light']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-common-screenshots-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '145.0.7632.67'
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Download devextreme sources
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-sources
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        working-directory: apps/demos
+        run: mise exec -- pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+
+      - name: Prepare JS
+        working-directory: apps/demos
+        run: mise exec -- pnpm run prepare-js
+
+      - name: Update bundles config
+        working-directory: apps/demos
+        run: mise exec -- pnpm exec gulp update-config
+
+      - name: Create bundles dir
+        run: mkdir -p apps/demos/bundles
+
+      - name: Download bundles artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles
+          path: apps/demos/bundles
+
+      - name: Run Web Server
+        shell: bash
+        run: |
+          if command -v python3 > /dev/null; then
+            python3 -m http.server 8080 &
+          else
+            python -m http.server 8080 &
+          fi
+
+      - name: Set concurrency based on framework
+        id: set-concurrency
+        shell: bash
+        run: |
+          if [[ "${{ matrix.CONSTEL }}" == react* ]]; then
+            echo "concurrency=4" >> $GITHUB_OUTPUT
+          elif [[ "${{ matrix.CONSTEL }}" == vue* ]]; then
+            echo "concurrency=1" >> $GITHUB_OUTPUT
+          elif [[ "${{ matrix.CONSTEL }}" == angular* ]]; then
+            echo "concurrency=2" >> $GITHUB_OUTPUT
+          else
+            echo "concurrency=2" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Playwright common screenshots
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-common-screenshots
+
+      - name: Run Playwright widget screenshots
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots
+
+      - name: Sanitize job name
+        if: ${{ always() }}
+        run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Run CSP server
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          rm -rf csp-reports
+          mise exec -- node utils/server/csp-server.js 8081 &
+
+      - name: Run Playwright common CSP
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          PLAYWRIGHT_DEMOS_BASE_URL: http://127.0.0.1:8081
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+          TCQUARANTINE: true
+          STRATEGY: csp
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-common-csp
+
+      - name: Show CSP violations summary
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -f csp-reports/csp-violations.jsonl ]; then
+            mise exec -- node utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No CSP violations detected." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload CSP violations
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-csp-violations-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/csp-reports/csp-violations.jsonl
+          if-no-files-found: ignore
+
+      - name: Run Playwright common accessibility
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+          TCQUARANTINE: true
+          STRATEGY: accessibility
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-common-accessibility
+
+      - name: Show accessibility warnings
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -d testing/artifacts/axe-reports ]; then
+            REPORT_COUNT=$(find testing/artifacts/axe-reports -name '*.md' | wc -l | tr -d ' ')
+          else
+            REPORT_COUNT=0
+          fi
+
+          if [ "$REPORT_COUNT" -gt 0 ]; then
+            echo "::warning ::Axe reports: ${REPORT_COUNT} demos have accessibility violations"
+          else
+            echo "No accessibility reports found."
+          fi
+
+      - name: Copy accessibility reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-reports-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/axe-reports/**/*
+          if-no-files-found: ignore
+
+      - name: Copy screenshots artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-screenshots-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+          if-no-files-found: ignore
+
+      - name: Copy Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright-report/**/*
+          if-no-files-found: ignore
+
+  common-screenshots-frameworks-changed:
+    needs: [determine-framework-tests-scope, build-demos]
+    if: |
+      always() &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-demos.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [react, vue, angular]
+        THEME: ['fluent.blue.light']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-common-screenshots-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '145.0.7632.67'
+
+      - name: Use mise
+        uses: jdx/mise-action@v4
+
+      - name: Download devextreme sources
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-sources
+
+      - name: Download changed demos
+        uses: actions/download-artifact@v8
+        with:
+          name: changed-demos
+          path: apps/demos
+        continue-on-error: true
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(mise exec -- pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: mise exec -- pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        working-directory: apps/demos
+        run: mise exec -- pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+
+      - name: Prepare JS
+        working-directory: apps/demos
+        run: mise exec -- pnpm run prepare-js
+
+      - name: Update bundles config
+        working-directory: apps/demos
+        run: mise exec -- pnpm exec gulp update-config
+
+      - name: Create bundles dir
+        run: mkdir -p apps/demos/bundles
+
+      - name: Download bundles artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles
+          path: apps/demos/bundles
+
+      - name: Run Web Server
+        shell: bash
+        run: |
+          if command -v python3 > /dev/null; then
+            python3 -m http.server 8080 &
+          else
+            python -m http.server 8080 &
+          fi
+
+      - name: Run Playwright common screenshots
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          CHANGEDFILEINFOSPATH: changed-files.json
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-common-screenshots -- --pass-with-no-tests
+
+      - name: Run Playwright widget screenshots
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          CHANGEDFILEINFOSPATH: changed-files.json
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-widgets-screenshots -- --pass-with-no-tests
+
+      - name: Sanitize job name
+        if: ${{ always() }}
+        run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Run CSP server
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          rm -rf csp-reports
+          mise exec -- node utils/server/csp-server.js 8081 &
+
+      - name: Run Playwright common CSP
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          CHANGEDFILEINFOSPATH: changed-files.json
+          PLAYWRIGHT_DEMOS_BASE_URL: http://127.0.0.1:8081
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          STRATEGY: csp
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+        run: mise exec -- pnpm exec nx test-playwright-common-csp -- --pass-with-no-tests
+
+      - name: Show CSP violations summary
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -f csp-reports/csp-violations.jsonl ]; then
+            mise exec -- node utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No CSP violations detected." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload CSP violations
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-csp-violations-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/csp-reports/csp-violations.jsonl
+          if-no-files-found: ignore
+
+      - name: Run Playwright common accessibility
+        if: ${{ !cancelled() }}
+        shell: bash
+        working-directory: apps/demos
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          CHANGEDFILEINFOSPATH: changed-files.json
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          STRATEGY: accessibility
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          CI_ENV: true
+          PLAYWRIGHT_LEGACY_SCREENSHOT: '1'
+        run: mise exec -- pnpm exec nx test-playwright-common-accessibility -- --pass-with-no-tests
+
+      - name: Show accessibility warnings
+        if: ${{ always() }}
+        shell: bash
+        working-directory: apps/demos
+        run: |
+          if [ -d testing/artifacts/axe-reports ]; then
+            REPORT_COUNT=$(find testing/artifacts/axe-reports -name '*.md' | wc -l | tr -d ' ')
+          else
+            REPORT_COUNT=0
+          fi
+
+          if [ "$REPORT_COUNT" -gt 0 ]; then
+            echo "::warning ::Axe reports: ${REPORT_COUNT} demos have accessibility violations"
+          else
+            echo "No accessibility reports found."
+          fi
+
+      - name: Copy accessibility reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-accessibility-reports-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/axe-reports/**/*
+          if-no-files-found: ignore
+
+      - name: Copy screenshots artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-screenshots-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+          if-no-files-found: ignore
+
+      - name: Copy Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright-report/**/*
+          if-no-files-found: ignore

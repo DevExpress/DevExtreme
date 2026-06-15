@@ -13,6 +13,7 @@
     "lib": ["es2022", "DOM", "DOM.Iterable"]
   },
   "include": [
+    "./playwright.*.ts",
     "./Demos/**/React/**/*.ts",
     "./Demos/**/React/**/*.tsx",
     "./Demos/**/Vue/**/*.ts",

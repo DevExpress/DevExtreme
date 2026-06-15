@@ -27,6 +27,20 @@
         "{projectRoot}/runner.ts",
         "{projectRoot}/tsconfig.json"
       ]
+    },
+    "test-playwright": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test-playwright"
+      },
+      "inputs": [
+        "^default",
+        "{projectRoot}/helpers/**/*",
+        "{projectRoot}/playwright/**/*",
+        "{projectRoot}/playwright.config.ts",
+        "{projectRoot}/tests/**/*",
+        "{projectRoot}/tsconfig.json"
+      ]
     }
   },
   "tags": []

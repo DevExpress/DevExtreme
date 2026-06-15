@@ -6,6 +6,7 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -16,6 +17,7 @@ env:
 
 jobs:
   build:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     name: build
     strategy:
       fail-fast: false
@@ -68,7 +70,23 @@ jobs:
         path: ./packages/devextreme/artifacts.zip
         retention-days: 1
 
+  renovation-skip-test:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: ${{ matrix.ARGS.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { platform: "angular" },
+          { platform: "react" },
+          { platform: "vue" },
+        ]
+    steps:
+      - run: echo "Skipped Playgrounds tests for renovation PR."
+
   test:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     name: ${{ matrix.ARGS.platform }}
     needs: [build]
     strategy:

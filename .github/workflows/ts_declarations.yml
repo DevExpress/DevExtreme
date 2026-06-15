@@ -6,13 +6,29 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
     branches: [26_1]
 
 jobs:
+  renovation-skip-check-ts-bundle:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: check-ts-bundle
+    steps:
+      - run: echo "Skipped TS Declarations for renovation PR."
+
+  renovation-skip-validate-declarations:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: validate-declarations
+    steps:
+      - run: echo "Skipped TS Declarations for renovation PR."
+
   check-ts-bundle:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
@@ -62,6 +78,7 @@ jobs:
         fi
 
   validate-declarations:
+    if: ${{ !(github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')) }}
     runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:

@@ -6,6 +6,7 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths-ignore:
       - 'apps/**/*.md'
   push:
@@ -14,7 +15,7 @@ on:
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
-  RUN_ALL_TESTS: true
+  RUN_ALL_TESTS: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation') && 'false' || 'true' }}
 
 jobs:
   check-should-run-all:
@@ -28,6 +29,8 @@ jobs:
         run: echo "should-run=${{ env.RUN_ALL_TESTS }}" >> $GITHUB_OUTPUT
 
   build:
+    needs: check-should-run-all
+    if: needs.check-should-run-all.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: Build
     timeout-minutes: 60
@@ -81,7 +84,8 @@ jobs:
         retention-days: 1
 
   qunit-tests:
-    needs: build
+    needs: [check-should-run-all, build]
+    if: needs.check-should-run-all.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
     timeout-minutes: 20
@@ -128,6 +132,67 @@ jobs:
         useJQuery: ${{ matrix.useJQuery }}
         useCsp: ${{ matrix.CSP }}
         maxWorkers: ${{ matrix.MAX_WORKERS || '' }}
+
+  renovation-skip-build:
+    needs: check-should-run-all
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - run: echo "Skipped QUnit build for renovation PR."
+
+  renovation-skip-qunit-tests:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [
+          misc,
+          ui,
+          ui.editors,
+          ui.grid,
+          ui.scheduler,
+        ]
+        TIMEZONE: ['']
+        CSP: ['true']
+        useJQuery: ['false']
+        MAX_WORKERS: ['']
+        include:
+          - CONSTEL: export
+            MAX_WORKERS: '3'
+            useJQuery: 'false'
+            CSP: 'true'
+          - CONSTEL: ui.scheduler
+            TIMEZONE: US/Pacific
+            useJQuery: 'false'
+          - CONSTEL: misc
+            CSP: 'false'
+            useJQuery: 'true'
+          - CONSTEL: ui.widgets
+            CSP: 'false'
+            useJQuery: 'false'
+            MAX_WORKERS: '3'
+    steps:
+      - run: echo "Skipped QUnit tests for renovation PR."
+
+  renovation-skip-qunit-shadow-dom:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'renovation')
+    runs-on: ubuntu-latest
+    name: ${{ matrix.constel }}-shadow-dom
+    strategy:
+      fail-fast: false
+      matrix:
+        constel: [
+          'ui',
+          'ui.widgets',
+          'ui.editors',
+          'ui.grid',
+          'ui.scheduler',
+        ]
+    steps:
+      - run: echo "Skipped QUnit shadow DOM tests for renovation PR."
 
   qunit-tests-shadow-dom:
     needs: [check-should-run-all, build]
