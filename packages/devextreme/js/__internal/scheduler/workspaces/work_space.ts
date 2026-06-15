@@ -46,7 +46,7 @@ import type { TranslateVector } from '@ts/common/core/animation/translator';
 import { getMemoizeScrollTo, type ScrollToFunc } from '@ts/core/utils/scroll';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import {
   AllDayPanelTitleComponent,
@@ -265,7 +265,7 @@ type WorkspaceCoordinates = CellPositionData & { groupIndex?: number };
 
 type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
-export interface WorkspaceOptionsInternal {
+export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
   newAppointments: boolean;
   resources: ResourceLoader[];
   getResourceManager: () => ResourceManager;
@@ -2082,7 +2082,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       top = 0;
     }
 
-    if (this._options.silent('templatesRenderAsynchronously')) {
+    if (this.option().templatesRenderAsynchronously) {
       // eslint-disable-next-line no-restricted-globals
       setTimeout(() => {
         scrollable.scrollBy({ left, top });
