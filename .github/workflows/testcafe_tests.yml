@@ -145,10 +145,10 @@ jobs:
       working-directory: ./packages/devextreme
       run: 7z x artifacts.zip -aoa
 
-    # - name: Setup Chrome
-    #   uses: ./.github/actions/setup-chrome
-    #   with:
-    #     chrome-version: '145.0.7632.67'
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
       uses: actions/setup-node@v6
