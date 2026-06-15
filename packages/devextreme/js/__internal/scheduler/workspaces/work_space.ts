@@ -1030,10 +1030,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       ? this.option().groupOrientation
       : this.getDefaultGroupStrategy();
 
-    const options = {
+    const renderState = this.virtualScrollingDispatcher.getRenderState();
+    const options: ViewDataProviderOptions = {
       groupByDate: this.option().groupByDate,
-      startRowIndex: 0,
-      startCellIndex: 0,
       groupOrientation,
       today: this.getToday?.() ?? new Date(),
       getResourceManager: this.option().getResourceManager,
@@ -1056,10 +1055,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       showCurrentTimeIndicator: this.option().showCurrentTimeIndicator,
       skippedDays: this.option().skippedDays,
 
-      ...this.virtualScrollingDispatcher.getRenderState(),
+      ...renderState,
+      startRowIndex: renderState.startRowIndex ?? 0,
+      startCellIndex: renderState.startCellIndex ?? 0,
+      cellCount: renderState.cellCount ?? 0,
     };
 
-    return options as ViewDataProviderOptions;
+    return options;
   }
 
   renovatedRenderSupported(): boolean { return true; }
