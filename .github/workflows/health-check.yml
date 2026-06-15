@@ -2,6 +2,7 @@ name: Health Check
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches:
       - 26_1
@@ -9,7 +10,7 @@ on:
 jobs:
   invoke:
     name: Invoke
-    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check
+    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@lavrov/ensure-node-version
     with:
       config: |
         {
