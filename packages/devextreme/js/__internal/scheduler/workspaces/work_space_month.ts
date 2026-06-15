@@ -3,6 +3,7 @@ import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { getBoundingRect } from '@js/core/utils/position';
 import { hasWindow } from '@js/core/utils/window';
+import type { ViewType } from '@js/ui/scheduler';
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
@@ -16,7 +17,7 @@ const MONTH_CLASS = 'dx-scheduler-work-space-month';
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
-  get type(): string { return VIEWS.MONTH; }
+  get type(): ViewType { return VIEWS.MONTH; }
 
   protected override getElementClass(): string {
     return MONTH_CLASS;

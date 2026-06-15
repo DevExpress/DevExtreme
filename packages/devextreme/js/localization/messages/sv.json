@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Sidstorlek",
         "dxPagination-ariaPageNumber": "Sidnummer",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Totalsumma",
         "dxPivotGrid-total": "Summa {0}",
         "dxPivotGrid-fieldChooserTitle": "Fältväljare",

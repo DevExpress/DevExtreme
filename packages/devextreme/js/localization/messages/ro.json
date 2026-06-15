@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Dimensiunea paginii",
         "dxPagination-ariaPageNumber": "Numărul paginii",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Total general",
         "dxPivotGrid-total": "{0} Total",
         "dxPivotGrid-fieldChooserTitle": "Selector de câmpuri",

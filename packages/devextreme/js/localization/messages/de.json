@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Seitenlänge",
         "dxPagination-ariaPageNumber": "Seitennummer",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Gesamt",
         "dxPivotGrid-total": "{0} Gesamt",
         "dxPivotGrid-fieldChooserTitle": "Feldauswahl",

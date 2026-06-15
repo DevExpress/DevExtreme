@@ -451,6 +451,46 @@ describe('selectionByIndexesCommand', () => {
         expect(result.status).toBe('success');
       });
 
+      it('resolves keys from loaded rows via store.keyOf', async () => {
+        const instance = await createRemoteGrid();
+        const store = instance.getDataSource().store();
+        const keyOfSpy = jest.spyOn(store, 'keyOf');
+        jest.spyOn(store, 'load').mockReturnValue(
+          Promise.resolve([{ id: 2, name: 'Beta' }, { id: 3, name: 'Gamma' }]) as never,
+        );
+        const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
+        const callbacks = createCallbacks();
+
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
+          indexes: [2, 3], mode: 'select', scope: 'allPages',
+        });
+
+        expect(keyOfSpy).toHaveBeenCalled();
+        expect(selectSpy).toHaveBeenCalledWith([2, 3], true);
+        expect(result.status).toBe('success');
+      });
+
+      it('resolves composite keys from loaded rows via store.keyOf', async () => {
+        const instance = await createCompositeGrid({
+          remoteOperations: { paging: true, filtering: true, sorting: true },
+        });
+        const store = instance.getDataSource().store();
+        const keyOfSpy = jest.spyOn(store, 'keyOf');
+        jest.spyOn(store, 'load').mockReturnValue(
+          Promise.resolve([{ a: 1, b: 10, name: 'Alpha' }, { a: 2, b: 20, name: 'Beta' }]) as never,
+        );
+        const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
+        const callbacks = createCallbacks();
+
+        const result = await selectionByIndexesCommand.execute(instance, callbacks)({
+          indexes: [1, 2], mode: 'select', scope: 'allPages',
+        });
+
+        expect(keyOfSpy).toHaveBeenCalled();
+        expect(selectSpy).toHaveBeenCalledWith([{ a: 1, b: 10 }, { a: 2, b: 20 }], true);
+        expect(result.status).toBe('success');
+      });
+
       it('applies the combined filter (not just the base dataSource filter) to store.load', async () => {
         const instance = await createRemoteGrid({
           columns: [

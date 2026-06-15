@@ -1,4 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
+import type { ViewType } from '@js/ui/scheduler';
 import { weekUtils } from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../utils/options/constants_view';
@@ -7,7 +8,7 @@ import SchedulerWorkSpaceVertical from './work_space_vertical';
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
-  get type(): string {
+  get type(): ViewType {
     return this.option().type ?? VIEWS.WEEK;
   }
 

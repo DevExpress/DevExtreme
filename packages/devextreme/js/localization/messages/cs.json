@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Velikost stránky",
         "dxPagination-ariaPageNumber": "Číslo stránky",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Celkem",
         "dxPivotGrid-total": "{0} Celkem",
         "dxPivotGrid-fieldChooserTitle": "Výběr pole",

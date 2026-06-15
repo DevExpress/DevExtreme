@@ -175,7 +175,8 @@ const { tableCreator } = tableCreatorModule;
 const DRAGGING_MOUSE_FAULT = 10;
 
 // @ts-expect-error Widget exposes a static abstract() helper not typed in its d.ts
-const { abstract } = Widget;
+const { abstract: widgetAbstract } = Widget;
+const abstract = widgetAbstract as () => never;
 const toMs = dateUtils.dateToMilliseconds;
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
@@ -456,13 +457,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return CELL_SELECTOR;
   }
 
-  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-  get type(): string {
-    return '';
+  get type(): ViewType {
+    return abstract();
   }
 
   get viewDataProvider(): ViewDataProvider {
-    this.viewDataProviderValue ??= new ViewDataProvider(this.type as ViewType);
+    this.viewDataProviderValue ??= new ViewDataProvider(this.type);
     return this.viewDataProviderValue;
   }
 
@@ -609,7 +609,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           groupCount,
           isMultiSelection: Boolean(isMultiSelection),
           isMultiSelectionAllowed,
-          viewType: this.type as ViewType,
+          viewType: this.type,
           key,
           getCellDataByPosition: this.viewDataProvider.getCellData.bind(this.viewDataProvider),
           isAllDayPanelCell: Boolean(isAllDayPanelCell),
@@ -1047,7 +1047,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startDayHour: this.option().startDayHour,
       endDayHour: this.option().endDayHour,
       cellDuration: this.getCellDuration(),
-      viewType: this.type as ViewType,
+      viewType: this.type,
       intervalCount: this.option().intervalCount,
       hoursInterval: this.option().hoursInterval,
       currentDate: this.option().currentDate,
@@ -1525,7 +1525,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       firstDayOfWeek: this.firstDayOfWeek(),
       skippedDays: this.option().skippedDays,
       viewOffset: 0,
-      viewType: this.type as ViewType,
+      viewType: this.type,
     };
   }
 
@@ -1678,7 +1678,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       cell.cellData,
       cell.position,
       currentDate,
-      isDateAndTimeView(this.type as ViewType),
+      isDateAndTimeView(this.type),
       this.viewDirection === 'vertical',
     );
   }
@@ -1896,7 +1896,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   getCellDuration(): number {
     return getCellDuration(
-      this.type as ViewType,
+      this.type,
       this.option().startDayHour,
       this.option().endDayHour,
       this.option().hoursInterval,
@@ -2193,7 +2193,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   protected getR1ComponentsViewContext(): ViewContext {
     return {
       view: {
-        type: this.type as ViewType,
+        type: this.type,
       },
       crossScrollingEnabled: Boolean(this.option().crossScrollingEnabled),
     };

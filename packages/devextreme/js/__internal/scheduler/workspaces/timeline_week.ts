@@ -1,4 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
+import type { ViewType } from '@js/ui/scheduler';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerTimeline from './timeline';
@@ -7,7 +8,7 @@ const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 const TIMELINE_WORK_WEEK_CLASS = 'dx-scheduler-timeline-work-week';
 
 export default class SchedulerTimelineWeek extends SchedulerTimeline {
-  get type(): string {
+  get type(): ViewType {
     return this.option().type ?? VIEWS.TIMELINE_WEEK;
   }
 

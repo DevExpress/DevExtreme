@@ -9,6 +9,7 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
+import type { ViewType } from '@js/ui/scheduler';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { EMPTY_ACTIVE_STATE_UNIT } from '@ts/core/widget/widget';
 
@@ -67,7 +68,7 @@ class SchedulerAgenda extends WorkSpace {
     return EMPTY_ACTIVE_STATE_UNIT;
   }
 
-  get type(): string { return VIEWS.AGENDA; }
+  get type(): ViewType { return VIEWS.AGENDA; }
 
   getStartViewDate(): Date {
     return this.startViewDate;
