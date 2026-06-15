@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "useDefineForClassFields": false,
+    "strict": false,
+    "noImplicitAny": false,
+    "baseUrl": "../../",
+    "paths": {
+      "@angular/*": ["node_modules/@angular/*"],
+      "devextreme": ["../../packages/devextreme/artifacts/transpiled-esm-npm/cjs/index"],
+      "devextreme/*": ["../../packages/devextreme/artifacts/transpiled-esm-npm/cjs/*"],
+      "devextreme-dist/*": ["../../packages/devextreme/artifacts/*"],
+      "globalize/*": ["../../node_modules/globalize/dist/globalize/*"],
+      "anti-forgery": ["shared/anti-forgery/fetch-override.js"]
+    },
+    "types": []
+  },
+  "angularCompilerOptions": {
+    "compilationMode": "full",
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictTemplates": false,
+    "strictInjectionParameters": false,
+    "fullTemplateTypeCheck": false,
+    "strictInputTypes": false,
+    "strictInputAccessModifiers": false,
+    "strictNullInputTypes": false,
+    "strictAttributeTypes": false,
+    "strictSafeNavigationTypes": false,
+    "strictDomLocalRefTypes": false,
+    "strictOutputEventTypes": false,
+    "strictDomEventTypes": false,
+    "strictContextGenerics": false,
+    "strictLiteralTypes": false
+  },
+  "files": [],
+  "include": []
+}

@@ -40,7 +40,7 @@
       [(value)]="selectionMode"
       [inputAttr]="{ 'aria-label': 'Selection Mode' }"
       [items]="['all', 'excludeRecursive', 'leavesOnly']"
-      (onValueChanged)="onOptionsChanged($event)"
+      (onValueChanged)="onOptionsChanged()"
       text="Recursive Selection"
     >
     </dx-select-box>
@@ -48,7 +48,7 @@
   <div class="option">
     <dx-check-box
       [(value)]="recursiveSelectionEnabled"
-      (onValueChanged)="onOptionsChanged($event)"
+      (onValueChanged)="onOptionsChanged()"
       text="Recursive Selection"
     >
     </dx-check-box>

@@ -1,7 +1,6 @@
-import type { ViewDataProviderOptions } from '@ts/scheduler/types';
-
 import { weekUtils } from '../../r1/utils/index';
-import { ViewDataGenerator } from './m_view_data_generator';
+import type { ViewDataProviderOptions } from './types';
+import { ViewDataGenerator } from './view_data_generator';
 
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
   _getIntervalDuration(intervalCount: number): number {
