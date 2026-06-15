@@ -17,9 +17,9 @@
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import _Color from '@js/color';
 import { extend } from '@js/core/utils/extend';
 import { isString as _isString } from '@js/core/utils/type';
+import _Color from '@ts/m_color';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
 const _floor = Math.floor;
@@ -280,7 +280,7 @@ function getExtrapolateColorsStrategy(palette, parameters) {
     }
     hsl.l = l * 100;
 
-    return _Color.prototype.fromHSL(hsl).toHex();
+    return _Color.fromHSL(hsl).toHex();
   }
 
   return {

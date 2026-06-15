@@ -833,7 +833,7 @@ class ColorView extends Editor<ColorViewProperties> {
       step: 0.1,
       onValueChanged: (args) => {
         let { value } = args;
-        value = this._currentColor.isValidAlpha(value) ? value : this._currentColor.a;
+        value = Color.isValidAlpha(value) ? value : this._currentColor.a;
         if (args.event) {
           this._saveValueChangeEvent(args.event);
         }
@@ -952,7 +952,7 @@ class ColorView extends Editor<ColorViewProperties> {
       if (this._alphaChannelInput) {
         const { value: alphaValue } = this._alphaChannelInput.option();
         const isValidAlpha = alphaValue !== undefined
-          && this._currentColor.isValidAlpha(alphaValue);
+          && Color.isValidAlpha(alphaValue);
 
         const valueToAdd = isValidAlpha ? alphaValue : this._currentColor.a;
 
@@ -972,7 +972,7 @@ class ColorView extends Editor<ColorViewProperties> {
   }
 
   _validateHex(hex: string): string {
-    return this._currentColor.isValidHex(hex) ? hex : this._currentColor.toHex();
+    return Color.isValidHex(hex) ? hex : this._currentColor.toHex();
   }
 
   _validateRgb(): number[] {
@@ -980,7 +980,7 @@ class ColorView extends Editor<ColorViewProperties> {
     let { value: g } = this._rgbInputs[1].option();
     let { value: b } = this._rgbInputs[2].option();
 
-    const isInvalidRgb = !this._currentColor.isValidRGB(r, g, b);
+    const isInvalidRgb = !Color.isValidRGB(r, g, b);
     if (isInvalidRgb) {
       r = this._currentColor.r;
       g = this._currentColor.g;
