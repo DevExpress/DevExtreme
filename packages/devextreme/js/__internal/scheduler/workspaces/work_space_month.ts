@@ -91,11 +91,13 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override getViewStartByOptions(): Date {
+    const startDate = this.option().startDate ?? undefined;
+
     return monthUtils.getViewStartByOptions(
-      this.option().startDate,
+      startDate,
       this.option().currentDate,
       this.option().intervalCount,
-      dateUtils.getFirstMonthDate(this.option().startDate) as Date,
+      startDate ? dateUtils.getFirstMonthDate(startDate) as Date : undefined,
     );
   }
 
