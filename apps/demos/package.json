@@ -128,7 +128,7 @@
         "eslint-config-devextreme": "catalog:",
         "eslint-plugin-deprecation": "3.0.0",
         "eslint-plugin-import": "catalog:",
-        "eslint-plugin-jest": "29.15.0",
+        "eslint-plugin-jest": "29.15.2",
         "eslint-plugin-no-only-tests": "catalog:",
         "eslint-plugin-react": "7.37.5",
         "eslint-plugin-react-hooks": "5.2.0",
