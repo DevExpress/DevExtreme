@@ -81,6 +81,9 @@ const waitForCondition = (condition, timeout = ANIMATION_TIMEOUT * 8, interval =
     }, interval);
 });
 
+// The editing preview removes its DOM node only on its CSS hide animation's animationend,
+// which is unreliable under CI load. Wait for the hiding to start, then fire animationend
+// so the node is removed synchronously.
 const waitForEditingPreviewToHide = async(getEditingPreview) => {
     await waitForCondition(() => getEditingPreview().length === 0
         || getEditingPreview().hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS));
@@ -1090,6 +1093,8 @@ QUnit.module('Chat', () => {
                     this.$sendButton.trigger('dxclick');
 
                     if(cancel) {
+                        // The update is cancelled, so the preview must stay visible. Give a bounded
+                        // window for an erroneous hide to start, then confirm it is still shown.
                         await waitForCondition(() => this.getEditingPreview().hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS), ANIMATION_TIMEOUT);
 
                         assert.strictEqual(this.getEditingPreview().length, 1, `Editing preview remains when cancel=${cancel}`);
@@ -1171,8 +1176,10 @@ QUnit.module('Chat', () => {
 
             $applyButton.trigger('dxclick');
 
+            // The preview hides via a CSS animation; drive its removal deterministically.
             await waitForEditingPreviewToHide(() => this.getEditingPreview());
 
+            // The input is refocused asynchronously, only after the confirmation popup hides.
             await waitForCondition(() => this.textArea.option('value') === ''
                 && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
 
@@ -1240,16 +1247,16 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
-            // The input is focused asynchronously, only after the context menu finishes hiding.
-            // Wait until the editing mode is fully established (preview shown and input focused)
-            // before sending, so the focus assertion does not race with the menu hide animation.
-            await waitForCondition(() => this.getEditingPreview().length === 1
-                && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
+            // Make sure the editing mode is established before sending.
+            await waitForCondition(() => this.getEditingPreview().length === 1);
 
             this.$sendButton.trigger('dxclick');
 
+            // The rejected cancel promise lets the update proceed, clearing the preview; its DOM
+            // node is removed only when the CSS hide animation ends, so drive that deterministically.
             await waitForEditingPreviewToHide(() => this.getEditingPreview());
 
+            // The input is focused asynchronously, only after the context menu finishes hiding.
             await waitForCondition(() => this.textArea.option('value') === ''
                 && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
 

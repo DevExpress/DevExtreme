@@ -798,13 +798,11 @@ test.meta({ unstable: true })('Item should appear in a correct spot when draggin
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
+  const rowHeight = await dataGrid.getDataRow(2).element.offsetHeight;
   const scrollOffsetForAutoScroll = await getOffsetToTriggerAutoScroll(2, 0.5, 'down');
 
-  await dragWithDisabledMouseUp(
-    t,
-    dataGrid.getDataRow(2).getDragCommand(),
-    { offsetX: 0, offsetY: scrollOffsetForAutoScroll, speed: 0.5 },
-  );
+  await dataGrid.moveRow(2, 0, rowHeight, true);
+  await dataGrid.moveRow(2, 0, scrollOffsetForAutoScroll);
 
   const expectedSequence = ['5-1', '3-1', '6-1'];
   const isTargetPageRendered = ClientFunction(() => {
