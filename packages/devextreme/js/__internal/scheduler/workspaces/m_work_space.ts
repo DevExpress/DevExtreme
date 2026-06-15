@@ -1366,7 +1366,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this.firstDayOfWeek(),
       viewOffset: this.option('viewOffset'),
-      viewType,
+      viewType: this.type,
     };
   }
 
@@ -1993,13 +1993,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private updateSelectedCellDataOption(selectedCellData, $nextFocusedCell?: any) {
     this.option('selectedCellData', selectedCellData);
     this.selectionChangedAction({ selectedCellData });
-  }
-
-  private fireSelectionEndEvent() {
-    const selectedCellData = this.option('selectedCellData') ?? [];
-    if (selectedCellData.length > 0 && this.selectionEndAction) {
-      this.selectionEndAction({ selectedCellData });
-    }
   }
 
   private getCellByData(cellData) {
