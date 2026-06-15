@@ -271,7 +271,9 @@ export interface WorkspaceOptionsInternal {
   getResourceManager: () => ResourceManager;
   getFilteredItems: () => ListEntity[];
   noDataText: string;
-  firstDayOfWeek: number;
+  activeStateEnabled: boolean;
+  hoverStateEnabled: boolean;
+  firstDayOfWeek?: number;
   startDayHour: number;
   endDayHour: number;
   viewOffset: number;
@@ -294,17 +296,17 @@ export interface WorkspaceOptionsInternal {
   groupByDate: boolean;
   scrolling: {
     mode: ScrollMode;
-    orientation: ScrollDirection;
+    orientation?: ScrollDirection;
   };
   draggingMode: 'outlook' | 'default';
-  timeZoneCalculator: TimeZoneCalculator;
+  timeZoneCalculator?: TimeZoneCalculator;
   schedulerHeight: string | number | undefined;
   schedulerWidth: string | number | undefined;
   allDayPanelMode: AllDayPanelMode;
   onSelectedCellsClick: (result: object, groups: GroupValues) => void;
   renderAppointments: () => void;
   onShowAllDayPanel: (isVisible: boolean) => void;
-  getHeaderHeight: (() => number);
+  getHeaderHeight?: (() => number);
   onScrollEnd: () => void;
   onInitialized: (e: InitializedEventInfo<SchedulerWorkSpace>) => void;
   onDisposing: () => void;
@@ -1038,7 +1040,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       hoursInterval: this.option().hoursInterval,
       currentDate: this.option().currentDate,
       startDate: this.option().startDate,
-      firstDayOfWeek: this.option().firstDayOfWeek,
+      firstDayOfWeek: this.option().firstDayOfWeek ?? 0,
       showCurrentTimeIndicator: this.option().showCurrentTimeIndicator,
 
       ...renderState,
@@ -1115,7 +1117,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected firstDayOfWeek(): number {
-    return this.viewDataProvider.getFirstDayOfWeek(this.option().firstDayOfWeek);
+    return this.viewDataProvider.getFirstDayOfWeek(this.option().firstDayOfWeek ?? 0);
   }
 
   protected attachEvents(): void {
@@ -2553,10 +2555,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _getDefaultOptions(): WorkspaceOptionsInternal {
-    const defaultOptions = extend(super._getDefaultOptions(), {
+    const defaultOptions: WorkspaceOptionsInternal = {
+      ...super._getDefaultOptions(),
       currentDate: new Date(),
       intervalCount: 1,
-      startDate: null,
+      startDate: undefined,
       firstDayOfWeek: undefined,
       startDayHour: 0,
       endDayHour: 24,
@@ -2567,7 +2570,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       groups: [],
       showAllDayPanel: true,
       allDayExpanded: false,
-      onCellClick: null,
+      onCellClick: undefined,
       crossScrollingEnabled: false,
       dataCellTemplate: null,
       timeCellTemplate: null,
@@ -2584,7 +2587,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         mode: 'standard',
       },
       allDayPanelMode: 'all',
-      height: undefined,
       draggingMode: 'outlook',
       onScrollEnd: noop,
       getHeaderHeight: undefined,
@@ -2594,9 +2596,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       timeZoneCalculator: undefined,
       schedulerHeight: undefined,
       schedulerWidth: undefined,
-    });
+    };
 
-    return defaultOptions as WorkspaceOptionsInternal;
+    return defaultOptions;
   }
 
   _optionChanged(args: OptionChanged<WorkspaceOptionsInternal>): void {
@@ -2811,7 +2813,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       hoursInterval: () => this.option().hoursInterval,
       crossScrollingEnabled: () => this.option().crossScrollingEnabled,
       rtlEnabled: () => this.option().rtlEnabled,
-      getHeaderHeight: () => this.option().getHeaderHeight() ?? 0,
+      getHeaderHeight: () => this.option().getHeaderHeight?.() ?? 0,
     };
   }
 
