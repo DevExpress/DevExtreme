@@ -322,7 +322,7 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   agendaDuration: number;
   intervalCount: number;
   rowHeight: number;
-  startDate?: Date;
+  startDate?: Date | null;
   type?: ViewType;
   groupOrientation: GroupOrientation;
   width?: number | string | undefined;
@@ -1039,14 +1039,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       intervalCount: this.option().intervalCount,
       hoursInterval: this.option().hoursInterval,
       currentDate: this.option().currentDate,
-      startDate: this.option().startDate,
+      startDate: this.option().startDate ?? undefined,
       firstDayOfWeek: this.option().firstDayOfWeek ?? 0,
       showCurrentTimeIndicator: this.option().showCurrentTimeIndicator,
 
       ...renderState,
       startRowIndex: renderState.startRowIndex ?? 0,
       startCellIndex: renderState.startCellIndex ?? 0,
-      cellCount: renderState.cellCount ?? 0,
     };
 
     return options;
@@ -1097,7 +1096,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected getViewStartByOptions(): Date {
     return getViewStartByOptions(
-      this.option().startDate,
+      this.option().startDate ?? undefined,
       this.option().currentDate,
       this.getTotalViewDuration(),
       this.option().startDate ? this.calculateViewStartDate() : undefined,
@@ -1113,7 +1112,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected calculateViewStartDate(): Date | undefined {
-    return calculateViewStartDate(this.option().startDate);
+    return calculateViewStartDate(this.option().startDate ?? undefined);
   }
 
   protected firstDayOfWeek(): number {
@@ -2559,7 +2558,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       ...super._getDefaultOptions(),
       currentDate: new Date(),
       intervalCount: 1,
-      startDate: undefined,
+      startDate: null,
       firstDayOfWeek: undefined,
       startDayHour: 0,
       endDayHour: 24,

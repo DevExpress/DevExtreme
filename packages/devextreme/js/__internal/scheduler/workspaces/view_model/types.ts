@@ -20,7 +20,7 @@ interface CommonOptions extends CountGenerationConfig {
   hoursInterval: number;
   viewType: ViewType;
   startDate?: Date;
-  cellCount: number;
+  cellCount?: number;
   isProvideVirtualCellsWidth: boolean;
   isGenerateTimePanelData?: boolean;
   isGenerateWeekDaysHeaderData?: boolean;
