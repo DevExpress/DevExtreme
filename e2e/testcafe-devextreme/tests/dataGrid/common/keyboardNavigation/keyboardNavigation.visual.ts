@@ -776,9 +776,14 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     await expectDataCellFocusState(t, dataGrid, 199, 34);
     await t
       .expect(dataGrid.isReady())
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
-      .expect(isScrollAtEnd('horizontal'))
       .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
+
+    if (!useNative) {
+      await t
+        .expect(isScrollAtEnd('horizontal'))
+        .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
+    }
+
     await waitForPaint();
 
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });

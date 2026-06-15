@@ -40,13 +40,16 @@ const loadAzureMock = () => $.getScript({
 const moduleConfig = {
     beforeEach: function() {
         const fakeURL = '/fakeAzureUrl';
+        let azureMockCreated = false;
 
         AzureProvider.remapConstant(fakeURL);
 
         ajaxMock.setup({
             url: fakeURL,
             callback: () => {
-                if(!window.atlas) {
+                if(!window.atlas && !azureMockCreated) {
+                    azureMockCreated = true;
+
                     loadAzureMock();
                 }
             },
@@ -306,15 +309,23 @@ QUnit.module('basic options', moduleConfig, () => {
         const done = assert.async();
         const center = 'Cedar Park, Texas';
 
-        $('#map').dxMap({
-            provider: 'azure',
-            center,
-            onReady: () => {
-                assert.deepEqual(atlas.cameraOptions.center, this.geocodedCoordinates, 'center coordinates are correct');
+        const initMap = () => {
+            $('#map').dxMap({
+                provider: 'azure',
+                center,
+                onReady: () => {
+                    assert.deepEqual(atlas.cameraOptions.center, this.geocodedCoordinates, 'center coordinates are correct');
 
-                done();
-            }
-        });
+                    done();
+                }
+            });
+        };
+
+        if(window.atlas && window.atlas.Map) {
+            initMap();
+        } else {
+            loadAzureMock().done(initMap);
+        }
     });
 
     QUnit.test('Previously geocoded location should be taken from cache instead of geocoding second time', function(assert) {

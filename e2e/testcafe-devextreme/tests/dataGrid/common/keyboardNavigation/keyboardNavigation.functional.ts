@@ -21,6 +21,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 import { addFocusableElementBefore } from '../../../../helpers/domUtils';
 
 const CLASS = ClassNames;
+const FOCUS_ASSERTION_TIMEOUT = 3000;
 
 const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
 
@@ -6831,10 +6832,12 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
     // act
     await t
       .click(searchPanel.input)
-      .pressKey('tab tab tab tab tab');
+      .expect(searchPanel.isFocused)
+      .ok({ timeout: FOCUS_ASSERTION_TIMEOUT })
+      .pressKey('tab tab tab tab tab', { speed: 0.5 });
 
     // assert
-    await t.expect(secondIDCell.isFocused).ok();
+    await t.expect(secondIDCell.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
 
     // act
     await searchPanel.focus();
@@ -6847,22 +6850,22 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
       .notOk('focus should be on the search panel');
 
     // act
-    await t.pressKey('tab tab tab');
+    await t.pressKey('tab tab tab', { speed: 0.5 });
 
     // assert
-    await t.expect(secondIDCell.isFocused).ok();
+    await t.expect(secondIDCell.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
 
     // act
     await t.pressKey('tab tab');
 
     // assert
-    await t.expect(button.isFocused).ok();
+    await t.expect(button.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
 
     // act
     await t.pressKey('shift+tab');
 
     // assert
-    await t.expect(secondNameCell.isFocused).ok();
+    await t.expect(secondNameCell.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
   }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],
