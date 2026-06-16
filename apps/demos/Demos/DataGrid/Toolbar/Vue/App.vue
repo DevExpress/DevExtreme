@@ -131,7 +131,6 @@ const refreshButtonOptions = {
     dataGridRef.value!.instance!.refresh();
   },
 };
-
 </script>
 <style>
 

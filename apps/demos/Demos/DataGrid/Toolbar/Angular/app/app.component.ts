@@ -88,7 +88,6 @@ export class AppComponent {
   toggleExpandAll() {
     this.expandAll = !this.expandAll;
   }
-
 }
 
 bootstrapApplication(AppComponent, {
