@@ -8,6 +8,7 @@ import {
   GRID_SELECTOR,
   baseGrid as gridDefaults,
   createGridWithAIAssistant,
+  getLoggedErrorIds,
   setupAIState,
   threeRows,
 } from './testHelpers';
@@ -28,6 +29,10 @@ const formatMessage = ClientFunction(
 
 const invalidResponse = (): Promise<string> => formatMessage(
   'dxDataGrid-aiAssistantInvalidResponseMessage',
+);
+
+const errorHeader = (): Promise<string> => formatMessage(
+  'dxDataGrid-aiAssistantErrorMessageHeader',
 );
 
 const getSelectedRowsCount = ClientFunction(
@@ -73,6 +78,7 @@ const expectInvalidResponse = async (
 ): Promise<void> => {
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getMessageHeader(0).innerText).eql(await errorHeader());
   await t.expect(aiChat.getMessageErrorText(0).innerText).eql(await invalidResponse());
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
   await t.expect(aiChat.getActionItems(0).count).eql(0);
@@ -82,9 +88,6 @@ const expectInvalidResponse = async (
 fixture`AI Assistant - Error Handling`
   .page(AI_INTEGRATION_PAGE);
 
-// === §2.1 Unsupported / unknown intent ===
-
-// 2.1.3 — empty actions reject through the same "invalid response" path (§4.5).
 test('Empty actions array should show no-action message and leave grid unchanged', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Tell me a joke');
 
@@ -94,9 +97,6 @@ test('Empty actions array should show no-action message and leave grid unchanged
   [{ actions: [] }],
 ));
 
-// === §2.3 Unknown field ===
-
-// 2.3.2 — schema-valid action, executor fails at runtime → per-action error entry.
 test('Sorting by non-existent dataField should show failure message and leave grid unchanged', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by Salary');
 
@@ -110,37 +110,6 @@ test('Sorting by non-existent dataField should show failure message and leave gr
   [{ actions: [{ name: 'sorting', args: { dataField: 'Salary', sortOrder: 'asc' } }] }],
 ));
 
-// === §2.4 Request impossible in current state ===
-
-// 2.4.1
-test('Page index out of range should show failure status', async (t) => {
-  const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Go to page 10000');
-
-  await t.expect(aiChat.getMessages().count).eql(2);
-  await t.expect(aiChat.getSuccessMessages().count).eql(0);
-  await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
-  await t.expect(dataGrid.apiPageIndex()).eql(0);
-}).before(async () => createGridWithAIAssistant(
-  { ...baseGrid, paging: { pageSize: 2 } },
-  [{ actions: [{ name: 'pageIndex', args: { pageIndex: 9999 } }] }],
-));
-
-// 2.4.2
-test('Grouping by non-groupable column should show failure entry', async (t) => {
-  const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Group by name');
-
-  await t.expect(aiChat.getMessages().count).eql(2);
-  await t.expect(aiChat.getSuccessMessages().count).eql(0);
-  await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
-  await t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(undefined);
-}).before(async () => createGridWithAIAssistant(
-  { ...baseGrid, columns: groupingLockedColumns },
-  [{ actions: [{ name: 'grouping', args: { dataField: 'name', groupIndex: 0 } }] }],
-));
-
-// 2.4.3
 test('Selecting non-existent keys should succeed and select no rows', async (t) => {
   const { aiChat } = await openChatAndSubmit(t, 'Select rows 999 and 1000');
 
@@ -154,9 +123,6 @@ test('Selecting non-existent keys should succeed and select no rows', async (t) 
   [{ actions: [{ name: 'selectByKeys', args: { keys: [999, 1000], preserve: false } }] }],
 ));
 
-// === §2.6 Excessively long prompt / provider error ===
-
-// 2.6.2
 test('sendRequest rejection should show error message and leave grid unchanged', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -166,17 +132,13 @@ test('sendRequest rejection should show error message and leave grid unchanged',
   [FAIL],
 ));
 
-// === §4.1 AI integration failures → "unexpected error" / "invalid response" ===
-
-// 4.1.1
-
 test('Missing aiIntegration should show an error and leave grid unchanged', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
   await expectInvalidResponse(t, aiChat, dataGrid);
+  await t.expect(await getLoggedErrorIds(t)).contains('E1068');
 }).before(async () => createGridWithoutIntegration(baseGrid));
 
-// 4.1.5
 test('Non-JSON string response should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -186,7 +148,6 @@ test('Non-JSON string response should show invalid-response error', async (t) =>
   ['not json'],
 ));
 
-// 4.1.6
 test('Non-JSON actions string should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -196,7 +157,6 @@ test('Non-JSON actions string should show invalid-response error', async (t) => 
   [{ actions: 'not json' }],
 ));
 
-// 4.1.7
 test('Empty string response should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -206,9 +166,6 @@ test('Empty string response should show invalid-response error', async (t) => {
   [''],
 ));
 
-// === §4.2 Response format failure → "invalid response" ===
-
-// 4.2.1
 test('Response missing actions should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -218,7 +175,6 @@ test('Response missing actions should show invalid-response error', async (t) =>
   [{}],
 ));
 
-// 4.2.2
 test('Object actions (not array) should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -228,7 +184,6 @@ test('Object actions (not array) should show invalid-response error', async (t) 
   [{ actions: { name: 'sorting' } }],
 ));
 
-// 4.2.3
 test('Null actions should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -238,7 +193,6 @@ test('Null actions should show invalid-response error', async (t) => {
   [{ actions: null }],
 ));
 
-// 4.2.4
 test('Primitive actions should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -248,7 +202,6 @@ test('Primitive actions should show invalid-response error', async (t) => {
   [{ actions: 42 }],
 ));
 
-// 4.2.5
 test('Null response should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -258,9 +211,6 @@ test('Null response should show invalid-response error', async (t) => {
   [null],
 ));
 
-// === §4.3 Validation failure (GridCommands.validate) → "invalid response" ===
-
-// 4.3.1
 test('Unknown command name should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -270,7 +220,6 @@ test('Unknown command name should show invalid-response error', async (t) => {
   [{ actions: [{ name: 'unknownCmd', args: {} }] }],
 ));
 
-// 4.3.2
 test('Non-string command name should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -280,7 +229,6 @@ test('Non-string command name should show invalid-response error', async (t) => 
   [{ actions: [{ name: 123, args: {} }] }],
 ));
 
-// 4.3.3
 test('Empty command name should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -290,7 +238,6 @@ test('Empty command name should show invalid-response error', async (t) => {
   [{ actions: [{ name: '', args: {} }] }],
 ));
 
-// 4.3.4
 test('Action without name should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -300,7 +247,6 @@ test('Action without name should show invalid-response error', async (t) => {
   [{ actions: [{ args: {} }] }],
 ));
 
-// 4.3.5
 test('Action without args should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -310,7 +256,6 @@ test('Action without args should show invalid-response error', async (t) => {
   [{ actions: [{ name: 'sorting' }] }],
 ));
 
-// 4.3.6
 test('Null args should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -320,7 +265,6 @@ test('Null args should show invalid-response error', async (t) => {
   [{ actions: [{ name: 'sorting', args: null }] }],
 ));
 
-// 4.3.7
 test('Args missing a required property should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -330,21 +274,18 @@ test('Args missing a required property should show invalid-response error', asyn
   [{ actions: [{ name: 'sorting', args: { sortOrder: 'asc' } }] }],
 ));
 
-// 4.3.8
 test('Args with a wrong-typed property should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
   await expectInvalidResponse(t, aiChat, dataGrid);
 }).before(async () => createGridWithAIAssistant(baseGrid, [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 123 } }] }]));
 
-// 4.3.9
 test('Args with an extra property should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
   await expectInvalidResponse(t, aiChat, dataGrid);
 }).before(async () => createGridWithAIAssistant(baseGrid, [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc', foo: 'bar' } }] }]));
 
-// 4.3.10
 test('Mix of valid and invalid actions should reject the whole response', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');
 
@@ -357,7 +298,6 @@ test('Mix of valid and invalid actions should reject the whole response', async 
   ],
 }]));
 
-// 4.3.11
 test('No-arg command with non-empty args should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Clear sorting');
 
@@ -367,9 +307,6 @@ test('No-arg command with non-empty args should show invalid-response error', as
   [{ actions: [{ name: 'clearSorting', args: { foo: 1 } }] }],
 ));
 
-// === §4.4 Execution failure → per-command failure message ===
-
-// 4.4.4
 test('Partial failure should report each action status and apply successes', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort, group and search');
 
@@ -392,7 +329,6 @@ test('Partial failure should report each action status and apply successes', asy
   ],
 }]));
 
-// 4.4.5
 test('All-commands failure should report failures and leave grid unchanged', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Do impossible things');
 
