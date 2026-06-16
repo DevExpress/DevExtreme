@@ -19,9 +19,8 @@ overrides:
   "semver@<5.7.2": ^5.7.2
   qs: ">=6.15.2"
   "vite@>=6.0.0 <6.4.1": ^7.3.2
-  "tar@<=7.5.9": ^7.5.10
   "underscore@<=1.13.7": ^1.13.8
-  "hono@<4.12.18": ">=4.12.18"
+  "hono@<4.12.21": "^4.12.21"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "picomatch@>=4.0.0 <4.0.4": 4.0.4
   "micromatch@<4.0.8": ^4.0.8
@@ -59,7 +58,7 @@ catalog:
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
   eslint-plugin-no-only-tests: 3.3.0
-  eslint-plugin-qunit: 8.2.5
+  eslint-plugin-qunit: 8.2.6
   eslint-plugin-vue: 10.4.0
   vue-eslint-parser: 10.0.0
   globals: 15.14.0
