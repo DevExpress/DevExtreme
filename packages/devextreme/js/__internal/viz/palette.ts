@@ -19,7 +19,7 @@
 
 import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
-import Color from '@ts/m_color';
+import { Color } from '@ts/m_color';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
 const HIGHLIGHTING_STEP = 50;
