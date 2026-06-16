@@ -23,12 +23,7 @@
     indicatorSrc="../../../../images/Loading.gif"
   ></dx-load-indicator>
   <div class="label">Using with other widgets</div>
-  <dx-button
-    id="button"
-    [height]="40"
-    [width]="180"
-    (onClick)="onClick($event)"
-  >
+  <dx-button id="button" [height]="40" [width]="180" (onClick)="onClick()">
     <div *dxTemplate="let data of 'content'">
       <dx-load-indicator
         class="button-indicator"

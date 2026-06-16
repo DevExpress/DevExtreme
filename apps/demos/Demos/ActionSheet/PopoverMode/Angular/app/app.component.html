@@ -1,5 +1,5 @@
 <dx-list (onItemClick)="itemClick($event)">
-  @for (contact of contacts; track contact.id) {
+  @for (contact of contacts; track contact.name) {
   <dxi-list-item>
     <div>{{ contact.name }}</div>
     <div>{{ contact.phone }}</div>

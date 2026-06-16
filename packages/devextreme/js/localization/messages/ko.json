@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "페이지 크기",
         "dxPagination-ariaPageNumber": "페이지 번호",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "총합계",
         "dxPivotGrid-total": "{0} 합계",
         "dxPivotGrid-fieldChooserTitle": "필드 선택기",

@@ -1,20 +1,41 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
+import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
-import type { CellPositionData } from '../../types';
+import type {
+  CellInfo,
+  CellPositionData,
+  GroupedDataMap,
+  GroupInfo,
+  ViewCellData,
+  ViewDataMap,
+  ViewType,
+} from '../../types';
 import timezoneUtils from '../../utils_time_zone';
+import type { ViewDataGenerator } from './view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
+interface GroupedDataMapViewOptions {
+  isVerticalGrouping: boolean;
+  viewType: ViewType;
+  viewOffset: number;
+}
+
 export class GroupedDataMapProvider {
-  groupedDataMap: any;
+  groupedDataMap: GroupedDataMap;
 
-  completeViewDataMap: any;
+  completeViewDataMap: ViewCellData[][];
 
-  private readonly viewOptions: any;
+  private readonly viewOptions: GroupedDataMapViewOptions;
 
-  constructor(viewDataGenerator, viewDataMap, completeViewDataMap, viewOptions) {
+  constructor(
+    viewDataGenerator: ViewDataGenerator,
+    viewDataMap: ViewDataMap,
+    completeViewDataMap: ViewCellData[][],
+    viewOptions: GroupedDataMapViewOptions,
+  ) {
     this.groupedDataMap = viewDataGenerator.generateGroupedDataMap(viewDataMap);
     this.completeViewDataMap = completeViewDataMap;
     this.viewOptions = viewOptions;
@@ -23,24 +44,35 @@ export class GroupedDataMapProvider {
   getGroupStartDate(groupIndex: number): Date | null {
     const firstRow = this.getFirstGroupRow(groupIndex);
 
-    return firstRow?.[0]?.cellData?.startDate as Date ?? null;
+    return firstRow?.[0]?.cellData?.startDate ?? null;
   }
 
-  getGroupEndDate(groupIndex) {
+  getGroupEndDate(groupIndex: number): Date | undefined {
     const lastRow = this.getLastGroupRow(groupIndex);
 
     if (lastRow) {
       const lastColumnIndex = lastRow.length - 1;
       const { cellData } = lastRow[lastColumnIndex];
-      const { endDate } = cellData;
 
-      return endDate;
+      return cellData.endDate;
     }
+
+    return undefined;
   }
 
-  findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate) {
+  findGroupCellStartDate(
+    groupIndex: number,
+    startDate: Date,
+    endDate: Date,
+    isFindByDate: boolean,
+  ): Date | undefined {
     const groupData = this.getGroupFromDateTableGroupMap(groupIndex);
-    const checkCellStartDate = (rowIndex, columnIndex) => {
+
+    if (!groupData) {
+      return undefined;
+    }
+
+    const checkCellStartDate = (rowIndex: number, columnIndex: number): Date | undefined => {
       const { cellData } = groupData[rowIndex][columnIndex];
       let {
         startDate: secondMin,
@@ -60,28 +92,39 @@ export class GroupedDataMapProvider {
       })) {
         return secondMin;
       }
+
+      return undefined;
     };
-    const searchVertical = () => {
+
+    const searchVertical = (): Date | undefined => {
       const cellCount = groupData[0].length;
-      for (let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
-        for (let rowIndex = 0; rowIndex < groupData.length; ++rowIndex) {
+      for (let columnIndex = 0; columnIndex < cellCount; columnIndex += 1) {
+        for (let rowIndex = 0; rowIndex < groupData.length; rowIndex += 1) {
           const result = checkCellStartDate(rowIndex, columnIndex);
           if (result) return result;
         }
       }
+
+      return undefined;
     };
-    const searchHorizontal = () => {
-      for (let rowIndex = 0; rowIndex < groupData.length; ++rowIndex) {
+
+    const searchHorizontal = (): Date | undefined => {
+      for (let rowIndex = 0; rowIndex < groupData.length; rowIndex += 1) {
         const row = groupData[rowIndex];
-        for (let columnIndex = 0; columnIndex < row.length; ++columnIndex) {
+        for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
           const result = checkCellStartDate(rowIndex, columnIndex);
           if (result) return result;
         }
       }
+
+      return undefined;
     };
 
     const startDateVerticalSearch = searchVertical();
     const startDateHorizontalSearch = searchHorizontal();
+
+    if (startDateVerticalSearch === undefined) return startDateHorizontalSearch;
+    if (startDateHorizontalSearch === undefined) return startDateVerticalSearch;
 
     return startDateVerticalSearch > startDateHorizontalSearch
       ? startDateHorizontalSearch
@@ -91,12 +134,16 @@ export class GroupedDataMapProvider {
   findAllDayGroupCellStartDate(groupIndex: number): Date | null {
     const groupedData = this.getGroupFromDateTableGroupMap(groupIndex);
     const cellData = groupedData?.[0]?.[0]?.cellData;
-    return cellData?.startDate as Date ?? null;
+
+    return cellData?.startDate ?? null;
   }
 
-  findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): CellPositionData | undefined {
+  findCellPositionInMap(
+    cellInfo: Pick<ViewCellData, 'startDate' | 'groupIndex' | 'index' | 'allDay'>,
+    isAppointmentRender: boolean,
+  ): CellPositionData | undefined {
     const {
-      groupIndex, startDate, isAllDay, index,
+      groupIndex, startDate, allDay, index,
     } = cellInfo;
     const {
       allDayPanelGroupedMap,
@@ -104,10 +151,15 @@ export class GroupedDataMapProvider {
     } = this.groupedDataMap;
     const { viewOffset } = this.viewOptions;
 
-    const rows = isAllDay && !this.viewOptions.isVerticalGrouping
-      ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : []
-      : dateTableGroupedMap[groupIndex] || [];
+    const normalizedGroupIndex = groupIndex ?? 0;
+    let rows: CellInfo[][] = dateTableGroupedMap[normalizedGroupIndex] || [];
 
+    if (allDay && !this.viewOptions.isVerticalGrouping) {
+      const allDayRow = allDayPanelGroupedMap[normalizedGroupIndex];
+      rows = allDayRow ? [allDayRow] : [];
+    }
+
+    /* eslint-disable @typescript-eslint/prefer-for-of, max-depth */
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
       const row = rows[rowIndex];
 
@@ -126,28 +178,29 @@ export class GroupedDataMapProvider {
           : originCellData;
 
         if (this.isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
-          if (this.isStartDateInCell(startDate, isAllDay, cellData, originCellData)) {
+          if (this.isStartDateInCell(startDate, allDay, cellData, originCellData)) {
             return cell.position;
           }
         }
       }
     }
+    /* eslint-enable @typescript-eslint/prefer-for-of, max-depth */
 
     return undefined;
   }
 
   private isStartDateInCell(
     startDate: Date,
-    inAllDayRow: boolean,
+    inAllDayRow: boolean | undefined,
     {
       startDate: cellStartDate,
       endDate: cellEndDate,
       allDay: cellAllDay,
-    }: any,
+    }: ViewCellData,
     {
       startDate: originCellStartDate,
       endDate: originCellEndDate,
-    }: any,
+    }: ViewCellData,
   ): boolean {
     const { viewType } = this.viewOptions;
 
@@ -211,28 +264,28 @@ export class GroupedDataMapProvider {
     return isInOriginInterval || isInSecondInterval;
   }
 
-  private isSameGroupIndexAndIndex(cellData, groupIndex, index) {
+  private isSameGroupIndexAndIndex(
+    cellData: ViewCellData,
+    groupIndex: number | undefined,
+    index: number | undefined,
+  ): boolean {
     return cellData.groupIndex === groupIndex
-            && (index === undefined || cellData.index === index);
+      && (index === undefined || cellData.index === index);
   }
 
-  getCellsGroup(groupIndex) {
-    const { dateTableGroupedMap } = this.groupedDataMap;
-    const groupData = dateTableGroupedMap[groupIndex];
+  getCellsGroup(groupIndex: number): GroupLeaf['grouped'] | undefined {
+    const groupData = this.getGroupFromDateTableGroupMap(groupIndex);
 
     if (groupData) {
       const { cellData } = groupData[0][0];
 
       return cellData.groups;
     }
+
+    return undefined;
   }
 
-  getCompletedGroupsInfo(): ({
-    allDay: boolean;
-    startDate: Date;
-    endDate: Date;
-    groupIndex: number;
-  })[] {
+  getCompletedGroupsInfo(): GroupInfo[] {
     const { dateTableGroupedMap } = this.groupedDataMap;
     return dateTableGroupedMap.map((groupData) => {
       const firstCell = groupData[0][0];
@@ -242,26 +295,26 @@ export class GroupedDataMapProvider {
       } = firstCell.cellData;
 
       return {
-        allDay,
-        groupIndex,
-        startDate: this.getGroupStartDate(groupIndex),
-        endDate: this.getGroupEndDate(groupIndex),
+        allDay: allDay ?? false,
+        groupIndex: groupIndex ?? 0,
+        startDate: this.getGroupStartDate(groupIndex ?? 0),
+        endDate: this.getGroupEndDate(groupIndex ?? 0),
       };
-    }).filter(({ startDate }) => Boolean(startDate));
+    }).filter((info): info is GroupInfo => Boolean(info.startDate) && Boolean(info.endDate));
   }
 
-  getGroupIndices() {
+  getGroupIndices(): number[] {
     return this.getCompletedGroupsInfo()
       .map(({ groupIndex }) => groupIndex);
   }
 
-  getGroupFromDateTableGroupMap(groupIndex) {
+  getGroupFromDateTableGroupMap(groupIndex: number): CellInfo[][] | undefined {
     const { dateTableGroupedMap } = this.groupedDataMap;
 
     return dateTableGroupedMap[groupIndex];
   }
 
-  getFirstGroupRow(groupIndex) {
+  getFirstGroupRow(groupIndex: number): CellInfo[] | undefined {
     const groupedData = this.getGroupFromDateTableGroupMap(groupIndex);
 
     if (groupedData) {
@@ -271,28 +324,33 @@ export class GroupedDataMapProvider {
         ? groupedData[0]
         : groupedData[1];
     }
+
+    return undefined;
   }
 
-  getLastGroupRow(groupIndex) {
-    const { dateTableGroupedMap } = this.groupedDataMap;
-    const groupedData = dateTableGroupedMap[groupIndex];
+  getLastGroupRow(groupIndex: number): CellInfo[] | undefined {
+    const groupedData = this.getGroupFromDateTableGroupMap(groupIndex);
 
     if (groupedData) {
       const lastRowIndex = groupedData.length - 1;
 
       return groupedData[lastRowIndex];
     }
+
+    return undefined;
   }
 
-  getLastGroupCellPosition(groupIndex) {
+  getLastGroupCellPosition(groupIndex: number): CellPositionData | undefined {
     const groupRow = this.getLastGroupRow(groupIndex);
+    const lastCell = groupRow?.[groupRow.length - 1];
 
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    return groupRow?.[groupRow?.length - 1].position;
+    return lastCell?.position;
   }
 
-  getRowCountInGroup(groupIndex) {
+  getRowCountInGroup(groupIndex: number): number {
     const groupRow = this.getLastGroupRow(groupIndex);
+    if (!groupRow) return 0;
+
     const cellAmount = groupRow.length;
     const lastCellData = groupRow[cellAmount - 1].cellData;
     const lastCellIndex = lastCellData.index;

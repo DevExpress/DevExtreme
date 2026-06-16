@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "حجم الصفحة",
         "dxPagination-ariaPageNumber": "رقم الصفحة",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "الإجمالي الكلي",
         "dxPivotGrid-total": "{0} المجموع",
         "dxPivotGrid-fieldChooserTitle": "منتقي الحقول",

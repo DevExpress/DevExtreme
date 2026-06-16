@@ -126,6 +126,7 @@ class HorizontalHeadersArea extends AreaItem {
       direction: 'horizontal',
       rtlEnabled: false,
       updateManually: true,
+      useKeyboard: false,
     });
   }
 
@@ -226,6 +227,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
       bounceEnabled: false,
       direction: 'vertical',
       updateManually: true,
+      useKeyboard: false,
     });
   }
 

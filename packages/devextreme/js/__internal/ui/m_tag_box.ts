@@ -25,7 +25,7 @@ import { isDefined, isObject, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
-import SelectBox from '@ts/ui/m_select_box';
+import SelectBox from '@ts/ui/select_box';
 import caret from '@ts/ui/text_box/utils.caret';
 import { allowScroll } from '@ts/ui/text_box/utils.scroll';
 
@@ -1482,7 +1482,6 @@ class TagBox<
     }
   }
 
-  // @ts-expect-error ts-error
   _fieldRenderData() {
     // @ts-expect-error ts-error
     return this._selectedItems.slice();
@@ -1568,7 +1567,7 @@ class TagBox<
 
   _searchHandler(e): void {
     if (this.option('searchEnabled') && !!e && !this._isTagRemoved) {
-      super._searchHandler(arguments);
+      super._searchHandler(e);
       this._setListDataSourceFilter();
     }
 

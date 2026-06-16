@@ -1,14 +1,16 @@
+import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
+
 import type { TimeZoneCalculator } from '../../r1/timezone_calculator/calculator';
 import type {
   CellPositionData,
   CountGenerationConfig,
   GetDateForHeaderText,
   GroupOrientation,
+  ViewCellData,
   ViewOptions,
   ViewType,
 } from '../../types';
 import type { ResourceManager } from '../../utils/resource_manager/resource_manager';
-import type { GroupLeaf } from '../../utils/resource_manager/types';
 
 interface CommonOptions extends CountGenerationConfig {
   getResourceManager: () => ResourceManager;
@@ -17,6 +19,7 @@ interface CommonOptions extends CountGenerationConfig {
   viewOffset: number;
   hoursInterval: number;
   viewType: ViewType;
+  startDate?: Date;
   skippedDays?: number[];
   cellCount: number;
   isProvideVirtualCellsWidth: boolean;
@@ -32,6 +35,8 @@ interface CommonOptions extends CountGenerationConfig {
   cellDuration: number;
   indicatorTime?: Date;
   timeZoneCalculator?: TimeZoneCalculator;
+  selectedCells?: ViewCellData[] | null;
+  focusedCell?: { cellData: ViewCellData } | null;
 }
 
 export interface ViewDataProviderOptions extends CommonOptions {
@@ -45,6 +50,14 @@ export interface ViewDataProviderExtendedOptions extends CommonOptions, ViewOpti
   isGroupedByDate: boolean;
   isGroupedAllDayPanel: boolean;
   interval: number;
+}
+
+export interface ViewDataMapOptions extends ViewDataProviderExtendedOptions {
+  rowCount?: number;
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
 }
 
 export interface ViewCellDataSimple {

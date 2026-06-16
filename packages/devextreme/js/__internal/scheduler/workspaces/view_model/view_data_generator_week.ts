@@ -1,12 +1,13 @@
 import { weekUtils } from '../../r1/utils/index';
-import { ViewDataGenerator } from './m_view_data_generator';
+import type { ViewDataProviderOptions } from './types';
+import { ViewDataGenerator } from './view_data_generator';
 
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
-  _getIntervalDuration(intervalCount) {
+  _getIntervalDuration(intervalCount: number): number {
     return weekUtils.getIntervalDuration(intervalCount);
   }
 
-  protected calculateStartViewDate(options) {
+  protected calculateStartViewDate(options: ViewDataProviderOptions): Date {
     return weekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
@@ -23,6 +24,6 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
   ): number {
     return this.skippedDays.length > 0
       ? startViewDate.getDay()
-      : this.getFirstDayOfWeek(firstDayOfWeekOption) ?? 0;
+      : this.getFirstDayOfWeek(firstDayOfWeekOption ?? 0);
   }
 }

@@ -198,6 +198,11 @@ abstract class AreaItem {
             span.classList.add(PIVOTGRID_EXPAND_CLASS);
             div.appendChild(span);
             td.appendChild(div);
+            const ariaLabel = String(cell.text ?? cell.value ?? '');
+            div.setAttribute('role', 'button');
+            div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
+            div.setAttribute('aria-expanded', String(cell.expanded));
+            div.setAttribute('tabindex', '0');
           }
 
           cellText = this._getCellText(cell, encodeHtml);

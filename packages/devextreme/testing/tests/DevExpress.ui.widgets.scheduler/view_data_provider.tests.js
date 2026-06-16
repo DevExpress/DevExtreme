@@ -1,4 +1,4 @@
-import ViewDataProvider from '__internal/scheduler/workspaces/view_model/m_view_data_provider';
+import ViewDataProvider from '__internal/scheduler/workspaces/view_model/view_data_provider';
 import { supportedViews } from '../../helpers/scheduler/helpers.js';
 import { getEmptyResourceManager, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
 
@@ -1036,8 +1036,8 @@ module('View Data Provider', {
         });
     });
 
-    function createCellInfo(groupIndex, startDate, isAllDay, index) {
-        return { groupIndex, startDate, isAllDay, index };
+    function createCellInfo(groupIndex, startDate, allDay, index) {
+        return { groupIndex, startDate, allDay, index };
     }
 
     module('Data generation', () => {
@@ -1366,7 +1366,6 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10, 5),
-                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1378,7 +1377,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 11, 5),
-                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
@@ -1390,7 +1388,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10, 5),
-                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1402,7 +1399,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 11, 5),
-                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 2,
@@ -1530,7 +1526,6 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 4,
                     startDate: new Date(2021, 0, 10, 5),
-                    endDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1542,7 +1537,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 4,
                     startDate: new Date(2021, 0, 11, 5),
-                    endDate: new Date(2021, 0, 11, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,

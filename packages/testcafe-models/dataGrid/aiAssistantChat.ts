@@ -6,6 +6,7 @@ import Chat from '../chat';
 const CLASS = {
   aiChat: 'dx-ai-chat',
   aiChatContent: 'dx-ai-chat__content',
+  abortConfirmDialog: 'dx-datagrid-ai-assistant-confirm-dialog',
   message: 'dx-ai-chat__message',
   messagePending: 'dx-ai-chat__message--pending',
   messageSuccess: 'dx-ai-chat__message--success',
@@ -25,7 +26,9 @@ const CLASS = {
   actionListItemIcon: 'dx-ai-chat__action-list-item-icon',
   actionListItemText: 'dx-ai-chat__action-list-item-text',
   closeButton: 'dx-closebutton',
-  clearChatButton: 'dx-icon-clearhistory',
+  clearChatButton: 'dx-ai-chat__clear-button',
+  suggestion: 'dx-chat-suggestions',
+  suggestionButton: 'dx-button',
 };
 
 export class AIAssistantChat extends Popup {
@@ -37,16 +40,51 @@ export class AIAssistantChat extends Popup {
     return new Chat(this.element.find(`.${CLASS.aiChatContent}`));
   }
 
+  getInput(): Selector {
+    return this.getChat().getInput();
+  }
+
   getCloseButton(): Button {
     return new Button(this.element.find(`.${CLASS.closeButton}`));
+  }
+
+  getTitle(): Selector {
+    return this.topToolbar;
   }
 
   getClearChatButton(): Selector {
     return this.element.find(`.${CLASS.clearChatButton}`);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getAbortConfirmDialog(): Selector {
+    return Selector(`.${CLASS.abortConfirmDialog}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getAbortConfirmYesButton(): Selector {
+    return Selector(`.${CLASS.abortConfirmDialog} .dx-button`).nth(1);
+  }
+
   getMessages(): Selector {
+    return this.getChat().getMessageBubbles();
+  }
+
+  getUserMessages(): Selector {
+    const messageClass = CLASS.message;
+
+    return this.getMessages().filter(
+      (node) => !node.querySelector(`.${messageClass}`),
+      { messageClass },
+    );
+  }
+
+  getAIMessages(): Selector {
     return this.element.find(`.${CLASS.message}`);
+  }
+
+  getAIMessage(index: number): Selector {
+    return this.getAIMessages().nth(index);
   }
 
   getPendingMessages(): Selector {
@@ -61,40 +99,36 @@ export class AIAssistantChat extends Popup {
     return this.element.find(`.${CLASS.messageError}`);
   }
 
-  getMessage(index: number): Selector {
-    return this.getMessages().nth(index);
-  }
-
   getMessageHeader(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageHeader}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageHeader}`);
   }
 
   getMessageErrorText(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageErrorText}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageErrorText}`);
   }
 
   getMessageProgressBar(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageProgressBar}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageProgressBar}`);
   }
 
   getMessageRegenerateButton(index: number): Selector {
-    return this.getMessage(index).find(`.${CLASS.messageRegenerateButton}`);
+    return this.getAIMessage(index).find(`.${CLASS.messageRegenerateButton}`);
   }
 
   getActionList(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionList}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionList}`);
   }
 
   getActionItems(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionListItem}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItem}`);
   }
 
   getSuccessActionItems(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionListItemSuccess}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItemSuccess}`);
   }
 
   getErrorActionItems(messageIndex: number): Selector {
-    return this.getMessage(messageIndex).find(`.${CLASS.actionListItemError}`);
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItemError}`);
   }
 
   getActionItemText(messageIndex: number, actionIndex: number): Selector {
@@ -103,5 +137,23 @@ export class AIAssistantChat extends Popup {
 
   getActionItemIcon(messageIndex: number, actionIndex: number): Selector {
     return this.getActionItems(messageIndex).nth(actionIndex).find(`.${CLASS.actionListItemIcon}`);
+  }
+
+  getSuggestions(): Selector {
+    return this.element.find(`.${CLASS.suggestion} .${CLASS.suggestionButton}`);
+  }
+
+  isInputDisabled(): Promise<boolean> {
+    return this.getChat().getTextArea().isDisabled;
+  }
+
+  isClearChatDisabled(): Promise<boolean> {
+    return this.getClearChatButton()
+      .find('.dx-button')
+      .hasClass('dx-state-disabled');
+  }
+
+  isSuggestionDisabled(index: number): Promise<boolean> {
+    return this.getSuggestions().nth(index).hasClass('dx-state-disabled');
   }
 }

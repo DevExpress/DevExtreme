@@ -1,17 +1,18 @@
 import registerComponent from '@js/core/component_registrator';
 import type { TemplateBase } from '@js/core/templates/template_base';
 import dateUtils from '@js/core/utils/date';
+import type { ViewType } from '@js/ui/scheduler';
 import { HeaderPanelComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekdayAndDay, monthUtils } from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerTimeline from './timeline';
-import type { ViewDataProviderOptions } from './view_model/m_types';
+import type { ViewDataProviderOptions } from './view_model/types';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 
 class SchedulerTimelineMonth extends SchedulerTimeline {
-  get type(): string { return VIEWS.TIMELINE_MONTH; }
+  get type(): ViewType { return VIEWS.TIMELINE_MONTH; }
 
   readonly viewDirection = 'horizontal';
 
