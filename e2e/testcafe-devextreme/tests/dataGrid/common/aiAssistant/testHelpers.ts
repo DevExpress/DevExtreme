@@ -103,3 +103,11 @@ export const createGridWithAIAssistant = async (
 };
 
 export const getRequests = ClientFunction(() => (window as any).__aiRequests);
+
+export const getLoggedErrorIds = async (t: TestController): Promise<string[]> => {
+  const consoleMessages = await t.getBrowserConsoleMessages();
+
+  return (consoleMessages?.error ?? [])
+    .map((message) => /^E\d+/.exec(message)?.[0])
+    .filter((id): id is string => id !== undefined);
+};
