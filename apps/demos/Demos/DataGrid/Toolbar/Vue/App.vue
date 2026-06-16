@@ -5,7 +5,6 @@
     :data-source="orders"
     key-expr="ID"
     :show-borders="true"
-    @toolbar-preparing="onToolbarPreparing"
   >
     <DxGrouping :auto-expand-all="expandAll"/>
     <DxColumnChooser :enabled="true"/>
@@ -133,9 +132,6 @@ const refreshButtonOptions = {
   },
 };
 
-const onToolbarPreparing = (e: DxDataGridTypes.ToolbarPreparingEvent) => {
-  e.toolbarOptions.allowKeyboardNavigation = false;
-};
 </script>
 <style>
 
