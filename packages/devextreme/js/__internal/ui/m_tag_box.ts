@@ -6,25 +6,33 @@ import messageLocalization from '@js/common/core/localization/message';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { getIntersection, removeDuplicates } from '@js/core/utils/array';
 import { ensureDefined, equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { createTextElementHiddenCopy } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { SelectionFilterCreator as FilterCreator } from '@js/core/utils/selection_filter';
 import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
+import type { ItemClickEvent, SelectionChangedEvent as ListSelectionChangedEvent } from '@js/ui/list';
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
 import SelectBox from '@ts/ui/select_box';
 import caret from '@ts/ui/text_box/utils.caret';
 import { allowScroll } from '@ts/ui/text_box/utils.scroll';
@@ -33,8 +41,28 @@ function xor(a: boolean, b: boolean): boolean {
   return (a || b) && !(a && b);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TagBoxItem = string | number | any;
 type SelectedItemsMap = Record<string, TagBoxItem>;
+
+interface FilterCreatorInstance {
+  getCombinedFilter: (
+    keyExpr: string | ((item: unknown) => unknown) | undefined,
+    dataSourceFilter: unknown,
+  ) => unknown;
+  getLocalFilter: (keyGetter: (item: unknown) => unknown) => (item: unknown) => boolean;
+}
+
+interface MultiTagPreparingArgs {
+  multiTagElement: DxElement;
+  selectedItems?: (string | number | unknown)[];
+  text?: string;
+  cancel?: boolean;
+}
+
+interface ValueIndexCache extends ItemCache {
+  indexByValues?: Record<string, number>;
+}
 
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
 const TAGBOX_TAG_DISPLAY_VALUE = 'dxTagDisplayValue';
@@ -61,6 +89,7 @@ export interface TagBoxProperties extends Omit<
   | 'onOpened' | 'onClosed'
   | 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
   | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+  useSubmitBehavior?: boolean;
 }
 
 class TagBox<
@@ -76,40 +105,46 @@ class TagBox<
 
   _selectAllValueChangeAction?: (event?: Record<string, unknown>) => void;
 
-  _multiTagPreparingAction?: (event?: Record<string, unknown>) => void;
+  _multiTagPreparingAction?: (event?: MultiTagPreparingArgs) => void;
 
-  _valuesToUpdate?: any;
+  _valuesToUpdate?: unknown[];
 
   _preserveFocusedTag?: boolean;
 
   _isTagRemoved?: boolean;
 
-  _userFilter?: any;
+  _userFilter?: unknown;
 
   _isDataSourceChanged?: boolean;
 
-  _tagTemplate?: any;
+  _tagTemplate?: TemplateBase;
 
   _isDataSourceOptionChanged?: boolean;
 
   _tagElementsCache?: dxElementWrapper;
 
-  _selectedItems?: any[];
+  _selectedItems?: unknown[];
 
-  _tagsToRender?: any[];
+  _tagsToRender?: unknown[];
 
   _supportedKeys(): Record<
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    string, (e: KeyboardEvent, options?: Record<string, unknown>) => boolean | void
+    string,
+    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+    (e: KeyboardEvent, options?: KeyboardKeyDownEvent) => boolean | void
   > {
     const parent = super._supportedKeys();
-    // @ts-expect-error ts-error
-    const sendToList = (options) => this._list._keyboardHandler(options);
-    const rtlEnabled = this.option('rtlEnabled');
+    const sendToList = (options?: KeyboardKeyDownEvent): void => {
+      if (!options) {
+        return;
+      }
+
+      this._list?._keyboardHandler(options);
+    };
+    const { rtlEnabled } = this.option();
 
     return {
       ...parent,
-      backspace(e): void {
+      backspace: (e: KeyboardEvent): void => {
         if (!this._isCaretAtTheStart()) {
           return;
         }
@@ -117,22 +152,26 @@ class TagBox<
         this._processKeyboardEvent(e);
         this._isTagRemoved = true;
 
-        const $tagToDelete = this._$focusedTag || this._tagElements().last();
+        const $tagToDelete = this._$focusedTag || this._tagElements()?.last();
 
         if (this._$focusedTag) {
           this._moveTagFocus('prev', true);
         }
 
-        if ($tagToDelete.length === 0) {
+        if (!$tagToDelete || $tagToDelete.length === 0) {
           return;
         }
         this._preserveFocusedTag = true;
         this._removeTagElement($tagToDelete);
         delete this._preserveFocusedTag;
       },
-      upArrow: (e, opts) => (e.altKey || !this._list ? parent.upArrow.call(this, e) : sendToList(opts)),
-      downArrow: (e, opts) => (e.altKey || !this._list ? parent.downArrow.call(this, e) : sendToList(opts)),
-      del(e) {
+      upArrow: (e: KeyboardEvent, options?: KeyboardKeyDownEvent) => (
+        e.altKey || !this._list ? parent.upArrow.call(this, e) : sendToList(options)
+      ),
+      downArrow: (e: KeyboardEvent, options?: KeyboardKeyDownEvent) => (
+        e.altKey || !this._list ? parent.downArrow.call(this, e) : sendToList(options)
+      ),
+      del: (e: KeyboardEvent): void => {
         if (!this._$focusedTag || !this._isCaretAtTheStart()) {
           return;
         }
@@ -148,37 +187,40 @@ class TagBox<
         this._removeTagElement($tagToDelete);
         delete this._preserveFocusedTag;
       },
-      enter(e, options): void {
-        const isListItemFocused = this._list?.option('focusedElement') !== null && this.option('opened') === true;
-        const isCustomItem = this.option('acceptCustomValue') && !isListItemFocused;
+      enter: (e: KeyboardEvent, options?: KeyboardKeyDownEvent): void => {
+        const { opened, acceptCustomValue } = this.option();
+        const isListItemFocused = this._list?.option('focusedElement') !== null && opened;
+        const isCustomItem = acceptCustomValue && !isListItemFocused;
 
         if (isCustomItem) {
           e.preventDefault();
-          (this._searchValue() !== '') && this._customItemAddedHandler(e);
+          if (this._searchValue() !== '') {
+            this._customItemAddedHandler(e);
+          }
           return;
         }
 
-        if (this.option('opened')) {
+        if (opened) {
           this._saveValueChangeEvent(e);
           sendToList(options);
           e.preventDefault();
         }
       },
-      space(e, options): void {
-        const isOpened = this.option('opened');
+      space: (e: KeyboardEvent, options?: KeyboardKeyDownEvent): void => {
+        const { opened } = this.option();
         const isInputActive = this._shouldRenderSearchEvent();
 
-        if (isOpened && !isInputActive) {
+        if (opened && !isInputActive) {
           this._saveValueChangeEvent(e);
           sendToList(options);
           e.preventDefault();
         }
       },
-      leftArrow(e): void {
+      leftArrow: (e: KeyboardEvent): void => {
         if (
           !this._isCaretAtTheStart()
             || this._isEmpty()
-            || this._isEditable() && rtlEnabled && !this._$focusedTag
+            || (this._isEditable() && rtlEnabled && !this._$focusedTag)
         ) {
           return;
         }
@@ -188,14 +230,16 @@ class TagBox<
         const direction = rtlEnabled ? 'next' : 'prev';
         this._moveTagFocus(direction);
 
-        if (!this.option('multiline')) {
+        const { multiline } = this.option();
+
+        if (!multiline) {
           this._scrollContainer(direction);
         }
       },
-      rightArrow(e): void {
+      rightArrow: (e: KeyboardEvent): void => {
         if (!this._isCaretAtTheStart()
           || this._isEmpty()
-          || this._isEditable() && !rtlEnabled && !this._$focusedTag
+          || (this._isEditable() && !rtlEnabled && !this._$focusedTag)
         ) {
           return;
         }
@@ -204,12 +248,16 @@ class TagBox<
 
         const direction = rtlEnabled ? 'prev' : 'next';
         this._moveTagFocus(direction);
-        !this.option('multiline') && this._scrollContainer(direction);
+        const { multiline } = this.option();
+
+        if (!multiline) {
+          this._scrollContainer(direction);
+        }
       },
     };
   }
 
-  _processKeyboardEvent(e): void {
+  _processKeyboardEvent(e: KeyboardEvent): void {
     e.preventDefault();
     e.stopPropagation();
     this._saveValueChangeEvent(e);
@@ -237,7 +285,7 @@ class TagBox<
     return position?.start === 0 && position.end === 0;
   }
 
-  _updateInputAriaActiveDescendant(id?): void {
+  _updateInputAriaActiveDescendant(id?: string): void {
     this.setAria('activedescendant', id, this._input());
   }
 
@@ -245,10 +293,10 @@ class TagBox<
     if (!this._$focusedTag) {
       const tagElements = this._tagElements();
 
-      this._$focusedTag = direction === 'next' ? tagElements.first() : tagElements.last();
+      this._$focusedTag = direction === 'next' ? tagElements?.first() : tagElements?.last();
 
       this._toggleFocusClass(true, this._$focusedTag);
-      this._updateInputAriaActiveDescendant(this._$focusedTag.attr('id'));
+      this._updateInputAriaActiveDescendant(this._$focusedTag?.attr('id'));
       return;
     }
 
@@ -291,12 +339,13 @@ class TagBox<
     return this._$tagsContainer;
   }
 
-  _getFieldElement() {
+  _getFieldElement(): dxElementWrapper {
     return this._input();
   }
 
-  _scrollContainer(direction: 'start' | 'end'): void {
-    if (this.option('multiline') || !hasWindow()) {
+  _scrollContainer(direction: 'start' | 'end' | 'next' | 'prev'): void {
+    const { multiline } = this.option();
+    if (multiline || !hasWindow()) {
       return;
     }
 
@@ -305,11 +354,11 @@ class TagBox<
     }
 
     const scrollPosition = this._getScrollPosition(direction);
-    // @ts-expect-error ts-error
+    // @ts-expect-error fix on renderer level
     this._$tagsContainer.scrollLeft(scrollPosition);
   }
 
-  _getScrollPosition(direction) {
+  _getScrollPosition(direction: 'start' | 'end' | 'next' | 'prev'): number {
     if (direction === 'start' || direction === 'end') {
       return this._getBorderPosition(direction);
     }
@@ -319,25 +368,24 @@ class TagBox<
       : this._getBorderPosition('end');
   }
 
-  _getBorderPosition(direction): number {
+  _getBorderPosition(direction: 'start' | 'end'): number {
     const { rtlEnabled } = this.option();
-    // @ts-expect-error ts-error
-    const isScrollLeft = xor(direction === 'end', rtlEnabled);
+    const isScrollLeft = xor(direction === 'end', Boolean(rtlEnabled));
 
     const scrollSign = rtlEnabled ? -1 : 1;
+    const containerScrollWidth = this._$tagsContainer.get(0).scrollWidth;
 
     return xor(isScrollLeft, !rtlEnabled)
       ? 0
-      : scrollSign * (this._$tagsContainer.get(0).scrollWidth - getOuterWidth(this._$tagsContainer));
+      : scrollSign * (containerScrollWidth - getOuterWidth(this._$tagsContainer));
   }
 
-  _getFocusedTagPosition(direction) {
-    const rtlEnabled = this.option('rtlEnabled');
-    // @ts-expect-error ts-error
-    const isScrollLeft = xor(direction === 'next', rtlEnabled);
-    // @ts-expect-error ts-error
-    let { left: scrollOffset } = this._$focusedTag.position();
-    let scrollLeft = this._$tagsContainer.scrollLeft();
+  _getFocusedTagPosition(direction: 'next' | 'prev'): number {
+    const { rtlEnabled } = this.option();
+    const isScrollLeft = xor(direction === 'next', Boolean(rtlEnabled));
+
+    let { left: scrollOffset = 0 } = this._$focusedTag?.position() || { };
+    let scrollLeft = this._$tagsContainer.scrollLeft() as unknown as number;
 
     if (isScrollLeft) {
       scrollOffset += getOuterWidth(this._$focusedTag, true) - getOuterWidth(this._$tagsContainer);
@@ -353,7 +401,7 @@ class TagBox<
   // eslint-disable-next-line class-methods-use-this
   _setNextValue(): void {}
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): TProperties {
     return extend(super._getDefaultOptions(), {
       value: [],
 
@@ -382,8 +430,7 @@ class TagBox<
       multiline: true,
 
       useSubmitBehavior: true,
-
-    });
+    }) as TProperties;
   }
 
   _init(): void {
@@ -398,34 +445,37 @@ class TagBox<
     this._initMultiTagPreparingAction();
   }
 
-  _initMultiTagPreparingAction() {
+  _initMultiTagPreparingAction(): void {
     this._multiTagPreparingAction = this._createActionByOption('onMultiTagPreparing', {
       beforeExecute: (e) => {
-        // @ts-expect-error ts-error
-        this._multiTagPreparingHandler(e.args[0]);
+        this._multiTagPreparingHandler((e.args as MultiTagPreparingArgs[])[0]);
       },
       excludeValidators: ['disabled', 'readOnly'],
     });
   }
 
-  _multiTagPreparingHandler(args) {
+  _multiTagPreparingHandler(args: MultiTagPreparingArgs): void {
     const { length: selectedCount } = this._getValue();
+    const { showMultiTagOnly, maxDisplayedTags } = this.option();
 
-    if (!this.option('showMultiTagOnly')) {
-      // @ts-expect-error ts-error
-      args.text = messageLocalization.getFormatter('dxTagBox-moreSelected')(selectedCount - this.option('maxDisplayedTags') + 1);
+    if (!showMultiTagOnly) {
+      // @ts-expect-error getFormatter return type not typed as callable
+      args.text = messageLocalization.getFormatter('dxTagBox-moreSelected')(selectedCount - maxDisplayedTags + 1);
     } else {
-      // @ts-expect-error ts-error
+      // @ts-expect-error getFormatter return type not typed as callable
       args.text = messageLocalization.getFormatter('dxTagBox-selected')(selectedCount);
     }
   }
 
   _initDynamicTemplates(): void {
-    // @ts-expect-error ts-error
+    // @ts-expect-error internal property
     super._initDynamicTemplates();
 
     this._templateManager.addDefaultTemplates({
-      tag: new BindableTemplate(($container, data) => {
+      tag: new BindableTemplate((
+        $container: dxElementWrapper,
+        data: TagBoxItem,
+      ) => {
         const $tagContent = $('<div>').addClass(TAGBOX_TAG_CONTENT_CLASS);
 
         $('<span>')
@@ -444,7 +494,7 @@ class TagBox<
     });
   }
 
-  _toggleSubmitElement(enabled): void {
+  _toggleSubmitElement(enabled?: unknown): void {
     if (enabled) {
       this._renderSubmitElement();
       this._setSubmitValue();
@@ -458,7 +508,8 @@ class TagBox<
   }
 
   _renderSubmitElement(): void {
-    if (!this.option('useSubmitBehavior')) {
+    const { useSubmitBehavior } = this.option();
+    if (!useSubmitBehavior) {
       return;
     }
 
@@ -468,30 +519,28 @@ class TagBox<
     };
 
     this._$submitElement = $('<select>')
-      // @ts-expect-error ts-error
+      // @ts-expect-error should be fixed on renderer level
       .attr(attributes)
       .css('display', 'none')
       .appendTo(this.$element());
   }
 
   _setSubmitValue(): void {
-    if (!this.option('useSubmitBehavior')) {
+    const { useSubmitBehavior } = this.option();
+
+    if (!useSubmitBehavior) {
       return;
     }
 
     const value = this._getValue();
-    const $options: dxElementWrapper[] = [];
 
-    for (let i = 0, n = value.length; i < n; i++) {
-      const useDisplayText = this._shouldUseDisplayValue(value[i]);
-
-      $options.push(
-        $('<option>')
+    const $options = value.map((item) => {
+      const useDisplayText = this._shouldUseDisplayValue(item);
+      return $('<option>')
         // @ts-expect-error DataExpressionMixin must be typed
-          .val(useDisplayText ? this._displayGetter(value[i]) : value[i])
-          .attr('selected', 'selected'),
-      );
-    }
+        .val(useDisplayText ? this._displayGetter(item) : item)
+        .attr('selected', 'selected');
+    });
 
     this._getSubmitElement()
       .empty()
@@ -500,11 +549,12 @@ class TagBox<
 
   _initMarkup(): void {
     this._tagElementsCache = $();
-    const isSingleLineMode = !this.option('multiline');
+    const { multiline, searchEnabled, acceptCustomValue } = this.option();
+    const isSingleLineMode = !multiline;
 
     this.$element()
       .addClass(TAGBOX_CLASS)
-      .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option('searchEnabled') || this.option('acceptCustomValue')))
+      .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(searchEnabled || acceptCustomValue))
       .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
     const elementAria = {
@@ -520,7 +570,8 @@ class TagBox<
     super._initMarkup();
   }
 
-  _getNewLabelId(actualId, newId, shouldRemove): string | undefined {
+  // eslint-disable-next-line class-methods-use-this
+  _getNewLabelId(actualId?: string, newId?: string, shouldRemove?: boolean): string | undefined {
     if (!actualId) {
       return newId;
     }
@@ -539,7 +590,7 @@ class TagBox<
     return `${actualId} ${newId}`;
   }
 
-  _updateElementAria(id?, shouldRemove?: boolean): void {
+  _updateElementAria(id?: string, shouldRemove?: boolean): void {
     const shouldClearLabel = !id;
 
     if (shouldClearLabel) {
@@ -561,7 +612,7 @@ class TagBox<
     this._scrollContainer('start');
   }
 
-  _initTagTemplate() {
+  _initTagTemplate(): void {
     this._tagTemplate = this._getTemplateByOption('tagTemplate');
   }
 
@@ -576,7 +627,7 @@ class TagBox<
     super._renderField();
   }
 
-  _renderTagRemoveAction() {
+  _renderTagRemoveAction(): void {
     const tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
     const eventName = addNamespace(clickEvent, 'dxTagBoxTagRemove');
 
@@ -587,33 +638,33 @@ class TagBox<
   }
 
   _renderSingleLineScroll(): void {
-    // @ts-expect-error ts-error
-    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME);
+    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME ?? '');
     const $element = this.$element();
-    const isMultiline = this.option('multiline');
+    const { multiline } = this.option();
 
     eventsEngine.off($element, mouseWheelEvent);
 
     if (devices.real().deviceType !== 'desktop') {
       if (this._$tagsContainer) {
-        this._$tagsContainer.css('overflowX', isMultiline ? '' : 'auto');
+        this._$tagsContainer.css('overflowX', multiline ? '' : 'auto');
       }
       return;
     }
 
-    if (isMultiline) {
+    if (multiline) {
       return;
     }
 
     eventsEngine.on($element, mouseWheelEvent, this._tagContainerMouseWheelHandler.bind(this));
   }
 
-  _tagContainerMouseWheelHandler(e): boolean | undefined {
+  _tagContainerMouseWheelHandler(e: DxMouseWheelEvent): boolean | undefined {
     const scrollLeft = this._$tagsContainer.scrollLeft();
     const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
     if (!isCommandKeyPressed(e) && allowScroll(this._$tagsContainer, delta, true)) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error scrollLeft with argument not typed in renderer.d.ts
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       this._$tagsContainer.scrollLeft(scrollLeft + delta);
       return false;
     }
@@ -624,11 +675,10 @@ class TagBox<
     super._renderEvents();
 
     const input = this._input();
-    // @ts-expect-error ts-error
-    const namespace = addNamespace('keydown', this.NAME);
-    eventsEngine.on(input, namespace, (e) => {
-      const keyName = normalizeKeyName(e);
-      // @ts-expect-error ts-error
+    const namespace = addNamespace('keydown', this.NAME ?? '');
+    eventsEngine.on(input, namespace, (e: KeyboardEvent) => {
+      const keyName = normalizeKeyName(e) ?? '';
+
       if (!this._isControlKey(keyName) && this._isEditable()) {
         this._clearTagFocus();
       }
@@ -644,11 +694,11 @@ class TagBox<
     this._renderPreventBlurOnInputClick();
   }
 
-  _renderPreventBlurOnInputClick() {
+  _renderPreventBlurOnInputClick(): void {
     const eventName = addNamespace('mousedown', 'dxTagBox');
 
     eventsEngine.off(this._inputWrapper(), eventName);
-    eventsEngine.on(this._inputWrapper(), eventName, (e) => {
+    eventsEngine.on(this._inputWrapper(), eventName, (e: MouseEvent) => {
       if (e.target !== this._input()[0] && this._isFocused()) {
         e.preventDefault();
       }
@@ -659,7 +709,8 @@ class TagBox<
     return this._renderMultiSelect();
   }
 
-  _loadInputValue() {
+  // eslint-disable-next-line class-methods-use-this
+  _loadInputValue(): DeferredObj<unknown> {
     return when();
   }
 
@@ -669,7 +720,7 @@ class TagBox<
     this.option('text', '');
   }
 
-  _focusInHandler(e): void {
+  _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
     if (!this._preventNestedFocusEvent(e)) {
       this._scrollContainer('end');
     }
@@ -677,19 +728,19 @@ class TagBox<
     super._focusInHandler(e);
   }
 
-  _renderInputValue(...args) {
+  _renderInputValue(...args: Parameters<SelectBox['_renderInputValue']>): ReturnType<SelectBox['_renderInputValue']> {
     this.option('displayValue', this._searchValue());
 
     return super._renderInputValue(...args);
   }
 
-  _restoreInputText(saveEditingValue?): void {
+  _restoreInputText(saveEditingValue?: boolean): void {
     if (!saveEditingValue) {
       this._clearTextValue();
     }
   }
 
-  _focusOutHandler(e): void {
+  _focusOutHandler(e: DxEvent<FocusEvent>): void {
     if (!this._preventNestedFocusEvent(e)) {
       this._clearTagFocus();
       this._scrollContainer('start');
@@ -712,21 +763,23 @@ class TagBox<
     return applyValueMode === 'useButtons';
   }
 
-  _listConfig() {
-    const selectionMode = this.option('showSelectionControls') ? 'all' : 'multiple';
+  _listConfig(): ListBaseProperties {
+    const {
+      showSelectionControls, maxFilterQueryLength, selectAllText, selectAllMode,
+    } = this.option();
+    const selectionMode = showSelectionControls ? 'all' : 'multiple';
 
     return extend(super._listConfig(), {
-      maxFilterLengthInRequest: this.option('maxFilterQueryLength'),
+      maxFilterLengthInRequest: maxFilterQueryLength,
       selectionMode,
-      selectAllText: this.option('selectAllText'),
-      onSelectAllValueChanged: ({ value }) => {
-        // @ts-expect-error ts-error
-        this._selectAllValueChangeAction({ value });
+      selectAllText,
+      onSelectAllValueChanged: ({ value }: { value: boolean }) => {
+        this._selectAllValueChangeAction?.({ value });
       },
-      selectAllMode: this.option('selectAllMode'),
+      selectAllMode,
       selectedItems: this._selectedItems,
       onFocusedItemChanged: null,
-    });
+    }) as ListBaseProperties;
   }
 
   _renderMultiSelect(): DeferredObj<unknown> {
@@ -735,17 +788,19 @@ class TagBox<
     this._updateTagsContainer(this._$textEditorInputContainer);
     this._renderInputSize();
     this._renderTags()
-    // @ts-expect-error ts-error
+      // @ts-expect-error _renderTags returns jQuery Deferred; .done/.fail not on standard Promise
       .done(d.resolve)
       .fail(d.reject);
-    // @ts-expect-error ts-error
+
+    // @ts-expect-error d.promise() return type is incompatible with DeferredObj<unknown>
     return d.promise();
   }
 
-  _listItemClickHandler(e): void {
-    !this.option('showSelectionControls') && this._clearTextValue();
-
-    const { applyValueMode } = this.option();
+  _listItemClickHandler(e?: ItemClickEvent): void {
+    const { showSelectionControls, applyValueMode } = this.option();
+    if (!showSelectionControls) {
+      this._clearTextValue();
+    }
     if (applyValueMode === 'useButtons') {
       return;
     }
@@ -756,9 +811,9 @@ class TagBox<
 
   _shouldClearFilter(): boolean {
     const shouldClearFilter = super._shouldClearFilter();
-    const showSelectionControls = this.option('showSelectionControls');
+    const { showSelectionControls } = this.option();
 
-    return !showSelectionControls && shouldClearFilter;
+    return !showSelectionControls && Boolean(shouldClearFilter);
   }
 
   _renderInputSize(): void {
@@ -767,10 +822,15 @@ class TagBox<
     const isEmptyInput = isString(value) && value;
     const cursorWidth = 5;
     let width = '';
-    let size;
-    const canTypeText = this.option('searchEnabled') || this.option('acceptCustomValue');
+    let size: string | number = '';
+    const { searchEnabled, acceptCustomValue } = this.option();
+    const canTypeText = searchEnabled || acceptCustomValue;
     if (isEmptyInput && canTypeText) {
-      const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
+      const $calculationElement = createTextElementHiddenCopy(
+        $input,
+        value,
+        { includePaddings: true },
+      );
 
       $calculationElement.insertAfter($input);
       width = getOuterWidth($calculationElement) + cursorWidth;
@@ -781,15 +841,15 @@ class TagBox<
     }
 
     $input.css('width', width);
-    $input.attr('size', size ?? '');
+    $input.attr('size', size);
   }
 
-  _renderInputSubstitution() {
+  _renderInputSubstitution(): void {
     super._renderInputSubstitution();
     this._updateWidgetHeight();
   }
 
-  _getValue(): any[] {
+  _getValue(): unknown[] {
     const { value } = this.option();
 
     return value || [];
@@ -802,7 +862,7 @@ class TagBox<
     return isDefined(maxDisplayedTags) && values.length > maxDisplayedTags;
   }
 
-  _renderMultiTag($input) {
+  _renderMultiTag($input: dxElementWrapper): dxElementWrapper | false {
     const tagId = `dx-${new Guid()}`;
 
     const $tag = $('<div>')
@@ -810,64 +870,60 @@ class TagBox<
       .addClass(TAGBOX_TAG_CLASS)
       .addClass(TAGBOX_MULTI_TAG_CLASS);
 
-    const args = {
-      multiTagElement: getPublicElement($tag),
-      selectedItems: this.option('selectedItems'),
-    };
-    // @ts-expect-error ts-error
-    this._multiTagPreparingAction(args);
+    const { selectedItems } = this.option();
 
-    // @ts-expect-error
+    const args: MultiTagPreparingArgs = {
+      multiTagElement: getPublicElement($tag),
+      selectedItems: selectedItems ?? [],
+    };
+
+    this._multiTagPreparingAction?.(args);
+
     if (args.cancel) {
       return false;
     }
 
-    // @ts-expect-error
     $tag.data(TAGBOX_TAG_DATA_KEY, args.text);
     $tag.insertBefore($input);
 
-    this._tagTemplate.render({
-      // @ts-expect-error
+    this._tagTemplate?.render({
       model: args.text,
       container: getPublicElement($tag),
     });
 
-    // @ts-expect-error
-    const tagText = args.text;
-
-    this._setTagAria($tag, tagText);
+    this._setTagAria($tag, args.text);
     this._updateElementAria(tagId);
+
     return $tag;
   }
 
-  _getFilter(creator) {
+  _getFilter(creator: FilterCreatorInstance): unknown {
     // @ts-expect-error fix argument type in m_data_controller.ts
     const dataSourceFilter = this._dataController.filter();
-    const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
+    const { valueExpr, maxFilterQueryLength } = this.option();
+    const filterExpr = creator.getCombinedFilter(valueExpr, dataSourceFilter);
     const filterQueryLength = encodeURI(JSON.stringify(filterExpr)).length;
-    const maxFilterQueryLength = this.option('maxFilterQueryLength');
-    // @ts-expect-error ts-error
-    if (filterQueryLength <= maxFilterQueryLength) {
+    if (filterQueryLength <= (maxFilterQueryLength ?? Infinity)) {
       return filterExpr;
     }
 
     errors.log('W1019', maxFilterQueryLength);
+    return undefined;
   }
 
-  _getFilteredItems(values) {
+  _getFilteredItems(values: unknown[]): Promise<unknown> {
     this._loadFilteredItemsPromise?.reject();
-    const creator = new FilterCreator(values);
+    const creator = new FilterCreator(values) as unknown as FilterCreatorInstance;
 
-    const listSelectedItems = this._list?.option('selectedItems');
-    // @ts-expect-error ts-error
-    const isListItemsLoaded = !!listSelectedItems && this._list._dataController.isLoaded();
-    const selectedItems = listSelectedItems || this.option('selectedItems');
+    const { selectedItems: listSelectedItems } = this._list?.option() ?? {};
+    const isListItemsLoaded = !!listSelectedItems && this._list?._dataController.isLoaded();
+    const { selectedItems: optionSelectedItems } = this.option();
+    const selectedItems = (listSelectedItems ?? optionSelectedItems) as unknown[];
     // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
-    // @ts-expect-error ts-error
-    const filteredItems = selectedItems.filter(clientFilterFunction);
+    const filteredItems = selectedItems.filter(clientFilterFunction as (item: unknown) => boolean);
     const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
-    const d = Deferred();
+    const d = Deferred<unknown>();
     const dataController = this._dataController;
 
     if (!this._dataSource) {
@@ -888,7 +944,7 @@ class TagBox<
       .loadFromStore({
         filter, customQueryParams, expand, select,
       })
-      .done((data, extra) => {
+      .done((data: unknown, extra: unknown) => {
         this._isDataSourceChanged = false;
         this._isDataSourceOptionChanged = false;
         if (this._disposed) {
@@ -898,7 +954,7 @@ class TagBox<
 
         const { data: items } = normalizeLoadResult(data, extra);
         const mappedItems = dataController.applyMapFunction(items);
-        d.resolve(mappedItems.filter(clientFilterFunction));
+        d.resolve(mappedItems.filter(clientFilterFunction as (item: unknown) => boolean));
       })
       .fail(d.reject);
 
@@ -906,25 +962,29 @@ class TagBox<
     return d.promise();
   }
 
-  _createTagsData(values, filteredItems) {
-    const items = [];
+  _createTagsData(values: unknown[], filteredItems: TagBoxItem[]): Promise<TagBoxItem[]> {
+    const items: TagBoxItem[] = [];
     const cache = {};
     // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
     const isValueExprSpecified = this._valueGetterExpr() === 'this';
     const { acceptCustomValue } = this.option();
-    const filteredValues = {};
+    const filteredValues: Record<string, TagBoxItem> = {};
 
     filteredItems.forEach((filteredItem) => {
-      // @ts-expect-error _valueGetter is injected by DataExpressionMixin
-      const filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
+      const filteredItemValue = isValueExprSpecified
+        ? JSON.stringify(filteredItem)
+        // @ts-expect-error _valueGetter is injected by DataExpressionMixin
+        : this._valueGetter(filteredItem);
 
       filteredValues[filteredItemValue] = filteredItem;
     });
 
-    const loadItemPromises = [];
+    const loadItemPromises: unknown[] = [];
 
     values.forEach((value, index) => {
-      const currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
+      const currentItem = filteredValues[
+        isValueExprSpecified ? JSON.stringify(value) : value as string
+      ];
 
       if (isValueExprSpecified && !isDefined(currentItem)) {
         if (!this._dataSource) {
@@ -932,29 +992,25 @@ class TagBox<
         }
 
         loadItemPromises.push(
-          // @ts-expect-error ts-error
           this._loadItem(value, cache)
             .done((item) => {
               const newItem = this._createTagData(item, value);
-              // @ts-expect-error ts-error
               items.splice(index, 0, newItem);
             })
             .fail(() => {
               if (acceptCustomValue) {
                 const newItem = this._createTagData(undefined, value);
-                // @ts-expect-error ts-error
                 items.splice(index, 0, newItem);
               }
             }),
         );
       } else {
         const newItem = this._createTagData(currentItem, value);
-        // @ts-expect-error ts-error
         items.splice(index, 0, newItem);
       }
     });
 
-    const d = Deferred();
+    const d = Deferred<TagBoxItem[]>();
     when.apply(this, loadItemPromises).always(() => {
       d.resolve(items);
     });
@@ -962,13 +1018,12 @@ class TagBox<
     return d.promise();
   }
 
-  _createTagData(item, value) {
+  _createTagData(item: TagBoxItem | undefined, value: unknown): TagBoxItem {
     if (isDefined(item)) {
-      // @ts-expect-error ts-error
-      this._selectedItems.push(item);
+      this._selectedItems?.push(item);
       return item;
     }
-    const selectedItem = this.option('selectedItem');
+    const { selectedItem } = this.option();
     // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
 
@@ -976,26 +1031,27 @@ class TagBox<
   }
 
   _isGroupedData(): boolean {
-    return this.option('grouped') && !this._dataController.group();
+    const { grouped } = this.option();
+
+    return Boolean(grouped) && !this._dataController.group();
   }
 
-  _getItemsByValues(values) {
-    const resultItems = [];
+  _getItemsByValues(values: unknown[]): TagBoxItem[] {
+    const resultItems: TagBoxItem[] = [];
     values.forEach((value) => {
       const item = this._getItemFromPlain(value);
       if (isDefined(item)) {
-        // @ts-expect-error ts-error
         resultItems.push(item);
       }
     });
     return resultItems;
   }
 
-  _getFilteredGroupedItems(values) {
-    const selectedItems = Deferred();
+  _getFilteredGroupedItems(values: unknown[]): Promise<TagBoxItem[]> {
+    const selectedItems = Deferred<TagBoxItem[]>();
 
     if (this._filteredGroupedItemsLoadPromise) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error operationId is a runtime augmentation not in DeferredObj types
       this._dataController.cancel(this._filteredGroupedItemsLoadPromise.operationId);
     }
     if (!this._dataController.items().length) {
@@ -1016,9 +1072,9 @@ class TagBox<
     return selectedItems.promise();
   }
 
-  _loadTagsData() {
+  _loadTagsData(): Promise<TagBoxItem[]> {
     const values = this._getValue();
-    const tagData = Deferred();
+    const tagData = Deferred<TagBoxItem[]>();
 
     this._selectedItems = [];
 
@@ -1027,11 +1083,11 @@ class TagBox<
       : this._getFilteredItems(values);
 
     filteredItemsPromise
-      // @ts-expect-error ts-error
-      .done((filteredItems) => {
+      // @ts-expect-error .done() is a jQuery-style extension not on standard Promise
+      .done((filteredItems: TagBoxItem[]) => {
         const items = this._createTagsData(values, filteredItems);
-        // @ts-expect-error ts-error
-        items.always((data) => {
+        // @ts-expect-error .always() is a jQuery-style extension not on standard Promise
+        items.always((data: TagBoxItem[]) => {
           tagData.resolve(data);
         });
       })
@@ -1040,17 +1096,18 @@ class TagBox<
     return tagData.promise();
   }
 
-  _renderTags() {
-    const d = Deferred();
+  _renderTags(): Promise<undefined> {
+    const d = Deferred<undefined>();
     let isPlainDataUsed = false;
+    const valuesToUpdate = this._valuesToUpdate;
 
-    if (this._shouldGetItemsFromPlain(this._valuesToUpdate)) {
-      this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
+    if (valuesToUpdate && this._shouldGetItemsFromPlain(valuesToUpdate)) {
+      this._selectedItems = this._getItemsFromPlain(valuesToUpdate);
 
-      if (this._selectedItems.length === this._valuesToUpdate.length) {
+      if (this._selectedItems.length === valuesToUpdate.length) {
         this._tagsToRender = this._sortSelectedItemsByValues(
           this._selectedItems,
-          this._valuesToUpdate,
+          valuesToUpdate,
         );
         this._renderTagsImpl();
         isPlainDataUsed = true;
@@ -1060,8 +1117,8 @@ class TagBox<
 
     if (!isPlainDataUsed) {
       this._loadTagsData()
-        // @ts-expect-error ts-error
-        .done((items) => {
+        // @ts-expect-error .done() is a jQuery-style extension not on standard Promise
+        .done((items: TagBoxItem[]) => {
           if (this._disposed) {
             d.reject();
             return;
@@ -1080,8 +1137,7 @@ class TagBox<
   _renderTagsImpl(): void {
     this._renderField();
     if (this._shouldUpdateSelectedItems()) {
-      // @ts-expect-error ts-error
-      this.option('selectedItems', this._selectedItems.slice());
+      this.option('selectedItems', this._selectedItems?.slice());
     }
 
     const fieldTemplate = this._getFieldTemplate();
@@ -1091,13 +1147,18 @@ class TagBox<
     }
   }
 
-  _shouldGetItemsFromPlain(values): boolean {
-    return values && this._dataController.isLoaded() && values.length <= this._getPlainItems().length;
+  _shouldGetItemsFromPlain(values: unknown[]): boolean {
+    return Boolean(
+      values
+      && this._dataController.isLoaded()
+      && values.length <= this._getPlainItems().length,
+    );
   }
 
-  _getItemsFromPlain(values) {
+  _getItemsFromPlain(values: unknown[]): TagBoxItem[] {
     let selectedItems = this._getSelectedItemsFromList(values);
-    const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length);
+    const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0)
+      || (selectedItems.length < values.length);
 
     if (needFilterPlainItems) {
       const plainItems = this._getPlainItems();
@@ -1107,10 +1168,12 @@ class TagBox<
     return selectedItems;
   }
 
-  _getSelectedItemsFromList(values) {
-    const { selectedItems: listSelectedItems } = this._list ? this._list.option() : { selectedItems: [] };
+  _getSelectedItemsFromList(values: unknown[]): TagBoxItem[] {
+    const { selectedItems: listSelectedItems } = this._list
+      ? this._list.option()
+      : { selectedItems: [] };
 
-    let selectedItems = [];
+    let selectedItems: TagBoxItem[] = [];
     if (values.length === listSelectedItems?.length) {
       selectedItems = this._filterSelectedItems(listSelectedItems, values);
     }
@@ -1118,7 +1181,7 @@ class TagBox<
     return selectedItems;
   }
 
-  _shouldUseClickOrderForTags(values: TagBox['_valuesToUpdate']): boolean {
+  _shouldUseClickOrderForTags(values: unknown[]): boolean {
     const { maxDisplayedTags, showMultiTagOnly } = this.option();
 
     return !showMultiTagOnly
@@ -1151,32 +1214,22 @@ class TagBox<
         result.push(item);
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return result;
     }, []);
 
     return selectedByOrderItems;
   }
 
-  _filterSelectedItems(plainItems, values) {
-    const selectedItems = plainItems.filter((dataItem) => {
-      let currentValue;
-      for (let i = 0; i < values.length; i++) {
-        currentValue = values[i];
-        if (isObject(currentValue)) {
-          // @ts-expect-error ts-error
-          if (this._isValueEquals(dataItem, currentValue)) {
-            return true;
-          }
-          // @ts-expect-error ts-error
-        } else if (this._isValueEquals(this._valueGetter(dataItem), currentValue)) {
-          return true;
-        }
+  _filterSelectedItems(plainItems: TagBoxItem[], values: unknown[]): TagBoxItem[] {
+    return plainItems.filter((dataItem: TagBoxItem) => values.some((currentValue) => {
+      if (isObject(currentValue)) {
+        // @ts-expect-error _isValueEquals is injected by DataExpressionMixin
+        return this._isValueEquals(dataItem, currentValue);
       }
-
-      return false;
-    }, this);
-
-    return selectedItems;
+      // @ts-expect-error _valueGetter/_isValueEquals are injected by DataExpressionMixin
+      return this._isValueEquals(this._valueGetter(dataItem), currentValue);
+    }));
   }
 
   _processDataSourceChanging(): void {
@@ -1196,7 +1249,7 @@ class TagBox<
   }
 
   _renderTagsCore(): void {
-    this._renderTagsElements(this._tagsToRender);
+    this._renderTagsElements(this._tagsToRender ?? []);
     this._renderEmptyState();
 
     if (!this._preserveFocusedTag) {
@@ -1222,17 +1275,17 @@ class TagBox<
     return false;
   }
 
-  _renderTagsElements(items): void {
+  _renderTagsElements(items: TagBoxItem[]): void {
     const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
     const { showMultiTagOnly, maxDisplayedTags } = this.option();
 
     items.forEach((item, index) => {
-      // @ts-expect-error ts-error
-      if (($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxDisplayedTags >= -1)) {
-        return false;
+      const isOverMaxDisplayed = isDefined(maxDisplayedTags)
+        && index - maxDisplayedTags >= -1;
+      if ($multiTag && (showMultiTagOnly || isOverMaxDisplayed)) {
+        return;
       }
       this._renderTag(item, $multiTag || this._input());
-      return undefined;
     });
 
     if (this._isFocused()) {
@@ -1244,18 +1297,18 @@ class TagBox<
 
   _cleanTags(): void {
     if (this._multiTagRequired()) {
-      this._tagElements().remove();
+      this._tagElements()?.remove();
     } else {
       const $tags = this._tagElements();
 
-      const selectedItems = this.option('selectedItems') ?? [];
+      const { selectedItems = [] } = this.option();
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       const values = selectedItems.map((item) => this._valueGetter(item));
 
-      each($tags, (_, tag) => {
+      Array.from($tags as unknown as ArrayLike<Element>).forEach((tag) => {
         const $tag = $(tag);
-        const tagData = $tag.data(TAGBOX_TAG_DATA_KEY);
-
+        const tagData: TagBoxItem = $tag.data(TAGBOX_TAG_DATA_KEY);
         if (!values.includes(tagData)) {
           $tag.remove();
         }
@@ -1267,8 +1320,7 @@ class TagBox<
 
   _renderEmptyState(): void {
     const isEmpty = !(this._getValue().length
-      // @ts-expect-error ts-error
-      || this._selectedItems.length
+      || this._selectedItems?.length
       || this._searchValue());
     this._toggleEmptiness(isEmpty);
     this._renderDisplayText();
@@ -1282,19 +1334,18 @@ class TagBox<
     this._tagElementsCache = this.$element().find(`.${TAGBOX_TAG_CLASS}`);
   }
 
-  _tagElements(): dxElementWrapper {
-    // @ts-expect-error ts-error
+  _tagElements(): dxElementWrapper | undefined {
     return this._tagElementsCache;
   }
 
-  _applyTagTemplate(item, $tag): void {
-    this._tagTemplate.render({
+  _applyTagTemplate(item: TagBoxItem, $tag: dxElementWrapper): void {
+    this._tagTemplate?.render({
       model: item,
       container: getPublicElement($tag),
     });
   }
 
-  _renderTag(item, $input): void {
+  _renderTag(item: TagBoxItem, $input: dxElementWrapper): void {
     // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const value = this._valueGetter(item);
 
@@ -1332,7 +1383,7 @@ class TagBox<
     }
   }
 
-  _setTagAria($tag, tagText) {
+  _setTagAria($tag: dxElementWrapper, tagText: TagBoxItem): void {
     const aria = {
       role: 'button',
       label: tagText,
@@ -1343,31 +1394,37 @@ class TagBox<
     this.setAria(aria, $tag);
   }
 
-  _getItemModel(item, displayValue) {
+  // eslint-disable-next-line class-methods-use-this
+  _getItemModel(item: TagBoxItem, displayValue: TagBoxItem): TagBoxItem {
     if (isObject(item) && isDefined(displayValue)) {
       return item;
     }
-    return ensureDefined(displayValue, '');
+    return ensureDefined(displayValue, '') as string;
   }
 
-  _getTag(value) {
+  _getTag(value: TagBoxItem): dxElementWrapper | false {
     const $tags = this._tagElements();
-    const tagsLength = $tags.length;
-    let result: dxElementWrapper | boolean = false;
+    if (!$tags) {
+      return false;
+    }
 
-    for (let i = 0; i < tagsLength; i++) {
-      const $tag = $tags[i];
-      const tagData = elementData($tag, TAGBOX_TAG_DATA_KEY);
+    for (const tag of Array.from($tags as unknown as ArrayLike<Element>)) {
+      const tagData: TagBoxItem = elementData(tag, TAGBOX_TAG_DATA_KEY);
 
       if (value === tagData || equalByValue(value, tagData)) {
-        result = $($tag);
-        break;
+        return $(tag);
       }
     }
-    return result;
+    return false;
   }
 
-  _createTag(value, $input, tagId, displayValue): dxElementWrapper {
+  // eslint-disable-next-line class-methods-use-this
+  _createTag(
+    value: TagBoxItem,
+    $input: dxElementWrapper,
+    tagId: string,
+    displayValue: TagBoxItem,
+  ): dxElementWrapper {
     return $('<div>')
       .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
@@ -1376,26 +1433,26 @@ class TagBox<
       .insertBefore($input);
   }
 
-  _toggleEmptinessEventHandler() {
+  _toggleEmptinessEventHandler(): void {
     this._toggleEmptiness(!this._getValue().length && !this._searchValue().length);
   }
 
-  _customItemAddedHandler(e) {
+  _customItemAddedHandler(e: KeyboardEvent): void {
     super._customItemAddedHandler(e);
     this._clearTextValue();
   }
 
-  _removeTagHandler(args) {
+  _removeTagHandler(args: { event: Event }): void {
     const e = args.event;
 
     e.stopPropagation();
     this._saveValueChangeEvent(e);
 
-    const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
+    const $tag = $(e.target as Element).closest(`.${TAGBOX_TAG_CLASS}`);
     this._removeTagElement($tag);
   }
 
-  _removeTagElement($tag) {
+  _removeTagElement($tag: dxElementWrapper): void {
     const { showMultiTagOnly, maxDisplayedTags } = this.option();
     if ($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
       if (!showMultiTagOnly && isDefined(maxDisplayedTags)) {
@@ -1419,7 +1476,7 @@ class TagBox<
   // eslint-disable-next-line class-methods-use-this
   _updateField(): void {}
 
-  _removeTagWithUpdate(itemValue): void {
+  _removeTagWithUpdate(itemValue: TagBoxItem): void {
     const value = this._getValue().slice();
     this._removeTag(value, itemValue);
     this.option('value', value);
@@ -1430,12 +1487,12 @@ class TagBox<
     }
   }
 
-  _getCurrentValue() {
+  _getCurrentValue(): TagBoxItem {
     return this._lastValue();
   }
 
-  _selectionChangeHandler(e): void {
-    const { applyValueMode } = this.option();
+  _selectionChangeHandler(e: ListSelectionChangedEvent): void {
+    const { applyValueMode, value: currentValue } = this.option();
 
     if (applyValueMode === 'useButtons') {
       return;
@@ -1443,29 +1500,32 @@ class TagBox<
 
     const value = this._getValue().slice();
 
-    each(e.removedItems || [], (_, removedItem) => {
+    e.removedItems.forEach((removedItem: TagBoxItem) => {
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       this._removeTag(value, this._valueGetter(removedItem));
     });
 
-    each(e.addedItems || [], (_, addedItem) => {
+    e.addedItems.forEach((addedItem: TagBoxItem) => {
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
       this._addTag(value, this._valueGetter(addedItem));
     });
 
     this._updateWidgetHeight();
-    // @ts-expect-error ts-error
-    if (!equalByValue(this._list.option('selectedItemKeys'), this.option('value'))) {
-      // @ts-expect-error ts-error
-      const listSelectionChangeEvent = this._list._getSelectionChangeEvent();
-      listSelectionChangeEvent && this._saveValueChangeEvent(listSelectionChangeEvent);
+
+    const { selectedItemKeys } = this._list?.option() ?? {};
+
+    if (!equalByValue(selectedItemKeys, currentValue)) {
+      const listSelectionChangeEvent = this._list?._getSelectionChangeEvent();
+      if (listSelectionChangeEvent) {
+        this._saveValueChangeEvent(listSelectionChangeEvent);
+      }
       this.option('value', value);
     }
-    // @ts-expect-error ts-error
-    this._list._saveSelectionChangeEvent(undefined);
+
+    this._list?._saveSelectionChangeEvent(undefined);
   }
 
-  _removeTag(value, item): void {
+  _removeTag(value: unknown[], item: TagBoxItem): void {
     const index = this._valueIndex(item, value);
 
     if (index >= 0) {
@@ -1473,7 +1533,7 @@ class TagBox<
     }
   }
 
-  _addTag(value, item): void {
+  _addTag(value: unknown[], item: TagBoxItem): void {
     const index = this._valueIndex(item);
 
     if (index < 0) {
@@ -1481,18 +1541,18 @@ class TagBox<
     }
   }
 
-  _fieldRenderData() {
-    // @ts-expect-error ts-error
-    return this._selectedItems.slice();
+  _fieldRenderData(): TagBoxItem[] | undefined {
+    return this._selectedItems?.slice();
   }
 
-  _completeSelection(value): void {
-    if (!this.option('showSelectionControls')) {
+  _completeSelection(value: TagBoxItem): void {
+    const { showSelectionControls } = this.option();
+    if (!showSelectionControls) {
       this._setValue(value);
     }
   }
 
-  _setValue(value): void {
+  _setValue(value: TagBoxItem): void {
     if (value === null) {
       return;
     }
@@ -1519,41 +1579,37 @@ class TagBox<
     }
   }
 
-  _isSelectedValue(value, cache): boolean {
+  _isSelectedValue(value: TagBoxItem, cache?: ValueIndexCache): boolean {
     return this._valueIndex(value, null, cache) > -1;
   }
 
-  _valueIndex(value, values?, cache?) {
-    let result = -1;
-
+  _valueIndex(
+    value: TagBoxItem,
+    values?: unknown[] | null,
+    cache?: ValueIndexCache,
+  ): number {
     if (cache && typeof value !== 'object') {
       if (!cache.indexByValues) {
-        cache.indexByValues = {};
-        values = values || this._getValue();
-        values.forEach((value, index) => {
-          cache.indexByValues[value] = index;
+        const indexByValues: Record<string, number> = {};
+        cache.indexByValues = indexByValues;
+        const resolvedForCache = values ?? this._getValue();
+        resolvedForCache.forEach((item, index) => {
+          indexByValues[String(item)] = index;
         });
       }
-      if (value in cache.indexByValues) {
-        return cache.indexByValues[value];
+
+      if (String(value) in cache.indexByValues) {
+        return cache.indexByValues[String(value)];
       }
     }
 
-    values = values || this._getValue();
+    const resolvedValues = values ?? this._getValue();
 
-    each(values, (index, selectedValue) => {
-      // @ts-expect-error ts-error
-      if (this._isValueEquals(value, selectedValue)) {
-        result = index;
-        return false;
-      }
-      return undefined;
-    });
-
-    return result;
+    // @ts-expect-error _isValueEquals is injected by DataExpressionMixin
+    return resolvedValues.findIndex((selectedValue) => this._isValueEquals(value, selectedValue));
   }
 
-  _lastValue() {
+  _lastValue(): TagBoxItem {
     const values = this._getValue();
     const lastValue = values[values.length - 1];
     return lastValue ?? null;
@@ -1564,8 +1620,9 @@ class TagBox<
     return searchEnabled || acceptCustomValue;
   }
 
-  _searchHandler(e): void {
-    if (this.option('searchEnabled') && !!e && !this._isTagRemoved) {
+  _searchHandler(e?: InputEvent | CompositionEvent): void {
+    const { searchEnabled } = this.option();
+    if (searchEnabled && !!e && !this._isTagRemoved) {
       super._searchHandler(e);
       this._setListDataSourceFilter();
     }
@@ -1581,15 +1638,18 @@ class TagBox<
     this._renderInputSize();
 
     const currentHeight = getHeight(element);
+    const { opened } = this.option();
 
-    if (this._popup && this.option('opened') && this._isEditable() && currentHeight !== originalHeight) {
+    if (this._popup && opened && this._isEditable() && currentHeight !== originalHeight) {
       this._popup.repaint();
     }
   }
 
   _refreshSelected(): void {
-    // @ts-expect-error ts-error
-    this._list?.getDataSource() && this._list.option('selectedItems', this._selectedItems);
+    // @ts-expect-error Fix on list level
+    if (this._list?.getDataSource()) {
+      this._list.option('selectedItems', this._selectedItems);
+    }
   }
 
   _resetListDataSourceFilter(): void {
@@ -1600,8 +1660,9 @@ class TagBox<
     dataController.reload();
   }
 
-  _setListDataSourceFilter() {
-    if (!this.option('hideSelectedItems') || !this._list) {
+  _setListDataSourceFilter(): void {
+    const { hideSelectedItems } = this.option();
+    if (!hideSelectedItems || !this._list) {
       return;
     }
 
@@ -1613,13 +1674,17 @@ class TagBox<
       const filter = this._dataSourceFilterExpr();
 
       if (this._userFilter === undefined) {
-        // @ts-expect-error
-        this._userFilter = dataController.filter() || null;
+        this._userFilter = dataController.filter(undefined) || null;
       }
-      // @ts-expect-error ts-error
-      this._userFilter && filter.push(this._userFilter);
+      if (this._userFilter) {
+        filter.push(this._userFilter);
+      }
 
-      filter.length ? dataController.filter(filter) : dataController.filter(null);
+      if (filter.length) {
+        dataController.filter(filter);
+      } else {
+        dataController.filter(null);
+      }
     } else {
       dataController.filter(this._dataSourceFilterFunction.bind(this));
     }
@@ -1627,46 +1692,33 @@ class TagBox<
     dataController.load();
   }
 
-  _dataSourceFilterExpr() {
-    const filter = [];
+  _dataSourceFilterExpr(): unknown[] {
     // @ts-expect-error _valueGetterExpr is injected by DataExpressionMixin
-    this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]]));
-
-    return filter;
+    return this._getValue().map((value) => ['!', [this._valueGetterExpr(), value]]);
   }
 
-  _dataSourceFilterFunction(itemData) {
+  _dataSourceFilterFunction(itemData: TagBoxItem): boolean {
     // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const itemValue = this._valueGetter(itemData);
-    let result = true;
 
-    each(this._getValue(), (index, value) => {
-      // @ts-expect-error ts-error
-      if (this._isValueEquals(value, itemValue)) {
-        result = false;
-        return false;
-      }
-      return undefined;
-    });
-
-    return result;
+    // @ts-expect-error _isValueEquals is injected by DataExpressionMixin
+    return !this._getValue().some((value) => this._isValueEquals(value, itemValue));
   }
 
-  _dataSourceChangedHandler(): void {
+  _dataSourceChangedHandler(...args: Parameters<SelectBox['_dataSourceChangedHandler']>): void {
     this._isDataSourceChanged = true;
-    // @ts-expect-error ts-error
-    super._dataSourceChangedHandler.apply(this, arguments);
+    super._dataSourceChangedHandler(...args);
   }
 
-  _applyButtonHandler(args): void {
-    this._saveValueChangeEvent(args.event);
+  _applyButtonHandler(args?: { event?: Event }): void {
+    this._saveValueChangeEvent(args?.event);
     this.option('value', this._getSortedListValues());
     this._clearTextValue();
     super._applyButtonHandler();
     this._cancelSearchIfNeed();
   }
 
-  _getSortedListValues() {
+  _getSortedListValues(): TagBoxItem[] {
     const listValues = this._getListValues();
     const { value } = this.option();
     const currentValue = value || [];
@@ -1676,10 +1728,11 @@ class TagBox<
       ? removeDuplicates(listValues, currentValue)
       : listValues;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return existedItems.concat(newItems);
   }
 
-  _getListValues() {
+  _getListValues(): TagBoxItem[] {
     if (!this._list) {
       return [];
     }
@@ -1689,7 +1742,8 @@ class TagBox<
     return this
       ._getPlainItems(selectedItems)
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
-      .map((item) => this._valueGetter(item));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      .map((item) => this._valueGetter(item)) as TagBoxItem[];
   }
 
   _setListDataSource(): void {
@@ -1705,8 +1759,8 @@ class TagBox<
 
   _renderOpenedState(): void {
     super._renderOpenedState();
-    const { applyValueMode } = this.option();
-    if (applyValueMode === 'useButtons' && !this.option('opened')) {
+    const { applyValueMode, opened } = this.option();
+    if (applyValueMode === 'useButtons' && !opened) {
       this._refreshSelected();
     }
   }
@@ -1732,7 +1786,10 @@ class TagBox<
     delete this._tagsToRender;
   }
 
-  _getSelectedItemsDifference(newItems, previousItems) {
+  _getSelectedItemsDifference(
+    newItems: TagBoxItem[],
+    previousItems: TagBoxItem[],
+  ): { addedItems: TagBoxItem[]; removedItems: TagBoxItem[] } {
     if (!newItems.length) {
       return {
         addedItems: [],
@@ -1746,19 +1803,19 @@ class TagBox<
       };
     }
 
-    const previousItemsValuesMap = previousItems.reduce((map, item) => {
+    const previousItemsValuesMap = previousItems.reduce<SelectedItemsMap>((map, item) => {
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
-      const value = this._valueGetter(item);
+      const value = this._valueGetter(item) as string;
       map[value] = item;
       return map;
     }, {});
 
-    const addedItems = [];
+    const addedItems: TagBoxItem[] = [];
     newItems.forEach((item) => {
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
-      const value = this._valueGetter(item);
+      const value = this._valueGetter(item) as string;
       if (!previousItemsValuesMap[value]) {
-        addedItems.push(item as never);
+        addedItems.push(item);
       }
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete previousItemsValuesMap[value];
@@ -1770,7 +1827,7 @@ class TagBox<
     };
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, value, previousValue } = args;
     switch (name) {
       case 'onSelectAllValueChanged':
@@ -1778,6 +1835,7 @@ class TagBox<
         break;
       case 'onMultiTagPreparing':
         this._initMultiTagPreparingAction();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._renderTags();
         break;
       case 'hideSelectedItems':
@@ -1800,21 +1858,24 @@ class TagBox<
         this._invalidate();
         break;
       case 'selectAllText':
-        this._setListOption('selectAllText', this.option('selectAllText'));
+        this._setListOption('selectAllText', value);
         break;
       case 'readOnly':
       case 'disabled':
         super._optionChanged(args);
-        !value && this._refreshEvents();
+        if (!value) {
+          this._refreshEvents();
+        }
         break;
       case 'value':
-        this._valuesToUpdate = value;
+        this._valuesToUpdate = value as unknown[];
         super._optionChanged(args);
         this._valuesToUpdate = undefined;
         this._setListDataSourceFilter();
         break;
       case 'maxDisplayedTags':
       case 'showMultiTagOnly':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._renderTags();
         break;
       case 'selectAllMode':
@@ -1823,7 +1884,10 @@ class TagBox<
       case 'selectedItem':
         break;
       case 'selectedItems':
-        this._selectionChangedAction(this._getSelectedItemsDifference(value, previousValue));
+        this._selectionChangedAction(this._getSelectedItemsDifference(
+          value as TagBoxItem[],
+          previousValue as TagBoxItem[],
+        ));
         break;
       case 'multiline':
         this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !value);
@@ -1836,7 +1900,7 @@ class TagBox<
     }
   }
 
-  _getActualSearchValue() {
+  _getActualSearchValue(): string {
     return super._getActualSearchValue() || this._searchValue();
   }
 
