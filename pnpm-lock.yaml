@@ -222,8 +222,8 @@ importers:
         specifier: 20.12.8
         version: 20.12.8
       '@types/shelljs':
-        specifier: 0.8.15
-        version: 0.8.15
+        specifier: 0.8.17
+        version: 0.8.17
       '@types/tar-fs':
         specifier: 2.0.4
         version: 2.0.4
@@ -6564,8 +6564,8 @@ packages:
   '@types/serve-static@1.15.10':
     resolution: {integrity: sha512-tRs1dB+g8Itk72rlSI2ZrW6vZg0YrLI81iQSTkMmOqnqCaNr/8Ek4VwWcN5vZgCYWbg/JJSGBlUaYGAOP73qBw==}
 
-  '@types/shelljs@0.8.15':
-    resolution: {integrity: sha512-vzmnCHl6hViPu9GNLQJ+DZFd6BQI2DBTUeOvYHqkWQLMfKAAQYMb/xAmZkTogZI/vqXHCWkqDRymDI5p0QTi5Q==}
+  '@types/shelljs@0.8.17':
+    resolution: {integrity: sha512-IDksKYmQA2W9MkQjiyptbMmcQx+8+Ol6b7h6dPU5S05JyiQDSb/nZKnrMrZqGwgV6VkVdl6/SPCKPDlMRvqECg==}
 
   '@types/sizzle@2.3.10':
     resolution: {integrity: sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==}
@@ -24495,10 +24495,10 @@ snapshots:
       '@types/node': 20.12.8
       '@types/send': 0.17.6
 
-  '@types/shelljs@0.8.15':
+  '@types/shelljs@0.8.17':
     dependencies:
-      '@types/glob': 7.2.0
       '@types/node': 20.12.8
+      glob: 11.1.0
 
   '@types/sizzle@2.3.10': {}
 
