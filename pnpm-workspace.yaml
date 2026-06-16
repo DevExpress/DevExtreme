@@ -35,6 +35,7 @@ overrides:
   "rollup@<2.79.2": ^4.53.3
   "semver@<5.7.2": ^5.7.2
   "serialize-javascript@<=7.0.2": 7.0.5
+  "shell-quote@>=1.1.0 <=1.8.3": ^1.8.4
   "tar@<=7.5.9": ^7.5.10
   "tmp@<0.2.6": ">=0.2.6"
   "underscore@<=1.13.7": ^1.13.8
