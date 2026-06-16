@@ -40,12 +40,13 @@ overrides:
   "tmp@<0.2.6": ">=0.2.6"
   "underscore@<=1.13.7": ^1.13.8
   "uuid@<14.0.0": ~14.0.0
-  "vite@>=6.0.0 <=6.4.1": ^7.3.2
+  "vite@>=6.0.0 <=6.4.2": ^6.4.3
+  "vite@>=7.0.0 <=7.3.4": ^7.3.5
   "webpack-dev-server@<=5.2.3": ^5.2.4
   "yaml@>=2.0.0 <2.8.3": ^2.8.3
 
 catalog:
-  axe-core: ^4.11.1
+  axe-core: ^4.12.1
   inferno: ^8.2.3
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
