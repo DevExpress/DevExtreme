@@ -271,8 +271,6 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   getResourceManager: () => ResourceManager;
   getFilteredItems: () => ListEntity[];
   noDataText: string;
-  activeStateEnabled: boolean;
-  hoverStateEnabled: boolean;
   firstDayOfWeek?: number;
   startDayHour: number;
   endDayHour: number;
@@ -325,7 +323,6 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   startDate?: Date | null;
   type?: ViewType;
   groupOrientation: GroupOrientation;
-  width?: number | string | undefined;
 
   rtlEnabled: boolean;
 }
@@ -540,8 +537,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _supportedKeys(): SupportedKeys {
-    const clickHandler = (
-      e: { preventDefault: () => void; stopPropagation: () => void; target: unknown },
+    const keyClickHandler = (
+      e: KeyboardEvent,
     ): void => {
       e.preventDefault();
       e.stopPropagation();
@@ -553,7 +550,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           .map((cellData) => this.getCellByData(cellData))
           .filter((cell): cell is dxElementWrapper => Boolean(cell));
 
-        e.target = selectedCellsElement;
         this.showPopup = true;
 
         const cellElements = selectedCellsElement.map(($cell) => $cell.get(0));
@@ -574,8 +570,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const focusedCellData = this.cellsSelectionState.getFocusedCell()?.cellData;
 
       if (focusedCellData) {
-        const isAllDayPanelCell = focusedCellData.allDay && !this.isVerticalGroupedWorkSpace();
-        const isMultiSelection = e.shiftKey;
+        const isAllDayPanelCell = Boolean(focusedCellData.allDay
+          && !this.isVerticalGroupedWorkSpace());
+        const isMultiSelection = Boolean(e.shiftKey);
         const isMultiSelectionAllowed = this.option().allowMultipleCellSelection;
         const isRTL = this.isRTL();
         const groupCount = this.getGroupCount();
@@ -614,8 +611,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
 
     const supportedKeys: SupportedKeys = {
-      enter: clickHandler,
-      space: clickHandler,
+      enter: keyClickHandler,
+      space: keyClickHandler,
       downArrow: (e) => {
         onArrowPressed(e, 'down');
       },
@@ -2940,11 +2937,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.$dateTableScrollable.$content().append(this.$dateTableScrollableContent);
 
       this.$headerTablesContainer.append([this.$headerPanel, this.$allDayPanel]);
-      if (this.$allDayPanel) {
-        this.$allDayPanel.append(
-          [this.$allDayContainer, this.$allDayTable].filter(Boolean) as dxElementWrapper[],
-        );
-      }
+      this.$allDayPanel.append(
+        [this.$allDayContainer, this.$allDayTable].filter(Boolean) as dxElementWrapper[],
+      );
     }
 
     this.appendHeaderPanelEmptyCellIfNecessary();
@@ -2985,11 +2980,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       );
     } else {
       this.headerScrollable.$content().append(this.$allDayPanel);
-      if (this.$allDayPanel) {
-        this.$allDayPanel.append(
-          [this.$allDayContainer, this.$allDayTable].filter(Boolean) as dxElementWrapper[],
-        );
-      }
+      this.$allDayPanel.append(
+        [this.$allDayContainer, this.$allDayTable].filter(Boolean) as dxElementWrapper[],
+      );
       this.$sidebarScrollableContent.append(this.$timePanel);
     }
 
