@@ -167,7 +167,7 @@ window.config = {
   map: {
     'anti-forgery': 'anti-forgery:fetch-override.js',
     'ts': 'npm:plugin-typescript/lib/plugin.js',
-    'typescript': 'npm:typescript/lib/typescript.js',
+    'typescript': 'npm:typescript6/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
 
     /* @angular */
