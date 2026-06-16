@@ -638,7 +638,7 @@ class TagBox<
   }
 
   _renderSingleLineScroll(): void {
-    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME ?? '');
+    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME as string);
     const $element = this.$element();
     const { multiline } = this.option();
 
@@ -675,7 +675,7 @@ class TagBox<
     super._renderEvents();
 
     const input = this._input();
-    const namespace = addNamespace('keydown', this.NAME ?? '');
+    const namespace = addNamespace('keydown', this.NAME as string);
     eventsEngine.on(input, namespace, (e: KeyboardEvent) => {
       const keyName = normalizeKeyName(e) ?? '';
 
@@ -1399,7 +1399,7 @@ class TagBox<
     if (isObject(item) && isDefined(displayValue)) {
       return item;
     }
-    return ensureDefined(displayValue, '') as string;
+    return ensureDefined(displayValue, '');
   }
 
   _getTag(value: TagBoxItem): dxElementWrapper | false {
@@ -1805,7 +1805,7 @@ class TagBox<
 
     const previousItemsValuesMap = previousItems.reduce<SelectedItemsMap>((map, item) => {
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
-      const value = this._valueGetter(item) as string;
+      const value = this._valueGetter(item);
       map[value] = item;
       return map;
     }, {});
@@ -1813,7 +1813,7 @@ class TagBox<
     const addedItems: TagBoxItem[] = [];
     newItems.forEach((item) => {
       // @ts-expect-error _valueGetter is injected by DataExpressionMixin
-      const value = this._valueGetter(item) as string;
+      const value = this._valueGetter(item);
       if (!previousItemsValuesMap[value]) {
         addedItems.push(item);
       }
