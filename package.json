@@ -34,7 +34,7 @@
     "@nx/js": "22.4.5",
     "@types/jest": "29.5.12",
     "@types/node": "20.12.8",
-    "@types/shelljs": "0.8.15",
+    "@types/shelljs": "0.8.17",
     "@types/tar-fs": "2.0.4",
     "@types/yargs": "17.0.32",
     "@vue/shared": "3.4.27",
