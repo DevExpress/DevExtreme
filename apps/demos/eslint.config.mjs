@@ -110,6 +110,8 @@ export default [
           'yargs',
           'treshold', // should be updated to 'threshold' in the codebase
           'callstack',
+          'ignoreDeprecations',
+          'Deprecations',
         ];
 
         return spellcheckRule;
