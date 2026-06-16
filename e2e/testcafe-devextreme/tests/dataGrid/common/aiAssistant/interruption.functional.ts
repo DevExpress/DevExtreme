@@ -87,8 +87,6 @@ const closeAndConfirmAbort = async (t: TestController, aiChat: AIAssistantChat):
 fixture`AI Assistant - Interruption`
   .page(AI_INTEGRATION_PAGE);
 
-// === §5.2 Popup close mid-request (before any command executes) ===
-
 test('Closing the popup mid-request aborts, leaves the grid unchanged, and shows the aborted response on re-open', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -117,7 +115,6 @@ test('Closing the popup mid-request aborts, leaves the grid unchanged, and shows
   await t.expect(aiChat.isInputDisabled()).notOk();
 }).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
 
-// 5.2.3
 test('Late LLM resolution after abort should be ignored', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -144,12 +141,9 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
   options: gridOptions, mode: 'delayed', actions: sortNameAsc,
 }));
 
-// === §5.3 Popup close mid-execution / §5.4 Re-open after a mid-execution close ===
-
 const resolveSelectAll = ClientFunction(() => { (window as any).__resolveSelectAll(); });
 const selectAllStarted = ClientFunction(() => (window as any).__selectAllStarted === true);
 
-// 5.3.1 / 5.3.4 / 5.3.5 / 5.4.1 / 5.4.2
 test('Closing the popup mid-execution aborts the remaining commands and keeps the completed ones', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -247,7 +241,6 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
   };
 }));
 
-// 5.4.3
 test('Customized response title is applied to the partial (aborted) result', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -332,9 +325,6 @@ test('Customized response title is applied to the partial (aborted) result', asy
   };
 }));
 
-// === §5.5 Grid destroyed (dispose) mid-request / mid-execution ===
-
-// 5.5.1
 test('Disposing the grid mid-request should not throw and ignore the late resolution', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -365,7 +355,6 @@ test('Disposing the grid mid-request should not throw and ignore the late resolu
   options: gridOptions, mode: 'delayed', actions: sortNameAsc,
 }));
 
-// 5.5.2
 test('Disposing the grid mid-execution should not throw', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -435,7 +424,6 @@ test('Disposing the grid mid-execution should not throw', async (t) => {
   };
 }));
 
-// 5.5.3
 test('Re-creating the grid after a dispose-during-flight yields a usable instance', async (t) => {
   let dataGrid = new DataGrid(GRID_SELECTOR);
 
