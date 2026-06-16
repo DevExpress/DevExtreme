@@ -52,8 +52,8 @@ const getIgnoredRules = (testName) => {
   // at the widget level rather than on the container element itself.
   // Only suppressed for components confirmed to trigger this false positive.
   const scrollableFalsePositiveComponents = [
-    'Chat', 'Common', 'Diagram', 'Gantt', 'PivotGrid',
-    'Scheduler', 'ScrollView', 'Sortable', 'TileView', 'TreeView',
+    'Chat', 'Diagram', 'Gantt', 'PivotGrid', 'Scheduler', 
+    'ScrollView', 'Sortable', 'TileView', 'TreeView',
   ];
   if (scrollableFalsePositiveComponents.includes(testName.split('-')[0])) {
     ignoredRules.push('scrollable-region-focusable');
