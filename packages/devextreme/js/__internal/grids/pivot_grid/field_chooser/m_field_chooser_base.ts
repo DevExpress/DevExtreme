@@ -13,7 +13,6 @@ import { isDefined } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 import {
-  headerFilterMixin,
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
 } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
@@ -85,10 +84,8 @@ function getStringState(state) {
   return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
 }
 
-const mixinWidget = headerFilterMixin(
-  sortingMixin(
-    columnStateMixin(Widget as any),
-  ),
+const mixinWidget = sortingMixin(
+  columnStateMixin(Widget as any),
 );
 
 export class FieldChooserBase extends mixinWidget {
@@ -126,16 +123,6 @@ export class FieldChooserBase extends mixinWidget {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _setAriaSortAttribute(_column, _ariaSortState, _$rootElement) { }
-
-  protected _applyColumnState(options) {
-    const $element = super._applyColumnState(options);
-
-    if (options.name === 'headerFilter' && $element) {
-      $element.removeAttr('tabindex');
-    }
-
-    return $element;
-  }
 
   _init() {
     super._init();
@@ -212,18 +199,7 @@ export class FieldChooserBase extends mixinWidget {
         });
       }
 
-      that._applyColumnState({
-        name: 'headerFilter',
-        rootElement: $fieldElement,
-        column: {
-          alignment: that.option('rtlEnabled') ? 'right' : 'left',
-          filterValues: mainGroupField.filterValues,
-          allowFiltering: mainGroupField.allowFiltering && !field.groupIndex,
-          allowSorting: field.allowSorting,
-          caption,
-        },
-        showColumnLines,
-      });
+      that._renderHeaderFilterIcon($fieldElement, mainGroupField, field, showColumnLines);
     }
 
     if (field.groupName) {
@@ -454,6 +430,32 @@ export class FieldChooserBase extends mixinWidget {
     if (this._focusedFieldIndex !== -1) {
       this.focusFieldElement(this._focusedFieldIndex);
     }
+  }
+
+  private _renderHeaderFilterIcon($fieldElement, mainGroupField, field, showColumnLines): void {
+    const allowFiltering = mainGroupField.allowFiltering && !field.groupIndex;
+
+    if (!allowFiltering) {
+      return;
+    }
+
+    const isEmpty = !mainGroupField.filterValues?.length;
+    const $icon = $('<span>').addClass(CLASSES.headerFilter).toggleClass('dx-header-filter-empty', isEmpty);
+
+    let $container = this._getIndicatorContainer($fieldElement);
+
+    if (!$container.length) {
+      const rtlEnabled = this.option('rtlEnabled') as boolean;
+      const indicatorAlignment = rtlEnabled ? 'left' : 'right';
+
+      $container = $('<div>').addClass('dx-column-indicators');
+      this.setAria('role', 'presentation', $container);
+      $container.css('float', showColumnLines ? indicatorAlignment : null);
+
+      $container[!showColumnLines && rtlEnabled ? 'appendTo' : 'prependTo']($fieldElement);
+    }
+
+    $container.append($icon);
   }
 
   private handleHeaderFilterIconClick(e, field): void {
