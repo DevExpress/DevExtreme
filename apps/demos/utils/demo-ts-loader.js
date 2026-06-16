@@ -1,4 +1,17 @@
-/* global ts */
+/* global ts, System */
+
+function getDemoTsCompilerOptions() {
+  const globalOpts = (typeof System !== 'undefined' && System.typescriptOptions) || {};
+
+  return {
+    target: ts.ScriptTarget.ES2015,
+    module: ts.ModuleKind.ES2015,
+    ignoreDeprecations: '6.0',
+    strict: false,
+    ...globalOpts,
+  };
+}
+
 module.exports.translate = (data) => {
   if (ts === undefined) {
     throw new Error('TypeScript is required, but window.ts is not defined!\nInclude typescript.js to page');
@@ -7,8 +20,7 @@ module.exports.translate = (data) => {
   const jsCode = ts.transpileModule(
     data.source,
     {
-      target: ts.ScriptTarget.ES5,
-      module: ts.ModuleKind.None,
+      compilerOptions: getDemoTsCompilerOptions(),
     },
   ).outputText;
 
