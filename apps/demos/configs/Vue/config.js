@@ -1,9 +1,6 @@
 window.exports = window.exports || {};
 window.config = {
   transpiler: 'plugin-babel',
-  typescriptOptions: {
-    ignoreDeprecations: '6.0',
-  },
   meta: {
     '*.vue': {
       loader: 'vue-loader',
@@ -59,8 +56,7 @@ window.config = {
     'anti-forgery': 'anti-forgery:fetch-override.js',
     'vue': 'npm:vue/dist/vue.esm-browser.js',
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
-    'vue-loader': 'project:utils/demo-vue-loader.js',
-    'dx-systemjs-vue-browser': 'npm:dx-systemjs-vue-browser/index.js',
+    'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'svg-loader': 'project:utils/svg-loader.js',
