@@ -20,9 +20,6 @@ const getAIRequests = ClientFunction(() => ((window as any).__aiRequests ?? []).
 fixture`AI Assistant - Regenerate`
   .page(AI_INTEGRATION_PAGE);
 
-// === §1.12 Regenerate button ===
-
-// 1.12.1
 test('Regenerate should be visible after AI integration failure', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -46,7 +43,6 @@ test('Regenerate should be visible after AI integration failure', async (t) => {
   [FAIL],
 ));
 
-// 1.12.2
 test('Regenerate should be visible after response format failure', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -69,7 +65,6 @@ test('Regenerate should be visible after response format failure', async (t) => 
   [{}],
 ));
 
-// 1.12.3
 test('Regenerate should be visible after validation failure', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -92,7 +87,6 @@ test('Regenerate should be visible after validation failure', async (t) => {
   [{ actions: [{ name: 'unknownCommand', args: { foo: 'bar' } }] }],
 ));
 
-// 1.12.4
 test('Regenerate should be visible after empty actions', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -116,7 +110,6 @@ test('Regenerate should be visible after empty actions', async (t) => {
   [{ actions: [] }],
 ));
 
-// 1.12.5
 test('Regenerate should NOT be visible after full success', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -140,7 +133,6 @@ test('Regenerate should NOT be visible after full success', async (t) => {
   [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] }],
 ));
 
-// 1.12.6
 test('Regenerate should NOT be visible after partial-execution failure', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -172,7 +164,6 @@ test('Regenerate should NOT be visible after partial-execution failure', async (
   }],
 ));
 
-// 1.12.7
 test('Regenerate should NOT be visible after all-execution failure', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -202,7 +193,6 @@ test('Regenerate should NOT be visible after all-execution failure', async (t) =
   }],
 ));
 
-// 1.12.8
 test('Regenerate should resend the same prompt and replace the previous response', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -242,7 +232,6 @@ test('Regenerate should resend the same prompt and replace the previous response
   ],
 ));
 
-// 1.12.9
 test('Regenerate should be disabled while request is in flight', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -273,7 +262,6 @@ test('Regenerate should be disabled while request is in flight', async (t) => {
   ],
 ));
 
-// 1.12.11
 test('Regenerate is visible after a popup-close-driven abort', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -308,9 +296,42 @@ test('Regenerate is visible after a popup-close-driven abort', async (t) => {
   [HANG],
 ));
 
-// === §3.8.2 Sequential resends after pre-execution failures ===
+test('Regenerate after a column is removed should resend with the actual context', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
 
-// 3.8.2
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+
+  await dataGrid.apiOption('columns', ['id', 'name']);
+
+  await t.click(aiChat.getMessageRegenerateButton(0));
+
+  await t.expect(aiChat.getAIMessages().count).eql(1);
+  await t.expect(aiChat.getSuccessMessages().count).eql(1);
+  await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
+
+  const requests = await getAIRequests();
+  await t.expect(requests.length).eql(2);
+  await t.expect(requests[0].columns).eql(['id', 'name', 'value']);
+  await t.expect(requests[1].columns).eql(['id', 'name']);
+}).before(async () => createGridWithAIAssistant(
+  { dataSource: threeRows, ...baseGrid },
+  [
+    FAIL,
+    { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
+  ],
+));
+
 test('Sequential regenerate after pre-execution failures keeps exactly one response', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
