@@ -86,7 +86,6 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/data-grid';
-import type { DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { query } from 'devextreme-vue/common/data';
 import { orders } from './data.ts';
