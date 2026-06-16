@@ -24439,7 +24439,7 @@ declare module DevExpress.ui {
     export type CellClickEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxPivotGrid,
-        MouseEvent | PointerEvent
+        KeyboardEvent | MouseEvent | PointerEvent
       > & {
         /**
          * [descr:_ui_pivot_grid_CellClickEvent.area]

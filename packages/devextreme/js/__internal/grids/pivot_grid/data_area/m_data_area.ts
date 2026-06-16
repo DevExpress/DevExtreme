@@ -58,6 +58,7 @@ class DataArea extends AreaItem {
       rtlEnabled: this.component.option('rtlEnabled'),
       bounceEnabled: false,
       updateManually: true,
+      useKeyboard: false,
     });
   }
 

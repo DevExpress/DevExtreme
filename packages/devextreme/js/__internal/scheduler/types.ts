@@ -112,7 +112,7 @@ export type TimePanelCellData = Omit<ViewCellData, 'endDate'>;
 export interface CountGenerationConfig {
   intervalCount: number;
   currentDate: Date;
-  viewType: string;
+  viewType: ViewType;
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
@@ -204,7 +204,7 @@ export interface DOMMetaData {
   allDayPanelCellsMeta: CellRect[];
 }
 
-export interface DateHeaderCellData extends ViewCellData {
+export interface DateHeaderCellData extends Omit<ViewCellData, 'endDate'> {
   colSpan: number;
 }
 

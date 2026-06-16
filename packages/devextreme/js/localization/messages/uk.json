@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Розмір сторінки",
         "dxPagination-ariaPageNumber": "Номер сторінки",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Загальний підсумок",
         "dxPivotGrid-total": "Підсумок для {0}",
         "dxPivotGrid-fieldChooserTitle": "Вибір полів",

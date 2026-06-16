@@ -10,6 +10,7 @@ import {
   normalizeKey,
   // eslint-disable-next-line spellcheck/spell-checker
   optionalNullish,
+  pickKeysByIndex,
   resolveFilterValue,
   splitIntoLoadWindows,
 } from '../utils';
@@ -200,5 +201,31 @@ describe('splitIntoLoadWindows', () => {
 
   it('deduplicates repeated indexes', () => {
     expect(splitIntoLoadWindows([1, 1, 2, 2, 3], 10)).toEqual([[1, 2, 3]]);
+  });
+});
+
+describe('pickKeysByIndex', () => {
+  it('maps 1-based indexes to the keys at those positions', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [1, 3])).toEqual(['a', 'c']);
+  });
+
+  it('preserves the requested index order', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [3, 1])).toEqual(['c', 'a']);
+  });
+
+  it('resolves a single index', () => {
+    expect(pickKeysByIndex([10, 20, 30], [2])).toEqual([20]);
+  });
+
+  it('accepts the last valid index', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [3])).toEqual(['c']);
+  });
+
+  it('returns null when any index exceeds the key count', () => {
+    expect(pickKeysByIndex(['a', 'b'], [1, 3])).toBeNull();
+  });
+
+  it('returns null for any index against an empty key list', () => {
+    expect(pickKeysByIndex([], [1])).toBeNull();
   });
 });
