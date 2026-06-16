@@ -50,9 +50,6 @@ const DATA_GRID_SELECTOR = '#container';
           groupIndex: 0,
         },
       ],
-      onToolbarPreparing(e): void {
-        e.toolbarOptions.allowKeyboardNavigation = false;
-      },
     });
   });
 
@@ -94,9 +91,6 @@ const DATA_GRID_SELECTOR = '#container';
           groupIndex: 0,
         },
       ],
-      onToolbarPreparing(e): void {
-        e.toolbarOptions.allowKeyboardNavigation = false;
-      },
     });
   });
 
@@ -230,9 +224,6 @@ test('Reordering of grouping column should not work when onKeyDown.args.handled 
         groupIndex: 0,
       },
     ],
-    onToolbarPreparing(e): void {
-      e.toolbarOptions.allowKeyboardNavigation = false;
-    },
   });
 });
 
@@ -274,9 +265,6 @@ test('The group column should not be reordered when groupPanel.allowColumnDraggi
         groupIndex: 0,
       },
     ],
-    onToolbarPreparing(e): void {
-      e.toolbarOptions.allowKeyboardNavigation = false;
-    },
   });
 });
 
@@ -319,9 +307,6 @@ test('The group column should not be reordered when it has allowGrouping set to 
         allowGrouping: false,
       },
     ],
-    onToolbarPreparing(e): void {
-      e.toolbarOptions.allowKeyboardNavigation = false;
-    },
   });
 });
 
@@ -674,9 +659,6 @@ test('Ungroup column when pressing Delete', async (t) => {
         groupIndex: 0,
       },
     ],
-    onToolbarPreparing(e): void {
-      e.toolbarOptions.allowKeyboardNavigation = false;
-    },
   });
 });
 

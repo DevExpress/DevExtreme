@@ -50,9 +50,6 @@ test('column separator should work properly with expand columns', async (t) => {
     },
   ],
   allowColumnReordering: true,
-  onToolbarPreparing(e): void {
-    e.toolbarOptions.allowKeyboardNavigation = false;
-  },
 }));
 
 test('HeaderRow should be highlighted when dragging column with allowColumnReordering=false', async (t) => {
@@ -141,9 +138,6 @@ test('The group separator should not appear when dragging a grouped column to th
       },
     ],
     allowColumnReordering: false,
-    onToolbarPreparing(e): void {
-      e.toolbarOptions.allowKeyboardNavigation = false;
-    },
   });
 }).after(async () => {
   await MouseUpEvents.enable(MouseAction.dragToOffset);
