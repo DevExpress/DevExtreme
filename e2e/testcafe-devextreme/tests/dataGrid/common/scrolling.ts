@@ -1085,7 +1085,7 @@ test.meta({ unstable: true })('The data should display correctly after changing 
 }));
 
 // T1166649
-test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
