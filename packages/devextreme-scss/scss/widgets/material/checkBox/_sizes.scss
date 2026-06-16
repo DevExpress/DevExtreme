@@ -20,7 +20,7 @@ $material-checkbox-indeterminate-icon-width: null !default;
   $material-checkbox-icon-font-size: 18px !default;
   $material-checkbox-ripple-size: 2.222223em !default;
 
-  $material-checkbox-border-radius: $base-border-radius - 2px !default;
+  $material-checkbox-border-radius: min($base-border-radius - 2px, 2px) !default;
 
   $material-checkbox-arrow-font-size: 0.888889em !default;
   $material-checkbox-indeterminate-icon-height: 0.111112em !default;
@@ -31,7 +31,7 @@ $material-checkbox-indeterminate-icon-width: null !default;
   $material-checkbox-icon-font-size: 16px !default;
   $material-checkbox-ripple-size: 2em !default;
 
-  $material-checkbox-border-radius: $base-border-radius !default;
+  $material-checkbox-border-radius: min($base-border-radius, 2px) !default;
 
   $material-checkbox-arrow-font-size: 0.875em !default;
   $material-checkbox-indeterminate-icon-height: 0.125em !default;
