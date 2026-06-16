@@ -199,6 +199,9 @@ overrides:
   webpack-dev-server@<=5.2.3: ^5.2.4
   yaml@>=2.0.0 <2.8.3: ^2.8.3
 
+patchedDependencies:
+  testcafe-hammerhead@31.7.7: 8a228aaee48378d5351c48579d64dbed08eabb120e19e7a73eba4ae6f308af14
+
 importers:
 
   .:
@@ -39227,7 +39230,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  testcafe-hammerhead@31.7.7:
+  testcafe-hammerhead@31.7.7(patch_hash=8a228aaee48378d5351c48579d64dbed08eabb120e19e7a73eba4ae6f308af14):
     dependencies:
       '@adobe/css-tools': 4.4.4
       '@electron/asar': 3.4.1
@@ -39273,7 +39276,7 @@ snapshots:
       pinkie: 2.0.4
       read-file-relative: 1.2.0
       strip-bom: 2.0.0
-      testcafe-hammerhead: 31.7.7
+      testcafe-hammerhead: 31.7.7(patch_hash=8a228aaee48378d5351c48579d64dbed08eabb120e19e7a73eba4ae6f308af14)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -39378,7 +39381,7 @@ snapshots:
       source-map-support: 0.5.21
       strip-bom: 2.0.0
       testcafe-browser-tools: 2.0.26
-      testcafe-hammerhead: 31.7.7
+      testcafe-hammerhead: 31.7.7(patch_hash=8a228aaee48378d5351c48579d64dbed08eabb120e19e7a73eba4ae6f308af14)
       testcafe-legacy-api: 5.1.8
       testcafe-reporter-json: 2.2.0
       testcafe-reporter-list: 2.2.0
