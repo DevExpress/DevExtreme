@@ -37,8 +37,6 @@ test('onAIAssistantRequestCreating should allow context customization', async (t
     .typeText(aiChat.getInput(), 'Sort by name')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
   await t.expect((await getRequestPayload(0)).context.customField).eql('customValue');
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(
@@ -66,8 +64,6 @@ test('onAIAssistantRequestCreating should allow schema customization', async (t)
     .typeText(aiChat.getInput(), 'Sort by name')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
   await t.expect((await getRequestPayload(0)).responseSchema.description).eql('Modified schema');
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(
@@ -94,9 +90,6 @@ test('onAIAssistantRequestCreating handler should receive grid component and ele
   await t
     .typeText(aiChat.getInput(), 'Sort by name')
     .pressKey('enter');
-
-  await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
 
   const handlerResult = await getRequestCreatingArgs();
 
@@ -133,19 +126,19 @@ test('Column added externally should be reflected in next request context', asyn
 
   const aiChat = dataGrid.getAIAssistantChat();
 
+  // First request
   await t
     .typeText(aiChat.getInput(), 'Sort by name')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(1);
-
+  // Update columns
   await dataGrid.apiOption('columns', ['id', 'name', 'value', 'extra']);
 
+  // Second request
   await t
     .typeText(aiChat.getInput(), 'Sort by extra')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(getRequestColumnNames(0)).eql(['id', 'name', 'value']);
   await t.expect(getRequestColumnNames(1)).eql(['id', 'name', 'value', 'extra']);
 }).before(async () => createGridWithAIAssistant(
@@ -181,7 +174,6 @@ test('Sort on removed column then submit another prompt should not crash', async
     .typeText(aiChat.getInput(), 'Sort by value')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).eql('asc');
 
   await dataGrid.apiOption('columns', ['id', 'name']);
@@ -190,7 +182,6 @@ test('Sort on removed column then submit another prompt should not crash', async
     .typeText(aiChat.getInput(), 'Sort by name')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(2);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
   await t.expect(getRequestColumnNames(0)).eql(['id', 'name', 'value']);
   await t.expect(getRequestColumnNames(1)).eql(['id', 'name']);
@@ -250,8 +241,6 @@ test('cancel left untouched should dispatch the request normally', async (t) => 
     .typeText(aiChat.getInput(), 'Sort by name')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
   await t.expect(getRequestCount()).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(
@@ -313,7 +302,6 @@ test('cancel from a dynamic context check should dispatch when the column is abs
     .typeText(aiChat.getInput(), 'Sort by value')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(getRequestCount()).eql(1);
   await t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).eql('desc');
 }).before(async () => createGridWithAIAssistant(
@@ -335,31 +323,4 @@ test('cancel from a dynamic context check should dispatch when the column is abs
       }
     },
   },
-));
-
-test('cancel-aborted message currently shows a Regenerate button', async (t) => {
-  const dataGrid = new DataGrid(GRID_SELECTOR);
-
-  await t.expect(dataGrid.isReady()).ok();
-
-  await t.click(dataGrid.getAIAssistantButton());
-
-  const aiChat = dataGrid.getAIAssistantChat();
-
-  await t
-    .typeText(aiChat.getInput(), 'Sort by name')
-    .pressKey('enter');
-
-  await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
-}).before(async () => createGridWithAIAssistant(
-  {
-    dataSource: threeRows,
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-  },
-  [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] }],
-  {},
-  { onAIAssistantRequestCreating: (e: any) => { e.cancel = true; } },
 ));

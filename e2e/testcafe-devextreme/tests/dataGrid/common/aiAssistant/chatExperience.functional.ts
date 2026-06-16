@@ -501,3 +501,30 @@ test('Clear-chat after re-open should remove all history', async (t) => {
 }, [
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
+
+test('cancel-aborted message currently shows a Regenerate button', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getAIAssistantButton());
+
+  const aiChat = dataGrid.getAIAssistantChat();
+
+  await t
+    .typeText(aiChat.getInput(), 'Sort by name')
+    .pressKey('enter');
+
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+}).before(async () => createGridWithAIAssistant(
+  {
+    dataSource: threeRows,
+    keyExpr: 'id',
+    columns: ['id', 'name', 'value'],
+    showBorders: true,
+  },
+  [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] }],
+  {},
+  { onAIAssistantRequestCreating: (e: any) => { e.cancel = true; } },
+));
