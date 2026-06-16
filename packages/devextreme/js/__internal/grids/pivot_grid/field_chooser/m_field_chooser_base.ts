@@ -350,9 +350,13 @@ export class FieldChooserBase extends mixinWidget {
         return;
       }
 
+      const isKeyboardOrClick = e.type === clickEventName
+        || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '));
       const isAltArrowDown = e.type === 'keydown' && e.altKey && e.key === 'ArrowDown';
+      const isHeaderFilterIconInteraction = isKeyboardOrClick
+        && $(e.target).hasClass(CLASSES.headerFilter);
 
-      if (isAltArrowDown) {
+      if (isAltArrowDown || isHeaderFilterIconInteraction) {
         const mainGroupField = getMainGroupField(this._dataSource, field);
 
         if (mainGroupField.allowFiltering && field.area !== 'data' && !field.groupIndex) {
@@ -363,19 +367,11 @@ export class FieldChooserBase extends mixinWidget {
         return;
       }
 
-      const shouldHandle = e.type === clickEventName
-        || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '));
-
-      if (!shouldHandle) {
+      if (!isKeyboardOrClick) {
         return;
       }
 
-      const isHeaderFilter = $(e.target).hasClass(CLASSES.headerFilter);
-
-      if (isHeaderFilter) {
-        e.preventDefault();
-        this.handleHeaderFilterIconClick(e, field);
-      } else if (field.allowSorting && field.area !== 'data') {
+      if (field.allowSorting && field.area !== 'data') {
         e.preventDefault();
         this.handleFieldClick(field);
       }
