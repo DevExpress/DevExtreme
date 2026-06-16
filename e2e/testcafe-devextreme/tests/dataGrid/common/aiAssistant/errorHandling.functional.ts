@@ -97,7 +97,7 @@ test('Empty actions array should show no-action message and leave grid unchanged
   [{ actions: [] }],
 ));
 
-test('Sorting by non-existent dataField should show failure message and leave grid unchanged', async (t) => {
+test('Sorting by a non-existent column should fail: schema is valid but incompatible with grid state', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by Salary');
 
   await t.expect(aiChat.getMessages().count).eql(2);
@@ -110,7 +110,7 @@ test('Sorting by non-existent dataField should show failure message and leave gr
   [{ actions: [{ name: 'sorting', args: { dataField: 'Salary', sortOrder: 'asc' } }] }],
 ));
 
-test('Selecting non-existent keys should succeed and select no rows', async (t) => {
+test('Selecting non-existent keys should succeed: schema is valid and the missing data is not sent in the request', async (t) => {
   const { aiChat } = await openChatAndSubmit(t, 'Select rows 999 and 1000');
 
   await t.expect(aiChat.getMessages().count).eql(2);
