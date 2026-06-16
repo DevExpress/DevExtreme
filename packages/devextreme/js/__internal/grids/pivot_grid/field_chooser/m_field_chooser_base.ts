@@ -357,9 +357,7 @@ export class FieldChooserBase extends mixinWidget {
         && $(e.target).hasClass(CLASSES.headerFilter);
 
       if (isAltArrowDown || isHeaderFilterIconInteraction) {
-        const mainGroupField = getMainGroupField(this._dataSource, field);
-
-        if (mainGroupField.allowFiltering && field.area !== 'data' && !field.groupIndex) {
+        if (field.allowFiltering && field.area !== 'data' && !field.groupIndex) {
           e.preventDefault();
           this.handleHeaderFilterIconClick(e, field);
         }
