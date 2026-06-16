@@ -39,7 +39,7 @@ overrides:
   "postcss@<8.5.10": 8.5.10
   "ip-address@<=10.1.0": ">=10.1.1"
   "webpack-dev-server@<=5.2.3": ^5.2.4
-  "form-data@<4.0.6": ">=4.0.6"
+  "form-data@<4.0.6": "^4.0.6"
 
 catalog:
   axe-core: ^4.11.1
