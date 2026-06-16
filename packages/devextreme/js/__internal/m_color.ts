@@ -159,9 +159,6 @@ type ColorParseResult = | [number, number, number]
   | [number, number, number, number, [number, number, number]]
   | [number, number, number, number, null, [number, number, number]];
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const _round = Math.round;
-
 function makeColorTint(colorPart: string, h: number): number {
   let colorTint = h;
   if (colorPart === 'r') {
@@ -254,7 +251,7 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
     b = hueToRgb(p, q, makeColorTint('b', h01));
   }
 
-  return [_round(r * 255), _round(g * 255), _round(b * 255)];
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
 // array of color definition objects
@@ -295,7 +292,7 @@ const standardColorTypes: {
   },
   {
     re: /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/,
-    process(colorString):[number, number, number, number] {
+    process(colorString): [number, number, number, number] {
       return [
         parseInt(colorString[1], 16),
         parseInt(colorString[2], 16),
@@ -470,15 +467,15 @@ function toHslFromRgb(r: number, g: number, b: number): { h: number; s: number; 
     h /= 6;
   }
 
-  return { h: _round(h * 360), s: _round(s * 100), l: _round(l * 100) };
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 
-function isIntegerBetweenMinAndMax(number: number | undefined, min = 0, max = 255): boolean {
-  if (typeof number !== 'number'
-       || number % 1 !== 0
-       || number < min
-       || number > max
-       || isNaN(number)) {
+function isIntegerBetweenMinAndMax(value: unknown, min = 0, max = 255): value is number {
+  if (typeof value !== 'number'
+       || value % 1 !== 0
+       || value < min
+       || value > max
+       || isNaN(value)) {
     return false;
   }
 
@@ -554,9 +551,9 @@ export class Color {
   blend(blendColor: Color | string, opacity: number): Color {
     const other = blendColor instanceof Color ? blendColor : new Color(blendColor);
     const result = new Color();
-    result.r = normalize(_round(this.r * (1 - opacity) + other.r * opacity));
-    result.g = normalize(_round(this.g * (1 - opacity) + other.g * opacity));
-    result.b = normalize(_round(this.b * (1 - opacity) + other.b * opacity));
+    result.r = normalize(Math.round(this.r * (1 - opacity) + other.r * opacity));
+    result.g = normalize(Math.round(this.g * (1 - opacity) + other.g * opacity));
+    result.b = normalize(Math.round(this.b * (1 - opacity) + other.b * opacity));
     return result;
   }
 
@@ -574,9 +571,9 @@ export class Color {
   }
 
   static isValidRGB(
-    r: number | undefined,
-    g: number | undefined,
-    b: number | undefined,
+    r: unknown,
+    g: unknown,
+    b: unknown,
   ): boolean {
     if (
       !isIntegerBetweenMinAndMax(r)
@@ -588,8 +585,8 @@ export class Color {
     return true;
   }
 
-  static isValidAlpha(a: number): boolean {
-    if (isNaN(a) || a < 0 || a > 1 || typeof a !== 'number') {
+  static isValidAlpha(a: unknown): a is number {
+    if (typeof a !== 'number' || isNaN(a) || a < 0 || a > 1) {
       return false;
     }
     return true;
@@ -605,6 +602,9 @@ export class Color {
     color.g = rgb[1];
     // eslint-disable-next-line prefer-destructuring
     color.b = rgb[2];
+    color.hsl = { ...hsl };
+    color.hsv = toHsvFromRgb(color.r, color.g, color.b);
+    color.colorIsInvalid = false;
 
     return color;
   }
