@@ -10,6 +10,10 @@ const extractBorderRadius = (css: string): string | null => {
   return match ? match[1].trim() : null;
 };
 
+const hasBorderRadiusDeclaration = (css: string): boolean => (
+  /\.probe\s*\{\s*border-radius:/.test(css)
+);
+
 const compile = async (source: string): Promise<string> => {
   const result = await compileStringAsync(source, { loadPaths: [scssRoot] });
   return result.css;
@@ -20,6 +24,14 @@ const genericSource = (baseBorderRadius: string): string => `
     $color: "light",
     $base-border-radius: ${baseBorderRadius}
   );
+  @use "widgets/generic/sizes" with ($size: "default");
+  @use "widgets/generic/checkBox/sizes" as cb;
+
+  ${probeSelector} { border-radius: cb.$generic-checkbox-border-radius; }
+`;
+
+const genericContrastSource = (): string => `
+  @use "widgets/generic/colors" with ($color: "contrast");
   @use "widgets/generic/sizes" with ($size: "default");
   @use "widgets/generic/checkBox/sizes" as cb;
 
@@ -55,6 +67,13 @@ describe('CheckBox border-radius capping (T1330300)', () => {
     test('intermediate base-border-radius is not over-clamped', async () => {
       const css = await compile(genericSource('3px'));
       expect(extractBorderRadius(css)).toBe('1px');
+    });
+
+    test('contrast color scheme (no exsmall) does not break compilation', async () => {
+      const css = await compile(genericContrastSource());
+      // $base-border-radius-exsmall is null in contrast → border-radius must
+      // stay null (no declaration emitted), not throw on min(null, 2px).
+      expect(hasBorderRadiusDeclaration(css)).toBe(false);
     });
   });
 
