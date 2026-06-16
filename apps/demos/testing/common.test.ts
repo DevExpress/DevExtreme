@@ -59,9 +59,16 @@ const getIgnoredRules = (testName) => {
   const ignoredRules = [];
 
   // False positive: axe-core 4.11 tightened scrollable-region-focusable to require tabindex on
-  // overflow elements, but DevExtreme's .dx-scrollable-container handles keyboard navigation at
-  // a higher level (via the widget's own keyboard handler), making this a systematic false positive.
-  ignoredRules.push('scrollable-region-focusable');
+  // overflow elements, but .dx-scrollable-container in these components handles keyboard navigation
+  // at the widget level rather than on the container element itself.
+  // Only suppressed for components confirmed to trigger this false positive.
+  const scrollableFalsePositiveComponents = [
+    'Chat', 'Common', 'Diagram', 'Gantt', 'PivotGrid',
+    'Scheduler', 'ScrollView', 'Sortable', 'TileView', 'TreeView',
+  ];
+  if (scrollableFalsePositiveComponents.includes(testName.split('-')[0])) {
+    ignoredRules.push('scrollable-region-focusable');
+  }
 
   if ((isMaterial() || isFluent())
     && [
