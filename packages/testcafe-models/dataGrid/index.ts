@@ -786,6 +786,15 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  apiGetSelectedRowKeys(): Promise<any[]> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).getSelectedRowKeys(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 

@@ -28,15 +28,18 @@ const disposeGrid = ClientFunction(() => { (window as any).widget.dispose(); });
 
 const wasAbortCalled = ClientFunction(() => (window as any).__aiAbortCalled === true);
 
+const wasAIRequestResolved = ClientFunction(() => (window as any).__aiRequestResolved === true);
+
+const resolveAIRequest = ClientFunction(() => { (window as any).__resolveAIRequest(); });
+
 const setupAIState = ClientFunction((config: any) => {
   (window as any).__aiConfig = config;
   (window as any).__aiAbortCalled = false;
+  (window as any).__aiRequestResolved = false;
 });
 
 const aiGridOptions = (): any => {
-  const {
-    options, mode, actions, delay,
-  } = (window as any).__aiConfig;
+  const { options, mode, actions } = (window as any).__aiConfig;
 
   const sendRequest = (): any => {
     const abort = (): void => { (window as any).__aiAbortCalled = true; };
@@ -47,7 +50,12 @@ const aiGridOptions = (): any => {
 
     if (mode === 'delayed') {
       return {
-        promise: new Promise((resolve) => { setTimeout(() => resolve({ actions }), delay); }),
+        promise: new Promise((resolve) => {
+          (window as any).__resolveAIRequest = (): void => {
+            (window as any).__aiRequestResolved = true;
+            resolve({ actions });
+          };
+        }),
         abort,
       };
     }
@@ -81,8 +89,7 @@ fixture`AI Assistant - Interruption`
 
 // === §5.2 Popup close mid-request (before any command executes) ===
 
-// 5.2.1
-test('Closing the popup mid-request should abort and leave the grid unchanged', async (t) => {
+test('Closing the popup mid-request aborts, leaves the grid unchanged, and shows the aborted response on re-open', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.expect(dataGrid.isReady()).ok();
@@ -101,25 +108,6 @@ test('Closing the popup mid-request should abort and leave the grid unchanged', 
 
   await t.expect(wasAbortCalled()).ok();
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
-}).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
-
-// 5.2.2
-test('Re-opening after a mid-request close shows the aborted response and re-enables input', async (t) => {
-  const dataGrid = new DataGrid(GRID_SELECTOR);
-
-  await t.expect(dataGrid.isReady()).ok();
-
-  await t.click(dataGrid.getAIAssistantButton());
-
-  const aiChat = dataGrid.getAIAssistantChat();
-
-  await t
-    .typeText(aiChat.getInput(), 'Sort by name')
-    .pressKey('enter');
-
-  await t.expect(aiChat.getPendingMessages().count).eql(1);
-
-  await closeAndConfirmAbort(t, aiChat);
 
   await t.click(dataGrid.getAIAssistantButton());
 
@@ -147,17 +135,18 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
 
   await closeAndConfirmAbort(t, aiChat);
 
-  await t.wait(2000);
+  await resolveAIRequest();
+  await t.expect(wasAIRequestResolved()).ok();
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
 }).before(async () => createGridWithAI({
-  options: gridOptions, mode: 'delayed', actions: sortNameAsc, delay: 1500,
+  options: gridOptions, mode: 'delayed', actions: sortNameAsc,
 }));
 
 // === §5.3 Popup close mid-execution / §5.4 Re-open after a mid-execution close ===
 
-const releaseSelectAll = ClientFunction(() => { (window as any).__resolveSelectAll(); });
+const resolveSelectAll = ClientFunction(() => { (window as any).__resolveSelectAll(); });
 const selectAllStarted = ClientFunction(() => (window as any).__selectAllStarted === true);
 
 // 5.3.1 / 5.3.4 / 5.3.5 / 5.4.1 / 5.4.2
@@ -174,15 +163,15 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
     .typeText(aiChat.getInput(), 'Sort by name, select all, then sort by value')
     .pressKey('enter');
 
-  // Command #1 (sort by name) has applied; command #2 (selectAll) is now in flight and gated.
+  // Command #1 (sort by name) has applied; command #2 (selectAll) is now in flight and delayed.
   await t.expect(selectAllStarted()).ok();
   await t.expect(aiChat.isInputDisabled()).ok();
 
   // Close the popup mid-execution → confirm dialog → abort.
   await closeAndConfirmAbort(t, aiChat);
 
-  // Let the gated selectAll resolve; the loop then sees the abort flag and stops before #3.
-  await releaseSelectAll();
+  // Let the delayed selectAll resolve; the loop then sees the abort flag and stops before #3.
+  await resolveSelectAll();
 
   // Re-open to inspect the resulting response.
   await t.click(dataGrid.getAIAssistantButton());
@@ -193,14 +182,12 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(2);
   await t.expect(aiChat.getAbortedActionItems(0).count).eql(1);
 
-  // the grid reflects only completed commands: #1 applied, #3 (sort by value) skipped.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
   await t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).notOk();
+  await t.expect((await dataGrid.apiGetSelectedRowKeys()).length).eql(50);
 
-  // no Regenerate button (commands were attempted; the grid was mutated).
   await t.expect(aiChat.getMessageRegenerateButton(0).count).eql(0);
 
-  // the in-flight lock has been released.
   await t.expect(aiChat.isInputDisabled()).notOk();
 }).before(async () => createWidget('dxDataGrid', () => {
   const w = window as any;
@@ -278,7 +265,7 @@ test('Customized response title is applied to the partial (aborted) result', asy
 
   await closeAndConfirmAbort(t, aiChat);
 
-  await releaseSelectAll();
+  await resolveSelectAll();
 
   await t.click(dataGrid.getAIAssistantButton());
 
@@ -365,11 +352,17 @@ test('Disposing the grid mid-request should not throw and ignore the late resolu
 
   await disposeGrid();
 
-  await t.wait(2000);
+  await resolveAIRequest();
+  await t.expect(wasAIRequestResolved()).ok();
 
   await t.expect(Selector('#container').find('.dx-datagrid').exists).notOk();
+  await t.expect(dataGrid.getAIAssistantChat().element.exists).notOk();
+
+  const { error } = await t.getBrowserConsoleMessages();
+
+  await t.expect(error).eql([]);
 }).before(async () => createGridWithAI({
-  options: gridOptions, mode: 'delayed', actions: sortNameAsc, delay: 1500,
+  options: gridOptions, mode: 'delayed', actions: sortNameAsc,
 }));
 
 // 5.5.2
@@ -393,6 +386,11 @@ test('Disposing the grid mid-execution should not throw', async (t) => {
   await t.wait(500);
 
   await t.expect(Selector('#container').find('.dx-datagrid').exists).notOk();
+  await t.expect(dataGrid.getAIAssistantChat().element.exists).notOk();
+
+  const { error } = await t.getBrowserConsoleMessages();
+
+  await t.expect(error).eql([]);
 }).before(async () => createWidget('dxDataGrid', () => {
   const data = Array.from({ length: 50 }, (_, i) => ({
     id: i + 1,
