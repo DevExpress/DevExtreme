@@ -101,7 +101,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Validate SBOMs
-        uses: mpreyskurantov/github-actions/validate-sbom@sbom-val-dev
+        uses: DevExpress/github-actions/validate-sbom@5034a6d5e0fd18fc2826ed20a5140f9c83b8994f
         with:
           input-format: json
           input-files: ${{ steps.sbomFiles.outputs.files }}
