@@ -163,7 +163,7 @@ const standardColorNames = {
 };
 
 export class Color {
-  baseColor: string | undefined;
+  baseColor?: string | null;
 
   r!: number;
 
@@ -179,7 +179,7 @@ export class Color {
 
   colorIsInvalid = false;
 
-  constructor(value?: string) {
+  constructor(value?: string | null) {
     this.baseColor = value;
     let color: ColorParseResult | null = null;
     if (value) {
@@ -251,9 +251,9 @@ export class Color {
   }
 
   static isValidRGB(
-    r: unknown,
-    g: unknown,
-    b: unknown,
+    r?: unknown,
+    g?: unknown,
+    b?: unknown,
   ): boolean {
     if (
       !isIntegerBetweenMinAndMax(r)
@@ -265,7 +265,7 @@ export class Color {
     return true;
   }
 
-  static isValidAlpha(a: unknown): a is number {
+  static isValidAlpha(a?: unknown): a is number {
     if (typeof a !== 'number' || isNaN(a) || a < 0 || a > 1) {
       return false;
     }
