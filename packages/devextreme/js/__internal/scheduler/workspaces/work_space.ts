@@ -583,9 +583,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         const edgeIndices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
           ? this.viewDataProvider.getGroupEdgeIndices(
             focusedCellData.groupIndex ?? 0,
-            Boolean(isAllDayPanelCell),
+            isAllDayPanelCell,
           )
-          : this.viewDataProvider.getViewEdgeIndices(Boolean(isAllDayPanelCell));
+          : this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCell);
 
         const nextCellData = this.cellsSelectionController.handleArrowClick({
           focusedCellPosition,
