@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   cleanup:
-    name: Delete stale PR preview folders
+    name: Delete stale PR storybook folders
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -21,7 +21,7 @@ jobs:
           ref: gh-pages
           fetch-depth: 0
 
-      - name: Delete preview folders older than 7 days
+      - name: Delete storybook folders older than 7 days
         id: cleanup
         run: |
           DELETED=0
@@ -56,5 +56,5 @@ jobs:
         run: |
           git config --global user.email "DXGitHubRobot@devexpress.com"
           git config --global user.name "DX Robot"
-          git commit -m "chore: remove ${{ steps.cleanup.outputs.deleted }} stale PR preview(s) [skip ci]"
+          git commit -m "chore: remove ${{ steps.cleanup.outputs.deleted }} stale PR storybook(s) [skip ci]"
           git push origin gh-pages

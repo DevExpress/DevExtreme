@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: preview-${{ github.event.pull_request.number }}
+  group: storybook-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 env:
@@ -89,7 +89,7 @@ jobs:
           wait-for-pages-deployment: true
 
   remove:
-    name: Remove preview
+    name: Remove storybook
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: >-

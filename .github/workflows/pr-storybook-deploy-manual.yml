@@ -21,7 +21,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: storybook-preview-${{ inputs.pr_number }}
+  group: storybook-${{ inputs.pr_number }}
   cancel-in-progress: true
 
 env:
