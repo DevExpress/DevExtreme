@@ -1,4 +1,4 @@
-name: Storybook PR Preview Cleanup
+name: PR Storybook - Preview Cleanup
 
 on:
   schedule:
@@ -27,7 +27,7 @@ jobs:
           DELETED=0
           CUTOFF=$(date -d '7 days ago' +%s)
 
-          for dir in preview/pr-*/; do
+          for dir in storybook/pr-*/; do
             [ -d "$dir" ] || continue
 
             LAST_COMMIT_TS=$(git log -1 --format="%ct" -- "$dir")
