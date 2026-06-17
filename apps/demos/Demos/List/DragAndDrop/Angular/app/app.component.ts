@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule } from 'devextreme-angular';
 import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';

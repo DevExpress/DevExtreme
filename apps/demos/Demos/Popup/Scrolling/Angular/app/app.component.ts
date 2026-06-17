@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';

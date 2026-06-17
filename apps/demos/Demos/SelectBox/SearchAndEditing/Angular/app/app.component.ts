@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxNumberBoxModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
