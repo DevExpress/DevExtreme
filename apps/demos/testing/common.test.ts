@@ -15,7 +15,7 @@ import {
   execCode,
   injectStyle,
 } from '../utils/visual-tests/matrix-test-helper';
-import { testScreenshot, isFluent, isMaterial } from '../utils/visual-tests/helpers/theme-utils';
+import { testScreenshot } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import { accessibilityUnsupportedComponents } from './accessibility-unsupported-components';
 import { knownWarnings } from './known-warnings';
@@ -59,8 +59,7 @@ const getIgnoredRules = (testName) => {
     ignoredRules.push('scrollable-region-focusable');
   }
 
-  if ((isMaterial() || isFluent())
-    && [
+  if ([
       // False positive: contrast rules do not apply to disabled tags
       'Accordion-Overview',
       'TagBox-Overview',
