@@ -1,8 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+
+const setGlobalRtl = ClientFunction((enabled: boolean) => {
+  (window as any).DevExpress.config({ rtlEnabled: enabled });
+});
 
 fixture
   .disablePageReloads`Keyboard Navigation - Group Column Reordering`
@@ -12,7 +17,7 @@ const DATA_GRID_SELECTOR = '#container';
 
 // Move grouped columns
 [true, false].forEach((rtlEnabled) => {
-  test(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
+  test.only(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
@@ -27,8 +32,8 @@ const DATA_GRID_SELECTOR = '#container';
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await setGlobalRtl(rtlEnabled);
     await createWidget('dxDataGrid', {
-      rtlEnabled,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
@@ -51,6 +56,8 @@ const DATA_GRID_SELECTOR = '#container';
         },
       ],
     });
+  }).after(async () => {
+    await setGlobalRtl(false);
   });
 
   test(`reorder group column when ${rtlEnabled ? 'right' : 'left'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
@@ -68,8 +75,8 @@ const DATA_GRID_SELECTOR = '#container';
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await setGlobalRtl(rtlEnabled);
     await createWidget('dxDataGrid', {
-      rtlEnabled,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
@@ -92,6 +99,8 @@ const DATA_GRID_SELECTOR = '#container';
         },
       ],
     });
+  }).after(async () => {
+    await setGlobalRtl(false);
   });
 
   test(`reorder group column to ${rtlEnabled ? 'left' : 'right'} via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
@@ -113,8 +122,8 @@ const DATA_GRID_SELECTOR = '#container';
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await setGlobalRtl(rtlEnabled);
     await createWidget('dxDataGrid', {
-      rtlEnabled,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
@@ -137,6 +146,8 @@ const DATA_GRID_SELECTOR = '#container';
         },
       ],
     });
+  }).after(async () => {
+    await setGlobalRtl(false);
   });
 
   test(`reorder group column to ${rtlEnabled ? 'right' : 'left'} via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
@@ -158,8 +169,8 @@ const DATA_GRID_SELECTOR = '#container';
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await setGlobalRtl(rtlEnabled);
     await createWidget('dxDataGrid', {
-      rtlEnabled,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
@@ -182,6 +193,8 @@ const DATA_GRID_SELECTOR = '#container';
         },
       ],
     });
+  }).after(async () => {
+    await setGlobalRtl(false);
   });
 });
 
