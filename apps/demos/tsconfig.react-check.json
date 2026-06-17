@@ -15,6 +15,7 @@
   },
   "include": [
     "Demos/**/React/**/*.tsx",
-    "Demos/**/React/**/*.ts"
+    "Demos/**/React/**/*.ts",
+    "shared/anti-forgery/index.d.ts"
   ],
 }

@@ -15,6 +15,7 @@
   },
 
   "include": [
-    "Demos/**/Angular/**/*.ts"
+    "Demos/**/Angular/**/*.ts",
+    "shared/anti-forgery/index.d.ts"
   ]
 }
