@@ -95,17 +95,22 @@ test('Should set correct start and end dates in drag&dropped appointment', async
   const cellToMoveElement = secondScheduler
     .getDateTableCell(0, 0);
 
+  // The first scheduler uses an async data source, so make sure its appointment is
+  // actually rendered (and the layout has settled) before the drag starts. Otherwise
+  // dragToElement may capture a stale position and the drop never reaches the target.
+  await t.expect(firstScheduler.getAppointmentCount()).eql(1);
+
   await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.5 });
 
-  // Wait for async data source operations and DOM updates to complete
-  await t.wait(500);
+  // The drop runs async onRemove/onAdd handlers. Wait for the appointment to actually
+  // appear in the target scheduler via an auto-retrying assertion instead of a fixed
+  // delay, then read its time the same way so the whole chain re-evaluates while the
+  // DOM updates.
+  await t.expect(secondScheduler.getAppointmentCount()).eql(1, { timeout: 3000 });
 
-  const movedAppointmentTime = await secondScheduler
-    .getAppointment(TEST_APPOINTMENT.text)
-    .date
-    .time;
-
-  await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
+  await t
+    .expect(secondScheduler.getAppointment(TEST_APPOINTMENT.text).date.time)
+    .eql(EXPECTED_APPOINTMENT_TIME, { timeout: 3000 });
 }).before(async () => {
   await setStyleAttribute(Selector('#container'), 'display: flex;');
   await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);

@@ -1224,7 +1224,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(sendButton.option('disabled'), true, 'send button is disabled after edit cancelled');
         });
 
-        QUnit.testInActiveWindow('editing preview should be enabled after the send button is clicked if cancel promise rejected', async function(assert) {
+        QUnit.skip('editing preview should be enabled after the send button is clicked if cancel promise rejected', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },

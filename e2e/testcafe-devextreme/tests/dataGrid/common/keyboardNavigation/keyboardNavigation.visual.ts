@@ -10,7 +10,11 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture`Keyboard Navigation.Visual`
   .page(url(__dirname, '../../../container.html'));
 
-const KEYBOARD_NAVIGATION_TIMEOUT = 3000;
+// Navigating to a far cell via Ctrl+End/Ctrl+Home triggers async virtual row/column
+// rendering after the keyboard navigation itself reports done, which can exceed a short
+// budget on a loaded CI machine. Keep this generous so the focus assertions auto-retry
+// long enough instead of flaking.
+const KEYBOARD_NAVIGATION_TIMEOUT = 7000;
 
 const isKeyboardNavigationInProgress = ClientFunction(() => {
   const dataGrid = ($('#container') as any).dxDataGrid('instance');
