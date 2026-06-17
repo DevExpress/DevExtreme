@@ -29,7 +29,7 @@ import { DROP_DOWN_BUTTON_CLASS } from '__internal/ui/drop_down_button';
 
 import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/text_editor.base';
 import { TEXTBOX_CLASS } from '__internal/ui/text_box/text_box';
-import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
+
 import { SWITCH_CLASS } from '__internal/ui/switch';
 import { CHECK_BOX_CLASS } from '__internal/ui/check_box/check_box';
 import { TABS_CLASS } from '__internal/ui/tabs/tabs';
@@ -63,6 +63,7 @@ function getActiveElement() {
     return active && active.shadowRoot ? (active.shadowRoot.activeElement || active) : active;
 }
 
+const SELECTBOX_CLASS = 'dx-selectbox';
 const TOOLBAR_SELECTOR = '#toolbar';
 
 QUnit.testStart(function() {
