@@ -40,7 +40,9 @@ module.exports.translate = function () {
         ? { ...getDemoTsCompilerOptions(), ...loadOpts }
         : getDemoTsCompilerOptions();
 
-      load.source = translateSFC(load.source, true, tsCompilerOptions);
+      load.source = translateSFC(load.source, true, {
+        compilerOptions: tsCompilerOptions,
+      });
       return load.source;
     });
   };
