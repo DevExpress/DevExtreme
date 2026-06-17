@@ -1,4 +1,4 @@
-name: Renovation
+name: Jest tests
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
@@ -51,6 +51,9 @@ jobs:
     - name: Build localization
       working-directory: ./packages/devextreme
       run: pnpm exec gulp localization
+
+    - name: Check test types
+      run: pnpm exec nx check-types devextreme
 
     - name: Jest tests
       run: pnpm exec nx test-jest devextreme
