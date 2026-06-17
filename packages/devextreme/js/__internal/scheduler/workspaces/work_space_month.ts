@@ -9,7 +9,7 @@ import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
 import { utils } from '../utils';
 import { VIEWS } from '../utils/options/constants_view';
-import type { ViewDateGenerationOptions } from './m_work_space';
+import type { ViewDateGenerationOptions } from './work_space';
 import SchedulerWorkSpace from './work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -30,7 +30,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   protected override getIntervalBetween(currentDate: Date): number {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
-    const startDayHour = this.option('startDayHour');
+    const { startDayHour } = this.option();
 
     return currentDate.getTime()
       - (firstViewDate.getTime() - startDayHour * 3600000)
@@ -56,14 +56,18 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
       let averageWidth = 0;
       const cells = this.getCells().slice(0, DAYS_IN_WEEK);
-      cells.each((index, element) => {
-        averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
-      });
+
+      cells.each(
+        (index: number, element: Element): boolean => {
+          averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
+          return true;
+        },
+      );
 
       return cells.length === 0 ? 0 : averageWidth / DAYS_IN_WEEK;
     });
 
-    return cellWidth as number;
+    return cellWidth;
   }
 
   protected override insertAllDayRowsIntoDateTable(): boolean {
@@ -83,15 +87,17 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override needCreateCrossScrolling(): boolean {
-    return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
+    return this.option().crossScrollingEnabled || this.isVerticalGroupedWorkSpace();
   }
 
   protected override getViewStartByOptions(): Date {
+    const startDate = this.option().startDate ?? undefined;
+
     return monthUtils.getViewStartByOptions(
-      this.option('startDate'),
-      this.option('currentDate'),
-      this.option('intervalCount'),
-      dateUtils.getFirstMonthDate(this.option('startDate')) as Date,
+      startDate,
+      this.option().currentDate,
+      this.option().intervalCount,
+      startDate ? dateUtils.getFirstMonthDate(startDate) as Date : undefined,
     );
   }
 
