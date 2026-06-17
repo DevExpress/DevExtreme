@@ -79,6 +79,12 @@ function getMainGroupField(dataSource, sourceField) {
   return field;
 }
 
+function fieldHasHeaderFilter(dataSource, field): boolean {
+  const mainGroupField = getMainGroupField(dataSource, field);
+  const isFirstInGroup = field.groupIndex === 0 || !isDefined(field.groupIndex);
+  return mainGroupField.allowFiltering && isFirstInGroup && field.area !== 'data';
+}
+
 function getStringState(state) {
   state = state || {};
   return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
@@ -182,7 +188,6 @@ export class FieldChooserBase extends mixinWidget {
       .attr('tabIndex', 0)
       .data('field', field)
       .append($fieldContent);
-    const mainGroupField = getMainGroupField(that._dataSource, field);
 
     if (field.area !== 'data') {
       if (field.allowSorting) {
@@ -199,7 +204,7 @@ export class FieldChooserBase extends mixinWidget {
         });
       }
 
-      that._renderHeaderFilterIcon($fieldElement, mainGroupField, field, showColumnLines);
+      that._renderHeaderFilterIcon($fieldElement, field, showColumnLines);
     }
 
     if (field.groupName) {
@@ -357,7 +362,7 @@ export class FieldChooserBase extends mixinWidget {
         && $(e.target).hasClass(CLASSES.headerFilter);
 
       if (isAltArrowDown || isHeaderFilterIconInteraction) {
-        if (field.allowFiltering && field.area !== 'data' && !field.groupIndex) {
+        if (fieldHasHeaderFilter(this._dataSource, field)) {
           e.preventDefault();
           this.handleHeaderFilterIconClick(e, field);
         }
@@ -426,13 +431,12 @@ export class FieldChooserBase extends mixinWidget {
     }
   }
 
-  private _renderHeaderFilterIcon($fieldElement, mainGroupField, field, showColumnLines): void {
-    const allowFiltering = mainGroupField.allowFiltering && !field.groupIndex;
-
-    if (!allowFiltering) {
+  private _renderHeaderFilterIcon($fieldElement, field, showColumnLines): void {
+    if (!fieldHasHeaderFilter(this._dataSource, field)) {
       return;
     }
 
+    const mainGroupField = getMainGroupField(this._dataSource, field);
     const isEmpty = !mainGroupField.filterValues?.length;
     const $icon = $('<span>').addClass(CLASSES.headerFilter).toggleClass('dx-header-filter-empty', isEmpty);
 
