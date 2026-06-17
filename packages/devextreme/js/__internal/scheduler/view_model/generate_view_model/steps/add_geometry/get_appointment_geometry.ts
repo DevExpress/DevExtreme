@@ -17,6 +17,7 @@ export const getAppointmentGeometry = (
     collectorWithMarginsSize,
     viewOrientation,
     cells,
+    panelLeftOffset,
   }: GeometryOptions,
 ): Geometry => {
   const cellAbstractSize = getAbstractSizeByViewOrientation(cellSize, viewOrientation);
@@ -24,8 +25,9 @@ export const getAppointmentGeometry = (
     collectorWithMarginsSize,
     viewOrientation,
   );
+  const abstractLeftOffset = viewOrientation === 'horizontal' ? (panelLeftOffset ?? 0) : 0;
   const abstractGeometry = {
-    ...getAppointmentX(entity, cellAbstractSize, cells),
+    ...getAppointmentX(entity, cellAbstractSize, cells, abstractLeftOffset),
     ...getAppointmentY(
       entity,
       cellAbstractSize,

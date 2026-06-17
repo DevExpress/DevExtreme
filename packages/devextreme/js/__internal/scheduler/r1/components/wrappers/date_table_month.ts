@@ -25,6 +25,9 @@ export class DateTableMonthComponent extends DateTableComponent {
         'addVerticalSizesClassToRows',
         'width',
         'dataCellTemplate',
+        'showWeekNumbers',
+        'weekNumberRule',
+        'firstDayOfWeek',
       ],
     };
   }

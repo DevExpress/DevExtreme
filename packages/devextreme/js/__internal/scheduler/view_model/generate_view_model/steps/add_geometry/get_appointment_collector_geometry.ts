@@ -16,12 +16,14 @@ export const getAppointmentCollectorGeometry = (
     collectorSize,
     collectorWithMarginsSize,
     viewOrientation,
-  }: Pick<GeometryOptions, 'collectorPosition' | 'cellSize' | 'collectorSize' | 'collectorWithMarginsSize' | 'viewOrientation'>,
+    panelLeftOffset,
+  }: Pick<GeometryOptions, 'collectorPosition' | 'cellSize' | 'collectorSize' | 'collectorWithMarginsSize' | 'viewOrientation' | 'panelLeftOffset'>,
 ): Geometry => {
   const collectorAbstractSize = getAbstractSizeByViewOrientation(collectorSize, viewOrientation);
   const cellAbstractSize = getAbstractSizeByViewOrientation(cellSize, viewOrientation);
+  const abstractLeftOffset = viewOrientation === 'horizontal' ? (panelLeftOffset ?? 0) : 0;
   const abstractGeometry = {
-    offsetX: entity.columnIndex * cellAbstractSize.sizeX,
+    offsetX: abstractLeftOffset + entity.columnIndex * cellAbstractSize.sizeX,
     offsetY: collectorPosition === 'start' ? 0 : cellAbstractSize.sizeY - getAbstractSizeByViewOrientation(
       collectorWithMarginsSize,
       viewOrientation,

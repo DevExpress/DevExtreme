@@ -7,6 +7,33 @@ $scheduler-workspace-month-text-color: null !default;
 $scheduler-month-date-text-padding: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 
+.dx-scheduler-week-number-cell,
+.dx-scheduler-week-number-header-cell {
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
+  overflow: hidden;
+  opacity: 0.56;
+  font-size: 0.85em;
+}
+
+.dx-scheduler-week-number-cell {
+  vertical-align: middle;
+  padding: 0 2px;
+}
+
+.dx-scheduler-week-number-header-cell {
+  font-weight: normal;
+
+  div {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+}
+
 .dx-scheduler-work-space-month {
   .dx-scheduler-all-day-title {
     display: none;

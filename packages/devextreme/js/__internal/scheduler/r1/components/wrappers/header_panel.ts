@@ -43,6 +43,7 @@ export class HeaderPanelComponent extends ComponentWrapper {
         'height',
         'className',
         'resourceCellTemplate',
+        'showWeekNumbers',
       ],
     };
   }

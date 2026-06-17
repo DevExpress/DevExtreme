@@ -19,6 +19,7 @@ export interface DateHeaderProps extends PropsWithViewContext {
   groups: Group[];
   dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
   timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
+  showWeekNumbers?: boolean;
 }
 
 export const DateHeaderDefaultProps = {
@@ -42,9 +43,11 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
       groupByDate,
       groupOrientation,
       groups,
+      showWeekNumbers,
     } = this.props;
     const isHorizontalGrouping = isHorizontalGroupingApplied(groups.length, groupOrientation)
       && !groupByDate;
+    const isMonthView = viewContext.view.type === 'month';
 
     return (
       <>
@@ -59,38 +62,45 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
               rightVirtualCellCount={rightVirtualCellCount}
               isHeaderRow={true}
             >
-              {
-                dateHeaderRow.map(({
-                  colSpan,
-                  groupIndex,
-                  groups: cellGroups,
-                  index,
-                  isFirstGroupCell,
-                  isLastGroupCell,
-                  key,
-                  startDate,
-                  text,
-                  today,
-                }) => (
-                  <DateHeaderCell
-                    key={key}
-                    viewContext={viewContext}
-                    startDate={startDate}
-                    groups={isHorizontalGrouping ? cellGroups : undefined}
-                    groupIndex={isHorizontalGrouping ? groupIndex : undefined}
-                    today={today ?? false}
-                    isWeekDayCell={false}
-                    isTimeCellTemplate={false}
-                    index={index}
-                    text={text}
-                    isFirstGroupCell={isFirstGroupCell}
-                    isLastGroupCell={isLastGroupCell}
-                    dateCellTemplate={dateCellTemplate}
-                    colSpan={colSpan}
-                    splitText={isMaterialBased}
-                  />
-                ))
-              }
+              <>
+                {showWeekNumbers && isMonthView && rowIndex === 0 && (
+                  <th className="dx-scheduler-week-number-header-cell" scope="col">
+                    <div>Wk</div>
+                  </th>
+                )}
+                {
+                  dateHeaderRow.map(({
+                    colSpan,
+                    groupIndex,
+                    groups: cellGroups,
+                    index,
+                    isFirstGroupCell,
+                    isLastGroupCell,
+                    key,
+                    startDate,
+                    text,
+                    today,
+                  }) => (
+                    <DateHeaderCell
+                      key={key}
+                      viewContext={viewContext}
+                      startDate={startDate}
+                      groups={isHorizontalGrouping ? cellGroups : undefined}
+                      groupIndex={isHorizontalGrouping ? groupIndex : undefined}
+                      today={today ?? false}
+                      isWeekDayCell={false}
+                      isTimeCellTemplate={false}
+                      index={index}
+                      text={text}
+                      isFirstGroupCell={isFirstGroupCell}
+                      isLastGroupCell={isLastGroupCell}
+                      dateCellTemplate={dateCellTemplate}
+                      colSpan={colSpan}
+                      splitText={isMaterialBased}
+                    />
+                  ))
+                }
+              </>
             </Row>
           ))
         }

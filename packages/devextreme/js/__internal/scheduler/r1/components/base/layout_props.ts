@@ -16,6 +16,9 @@ export interface LayoutProps extends PropsWithViewContext {
   addVerticalSizesClassToRows: boolean;
   width?: number;
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
+  showWeekNumbers?: boolean;
+  weekNumberRule?: string;
+  firstDayOfWeek?: number;
 }
 
 export const LayoutDefaultProps: DefaultProps<LayoutProps> = {

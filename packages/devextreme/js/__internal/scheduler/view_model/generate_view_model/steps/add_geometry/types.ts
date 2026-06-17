@@ -69,6 +69,7 @@ export interface GeometryOptions {
   collectorWithMarginsSize: RealSize;
   groupSize: RealSize;
   panelSize: RealSize;
+  panelLeftOffset?: number;
 }
 
 export interface VirtualCropOptions {

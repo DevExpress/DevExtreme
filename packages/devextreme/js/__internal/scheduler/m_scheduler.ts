@@ -270,6 +270,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _optionChanged(args: OptionChanged<SafeSchedulerOptions>): void {
     this.schedulerOptionChanged(args);
 
+    const optionName = args.name as string;
+    if (optionName === 'showWeekNumbers' || optionName === 'weekNumberRule') {
+      this.updateOption('workSpace', optionName, args.value);
+      this.repaint();
+      return;
+    }
+
     const { value, name } = args;
 
     switch (args.name) {
@@ -1519,6 +1526,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       focusStateEnabled: this.option('focusStateEnabled'),
       cellDuration: this.option('cellDuration'),
       showAllDayPanel: this.option('showAllDayPanel'),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      showWeekNumbers: (this as any).option('showWeekNumbers') ?? false,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      weekNumberRule: (this as any).option('weekNumberRule') ?? 'auto',
       showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
       indicatorTime: this.option('indicatorTime'),
       indicatorUpdateInterval: this.option('indicatorUpdateInterval'),

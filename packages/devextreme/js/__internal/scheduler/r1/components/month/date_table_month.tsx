@@ -20,6 +20,9 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
       groupOrientation,
       tableRef,
       width,
+      showWeekNumbers,
+      weekNumberRule,
+      firstDayOfWeek,
       ...restProps
     } = this.props;
 
@@ -35,6 +38,9 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
         tableRef={tableRef}
         addVerticalSizesClassToRows={addVerticalSizesClassToRows}
         width={width}
+        showWeekNumbers={showWeekNumbers}
+        weekNumberRule={weekNumberRule}
+        firstDayOfWeek={firstDayOfWeek}
       />
     );
   }

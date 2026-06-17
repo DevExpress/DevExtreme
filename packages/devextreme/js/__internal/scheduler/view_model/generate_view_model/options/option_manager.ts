@@ -80,6 +80,7 @@ export class OptionManager {
       const viewOrientation = panelName === 'allDayPanel' ? 'horizontal' : nativeViewOrientation;
       const isCompactCollector = isAdaptivityEnabled || viewOrientation === 'vertical';
       const collectorCSS = workspace.getCollectorDimension(isCompactCollector, panelName);
+      const DOMMetaData = workspace.getDOMElementsMetaData();
       const {
         allDayPanelCellSize,
         cellSize,
@@ -92,7 +93,7 @@ export class OptionManager {
         viewOrientation,
         isAdaptivityEnabled,
         collectorCSS,
-        DOMMetaData: workspace.getDOMElementsMetaData(),
+        DOMMetaData,
         panelName,
       });
 
@@ -137,6 +138,7 @@ export class OptionManager {
           isAllDayPanel: panelName === 'allDayPanel',
         }),
         panelSize: panelDOMSize,
+        panelLeftOffset: DOMMetaData.dateTableCellsMeta[0]?.[0]?.left ?? 0,
       };
       const collectorOptions: CollectorOptions = {
         cells,

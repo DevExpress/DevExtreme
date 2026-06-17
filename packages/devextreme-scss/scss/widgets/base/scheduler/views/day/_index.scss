@@ -1,6 +1,15 @@
 $scheduler-base-border: null !default;
 $scheduler-base-border-color: null !default;
 
+.dx-scheduler-week-number-label {
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+  opacity: 0.56;
+  font-size: 0.85em;
+  padding: 2px 0;
+}
+
 .dx-scheduler-work-space-day {
   &:not(.dx-scheduler-work-space-count) {
     &:not(.dx-scheduler-work-space-grouped) {

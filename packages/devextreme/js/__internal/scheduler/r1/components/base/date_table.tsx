@@ -35,6 +35,9 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
       dataCellTemplate,
       groupOrientation,
       addVerticalSizesClassToRows,
+      showWeekNumbers,
+      weekNumberRule,
+      firstDayOfWeek,
       ...restProps
     } = this.props;
     const classes = addDateTableClass ? 'dx-scheduler-date-table' : undefined;
@@ -70,6 +73,9 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
           topVirtualRowHeight={DateTableBodyDefaultProps.topVirtualRowHeight}
           bottomVirtualRowHeight={DateTableBodyDefaultProps.bottomVirtualRowHeight}
           addDateTableClass={DateTableBodyDefaultProps.addDateTableClass}
+          showWeekNumbers={showWeekNumbers}
+          weekNumberRule={weekNumberRule}
+          firstDayOfWeek={firstDayOfWeek}
         />
       </Table>
     );

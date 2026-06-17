@@ -17,6 +17,7 @@ export interface HeaderPanelProps extends GroupPanelProps {
   dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
   timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
   dateHeaderTemplate: JSXTemplate<DateHeaderProps, 'dateHeaderData'>;
+  showWeekNumbers?: boolean;
 }
 
 export const HeaderPanelDefaultProps = {
@@ -43,6 +44,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       dateHeaderTemplate,
       resourceCellTemplate,
       timeCellTemplate,
+      showWeekNumbers,
     } = this.props;
     const isHorizontalGrouping = isHorizontalGroupingApplied(groups.length, groupOrientation);
 
@@ -72,6 +74,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
             groups,
             dateCellTemplate,
             timeCellTemplate,
+            showWeekNumbers,
           }}
         />
       }

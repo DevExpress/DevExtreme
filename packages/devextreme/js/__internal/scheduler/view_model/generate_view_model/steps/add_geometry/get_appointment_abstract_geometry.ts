@@ -18,10 +18,11 @@ export const getAppointmentX = (
   entity: Pick<GeometryMinimalEntity, 'startDateUTC' | 'endDateUTC' | 'cellIndex' | 'endCellIndex' | 'columnIndex'>,
   cellSize: AbstractSize,
   cells: CellInterval[],
+  panelLeftOffset = 0,
 ): X => {
   const startX = getInsideCellX(entity.startDateUTC, cells[entity.cellIndex], cellSize.sizeX);
   const endX = getInsideCellX(entity.endDateUTC, cells[entity.endCellIndex], cellSize.sizeX);
-  const offsetX = entity.columnIndex * cellSize.sizeX + startX;
+  const offsetX = panelLeftOffset + entity.columnIndex * cellSize.sizeX + startX;
   const sizeX = (entity.endCellIndex - entity.cellIndex) * cellSize.sizeX + endX - startX;
 
   return { offsetX, sizeX };

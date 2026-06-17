@@ -277,6 +277,8 @@ export interface WorkspaceOptionsInternal {
   width?: number | string | undefined;
 
   rtlEnabled: boolean;
+  showWeekNumbers?: boolean;
+  weekNumberRule?: string;
 }
 
 class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
@@ -2260,6 +2262,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         groupOrientation: this.option('groupOrientation'),
         resourceCellTemplate: this.option('resourceCellTemplate'),
         isRenderDateHeader,
+        showWeekNumbers: this.option().showWeekNumbers,
       },
     );
   }
@@ -2417,6 +2420,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       selectedCellData: [],
       groupByDate: false,
       skippedDays: undefined,
+      showWeekNumbers: false,
+      weekNumberRule: 'auto',
       scrolling: {
         mode: 'standard',
       },
@@ -2449,6 +2454,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       case 'firstDayOfWeek':
       case 'currentDate':
       case 'startDate':
+      case 'showWeekNumbers':
+      case 'weekNumberRule':
         this.cleanWorkSpace();
         break;
       case 'groups':

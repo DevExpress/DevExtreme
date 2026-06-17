@@ -120,7 +120,14 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   getWorkSpaceLeftOffset(): number {
-    return 0;
+    let result = 0;
+    if (this.option().showWeekNumbers && hasWindow()) {
+      const $weekCell = this.$element().find('.dx-scheduler-week-number-cell').first();
+      if ($weekCell.length) {
+        result = Math.round(getBoundingRect($weekCell.get(0)).width);
+      }
+    }
+    return result;
   }
 
   needApplyCollectorOffset(): boolean {
@@ -134,6 +141,19 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   renderRAllDayPanel(): void {}
 
   renderRTimeTable(): void {}
+
+  protected override getRDateTableProps(): ReturnType<SchedulerWorkSpace['getRDateTableProps']> & {
+    showWeekNumbers: boolean | undefined;
+    weekNumberRule: string | undefined;
+    firstDayOfWeek: number | undefined;
+  } {
+    return {
+      ...super.getRDateTableProps(),
+      showWeekNumbers: this.option().showWeekNumbers,
+      weekNumberRule: this.option().weekNumberRule,
+      firstDayOfWeek: this.option().firstDayOfWeek,
+    };
+  }
 
   renderRDateTable(): void {
     utils.renovation.renderComponent(
