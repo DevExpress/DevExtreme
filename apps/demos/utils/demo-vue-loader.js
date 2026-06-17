@@ -32,18 +32,16 @@ function ensureTranslateSFC() {
   });
 }
 
-module.exports.translate = function () {
-  return function (load) {
-    return ensureTranslateSFC().then(() => {
-      const loadOpts = load.metadata && load.metadata.typescriptOptions;
-      const tsCompilerOptions = loadOpts
-        ? { ...getDemoTsCompilerOptions(), ...loadOpts }
-        : getDemoTsCompilerOptions();
+module.exports.translate = function translate(load) {
+  return ensureTranslateSFC().then(() => {
+    const loadOpts = load.metadata && load.metadata.typescriptOptions;
+    const tsCompilerOptions = loadOpts
+      ? { ...getDemoTsCompilerOptions(), ...loadOpts }
+      : getDemoTsCompilerOptions();
 
-      load.source = translateSFC(load.source, true, {
-        compilerOptions: tsCompilerOptions,
-      });
-      return load.source;
+    load.source = translateSFC(load.source, true, {
+      compilerOptions: tsCompilerOptions,
     });
-  };
-}();
+    return load.source;
+  });
+};
