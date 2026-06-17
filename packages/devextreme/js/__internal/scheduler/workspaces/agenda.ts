@@ -511,7 +511,7 @@ class SchedulerAgenda extends WorkSpace {
 
     currentDateNormalized.setHours(endDayHour);
 
-    const result = currentDateNormalized.setDate(currentDate.getDate()
+    const result = currentDateNormalized.setDate(currentDateNormalized.getDate()
       + agendaDuration - 1) - 60000;
 
     return new Date(result);
