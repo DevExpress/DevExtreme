@@ -1709,19 +1709,17 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private normalizeCellData(cellData: Partial<ViewCellData>): NormalizedCellData {
-    const startDateUTC = cellData.startDate
-      && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid');
-    const endDateUTC = cellData.endDate
-      && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid');
-    return {
+    const normalizedCellData: NormalizedCellData = {
       startDate: cellData.startDate ?? new Date(),
       endDate: cellData.endDate ?? new Date(),
-      ...(startDateUTC !== undefined && { startDateUTC }),
-      ...(endDateUTC !== undefined && { endDateUTC }),
-      ...(cellData.allDay !== undefined && { allDay: cellData.allDay }),
-      ...(cellData.groups !== undefined && { groups: { ...cellData.groups } }),
+      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid'),
+      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid'),
+      groups: cellData.groups,
       groupIndex: cellData.groupIndex,
+      allDay: cellData.allDay,
     };
+
+    return extend(true, {}, normalizedCellData) as NormalizedCellData;
   }
 
   private getSelectedCellsData(): NormalizedCellData[] {
