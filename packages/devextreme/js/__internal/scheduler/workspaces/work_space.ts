@@ -537,7 +537,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _supportedKeys(): SupportedKeys {
-    const keyClickHandler = (
+    const enterKeydownHandler = (
       e: KeyboardEvent,
     ): void => {
       e.preventDefault();
@@ -593,26 +593,26 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           isRTL,
           isGroupedByDate,
           groupCount,
-          isMultiSelection: Boolean(isMultiSelection),
+          isMultiSelection,
           isMultiSelectionAllowed,
           viewType: this.type,
           key,
           getCellDataByPosition: this.viewDataProvider.getCellData.bind(this.viewDataProvider),
-          isAllDayPanelCell: Boolean(isAllDayPanelCell),
+          isAllDayPanelCell,
           focusedCellData,
         });
 
         this.processNextSelectedCell(
           nextCellData,
           focusedCellData,
-          Boolean(isMultiSelection) && isMultiSelectionAllowed,
+          isMultiSelection && isMultiSelectionAllowed,
         );
       }
     };
 
     const supportedKeys: SupportedKeys = {
-      enter: keyClickHandler,
-      space: keyClickHandler,
+      enter: enterKeydownHandler,
+      space: enterKeydownHandler,
       downArrow: (e) => {
         onArrowPressed(e, 'down');
       },
