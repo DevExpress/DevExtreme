@@ -48,8 +48,8 @@ type SelectedItemsMap = Record<string, TagBoxItem>;
 interface FilterCreatorInstance {
   getCombinedFilter: (
     keyExpr: string | ((item: unknown) => unknown) | undefined,
-    dataSourceFilter: unknown,
-  ) => unknown;
+    dataSourceFilter: unknown[] | null,
+  ) => unknown[] | undefined;
   getLocalFilter: (keyGetter: (item: unknown) => unknown) => (item: unknown) => boolean;
 }
 
@@ -97,7 +97,7 @@ class TagBox<
 > extends SelectBox<TProperties> {
   _$focusedTag?: dxElementWrapper;
 
-  _$tagsContainer!: dxElementWrapper;
+  _$tagsContainer?: dxElementWrapper;
 
   _loadFilteredItemsPromise?: DeferredObj<unknown>;
 
@@ -107,7 +107,7 @@ class TagBox<
 
   _multiTagPreparingAction?: (event?: MultiTagPreparingArgs) => void;
 
-  _valuesToUpdate?: unknown[];
+  _valuesToUpdate?: TagBoxItem[];
 
   _preserveFocusedTag?: boolean;
 
@@ -123,9 +123,9 @@ class TagBox<
 
   _tagElementsCache?: dxElementWrapper;
 
-  _selectedItems?: unknown[];
+  _selectedItems?: TagBoxItem[];
 
-  _tagsToRender?: unknown[];
+  _tagsToRender?: TagBoxItem[];
 
   _supportedKeys(): Record<
     string,
@@ -324,7 +324,7 @@ class TagBox<
 
     this._toggleFocusClass(false, this._$focusedTag);
     this._updateInputAriaActiveDescendant();
-    delete this._$focusedTag;
+    this._$focusedTag = undefined;
   }
 
   _focusClassTarget($element: dxElementWrapper): dxElementWrapper {
@@ -336,7 +336,7 @@ class TagBox<
   }
 
   _getLabelContainer(): dxElementWrapper {
-    return this._$tagsContainer;
+    return this._$tagsContainer ?? super._getLabelContainer();
   }
 
   _getFieldElement(): dxElementWrapper {
@@ -369,6 +369,10 @@ class TagBox<
   }
 
   _getBorderPosition(direction: 'start' | 'end'): number {
+    if (!this._$tagsContainer) {
+      return 0;
+    }
+
     const { rtlEnabled } = this.option();
     const isScrollLeft = xor(direction === 'end', Boolean(rtlEnabled));
 
@@ -381,11 +385,16 @@ class TagBox<
   }
 
   _getFocusedTagPosition(direction: 'next' | 'prev'): number {
+    if (!this._$tagsContainer) {
+      return 0;
+    }
+
     const { rtlEnabled } = this.option();
     const isScrollLeft = xor(direction === 'next', Boolean(rtlEnabled));
 
     let { left: scrollOffset = 0 } = this._$focusedTag?.position() || { };
-    let scrollLeft = this._$tagsContainer.scrollLeft() as unknown as number;
+    // @ts-expect-error fix on renderer level
+    let scrollLeft = this._$tagsContainer.scrollLeft() as number;
 
     if (isScrollLeft) {
       scrollOffset += getOuterWidth(this._$focusedTag, true) - getOuterWidth(this._$tagsContainer);
@@ -659,6 +668,10 @@ class TagBox<
   }
 
   _tagContainerMouseWheelHandler(e: DxMouseWheelEvent): boolean | undefined {
+    if (!this._$tagsContainer) {
+      return undefined;
+    }
+
     const scrollLeft = this._$tagsContainer.scrollLeft();
     const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
@@ -849,7 +862,7 @@ class TagBox<
     this._updateWidgetHeight();
   }
 
-  _getValue(): unknown[] {
+  _getValue(): TagBoxItem[] {
     const { value } = this.option();
 
     return value || [];
@@ -897,7 +910,7 @@ class TagBox<
     return $tag;
   }
 
-  _getFilter(creator: FilterCreatorInstance): unknown {
+  _getFilter(creator: FilterCreatorInstance): unknown[] | undefined {
     // @ts-expect-error fix argument type in m_data_controller.ts
     const dataSourceFilter = this._dataController.filter();
     const { valueExpr, maxFilterQueryLength } = this.option();
@@ -1781,9 +1794,10 @@ class TagBox<
 
   _clean(): void {
     super._clean();
-    delete this._valuesToUpdate;
-    delete this._tagTemplate;
-    delete this._tagsToRender;
+    this._valuesToUpdate = undefined;
+    this._tagTemplate = undefined;
+    this._tagsToRender = undefined;
+    this._$tagsContainer = undefined;
   }
 
   _getSelectedItemsDifference(
