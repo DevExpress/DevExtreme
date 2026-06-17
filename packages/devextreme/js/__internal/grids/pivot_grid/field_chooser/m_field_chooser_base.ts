@@ -355,10 +355,10 @@ export class FieldChooserBase extends mixinWidget {
         return;
       }
 
-      const isKeyboardOrClick = e.type === clickEventName
+      const isClick = e.type === clickEventName
         || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '));
       const isAltArrowDown = e.type === 'keydown' && e.altKey && e.key === 'ArrowDown';
-      const isHeaderFilterIconInteraction = isKeyboardOrClick
+      const isHeaderFilterIconInteraction = isClick
         && $(e.target).hasClass(CLASSES.headerFilter);
 
       if (isAltArrowDown || isHeaderFilterIconInteraction) {
@@ -370,7 +370,7 @@ export class FieldChooserBase extends mixinWidget {
         return;
       }
 
-      if (!isKeyboardOrClick) {
+      if (!isClick) {
         return;
       }
 
