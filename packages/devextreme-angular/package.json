@@ -47,7 +47,6 @@
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "@webcomponents/custom-elements": "1.6.0",
-    "codelyzer": "6.0.2",
     "core-js": "2.6.12",
     "cross-env": "7.0.3",
     "css-loader": "6.10.0",
