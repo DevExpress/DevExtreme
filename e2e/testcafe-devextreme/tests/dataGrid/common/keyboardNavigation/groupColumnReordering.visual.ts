@@ -17,7 +17,7 @@ const DATA_GRID_SELECTOR = '#container';
 
 // Move grouped columns
 [true, false].forEach((rtlEnabled) => {
-  test.only(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
+  test(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
