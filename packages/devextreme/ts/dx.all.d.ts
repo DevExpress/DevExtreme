@@ -23212,7 +23212,12 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxMap>;
-    export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
+    export type MapProvider =
+      | 'azure'
+      | 'bing'
+      | 'google'
+      | 'googleStatic'
+      | 'osm';
     export type MapType = 'hybrid' | 'roadmap' | 'satellite';
     /**
      * [descr:_ui_map_MarkerAddedEvent]
@@ -23244,6 +23249,55 @@ declare module DevExpress.ui {
     export type OptionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxMap> &
         DevExpress.common.core.events.ChangedOptionInfo;
+    /**
+     * [descr:OSMGeocodeFunction]
+     */
+    export type OSMGeocodeFunction = (
+      query: string
+    ) => Promise<MapLocation | null | undefined>;
+    /**
+     * [descr:OSMGetRouteFunction]
+     */
+    export type OSMGetRouteFunction = (
+      params: OSMGetRouteParams
+    ) => Promise<Array<[number, number]>>;
+    /**
+     * [descr:OSMGetRouteParams]
+     */
+    export interface OSMGetRouteParams {
+      locations: Array<MapLocation>;
+      mode: RouteMode | string;
+    }
+    /**
+     * [descr:OSMTileServer]
+     */
+    export type OSMTileServer =
+      | string
+      | OSMTileServerConfig
+      | ((
+          type: MapType | string
+        ) => string | OSMTileServerConfig | null | undefined);
+    /**
+     * [descr:OSMTileServerConfig]
+     */
+    export interface OSMTileServerConfig {
+      /**
+       * [descr:OSMTileServerConfig.url]
+       */
+      url: string;
+      /**
+       * [descr:OSMTileServerConfig.attribution]
+       */
+      attribution?: string;
+      /**
+       * [descr:OSMTileServerConfig.subdomains]
+       */
+      subdomains?: string | Array<string>;
+      /**
+       * [descr:OSMTileServerConfig.maxZoom]
+       */
+      maxZoom?: number;
+    }
     export type Properties = dxMapOptions;
     /**
      * [descr:_ui_map_ReadyEvent]
@@ -23407,6 +23461,18 @@ declare module DevExpress.ui {
        * @deprecated [depNote:dxMapOptions.providerConfig.useAdvancedMarkers]
        */
       useAdvancedMarkers?: boolean;
+      /**
+       * [descr:dxMapOptions.providerConfig.tileServer]
+       */
+      tileServer?: DevExpress.ui.dxMap.OSMTileServer;
+      /**
+       * [descr:dxMapOptions.providerConfig.geocodeLocation]
+       */
+      geocodeLocation?: DevExpress.ui.dxMap.OSMGeocodeFunction;
+      /**
+       * [descr:dxMapOptions.providerConfig.getRoute]
+       */
+      getRoute?: DevExpress.ui.dxMap.OSMGetRouteFunction;
     };
     /**
      * [descr:dxMapOptions.routes]

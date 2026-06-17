@@ -14,9 +14,64 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
+export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic' | 'osm';
 /** @public */
 export type RouteMode = 'driving' | 'walking';
+
+/**
+ * @docid
+ * @public
+ */
+export type OSMGeocodeFunction = (query: string) => Promise<MapLocation | null | undefined>;
+
+/**
+ * @docid
+ * @public
+ */
+export interface OSMGetRouteParams {
+  locations: Array<MapLocation>;
+  mode: RouteMode | string;
+}
+
+/**
+ * @docid
+ * @public
+ */
+export type OSMGetRouteFunction = (params: OSMGetRouteParams) => Promise<Array<[number, number]>>;
+
+/**
+ * @docid
+ * @public
+ */
+export interface OSMTileServerConfig {
+  /**
+   * @docid
+   */
+  url: string;
+  /**
+   * @docid
+   * @default ''
+   */
+  attribution?: string;
+  /**
+   * @docid
+   * @default 'abc'
+   */
+  subdomains?: string | Array<string>;
+  /**
+   * @docid
+   * @default 19
+   */
+  maxZoom?: number;
+}
+
+/**
+ * @docid
+ * @public
+ */
+export type OSMTileServer = string | OSMTileServerConfig
+| ((type: MapType | string) => string | OSMTileServerConfig | null | undefined);
+
 /** @public */
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
 
@@ -336,6 +391,24 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @deprecated
        */
       useAdvancedMarkers?: boolean;
+      /**
+       * @docid
+       * @public
+       * @default undefined
+       */
+      tileServer?: OSMTileServer;
+      /**
+       * @docid
+       * @public
+       * @default undefined
+       */
+      geocodeLocation?: OSMGeocodeFunction;
+      /**
+       * @docid
+       * @public
+       * @default undefined
+       */
+      getRoute?: OSMGetRouteFunction;
     };
     /**
      * @docid

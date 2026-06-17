@@ -57,6 +57,10 @@ class Provider {
     Class.abstract();
   }
 
+  updateTileServer(): Promise<unknown> {
+    return Promise.resolve();
+  }
+
   updateDisabled(): void {
     Class.abstract();
   }
@@ -173,7 +177,9 @@ class Provider {
       return key;
     }
     if (isPlainObject(key)) {
-      return key[providerName] ?? '';
+      // apiKey only carries keyed providers (azure/bing/google/googleStatic); other providers
+      // such as 'osm' simply have no entry, so index through a string-keyed view.
+      return (key as Record<string, string | undefined>)[providerName] ?? '';
     }
     return '';
   }

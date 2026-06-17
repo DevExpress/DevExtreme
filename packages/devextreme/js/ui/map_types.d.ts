@@ -1,6 +1,11 @@
 export {
   MapProvider,
   RouteMode,
+  OSMGeocodeFunction,
+  OSMGetRouteParams,
+  OSMGetRouteFunction,
+  OSMTileServerConfig,
+  OSMTileServer,
   MapType,
   ClickEvent,
   DisposingEvent,

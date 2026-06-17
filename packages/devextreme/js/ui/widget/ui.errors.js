@@ -406,4 +406,16 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1029
      */
     W1029: '\'hiddenWeekDays\' must leave at least one weekday visible.',
+    /**
+     * @name ErrorsUIWidgets.W1030
+     */
+    W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option. Note that the public OpenStreetMap tile server (tile.openstreetmap.org) must not be used in production or commercial applications per its Tile Usage Policy (https://operations.osmfoundation.org/policies/tiles/); use a self-hosted or commercial tile provider instead.',
+    /**
+     * @name ErrorsUIWidgets.W1031
+     */
+    W1031: 'A string location ("{0}") was used with the OSM map provider but no "providerConfig.geocodeLocation" callback is configured, so the location resolved to (0, 0). Specify the "providerConfig.geocodeLocation" option to geocode string addresses (for example, via your own Nominatim instance).',
+    /**
+     * @name ErrorsUIWidgets.W1032
+     */
+    W1032: 'The OSM map provider tile server is configured without an "attribution". When you display OpenStreetMap data, attribution is obligatory (for example, "© OpenStreetMap contributors"); your tile provider may require its own attribution as well. Set the "attribution" field of the "providerConfig.tileServer" option.',
 });
