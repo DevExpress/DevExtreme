@@ -92,7 +92,7 @@ test('Should set correct start and end dates in drag&dropped appointment', async
   const cellToMoveElement = secondScheduler.getDateTableCell(0, 0);
 
   // The first scheduler uses an async data source, so make sure its appointment is
-  // rendered before dragging — otherwise dragToElement may grab a stale position.
+  // rendered before dragging - otherwise dragToElement may grab a stale position.
   await t.expect(firstScheduler.getAppointmentCount()).eql(1);
 
   // Dropping an appointment onto another scheduler occasionally fails to register on a
