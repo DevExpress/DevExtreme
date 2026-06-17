@@ -45,57 +45,20 @@ const getTestSpecificSkipRules = (testName) => {
 };
 
 const getIgnoredRules = (testName) => {
-  const ignoredRules = [];
-
-  // False positive: axe-core 4.11 tightened scrollable-region-focusable to require tabindex on
-  // overflow elements, but .dx-scrollable-container in these components handles keyboard navigation
-  // at the widget level rather than on the container element itself.
-  // Only suppressed for components confirmed to trigger this false positive.
-  const scrollableFalsePositiveComponents = [
-    'Chat', 'Diagram', 'Gantt', 'PivotGrid', 'Scheduler', 
-    'ScrollView', 'Sortable', 'TileView', 'TreeView',
-  ];
-  if (scrollableFalsePositiveComponents.includes(testName.split('-')[0])) {
-    ignoredRules.push('scrollable-region-focusable');
-  }
-
-  if ([
-      // False positive: contrast rules do not apply to disabled tags
-      'Accordion-Overview',
-      'TagBox-Overview',
-      'TreeList-StatePersistence',
-      // False positive: contrast rules do not apply to custom orange color
-      'CardView-FieldTemplate',
-      // False positive: contrast rules do not apply to read-only editors on the custom option panel background
-      'VectorMap-DynamicViewport',
-      // False positive: Diagram uses custom shape colors that do not meet contrast requirements
-      'Diagram-Adaptability',
-      'Diagram-AdvancedDataBinding',
-      'Diagram-Containers',
-      'Diagram-CustomShapesWithIcons',
-      'Diagram-CustomShapesWithTemplates',
-      'Diagram-CustomShapesWithTemplatesWithEditing',
-      'Diagram-CustomShapesWithTexts',
-      'Diagram-ImagesInShapes',
-      'Diagram-ItemSelection',
-      'Diagram-NodesAndEdgesArrays',
-      'Diagram-NodesArrayHierarchicalStructure',
-      'Diagram-NodesArrayPlainStructure',
-      'Diagram-OperationRestrictions',
-      'Diagram-Overview',
-      'Diagram-ReadOnly',
-      'Diagram-SimpleView',
-      'Diagram-UICustomization',
-      'Diagram-WebAPIService',
-    ].includes(testName)
-  ) {
-    ignoredRules.push('color-contrast');
-  }
 
   const specificRules = {
     'Calendar-MultipleSelection': ['empty-table-header'],
 
     'DataGrid-EditStateManagement': ['aria-required-parent'],
+
+    'Form-Grouping': ['aria-tab-name'],
+
+    'Stepper-StepTemplate': ['aria-tab-name'],
+
+    'TabPanel-Overview': ['aria-tab-name'],
+
+    'Tabs-Overview': ['aria-tab-name'],
+    'Tabs-Selection': ['aria-tab-name'],
 
     'Diagram-Adaptability': ['aria-dialog-name', 'label'],
     'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
@@ -133,7 +96,6 @@ const getIgnoredRules = (testName) => {
   };
 
   return [
-    ...ignoredRules,
     ...(specificRules[testName] || []),
   ];
 };
