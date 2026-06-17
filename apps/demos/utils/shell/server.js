@@ -5,6 +5,7 @@ const serveStatic = require('serve-static');
 const serveIndex = require('serve-index');
 const cookieParser = require('cookie-parser');
 const open = require('open');
+const rateLimit = require('express-rate-limit');
 const { join, normalize } = require('path');
 const { readFileSync, readdirSync } = require('fs');
 
@@ -42,12 +43,17 @@ const demoIndexHandler = (request, response) => {
 const app = express();
 app.use(cookieParser());
 
+const demoLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
 app.get('/apps/demos', (request, response) => response.redirect('/'));
 app.get(`/apps/demos/${indexFileName}`, (request, response) => response.redirect('/'));
-app.get('/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
-app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
+app.get('/Demos/:widget/:name/:approach', demoLimiter, demoIndexHandler);
+app.get(`/Demos/:widget/:name/:approach/${indexFileName}`, demoLimiter, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', demoLimiter, demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoLimiter, demoIndexHandler);
 app.get('/themes', (request, response) => response.send(getAvailableThemes));
 app.use(
   serveStatic(root, { index: [indexFileName] }),
