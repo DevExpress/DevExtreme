@@ -1,4 +1,4 @@
-import TagBox from '../__internal/ui/m_tag_box';
+import TagBox from '../__internal/ui/tag_box';
 
 export default TagBox;
 // STYLE tagBox
