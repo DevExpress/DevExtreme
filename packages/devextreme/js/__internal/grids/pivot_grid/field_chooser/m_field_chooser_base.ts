@@ -13,7 +13,6 @@ import { isDefined } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 import {
-  headerFilterMixin,
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
 } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
@@ -80,15 +79,19 @@ function getMainGroupField(dataSource, sourceField) {
   return field;
 }
 
+function fieldHasHeaderFilter(dataSource, field): boolean {
+  const mainGroupField = getMainGroupField(dataSource, field);
+  const isFirstInGroup = field.groupIndex === 0 || !isDefined(field.groupIndex);
+  return mainGroupField.allowFiltering && isFirstInGroup && field.area !== 'data';
+}
+
 function getStringState(state) {
   state = state || {};
   return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
 }
 
-const mixinWidget = headerFilterMixin(
-  sortingMixin(
-    columnStateMixin(Widget as any),
-  ),
+const mixinWidget = sortingMixin(
+  columnStateMixin(Widget as any),
 );
 
 export class FieldChooserBase extends mixinWidget {
@@ -185,7 +188,6 @@ export class FieldChooserBase extends mixinWidget {
       .attr('tabIndex', 0)
       .data('field', field)
       .append($fieldContent);
-    const mainGroupField = getMainGroupField(that._dataSource, field);
 
     if (field.area !== 'data') {
       if (field.allowSorting) {
@@ -202,18 +204,7 @@ export class FieldChooserBase extends mixinWidget {
         });
       }
 
-      that._applyColumnState({
-        name: 'headerFilter',
-        rootElement: $fieldElement,
-        column: {
-          alignment: that.option('rtlEnabled') ? 'right' : 'left',
-          filterValues: mainGroupField.filterValues,
-          allowFiltering: mainGroupField.allowFiltering && !field.groupIndex,
-          allowSorting: field.allowSorting,
-          caption,
-        },
-        showColumnLines,
-      });
+      that._renderHeaderFilterIcon($fieldElement, field, showColumnLines);
     }
 
     if (field.groupName) {
@@ -358,20 +349,32 @@ export class FieldChooserBase extends mixinWidget {
     const targetElement = element ?? this.$element();
 
     const handler = (e) => {
-      const shouldHandle = e.type === clickEventName
-        || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '));
+      const field: any = $(e.currentTarget).data('field');
 
-      if (!shouldHandle) {
+      if (!field) {
         return;
       }
 
-      const field: any = $(e.currentTarget).data('field');
-      const isHeaderFilter = $(e.target).hasClass(CLASSES.headerFilter);
+      const isClick = e.type === clickEventName
+        || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '));
+      const isAltArrowDown = e.type === 'keydown' && e.altKey && e.key === 'ArrowDown';
+      const isHeaderFilterIconInteraction = isClick
+        && $(e.target).hasClass(CLASSES.headerFilter);
 
-      if (isHeaderFilter) {
-        e.preventDefault();
-        this.handleHeaderFilterIconClick(e, field);
-      } else if (field.allowSorting && field.area !== 'data') {
+      if (isAltArrowDown || isHeaderFilterIconInteraction) {
+        if (fieldHasHeaderFilter(this._dataSource, field)) {
+          e.preventDefault();
+          this.handleHeaderFilterIconClick(e, field);
+        }
+
+        return;
+      }
+
+      if (!isClick) {
+        return;
+      }
+
+      if (field.allowSorting && field.area !== 'data') {
         e.preventDefault();
         this.handleFieldClick(field);
       }
@@ -426,6 +429,30 @@ export class FieldChooserBase extends mixinWidget {
     if (this._focusedFieldIndex !== -1) {
       this.focusFieldElement(this._focusedFieldIndex);
     }
+  }
+
+  private _renderHeaderFilterIcon($fieldElement, field, showColumnLines): void {
+    if (!fieldHasHeaderFilter(this._dataSource, field)) {
+      return;
+    }
+
+    const mainGroupField = getMainGroupField(this._dataSource, field);
+    const isEmpty = !mainGroupField.filterValues?.length;
+    const $icon = $('<span>').addClass(CLASSES.headerFilter).toggleClass('dx-header-filter-empty', isEmpty);
+
+    let $container = this._getIndicatorContainer($fieldElement);
+
+    if (!$container.length) {
+      const rtlEnabled = this.option('rtlEnabled') as boolean;
+      const indicatorAlignment = rtlEnabled ? 'left' : 'right';
+
+      $container = $('<div>').addClass('dx-column-indicators');
+      $container.css('float', showColumnLines ? indicatorAlignment : null);
+
+      $container[!showColumnLines && rtlEnabled ? 'appendTo' : 'prependTo']($fieldElement);
+    }
+
+    $container.append($icon);
   }
 
   private handleHeaderFilterIconClick(e, field): void {
