@@ -447,7 +447,6 @@ export class FieldChooserBase extends mixinWidget {
       const indicatorAlignment = rtlEnabled ? 'left' : 'right';
 
       $container = $('<div>').addClass('dx-column-indicators');
-      this.setAria('role', 'presentation', $container);
       $container.css('float', showColumnLines ? indicatorAlignment : null);
 
       $container[!showColumnLines && rtlEnabled ? 'appendTo' : 'prependTo']($fieldElement);
