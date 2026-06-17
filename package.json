@@ -40,7 +40,6 @@
     "@vue/shared": "3.4.27",
     "axe-core": "catalog:",
     "cheerio": "1.0.0-rc.10",
-    "codelyzer": "6.0.2",
     "devextreme-internal-tools": "catalog:tools",
     "devextreme-metadata": "workspace:*",
     "http-server": "14.1.1",
