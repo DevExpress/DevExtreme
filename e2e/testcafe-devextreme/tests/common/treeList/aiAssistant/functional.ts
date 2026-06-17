@@ -88,9 +88,6 @@ const createTreeListWithAIAssistant = async (
 fixture`AI Assistant - TreeList`
   .page(AI_INTEGRATION_PAGE);
 
-// === §6.1 grid_core-level commands behave identically on TreeList ===
-
-// 6.1.1
 test('Toolbar button, popup and chat behave like DataGrid (sorting)', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -114,7 +111,6 @@ test('Toolbar button, popup and chat behave like DataGrid (sorting)', async (t) 
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 6.1.2
 test('Searching behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -135,7 +131,6 @@ test('Searching behaves like DataGrid', async (t) => {
   { actions: [{ name: 'searching', args: { text: 'Bob' } }] },
 ]));
 
-// 6.1.3
 test('Paging (pageSize) behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -157,7 +152,6 @@ test('Paging (pageSize) behaves like DataGrid', async (t) => {
   [{ actions: [{ name: 'pageSize', args: { pageSize: 50 } }] }],
 ));
 
-// 6.1.4
 test('Column visibility behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -179,7 +173,6 @@ test('Column visibility behaves like DataGrid', async (t) => {
   [{ actions: [{ name: 'columnsVisibility', args: { dataField: 'value', visible: false } }] }],
 ));
 
-// 6.1.4
 test('Column reorder behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -202,7 +195,6 @@ test('Column reorder behaves like DataGrid', async (t) => {
   [{ actions: [{ name: 'columnsReorder', args: { dataField: 'value', visibleIndex: 0 } }] }],
 ));
 
-// 6.1.4 — columnsPinning parity.
 test('Column pinning behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -230,7 +222,6 @@ test('Column pinning behaves like DataGrid', async (t) => {
   }],
 ));
 
-// 6.1.4 — columnsResize parity.
 test('Column resize behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -252,7 +243,6 @@ test('Column resize behaves like DataGrid', async (t) => {
   [{ actions: [{ name: 'columnsResize', args: { dataField: 'value', width: 250 } }] }],
 ));
 
-// 6.1.5
 test('Selection (selectByKeys) behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -274,7 +264,6 @@ test('Selection (selectByKeys) behaves like DataGrid', async (t) => {
   [{ actions: [{ name: 'selectByKeys', args: { keys: [2], preserve: false } }] }],
 ));
 
-// 6.1.6
 test('Row focusing (focusRowByKey) behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -296,7 +285,6 @@ test('Row focusing (focusRowByKey) behaves like DataGrid', async (t) => {
   [{ actions: [{ name: 'focusRowByKey', args: { key: 2 } }] }],
 ));
 
-// 6.1.8
 test('Error paths behave like DataGrid (invalid response)', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -318,7 +306,6 @@ test('Error paths behave like DataGrid (invalid response)', async (t) => {
   { actions: null },
 ]));
 
-// 6.1.9
 test('In-flight lock behaves like DataGrid', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -337,9 +324,6 @@ test('In-flight lock behaves like DataGrid', async (t) => {
   await t.expect(aiChat.isClearChatDisabled()).ok();
 }).before(async () => createTreeListWithAIAssistant(treeListBase(), [PENDING]));
 
-// === §6.2 DataGrid-only commands are not offered for TreeList ===
-
-// 6.2.1
 test('grouping command is absent from the TreeList response schema', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -364,7 +348,6 @@ test('grouping command is absent from the TreeList response schema', async (t) =
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// 6.2.2
 test('summary commands are absent from the TreeList response schema', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -389,9 +372,6 @@ test('summary commands are absent from the TreeList response schema', async (t) 
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
 ]));
 
-// === §6.3 Hierarchical-data peculiarities ===
-
-// 6.3.1
 test('Filtering applies on hierarchical data', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -427,7 +407,6 @@ test('Filtering applies on hierarchical data', async (t) => {
   },
 ]));
 
-// 6.3.2
 test('Sorting keeps nested children grouped under their parent', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
@@ -468,7 +447,6 @@ test('Sorting keeps nested children grouped under their parent', async (t) => {
   [{ actions: [{ name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } }] }],
 ));
 
-// 6.3.3
 test('Selecting a parent row applies per TreeList selection rules', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
 
