@@ -1,5 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
 
+import type { ColorParseResult } from './utils/color.helpers';
+import {
+  hslToRgb,
+  hsvToRgb,
+  isIntegerBetweenMinAndMax,
+  normalize, parseColor, toHexFromRgb, toHslFromRgb, toHsvFromRgb,
+} from './utils/color.helpers';
+
 const standardColorNames = {
   aliceblue: 'f0f8ff',
   antiquewhite: 'faebd7',
@@ -154,439 +162,117 @@ const standardColorNames = {
   yellowgreen: '9acd32',
 };
 
-// array of color definition objects
-const standardColorTypes = [
-  {
-    re: /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,
-    process(colorString) {
-      return [
-        parseInt(colorString[1], 10),
-        parseInt(colorString[2], 10),
-        parseInt(colorString[3], 10),
-      ];
-    },
-  },
-  {
-    re: /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*\.*\d+)\)$/,
-    process(colorString) {
-      return [
-        parseInt(colorString[1], 10),
-        parseInt(colorString[2], 10),
-        parseInt(colorString[3], 10),
-        parseFloat(colorString[4]),
-      ];
-    },
-  },
-  {
-    re: /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/,
-    process(colorString) {
-      return [
-        parseInt(colorString[1], 16),
-        parseInt(colorString[2], 16),
-        parseInt(colorString[3], 16),
-      ];
-    },
-  },
-  {
-    re: /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/,
-    process(colorString) {
-      return [
-        parseInt(colorString[1], 16),
-        parseInt(colorString[2], 16),
-        parseInt(colorString[3], 16),
-        Number((parseInt(colorString[4], 16) / 255).toFixed(2)),
-      ];
-    },
-  },
-  {
-    re: /^#([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})$/,
-    process(colorString) {
-      return [
-        parseInt(colorString[1] + colorString[1], 16),
-        parseInt(colorString[2] + colorString[2], 16),
-        parseInt(colorString[3] + colorString[3], 16),
-        Number((parseInt(colorString[4] + colorString[4], 16) / 255).toFixed(2)),
-      ];
-    },
-  },
-  {
-    re: /^#([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})$/,
-    process(colorString) {
-      return [
-        parseInt(colorString[1] + colorString[1], 16),
-        parseInt(colorString[2] + colorString[2], 16),
-        parseInt(colorString[3] + colorString[3], 16),
-      ];
-    },
-  },
-  {
-    re: /^hsv\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,
-    process(colorString) {
-      const h = parseInt(colorString[1], 10);
-      const s = parseInt(colorString[2], 10);
-      const v = parseInt(colorString[3], 10);
-      const rgb = hsvToRgb(h, s, v);
+export class Color {
+  baseColor?: string | null;
 
-      return [
-        rgb[0],
-        rgb[1],
-        rgb[2],
-        1,
-        [h, s, v],
-      ];
-    },
-  },
-  {
-    re: /^hsl\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,
-    process(colorString) {
-      const h = parseInt(colorString[1], 10);
-      const s = parseInt(colorString[2], 10);
-      const l = parseInt(colorString[3], 10);
-      const rgb = hslToRgb(h, s, l);
+  r!: number;
 
-      return [
-        rgb[0],
-        rgb[1],
-        rgb[2],
-        1,
-        null,
-        [h, s, l],
-      ];
-    },
-  },
-];
+  g!: number;
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const _round = Math.round;
+  b!: number;
 
-export interface ColorInstance {
-  baseColor: string | undefined;
-  r: number;
-  g: number;
-  b: number;
-  a: number;
-  hsv: { h: number; s: number; v: number };
-  hsl: { h: number; s: number; l: number };
-  colorIsInvalid: boolean;
-  highlight: (step?: number) => string;
-  darken: (step?: number) => string;
-  alter: (step: number) => ColorInstance;
-  blend: (blendColor: ColorInstance | string, opacity: number) => ColorInstance;
-  toHex: () => string;
-  getPureColor: () => ColorInstance;
-  isValidHex: (hex: string) => boolean;
-  isValidRGB: (r: number | undefined, g: number | undefined, b: number | undefined) => boolean;
-  isValidAlpha: (a: number) => boolean;
-  fromHSL: (hsl: { h: number; s: number; l: number }) => ColorInstance;
-}
+  a!: number;
 
-function Color(value?) {
-  this.baseColor = value;
-  let color;
-  if (value) {
-    color = String(value).toLowerCase().replace(/ /g, '');
-    color = standardColorNames[color] ? `#${standardColorNames[color]}` : color;
-    color = parseColor(color);
-  }
-  if (!color) {
-    this.colorIsInvalid = true;
-  }
+  hsv!: { h: number; s: number; v: number };
 
-  color = color || {};
-  this.r = normalize(color[0]);
-  this.g = normalize(color[1]);
-  this.b = normalize(color[2]);
-  this.a = normalize(color[3], 1, 1);
-  if (color[4]) {
-    this.hsv = { h: color[4][0], s: color[4][1], v: color[4][2] };
-  } else {
-    this.hsv = toHsvFromRgb(this.r, this.g, this.b);
-  }
-  if (color[5]) {
-    this.hsl = { h: color[5][0], s: color[5][1], l: color[5][2] };
-  } else {
-    this.hsl = toHslFromRgb(this.r, this.g, this.b);
-  }
-}
+  hsl!: { h: number; s: number; l: number };
 
-function parseColor(color) {
-  if (color === 'transparent') {
-    return [0, 0, 0, 0];
-  }
+  colorIsInvalid = false;
 
-  let i = 0;
-  const ii = standardColorTypes.length;
-  let str;
-  for (; i < ii; ++i) {
-    str = standardColorTypes[i].re.exec(color);
-    if (str) {
-      return standardColorTypes[i].process(str);
+  constructor(value?: string | null) {
+    this.baseColor = value;
+    let color: ColorParseResult | null = null;
+    if (value) {
+      let colorStr = String(value).toLowerCase().replace(/ /g, '');
+      colorStr = standardColorNames[colorStr] ? `#${standardColorNames[colorStr]}` : colorStr;
+      color = parseColor(colorStr);
     }
-  }
-  return null;
-}
-
-function normalize(colorComponent, def?, max?) {
-  def = def || 0;
-  max = max || 255;
-  return colorComponent < 0 || isNaN(colorComponent) ? def : colorComponent > max ? max : colorComponent;
-}
-
-function toHexFromRgb(r, g, b) {
-  return `#${(0X01000000 | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-}
-
-function toHsvFromRgb(r, g, b) {
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const delta = max - min;
-  let H;
-  let S;
-  let V = max;
-  S = max === 0 ? 0 : 1 - min / max;
-
-  if (max === min) {
-    H = 0;
-  } else {
-    switch (max) {
-      case r:
-        H = 60 * ((g - b) / delta);
-        if (g < b) {
-          H += 360;
-        }
-        break;
-      case g:
-        H = 60 * ((b - r) / delta) + 120;
-        break;
-      case b:
-        H = 60 * ((r - g) / delta) + 240;
-        break;
-      default:
-        break;
+    if (!color) {
+      this.colorIsInvalid = true;
     }
-  }
 
-  S *= 100;
-  V *= 100 / 255;
-
-  return {
-    h: Math.round(H),
-    s: Math.round(S),
-    v: Math.round(V),
-  };
-}
-
-function hsvToRgb(h, s, v) {
-  const index = Math.floor((h % 360) / 60);
-  const vMin = ((100 - s) * v) / 100;
-  const a = (v - vMin) * ((h % 60) / 60);
-  const vInc = vMin + a;
-  const vDec = v - a;
-
-  let r;
-  let g;
-  let b;
-
-  switch (index) {
-    case 0: r = v; g = vInc; b = vMin; break;
-    case 1: r = vDec; g = v; b = vMin; break;
-    case 2: r = vMin; g = v; b = vInc; break;
-    case 3: r = vMin; g = vDec; b = v; break;
-    case 4: r = vInc; g = vMin; b = v; break;
-    case 5: r = v; g = vMin; b = vDec; break;
-    default:
-      break;
-  }
-
-  return [Math.round(r * 2.55), Math.round(g * 2.55), Math.round(b * 2.55)];
-}
-
-function calculateHue(r, g, b, delta) {
-  const max = Math.max(r, g, b);
-  switch (max) {
-    case r:
-      return (g - b) / delta + (g < b ? 6 : 0);
-    case g:
-      return (b - r) / delta + 2;
-    case b:
-      return (r - g) / delta + 4;
-    default:
-      return undefined; // should never happen
-  }
-}
-
-function toHslFromRgb(r, g, b) {
-  r = convertTo01Bounds(r, 255);
-  g = convertTo01Bounds(g, 255);
-  b = convertTo01Bounds(b, 255);
-
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const maxMinSum = max + min;
-  let h;
-  let s;
-  const l = maxMinSum / 2;
-
-  if (max === min) {
-    h = s = 0;
-  } else {
-    const delta = max - min;
-
-    if (l > 0.5) {
-      s = delta / (2 - maxMinSum);
+    const parts = color ?? [];
+    this.r = normalize(parts[0]);
+    this.g = normalize(parts[1]);
+    this.b = normalize(parts[2]);
+    this.a = normalize(parts[3], 1, 1);
+    const hsvData = parts[4] as number[] | null | undefined;
+    if (hsvData) {
+      this.hsv = { h: hsvData[0], s: hsvData[1], v: hsvData[2] };
     } else {
-      s = delta / maxMinSum;
+      this.hsv = toHsvFromRgb(this.r, this.g, this.b);
     }
-
-    h = calculateHue(r, g, b, delta);
-    h /= 6;
+    const hslData = parts[5] as number[] | null | undefined;
+    if (hslData) {
+      this.hsl = { h: hslData[0], s: hslData[1], l: hslData[2] };
+    } else {
+      this.hsl = toHslFromRgb(this.r, this.g, this.b);
+    }
   }
 
-  return { h: _round(h * 360), s: _round(s * 100), l: _round(l * 100) };
-}
-
-function makeColorTint(colorPart, h) {
-  let colorTint = h;
-  if (colorPart === 'r') {
-    colorTint = h + 1 / 3;
-  }
-  if (colorPart === 'b') {
-    colorTint = h - 1 / 3;
+  highlight(step?: number): string {
+    const stepValue = step ?? 10;
+    return this.alter(stepValue).toHex();
   }
 
-  return colorTint;
-}
-
-function modifyColorTint(colorTint) {
-  if (colorTint < 0) {
-    colorTint += 1;
-  }
-  if (colorTint > 1) {
-    colorTint -= 1;
+  darken(step?: number): string {
+    const stepValue = step ?? 10;
+    return this.alter(-stepValue).toHex();
   }
 
-  return colorTint;
-}
-
-function hueToRgb(p, q, colorTint) {
-  colorTint = modifyColorTint(colorTint);
-  if (colorTint < 1 / 6) {
-    return p + (q - p) * 6 * colorTint;
-  }
-  if (colorTint < 1 / 2) {
-    return q;
-  }
-  if (colorTint < 2 / 3) {
-    return p + (q - p) * (2 / 3 - colorTint) * 6;
-  }
-  return p;
-}
-
-function hslToRgb(h, s, l) {
-  let r;
-  let g;
-  let b;
-
-  h = convertTo01Bounds(h, 360);
-  s = convertTo01Bounds(s, 100);
-  l = convertTo01Bounds(l, 100);
-
-  if (s === 0) {
-    r = g = b = l;
-  } else {
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-    r = hueToRgb(p, q, makeColorTint('r', h));
-    g = hueToRgb(p, q, makeColorTint('g', h));
-    b = hueToRgb(p, q, makeColorTint('b', h));
-  }
-
-  return [_round(r * 255), _round(g * 255), _round(b * 255)];
-}
-
-function convertTo01Bounds(n, max) {
-  n = Math.min(max, Math.max(0, parseFloat(n)));
-  if (Math.abs(n - max) < 0.000001) {
-    return 1;
-  }
-  return (n % max) / parseFloat(max);
-}
-
-function isIntegerBetweenMinAndMax(number, min?, max?) {
-  min = min || 0;
-  max = max || 255;
-
-  if (typeof number !== 'number'
-       || number % 1 !== 0
-       || number < min
-       || number > max
-       || isNaN(number)) {
-    return false;
-  }
-
-  return true;
-}
-
-Color.prototype = {
-  constructor: Color,
-
-  highlight(step) {
-    step = step || 10;
-    return this.alter(step).toHex();
-  },
-
-  darken(step) {
-    step = step || 10;
-    return this.alter(-step).toHex();
-  },
-
-  alter(step) {
+  alter(step: number): Color {
     const result = new Color();
     result.r = normalize(this.r + step);
     result.g = normalize(this.g + step);
     result.b = normalize(this.b + step);
     return result;
-  },
+  }
 
-  blend(blendColor, opacity) {
+  blend(blendColor: Color | string, opacity: number): Color {
     const other = blendColor instanceof Color ? blendColor : new Color(blendColor);
     const result = new Color();
-    result.r = normalize(_round(this.r * (1 - opacity) + other.r * opacity));
-    result.g = normalize(_round(this.g * (1 - opacity) + other.g * opacity));
-    result.b = normalize(_round(this.b * (1 - opacity) + other.b * opacity));
+    result.r = normalize(Math.round(this.r * (1 - opacity) + other.r * opacity));
+    result.g = normalize(Math.round(this.g * (1 - opacity) + other.g * opacity));
+    result.b = normalize(Math.round(this.b * (1 - opacity) + other.b * opacity));
     return result;
-  },
+  }
 
-  toHex() {
+  toHex(): string {
     return toHexFromRgb(this.r, this.g, this.b);
-  },
+  }
 
-  getPureColor() {
+  getPureColor(): Color {
     const rgb = hsvToRgb(this.hsv.h, 100, 100);
     return new Color(`rgb(${rgb.join(',')})`);
-  },
+  }
 
-  isValidHex(hex) {
+  static isValidHex(hex: string): boolean {
     return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(hex);
-  },
+  }
 
-  isValidRGB(r, g, b) {
-    if (!isIntegerBetweenMinAndMax(r) || !isIntegerBetweenMinAndMax(g) || !isIntegerBetweenMinAndMax(b)) {
+  static isValidRGB(
+    r?: unknown,
+    g?: unknown,
+    b?: unknown,
+  ): boolean {
+    if (
+      !isIntegerBetweenMinAndMax(r)
+      || !isIntegerBetweenMinAndMax(g)
+      || !isIntegerBetweenMinAndMax(b)
+    ) {
       return false;
     }
     return true;
-  },
+  }
 
-  isValidAlpha(a) {
-    if (isNaN(a) || a < 0 || a > 1 || typeof a !== 'number') {
+  static isValidAlpha(a?: unknown): a is number {
+    if (typeof a !== 'number' || isNaN(a) || a < 0 || a > 1) {
       return false;
     }
     return true;
-  },
+  }
 
-  colorIsInvalid: false,
-
-  fromHSL(hsl) {
+  static fromHSL(hsl: { h: number; s: number; l: number }): Color {
     const color = new Color();
     const rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
 
@@ -596,14 +282,14 @@ Color.prototype = {
     color.g = rgb[1];
     // eslint-disable-next-line prefer-destructuring
     color.b = rgb[2];
+    color.hsl = { ...hsl };
+    color.hsv = toHsvFromRgb(color.r, color.g, color.b);
+    color.colorIsInvalid = false;
 
     return color;
-  },
-};
-
-interface ColorConstructor {
-  prototype: ColorInstance;
-  new(value?: string): ColorInstance;
+  }
 }
 
-export default Color as unknown as ColorConstructor;
+export type ColorInstance = Color;
+
+export default Color;

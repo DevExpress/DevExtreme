@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script type="text/javascript">
-        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+        const storedThemeId = localStorage.getItem("currentThemeId");
+        const safeThemeId = (storedThemeId && /^[a-z0-9.]+$/.test(storedThemeId)) ? storedThemeId : "light";
 
         const link = document.createElement("link");
-        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+        link.href = `../artifacts/css/dx.${encodeURIComponent(safeThemeId)}.css`;
         link.type = "text/css";
         link.rel = "stylesheet";
 

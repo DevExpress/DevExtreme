@@ -23,6 +23,7 @@ const CLASS = {
   actionListItem: 'dx-ai-chat__action-list-item',
   actionListItemSuccess: 'dx-ai-chat__action-list-item--success',
   actionListItemError: 'dx-ai-chat__action-list-item--error',
+  actionListItemAborted: 'dx-ai-chat__action-list-item--aborted',
   actionListItemIcon: 'dx-ai-chat__action-list-item-icon',
   actionListItemText: 'dx-ai-chat__action-list-item-text',
   closeButton: 'dx-closebutton',
@@ -129,6 +130,10 @@ export class AIAssistantChat extends Popup {
 
   getErrorActionItems(messageIndex: number): Selector {
     return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItemError}`);
+  }
+
+  getAbortedActionItems(messageIndex: number): Selector {
+    return this.getAIMessage(messageIndex).find(`.${CLASS.actionListItemAborted}`);
   }
 
   getActionItemText(messageIndex: number, actionIndex: number): Selector {

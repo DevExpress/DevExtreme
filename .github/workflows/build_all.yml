@@ -15,7 +15,6 @@ on:
         type: boolean
 
 env:
-  NX_CLOUD_ACCESS_TOKEN: ${{ github.ref_name == github.event.repository.default_branch && secrets.NX_CLOUD_ACCESS_TOKEN || '' }}
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
   CYCLONEDX_CLI_VERSION: 0.32.0
   CYCLONEDX_CLI_LINUX_X64_SHA256: 454879e6a4a405c8a13bff49b8982adcb0596f3019b26b0811c66e4d7f0783e1
