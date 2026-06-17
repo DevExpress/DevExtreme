@@ -98,7 +98,6 @@ export type ColorParseResult = | [number, number, number]
   | [number, number, number, number, [number, number, number]]
   | [number, number, number, number, null, [number, number, number]];
 
-// array of color definition objects
 const standardColorTypes: {
   re: RegExp;
   process: (colorString: RegExpExecArray) => ColorParseResult;
