@@ -240,6 +240,54 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('success');
     });
 
+    it('converts ISO date string to Date object for date columns', async () => {
+      const instance = await createGrid({
+        dataSource: [
+          { id: 1, SaleDate: new Date(2024, 4, 10) },
+        ],
+        columns: [
+          { dataField: 'id', dataType: 'number' },
+          { dataField: 'SaleDate', dataType: 'date' },
+        ],
+      });
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('SaleDate', '=', '2024-05-10T00:00:00'),
+      });
+
+      expect(spy).toHaveBeenCalledWith(
+        'filterValue',
+        ['SaleDate', '=', new Date('2024-05-10T00:00:00')],
+      );
+      expect(result.status).toBe('success');
+    });
+
+    it('does not convert invalid date string for date columns', async () => {
+      const instance = await createGrid({
+        dataSource: [
+          { id: 1, SaleDate: new Date(2024, 4, 10) },
+        ],
+        columns: [
+          { dataField: 'id', dataType: 'number' },
+          { dataField: 'SaleDate', dataType: 'date' },
+        ],
+      });
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('SaleDate', '=', 'not-a-date'),
+      });
+
+      expect(spy).toHaveBeenCalledWith(
+        'filterValue',
+        ['SaleDate', '=', 'not-a-date'],
+      );
+      expect(result.status).toBe('success');
+    });
+
     it('converts a combined node into the legacy array form', async () => {
       const instance = await createGrid();
       const spy = jest.spyOn(instance, 'option');
@@ -290,11 +338,15 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('success');
     });
 
-    it('returns failure when option throws', async () => {
+    it('returns failure when applying the filter throws', async () => {
       const instance = await createGrid();
-      jest.spyOn(instance, 'option').mockImplementationOnce(() => {
-        throw new Error('Error');
-      });
+      const original = instance.option.bind(instance) as (...a: unknown[]) => unknown;
+      jest.spyOn(instance, 'option').mockImplementation(((...args: unknown[]) => {
+        if (args[0] === 'filterValue' && args.length > 1) {
+          throw new Error('Error');
+        }
+        return original(...args);
+      }) as never);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -384,6 +436,38 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('failure');
     });
 
+    it('returns failure when a field has no corresponding column', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('nonexistent', '=', 'Alpha'),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('succeeds when a field maps to a hidden but existing column', async () => {
+      const instance = await createGrid({
+        columns: [
+          { dataField: 'id', dataType: 'number' },
+          { dataField: 'name', dataType: 'string' },
+          { dataField: 'age', dataType: 'number', visible: false },
+        ],
+      });
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleBasic('age', '>', 10),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', ['age', '>', 10]);
+      expect(result.status).toBe('success');
+    });
+
     it('tolerates unreachable extra nodes', async () => {
       const instance = await createGrid();
       const spy = jest.spyOn(instance, 'option');
@@ -402,7 +486,7 @@ describe('filterValueCommand', () => {
   });
 
   describe('default message', () => {
-    it('uses `Apply a filter.` when expression is set', async () => {
+    it('appends the human-readable filter text when expression is set', async () => {
       const instance = await createGrid();
       const callbacks = createCallbacks();
 
@@ -410,7 +494,7 @@ describe('filterValueCommand', () => {
         expression: singleBasic('name', '=', 'Alpha'),
       });
 
-      expect(callbacks.success).toHaveBeenCalledWith('Apply a filter.');
+      expect(callbacks.success).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'.");
     });
 
     it('uses `Clear filter.` when expression is null', async () => {
@@ -424,18 +508,22 @@ describe('filterValueCommand', () => {
       expect(callbacks.success).toHaveBeenCalledWith('Clear filter.');
     });
 
-    it('passes the same default message to failure when executability fails', async () => {
+    it('passes the same readable default message to failure when applying the filter fails', async () => {
       const instance = await createGrid();
-      jest.spyOn(instance, 'option').mockImplementationOnce(() => {
-        throw new Error('Error');
-      });
+      const original = instance.option.bind(instance) as (...a: unknown[]) => unknown;
+      jest.spyOn(instance, 'option').mockImplementation(((...args: unknown[]) => {
+        if (args[0] === 'filterValue' && args.length > 1) {
+          throw new Error('Error');
+        }
+        return original(...args);
+      }) as never);
       const callbacks = createCallbacks();
 
       await filterValueCommand.execute(instance, callbacks)({
         expression: singleBasic('name', '=', 'Alpha'),
       });
 
-      expect(callbacks.failure).toHaveBeenCalledWith('Apply a filter.');
+      expect(callbacks.failure).toHaveBeenCalledWith("Apply a filter: [Name] Equals 'Alpha'.");
     });
   });
 });

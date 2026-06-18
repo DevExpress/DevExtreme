@@ -29,6 +29,9 @@ node_modules
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Claude local instructions
+CLAUDE.local.md
+
 # System Files
 .DS_Store
 Thumbs.db

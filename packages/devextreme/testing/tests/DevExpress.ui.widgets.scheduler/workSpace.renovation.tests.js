@@ -5,13 +5,13 @@ import $ from 'jquery';
 
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
-import '__internal/scheduler/workspaces/m_work_space_day';
-import '__internal/scheduler/workspaces/m_work_space_month';
-import '__internal/scheduler/workspaces/m_work_space_week';
+import '__internal/scheduler/workspaces/work_space_day';
+import '__internal/scheduler/workspaces/work_space_month';
+import '__internal/scheduler/workspaces/work_space_week';
 
-import '__internal/scheduler/workspaces/m_timeline_day';
-import '__internal/scheduler/workspaces/m_timeline_month';
-import '__internal/scheduler/workspaces/m_timeline_week';
+import '__internal/scheduler/workspaces/timeline_day';
+import '__internal/scheduler/workspaces/timeline_month';
+import '__internal/scheduler/workspaces/timeline_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { applyWorkspaceGroups, getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
@@ -51,7 +51,6 @@ module('Renovated Render', {
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
             this.instance = $('#scheduler-work-space')[workSpace]({
-                renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
                 endDayHour: 1,

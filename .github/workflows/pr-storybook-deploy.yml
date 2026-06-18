@@ -1,0 +1,116 @@
+name: PR Storybook - Preview
+run-name: "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+
+on:
+  pull_request:
+    branches:
+      - 26_1
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+      - closed
+
+permissions:
+  contents: write
+
+concurrency:
+  group: storybook-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  SOURCE_DIR: ./apps/react-storybook/storybook-static
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        (github.event.action == 'labeled' && github.event.label.name == 'storybook') ||
+        (github.event.action != 'labeled' && github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'storybook'))
+      )
+    environment:
+      name: storybook
+      url: https://devexpress.github.io/DevExtreme/storybook/pr-${{ github.event.pull_request.number }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+          fetch-depth: 1
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm + nx cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook preview (static)
+        run: pnpm nx build devextreme-react-storybook
+
+      - name: Deploy PR preview
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
+        with:
+          action: deploy
+          pr-number: ${{ github.event.pull_request.number }}
+          source-dir: ${{ env.SOURCE_DIR }}
+          preview-branch: gh-pages
+          umbrella-dir: storybook
+          comment: false
+          token: ${{ github.token }}
+          wait-for-pages-deployment: true
+
+  remove:
+    name: Remove storybook
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'storybook')) ||
+        (github.event.action == 'unlabeled' && github.event.label.name == 'storybook')
+      )
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Remove PR preview
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
+        with:
+          action: remove
+          pr-number: ${{ github.event.pull_request.number }}
+          source-dir: ${{ env.SOURCE_DIR }}
+          preview-branch: gh-pages
+          umbrella-dir: storybook
+          comment: false
+          token: ${{ github.token }}
+          wait-for-pages-deployment: true

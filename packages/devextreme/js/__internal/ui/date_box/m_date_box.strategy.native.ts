@@ -7,7 +7,7 @@ import type { Format } from '@js/localization';
 import type { TextBoxType } from '@js/ui/text_box';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
-import type { PopupProperties } from '../popup/m_popup';
+import type { PopupProperties } from '../popup/popup';
 import type { DateBoxBaseProperties } from './date_box.base';
 import type DateBox from './date_box.base';
 import dateUtils from './date_utils';

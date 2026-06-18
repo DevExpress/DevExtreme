@@ -3,9 +3,9 @@ import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import $ from 'jquery';
 
-import '__internal/scheduler/workspaces/m_work_space_day';
-import '__internal/scheduler/workspaces/m_work_space_month';
-import '__internal/scheduler/workspaces/m_work_space_week';
+import '__internal/scheduler/workspaces/work_space_day';
+import '__internal/scheduler/workspaces/work_space_month';
+import '__internal/scheduler/workspaces/work_space_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
@@ -46,7 +46,7 @@ module('Workspace navigation', () => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: true,
+
                             getResourceManager: getEmptyResourceManager,
                             ...options,
                         });
@@ -953,7 +953,7 @@ module('Workspace navigation', () => {
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: true,
+
                             currentDate: new Date(2021, 0, 10),
                             getResourceManager: getEmptyResourceManager,
                             ...options,

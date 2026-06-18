@@ -16,6 +16,21 @@
     "packageRules": [
         {
             "matchPackageNames": [
+                "postcss"
+            ],
+            "rangeStrategy": "bump"
+        },
+        {
+            "matchPackageNames": [
+                "@angular/platform-server"
+            ],
+            "matchFileNames": [
+                "apps/demos/package.json"
+            ],
+            "rangeStrategy": "bump"
+        },
+        {
+            "matchPackageNames": [
                 "openai",
                 "rehype-minify-whitespace",
                 "rehype-parse",
@@ -66,12 +81,6 @@
             "enabled": false
         },
         {
-            "enabled": false,
-            "matchPackageNames": [
-                "/^@devextreme-generator//"
-            ]
-        },
-        {
             "matchPackageNames": [
                 "devexpress-gantt",
                 "devexpress-diagram",
@@ -98,10 +107,7 @@
             ],
             "dependencyDashboardApproval": true,
             "matchPackageNames": [
-                "*",
-                "!cldr-{/,}**",
-                "!chrome{/,}**",
-                "!firefox{/,}**"
+                "*"
             ]
         },
         {

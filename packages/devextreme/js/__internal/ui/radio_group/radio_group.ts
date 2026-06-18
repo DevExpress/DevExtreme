@@ -274,7 +274,6 @@ class RadioGroup extends Editor<RadioGroupProperties> {
   }
 
   _setCollectionWidgetOption(...args: [string, unknown]): void {
-    // @ts-expect-error widget._setWidgetOption args should be typed as ArrayLike<unknown>
     this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', args));
   }
 

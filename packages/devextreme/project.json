@@ -13,7 +13,8 @@
         "targetDirectory": "./artifacts",
         "excludePatterns": [
           "./artifacts/css",
-          "./artifacts/npm/devextreme/package.json"
+          "./artifacts/npm/devextreme/package.json",
+          "./artifacts/npm/devextreme-dist"
         ]
       }
     },
@@ -868,7 +869,8 @@
       },
       "configurations": {
         "internal": {
-          "distDirectory": "./artifacts/npm/devextreme-dist-internal"
+          "distDirectory": "./artifacts/npm/devextreme-dist-internal",
+          "setName": "devextreme-dist-internal"
         }
       },
       "inputs": [
@@ -1133,7 +1135,9 @@
           { "from": "./node_modules/devexpress-gantt/dist/dx-gantt.min.js", "to": "./artifacts/js/dx-gantt.min.js" },
           { "from": "./node_modules/devextreme-quill/dist/dx-quill.js", "to": "./artifacts/js/dx-quill.js" },
           { "from": "./node_modules/devextreme-quill/dist/dx-quill.min.js", "to": "./artifacts/js/dx-quill.min.js" },
-          { "from": "./node_modules/devextreme-aspnet-data/js/dx.aspnet.data.js", "to": "./artifacts/js/dx.aspnet.data.js" }
+          { "from": "../devextreme-themebuilder/node_modules/bootstrap/dist/js/bootstrap.js", "to": "./artifacts/js/bootstrap.js" },
+          { "from": "../devextreme-themebuilder/node_modules/bootstrap/dist/js/bootstrap.min.js", "to": "./artifacts/js/bootstrap.min.js" },
+          { "from": "../../apps/demos/node_modules/devextreme-aspnet-data/js/dx.aspnet.data.js", "to": "./artifacts/js/dx.aspnet.data.js" }
         ]
       },
       "inputs": [
@@ -1161,6 +1165,8 @@
         "{projectRoot}/artifacts/js/dx-gantt.min.js",
         "{projectRoot}/artifacts/js/dx-quill.js",
         "{projectRoot}/artifacts/js/dx-quill.min.js",
+        "{projectRoot}/artifacts/js/bootstrap.js",
+        "{projectRoot}/artifacts/js/bootstrap.min.js",
         "{projectRoot}/artifacts/js/dx.aspnet.data.js"
       ]
     },
@@ -1169,7 +1175,8 @@
       "options": {
         "files": [
           { "from": "./node_modules/devexpress-diagram/dist/dx-{diagram,diagram.min}.css", "to": "./artifacts/css" },
-          { "from": "./node_modules/devexpress-gantt/dist/dx-{gantt,gantt.min}.css", "to": "./artifacts/css" }
+          { "from": "./node_modules/devexpress-gantt/dist/dx-{gantt,gantt.min}.css", "to": "./artifacts/css" },
+          { "from": "../devextreme-themebuilder/node_modules/bootstrap/dist/css/{bootstrap,bootstrap.min}.css", "to": "./artifacts/css" }
         ]
       },
       "inputs": [
@@ -1180,7 +1187,9 @@
         "{projectRoot}/artifacts/css/dx-diagram.css",
         "{projectRoot}/artifacts/css/dx-diagram.min.css",
         "{projectRoot}/artifacts/css/dx-gantt.css",
-        "{projectRoot}/artifacts/css/dx-gantt.min.css"
+        "{projectRoot}/artifacts/css/dx-gantt.min.css",
+        "{projectRoot}/artifacts/css/bootstrap.css",
+        "{projectRoot}/artifacts/css/bootstrap.min.css"
       ]
     },
     "copy:vendor": {

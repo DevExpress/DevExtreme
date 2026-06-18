@@ -402,4 +402,15 @@ export default class Selection<
   loadSelectedItemsWithFilter(): DeferredObj<unknown> {
     return this._selectionStrategy.loadSelectedItemsWithFilter();
   }
+
+  hasExactSelectedItems(keys: TKey[]): boolean {
+    const { selectedItems, keyOf } = this.options;
+    if (keys.length === selectedItems.length) {
+      return keys.every((key) => selectedItems.some((item) => {
+        const isKeysEqual = this._selectionStrategy.equalKeys(keyOf(item), key);
+        return isKeysEqual;
+      }));
+    }
+    return false;
+  }
 }

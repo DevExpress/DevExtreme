@@ -17,7 +17,7 @@ import { each } from '@js/core/utils/iterator';
 import type { Properties } from '@js/ui/date_range_box';
 import Editor from '@js/ui/editor/editor';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
-import DropDownButton from '@ts/ui/drop_down_editor/m_drop_down_button';
+import DropDownButton from '@ts/ui/drop_down_editor/drop_down_button';
 import ClearButton from '@ts/ui/text_box/text_editor.clear';
 import TextEditorButtonCollection from '@ts/ui/text_box/texteditor_button_collection/index';
 

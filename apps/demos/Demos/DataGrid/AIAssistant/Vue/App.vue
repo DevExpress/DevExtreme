@@ -5,6 +5,9 @@
     :showBorders="true"
     keyExpr="Id"
     :filterSyncEnabled="true"
+    :allowColumnResizing="true"
+    :allowColumnReordering="true"
+    :focusedRowEnabled="true"
   >
     <DxSearchPanel
       :visible="true"
@@ -14,6 +17,8 @@
     <DxGroupPanel :visible="true"/>
     <DxHeaderFilter :visible="true"/>
     <DxFilterRow :visible="true"/>
+    <DxSelection mode="multiple"/>
+    <DxSorting mode="multiple"/>
     <DxPaging :pageSize="10"/>
     <DxPager
       :visible="true"
@@ -65,15 +70,17 @@ import {
   DxFilterRow,
   DxPaging,
   DxPager,
+  DxSelection,
+  DxSorting,
   DxAIAssistant,
 } from 'devextreme-vue/data-grid';
-import type dxChat from 'devextreme/ui/chat';
-import { type DxChatTypes } from 'devextreme-vue/chat';
+
+import type { DxChatTypes } from 'devextreme-vue/chat';
 import type { DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { sales } from './data.ts';
 import { aiIntegration } from './service.ts';
 
-let chatInstance: dxChat | undefined;
+let chatInstance: DxChatTypes.InitializedEvent['component'] | undefined;
 
 const suggestionItems = [
   {

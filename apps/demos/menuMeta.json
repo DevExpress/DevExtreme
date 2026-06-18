@@ -4,6 +4,7 @@
     "Groups": [
       {
         "Name": "Data Grid",
+        "Badge": "Updated",
         "Equivalents": "dxDataGrid, dx-data-grid",
         "Groups": [
           {
@@ -65,6 +66,7 @@
       {
         "Name": "Chat",
         "Equivalents": "dxChat, dx-chat, chat",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "AI and Chatbot Integration",
@@ -88,6 +90,21 @@
               {
                 "Title": "Message Streaming",
                 "Name": "MessageStreaming",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "html-react-parser,openai,unified",
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Prompt Suggestions",
+            "Equivalents": "Prompt Suggestions, Question Suggestions, Suggested Prompts, Message Suggestions, Quick Prompts",
+            "Demos": [
+              {
+                "Title": "Prompt Suggestions",
+                "Name": "PromptSuggestions",
                 "Widget": "Chat",
                 "Badge": "AI",
                 "TopLevel": true,
@@ -154,6 +171,7 @@
     "Groups": [
       {
         "Name": "Data Grid",
+        "Badge": "Updated",
         "Equivalents": "dxDataGrid, dx-data-grid",
         "Groups": [
           {
@@ -4397,20 +4415,6 @@
             ]
           },
           {
-            "Name": "Tool Call Visualization",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Tool Call Visualization",
-                "Name": "ToolCallVisualization",
-                "Widget": "Chat",
-                "Badge": "Roadmap",
-                "DemoType": "Web",
-                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-tool-call-visualization.xml"
-              }
-            ]
-          },
-          {
             "Name": "Prompt Suggestions",
             "Equivalents": "Prompt Suggestions, Question Suggestions, Suggested Prompts, Message Suggestions, Quick Prompts",
             "Demos": [
@@ -4418,7 +4422,7 @@
                 "Title": "Prompt Suggestions",
                 "Name": "PromptSuggestions",
                 "Widget": "Chat",
-                "Badge": "New",
+                "Badge": "AI",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
               }

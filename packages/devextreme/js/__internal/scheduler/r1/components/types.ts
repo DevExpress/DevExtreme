@@ -1,4 +1,5 @@
 import type { JSXTemplate } from '@ts/core/r1/types';
+import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import type { GroupItem, ViewDataBase, ViewType } from '../../types';
 
@@ -7,7 +8,7 @@ export interface BaseTemplateProps {
 }
 
 interface BaseTemplateData {
-  groups?: Record<string, unknown>;
+  groups?: GroupLeaf['grouped'];
   groupIndex?: number;
   allDay?: boolean;
   text?: string;
@@ -49,7 +50,7 @@ export interface ViewCellData {
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
-  groups?: Record<string, unknown>;
+  groups?: GroupLeaf['grouped'];
   groupIndex?: number;
   index: number;
   isFirstGroupCell: boolean;
@@ -59,23 +60,6 @@ export interface ViewCellData {
   isSelected?: boolean;
   isFocused?: boolean;
   highlighted?: boolean;
-}
-
-export interface DateHeaderCellData extends ViewCellData {
-  colSpan: number;
-}
-
-export interface DateHeaderData {
-  dataMap: DateHeaderCellData[][];
-  leftVirtualCellWidth: number;
-  rightVirtualCellWidth: number;
-  leftVirtualCellCount: number;
-  rightVirtualCellCount: number;
-  weekDayLeftVirtualCellWidth?: number;
-  weekDayRightVirtualCellWidth?: number;
-  weekDayLeftVirtualCellCount?: number;
-  weekDayRightVirtualCellCount?: number;
-  isMonthDateHeader?: boolean;
 }
 
 interface DataCellTemplateData extends BaseTemplateData {

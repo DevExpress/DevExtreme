@@ -118,6 +118,7 @@ export class FieldChooser extends FieldChooserBase {
       each(that._dataChangedHandlers, (_, func) => {
         func();
       });
+      that.restoreFieldFocus();
       that._fireContentReadyAction();
       that._skipStateChange = true;
       that.option('state', that._dataSource.state());
@@ -584,6 +585,7 @@ export class FieldChooser extends FieldChooserBase {
       render();
       $fieldsContainer.dxScrollable({
         useNative: false,
+        useKeyboard: false,
       });
     } else {
       $areaContainer.addClass(CLASSES.allFields);

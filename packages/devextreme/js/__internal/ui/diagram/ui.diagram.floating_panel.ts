@@ -11,8 +11,8 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import type { dxPopupAnimation } from '@js/ui/popup';
 import DiagramPanel from '@ts/ui/diagram/ui.diagram.panel';
-import type { PopupProperties } from '@ts/ui/popup/m_popup';
-import Popup from '@ts/ui/popup/m_popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
+import Popup from '@ts/ui/popup/popup';
 
 const DIAGRAM_MOBILE_POPUP_CLASS = 'dx-diagram-mobile-popup';
 

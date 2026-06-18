@@ -1,6 +1,6 @@
 import sh from 'shelljs';
 import path from 'node:path';
-import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR, JS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
+import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR } from './common/paths';
 import { version as devextremeNpmVersion } from '../../packages/devextreme/package.json';
 
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
@@ -55,11 +55,6 @@ sh.exec('pnpm exec nx build devextreme-themebuilder --skipNxCache');
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
     sh.cp('-r', ['ts', 'js', 'css'], ARTIFACTS_DIR);
 sh.popd();
-
-// TODO: maybe we should add bootstrap to vendors
-const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'node_modules', 'bootstrap', 'dist');
-sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], JS_ARTIFACTS);
-sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], CSS_ARTIFACTS);
 
 sh.exec('pnpm run all:pack-and-copy');
 

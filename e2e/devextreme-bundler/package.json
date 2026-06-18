@@ -1,6 +1,6 @@
 {
   "name": "devextreme-bundler-test",
-  "version": "26.1.2",
+  "version": "26.1.3",
   "description": "Project for testing the \"devextreme-bundler\" commands from \"devextreme\" package. See build_all.yml for details",
   "scripts": {},
   "dependencies": {
