@@ -220,7 +220,7 @@ function extractDemoBodyInner(srcDir) {
     let previous;
     do {
       previous = withoutScripts;
-      withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+      withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, '');
     } while (withoutScripts !== previous);
     const trimmed = withoutScripts.trim();
     return trimmed || null;
