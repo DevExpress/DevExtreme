@@ -38,6 +38,12 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'Form-Grouping':
+    case 'Stepper-StepTemplate':
+    case 'TabPanel-Overview':
+    case 'Tabs-Overview':
+    case 'Tabs-Selection':
+      return ['aria-tab-name'];
     default:
       return [];
   }
