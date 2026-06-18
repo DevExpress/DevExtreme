@@ -55,7 +55,7 @@ export type PivotGridTotalDisplayMode = 'both' | 'columns' | 'none' | 'rows';
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {
+export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, KeyboardEvent | MouseEvent | PointerEvent> & {
     /** @docid _ui_pivot_grid_CellClickEvent.area */
     readonly area?: string;
     /** @docid _ui_pivot_grid_CellClickEvent.cellElement */

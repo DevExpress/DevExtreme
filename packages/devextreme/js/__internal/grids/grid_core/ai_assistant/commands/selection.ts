@@ -1,3 +1,4 @@
+import type { DataSource } from '@js/common/data';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid, RowKey } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
@@ -7,10 +8,18 @@ import {
   compositeKeyPairSchema,
   isKeyShapeValid,
   normalizeKey,
+  pickKeysByIndex,
   splitIntoLoadWindows,
 } from './utils';
 
 const MAX_LOAD_WINDOW_PAGES = 5;
+
+type DataGridStore = ReturnType<DataSource['store']>;
+
+interface LoadedWindow {
+  window: number[];
+  rows: unknown;
+}
 
 const selectByKeysCommandSchema = z.object({
   keys: z.array(z.union([
@@ -57,24 +66,6 @@ const selectionByIndexesCommandSchema = z.object({
   scope: z.enum(['allPages', 'page']),
 }).strict();
 
-// Maps 1-based indexes to the keys at those positions;
-// an index past the last entry rejects the whole set.
-const pickKeysByIndex = (
-  keys: RowKey[],
-  indexes: number[],
-): RowKey[] | null => {
-  const normalizedRowIndexes = indexes.map((index) => index - 1);
-  const allIndexesValid = normalizedRowIndexes.every(
-    (index) => index < keys.length,
-  );
-
-  if (!allIndexesValid) {
-    return null;
-  }
-
-  return normalizedRowIndexes.map((index) => keys[index]);
-};
-
 const resolveKeysFromCurrentPage = (
   component: InternalGrid,
   indexes: number[],
@@ -85,6 +76,60 @@ const resolveKeysFromCurrentPage = (
   const dataKeys = dataItems.map((item) => item.key);
 
   return pickKeysByIndex(dataKeys, indexes);
+};
+
+const isDataSourceGrouped = (
+  dataSource: DataSource,
+): boolean => {
+  const grouping = dataSource.group();
+
+  return Array.isArray(grouping) ? grouping.length > 0 : !!grouping;
+};
+
+const loadIndexWindows = (
+  store: DataGridStore,
+  baseLoadOptions: Record<string, unknown>,
+  indexes: number[],
+  maxWindowSize: number,
+): Promise<LoadedWindow[]> => {
+  const windows = splitIntoLoadWindows(indexes, maxWindowSize);
+
+  return Promise.all(windows.map((window) => {
+    const skip = window[0] - 1;
+    const take = window[window.length - 1] - window[0] + 1;
+    return store.load({ ...baseLoadOptions, skip, take })
+      .then((result) => {
+        const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
+        return { window, rows };
+      });
+  }));
+};
+
+// Maps each requested index to the key of the row loaded at its offset.
+const extractKeysFromWindows = (
+  loadedWindows: LoadedWindow[],
+  store: DataGridStore,
+): RowKey[] | null => {
+  const keys: RowKey[] = [];
+
+  for (const { window, rows } of loadedWindows) {
+    if (!Array.isArray(rows)) {
+      return null;
+    }
+
+    for (const index of window) {
+      // The requested index maps to `window[0]` offset within the loaded rows
+      const row = rows[index - window[0]];
+
+      if (row === undefined) {
+        return null;
+      }
+
+      keys.push(store.keyOf(row));
+    }
+  }
+
+  return keys;
 };
 
 const resolveKeysFromAllPagesRemote = async (
@@ -106,52 +151,24 @@ const resolveKeysFromAllPagesRemote = async (
 
   // Under grouping store.load returns group structures rather than flat rows,
   // so an index no longer maps to a single data row. Fail instead of resolving meaningless keys
-  const grouping = dataSource.group();
-  const isGrouped = Array.isArray(grouping) ? grouping.length > 0 : !!grouping;
-
-  if (isGrouped) {
+  if (isDataSourceGrouped(dataSource)) {
     return null;
   }
 
-  const dataController = component.getController('data');
-  const filter = dataController.getCombinedFilter(true);
+  const filter = component.getController('data').getCombinedFilter(true);
   const baseLoadOptions = {
     ...dataSource.loadOptions(),
     filter,
   };
 
-  const windows = splitIntoLoadWindows(indexes, dataSource.pageSize() * MAX_LOAD_WINDOW_PAGES);
+  const loadedWindows = await loadIndexWindows(
+    store,
+    baseLoadOptions,
+    indexes,
+    dataSource.pageSize() * MAX_LOAD_WINDOW_PAGES,
+  );
 
-  const loadedWindows = await Promise.all(windows.map((window) => {
-    const skip = window[0] - 1;
-    const take = window[window.length - 1] - window[0] + 1;
-    return store.load({ ...baseLoadOptions, skip, take })
-      .then((result) => {
-        const rows = Array.isArray(result) ? result : (result as { data: unknown[] }).data;
-        return { window, rows };
-      });
-  }));
-
-  const keys: RowKey[] = [];
-
-  for (const { window, rows } of loadedWindows) {
-    if (!Array.isArray(rows)) {
-      return null;
-    }
-
-    for (const index of window) {
-      // The requested index maps to `window[0]` offset within the loaded rows
-      const row = rows[index - window[0]];
-
-      if (row === undefined) {
-        return null;
-      }
-
-      keys.push(store.keyOf(row));
-    }
-  }
-
-  return keys;
+  return extractKeysFromWindows(loadedWindows, store);
 };
 
 const resolveKeysFromAllPagesLocal = async (
@@ -185,6 +202,8 @@ export const selectionByIndexesCommand = defineGridCommand({
     + 'Always set scope to choose how indexes are interpreted: '
     + '"allPages" — indexes are positions within the currently filtered and sorted dataset, NOT limited to the current page; index 1 is the first row of the dataset, regardless of pageIndex/pageSize. Use this when the user does NOT explicitly refer to the visible page (e.g. "select rows 1 to 100"). '
     + '"page" — indexes are positions within the currently rendered page; index 1 is the first data row on the visible page and group/header rows are not counted. Use this ONLY when the user explicitly mentions the current/visible page (e.g. "select the first 3 rows on the current page", "deselect row 2 on this page"). '
+    + 'This ALSO covers "select/deselect ALL rows on the current/visible page" when selection.selectAllMode is "allPages" (in that case selectAll/deselectAll cannot target a single page, so use this command instead): list every 1-based index from 1 to paging.visibleRowCount. '
+    + 'visibleRowCount is the exact number of data rows currently rendered on the visible page (group/header rows excluded) and is correct for every scrolling mode — do NOT derive the count from pageSize/pageIndex/totalCount, because with virtual or infinite scrolling the rendered rows may span more or fewer than pageSize and totalCount may be unknown (-1). '
     + 'Set mode to "select" to add the listed rows to the current selection (multiple calls accumulate, so previously selected ranges are kept); set mode to "deselect" to remove the listed rows from the current selection (e.g. "unselect row 1"). '
     + 'To clear selection only within the current selectAll scope, use deselectAll; to clear selection across all pages regardless of selectAllMode, use clearSelection. '
     + 'To target rows by key value rather than by index, use selectByKeys.',
@@ -223,7 +242,9 @@ export const selectionByIndexesCommand = defineGridCommand({
 
 export const selectAllCommand = defineGridCommand({
   name: 'selectAll',
-  description: 'Select rows. Scope depends on selection.selectAllMode: "allPages" (default) selects across every page; "page" selects only the currently rendered page. If a filter is applied, only rows matching the filter are selected.',
+  description: 'Select rows. Scope depends on selection.selectAllMode: "allPages" (default) selects across every page; "page" selects only the currently rendered page. If a filter is applied, only rows matching the filter are selected. '
+    + 'Use this command ONLY when the scope the user asks for matches selection.selectAllMode: for an unqualified "select all rows" request when selectAllMode is "allPages", or for "select all rows on the current/visible page" when selectAllMode is "page". '
+    + 'If the user asks to select all rows on the CURRENT/VISIBLE page but selectAllMode is "allPages", do NOT use this command (it would select every page) — instead use selectionByIndexes with scope "page", mode "select", and indexes listing every row on the current page.',
   schema: z.object({}).strict(),
   execute: (component, { success, failure }) => async (): Promise<CommandResult> => {
     const defaultMessage = 'Select all rows.';
@@ -244,7 +265,10 @@ export const selectAllCommand = defineGridCommand({
 
 export const deselectAllCommand = defineGridCommand({
   name: 'deselectAll',
-  description: 'Deselect rows. Scope depends on selection.selectAllMode: "allPages" (default) deselects across every page; "page" deselects only the currently rendered page. If a filter is applied, only rows matching the filter are deselected.',
+  description: 'Deselect rows. Scope depends on selection.selectAllMode: "allPages" (default) deselects across every page; "page" deselects only the currently rendered page. If a filter is applied, only rows matching the filter are deselected. '
+    + 'Use this command ONLY when the scope the user asks for matches selection.selectAllMode: for an unqualified "deselect all rows" request when selectAllMode is "allPages", or for "deselect all rows on the current/visible page" when selectAllMode is "page". '
+    + 'If the user asks to deselect all rows on the CURRENT/VISIBLE page but selectAllMode is "allPages", do NOT use this command (it would deselect every page) — instead use selectionByIndexes with scope "page", mode "deselect", and indexes listing every row on the current page. '
+    + 'To clear selection across all pages regardless of selectAllMode, use clearSelection.',
   schema: z.object({}).strict(),
   execute: (component, { success, failure }) => async (): Promise<CommandResult> => {
     const defaultMessage = 'Deselect all rows.';
