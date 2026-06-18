@@ -3023,6 +3023,67 @@ QUnit.module('Template items', moduleConfig, function() {
         assert.strictEqual($(focusedElement).get(0), $templateItem.get(0),
             'ArrowRight inside activated template does NOT navigate toolbar');
     });
+
+    QUnit.test('template with datagrid-like group panel: Ctrl+Arrow does not move toolbar focus', function(assert) {
+        const toolbar = this.$element.dxToolbar({
+            items: [
+                { locateInMenu: 'never', widget: 'dxButton', options: { text: 'A' } },
+                {
+                    locateInMenu: 'never',
+                    template: () => $('<div class="group-panel">').append(
+                        $('<div tabindex="0" class="group-panel-item">').text('Field 1'),
+                        $('<div tabindex="-1" class="group-panel-item">').text('Field 2'),
+                    ),
+                },
+                { locateInMenu: 'never', widget: 'dxButton', options: { text: 'C' } },
+            ],
+        }).dxToolbar('instance');
+
+        const $templateItem = helpers.getAvailableItems(toolbar).eq(1);
+        const $groupItem = $($templateItem.find('.group-panel-item').get(0));
+
+        focusToolbarItem(toolbar, 1);
+        helpers.press('ArrowRight', $groupItem.get(0), { ctrlKey: true });
+        helpers.press('ArrowLeft', $groupItem.get(0), { ctrlKey: true });
+
+        assert.strictEqual(getActiveElement(), $groupItem.get(0),
+            'Ctrl+ArrowLeft/Right keeps focus on the same group panel item');
+        assert.strictEqual($(toolbar.option('focusedElement')).get(0), $templateItem.get(0),
+            'focusedElement stays on the same toolbar item');
+    });
+
+    QUnit.test('template with datagrid-like group panel: Ctrl+Arrow event reaches nested item', function(assert) {
+        const toolbar = this.$element.dxToolbar({
+            items: [
+                { locateInMenu: 'never', widget: 'dxButton', options: { text: 'A' } },
+                {
+                    locateInMenu: 'never',
+                    template: () => $('<div class="group-panel">').append(
+                        $('<div tabindex="0" class="group-panel-item">').text('Field 1'),
+                        $('<div tabindex="-1" class="group-panel-item">').text('Field 2'),
+                    ),
+                },
+                { locateInMenu: 'never', widget: 'dxButton', options: { text: 'C' } },
+            ],
+        }).dxToolbar('instance');
+
+        const $templateItem = helpers.getAvailableItems(toolbar).eq(1);
+        const $groupItem = $($templateItem.find('.group-panel-item').get(0));
+        let nestedKeydownCalls = 0;
+
+        focusToolbarItem(toolbar, 1);
+
+        $groupItem.on('keydown', () => {
+            nestedKeydownCalls += 1;
+        });
+
+        helpers.press('ArrowRight', $groupItem.get(0), { ctrlKey: true });
+
+        assert.strictEqual(nestedKeydownCalls, 1,
+            'keydown with Ctrl+Arrow reaches the nested group panel item');
+        assert.strictEqual($(toolbar.option('focusedElement')).get(0), $templateItem.get(0),
+            'toolbar does not navigate away on Ctrl+Arrow');
+    });
 });
 
 QUnit.module('Core behaviors', moduleConfig, function() {
