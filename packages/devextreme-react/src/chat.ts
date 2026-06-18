@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, User as ChatUser, MessageType } from "devextreme/ui/chat";
 import type { Format } from "devextreme/common";
 
 
@@ -190,7 +190,7 @@ type IItemProps = React.PropsWithChildren<{
   src?: string;
   text?: string;
   timestamp?: Date | number | string;
-  type?: string | undefined;
+  type?: MessageType;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {

@@ -199,6 +199,13 @@ export type Alert = {
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type MessageType = 'text' | 'image';
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
  * @type object
  * @hidden
  */
@@ -210,11 +217,9 @@ export type MessageBase = {
     id?: number | string;
     /**
      * @docid
-     * @default undefined
-     * @type string|undefined
      * @public
      */
-    type?: 'text' | 'image' | undefined;
+    type?: MessageType;
     /**
      * @docid
      * @public
