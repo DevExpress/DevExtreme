@@ -60,7 +60,7 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.29
   devexpress-gantt: 4.1.69
-  devextreme-quill: 1.7.9
+  devextreme-quill: 1.7.10
   "@eslint/js": 9.39.4
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
@@ -102,7 +102,7 @@ catalogs:
     "@angular/platform-server": ~19.2.25
     "@angular/router": ~19.2.25
     "ng-packagr": ~19.2.2
-    "typescript": 5.5.4 
+    "typescript": 5.5.4
     "zone.js": 0.15.1
   tools:
     "devextreme-internal-tools": 20.1.1
@@ -130,3 +130,4 @@ patchedDependencies:
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
+  - devextreme-quill@1.7.10
