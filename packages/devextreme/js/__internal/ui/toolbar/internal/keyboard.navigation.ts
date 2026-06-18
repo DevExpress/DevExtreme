@@ -140,6 +140,11 @@ export class RovingTabIndexController {
   }
 
   private handleDirectional(target: HTMLElement, e: KeyboardEvent): void {
+    const hasModifier = e.ctrlKey || e.altKey || e.metaKey || e.shiftKey;
+    if (hasModifier) {
+      return;
+    }
+
     const location = this.getKeyToLocation()[e.key];
 
     if (!location) {
