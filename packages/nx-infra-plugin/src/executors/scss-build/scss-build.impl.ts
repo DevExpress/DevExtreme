@@ -120,24 +120,23 @@ async function generateScssBundles(
 
 function loadDependencies(projectRoot: string): BuildDependencies {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
-  const workspaceRequire = createRequire(path.join(projectRoot, '..', '..', 'package.json'));
 
   return {
     sass: projectRequire('sass-embedded'),
-    postcss: workspaceRequire('postcss'),
-    autoprefixer: workspaceRequire('autoprefixer'),
-    chokidar: workspaceRequire('chokidar'),
-    CleanCss: workspaceRequire('clean-css'),
+    postcss: projectRequire('postcss'),
+    autoprefixer: projectRequire('autoprefixer'),
+    chokidar: projectRequire('chokidar'),
+    CleanCss: projectRequire('clean-css'),
     themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.cjs')) as {
       getThemes: () => Array<[string, string, string, string?]>;
     },
     cleanCssSanitizeOptions: projectRequire(
       path.resolve(projectRoot, 'build/clean-css-options.json'),
     ),
-    cleanCssDevOptions: workspaceRequire(
+    cleanCssDevOptions: projectRequire(
       path.resolve(projectRoot, '../devextreme-themebuilder/src/data/clean-css-options.json'),
     ),
-    devextremeVersion: workspaceRequire(path.resolve(projectRoot, '../devextreme/package.json'))
+    devextremeVersion: projectRequire(path.resolve(projectRoot, '../devextreme/package.json'))
       .version,
   };
 }
