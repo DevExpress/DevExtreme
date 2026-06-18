@@ -342,6 +342,7 @@ export default [
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
+      'import/no-unresolved': ['error', { ignore: ['^anti-forgery$'] }],
       'func-style': ['error', 'declaration', { 'allowArrowFunctions': true }],
 
       'react/display-name': 0,
