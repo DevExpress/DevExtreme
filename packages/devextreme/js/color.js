@@ -1,4 +1,4 @@
 // deprecated
-import Color from './__internal/m_color';
+import Color from './__internal/color';
 
 export default Color;
