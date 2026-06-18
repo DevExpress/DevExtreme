@@ -38,6 +38,22 @@
                 "Modules": "openai"
               }
             ]
+          },
+          {
+            "Name": "Semantic Search",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Semantic Search",
+                "Name": "SemanticSearch",
+                "Widget": "DataGrid",
+                "Badge": "AI",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [],
+                "TopLevel": true,
+                "Equivalents": "AI-Powered Search, Smart Search, Context-Aware Search, Natural Language Search, AI Search, Semantic Retrieval, Similarity Search"
+              }
+            ]
           }
         ]
       },
@@ -315,6 +331,15 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Semantic Search",
+                "Name": "SemanticSearch",
+                "Widget": "DataGrid",
+                "Badge": "AI",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [],
+                "Equivalents": "AI-Powered Search, Smart Search, Context-Aware Search, Natural Language Search, AI Search, Semantic Retrieval, Similarity Search"
               }
             ]
           },
