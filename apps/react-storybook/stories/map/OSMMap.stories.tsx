@@ -141,8 +141,14 @@ const meta: Meta<OSMStoryArgs> = {
     },
     // --- Map ---
     type: { control: 'select', options: ['roadmap', 'satellite', 'hybrid'], table: { category: 'Map' } },
-    center: { control: 'select', options: Object.keys(centers), table: { category: 'Map' } },
-    zoom: { control: { type: 'number', min: 1, max: 19 }, table: { category: 'Map' } },
+    center: {
+      control: 'select', options: Object.keys(centers), table: { category: 'Map' },
+      description: 'Initial center — the map can be freely panned afterwards.',
+    },
+    zoom: {
+      control: { type: 'number', min: 1, max: 19 }, table: { category: 'Map' },
+      description: 'Initial zoom — the map can be freely zoomed afterwards.',
+    },
     controls: { control: 'boolean', table: { category: 'Map' } },
     disabled: { control: 'boolean', table: { category: 'Map' } },
     autoAdjust: {
@@ -197,11 +203,16 @@ const render: Story['render'] = (args) => {
 
   return (
     <Map
+      // center/zoom are UNCONTROLLED (defaultCenter/defaultZoom) so the user can freely pan & zoom.
+      // A *controlled* center/zoom without an on*Change handler locks the map (it snaps back to the
+      // prop on every render); a two-way `center` would loop, because the provider reports center
+      // back as a fresh { lat, lng } object each apply. The `key` re-mounts the map when the
+      // Center/Zoom controls change so those controls re-seed the initial view.
+      key={`${center}|${zoom}`}
       provider="osm"
       providerConfig={providerConfig}
-      // @ts-expect-error center accepts a {lat,lng} object at runtime
-      center={centers[center]}
-      zoom={zoom}
+      defaultCenter={centers[center]}
+      defaultZoom={zoom}
       type={type}
       height={height}
       width={width}
