@@ -142,6 +142,7 @@ export class HeaderPanel extends ColumnsView {
             itemRenderedCallback(e);
           }
         },
+        allowKeyboardNavigation: false,
       },
     };
 
