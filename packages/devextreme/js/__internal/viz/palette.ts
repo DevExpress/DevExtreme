@@ -17,14 +17,10 @@
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import _Color from '@js/color';
 import { extend } from '@js/core/utils/extend';
-import { isString as _isString } from '@js/core/utils/type';
+import { isString } from '@js/core/utils/type';
+import { Color } from '@ts/color';
 import { normalizeEnum } from '@ts/viz/core/utils';
-
-const _floor = Math.floor;
-const _ceil = Math.ceil;
-const _isArray = Array.isArray;
 
 const HIGHLIGHTING_STEP = 50;
 const DEFAULT_PALETTE = 'material';
@@ -155,10 +151,10 @@ export function getPalette(palette, parameters) {
 
   let result;
   const type = parameters.type;
-  if (_isArray(palette)) {
+  if (Array.isArray(palette)) {
     return palette.slice(0);
   } else {
-    if (_isString(palette)) {
+    if (isString(palette)) {
       result = palettes[normalizeEnum(palette)];
     }
     if (!result) {
@@ -173,16 +169,16 @@ export function registerPalette(name, palette) {
   const item = {};
   let paletteName;
 
-  if (_isArray(palette)) {
+  if (Array.isArray(palette)) {
     // @ts-expect-error
     item.simpleSet = palette.slice(0);
   } else if (palette) {
     // @ts-expect-error
-    item.simpleSet = _isArray(palette.simpleSet) ? palette.simpleSet.slice(0) : undefined;
+    item.simpleSet = Array.isArray(palette.simpleSet) ? palette.simpleSet.slice(0) : undefined;
     // @ts-expect-error
-    item.indicatingSet = _isArray(palette.indicatingSet) ? palette.indicatingSet.slice(0) : undefined;
+    item.indicatingSet = Array.isArray(palette.indicatingSet) ? palette.indicatingSet.slice(0) : undefined;
     // @ts-expect-error
-    item.gradientSet = _isArray(palette.gradientSet) ? palette.gradientSet.slice(0) : undefined;
+    item.gradientSet = Array.isArray(palette.gradientSet) ? palette.gradientSet.slice(0) : undefined;
     // @ts-expect-error
     item.accentColor = palette.accentColor;
   }
@@ -257,7 +253,7 @@ function getAlternateColorsStrategy(palette, parameters) {
 
 function getExtrapolateColorsStrategy(palette, parameters) {
   function convertColor(color, cycleIndex, cycleCount) {
-    const hsl = new _Color(color).hsl;
+    const hsl = new Color(color).hsl;
     let l = hsl.l / 100;
     const diapason = cycleCount - 1 / cycleCount;
     let minL = l - diapason * 0.5;
@@ -280,17 +276,17 @@ function getExtrapolateColorsStrategy(palette, parameters) {
     }
     hsl.l = l * 100;
 
-    return _Color.prototype.fromHSL(hsl).toHex();
+    return Color.fromHSL(hsl).toHex();
   }
 
   return {
     getColor(index, count) {
       const paletteCount = palette.length;
-      const cycles = _floor((count - 1) / paletteCount + 1);
+      const cycles = Math.floor((count - 1) / paletteCount + 1);
       const color = palette[index % paletteCount];
 
       if (cycles > 1) {
-        return convertColor(color, _floor(index / paletteCount), cycles);
+        return convertColor(color, Math.floor(index / paletteCount), cycles);
       }
 
       return color;
@@ -360,9 +356,9 @@ function getColorMixer(palette, parameters) {
         } else {
           const c2 = getColorAndDistance(paletteWithEmptyColors, i, paletteLength);
           // @ts-expect-error
-          const color2 = new _Color(c2[0]);
+          const color2 = new Color(c2[0]);
 
-          color1 = new _Color(color1);
+          color1 = new Color(color1);
           // @ts-expect-error
           for (let j = 0; j < c2[1]; j++, i++) {
             // @ts-expect-error
@@ -487,10 +483,10 @@ function getAlteredPalette(originalPalette, step) {
 }
 
 function getNewColor(currentColor, step) {
-  let newColor = new _Color(currentColor).alter(step);
+  let newColor = new Color(currentColor).alter(step);
   const lightness = getLightness(newColor);
   if (lightness > 200 || lightness < 55) {
-    newColor = new _Color(currentColor).alter(-step / 2);
+    newColor = new Color(currentColor).alter(-step / 2);
   }
   return newColor.toHex();
 }
@@ -518,15 +514,15 @@ function createDiscreteColors(source, count) {
 
   function addColor(pos) {
     const k = sourceCount * pos;
-    const kl = _floor(k);
-    const kr = _ceil(k);
+    const kl = Math.floor(k);
+    const kr = Math.ceil(k);
     // @ts-expect-error
     gradient.push(colors[kl].blend(colors[kr], k - kl).toHex());
   }
 
   for (i = 0; i <= sourceCount; ++i) {
     // @ts-expect-error
-    colors.push(new _Color(source[i]));
+    colors.push(new Color(source[i]));
   }
   if (colorCount > 0) {
     for (i = 0; i <= colorCount; ++i) {
@@ -541,8 +537,8 @@ function createDiscreteColors(source, count) {
 export function getGradientPalette(source, themeDefaultPalette) {
   // TODO: Looks like some new set is going to be added
   const palette = getPalette(source, { type: 'gradientSet', themeDefault: themeDefaultPalette });
-  const color1 = new _Color(palette[0]);
-  const color2 = new _Color(palette[1]);
+  const color1 = new Color(palette[0]);
+  const color2 = new Color(palette[1]);
 
   return {
     getColor(ratio) {

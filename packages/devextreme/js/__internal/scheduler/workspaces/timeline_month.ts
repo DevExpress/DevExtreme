@@ -29,7 +29,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   }
 
   protected override getDateHeaderTemplate(): TemplateBase | null | undefined {
-    return this.option('dateCellTemplate');
+    return this.option().dateCellTemplate;
   }
 
   protected override calculateDurationInCells(timeDiff: number): number {
@@ -47,7 +47,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   protected override getIntervalBetween(currentDate: Date): number {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
-    const startDayHour = this.option('startDayHour');
+    const { startDayHour } = this.option();
 
     return currentDate.getTime()
       - (firstViewDate.getTime() - startDayHour * 3600000)
@@ -55,14 +55,14 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   }
 
   protected override getViewStartByOptions(): Date {
-    const currentDate: Date = this.option('currentDate') ?? new Date();
-    const startDate: Date = this.option('startDate') ?? currentDate;
+    const currentDate: Date = this.option().currentDate ?? new Date();
+    const startDate: Date = this.option().startDate ?? currentDate;
     const firstMonthDate = dateUtils.getFirstMonthDate(startDate) ?? startDate;
 
     return monthUtils.getViewStartByOptions(
       startDate,
       currentDate,
-      this.option('intervalCount'),
+      this.option().intervalCount,
       firstMonthDate,
     );
   }

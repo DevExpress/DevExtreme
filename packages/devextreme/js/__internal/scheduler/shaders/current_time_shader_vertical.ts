@@ -1,7 +1,7 @@
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { setHeight, setWidth } from '@js/core/utils/size';
 
-import type SchedulerWorkSpace from '../workspaces/m_work_space';
+import type SchedulerWorkSpace from '../workspaces/work_space';
 import CurrentTimeShader from './current_time_shader';
 
 const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
@@ -141,23 +141,23 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   }
 
   private getShaderOffset(i: number, width: number): number {
-    return this.workSpace.getGroupedStrategy().getShaderOffset(i, width) as number;
+    return this.workSpace.getGroupedStrategy().getShaderOffset(i, width);
   }
 
   private getShaderTopOffset(i: number): number {
-    return this.workSpace.getGroupedStrategy().getShaderTopOffset(i) as number;
+    return this.workSpace.getGroupedStrategy().getShaderTopOffset(i);
   }
 
   private getShaderHeight(): number {
-    return this.workSpace.getGroupedStrategy().getShaderHeight() as number;
+    return this.workSpace.getGroupedStrategy().getShaderHeight();
   }
 
   private getShaderMaxHeight(): number {
-    return this.workSpace.getGroupedStrategy().getShaderMaxHeight() as number;
+    return this.workSpace.getGroupedStrategy().getShaderMaxHeight();
   }
 
   private getShaderWidth(): number {
-    return this.workSpace.getGroupedStrategy().getShaderWidth() as number;
+    return this.workSpace.getGroupedStrategy().getShaderWidth();
   }
 
   clean(): void {
