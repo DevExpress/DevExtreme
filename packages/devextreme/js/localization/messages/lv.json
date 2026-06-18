@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Lapas izmērs",
         "dxPagination-ariaPageNumber": "Lapas numurs",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Kopsummā",
         "dxPivotGrid-total": "{0} Summā",
         "dxPivotGrid-fieldChooserTitle": "Lauka izvēle",

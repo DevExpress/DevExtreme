@@ -81,12 +81,6 @@
             "enabled": false
         },
         {
-            "enabled": false,
-            "matchPackageNames": [
-                "/^@devextreme-generator//"
-            ]
-        },
-        {
             "matchPackageNames": [
                 "devexpress-gantt",
                 "devexpress-diagram",
@@ -113,10 +107,7 @@
             ],
             "dependencyDashboardApproval": true,
             "matchPackageNames": [
-                "*",
-                "!cldr-{/,}**",
-                "!chrome{/,}**",
-                "!firefox{/,}**"
+                "*"
             ]
         },
         {

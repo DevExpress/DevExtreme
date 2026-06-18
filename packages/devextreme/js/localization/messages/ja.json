@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "ページ サイズ",
         "dxPagination-ariaPageNumber": "ページ番号",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "総計",
         "dxPivotGrid-total": "{0} 合計",
         "dxPivotGrid-fieldChooserTitle": "フィールドの選択",

@@ -6,6 +6,8 @@ import { z } from 'zod';
 
 type RowKey = string | number | Record<string, string | number>;
 
+type FilterExprValue = BasicFilterExpr['value'];
+
 export const compositeKeyPairSchema = z.object({
   field: z.string(),
   value: z.union([z.string(), z.number()]),
@@ -88,7 +90,22 @@ export const splitIntoLoadWindows = (
   return windows;
 };
 
-type FilterExprValue = BasicFilterExpr['value'];
+// Maps 1-based indexes to the keys at those positions;
+export const pickKeysByIndex = <T>(
+  keys: T[],
+  indexes: number[],
+): T[] | null => {
+  const normalizedRowIndexes = indexes.map((index) => index - 1);
+  const allIndexesValid = normalizedRowIndexes.every(
+    (index) => index < keys.length,
+  );
+
+  if (!allIndexesValid) {
+    return null;
+  }
+
+  return normalizedRowIndexes.map((index) => keys[index]);
+};
 
 export function resolveFilterValue(
   dataType: string | undefined,

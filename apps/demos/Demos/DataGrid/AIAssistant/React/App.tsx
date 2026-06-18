@@ -1,9 +1,5 @@
 import React, { useCallback, useRef } from 'react';
 
-import type dxChat from 'devextreme/ui/chat';
-import type { InitializedEvent, Properties as ChatProperties } from 'devextreme/ui/chat';
-import type { ItemClickEvent } from 'devextreme/ui/button_group';
-
 import DataGrid, {
   Column,
   Paging,
@@ -16,6 +12,9 @@ import DataGrid, {
   Sorting,
   AIAssistant,
 } from 'devextreme-react/data-grid';
+
+import type { ChatTypes } from 'devextreme-react/chat';
+import type { ButtonGroupTypes } from 'devextreme-react/button-group';
 
 import { sales } from './data.ts';
 import { aiIntegration } from './service.ts';
@@ -54,13 +53,13 @@ const suggestions = {
 };
 
 export default function App() {
-  const chatRef = useRef<dxChat | null>(null);
+  const chatRef = useRef<ChatTypes.InitializedEvent['component'] | null>(null);
 
-  const onChatInitialized = useCallback((e: InitializedEvent) => {
+  const onChatInitialized = useCallback((e: ChatTypes.InitializedEvent) => {
     chatRef.current = e.component ?? null;
   }, []);
 
-  const onSuggestionItemClick = useCallback((e: ItemClickEvent) => {
+  const onSuggestionItemClick = useCallback((e: ButtonGroupTypes.ItemClickEvent) => {
     const { prompt, text } = e.itemData;
     const userId = text === '💡 Help' ? 'help' : 'user';
 
@@ -77,7 +76,7 @@ export default function App() {
     }]);
   }, []);
 
-  const chatOptions: ChatProperties = {
+  const chatOptions: ChatTypes.Properties = {
     onInitialized: onChatInitialized,
     user: {
       id: 'user',

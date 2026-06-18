@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Sidestørrelse",
         "dxPagination-ariaPageNumber": "Sidenummer",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Totalsum",
         "dxPivotGrid-total": "{0} Totalt",
         "dxPivotGrid-fieldChooserTitle": "Feltvelger",

@@ -33,6 +33,11 @@ Demos/**/tsconfig.json
 publish-demos
 
 csp-reports
+csp-bundled-demos
+
+# Scratch artifacts from utils/server/csp-bundle-angular.js (cleaned up on success).
+utils/server/.csp-bundle-angular-*
+Demos/**/.csp-bundle-angular-patched.*.ts
 
 .angular
 angular.json

@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Sayfa boyutu",
         "dxPagination-ariaPageNumber": "Sayfa numarası",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Genel Toplam",
         "dxPivotGrid-total": "{0} Toplam",
         "dxPivotGrid-fieldChooserTitle": "Alan Seçici",

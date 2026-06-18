@@ -11,8 +11,8 @@ import type {
   TimePanelData,
   ViewCellData,
 } from '../../types';
-import type { ViewDataGenerator } from './m_view_data_generator';
 import type { ViewDataProviderExtendedOptions } from './types';
+import type { ViewDataGenerator } from './view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
