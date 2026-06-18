@@ -7236,8 +7236,9 @@ declare module DevExpress.core.utils {
     * [descr:DxPromise]
     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
     */
-   export type DxPromise<T = void> =
-    {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
+   export type DxPromise<T = void> = {} extends PromiseType<T>
+    ? Promise<T>
+    : PromiseType<T>;
 }
 declare module DevExpress.data {
   /**
@@ -8887,8 +8888,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class DateBoxBase<
-    TProperties extends
-      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
   > extends dxDropDownEditor<TProperties> {
     /**
      * [descr:DateBoxBase.close()]
@@ -16760,8 +16760,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownEditor<
-    TProperties extends
-      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
   > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
@@ -27189,8 +27188,7 @@ declare module DevExpress.ui {
    * [descr:dxSelectBox]
    */
   export class dxSelectBox<
-    TProperties extends
-      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
   > extends dxDropDownList<TProperties> {}
   module dxSelectBox {
     /**
@@ -29524,8 +29522,7 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties extends
-      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
   > extends dxTextEditor<TProperties> {
     /**
      * [descr:dxTextBox.reset(value)]
@@ -29675,8 +29672,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties extends
-      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -33047,8 +33043,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties extends
-      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
