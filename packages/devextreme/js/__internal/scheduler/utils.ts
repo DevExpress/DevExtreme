@@ -6,9 +6,10 @@ import { getOuterHeight, setHeight, setWidth } from '@js/core/utils/size';
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
 import type { AppointmentViewModelPlain } from './view_model/types';
 
-interface RenovationWidget {
+export interface RenovationWidget {
   $element: () => dxElementWrapper;
   option: (options: Record<string, unknown>) => void;
+  dispose: () => void;
 }
 
 type CreateComponentFn = (

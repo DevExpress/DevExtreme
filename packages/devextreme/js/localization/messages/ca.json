@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Mida de la pàgina",
         "dxPagination-ariaPageNumber": "Número de pàgina",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Total general",
         "dxPivotGrid-total": "{0} total",
         "dxPivotGrid-fieldChooserTitle": "Escollit de camp",

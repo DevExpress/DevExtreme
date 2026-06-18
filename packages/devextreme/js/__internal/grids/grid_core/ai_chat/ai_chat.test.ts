@@ -11,7 +11,7 @@ import $ from '@js/core/renderer';
 import Chat from '@js/ui/chat';
 import { AI_ASSISTANT_AUTHOR_ID } from '@ts/grids/grid_core/ai_assistant/const';
 import ProgressBar from '@ts/ui/m_progress_bar';
-import Popup from '@ts/ui/popup/m_popup';
+import Popup from '@ts/ui/popup/popup';
 
 import { AIChat } from './ai_chat';
 import {

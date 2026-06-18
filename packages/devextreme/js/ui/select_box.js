@@ -1,4 +1,4 @@
-import SelectBox from '../__internal/ui/m_select_box';
+import SelectBox from '../__internal/ui/select_box';
 
 export default SelectBox;
 

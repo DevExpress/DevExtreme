@@ -6609,9 +6609,10 @@ declare module DevExpress.common.grids {
       keys: Array<string | number | Array<CompositeKeyPair>>;
       preserve: boolean;
     };
-    selectByIndexes: {
+    selectionByIndexes: {
       indexes: number[];
       mode: 'select' | 'deselect';
+      scope: 'page' | 'allPages';
     };
     selectAll: {};
     deselectAll: {};
@@ -24504,7 +24505,7 @@ declare module DevExpress.ui {
     export type CellClickEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxPivotGrid,
-        MouseEvent | PointerEvent
+        KeyboardEvent | MouseEvent | PointerEvent
       > & {
         /**
          * [descr:_ui_pivot_grid_CellClickEvent.area]

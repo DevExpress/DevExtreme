@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Sivun koko",
         "dxPagination-ariaPageNumber": "Sivunumero",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Loppusumma",
         "dxPivotGrid-total": "{0} yhteensä",
         "dxPivotGrid-fieldChooserTitle": "Kenttävalitsin",

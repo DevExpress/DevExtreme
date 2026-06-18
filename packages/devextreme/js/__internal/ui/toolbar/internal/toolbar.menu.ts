@@ -20,7 +20,7 @@ import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
 import type { ListBase } from '@ts/ui/list/list.base';
-import Popup from '@ts/ui/popup/m_popup';
+import Popup from '@ts/ui/popup/popup';
 import ToolbarMenuList, { TOOLBAR_MENU_ACTION_CLASS } from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 

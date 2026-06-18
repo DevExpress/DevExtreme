@@ -15,3 +15,11 @@
   text-align: center;
   margin-bottom: 20px;
 }
+
+::ng-deep .center-label {
+  font-size: 18px;
+}
+
+::ng-deep .center-label-total {
+  font-weight: 600;
+}

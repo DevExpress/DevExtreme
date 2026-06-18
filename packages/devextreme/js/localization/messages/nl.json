@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "Paginagrootte",
         "dxPagination-ariaPageNumber": "Paginanummer",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "Eindtotaal",
         "dxPivotGrid-total": "{0} Totaal",
         "dxPivotGrid-fieldChooserTitle": "Veldenkiezer",

@@ -1,5 +1,5 @@
 import timeZoneUtils from '../../../utils_time_zone';
-import type ViewDataProvider from '../../../workspaces/view_model/m_view_data_provider';
+import type ViewDataProvider from '../../../workspaces/view_model/view_data_provider';
 import { isAppointmentMatchedIntervals } from '../../common/is_appointment_matched_intervals';
 import type { ListEntity } from '../../types';
 

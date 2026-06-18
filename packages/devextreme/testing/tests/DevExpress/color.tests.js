@@ -245,37 +245,34 @@ QUnit.test('blend - paired', function(assert) {
 QUnit.module('Color validation');
 
 QUnit.test('is valid hex', function(assert) {
-    const color = new Color();
-    assert.equal(color.isValidHex('#ff0000'), true);
-    assert.equal(color.isValidHex('#0000FF'), true);
-    assert.equal(color.isValidHex('#606060'), true);
-    assert.equal(color.isValidHex('#FFF'), true);
-    assert.equal(color.isValidHex('646400'), false);
-    assert.equal(color.isValidHex('#0000ZZ'), false);
-    assert.equal(color.isValidHex('100'), false);
-    assert.equal(color.isValidHex('#FFX'), false);
+    assert.equal(Color.isValidHex('#ff0000'), true);
+    assert.equal(Color.isValidHex('#0000FF'), true);
+    assert.equal(Color.isValidHex('#606060'), true);
+    assert.equal(Color.isValidHex('#FFF'), true);
+    assert.equal(Color.isValidHex('646400'), false);
+    assert.equal(Color.isValidHex('#0000ZZ'), false);
+    assert.equal(Color.isValidHex('100'), false);
+    assert.equal(Color.isValidHex('#FFX'), false);
 });
 
 QUnit.test('is valid RGB', function(assert) {
-    const color = new Color();
-    assert.equal(color.isValidRGB(0, 0, 0), true);
-    assert.equal(color.isValidRGB(250, 100, 255), true);
-    assert.equal(color.isValidRGB(-250, 100, 255), false);
-    assert.equal(color.isValidRGB(250, 400, 255), false);
-    assert.equal(color.isValidRGB(250, 'sdsd', 255), false);
-    assert.equal(color.isValidRGB(250, null, 100), false);
-    assert.equal(color.isValidRGB(250, 100), false);
-    assert.equal(color.isValidRGB(250, 100, NaN), false);
-    assert.equal(color.isValidRGB(250, 100, 123.5), false);
+    assert.equal(Color.isValidRGB(0, 0, 0), true);
+    assert.equal(Color.isValidRGB(250, 100, 255), true);
+    assert.equal(Color.isValidRGB(-250, 100, 255), false);
+    assert.equal(Color.isValidRGB(250, 400, 255), false);
+    assert.equal(Color.isValidRGB(250, 'sdsd', 255), false);
+    assert.equal(Color.isValidRGB(250, null, 100), false);
+    assert.equal(Color.isValidRGB(250, 100), false);
+    assert.equal(Color.isValidRGB(250, 100, NaN), false);
+    assert.equal(Color.isValidRGB(250, 100, 123.5), false);
 });
 
 QUnit.test('is valid alpha', function(assert) {
-    const color = new Color();
-    assert.equal(color.isValidAlpha(0), true);
-    assert.equal(color.isValidAlpha(0.8), true);
-    assert.equal(color.isValidAlpha(1), true);
-    assert.equal(color.isValidAlpha(-0.5), false);
-    assert.equal(color.isValidAlpha(), false);
-    assert.equal(color.isValidAlpha(100), false);
-    assert.equal(color.isValidAlpha('sdss'), false);
+    assert.equal(Color.isValidAlpha(0), true);
+    assert.equal(Color.isValidAlpha(0.8), true);
+    assert.equal(Color.isValidAlpha(1), true);
+    assert.equal(Color.isValidAlpha(-0.5), false);
+    assert.equal(Color.isValidAlpha(), false);
+    assert.equal(Color.isValidAlpha(100), false);
+    assert.equal(Color.isValidAlpha('sdss'), false);
 });
