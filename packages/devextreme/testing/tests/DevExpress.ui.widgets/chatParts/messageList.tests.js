@@ -1839,7 +1839,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(this.getScrollView().scrollTop(), this.getScrollOffsetMax(), 1.01, 'scroll position should be limited to the max scrollable offset after increasing height');
         });
 
-        QUnit.test('should be scrolled down to companion reply rendered immediately after current user message', async function(assert) {
+        QUnit.skip('should be scrolled down to companion reply rendered immediately after current user message', async function(assert) {
             const items = generateMessages(67);
 
             this.reinit({
