@@ -44,6 +44,7 @@ overrides:
   "ip-address@<=10.1.0": ">=10.1.1"
   "webpack-dev-server@<=5.2.3": ^5.2.4
   "form-data@<4.0.6": "^4.0.6"
+  "tar@<=7.5.15": ">=7.5.16"
 
 catalog:
   axe-core: ^4.11.1
