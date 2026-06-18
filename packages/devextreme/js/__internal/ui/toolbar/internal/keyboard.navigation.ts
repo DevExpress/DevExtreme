@@ -1,5 +1,6 @@
 import type { Orientation } from '@js/common';
 import { keyboard } from '@js/common/core/events/short';
+import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -140,11 +141,6 @@ export class RovingTabIndexController {
   }
 
   private handleDirectional(target: HTMLElement, e: KeyboardEvent): void {
-    const hasModifier = e.ctrlKey || e.altKey || e.metaKey || e.shiftKey;
-    if (hasModifier) {
-      return;
-    }
-
     const location = this.getKeyToLocation()[e.key];
 
     if (!location) {
@@ -183,6 +179,10 @@ export class RovingTabIndexController {
   ): boolean {
     if (!this.isHorizontalArrow(location)) {
       return false;
+    }
+
+    if (isCommandKeyPressed(e)) {
+      return true;
     }
 
     const $focused = $(this.host.option().focusedElement);
