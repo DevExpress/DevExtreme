@@ -3,6 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { Color, type ColorInstance } from '@ts/color';
 import { locate, move } from '@ts/common/core/animation/translator';
 import messageLocalization from '@ts/core/localization/message';
 import devices from '@ts/core/m_devices';
@@ -14,7 +15,6 @@ import type { SupportedKeyHandler, SupportedKeys } from '@ts/core/widget/widget'
 import eventsEngine from '@ts/events/core/m_events_engine';
 import { name as clickEventName } from '@ts/events/m_click';
 import { isCommandKeyPressed } from '@ts/events/utils/index';
-import { Color, type ColorInstance } from '@ts/m_color';
 import Draggable from '@ts/m_draggable';
 import type { EditorProperties, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
