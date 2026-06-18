@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: preview-${{ github.event.pull_request.number }}
+  group: storybook-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 env:
@@ -36,7 +36,7 @@ jobs:
       )
     environment:
       name: storybook
-      url: https://devexpress.github.io/DevExtreme/preview/pr-${{ github.event.pull_request.number }}
+      url: https://devexpress.github.io/DevExtreme/storybook/pr-${{ github.event.pull_request.number }}
 
     steps:
       - name: Checkout repository
@@ -83,13 +83,13 @@ jobs:
           pr-number: ${{ github.event.pull_request.number }}
           source-dir: ${{ env.SOURCE_DIR }}
           preview-branch: gh-pages
-          umbrella-dir: preview
+          umbrella-dir: storybook
           comment: false
           token: ${{ github.token }}
           wait-for-pages-deployment: true
 
   remove:
-    name: Remove preview
+    name: Remove storybook
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: >-
@@ -110,7 +110,7 @@ jobs:
           pr-number: ${{ github.event.pull_request.number }}
           source-dir: ${{ env.SOURCE_DIR }}
           preview-branch: gh-pages
-          umbrella-dir: preview
+          umbrella-dir: storybook
           comment: false
           token: ${{ github.token }}
           wait-for-pages-deployment: true
