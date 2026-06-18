@@ -173,12 +173,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private a11yStatus!: dxElementWrapper;
 
-  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/m_work_space.ts
+  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/work_space.ts
   _workSpace: any;
 
   private header?: SchedulerHeader;
 
-  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/m_work_space.ts
+  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/work_space.ts
   _appointments: any;
 
   private appointmentDragController!: AppointmentDragController;

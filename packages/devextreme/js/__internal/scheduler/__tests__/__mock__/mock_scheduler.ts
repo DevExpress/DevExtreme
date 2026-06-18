@@ -2,7 +2,7 @@ import { jest } from '@jest/globals';
 import { logger } from '@ts/core/utils/m_console';
 import DOMComponent from '@ts/core/widget/dom_component';
 
-import SchedulerWorkSpace from '../../workspaces/m_work_space';
+import SchedulerWorkSpace from '../../workspaces/work_space';
 
 type ClassRects = Record<string, Partial<DOMRect>>;
 

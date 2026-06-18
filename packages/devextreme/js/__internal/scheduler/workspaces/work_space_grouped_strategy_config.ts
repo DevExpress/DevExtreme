@@ -1,4 +1,4 @@
-import type { CellPositionData } from '@ts/scheduler/types';
+import type { Coordinates } from '@js/core/renderer';
 
 export interface GroupedStrategyConfig {
   getRowCount: () => number;
@@ -19,7 +19,7 @@ export interface GroupedStrategyConfig {
   getElement: () => Element;
   getHeaderPanelContainerElement: () => Element;
   getCellIndexByCoordinates: (
-    coordinates: CellPositionData & { groupIndex?: number },
+    coordinates: Coordinates & { groupIndex?: number },
   ) => number;
   supportAllDayRow: () => boolean;
   isGroupedByDate: () => boolean;
