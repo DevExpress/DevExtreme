@@ -20,9 +20,9 @@ export const getViewStartByOptions = (
   startDate: Date | undefined,
   currentDate: Date,
   intervalCount: number,
-  startViewDate: Date,
+  startViewDate?: Date,
 ): Date => {
-  if (!startDate) {
+  if (!startDate || !startViewDate) {
     return new Date(currentDate);
   }
   let currentStartDate = new Date(startViewDate);
@@ -58,7 +58,7 @@ export const getCellText = (date: Date, intervalCount: number): string => {
 export const calculateStartViewDate = (
   currentDate: Date,
   startDayHour: number,
-  startDate: Date,
+  startDate: Date | undefined,
   intervalCount: number,
   firstDayOfWeekOption: number | undefined,
 ): Date => {

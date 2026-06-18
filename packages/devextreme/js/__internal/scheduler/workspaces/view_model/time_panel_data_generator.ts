@@ -5,9 +5,22 @@ import {
   getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
 } from '@ts/scheduler/r1/utils/index';
 
-import type { ViewDataProviderExtendedOptions } from './m_types';
+import type {
+  TimePanelCellData,
+  TimePanelCellsData,
+  TimePanelData,
+  ViewCellData,
+} from '../../types';
+import type { ViewDataGenerator } from './m_view_data_generator';
+import type { ViewDataProviderExtendedOptions } from './types';
 
 const toMs = dateUtils.dateToMilliseconds;
+
+interface TimePanelGenerateOptions extends ViewDataProviderExtendedOptions {
+  rowCount?: number;
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+}
 
 interface TimePanelGeneratorCellData {
   date: Date;
@@ -24,10 +37,13 @@ interface TimePanelVisibleInterval {
 }
 
 export class TimePanelDataGenerator {
-  constructor(private readonly viewDataGenerator) {
+  constructor(private readonly viewDataGenerator: ViewDataGenerator) {
   }
 
-  getCompleteTimePanelMap(options: ViewDataProviderExtendedOptions, completeViewDataMap) {
+  getCompleteTimePanelMap(
+    options: ViewDataProviderExtendedOptions,
+    completeViewDataMap: ViewCellData[][],
+  ): TimePanelCellData[] {
     const {
       startViewDate,
       cellDuration,
@@ -43,7 +59,8 @@ export class TimePanelDataGenerator {
       showCurrentTimeIndicator,
     } = options;
     const rowsCount = completeViewDataMap.length - 1;
-    const realEndViewDate = completeViewDataMap[rowsCount][completeViewDataMap[rowsCount].length - 1].endDate;
+    const lastRow = completeViewDataMap[rowsCount];
+    const realEndViewDate = lastRow[lastRow.length - 1].endDate;
 
     const rowCountInGroup = this.viewDataGenerator.getRowCount({
       intervalCount,
@@ -129,7 +146,10 @@ export class TimePanelDataGenerator {
     });
   }
 
-  generateTimePanelData(completeTimePanelMap, options) {
+  generateTimePanelData(
+    completeTimePanelMap: TimePanelCellData[],
+    options: TimePanelGenerateOptions,
+  ): TimePanelData {
     const {
       startRowIndex,
       rowCount,
@@ -147,43 +167,55 @@ export class TimePanelDataGenerator {
     const timePanelMap = completeTimePanelMap
       .slice(correctedStartRowIndex, correctedStartRowIndex + displayedRowCount);
 
-    const timePanelData: any = {
-      topVirtualRowHeight,
-      bottomVirtualRowHeight,
-      isGroupedAllDayPanel,
-    };
-
     const {
       previousGroupedData: groupedData,
     } = this.generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping);
 
-    timePanelData.groupedData = groupedData;
-
-    return timePanelData;
+    return {
+      topVirtualRowHeight,
+      bottomVirtualRowHeight,
+      isGroupedAllDayPanel,
+      groupedData,
+    };
   }
 
-  private generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping) {
-    return timePanelMap.reduce(({ previousGroupIndex, previousGroupedData }, cellData) => {
-      const currentGroupIndex = cellData.groupIndex;
-      if (currentGroupIndex !== previousGroupIndex) {
-        previousGroupedData.push({
-          dateTable: [],
-          isGroupedAllDayPanel: getIsGroupedAllDayPanel(Boolean(cellData.allDay), isVerticalGrouping),
-          groupIndex: currentGroupIndex,
-          key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
-        });
-      }
-      if (cellData.allDay) {
-        previousGroupedData[previousGroupedData.length - 1].allDayPanel = cellData;
-      } else {
-        previousGroupedData[previousGroupedData.length - 1].dateTable.push(cellData);
-      }
+  private generateTimePanelDataFromMap(
+    timePanelMap: TimePanelCellData[],
+    isVerticalGrouping: boolean,
+  ): {
+    previousGroupIndex: number | undefined;
+    previousGroupedData: TimePanelCellsData[];
+  } {
+    return timePanelMap.reduce<{
+      previousGroupIndex: number | undefined;
+      previousGroupedData: TimePanelCellsData[];
+    }>(
+      ({ previousGroupIndex, previousGroupedData }, cellData) => {
+        const currentGroupIndex = cellData.groupIndex;
+        if (currentGroupIndex !== previousGroupIndex) {
+          previousGroupedData.push({
+            dateTable: [],
+            isGroupedAllDayPanel: getIsGroupedAllDayPanel(
+              Boolean(cellData.allDay),
+              isVerticalGrouping,
+            ),
+            groupIndex: currentGroupIndex,
+            key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
+          });
+        }
+        if (cellData.allDay) {
+          previousGroupedData[previousGroupedData.length - 1].allDayPanel = cellData;
+        } else {
+          previousGroupedData[previousGroupedData.length - 1].dateTable.push(cellData);
+        }
 
-      return {
-        previousGroupIndex: currentGroupIndex,
-        previousGroupedData,
-      };
-    }, { previousGroupIndex: -1, previousGroupedData: [] });
+        return {
+          previousGroupIndex: currentGroupIndex,
+          previousGroupedData,
+        };
+      },
+      { previousGroupIndex: -1, previousGroupedData: [] },
+    );
   }
 
   private isTimeCellShouldBeHighlighted(
@@ -255,7 +287,7 @@ export class TimePanelDataGenerator {
   }
 
   private isLastCellInGroup(
-    completeViewDataMap: any,
+    completeViewDataMap: ViewCellData[][],
     index: number,
   ): boolean {
     if (index === completeViewDataMap.length - 1) {
@@ -268,6 +300,6 @@ export class TimePanelDataGenerator {
       allDay: nextAllDay,
     } = completeViewDataMap[index + 1][0];
 
-    return nextAllDay || nextGroupIndex !== currentGroupIndex;
+    return (nextAllDay ?? false) || nextGroupIndex !== currentGroupIndex;
   }
 }
