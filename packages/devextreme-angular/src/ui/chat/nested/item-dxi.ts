@@ -12,7 +12,7 @@ import {
 
 
 
-import { User } from 'devextreme/ui/chat';
+import { User, MessageType } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,
@@ -102,10 +102,10 @@ export class DxiChatItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): string | undefined {
+    get type(): MessageType {
         return this._getOption('type');
     }
-    set type(value: string | undefined) {
+    set type(value: MessageType) {
         this._setOption('type', value);
     }
 
