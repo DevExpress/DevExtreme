@@ -5,11 +5,14 @@ import { ScssBuildExecutorSchema } from './schema';
 import { createMockContext, createTempDir, cleanupTempDir } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
 
-function createMockModules(workspaceRoot: string, projectRoot: string): void {
-  const projectNodeModules = path.join(projectRoot, 'node_modules', 'sass-embedded');
+function createMockModules(projectRoot: string): void {
+  const projectNodeModules = path.join(projectRoot, 'node_modules');
   fs.mkdirSync(projectNodeModules, { recursive: true });
+
+  const sassEmbeddedDir = path.join(projectNodeModules, 'sass-embedded');
+  fs.mkdirSync(sassEmbeddedDir, { recursive: true });
   fs.writeFileSync(
-    path.join(projectNodeModules, 'index.js'),
+    path.join(sassEmbeddedDir, 'index.js'),
     [
       'class SassString {',
       '  constructor(value) { this.value = value; }',
@@ -23,10 +26,7 @@ function createMockModules(workspaceRoot: string, projectRoot: string): void {
     'utf8',
   );
 
-  const workspaceNodeModules = path.join(workspaceRoot, 'node_modules');
-  fs.mkdirSync(workspaceNodeModules, { recursive: true });
-
-  const postcssDir = path.join(workspaceNodeModules, 'postcss');
+  const postcssDir = path.join(projectNodeModules, 'postcss');
   fs.mkdirSync(postcssDir, { recursive: true });
   fs.writeFileSync(
     path.join(postcssDir, 'index.js'),
@@ -41,7 +41,7 @@ function createMockModules(workspaceRoot: string, projectRoot: string): void {
     'utf8',
   );
 
-  const autoprefixerDir = path.join(workspaceNodeModules, 'autoprefixer');
+  const autoprefixerDir = path.join(projectNodeModules, 'autoprefixer');
   fs.mkdirSync(autoprefixerDir, { recursive: true });
   fs.writeFileSync(
     path.join(autoprefixerDir, 'index.js'),
@@ -49,7 +49,7 @@ function createMockModules(workspaceRoot: string, projectRoot: string): void {
     'utf8',
   );
 
-  const cleanCssDir = path.join(workspaceNodeModules, 'clean-css');
+  const cleanCssDir = path.join(projectNodeModules, 'clean-css');
   fs.mkdirSync(cleanCssDir, { recursive: true });
   fs.writeFileSync(
     path.join(cleanCssDir, 'index.js'),
@@ -65,7 +65,7 @@ function createMockModules(workspaceRoot: string, projectRoot: string): void {
     'utf8',
   );
 
-  const chokidarDir = path.join(workspaceNodeModules, 'chokidar');
+  const chokidarDir = path.join(projectNodeModules, 'chokidar');
   fs.mkdirSync(chokidarDir, { recursive: true });
   fs.writeFileSync(
     path.join(chokidarDir, 'index.js'),
@@ -129,7 +129,7 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
     '.generic-$COLOR { color: red; }',
   );
 
-  createMockModules(workspaceRoot, projectRoot);
+  createMockModules(projectRoot);
   return projectRoot;
 }
 
