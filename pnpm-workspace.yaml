@@ -57,7 +57,7 @@ catalog:
   devexpress-diagram: 2.2.29
   devexpress-gantt: 4.1.69
   devextreme-exceljs-fork: 4.4.11
-  devextreme-quill: 1.7.9
+  devextreme-quill: 1.7.10
   "@eslint/js": 9.39.4
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
@@ -127,3 +127,4 @@ patchedDependencies:
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
+  - devextreme-quill@1.7.10
