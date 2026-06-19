@@ -12,6 +12,7 @@ import { ColumnChooserModel } from './column_chooser';
 import { ConfirmationDialogModel } from './confirmation_dialog';
 import { EditFormModel } from './edit_form';
 import { FilterPanelModel } from './filter_panel';
+import { HeaderFilterModel } from './header_filter';
 import { DataRowModel } from './row/data_row';
 import { FilterRowModel } from './row/filter_row';
 import { GroupRowModel } from './row/group_row';
@@ -71,6 +72,12 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getHeaderByText(text: string): dxElementWrapper {
     return $(Array.from(this.getHeaderCells()).find((el) => $(el).text().includes(text)));
+  }
+
+  public openHeaderFilter(columnIndex: number): HeaderFilterModel {
+    (this.getHeaderCellFilter(columnIndex).get(0) as HTMLElement).click();
+
+    return new HeaderFilterModel();
   }
 
   public getDataRows(): NodeListOf<HTMLElement> {
