@@ -55,7 +55,8 @@
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*"
+        "{projectRoot}/scss/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
@@ -73,7 +74,9 @@
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*"
+        "{projectRoot}/scss/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/packages/devextreme-themebuilder/src/data/clean-css-options.json"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
@@ -95,7 +98,8 @@
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*"
+        "{projectRoot}/scss/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
@@ -119,7 +123,9 @@
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*"
+        "{projectRoot}/scss/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/packages/devextreme-themebuilder/src/data/clean-css-options.json"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
