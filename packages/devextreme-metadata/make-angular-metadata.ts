@@ -11,6 +11,8 @@ Ng.makeMetadata({
   },
   mutations: [
     removeMembers(/\/card_view:/),
+    removeMembers(/\/chat:MessageType/),
+    removeMembers(/\/chat:MessageBase.type/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/stepper:/),
     removeMembers(/\/tree_list:dxTreeListColumnButton.onClick/),

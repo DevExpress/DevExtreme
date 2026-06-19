@@ -13,6 +13,7 @@ export {
   MessageUpdatedEvent,
   User,
   Alert,
+  MessageType,
   TextMessage,
   ImageMessage,
   Message,
