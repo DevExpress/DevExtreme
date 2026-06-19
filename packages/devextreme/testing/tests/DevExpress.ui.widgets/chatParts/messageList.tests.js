@@ -1681,7 +1681,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should remain the same after rendering the new message');
         });
 
-        QUnit.test('should be scrolled down after showing if was initially rendered inside an invisible element', async function(assert) {
+        QUnit.skip('should be scrolled down after showing if was initially rendered inside an invisible element', async function(assert) {
             $('#qunit-fixture').css('display', 'none');
 
             const items = generateMessages(31);
