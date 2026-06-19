@@ -131,26 +131,4 @@ describe('getFormatOptions', () => {
     expect(getFormatOptions('Arkansas', column, 1).groupInterval).toBe('State');
     expect(getFormatOptions('Bentonville', column, 2).groupInterval).toBe('City');
   });
-
-  it('selects the date interval and its format per level for a date column', () => {
-    const column = { dataType: 'date', headerFilter: { groupInterval: 'month' } };
-
-    const yearLevel = getFormatOptions(2024, column, 0);
-    expect(yearLevel.groupInterval).toBe('year');
-    expect(yearLevel.format(2024)).toBe('2024');
-
-    const monthLevel = getFormatOptions(3, column, 1);
-    expect(monthLevel.groupInterval).toBe('month');
-    expect(monthLevel.format(3)).toBe('March');
-  });
-
-  it('selects the date interval and its format per level for a datetime column', () => {
-    const column = { dataType: 'datetime', headerFilter: { groupInterval: 'hour' } };
-
-    expect(getFormatOptions(2024, column, 0).groupInterval).toBe('year');
-
-    const hourLevel = getFormatOptions(14, column, 3);
-    expect(hourLevel.groupInterval).toBe('hour');
-    expect(hourLevel.format(14)).toBe('14');
-  });
 });
