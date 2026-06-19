@@ -20,6 +20,7 @@ import {
  TypingEndEvent,
  TypingStartEvent,
  User,
+ MessageType,
 } from "devextreme/ui/chat";
 import {
  DataSourceOptions,
@@ -297,7 +298,7 @@ const DxItemConfig = {
     src: String,
     text: String,
     timestamp: [Date, Number, String],
-    type: String
+    type: String as PropType<MessageType>
   }
 };
 
