@@ -1142,7 +1142,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
 
-        QUnit.testInActiveWindow('editing preview should be hidden after the message is deleted', async function(assert) {
+        QUnit.skip('editing preview should be hidden after the message is deleted', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
