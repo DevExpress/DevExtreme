@@ -16,10 +16,17 @@ export const getAppointmentGeometry = (
     cellSize,
     collectorWithMarginsSize,
     viewOrientation,
+    isMonthView,
     cells,
+    autoRowHeights,
   }: GeometryOptions,
 ): Geometry => {
-  const cellAbstractSize = getAbstractSizeByViewOrientation(cellSize, viewOrientation);
+  const rowKey = isMonthView ? entity.rowIndex : entity.groupIndex;
+  const effectiveCellSize = autoRowHeights?.length
+    ? { ...cellSize, height: autoRowHeights[rowKey] ?? cellSize.height }
+    : cellSize;
+
+  const cellAbstractSize = getAbstractSizeByViewOrientation(effectiveCellSize, viewOrientation);
   const collectorFullAbstractSize = getAbstractSizeByViewOrientation(
     collectorWithMarginsSize,
     viewOrientation,

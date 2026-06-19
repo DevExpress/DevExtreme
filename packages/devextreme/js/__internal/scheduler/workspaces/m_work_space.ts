@@ -1686,6 +1686,65 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     );
   }
 
+  setAutoRowHeights(heights: number[]): void {
+    const $dateTable = this.getDateTable();
+    if (!$dateTable?.length) return;
+
+    let totalHeight = 0;
+    const $rows = $dateTable.find('tr').not(`.${VIRTUAL_ROW_CLASS}`);
+    $rows.each((index: number, row: Element) => {
+      if (index < heights.length) {
+        const h = heights[index];
+        (row as HTMLElement).style.height = `${h}px`;
+        totalHeight += h;
+      } else {
+        totalHeight += (row as HTMLElement).offsetHeight;
+      }
+    });
+
+    ($dateTable[0] as HTMLElement).style.height = `${totalHeight}px`;
+
+    if (this.$timePanel?.length) {
+      this.$timePanel.find('tr').each((index: number, row: Element) => {
+        if (index < heights.length) {
+          (row as HTMLElement).style.height = `${heights[index]}px`;
+        }
+      });
+    }
+
+    this.cache.delete('cellElementsMeta');
+    this.cache.delete('regularPanelSize');
+  }
+
+  setAutoAllDayRowHeight(height: number): void {
+    if (this.$allDayPanel?.length) {
+      this.$allDayPanel.find('tr').css('height', `${height}px`);
+    }
+
+    this.cache.delete('cellElementsMeta');
+    this.cache.delete('allDayPanelSize');
+  }
+
+  clearAutoRowHeight(): void {
+    const $dateTable = this.getDateTable();
+    if ($dateTable?.length) {
+      $dateTable.find('tr').css('height', '');
+      ($dateTable[0] as HTMLElement).style.height = '';
+    }
+
+    if (this.$timePanel?.length) {
+      this.$timePanel.find('tr').css('height', '');
+    }
+
+    if (this.$allDayPanel?.length) {
+      this.$allDayPanel.find('tr').css('height', '');
+    }
+
+    this.cache.delete('cellElementsMeta');
+    this.cache.delete('regularPanelSize');
+    this.cache.delete('allDayPanelSize');
+  }
+
   getIndicatorOffset(): number {
     return 0;
   }

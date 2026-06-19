@@ -5,6 +5,7 @@ import { filterAppointments } from './filtration/filter_appointments';
 import { getOccurrences } from './filtration/get_occurrences';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
 import { generateGridViewModel, sortAppointments } from './generate_view_model/generate_grid_view_model';
+import { getDefaultAppointmentSize } from './generate_view_model/options/get_min_appointment_size';
 import { OptionManager } from './generate_view_model/options/option_manager';
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { getAgendaAppointmentInfo, getAppointmentInfo } from './get_appointment_info';
@@ -19,6 +20,57 @@ import type {
   SortedEntity,
   UTCDatesBeforeSplit,
 } from './types';
+
+const computeAutoPerRowHeights = (
+  sortedItems: SortedEntity[],
+  panelName: 'regularPanel' | 'allDayPanel',
+  minHeight: number,
+  baseCellHeight: number,
+  isMonthView: boolean,
+): number[] => {
+  const maxLevelPerRow: Record<number, number> = {};
+
+  for (const item of sortedItems) {
+    const inPanel = panelName === 'allDayPanel' ? item.isAllDayPanelOccupied : !item.isAllDayPanelOccupied;
+    if (inPanel) {
+      const rowKey = isMonthView ? item.rowIndex : item.groupIndex;
+      const prev = maxLevelPerRow[rowKey] ?? 0;
+      if (item.maxLevel > prev) {
+        maxLevelPerRow[rowKey] = item.maxLevel;
+      }
+    }
+  }
+
+  const keys = Object.keys(maxLevelPerRow);
+  if (keys.length === 0) {
+    return [];
+  }
+
+  const maxKey = Math.max(...keys.map(Number));
+  const heights: number[] = Array<number>(maxKey + 1).fill(baseCellHeight);
+  for (const [key, maxLevel] of Object.entries(maxLevelPerRow)) {
+    heights[Number(key)] = Math.max(baseCellHeight, maxLevel * minHeight);
+  }
+  return heights;
+};
+
+const computeAllDayAutoHeight = (
+  sortedItems: SortedEntity[],
+  minHeight: number,
+  baseCellHeight: number,
+): number => {
+  let maxLevel = 0;
+
+  for (const item of sortedItems) {
+    if (item.isAllDayPanelOccupied) {
+      maxLevel = Math.max(maxLevel, item.maxLevel);
+    }
+  }
+
+  return maxLevel > 0
+    ? Math.max(baseCellHeight, maxLevel * minHeight)
+    : baseCellHeight;
+};
 
 class AppointmentLayoutManager {
   private preparedItems: MinimalAppointmentEntity[] = [];
@@ -76,6 +128,62 @@ class AppointmentLayoutManager {
     const optionManager = new OptionManager(this.schedulerStore);
 
     this._sortedItems = sortAppointments(optionManager, this._filteredItems);
+
+    const {
+      autoHeight,
+      viewOrientation,
+      isTimelineView,
+      isMonthView,
+      isAdaptivityEnabled,
+      hasAllDayPanel,
+    } = optionManager.options;
+
+    const isAutoHeightApplicable = autoHeight && (isTimelineView || isMonthView);
+
+    if (isAutoHeightApplicable) {
+      const workspace = this.schedulerStore.getWorkSpace();
+      const baseCellHeight = Math.max(workspace.getCellHeight(), 1);
+      const minAppointmentHeight = getDefaultAppointmentSize({
+        isTimelineView,
+        isAdaptivityEnabled,
+        viewOrientation,
+      }).height;
+
+      const autoRowHeights = computeAutoPerRowHeights(
+        this._sortedItems,
+        'regularPanel',
+        minAppointmentHeight,
+        baseCellHeight,
+        isMonthView,
+      );
+
+      if (autoRowHeights.length) {
+        workspace.setAutoRowHeights(autoRowHeights);
+        optionManager.setAutoRowHeights(autoRowHeights);
+      }
+
+      if (hasAllDayPanel) {
+        const allDayBaseCellHeight = Math.max(workspace.getAllDayHeight(), 1);
+        const allDayMinAppointmentHeight = getDefaultAppointmentSize({
+          isTimelineView: false,
+          isAdaptivityEnabled,
+          viewOrientation: 'horizontal',
+        }).height;
+        const requiredAllDayHeight = computeAllDayAutoHeight(
+          this._sortedItems,
+          allDayMinAppointmentHeight,
+          allDayBaseCellHeight,
+        );
+
+        workspace.setAutoAllDayRowHeight(requiredAllDayHeight);
+      }
+
+      optionManager.clearCache();
+    } else {
+      const workspace = this.schedulerStore.getWorkSpace();
+      workspace.clearAutoRowHeight();
+      optionManager.resetAutoRowHeights();
+    }
 
     const viewModel = generateGridViewModel(
       this.schedulerStore,

@@ -736,6 +736,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     max?: Date | number | string | undefined;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    autoHeight?: boolean;
+    /**
+     * @docid
      * @default "auto"
      * @public
      */
@@ -1138,6 +1144,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default 1
        */
       intervalCount?: number;
+      /**
+       * @docid
+       * @default false
+       */
+      autoHeight?: boolean;
       /**
        * @docid
        * @default "auto"

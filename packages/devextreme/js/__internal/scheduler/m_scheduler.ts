@@ -568,6 +568,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'dateSerializationFormat':
         break;
+      case 'autoHeight':
       case 'maxAppointmentsPerCell':
         this.repaint();
         break;

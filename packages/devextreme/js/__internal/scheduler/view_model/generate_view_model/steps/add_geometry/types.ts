@@ -59,6 +59,7 @@ export interface GeometryOptions {
   isGroupByDate: boolean;
   hasAllDayPanel: boolean;
   isTimelineView: boolean;
+  isMonthView: boolean;
   isRTLEnabled: boolean;
   isAdaptivityEnabled: boolean;
   collectorPosition: 'start' | 'end';
@@ -69,6 +70,7 @@ export interface GeometryOptions {
   collectorWithMarginsSize: RealSize;
   groupSize: RealSize;
   panelSize: RealSize;
+  autoRowHeights?: number[];
 }
 
 export interface VirtualCropOptions {

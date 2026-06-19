@@ -17,6 +17,7 @@ const MIN_LEVEL_VERTICAL_VIEW = 1;
 export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   alwaysReserveSpaceForCollector,
   isTimelineView,
+  isMonthView,
   viewOrientation,
   isAdaptivityEnabled,
   collectorCSS,
@@ -26,6 +27,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   DOMMetaData: DOMMetaData;
   alwaysReserveSpaceForCollector: boolean;
   isTimelineView: boolean;
+  isMonthView: boolean;
   viewOrientation: Orientation;
   isAdaptivityEnabled: boolean;
   collectorCSS: CollectorCSS;
@@ -52,7 +54,13 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
     width: cellDOM.width ?? 0,
     height: cellDOM.height ?? 0,
   };
-  const maxAppointmentsPerCell = schedulerStore.getViewOption('maxAppointmentsPerCell');
+  const isAutoHeight = Boolean(
+    schedulerStore.getViewOption('autoHeight') ?? schedulerStore.option('autoHeight'),
+  );
+  const isAutoHeightApplicable = isAutoHeight && (isTimelineView || isMonthView);
+  const maxAppointmentsPerCell = isAutoHeightApplicable
+    ? 'unlimited'
+    : schedulerStore.getViewOption('maxAppointmentsPerCell');
   const collectorSizes = maxAppointmentsPerCell === 'unlimited' && !alwaysReserveSpaceForCollector
     ? UNLIMITED_COLLECTOR_SIZES
     : getCollectorSize(

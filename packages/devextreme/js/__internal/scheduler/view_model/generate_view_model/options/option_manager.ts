@@ -44,8 +44,18 @@ export class OptionManager {
 
   public readonly options: ViewModelOptions;
 
+  private autoRowHeightsData: number[] | undefined;
+
   constructor(protected schedulerStore: Scheduler) {
     this.options = getViewModelOptions(schedulerStore);
+  }
+
+  setAutoRowHeights(heights: number[]): void {
+    this.autoRowHeightsData = heights.length ? heights : undefined;
+  }
+
+  resetAutoRowHeights(): void {
+    this.autoRowHeightsData = undefined;
   }
 
   protected getPanelOptions(panelName: PanelName): {
@@ -89,6 +99,7 @@ export class OptionManager {
       } = getPanelCollectorOptions(this.schedulerStore, {
         alwaysReserveSpaceForCollector: type === 'month',
         isTimelineView,
+        isMonthView,
         viewOrientation,
         isAdaptivityEnabled,
         collectorCSS,
@@ -120,6 +131,7 @@ export class OptionManager {
         groupOrientation,
         isGroupByDate,
         isTimelineView,
+        isMonthView,
         isRTLEnabled,
         isAdaptivityEnabled,
         allDayPanelCellSize,
@@ -137,6 +149,7 @@ export class OptionManager {
           isAllDayPanel: panelName === 'allDayPanel',
         }),
         panelSize: panelDOMSize,
+        autoRowHeights: this.autoRowHeightsData,
       };
       const collectorOptions: CollectorOptions = {
         cells,
@@ -153,6 +166,10 @@ export class OptionManager {
         geometryOptions,
       };
     });
+  }
+
+  clearCache(): void {
+    this.cache.clear();
   }
 
   getSplitIntervals(panelName: PanelName): DateInterval[] {

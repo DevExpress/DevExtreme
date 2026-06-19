@@ -1,7 +1,7 @@
 import type { AppointmentCollectorWithGeometry } from '../../../types';
 import { addAdaptivityGeometryInsideInterval } from './add_adaptivity_geometry_inside_interval';
 import { addGeometryInsideInterval } from './add_geometry_inside_interval';
-import { addGroupingOffset } from './add_grouping_offset';
+import { addGroupingOffset, getCumulativeRowOffset } from './add_grouping_offset';
 import type {
   Geometry,
   GeometryMinimalEntity,
@@ -20,11 +20,13 @@ const RTLSwap = (
 
 const addPanelOffset = <T extends GeometryMinimalEntity & Geometry>(
   entity: T,
-  { cellSize, viewOrientation, isTimelineView }: GeometryOptions,
+  {
+    cellSize, viewOrientation, isTimelineView, autoRowHeights,
+  }: GeometryOptions,
 ): void => {
   switch (true) {
     case viewOrientation === 'horizontal' && !isTimelineView: // month
-      entity.top += entity.rowIndex * cellSize.height;
+      entity.top += getCumulativeRowOffset(autoRowHeights, entity.rowIndex, cellSize.height);
       break;
     case viewOrientation === 'horizontal' && isTimelineView: // timelineX
     case viewOrientation === 'vertical': // day, week, workWeek

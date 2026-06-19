@@ -4,6 +4,14 @@ import type {
   GeometryOptions,
 } from './types';
 
+export const getCumulativeRowOffset = (
+  heights: number[] | undefined,
+  index: number,
+  uniformSize: number,
+): number => (heights?.length
+  ? heights.slice(0, index).reduce((sum, height) => sum + height, 0)
+  : index * uniformSize);
+
 export const addGroupingOffset = (
   entity: GeometryMinimalEntity & Geometry,
   {
@@ -15,6 +23,7 @@ export const addGroupingOffset = (
     allDayPanelCellSize,
     cellSize,
     groupSize,
+    autoRowHeights,
   }: GeometryOptions,
 ): void => {
   if (groupCount) {
@@ -29,10 +38,17 @@ export const addGroupingOffset = (
       case groupOrientation === 'horizontal':
         entity.left += entity.groupIndex * groupSize.width; // intervals before
         break;
-      default:
-        entity.top += entity.groupIndex * groupSize.height
-        + (entity.groupIndex + Number(!entity.isAllDayPanelOccupied))
+      default: {
+        const groupTopOffset = getCumulativeRowOffset(
+          autoRowHeights,
+          entity.groupIndex,
+          groupSize.height,
+        );
+
+        entity.top += groupTopOffset
+          + (entity.groupIndex + Number(!entity.isAllDayPanelOccupied))
           * Number(hasAllDayPanel) * allDayPanelCellSize.height;
+      }
     }
   }
 };

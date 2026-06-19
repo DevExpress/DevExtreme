@@ -56,6 +56,7 @@ export interface ViewModelOptions {
   isAdaptivityEnabled: boolean;
   cellDurationMinutes: number;
   isVirtualScrolling: boolean;
+  autoHeight: boolean;
 }
 
 export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions => {
@@ -76,6 +77,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
   } = configByView[type];
   const isRTLEnabled = Boolean(schedulerStore.option('rtlEnabled'));
   const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
+  const autoHeight = Boolean(schedulerStore.getViewOption('autoHeight') ?? schedulerStore.option('autoHeight'));
   const cellDurationMinutes = schedulerStore.getViewOption('cellDuration');
   const allDayPanelMode = schedulerStore.getViewOption('allDayPanelMode');
   const snapToCellsMode = schedulerStore.getViewOption('snapToCellsMode');
@@ -95,6 +97,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
     viewOrientation,
     isRTLEnabled,
     isAdaptivityEnabled,
+    autoHeight,
     cellDurationMinutes,
     hasAllDayPanel: showAllDayPanel && allDayPanelMode !== 'hidden' && viewOrientation === 'vertical',
     isVirtualScrolling,

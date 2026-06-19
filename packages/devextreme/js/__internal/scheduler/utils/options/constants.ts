@@ -51,6 +51,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   indicatorUpdateInterval: 300000,
   recurrenceEditMode: 'dialog',
   cellDuration: 30,
+  autoHeight: false,
   maxAppointmentsPerCell: 'auto',
   selectedCellData: [],
   groupByDate: false,
