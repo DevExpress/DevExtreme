@@ -2226,8 +2226,8 @@ importers:
         specifier: 11.2.0
         version: 11.2.0
       immutable:
-        specifier: 5.1.5
-        version: 5.1.5
+        specifier: 5.1.6
+        version: 5.1.6
       precinct:
         specifier: 11.0.5
         version: 11.0.5
@@ -11741,6 +11741,9 @@ packages:
 
   immutable@5.1.5:
     resolution: {integrity: sha512-t7xcm2siw+hlUM68I+UEOK+z84RzmN59as9DZ7P1l0994DKUWV7UXBMQZVxaoMSRQ+PBZbHCOoBt7a2wxOMt+A==}
+
+  immutable@5.1.6:
+    resolution: {integrity: sha512-q1swsS8K7L8usSHuOqF2TAoCCkonYz0SG38wLAggaa4Wml70zixIvt2ql4coQ2C2B3hTjltJry4r6bULwgAXLQ==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -31018,6 +31021,8 @@ snapshots:
   immediate@3.0.6: {}
 
   immutable@5.1.5: {}
+
+  immutable@5.1.6: {}
 
   import-fresh@3.3.1:
     dependencies:
