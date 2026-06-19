@@ -25,6 +25,7 @@ import {
  SendButtonProperties,
  User,
  Attachment,
+ MessageType,
  SendButtonAction,
  SendButtonClickEvent,
 } from "devextreme/ui/chat";
@@ -359,7 +360,7 @@ const DxChatItemConfig = {
     src: String,
     text: String,
     timestamp: [Date, Number, String],
-    type: String
+    type: String as PropType<MessageType>
   }
 };
 
@@ -618,7 +619,7 @@ const DxItemConfig = {
     template: {},
     text: String,
     timestamp: [Date, Number, String],
-    type: String as PropType<string | ButtonType>,
+    type: String as PropType<MessageType | ButtonType | string>,
     visible: Boolean
   }
 };

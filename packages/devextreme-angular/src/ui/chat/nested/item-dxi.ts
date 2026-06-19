@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import type { Attachment, User } from 'devextreme/ui/chat';
+import type { Attachment, User, MessageType } from 'devextreme/ui/chat';
 import type { ButtonType } from 'devextreme/common';
 
 import {
@@ -130,10 +130,10 @@ export class DxiChatItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get type(): string | undefined | ButtonType {
+    get type(): MessageType | ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: string | undefined | ButtonType) {
+    set type(value: MessageType | ButtonType | string) {
         this._setOption('type', value);
     }
 
