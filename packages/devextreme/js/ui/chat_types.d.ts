@@ -17,6 +17,7 @@ export {
   User,
   Alert,
   Attachment,
+  MessageType,
   TextMessage,
   ImageMessage,
   Message,

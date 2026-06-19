@@ -59,10 +59,10 @@ export class DxoCardViewColumnHeaderFilterComponent extends NestedOption impleme
     }
 
     @Input()
-    get groupInterval(): HeaderFilterGroupInterval | number | undefined {
+    get groupInterval(): Array<number | string> | HeaderFilterGroupInterval | number | undefined {
         return this._getOption('groupInterval');
     }
-    set groupInterval(value: HeaderFilterGroupInterval | number | undefined) {
+    set groupInterval(value: Array<number | string> | HeaderFilterGroupInterval | number | undefined) {
         this._setOption('groupInterval', value);
     }
 

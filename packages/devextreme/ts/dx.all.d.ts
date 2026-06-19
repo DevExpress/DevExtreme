@@ -5192,7 +5192,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:ColumnHeaderFilter.groupInterval]
      */
-    groupInterval?: HeaderFilterGroupInterval | number | undefined;
+    groupInterval?:
+      | HeaderFilterGroupInterval
+      | number
+      | Array<string | number>
+      | undefined;
     /**
      * [descr:ColumnHeaderFilter.height]
      */
@@ -34514,7 +34518,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:MessageBase.type]
      */
-    type?: 'text' | 'image' | undefined;
+    type?: MessageType;
     /**
      * [descr:MessageBase.timestamp]
      */
@@ -34530,6 +34534,10 @@ declare module DevExpress.ui.dxChat {
 
     [key: string]: any;
   };
+  /**
+   * [descr:MessageType]
+   */
+  export type MessageType = 'text' | 'image';
   /**
    * [descr:SendButtonProperties]
    */

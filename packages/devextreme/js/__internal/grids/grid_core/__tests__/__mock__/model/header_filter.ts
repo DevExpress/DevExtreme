@@ -1,8 +1,10 @@
 import { PopupModel } from '@ts/ui/__tests__/__mock__/model/popup';
+import { TreeViewModel } from '@ts/ui/__tests__/__mock__/model/tree_view/tree_view';
 
 const CLASSES = {
   headerFilterMenu: 'dx-header-filter-menu',
   listItemContent: 'dx-list-item-content',
+  treeView: 'dx-treeview',
 };
 
 const SELECTORS = {
@@ -13,6 +15,12 @@ export class HeaderFilterModel extends PopupModel {
   public getOKButton(): HTMLElement {
     const popup = this.getPopupWrapper();
     return popup?.querySelector(SELECTORS.okButton) as HTMLElement;
+  }
+
+  public getTreeView(): TreeViewModel {
+    const popup = this.getPopupWrapper();
+    const treeViewElement = popup?.querySelector(`.${CLASSES.treeView}`) as HTMLElement;
+    return new TreeViewModel(treeViewElement);
   }
 
   public getListItems(): HTMLElement[] {
