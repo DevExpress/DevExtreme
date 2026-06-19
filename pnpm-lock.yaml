@@ -206,6 +206,10 @@ overrides:
   webpack-dev-server@<=5.2.3: ^5.2.4
   yaml@>=2.0.0 <2.8.3: ^2.8.3
   form-data@<4.0.6: ^4.0.6
+  dompurify@<=3.4.10: ^3.4.11
+  piscina@<=4.9.2: ^4.9.3
+  piscina@>=5.0.0-alpha.0 <=5.1.4: ^5.1.5
+  http-proxy-middleware@>=0.16.0 <3.0.7: ^3.0.7
 
 patchedDependencies:
   testcafe-hammerhead@31.7.7: 8a228aaee48378d5351c48579d64dbed08eabb120e19e7a73eba4ae6f308af14
@@ -9309,8 +9313,8 @@ packages:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
 
-  dompurify@3.4.10:
-    resolution: {integrity: sha512-0xzNv0e7oYC6yyuOGZIABPM4qtg3QxLFniDNPP4ZP90wR8Yq3zgwpRbrNiT4N3IKqDbbYFEJLV+JWEs19aZ//w==}
+  dompurify@3.4.11:
+    resolution: {integrity: sha512-zhlUV12GsaRzMsf9q5M254YhA4+VuF0fG+QFqu6aYpoGlKtz+w8//jBcGVYBgQkR5GHjUomejY84AV+/uPbWdw==}
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -11057,18 +11061,9 @@ packages:
     resolution: {integrity: sha512-T1gkAiYYDWYx3V5Bmyu7HcfcvL7mUrTWiM6yOfa3PIphViJ/gFPbvidQ+veqSOHci/PxBcDabeUNCzpOODJZig==}
     engines: {node: '>= 14'}
 
-  http-proxy-middleware@2.0.9:
-    resolution: {integrity: sha512-c1IyJYLYppU574+YI7R4QyX2ystMtVXZwIdzazUIPIJsHuWNd+mho2j+bKoHftndicGj9yh+xjd+l0yj7VeT1Q==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@types/express': ^4.17.13
-    peerDependenciesMeta:
-      '@types/express':
-        optional: true
-
-  http-proxy-middleware@3.0.5:
-    resolution: {integrity: sha512-GLZZm1X38BPY4lkXA01jhwxvDoOkkXqjgVyUzVxiEK4iuRu03PZoYHhHRwxnfhQMDuaxi3vVri0YgSro/1oWqg==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+  http-proxy-middleware@3.0.7:
+    resolution: {integrity: sha512-iwbQltVlx8bCrqePUM8C+hllHvdawVhQJaLrj1X7qllkvFQdXFsr16pW/mo9+JDVjN+QO2XUx9jd8SmoFkE5qw==}
+    engines: {node: ^14.18.0 || ^16.10.0 || >=18.0.0}
 
   http-proxy@1.18.1:
     resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
@@ -11533,10 +11528,6 @@ packages:
   is-path-inside@3.0.3:
     resolution: {integrity: sha512-Fd4gABb+ycGAmKou8eMftCupSir5lRxqf4aD/vd0cD2qc4HL07OjCeuHMr8Ro4CoMaeCKDB0/ECBOVWjTwUvPQ==}
     engines: {node: '>=8'}
-
-  is-plain-obj@3.0.0:
-    resolution: {integrity: sha512-gwsOE28k+23GP1B6vFl1oVh/WOzmawBrKwo5Ev6wMKzPkaXaCDIQKzLnvsA42DRlbVTWorkgTKIviAKCWkfUwA==}
-    engines: {node: '>=10'}
 
   is-plain-obj@4.1.0:
     resolution: {integrity: sha512-+Pgi+vMuUNkJyExiMBt5IlFoMyKnr5zhJ4Uspz58WOhBF5QoIZkFyNHIbBAtHwzVAgk5RtndVNsDRN61/mmDqg==}
@@ -13896,15 +13887,8 @@ packages:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
 
-  piscina@4.8.0:
-    resolution: {integrity: sha512-EZJb+ZxDrQf3dihsUL7p42pjNyrNIFJCrRHPMgxu/svsj+P3xS3fuEWp7k2+rfsavfl1N0G29b1HGs7J0m8rZA==}
-
   piscina@4.9.3:
     resolution: {integrity: sha512-3e3ka9QCE8RJ5I9uszdAADZnkcYi21cqmF3gxox3u884N72qpFHCsIVhHt8cEQ9t3Auq/NqoiCEuhxlxxQuDWA==}
-
-  piscina@5.1.4:
-    resolution: {integrity: sha512-7uU4ZnKeQq22t9AsmHGD2w4OYQGonwFnTypDypaWi7Qr2EvQIFVtG8J5D/3bE7W123Wdc9+v4CZDu5hJXVCtBg==}
-    engines: {node: '>=20.x'}
 
   piscina@5.2.0:
     resolution: {integrity: sha512-DszUCKeVN/5G5QKo6jAVHL8fmKnkJvQ0ACiVgY7YGCq3TUB2oznAOayvZPIAdEThvhczkXR+qm3IHsNXpFCYfA==}
@@ -17559,7 +17543,7 @@ snapshots:
       css-loader: 7.1.2(webpack@5.105.0(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1))
       esbuild-wasm: 0.28.0
       fast-glob: 3.3.3
-      http-proxy-middleware: 3.0.5
+      http-proxy-middleware: 3.0.7
       istanbul-lib-instrument: 6.0.3
       jsonc-parser: 3.3.1
       karma-source-map-support: 1.4.0
@@ -17571,7 +17555,7 @@ snapshots:
       open: 10.1.0
       ora: 5.4.1
       picomatch: 4.0.4
-      piscina: 4.8.0
+      piscina: 4.9.3
       postcss: 8.5.12
       postcss-loader: 8.1.1(postcss@8.5.12)(typescript@5.8.3)(webpack@5.105.0(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1))
       resolve-url-loader: 5.0.0
@@ -17604,7 +17588,6 @@ snapshots:
       - '@types/node'
       - bufferutil
       - chokidar
-      - debug
       - html-webpack-plugin
       - jiti
       - lightningcss
@@ -17648,7 +17631,7 @@ snapshots:
       css-loader: 7.1.2(webpack@5.105.0(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1))
       esbuild-wasm: 0.28.0
       fast-glob: 3.3.3
-      http-proxy-middleware: 3.0.5
+      http-proxy-middleware: 3.0.7
       istanbul-lib-instrument: 6.0.3
       jsonc-parser: 3.3.1
       karma-source-map-support: 1.4.0
@@ -17660,7 +17643,7 @@ snapshots:
       open: 10.1.0
       ora: 5.4.1
       picomatch: 4.0.4
-      piscina: 4.8.0
+      piscina: 4.9.3
       postcss: 8.5.12
       postcss-loader: 8.1.1(postcss@8.5.12)(typescript@5.5.4)(webpack@5.105.0(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1))
       resolve-url-loader: 5.0.0
@@ -17693,7 +17676,6 @@ snapshots:
       - '@types/node'
       - bufferutil
       - chokidar
-      - debug
       - html-webpack-plugin
       - jiti
       - lightningcss
@@ -17735,7 +17717,7 @@ snapshots:
       copy-webpack-plugin: 14.0.0(webpack@5.105.2(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1))
       css-loader: 7.1.3(webpack@5.105.2(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1))
       esbuild-wasm: 0.27.3
-      http-proxy-middleware: 3.0.5
+      http-proxy-middleware: 3.0.7
       istanbul-lib-instrument: 6.0.3
       jsonc-parser: 3.3.1
       karma-source-map-support: 1.4.0
@@ -17747,7 +17729,7 @@ snapshots:
       open: 11.0.0
       ora: 9.3.0
       picomatch: 4.0.4
-      piscina: 5.1.4
+      piscina: 5.2.0
       postcss: 8.5.12
       postcss-loader: 8.2.0(postcss@8.5.12)(typescript@5.9.3)(webpack@5.105.2(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1))
       resolve-url-loader: 5.0.0
@@ -17783,7 +17765,6 @@ snapshots:
       - '@types/node'
       - bufferutil
       - chokidar
-      - debug
       - html-webpack-plugin
       - jiti
       - lightningcss
@@ -17887,7 +17868,7 @@ snapshots:
       mrmime: 2.0.1
       parse5-html-rewriting-stream: 7.0.0
       picomatch: 4.0.4
-      piscina: 4.8.0
+      piscina: 4.9.3
       rollup: 4.59.0
       sass: 1.85.0
       semver: 7.7.1
@@ -17938,7 +17919,7 @@ snapshots:
       mrmime: 2.0.1
       parse5-html-rewriting-stream: 7.0.0
       picomatch: 4.0.4
-      piscina: 4.8.0
+      piscina: 4.9.3
       rollup: 4.59.0
       sass: 1.85.0
       semver: 7.7.1
@@ -17988,7 +17969,7 @@ snapshots:
       mrmime: 2.0.1
       parse5-html-rewriting-stream: 8.0.0
       picomatch: 4.0.4
-      piscina: 5.1.4
+      piscina: 5.2.0
       rolldown: 1.0.0-rc.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
       sass: 1.97.3
       semver: 7.7.4
@@ -26695,7 +26676,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.4.10:
+  dompurify@3.4.11:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
     optional: true
@@ -29460,19 +29441,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  http-proxy-middleware@2.0.9(@types/express@4.17.25):
-    dependencies:
-      '@types/http-proxy': 1.17.17
-      http-proxy: 1.18.1(debug@4.4.3)
-      is-glob: 4.0.3
-      is-plain-obj: 3.0.0
-      micromatch: 4.0.8
-    optionalDependencies:
-      '@types/express': 4.17.25
-    transitivePeerDependencies:
-      - debug
-
-  http-proxy-middleware@3.0.5:
+  http-proxy-middleware@3.0.7:
     dependencies:
       '@types/http-proxy': 1.17.17
       debug: 4.4.3
@@ -29894,8 +29863,6 @@ snapshots:
       path-is-inside: 1.0.2
 
   is-path-inside@3.0.3: {}
-
-  is-plain-obj@3.0.0: {}
 
   is-plain-obj@4.1.0: {}
 
@@ -31174,7 +31141,7 @@ snapshots:
     optionalDependencies:
       canvg: 3.0.11
       core-js: 3.49.0
-      dompurify: 3.4.10
+      dompurify: 3.4.11
       html2canvas: 1.4.1
 
   jsx-ast-utils@3.3.5:
@@ -33447,15 +33414,7 @@ snapshots:
 
   pirates@4.0.7: {}
 
-  piscina@4.8.0:
-    optionalDependencies:
-      '@napi-rs/nice': 1.1.1
-
   piscina@4.9.3:
-    optionalDependencies:
-      '@napi-rs/nice': 1.1.1
-
-  piscina@5.1.4:
     optionalDependencies:
       '@napi-rs/nice': 1.1.1
 
@@ -37617,7 +37576,7 @@ snapshots:
       connect-history-api-fallback: 2.0.0
       express: 4.22.2
       graceful-fs: 4.2.11
-      http-proxy-middleware: 2.0.9(@types/express@4.17.25)
+      http-proxy-middleware: 3.0.7
       ipaddr.js: 2.4.0
       launch-editor: 2.14.1
       open: 10.2.0
@@ -37634,7 +37593,6 @@ snapshots:
       webpack-cli: 5.1.4(webpack-dev-server@5.2.5)(webpack@5.105.4)
     transitivePeerDependencies:
       - bufferutil
-      - debug
       - supports-color
       - tslib
       - utf-8-validate
@@ -37657,7 +37615,7 @@ snapshots:
       connect-history-api-fallback: 2.0.0
       express: 4.22.2
       graceful-fs: 4.2.11
-      http-proxy-middleware: 2.0.9(@types/express@4.17.25)
+      http-proxy-middleware: 3.0.7
       ipaddr.js: 2.4.0
       launch-editor: 2.14.1
       open: 10.2.0
@@ -37673,7 +37631,6 @@ snapshots:
       webpack: 5.105.0(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1)
     transitivePeerDependencies:
       - bufferutil
-      - debug
       - supports-color
       - tslib
       - utf-8-validate
@@ -37696,7 +37653,7 @@ snapshots:
       connect-history-api-fallback: 2.0.0
       express: 4.22.2
       graceful-fs: 4.2.11
-      http-proxy-middleware: 2.0.9(@types/express@4.17.25)
+      http-proxy-middleware: 3.0.7
       ipaddr.js: 2.4.0
       launch-editor: 2.14.1
       open: 10.2.0
@@ -37712,7 +37669,6 @@ snapshots:
       webpack: 5.105.2(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1)
     transitivePeerDependencies:
       - bufferutil
-      - debug
       - supports-color
       - tslib
       - utf-8-validate
