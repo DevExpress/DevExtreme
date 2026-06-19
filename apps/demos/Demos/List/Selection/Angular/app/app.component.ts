@@ -1,5 +1,5 @@
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import type { SingleMultipleAllOrNone } from 'devextreme-angular/common';
@@ -24,7 +24,6 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
   imports: [
-    BrowserModule,
     DxSelectBoxModule,
     DxListModule,
     DxCheckBoxModule,

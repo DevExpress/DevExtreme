@@ -55,6 +55,10 @@ export class AIAssistantIntegrationController extends Controller {
         pageIndex: this.dataController.pageIndex(),
         pageSize: this.dataController.pageSize(),
         totalCount: this.dataController.totalCount(),
+        visibleRowCount: this.dataController
+          .getVisibleRows()
+          .filter((row) => row.rowType === 'data')
+          .length,
       },
       search: {
         searchText: this.option('searchPanel.text') ?? '',

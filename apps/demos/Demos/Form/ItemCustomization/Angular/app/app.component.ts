@@ -60,7 +60,7 @@ export class AppComponent implements AfterViewInit {
 
   phoneEditorOptions: Object;
 
-  labelTemplates: Object;
+  labelTemplates: { name: string; icon: string }[];
 
   constructor(service: Service) {
     this.employee = service.getEmployee();

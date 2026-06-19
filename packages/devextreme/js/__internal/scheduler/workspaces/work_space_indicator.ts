@@ -13,7 +13,7 @@ import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
 import timezoneUtils from '../utils_time_zone';
 import SchedulerWorkSpace, {
   type WorkspaceOptionsInternal,
-} from './m_work_space';
+} from './work_space';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -23,8 +23,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   private indicatorInterval?: ReturnType<typeof setInterval>;
 
   protected getToday(): Date {
-    const viewOffset = this.option('viewOffset');
-    const today = getToday(this.option('indicatorTime'), this.timeZoneCalculator);
+    const { viewOffset, indicatorTime } = this.option();
+    const today = getToday(indicatorTime, this.timeZoneCalculator);
     return dateUtilsTs.addOffsets(today, -viewOffset);
   }
 
@@ -91,7 +91,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   protected setIndicationUpdateInterval(): void {
-    if (!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
+    if (!this.option().showCurrentTimeIndicator || this.option().indicatorUpdateInterval === 0) {
       return;
     }
 
@@ -100,7 +100,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     // eslint-disable-next-line no-restricted-globals
     this.indicatorInterval = setInterval(() => {
       this.renderCurrentDateTimeIndication();
-    }, this.option('indicatorUpdateInterval'));
+    }, this.option().indicatorUpdateInterval);
   }
 
   private clearIndicatorUpdateInterval(): void {
@@ -135,7 +135,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     const viewStartTime = this.getStartViewDate().getTime();
     let timeDiff = today.getTime() - viewStartTime;
 
-    if (((this.option('skippedDays')) ?? []).length > 0) {
+    if (((this.option().skippedDays) ?? []).length > 0) {
       const skippedDaysDuration = this.getSkippedDaysCount(
         this.getStartViewDate(),
         Math.round(timeDiff / toMs('day')),

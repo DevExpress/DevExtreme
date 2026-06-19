@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 DevExtreme is an enterprise UI component suite for Angular, React, Vue, and jQuery. This is a large-scale monorepo (pnpm workspaces + Nx 22) containing the core library, framework wrappers, demos, themes, and test suites.
 
-**Required tooling:** Node.js 24.15.0, pnpm 11.5.1.
+**Required tooling:** Node.js 24.15.0, pnpm 11.6.0.
 
 ## Setup
 

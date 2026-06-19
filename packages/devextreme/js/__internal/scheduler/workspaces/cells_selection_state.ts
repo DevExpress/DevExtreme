@@ -1,7 +1,7 @@
 import type { CellPositionData, ViewCellData } from '@ts/scheduler/types';
 
-import type { CellPosition } from './view_model/m_types';
-import type ViewDataProvider from './view_model/m_view_data_provider';
+import type { CellPosition } from './view_model/types';
+import type ViewDataProvider from './view_model/view_data_provider';
 
 export default class CellsSelectionState {
   private focusedCell: ViewCellData | null = null;
@@ -28,11 +28,7 @@ export default class CellsSelectionState {
       return undefined;
     }
 
-    const { groupIndex, startDate, allDay } = focusedCell;
-    const cellInfo = {
-      groupIndex, startDate, isAllDay: allDay, index: focusedCell.index,
-    };
-    const cellPosition = this.viewDataProvider.findCellPositionInMap(cellInfo);
+    const cellPosition = this.viewDataProvider.findCellPositionInMap(focusedCell);
 
     return { coordinates: cellPosition, cellData: focusedCell };
   }
