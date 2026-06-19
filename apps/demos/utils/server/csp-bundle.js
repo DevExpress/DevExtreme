@@ -216,7 +216,12 @@ function extractDemoBodyInner(srcDir) {
     const html = fs.readFileSync(path.join(srcDir, 'index.html'), 'utf8');
     const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
     if (!bodyMatch) return null;
-    const withoutScripts = bodyMatch[1].replace(/<script\b[\s\S]*?<\/script>/gi, '');
+    let withoutScripts = bodyMatch[1];
+    let previous;
+    do {
+      previous = withoutScripts;
+      withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, '');
+    } while (withoutScripts !== previous);
     const trimmed = withoutScripts.trim();
     return trimmed || null;
   } catch {

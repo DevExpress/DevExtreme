@@ -26,6 +26,14 @@
         ]
       }
     },
+    "copy:devextreme-aspnet-data": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "../../apps/demos/node_modules/devextreme-aspnet-data/js/dx.aspnet.data.js", "to": "../../artifacts/js/dx.aspnet.data.js" }
+        ]
+      }
+    },
     "copy:npm-tgz": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
       "options": {
