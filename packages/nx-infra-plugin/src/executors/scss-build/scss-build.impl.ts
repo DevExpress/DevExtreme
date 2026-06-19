@@ -32,15 +32,6 @@ interface BuildDependencies {
   sass: any;
   postcss: any;
   autoprefixer: (options?: { overrideBrowserslist?: string[] }) => any;
-  chokidar: {
-    watch: (
-      paths: string | string[],
-      options?: Record<string, unknown>,
-    ) => {
-      on: (event: string, handler: (...args: any[]) => void) => unknown;
-      close: () => Promise<void> | void;
-    };
-  };
   CleanCss: new (options: unknown) => { minify: (input: string) => { styles: string } };
   themeOptions: { getThemes: () => Array<[string, string, string, string?]> };
   cleanCssSanitizeOptions: unknown;
@@ -125,7 +116,6 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     sass: projectRequire('sass-embedded'),
     postcss: projectRequire('postcss'),
     autoprefixer: projectRequire('autoprefixer'),
-    chokidar: projectRequire('chokidar'),
     CleanCss: projectRequire('clean-css'),
     themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.cjs')) as {
       getThemes: () => Array<[string, string, string, string?]>;
@@ -284,6 +274,19 @@ async function runSingleBuild(
   }
 }
 
+function loadChokidar(projectRoot: string): {
+  watch: (
+    paths: string | string[],
+    options?: Record<string, unknown>,
+  ) => {
+    on: (event: string, handler: (...args: any[]) => void) => unknown;
+    close: () => Promise<void> | void;
+  };
+} {
+  const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
+  return projectRequire('chokidar');
+}
+
 async function runWatchBuild(
   projectRoot: string,
   options: ScssBuildExecutorSchema,
@@ -347,7 +350,8 @@ async function runWatchBuild(
       }, 200);
     };
 
-    const watcher = deps.chokidar.watch(path.join(watchDir, '**/*.scss'), {
+    const chokidar = loadChokidar(projectRoot);
+    const watcher = chokidar.watch(path.join(watchDir, '**/*.scss'), {
       ignoreInitial: true,
     });
     watcher.on('all', scheduleRebuild);

@@ -5,14 +5,20 @@ import { ScssBuildExecutorSchema } from './schema';
 import { createMockContext, createTempDir, cleanupTempDir } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
 
+function writeMockPackage(nodeModulesDir: string, packageName: string, mainFile: string): void {
+  const packageDir = path.join(nodeModulesDir, packageName);
+  fs.mkdirSync(packageDir, { recursive: true });
+  fs.writeFileSync(path.join(packageDir, 'package.json'), JSON.stringify({ main: mainFile }), 'utf8');
+  fs.writeFileSync(path.join(packageDir, mainFile), '', 'utf8');
+}
+
 function createMockModules(projectRoot: string): void {
   const projectNodeModules = path.join(projectRoot, 'node_modules');
   fs.mkdirSync(projectNodeModules, { recursive: true });
 
-  const sassEmbeddedDir = path.join(projectNodeModules, 'sass-embedded');
-  fs.mkdirSync(sassEmbeddedDir, { recursive: true });
+  writeMockPackage(projectNodeModules, 'sass-embedded', 'index.js');
   fs.writeFileSync(
-    path.join(sassEmbeddedDir, 'index.js'),
+    path.join(projectNodeModules, 'sass-embedded', 'index.js'),
     [
       'class SassString {',
       '  constructor(value) { this.value = value; }',
@@ -26,10 +32,9 @@ function createMockModules(projectRoot: string): void {
     'utf8',
   );
 
-  const postcssDir = path.join(projectNodeModules, 'postcss');
-  fs.mkdirSync(postcssDir, { recursive: true });
+  writeMockPackage(projectNodeModules, 'postcss', 'index.js');
   fs.writeFileSync(
-    path.join(postcssDir, 'index.js'),
+    path.join(projectNodeModules, 'postcss', 'index.js'),
     [
       'module.exports = function postcss() {',
       '  return {',
@@ -41,18 +46,16 @@ function createMockModules(projectRoot: string): void {
     'utf8',
   );
 
-  const autoprefixerDir = path.join(projectNodeModules, 'autoprefixer');
-  fs.mkdirSync(autoprefixerDir, { recursive: true });
+  writeMockPackage(projectNodeModules, 'autoprefixer', 'index.js');
   fs.writeFileSync(
-    path.join(autoprefixerDir, 'index.js'),
+    path.join(projectNodeModules, 'autoprefixer', 'index.js'),
     'module.exports = function autoprefixer() { return { postcssPlugin: "autoprefixer" }; };',
     'utf8',
   );
 
-  const cleanCssDir = path.join(projectNodeModules, 'clean-css');
-  fs.mkdirSync(cleanCssDir, { recursive: true });
+  writeMockPackage(projectNodeModules, 'clean-css', 'index.js');
   fs.writeFileSync(
-    path.join(cleanCssDir, 'index.js'),
+    path.join(projectNodeModules, 'clean-css', 'index.js'),
     [
       'module.exports = class CleanCss {',
       '  constructor(options) { this.options = options || {}; }',
@@ -65,10 +68,9 @@ function createMockModules(projectRoot: string): void {
     'utf8',
   );
 
-  const chokidarDir = path.join(projectNodeModules, 'chokidar');
-  fs.mkdirSync(chokidarDir, { recursive: true });
+  writeMockPackage(projectNodeModules, 'chokidar', 'index.js');
   fs.writeFileSync(
-    path.join(chokidarDir, 'index.js'),
+    path.join(projectNodeModules, 'chokidar', 'index.js'),
     [
       'module.exports = {',
       '  watch: function watch() {',
@@ -90,7 +92,16 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
   fs.mkdirSync(buildDir, { recursive: true });
 
   await writeJson(path.join(workspaceRoot, 'package.json'), { name: 'workspace' });
-  await writeJson(path.join(projectRoot, 'package.json'), { name: 'devextreme-scss' });
+  await writeJson(path.join(projectRoot, 'package.json'), {
+    name: 'devextreme-scss',
+    devDependencies: {
+      'sass-embedded': '1.0.0',
+      postcss: '8.0.0',
+      autoprefixer: '10.0.0',
+      'clean-css': '5.0.0',
+      chokidar: '5.0.0',
+    },
+  });
 
   await writeJson(path.join(projectRoot, 'build', 'clean-css-options.json'), { profile: 'all' });
 
