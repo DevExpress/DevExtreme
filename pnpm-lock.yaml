@@ -178,7 +178,7 @@ overrides:
   semver@<5.7.2: ^5.7.2
   qs: '>=6.15.2'
   vite@>=7.0.0 <=7.3.4: ^7.3.5
-  'dompurify@<=3.4.10 ': ^3.4.11
+  dompurify@<=3.4.10: ^3.4.11
   underscore@<=1.13.7: ^1.13.8
   hono@<4.12.21: ^4.12.21
   minimatch@>=9.0.0 < 9.0.7: 9.0.9
@@ -215,13 +215,13 @@ importers:
     devDependencies:
       '@nx/devkit':
         specifier: 22.7.0
-        version: 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))
+        version: 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))
       '@nx/jest':
         specifier: 22.7.0
-        version: 22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)
+        version: 22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)
       '@nx/js':
         specifier: 22.7.0
-        version: 22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))
+        version: 22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))
       '@types/jest':
         specifier: 29.5.14
         version: 29.5.14
@@ -254,7 +254,7 @@ importers:
         version: link:packages/devextreme-metadata
       http-server:
         specifier: 14.1.1
-        version: 14.1.1
+        version: 14.1.1(debug@4.4.3)
       husky:
         specifier: 8.0.3
         version: 8.0.3
@@ -269,7 +269,7 @@ importers:
         version: 14.0.1(enquirer@2.4.1)
       nx:
         specifier: 22.7.0
-        version: 22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))
+        version: 22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3)
       shelljs:
         specifier: 0.8.5
         version: 0.8.5
@@ -888,7 +888,7 @@ importers:
         version: 18.3.7(@types/react@18.3.28)
       http-server:
         specifier: 14.1.1
-        version: 14.1.1
+        version: 14.1.1(debug@4.4.3)
       prop-types:
         specifier: 15.8.1
         version: 15.8.1
@@ -22496,23 +22496,23 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nx/devkit@22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))':
+  '@nx/devkit@22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))':
     dependencies:
       '@zkochan/js-yaml': 0.0.7
       ejs: 5.0.1
       enquirer: 2.3.6
       minimatch: 10.2.4
-      nx: 22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))
+      nx: 22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3)
       semver: 7.7.4
       tslib: 2.8.1
       yargs-parser: 21.1.1
 
-  '@nx/jest@22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)':
+  '@nx/jest@22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@jest/reporters': 30.3.0(node-notifier@9.0.1)
       '@jest/test-result': 30.3.0
-      '@nx/devkit': 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))
-      '@nx/js': 22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))
+      '@nx/devkit': 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))
+      '@nx/js': 22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))
       '@phenomnomnominal/tsquery': 6.1.4(typescript@5.9.3)
       identity-obj-proxy: 3.0.0
       jest-config: 30.3.0(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.12.8)(typescript@5.9.3))
@@ -22539,7 +22539,7 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nx/js@22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))':
+  '@nx/js@22.7.0(@babel/traverse@7.29.7)(@swc/core@1.15.30(@swc/helpers@0.5.21))(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/plugin-proposal-decorators': 7.29.0(@babel/core@7.29.7)
@@ -22548,7 +22548,7 @@ snapshots:
       '@babel/preset-env': 7.29.2(@babel/core@7.29.7)
       '@babel/preset-typescript': 7.28.5(@babel/core@7.29.7)
       '@babel/runtime': 7.29.2
-      '@nx/devkit': 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))
+      '@nx/devkit': 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))
       '@nx/workspace': 22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))
       '@zkochan/js-yaml': 0.0.7
       babel-plugin-const-enum: 1.2.0(@babel/core@7.29.7)
@@ -22607,11 +22607,11 @@ snapshots:
 
   '@nx/workspace@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))':
     dependencies:
-      '@nx/devkit': 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)))
+      '@nx/devkit': 22.7.0(nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3))
       '@zkochan/js-yaml': 0.0.7
       chalk: 4.1.2
       enquirer: 2.3.6
-      nx: 22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))
+      nx: 22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3)
       picomatch: 4.0.4
       semver: 7.8.4
       tslib: 2.8.1
@@ -26086,7 +26086,7 @@ snapshots:
 
   axe-core@4.11.3: {}
 
-  axios@1.16.0:
+  axios@1.16.0(debug@4.4.3):
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.6
@@ -27072,7 +27072,7 @@ snapshots:
 
   cldr-data-downloader@1.1.0:
     dependencies:
-      axios: 1.16.0
+      axios: 1.16.0(debug@4.4.3)
       mkdirp: 1.0.4
       nopt: 3.0.6
       q: 1.0.1
@@ -30935,7 +30935,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  http-server@14.1.1:
+  http-server@14.1.1(debug@4.4.3):
     dependencies:
       basic-auth: 2.0.1
       chalk: 4.1.2
@@ -34618,7 +34618,7 @@ snapshots:
 
   nwsapi@2.2.23: {}
 
-  nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21)):
+  nx@22.7.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(debug@4.4.3):
     dependencies:
       '@emnapi/core': 1.4.5
       '@emnapi/runtime': 1.4.5
@@ -34633,7 +34633,7 @@ snapshots:
       ansi-styles: 4.3.0
       argparse: 2.0.1
       asynckit: 0.4.0
-      axios: 1.16.0
+      axios: 1.16.0(debug@4.4.3)
       balanced-match: 4.0.3
       base64-js: 1.5.1
       bl: 4.1.0
