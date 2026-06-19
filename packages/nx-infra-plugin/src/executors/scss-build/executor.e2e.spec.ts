@@ -8,7 +8,11 @@ import { writeFileText, writeJson, readFileText } from '../../utils';
 function writeMockPackage(nodeModulesDir: string, packageName: string, mainFile: string): void {
   const packageDir = path.join(nodeModulesDir, packageName);
   fs.mkdirSync(packageDir, { recursive: true });
-  fs.writeFileSync(path.join(packageDir, 'package.json'), JSON.stringify({ main: mainFile }), 'utf8');
+  fs.writeFileSync(
+    path.join(packageDir, 'package.json'),
+    JSON.stringify({ main: mainFile }),
+    'utf8',
+  );
   fs.writeFileSync(path.join(packageDir, mainFile), '', 'utf8');
 }
 
