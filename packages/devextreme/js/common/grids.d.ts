@@ -1049,7 +1049,7 @@ export type ColumnHeaderFilter = {
    * @docid
    * @default undefined
    */
-  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | Array<string | number> | undefined;
   /**
    * @docid
    * @default undefined
