@@ -1843,6 +1843,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       } else {
         totalHeight += (row as HTMLElement).offsetHeight;
       }
+
+      return true;
     });
 
     ($dateTable[0] as HTMLElement).style.height = `${totalHeight}px`;
@@ -1852,6 +1854,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         if (index < heights.length) {
           (row as HTMLElement).style.height = `${heights[index]}px`;
         }
+
+        return true;
       });
     }
 
