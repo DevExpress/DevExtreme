@@ -796,7 +796,7 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
-  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig;
   searchMode?: SearchMode;
@@ -1532,7 +1532,7 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
-  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   searchMode?: SearchMode;

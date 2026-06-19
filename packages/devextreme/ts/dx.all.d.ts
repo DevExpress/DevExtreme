@@ -4884,7 +4884,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:ColumnHeaderFilter.groupInterval]
      */
-    groupInterval?: HeaderFilterGroupInterval | number | undefined;
+    groupInterval?:
+      | HeaderFilterGroupInterval
+      | number
+      | Array<string | number>
+      | undefined;
     /**
      * [descr:ColumnHeaderFilter.height]
      */
