@@ -53,6 +53,8 @@ jobs:
           BUILD_INTERNAL_PACKAGE: true
         run: pnpm run all:build
 
+      # Builds the dx-make-sbom package argument list from known package names and the tgz files produced in artifacts/npm.
+      # Produces SBOM_PACKAGES for the packages/sbom build-hashed target.
       - name: Prepare SBOM package inputs
         shell: bash
         run: |
@@ -75,6 +77,8 @@ jobs:
           echo "SBOM_PACKAGES=$sbom_packages_value" >> "$GITHUB_ENV"
           echo "$sbom_packages_value"
 
+      # Generates CycloneDX SBOM JSON files for the selected packages using the just-built tgz files.
+      # Produces packages/sbom/dist/*.cdx.json.
       - name: Build SBOMs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -82,6 +86,8 @@ jobs:
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm nx build-hashed sbom;
 
+      # Collects concrete SBOM file paths for validation because the shared action expects explicit file names.
+      # Produces the sbomFiles.outputs.files multiline output.
       - name: Collect SBOM files
         id: sbomFiles
         shell: bash
@@ -100,6 +106,8 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      # Validates every generated CycloneDX SBOM file with the shared validation action.
+      # Produces no artifact; fails the workflow if any SBOM is invalid.
       - name: Validate SBOMs
         uses: DevExpress/github-actions/validate-sbom@5034a6d5e0fd18fc2826ed20a5140f9c83b8994f
         with:
@@ -109,6 +117,8 @@ jobs:
       - name: Build artifacts package
         run: pnpm run make-artifacts-package
 
+      # Saves generated SBOM files for the publish job.
+      # Produces the sbom-packages workflow artifact.
       - name: Upload SBOMs
         uses: actions/upload-artifact@v7
         with:
@@ -147,6 +157,8 @@ jobs:
           name: npm-packages
           path: npm-packages
 
+      # Restores generated SBOM files from the build job.
+      # Produces the local sbom-packages directory for matrix publishing.
       - name: Download SBOMs
         uses: actions/download-artifact@v8
         with:
@@ -178,6 +190,8 @@ jobs:
           pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
 
+      # Wraps the matching SBOM JSON file into a minimal scoped npm package when the matrix package has an SBOM.
+      # Produces scopedSbomPackage outputs used by the publish step.
       - name: Build SBOM package
         id: scopedSbomPackage
         env:
@@ -200,23 +214,15 @@ jobs:
           fi
 
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          SBOM_PACKAGE_NAME="$UNSCOPED_PACKAGE_NAME-sbom";
+          SBOM_PACKAGE_NAME="@$SCOPE/$UNSCOPED_PACKAGE_NAME-sbom";
           SBOM_PACKAGE_DIR="sbom-package/$SBOM_PACKAGE_NAME";
-          SBOM_TGZ_DIR="sbom-package-tgz";
-          PACKAGE_LICENSE=$(node -p "require('./package.json').license");
-          PACKAGE_AUTHOR=$(node -p "require('./package.json').author");
 
-          mkdir -p "$SBOM_PACKAGE_DIR" "$SBOM_TGZ_DIR";
+          mkdir -p "$SBOM_PACKAGE_DIR";
           cp "$SBOM_FILE" "$SBOM_PACKAGE_DIR/";
           cd "$SBOM_PACKAGE_DIR";
-          node -e "const fs = require('fs'); const [name, version, license, author] = process.argv.slice(1); fs.writeFileSync('package.json', JSON.stringify({ name, version, license, author }, null, 2));" "$SBOM_PACKAGE_NAME" "$PACKAGE_VERSION" "$PACKAGE_LICENSE" "$PACKAGE_AUTHOR";
-          npm pack --pack-destination "../../$SBOM_TGZ_DIR";
-          cd ../..;
-
-          SCOPED_SBOM_PACKAGE_DIR=$(pnpm --silent run change-package-scope --tgz "$SBOM_TGZ_DIR/$SBOM_PACKAGE_NAME-$PACKAGE_VERSION.tgz" --scope "$SCOPE");
+          node -e "const fs = require('fs'); const [name, version] = process.argv.slice(1); fs.writeFileSync('package.json', JSON.stringify({ name, version }, null, 2));" "$SBOM_PACKAGE_NAME" "$PACKAGE_VERSION";
           echo "hasSbom=true" >> "$GITHUB_OUTPUT";
-          echo "packageDir=$SCOPED_SBOM_PACKAGE_DIR" >> "$GITHUB_OUTPUT";
-          cd "$SCOPED_SBOM_PACKAGE_DIR";
+          echo "packageDir=$PWD" >> "$GITHUB_OUTPUT";
           pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
@@ -237,6 +243,8 @@ jobs:
           pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
 
         # --ignore-scripts - like above, should be removed, check if could be removed everywhere
+      # Publishes the generated scoped SBOM npm package to GitHub Packages.
+      # Produces @<owner>/<package>-sbom in the npm.pkg.github.com feed.
       - name: Publish SBOM to npm.pkg.github.com
         if: ${{ steps.scopedSbomPackage.outputs.hasSbom == 'true' }}
         working-directory: ${{ steps.scopedSbomPackage.outputs.packageDir }}
