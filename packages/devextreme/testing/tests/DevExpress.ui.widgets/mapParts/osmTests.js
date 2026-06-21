@@ -3,13 +3,13 @@
 
 import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
-import OSMProvider from '__internal/ui/map/provider.dynamic.osm';
+import OsmProvider from '__internal/ui/map/provider.dynamic.osm';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
 
-const prepareTestingOSMProvider = () => {
+const prepareTestingOsmProvider = () => {
     L.mapCreated = false;
     L.mapDisposed = false;
     L.mapResized = false;
@@ -46,7 +46,7 @@ const moduleConfig = {
         const fakeURL = '/fakeLeafletUrl';
         let leafletMockCreated = false;
 
-        OSMProvider.remapConstant(fakeURL);
+        OsmProvider.remapConstant(fakeURL);
 
         ajaxMock.setup({
             url: fakeURL,
@@ -58,14 +58,14 @@ const moduleConfig = {
                         url: '../../packages/devextreme/testing/helpers/forMap/leafletMock.js',
                         scriptAttrs: { nonce: 'qunit-test' },
                     }).done(() => {
-                        prepareTestingOSMProvider();
+                        prepareTestingOsmProvider();
                     });
                 }
             },
         });
 
         if(window.L) {
-            prepareTestingOSMProvider();
+            prepareTestingOsmProvider();
         }
 
         this.geocodedLatLng = { lat: 10, lng: 20 };
