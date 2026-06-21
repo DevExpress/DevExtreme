@@ -253,8 +253,15 @@ class OSMProvider extends DynamicProvider {
       southWest: { lat: bounds.getSouthWest().lat, lng: bounds.getSouthWest().lng },
     });
 
-    const center = this._map.getCenter();
-    this._option('center', this._normalizeLocation(center));
+    // Only report the center back to the widget when it actually changed. Emitting a fresh
+    // location object on every view change feeds an infinite update loop under two-way center
+    // bindings (e.g. Angular [(center)]): each new object identity re-triggers the bound value,
+    // which re-applies the view, which fires another view change.
+    const center = this._normalizeLocation(this._map.getCenter());
+    const currentCenter = this._getLatLng(this._option('center'));
+    if (!currentCenter || currentCenter.lat !== center.lat || currentCenter.lng !== center.lng) {
+      this._option('center', center);
+    }
 
     if (!this._preventZoomChangeEvent) {
       this._option('zoom', this._map.getZoom());
