@@ -205,9 +205,9 @@ const render: Story['render'] = (args) => {
     <Map
       // center/zoom are UNCONTROLLED (defaultCenter/defaultZoom) so the user can freely pan & zoom.
       // A *controlled* center/zoom without an on*Change handler locks the map (it snaps back to the
-      // prop on every render); a two-way `center` would loop, because the provider reports center
-      // back as a fresh { lat, lng } object each apply. The `key` re-mounts the map when the
-      // Center/Zoom controls change so those controls re-seed the initial view.
+      // prop on every render), so the uncontrolled defaults keep this story simple. The `key`
+      // re-mounts the map when the Center/Zoom controls change so those controls re-seed the
+      // initial view.
       key={`${center}|${zoom}`}
       provider="osm"
       providerConfig={providerConfig}
