@@ -36,10 +36,10 @@ export abstract class DxoColumnHeaderFilter extends NestedOption {
         this._setOption('dataSource', value);
     }
 
-    get groupInterval(): HeaderFilterGroupInterval | number | undefined {
+    get groupInterval(): HeaderFilterGroupInterval | number | undefined | Array<string | number> {
         return this._getOption('groupInterval');
     }
-    set groupInterval(value: HeaderFilterGroupInterval | number | undefined) {
+    set groupInterval(value: HeaderFilterGroupInterval | number | undefined | Array<string | number>) {
         this._setOption('groupInterval', value);
     }
 
