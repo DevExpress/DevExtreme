@@ -536,14 +536,11 @@ class OSMProvider extends DynamicProvider {
         getRouteFn({ locations: normalizedLocations, mode }).then((coords) => {
           drawPolyline(coords);
         }).catch((e: unknown) => {
-          const fallbackCoords = resolvedLocations.map(
-            (loc) => [loc.lat, loc.lng] as [number, number],
-          );
-          const polyline = L.polyline(fallbackCoords, polylineOptions).addTo(this._map);
-
           errors.log('W1006', e);
 
-          resolve({ instance: polyline });
+          // Draw a straight-line fallback through drawPolyline so the route still reports its
+          // bounds (northEast/southWest) and participates in autoAdjust fitting.
+          drawPolyline(resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]));
         });
       }));
   }
