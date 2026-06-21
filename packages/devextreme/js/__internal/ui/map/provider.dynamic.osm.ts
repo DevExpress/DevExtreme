@@ -117,7 +117,7 @@ class OSMProvider extends DynamicProvider {
   }
 
   _loadImpl(): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       if (osmMapsLoaded()) {
         resolve();
         return;
@@ -133,8 +133,8 @@ class OSMProvider extends DynamicProvider {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._loadMapResources().then(resolve);
-      });
+        this._loadMapResources().then(resolve, reject);
+      }, reject);
     });
   }
 
@@ -146,25 +146,25 @@ class OSMProvider extends DynamicProvider {
   }
 
   _loadMapScript(): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       ajax.sendRequest({
         url: LEAFLET_JS_URL,
         dataType: 'script',
       }).then(() => {
         resolve();
-      });
+      }, reject);
     });
   }
 
   _loadMapStyles(): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       ajax.sendRequest({
         url: LEAFLET_CSS_URL,
         dataType: 'text',
       }).then((css) => {
         $('<style>').html(css).appendTo($('head'));
         resolve();
-      });
+      }, reject);
     });
   }
 
