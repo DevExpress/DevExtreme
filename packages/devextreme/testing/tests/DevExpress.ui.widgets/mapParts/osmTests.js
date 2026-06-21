@@ -370,7 +370,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
         let clickFired = 0;
         const fakeEvent = new PointerEvent('click');
 
-        const map = $('#map').dxMap({
+        $('#map').dxMap({
             provider: 'osm',
             onClick: (e) => {
                 assert.deepEqual(e.location, { lat: 5, lng: 10 }, 'click location is correct');
@@ -382,7 +382,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
                 assert.strictEqual(clickFired, 1, 'onClick fired once');
                 done();
             }
-        }).dxMap('instance');
+        });
     });
 
     QUnit.test('moveend event updates center, bounds and zoom options', function(assert) {
