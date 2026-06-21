@@ -9,8 +9,6 @@ import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
 
-const MARKER_CLASS = 'dx-map-marker';
-
 const prepareTestingOSMProvider = () => {
     L.mapCreated = false;
     L.mapDisposed = false;
