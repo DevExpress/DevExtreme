@@ -25,18 +25,18 @@ let LEAFLET_CSS_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
 
-interface OSMTileServerConfig {
+interface OsmTileServerConfig {
   url: string;
   attribution?: string;
   subdomains?: string | string[];
   maxZoom?: number;
 }
 
-type OSMTileServerObject = OSMTileServerConfig
-  | ((type: string) => string | OSMTileServerConfig | null | undefined);
-type OSMTileServerOption = string | OSMTileServerObject;
+type OsmTileServerObject = OsmTileServerConfig
+  | ((type: string) => string | OsmTileServerConfig | null | undefined);
+type OsmTileServerOption = string | OsmTileServerObject;
 
-export type OSMLocation = PlainLocation;
+export type OsmLocation = PlainLocation;
 
 // @ts-expect-error ts-error
 const osmMapsLoaded = (): boolean => Boolean(window.L?.map);
@@ -44,7 +44,7 @@ const osmMapsLoaded = (): boolean => Boolean(window.L?.map);
 // eslint-disable-next-line @typescript-eslint/init-declarations
 let osmMapsLoader: Promise<void> | undefined;
 
-class OSMProvider extends DynamicProvider {
+class OsmProvider extends DynamicProvider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _tileLayer?: any;
 
@@ -53,7 +53,7 @@ class OSMProvider extends DynamicProvider {
 
   _currentTileType?: string;
 
-  _clickHandler?: (e: { latlng: OSMLocation; originalEvent: Event }) => void;
+  _clickHandler?: (e: { latlng: OsmLocation; originalEvent: Event }) => void;
 
   _viewChangeHandler?: () => void;
 
@@ -68,7 +68,7 @@ class OSMProvider extends DynamicProvider {
     return modes[type] ?? 'driving';
   }
 
-  _resolveLocation(location?: LocationOption | null): Promise<OSMLocation> {
+  _resolveLocation(location?: LocationOption | null): Promise<OsmLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
@@ -76,13 +76,13 @@ class OSMProvider extends DynamicProvider {
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
-          resolve(geocodedLocation as unknown as OSMLocation);
+          resolve(geocodedLocation as unknown as OsmLocation);
         });
       }
     });
   }
 
-  _geocodeLocationImpl(location: string): Promise<OSMLocation> {
+  _geocodeLocationImpl(location: string): Promise<OsmLocation> {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
         resolve(L.latLng(0, 0));
@@ -109,7 +109,7 @@ class OSMProvider extends DynamicProvider {
     });
   }
 
-  _normalizeLocation(location: OSMLocation): { lat: number; lng: number } {
+  _normalizeLocation(location: OsmLocation): { lat: number; lng: number } {
     return {
       lat: location.lat,
       lng: location.lng,
@@ -198,8 +198,8 @@ class OSMProvider extends DynamicProvider {
     });
   }
 
-  _resolveTileConfig(type: string): OSMTileServerConfig | undefined {
-    const option = this._option('providerConfig')?.tileServer as OSMTileServerOption | null | undefined;
+  _resolveTileConfig(type: string): OsmTileServerConfig | undefined {
+    const option = this._option('providerConfig')?.tileServer as OsmTileServerOption | null | undefined;
 
     const resolved = typeof option === 'function' ? option(type) : option;
 
@@ -268,7 +268,7 @@ class OSMProvider extends DynamicProvider {
     }
   }
 
-  _onMapClick(e: { latlng: OSMLocation; originalEvent: Event }): void {
+  _onMapClick(e: { latlng: OsmLocation; originalEvent: Event }): void {
     this._fireClickAction({
       location: this._normalizeLocation(e.latlng),
       event: e.originalEvent,
@@ -605,11 +605,11 @@ class OSMProvider extends DynamicProvider {
 
 /// #DEBUG
 // @ts-expect-error ts-error
-OSMProvider.remapConstant = (newValue: string): void => {
+OsmProvider.remapConstant = (newValue: string): void => {
   LEAFLET_JS_URL = newValue;
   LEAFLET_CSS_URL = newValue;
 };
 
 /// #ENDDEBUG
 
-export default OSMProvider;
+export default OsmProvider;

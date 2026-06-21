@@ -22,13 +22,13 @@ export type RouteMode = 'driving' | 'walking';
  * @docid
  * @public
  */
-export type OSMGeocodeFunction = (query: string) => Promise<MapLocation | null | undefined>;
+export type OsmGeocodeFunction = (query: string) => Promise<MapLocation | null | undefined>;
 
 /**
  * @docid
  * @public
  */
-export interface OSMGetRouteParams {
+export interface OsmGetRouteParams {
   locations: Array<MapLocation>;
   mode: RouteMode | string;
 }
@@ -37,13 +37,13 @@ export interface OSMGetRouteParams {
  * @docid
  * @public
  */
-export type OSMGetRouteFunction = (params: OSMGetRouteParams) => Promise<Array<[number, number]>>;
+export type OsmGetRouteFunction = (params: OsmGetRouteParams) => Promise<Array<[number, number]>>;
 
 /**
  * @docid
  * @public
  */
-export interface OSMTileServerConfig {
+export interface OsmTileServerConfig {
   /**
    * @docid
    */
@@ -69,8 +69,8 @@ export interface OSMTileServerConfig {
  * @docid
  * @public
  */
-export type OSMTileServer = string | OSMTileServerConfig
-| ((type: MapType | string) => string | OSMTileServerConfig | null | undefined);
+export type OsmTileServer = string | OsmTileServerConfig
+| ((type: MapType | string) => string | OsmTileServerConfig | null | undefined);
 
 /** @public */
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
@@ -396,19 +396,19 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @public
        * @default undefined
        */
-      tileServer?: OSMTileServer;
+      tileServer?: OsmTileServer;
       /**
        * @docid
        * @public
        * @default undefined
        */
-      geocodeLocation?: OSMGeocodeFunction;
+      geocodeLocation?: OsmGeocodeFunction;
       /**
        * @docid
        * @public
        * @default undefined
        */
-      getRoute?: OSMGetRouteFunction;
+      getRoute?: OsmGetRouteFunction;
     };
     /**
      * @docid

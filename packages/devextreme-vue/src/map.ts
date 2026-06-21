@@ -14,11 +14,11 @@ import {
  RouteRemovedEvent,
  MapProvider,
  MapType,
- OSMGeocodeFunction,
- OSMGetRouteFunction,
- OSMGetRouteParams,
- OSMTileServer,
- OSMTileServerConfig,
+ OsmGeocodeFunction,
+ OsmGetRouteFunction,
+ OsmGetRouteParams,
+ OsmTileServer,
+ OsmTileServerConfig,
  RouteMode,
 } from "devextreme/ui/map";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -256,10 +256,10 @@ const DxProviderConfigConfig = {
     "update:useAdvancedMarkers": null,
   },
   props: {
-    geocodeLocation: [Object, Function] as PropType<OSMGeocodeFunction | (((query: string) => any))>,
-    getRoute: [Object, Function] as PropType<OSMGetRouteFunction | (((params: OSMGetRouteParams) => any))>,
+    geocodeLocation: [Object, Function] as PropType<OsmGeocodeFunction | (((query: string) => any))>,
+    getRoute: [Object, Function] as PropType<OsmGetRouteFunction | (((params: OsmGetRouteParams) => any))>,
     mapId: String,
-    tileServer: [Object, Function, String] as PropType<OSMTileServer | (((type: MapType | string) => string | OSMTileServerConfig | null | undefined)) | OSMTileServerConfig | string>,
+    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType | string) => string | OsmTileServerConfig | null | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean
   }
 };

@@ -23251,51 +23251,51 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxMap> &
         DevExpress.common.core.events.ChangedOptionInfo;
     /**
-     * [descr:OSMGeocodeFunction]
+     * [descr:OsmGeocodeFunction]
      */
-    export type OSMGeocodeFunction = (
+    export type OsmGeocodeFunction = (
       query: string
     ) => Promise<MapLocation | null | undefined>;
     /**
-     * [descr:OSMGetRouteFunction]
+     * [descr:OsmGetRouteFunction]
      */
-    export type OSMGetRouteFunction = (
-      params: OSMGetRouteParams
+    export type OsmGetRouteFunction = (
+      params: OsmGetRouteParams
     ) => Promise<Array<[number, number]>>;
     /**
-     * [descr:OSMGetRouteParams]
+     * [descr:OsmGetRouteParams]
      */
-    export interface OSMGetRouteParams {
+    export interface OsmGetRouteParams {
       locations: Array<MapLocation>;
       mode: RouteMode | string;
     }
     /**
-     * [descr:OSMTileServer]
+     * [descr:OsmTileServer]
      */
-    export type OSMTileServer =
+    export type OsmTileServer =
       | string
-      | OSMTileServerConfig
+      | OsmTileServerConfig
       | ((
           type: MapType | string
-        ) => string | OSMTileServerConfig | null | undefined);
+        ) => string | OsmTileServerConfig | null | undefined);
     /**
-     * [descr:OSMTileServerConfig]
+     * [descr:OsmTileServerConfig]
      */
-    export interface OSMTileServerConfig {
+    export interface OsmTileServerConfig {
       /**
-       * [descr:OSMTileServerConfig.url]
+       * [descr:OsmTileServerConfig.url]
        */
       url: string;
       /**
-       * [descr:OSMTileServerConfig.attribution]
+       * [descr:OsmTileServerConfig.attribution]
        */
       attribution?: string;
       /**
-       * [descr:OSMTileServerConfig.subdomains]
+       * [descr:OsmTileServerConfig.subdomains]
        */
       subdomains?: string | Array<string>;
       /**
-       * [descr:OSMTileServerConfig.maxZoom]
+       * [descr:OsmTileServerConfig.maxZoom]
        */
       maxZoom?: number;
     }
@@ -23465,15 +23465,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.providerConfig.tileServer]
        */
-      tileServer?: DevExpress.ui.dxMap.OSMTileServer;
+      tileServer?: DevExpress.ui.dxMap.OsmTileServer;
       /**
        * [descr:dxMapOptions.providerConfig.geocodeLocation]
        */
-      geocodeLocation?: DevExpress.ui.dxMap.OSMGeocodeFunction;
+      geocodeLocation?: DevExpress.ui.dxMap.OsmGeocodeFunction;
       /**
        * [descr:dxMapOptions.providerConfig.getRoute]
        */
-      getRoute?: DevExpress.ui.dxMap.OSMGetRouteFunction;
+      getRoute?: DevExpress.ui.dxMap.OsmGetRouteFunction;
     };
     /**
      * [descr:dxMapOptions.routes]

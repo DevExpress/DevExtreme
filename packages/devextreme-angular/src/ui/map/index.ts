@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, OSMGeocodeFunction, OSMGetRouteFunction, OSMTileServer, RouteMode, MapType } from 'devextreme/ui/map';
+import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, OsmGeocodeFunction, OsmGetRouteFunction, OsmTileServer, RouteMode, MapType } from 'devextreme/ui/map';
 
 import DxMap from 'devextreme/ui/map';
 
@@ -302,10 +302,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get providerConfig(): { geocodeLocation?: OSMGeocodeFunction, getRoute?: OSMGetRouteFunction, mapId?: string, tileServer?: OSMTileServer, useAdvancedMarkers?: boolean } {
+    get providerConfig(): { geocodeLocation?: OsmGeocodeFunction, getRoute?: OsmGetRouteFunction, mapId?: string, tileServer?: OsmTileServer, useAdvancedMarkers?: boolean } {
         return this._getOption('providerConfig');
     }
-    set providerConfig(value: { geocodeLocation?: OSMGeocodeFunction, getRoute?: OSMGetRouteFunction, mapId?: string, tileServer?: OSMTileServer, useAdvancedMarkers?: boolean }) {
+    set providerConfig(value: { geocodeLocation?: OsmGeocodeFunction, getRoute?: OsmGetRouteFunction, mapId?: string, tileServer?: OsmTileServer, useAdvancedMarkers?: boolean }) {
         this._setOption('providerConfig', value);
     }
 
@@ -582,7 +582,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() providerConfigChange: EventEmitter<{ geocodeLocation?: OSMGeocodeFunction, getRoute?: OSMGetRouteFunction, mapId?: string, tileServer?: OSMTileServer, useAdvancedMarkers?: boolean }>;
+    @Output() providerConfigChange: EventEmitter<{ geocodeLocation?: OsmGeocodeFunction, getRoute?: OsmGetRouteFunction, mapId?: string, tileServer?: OsmTileServer, useAdvancedMarkers?: boolean }>;
 
     /**
     
