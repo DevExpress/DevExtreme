@@ -93,7 +93,7 @@ const centers: Record<string, { lat: number; lng: number }> = {
 };
 
 // Custom args (not native Map props) used to drive the story controls.
-interface OSMStoryArgs {
+interface OsmStoryArgs {
   tileProvider: TileProvider;
   maptilerKey: string;
   thunderforestKey: string;
@@ -112,7 +112,7 @@ interface OSMStoryArgs {
   width: string;
 }
 
-const meta: Meta<OSMStoryArgs> = {
+const meta: Meta<OsmStoryArgs> = {
   title: 'Map/OSM Provider',
   component: Map,
   parameters: { layout: 'fullscreen' },
@@ -178,7 +178,7 @@ const meta: Meta<OSMStoryArgs> = {
 
 export default meta;
 
-type Story = StoryObj<OSMStoryArgs>;
+type Story = StoryObj<OsmStoryArgs>;
 
 const render: Story['render'] = (args) => {
   const {
