@@ -133,7 +133,13 @@ class OsmProvider extends DynamicProvider {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._loadMapResources().then(resolve, reject);
+        this._loadMapResources().then(() => {
+          if (osmMapsLoaded()) {
+            resolve();
+          } else {
+            reject(new Error('Leaflet (window.L) is not available after loading its resources.'));
+          }
+        }, reject);
       }, reject);
     });
   }
