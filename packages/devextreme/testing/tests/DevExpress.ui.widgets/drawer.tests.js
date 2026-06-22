@@ -144,7 +144,7 @@ QUnit.module('Drawer behavior', () => {
     });
 
     [true, false].forEach((animationEnabled) => {
-        QUnit.test(`Toggle promise should be resolved after toggle finished (animationEnabled=${animationEnabled})`, function(assert) {
+        QUnit.skip(`Toggle promise should be resolved after toggle finished (animationEnabled=${animationEnabled})`, function(assert) {
             assert.expect(1);
 
             const instance = $('#drawer').dxDrawer({

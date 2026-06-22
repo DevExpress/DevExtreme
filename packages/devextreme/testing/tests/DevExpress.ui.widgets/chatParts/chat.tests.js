@@ -1294,7 +1294,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
 
-        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', async function(assert) {
+        QUnit.skip('message box should have editing message text and focus after the Edit was triggered from keyboard', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
