@@ -7,7 +7,7 @@ on:
 
 jobs:
   fetch:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     name: Fetch analysis
     outputs:
       alerts: ${{ steps.fetch.outputs.ALERTS }}
@@ -25,7 +25,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     name: Send notifications
     needs: [ fetch ]
 

@@ -66,7 +66,7 @@ jobs:
           sha: ${{ steps.get-head-sha.outputs.SHA }}
 
   fetch:
-    runs-on: devextreme-shr2
+    runs-on: devextreme-latest
     name: Fetch analysis
     needs: [ analyze-javascript ]
 
@@ -82,7 +82,7 @@ jobs:
           echo 'EOF' >> $GITHUB_ENV
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-slim
     name: Send notifications
     needs: [ fetch ]
 

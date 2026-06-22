@@ -19,7 +19,7 @@ env:
 jobs:
   check-should-run:
     name: Check if tests should run
-    runs-on: devextreme-shr2
+    runs-on: devextreme-slim
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
@@ -228,7 +228,7 @@ jobs:
         if-no-files-found: ignore
 
   merge-artifacts:
-    runs-on: devextreme-shr2
+    runs-on: devextreme-latest
     needs: testcafe
     if: ${{ always() }}
 
@@ -250,7 +250,7 @@ jobs:
         delete-merged: true
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-slim
     name: Send notifications
     needs: [build, testcafe]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')

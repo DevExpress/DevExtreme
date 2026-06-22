@@ -140,7 +140,7 @@ jobs:
           pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-slim
     name: Send notifications
     needs: [ build, publish ]
     if: failure()
