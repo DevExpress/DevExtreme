@@ -1,6 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as process from 'process';
 import parseArgs from 'minimist';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
@@ -14,7 +15,6 @@ import { getCurrentTheme } from './helpers/themeUtils';
 
 const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
-const FAILED_TESTS_RETRY_ATTEMPTS = 0;
 
 const wait = async (
   timeout: number,
@@ -55,7 +55,10 @@ interface ParsedArgs {
   shadowDom: boolean;
   skipUnstable: boolean;
   disableScreenshots: boolean;
-  retryFailed: boolean;
+  testNamesFile: string;
+  timezone: string;
+  failedTestsOutput: string;
+  deferThreshold: number;
 }
 
 const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions> => ({
@@ -114,9 +117,46 @@ function getArgs(): ParsedArgs {
       shadowDom: false,
       skipUnstable: true,
       disableScreenshots: false,
-      retryFailed: true,
+      testNamesFile: '',
+      timezone: '',
+      failedTestsOutput: './artifacts/failed-tests/failed-tests.json',
+      deferThreshold: 0,
     },
   }) as ParsedArgs;
+}
+
+function readTestNames(filePath: string): Set<string> {
+  const content = fs.readFileSync(filePath, 'utf8');
+  return new Set(
+    content
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0),
+  );
+}
+
+function writeFailedTests(
+  args: ParsedArgs,
+  componentFolder: string,
+  file: string,
+  tests: string[],
+): void {
+  const outputPath = args.failedTestsOutput.trim();
+  if (!outputPath) {
+    return;
+  }
+
+  const payload = {
+    label: (process.env.RUN_LABEL ?? '') || componentFolder || 'tests',
+    componentFolder,
+    theme: process.env.theme ?? '',
+    timezone: args.timezone,
+    file,
+    tests,
+  };
+
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+  fs.writeFileSync(outputPath, JSON.stringify(payload, null, 2));
 }
 
 async function main() {
@@ -151,7 +191,10 @@ async function main() {
 
     const failedTests: Set<string> = new Set();
 
-    const createRunner = (filterByFailedTests = false, testsToFilter?: Set<string>) => {
+    const testNamesFile = args.testNamesFile.trim();
+    const testNames = testNamesFile ? readTestNames(testNamesFile) : null;
+
+    const createRunner = () => {
       const runner: Runner = testCafe!.createRunner()
         .browsers(browsers)
         .reporter(reporter)
@@ -163,11 +206,11 @@ async function main() {
         },
       });
 
-      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 8));
+      runner.concurrency(testNames ? 1 : (args.concurrency || 4));
 
       const filters: FilterFunction[] = [];
 
-      if (indices && !filterByFailedTests) {
+      if (indices && !testNames) {
         const [current, total] = indices.split(/_|of|\\|\//ig).map((x) => +x);
 
         /* eslint-disable no-console */
@@ -190,8 +233,8 @@ async function main() {
         filters.push((name: string) => name === testName);
       }
 
-      if (filterByFailedTests && testsToFilter && testsToFilter.size > 0) {
-        filters.push((name: string) => testsToFilter.has(name));
+      if (testNames) {
+        filters.push((name: string) => testNames.has(name));
       }
 
       if (args.skipUnstable) {
@@ -290,12 +333,10 @@ async function main() {
           after: async (t: TestController) => {
             await clearTestPage(t);
 
-            if (args.retryFailed) {
-              // @ts-expect-error ts-errors
-              const { test, errs } = t.testRun;
-              if (errs && errs.length > 0) {
-                failedTests.add(test.name);
-              }
+            // @ts-expect-error ts-errors
+            const { test, errs } = t.testRun;
+            if (errs && errs.length > 0) {
+              failedTests.add(test.name);
             }
           },
         },
@@ -306,83 +347,24 @@ async function main() {
       runOptions.disableScreenshots = true;
     }
 
-    // First run - all tests
-    const runner = createRunner(false);
-    let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
+    const runner = createRunner();
+    const failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
 
-    // Retry failed tests multiple times if enabled and there are failures
-    if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
-      const initialFailedCount = failedTests.size;
-      const noRetryFolders = ['cardView', 'dataGrid', 'common'];
-      let attemptsLeft = noRetryFolders.some((folder) => componentFolderArg === folder || componentFolderArg.startsWith(`${folder}/`))
-        ? 0
-        : FAILED_TESTS_RETRY_ATTEMPTS;
+    // A job with no more than `deferThreshold` failures is still considered
+    // passed: it records the failed tests and exits 0 so the dedicated
+    // "retry-unstable" job (see testcafe_tests.yml) can re-run them in
+    // isolation and tell flaky tests apart from real failures. More failures
+    // than that are treated as a real regression in this shard - the job fails
+    // and its tests are not handed off for retry.
+    const deferred = failedCount > 0 && failedCount <= args.deferThreshold;
 
-      while (attemptsLeft > 0 && failedCount > 0) {
-        const attemptNumber = FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft + 1;
-
-        /* eslint-disable no-console */
-        console.info('\n');
-        console.info('='.repeat(60));
-        console.info(`RETRY ATTEMPT ${attemptNumber}/${FAILED_TESTS_RETRY_ATTEMPTS}`);
-        console.info(`Retrying ${failedTests.size} failed test(s)`);
-        console.info('='.repeat(60));
-        console.info('Failed tests:');
-        failedTests.forEach((failedTestName) => console.info(`  - ${failedTestName}`));
-        console.info('='.repeat(60));
-        console.info('\n');
-        /* eslint-enable no-console */
-
-        const testsToRetry = new Set(failedTests);
-        failedTests.clear();
-
-        const retryRunner = createRunner(true, testsToRetry);
-
-        failedCount = await retry(
-          () => retryRunner.run(runOptions),
-          LAUNCH_RETRY_ATTEMPTS,
-        );
-
-        attemptsLeft -= 1;
-
-        /* eslint-disable no-console */
-        console.info('\n');
-        console.info('='.repeat(60));
-        console.info(`ATTEMPT ${attemptNumber} RESULTS`);
-        console.info('='.repeat(60));
-        console.info(`Tests retried: ${testsToRetry.size}`);
-        console.info(`Still failing: ${failedCount}`);
-        console.info(`Passed on this attempt: ${Math.max(0, testsToRetry.size - failedCount)}`);
-        console.info('='.repeat(60));
-        console.info('\n');
-        /* eslint-enable no-console */
-
-        if (failedCount === 0) {
-          /* eslint-disable no-console */
-          console.info('✅ All previously failed tests now pass!');
-          console.info('\n');
-          /* eslint-enable no-console */
-          break;
-        }
-      }
-
-      /* eslint-disable no-console */
-      console.info('\n');
-      console.info('='.repeat(60));
-      console.info('FINAL RETRY RESULTS');
-      console.info('='.repeat(60));
-      console.info(`Initially failed: ${initialFailedCount}`);
-      console.info(`Total retry attempts used: ${FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft}`);
-      console.info(`Final failing count: ${failedCount}`);
-      console.info(`Successfully recovered: ${initialFailedCount - failedCount}`);
-      console.info('='.repeat(60));
-      console.info('\n');
-      /* eslint-enable no-console */
+    if (deferred && failedTests.size > 0) {
+      writeFailedTests(args, componentFolderArg, file, Array.from(failedTests));
     }
 
     await testCafe.close();
 
-    process.exit(failedCount);
+    process.exit(failedCount <= args.deferThreshold ? 0 : failedCount);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error occurred during test execution:', error);
