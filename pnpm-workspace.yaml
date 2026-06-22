@@ -81,7 +81,7 @@ catalog:
   jquery: 3.7.1
   stylelint: 16.22.0
   jspdf: 4.2.1
-  testcafe: 3.7.4
+  testcafe: 3.7.5
   "@babel/eslint-parser": 7.29.7
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.5
@@ -130,7 +130,7 @@ allowBuilds:
   unrs-resolver: true
 
 patchedDependencies:
-  testcafe-hammerhead@31.7.7: patches/testcafe-hammerhead@31.7.7.patch
+  testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
