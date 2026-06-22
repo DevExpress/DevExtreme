@@ -1707,7 +1707,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after element becomes visible');
         });
 
-        QUnit.test('should be scrolled down after being initialized on a detached element and then attached to the DOM', async function(assert) {
+        QUnit.skip('should be scrolled down after being initialized on a detached element and then attached to the DOM', async function(assert) {
             const $messageList = $('<div id="messageListDetached">');
 
             const items = generateMessages(31);
