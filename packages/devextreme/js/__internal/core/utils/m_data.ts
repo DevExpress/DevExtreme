@@ -17,6 +17,10 @@ const bracketsToDots = function (expr) {
     .replace(/\]/g, '');
 };
 
+const UNSAFE_PATH_FRAGMENTS = new Set(['__proto__', 'constructor', 'prototype']);
+
+const isUnsafePathFragment = (name: string): boolean => UNSAFE_PATH_FRAGMENTS.has(name);
+
 export const getPathParts = function (name) {
   return bracketsToDots(name).split('.');
 };
@@ -81,6 +85,11 @@ export const compileGetter = function (expr) {
 
         const pathPart = path[i];
 
+        if (isUnsafePathFragment(pathPart)) {
+          errors.log('E0123', pathPart);
+          return;
+        }
+
         if (hasDefaultValue && isObject(current) && !(pathPart in current)) {
           return options.defaultValue;
         }
@@ -130,13 +139,23 @@ function combineGetters(getters) {
 
       for (let i = 0; i < last; i++) {
         const pathItem = path[i];
+        if (isUnsafePathFragment(pathItem)) {
+          errors.log('E0123', pathItem);
+          return;
+        }
         if (!(pathItem in current)) {
           current[pathItem] = { };
         }
         current = current[pathItem];
       }
 
-      current[path[last]] = value;
+      const lastPathItem = path[last];
+      if (isUnsafePathFragment(lastPathItem)) {
+        errors.log('E0123', lastPathItem);
+        return;
+      }
+
+      current[lastPathItem] = value;
     });
     return result;
   };
@@ -170,6 +189,11 @@ export const compileSetter = function (expr) {
     let currentValue = unwrap(obj, options);
 
     expr.forEach(function (propertyName, levelIndex) {
+      if (isUnsafePathFragment(propertyName)) {
+        errors.log('E0123', propertyName);
+        return;
+      }
+
       let propertyValue = readPropValue(currentValue, propertyName, options);
       const isPropertyFunc = !options.functionsAsIs && isFunction(propertyValue) && !isWrapped(propertyValue);
 
