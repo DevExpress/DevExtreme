@@ -44,7 +44,7 @@ const waitForKeyboardNavigation = async (t: TestController): Promise<void> => {
     .notOk({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
 };
 
-fixture.disablePageReloads`Keyboard Navigation - common`
+fixture`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
 test.meta({ unstable: true })('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
