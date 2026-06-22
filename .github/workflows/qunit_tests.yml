@@ -19,7 +19,7 @@ env:
 jobs:
   check-should-run-all:
     name: Check if all tests should run
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
