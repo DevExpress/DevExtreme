@@ -493,16 +493,20 @@ QUnit.module('prototype pollution protection', {
 }, () => {
 
     test('compileSetter logs error and skips assignment for __proto__ path fragment', function(assert) {
-        SETTER('__proto__.pp_dx')({}, 'yes', { functionsAsIs: true });
+        const obj = {};
+        SETTER('__proto__.pp_dx')(obj, 'yes', { functionsAsIs: true });
 
         assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__');
+        assert.strictEqual(obj.pp_dx, undefined, 'target object must not be modified');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
 
     test('compileSetter logs error and skips assignment for constructor path fragment', function(assert) {
-        SETTER('constructor.prototype.pp_dx')({}, 'yes', { functionsAsIs: true });
+        const obj = {};
+        SETTER('constructor.prototype.pp_dx')(obj, 'yes', { functionsAsIs: true });
 
         assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
+        assert.strictEqual(obj.pp_dx, undefined, 'target object must not be modified');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
 
@@ -511,6 +515,7 @@ QUnit.module('prototype pollution protection', {
         SETTER('prototype.pp_dx')(fn, 'yes', { functionsAsIs: true });
 
         assert.strictEqual(errors.log.calledWith('E0123', 'prototype'), true, 'should log E0123 for prototype');
+        assert.strictEqual(fn.pp_dx, undefined, 'function object must not be modified');
         assert.strictEqual(fn.prototype.pp_dx, undefined, 'function prototype must not be modified');
     });
 

@@ -186,14 +186,16 @@ export const compileSetter = function (expr) {
 
   return function (obj, value, options) {
     options = prepareOptions(options);
+
+    const unsafeFragment = expr.find(isUnsafePathFragment);
+    if (unsafeFragment !== undefined) {
+      errors.log('E0123', unsafeFragment);
+      return;
+    }
+
     let currentValue = unwrap(obj, options);
 
     expr.forEach(function (propertyName, levelIndex) {
-      if (isUnsafePathFragment(propertyName)) {
-        errors.log('E0123', propertyName);
-        return;
-      }
-
       let propertyValue = readPropValue(currentValue, propertyName, options);
       const isPropertyFunc = !options.functionsAsIs && isFunction(propertyValue) && !isWrapped(propertyValue);
 
