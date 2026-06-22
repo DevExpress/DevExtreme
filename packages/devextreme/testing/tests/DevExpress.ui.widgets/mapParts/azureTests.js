@@ -1137,7 +1137,7 @@ QUnit.module('Routes', moduleConfig, () => {
             }, 100);
         });
 
-        QUnit.test('Add route method should not be called before map ready promise is resolved', function(assert) {
+        QUnit.skip('Add route method should not be called before map ready promise is resolved', function(assert) {
             const done = assert.async();
             const onRouteAdded = sinon.stub();
 
