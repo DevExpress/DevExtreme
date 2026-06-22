@@ -237,6 +237,9 @@ importers:
       '@types/yargs':
         specifier: 17.0.35
         version: 17.0.35
+      axe-core:
+        specifier: 'catalog:'
+        version: 4.11.3
       devextreme-internal-tools:
         specifier: catalog:tools
         version: 20.4.0
