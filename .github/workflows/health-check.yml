@@ -18,12 +18,23 @@ jobs:
             'GHSA-4wf5-vphf-c2xc', // terser
             'GHSA-68x2-mx4q-78m7', // @angular/platform-server
             'GHSA-58c5-g7wp-6w37', // @angular/common
+            'GHSA-p3vc-36g9-x9gr', // @angular/common
+            'GHSA-q6f4-qqrg-jv6x', // @angular/common
+            'GHSA-48r7-hpm6-gfxm', // @angular/common
+            'GHSA-39pv-4j6c-2g6v', // @angular/common
             'GHSA-v4hv-rgfq-gp49', // @angular/compiler
             'GHSA-jrmj-c5cx-3cw6', // @angular/core
             'GHSA-prjf-86w9-mfqv', // @angular/core
+            'GHSA-rgjc-h3x7-9mwg', // @angular/core
+            'GHSA-692r-grfm-v8x7', // @angular/core
             'GHSA-g93w-mfhg-p222', // @angular/compiler
+            'GHSA-58w9-8g37-x9v5', // @angular/compiler
+            'GHSA-f3m7-gqxr-g87x', // @angular/core // @angular/compiler 
             'GHSA-45q2-gjvg-7973', // @angular/platform-server
             'GHSA-rfh7-fxqc-q52v', // @angular/platform-server
+            'GHSA-xrxm-cp7j-8xf6', // @angular/platform-server
+            'GHSA-gxx4-3xcv-f8qx', // @angular/platform-server
+            'GHSA-hqr9-c56f-3x7f', // @angular/platform-server
             'GHSA-2gmp-34j9-fqjm', // replicator
             'GHSA-848j-6mx2-7j84', // elliptic
           ]
