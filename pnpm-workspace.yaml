@@ -73,6 +73,7 @@ catalog:
   gulp-eslint-new: 2.4.0
   jquery: 4.0.0
   stylelint: 16.22.0
+  testcafe: 3.7.5
   zod: 3.24.4
   zod-to-json-schema: 3.24.6
   "@babel/eslint-parser": 7.29.7
@@ -124,7 +125,7 @@ allowBuilds:
   unrs-resolver: true
 
 patchedDependencies:
-  testcafe-hammerhead@31.7.7: patches/testcafe-hammerhead@31.7.7.patch
+  testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
