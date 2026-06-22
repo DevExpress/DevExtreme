@@ -218,4 +218,22 @@ describe('ScssBuildExecutor E2E', () => {
 
     expect(fs.existsSync(path.join(projectRoot, 'scss', 'bundles', 'dx.common.scss'))).toBe(true);
   });
+
+  it('fails in ci mode when a configured bundle source is missing', async () => {
+    await setupProjectStructure(tempDir);
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    const options: ScssBuildExecutorSchema = {
+      mode: 'ci',
+      devBundles: ['light', 'missing.bundle'],
+      cssOutputDir: './artifacts/css',
+    };
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(false);
+  });
 });

@@ -230,15 +230,17 @@ function resolveSourcesByBundleNames(
   bundleNames: string[],
 ): string[] {
   const resolvedBundlesDir = path.resolve(projectRoot, bundlesDir);
-  const sources: string[] = [];
+  return bundleNames.map((bundleName) => path.join(resolvedBundlesDir, `dx.${bundleName}.scss`));
+}
 
-  for (const bundleName of bundleNames) {
-    const source = path.join(resolvedBundlesDir, `dx.${bundleName}.scss`);
-    if (fs.existsSync(source)) {
-      sources.push(source);
-    } else {
-      logger.warn(`${source} file does not exist`);
-    }
+function assertCiSourcesAvailable(sources: string[]): string[] {
+  const missingSources = sources.filter((source) => !fs.existsSync(source));
+  if (missingSources.length > 0) {
+    throw new Error(`Missing SCSS bundle source(s) in CI mode: ${missingSources.join(', ')}`);
+  }
+
+  if (sources.length === 0) {
+    throw new Error('No SCSS bundle sources configured for CI mode');
   }
 
   return sources;
@@ -265,10 +267,13 @@ async function runSingleBuild(
   await ensureDir(cssOutputDir);
 
   const sources = await resolveSourceFiles(projectRoot, options);
-  const existingSources = sources.filter((source) => fs.existsSync(source));
+  const sourcesToCompile =
+    options.mode === 'ci'
+      ? assertCiSourcesAvailable(sources)
+      : sources.filter((source) => fs.existsSync(source));
   const minifyProfile: MinifyProfile = options.mode === 'ci' ? 'ci' : 'all';
 
-  for (const source of existingSources) {
+  for (const source of sourcesToCompile) {
     logger.verbose(`Compiling ${source}`);
     await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
   }
@@ -302,7 +307,11 @@ async function runWatchBuild(
     await generateScssBundles(projectRoot, bundlesDir, deps);
     await ensureDir(cssOutputDir);
 
-    const sources = resolveSourcesByBundleNames(projectRoot, bundlesDir, watchBundleNames);
+    const resolvedSources = resolveSourcesByBundleNames(projectRoot, bundlesDir, watchBundleNames);
+    const sources =
+      options.mode === 'ci'
+        ? assertCiSourcesAvailable(resolvedSources)
+        : resolvedSources.filter((source) => fs.existsSync(source));
     for (const source of sources) {
       await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
     }
