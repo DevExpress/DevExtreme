@@ -70,7 +70,7 @@ catalog:
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
   stylelint: 16.22.0
-  testcafe: 3.7.4
+  testcafe: 3.7.5
   "@babel/eslint-parser": 7.29.7
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.5
