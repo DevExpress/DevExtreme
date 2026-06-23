@@ -9,6 +9,7 @@ import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 import type { FunctionTemplate } from '@js/core/templates/function_template';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import Callbacks from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -87,6 +88,7 @@ import type {
   MappedAppointmentFields,
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
+  ViewCellData,
   ViewType,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
@@ -110,7 +112,7 @@ import SchedulerTimelineDay from './workspaces/timeline_day';
 import SchedulerTimelineMonth from './workspaces/timeline_month';
 import SchedulerTimelineWeek from './workspaces/timeline_week';
 import type SchedulerWorkSpace from './workspaces/work_space';
-import type { DroppableCellData } from './workspaces/work_space';
+import type { DroppableCellData, WorkspaceOptionsInternal } from './workspaces/work_space';
 import SchedulerWorkSpaceDay from './workspaces/work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/work_space_week';
@@ -1567,7 +1569,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
   }
 
-  private workSpaceConfig(currentViewOptions: NormalizedView) {
+  private workSpaceConfig(currentViewOptions: NormalizedView): WorkspaceOptionsInternal {
+    const cellDuration = this.option('cellDuration');
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling
@@ -1579,7 +1582,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       || horizontalVirtualScrollingAllowed
       || isTimelineView(currentViewOptions.type);
 
-    const result = extend({
+    const workSpaceOptions = extend({
       newAppointments: Boolean(this.option('_newAppointments')),
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
@@ -1590,13 +1593,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
       viewOffset: this.getViewOffsetMs(),
-      tabIndex: this.option('tabIndex'),
-      accessKey: this.option('accessKey'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      cellDuration: this.option('cellDuration'),
+      tabIndex: this.option('tabIndex') ?? 0,
+      accessKey: this.option('accessKey') ?? '',
+      focusStateEnabled: Boolean(this.option('focusStateEnabled')),
       showAllDayPanel: this.option('showAllDayPanel'),
       showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
-      indicatorTime: this.option('indicatorTime'),
+      indicatorTime: this.option('indicatorTime') ?? new Date(),
       indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
       shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
       crossScrollingEnabled,
@@ -1606,17 +1608,17 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dateCellTemplate: this.option('dateCellTemplate'),
       allowMultipleCellSelection: this.option('allowMultipleCellSelection'),
       selectedCellData: this.option('selectedCellData'),
-      onSelectionChanged: (args) => {
+      onSelectionChanged: (args: { selectedCellData: ViewCellData[] }) => {
         this.option('selectedCellData', args.selectedCellData);
       },
-      onSelectionEnd: (args) => {
+      onSelectionEnd: (args: { selectedCellData: ViewCellData[] }) => {
         this.actions.onSelectionEnd({
           component: this,
           element: this.$element(),
           selectedCellData: args.selectedCellData,
         });
       },
-      groupByDate: this.getViewOption('groupByDate'),
+      groupByDate: Boolean(this.getViewOption('groupByDate')),
       scrolling,
       draggingMode: this.option('_draggingMode'),
       timeZoneCalculator: this.timeZoneCalculator,
@@ -1624,41 +1626,49 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-      renderAppointments: () => { this.renderAppointments(); },
-      onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
-      getHeaderHeight: () => this.header?.getHeight() ?? 0,
-      onScrollEnd: () => this._appointments.updateResizableArea(),
+      renderAppointments: (): void => { this.renderAppointments(); },
+      onShowAllDayPanel: (value: boolean) => this.option('showAllDayPanel', value),
+      getHeaderHeight: (): number => this.header?.getHeight() ?? 0,
+      onScrollEnd: (): void => this._appointments.updateResizableArea(),
       onInitialized: (e) => {
         if (this.option('_newAppointments')) {
           this.appointmentDragController.createWorkSpaceDraggable(
-            e.element,
+            $(e.element),
             {
               getAppointmentData: this._appointments.getAppointmentData.bind(this._appointments),
             },
           );
         }
       },
-      onDisposing: () => {
+      onDisposing: (): void => {
         if (this.option('_newAppointments')) {
           this.appointmentDragController.disposeWorkSpaceDraggable();
         }
       },
+      rtlEnabled: Boolean(this.option('rtlEnabled')),
+      hoursInterval: cellDuration / 60,
+      allDayExpanded: false,
+      currentDate: this.getViewOption('currentDate'),
+    }, currentViewOptions) as WorkspaceOptionsInternal;
 
-    }, currentViewOptions);
+    workSpaceOptions.notifyScheduler = this.notifyScheduler;
+    workSpaceOptions.groups = this.resourceManager.groupResources();
+    workSpaceOptions.onCellClick = this._createActionByOption('onCellClick') as (e: CellClickEvent) => void;
+    workSpaceOptions.onCellContextMenu = this._createActionByOption('onCellContextMenu') as (e: CellContextMenuEvent) => void;
+    workSpaceOptions.dataCellTemplate = workSpaceOptions.dataCellTemplate
+      ? this._getTemplate(workSpaceOptions.dataCellTemplate) as TemplateBase
+      : null;
+    workSpaceOptions.timeCellTemplate = workSpaceOptions.timeCellTemplate
+      ? this._getTemplate(workSpaceOptions.timeCellTemplate) as TemplateBase
+      : null;
+    workSpaceOptions.resourceCellTemplate = workSpaceOptions.resourceCellTemplate
+      ? this._getTemplate(workSpaceOptions.resourceCellTemplate) as TemplateBase
+      : null;
+    workSpaceOptions.dateCellTemplate = workSpaceOptions.dateCellTemplate
+      ? this._getTemplate(workSpaceOptions.dateCellTemplate) as TemplateBase
+      : null;
 
-    result.notifyScheduler = this.notifyScheduler;
-    result.groups = this.resourceManager.groupResources();
-    result.onCellClick = this._createActionByOption('onCellClick');
-    result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
-    result.currentDate = this.getViewOption('currentDate');
-    result.hoursInterval = result.cellDuration / 60;
-    result.allDayExpanded = false;
-    result.dataCellTemplate = result.dataCellTemplate ? this._getTemplate(result.dataCellTemplate) : null;
-    result.timeCellTemplate = result.timeCellTemplate ? this._getTemplate(result.timeCellTemplate) : null;
-    result.resourceCellTemplate = result.resourceCellTemplate ? this._getTemplate(result.resourceCellTemplate) : null;
-    result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
-
-    return result;
+    return workSpaceOptions;
   }
 
   private waitAsyncTemplate(callback): void {
