@@ -180,8 +180,8 @@ export const filterValueCommand = defineGridCommand({
   
   Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith", "anyof", "noneof".
 
-  It is needed to use the anyof operator for filtering multiple values. It allows syncing with HeaderFilter.
-  For example, instead of using 
+  Use the anyof operator to filter by multiple values. This keeps the filter in sync with HeaderFilter.
+  For example, instead of using
   {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"name","operator":"=","value":"Beta"}},{"id":"n3","expr":{"type":"combined","combiner":"or","leftId":"n1","rightId":"n2"}}]}
   you need to use:
   {"rootId": "n1", "nodes":[{"id":"n1", "expr":{"type":"basic", "field": "name", "operator":"anyof", "value":["Alpha", "Beta"]}}]}
