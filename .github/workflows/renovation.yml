@@ -16,7 +16,7 @@ env:
 
 jobs:
   jest-tests:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -58,7 +58,7 @@ jobs:
       run: pnpm exec nx test-jest devextreme
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [jest-tests]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')

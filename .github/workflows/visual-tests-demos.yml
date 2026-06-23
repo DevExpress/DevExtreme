@@ -266,7 +266,7 @@ jobs:
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
       needs.build-devextreme.result == 'success'
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
@@ -329,7 +329,7 @@ jobs:
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
       needs.build-devextreme.result == 'success'
 
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:

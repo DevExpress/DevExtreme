@@ -100,7 +100,7 @@ jobs:
         pnpm run validate-declarations
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
