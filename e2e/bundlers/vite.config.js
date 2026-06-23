@@ -5,7 +5,7 @@ rollupConfig.plugins = rollupConfig.plugins.filter(p => p.name !== 'commonjs');
 
 module.exports = {
     build: {
-        output: './dist/dist_vite/bundle_esm.js',
+        outDir: './dist/dist_vite',
         rollupOptions: rollupConfig
     }
 };
