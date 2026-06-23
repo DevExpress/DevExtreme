@@ -447,10 +447,6 @@ class Overlay<
   }
 
   _documentDownHandler(e: DxEvent<PointerInteractionEvent>): boolean {
-    if (this._showAnimationProcessing) {
-      this._stopAnimation();
-    }
-
     const { target } = e;
     const $target = $(target);
 

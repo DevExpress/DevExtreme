@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>T1330691 - Scheduler Popup Animation Debug</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/25.1.3/css/dx.fluent.blue.light.css" />
+  <script src="https://cdn3.devexpress.com/jslib/25.1.3/js/dx.all.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 20px; }
+    h1 { font-size: 1.3em; margin-bottom: 8px; }
+    .info { background: #f0f4ff; border: 1px solid #cce; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 13px; }
+    #scheduler { margin-top: 12px; }
+    #log { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a2e; color: #0f0; font-family: monospace; font-size: 11px; padding: 6px; max-height: 200px; overflow-y: auto; z-index: 99999; }
+    #log .entry { margin: 1px 0; }
+    #log .warn { color: #ff0; }
+    #log .err { color: #f55; }
+    #log .ok { color: #5f5; }
+    .controls { margin-bottom: 8px; }
+    .controls button { margin-right: 8px; padding: 4px 12px; }
+  </style>
+</head>
+<body class="dx-viewport">
+  <h1>T1330691 - Scheduler Popup Animation Debug</h1>
+  <div class="info">
+    <strong>Steps:</strong> Double-click empty slot (animation shows) &rarr; close &rarr; click same slot again (no animation).
+    <br>Check the debug log below for fx.animate / fx.stop calls and CSS transform values.
+  </div>
+  <div class="controls">
+    <button onclick="document.getElementById('log').innerHTML=''">Clear Log</button>
+  </div>
+  <div id="scheduler"></div>
+  <div id="log"></div>
+
+  <script>
+    var logEl = document.getElementById('log');
+    function log(msg, cls) {
+      var d = new Date();
+      var ts = d.toLocaleTimeString() + '.' + String(d.getMilliseconds()).padStart(3, '0');
+      var div = document.createElement('div');
+      div.className = 'entry ' + (cls || '');
+      div.textContent = '[' + ts + '] ' + msg;
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function getStack() {
+      try { throw new Error(); } catch(e) {
+        var lines = (e.stack || '').split('\n').slice(2, 6);
+        return lines.map(function(l) { return l.trim().replace(/^at\s+/, ''); }).join(' < ');
+      }
+    }
+
+    var popupShowCount = 0;
+
+    // Hook fx.animate
+    var origAnimate = DevExpress.fx.animate;
+    DevExpress.fx.animate = function(element, config) {
+      var $el = $(element);
+      if ($el.hasClass('dx-overlay-content')) {
+        var type = config ? config.type : '?';
+        var duration = config ? config.duration : '?';
+        var fromScale = config && config.from ? JSON.stringify(config.from) : '?';
+        var toStr = config && config.to ? JSON.stringify(config.to) : '?';
+        log('fx.animate: type=' + type + ' dur=' + duration + ' from=' + fromScale + ' to=' + toStr, 'ok');
+        lastAnimateTime = Date.now();
+        if (type === 'pop' && fromScale.indexOf('0.55') >= 0) {
+          animateActive = true;
+          setTimeout(function() { animateActive = false; }, 500);
+        }
+
+        var computedTransform = window.getComputedStyle(element).transform;
+        var inlineTransform = element.style.transform;
+        log('  CSS state: computed=' + computedTransform + ' inline=' + inlineTransform);
+      }
+      return origAnimate.apply(this, arguments);
+    };
+
+    // Track when animate was last called
+    var lastAnimateTime = 0;
+    var animateActive = false;
+
+    // Hook fx.stop
+    var origStop = DevExpress.fx.stop;
+    DevExpress.fx.stop = function(element, jumpToEnd) {
+      var $el = $(element);
+      if ($el.hasClass('dx-overlay-content') && $el.closest('.dx-scheduler-appointment-popup').length) {
+        var timeSinceAnimate = Date.now() - lastAnimateTime;
+        var stack;
+        try { throw new Error(); } catch(e) { stack = e.stack || ''; }
+        var lines = stack.split('\n').slice(2, 8).map(function(l) { return l.trim(); }).join('\n    ');
+        var isKiller = animateActive && timeSinceAnimate < 500;
+        if (isKiller) {
+          log('!! fx.stop ' + timeSinceAnimate + 'ms AFTER animate (KILLS ANIMATION):\n    ' + lines, 'err');
+        } else {
+          log('fx.stop(jumpToEnd=' + jumpToEnd + ') ' + timeSinceAnimate + 'ms after animate', 'warn');
+        }
+      }
+      return origStop.apply(this, arguments);
+    };
+
+    var currentDate = new Date();
+    var appointments = [
+      {
+        text: 'Meeting',
+        startDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 9, 30),
+        endDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 11, 0),
+      },
+    ];
+
+    $('#scheduler').dxScheduler({
+      dataSource: appointments,
+      currentDate: currentDate,
+      startDayHour: 8,
+      endDayHour: 18,
+      height: 450,
+      views: ['week'],
+      currentView: 'week',
+    });
+
+    log('Scheduler ready. Double-click empty slot, close popup, then click same slot again.');
+    log('Compare log output between first open (with animation) and second open (without).');
+  </script>
+</body>
+</html>
