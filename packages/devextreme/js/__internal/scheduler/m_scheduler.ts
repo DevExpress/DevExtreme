@@ -14,7 +14,8 @@ import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
-// @ts-expect-error
+import type { DeferredObj } from '@js/core/utils/deferred';
+// @ts-expect-error untyped deferred module re-export
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -169,6 +170,20 @@ const RECURRENCE_EDITING_MODE = {
   CANCEL: 'cancel',
 };
 
+type SchedulerActionCancel = boolean | PromiseLike<boolean> | DeferredObj<boolean | undefined>;
+
+type SchedulerActionOptions = {
+  cancel: SchedulerActionCancel;
+} & Record<string, unknown>;
+
+type ProcessActionCallback = (
+  canceled: boolean,
+) => unknown;
+
+interface SchedulerDragEvent {
+  cancel: DeferredObj<boolean>;
+}
+
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
@@ -255,15 +270,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.postponedOperations.add('_reloadDataSource', this.reloadDataSource.bind(this), promise);
   }
 
-  private postponeResourceLoading(forceReload = false) {
+  private postponeResourceLoading(forceReload = false): DeferredObj<void> {
     const whenLoaded = this.postponedOperations.add('loadResources', () => {
       const groups = this.getViewOption('groups');
 
       return fromPromise(this.resourceManager.loadGroupResources(groups, forceReload));
     });
 
-    // @ts-expect-error
-    const resolveCallbacks = new Deferred();
+    const resolveCallbacks: DeferredObj<void> = Deferred();
 
     whenLoaded.done(() => {
       resolveCallbacks.resolve();
@@ -271,7 +285,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this.postponeDataSourceLoading(whenLoaded);
 
-    return resolveCallbacks.promise();
+    return resolveCallbacks;
   }
 
   _optionChanged(args: OptionChanged<SafeSchedulerOptions>): void {
@@ -678,9 +692,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     dataSource.filter(filter);
   }
 
-  private reloadDataSource() {
-    // @ts-expect-error
-    const result = new Deferred();
+  private reloadDataSource(): Promise<void> {
+    const result: DeferredObj<void> = Deferred();
 
     if (this._dataSource) {
       this._dataSource.load().done(() => {
@@ -707,7 +720,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return result.promise();
   }
 
-  _fireContentReadyAction(result?: any): void {
+  _fireContentReadyAction(result?: DeferredObj<void>): void {
     // @ts-expect-error
     const contentReadyBase = super._fireContentReadyAction.bind(this);
     const fireContentReady = () => {
@@ -1674,7 +1687,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.updateAppointmentCore(
             appointmentData,
             newAppointmentData,
-          ).always(resolve);
+          ).finally(resolve);
         },
         false,
         undefined,
@@ -1800,7 +1813,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return dateSerialization.serializeDate(date, UTC_FULL_DATE_FORMAT);
   }
 
-  private showRecurrenceChangeConfirm(isDeleted) {
+  private showRecurrenceChangeConfirm(isDeleted: boolean): DeferredObj<string> {
     const title = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteTitle' : 'dxScheduler-confirmRecurrenceEditTitle');
     const message = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteMessage' : 'dxScheduler-confirmRecurrenceEditMessage');
     const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
@@ -1946,7 +1959,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._workSpace.getDataByDroppableCell();
   }
 
-  updateAppointmentCore(target, rawAppointment, onUpdatePrevented?: any, dragEvent?: any) {
+  updateAppointmentCore(
+    target: SafeAppointment,
+    rawAppointment: SafeAppointment,
+    onUpdatePrevented?: () => void,
+    dragEvent?: SchedulerDragEvent,
+  ): Promise<void> {
     const updatingOptions = {
       newData: rawAppointment,
       oldData: extend({}, target),
@@ -1966,8 +1984,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.actions[StoreEventNames.UPDATING](updatingOptions);
 
     if (dragEvent && !isDeferred(dragEvent.cancel)) {
-      // @ts-expect-error
-      dragEvent.cancel = new Deferred();
+      dragEvent.cancel = Deferred<boolean>();
     }
 
     if (isPromise(updatingOptions.cancel) && (dragEvent || this.option('_newAppointments'))) {
@@ -1975,8 +1992,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
 
     return this.processActionResult(updatingOptions, function (canceled) {
-      // @ts-expect-error
-      let deferred = new Deferred();
+      let deferred: DeferredObj<void> = Deferred();
 
       if (!canceled) {
         this.expandAllDayPanel(rawAppointment);
@@ -2007,23 +2023,25 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
   }
 
-  private processActionResult(actionOptions, callback) {
-    // @ts-expect-error
-    const deferred = new Deferred();
-    const resolveCallback = (callbackResult) => {
+  private processActionResult(
+    actionOptions: SchedulerActionOptions,
+    callback: ProcessActionCallback,
+  ): Promise<void> {
+    const deferred: DeferredObj<void> = Deferred();
+    const resolveCallback = (callbackResult: unknown): void => {
       when(fromPromise(callbackResult))
-        .always(deferred.resolve);
+        .always(() => { deferred.resolve(); });
     };
 
     if (isPromise(actionOptions.cancel)) {
       when(fromPromise(actionOptions.cancel)).always((cancel) => {
         if (!isDefined(cancel)) {
-          cancel = actionOptions.cancel.state() === 'rejected';
+          cancel = (actionOptions.cancel as DeferredObj<boolean>).state() === 'rejected';
         }
         resolveCallback(callback.call(this, cancel));
       });
     } else {
-      resolveCallback(callback.call(this, actionOptions.cancel));
+      resolveCallback(callback.call(this, actionOptions.cancel as boolean));
     }
 
     return deferred.promise();
@@ -2231,7 +2249,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (this.appointmentTooltip.isShownForTarget(target)) {
       this.hideAppointmentTooltip();
     } else {
-      this.processActionResult(arg, (canceled) => {
+      this.processActionResult({ ...arg, cancel: arg.cancel ?? false }, (canceled) => {
         !canceled && this.appointmentTooltip.show(target, data, {
           ...this.getExtraAppointmentTooltipOptions(),
           ...options,
@@ -2279,7 +2297,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       && (orientation === 'horizontal' || orientation === 'both');
   }
 
-  addAppointment(rawAppointment) {
+  addAppointment(rawAppointment: SafeAppointment): Promise<void> {
     // NOTE: mutation of raw appointment
     const appointment = new AppointmentAdapter(
       rawAppointment,
@@ -2298,8 +2316,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     return this.processActionResult(addingOptions, (canceled) => {
       if (canceled) {
-        // @ts-expect-error
-        return new Deferred().resolve();
+        return Deferred().resolve().promise();
       }
 
       this.expandAllDayPanel(serializedAppointment);
@@ -2310,7 +2327,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
   }
 
-  updateAppointment(target, appointment) {
+  updateAppointment(target: SafeAppointment, appointment: SafeAppointment): Promise<void> {
     return this.updateAppointmentCore(target, appointment);
   }
 
