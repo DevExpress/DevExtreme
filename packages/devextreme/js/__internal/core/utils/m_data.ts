@@ -139,23 +139,13 @@ function combineGetters(getters) {
 
       for (let i = 0; i < last; i++) {
         const pathItem = path[i];
-        if (isUnsafePathFragment(pathItem)) {
-          errors.log('E0123', pathItem);
-          return;
-        }
         if (!(pathItem in current)) {
           current[pathItem] = { };
         }
         current = current[pathItem];
       }
 
-      const lastPathItem = path[last];
-      if (isUnsafePathFragment(lastPathItem)) {
-        errors.log('E0123', lastPathItem);
-        return;
-      }
-
-      current[lastPathItem] = value;
+      current[path[last]] = value;
     });
     return result;
   };
