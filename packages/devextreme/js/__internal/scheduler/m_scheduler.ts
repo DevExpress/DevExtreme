@@ -26,6 +26,7 @@ import {
   isPromise,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
 import type {
@@ -772,7 +773,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     visible && this._dimensionChanged(null, true);
   }
 
-  _dataSourceOptions() {
+  _dataSourceOptions(): DataSourceOptions {
     return { paginate: false };
   }
 
@@ -1107,7 +1108,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
         getDataAccessor: () => this._dataAccessors,
-        getStartViewDate: () => this.getStartViewDate(),
+        getStartViewDate: (): Date => this.getStartViewDate()!,
         getSortedItems: () => this._layoutManager.sortedItems,
 
         isVirtualScrolling: () => this.isVirtualScrolling(),
@@ -1167,7 +1168,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.$element().append(this.mainContainer);
   }
 
-  createAppointmentForm() {
+  createAppointmentForm(): AppointmentForm {
     const config: AppointmentFormConfig = {
       dataAccessors: this._dataAccessors,
       editing: this.editing,
@@ -1182,7 +1183,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return new AppointmentForm(config);
   }
 
-  createAppointmentPopup(form) {
+  createAppointmentPopup(form: AppointmentForm): AppointmentPopup {
     const scheduler = {
       getElement: () => this.$element(),
       // @ts-expect-error
@@ -1294,7 +1295,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     );
   }
 
-  private getExtraAppointmentTooltipOptions() {
+  private getExtraAppointmentTooltipOptions(): AppointmentTooltipExtraOptions {
     return {
       rtlEnabled: this.option('rtlEnabled'),
       focusStateEnabled: this.option('focusStateEnabled'),
@@ -1365,7 +1366,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       min: this.getViewOption('min'),
       max: this.getViewOption('max'),
       indicatorTime: this.option('indicatorTime'),
-      startViewDate: this.getStartViewDate(),
+      startViewDate: this.getStartViewDate()!,
       tabIndex: this.option('tabIndex'),
       focusStateEnabled: this.option('focusStateEnabled'),
       useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
@@ -1634,7 +1635,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._workSpace;
   }
 
-  getHeader() {
+  getHeader(): SchedulerHeader | undefined {
     return this.header;
   }
 
@@ -2038,7 +2039,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._appointments;
   }
 
-  getLayoutManager() {
+  getLayoutManager(): AppointmentLayoutManager {
     return this._layoutManager;
   }
 
@@ -2089,11 +2090,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return startDateTimeStamp <= dayTimeStamp && dayTimeStamp <= endDateTimeStamp;
   }
 
-  getStartViewDate() {
+  getStartViewDate(): Date | undefined {
     return this._workSpace?.getStartViewDate();
   }
 
-  getEndViewDate() {
+  getEndViewDate(): Date {
     return this._workSpace.getEndViewDate();
   }
 
