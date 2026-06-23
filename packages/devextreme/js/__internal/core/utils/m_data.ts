@@ -68,8 +68,14 @@ export const compileGetter = function (expr) {
 
   if (typeof expr === 'string') {
     const path = getPathParts(expr);
+    const unsafeFragment = path.find(isUnsafePathFragment);
 
     return function (obj, options) {
+      if (unsafeFragment !== undefined) {
+        errors.log('E0123', unsafeFragment);
+        return;
+      }
+
       options = prepareOptions(options);
       const functionAsIs = options.functionsAsIs;
       const hasDefaultValue = 'defaultValue' in options;
@@ -84,11 +90,6 @@ export const compileGetter = function (expr) {
         }
 
         const pathPart = path[i];
-
-        if (isUnsafePathFragment(pathPart)) {
-          errors.log('E0123', pathPart);
-          return;
-        }
 
         if (hasDefaultValue && isObject(current) && !(pathPart in current)) {
           return options.defaultValue;
@@ -173,11 +174,11 @@ const ensurePropValueDefined = function (obj, propName, value, options) {
 export const compileSetter = function (expr) {
   expr = getPathParts(expr || 'this');
   const lastLevelIndex = expr.length - 1;
+  const unsafeFragment = expr.find(isUnsafePathFragment);
 
   return function (obj, value, options) {
     options = prepareOptions(options);
 
-    const unsafeFragment = expr.find(isUnsafePathFragment);
     if (unsafeFragment !== undefined) {
       errors.log('E0123', unsafeFragment);
       return;

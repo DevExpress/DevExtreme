@@ -492,7 +492,7 @@ QUnit.module('prototype pollution protection', {
     }
 }, () => {
 
-    test('compileSetter logs error and skips assignment for __proto__ path fragment', function(assert) {
+    test('compileSetter logs error and skips assignment for __proto__ path fragment (T1330839)', function(assert) {
         const obj = {};
         SETTER('__proto__.pp_dx')(obj, 'yes', { functionsAsIs: true });
 
@@ -501,7 +501,7 @@ QUnit.module('prototype pollution protection', {
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
 
-    test('compileSetter logs error and skips assignment for constructor path fragment', function(assert) {
+    test('compileSetter logs error and skips assignment for constructor path fragment (T1330839)', function(assert) {
         const obj = {};
         SETTER('constructor.prototype.pp_dx')(obj, 'yes', { functionsAsIs: true });
 
@@ -510,7 +510,7 @@ QUnit.module('prototype pollution protection', {
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
 
-    test('compileSetter logs error and skips assignment for prototype path fragment', function(assert) {
+    test('compileSetter logs error and skips assignment for prototype path fragment (T1330839)', function(assert) {
         const fn = function() {};
         SETTER('prototype.pp_dx')(fn, 'yes', { functionsAsIs: true });
 
@@ -519,7 +519,7 @@ QUnit.module('prototype pollution protection', {
         assert.strictEqual(fn.prototype.pp_dx, undefined, 'function prototype must not be modified');
     });
 
-    test('compileSetter works normally for safe paths', function(assert) {
+    test('compileSetter works normally for safe paths (T1330839)', function(assert) {
         const obj = { a: { b: 1 } };
         SETTER('a.b')(obj, 42);
 
@@ -527,28 +527,28 @@ QUnit.module('prototype pollution protection', {
         assert.strictEqual(errors.log.called, false, 'should not log for safe paths');
     });
 
-    test('compileGetter logs error and returns undefined for __proto__ path fragment', function(assert) {
+    test('compileGetter logs error and returns undefined for __proto__ path fragment (T1330839)', function(assert) {
         const result = GETTER('__proto__.pp_dx')({});
 
         assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__');
         assert.strictEqual(result, undefined, 'getter must return undefined for __proto__');
     });
 
-    test('compileGetter logs error and returns undefined for constructor path fragment', function(assert) {
+    test('compileGetter logs error and returns undefined for constructor path fragment (T1330839)', function(assert) {
         const result = GETTER('constructor.prototype')(function() {});
 
         assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
         assert.strictEqual(result, undefined, 'getter must return undefined for constructor');
     });
 
-    test('compileGetter logs error and returns undefined for prototype path fragment', function(assert) {
+    test('compileGetter logs error and returns undefined for prototype path fragment (T1330839)', function(assert) {
         const result = GETTER('prototype.pp_dx')(function() {});
 
         assert.strictEqual(errors.log.calledWith('E0123', 'prototype'), true, 'should log E0123 for prototype');
         assert.strictEqual(result, undefined, 'getter must return undefined for prototype');
     });
 
-    test('combineGetters logs error and skips __proto__ fragment, returns safe fields', function(assert) {
+    test('combineGetters logs error and skips __proto__ fragment, returns safe fields (T1330839)', function(assert) {
         const obj = { safe: 'value' };
         const result = GETTER(['__proto__.pp_dx', 'safe'])(obj);
 
@@ -557,12 +557,21 @@ QUnit.module('prototype pollution protection', {
         assert.deepEqual(result, { safe: 'value' }, 'safe field must still be returned');
     });
 
-    test('combineGetters logs error and skips constructor fragment, returns safe fields', function(assert) {
+    test('combineGetters logs error and skips constructor fragment, returns safe fields (T1330839)', function(assert) {
         const obj = { safe: 'value' };
         const result = GETTER(['constructor.prototype.pp_dx', 'safe'])(obj);
 
         assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
+        assert.deepEqual(result, { safe: 'value' }, 'safe field must still be returned');
+    });
+
+    test('combineGetters logs error and skips unsafe paths even if intermediate values break early (with defaultValue) (T1330839)', function(assert) {
+        const obj = { a: null, safe: 'value' };
+        const result = GETTER(['a.constructor.prototype.pp_dx2', 'safe'])(obj, { defaultValue: 'default' });
+
+        assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
+        assert.strictEqual(({}).pp_dx2, undefined, 'Object.prototype must not be polluted');
         assert.deepEqual(result, { safe: 'value' }, 'safe field must still be returned');
     });
 });
