@@ -47,6 +47,7 @@ import type {
   CellContextMenuEvent,
   DayOfWeek,
   Occurrence,
+  RecurrenceEditMode,
   SelectionEndEvent,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
@@ -106,6 +107,7 @@ import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView, SafeSchedulerOptions } from './utils/options/types';
 import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
+import type { GroupValues } from './utils/resource_manager/types';
 import timeZoneUtils, { type TimezoneLabel } from './utils_time_zone';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
@@ -180,7 +182,9 @@ const StoreEventNames = {
 
   UPDATING: 'onAppointmentUpdating',
   UPDATED: 'onAppointmentUpdated',
-};
+} as const;
+
+type StoreEventName = typeof StoreEventNames[keyof typeof StoreEventNames];
 
 const RECURRENCE_EDITING_MODE = {
   SERIES: 'editSeries',
@@ -234,6 +238,22 @@ interface SchedulerActions {
   onAppointmentClick: (args: AppointmentClickEvent) => void;
   onAppointmentDblClick: (args: AppointmentDblClickEvent) => void;
   onAppointmentContextMenu: (args: AppointmentContextMenuEvent) => void;
+}
+
+interface SelectedCellsClickCellData {
+  startDate?: Date;
+  endDate?: Date;
+  startDateUTC: number;
+  endDateUTC: number;
+  allDay?: boolean;
+}
+
+interface SchedulerEditing {
+  allowAdding: boolean;
+  allowUpdating: boolean;
+  allowDeleting: boolean;
+  allowResizing: boolean;
+  allowDragging: boolean;
 }
 
 class Scheduler extends SchedulerOptionsBaseWidget {
@@ -322,7 +342,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.timeZoneCalculatorInstance;
   }
 
-  private postponeDataSourceLoading(promise?: any): void {
+  private postponeDataSourceLoading(promise?: DeferredObj<unknown>): void {
     this.postponedOperations.add('_reloadDataSource', this.reloadDataSource.bind(this), promise);
   }
 
@@ -690,7 +710,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  private bringEditingModeToAppointments(editing): void {
+  private bringEditingModeToAppointments(editing: SchedulerEditing): void {
     const editingConfig: any = {
       allowDelete: editing.allowUpdating && editing.allowDeleting,
     };
@@ -805,7 +825,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  _dimensionChanged(value, isForce = false): void {
+  _dimensionChanged(value: unknown, isForce = false): void {
     const isFixedHeight = typeof this.option('height') === 'number';
     const isFixedWidth = typeof this.option('width') === 'number';
 
@@ -855,7 +875,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     (this.$element() as any).toggleClass(WIDGET_ADAPTIVE_CLASS, this.option('adaptivityEnabled'));
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     visible && this._dimensionChanged(null, true);
   }
 
@@ -962,9 +982,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   // TODO<Appointments>: delete this method when old impl is removed
   private initAppointmentTemplate(): void {
     const { expr } = this._dataAccessors;
-    const createGetter = (property) => compileGetter(`appointmentData.${property}`);
+    const createGetter = (property: string): ((data: unknown) => unknown) => (
+      compileGetter(`appointmentData.${property}`) as (data: unknown) => unknown
+    );
 
-    const getDate = (getter) => (data) => {
+    const getDate = (getter: (data: unknown) => unknown) => (data: unknown) => {
       const value = getter(data);
       if (value instanceof Date) {
         return value.valueOf();
@@ -1380,15 +1402,19 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
   }
 
-  checkAndDeleteAppointment(appointment, targetedAppointment): void {
+  checkAndDeleteAppointment(
+    appointment: SafeAppointment,
+    targetedAppointment?: SafeAppointment | TargetedAppointment,
+  ): void {
+    const targetedData = targetedAppointment ?? appointment;
     const targetedAdapter = new AppointmentAdapter(
-      targetedAppointment,
+      targetedData,
       this._dataAccessors,
     );
     const deletingOptions = this.fireOnAppointmentDeleting(appointment, targetedAdapter);
     this.checkRecurringAppointment(
       appointment,
-      targetedAppointment,
+      targetedData,
       targetedAdapter.startDate,
       () => {
         this.processDeleteAppointment(appointment, deletingOptions);
@@ -1406,7 +1432,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     };
   }
 
-  isAppointmentInAllDayPanel(appointmentData): boolean {
+  isAppointmentInAllDayPanel(appointmentData: SafeAppointment | Appointment): boolean {
     const workSpace = this._workSpace;
     const itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
 
@@ -1689,7 +1715,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return workSpaceOptions;
   }
 
-  private waitAsyncTemplate(callback): void {
+  private waitAsyncTemplate(callback: () => void): void {
     if (this._options.silent('templatesRenderAsynchronously')) {
       const timer = setTimeout(() => {
         callback();
@@ -1798,14 +1824,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   checkRecurringAppointment(
-    rawAppointment,
-    singleAppointment,
-    exceptionDate,
-    callback,
-    isDeleted,
-    isPopupEditing?: any,
-    dragEvent?: any,
-    recurrenceEditMode?: any,
+    rawAppointment: SafeAppointment,
+    singleAppointment: SafeAppointment,
+    exceptionDate: Date,
+    callback: () => void,
+    isDeleted: boolean,
+    isPopupEditing?: boolean,
+    dragEvent?: SchedulerDragEvent | null,
+    recurrenceEditMode?: RecurrenceEditMode,
     onCancel?: () => void,
   ): void {
     const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
@@ -1821,7 +1847,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         callback();
         break;
       case 'occurrence':
-        this.excludeAppointmentFromSeries(rawAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+        this.excludeAppointmentFromSeries(
+          rawAppointment,
+          singleAppointment,
+          exceptionDate,
+          isDeleted,
+          Boolean(isPopupEditing),
+          dragEvent,
+        );
         break;
       default:
         if (dragEvent) {
@@ -1837,7 +1870,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
               singleAppointment,
               exceptionDate,
               isDeleted,
-              isPopupEditing,
+              Boolean(isPopupEditing),
               dragEvent,
             );
           })
@@ -1851,7 +1884,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  private excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent): void {
+  private excludeAppointmentFromSeries(
+    rawAppointment: SafeAppointment,
+    newRawAppointment: SafeAppointment,
+    exceptionDate: Date,
+    isDeleted: boolean,
+    isPopupEditing: boolean,
+    dragEvent?: SchedulerDragEvent | null,
+  ): void {
     const appointment = excludeFromRecurrence(
       rawAppointment,
       exceptionDate,
@@ -1890,18 +1930,22 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  private createRecurrenceException(appointment, exceptionDate): string {
+  private createRecurrenceException(
+    appointment: SafeAppointment & { recurrenceException?: string },
+    exceptionDate: Date,
+  ): string {
     const result: any[] = [];
 
     if (appointment.recurrenceException) {
       result.push(appointment.recurrenceException);
     }
-    result.push(this.getSerializedDate(exceptionDate, appointment.startDate, appointment.allDay));
+    const adapter = new AppointmentAdapter(appointment, this._dataAccessors);
+    result.push(this.getSerializedDate(exceptionDate, adapter.startDate, Boolean(adapter.allDay)));
 
     return result.join();
   }
 
-  private getSerializedDate(date, startDate, isAllDay): string {
+  private getSerializedDate(date: Date, startDate: Date, isAllDay: boolean): string {
     isAllDay && date.setHours(
       startDate.getHours(),
       startDate.getMinutes(),
@@ -1941,7 +1985,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   getUpdatedData(rawAppointment: Appointment, $cell?: dxElementWrapper): SafeAppointment {
     const viewOffset = this.getViewOffsetMs();
 
-    const getConvertedFromGrid = (date: any): Date | undefined => {
+    const getConvertedFromGrid = (date: Date | undefined): Date | undefined => {
       if (!date) {
         return undefined;
       }
@@ -2037,7 +2081,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     );
   }
 
-  subscribe(subject, action): void {
+  subscribe<K extends SubscribeKey>(subject: K, action: SubscribeMethods[K]): void {
     this.subscribes[subject] = subscribes[subject] = action;
   }
 
@@ -2062,7 +2106,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     target: SafeAppointment,
     rawAppointment: SafeAppointment,
     onUpdatePrevented?: () => void,
-    dragEvent?: SchedulerDragEvent,
+    dragEvent?: SchedulerDragEvent | null,
   ): Promise<void> {
     const updatingOptions = {
       newData: rawAppointment,
@@ -2070,7 +2114,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       cancel: false,
     };
 
-    const performFailAction = function (err?: any) {
+    const performFailAction = function (this: Scheduler, err?: Error): void {
       if (onUpdatePrevented) {
         onUpdatePrevented.call(this);
       }
@@ -2107,8 +2151,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
               this.onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment);
             })
             .fail(() => performFailAction());
-        } catch (err) {
-          performFailAction(err);
+        } catch (err: unknown) {
+          performFailAction(err instanceof Error ? err : undefined);
           this.updatingAppointments.delete(target);
           deferred.resolve();
         }
@@ -2146,13 +2190,17 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return deferred.promise();
   }
 
-  private expandAllDayPanel(appointment): void {
+  private expandAllDayPanel(appointment: SafeAppointment | Appointment): void {
     if (!this.isAllDayExpanded() && this.appointmentTakesAllDay(appointment)) {
       this.updateOption('workSpace', 'allDayExpanded', true);
     }
   }
 
-  private onDataPromiseCompleted(handlerName, storeAppointment, appointment?: any): void {
+  private onDataPromiseCompleted(
+    handlerName: StoreEventName,
+    storeAppointment: SafeAppointment | Error,
+    appointment?: SafeAppointment,
+  ): void {
     const args: any = { appointmentData: appointment || storeAppointment };
 
     if (storeAppointment instanceof Error) {
@@ -2177,7 +2225,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.actions;
   }
 
-  appointmentTakesAllDay(rawAppointment): boolean {
+  appointmentTakesAllDay(rawAppointment: SafeAppointment | Appointment): boolean {
     const appointment = new AppointmentAdapter(
       rawAppointment,
       this._dataAccessors,
@@ -2189,8 +2237,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     );
   }
 
-  dayHasAppointment(day, rawAppointment, trimTime): boolean {
-    const getConvertedToTimeZone = (date) => this.timeZoneCalculator.createDate(date, 'toGrid');
+  dayHasAppointment(day: Date, rawAppointment: SafeAppointment | Appointment, trimTime: boolean): boolean {
+    const getConvertedToTimeZone = (date: Date): Date => this.timeZoneCalculator.createDate(date, 'toGrid');
 
     const appointment = new AppointmentAdapter(
       rawAppointment,
@@ -2228,36 +2276,40 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._workSpace.getEndViewDate();
   }
 
-  showAddAppointmentPopup(cellData, cellGroups): void {
+  showAddAppointmentPopup(cellData: SelectedCellsClickCellData, cellGroups: GroupValues): void {
     const appointmentAdapter = new AppointmentAdapter({}, this._dataAccessors);
 
     appointmentAdapter.allDay = Boolean(cellData.allDay);
-    appointmentAdapter.startDate = cellData.startDateUTC;
-    appointmentAdapter.endDate = cellData.endDateUTC;
+    appointmentAdapter.startDate = new Date(cellData.startDateUTC);
+    appointmentAdapter.endDate = new Date(cellData.endDateUTC);
 
     const resultAppointment = extend(appointmentAdapter.source, cellGroups);
     this.showAppointmentPopup(resultAppointment, true);
   }
 
-  showAppointmentPopup(rawAppointment?: any, createNewAppointment?: boolean, rawTargetedAppointment?: any): void {
-    const newRawTargetedAppointment = { ...rawTargetedAppointment };
-    if (newRawTargetedAppointment) {
+  showAppointmentPopup(
+    rawAppointment?: SafeAppointment,
+    createNewAppointment?: boolean,
+    rawTargetedAppointment?: SafeAppointment | TargetedAppointment,
+  ): void {
+    const newRawTargetedAppointment = rawTargetedAppointment
+      ? { ...rawTargetedAppointment }
+      : {} as SafeAppointment;
+    if (rawTargetedAppointment) {
       delete newRawTargetedAppointment.displayStartDate;
       delete newRawTargetedAppointment.displayEndDate;
     }
 
-    const newTargetedAppointment = extend({}, rawAppointment, newRawTargetedAppointment);
-
     const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 
-    if (isEmptyObject(rawAppointment)) {
-      rawAppointment = this.createPopupAppointment();
-    }
-
     if (isCreateAppointment) {
+      const appointmentData = isEmptyObject(rawAppointment)
+        ? this.createPopupAppointment()
+        : rawAppointment as SafeAppointment;
+
       delete this.editAppointmentData; // TODO
       if (this.editing.allowAdding) {
-        this.appointmentPopup.show(rawAppointment, {
+        this.appointmentPopup.show(appointmentData, {
           onSave: (appointment) => when(this.addAppointment(appointment))
             .done(() => this.scrollToAppointment(appointment)),
           title: messageLocalization.format('dxScheduler-newPopupTitle'),
@@ -2265,17 +2317,22 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         });
       }
     } else {
-      const startDate = this._dataAccessors.get('startDate', newRawTargetedAppointment || rawAppointment);
+      const appointmentData = rawAppointment as SafeAppointment;
+      const newTargetedAppointment = extend({}, appointmentData, newRawTargetedAppointment) as SafeAppointment;
+      const startDate = this._dataAccessors.get(
+        'startDate',
+        Object.keys(newRawTargetedAppointment).length ? newRawTargetedAppointment : appointmentData,
+      );
 
-      this.checkRecurringAppointment(rawAppointment, newTargetedAppointment, startDate, () => {
-        this.editAppointmentData = rawAppointment; // TODO
+      this.checkRecurringAppointment(appointmentData, newTargetedAppointment, startDate, () => {
+        this.editAppointmentData = appointmentData; // TODO
 
-        const adapter = new AppointmentAdapter(rawAppointment, this._dataAccessors);
+        const adapter = new AppointmentAdapter(appointmentData, this._dataAccessors);
         const isDisabled = Boolean(adapter.source) && adapter.disabled;
         const readOnly = isDisabled || !this.editing.allowUpdating;
 
-        this.appointmentPopup.show(rawAppointment, {
-          onSave: (appointment) => when(this.updateAppointment(rawAppointment, appointment))
+        this.appointmentPopup.show(appointmentData, {
+          onSave: (appointment) => when(this.updateAppointment(appointmentData, appointment))
             .done(() => this.scrollToAppointment(appointment)),
           title: messageLocalization.format('dxScheduler-editPopupTitle'),
           readOnly,
@@ -2297,7 +2354,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return result;
   }
 
-  hideAppointmentPopup(saveChanges?: any): void {
+  hideAppointmentPopup(saveChanges?: boolean): void {
     if (this.appointmentPopup?.visible) {
       saveChanges && this.appointmentPopup.saveChangesAsync();
       this.appointmentPopup.hide();
@@ -2434,7 +2491,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.updateAppointmentCore(target, appointment);
   }
 
-  deleteAppointment(rawAppointment): void {
+  deleteAppointment(rawAppointment: SafeAppointment): void {
     const deletingOptions = this.fireOnAppointmentDeleting(rawAppointment);
     this.processDeleteAppointment(rawAppointment, deletingOptions);
   }
@@ -2472,9 +2529,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   deleteRecurrence(
-    appointment,
+    appointment: SafeAppointment,
     date: Date | string,
-    recurrenceEditMode,
+    recurrenceEditMode: RecurrenceEditMode,
   ): void {
     if (typeof date === 'string') {
       date = new Date(date);
@@ -2491,7 +2548,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       },
       true,
       false,
-      null,
+      undefined,
       recurrenceEditMode,
     );
   }
