@@ -32,7 +32,16 @@ import type { DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
 import type {
-  Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek,
+  Appointment,
+  AppointmentAddingEvent,
+  AppointmentClickEvent,
+  AppointmentContextMenuEvent,
+  AppointmentDblClickEvent,
+  AppointmentFormOpeningEvent,
+  AppointmentRenderedEvent,
+  AppointmentTooltipShowingEvent,
+  AppointmentUpdatingEvent,
+  SelectionEndEvent,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
@@ -184,6 +193,40 @@ interface SchedulerDragEvent {
   cancel: DeferredObj<boolean>;
 }
 
+type SchedulerEventArgs<T extends { component?: unknown; element?: unknown }> = Omit<T, 'component' | 'element'>;
+
+type AppointmentAddingOptions = Pick<AppointmentAddingEvent, 'appointmentData' | 'cancel'>;
+
+type AppointmentUpdatingOptions = Pick<AppointmentUpdatingEvent, 'newData' | 'oldData' | 'cancel'>;
+
+interface AppointmentCompletedOptions {
+  appointmentData: SafeAppointment;
+  error?: Error;
+}
+
+interface AppointmentDeletingOptions {
+  [key: string]: unknown;
+  appointmentData: SafeAppointment;
+  targetedAppointmentData?: SafeAppointment | AppointmentAdapter;
+  cancel: SchedulerActionCancel;
+}
+
+interface SchedulerActions {
+  onAppointmentAdding: (args: AppointmentAddingOptions) => void;
+  onAppointmentAdded: (args: AppointmentCompletedOptions) => void;
+  onAppointmentUpdating: (args: AppointmentUpdatingOptions) => void;
+  onAppointmentUpdated: (args: AppointmentCompletedOptions) => void;
+  onAppointmentDeleting: (args: AppointmentDeletingOptions) => void;
+  onAppointmentDeleted: (args: AppointmentCompletedOptions) => void;
+  onAppointmentFormOpening: (args: SchedulerEventArgs<AppointmentFormOpeningEvent>) => void;
+  onAppointmentTooltipShowing: (args: SchedulerEventArgs<AppointmentTooltipShowingEvent>) => void;
+  onSelectionEnd: (args: SchedulerEventArgs<SelectionEndEvent>) => void;
+  onAppointmentRendered: (args: AppointmentRenderedEvent) => void;
+  onAppointmentClick: (args: AppointmentClickEvent) => void;
+  onAppointmentDblClick: (args: AppointmentDblClickEvent) => void;
+  onAppointmentContextMenu: (args: AppointmentContextMenuEvent) => void;
+}
+
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
@@ -212,9 +255,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   resourceManager!: ResourceManager;
 
-  private actions: any;
+  private actions!: SchedulerActions;
 
-  _createActionByOption: any;
+  // TODO: used externally in workspaces/work_space.ts
+  declare _createActionByOption: (
+    optionName: string,
+    config?: { excludeValidators?: string[] },
+  ) => (event?: unknown) => void;
 
   private appointmentTooltip!: MobileTooltipStrategy | DesktopTooltipStrategy;
 
@@ -1050,14 +1097,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onAppointmentClick: this._createActionByOption('onAppointmentClick'),
       onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
       onAppointmentContextMenu: this._createActionByOption('onAppointmentContextMenu'),
-    };
+    } as SchedulerActions;
   }
 
   // TODO<Appointments>: delete this method when old impl is removed
-  private getAppointmentRenderedAction() {
+  private getAppointmentRenderedAction(): (args: AppointmentRenderedEvent) => void {
     return this._createActionByOption('onAppointmentRendered', {
       excludeValidators: ['disabled', 'readOnly'],
-    });
+    }) as (args: AppointmentRenderedEvent) => void;
   }
 
   _renderFocusTarget(): void { return noop(); }
@@ -1117,7 +1164,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
 
         onAppointmentRendered: (...args) => this.actions.onAppointmentRendered(...args),
-        onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
+        onAppointmentClick: (args: AppointmentClickEvent) => this.actions.onAppointmentClick(args),
         onAppointmentDblClick: (...args) => this.actions.onAppointmentDblClick(...args),
         onAppointmentContextMenu: (...args) => this.actions.onAppointmentContextMenu(...args),
         onDeleteKeyPress: (e) => {
@@ -1222,7 +1269,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       updateAppointment: (sourceAppointment, updatedAppointment) => this.updateAppointment(sourceAppointment, updatedAppointment),
 
     };
-    return new AppointmentPopup(scheduler, form);
+    return new AppointmentPopup(scheduler as never, form);
   }
 
   private scrollToAppointment(appointment: Record<string, unknown>): void {
@@ -1265,7 +1312,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       createEventArgs: that._createEventArgs.bind(that),
 
       newAppointments: Boolean(this.option('_newAppointments')),
-      onAppointmentClick: (...args) => this.actions.onAppointmentClick(...args),
+      onAppointmentClick: (args: AppointmentClickEvent) => this.actions.onAppointmentClick(args),
       onListInitialized: (e) => {
         if (this.option('_newAppointments')) {
           this.appointmentDragController.createTooltipDraggable(
@@ -1544,6 +1591,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       selectedCellData: this.option('selectedCellData'),
       onSelectionChanged: (args) => {
         this.option('selectedCellData', args.selectedCellData);
+      },
+      onSelectionEnd: (args) => {
+        this.actions.onSelectionEnd({
+          component: this,
+          element: this.$element(),
+          selectedCellData: args.selectedCellData,
+        });
       },
       groupByDate: this.getViewOption('groupByDate'),
       scrolling,
@@ -2074,7 +2128,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._layoutManager;
   }
 
-  getActions() {
+  getActions(): SchedulerActions {
     return this.actions;
   }
 
@@ -2336,8 +2390,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.processDeleteAppointment(rawAppointment, deletingOptions);
   }
 
-  fireOnAppointmentDeleting(rawAppointment, targetedAppointmentData?: any) {
-    const deletingOptions = {
+  fireOnAppointmentDeleting(
+    rawAppointment: SafeAppointment,
+    targetedAppointmentData?: SafeAppointment | AppointmentAdapter,
+  ): AppointmentDeletingOptions {
+    const deletingOptions: AppointmentDeletingOptions = {
       appointmentData: rawAppointment,
       targetedAppointmentData,
       cancel: false,
@@ -2348,7 +2405,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return deletingOptions;
   }
 
-  processDeleteAppointment(rawAppointment, deletingOptions): void {
+  processDeleteAppointment(
+    rawAppointment: SafeAppointment,
+    deletingOptions: AppointmentDeletingOptions,
+  ): void {
     this.processActionResult(deletingOptions, function (canceled) {
       if (!canceled) {
         this.appointmentDataSource
@@ -2377,7 +2437,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       () => {
         this.processDeleteAppointment(
           appointment,
-          { cancel: false },
+          { appointmentData: appointment, cancel: false },
         );
       },
       true,
