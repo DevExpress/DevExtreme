@@ -55,7 +55,7 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.25
   devexpress-gantt: 4.1.67
-  devextreme-quill: 1.7.9
+  devextreme-quill: 1.7.10
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
   eslint-config-devextreme: 1.1.11
