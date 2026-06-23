@@ -52,7 +52,7 @@ import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
 import { combineRemoteFilter } from './r1/filterting/remote';
-import { createTimeZoneCalculator } from './r1/timezone_calculator/index';
+import { createTimeZoneCalculator, type TimeZoneCalculator } from './r1/timezone_calculator/index';
 import {
   excludeFromRecurrence,
   getToday,
@@ -166,7 +166,7 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
-  private timeZoneCalculatorInstance!: any;
+  private timeZoneCalculatorInstance: TimeZoneCalculator | null = null;
 
   postponedOperations: any;
 
@@ -237,7 +237,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private timeZonesPromise!: Promise<TimezoneLabel[]>;
 
-  get timeZoneCalculator() {
+  get timeZoneCalculator(): TimeZoneCalculator {
     if (!this.timeZoneCalculatorInstance) {
       this.timeZoneCalculatorInstance = createTimeZoneCalculator(this.option('timeZone'));
     }
@@ -1193,7 +1193,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       getEditingConfig: () => this.editing,
 
-      getTimeZoneCalculator: () => this.timeZoneCalculator,
+      getTimeZoneCalculator: (): TimeZoneCalculator => this.timeZoneCalculator,
       getDataAccessors: () => this._dataAccessors,
       getAppointmentFormOpening: () => this.actions.onAppointmentFormOpening,
       processActionResult: (arg, canceled) => this.processActionResult(arg, canceled),
