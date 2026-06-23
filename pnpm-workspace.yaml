@@ -61,3 +61,4 @@ catalogs:
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
+  
