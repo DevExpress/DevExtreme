@@ -1,4 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { ItemContextMenuEvent } from '@js/ui/list';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 import type { Component } from '@ts/core/widget/component';
 
@@ -295,6 +296,17 @@ export interface AppointmentTooltipItem {
   color: Promise<string | undefined>;
   settings: AppointmentItemViewModel;
 }
+
+export interface MappedAppointmentFields {
+  appointmentData: SafeAppointment;
+  appointmentElement: dxElementWrapper;
+  targetedAppointmentData: SafeAppointment | TargetedAppointment;
+}
+
+export type AppointmentTooltipContextMenuEventArgs = MappedAppointmentFields & Pick<
+  ItemContextMenuEvent<AppointmentTooltipItem>,
+  'component' | 'element' | 'event' | 'model'
+>;
 
 export interface CompactAppointmentOptions {
   $container: dxElementWrapper;
