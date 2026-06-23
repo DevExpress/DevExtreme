@@ -47,12 +47,10 @@ import { Appointments } from './appointments_new/appointments';
 import NotifyScheduler from './base/widget_notify_scheduler';
 import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
+import { hide as hideLoading, show as showLoading } from './loading';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
-import { hide as hideLoading, show as showLoading } from './m_loading';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
-import { utils } from './m_utils';
-import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
 import { combineRemoteFilter } from './r1/filterting/remote';
 import { createTimeZoneCalculator } from './r1/timezone_calculator/index';
 import {
@@ -73,6 +71,7 @@ import type {
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
   ViewType,
 } from './types';
+import { utils } from './utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
@@ -83,6 +82,7 @@ import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView, SafeSchedulerOptions } from './utils/options/types';
 import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
+import timeZoneUtils, { type TimezoneLabel } from './utils_time_zone';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';
@@ -171,12 +171,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private a11yStatus!: dxElementWrapper;
 
-  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/m_work_space.ts
+  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/work_space.ts
   _workSpace: any;
 
   private header?: SchedulerHeader;
 
-  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/m_work_space.ts
+  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/work_space.ts
   _appointments: any;
 
   private appointmentDragController!: AppointmentDragController;
@@ -689,20 +689,22 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (this._dataSource) {
       this._dataSource.load().done(() => {
-        hideLoading();
+        hideLoading().catch(noop);
 
         this._fireContentReadyAction(result);
       }).fail(() => {
-        hideLoading();
+        hideLoading().catch(noop);
         result.reject();
       });
 
-      this._dataSource.isLoading() && showLoading({
-        container: this.$element(),
-        position: {
-          of: this.$element(),
-        },
-      });
+      if (this._dataSource.isLoading()) {
+        showLoading({
+          container: this.$element().get(0),
+          position: {
+            of: this.$element() as any,
+          },
+        }).catch(noop);
+      }
     } else {
       this._fireContentReadyAction(result);
     }

@@ -1,3 +1,3 @@
-import Popup from '../../__internal/ui/popup/m_popup';
+import Popup from '../../__internal/ui/popup/popup';
 
 export default Popup;

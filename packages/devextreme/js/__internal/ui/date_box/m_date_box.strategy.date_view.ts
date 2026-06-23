@@ -6,8 +6,8 @@ import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
 import type { Format } from '@js/localization';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
-import type { PopupProperties } from '../popup/m_popup';
 import type DateBox from './date_box.base';
 import type { DateBoxBaseProperties } from './date_box.base';
 import dateUtils from './date_utils';

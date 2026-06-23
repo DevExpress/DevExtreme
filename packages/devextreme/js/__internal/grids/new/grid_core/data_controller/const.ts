@@ -1,0 +1,1 @@
+export const FILTER_OBJ_COMPARE_DEPTH = 6;

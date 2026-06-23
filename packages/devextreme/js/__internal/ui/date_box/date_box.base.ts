@@ -23,8 +23,8 @@ import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
-import type { PopupProperties } from '../popup/m_popup';
 import uiDateUtils from './date_utils';
 import Calendar from './m_date_box.strategy.calendar';
 import CalendarWithTime from './m_date_box.strategy.calendar_with_time';

@@ -4,10 +4,51 @@
   "sourceRoot": "packages/devextreme-scss",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "nx:run-script",
+    "clean:artifacts": {
+      "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "script": "build"
+        "targetDirectory": "../devextreme/artifacts/css"
+      }
+    },
+    "clean:bundles": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./scss/bundles"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx clean:artifacts devextreme-scss",
+          "pnpm nx clean:bundles devextreme-scss"
+        ],
+        "parallel": false
+      }
+    },
+    "copy:assets": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          {
+            "from": "./fonts/**/*",
+            "to": "../devextreme/artifacts/css/fonts"
+          },
+          {
+            "from": "./icons/**/*",
+            "to": "../devextreme/artifacts/css/icons"
+          }
+        ]
+      },
+      "outputs": [
+        "{workspaceRoot}/packages/devextreme/artifacts/css/fonts",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
+      ]
+    },
+    "build:themes": {
+      "executor": "devextreme-nx-infra-plugin:scss-build",
+      "options": {
+        "mode": "all"
       },
       "inputs": [
         "{projectRoot}/build/**/*",
@@ -15,7 +56,50 @@
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
         "{projectRoot}/scss/**/*",
-        "{projectRoot}/gulpfile.js"
+        "{workspaceRoot}/packages/devextreme/package.json"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/bundles",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css"
+      ],
+      "cache": true
+    },
+    "build:themes-dev": {
+      "executor": "devextreme-nx-infra-plugin:scss-build",
+      "options": {
+        "mode": "ci"
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/packages/devextreme-themebuilder/src/data/clean-css-options.json"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/bundles",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css"
+      ],
+      "cache": true
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx clean devextreme-scss",
+          "pnpm nx run-many --targets=build:themes,copy:assets --projects=devextreme-scss --parallel"
+        ],
+        "parallel": false
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json"
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
@@ -24,6 +108,47 @@
         "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
       ],
       "cache": true
+    },
+    "build:ci": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx clean devextreme-scss",
+          "pnpm nx run-many --targets=build:themes-dev,copy:assets --projects=devextreme-scss --parallel"
+        ],
+        "parallel": false
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/packages/devextreme-themebuilder/src/data/clean-css-options.json"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/bundles",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/fonts",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
+      ],
+      "cache": true
+    },
+    "watch": {
+      "executor": "devextreme-nx-infra-plugin:scss-build",
+      "options": {
+        "mode": "all",
+        "watch": true
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*"
+      ],
+      "cache": false
     },
     "lint": {
       "executor": "nx:run-script",

@@ -2119,6 +2119,145 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
     });
 });
 
+QUnit.module('format: scroll position on boundary keys (T1330133)', {
+    beforeEach: function() {
+        moduleConfig.beforeEach.call(this);
+
+        this.scrollState = { scrollWidth: 200, scrollLeft: 0 };
+
+        Object.defineProperty(this.inputElement, 'scrollWidth', {
+            get: () => this.scrollState.scrollWidth,
+            configurable: true,
+        });
+
+        Object.defineProperty(this.inputElement, 'scrollLeft', {
+            get: () => this.scrollState.scrollLeft,
+            set: (value) => { this.scrollState.scrollLeft = value; },
+            configurable: true,
+        });
+
+        this.assertScrolledTo = (assert, expected, message) => {
+            const actual = expected === 'end' ? this.scrollState.scrollWidth : 0;
+            assert.strictEqual(this.scrollState.scrollLeft, actual, message);
+        };
+    },
+    afterEach: function() {
+        delete this.inputElement.scrollLeft;
+        delete this.inputElement.scrollWidth;
+        moduleConfig.afterEach.call(this);
+    }
+}, () => {
+    QUnit.module('arrow keys', () => {
+        QUnit.test('left arrow at the start boundary scrolls the input to the start edge so the minus sign becomes visible (T1330133)', function(assert) {
+            this.instance.option({
+                format: '#,##0.00',
+                value: -4589999.89,
+            });
+
+            this.scrollState.scrollLeft = 50;
+            this.keyboard.caret(1).keyDown('left');
+
+            assert.ok(this.keyboard.event.isDefaultPrevented(), 'default is still prevented');
+            assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret stays on the start boundary');
+            this.assertScrolledTo(assert, 'start', 'input is scrolled to the start edge');
+        });
+
+        QUnit.test('left arrow at the prefix-stub boundary scrolls the input to the start edge', function(assert) {
+            this.instance.option({
+                format: '$#',
+                value: 1,
+            });
+
+            this.scrollState.scrollLeft = 50;
+            this.keyboard.caret(1).keyDown('left');
+
+            assert.ok(this.keyboard.event.isDefaultPrevented(), 'default is still prevented');
+            this.assertScrolledTo(assert, 'start', 'input is scrolled so the prefix stub becomes visible');
+        });
+
+        QUnit.test('right arrow at the end boundary scrolls the input to the end edge', function(assert) {
+            this.instance.option({
+                format: '#d',
+                value: 1,
+            });
+
+            this.scrollState.scrollLeft = 0;
+            this.keyboard.caret(1).keyDown('right');
+
+            assert.ok(this.keyboard.event.isDefaultPrevented(), 'default is still prevented');
+            this.assertScrolledTo(assert, 'end', 'input is scrolled to the end edge');
+        });
+
+        QUnit.test('arrow key within boundaries does not adjust the scroll position', function(assert) {
+            this.instance.option({
+                format: '#,##0.00',
+                value: -4589999.89
+            });
+
+            this.scrollState.scrollLeft = 42;
+            this.keyboard.caret(5).keyDown('left');
+
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), 'default is not prevented inside the boundaries');
+            assert.strictEqual(this.scrollState.scrollLeft, 42, 'scroll position is not adjusted');
+        });
+    });
+
+    QUnit.module('Home, End keys', () => {
+        QUnit.test('Home scrolls the input to the start edge so the prefix becomes visible (T1330133)', function(assert) {
+            this.instance.option({
+                format: '#,##0.00',
+                value: -4589999.89,
+            });
+
+            this.scrollState.scrollLeft = 50;
+            this.keyboard.caret(13).keyDown('home');
+
+            assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on the start boundary');
+            this.assertScrolledTo(assert, 'start', 'input is scrolled so the minus sign becomes visible');
+        });
+
+        QUnit.test('End scrolls the input to the end edge so the trailing digits become visible (T1330133)', function(assert) {
+            this.instance.option({
+                format: '#,##0.00',
+                value: -4589999.89,
+            });
+
+            this.scrollState.scrollLeft = 0;
+            this.keyboard.caret(1).keyDown('end');
+
+            assert.deepEqual(this.keyboard.caret(), { start: 13, end: 13 }, 'caret is on the end boundary');
+            this.assertScrolledTo(assert, 'end', 'input is scrolled so the trailing digits become visible');
+        });
+
+        ['home', 'end'].forEach((key) => {
+            QUnit.test(`shift+${key} does not adjust the scroll position`, function(assert) {
+                this.scrollState.scrollLeft = 30;
+                this.keyboard.keyDown(key, { shiftKey: true });
+
+                assert.strictEqual(this.scrollState.scrollLeft, 30, 'scroll position is not adjusted');
+            });
+        });
+    });
+
+    QUnit.module('focus-in semantics', () => {
+        QUnit.test('focus on integer-only format does not force-scroll the input to a boundary', function(assert) {
+            this.instance.option({
+                format: '#,##0',
+                value: -4589999,
+            });
+
+            this.scrollState.scrollLeft = 42;
+
+            this.input.focus();
+            this.clock.tick(CARET_TIMEOUT_DURATION);
+
+            assert.notStrictEqual(this.scrollState.scrollLeft, this.scrollState.scrollWidth, 'scroll is not forced to the end edge on focus');
+            assert.notStrictEqual(this.scrollState.scrollLeft, 0, 'scroll is not forced to the start edge on focus');
+            assert.strictEqual(this.scrollState.scrollLeft, 42, 'scroll position is left to the browser');
+        });
+    });
+});
+
 QUnit.module('format: custom parser and formatter', moduleConfig, () => {
     QUnit.test('custom parser and formatter should work', function(assert) {
         this.instance.option({

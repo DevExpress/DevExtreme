@@ -585,6 +585,7 @@ export class FieldChooser extends FieldChooserBase {
       render();
       $fieldsContainer.dxScrollable({
         useNative: false,
+        useKeyboard: false,
       });
     } else {
       $areaContainer.addClass(CLASSES.allFields);

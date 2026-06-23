@@ -240,9 +240,10 @@ export type PredefinedCommands = {
     keys: Array<string | number | Array<CompositeKeyPair>>;
     preserve: boolean;
   };
-  selectByIndexes: {
+  selectionByIndexes: {
     indexes: number[];
     mode: 'select' | 'deselect';
+    scope: 'page' | 'allPages';
   };
   selectAll: {};
   deselectAll: {};
@@ -1068,7 +1069,7 @@ export type ColumnHeaderFilter = {
    * @docid
    * @default undefined
    */
-  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | Array<string | number> | undefined;
   /**
    * @docid
    * @default undefined

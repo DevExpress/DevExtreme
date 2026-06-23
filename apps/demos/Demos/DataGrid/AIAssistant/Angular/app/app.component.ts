@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
-import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import type { DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
+import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type Sale } from './app.service';
 import { AiService } from './ai/ai.service';
 

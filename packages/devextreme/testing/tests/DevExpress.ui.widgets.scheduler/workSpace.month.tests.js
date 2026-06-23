@@ -4,7 +4,7 @@ import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/work_space_month';
-import { getGroupWidth } from '__internal/scheduler/workspaces/helpers/m_position_helper';
+import { getGroupWidth } from '__internal/scheduler/workspaces/helpers/position_helper';
 
 import { getEmptyResourceManager, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
 

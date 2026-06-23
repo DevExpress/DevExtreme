@@ -5194,7 +5194,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:ColumnHeaderFilter.groupInterval]
      */
-    groupInterval?: HeaderFilterGroupInterval | number | undefined;
+    groupInterval?:
+      | HeaderFilterGroupInterval
+      | number
+      | Array<string | number>
+      | undefined;
     /**
      * [descr:ColumnHeaderFilter.height]
      */
@@ -6625,9 +6629,10 @@ declare module DevExpress.common.grids {
       keys: Array<string | number | Array<CompositeKeyPair>>;
       preserve: boolean;
     };
-    selectByIndexes: {
+    selectionByIndexes: {
       indexes: number[];
       mode: 'select' | 'deselect';
+      scope: 'page' | 'allPages';
     };
     selectAll: {};
     deselectAll: {};
@@ -24458,7 +24463,7 @@ declare module DevExpress.ui {
     export type CellClickEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxPivotGrid,
-        MouseEvent | PointerEvent
+        KeyboardEvent | MouseEvent | PointerEvent
       > & {
         /**
          * [descr:_ui_pivot_grid_CellClickEvent.area]
@@ -34533,7 +34538,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:MessageBase.type]
      */
-    type?: 'text' | 'image' | undefined;
+    type?: MessageType;
     /**
      * [descr:MessageBase.timestamp]
      */
@@ -34549,6 +34554,10 @@ declare module DevExpress.ui.dxChat {
 
     [key: string]: any;
   };
+  /**
+   * [descr:MessageType]
+   */
+  export type MessageType = 'text' | 'image';
   /**
    * [descr:SendButtonProperties]
    */

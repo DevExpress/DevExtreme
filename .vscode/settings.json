@@ -6,6 +6,11 @@
         "source.fixAll.eslint": "explicit",
         "source.fixAll.stylelint": "explicit"
     },
+    "jest.jestCommandLine": "pnpm run test-jest --",
+    "jest.rootPath": "packages/devextreme",
+
     "typescript.tsdk": "packages/devextreme/node_modules/typescript/lib",
-    "stylelint.validate": ["css", "scss"]
+    "stylelint.validate": ["css", "scss"],
+
+    "testcafeTestRunner.workspaceRoot": "e2e/testcafe-devextreme"
 }

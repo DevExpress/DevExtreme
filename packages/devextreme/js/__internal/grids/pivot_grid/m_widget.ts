@@ -4,6 +4,7 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender, deferUpdate, noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -16,11 +17,12 @@ import {
 import { format as formatString } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { Properties } from '@js/ui/button';
+import type { ButtonStyle, Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
-import { current, isFluent } from '@js/ui/themes';
+import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
+import { current, isGeneric } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -160,6 +162,8 @@ class PivotGrid extends Widget {
   __scrollBarWidth: any;
 
   _createActionByOption: any;
+
+  $fieldChooserButton?: dxElementWrapper;
 
   _getDefaultOptions() {
     return extend(super._getDefaultOptions(), {
@@ -644,6 +648,10 @@ class PivotGrid extends Widget {
         const fieldChooser = e.component.$content().dxPivotGridFieldChooser('instance');
         fieldChooser.resetTreeView();
         fieldChooser.cancelChanges();
+
+        if (that.$fieldChooserButton) {
+          (that.$fieldChooserButton.get(0) as HTMLElement).focus();
+        }
       },
     };
 
@@ -883,6 +891,35 @@ class PivotGrid extends Widget {
     });
   }
 
+  _handleCellKeyDown(e) {
+    if (e.repeat) {
+      return;
+    }
+    if (e.key !== 'Enter' && e.key !== ' ') {
+      return;
+    }
+    const args = this._createEventArgs(e.currentTarget, e);
+    const { cell } = args;
+    if (!cell || !isDefined(cell.expanded)) {
+      return;
+    }
+    e.preventDefault();
+    this._trigger('onCellClick', args);
+    if (args.cancel) {
+      return;
+    }
+    const $control = $(e.currentTarget).find('.dx-expand-icon-container');
+    saveFocusedElementInfo($control.get(0), this);
+    const onReady = () => {
+      this.off('contentReady', onReady);
+      restoreFocus(this);
+    };
+    this.on('contentReady', onReady);
+    setTimeout(() => {
+      this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+    });
+  }
+
   _getNoDataText() {
     return this.option('texts.noData');
   }
@@ -945,6 +982,8 @@ class PivotGrid extends Widget {
 
     let $targetContainer;
 
+    let buttonStylingMode: ButtonStyle = isGeneric(current()) ? 'contained' : 'text';
+
     // @ts-expect-error ts-error
     if (fieldPanel.visible && fieldPanel.showFilterFields) {
       $targetContainer = $filterHeader;
@@ -953,6 +992,7 @@ class PivotGrid extends Widget {
       $targetContainer = $columnHeader;
     } else {
       $targetContainer = $descriptionCell;
+      buttonStylingMode = 'text';
     }
 
     $columnHeader.toggleClass(
@@ -976,23 +1016,26 @@ class PivotGrid extends Widget {
     this.$element().find('.dx-pivotgrid-toolbar').remove();
 
     $toolbarContainer.prependTo($targetContainer);
-    const stylingMode = isFluent(current()) ? 'text' : 'contained';
 
     if (this.option('fieldChooser.enabled')) {
-      const $buttonElement = $(DIV)
+      this.$fieldChooserButton = $(DIV)
         .appendTo($toolbarContainer)
         .addClass('dx-pivotgrid-field-chooser-button');
       const buttonOptions: Properties = {
         icon: 'columnchooser',
         // @ts-expect-error ts-error
         hint: this.option('texts.showFieldChooser'),
-        stylingMode,
+        elementAttr: {
+          'aria-label': this.option('texts.showFieldChooser'),
+          'aria-haspopup': 'dialog',
+        },
+        stylingMode: buttonStylingMode,
         onClick: () => {
           this.getFieldChooserPopup().show();
         },
       };
 
-      this._createComponent($buttonElement, Button, buttonOptions);
+      this._createComponent(this.$fieldChooserButton, Button, buttonOptions);
     }
 
     if (this.option('export.enabled')) {
@@ -1003,7 +1046,7 @@ class PivotGrid extends Widget {
         icon: 'xlsxfile',
         // @ts-expect-error ts-error
         hint: this.option('texts.exportToExcel'),
-        stylingMode,
+        stylingMode: buttonStylingMode,
         onClick: () => {
           // @ts-expect-error ts-error
           this.exportTo();
@@ -1071,11 +1114,13 @@ class PivotGrid extends Widget {
   _createTableElement() {
     const that = this;
     const $table = ($('<table>') as any)
+      .attr('role', 'presentation')
       .css({ width: '100%' })
       .toggleClass(BORDERS_CLASS, !!that.option('showBorders'))
       .toggleClass('dx-word-wrap', !!that.option('wordWrapEnabled'));
 
     eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', that._handleCellClick.bind(that));
+    eventsEngine.on($table, addNamespace('keydown', 'dxPivotGrid'), 'td', that._handleCellKeyDown.bind(that));
 
     return $table;
   }
@@ -1110,7 +1155,10 @@ class PivotGrid extends Widget {
   _initMarkup() {
     const that = this;
     super._initMarkup();
-    that.$element().addClass(PIVOTGRID_CLASS);
+    that.$element()
+      .addClass(PIVOTGRID_CLASS)
+      .attr('role', 'group')
+      .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
   }
 
   _renderContentImpl() {

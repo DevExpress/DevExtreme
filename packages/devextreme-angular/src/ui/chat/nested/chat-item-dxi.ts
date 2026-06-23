@@ -14,7 +14,7 @@ import {
 
 
 
-import type { Attachment, User } from 'devextreme/ui/chat';
+import type { Attachment, User, MessageType } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,
@@ -119,10 +119,10 @@ export class DxiChatChatItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): string | undefined {
+    get type(): MessageType {
         return this._getOption('type');
     }
-    set type(value: string | undefined) {
+    set type(value: MessageType) {
         this._setOption('type', value);
     }
 

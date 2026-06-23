@@ -88,7 +88,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '145.0.7632.67'
+        chrome-version: '149.0.7827.114'
 
     - name: Use Node.js
       uses: actions/setup-node@v6
@@ -131,7 +131,7 @@ jobs:
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: pnpm exec nx build
+      run: pnpm exec nx build --excludeTaskDependencies
 
 #    - name: Run test
 #      if: ${{ matrix.ARGS.platform != 'angular' }}
