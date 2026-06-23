@@ -25,34 +25,36 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   renderShader(isHorizontalGroupedWorkSpace: boolean, groupCount: number, cellCount: number): void {
     let shaderHeight = this.getShaderHeight();
-    const maxHeight = this.getShaderMaxHeight();
-    const isSolidShader = shaderHeight > maxHeight;
-
-    if (shaderHeight > maxHeight) {
-      shaderHeight = maxHeight;
-    }
-
-    setHeight(this.$shader, shaderHeight);
 
     if (this.workSpace.isGroupedByDate()) {
+      const maxHeight = this.getShaderMaxHeight();
+      const isSolidShader = shaderHeight > maxHeight;
+
+      if (shaderHeight > maxHeight) {
+        shaderHeight = maxHeight;
+      }
+
+      setHeight(this.$shader, shaderHeight);
       this.renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
     } else {
-      this.renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
+      setHeight(this.$shader, shaderHeight);
+      this.renderShaderParts(groupCount, shaderHeight);
     }
   }
 
   private renderShaderParts(
     groupCount: number,
     shaderHeight: number,
-    maxHeight: number,
-    isSolidShader: boolean,
   ): void {
     for (let i = 0; i < groupCount; i += 1) {
+      const maxHeight = this.getShaderMaxHeight(i);
+      const isSolidShader = shaderHeight > maxHeight;
+      const normalizedShaderHeight = isSolidShader ? maxHeight : shaderHeight;
       const shaderWidth = this.getShaderWidth();
-      this.renderTopShader(this.$shader, shaderHeight, shaderWidth, i);
+      this.renderTopShader(this.$shader, normalizedShaderHeight, shaderWidth, i);
 
       if (!isSolidShader) {
-        this.renderBottomShader(this.$shader, maxHeight, shaderHeight, shaderWidth, i);
+        this.renderBottomShader(this.$shader, maxHeight, normalizedShaderHeight, shaderWidth, i);
       }
 
       this.renderAllDayShader(shaderWidth, i);
@@ -152,8 +154,8 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     return this.workSpace.getGroupedStrategy().getShaderHeight();
   }
 
-  private getShaderMaxHeight(): number {
-    return this.workSpace.getGroupedStrategy().getShaderMaxHeight();
+  private getShaderMaxHeight(groupIndex?: number): number {
+    return this.workSpace.getGroupedStrategy().getShaderMaxHeight(groupIndex);
   }
 
   private getShaderWidth(): number {
