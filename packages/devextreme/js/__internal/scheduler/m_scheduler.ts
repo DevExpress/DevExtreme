@@ -31,6 +31,7 @@ import { hasWindow } from '@js/core/utils/window';
 import type { DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
+import type { ItemContextMenuEvent } from '@js/ui/list';
 import type {
   Appointment,
   AppointmentAddingEvent,
@@ -56,6 +57,7 @@ import { AppointmentDragController } from './appointment_drag_controller';
 import type { AppointmentFormConfig } from './appointment_popup/form';
 import { AppointmentForm } from './appointment_popup/form';
 import { AppointmentPopup } from './appointment_popup/popup';
+import type { AppointmentCollectionOptions } from './appointments/appointment_collection_options';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
@@ -80,9 +82,11 @@ import { validateRRule } from './recurrence/validate_rule';
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobile_tooltip_strategy';
-import type { AppointmentTooltipExtraOptions } from './tooltip_strategies/tooltip_strategy_base';
+import type { AppointmentTooltipExtraOptions, AppointmentTooltipOptions } from './tooltip_strategies/tooltip_strategy_base';
 import type {
+  AppointmentTooltipContextMenuEventArgs,
   AppointmentTooltipItem,
+  MappedAppointmentFields,
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
   ViewType,
@@ -1308,10 +1312,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
   }
 
-  private getAppointmentTooltipOptions() {
+  private getAppointmentTooltipOptions(): AppointmentTooltipOptions {
     const that = this;
     return {
-      // @ts-expect-error
+      // @ts-expect-error _createComponent is not defined in ts
       createComponent: that._createComponent.bind(that),
       container: that.$element(),
       getScrollableContainer: that.getWorkSpaceScrollableContainer.bind(that),
@@ -1321,7 +1325,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
       isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
-      createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('createFormattedDateText', appointment, targetedAppointment, format),
+      createFormattedDateText: (appointment, targetedAppointment, format) => this.fire(
+        'createFormattedDateText',
+        appointment,
+        (targetedAppointment ?? appointment) as TargetedAppointment,
+        format,
+      ),
       getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
       onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
       createEventArgs: that._createEventArgs.bind(that),
@@ -1329,9 +1338,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       newAppointments: Boolean(this.option('_newAppointments')),
       onAppointmentClick: (args: AppointmentClickEvent) => this.actions.onAppointmentClick(args),
       onListInitialized: (e) => {
-        if (this.option('_newAppointments')) {
+        if (this.option('_newAppointments') && e.element) {
           this.appointmentDragController.createTooltipDraggable(
-            e.element,
+            $(e.element),
             {
               dragTemplate: this._appointments.renderDragClone.bind(this._appointments),
             },
@@ -1341,17 +1350,25 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onListDisposing: () => {
         this.appointmentDragController.disposeTooltipDraggable();
       },
-    };
+    } satisfies AppointmentTooltipOptions;
   }
 
   // TODO<Appointments>: delete this method when old impl is removed
-  _createEventArgs(e) {
-    const config = {
-      itemData: e.itemData.appointment,
-      itemElement: e.itemElement,
-      targetedAppointment: e.itemData.targetedAppointment,
+  _createEventArgs(
+    e: ItemContextMenuEvent<AppointmentTooltipItem>,
+  ): AppointmentTooltipContextMenuEventArgs {
+    const config: {
+      itemData: SafeAppointment;
+      itemElement: dxElementWrapper;
+      targetedAppointment?: SafeAppointment | TargetedAppointment;
+    } = {
+      itemData: e.itemData!.appointment,
+      itemElement: $(e.itemElement),
+      targetedAppointment: e.itemData!.targetedAppointment,
     };
-    return extend({}, (this.fire as any)('mapAppointmentFields', config), {
+    const mappedFields = this.fire('mapAppointmentFields', config) as MappedAppointmentFields;
+
+    return extend({}, mappedFields, {
       component: e.component,
       element: e.element,
       event: e.event,
@@ -1464,8 +1481,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     };
   }
 
-  private appointmentsConfig() {
-    const config = {
+  private appointmentsConfig(): AppointmentCollectionOptions {
+    const config: AppointmentCollectionOptions = {
       getResourceManager: () => this.resourceManager,
       getAppointmentDataSource: () => this.appointmentDataSource,
       getSortedAppointments: () => this._layoutManager.sortedItems,
@@ -1474,18 +1491,18 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
       onItemRendered: this.getAppointmentRenderedAction(),
-      onItemClick: this._createActionByOption('onAppointmentClick'),
-      onItemContextMenu: this._createActionByOption('onAppointmentContextMenu'),
-      onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
-      tabIndex: this.option('tabIndex'),
-      focusStateEnabled: this.option('focusStateEnabled'),
+      onItemClick: this._createActionByOption('onAppointmentClick') as (args: AppointmentClickEvent) => void,
+      onItemContextMenu: this._createActionByOption('onAppointmentContextMenu') as (args: AppointmentContextMenuEvent) => void,
+      onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick') as (args: AppointmentDblClickEvent) => void,
+      tabIndex: this.option('tabIndex') ?? 0,
+      focusStateEnabled: Boolean(this.option('focusStateEnabled')),
       allowDrag: this.allowDragging(),
       allowDelete: this.editing.allowUpdating && this.editing.allowDeleting,
       allowResize: this.allowResizing(),
       allowAllDayResize: this.allowAllDayResizing(),
-      rtlEnabled: this.option('rtlEnabled'),
+      rtlEnabled: Boolean(this.option('rtlEnabled')),
       groups: this.getViewOption('groups'),
-      groupByDate: this.getViewOption('groupByDate'),
+      groupByDate: Boolean(this.getViewOption('groupByDate')),
       timeZoneCalculator: this.timeZoneCalculator,
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
