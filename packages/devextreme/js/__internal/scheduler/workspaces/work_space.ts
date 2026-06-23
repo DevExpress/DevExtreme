@@ -266,7 +266,7 @@ interface WorkspaceOptionActionMap {
 
 type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 
-type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
+export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
   newAppointments: boolean;
