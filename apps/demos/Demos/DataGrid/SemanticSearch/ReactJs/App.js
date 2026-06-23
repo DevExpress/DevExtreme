@@ -7,41 +7,41 @@ import DataGrid, {
   Item,
 } from 'devextreme-react/data-grid';
 import NumberBox from 'devextreme-react/number-box';
+import DataSource from 'devextreme/data/data_source';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch';
 const App = () => {
   const searchValueRef = useRef('');
   const similarityFactorRef = useRef(0.31);
-  const gridRef = useRef(null);
-  const store = useMemo(
+  const dataSource = useMemo(
     () =>
-      createStore({
-        key: 'ID',
-        loadUrl: `${url}/Get`,
-        onBeforeSend(method, ajaxOptions) {
-          ajaxOptions.xhrFields = { withCredentials: true };
-          ajaxOptions.data = {
-            ...ajaxOptions.data,
-            searchValue: searchValueRef.current,
-            similarityFactor: similarityFactorRef.current,
-          };
-        },
+      new DataSource({
+        store: createStore({
+          key: 'ID',
+          loadUrl: `${url}/Get`,
+          loadParams: {
+            searchValue: () => searchValueRef.current,
+            similarityFactor: () => similarityFactorRef.current,
+          },
+          onBeforeSend(method, ajaxOptions) {
+            ajaxOptions.xhrFields = { withCredentials: true };
+          },
+        }),
       }),
     [],
   );
   const onSimilarityFactorChanged = useCallback(({ value }) => {
     similarityFactorRef.current = value;
     if (searchValueRef.current !== '') {
-      gridRef.current?.instance().getDataSource().reload();
+      dataSource.reload();
     }
   }, []);
   const onEditorPreparing = useCallback((e) => {
     if (e.parentType === 'searchPanel') {
       let searchTimeout;
       e.editorOptions.onValueChanged = (args) => {
-        if (searchTimeout) {
-          clearTimeout(searchTimeout);
-        }
+        clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
           searchValueRef.current = args.value;
           e.component.getDataSource().reload();
@@ -52,8 +52,7 @@ const App = () => {
   }, []);
   return (
     <DataGrid
-      ref={gridRef}
-      dataSource={store}
+      dataSource={dataSource}
       showBorders={true}
       remoteOperations={true}
       height={600}

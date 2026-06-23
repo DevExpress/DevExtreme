@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useMemo } from 'react';
-import DataGrid, { Column, Scrolling, SearchPanel, Toolbar, Item, DataGridRef, DataGridTypes } from 'devextreme-react/data-grid';
-import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
+import DataGrid, { Column, Scrolling, SearchPanel, Toolbar, Item, type DataGridTypes } from 'devextreme-react/data-grid';
+import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
+import DataSource from 'devextreme/data/data_source';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch';
@@ -9,25 +10,24 @@ const App = () => {
   const searchValueRef = useRef<string>('');
   const similarityFactorRef = useRef<number>(0.31);
 
-  const gridRef = useRef<DataGridRef>(null);
-
-  const store = useMemo(() => createStore({
-    key: 'ID',
-    loadUrl: `${url}/Get`,
-    onBeforeSend(method, ajaxOptions) {
-      ajaxOptions.xhrFields = { withCredentials: true };
-      ajaxOptions.data = {
-        ...ajaxOptions.data,
-        searchValue: searchValueRef.current,
-        similarityFactor: similarityFactorRef.current,
-      };
-    },
+  const dataSource = useMemo<DataSource>(() => new DataSource({
+    store: createStore({
+      key: 'ID',
+      loadUrl: `${url}/Get`,
+      loadParams: {
+        searchValue: () => searchValueRef.current,
+        similarityFactor: () => similarityFactorRef.current,
+      },
+      onBeforeSend(method, ajaxOptions) {
+        ajaxOptions.xhrFields = { withCredentials: true };
+      },
+    })
   }), []);
 
   const onSimilarityFactorChanged = useCallback(({ value }: NumberBoxTypes.ValueChangedEvent) => {
     similarityFactorRef.current = value;
     if (searchValueRef.current !== '') {
-      gridRef.current?.instance().getDataSource().reload();
+      dataSource.reload();
     }
   }, []);
 
@@ -35,9 +35,7 @@ const App = () => {
     if (e.parentType === 'searchPanel') {
       let searchTimeout: ReturnType<typeof setTimeout> | undefined;
       e.editorOptions.onValueChanged = (args: { value: string }) => {
-        if (searchTimeout) {
-          clearTimeout(searchTimeout);
-        }
+        clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
           searchValueRef.current = args.value;
           e.component.getDataSource().reload();
@@ -49,8 +47,7 @@ const App = () => {
 
   return (
     <DataGrid
-      ref={gridRef}
-      dataSource={store}
+      dataSource={dataSource}
       showBorders={true}
       remoteOperations={true}
       height={600}

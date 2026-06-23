@@ -31,22 +31,25 @@ $(() => {
         {
           location: 'after',
           cssClass: 'align-bottom',
-          widget: 'dxNumberBox',
-          options: {
-            label: 'Similarity Factor',
-            labelMode: 'floating',
-            value: similarityFactor,
-            min: 0,
-            max: 1,
-            format: '0.00',
-            step: 0.05,
-            onValueChanged(e) {
-              similarityFactor = e.value;
-              if (searchValue !== '') {
-                dataGrid.getDataSource().reload();
-              }
-            },
-          },
+          template: function (data, container) {
+            $('<div>')
+              .appendTo(container)
+              .dxNumberBox({
+                label: 'Similarity Factor',
+                labelMode: 'floating',
+                value: similarityFactor,
+                min: 0,
+                max: 1,
+                format: '0.00',
+                step: 0.05,
+                onValueChanged(e) {
+                  similarityFactor = e.value;
+                  if (searchValue !== '') {
+                    dataGrid.getDataSource().reload();
+                  }
+                },
+              });
+          }
         },
         {
           name: 'searchPanel',

@@ -1,7 +1,5 @@
 <template>
   <DxDataGrid
-    id="gridContainer"
-    ref="dataGridRef"
     :data-source="dataSource"
     :show-borders="true"
     :remote-operations="true"
@@ -50,30 +48,32 @@ import {
   type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxNumberBox, { type DxNumberBoxTypes } from 'devextreme-vue/number-box';
+import DataSource from 'devextreme/data/data_source';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch';
 
-const dataGridRef = ref<InstanceType<typeof DxDataGrid> | null>(null);
 const searchValue = ref('');
 const similarityFactor = ref(0.31);
 
-const dataSource = createStore({
-  key: 'ID',
-  loadUrl: `${url}/Get`,
-  loadParams: {
-    searchValue: () => searchValue.value,
-    similarityFactor: () => similarityFactor.value,
-  },
-  onBeforeSend(method, ajaxOptions) {
-    ajaxOptions.xhrFields = { withCredentials: true };
-  },
+const dataSource = new DataSource({
+  store: createStore({
+    key: 'ID',
+    loadUrl: `${url}/Get`,
+    loadParams: {
+      searchValue: () => searchValue.value,
+      similarityFactor: () => similarityFactor.value,
+    },
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  })
 });
 
 const onSimilarityFactorChanged = (e: DxNumberBoxTypes.ValueChangedEvent) => {
   similarityFactor.value = e.value;
   if (searchValue.value !== '') {
-    dataGridRef.value!.instance!.getDataSource().reload();
+    dataSource.reload();
   }
 };
 
@@ -81,9 +81,7 @@ const onEditorPreparing = (e: DxDataGridTypes.EditorPreparingEvent) => {
   if (e.parentType === 'searchPanel') {
     let searchTimeout: ReturnType<typeof setTimeout> | undefined;
     e.editorOptions.onValueChanged = (args: { value: string }) => {
-      if (searchTimeout) {
-        clearTimeout(searchTimeout);
-      }
+      clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         searchValue.value = args.value;
         e.component.getDataSource().reload();
@@ -93,3 +91,8 @@ const onEditorPreparing = (e: DxDataGridTypes.EditorPreparingEvent) => {
   }
 };
 </script>
+<style scoped>
+.align-bottom.dx-toolbar-item {
+  vertical-align: bottom;
+}
+</style>
