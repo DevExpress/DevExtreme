@@ -15,7 +15,7 @@ env:
 
 jobs:
   test:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     env:
       NODE_OPTIONS: --max-old-space-size=8192
     timeout-minutes: 30

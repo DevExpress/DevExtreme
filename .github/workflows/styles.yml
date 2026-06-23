@@ -15,7 +15,7 @@ env:
 
 jobs:
   Tests:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
