@@ -201,7 +201,8 @@ class HorizontalGroupedStrategy {
     return this.config.getIndicationHeight();
   }
 
-  getShaderMaxHeight(): number {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getShaderMaxHeight(groupIndex?: number): number {
     return (getBoundingRect(this.config.getScrollableContentElement()) as DOMRect).height;
   }
 
