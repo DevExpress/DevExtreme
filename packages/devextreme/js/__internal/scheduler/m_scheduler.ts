@@ -8,6 +8,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import Callbacks from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -35,6 +36,7 @@ import type {
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
@@ -49,6 +51,7 @@ import NotifyScheduler from './base/widget_notify_scheduler';
 import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { hide as hideLoading, show as showLoading } from './loading';
+import type AppointmentDragBehavior from './m_appointment_drag_behavior';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
@@ -92,6 +95,8 @@ import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
 import SchedulerTimelineDay from './workspaces/timeline_day';
 import SchedulerTimelineMonth from './workspaces/timeline_month';
 import SchedulerTimelineWeek from './workspaces/timeline_week';
+import type SchedulerWorkSpace from './workspaces/work_space';
+import type { DroppableCellData } from './workspaces/work_space';
 import SchedulerWorkSpaceDay from './workspaces/work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/work_space_week';
@@ -174,7 +179,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private a11yStatus!: dxElementWrapper;
 
   // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/work_space.ts
-  _workSpace: any;
+  _workSpace!: SchedulerWorkSpace;
 
   private header?: SchedulerHeader;
 
@@ -946,7 +951,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const workspace = this.getWorkSpace();
     this._layoutManager.filterAppointments();
 
-    workspace.option('allDayExpanded', this.isAllDayExpanded());
+    workspace?.option('allDayExpanded', this.isAllDayExpanded());
 
     // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
@@ -956,7 +961,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
     if (this.isAgenda()) {
-      this._workSpace.renderAgendaLayout(viewModel);
+      // @ts-expect-error renderAgendaLayout exists only on agenda workspace
+      this._workSpace.renderAgendaLayout?.(viewModel);
     }
   }
 
@@ -1308,7 +1314,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const workSpace = this._workSpace;
     const itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
 
-    return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
+    return itTakesAllDay && workSpace.supportAllDayRow() && Boolean(workSpace.option('showAllDayPanel'));
   }
 
   private initMarkupCore(): void {
@@ -1408,6 +1414,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
       getViewDataProvider: () => this._workSpace?.viewDataProvider,
+      // @ts-expect-error protected method
       isVerticalGroupedWorkSpace: () => this._workSpace.isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
       onContentReady: () => {
@@ -1432,6 +1439,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this.recalculateWorkspace();
     if (currentViewOptions.startDate) {
+      // @ts-expect-error protected method
       this.updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
   }
@@ -1454,8 +1462,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
     if (!this.option('_newAppointments')) {
-      this.allowDragging() && this._workSpace.initDragBehavior(this, this.all);
+      if (this.allowDragging()) {
+        this._workSpace.initDragBehavior(this);
+      }
     }
+    // @ts-expect-error protected method
     this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
@@ -1474,6 +1485,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.workSpaceRecalculation = new Deferred();
     triggerResizeEvent(this._workSpace.$element());
     this.waitAsyncTemplate(() => {
+      // @ts-expect-error protected method
       this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
@@ -1577,7 +1589,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  getAppointmentTemplate(optionName) {
+  getAppointmentTemplate(optionName: string): FunctionTemplate {
     if (this.currentView?.[optionName]) {
       return this._getTemplate(this.currentView[optionName]);
     }
@@ -1597,7 +1609,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private refreshWorkSpace(): void {
     this.cleanWorkSpace();
 
-    delete this._workSpace;
+    // @ts-expect-error
+    this._workSpace = undefined;
 
     this.renderWorkSpace();
 
@@ -1623,15 +1636,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.option('selectedCellData', []);
   }
 
-  getWorkSpaceScrollable() {
+  getWorkSpaceScrollable(): Scrollable {
     return this._workSpace.getScrollable();
   }
 
-  getWorkSpaceScrollableContainer() {
+  getWorkSpaceScrollableContainer(): dxElementWrapper {
     return this._workSpace.getScrollableContainer();
   }
 
-  getWorkSpace() {
+  getWorkSpace(): SchedulerWorkSpace | undefined {
     return this._workSpace;
   }
 
@@ -1813,7 +1826,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.recurrenceDialog.show();
   }
 
-  getUpdatedData(rawAppointment, $cell?) {
+  getUpdatedData(rawAppointment: Appointment, $cell?: dxElementWrapper): SafeAppointment {
     const viewOffset = this.getViewOffsetMs();
 
     const getConvertedFromGrid = (date: any): Date | undefined => {
@@ -1929,7 +1942,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return callback.call(this, ...args);
   }
 
-  getTargetCellData() {
+  getTargetCellData(): DroppableCellData {
     return this._workSpace.getDataByDroppableCell();
   }
 
@@ -2035,7 +2048,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._fireContentReadyAction();
   }
 
-  getAppointmentsInstance() {
+  getAppointmentsInstance(): Appointments | AppointmentCollection {
     return this._appointments;
   }
 
@@ -2154,8 +2167,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  createPopupAppointment() {
-    const result: any = {};
+  createPopupAppointment(): SafeAppointment {
+    const result: SafeAppointment = {};
     const toMs = dateUtils.dateToMilliseconds;
 
     const startDate = new Date(this.option('currentDate'));
@@ -2385,7 +2398,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   // TODO: used externally in m_appointment_drag_behavior.ts
-  _getDragBehavior() {
+  _getDragBehavior(): AppointmentDragBehavior | null {
     return this._workSpace.dragBehavior;
   }
 
