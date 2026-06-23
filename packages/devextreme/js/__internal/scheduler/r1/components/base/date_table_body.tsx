@@ -4,6 +4,7 @@ import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 import { Fragment } from 'inferno';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
+import { renderUtils } from '../../utils/index';
 import { DATE_TABLE_ROW_CLASS } from '../const';
 import type { CellTemplateProps, DefaultProps } from '../types';
 import { AllDayPanelTableBody, AllDayPanelTableBodyDefaultProps } from './all_day_panel_table_body';
@@ -29,7 +30,9 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
       addVerticalSizesClassToRows,
       cellTemplate,
       dataCellTemplate,
+      rowHeights,
     } = this.props;
+    let rowIndex = 0;
     const rowClasses = combineClasses({
       [DATE_TABLE_ROW_CLASS]: true,
       'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
@@ -63,10 +66,18 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                   dateTable.map(({
                     cells,
                     key: rowKey,
-                  }) => (
+                  }) => {
+                    const rowHeight = rowHeights?.[rowIndex];
+                    const rowStyles = rowHeight === undefined
+                      ? undefined
+                      : renderUtils.addHeightToStyle(rowHeight);
+                    rowIndex += 1;
+
+                    return (
                       <Row
                         key={rowKey}
                         className={rowClasses}
+                        styles={rowStyles}
                         leftVirtualCellWidth={viewData.leftVirtualCellWidth
                           ?? RowDefaultProps.leftVirtualCellWidth}
                         rightVirtualCellWidth={viewData.rightVirtualCellWidth
@@ -112,7 +123,8 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                             } as CellTemplateProps} />)
                         }
                       </Row>
-                  ))
+                    );
+                  })
                 }
               </Fragment>
           ))
