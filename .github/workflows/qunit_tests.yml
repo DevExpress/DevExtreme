@@ -19,7 +19,7 @@ env:
 jobs:
   check-should-run-all:
     name: Check if all tests should run
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -161,7 +161,7 @@ jobs:
           maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '3' || '' }}
 
   notify:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [
       build,
