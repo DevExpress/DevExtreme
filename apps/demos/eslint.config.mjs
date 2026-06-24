@@ -525,7 +525,7 @@ export default [
       '@typescript-eslint/await-thenable': 0,
       'spellcheck/spell-checker': 0,
       'consistent-return': 0,
-      'import/no-unresolved': ['error', { ignore: ['^demo-ts-loader$', '^demo-ts-shared$'] }],
+      'import/no-unresolved': ['error', { ignore: ['^demo-ts-loader$', '^demo-ts-shared$', '^demo-react-ts-loader$'] }],
     },
   },
   {
