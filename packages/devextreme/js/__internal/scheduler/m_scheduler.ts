@@ -374,6 +374,17 @@ interface SchedulerAppointmentsHost {
   updateResizableArea: () => void;
   renderDragClone: (...args: unknown[]) => dxElementWrapper;
   getAppointmentData: (...args: unknown[]) => unknown;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _createComponent: CreateComponentFn;
+  _renderItem: (index: number, item: unknown, container?: dxElementWrapper) => dxElementWrapper;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _getItemData: (element: dxElementWrapper) => unknown;
+  notifyObserver: (subject: string, args?: unknown) => void;
+  invoke: (funcName: string, ...args: unknown[]) => unknown;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _setDragSourceAppointment: (appointment: unknown, settings: unknown) => void;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _removeDragSourceClassFromDraggedAppointment: () => void;
 }
 
 class Scheduler extends SchedulerOptionsBaseWidget {
@@ -478,7 +489,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const whenLoaded = this.postponedOperations.add('loadResources', () => {
       const groups = this.getViewOption('groups');
 
-      return when(this.resourceManager.loadGroupResources(groups, forceReload));
+      return fromPromise(this.resourceManager.loadGroupResources(groups, forceReload));
     }, undefined);
 
     const resolveCallbacks: DeferredObj<void> = Deferred();
@@ -504,6 +515,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'firstDayOfWeek':
         this.updateOption('workSpace', name, value);
         this.updateOption('header', name, value);
+        this.updateOption('header', 'startViewDate', this.getStartViewDate());
         this.createAppointmentPopupForm();
         break;
       case 'currentDate': {
@@ -524,7 +536,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         this.postponeResourceLoading().done(() => {
           if (this._dataSource) {
-            this.appointmentDataSource.setDataSource(this._dataSource);
+            if (this.appointmentDataSource) {
+              this.appointmentDataSource.setDataSource(this._dataSource);
+            } else {
+              this.createAppointmentDataSource();
+            }
           }
           this.setRemoteFilterIfNeeded();
           this.updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
@@ -917,7 +933,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         showLoading({
           container: this.$element().get(0),
           position: {
-            of: this.$element().get(0),
+            // @ts-expect-error
+            of: this.$element(),
           },
         }).catch(noop);
       }
@@ -1192,7 +1209,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       : [];
 
     this._appointments.option('items', viewModel);
-    this.appointmentDataSource.cleanState();
+    this.appointmentDataSource?.cleanState();
     if (this.isAgenda()) {
       this._workSpace.renderAgendaLayout?.(viewModel);
     }
@@ -1642,7 +1659,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       min: this.getViewOption('min'),
       max: this.getViewOption('max'),
       indicatorTime: this.option('indicatorTime'),
-      startViewDate: this.getStartViewDate() ?? new Date(),
+      startViewDate: this.getStartViewDate() ?? this.getViewOption('currentDate'),
       tabIndex: this.option('tabIndex'),
       focusStateEnabled: this.option('focusStateEnabled'),
       useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
@@ -1709,6 +1726,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
 
     this.recalculateWorkspace();
+
+    if (this.header) {
+      const startViewDate = this.getStartViewDate();
+      if (startViewDate) {
+        this.updateOption('header', 'startViewDate', startViewDate);
+      }
+    }
+
     if (currentViewOptions.startDate) {
       this.updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
@@ -1759,7 +1784,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private workSpaceConfig(currentViewOptions: NormalizedView): WorkspaceOptionsInternal {
-    const cellDuration = this.option('cellDuration');
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling
@@ -1787,7 +1811,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       focusStateEnabled: Boolean(this.option('focusStateEnabled')),
       showAllDayPanel: this.option('showAllDayPanel'),
       showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
-      indicatorTime: this.option('indicatorTime') ?? new Date(),
+      indicatorTime: this.option('indicatorTime'),
       indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
       shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
       crossScrollingEnabled,
@@ -1834,10 +1858,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
       },
       rtlEnabled: Boolean(this.option('rtlEnabled')),
-      hoursInterval: cellDuration / 60,
+      cellDuration: this.option('cellDuration'),
       allDayExpanded: false,
       currentDate: this.getViewOption('currentDate'),
     }, currentViewOptions) as WorkspaceOptionsInternal;
+
+    workSpaceOptions.hoursInterval = workSpaceOptions.cellDuration / 60;
 
     workSpaceOptions.notifyScheduler = this.notifyScheduler;
     workSpaceOptions.groups = this.resourceManager.groupResources();
@@ -1956,7 +1982,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.updateAppointmentCore(
             appointmentData,
             newAppointmentData,
-          ).finally(resolve).catch(noop);
+          ).then(resolve);
         },
         false,
         undefined,
@@ -2560,12 +2586,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   ): void {
     if (appointment) {
       const settings = this._appointments.getAppointmentSettings(element);
-      if (!settings) {
-        return;
-      }
       const appointmentConfig = {
         itemData: targetedAppointment ?? appointment,
-        groupIndex: settings.groupIndex ?? 0,
+        groupIndex: settings?.groupIndex ?? 0,
       };
 
       const info: AppointmentTooltipItem = {
@@ -2599,14 +2622,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (this.appointmentTooltip.isShownForTarget(target)) {
       this.hideAppointmentTooltip();
     } else {
-      this.processActionResult({ ...arg, cancel: arg.cancel ?? false }, (canceled) => {
+      // @ts-expect-error
+      this.processActionResult(arg, (canceled) => {
         if (!canceled) {
           this.appointmentTooltip.show(target, data, {
             ...this.getExtraAppointmentTooltipOptions(),
             ...options,
           });
         }
-      }).catch(noop);
+      });
     }
   }
 
