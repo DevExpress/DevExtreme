@@ -95,7 +95,7 @@ window.config = {
   transpiler: false,
   meta: {
     '*.ts': {
-      loader: 'demo-angular-ts-loader',
+      loader: 'demo-ts-loader',
     },
     'typescript': {
       'exports': 'ts',
@@ -198,7 +198,6 @@ window.config = {
   },
   map: {
     'anti-forgery': 'anti-forgery:fetch-override.js',
-    'demo-angular-ts-loader': 'project:utils/demo-angular-ts-loader.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
     'demo-ts-shared': 'project:utils/demo-ts-shared.js',
     'typescript': 'npm:typescript/lib/typescript.js',

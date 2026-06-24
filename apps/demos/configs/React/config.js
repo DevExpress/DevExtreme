@@ -3,10 +3,13 @@ window.config = {
   transpiler: false,
   meta: {
     '*.ts': {
-      loader: 'demo-react-ts-loader',
+      loader: 'demo-ts-loader',
     },
     '*.tsx': {
-      loader: 'demo-react-ts-loader',
+      loader: 'demo-ts-loader',
+      typescriptOptions: {
+        jsx: 'react',
+      },
     },
     'typescript': {
       'exports': 'ts',
@@ -92,7 +95,6 @@ window.config = {
   defaultExtension: 'js',
   map: {
     'anti-forgery': 'anti-forgery:fetch-override.js',
-    'demo-react-ts-loader': 'project:utils/demo-react-ts-loader.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
     'demo-ts-shared': 'project:utils/demo-ts-shared.js',
     'typescript': 'npm:typescript/lib/typescript.js',
