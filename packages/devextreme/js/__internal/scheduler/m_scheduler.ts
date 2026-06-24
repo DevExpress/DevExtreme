@@ -935,11 +935,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result: DeferredObj<void> = Deferred();
 
     if (this._dataSource) {
-      this._dataSource.load().then(() => {
+      when(fromPromise(this._dataSource.load())).done(() => {
         hideLoading().catch(noop);
 
         this._fireContentReadyAction(result);
-      }).catch(() => {
+      }).fail(() => {
         hideLoading().catch(noop);
         result.reject();
       });
@@ -968,7 +968,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       result?.resolve();
     };
 
-    if (this.workSpaceRecalculation?.state() === 'pending') {
+    if (isDeferred(this.workSpaceRecalculation)) {
       this.workSpaceRecalculation.done(() => {
         fireContentReady();
       });
@@ -2113,11 +2113,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (isPopupEditing) {
       this.appointmentPopup.show(singleRawAppointment, {
-        onSave: (newAppointment) => (
-          this.updateAppointment(rawAppointment, appointment.source)
-            .then(() => this.addAppointment(newAppointment as SafeAppointment))
-            .then(() => { this.scrollToAppointment(newAppointment as SafeAppointment); })
-        ),
+        onSave: (newAppointment) => {
+          const saveResult = when(
+            this.updateAppointment(rawAppointment, appointment.source)
+              .then(() => this.addAppointment(newAppointment as SafeAppointment)),
+          ).done(() => { this.scrollToAppointment(newAppointment as SafeAppointment); });
+
+          return saveResult.promise();
+        },
         title: messageLocalization.format('dxScheduler-editPopupTitle'),
         readOnly: Boolean(appointment.source) && appointment.disabled,
       });
@@ -2542,10 +2545,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       delete this.editAppointmentData; // TODO
       if (this.editing.allowAdding) {
         this.appointmentPopup.show(appointmentData, {
-          onSave: (appointment) => (
-            this.addAppointment(appointment as SafeAppointment)
-              .then(() => { this.scrollToAppointment(appointment as SafeAppointment); })
-          ),
+          onSave: (appointment) => {
+            const saveResult = when(this.addAppointment(appointment as SafeAppointment))
+              .done(() => { this.scrollToAppointment(appointment as SafeAppointment); });
+
+            return saveResult.promise();
+          },
           title: messageLocalization.format('dxScheduler-newPopupTitle'),
           readOnly: false,
         });
@@ -2570,10 +2575,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         const readOnly = isDisabled || !this.editing.allowUpdating;
 
         this.appointmentPopup.show(appointmentData, {
-          onSave: (appointment) => (
-            this.updateAppointment(appointmentData, appointment as SafeAppointment)
-              .then(() => { this.scrollToAppointment(appointment as SafeAppointment); })
-          ),
+          onSave: (appointment) => {
+            const saveResult = when(this.updateAppointment(appointmentData, appointment as SafeAppointment))
+              .done(() => { this.scrollToAppointment(appointment as SafeAppointment); });
+
+            return saveResult.promise();
+          },
           title: messageLocalization.format('dxScheduler-editPopupTitle'),
           readOnly,
         });
