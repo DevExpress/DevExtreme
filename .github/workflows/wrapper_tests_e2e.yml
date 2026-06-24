@@ -9,7 +9,8 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [24_2, 25_*, 26_*]
+    branches: [24_2, 25_*]
+  merge_group:
   workflow_dispatch:
 
 env:
