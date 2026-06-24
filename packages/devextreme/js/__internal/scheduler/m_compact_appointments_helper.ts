@@ -91,7 +91,7 @@ export class CompactAppointmentsHelper {
         getItemSettings,
       };
 
-      workSpace.createDragBehaviorBase($element, $schedulerElement, options);
+      workSpace?.createDragBehaviorBase($element, $schedulerElement, options);
     };
   }
 
@@ -105,7 +105,6 @@ export class CompactAppointmentsHelper {
   private createCompactButton(template, options: CompactAppointmentOptions) {
     const $button = this.createCompactButtonElement(options);
 
-    // @ts-expect-error
     return this.instance._createComponent($button, Button, {
       type: 'default',
       width: options.width,
