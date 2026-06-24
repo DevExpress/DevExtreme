@@ -1,5 +1,4 @@
 import { locate, move } from '@js/common/core/animation/translator';
-import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
@@ -93,7 +92,7 @@ export class CompactAppointmentsHelper {
       };
 
       // @ts-expect-error protected method
-      workSpace.createDragBehaviorBase($element, $schedulerElement, options);
+      workSpace?.createDragBehaviorBase($element, $schedulerElement, options);
     };
   }
 
@@ -188,7 +187,7 @@ export class CompactAppointmentsHelper {
   }
 
   private localizeDate(date) {
-    return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
+    return formatImplicitSchedulerDate(date);
   }
 
   private getDateText(

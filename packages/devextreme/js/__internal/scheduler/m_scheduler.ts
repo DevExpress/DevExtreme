@@ -1,4 +1,3 @@
-/* eslint-disable devextreme-custom/no-deferred */
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
@@ -49,9 +48,8 @@ import type {
   AppointmentUpdatingEvent,
   CellClickEvent,
   CellContextMenuEvent,
-  RecurrenceEditMode,
-  SelectionEndEvent,
   Properties as SchedulerProperties,
+  RecurrenceEditMode,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import type { Options } from '@ts/core/options/m_index';
@@ -61,7 +59,7 @@ import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
-import { AppointmentDragController } from './appointment_drag_controller';
+import { AppointmentDragController, type WorkSpaceDraggableOptions } from './appointment_drag_controller';
 import type { AppointmentFormConfig } from './appointment_popup/form';
 import { AppointmentForm } from './appointment_popup/form';
 import { AppointmentPopup } from './appointment_popup/popup';
@@ -95,6 +93,8 @@ import type {
   AppointmentTooltipContextMenuEventArgs,
   AppointmentTooltipItem,
   CreateComponentFn,
+  DOMMetaData,
+  GroupBoundsOffset,
   MappedAppointmentFields,
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
@@ -114,16 +114,17 @@ import { ResourceManager } from './utils/resource_manager/resource_manager';
 import type { GroupValues } from './utils/resource_manager/types';
 import timeZoneUtils, { type TimezoneLabel } from './utils_time_zone';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
+import type { CollectorCSS, RealSize } from './view_model/generate_view_model/steps/add_geometry/types';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
-import type { AppointmentViewModelPlain, AppointmentItemViewModel } from './view_model/types';
+import type { AppointmentItemViewModel, AppointmentViewModelPlain, PanelName } from './view_model/types';
 import SchedulerAgenda from './workspaces/agenda';
 import SchedulerTimelineWorkWeek from './workspaces/m_timeline_work_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
 import SchedulerTimelineDay from './workspaces/timeline_day';
 import SchedulerTimelineMonth from './workspaces/timeline_month';
 import SchedulerTimelineWeek from './workspaces/timeline_week';
-import type SchedulerWorkSpace from './workspaces/work_space';
-import type { DroppableCellData, WorkspaceOptionsInternal } from './workspaces/work_space';
+import type ViewDataProvider from './workspaces/view_model/view_data_provider';
+import type { WorkspaceOptionsInternal } from './workspaces/work_space';
 import SchedulerWorkSpaceDay from './workspaces/work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/work_space_week';
@@ -198,6 +199,93 @@ const RECURRENCE_EDITING_MODE = {
   CANCEL: 'cancel',
 };
 
+type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
+
+interface WorkSpaceCoordinates {
+  top: number;
+  left: number;
+  groupIndex?: number;
+}
+
+interface WorkSpacePositionHelper {
+  getResizableStep: () => number;
+  getHorizontalMax: (groupIndex: number) => number;
+  getVerticalMax: (options: {
+    groupIndex: number;
+    isVirtualScrolling: boolean;
+    showAllDayPanel: boolean;
+    supportAllDayRow: boolean;
+    isGroupedAllDayPanel: boolean;
+    isVerticalGrouping: boolean;
+  }) => number;
+}
+
+interface VirtualScrollingDispatcherLike {
+  cellCountInsideLeftVirtualCell: number;
+  cellCountInsideRightVirtualCell: number;
+  cellCountInsideTopVirtualRow: number;
+}
+
+interface SchedulerWorkSpaceLike {
+  type: ViewType;
+  NAME?: string;
+  dragBehavior: AppointmentDragBehavior | null;
+  positionHelper: WorkSpacePositionHelper;
+  virtualScrollingDispatcher: VirtualScrollingDispatcherLike;
+  viewDataProvider: ViewDataProvider;
+  option: (name: string | Record<string, unknown>, value?: unknown) => unknown;
+  getDateRange: () => Date[];
+  getCellFromDragTarget: ($dragTarget: dxElementWrapper) => dxElementWrapper | null;
+  renderAgendaLayout?: (viewModel: AppointmentViewModelPlain[]) => void;
+  calculateEndDate: (startDate: Date) => Date;
+  updateScrollPosition: (date: Date, groupValues: GroupValues, inAllDayRow: boolean) => void;
+  supportAllDayRow: () => boolean;
+  getAllDayContainer: () => dxElementWrapper | null;
+  getFixedContainer: () => dxElementWrapper;
+  getDOMElementsMetaData: () => DOMMetaData;
+  isVerticalGroupedWorkSpace: () => boolean;
+  isVirtualScrolling: () => boolean;
+  isGroupedByDate: () => boolean;
+  needRecalculateResizableArea: () => boolean;
+  getHeaderDate: () => Date;
+  updateHeaderEmptyCellWidth: () => void;
+  initDragBehavior: (scheduler: unknown) => void;
+  attachTablesEvents: () => void;
+  getWorkArea: () => dxElementWrapper;
+  $element: () => dxElementWrapper;
+  renderCurrentDateTimeLineAndShader: () => void;
+  _dispose: () => void;
+  _dimensionChanged: () => void;
+  getScrollable: () => Scrollable;
+  getScrollableContainer: () => dxElementWrapper;
+  getCellData: ($cell: dxElementWrapper) => DroppableCellData;
+  getCellWidth: () => number;
+  getCellHeight: () => number;
+  getGroupCount: () => number;
+  getGroupBounds: (coordinates: WorkSpaceCoordinates) => GroupBoundsOffset | undefined;
+  getPanelDOMSize: (panelName: PanelName) => RealSize;
+  getCollectorDimension: (isCompactCollector: boolean, panelName: PanelName) => CollectorCSS;
+  getAgendaVerticalStepHeight: () => number;
+  createDragBehaviorBase: (
+    targetElement: dxElementWrapper,
+    rootElement: dxElementWrapper,
+    options: Record<string, unknown>,
+  ) => void;
+  removeDroppableCellClass: () => void;
+  keepOriginalHours: () => boolean;
+  getDataByDroppableCell: () => DroppableCellData;
+  getStartViewDate: () => Date | undefined;
+  getEndViewDate: () => Date;
+  scrollTo: (
+    date: Date,
+    groupValuesOrOptions?: ScrollToGroupValuesOrOptions,
+    allDay?: boolean,
+    throwWarning?: boolean,
+    align?: 'start' | 'center',
+  ) => void;
+  focus: () => void;
+}
+
 type SchedulerActionCancel = boolean | PromiseLike<boolean> | DeferredObj<boolean | undefined>;
 
 type SchedulerActionOptions = {
@@ -239,7 +327,6 @@ interface SchedulerActions {
   onAppointmentDeleted: (args: AppointmentCompletedOptions) => void;
   onAppointmentFormOpening: (args: SchedulerEventArgs<AppointmentFormOpeningEvent>) => void;
   onAppointmentTooltipShowing: (args: SchedulerEventArgs<AppointmentTooltipShowingEvent>) => void;
-  onSelectionEnd: (args: SchedulerEventArgs<SelectionEndEvent>) => void;
   onAppointmentRendered: (args: AppointmentRenderedEvent) => void;
   onAppointmentClick: (args: AppointmentClickEvent) => void;
   onAppointmentDblClick: (args: AppointmentDblClickEvent) => void;
@@ -279,15 +366,14 @@ type AppointmentsEditingOptions = Partial<{
 }>;
 
 interface SchedulerAppointmentsHost {
-  option(options: Record<string, unknown>): unknown;
-  option(name: string, value?: unknown): unknown;
-  repaint(): void;
-  $element(): dxElementWrapper;
-  focus(): void;
-  moveAppointmentBack(dragEvent?: SchedulerDragEvent | null): void;
-  updateResizableArea(): void;
-  renderDragClone(...args: unknown[]): dxElementWrapper;
-  getAppointmentData(...args: unknown[]): unknown;
+  option: ((options: Record<string, unknown>) => unknown) & ((name: string, value?: unknown) => unknown);
+  repaint: () => void;
+  $element: () => dxElementWrapper;
+  focus: () => void;
+  moveAppointmentBack: (dragEvent?: SchedulerDragEvent | null) => void;
+  updateResizableArea: () => void;
+  renderDragClone: (...args: unknown[]) => dxElementWrapper;
+  getAppointmentData: (...args: unknown[]) => unknown;
 }
 
 class Scheduler extends SchedulerOptionsBaseWidget {
@@ -305,7 +391,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   // TODO: used externally in m_appointment_drag_behavior.ts,
   // m_subscribes.ts, workspaces/work_space.ts
-  _workSpace!: SchedulerWorkSpace;
+  _workSpace!: SchedulerWorkSpaceLike;
 
   private header?: SchedulerHeader;
 
@@ -320,6 +406,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   declare _dataSource: DataSource | undefined;
 
   // TODO: used externally in workspaces/work_space.ts
+  // eslint-disable-next-line @typescript-eslint/naming-convention -- inherited Widget API
   declare _createComponent: CreateComponentFn;
 
   // TODO: used externally in m_subscribes.ts,
@@ -817,7 +904,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result: DeferredObj<void> = Deferred();
 
     if (this._dataSource) {
-      void this._dataSource.load().then(() => {
+      this._dataSource.load().then(() => {
         hideLoading().catch(noop);
 
         this._fireContentReadyAction(result);
@@ -1107,7 +1194,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
     if (this.isAgenda()) {
-      // @ts-expect-error renderAgendaLayout exists only on agenda workspace
       this._workSpace.renderAgendaLayout?.(viewModel);
     }
   }
@@ -1334,7 +1420,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       resourceManager: this.resourceManager,
       firstDayOfWeek: this.getFirstDayOfWeek(),
       startDayHour: this.option('startDayHour') ?? 0,
-      // @ts-expect-error
       createComponent: this._createComponent.bind(this),
       getCalculatedEndDate: (startDateWithStartHour: Date): Date => (
         this._workSpace.calculateEndDate(startDateWithStartHour)
@@ -1347,7 +1432,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   createAppointmentPopup(form: AppointmentForm): AppointmentPopup {
     const scheduler = {
       getElement: (): dxElementWrapper => this.$element(),
-      // @ts-expect-error
       createComponent: this._createComponent.bind(this),
       focus: (): void => { this.focus(); },
 
@@ -1400,8 +1484,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private getAppointmentTooltipOptions(): AppointmentTooltipOptions {
     return {
-      // @ts-expect-error _createComponent is not defined in ts
-      createComponent: this._createComponent.bind(this),
+      createComponent: this._createComponent.bind(this) as AppointmentTooltipOptions['createComponent'],
       container: this.$element(),
       getScrollableContainer: this.getWorkSpaceScrollableContainer.bind(this),
       addDefaultTemplates: this._templateManager.addDefaultTemplates.bind(this._templateManager),
@@ -1547,7 +1630,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (isHeaderShown) {
       const $header = $('<div>').appendTo(this.mainContainer);
       const headerOptions = this.headerConfig();
-      // @ts-expect-error
       this.header = this._createComponent($header, SchedulerHeader, headerOptions);
     }
   }
@@ -1604,7 +1686,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       ),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
       getViewDataProvider: () => this._workSpace?.viewDataProvider,
-      // @ts-expect-error protected method
       isVerticalGroupedWorkSpace: () => this._workSpace.isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
       onContentReady: () => {
@@ -1629,7 +1710,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this.recalculateWorkspace();
     if (currentViewOptions.startDate) {
-      // @ts-expect-error protected method
       this.updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
   }
@@ -1649,14 +1729,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const workSpaceComponent = VIEWS_CONFIG[currentViewType].workSpace;
     const workSpaceConfig = this.workSpaceConfig(this.currentView);
     // @ts-expect-error
-    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
+    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig) as SchedulerWorkSpaceLike;
 
     if (!this.option('_newAppointments')) {
       if (this.allowDragging()) {
         this._workSpace.initDragBehavior(this);
       }
     }
-    // @ts-expect-error protected method
     this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
@@ -1666,7 +1745,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const workSpaceConfig = this.workSpaceConfig(this.currentView);
     const workSpaceComponent = VIEWS_CONFIG.agenda.workSpace;
     // @ts-expect-error
-    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
+    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig) as SchedulerWorkSpaceLike;
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
 
@@ -1675,7 +1754,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.workSpaceRecalculation = new Deferred();
     triggerResizeEvent(this._workSpace.$element());
     this.waitAsyncTemplate(() => {
-      // @ts-expect-error protected method
       this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
@@ -1722,13 +1800,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onSelectionChanged: (args: { selectedCellData: ViewCellData[] }) => {
         this.option('selectedCellData', args.selectedCellData);
       },
-      onSelectionEnd: (args: { selectedCellData: ViewCellData[] }) => {
-        this.actions.onSelectionEnd({
-          component: this,
-          element: this.$element(),
-          selectedCellData: args.selectedCellData,
-        });
-      },
       groupByDate: Boolean(this.getViewOption('groupByDate')),
       scrolling,
       draggingMode: this.option('_draggingMode'),
@@ -1742,7 +1813,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getHeaderHeight: (): number => this.header?.getHeight() ?? 0,
       onScrollEnd: (): void => {
         if (!this.option('_newAppointments')) {
-          (this._appointments as AppointmentCollection).updateResizableArea();
+          (this._appointments as unknown as AppointmentCollection).updateResizableArea();
         }
       },
       onInitialized: (e) => {
@@ -1750,7 +1821,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.appointmentDragController.createWorkSpaceDraggable(
             $(e.element),
             {
-              getAppointmentData: this._appointments.getAppointmentData.bind(this._appointments),
+              getAppointmentData: this._appointments.getAppointmentData.bind(
+                this._appointments,
+              ) as WorkSpaceDraggableOptions['getAppointmentData'],
             },
           );
         }
@@ -1853,7 +1926,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._workSpace.getScrollableContainer();
   }
 
-  getWorkSpace(): SchedulerWorkSpace | undefined {
+  getWorkSpace(): SchedulerWorkSpaceLike {
     return this._workSpace;
   }
 
@@ -2252,13 +2325,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         } catch (err: unknown) {
           performFailAction(err instanceof Error ? err : undefined);
           this.updatingAppointments.delete(target);
-          return Deferred<void>().resolve().promise();
+          return Deferred().resolve().promise();
         }
       }
 
       performFailAction();
       this.updatingAppointments.delete(target);
-      return Deferred<void>().resolve().promise();
+      return Deferred().resolve().promise();
     });
   }
 
@@ -2314,7 +2387,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   getAppointmentsInstance(): Appointments | AppointmentCollection {
-    return this._appointments as Appointments | AppointmentCollection;
+    return this._appointments as unknown as Appointments | AppointmentCollection;
   }
 
   getLayoutManager(): AppointmentLayoutManager {
@@ -2693,7 +2766,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private validateKeyFieldIfAgendaExist(): void {
-    if (!this.appointmentDataSource.isDataSourceInit) {
+    if (!this.appointmentDataSource?.isDataSourceInit) {
       return;
     }
 
