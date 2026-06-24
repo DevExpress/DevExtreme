@@ -33,7 +33,7 @@ import { quadToObject } from '@js/core/utils/string';
 import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import type { Properties } from '@js/ui/draggable';
+import type { DragMoveEvent, Properties } from '@js/ui/draggable';
 import DOMComponent from '@ts/core/widget/dom_component';
 
 import Animator from './ui/scroll_view/animator';
@@ -284,6 +284,8 @@ class Draggable extends DOMComponent<Draggable, Properties> {
   _$dragElement?: dxElementWrapper | null;
 
   dragInProgress?: boolean;
+
+  _dragMoveArgs?: DragMoveEvent;
 
   _scrollAnimator!: ScrollAnimator;
 
@@ -636,7 +638,6 @@ class Draggable extends DOMComponent<Draggable, Properties> {
 
   _dragStartHandler(e) {
     const $element = this._getDraggableElement(e);
-    this.dragInProgress = true;
 
     if (!this._isValidElement(e, $element)) {
       e.cancel = true;
@@ -654,6 +655,7 @@ class Draggable extends DOMComponent<Draggable, Properties> {
       return;
     }
 
+    this.dragInProgress = true;
     this.option('itemData', dragStartArgs.itemData);
     this._setSourceDraggable();
 
@@ -790,16 +792,15 @@ class Draggable extends DOMComponent<Draggable, Properties> {
   }
 
   _dragMoveHandler(e) {
-    // @ts-expect-error ts-error
+    this._allowNativeScrollingWhenNotDragging(e);
     this._dragMoveArgs = e;
+
     if (!this._$dragElement) {
       e.cancel = true;
       return;
     }
 
-    const offset = this._getDraggableElementOffset(e.offset.x, e.offset.y);
-
-    this._move(offset);
+    this._moveDragElement(e);
     this._updateScrollable(e);
 
     const eventArgs = this._getEventArgs(e);
@@ -809,8 +810,21 @@ class Draggable extends DOMComponent<Draggable, Properties> {
       return;
     }
 
-    const targetDraggable = this._getTargetDraggable();
-    targetDraggable.dragMove(e, scrollBy);
+    this._getTargetDraggable().dragMove(e, scrollBy);
+  }
+
+  // Without an active drag the gesture emitter must not call preventDefault on the
+  // move event, otherwise native scrolling is blocked on touch devices (T1329643).
+  _allowNativeScrollingWhenNotDragging(e): void {
+    if (!this.dragInProgress) {
+      e._cancelPreventDefault = true;
+    }
+  }
+
+  _moveDragElement(e): void {
+    const offset = this._getDraggableElementOffset(e.offset.x, e.offset.y);
+
+    this._move(offset);
   }
 
   _updateScrollable(e) {
@@ -1164,6 +1178,13 @@ class Draggable extends DOMComponent<Draggable, Properties> {
 
     this._getAction('onDragLeave')(args);
   }
+
+  /// #DEBUG
+  // Test-only accessor, removed from production builds.
+  getDragInProgress(): boolean {
+    return !!this.dragInProgress;
+  }
+  /// #ENDDEBUG
 }
 
 registerComponent(DRAGGABLE, Draggable);
