@@ -1004,8 +1004,16 @@ export const ClearButton: Story = {
             setMessages((prev) => [...prev, message]);
         }, []);
 
+        const onClearButtonClick = useCallback(() => {
+            setMessages([]);
+        }, []);
+
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
                 <Chat
                     width={400}
                     height={500}
@@ -1013,6 +1021,7 @@ export const ClearButton: Story = {
                     user={secondAuthor}
                     onMessageEntered={onMessageEntered}
                     showClearButton={showClearButton}
+                    onClearButtonClick={onClearButtonClick}
                 />
             </div>
         );
