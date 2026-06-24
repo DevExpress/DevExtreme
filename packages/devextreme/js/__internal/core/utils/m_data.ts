@@ -72,7 +72,7 @@ export const compileGetter = function (expr) {
 
     if (unsafeFragment !== undefined) {
       return function () {
-        errors.log('E0123', unsafeFragment);
+        errors.log('E0123', 'compileGetter', unsafeFragment);
         // eslint-disable-next-line no-useless-return
         return;
       };
@@ -181,7 +181,7 @@ export const compileSetter = function (expr) {
 
   if (unsafeFragment !== undefined) {
     return function () {
-      errors.log('E0123', unsafeFragment);
+      errors.log('E0123', 'compileSetter', unsafeFragment);
       // eslint-disable-next-line no-useless-return
       return;
     };
