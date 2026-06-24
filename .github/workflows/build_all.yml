@@ -28,9 +28,6 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v6
 
-      - name: Pin Nx machine id
-        uses: ./.github/actions/pin-nx-machine-id
-
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:

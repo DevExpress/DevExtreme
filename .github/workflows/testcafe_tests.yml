@@ -33,7 +33,10 @@ jobs:
         with:
           filters: |
             styles:
-              - 'packages/devextreme-scss/**'
+              - 'packages/devextreme-scss/scss/**'
+              - 'packages/devextreme-scss/icons/**'
+              - 'packages/devextreme-scss/images/**'
+              - 'packages/devextreme-scss/fonts/**'
               - 'packages/devextreme/js/**/themes/**'
               - 'e2e/testcafe-devextreme/helpers/accessibility/**'
 
@@ -223,13 +226,13 @@ jobs:
             { "name": "material - compact", "theme": "material.blue.light.compact" },
 
             { "componentFolder": "cardView", "name": "cardView" },
-            { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true },
-            { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "cache": true },
-            { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true },
-            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true },
+            { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true, "concurrency": 6 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "cache": true, "concurrency": 6 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 6 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 6 },
 
             { "componentFolder": "editors", "name": "editors" },
-            { "componentFolder": "navigation", "name": "navigation" },
+            { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 },
 
             { "componentFolder": "scheduler/common", "name": "scheduler / common (1/3)", "indices": "1/3" },
             { "componentFolder": "scheduler/common", "name": "scheduler / common (2/3)", "indices": "2/3" },

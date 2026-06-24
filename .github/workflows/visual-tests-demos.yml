@@ -789,7 +789,7 @@ jobs:
         CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
         #DEBUG: hammerhead:*,testcafe:*
-        CONCURRENCY: 6
+        CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
         THEME: ${{ matrix.THEME }}
