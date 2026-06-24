@@ -92,14 +92,11 @@ const componentNames = [
 
 window.exports = window.exports || {};
 window.config = {
-  transpiler: 'ts',
-  typescriptOptions: {
-    module: 'system',
-    emitDecoratorMetadata: true,
-    experimentalDecorators: true,
-    ignoreDeprecations: '6.0',
-  },
+  transpiler: false,
   meta: {
+    '*.ts': {
+      loader: 'demo-angular-ts-loader',
+    },
     'typescript': {
       'exports': 'ts',
     },
@@ -159,6 +156,7 @@ window.config = {
     },
   },
   paths: {
+    'project:': '../../../../',
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
@@ -166,7 +164,7 @@ window.config = {
   },
   map: {
     'anti-forgery': 'anti-forgery:fetch-override.js',
-    'ts': 'npm:plugin-typescript/lib/plugin.js',
+    'demo-angular-ts-loader': 'project:utils/demo-angular-ts-loader.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
 
