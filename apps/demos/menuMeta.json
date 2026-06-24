@@ -49,6 +49,7 @@
                 "Widget": "DataGrid",
                 "Badge": "AI",
                 "DemoType": "Web",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "MvcAdditionalFiles": [
                   "/DataProviders/SmartFilterProvider.cs",
                   "/Controllers/ApiControllers/DataGridSemanticSearchController.cs",
@@ -344,6 +345,7 @@
                 "Widget": "DataGrid",
                 "Badge": "AI",
                 "DemoType": "Web",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "MvcAdditionalFiles": [
                   "/DataProviders/SmartFilterProvider.cs",
                   "/Controllers/ApiControllers/DataGridSemanticSearchController.cs",
@@ -818,20 +820,6 @@
                 "DemoType": "Web",
                 "Equivalents": "Smart DataGrid Assistant, Natural Language DataGrid Assistant, Natural Language Data Queries, AI-Powered DataGrid Assistant, AI Copilot for DataGrid, Conversational DataGrid, AI DataGrid Helper, AI-Assisted Data Manipulation",
                 "Modules": "openai"
-              }
-            ]
-          },
-          {
-            "Name": "Semantic Search",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Semantic Search",
-                "Name": "SemanticSearch",
-                "Widget": "DataGrid",
-                "Badge": "AI",
-                "DemoType": "Web",
-                "Equivalents": "AI-Powered Search, Smart Search, Context-Aware Search, Natural Language Search, AI Search, Semantic Retrieval, Similarity Search"
               }
             ]
           },
