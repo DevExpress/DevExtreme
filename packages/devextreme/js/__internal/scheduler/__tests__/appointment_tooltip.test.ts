@@ -438,7 +438,7 @@ describe.each([
 
         const initialTarget = POM.tooltip.target;
 
-        scheduler.addAppointment({
+        await scheduler.addAppointment({
           text: 'New Apt',
           startDate: new Date(2017, 4, 20, 9, 30),
           endDate: new Date(2017, 4, 20, 10, 30),
