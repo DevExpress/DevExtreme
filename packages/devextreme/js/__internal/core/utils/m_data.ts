@@ -176,13 +176,14 @@ export const compileSetter = function (expr) {
   const lastLevelIndex = expr.length - 1;
   const unsafeFragment = expr.find(isUnsafePathFragment);
 
+  if (unsafeFragment !== undefined) {
+    return function () {
+      errors.log('E0123', unsafeFragment);
+    };
+  }
+
   return function (obj, value, options) {
     options = prepareOptions(options);
-
-    if (unsafeFragment !== undefined) {
-      errors.log('E0123', unsafeFragment);
-      return;
-    }
 
     let currentValue = unwrap(obj, options);
 
