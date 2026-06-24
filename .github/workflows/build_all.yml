@@ -4,8 +4,7 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [26_1]
+  merge_group:
   workflow_dispatch:
     inputs:
       SBOM:
