@@ -7,6 +7,7 @@ import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
+import { getOuterHeight } from '@js/core/utils/size';
 import type { ItemClickEvent } from '@js/ui/button_group';
 import type { DateNavigatorTextInfo, ToolbarItem } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
@@ -282,6 +283,10 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     const useShortDateFormat = this.option()._useShortDateFormat;
 
     return getCaption(options, Boolean(useShortDateFormat), customizeDateNavigatorText);
+  }
+
+  public getHeight(): number {
+    return parseInt(getOuterHeight(this.$element()), 10);
   }
 
   public updateDateByDirection(direction: Direction): void {
