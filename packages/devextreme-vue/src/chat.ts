@@ -110,7 +110,6 @@ type AccessibleOptions = Pick<Properties,
   "messageTemplate" |
   "messageTimestampFormat" |
   "onAttachmentDownloadClick" |
-  "onClearButtonClick" |
   "onDisposing" |
   "onInitialized" |
   "onInputFieldTextChanged" |
@@ -166,7 +165,6 @@ const componentConfig = {
     messageTemplate: {},
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     onAttachmentDownloadClick: Function as PropType<((e: AttachmentDownloadClickEvent) => void)>,
-    onClearButtonClick: Function as PropType<(() => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onInputFieldTextChanged: Function as PropType<((e: InputFieldTextChangedEvent) => void)>,
@@ -218,7 +216,6 @@ const componentConfig = {
     "update:messageTemplate": null,
     "update:messageTimestampFormat": null,
     "update:onAttachmentDownloadClick": null,
-    "update:onClearButtonClick": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onInputFieldTextChanged": null,
