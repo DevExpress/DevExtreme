@@ -9,7 +9,7 @@ window.config = {
       loader: false,
     },
     'typescript': {
-      'exports': 'ts',
+      exports: 'ts',
       loader: false,
     },
     'anti-forgery': {
@@ -48,11 +48,11 @@ window.config = {
     /**/
     'react': {
       loader: false,
-      'esModule': true,
+      esModule: true,
     },
     'react-dom': {
       loader: false,
-      'esModule': true,
+      esModule: true,
     },
     'prop-types': {
       loader: false,
