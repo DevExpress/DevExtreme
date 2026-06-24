@@ -103,6 +103,37 @@ window.config = {
     'anti-forgery': {
       loader: 'demo-ts-loader',
     },
+    /** unified */
+    'unified': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-rehype': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-remark': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-minify-whitespace': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
+    /** canvg */
+    'canvg': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': {
       'esModule': true,
