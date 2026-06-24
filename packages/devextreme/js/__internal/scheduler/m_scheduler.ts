@@ -920,10 +920,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result: DeferredObj<void> = Deferred();
 
     if (this._dataSource) {
-      when(fromPromise(this._dataSource.load())).done(() => {
+      // @ts-ignore
+      this._dataSource.load().done(() => {
         hideLoading().catch(noop);
 
         this._fireContentReadyAction(result);
+      // @ts-ignore
       }).fail(() => {
         hideLoading().catch(noop);
         result.reject();
@@ -953,8 +955,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       result?.resolve();
     };
 
-    if (isDeferred(this.workSpaceRecalculation)) {
-      this.workSpaceRecalculation.done(() => {
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    if (this.workSpaceRecalculation) {
+      this.workSpaceRecalculation?.done(() => {
         fireContentReady();
       });
     } else {
@@ -2087,14 +2091,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
 
     if (isPopupEditing) {
+      // @ts-ignore
       this.appointmentPopup.show(singleRawAppointment, {
+        // @ts-ignore
         onSave: (newAppointment) => {
-          const saveResult = when(
-            this.updateAppointment(rawAppointment, appointment.source)
-              .then(() => this.addAppointment(newAppointment as SafeAppointment)),
-          ).done(() => { this.scrollToAppointment(newAppointment as SafeAppointment); });
-
-          return saveResult.promise();
+          // @ts-ignore
+          this.updateAppointment(rawAppointment, appointment.source);
+          // @ts-ignore
+          return when(this.addAppointment(newAppointment as SafeAppointment))
+            .done(() => { this.scrollToAppointment(newAppointment as SafeAppointment); });
         },
         title: messageLocalization.format('dxScheduler-editPopupTitle'),
         readOnly: Boolean(appointment.source) && appointment.disabled,
@@ -2519,13 +2524,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       delete this.editAppointmentData; // TODO
       if (this.editing.allowAdding) {
+        // @ts-ignore
         this.appointmentPopup.show(appointmentData, {
-          onSave: (appointment) => {
-            const saveResult = when(this.addAppointment(appointment as SafeAppointment))
-              .done(() => { this.scrollToAppointment(appointment as SafeAppointment); });
-
-            return saveResult.promise();
-          },
+          // @ts-ignore
+          onSave: (appointment) => (
+            // @ts-ignore
+            when(this.addAppointment(appointment as SafeAppointment))
+              .done(() => { this.scrollToAppointment(appointment as SafeAppointment); })
+          ),
           title: messageLocalization.format('dxScheduler-newPopupTitle'),
           readOnly: false,
         });
@@ -2549,13 +2555,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         const isDisabled = Boolean(adapter.source) && adapter.disabled;
         const readOnly = isDisabled || !this.editing.allowUpdating;
 
+        // @ts-ignore
         this.appointmentPopup.show(appointmentData, {
-          onSave: (appointment) => {
-            const saveResult = when(this.updateAppointment(appointmentData, appointment as SafeAppointment))
-              .done(() => { this.scrollToAppointment(appointment as SafeAppointment); });
-
-            return saveResult.promise();
-          },
+          // @ts-ignore
+          onSave: (appointment) => (
+            // @ts-ignore
+            when(this.updateAppointment(appointmentData, appointment as SafeAppointment))
+              .done(() => { this.scrollToAppointment(appointment as SafeAppointment); })
+          ),
           title: messageLocalization.format('dxScheduler-editPopupTitle'),
           readOnly,
         });
