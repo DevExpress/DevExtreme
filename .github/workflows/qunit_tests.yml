@@ -8,8 +8,7 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [26_1]
+  merge_group:
   workflow_dispatch:
 
 env:
@@ -161,7 +160,7 @@ jobs:
           maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '3' || '' }}
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [
       build,
