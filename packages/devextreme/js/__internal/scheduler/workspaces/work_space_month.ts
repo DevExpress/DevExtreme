@@ -7,7 +7,6 @@ import type { ViewType } from '@js/ui/scheduler';
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
-import { utils } from '../utils';
 import { VIEWS } from '../utils/options/constants_view';
 import type { ViewDateGenerationOptions } from './m_work_space';
 import SchedulerWorkSpace from './work_space_indicator';
@@ -136,8 +135,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   renderRTimeTable(): void {}
 
   renderRDateTable(): void {
-    utils.renovation.renderComponent(
-      this,
+    this.renderRenovatedComponent(
       this.$dateTable,
       DateTableMonthComponent,
       'renovatedDateTable',
