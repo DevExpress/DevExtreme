@@ -920,12 +920,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result: DeferredObj<void> = Deferred();
 
     if (this._dataSource) {
-      // @ts-ignore
-      this._dataSource.load().done(() => {
+      when(fromPromise(this._dataSource.load())).done(() => {
         hideLoading().catch(noop);
 
         this._fireContentReadyAction(result);
-      // @ts-ignore
       }).fail(() => {
         hideLoading().catch(noop);
         result.reject();
@@ -955,10 +953,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       result?.resolve();
     };
 
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    if (this.workSpaceRecalculation) {
-      this.workSpaceRecalculation?.done(() => {
+    if (isDeferred(this.workSpaceRecalculation)) {
+      this.workSpaceRecalculation.done(() => {
         fireContentReady();
       });
     } else {
@@ -1503,6 +1499,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
   }
 
+  private saveAppointmentAndScroll(
+    saveAction: () => PromiseLike<void>,
+    appointment: SafeAppointment,
+  ): PromiseLike<void> {
+    return when(saveAction()).done(() => {
+      this.scrollToAppointment(appointment);
+    }).promise();
+  }
+
   private getAppointmentTooltipOptions(): AppointmentTooltipOptions {
     return {
       createComponent: this._createComponent.bind(this) as AppointmentTooltipOptions['createComponent'],
@@ -1983,11 +1988,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         newAppointmentData,
         startDate,
         () => {
-          this.updateAppointmentCore(
+          when(fromPromise(this.updateAppointmentCore(
             appointmentData,
             newAppointmentData,
-          // @ts-ignore
-          ).always(resolve);
+          ))).always(resolve);
         },
         false,
         undefined,
@@ -1998,16 +2002,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
   }
 
-  // @ts-ignore
   checkRecurringAppointment(
-    rawAppointment,
-    singleAppointment,
-    exceptionDate,
-    callback,
-    isDeleted,
-    isPopupEditing?,
-    dragEvent?,
-    recurrenceEditMode?,
+    rawAppointment: SafeAppointment,
+    singleAppointment: SafeAppointment,
+    exceptionDate: Date,
+    callback: () => void,
+    isDeleted: boolean,
+    isPopupEditing?: boolean,
+    dragEvent?: SchedulerDragEvent | null,
+    recurrenceEditMode?: RecurrenceEditMode,
     onCancel?: () => void,
   ): void {
     const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
@@ -2028,7 +2031,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           singleAppointment,
           exceptionDate,
           isDeleted,
-          isPopupEditing,
+          Boolean(isPopupEditing),
           dragEvent,
         );
         break;
@@ -2039,16 +2042,20 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
         this.showRecurrenceChangeConfirm(isDeleted)
           .done((editingMode) => {
-            editingMode === RECURRENCE_EDITING_MODE.SERIES && callback();
+            if (editingMode === RECURRENCE_EDITING_MODE.SERIES) {
+              callback();
+            }
 
-            editingMode === RECURRENCE_EDITING_MODE.OCCURRENCE && this.excludeAppointmentFromSeries(
-              rawAppointment,
-              singleAppointment,
-              exceptionDate,
-              isDeleted,
-              isPopupEditing,
-              dragEvent,
-            );
+            if (editingMode === RECURRENCE_EDITING_MODE.OCCURRENCE) {
+              this.excludeAppointmentFromSeries(
+                rawAppointment,
+                singleAppointment,
+                exceptionDate,
+                isDeleted,
+                Boolean(isPopupEditing),
+                dragEvent,
+              );
+            }
           })
           .fail(() => {
             if (this.option('_newAppointments')) {
@@ -2089,15 +2096,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
 
     if (isPopupEditing) {
-      // @ts-ignore
       this.appointmentPopup.show(singleRawAppointment, {
-        // @ts-ignore
         onSave: (newAppointment) => {
-          // @ts-ignore
-          this.updateAppointment(rawAppointment, appointment.source);
-          // @ts-ignore
-          return when(this.addAppointment(newAppointment as SafeAppointment))
-            .done(() => { this.scrollToAppointment(newAppointment as SafeAppointment); });
+          this.updateAppointment(rawAppointment, appointment.source).catch(noop);
+          return this.saveAppointmentAndScroll(
+            () => this.addAppointment(newAppointment as SafeAppointment),
+            newAppointment as SafeAppointment,
+          );
         },
         title: messageLocalization.format('dxScheduler-editPopupTitle'),
         readOnly: Boolean(appointment.source) && appointment.disabled,
@@ -2304,20 +2309,24 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._workSpace.getDataByDroppableCell();
   }
 
-  // @ts-ignore
-  updateAppointmentCore(target, rawAppointment, onUpdatePrevented?, dragEvent?) {
+  updateAppointmentCore(
+    target: SafeAppointment,
+    rawAppointment: SafeAppointment,
+    onUpdatePrevented?: () => void,
+    dragEvent?: SchedulerDragEvent | null,
+  ): Promise<void> {
     const updatingOptions = {
       newData: rawAppointment,
       oldData: extend({}, target),
       cancel: false,
     };
 
-    const performFailAction = function (err?) {
+    const performFailAction = function performFailAction(this: Scheduler, err?: Error): void {
       if (onUpdatePrevented) {
         onUpdatePrevented.call(this);
       }
 
-      if (err && err.name === 'Error') {
+      if (err?.name === 'Error') {
         throw err;
       }
     }.bind(this);
@@ -2325,17 +2334,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.actions[StoreEventNames.UPDATING](updatingOptions);
 
     if (dragEvent && !isDeferred(dragEvent.cancel)) {
-      // @ts-expect-error
-      dragEvent.cancel = new Deferred();
+      dragEvent.cancel = Deferred<boolean>();
     }
 
     if (isPromise(updatingOptions.cancel) && (dragEvent || this.option('_newAppointments'))) {
       this.updatingAppointments.add(target);
     }
 
-    return this.processActionResult(updatingOptions, function (canceled) {
-      // @ts-expect-error
-      let deferred = new Deferred();
+    return this.processActionResult(updatingOptions, function onUpdate(this: Scheduler, canceled) {
+      let deferred: DeferredObj<unknown> = Deferred();
 
       if (!canceled) {
         this.expandAllDayPanel(rawAppointment);
@@ -2344,15 +2351,18 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           deferred = this.appointmentDataSource
             .update(target, rawAppointment)
             .done(() => {
-              dragEvent?.cancel.resolve(false);
+              dragEvent?.cancel?.resolve(false);
             })
             .always((storeAppointment) => {
               this.updatingAppointments.delete(target);
-              this.onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment);
+              this.onDataPromiseCompleted(
+                StoreEventNames.UPDATED,
+                storeAppointment as SafeAppointment,
+              );
             })
             .fail(() => performFailAction());
-        } catch (err) {
-          performFailAction(err);
+        } catch (err: unknown) {
+          performFailAction(err instanceof Error ? err : undefined);
           this.updatingAppointments.delete(target);
           deferred.resolve();
         }
@@ -2499,47 +2509,62 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.showAppointmentPopup(resultAppointment, true);
   }
 
-  // @ts-ignore
-  showAppointmentPopup(rawAppointment?, createNewAppointment?, rawTargetedAppointment?) {
-    const newRawTargetedAppointment = { ...rawTargetedAppointment };
-    if (newRawTargetedAppointment) {
+  showAppointmentPopup(
+    rawAppointment?: SafeAppointment,
+    createNewAppointment?: boolean,
+    rawTargetedAppointment?: SafeAppointment | TargetedAppointment,
+  ): void {
+    const newRawTargetedAppointment: SafeAppointment = rawTargetedAppointment
+      ? { ...rawTargetedAppointment }
+      : {} as SafeAppointment;
+    if (rawTargetedAppointment) {
       delete newRawTargetedAppointment.displayStartDate;
       delete newRawTargetedAppointment.displayEndDate;
     }
 
-    const newTargetedAppointment = extend({}, rawAppointment, newRawTargetedAppointment);
+    const newTargetedAppointment = extend(
+      {},
+      rawAppointment,
+      newRawTargetedAppointment,
+    ) as SafeAppointment;
 
     const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 
-    if (isEmptyObject(rawAppointment)) {
-      rawAppointment = this.createPopupAppointment();
+    let appointment: SafeAppointment = rawAppointment ?? {} as SafeAppointment;
+    if (isEmptyObject(appointment)) {
+      appointment = this.createPopupAppointment();
     }
 
     if (isCreateAppointment) {
       delete this.editAppointmentData; // TODO
       if (this.editing.allowAdding) {
-        this.appointmentPopup.show(rawAppointment, {
-          // @ts-ignore
-          onSave: (appointment) => when(this.addAppointment(appointment))
-            .done(() => { this.scrollToAppointment(appointment); }),
+        this.appointmentPopup.show(appointment, {
+          onSave: (appointmentData) => this.saveAppointmentAndScroll(
+            () => this.addAppointment(appointmentData as SafeAppointment),
+            appointmentData as SafeAppointment,
+          ),
           title: messageLocalization.format('dxScheduler-newPopupTitle'),
           readOnly: false,
         });
       }
     } else {
-      const startDate = this._dataAccessors.get('startDate', newRawTargetedAppointment || rawAppointment);
+      const startDate = this._dataAccessors.get(
+        'startDate',
+        Object.keys(newRawTargetedAppointment).length ? newRawTargetedAppointment : appointment,
+      );
 
-      this.checkRecurringAppointment(rawAppointment, newTargetedAppointment, startDate, () => {
-        this.editAppointmentData = rawAppointment; // TODO
+      this.checkRecurringAppointment(appointment, newTargetedAppointment, startDate, () => {
+        this.editAppointmentData = appointment; // TODO
 
-        const adapter = new AppointmentAdapter(rawAppointment, this._dataAccessors);
+        const adapter = new AppointmentAdapter(appointment, this._dataAccessors);
         const isDisabled = Boolean(adapter.source) && adapter.disabled;
         const readOnly = isDisabled || !this.editing.allowUpdating;
 
-        this.appointmentPopup.show(rawAppointment, {
-          // @ts-ignore
-          onSave: (appointment) => when(this.updateAppointment(rawAppointment, appointment))
-            .done(() => { this.scrollToAppointment(appointment); }),
+        this.appointmentPopup.show(appointment, {
+          onSave: (appointmentData) => this.saveAppointmentAndScroll(
+            () => this.updateAppointment(appointment, appointmentData as SafeAppointment),
+            appointmentData as SafeAppointment,
+          ),
           title: messageLocalization.format('dxScheduler-editPopupTitle'),
           readOnly,
         });
@@ -2820,7 +2845,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (Scheduler as any).include(DataHelperMixin);
 
-// @ts-ignore
+// @ts-expect-error DataHelperMixin changes Scheduler prototype
 registerComponent('dxScheduler', Scheduler);
 
 export default Scheduler;
