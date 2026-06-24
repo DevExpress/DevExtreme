@@ -110,6 +110,7 @@ type AccessibleOptions = Pick<Properties,
   "messageTemplate" |
   "messageTimestampFormat" |
   "onAttachmentDownloadClick" |
+  "onClearButtonClick" |
   "onDisposing" |
   "onInitialized" |
   "onInputFieldTextChanged" |
@@ -127,6 +128,7 @@ type AccessibleOptions = Pick<Properties,
   "rtlEnabled" |
   "sendButtonOptions" |
   "showAvatar" |
+  "showClearButton" |
   "showDayHeaders" |
   "showMessageTimestamp" |
   "showUserName" |
@@ -164,6 +166,7 @@ const componentConfig = {
     messageTemplate: {},
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     onAttachmentDownloadClick: Function as PropType<((e: AttachmentDownloadClickEvent) => void)>,
+    onClearButtonClick: Function as PropType<(() => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onInputFieldTextChanged: Function as PropType<((e: InputFieldTextChangedEvent) => void)>,
@@ -181,6 +184,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     sendButtonOptions: Object as PropType<SendButtonProperties | Record<string, any>>,
     showAvatar: Boolean,
+    showClearButton: Boolean,
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
@@ -214,6 +218,7 @@ const componentConfig = {
     "update:messageTemplate": null,
     "update:messageTimestampFormat": null,
     "update:onAttachmentDownloadClick": null,
+    "update:onClearButtonClick": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onInputFieldTextChanged": null,
@@ -231,6 +236,7 @@ const componentConfig = {
     "update:rtlEnabled": null,
     "update:sendButtonOptions": null,
     "update:showAvatar": null,
+    "update:showClearButton": null,
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
     "update:showUserName": null,

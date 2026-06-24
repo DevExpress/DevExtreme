@@ -644,6 +644,19 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    showClearButton?: boolean;
+    /**
+     * @docid
+     * @default undefined
+     * @action
+     * @public
+     */
+    onClearButtonClick?: (() => void) | undefined;
 }
 
 /**
