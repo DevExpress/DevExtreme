@@ -70,12 +70,15 @@ export const compileGetter = function (expr) {
     const path = getPathParts(expr);
     const unsafeFragment = path.find(isUnsafePathFragment);
 
-    return function (obj, options) {
-      if (unsafeFragment !== undefined) {
+    if (unsafeFragment !== undefined) {
+      return function () {
         errors.log('E0123', unsafeFragment);
+        // eslint-disable-next-line no-useless-return
         return;
-      }
+      };
+    }
 
+    return function (obj, options) {
       options = prepareOptions(options);
       const functionAsIs = options.functionsAsIs;
       const hasDefaultValue = 'defaultValue' in options;
@@ -179,6 +182,8 @@ export const compileSetter = function (expr) {
   if (unsafeFragment !== undefined) {
     return function () {
       errors.log('E0123', unsafeFragment);
+      // eslint-disable-next-line no-useless-return
+      return;
     };
   }
 

@@ -527,7 +527,24 @@ QUnit.module('prototype pollution protection', {
         assert.strictEqual(errors.log.called, false, 'should not log for safe paths');
     });
 
-    test('compileGetter logs error and returns undefined for __proto__ path fragment (T1330839)', function(assert) {
+    test('compileSetter blocks unsafe fragment written in bracket notation (T1330839)', function(assert) {
+        const obj = {};
+        SETTER('a[constructor][prototype].pp_dx')(obj, 'yes', { functionsAsIs: true });
+
+        assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor in bracket notation');
+        assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
+    });
+
+    test('compileSetter blocks unsafe fragment in non-first position (T1330839)', function(assert) {
+        const obj = { a: { b: {} } };
+        SETTER('a.b.__proto__')(obj, { pp_dx: 'yes' }, { functionsAsIs: true });
+
+        assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__ in non-first position');
+        assert.strictEqual(obj.a.b.pp_dx, undefined, 'nested object must not inherit a polluted property');
+        assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
+    });
+
+    test('compileGetter logs error and returns undefined for __proto__ path fragent (T1330839)', function(assert) {
         const result = GETTER('__proto__.pp_dx')({});
 
         assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__');
