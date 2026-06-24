@@ -3,7 +3,7 @@
 const {
   ensureTypeScript,
   transpileToSystemRegister,
-} = require('demo-ts-shared');
+} = require('./demo-ts-shared');
 
 module.exports.translate = function translate(load) {
   const parentName = load.name || load.address;

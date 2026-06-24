@@ -3,7 +3,7 @@
 const {
   ensureTypeScript,
   getDemoTsCompilerOptions,
-} = require('demo-ts-shared');
+} = require('./demo-ts-shared');
 
 const DX_SYSTEMJS_VUE_BROWSER = 'npm:dx-systemjs-vue-browser/index.js';
 
