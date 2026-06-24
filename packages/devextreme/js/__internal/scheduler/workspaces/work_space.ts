@@ -319,6 +319,7 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   onCellClick: ((e: CellClickEvent) => void) | undefined;
   onCellContextMenu: ((e: CellContextMenuEvent) => void) | undefined;
   currentDate: Date;
+  cellDuration: number;
   hoursInterval: number;
   allDayExpanded: boolean;
 
@@ -2620,6 +2621,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDayHour: 24,
       viewOffset: 0,
       hoursInterval: 0.5,
+      cellDuration: 30,
       activeStateEnabled: true,
       hoverStateEnabled: true,
       groups: [],
