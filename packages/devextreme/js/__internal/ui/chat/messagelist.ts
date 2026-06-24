@@ -13,6 +13,8 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
+import type { Properties as ButtonProperties } from '@js/ui/button';
+import Button from '@js/ui/button';
 import type {
   AttachmentDownloadClickEvent, Message, TextMessage, User,
 } from '@js/ui/chat';
@@ -48,6 +50,9 @@ const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 const CHAT_MESSAGELIST_EMPTY_LOADING_CLASS = 'dx-chat-messagelist-empty-loading';
+const CHAT_MESSAGELIST_SCROLL_TO_BOTTOM_BUTTON_CLASS = 'dx-chat-messagelist-scroll-to-bottom-button';
+const CHAT_MESSAGELIST_SCROLL_TO_BOTTOM_BUTTON_VISIBLE_CLASS = 'dx-chat-messagelist-scroll-to-bottom-button-visible';
+const SCROLL_TO_BOTTOM_THRESHOLD = 0.15;
 
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 export const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
@@ -123,6 +128,8 @@ class MessageList extends Widget<Properties> {
 
   private _contextMenu!: ContextMenu;
 
+  private _scrollToBottomButton!: Button;
+
   private _$content!: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
@@ -163,6 +170,7 @@ class MessageList extends Widget<Properties> {
     this._renderMessageGroups();
     this._renderTypingIndicator();
     this._renderContextMenu();
+    this._renderScrollToBottomButton();
 
     this._updateAria();
     this._scrollDownContent();
@@ -411,7 +419,48 @@ class MessageList extends Widget<Properties> {
       bounceEnabled: false,
       reachBottomText: '',
       onReachBottom: noop,
+      onScroll: () => {
+        this._updateScrollToBottomButtonVisibility();
+      },
     });
+  }
+
+  _renderScrollToBottomButton(): void {
+    const $buttonContainer = $('<div>')
+      .addClass(CHAT_MESSAGELIST_SCROLL_TO_BOTTOM_BUTTON_CLASS)
+      .appendTo(this.$element());
+
+    this._scrollToBottomButton = this._createComponent<Button, ButtonProperties>(
+      $buttonContainer,
+      Button,
+      {
+        icon: 'arrowdown',
+        stylingMode: 'contained',
+        elementAttr: {
+          'aria-label': messageLocalization.format('dxChat-scrollToBottomButtonAriaLabel'),
+        },
+        onClick: () => {
+          this._scrollDownContent();
+        },
+      },
+    );
+  }
+
+  _updateScrollToBottomButtonVisibility(): void {
+    if (!this._scrollToBottomButton) {
+      return;
+    }
+
+    const container = this._scrollableContainer();
+    const maxScroll = getScrollTopMax(container);
+    const threshold = container.clientHeight * SCROLL_TO_BOTTOM_THRESHOLD;
+    const distanceFromBottom = maxScroll - container.scrollTop;
+    const isVisible = this._isContentOverflowing() && distanceFromBottom > threshold;
+
+    this._scrollToBottomButton.$element().toggleClass(
+      CHAT_MESSAGELIST_SCROLL_TO_BOTTOM_BUTTON_VISIBLE_CLASS,
+      isVisible,
+    );
   }
 
   _shouldAddDayHeader(timestamp: undefined | string | number | Date): boolean {

@@ -103,6 +103,9 @@
   $chat-messagelist-contextmenu-delete-button-focused-color,
   $chat-messagelist-contextmenu-delete-button-focused-bg,
 );
+@include chat-messagelist-scroll-to-bottom-button(
+  $chat-scroll-to-bottom-button-box-shadow,
+);
 @include chat-typingindicator(
   $chat-typingindicator-template,
   $chat-typingindicator-padding,
