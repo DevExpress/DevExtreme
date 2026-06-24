@@ -15,7 +15,7 @@ env:
 
 jobs:
   test:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     env:
       NODE_OPTIONS: --max-old-space-size=8192
     timeout-minutes: 30
@@ -70,7 +70,7 @@ jobs:
       run: pnpm exec stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [test]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
