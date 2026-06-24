@@ -8,15 +8,14 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [26_1]
+  merge_group:
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
 
 jobs:
   TS:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -71,7 +70,7 @@ jobs:
       run: pnpm exec nx lint
 
   JS:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -113,7 +112,7 @@ jobs:
       run: pnpm exec nx lint-js
 
   texts:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -149,7 +148,7 @@ jobs:
       run: pnpm exec nx lint-texts
 
   component_exports:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
     - name: Get sources
@@ -231,7 +230,7 @@ jobs:
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [TS, JS, texts, component_exports]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
