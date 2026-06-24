@@ -33,7 +33,7 @@ import { quadToObject } from '@js/core/utils/string';
 import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import type { DragMoveEvent, Properties } from '@js/ui/draggable';
+import type { Properties } from '@js/ui/draggable';
 import DOMComponent from '@ts/core/widget/dom_component';
 
 import Animator from './ui/scroll_view/animator';
@@ -285,7 +285,7 @@ class Draggable extends DOMComponent<Draggable, Properties> {
 
   dragInProgress?: boolean;
 
-  _dragMoveArgs?: DragMoveEvent;
+  _dragMoveArgs?: any;
 
   _scrollAnimator!: ScrollAnimator;
 
