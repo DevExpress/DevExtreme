@@ -1,3 +1,1 @@
-/* global */
-
-module.exports.translate = require('./demo-ts-loader').translate;
+module.exports.translate = require('demo-ts-loader').translate;
