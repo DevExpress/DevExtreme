@@ -1557,7 +1557,14 @@
         "script": "lint-texts"
       },
       "inputs": [
-        "{projectRoot}/js/**/*",
+        "{projectRoot}/**/*",
+        "!{projectRoot}/**/*.{js,ts,tsx}",
+        "!{projectRoot}/artifacts/**",
+        "!{projectRoot}/build/**",
+        "!{projectRoot}/fonts/**",
+        "!{projectRoot}/icons/**",
+        "!{projectRoot}/localization/**",
+        "!{projectRoot}/node_modules/**",
         "{projectRoot}/build/linters/validate-non-latin-symbols.js",
         "{projectRoot}/.gitignore"
       ]
