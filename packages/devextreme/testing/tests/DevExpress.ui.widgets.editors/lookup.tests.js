@@ -2555,6 +2555,23 @@ QUnit.module('popup options', {
             }
         });
     });
+
+    QUnit.test('should not log W0017 deprecation warning on popup open for function-valued width/height (T1330990)', function(assert) {
+        const logStub = sinon.stub(errors, 'log');
+
+        try {
+            $('#lookup').dxLookup({
+                items: [1, 2, 3],
+                opened: true,
+            });
+
+            const warningCalls = logStub.args.filter(args => args[0] === 'W0017');
+
+            assert.strictEqual(warningCalls.length, 0, 'no W0017 warnings should be logged when opening the popup');
+        } finally {
+            logStub.restore();
+        }
+    });
 });
 
 QUnit.module('list options', {

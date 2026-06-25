@@ -8,15 +8,14 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [26_1]
+  merge_group:
 
 env:
   MAX_LENGTH: 170
 
 jobs:
   checks:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
     - name: Get sources
@@ -31,7 +30,7 @@ jobs:
     #     if (( ${#RESULT} )); then printf "The following filenames are longer than $MAX_LENGTH characters:\n${RESULT}" && exit 1; fi;
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [checks]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
