@@ -27,11 +27,11 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IDropDownButtonOptionsNarrowedEvents = {
-  onButtonClick?: ((e: ButtonClickEvent) => void) | null;
+  onButtonClick?: ((e: ButtonClickEvent) => void);
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onItemClick?: ((e: ItemClickEvent) => void) | null;
+  onItemClick?: ((e: ItemClickEvent) => void);
 }
 
 type IDropDownButtonOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDropDownButtonOptionsNarrowedEvents> & IHtmlOptions & {
@@ -345,7 +345,7 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  onClick?: ((e: ItemClickEvent) => void) | null;
+  onClick?: ((e: ItemClickEvent) => void);
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;

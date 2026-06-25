@@ -79,10 +79,10 @@ export class DxiDropDownButtonItemComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get onClick(): ((e: ItemClickEvent) => void) | null {
+    get onClick(): ((e: ItemClickEvent) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: ItemClickEvent) => void) | null) {
+    set onClick(value: ((e: ItemClickEvent) => void)) {
         this._setOption('onClick', value);
     }
 

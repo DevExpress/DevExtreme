@@ -213,7 +213,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @default null
-     * @type function | null
+     * @type function
      * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
      * @action
      * @public
@@ -222,7 +222,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @default null
-     * @type function | null
+     * @type function
      * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
      * @action
      * @public
@@ -231,7 +231,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @default null
-     * @type function | null
+     * @type function
      * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
      * @action
      * @public
@@ -363,7 +363,7 @@ export interface dxDropDownButtonItem extends dxListItem {
     /**
      * @docid
      * @default null
-     * @type function | null
+     * @type function
      * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
      * @public
      */
