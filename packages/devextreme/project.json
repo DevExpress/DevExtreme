@@ -1559,6 +1559,7 @@
       "inputs": [
         "{projectRoot}/**/*",
         "!{projectRoot}/**/*.{js,ts,tsx}",
+        "!{projectRoot}/**/*.{jpg,gif,ico,png}",
         "!{projectRoot}/artifacts/**",
         "!{projectRoot}/build/**",
         "!{projectRoot}/fonts/**",
