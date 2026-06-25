@@ -193,11 +193,11 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @type Array<dxDropDownButtonItem | any>
+     * @type Array<dxDropDownButtonItem | any> | null
      * @default null
      * @public
      */
-    items?: Array<Item | any>;
+    items?: Array<Item | any> | null;
     /**
      * @docid
      * @default 'this'
@@ -213,30 +213,30 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @default null
-     * @type function
+     * @type function | null
      * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
      * @action
      * @public
      */
-    onButtonClick?: ((e: ButtonClickEvent) => void) | string;
+    onButtonClick?: ((e: ButtonClickEvent) => void) | string | null;
     /**
      * @docid
      * @default null
-     * @type function
+     * @type function | null
      * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent) => void) | string;
+    onItemClick?: ((e: ItemClickEvent) => void) | string | null;
     /**
      * @docid
      * @default null
-     * @type function
+     * @type function | null
      * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | string;
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | string | null;
     /**
      * @docid
      * @default false
@@ -249,13 +249,13 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @readonly
      * @public
      */
-    selectedItem?: string | number | any;
+    selectedItem?: string | number | any | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    selectedItemKey?: string | number;
+    selectedItemKey?: string | number | null;
     /**
      * @docid
      * @default true
@@ -363,11 +363,11 @@ export interface dxDropDownButtonItem extends dxListItem {
     /**
      * @docid
      * @default null
-     * @type function
+     * @type function | null
      * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
      * @public
      */
-     onClick?: ((e: ItemClickEvent) => void) | string;
+     onClick?: ((e: ItemClickEvent) => void) | string | null;
 }
 
 /** @public */

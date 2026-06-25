@@ -61,6 +61,7 @@ Ng.makeMetadata({
     removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),
     removeMembers(/\/form:FormPredefinedButtonItem/),
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
+    removeMembers(/\/drop_down_button/),
     removeMembers(/\/load_panel:dxLoadPanelOptions.indicatorOptions/),
     removeMembers(/\/grids:LoadPanel.indicatorOptions/),
     removeMembers(/\/popup:dxPopupOptions.tabFocusLoopEnabled/),
