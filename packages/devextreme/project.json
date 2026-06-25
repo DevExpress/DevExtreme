@@ -1495,6 +1495,15 @@
       ],
       "cache": true
     },
+    "lint": {
+      "executor": "nx:noop",
+      "dependsOn": [
+        "lint-js",
+        "lint-ts",
+        "lint-dts",
+        "lint-texts"
+      ]
+    },
     "lint-css": {
       "executor": "nx:run-script",
       "options": {
@@ -1540,6 +1549,17 @@
         "{projectRoot}/**/*.ts?(x)",
         "{projectRoot}/.eslint*",
         "!{projectRoot}/**/*.d.ts"
+      ]
+    },
+    "lint-texts": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-texts"
+      },
+      "inputs": [
+        "{projectRoot}/js/**/*",
+        "{projectRoot}/build/linters/validate-non-latin-symbols.js",
+        "{projectRoot}/.gitignore"
       ]
     },
     "test-jest": {

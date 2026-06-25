@@ -178,7 +178,6 @@
     "minimist": "1.2.8",
     "nconf": "0.12.1",
     "normalize-path": "3.0.0",
-    "npm-run-all2": "5.0.2",
     "opentype.js": "1.3.4",
     "plugin-error": "2.0.1",
     "qunit": "2.25.0",
@@ -214,7 +213,7 @@
   },
   "scripts": {
     "clean": "gulp clean",
-    "lint": "npm-run-all -p -c lint-js lint-ts lint-dts lint-texts",
+    "lint": "nx lint",
     "lint-js": "eslint --quiet '**/*.js'",
     "lint-ts": "eslint --quiet '**/*.{tsx,ts}' --ignore-pattern '**/*.d.ts'",
     "lint-dts": "eslint './js/**/*.d.ts'",
