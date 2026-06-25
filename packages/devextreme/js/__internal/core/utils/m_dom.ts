@@ -23,6 +23,10 @@ const getRootNodeHost = (element) => {
   return host;
 };
 
+// Returns the parent node, stepping from a shadow root to its host so callers can
+// walk out of a shadow tree (T1329805).
+export const getParentNode = (node) => node.parentNode ?? getRootNodeHost(node) ?? null;
+
 export const resetActiveElement = () => {
   const activeElement = domAdapter.getActiveElement();
 
@@ -178,6 +182,7 @@ export default {
   normalizeTemplateElement,
   clipboardText,
   contains,
+  getParentNode,
   createTextElementHiddenCopy,
   insertBefore,
   replaceWith,
