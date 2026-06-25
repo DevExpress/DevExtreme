@@ -1439,6 +1439,33 @@
       ],
       "cache": true
     },
+    "build:dev": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build:dev"
+      },
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "internalPackageEnv",
+        {
+          "env": "DEVEXTREME_TEST_CI"
+        },
+        "default",
+        "!{projectRoot}/js/__internal/core/localization/cldr-data/**/*",
+        "!{projectRoot}/js/__internal/core/localization/default_messages.ts",
+        "test",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts",
+        "{projectRoot}/build/bundle-templates/dx.custom.js",
+        "{projectRoot}/js/__internal/core/localization/cldr-data",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts"
+      ],
+      "cache": true
+    },
     "dev": {
       "executor": "nx:run-script",
       "options": {
