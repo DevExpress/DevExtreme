@@ -15,6 +15,7 @@ export interface LayoutProps extends PropsWithViewContext {
   addDateTableClass: boolean;
   addVerticalSizesClassToRows: boolean;
   width?: number;
+  rowHeights?: number[];
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
 

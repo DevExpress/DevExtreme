@@ -1,5 +1,6 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 
+import { renderUtils } from '../../utils/index';
 import type { GroupPanelRowProps } from './group_panel_props';
 import { GroupPanelRowDefaultProps } from './group_panel_props';
 import { GroupPanelVerticalCell } from './group_panel_vertical_cell';
@@ -9,11 +10,18 @@ export class GroupPanelVerticalRow extends BaseInfernoComponent<GroupPanelRowPro
     const {
       className,
       groupItems,
+      height,
       cellTemplate,
     } = this.props;
+    const styles = height === undefined
+      ? undefined
+      : normalizeStyles(renderUtils.addHeightToStyle(height));
 
     return (
-      <div className={`dx-scheduler-group-row ${className}`}>
+      <div
+        className={`dx-scheduler-group-row ${className}`}
+        style={styles}
+      >
         {
           groupItems.map(({
             color,
