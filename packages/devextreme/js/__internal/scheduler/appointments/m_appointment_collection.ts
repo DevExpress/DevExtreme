@@ -200,7 +200,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   public getAppointmentSettings($item: dxElementWrapper): AppointmentViewModelPlain {
-    return $item.data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain;
+    return $($item).data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain;
   }
 
   _moveFocus() {}
