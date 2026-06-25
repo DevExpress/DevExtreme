@@ -496,7 +496,7 @@ QUnit.module('prototype pollution protection', {
         const obj = {};
         SETTER('__proto__.pp_dx')(obj, 'yes', { functionsAsIs: true });
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileSetter', '__proto__'), true, 'should log E0123 for __proto__');
+        assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__');
         assert.strictEqual(obj.pp_dx, undefined, 'target object must not be modified');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
@@ -505,7 +505,7 @@ QUnit.module('prototype pollution protection', {
         const obj = {};
         SETTER('constructor.prototype.pp_dx')(obj, 'yes', { functionsAsIs: true });
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileSetter', 'constructor'), true, 'should log E0123 for constructor');
+        assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
         assert.strictEqual(obj.pp_dx, undefined, 'target object must not be modified');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
@@ -514,7 +514,7 @@ QUnit.module('prototype pollution protection', {
         const fn = function() {};
         SETTER('prototype.pp_dx')(fn, 'yes', { functionsAsIs: true });
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileSetter', 'prototype'), true, 'should log E0123 for prototype');
+        assert.strictEqual(errors.log.calledWith('E0123', 'prototype'), true, 'should log E0123 for prototype');
         assert.strictEqual(fn.pp_dx, undefined, 'function object must not be modified');
         assert.strictEqual(fn.prototype.pp_dx, undefined, 'function prototype must not be modified');
     });
@@ -539,7 +539,7 @@ QUnit.module('prototype pollution protection', {
         const obj = {};
         SETTER('a[constructor][prototype].pp_dx')(obj, 'yes', { functionsAsIs: true });
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileSetter', 'constructor'), true, 'should log E0123 for constructor in bracket notation');
+        assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor in bracket notation');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
 
@@ -547,7 +547,7 @@ QUnit.module('prototype pollution protection', {
         const obj = { a: { b: {} } };
         SETTER('a.b.__proto__')(obj, { pp_dx: 'yes' }, { functionsAsIs: true });
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileSetter', '__proto__'), true, 'should log E0123 for __proto__ in non-first position');
+        assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__ in non-first position');
         assert.strictEqual(obj.a.b.pp_dx, undefined, 'nested object must not inherit a polluted property');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
     });
@@ -555,21 +555,21 @@ QUnit.module('prototype pollution protection', {
     test('compileGetter logs error and returns undefined for __proto__ path fragent (T1330839)', function(assert) {
         const result = GETTER('__proto__.pp_dx')({});
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileGetter', '__proto__'), true, 'should log E0123 for __proto__');
+        assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__');
         assert.strictEqual(result, undefined, 'getter must return undefined for __proto__');
     });
 
     test('compileGetter logs error and returns undefined for constructor path fragment (T1330839)', function(assert) {
         const result = GETTER('constructor.prototype')(function() {});
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileGetter', 'constructor'), true, 'should log E0123 for constructor');
+        assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
         assert.strictEqual(result, undefined, 'getter must return undefined for constructor');
     });
 
     test('compileGetter logs error and returns undefined for prototype path fragment (T1330839)', function(assert) {
         const result = GETTER('prototype.pp_dx')(function() {});
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileGetter', 'prototype'), true, 'should log E0123 for prototype');
+        assert.strictEqual(errors.log.calledWith('E0123', 'prototype'), true, 'should log E0123 for prototype');
         assert.strictEqual(result, undefined, 'getter must return undefined for prototype');
     });
 
@@ -585,7 +585,7 @@ QUnit.module('prototype pollution protection', {
         const obj = { safe: 'value' };
         const result = GETTER(['__proto__.pp_dx', 'safe'])(obj);
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileGetter', '__proto__'), true, 'should log E0123 for __proto__');
+        assert.strictEqual(errors.log.calledWith('E0123', '__proto__'), true, 'should log E0123 for __proto__');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
         assert.deepEqual(result, { safe: 'value' }, 'safe field must still be returned');
     });
@@ -594,7 +594,7 @@ QUnit.module('prototype pollution protection', {
         const obj = { safe: 'value' };
         const result = GETTER(['constructor.prototype.pp_dx', 'safe'])(obj);
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileGetter', 'constructor'), true, 'should log E0123 for constructor');
+        assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
         assert.strictEqual(({}).pp_dx, undefined, 'Object.prototype must not be polluted');
         assert.deepEqual(result, { safe: 'value' }, 'safe field must still be returned');
     });
@@ -603,7 +603,7 @@ QUnit.module('prototype pollution protection', {
         const obj = { a: null, safe: 'value' };
         const result = GETTER(['a.constructor.prototype.pp_dx2', 'safe'])(obj, { defaultValue: 'default' });
 
-        assert.strictEqual(errors.log.calledWith('E0123', 'compileGetter', 'constructor'), true, 'should log E0123 for constructor');
+        assert.strictEqual(errors.log.calledWith('E0123', 'constructor'), true, 'should log E0123 for constructor');
         assert.strictEqual(({}).pp_dx2, undefined, 'Object.prototype must not be polluted');
         assert.deepEqual(result, { safe: 'value' }, 'safe field must still be returned');
     });

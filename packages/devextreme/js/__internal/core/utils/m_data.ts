@@ -72,7 +72,7 @@ export const compileGetter = function (expr) {
     const unsafeFragment = path.find(isUnsafePathFragment);
 
     if (unsafeFragment !== undefined) {
-      errors.log('E0123', 'compileGetter', unsafeFragment);
+      errors.log('E0123', unsafeFragment);
       return function () {
         // eslint-disable-next-line no-useless-return
         return;
@@ -87,7 +87,7 @@ export const compileGetter = function (expr) {
 
       for (let i = 0; i < path.length; i++) {
         if (isUnsafePrototypeAccess(current, path[i])) {
-          errors.log('E0123', 'compileGetter', path[i]);
+          errors.log('E0123', path[i]);
           return;
         }
 
@@ -186,7 +186,7 @@ export const compileSetter = function (expr) {
   const unsafeFragment = expr.find(isUnsafePathFragment);
 
   if (unsafeFragment !== undefined) {
-    errors.log('E0123', 'compileSetter', unsafeFragment);
+    errors.log('E0123', unsafeFragment);
     return function () {
       // eslint-disable-next-line no-useless-return
       return;
@@ -205,7 +205,7 @@ export const compileSetter = function (expr) {
       }
 
       if (isUnsafePrototypeAccess(currentValue, propertyName)) {
-        errors.log('E0123', 'compileSetter', propertyName);
+        errors.log('E0123', propertyName);
         hasUnsafePrototypeAccess = true;
         return;
       }
