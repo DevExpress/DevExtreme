@@ -4,15 +4,27 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [25_1]
+  workflow_dispatch:
 
 env:
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: ${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'force all tests'))) && 'true' || 'false' }}
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build:
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     timeout-minutes: 15
 
@@ -54,6 +66,8 @@ jobs:
         run: pnpm exec nx build
 
   check-regenerate:
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     timeout-minutes: 10
 
@@ -105,7 +119,8 @@ jobs:
 
   test:
     timeout-minutes: 20
-    needs: build
+    needs: [check-should-run, build]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     strategy:
       fail-fast: false

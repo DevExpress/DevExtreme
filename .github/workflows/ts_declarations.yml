@@ -8,8 +8,6 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [25_1]
 
 jobs:
   check-ts-bundle:
