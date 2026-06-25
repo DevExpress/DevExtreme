@@ -63,8 +63,7 @@ import { AppointmentDragController, type WorkSpaceDraggableOptions } from './app
 import type { AppointmentFormConfig } from './appointment_popup/form';
 import { AppointmentForm } from './appointment_popup/form';
 import { AppointmentPopup } from './appointment_popup/popup';
-import type { AppointmentCollectionOptions } from './appointments/appointment_collection_options';
-import AppointmentCollection from './appointments/m_appointment_collection';
+import AppointmentCollection, { type AppointmentCollectionOptions } from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
 import NotifyScheduler from './base/widget_notify_scheduler';
@@ -124,7 +123,7 @@ import SchedulerTimelineDay from './workspaces/timeline_day';
 import SchedulerTimelineMonth from './workspaces/timeline_month';
 import SchedulerTimelineWeek from './workspaces/timeline_week';
 import type ViewDataProvider from './workspaces/view_model/view_data_provider';
-import type { WorkspaceOptionsInternal } from './workspaces/work_space';
+import type { DroppableCellData, WorkspaceCoordinates, WorkspaceOptionsInternal } from './workspaces/work_space';
 import SchedulerWorkSpaceDay from './workspaces/work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/work_space_week';
@@ -193,19 +192,29 @@ const StoreEventNames = {
 
 type StoreEventName = typeof StoreEventNames[keyof typeof StoreEventNames];
 
+interface SchedulerActionMap {
+  onAppointmentAdding: AppointmentAddingOptions;
+  onAppointmentAdded: AppointmentCompletedOptions;
+  onAppointmentUpdating: AppointmentUpdatingOptions;
+  onAppointmentUpdated: AppointmentCompletedOptions;
+  onAppointmentDeleting: AppointmentDeletingOptions;
+  onAppointmentDeleted: AppointmentCompletedOptions;
+  onAppointmentFormOpening: SchedulerEventArgs<AppointmentFormOpeningEvent>;
+  onAppointmentTooltipShowing: SchedulerEventArgs<AppointmentTooltipShowingEvent>;
+  onSelectionEnd: SchedulerEventArgs<SelectionEndEvent>;
+  onAppointmentRendered: AppointmentRenderedEvent;
+  onAppointmentClick: AppointmentClickEvent;
+  onAppointmentDblClick: AppointmentDblClickEvent;
+  onAppointmentContextMenu: AppointmentContextMenuEvent;
+  onCellClick: CellClickEvent;
+  onCellContextMenu: CellContextMenuEvent;
+}
+
 const RECURRENCE_EDITING_MODE = {
   SERIES: 'editSeries',
   OCCURRENCE: 'editOccurrence',
   CANCEL: 'cancel',
 };
-
-type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
-
-interface WorkSpaceCoordinates {
-  top: number;
-  left: number;
-  groupIndex?: number;
-}
 
 interface WorkSpacePositionHelper {
   getResizableStep: () => number;
@@ -262,7 +271,7 @@ interface SchedulerWorkSpaceLike {
   getCellWidth: () => number;
   getCellHeight: () => number;
   getGroupCount: () => number;
-  getGroupBounds: (coordinates: WorkSpaceCoordinates) => GroupBoundsOffset | undefined;
+  getGroupBounds: (coordinates: WorkspaceCoordinates) => GroupBoundsOffset | undefined;
   getPanelDOMSize: (panelName: PanelName) => RealSize;
   getCollectorDimension: (isCompactCollector: boolean, panelName: PanelName) => CollectorCSS;
   getAgendaVerticalStepHeight: () => number;
@@ -431,7 +440,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   // TODO: used externally in workspaces/work_space.ts
   declare _createActionByOption: (
-    optionName: string,
+    optionName: keyof SafeSchedulerOptions,
     config?: { excludeValidators?: string[] },
   ) => (event?: unknown) => void;
 
@@ -665,32 +674,32 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case StoreEventNames.DELETED:
       case 'onAppointmentFormOpening':
       case 'onAppointmentTooltipShowing':
-        this.actions[name] = this._createActionByOption(name);
+        this.actions[name] = this.createSchedulerAction(name);
         break;
       case 'onAppointmentRendered':
         if (this.option('_newAppointments')) {
-          this.actions.onAppointmentRendered = this._createActionByOption('onAppointmentRendered');
+          this.actions.onAppointmentRendered = this.createSchedulerAction('onAppointmentRendered');
         } else {
           this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
         }
         break;
       case 'onAppointmentClick':
         if (this.option('_newAppointments')) {
-          this.actions.onAppointmentClick = this._createActionByOption('onAppointmentClick');
+          this.actions.onAppointmentClick = this.createSchedulerAction('onAppointmentClick');
         } else {
           this._appointments.option('onItemClick', this._createActionByOption(name));
         }
         break;
       case 'onAppointmentDblClick':
         if (this.option('_newAppointments')) {
-          this.actions.onAppointmentDblClick = this._createActionByOption('onAppointmentDblClick');
+          this.actions.onAppointmentDblClick = this.createSchedulerAction('onAppointmentDblClick');
         } else {
           this._appointments.option(name, this._createActionByOption(name));
         }
         break;
       case 'onAppointmentContextMenu':
         if (this.option('_newAppointments')) {
-          this.actions.onAppointmentContextMenu = this._createActionByOption('onAppointmentContextMenu');
+          this.actions.onAppointmentContextMenu = this.createSchedulerAction('onAppointmentContextMenu');
         } else {
           this._appointments.option('onItemContextMenu', this._createActionByOption(name));
         }
@@ -1272,28 +1281,35 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     super._dispose();
   }
 
+  private createSchedulerAction<K extends keyof SchedulerActionMap>(
+    optionName: K,
+    config?: { excludeValidators?: string[] },
+  ): (args: SchedulerActionMap[K]) => void {
+    return this._createActionByOption(optionName, config) as (args: SchedulerActionMap[K]) => void;
+  }
+
   private initActions(): void {
     this.actions = {
-      onAppointmentAdding: this._createActionByOption(StoreEventNames.ADDING),
-      onAppointmentAdded: this._createActionByOption(StoreEventNames.ADDED),
-      onAppointmentUpdating: this._createActionByOption(StoreEventNames.UPDATING),
-      onAppointmentUpdated: this._createActionByOption(StoreEventNames.UPDATED),
-      onAppointmentDeleting: this._createActionByOption(StoreEventNames.DELETING),
-      onAppointmentDeleted: this._createActionByOption(StoreEventNames.DELETED),
-      onAppointmentFormOpening: this._createActionByOption('onAppointmentFormOpening'),
-      onAppointmentTooltipShowing: this._createActionByOption('onAppointmentTooltipShowing'),
-      onAppointmentRendered: this._createActionByOption('onAppointmentRendered'),
-      onAppointmentClick: this._createActionByOption('onAppointmentClick'),
-      onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
-      onAppointmentContextMenu: this._createActionByOption('onAppointmentContextMenu'),
-    } as SchedulerActions;
+      onAppointmentAdding: this.createSchedulerAction(StoreEventNames.ADDING),
+      onAppointmentAdded: this.createSchedulerAction(StoreEventNames.ADDED),
+      onAppointmentUpdating: this.createSchedulerAction(StoreEventNames.UPDATING),
+      onAppointmentUpdated: this.createSchedulerAction(StoreEventNames.UPDATED),
+      onAppointmentDeleting: this.createSchedulerAction(StoreEventNames.DELETING),
+      onAppointmentDeleted: this.createSchedulerAction(StoreEventNames.DELETED),
+      onAppointmentFormOpening: this.createSchedulerAction('onAppointmentFormOpening'),
+      onAppointmentTooltipShowing: this.createSchedulerAction('onAppointmentTooltipShowing'),
+      onAppointmentRendered: this.createSchedulerAction('onAppointmentRendered'),
+      onAppointmentClick: this.createSchedulerAction('onAppointmentClick'),
+      onAppointmentDblClick: this.createSchedulerAction('onAppointmentDblClick'),
+      onAppointmentContextMenu: this.createSchedulerAction('onAppointmentContextMenu'),
+    };
   }
 
   // TODO<Appointments>: delete this method when old impl is removed
   private getAppointmentRenderedAction(): (args: AppointmentRenderedEvent) => void {
-    return this._createActionByOption('onAppointmentRendered', {
+    return this.createSchedulerAction('onAppointmentRendered', {
       excludeValidators: ['disabled', 'readOnly'],
-    }) as (args: AppointmentRenderedEvent) => void;
+    });
   }
 
   _renderFocusTarget(): void { return noop(); }
@@ -1694,9 +1710,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
       onItemRendered: this.getAppointmentRenderedAction(),
-      onItemClick: this._createActionByOption('onAppointmentClick') as (args: AppointmentClickEvent) => void,
-      onItemContextMenu: this._createActionByOption('onAppointmentContextMenu') as (args: AppointmentContextMenuEvent) => void,
-      onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick') as (args: AppointmentDblClickEvent) => void,
+      onItemClick: this.createSchedulerAction('onAppointmentClick'),
+      onItemContextMenu: this.createSchedulerAction('onAppointmentContextMenu'),
+      onAppointmentDblClick: this.createSchedulerAction('onAppointmentDblClick'),
       tabIndex: this.option('tabIndex') ?? 0,
       focusStateEnabled: Boolean(this.option('focusStateEnabled')),
       allowDrag: this.allowDragging(),
@@ -1846,7 +1862,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getHeaderHeight: (): number => this.header?.getHeight() ?? 0,
       onScrollEnd: (): void => {
         if (!this.option('_newAppointments')) {
-          (this._appointments as unknown as AppointmentCollection).updateResizableArea();
+          this._appointments.updateResizableArea();
         }
       },
       onInitialized: (e) => {
@@ -1876,8 +1892,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     workSpaceOptions.notifyScheduler = this.notifyScheduler;
     workSpaceOptions.groups = this.resourceManager.groupResources();
-    workSpaceOptions.onCellClick = this._createActionByOption('onCellClick') as (e: CellClickEvent) => void;
-    workSpaceOptions.onCellContextMenu = this._createActionByOption('onCellContextMenu') as (e: CellContextMenuEvent) => void;
+    workSpaceOptions.onCellClick = this.createSchedulerAction('onCellClick');
+    workSpaceOptions.onCellContextMenu = this.createSchedulerAction('onCellContextMenu');
     workSpaceOptions.dataCellTemplate = workSpaceOptions.dataCellTemplate
       ? this._getTemplate(workSpaceOptions.dataCellTemplate) as TemplateBase
       : null;
@@ -2633,7 +2649,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       targetElement: getPublicElement(target),
     };
 
-    this._createActionByOption('onAppointmentTooltipShowing')(arg);
+    this.actions.onAppointmentTooltipShowing(arg);
 
     if (this.appointmentTooltip.isShownForTarget(target)) {
       this.hideAppointmentTooltip();
