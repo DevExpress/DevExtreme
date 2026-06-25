@@ -34,7 +34,7 @@ const RETRY_CONCURRENCY = (() => {
 const BATCH_SIZE = (() => {
   const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
   if (fromEnv > 0) return fromEnv;
-  return 8;
+  return 12;
 })();
 
 const BATCH_CONCURRENCY = (() => {
