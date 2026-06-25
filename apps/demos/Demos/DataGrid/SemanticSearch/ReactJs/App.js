@@ -36,7 +36,7 @@ const App = () => {
     if (searchValueRef.current !== '') {
       dataSource.reload();
     }
-  }, []);
+  }, [dataSource]);
   const onEditorPreparing = useCallback((e) => {
     if (e.parentType === 'searchPanel') {
       let searchTimeout;

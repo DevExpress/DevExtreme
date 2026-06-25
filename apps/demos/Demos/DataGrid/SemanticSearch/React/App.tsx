@@ -29,7 +29,7 @@ const App = () => {
     if (searchValueRef.current !== '') {
       dataSource.reload();
     }
-  }, []);
+  }, [dataSource]);
 
   const onEditorPreparing = useCallback((e: DataGridTypes.EditorPreparingEvent) => {
     if (e.parentType === 'searchPanel') {

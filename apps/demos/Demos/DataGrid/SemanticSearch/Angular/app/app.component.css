@@ -1,4 +1,4 @@
-:host .align-bottom.dx-toolbar-item {
+::ng-deep .align-bottom.dx-toolbar-item {
   vertical-align: bottom;
 }
 
