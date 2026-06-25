@@ -1,4 +1,3 @@
-import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
@@ -86,7 +85,7 @@ class VerticalGroupedStrategy {
     return this.config.getTimePanelWidth() + this.config.getGroupTableWidth();
   }
 
-  getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [DxElement, DxElement])
+  getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [Element, Element])
   : GroupBoundsOffset {
     return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
       const startDayHour = this.config.startDayHour();

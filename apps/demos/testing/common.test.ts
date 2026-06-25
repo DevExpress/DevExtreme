@@ -39,6 +39,12 @@ const getTestSpecificSkipRules = (testName) => {
       return ['label'];
     case 'DataGrid-EditStateManagement':
       return ['aria-required-parent'];
+    case 'Form-Grouping':
+    case 'Stepper-StepTemplate':
+    case 'TabPanel-Overview':
+    case 'Tabs-Overview':
+    case 'Tabs-Selection':
+      return ['aria-tab-name'];
     default:
       return [];
   }

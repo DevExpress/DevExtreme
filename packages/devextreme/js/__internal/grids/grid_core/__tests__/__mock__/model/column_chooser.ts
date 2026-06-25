@@ -1,5 +1,5 @@
 import { PopupModel } from '@ts/ui/__tests__/__mock__/model/popup';
-import { TreeViewModel } from '@ts/ui/__tests__/__mock__/model/tree_view';
+import { TreeViewModel } from '@ts/ui/__tests__/__mock__/model/tree_view/tree_view';
 
 export class ColumnChooserModel extends PopupModel {
   private readonly columnChooserListClass: string;

@@ -958,7 +958,7 @@
 /packages/devextreme/js/ui/tag_box.d.ts                              @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/tag_box_types.d.ts                        @DevExpress/devextreme-editors
 
-/packages/devextreme/js/__internal/ui/m_tag_box.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/tag_box.ts                   @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_tagBox.scss             @DevExpress/devextreme-editors
 /packages/devextreme-scss/scss/widgets/**/tagBox/**                  @DevExpress/devextreme-editors

@@ -20,7 +20,7 @@ env:
 jobs:
   check-should-run:
     name: Check if tests should run
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -29,7 +29,7 @@ jobs:
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
 
   get-changes:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     needs: check-should-run
     if: github.event_name == 'pull_request' && needs.check-should-run.outputs.should-run == 'true'
     name: Get changed demos
@@ -74,7 +74,7 @@ jobs:
           retention-days: 1
 
   determine-framework-tests-scope:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Determine scope for framework tests
     needs: [check-should-run, get-changes]
     if: |
@@ -236,7 +236,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
@@ -308,7 +308,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Demos - Check Vue TS
         working-directory: apps/demos
@@ -379,7 +379,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Run lint on all demos
       if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
@@ -506,7 +506,7 @@ jobs:
     - name: Install tgz
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
@@ -582,7 +582,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -651,7 +651,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '145.0.7632.67'
+        chrome-version: '149.0.7827.114'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -816,7 +816,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '145.0.7632.67'
+        chrome-version: '149.0.7827.114'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -851,7 +851,7 @@ jobs:
 
     - name: Install tgz
       working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -947,7 +947,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '145.0.7632.67'
+          chrome-version: '149.0.7827.114'
           runner-type: 'github-hosted'
 
       - name: Use Node.js
@@ -989,7 +989,7 @@ jobs:
 
       - name: Install tgz
         working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.0.0 devextreme-aspnet-data-nojquery@5.0.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Prepare JS
         working-directory: apps/demos
@@ -1051,7 +1051,7 @@ jobs:
           if-no-files-found: ignore
 
   merge-artifacts:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     needs: [testcafe-jquery, testcafe-frameworks-all, testcafe-frameworks-changed]
     if: always() && (needs.testcafe-jquery.result == 'failure' || needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure')
 

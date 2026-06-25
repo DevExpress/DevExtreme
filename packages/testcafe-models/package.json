@@ -4,7 +4,8 @@
     "testcafe": "catalog:"
   },
   "devDependencies": {
-    "devextreme": "workspace:*"
+    "devextreme": "workspace:*",
+    "testcafe": "catalog:"
   },
   "version": "25.2.8"
 }

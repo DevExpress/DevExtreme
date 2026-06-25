@@ -6,7 +6,7 @@
     "tar-fs": "3.1.2"
   },
   "devDependencies": {
-    "@types/shelljs": "0.8.15",
+    "@types/shelljs": "0.8.17",
     "@types/tar-fs": "2.0.4",
     "@types/jest": "29.5.14",
     "ts-jest": "29.1.3"

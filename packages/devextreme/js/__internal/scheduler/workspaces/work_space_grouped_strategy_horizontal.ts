@@ -1,4 +1,4 @@
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import type {
   CellInfo,
@@ -120,7 +120,7 @@ class HorizontalGroupedStrategy {
     cellCount: number,
     $cells: dxElementWrapper,
     cellWidth: number,
-    coordinates: CellPositionData & { groupIndex?: number },
+    coordinates: Coordinates & { groupIndex?: number },
     groupedDataMap: { dateTableGroupedMap: CellInfo[][][] },
   ): GroupBoundsOffset {
     if (this.config.isGroupedByDate()) {
