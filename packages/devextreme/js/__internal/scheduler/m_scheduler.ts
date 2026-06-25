@@ -117,6 +117,7 @@ import type { CollectorCSS, RealSize } from './view_model/generate_view_model/st
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentItemViewModel, AppointmentViewModelPlain, PanelName } from './view_model/types';
 import SchedulerAgenda from './workspaces/agenda';
+import type { PositionHelper } from './workspaces/helpers/position_helper';
 import SchedulerTimelineWorkWeek from './workspaces/m_timeline_work_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
 import SchedulerTimelineDay from './workspaces/timeline_day';
@@ -216,19 +217,6 @@ const RECURRENCE_EDITING_MODE = {
   CANCEL: 'cancel',
 };
 
-interface WorkSpacePositionHelper {
-  getResizableStep: () => number;
-  getHorizontalMax: (groupIndex: number) => number;
-  getVerticalMax: (options: {
-    groupIndex: number;
-    isVirtualScrolling: boolean;
-    showAllDayPanel: boolean;
-    supportAllDayRow: boolean;
-    isGroupedAllDayPanel: boolean;
-    isVerticalGrouping: boolean;
-  }) => number;
-}
-
 interface VirtualScrollingDispatcherLike {
   cellCountInsideLeftVirtualCell: number;
   cellCountInsideRightVirtualCell: number;
@@ -239,7 +227,7 @@ interface SchedulerWorkSpaceLike {
   type: ViewType;
   NAME?: string;
   dragBehavior: AppointmentDragBehavior | null;
-  positionHelper: WorkSpacePositionHelper;
+  positionHelper: PositionHelper;
   virtualScrollingDispatcher: VirtualScrollingDispatcherLike;
   viewDataProvider: ViewDataProvider;
   option: (name: string | Record<string, unknown>, value?: unknown) => unknown;
