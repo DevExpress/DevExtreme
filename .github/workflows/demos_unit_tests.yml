@@ -8,17 +8,15 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [25_1]
   workflow_dispatch:
 
 env:
-  RUN_TESTS: true
+  RUN_TESTS: ${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'force all tests'))) && 'true' || 'false' }}
 
 jobs:
   check-should-run:
     name: Check if tests should run
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
