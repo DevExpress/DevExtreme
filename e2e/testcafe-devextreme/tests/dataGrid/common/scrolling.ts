@@ -1119,8 +1119,6 @@ test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table sho
   },
   columnFixing: {
     enabled: true,
-    // @ts-expect-error private option
-    legacyMode: true,
   },
   columns: [{
     type: 'buttons',
