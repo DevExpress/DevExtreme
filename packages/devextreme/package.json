@@ -224,13 +224,8 @@
     "build:testcafe": "cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true BUILD_TESTCAFE=TRUE gulp default",
     "build-npm-devextreme": "cross-env BUILD_ESM_PACKAGE=true gulp default",
     "build-dist": "cross-env BUILD_ESM_PACKAGE=true gulp default --uglify",
-    "build-themes": "pnpm --workspace-root nx build devextreme-scss",
-    "build:react": "gulp generate-react",
-    "build:react:watch": "gulp generate-react-watch",
-    "build:react:typescript": "gulp generate-react-typescript",
     "build:modular": "cd ./playground/modular && webpack",
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
-    "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
     "build:community-localization": "gulp generate-community-locales",
     "build:systemjs": "gulp transpile-systemjs",
     "dev": "cross-env DEVEXTREME_TEST_CI=true gulp dev",
@@ -247,8 +242,7 @@
     "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",
     "test-jest:watch": "jest --watch",
     "test-jest:node": "jest --no-coverage --runInBand --selectProjects node-tests",
-    "test-jest:all": "pnpm test-jest && pnpm test-jest:node",
-    "tcd-update": "tcd-update"
+    "test-jest:all": "pnpm test-jest && pnpm test-jest:node"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
