@@ -1,5 +1,6 @@
 import Widget from '@js/ui/widget/ui.widget';
 import { extend } from '@ts/core/utils/m_extend';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 import {
   DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
@@ -64,10 +65,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     this.validateOptions();
   }
 
-  protected schedulerOptionChanged<K extends keyof SafeSchedulerOptions>(args: {
-    name: K;
-    value: SafeSchedulerOptions[K];
-  }): void {
+  protected schedulerOptionChanged(args: OptionChanged<SafeSchedulerOptions>): void {
     switch (args.name) {
       case 'currentView':
       case 'views':
