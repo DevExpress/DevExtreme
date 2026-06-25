@@ -2339,8 +2339,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.attachGroupCountClass();
       const $groupHeaderContainer = this.getGroupHeaderContainer();
       if ($groupHeaderContainer) {
-        utils.renovation.renderComponent(
-          this,
+        this.renderRenovatedComponent(
           $groupHeaderContainer,
           GroupPanelComponent,
           'renovatedGroupPanel',
@@ -2397,9 +2396,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       };
 
       if (this.$allDayTable) {
-        this.renderRenovatedComponent(this, this.$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
+        this.renderRenovatedComponent(this.$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
       }
-      this.renderRenovatedComponent(this, this.$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
+      this.renderRenovatedComponent(this.$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
     }
 
     this.updateAllDayVisibility();
