@@ -80,15 +80,14 @@ export class OptionManager {
         : panelName,
     );
     const groupHeights = layoutData.getGroupHeights?.(panelName);
-    const groupHeightsKey = groupHeights?.join('.') ?? '';
     const cacheKey = [
       panelDOMSize.width,
       panelDOMSize.height,
       panelName,
-      groupHeightsKey,
-    ].join('.');
+      groupHeights,
+    ];
 
-    return this.cache.memo(cacheKey, () => {
+    return this.cache.memo(JSON.stringify(cacheKey), () => {
       const {
         type,
         viewOffset,

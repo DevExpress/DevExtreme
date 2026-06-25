@@ -93,6 +93,12 @@ describe('DateTableBody', () => {
           ],
           groupIndex: 0,
           key: '0',
+        }, {
+          dateTable: [
+            { key: 2, cells: [createCell(2)] },
+          ],
+          groupIndex: 1,
+          key: '1',
         }],
         leftVirtualCellCount: 0,
         rightVirtualCellCount: 0,
@@ -106,12 +112,13 @@ describe('DateTableBody', () => {
       bottomVirtualRowHeight: 0,
       addDateTableClass: true,
       addVerticalSizesClassToRows: true,
-      rowHeights: [120, 80],
+      rowHeights: [120, 80, 160],
     });
 
     const rows = getRowNodes(component.render());
 
     expect(rows[0].props?.styles).toEqual({ height: 120 });
     expect(rows[1].props?.styles).toEqual({ height: 80 });
+    expect(rows[2].props?.styles).toEqual({ height: 160 });
   });
 });

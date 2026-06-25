@@ -32,11 +32,13 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
       dataCellTemplate,
       rowHeights,
     } = this.props;
-    let rowIndex = 0;
     const rowClasses = combineClasses({
       [DATE_TABLE_ROW_CLASS]: true,
       'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
     });
+    const getGroupRowOffset = (groupIndex: number): number => viewData.groupedData
+      .slice(0, groupIndex)
+      .reduce((offset, { dateTable }) => offset + dateTable.length, 0);
 
     return (
       <>
@@ -46,7 +48,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
             dateTable,
             isGroupedAllDayPanel,
             key: fragmentKey,
-          }) => (
+          }, groupIndex) => (
               <Fragment key={fragmentKey}>
                 {
                   isGroupedAllDayPanel && <AllDayPanelTableBody
@@ -66,12 +68,11 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                   dateTable.map(({
                     cells,
                     key: rowKey,
-                  }) => {
-                    const rowHeight = rowHeights?.[rowIndex];
+                  }, rowIndex) => {
+                    const rowHeight = rowHeights?.[getGroupRowOffset(groupIndex) + rowIndex];
                     const rowStyles = rowHeight === undefined
                       ? undefined
                       : renderUtils.addHeightToStyle(rowHeight);
-                    rowIndex += 1;
 
                     return (
                       <Row
