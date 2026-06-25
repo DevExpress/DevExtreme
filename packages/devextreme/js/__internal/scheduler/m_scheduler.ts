@@ -1351,13 +1351,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
         getDataAccessor: () => this._dataAccessors,
-        getStartViewDate: (): Date => {
-          const startViewDate = this.getStartViewDate();
-          if (!startViewDate) {
-            throw errors.Error('E0001');
-          }
-          return startViewDate;
-        },
+        getStartViewDate: () => this.getStartViewDate() as Date,
         getSortedItems: () => this._layoutManager.sortedItems,
 
         isVirtualScrolling: () => this.isVirtualScrolling(),
@@ -2858,7 +2852,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (Scheduler as any).include(DataHelperMixin);
 
-// @ts-expect-error DataHelperMixin changes Scheduler prototype
-registerComponent('dxScheduler', Scheduler);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+registerComponent('dxScheduler', Scheduler as any);
 
 export default Scheduler;
