@@ -18,7 +18,7 @@ env:
 jobs:
   check-should-run:
     name: Check if tests should run
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -27,7 +27,7 @@ jobs:
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
 
   get-changes:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     needs: check-should-run
     if: github.event_name == 'pull_request' && needs.check-should-run.outputs.should-run == 'true'
     name: Get changed demos
@@ -72,7 +72,7 @@ jobs:
           retention-days: 1
 
   determine-framework-tests-scope:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Determine scope for framework tests
     needs: [check-should-run, get-changes]
     if: |
