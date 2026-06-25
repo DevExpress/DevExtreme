@@ -1466,15 +1466,6 @@
       ],
       "cache": true
     },
-    "dev": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "dev"
-      },
-      "dependsOn": [
-        "^build"
-      ]
-    },
     "build:systemjs": {
       "executor": "nx:run-script",
       "options": {
@@ -1503,6 +1494,15 @@
         "{projectRoot}/artifacts/js-systemjs"
       ],
       "cache": true
+    },
+    "lint": {
+      "executor": "nx:noop",
+      "dependsOn": [
+        "lint-js",
+        "lint-ts",
+        "lint-dts",
+        "lint-texts"
+      ]
     },
     "lint-css": {
       "executor": "nx:run-script",
@@ -1549,6 +1549,25 @@
         "{projectRoot}/**/*.ts?(x)",
         "{projectRoot}/.eslint*",
         "!{projectRoot}/**/*.d.ts"
+      ]
+    },
+    "lint-texts": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-texts"
+      },
+      "inputs": [
+        "{projectRoot}/**/*",
+        "!{projectRoot}/**/*.{js,ts,tsx}",
+        "!{projectRoot}/**/*.{jpg,gif,ico,png}",
+        "!{projectRoot}/artifacts/**",
+        "!{projectRoot}/build/**",
+        "!{projectRoot}/fonts/**",
+        "!{projectRoot}/icons/**",
+        "!{projectRoot}/localization/**",
+        "!{projectRoot}/node_modules/**",
+        "{projectRoot}/build/linters/validate-non-latin-symbols.js",
+        "{projectRoot}/.gitignore"
       ]
     },
     "test-jest": {
