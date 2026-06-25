@@ -54,6 +54,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoDropDownButtonAnimationModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxoDropDownButtonAtModule } from 'devextreme-angular/ui/drop-down-button/nested';
@@ -287,7 +288,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     }
 
 
+    /**
+     * [descr:dxDropDownButtonOptions.items]
     
+     */
     @Input()
     get items(): Array<any | dxDropDownButtonItem> | null {
         return this._getOption('items');
@@ -362,7 +366,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     }
 
 
+    /**
+     * [descr:dxDropDownButtonOptions.selectedItem]
     
+     */
     @Input()
     get selectedItem(): any | null | number | string {
         return this._getOption('selectedItem');
@@ -372,7 +379,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     }
 
 
+    /**
+     * [descr:dxDropDownButtonOptions.selectedItemKey]
     
+     */
     @Input()
     get selectedItemKey(): null | number | string {
         return this._getOption('selectedItemKey');
@@ -539,7 +549,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxDropDownButtonOptions.onButtonClick]
     
     
      */
@@ -571,7 +581,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxDropDownButtonOptions.onItemClick]
     
     
      */
@@ -587,7 +597,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxDropDownButtonOptions.onSelectionChanged]
     
     
      */
@@ -946,6 +956,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiItemModule,
     DxoDropDownButtonAnimationModule,
     DxoDropDownButtonAtModule,
     DxoDropDownButtonBoundaryOffsetModule,
@@ -977,6 +988,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiItemModule,
     DxoDropDownButtonAnimationModule,
     DxoDropDownButtonAtModule,
     DxoDropDownButtonBoundaryOffsetModule,
