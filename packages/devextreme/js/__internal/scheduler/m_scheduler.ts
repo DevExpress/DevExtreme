@@ -1,3 +1,4 @@
+/* eslint-disable devextreme-custom/no-deferred */
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
@@ -456,7 +457,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const whenLoaded = this.postponedOperations.add('loadResources', () => {
       const groups = this.getViewOption('groups');
 
-      return fromPromise(this.resourceManager.loadGroupResources(groups, forceReload));
+      return fromPromise(
+        this.resourceManager.loadGroupResources(groups, forceReload),
+      ) as DeferredObj<void>;
     }, undefined);
 
     const resolveCallbacks: DeferredObj<void> = Deferred();
@@ -486,7 +489,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.createAppointmentPopupForm();
         break;
       case 'currentDate': {
-        const dateValue = this.getViewOption(name);
+        const dateValue = this.getViewOption('currentDate');
         this.option('selectedCellData', []);
         this.updateOption('workSpace', name, dateValue);
         this.updateOption('header', name, dateValue);
@@ -515,9 +518,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'min':
       case 'max': {
-        const viewValue = this.getViewOption(name);
-        this.updateOption('header', name, viewValue);
-        this.updateOption('workSpace', name, viewValue);
+        const viewValue = args.name === 'min'
+          ? this.getViewOption('min')
+          : this.getViewOption('max');
+        this.updateOption('header', args.name, viewValue);
+        this.updateOption('workSpace', args.name, viewValue);
         break;
       }
       case 'views':
@@ -635,9 +640,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case StoreEventNames.DELETED:
       case 'onAppointmentFormOpening':
       case 'onAppointmentTooltipShowing':
-      case 'onSelectionEnd':
-        this.actions[name as keyof SchedulerActions] = this.createSchedulerAction(name as keyof SchedulerActionMap);
+      case 'onSelectionEnd': {
+        const schedulerAction = this.createSchedulerAction(name as keyof SchedulerActionMap);
+        this.actions[name as keyof SchedulerActions] = schedulerAction;
         break;
+      }
       case 'onAppointmentRendered':
         if (this.option('_newAppointments')) {
           this.actions.onAppointmentRendered = this.createSchedulerAction('onAppointmentRendered');
@@ -649,23 +656,23 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         if (this.option('_newAppointments')) {
           this.actions.onAppointmentClick = this.createSchedulerAction('onAppointmentClick');
         } else {
-          this._appointments.option('onItemClick', this._createActionByOption(name));
+          this._appointments.option('onItemClick', this._createActionByOption('onAppointmentClick'));
         }
         break;
       case 'onAppointmentDblClick':
         if (this.option('_newAppointments')) {
           this.actions.onAppointmentDblClick = this.createSchedulerAction('onAppointmentDblClick');
         } else {
-          this._appointments.option(name, this._createActionByOption(name));
+          this._appointments.option('onAppointmentDblClick', this._createActionByOption('onAppointmentDblClick'));
         }
         break;
       case 'onAppointmentContextMenu':
         if (this.option('_newAppointments')) {
           this.actions.onAppointmentContextMenu = this.createSchedulerAction('onAppointmentContextMenu');
         } else {
-          this._appointments.option('onItemContextMenu', this._createActionByOption(name));
+          this._appointments.option('onItemContextMenu', this._createActionByOption('onAppointmentContextMenu'));
         }
-        this.appointmentTooltip._options.onItemContextMenu = this._createActionByOption(name);
+        this.appointmentTooltip._options.onItemContextMenu = this._createActionByOption('onAppointmentContextMenu');
         break;
       case 'noDataText':
       case 'allowMultipleCellSelection':
@@ -1254,9 +1261,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private createSchedulerAction<K extends keyof SchedulerActionMap>(
     optionName: K,
-    config?: { excludeValidators?: string[] },
+    actionConfig?: { excludeValidators?: string[] },
   ): (args: SchedulerActionMap[K]) => void {
-    return this._createActionByOption(optionName, config) as (args: SchedulerActionMap[K]) => void;
+    return this._createActionByOption(optionName, actionConfig) as (
+      args: SchedulerActionMap[K],
+    ) => void;
   }
 
   private initActions(): void {
@@ -1746,7 +1755,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const workSpaceComponent = VIEWS_CONFIG[currentViewType].workSpace;
     const workSpaceConfig = this.workSpaceConfig(this.currentView);
     // @ts-expect-error
-    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig) as SchedulerWorkSpaceLike;
+    this._workSpace = this._createComponent(
+      $workSpace,
+      // @ts-expect-error workspace component type depends on current view
+      workSpaceComponent,
+      workSpaceConfig,
+    ) as SchedulerWorkSpaceLike;
 
     if (!this.option('_newAppointments')) {
       if (this.allowDragging()) {
@@ -1762,7 +1776,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const workSpaceConfig = this.workSpaceConfig(this.currentView);
     const workSpaceComponent = VIEWS_CONFIG.agenda.workSpace;
     // @ts-expect-error
-    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig) as SchedulerWorkSpaceLike;
+    this._workSpace = this._createComponent(
+      $workSpace,
+      workSpaceComponent,
+      workSpaceConfig,
+    ) as SchedulerWorkSpaceLike;
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
 
@@ -1832,7 +1850,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
       renderAppointments: (): void => { this.renderAppointments(); },
       onShowAllDayPanel: (value: boolean) => this.option('showAllDayPanel', value),
-      getHeaderHeight: (): number => this.header?.getHeight() ?? 0,
+      getHeaderHeight: (): number => (this.header?.getHeight() ?? 0),
       onScrollEnd: (): void => {
         if (!this.option('_newAppointments')) {
           this._appointments.updateResizableArea();
@@ -2630,6 +2648,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this.hideAppointmentTooltip();
     } else {
       // @ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.processActionResult(arg, (canceled) => {
         if (!canceled) {
           this.appointmentTooltip.show(target, data, {
