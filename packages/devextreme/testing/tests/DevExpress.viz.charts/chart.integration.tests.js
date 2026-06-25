@@ -2043,12 +2043,8 @@ QUnit.test('Constant lines dynamic update with automatically created value axis 
         }
     });
 
-    try {
-        chart.option('argumentAxis.constantLines', [{ value: new Date(2026, 5, 16) }]);
-        assert.ok(true, 'no error during update');
-    } catch(e) {
-        assert.ok(false, 'error: ' + e.message);
-    }
+    chart.option('argumentAxis.constantLines', [{ value: new Date(2026, 5, 16) }]);
+    assert.ok(true, 'dynamic update argumentAxis.constantLines do not throw error');
 });
 
 
