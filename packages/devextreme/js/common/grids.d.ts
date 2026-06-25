@@ -106,7 +106,7 @@ export type ResponseStatusTexts = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type FilterScalarValue = string | number | boolean | null | Date;
+export type ScalarFilterValue = string | number | boolean | null | Date;
 
 /**
  * @docid
@@ -117,7 +117,7 @@ export type BasicFilterExpr = {
   type: 'basic';
   field: string;
   operator: SearchOperation;
-  value: FilterScalarValue;
+  value: ScalarFilterValue;
 };
 
 /**
@@ -129,7 +129,7 @@ export type MultiValueFilterExpr = {
   type: 'basic';
   field: string;
   operator: MultiValueSearchOperation;
-  value: FilterScalarValue[];
+  value: ScalarFilterValue[];
 };
 
 /**

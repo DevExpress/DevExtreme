@@ -1,5 +1,6 @@
 import type {
-  BasicFilterExpr, CompositeKeyPair, FilterScalarValue, MultiValueFilterExpr,
+  BasicFilterExpr, CompositeKeyPair, MultiValueFilterExpr,
+  ScalarFilterValue,
 } from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
@@ -109,8 +110,8 @@ export const pickKeysByIndex = <T>(
 
 export function resolveFilterValue(
   dataType: string | undefined,
-  value: FilterScalarValue,
-): FilterScalarValue {
+  value: ScalarFilterValue,
+): ScalarFilterValue {
   if (typeof value === 'string' && isDateType(dataType)) {
     if (!dateUtilsTs.isValidDate(value)) {
       return value;

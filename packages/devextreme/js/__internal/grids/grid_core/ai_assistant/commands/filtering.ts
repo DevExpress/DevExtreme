@@ -1,6 +1,6 @@
 import type { MultiValueSearchOperation, SearchOperation } from '@js/common/data.types';
 import type {
-  FilterExprNode, FilterExprTree, FilterScalarValue,
+  FilterExprNode, FilterExprTree, ScalarFilterValue,
 } from '@js/common/grids';
 import { when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
@@ -20,8 +20,8 @@ const MULTI_VALUE_FILTER_OPS = [
   'anyof', 'noneof',
 ] as const satisfies readonly MultiValueSearchOperation[];
 
-type FilterExprArray = [string, SearchOperation, FilterScalarValue]
-  | [string, MultiValueSearchOperation, FilterScalarValue[]]
+type FilterExprArray = [string, SearchOperation, ScalarFilterValue]
+  | [string, MultiValueSearchOperation, ScalarFilterValue[]]
   | [FilterExprArray, 'and' | 'or', FilterExprArray]
   | ['!', FilterExprArray];
 

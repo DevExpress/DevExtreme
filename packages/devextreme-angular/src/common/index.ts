@@ -318,7 +318,6 @@ export namespace Grids {
     export type FilterPanelTexts = GridsModule.FilterPanelTexts;
     export type FilterRow = GridsModule.FilterRow;
     export type FilterRowOperationDescriptions = GridsModule.FilterRowOperationDescriptions;
-    export type FilterScalarValue = GridsModule.FilterScalarValue;
     export type FilterType = GridsModule.FilterType;
     export type FixedPosition = GridsModule.FixedPosition;
     export type GridBase<TRowData = any, TKey = any> = GridsModule.GridBase<TRowData, TKey>;
@@ -356,6 +355,7 @@ export namespace Grids {
     export type RowUpdatingInfo<TRowData = any, TKey = any> = GridsModule.RowUpdatingInfo<TRowData, TKey>;
     export type RowValidatingInfo<TRowData = any, TKey = any> = GridsModule.RowValidatingInfo<TRowData, TKey>;
     export type SavingInfo<TRowData = any, TKey = any> = GridsModule.SavingInfo<TRowData, TKey>;
+    export type ScalarFilterValue = GridsModule.ScalarFilterValue;
     export type ScrollingBase = GridsModule.ScrollingBase;
     export type SearchPanel = GridsModule.SearchPanel;
     export type SelectedFilterOperation = GridsModule.SelectedFilterOperation;
