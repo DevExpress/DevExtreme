@@ -527,6 +527,14 @@ QUnit.module('prototype pollution protection', {
         assert.strictEqual(errors.log.called, false, 'should not log for safe paths');
     });
 
+    test('compileSetter allows prototype property on plain objects (T1330839)', function(assert) {
+        const obj = {};
+        SETTER('prototype')(obj, 'yes');
+
+        assert.strictEqual(obj.prototype, 'yes', 'should allow setting prototype on plain objects');
+        assert.strictEqual(errors.log.called, false, 'should not log error for plain objects');
+    });
+
     test('compileSetter blocks unsafe fragment written in bracket notation (T1330839)', function(assert) {
         const obj = {};
         SETTER('a[constructor][prototype].pp_dx')(obj, 'yes', { functionsAsIs: true });
@@ -563,6 +571,14 @@ QUnit.module('prototype pollution protection', {
 
         assert.strictEqual(errors.log.calledWith('E0123', 'compileGetter', 'prototype'), true, 'should log E0123 for prototype');
         assert.strictEqual(result, undefined, 'getter must return undefined for prototype');
+    });
+
+    test('compileGetter allows prototype property on plain objects (T1330839)', function(assert) {
+        const obj = { prototype: 'yes' };
+        const result = GETTER('prototype')(obj);
+
+        assert.strictEqual(result, 'yes', 'should allow getting prototype on plain objects');
+        assert.strictEqual(errors.log.called, false, 'should not log error for plain objects');
     });
 
     test('combineGetters logs error and skips __proto__ fragment, returns safe fields (T1330839)', function(assert) {

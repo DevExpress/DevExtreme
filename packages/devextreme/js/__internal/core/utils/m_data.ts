@@ -17,9 +17,10 @@ const bracketsToDots = function (expr) {
     .replace(/\]/g, '');
 };
 
-const UNSAFE_PATH_FRAGMENTS = new Set(['__proto__', 'constructor', 'prototype']);
+const UNSAFE_PATH_FRAGMENTS = new Set(['__proto__', 'constructor']);
 
 const isUnsafePathFragment = (name: string): boolean => UNSAFE_PATH_FRAGMENTS.has(name);
+const isUnsafePrototypeAccess = (obj: any, name: string): boolean => name === 'prototype' && typeof obj === 'function';
 
 export const getPathParts = function (name) {
   return bracketsToDots(name).split('.');
@@ -71,8 +72,8 @@ export const compileGetter = function (expr) {
     const unsafeFragment = path.find(isUnsafePathFragment);
 
     if (unsafeFragment !== undefined) {
+      errors.log('E0123', 'compileGetter', unsafeFragment);
       return function () {
-        errors.log('E0123', 'compileGetter', unsafeFragment);
         // eslint-disable-next-line no-useless-return
         return;
       };
@@ -85,6 +86,11 @@ export const compileGetter = function (expr) {
       let current = unwrap(obj, options);
 
       for (let i = 0; i < path.length; i++) {
+        if (isUnsafePrototypeAccess(current, path[i])) {
+          errors.log('E0123', 'compileGetter', path[i]);
+          return;
+        }
+
         if (!current) {
           if (current == null && hasDefaultValue) {
             return options.defaultValue;
@@ -180,8 +186,8 @@ export const compileSetter = function (expr) {
   const unsafeFragment = expr.find(isUnsafePathFragment);
 
   if (unsafeFragment !== undefined) {
+    errors.log('E0123', 'compileSetter', unsafeFragment);
     return function () {
-      errors.log('E0123', 'compileSetter', unsafeFragment);
       // eslint-disable-next-line no-useless-return
       return;
     };
@@ -191,8 +197,19 @@ export const compileSetter = function (expr) {
     options = prepareOptions(options);
 
     let currentValue = unwrap(obj, options);
+    let hasUnsafePrototypeAccess = false;
 
     expr.forEach(function (propertyName, levelIndex) {
+      if (hasUnsafePrototypeAccess) {
+        return;
+      }
+
+      if (isUnsafePrototypeAccess(currentValue, propertyName)) {
+        errors.log('E0123', 'compileSetter', propertyName);
+        hasUnsafePrototypeAccess = true;
+        return;
+      }
+
       let propertyValue = readPropValue(currentValue, propertyName, options);
       const isPropertyFunc = !options.functionsAsIs && isFunction(propertyValue) && !isWrapped(propertyValue);
 
