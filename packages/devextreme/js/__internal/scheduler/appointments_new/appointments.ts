@@ -112,6 +112,16 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     return result;
   }
 
+  public getAppointmentSettings($element: dxElementWrapper): AppointmentViewModelPlain {
+    const viewItem = this.findViewItemByElement($element);
+
+    if (!viewItem) {
+      return undefined as unknown as AppointmentViewModelPlain;
+    }
+
+    return this.getViewModelBySortedIndex(viewItem.option().sortedIndex);
+  }
+
   public getAppointmentData($element: dxElementWrapper): {
     appointmentData: SafeAppointment,
     targetedAppointmentData: TargetedAppointment,
@@ -418,6 +428,12 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
   public renderDragClone(appointmentViewModel: AppointmentViewModelPlain): dxElementWrapper {
     return this.renderViewItem(appointmentViewModel, this.viewItems.length).$element();
+  }
+
+  private findViewItemByElement($element: dxElementWrapper): ViewItem | undefined {
+    return this.viewItems.find(
+      (item: ViewItem) => item.$element().is($element),
+    );
   }
 
   private getTargetedAppointmentData(

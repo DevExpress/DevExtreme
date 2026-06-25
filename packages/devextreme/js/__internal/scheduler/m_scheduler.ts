@@ -71,7 +71,6 @@ import type {
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
   ViewType,
 } from './types';
-import { utils } from './utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
@@ -1530,7 +1529,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
       renderAppointments: () => { this.renderAppointments(); },
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
-      getHeaderHeight: () => utils.DOM.getHeaderHeight(this.header),
+      getHeaderHeight: () => this.header?.getHeight() ?? 0,
       onScrollEnd: () => this._appointments.updateResizableArea(),
       onInitialized: (e) => {
         if (this.option('_newAppointments')) {
@@ -1903,7 +1902,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   // TODO<Appointments>: delete this method when old impl is removed
   getTargetedAppointment(appointment: SafeAppointment, element: dxElementWrapper): TargetedAppointment {
-    const settings = utils.dataAccessors.getAppointmentSettings(element)!;
+    const settings = this._appointments.getAppointmentSettings(element);
     return getTargetedAppointment(
       appointment,
       settings,
@@ -2181,7 +2180,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     targetedAppointment?: SafeAppointment,
   ) {
     if (appointment) {
-      const settings: any = utils.dataAccessors.getAppointmentSettings(element);
+      const settings: any = this._appointments.getAppointmentSettings(element);
       const appointmentConfig = {
         itemData: targetedAppointment ?? appointment,
         groupIndex: settings?.groupIndex,
