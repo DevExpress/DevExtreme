@@ -106,7 +106,7 @@ export type ResponseStatusTexts = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type ScalarFilterValue = string | number | boolean | null | Date;
+export type ScalarFilterValue = string | number | boolean | Date | null;
 
 /**
  * @docid
