@@ -56,7 +56,6 @@ gridCore.registerModulesOrder([
   'groupPanelKeyboardNavigation',
   'errorHandling',
   'summary',
-  'columnFixing',
   'export',
   'toast',
   'gridView',

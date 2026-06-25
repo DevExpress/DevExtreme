@@ -27,7 +27,6 @@ import './keyboard_navigation/m_headers_keyboard_navigation';
 import './keyboard_navigation/m_group_panel_keyboard_navigation';
 import './summary/m_summary';
 import './module_not_extended/sticky_columns';
-import './module_not_extended/column_fixing';
 import './module_not_extended/adaptivity';
 import './module_not_extended/virtual_columns';
 import './export/m_export';

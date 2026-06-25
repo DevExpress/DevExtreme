@@ -50,7 +50,6 @@ treeListCore.registerModulesOrder([
   'headersKeyboardNavigation',
   'errorHandling',
   'summary',
-  'columnFixing',
   'export',
   'toast',
   'gridView',
