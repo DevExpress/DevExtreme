@@ -40,7 +40,7 @@ only when the runtime performs a meaningful `=== null` check.
   undefined`, never `| null`.
 - **A-obj — object-valued option** (the value is a config the runtime merges, e.g.
   `editing`, `paging`, `tooltip`, `dropDownOptions`): type is `T` without `| undefined`. A
-  `@default` (**R4**) is needed only when `getDefaultOptions` stores a value that DIFFERS from
+  `@default` (**R4**) is needed only when `_getDefaultOptions` stores a value that DIFFERS from
   the referenced type's own defaults — i.e. a runtime override worth documenting. The referenced
   type (`PopupProperties`) already documents its sub-properties' defaults, so an empty seed
   (`{}`, no override) needs no `@default`. An INLINE object whose sub-properties carry their
@@ -72,7 +72,7 @@ editRowKey?: TKey;                             // incorrect: @default null, but 
 
 // A-obj (reference) — @default documents a runtime override of the type's defaults
 /** @default { showTitle: false } */
-dropDownOptions?: PopupProperties;             // correct: getDefaultOptions overrides showTitle
+dropDownOptions?: PopupProperties;             // correct: _getDefaultOptions overrides showTitle
 dropDownOptions?: PopupProperties;             // correct: seed {} (no override) -> no @default
 // A-obj (inline) — sub-properties carry their own @default; the container needs none
 editing?: {
@@ -94,7 +94,7 @@ location?: TextEditorButtonLocation;           // incorrect: @default whose valu
 - **R1**: `@default null` present -> the type must include `null`.
 - **R2**: a concrete `@default` (not `null`/`undefined`) -> the type must NOT include `| undefined`.
 - **R3**: `@default undefined` present -> the type must include `| undefined`.
-- **R4**: an object-valued option -> add a `@default` only when `getDefaultOptions` stores a value
+- **R4**: an object-valued option -> add a `@default` only when `_getDefaultOptions` stores a value
   that DIFFERS from the referenced type's own defaults (a runtime override); an empty seed
   (`{}`) or an INLINE object whose sub-properties carry their own `@default` needs none. (Not
   lint-enforced — a review check.)
