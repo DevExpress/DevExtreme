@@ -240,7 +240,7 @@ class ScrollHelper {
       const dragMoveEvent = that._component._dragMoveEvent;
 
       if (dragMoveEvent) {
-        that._component._dragMoveHandler(dragMoveEvent);
+        that._component.dragMoveHandler(dragMoveEvent);
       }
     }
   }
@@ -509,7 +509,7 @@ class Draggable extends DOMComponent<Draggable, Properties> {
     }
     // @ts-expect-error
     eventsEngine.on($element, DRAGSTART_EVENT_NAME, itemsSelector, data, this._dragStartHandler.bind(this));
-    eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragMoveHandler.bind(this));
+    eventsEngine.on($element, DRAG_EVENT_NAME, data, this.dragMoveHandler.bind(this));
     eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
     eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
     eventsEngine.on($element, DRAGEND_LEAVE_EVENT_NAME, data, this._dragLeaveHandler.bind(this));
@@ -804,7 +804,7 @@ class Draggable extends DOMComponent<Draggable, Properties> {
     return this.option('clone') || this.option('dragTemplate');
   }
 
-  private _dragMoveHandler(e: DragEvent): void {
+  public dragMoveHandler(e: DragEvent): void {
     this._allowNativeScrollingWhenNotDragging(e);
     this._dragMoveEvent = e;
 
