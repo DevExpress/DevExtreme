@@ -47,6 +47,7 @@ const createSchedulerStore = (workspace: unknown): Scheduler => ({
   currentView: {
     type: 'day',
     groupOrientation: 'vertical',
+    skippedDays: [],
   },
   resourceManager: {
     groupCount: () => 2,
