@@ -671,7 +671,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'onAppointmentFormOpening':
       case 'onAppointmentTooltipShowing':
       case 'onSelectionEnd':
-        this.actions[name] = this.createSchedulerAction(name);
+        this.actions[name as keyof SchedulerActions] = this.createSchedulerAction(name as keyof SchedulerActionMap);
         break;
       case 'onAppointmentRendered':
         if (this.option('_newAppointments')) {
