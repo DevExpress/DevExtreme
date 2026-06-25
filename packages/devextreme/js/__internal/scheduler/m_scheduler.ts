@@ -383,6 +383,7 @@ interface SchedulerAppointmentsHost {
   updateResizableArea: () => void;
   renderDragClone: (...args: unknown[]) => dxElementWrapper;
   getAppointmentData: (...args: unknown[]) => unknown;
+  getAppointmentSettings: (element: dxElementWrapper) => AppointmentViewModelPlain;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   _createComponent: CreateComponentFn;
   _renderItem: (index: number, item: unknown, container?: dxElementWrapper) => dxElementWrapper;
