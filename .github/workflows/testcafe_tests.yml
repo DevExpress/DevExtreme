@@ -28,8 +28,6 @@ jobs:
 
   build:
     name: Build DevExtreme
-    needs: check-should-run
-    if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: devextreme-shr2
     timeout-minutes: 30
@@ -85,7 +83,7 @@ jobs:
 
   testcafe:
     name: ${{ matrix.ARGS.name }}${{ !matrix.ARGS.theme && ' - fluent' || '' }}
-    if: needs.check-should-run.outputs.should-run == 'true'
+    if: needs.check-should-run.outputs.should-run == 'true' || matrix.ARGS.componentFolder == 'accessibility'
     needs: [check-should-run, build]
     strategy:
       fail-fast: false
