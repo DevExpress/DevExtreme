@@ -264,7 +264,7 @@ interface WorkspaceOptionActionMap {
   onCellContextMenu: Pick<CellContextMenuEvent, 'event' | 'cellElement' | 'cellData'>;
 }
 
-type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
+export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 
 export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
