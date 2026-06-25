@@ -787,6 +787,26 @@ module('Keyboard navigation', setupModule, () => {
         assert.strictEqual(this.instance.option('value'), null, 'value has been cleared');
     });
 
+    test('deleteContentBackward input event should revert the active date part to its minimum value without clearing the value (Chinese MS IME composition backspace) (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16), // Oct 16, 2025; text = '10/16/2025'
+        });
+
+        this.$input.get(0).focus();
+
+        this.$input.trigger($.Event('input', {
+            type: 'input',
+            originalEvent: $.Event('input', {
+                inputType: 'deleteContentBackward',
+            })
+        }));
+
+        assert.ok(this.instance.option('text').length > 0, 'text is not cleared after IME composition backspace');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'first date part (month) is still active');
+        assert.strictEqual(this.instance.option('text'), '01/16/2025', 'month part is reset to minimum value, other parts unchanged');
+    });
+
     QUnit.testInActiveWindow('focusout should clear search value', function(assert) {
         this.keyboard.type('1');
         assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
@@ -796,6 +816,20 @@ module('Keyboard navigation', setupModule, () => {
         this.keyboard.type('2');
         assert.strictEqual(this.instance.option('text'), 'February 10 2012', 'search value and position was cleared');
         assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
+    });
+
+    QUnit.testInActiveWindow('first part should be active when re-focusing after all parts are completed (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 0, 1),
+        });
+
+        this.keyboard.type('10162025'); // Oct 16, 2025
+
+        this.$input.focusout();
+        this.$input.get(0).focus();
+
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is selected after re-focusing');
     });
 
     test('enter should clear search value', function(assert) {

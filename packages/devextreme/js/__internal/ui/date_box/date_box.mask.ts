@@ -4,6 +4,7 @@ import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { clipboardText } from '@js/core/utils/dom';
 import { fitIntoRange, inRange, sign } from '@js/core/utils/math';
@@ -15,6 +16,7 @@ import type { DateLike, Properties } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 
 import type { DxMouseWheelEvent } from '../scroll_view/types';
 import type { DateBoxBaseProperties } from './date_box.base';
@@ -25,6 +27,7 @@ const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
 const BACKWARD = -1;
 const IME_DIGIT_CODE_REGEXP = /^(?:Digit|Numpad)(\d)$/;
+const IME_BACKSPACE_INPUT_TYPE = 'deleteContentBackward';
 
 export interface DateBoxMaskProperties extends Properties {
   emptyDateValue?: Date;
@@ -51,6 +54,8 @@ class DateBoxMask extends DateBoxBase {
   _isIMEDigitProcessed?: boolean;
 
   _isIMECommitPending?: boolean;
+
+  _isClearingValue?: boolean;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
     const originalHandlers = super._supportedKeys();
@@ -307,6 +312,17 @@ class DateBoxMask extends DateBoxBase {
 
       return;
     }
+
+    if (this._useMaskBehavior() && event?.inputType === IME_BACKSPACE_INPUT_TYPE) {
+      if (this._isAllSelected()) {
+        this._selectFirstPart();
+      }
+      this._revertPart(BACKWARD);
+      this._syncInputWithMask();
+
+      return;
+    }
+
     super._keyPressHandler(e);
 
     if (this._maskInputHandler) {
@@ -789,6 +805,20 @@ class DateBoxMask extends DateBoxBase {
       this._selectFirstPart();
     } else {
       this._selectNextPart(FORWARD);
+    }
+  }
+
+  _clearValueHandler(e: ValueChangedEvent & DxEvent): void {
+    this._isClearingValue = true;
+    super._clearValueHandler(e);
+    this._isClearingValue = false;
+  }
+
+  _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
+    super._focusInHandler(e);
+
+    if (this._useMaskBehavior() && !e.isDefaultPrevented() && !this._isClearingValue) {
+      this._selectFirstPart();
     }
   }
 
