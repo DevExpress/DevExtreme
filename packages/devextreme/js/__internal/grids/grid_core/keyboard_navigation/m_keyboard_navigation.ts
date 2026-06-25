@@ -508,6 +508,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this._editorFactory.loseFocus();
 
     if (this._editingController.isEditing() && !this.isRowEditMode()) {
+      // Focus the cell before closing the editor on native Tab-out,
+      // so the browser's native Shift+Tab leaves from a stable anchor.
+      ($cell.get(0) as HTMLElement | undefined)?.focus({ preventScroll: true });
       this._resetFocusedCell(true);
       this._resetFocusedView();
       this._closeEditCell();
