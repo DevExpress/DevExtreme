@@ -12,6 +12,11 @@ export type SearchOperation = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'startswith
 /**
  * @namespace DevExpress.data
  */
+export type MultiValueSearchOperation = 'anyof' | 'noneof';
+
+/**
+ * @namespace DevExpress.data
+ */
 export type GroupingInterval = 'year' | 'quarter' | 'month' | 'day' | 'dayOfWeek' | 'hour' | 'minute' | 'second';
 
 /**
