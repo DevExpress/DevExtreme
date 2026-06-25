@@ -1,5 +1,7 @@
-import type { SearchOperation } from '@js/common/data.types';
-import type { BasicFilterExpr, FilterExprNode, FilterExprTree } from '@js/common/grids';
+import type { MultiValueSearchOperation, SearchOperation } from '@js/common/data.types';
+import type {
+  FilterExprNode, FilterExprTree, ScalarFilterValue,
+} from '@js/common/grids';
 import { when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
@@ -7,18 +9,24 @@ import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
-import { resolveFilterValue } from './utils';
+import { isMultiValueExpr, resolveFilterValue } from './utils';
 
 const FILTER_OPS = [
   '=', '<>', '<', '<=', '>', '>=',
   'contains', 'notcontains', 'startswith', 'endswith',
 ] as const satisfies readonly SearchOperation[];
 
-type FilterExprArray = | [string, SearchOperation, BasicFilterExpr['value']]
+const MULTI_VALUE_FILTER_OPS = [
+  'anyof', 'noneof',
+] as const satisfies readonly MultiValueSearchOperation[];
+
+type FilterExprArray = [string, SearchOperation, ScalarFilterValue]
+  | [string, MultiValueSearchOperation, ScalarFilterValue[]]
   | [FilterExprArray, 'and' | 'or', FilterExprArray]
   | ['!', FilterExprArray];
 
 const filterOpSchema = z.enum(FILTER_OPS);
+const multiValueFilterOpSchema = z.enum(MULTI_VALUE_FILTER_OPS);
 
 const filterValueScalarSchema = z.union([
   z.string().describe(
@@ -36,6 +44,13 @@ const basicFilterExprSchema = z.object({
   value: filterValueScalarSchema,
 }).strict();
 
+const multiValueFilterExprSchema = z.object({
+  type: z.enum(['basic']),
+  field: z.string(),
+  operator: multiValueFilterOpSchema,
+  value: z.array(filterValueScalarSchema),
+}).strict();
+
 const combinedFilterExprSchema = z.object({
   type: z.enum(['combined']),
   combiner: z.enum(['and', 'or']),
@@ -50,6 +65,7 @@ const negatedFilterExprSchema = z.object({
 
 const filterExprSchema = z.union([
   basicFilterExprSchema,
+  multiValueFilterExprSchema,
   combinedFilterExprSchema,
   negatedFilterExprSchema,
 ]);
@@ -101,6 +117,11 @@ function convertFilterExprToArray(
             throw new Error(`Unknown column: ${expr.field}`);
           }
 
+          if (isMultiValueExpr(expr)) {
+            const resolved = expr.value.map((v) => resolveFilterValue(column.dataType, v));
+            return [expr.field, expr.operator, resolved];
+          }
+
           const resolved = resolveFilterValue(column.dataType, expr.value);
 
           return [expr.field, expr.operator, resolved];
@@ -125,9 +146,9 @@ const getFilterSuccessMessage = async (
   filterValue: FilterExprArray,
 ): Promise<string> => {
   try {
+    const customOperations = component.getController('filterSync').getCustomFilterOperations();
     const filterText: string = await when(
-      // Custom filter operations are omitted as not supported in command
-      component.getView('filterPanelView').getFilterText(filterValue, []),
+      component.getView('filterPanelView').getFilterText(filterValue, customOperations),
     );
 
     return `Apply a filter: ${filterText}.`;
@@ -138,7 +159,40 @@ const getFilterSuccessMessage = async (
 
 export const filterValueCommand = defineGridCommand({
   name: 'filterValue',
-  description: 'Apply a filter expression to the grid. Replaces any existing filter; pass null for expression to clear. The expression is a flat node list: {"rootId":id,"nodes":[...]}. Each node is {"id":<unique string like "n1">,"expr":<expression>}, where "expr" is one of: basic {"type":"basic","field":dataField,"operator":op,"value":val}, combined {"type":"combined","combiner":"and"|"or","leftId":nodeId,"rightId":nodeId}, negated {"type":"negated","expressionId":nodeId}. "rootId" MUST be the "id" of the outermost node (the top of the expression tree) and must match one of the node ids exactly — never invent a value like "root". Every "leftId"/"rightId"/"expressionId" must also match a node "id". Ids must be unique and must not form cycles. The "field" of every basic expression MUST be the dataField of a column that exists in the grid (not the caption); the column may be hidden, but it must exist. Never filter on a field that has no corresponding column. Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith". DATE VALUES: When a value is a date or datetime, always use "YYYY-MM-DDTHH:mm:ss" format without timezone suffix, e.g. "2024-05-10T00:00:00" for midnight or "2024-05-10T14:30:00" for a specific time. Always include the "T" and time part. Do NOT use date-only format like "2024-05-10" without time. Do NOT append "Z" or any timezone offset unless the user explicitly requests it. Do NOT use natural language for dates. To express "not and" / "not or", add a negated node whose expressionId points at a combined node. Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node): {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.',
+  description: `Apply a filter expression to the grid. Replaces any existing filter;
+  pass null for expression to clear. The expression is a flat node list: {"rootId":id,"nodes":[...]}.
+  Each node is {"id":<unique string like "n1">,"expr":<expression>}, where "expr" is one of:
+  - basic {"type":"basic","field":dataField,"operator":op,"value":val}
+  - combined {"type":"combined","combiner":"and"|"or","leftId":nodeId,"rightId":nodeId}
+  - negated {"type":"negated","expressionId":nodeId}.
+  
+  "rootId" MUST be the "id" of the outermost node (the top of the expression tree) and must match one of
+  the node ids exactly — never invent a value like "root". Every "leftId"/"rightId"/"expressionId" must also
+  match a node "id". Ids must be unique and must not form cycles. The "field" of every basic expression MUST be
+  the dataField of a column that exists in the grid (not the caption); the column may be hidden, but it
+  must exist. Never filter on a field that has no corresponding column.
+
+  DATE VALUES: When a value is a date or datetime, always use "YYYY-MM-DDTHH:mm:ss" format without timezone
+  suffix, e.g. "2024-05-10T00:00:00" for midnight or "2024-05-10T14:30:00" for a specific time.
+  Always include the "T" and time part. Do NOT use date-only format like "2024-05-10" without time.
+  Do NOT append "Z" or any timezone offset unless the user explicitly requests it. Do NOT use natural language
+  for dates.
+  
+  Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith", "anyof", "noneof".
+
+  Use the anyof operator to filter by multiple values. This keeps the filter in sync with HeaderFilter.
+  For example, instead of using
+  {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"name","operator":"=","value":"Beta"}},{"id":"n3","expr":{"type":"combined","combiner":"or","leftId":"n1","rightId":"n2"}}]}
+  you need to use:
+  {"rootId": "n1", "nodes":[{"id":"n1", "expr":{"type":"basic", "field": "name", "operator":"anyof", "value":["Alpha", "Beta"]}}]}
+
+  Use the noneof operator to exclude multiple values. For example, to filter rows where name is neither "Alpha" nor "Beta":
+  {"rootId": "n1", "nodes":[{"id":"n1", "expr":{"type":"basic", "field": "name", "operator":"noneof", "value":["Alpha", "Beta"]}}]}
+
+  To express "not and" / "not or", add a negated node whose expressionId points at a combined node.
+  Example for name = "Alpha" AND age > 10 (rootId is "n3", the combined node):
+  {"rootId":"n3","nodes":[{"id":"n1","expr":{"type":"basic","field":"name","operator":"=","value":"Alpha"}},{"id":"n2","expr":{"type":"basic","field":"age","operator":">","value":10}},{"id":"n3","expr":{"type":"combined","combiner":"and","leftId":"n1","rightId":"n2"}}]}.
+  `,
   schema: filterValueCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     let defaultMessage = args.expression === null
