@@ -188,7 +188,6 @@ $(() => {
         editorOptions: {
           stylingMode,
           mode: 'text',
-          value: null,
         },
         aiOptions: {
           instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.',
