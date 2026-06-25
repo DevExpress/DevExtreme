@@ -162,11 +162,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return this.option('getResourceManager')();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  option(optionName?: string, value?: any) {
-    return super.option(...arguments);
-  }
-
   notifyObserver(subject, args) {
     const notifyScheduler: any = this.option('notifyScheduler');
     if (notifyScheduler) {

@@ -366,29 +366,6 @@ type AppointmentsEditingOptions = Partial<{
   allowAllDayResize: boolean;
 }>;
 
-interface SchedulerAppointmentsHost {
-  option: ((options: Record<string, unknown>) => unknown) & ((name: string, value?: unknown) => unknown);
-  repaint: () => void;
-  $element: () => dxElementWrapper;
-  focus: () => void;
-  moveAppointmentBack: (dragEvent?: SchedulerDragEvent | null) => void;
-  updateResizableArea: () => void;
-  renderDragClone: (...args: unknown[]) => dxElementWrapper;
-  getAppointmentData: (...args: unknown[]) => unknown;
-  getAppointmentSettings: (element: dxElementWrapper) => AppointmentViewModelPlain;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _createComponent: CreateComponentFn;
-  _renderItem: (index: number, item: unknown, container?: dxElementWrapper) => dxElementWrapper;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _getItemData: (element: dxElementWrapper) => unknown;
-  notifyObserver: (subject: string, args?: unknown) => void;
-  invoke: (funcName: string, ...args: unknown[]) => unknown;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _setDragSourceAppointment: (appointment: unknown, settings: unknown) => void;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _removeDragSourceClassFromDraggedAppointment: () => void;
-}
-
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
@@ -410,7 +387,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   // TODO: used externally in m_appointment_drag_behavior.ts,
   // m_subscribes.ts, workspaces/work_space.ts
-  _appointments!: SchedulerAppointmentsHost;
+  _appointments!: AppointmentCollection;
 
   private appointmentDragController!: AppointmentDragController;
 
@@ -1409,7 +1386,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       // @ts-expect-error
       this._appointments = this._createComponent('<div>', Appointments, appointmentsConfig);
     } else {
-      // @ts-expect-error
       this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
       this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
     }
@@ -1559,6 +1535,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.appointmentDragController.createTooltipDraggable(
             $(e.element),
             {
+              // @ts-expect-error
               dragTemplate: this._appointments.renderDragClone.bind(this._appointments),
             },
           );
@@ -1884,6 +1861,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.appointmentDragController.createWorkSpaceDraggable(
             $(e.element),
             {
+              // @ts-expect-error
               getAppointmentData: this._appointments.getAppointmentData.bind(
                 this._appointments,
               ) as WorkSpaceDraggableOptions['getAppointmentData'],
