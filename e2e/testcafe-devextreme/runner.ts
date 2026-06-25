@@ -163,7 +163,7 @@ async function main() {
         },
       });
 
-      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 4));
+      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 8));
 
       const filters: FilterFunction[] = [];
 

@@ -18,7 +18,7 @@ const CORES = (typeof os.availableParallelism === 'function'
   ? os.availableParallelism()
   : (os.cpus() || []).length) || 1;
 function defaultConcurrency() {
-  if (FRAMEWORK === 'jQuery') return Math.max(2, Math.min(8, CORES));
+  if (FRAMEWORK === 'jQuery') return Math.max(6, Math.min(8, CORES));
   if (USE_BUNDLED) return Math.max(2, Math.min(8, CORES));
   return 2;
 }
