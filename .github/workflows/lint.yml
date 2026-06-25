@@ -15,7 +15,7 @@ env:
 
 jobs:
   TS:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -43,8 +43,54 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-cache
 
+    - name: Lookup nx cache
+      id: lookup-nx-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
+
+        lookup-only: true
+
+    - name: Show nx cache status
+      shell: bash
+      run: |
+        echo "Nx cache lookup exact hit: ${{ steps.lookup-nx-cache.outputs.cache-hit }}"
+        echo "Nx cache primary key: ${{ steps.lookup-nx-cache.outputs.cache-primary-key }}"
+        echo "Nx cache matched key: ${{ steps.lookup-nx-cache.outputs.cache-matched-key }}"
+        if [ -z "${{ steps.lookup-nx-cache.outputs.cache-matched-key }}" ]; then
+          echo "Nx cache lookup: miss"
+        elif [ "${{ steps.lookup-nx-cache.outputs.cache-hit }}" = "true" ]; then
+          echo "Nx cache lookup: exact hit"
+        else
+          echo "Nx cache lookup: partial hit via restore-keys"
+        fi
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Setup nx cache
+      id: setup-nx-cache
+      uses: actions/cache@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -70,7 +116,7 @@ jobs:
       run: pnpm exec nx lint
 
   JS:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -98,8 +144,54 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-cache
 
+    - name: Lookup nx cache
+      id: lookup-nx-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
+
+        lookup-only: true
+
+    - name: Show nx cache status
+      shell: bash
+      run: |
+        echo "Nx cache lookup exact hit: ${{ steps.lookup-nx-cache.outputs.cache-hit }}"
+        echo "Nx cache primary key: ${{ steps.lookup-nx-cache.outputs.cache-primary-key }}"
+        echo "Nx cache matched key: ${{ steps.lookup-nx-cache.outputs.cache-matched-key }}"
+        if [ -z "${{ steps.lookup-nx-cache.outputs.cache-matched-key }}" ]; then
+          echo "Nx cache lookup: miss"
+        elif [ "${{ steps.lookup-nx-cache.outputs.cache-hit }}" = "true" ]; then
+          echo "Nx cache lookup: exact hit"
+        else
+          echo "Nx cache lookup: partial hit via restore-keys"
+        fi
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Setup nx cache
+      id: setup-nx-cache
+      uses: actions/cache@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -112,7 +204,7 @@ jobs:
       run: pnpm exec nx lint-js
 
   texts:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -140,15 +232,61 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-cache
 
+    - name: Lookup nx cache
+      id: lookup-nx-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
+
+        lookup-only: true
+
+    - name: Show nx cache status
+      shell: bash
+      run: |
+        echo "Nx cache lookup exact hit: ${{ steps.lookup-nx-cache.outputs.cache-hit }}"
+        echo "Nx cache primary key: ${{ steps.lookup-nx-cache.outputs.cache-primary-key }}"
+        echo "Nx cache matched key: ${{ steps.lookup-nx-cache.outputs.cache-matched-key }}"
+        if [ -z "${{ steps.lookup-nx-cache.outputs.cache-matched-key }}" ]; then
+          echo "Nx cache lookup: miss"
+        elif [ "${{ steps.lookup-nx-cache.outputs.cache-hit }}" = "true" ]; then
+          echo "Nx cache lookup: exact hit"
+        else
+          echo "Nx cache lookup: partial hit via restore-keys"
+        fi
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Setup nx cache
+      id: setup-nx-cache
+      uses: actions/cache@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Check texts
       working-directory: ./packages/devextreme
       run: pnpm exec nx lint-texts
 
   component_exports:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
     - name: Get sources
@@ -223,14 +361,60 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-cache
 
+    - name: Lookup nx cache
+      id: lookup-nx-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
+
+        lookup-only: true
+
+    - name: Show nx cache status
+      shell: bash
+      run: |
+        echo "Nx cache lookup exact hit: ${{ steps.lookup-nx-cache.outputs.cache-hit }}"
+        echo "Nx cache primary key: ${{ steps.lookup-nx-cache.outputs.cache-primary-key }}"
+        echo "Nx cache matched key: ${{ steps.lookup-nx-cache.outputs.cache-matched-key }}"
+        if [ -z "${{ steps.lookup-nx-cache.outputs.cache-matched-key }}" ]; then
+          echo "Nx cache lookup: miss"
+        elif [ "${{ steps.lookup-nx-cache.outputs.cache-hit }}" = "true" ]; then
+          echo "Nx cache lookup: exact hit"
+        else
+          echo "Nx cache lookup: partial hit via restore-keys"
+        fi
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Setup nx cache
+      id: setup-nx-cache
+      uses: actions/cache@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Lint wrappers
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [TS, JS, texts, component_exports]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
