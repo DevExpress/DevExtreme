@@ -113,4 +113,77 @@ describe('addGroupingOffset', () => {
       left: 1307, top: 89, columnIndex: 1, rowIndex: 1, groupIndex: 2,
     });
   });
+
+  describe('with groupHeights', () => {
+    it('should use cumulative offset for vertical grouping', () => {
+      const entity = { left: 7, top: 9, groupIndex: 2 } as any;
+
+      addGroupingOffset(entity, {
+        hasAllDayPanel: false,
+        groupCount: 3,
+        groupOrientation: 'vertical',
+        isGroupByDate: false,
+        isTimelineView: false,
+        allDayPanelCellSize: { width: 100, height: 80 },
+        cellSize: { width: 100, height: 80 },
+        groupSize: { width: 80, height: 800 },
+        groupHeights: [100, 200, 300],
+      } as any);
+
+      expect(entity).toEqual({ left: 7, top: 100 + 200 + 9, groupIndex: 2 });
+    });
+
+    it('should use group size height when group height is not specified', () => {
+      const entity = { left: 7, top: 9, groupIndex: 3 } as any;
+
+      addGroupingOffset(entity, {
+        hasAllDayPanel: false,
+        groupCount: 4,
+        groupOrientation: 'vertical',
+        isGroupByDate: false,
+        isTimelineView: false,
+        allDayPanelCellSize: { width: 100, height: 80 },
+        cellSize: { width: 100, height: 80 },
+        groupSize: { width: 80, height: 800 },
+        groupHeights: [100, 200],
+      } as any);
+
+      expect(entity).toEqual({ left: 7, top: 100 + 200 + 800 + 9, groupIndex: 3 });
+    });
+
+    it('should use cumulative offset with all day panel', () => {
+      const entity = { left: 7, top: 9, groupIndex: 2 } as any;
+
+      addGroupingOffset(entity, {
+        hasAllDayPanel: true,
+        groupCount: 3,
+        groupOrientation: 'vertical',
+        isGroupByDate: false,
+        isTimelineView: false,
+        allDayPanelCellSize: { width: 100, height: 50 },
+        cellSize: { width: 100, height: 80 },
+        groupSize: { width: 80, height: 800 },
+        groupHeights: [100, 200, 300],
+      } as any);
+
+      expect(entity).toEqual({ left: 7, top: 100 + 200 + 3 * 50 + 9, groupIndex: 2 });
+    });
+
+    it('should not affect horizontal grouping', () => {
+      const entity = { left: 7, top: 9, groupIndex: 2 } as any;
+
+      addGroupingOffset(entity, {
+        groupCount: 3,
+        groupOrientation: 'horizontal',
+        isGroupByDate: false,
+        isTimelineView: false,
+        allDayPanelCellSize: { width: 100, height: 80 },
+        cellSize: { width: 100, height: 80 },
+        groupSize: { width: 800, height: 80 },
+        groupHeights: [100, 200, 300],
+      } as any);
+
+      expect(entity).toEqual({ left: 2 * 800 + 7, top: 9, groupIndex: 2 });
+    });
+  });
 });
