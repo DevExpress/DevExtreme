@@ -1,0 +1,431 @@
+name: Cherry Pick
+on:
+  workflow_call:
+    inputs:
+      pr_number:
+        description: 'PR number to cherry-pick'
+        required: true
+        type: string
+      target_branch:
+        description: 'Target branch'
+        required: true
+        type: string
+      new_branch:
+        description: 'Optional new branch name'
+        required: false
+        type: string
+      max_files:
+        description: 'Maximum number of files allowed in PR'
+        required: false
+        default: 200
+        type: string
+      replace:
+        description: 'Strings to replace in patch'
+        required: false
+        type: string
+      exclude:
+        description: 'Files to exclude'
+        required: false
+        type: string
+jobs:
+  cherrypick:
+    runs-on: farm
+    env:
+      VM_IMAGE: WIN
+      VM_MEMORY: 512
+      VM_CPU: 1
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Cherry-pick
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const inputs = ${{ toJSON(inputs) }};
+            // parse inputs
+            const prNumber = parseInt(inputs.pr_number);
+            if (isNaN(prNumber)) {
+              throw new Error(`Invalid PR number: ${inputs.pr_number}`);
+            }
+            const targetBranch = inputs.target_branch;
+            const newBranchInput = inputs.new_branch;
+            const maxFiles = parseInt(inputs.max_files);
+            if (isNaN(maxFiles)) {
+              throw new Error(`Invalid Max files: ${inputs.max_files}`);
+            }
+            const replace = inputs.replace.split(' ');
+            const exclude = inputs.exclude.split(' ');
+
+            const { owner, repo } = context.repo;
+
+            // --- Helpers: patch parsing & safe apply ------------------------------------------------
+
+            function parsePatch(patch) {
+              const lines = patch.split(/\r\n|\n/);
+              const files = [];
+              let i = 0;
+
+              while (i < lines.length) {
+                const line = lines[i];
+
+                if (line.startsWith('diff --git ')) {
+                  const m = line.match(/^diff --git a\/(.+?) b\/(.+)$/);
+                  let oldPath = m ? m[1] : null;
+                  let newPath = m ? m[2] : null;
+                  i++;
+
+                  if (i < lines.length && lines[i] == 'similarity index 100%') {
+                    files.push({
+                      oldPath,
+                      newPath,
+                      isNewFile: false,
+                      isDeletedFile: false,
+                      hunks: []
+                    });
+                    continue;
+                  }
+
+                  let isNew = false, isDeleted = false;
+                  while (i < lines.length && !lines[i].startsWith('--- ')) {
+                    if (lines[i].startsWith('Binary files')) {
+                      throw new Error(`❌ Binary files not supported`);
+                    }
+                    if (lines[i].startsWith('new file mode')) isNew = true;
+                    if (lines[i].startsWith('deleted file mode')) isDeleted = true;
+                    i++;
+                  }
+
+                  if (i < lines.length && lines[i].startsWith('--- ')) {
+                    let raw = lines[i].slice(4).trim();
+                    oldPath = raw === '/dev/null' ? null : raw.replace(/^a\//, '');
+                    i++;
+                  }
+
+                  if (i < lines.length && lines[i].startsWith('+++ ')) {
+                    let raw = lines[i].slice(4).trim();
+                    newPath = raw === '/dev/null' ? null : raw.replace(/^b\//, '');
+                    i++;
+                  }
+
+                  const hunks = [];
+                  while (i < lines.length && !lines[i].startsWith('diff --git ')) {
+                    if (lines[i].startsWith('@@')) {
+                      const hh = lines[i].match(/^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/);
+                      if (!hh) throw new Error('Failed to parse hunk header: ' + lines[i]);
+                      const oldStart = parseInt(hh[1], 10);
+                      const oldCount = hh[2] ? parseInt(hh[2], 10) : 1;
+                      const newStart = parseInt(hh[3], 10);
+                      const newCount = hh[4] ? parseInt(hh[4], 10) : 1;
+                      i++;
+
+                      const hLines = [];
+
+                      while (i < lines.length && !lines[i].startsWith('@@') && !lines[i].startsWith('diff --git ')) {
+                        const l = lines[i];
+                        let s = l.slice(1)
+                        if (replace.length === 2) {
+                          s = s.replaceAll(replace[0], replace[1])
+                        }
+                        if (l.startsWith('+')) {
+                          hLines.push({ type: 'add', content: s });
+                        } else if (l.startsWith('-')) {
+                          hLines.push({ type: 'del', content: s });
+                        } else if (l.startsWith(' ')) {
+                          hLines.push({ type: 'context', content: s });
+                        } else if (l.startsWith('\\')) {
+                          // skip "\ No newline at end of file" marker completely
+                        } else {
+                          break; // stop if unknown
+                        }
+                        i++;
+                      }
+
+                      hunks.push({
+                        oldStart,
+                        oldCount,
+                        newStart,
+                        newCount,
+                        lines: hLines
+                      });
+                    } else {
+                      i++;
+                    }
+                  }
+                  if (!exclude.includes(newPath)) {
+                    files.push({
+                      oldPath,
+                      newPath,
+                      isNewFile: oldPath === null,
+                      isDeletedFile: newPath === null,
+                      hunks
+                    });
+                  }
+                } else {
+                  i++;
+                }
+              }
+
+              return files;
+            }
+
+            /**
+             * Apply hunks to base content lines FUZZY.
+             * If any hunk cannot be applied (context mismatch), throw an error.
+             * Returns resulting content string or null for deletion.
+             */
+            function applyHunksToContent(baseRaw, fileObj) {
+              // baseRaw: string or null (if file absent)
+              // For new file: baseLines = []
+              const baseLines = baseRaw !== null ? baseRaw.split(/\r\n|\n|\r/) : [];
+              const match = baseRaw !== null ? baseRaw.match(/\r\n|\r|\n/) : null;
+              const eol = match ? match[0] : '\r\n'; // fallback to CRLF if empty
+
+              let offset = 0;
+
+              const FUZZ = 20;
+
+              for (const hunk of fileObj.hunks) {
+                const oldStartZero = hunk.oldStart - 1; // convert to 0-based
+                let pos = oldStartZero + offset;
+                core.debug(`Applying hunk at ${pos}`);
+                const oldSegment = hunk.lines.filter(l => l.type === 'context' || l.type === 'del').map(l => l.content);
+                const newSegment = hunk.lines.filter(l => l.type === 'context' || l.type === 'add').map(l => l.content);
+
+                function matchesAt(position) {
+                  if (position < 0 || position + oldSegment.length > baseLines.length) return false;
+                  for (let j = 0; j < oldSegment.length; j++) {
+                    const expected = oldSegment[j];
+                    const actual = baseLines[position + j];
+                    if (actual !== expected) {
+                      core.debug(`Segments not equal at ${j}`);
+                      core.debug(`${expected}`);
+                      core.debug(`${actual}`);
+                      return false;
+                    }
+                  }
+                  return true;
+                }
+
+                let applied = false;
+                if (matchesAt(pos)) {
+                  baseLines.splice(pos, oldSegment.length, ...newSegment);
+                  offset += newSegment.length - oldSegment.length;
+                  applied = true;
+                } else {
+                  for (let delta = 1; delta <= FUZZ && !applied; delta++) {
+                    core.debug(`Try fuzz ${delta}`);
+                    if (matchesAt(pos - delta)) {
+                      pos = pos - delta;
+                      baseLines.splice(pos, oldSegment.length, ...newSegment);
+                      offset += newSegment.length - oldSegment.length;
+                      applied = true;
+                    } else if (matchesAt(pos + delta)) {
+                      pos = pos + delta;
+                      baseLines.splice(pos, oldSegment.length, ...newSegment);
+                      offset += newSegment.length - oldSegment.length;
+                      applied = true;
+                    }
+                  }
+                }
+
+                if (!applied) {
+                  const url = `https://github.com/${owner}/${repo}/blob/${targetBranch}/${fileObj.newPath}#L${hunk.oldStart}`;
+                  throw new Error(
+                    `❌ Cannot apply hunk in ${fileObj.oldPath || fileObj.newPath} around line ${url}`
+                  );
+                }
+              }
+
+              return baseLines.join(eol);
+            }
+            // helper: log GitHub API rate limit after a request
+            async function logRateLimit() {
+              try {
+                const { data: rate } = await github.rest.rateLimit.get();
+                core.info(`GitHub Rate Limit: ${rate.rate.remaining}/${rate.rate.limit} remaining. Reset at ${new Date(rate.rate.reset * 1000).toISOString()}`);
+              } catch (e) {
+                core.warning(`Failed to fetch rate limit: ${e}`);
+              }
+            }
+
+            // --- Main flow --------------------------------------------------------------------------
+
+            await logRateLimit();
+
+            // 1) Get PR metadata
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+
+            if (pr.merged_at === null) throw new Error('Pull request is not merged #' + prNumber);
+
+            // 2) Get patch content (unified patch)
+            const patchResp = await github.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
+              owner, repo, pull_number: prNumber,
+              headers: { accept: 'application/vnd.github.v3.diff' }
+            });
+            const patch = String(patchResp.data || '');
+
+            if (!patch.trim()) throw new Error('No patch content returned for PR #' + prNumber);
+
+            // 3) Parse the patch into file hunks
+            const filePatches = parsePatch(patch);
+            if (filePatches.length === 0) throw new Error('No file diffs parsed from patch.');
+            if (filePatches.length > maxFiles) {
+              throw new Error(`PR #${prNumber} has ${filePatches.length} files, which exceeds the limit of ${maxFiles}.`);
+            }
+
+            // 4) Resolve branch names / create branch
+            const safeTarget = targetBranch.replace(/[^a-zA-Z0-9_/-]/g, '');
+            const newBranch = newBranchInput || `cherry-pick-${prNumber}-to-${safeTarget}-${pr.head.sha.slice(0,7)}`;
+
+            // 5) Get base (target branch) commit SHA and tree SHA
+            const { data: baseRef } = await github.rest.git.getRef({ owner, repo, ref: `heads/${targetBranch}` });
+            const baseCommitSha = baseRef.object.sha;
+            const { data: baseCommit } = await github.rest.git.getCommit({ owner, repo, commit_sha: baseCommitSha });
+            const baseTreeSha = baseCommit.tree.sha;
+
+            // 6) For each file in patch, fetch base content on target branch and apply hunks
+            const treeItems = [];
+            for (const fp of filePatches) {
+              const pathOld = fp.oldPath; // may be null => /dev/null (new file)
+              const pathNew = fp.newPath; // may be null => /dev/null (deleted file)
+              const targetReadPath = pathOld || pathNew; // source path to read base from (rename: oldPath)
+              let baseRaw = null;
+
+              if (pathOld !== null) {
+                // fetch content of old path from target branch
+                try {
+                  const { data: contentData } = await github.rest.repos.getContent({
+                    owner, repo, path: pathOld, ref: targetBranch
+                  });
+
+                  if (Array.isArray(contentData)) {
+                    throw new Error(`Path ${pathOld} is a directory on target branch; cannot apply patch.`);
+                  }
+
+                  const buf = Buffer.from(contentData.content, contentData.encoding || 'base64');
+                  // quick binary detection: embedded zero byte => binary
+                  if (buf.includes(0)) throw new Error(`File ${pathOld} appears binary on target branch; aborting.`);
+                  baseRaw = buf.toString('utf8');
+                } catch (err) {
+                  // 404 means file doesn't exist on target branch
+                  if (err.status === 404) {
+                    baseRaw = null;
+                  } else {
+                    throw err;
+                  }
+                }
+              } else {
+                // oldPath === null => new file in PR; start from empty content
+                baseRaw = null;
+              }
+
+              // If file is deletion (newPath === null), we will delete target path
+              if (fp.isDeletedFile) {
+                // Validate that the file to delete actually exists on target branch (if not — we can skip or warn)
+                // We'll allow deletion even if absent (no-op).
+                treeItems.push({ path: pathOld, type: 'blob', mode: '100644', sha: null });
+                continue;
+              }
+
+              // For other files (new/mod/rename) apply hunks
+              // If baseRaw is null and file is not new => this is a modification of a non-existing file -> fail
+              if (baseRaw === null && !fp.isNewFile && fp.oldPath !== null) {
+                throw new Error(`Target branch does not contain ${fp.oldPath}; cannot apply modification hunks.`);
+              }
+
+              // Apply hunks strictly
+              const finalContent = applyHunksToContent(baseRaw, fp);
+
+              // Determine new path to write to
+              const writePath = pathNew || pathOld;
+              if (!writePath) throw new Error('Cannot determine write path for file patch.');
+
+              // Detect binary in new content (safety)
+              if (Buffer.from(finalContent, 'utf8').includes(0)) {
+                throw new Error(`Resulting content for ${writePath} appears binary; aborting.`);
+              }
+
+              // Add blob entry (create/modify)
+              treeItems.push({
+                path: writePath,
+                mode: '100644',
+                type: 'blob',
+                content: finalContent
+              });
+
+              // If rename (oldPath !== null && newPath !== null && oldPath !== newPath) -> delete oldPath
+              if (fp.oldPath && fp.newPath && fp.oldPath !== fp.newPath) {
+                treeItems.push({ path: fp.oldPath, mode: '100644', sha: null });
+              }
+            }
+
+            if (treeItems.length === 0) {
+              throw new Error('No tree items generated from patch (nothing to commit).');
+            }
+
+            // 7) Create branch (or ignore if exists)
+            try {
+              await github.rest.git.createRef({ owner, repo, ref: `refs/heads/${newBranch}`, sha: baseCommitSha });
+            } catch (e) {
+              if (e.status !== 422) throw e; // 422 = ref exists
+              core.info(`Branch ${newBranch} already exists; it will be updated.`);
+            }
+
+            // 8) Create new tree based on target branch tree
+            const { data: newTree } = await github.rest.git.createTree({
+              owner, repo,
+              base_tree: baseTreeSha,
+              tree: treeItems
+            });
+
+            // 9) Create commit with parent = target branch tip
+            const commiterName = process.env.GITHUB_ACTOR;
+            const commiterEmail = `${process.env.GITHUB_ACTOR_ID}+${commiterName}@users.noreply.github.com`;
+            const now = new Date().toISOString();
+
+            const authorName = pr.user.login;
+            const authorEmail = `${pr.user.id}+${authorName}@users.noreply.github.com`;
+            
+            const commitMessage = `${pr.title}\n${pr.body || ''}`;
+            const { data: newCommit } = await github.rest.git.createCommit({
+              owner, repo,
+              message: commitMessage,
+              tree: newTree.sha,
+              parents: [baseCommitSha],
+              author: {
+                name: authorName,
+                email: authorEmail,
+                date: now
+              },
+              committer: {
+                name: commiterName,
+                email: commiterEmail,
+                date: now
+              }
+            });
+
+            // 10) Update branch ref to new commit (force update if branch existed)
+            await github.rest.git.updateRef({
+              owner, repo,
+              ref: `heads/${newBranch}`,
+              sha: newCommit.sha,
+              force: true
+            });
+
+            // 11) Create PR
+            const prBody = `Cherry pick #${prNumber}\n${pr.body || ''}`;
+            const { data: newPr } = await github.rest.pulls.create({
+              owner, repo,
+              title: pr.title,
+              body: prBody,
+              base: targetBranch,
+              head: newBranch,
+              draft: true
+            });
+            
+            await logRateLimit();
+            core.setOutput('new_pr_number', String(newPr.number));
+            core.setOutput('new_pr_url', newPr.html_url);
+            core.notice(`Created PR #${newPr.number}: ${newPr.html_url}`);
