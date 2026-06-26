@@ -16,7 +16,7 @@ class CalendarSelectionStrategy {
     this.calendar = component;
   }
 
-  dateValue(value: Date | null | (Date | null)[], e: DxEvent): void {
+  dateValue(value: Date | (Date | null)[] | null, e: DxEvent): void {
     this.calendar._dateValue(value, e);
   }
 
@@ -34,8 +34,8 @@ class CalendarSelectionStrategy {
   }
 
   processValueChanged(
-    val: Date | null | (Date | null)[],
-    previousVal: Date | null | (Date | null)[],
+    val: Date | (Date | null)[] | null,
+    previousVal: Date | (Date | null)[] | null,
   ): void {
     let value = val;
     let previousValue = previousVal;

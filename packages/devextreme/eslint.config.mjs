@@ -384,8 +384,9 @@ export default [
     },
     // Require `null` and `undefined` to be placed at the end of union types,
     // with `null` before `undefined` when both are present.
+    // Applies to public API definitions and internal TS source.
     {
-        files: ['js/**/*.d.ts'],
+        files: ['js/**/*.d.ts', 'js/__internal/**/*.ts?(x)'],
         plugins: {
             perfectionist,
         },
