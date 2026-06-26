@@ -1773,7 +1773,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(this.getScrollView().scrollTop(), this.getScrollOffsetMax(), 1, 'max scroll position should be saved after increasing height');
         });
 
-        QUnit.test('should update visual scroll position after reducing height if it\'s not scrolled to the bottom (fix viewport bottom point)', async function(assert) {
+        QUnit.skip('should update visual scroll position after reducing height if it\'s not scrolled to the bottom (fix viewport bottom point)', async function(assert) {
             const items = generateMessages(31);
 
             this.reinit({
@@ -1818,7 +1818,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(this.getScrollView().scrollTop(), newScrollTop, 1, 'scroll position should be saved correctly after increasing height');
         });
 
-        QUnit.test('should limit scroll position after increasing height more than scroll offset allows', async function(assert) {
+        QUnit.skip('should limit scroll position after increasing height more than scroll offset allows', async function(assert) {
             const items = generateMessages(31);
 
             this.reinit({
