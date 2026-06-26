@@ -17,7 +17,7 @@ export type Xor<T1, T2 = never, T3 = never, T4 = never, T5 = never, T6 = never, 
   | Seal<T8, KeysOf<T1, T2, T3, T4, T5, T6, T7, T9>>
   | Seal<T9, KeysOf<T1, T2, T3, T4, T5, T6, T7, T8>>;
 
-export type Scalar = string | String | number | Number | bigint | BigInteger | boolean | Boolean | Date | Function | Symbol | Array<unknown> | undefined | null;
+export type Scalar = string | String | number | Number | bigint | BigInteger | boolean | Boolean | Date | Function | Symbol | Array<unknown> | null | undefined;
 export type DeepPartial<T> = T | (T extends Scalar ? T : {
   [P in keyof T]?: DeepPartial<T[P]>;
 });

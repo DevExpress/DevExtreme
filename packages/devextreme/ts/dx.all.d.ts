@@ -7497,8 +7497,8 @@ declare module DevExpress.core {
     | Function
     | Symbol
     | Array<unknown>
-    | undefined
-    | null;
+    | null
+    | undefined;
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7537,12 +7537,12 @@ declare module DevExpress.core.utils {
             value: T,
             extraParameters?: any
           ) => TResult1 | PromiseLike<TResult1>)
-        | undefined
-        | null,
+        | null
+        | undefined,
       onRejected?:
         | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-        | undefined
         | null
+        | undefined
     ): PromiseLike<TResult1 | TResult2>;
   };
   /**

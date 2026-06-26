@@ -382,7 +382,8 @@ export default [
             '@typescript-eslint/no-empty-interface': 'off',
         },
     },
-    // Require `null` and `undefined` to be placed at the end of union types
+    // Require `null` and `undefined` to be placed at the end of union types,
+    // with `null` before `undefined` when both are present.
     {
         files: ['js/**/*.d.ts'],
         plugins: {
@@ -391,7 +392,10 @@ export default [
         rules: {
             'perfectionist/sort-union-types': ['error', {
                 type: 'unsorted',
-                groups: ['unknown', 'nullish'],
+                groups: ['unknown', 'null', 'nullish'],
+                customGroups: [
+                    { groupName: 'null', elementNamePattern: '^null$' },
+                ],
             }],
         },
     },
