@@ -30,10 +30,6 @@ on:
 jobs:
   cherrypick:
     runs-on: ubuntu-latest
-    env:
-      VM_IMAGE: WIN
-      VM_MEMORY: 512
-      VM_CPU: 1
     timeout-minutes: 10
     permissions:
       contents: write
