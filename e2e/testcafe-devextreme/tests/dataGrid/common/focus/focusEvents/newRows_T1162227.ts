@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
@@ -337,24 +338,18 @@ test('It should fire correct events on page change', async (t) => {
 
 test('It should fire row changed event and change page if focusedRowKey on another page', async (t) => {
   const expectedRowFocusChanged: FocusRowChangedData[] = [[1]];
+  const getRowFocusChanged = ClientFunction(() => {
+    const extendedWindow = window as WindowCallbackExtended;
+
+    return extendedWindow.clientTesting!.data.rowFocusChanged;
+  });
 
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
-  await t.wait(100);
-
-  const [
-    ,
-    ,
-    ,
-    rowFocusChanged,
-  ] = await collectEventsCallbackResults();
-
-  const cellText = await dataGrid.getDataCell(3, 0).element().innerText;
-
   await t
-    .expect(rowFocusChanged)
+    .expect(getRowFocusChanged())
     .eql(expectedRowFocusChanged)
-    .expect(cellText)
+    .expect(dataGrid.getDataCell(3, 0).element.innerText)
     .eql('dataA_3');
 }).before(async () => {
   await initCallbackTesting();

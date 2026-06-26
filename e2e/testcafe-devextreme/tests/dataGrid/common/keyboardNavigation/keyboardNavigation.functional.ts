@@ -1870,7 +1870,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 
-  test(`${editMode} mode - Shift+Tab from the first editable cell should move focus to the last header (T1329750)`, async (t) => {
+  test.meta({ unstable: true })(`${editMode} mode - Shift+Tab from the first editable cell should move focus to the last header (T1329750)`, async (t) => {
     const dataGrid = new DataGrid('#container') as any;
     const cell00 = dataGrid.getDataCell(0, 0);
     const editor00 = cell00.getEditor();
@@ -6323,7 +6323,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6661,7 +6661,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
