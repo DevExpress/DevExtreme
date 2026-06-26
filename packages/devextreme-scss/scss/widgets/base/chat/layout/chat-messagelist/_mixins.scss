@@ -70,6 +70,12 @@
   }
 }
 
+@mixin chat-messagelist-scroll-to-bottom-button($box-shadow) {
+  .dx-chat-messagelist-scroll-to-bottom-button {
+    box-shadow: $box-shadow;
+  }
+}
+
 @mixin chat-messagelist-contextmenu(
   $delete-button-color,
   $delete-button-focused-color,
