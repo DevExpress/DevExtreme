@@ -796,10 +796,7 @@
         "mode": "modules",
         "typescriptModule": "typescript-min"
       },
-      "inputs": [
-        "{projectRoot}/js/**/*.d.ts",
-        "{projectRoot}/build/gulp/modules_metadata.json"
-      ]
+      "inputs": ["{projectRoot}/js/**/*.d.ts"]
     },
     "verify:ts-bundle": {
       "executor": "devextreme-nx-infra-plugin:check-declarations",
@@ -860,8 +857,8 @@
         "internal": {
           "commands": [
             "pnpm nx run devextreme:copy:ts-vendor",
-            "pnpm nx run devextreme:verify:ts-jquery",
-            "pnpm nx run devextreme:verify:ts-bundle"
+            "pnpm nx run devextreme:verify:ts-jquery -c internal",
+            "pnpm nx run devextreme:verify:ts-bundle -c internal"
           ],
           "parallel": false
         }
