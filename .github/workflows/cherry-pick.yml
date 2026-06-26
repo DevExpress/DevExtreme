@@ -203,7 +203,7 @@ jobs:
               // For new file: baseLines = []
               const baseLines = baseRaw !== null ? baseRaw.split(/\r\n|\n|\r/) : [];
               const match = baseRaw !== null ? baseRaw.match(/\r\n|\r|\n/) : null;
-              const eol = match ? match[0] : '\r\n'; // fallback to CRLF if empty
+              const eol = match ? match[0] : '\n'; // new/empty file: default to LF, not CRLF
 
               let offset = 0;
 
