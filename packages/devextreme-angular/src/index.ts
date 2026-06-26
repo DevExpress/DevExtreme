@@ -314,6 +314,7 @@ export namespace Common {
         export const LocalStore = (DataModule as any).LocalStore as typeof import('devextreme/common/data').LocalStore;
         export type LocalStore<TItem = any, TKey = any> = import('devextreme/common/data').LocalStore<TItem, TKey>;
         export type LocalStoreOptions<TItem = any, TKey = any> = import('devextreme/common/data').LocalStoreOptions<TItem, TKey>;
+        export type MultiValueSearchOperation = import('devextreme/common/data').MultiValueSearchOperation;
         export const ODataContext = (DataModule as any).ODataContext as typeof import('devextreme/common/data').ODataContext;
         export type ODataContext = import('devextreme/common/data').ODataContext;
         export type ODataContextOptions = import('devextreme/common/data').ODataContextOptions;

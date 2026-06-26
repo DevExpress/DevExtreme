@@ -51,6 +51,7 @@
       ]
     },
     "build:localization": {
+      "cache": true,
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -62,7 +63,8 @@
       "inputs": [
         "{projectRoot}/js/localization/messages/**/*.json",
         "{projectRoot}/build/gulp/localization-template.jst",
-        "{projectRoot}/build/gulp/generated_js.jst"
+        "{projectRoot}/build/gulp/generated_js.jst",
+        { "externalDependencies": ["cldrjs", "cldr-core", "devextreme-cldr-data"] }
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/localization",
@@ -713,6 +715,7 @@
       }
     },
     "build:vectormap": {
+      "cache": true,
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -788,6 +791,7 @@
       "outputs": ["{projectRoot}/artifacts/js/dx.aspnet.mvc.js"]
     },
     "build:declarations": {
+      "cache": true,
       "executor": "nx:run-commands",
       "options": {
         "command": "gulp ts",
@@ -795,7 +799,9 @@
       },
       "inputs": [
         "{projectRoot}/ts/**/*.d.ts",
-        "{projectRoot}/build/gulp/ts.js"
+        "{projectRoot}/build/gulp/ts.js",
+        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
         "{projectRoot}/artifacts/ts"
@@ -1112,6 +1118,7 @@
       }
     },
     "copy:vendor:js": {
+      "cache": true,
       "executor": "devextreme-nx-infra-plugin:copy-files",
       "options": {
         "files": [
@@ -1171,6 +1178,7 @@
       ]
     },
     "copy:vendor:css": {
+      "cache": true,
       "executor": "devextreme-nx-infra-plugin:copy-files",
       "options": {
         "files": [
@@ -1375,7 +1383,10 @@
       "inputs": [
         "internalPackageEnv",
         "default",
-        "test"
+        "!{projectRoot}/js/__internal/core/localization/cldr-data/**/*",
+        "!{projectRoot}/js/__internal/core/localization/default_messages.ts",
+        "test",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
         "{projectRoot}/artifacts",
@@ -1383,6 +1394,7 @@
         "{projectRoot}/js/__internal/core/localization/cldr-data",
         "{projectRoot}/js/__internal/core/localization/default_messages.ts"
       ],
+      "cache": true,
       "configurations": {
         "testing": {
           "env": {
@@ -1418,12 +1430,14 @@
       "inputs": [
         "internalPackageEnv",
         "default",
-        "test"
+        "test",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
         "{projectRoot}/artifacts",
         "{projectRoot}/scss/bundles"
-      ]
+      ],
+      "cache": true
     },
     "build:dev": {
       "executor": "nx:run-script",
@@ -1439,23 +1453,18 @@
           "env": "DEVEXTREME_TEST_CI"
         },
         "default",
-        "test"
+        "!{projectRoot}/js/__internal/core/localization/cldr-data/**/*",
+        "!{projectRoot}/js/__internal/core/localization/default_messages.ts",
+        "test",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
         "{projectRoot}/artifacts",
         "{projectRoot}/build/bundle-templates/dx.custom.js",
         "{projectRoot}/js/__internal/core/localization/cldr-data",
         "{projectRoot}/js/__internal/core/localization/default_messages.ts"
-      ]
-    },
-    "dev": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "dev"
-      },
-      "dependsOn": [
-        "^build"
-      ]
+      ],
+      "cache": true
     },
     "build:systemjs": {
       "executor": "nx:run-script",
@@ -1464,6 +1473,35 @@
       },
       "dependsOn": [
         "build:dev"
+      ],
+      "inputs": [
+        "{projectRoot}/artifacts/transpiled/**/*",
+        "{projectRoot}/artifacts/css/dx.light.css",
+        "{projectRoot}/artifacts/css/dx.material.blue.light.css",
+        "{projectRoot}/artifacts/css/dx.fluent.blue.light.css",
+        "{projectRoot}/artifacts/css/dx-gantt.css",
+        "{projectRoot}/testing/content/**/*",
+        "{projectRoot}/testing/helpers/**/*",
+        "{projectRoot}/testing/tests/**/*",
+        "{projectRoot}/testing/systemjs-builder.js",
+        "{projectRoot}/build/gulp/systemjs.js",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled-systemjs",
+        "{projectRoot}/artifacts/transpiled-testing",
+        "{projectRoot}/artifacts/css-systemjs",
+        "{projectRoot}/artifacts/js-systemjs"
+      ],
+      "cache": true
+    },
+    "lint": {
+      "executor": "nx:noop",
+      "dependsOn": [
+        "lint-js",
+        "lint-ts",
+        "lint-dts",
+        "lint-texts"
       ]
     },
     "lint-css": {
@@ -1510,8 +1548,26 @@
         },
         "{projectRoot}/**/*.ts?(x)",
         "{projectRoot}/.eslint*",
-        "!{projectRoot}/**/*.d.ts",
-        "!{projectRoot}/testing/renovation/**/*"
+        "!{projectRoot}/**/*.d.ts"
+      ]
+    },
+    "lint-texts": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-texts"
+      },
+      "inputs": [
+        "{projectRoot}/**/*",
+        "!{projectRoot}/**/*.{js,ts,tsx}",
+        "!{projectRoot}/**/*.{jpg,gif,ico,png}",
+        "!{projectRoot}/artifacts/**",
+        "!{projectRoot}/build/**",
+        "!{projectRoot}/fonts/**",
+        "!{projectRoot}/icons/**",
+        "!{projectRoot}/localization/**",
+        "!{projectRoot}/node_modules/**",
+        "{projectRoot}/build/linters/validate-non-latin-symbols.js",
+        "{projectRoot}/.gitignore"
       ]
     },
     "test-jest": {

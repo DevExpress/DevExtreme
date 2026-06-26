@@ -136,7 +136,7 @@ test('The focused state of a row with the 0 key should be restored (T1252962)', 
 }));
 
 test('DataGrid - Cannot read properties of undefined (reading \'done\') error occurs when column fixing and state storing are used (T1283168)', async (t) => {
-  await t.eval(() => location.reload());
+  await t.navigateTo(url(__dirname, '../../../container.html'));
   await createWidget('dxDataGrid', { ...dataGridConfig });
   // eslint-disable-next-line @stylistic/max-len
   // DataGrid is expected to load normally with the given configuration, so no other checks are required.

@@ -10,15 +10,27 @@
         "script": "build"
       },
       "inputs": [
-        "{projectRoot}/src",
-        "{projectRoot}/tests"
+        "{projectRoot}/src/**/*",
+        "{projectRoot}/tests/**/*",
+        "{projectRoot}/package.json",
+        "{projectRoot}/README.md",
+        "{projectRoot}/tsconfig*.json",
+        "{workspaceRoot}/packages/devextreme/js/**/*",
+        "{workspaceRoot}/packages/devextreme/build/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/packages/devextreme-scss/build/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/images/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
         "{projectRoot}/dist",
         "{projectRoot}/src/data/metadata",
-        "{projectRoot}/src/data/scss",
-        "{workspaceRoot}/packages/devextreme-scss/scss/**/*.scss"
-      ]
+        "{projectRoot}/src/data/scss"
+      ],
+      "cache": true
     },
     "test": {
       "executor": "nx:run-script",
