@@ -22,9 +22,15 @@ test('FilterBuilder - First field uses the dataField property while subsequent f
     ],
   ];
   await t
+    .expect(filterBuilder.isReady())
+    .ok();
+
+  await t
     .click(filterBuilder.getAddButton())
-    .expect(FilterBuilder.getPopupTreeView().visible).ok()
+    .expect(FilterBuilder.getPopupTreeViewNode(0).visible).ok()
     .click(FilterBuilder.getPopupTreeViewNode(0))
+    .expect(filterBuilder.getField(1, 'itemValue').element.exists)
+    .ok()
     .click(filterBuilder.getField(1, 'itemValue').element)
     .pressKey('A enter');
 
@@ -34,8 +40,10 @@ test('FilterBuilder - First field uses the dataField property while subsequent f
 
   await t
     .click(filterBuilder.getField(1, 'item').element)
-    .expect(FilterBuilder.getPopupTreeView().visible).ok()
+    .expect(FilterBuilder.getPopupTreeViewNode(1).visible).ok()
     .click(FilterBuilder.getPopupTreeViewNode(1))
+    .expect(filterBuilder.getField(1, 'itemValue').element.exists)
+    .ok()
     .click(filterBuilder.getField(1, 'itemValue').element)
     .pressKey('A enter');
 
