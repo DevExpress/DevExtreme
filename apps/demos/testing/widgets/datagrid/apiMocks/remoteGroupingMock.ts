@@ -72,7 +72,7 @@ const storeGroupsScrolledPage = {
 const categoryGroups = {
   data: [
     { key: 'Audio', count: 65 },
-    { key: 'Cameras and camcorders ', count: 356 },
+    { key: 'Cameras and camcorders', count: 356 },
     { key: 'Cell phones', count: 256 },
     { key: 'Computers', count: 529 },
     { key: 'Games and Toys', count: 56 },
