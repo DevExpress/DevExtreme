@@ -111,12 +111,18 @@ function formatDiagnostics(
   diagnostics: readonly import('typescript').Diagnostic[],
 ): string[] {
   return diagnostics.map((diagnostic) => {
-    if (diagnostic.file) {
-      const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
-      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE);
+    const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE);
+
+    if (diagnostic.file && diagnostic.start !== undefined) {
+      const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
       return `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`;
     }
-    return ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE);
+
+    if (diagnostic.file) {
+      return `${diagnostic.file.fileName}: ${message}`;
+    }
+
+    return message;
   });
 }
 
