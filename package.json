@@ -33,7 +33,7 @@
     "@nx/jest": "23.0.1",
     "@nx/js": "23.0.1",
     "@types/jest": "29.5.14",
-    "@types/node": "20.12.8",
+    "@types/node": "catalog:tools",
     "@types/shelljs": "0.8.15",
     "axe-core": "catalog:",
     "@types/yargs": "17.0.35",
@@ -46,6 +46,8 @@
     "shelljs": "0.8.5",
     "stylelint": "catalog:",
     "ts-node": "10.9.2",
+    "typescript": "catalog:tools",
+    "vue": "3.4.27",
     "yargs": "17.7.2"
   },
   "pre-commit": [
