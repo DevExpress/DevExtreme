@@ -52,10 +52,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -86,10 +86,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Build
@@ -153,10 +153,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -187,10 +187,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Build
@@ -241,10 +241,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -275,10 +275,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Check texts
@@ -370,10 +370,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -404,10 +404,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Lint wrappers
