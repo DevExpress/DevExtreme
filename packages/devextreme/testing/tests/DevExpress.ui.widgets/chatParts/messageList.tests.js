@@ -47,9 +47,6 @@ const getStringDate = (date) => {
 };
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 
-// NOTE: scroll restoration after a height change is driven by an asynchronous
-// ResizeObserver, so a fixed delay races with it under CI load. Poll until the
-// expected condition holds (bounded) instead of guessing a timeout.
 const waitForCondition = (condition, timeout = 3000, interval = 15) => new Promise((resolve) => {
     const startTime = Date.now();
     const timer = setInterval(() => {
@@ -1685,8 +1682,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should remain the same after rendering the new message');
         });
 
-        QUnit.skip('should be scrolled down after showing if was initially rendered inside an invisible element', function(assert) {
-            const done = assert.async();
+        QUnit.test('should be scrolled down after showing if was initially rendered inside an invisible element', async function(assert) {
             $('#qunit-fixture').css('display', 'none');
 
             const items = generateMessages(31);
@@ -1699,26 +1695,20 @@ QUnit.module('MessageList', () => {
 
             this.$element.css('height', 400);
 
-            setTimeout(() => {
-                const scrollTop = this.getScrollView().scrollTop();
+            assert.strictEqual(this.getScrollView().scrollTop(), 0, 'scroll position should be 0 when the element is hidden');
 
-                assert.strictEqual(scrollTop, 0, 'scroll position should be 0 when the element is hidden');
+            $('#qunit-fixture').css('display', 'block');
 
-                $('#qunit-fixture').css('display', 'block');
+            await waitForCondition(() => this.getScrollView().scrollTop() !== 0
+                && Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
 
-                setTimeout(() => {
-                    const scrollTop = this.getScrollView().scrollTop();
+            const scrollTop = this.getScrollView().scrollTop();
 
-                    assert.notEqual(scrollTop, 0, 'scroll position should change after the element is made visible');
-                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after element becomes visible');
-
-                    done();
-                }, this._resizeTimeout);
-            }, this._resizeTimeout);
+            assert.notEqual(scrollTop, 0, 'scroll position should change after the element is made visible');
+            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after element becomes visible');
         });
 
-        QUnit.skip('should be scrolled down after being initialized on a detached element and then attached to the DOM', function(assert) {
-            const done = assert.async();
+        QUnit.test('should be scrolled down after being initialized on a detached element and then attached to the DOM', async function(assert) {
             const $messageList = $('<div id="messageListDetached">');
 
             const items = generateMessages(31);
@@ -1731,22 +1721,17 @@ QUnit.module('MessageList', () => {
 
             this.$element.css('height', 400);
 
-            setTimeout(() => {
-                const scrollTop = this.getScrollView().scrollTop();
+            assert.strictEqual(this.getScrollView().scrollTop(), 0, 'scroll position should be 0 while the element is detached');
 
-                assert.strictEqual(scrollTop, 0, 'scroll position should be 0 while the element is detached');
+            $messageList.appendTo('#qunit-fixture');
 
-                $messageList.appendTo('#qunit-fixture');
+            await waitForCondition(() => this.getScrollView().scrollTop() !== 0
+                && Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
 
-                setTimeout(() => {
-                    const scrollTop = this.getScrollView().scrollTop();
+            const scrollTop = this.getScrollView().scrollTop();
 
-                    assert.notEqual(scrollTop, 0, 'scroll position should change after the element is attached to the DOM');
-                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after attachment');
-
-                    done();
-                }, this._resizeTimeout);
-            });
+            assert.notEqual(scrollTop, 0, 'scroll position should change after the element is attached to the DOM');
+            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after attachment');
         });
 
         QUnit.test('should be scrolled to the bottom after reducing height if it\'s initially scrolled to the bottom', async function(assert) {
@@ -1789,7 +1774,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(this.getScrollView().scrollTop(), this.getScrollOffsetMax(), 1, 'max scroll position should be saved after increasing height');
         });
 
-        QUnit.skip('should update visual scroll position after reducing height if it\'s not scrolled to the bottom (fix viewport bottom point)', async function(assert) {
+        QUnit.test('should update visual scroll position after reducing height if it\'s not scrolled to the bottom (fix viewport bottom point)', async function(assert) {
             const items = generateMessages(31);
 
             this.reinit({
@@ -1805,14 +1790,12 @@ QUnit.module('MessageList', () => {
             this.getScrollView().scrollTo({ top: this.getScrollOffsetMax() - 200 });
             this.instance.option('height', 300);
 
-            // Reducing the container height shifts the viewport bottom point, so the scroll
-            // position is expected to settle at (new max scroll offset - 200).
             await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - (this.getScrollOffsetMax() - 200)) <= 1);
 
             assert.roughEqual(this.getScrollView().scrollTop(), this.getScrollOffsetMax() - 200, 1, 'scroll position should be set correctly after reducing height');
         });
 
-        QUnit.skip('should keep visual scroll position after increasing height if it\'s not scrolled to the bottom (fix viewport top point)', async function(assert) {
+        QUnit.test('should keep visual scroll position after increasing height if it\'s not scrolled to the bottom (fix viewport top point)', async function(assert) {
             const items = generateMessages(31);
 
             this.reinit({
@@ -1834,9 +1817,7 @@ QUnit.module('MessageList', () => {
             assert.roughEqual(this.getScrollView().scrollTop(), newScrollTop, 1, 'scroll position should be saved correctly after increasing height');
         });
 
-        QUnit.skip('should limit scroll position after increasing height more than scroll offset allows', function(assert) {
-            const done = assert.async();
-
+        QUnit.test('should limit scroll position after increasing height more than scroll offset allows', async function(assert) {
             const items = generateMessages(31);
 
             this.reinit({
@@ -1845,24 +1826,19 @@ QUnit.module('MessageList', () => {
                 items,
             });
 
-            setTimeout(() => {
-                const newScrollTop = this.getScrollOffsetMax() - 200;
+            await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
 
-                this.getScrollView().scrollTo({ top: newScrollTop });
-                this.instance.option('height', 800);
+            const newScrollTop = this.getScrollOffsetMax() - 200;
 
-                setTimeout(() => {
-                    const scrollTop = this.getScrollView().scrollTop();
+            this.getScrollView().scrollTo({ top: newScrollTop });
+            this.instance.option('height', 800);
 
-                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1.01, 'scroll position should be limited to the max scrollable offset after increasing height');
+            await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1.01);
 
-                    done();
-                }, this._resizeTimeout);
-            }, this._resizeTimeout);
+            assert.roughEqual(this.getScrollView().scrollTop(), this.getScrollOffsetMax(), 1.01, 'scroll position should be limited to the max scrollable offset after increasing height');
         });
 
-        QUnit.skip('should be scrolled down to companion reply rendered immediately after current user message', function(assert) {
-            const done = assert.async();
+        QUnit.test('should be scrolled down to companion reply rendered immediately after current user message', async function(assert) {
             const items = generateMessages(67);
 
             this.reinit({
@@ -1884,19 +1860,18 @@ QUnit.module('MessageList', () => {
                 text: 'Reply',
             };
 
-            setTimeout(() => {
-                const scrollTopBefore = this.getScrollView().scrollTop();
-                assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom before test');
+            await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
 
-                this.instance.option('items', [...items, userMessage]);
-                this.instance.option('items', [...items, userMessage, replyMessage]);
+            const scrollTopBefore = this.getScrollView().scrollTop();
+            assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom before test');
 
-                setTimeout(() => {
-                    const scrollTop = this.getScrollView().scrollTop();
-                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after the companion reply');
-                    done();
-                });
-            }, this._resizeTimeout);
+            this.instance.option('items', [...items, userMessage]);
+            this.instance.option('items', [...items, userMessage, replyMessage]);
+
+            await waitForCondition(() => this.getBubbles().length === items.length + 2
+                && Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
+
+            assert.roughEqual(this.getScrollView().scrollTop(), this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after the companion reply');
         });
     });
 

@@ -98,11 +98,13 @@ testsFactory({
     await t.click(
       cardView.getColumnChooser().getCheckbox(0),
     );
+    await t.expect(cardView.isReady()).ok();
   },
   async showFirstColumn(t: TestController, cardView: CardView) {
     await t.click(
       cardView.getColumnChooser().getCheckbox(0),
     );
+    await t.expect(cardView.isReady()).ok();
   },
   async assertFirstColumnVisible(t: TestController, cardView: CardView) {
     await t.expect(cardView.getColumnChooser().getColumnsCount()).eql(3);

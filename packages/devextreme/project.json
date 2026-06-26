@@ -1468,11 +1468,25 @@
         "build:dev"
       ],
       "inputs": [
-        "{projectRoot}/artifacts/transpiled/**/*",
-        "{projectRoot}/artifacts/css/dx.light.css",
-        "{projectRoot}/artifacts/css/dx.material.blue.light.css",
-        "{projectRoot}/artifacts/css/dx.fluent.blue.light.css",
-        "{projectRoot}/artifacts/css/dx-gantt.css",
+        "internalPackageEnv",
+        {
+          "env": "DEVEXTREME_TEST_CI"
+        },
+        {
+          "dependentTasksOutputFiles": "{projectRoot}/artifacts/transpiled/**/*"
+        },
+        {
+          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx.light.css"
+        },
+        {
+          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx.material.blue.light.css"
+        },
+        {
+          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx.fluent.blue.light.css"
+        },
+        {
+          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx-gantt.css"
+        },
         "{projectRoot}/testing/content/**/*",
         "{projectRoot}/testing/helpers/**/*",
         "{projectRoot}/testing/tests/**/*",

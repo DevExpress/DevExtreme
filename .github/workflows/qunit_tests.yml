@@ -137,7 +137,6 @@ jobs:
           misc,
           ui,
           ui.editors,
-          ui.grid,
           ui.scheduler,
         ]
         TIMEZONE: ['']
@@ -145,7 +144,7 @@ jobs:
         useJQuery: ['false']
         MAX_WORKERS: ['']
         include:
-          - CONSTEL: export
+          - CONSTEL: ui.grid
             MAX_WORKERS: '3'
             useJQuery: 'false'
             CSP: 'true'

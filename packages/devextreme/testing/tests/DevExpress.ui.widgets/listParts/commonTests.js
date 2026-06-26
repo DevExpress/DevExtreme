@@ -385,9 +385,6 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         const groupBodyElement = $groupBody.get(0);
         const startTime = Date.now();
 
-        // NOTE: each click cancels the previous animation and starts a new one, so the
-        // final collapse animation may finish later than a fixed delay under CI load.
-        // Wait until the animation actually settles instead of guessing a timeout (T1282693).
         const waitForSettled = () => {
             if(!fx.isAnimating(groupBodyElement) || Date.now() - startTime >= 3000) {
                 assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), true, 'collapsed class is present');

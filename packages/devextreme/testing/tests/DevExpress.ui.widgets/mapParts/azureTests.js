@@ -303,27 +303,21 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
-    QUnit.skip('center should be geocoded if adress is passed as a string', function(assert) {
+    QUnit.test('center should be geocoded if adress is passed as a string', async function(assert) {
+        await loadAzureMock();
+
         const done = assert.async();
         const center = 'Cedar Park, Texas';
 
-        const initMap = () => {
-            $('#map').dxMap({
-                provider: 'azure',
-                center,
-                onReady: () => {
-                    assert.deepEqual(atlas.cameraOptions.center, this.geocodedCoordinates, 'center coordinates are correct');
+        $('#map').dxMap({
+            provider: 'azure',
+            center,
+            onReady: () => {
+                assert.deepEqual(atlas.cameraOptions.center, this.geocodedCoordinates, 'center coordinates are correct');
 
-                    done();
-                }
-            });
-        };
-
-        if(window.atlas && window.atlas.Map) {
-            initMap();
-        } else {
-            loadAzureMock().done(initMap);
-        }
+                done();
+            }
+        });
     });
 
     QUnit.test('Previously geocoded location should be taken from cache instead of geocoding second time', function(assert) {
@@ -376,8 +370,9 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
-    // Test timed out after 45 seconds!
-    QUnit.skip('Bounds option should have more priority than center option', function(assert) {
+    QUnit.test('Bounds option should have more priority than center option', async function(assert) {
+        await loadAzureMock();
+
         const done = assert.async();
 
         $('#map').dxMap({

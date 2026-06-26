@@ -353,7 +353,6 @@ function buildRunAllModel(searchParams: URLSearchParams): RunAllModel {
     CategoriesList: include ?? '',
     Version: readPackageVersion(),
     Suites: suitesService.getAllSuites({
-      deviceMode: hasDeviceModeFlag(searchParams),
       constellation,
       includeCategories: includeSet,
       excludeCategories: excludeSet,
@@ -384,10 +383,6 @@ function assignBaseRunProps(searchParams: URLSearchParams): BaseRunProps {
   }
 
   return result;
-}
-
-function hasDeviceModeFlag(searchParams: URLSearchParams): boolean {
-  return searchParams.has('deviceMode');
 }
 
 async function saveResults(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {

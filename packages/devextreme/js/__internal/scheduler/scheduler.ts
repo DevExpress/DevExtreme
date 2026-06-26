@@ -1933,10 +1933,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private refreshWorkSpace(): void {
-    // NOTE: This method is called from postponed (async) resource-loading
-    // callbacks, which may resolve after the component has been disposed.
-    // Recreating the workspace here would leave an orphaned instance with a
-    // running indication interval that is never cleared (see initMarkupOnResourceLoaded).
     if ((this as any)._disposed) {
       return;
     }
