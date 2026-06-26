@@ -12,7 +12,6 @@ test('Don\'t calculate additional filter when filtering column list is empty', a
   // arrange
   const dataGrid = new DataGrid(GRID_CONTAINER);
   await t.expect(dataGrid.isReady()).ok();
-  const consoleMessages = await t.getBrowserConsoleMessages();
 
   // act
   await dataGrid.option({
@@ -37,8 +36,10 @@ test('Don\'t calculate additional filter when filtering column list is empty', a
   });
 
   // assert
+  const consoleMessages = await t.getBrowserConsoleMessages();
+
   await t
-    .expect(consoleMessages.error.every((msg) => !msg.includes('E1047')))
+    .expect((consoleMessages?.error ?? []).every((msg) => !msg.includes('E1047')))
     .ok();
 }).before(async () => createWidget('dxDataGrid', {
   keyExpr: 'id',
