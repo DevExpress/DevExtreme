@@ -873,7 +873,8 @@
       "outputs": [
         "{projectRoot}/artifacts/ts",
         "{projectRoot}/artifacts/ts/dx.all.d.ts",
-        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts"
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.all.d.ts"
       ]
     },
     "compress:ts-modules": {
@@ -1333,6 +1334,8 @@
       "inputs": [
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
         "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme-internal/**/*.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.all.d.ts",
         "{projectRoot}/build/gulp/modules_metadata.json",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts"
@@ -1356,12 +1359,25 @@
         "parallel": false,
         "cwd": "{workspaceRoot}"
       },
+      "configurations": {
+        "internal": {
+          "commands": [
+            "pnpm nx run devextreme:verify:ts-modules",
+            "pnpm nx run devextreme:verify:ts-bundle -c internal",
+            "pnpm nx run devextreme:verify:ts-jquery -c internal",
+            "pnpm nx run devextreme:verify:public-modules -c internal"
+          ],
+          "parallel": false,
+          "cwd": "{workspaceRoot}"
+        }
+      },
       "inputs": [
         "{projectRoot}/js/**/*.d.ts",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",
         "{projectRoot}/build/gulp/modules_metadata.json",
-        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts"
+        "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
+        "{projectRoot}/artifacts/npm/devextreme-internal/**/*.d.ts"
       ]
     },
     "build:npm": {
