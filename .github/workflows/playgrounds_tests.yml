@@ -148,7 +148,7 @@ jobs:
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: pnpm exec nx build
+      run: pnpm exec nx build --excludeTaskDependencies
 
 #    - name: Run test
 #      if: ${{ matrix.ARGS.platform != 'angular' }}
