@@ -17,7 +17,7 @@ on:
       max_files:
         description: 'Maximum number of files allowed in PR'
         required: false
-        default: 200
+        default: '200'
         type: string
       replace:
         description: 'Strings to replace in patch'
@@ -29,7 +29,7 @@ on:
         type: string
 jobs:
   cherrypick:
-    runs-on: farm
+    runs-on: ubuntu-latest
     env:
       VM_IMAGE: WIN
       VM_MEMORY: 512
