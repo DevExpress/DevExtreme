@@ -31,12 +31,15 @@ const App = () => {
       }),
     [],
   );
-  const onSimilarityFactorChanged = useCallback(({ value }) => {
-    similarityFactorRef.current = value;
-    if (searchValueRef.current !== '') {
-      dataSource.reload();
-    }
-  }, [dataSource]);
+  const onSimilarityFactorChanged = useCallback(
+    ({ value }) => {
+      similarityFactorRef.current = value;
+      if (searchValueRef.current !== '') {
+        dataSource.reload();
+      }
+    },
+    [dataSource],
+  );
   const onEditorPreparing = useCallback((e) => {
     if (e.parentType === 'searchPanel') {
       let searchTimeout;
