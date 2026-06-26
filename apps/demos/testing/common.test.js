@@ -59,14 +59,6 @@ const getTestSpecificSkipRules = (testName) => {
       return ['label'];
     case 'Form-Grouping':
     case 'Stepper-StepTemplate':
-    case 'TabPanel-Overview':
-    case 'Tabs-Overview':
-    case 'Tabs-Selection':
-    case 'DataGrid-FocusedRow':
-    case 'DataGrid-ExcelJSExportMultipleGrids':
-    case 'DataGrid-Overview':
-    case 'DataGrid-FilteringAPI':
-    case 'DataGrid-OdataService':
       return ['aria-tab-name'];
     default:
       return [];
@@ -97,8 +89,12 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'DeferredSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'FocusedRow', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PDFExportMultipleGrids', themes: [THEME.generic, THEME.fluent] },
+      { demo: 'ExcelJSExportMultipleGrids', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PDFExportMultipleGrids', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ]
   },
   Angular: {
