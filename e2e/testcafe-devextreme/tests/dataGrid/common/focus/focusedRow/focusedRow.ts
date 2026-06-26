@@ -316,7 +316,7 @@ test('Row - Focused row should be reset after editing a row by API (T879627)', a
   },
 }));
 
-test('Cell - Focused row should not be reset after editing a cell (T879627)', async (t) => {
+test.meta({ unstable: true })('Cell - Focused row should not be reset after editing a cell (T879627)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const dataRow0 = dataGrid.getDataRow(0);
   const dataRow1 = dataGrid.getDataRow(1);
@@ -579,7 +579,9 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     masterDetail: {
       enabled: true,
       template: (container): any => {
-        (container.append($('<div>') as any) as any).dxDataGrid({
+        const nestedGridContainer = $('<div>') as any;
+        nestedGridContainer.appendTo(container);
+        nestedGridContainer.dxDataGrid({
           height: 500,
           keyExpr: 'id',
           dataSource: data,

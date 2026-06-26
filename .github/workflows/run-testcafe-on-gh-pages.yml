@@ -77,11 +77,11 @@ jobs:
                   devextreme/.nx/workspace-data/*.db
                   devextreme/.nx/workspace-data/*.db-wal
                   devextreme/.nx/workspace-data/*.db-shm
-                key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.run_attempt }}
+                key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}
                 restore-keys: |
-                  ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-
-                  ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-                  ${{ runner.os }}-nx-v2-${{ github.sha }}-
+                  ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}-
+                  ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-
+                  ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
                   ${{ runner.os }}-nx-v2-
 
                 lookup-only: true
@@ -115,11 +115,11 @@ jobs:
                   devextreme/.nx/workspace-data/*.db
                   devextreme/.nx/workspace-data/*.db-wal
                   devextreme/.nx/workspace-data/*.db-shm
-                key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.run_attempt }}
+                key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}
                 restore-keys: |
-                  ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-
-                  ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-                  ${{ runner.os }}-nx-v2-${{ github.sha }}-
+                  ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}-
+                  ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-
+                  ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
                   ${{ runner.os }}-nx-v2-
             
             - name: Run TestCafe tests
