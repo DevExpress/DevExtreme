@@ -102,6 +102,11 @@ test('Validation popup with open master detail and fixed columns', async (t) => 
     .click(dataGrid.getDataCell(5, 2).element)
     .pressKey('ctrl+a backspace enter');
 
+  await t.expect(dataGrid.getRevertTooltip().exists)
+    .ok()
+    .expect(dataGrid.getInvalidMessageTooltip().exists)
+    .ok();
+
   // act
   await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail_fixed-column.png', { element: dataGrid.element });
   await dataGrid.scrollTo(t, { y: 150 });
