@@ -28,7 +28,7 @@ function run_test {
     local i
     local status
 
-    for i in {1..3}; do
+    for i in {1..1}; do
         set +e
         (set -e; run_test_impl); status=$?
         set -e

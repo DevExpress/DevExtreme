@@ -378,18 +378,28 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         const $groupBody = $group.find('.' + LIST_GROUP_BODY_CLASS);
         const $groupHeader = $element.find('.' + LIST_GROUP_HEADER_CLASS);
 
-        const animationDuration = 200;
-
         for(let i = 0; i < 11; i++) {
             $groupHeader.trigger('dxclick');
         }
 
-        setTimeout(() => {
-            assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), true, 'collapsed class is present');
-            assert.strictEqual($groupBody.height(), 0, 'group items are hidden');
+        const groupBodyElement = $groupBody.get(0);
+        const startTime = Date.now();
 
-            done();
-        }, 2 * animationDuration);
+        // NOTE: each click cancels the previous animation and starts a new one, so the
+        // final collapse animation may finish later than a fixed delay under CI load.
+        // Wait until the animation actually settles instead of guessing a timeout (T1282693).
+        const waitForSettled = () => {
+            if(!fx.isAnimating(groupBodyElement) || Date.now() - startTime >= 3000) {
+                assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), true, 'collapsed class is present');
+                assert.strictEqual($groupBody.height(), 0, 'group items are hidden');
+
+                done();
+            } else {
+                setTimeout(waitForSettled, 16);
+            }
+        };
+
+        waitForSettled();
     });
 
     const LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator';

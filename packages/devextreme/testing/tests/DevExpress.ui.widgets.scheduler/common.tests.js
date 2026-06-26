@@ -77,6 +77,8 @@ QUnit.module('Loading', {
         await waitForAsync(() => count === 1);
         scheduler.instance.option('currentView', 'week');
         await waitForAsync(() => count === 2);
+        // the panel hides after the load completes and the view re-renders, not exactly when count===2
+        await waitForAsync(() => $('.dx-loadpanel-wrapper').length === 0);
 
         assert.equal($('.dx-loadpanel-wrapper').length, 0, 'loading panel hide');
     });
