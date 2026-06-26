@@ -64,6 +64,8 @@ export default errorUtils({
 
   E0122: 'AIIntegration: The sendRequest method is missing.',
 
+  E0123: 'Disallowed property name in expression: \'{0}\'',
+
   W0000: '\'{0}\' is deprecated in {1}. {2}',
 
   W0001: '{0} - \'{1}\' option is deprecated in {2}. {3}',
