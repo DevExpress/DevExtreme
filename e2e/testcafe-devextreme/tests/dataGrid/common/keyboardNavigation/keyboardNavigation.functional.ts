@@ -21,30 +21,10 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 import { addFocusableElementBefore } from '../../../../helpers/domUtils';
 
 const CLASS = ClassNames;
-const FOCUS_ASSERTION_TIMEOUT = 3000;
-// Ctrl+End/Ctrl+Home over virtual/infinite scrolling renders the far row/column
-// asynchronously, which can exceed a short budget on a loaded CI machine.
-const KEYBOARD_NAVIGATION_TIMEOUT = 7000;
 
 const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
 
-const isKeyboardNavigationInProgress = ClientFunction(() => {
-  const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-  return dataGrid
-    .getController('keyboardNavigation')
-    .navigationToCellInProgress();
-});
-
-// Waits until the keyboard navigation controller has finished scrolling to / focusing the
-// target cell, so the focus state and the recorded focus events are settled before asserting.
-const waitForKeyboardNavigation = async (t: TestController): Promise<void> => {
-  await t
-    .expect(isKeyboardNavigationInProgress())
-    .notOk({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
-};
-
-fixture`Keyboard Navigation - common`
+fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
 test.meta({ unstable: true })('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
@@ -5812,7 +5792,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 14).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
 
@@ -5889,7 +5869,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 34).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
 
@@ -5967,7 +5947,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 14).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedCellChanged']);
 
@@ -6051,7 +6031,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 34).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedCellChanged']);
 
@@ -6137,7 +6117,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(19, 14).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
 
@@ -6214,7 +6194,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(19, 34).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
 
@@ -6288,12 +6268,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.pressKey('ctrl+end');
-    await waitForKeyboardNavigation(t);
+    await t.wait(100);
 
     // assert
     await t
       .expect(dataGrid.getDataCell(199, 34).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
 
@@ -6367,13 +6347,14 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t.pressKey('ctrl+end');
-    await waitForKeyboardNavigation(t);
+    await t
+      .pressKey('ctrl+end')
+      .wait(100);
 
     // assert
     await t
       .expect(dataGrid.getDataCell(19, 14).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
 
@@ -6422,7 +6403,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6447,13 +6428,14 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t.pressKey('ctrl+end');
-    await waitForKeyboardNavigation(t);
+    await t
+      .pressKey('ctrl+end')
+      .wait(100);
 
     // assert
     await t
       .expect(dataGrid.getDataCell(19, 14).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
 
@@ -6531,7 +6513,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(19, 14).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedRowChanged', 'onFocusedCellChanged']);
 
@@ -6619,7 +6601,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(19, 34).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedRowChanged', 'onFocusedCellChanged']);
 
@@ -6709,7 +6691,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // assert
     await t
       .expect(dataGrid.getDataCell(199, 34).element.focused)
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT })
+      .ok()
       .expect(getOrderOfEventCalls())
       .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedRowChanged', 'onFocusedCellChanged']);
 
@@ -6849,12 +6831,10 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
     // act
     await t
       .click(searchPanel.input)
-      .expect(searchPanel.isFocused)
-      .ok({ timeout: FOCUS_ASSERTION_TIMEOUT })
-      .pressKey('tab tab tab tab tab', { speed: 0.5 });
+      .pressKey('tab tab tab tab tab');
 
     // assert
-    await t.expect(secondIDCell.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
+    await t.expect(secondIDCell.isFocused).ok();
 
     // act
     await searchPanel.focus();
@@ -6867,22 +6847,22 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
       .notOk('focus should be on the search panel');
 
     // act
-    await t.pressKey('tab tab tab', { speed: 0.5 });
+    await t.pressKey('tab tab tab');
 
     // assert
-    await t.expect(secondIDCell.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
+    await t.expect(secondIDCell.isFocused).ok();
 
     // act
     await t.pressKey('tab tab');
 
     // assert
-    await t.expect(button.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
+    await t.expect(button.isFocused).ok();
 
     // act
     await t.pressKey('shift+tab');
 
     // assert
-    await t.expect(secondNameCell.isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
+    await t.expect(secondNameCell.isFocused).ok();
   }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],

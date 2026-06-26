@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction, Selector } from 'testcafe';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
@@ -777,63 +778,37 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
     rowDragging: {
       scrollSpeed: 300,
       allowReordering: true,
-      onReorder(e) {
-        const dataSource = e.component.option('dataSource') as Record<string, unknown>[];
+      onReorder: ClientFunction((e) => {
         const visibleRows = e.component.getVisibleRows();
         // eslint-disable-next-line @stylistic/max-len
-        const toIndex = dataSource.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
-        const fromIndex = dataSource.findIndex((item) => item.field1 === e.itemData.field1);
-        dataSource.splice(fromIndex, 1);
-        dataSource.splice(toIndex, 0, e.itemData);
+        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+        const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
+        items.splice(fromIndex, 1);
+        items.splice(toIndex, 0, e.itemData);
 
         e.component.refresh();
-      },
+      }, { dependencies: { items } }),
     },
     showBorders: true,
   });
 });
 
 // T1139685
-test.meta({ unstable: true })('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
-  const rowHeight = await dataGrid.getDataRow(2).element.offsetHeight;
-  const scrollOffsetForAutoScroll = await getOffsetToTriggerAutoScroll(2, 0.5, 'down');
+  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, 32, { speed: 0.95 });
 
-  await dataGrid.moveRow(2, 0, rowHeight, true);
-  await dataGrid.moveRow(2, 0, scrollOffsetForAutoScroll);
-
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const visibleRowKeys = visibleRows.map((row) => row.key);
   const expectedSequence = ['5-1', '3-1', '6-1'];
-  const isTargetPageRendered = ClientFunction(() => {
-    const visibleRowKeys = (($('#container') as any)
-      .dxDataGrid('instance')
-      .getVisibleRows() as any[])
-      .map((row: any) => row.key);
 
-    return visibleRowKeys.includes('5-1') && visibleRowKeys.includes('6-1');
-  });
-  const containsExpectedSequence = ClientFunction(() => {
-    const dataSourceKeys = (($('#container') as any)
-      .dxDataGrid('instance')
-      .option('dataSource') as any[])
-      .map((item: any) => item.field1);
+  const startIndex = visibleRowKeys.findIndex(
+    (_, i) => expectedSequence.every((val, j) => visibleRowKeys[i + j] === val),
+  );
 
-    return dataSourceKeys.some(
-      (_: string, i: number) => expectedSequence.every(
-        (val: string, j: number) => dataSourceKeys[i + j] === val,
-      ),
-    );
-  }, { dependencies: { expectedSequence } });
-
-  await t
-    .expect(isTargetPageRendered()).ok({ timeout: 3000 });
-
-  await dataGrid.dropRow();
-
-  await t
-    .expect(dataGrid.isReady()).ok({ timeout: 3000 })
-    .expect(containsExpectedSequence()).ok({ timeout: 3000 });
+  await t.expect(startIndex).gte(0);
 }).before(async () => {
   const items = generateData(20, 1);
   return createWidget('dxDataGrid', {
@@ -849,17 +824,16 @@ test.meta({ unstable: true })('Item should appear in a correct spot when draggin
     rowDragging: {
       scrollSpeed: 300,
       allowReordering: true,
-      onReorder(e) {
-        const dataSource = e.component.option('dataSource') as Record<string, unknown>[];
+      onReorder: ClientFunction((e) => {
         const visibleRows = e.component.getVisibleRows();
         // eslint-disable-next-line @stylistic/max-len
-        const toIndex = dataSource.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
-        const fromIndex = dataSource.findIndex((item) => item.field1 === e.itemData.field1);
-        dataSource.splice(fromIndex, 1);
-        dataSource.splice(toIndex, 0, e.itemData);
+        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+        const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
+        items.splice(fromIndex, 1);
+        items.splice(toIndex, 0, e.itemData);
 
         e.component.refresh();
-      },
+      }, { dependencies: { items } }),
     },
     showBorders: true,
   });

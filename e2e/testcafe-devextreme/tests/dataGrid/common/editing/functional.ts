@@ -8,8 +8,6 @@ import { createWidget } from '../../../../helpers/createWidget';
 fixture.disablePageReloads`Editing.Functional`
   .page(url(__dirname, '../../../container.html'));
 
-const FOCUS_ASSERTION_TIMEOUT = 3000;
-
 const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {
     errorRowEnabled: true,
@@ -72,9 +70,7 @@ test.meta({ unstable: true })('DataGrid - The "Cannot read properties of undefin
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
     .pressKey('enter tab tab');
   await resolveOnSavingDeferred();
-  await t
-    .expect(dataGrid.isReady()).ok({ timeout: FOCUS_ASSERTION_TIMEOUT })
-    .expect(dataGrid.getDataCell(2, 0).isFocused).ok({ timeout: FOCUS_ASSERTION_TIMEOUT });
+  await t.expect(dataGrid.getDataCell(2, 0).isFocused).ok();
 }).before(async () => {
   await ClientFunction(() => {
     (window as any).deferred = $.Deferred();

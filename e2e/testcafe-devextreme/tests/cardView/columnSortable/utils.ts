@@ -2,7 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import CardView from 'devextreme-testcafe-models/cardView';
 import TreeView from 'devextreme-testcafe-models/treeView';
 
-const DRAG_ASSERTION_TIMEOUT = 3000;
+const DRAG_ASSERTION_TIMEOUT = 1000;
 const HEADER_DROP_OFFSET_Y = 5;
 
 export const SELECTORS = {

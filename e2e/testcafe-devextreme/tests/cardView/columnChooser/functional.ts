@@ -4,11 +4,8 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getCardFieldCaptions } from '../helpers/cardUtils';
 
-const COLUMN_CHOOSER_DND_TIMEOUT = 3000;
+const COLUMN_CHOOSER_DND_TIMEOUT = 1000;
 const SORTABLE_DRAGGING_SELECTOR = '.dx-sortable-dragging';
-
-fixture`CardView - ColumnChooser.Functional`
-  .page(url(__dirname, '../../container.html'));
 
 const waitForDragEnd = async (t: TestController, cardView: CardView): Promise<void> => {
   await t
@@ -47,6 +44,9 @@ const dragColumnChooserColumnToHeaderPanel = async (
   );
   await waitForDragEnd(t, cardView);
 };
+
+fixture`CardView - ColumnChooser.Functional`
+  .page(url(__dirname, '../../container.html'));
 
 function testsFactory(testModel: {
   name: string;

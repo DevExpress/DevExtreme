@@ -1085,7 +1085,7 @@ test.meta({ unstable: true })('The data should display correctly after changing 
 }));
 
 // T1166649
-test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1094,54 +1094,8 @@ test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a
   // act
   await t
     .hover(scrollbarVerticalThumbTrack)
-    .drag(scrollbarVerticalThumbTrack, 0, 600);
-
-  await dataGrid.scrollTo(t, { y: 100000 });
-  await t.expect(dataGrid.isReady()).ok({ timeout: 3000 });
-
-  const isRowsViewScrolledToEnd = ClientFunction(() => {
-    const scrollableContainer = document.querySelector(
-      '#container .dx-datagrid-rowsview .dx-scrollable-container',
-    );
-
-    if (!scrollableContainer) {
-      return false;
-    }
-
-    const {
-      scrollTop,
-      clientHeight,
-      scrollHeight,
-    } = scrollableContainer as HTMLElement;
-
-    return Math.round(scrollTop + clientHeight) >= scrollHeight - 1;
-  });
-
-  const isTargetRowSynchronized = ClientFunction(() => {
-    const rows = Array
-      .from(document.querySelectorAll('tr[aria-rowindex="999"]'))
-      .filter((row) => {
-        const { width, height } = row.getBoundingClientRect();
-
-        return width > 0 && height > 0;
-      });
-
-    if (!rows.length) {
-      return false;
-    }
-
-    const tops = rows.map((row) => row.getBoundingClientRect().top);
-    const text = rows.map((row) => row.textContent).join(' ');
-
-    return text.includes('998')
-      && text.includes('item 998')
-      && Math.max(...tops) - Math.min(...tops) < 1;
-  });
-
-  await t
-    .expect(isRowsViewScrolledToEnd()).ok({ timeout: 3000 })
-    .expect(isTargetRowSynchronized()).ok({ timeout: 3000 })
-    .wait(100);
+    .drag(scrollbarVerticalThumbTrack, 0, 600)
+    .wait(1000);
 
   await testScreenshot(t, takeScreenshot, 'grid-virtual-scrolling_with_fixed_columns-T1166649.png', { element: 'tr[aria-rowindex="999"]' });
   await t

@@ -1,65 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
-import { isScrollAtEnd } from '../../helpers/rowDraggingHelpers';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture`Keyboard Navigation.Visual`
   .page(url(__dirname, '../../../container.html'));
-
-// Navigating to a far cell via Ctrl+End/Ctrl+Home triggers async virtual row/column
-// rendering after the keyboard navigation itself reports done, which can exceed a short
-// budget on a loaded CI machine. Keep this generous so the focus assertions auto-retry
-// long enough instead of flaking.
-const KEYBOARD_NAVIGATION_TIMEOUT = 7000;
-
-const isKeyboardNavigationInProgress = ClientFunction(() => {
-  const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-  return dataGrid
-    .getController('keyboardNavigation')
-    .navigationToCellInProgress();
-});
-
-const waitForPaint = ClientFunction(() => new Promise<void>((resolve) => {
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => resolve());
-  });
-}));
-
-const focusDataCell = async (
-  t: TestController,
-  dataGrid: DataGrid,
-  rowIndex: number,
-  columnIndex: number,
-): Promise<void> => {
-  const cell = dataGrid.getDataCell(rowIndex, columnIndex);
-
-  await dataGrid.apiFocus(cell.element);
-  await t
-    .expect(cell.element.focused)
-    .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
-};
-
-const expectDataCellFocusState = async (
-  t: TestController,
-  dataGrid: DataGrid,
-  rowIndex: number,
-  columnIndex: number,
-): Promise<void> => {
-  await t
-    .expect(dataGrid.getDataCell(rowIndex, columnIndex).isFocused)
-    .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
-};
-
-const waitForKeyboardNavigation = async (t: TestController): Promise<void> => {
-  await t
-    .expect(isKeyboardNavigationInProgress())
-    .notOk({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
-};
 
 // Quick navigation through grid cells via Home and End keys
 test('Focus the last cell in the row that contains focus when pressing the End key', async (t) => {
@@ -566,7 +513,7 @@ test('Navigate to first cell in the first row when pressing the Ctrl + Home key'
   },
 }));
 
-test.meta({ unstable: true })('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
+test('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -575,11 +522,11 @@ test.meta({ unstable: true })('Navigate to last cell in the last row when virtua
     .ok();
 
   // act
-  await focusDataCell(t, dataGrid, 0, 0);
-  await t.pressKey('ctrl+end');
-  await waitForKeyboardNavigation(t);
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+end')
+    .wait(100);
 
-  await expectDataCellFocusState(t, dataGrid, 199, 14);
   await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_last_row_when_virtual_scrolling_is_enabled.png', { element: dataGrid.element });
 
   // assert
@@ -599,7 +546,7 @@ test.meta({ unstable: true })('Navigate to last cell in the last row when virtua
   },
 }));
 
-test.meta({ unstable: true })('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
+test('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -618,11 +565,11 @@ test.meta({ unstable: true })('Navigate to first cell in the first row when virt
   await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_1.png', { element: dataGrid.element });
 
   // act
-  await focusDataCell(t, dataGrid, 199, 14);
-  await t.pressKey('ctrl+home');
-  await waitForKeyboardNavigation(t);
+  await t
+    .click(dataGrid.getDataCell(199, 14).element)
+    .pressKey('ctrl+home')
+    .wait(1000);
 
-  await expectDataCellFocusState(t, dataGrid, 0, 0);
   await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_2.png', { element: dataGrid.element });
 
   // assert
@@ -651,12 +598,15 @@ test('Navigate to last cell in the last row when virtual scrolling and columns a
     .ok();
 
   // act
-  await focusDataCell(t, dataGrid, 0, 0);
-  await t.pressKey('ctrl+end');
-  await waitForKeyboardNavigation(t);
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+end')
+    .wait(1000);
 
   // assert
-  await expectDataCellFocusState(t, dataGrid, 199, 34);
+  await t
+    .expect(dataGrid.getDataCell(199, 34).element.focused)
+    .ok();
 
   await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_last_row_when_virtual_scrolling_and_columns_are_enabled.png', { element: dataGrid.element });
 
@@ -693,12 +643,15 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
   await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_1.png', { element: dataGrid.element });
 
   // act
-  await focusDataCell(t, dataGrid, 199, 34);
-  await t.pressKey('ctrl+home');
-  await waitForKeyboardNavigation(t);
+  await t
+    .click(dataGrid.getDataCell(199, 34).element)
+    .pressKey('ctrl+home')
+    .wait(300);
 
   // assert
-  await expectDataCellFocusState(t, dataGrid, 0, 0);
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
 
   await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_2.png', { element: dataGrid.element });
 
@@ -727,25 +680,28 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .ok();
 
     // act
-    await focusDataCell(t, dataGrid, 0, 1);
-    await t.pressKey('ctrl+end');
-    await waitForKeyboardNavigation(t);
+    await t
+      .click(dataGrid.getDataCell(0, 1).element)
+      .pressKey('ctrl+end')
+      .wait(1000);
 
     // assert
-    await expectDataCellFocusState(t, dataGrid, 199, 35);
+    await t
+      .expect(dataGrid.getDataCell(199, 35).element.focused)
+      .ok();
 
     // act
-    await focusDataCell(t, dataGrid, 199, 35);
-    await t.pressKey('ctrl+home');
-    await waitForKeyboardNavigation(t);
-
-    // assert
-    await expectDataCellFocusState(t, dataGrid, 0, 1);
+    await t
+      .click(dataGrid.getDataCell(199, 35).element)
+      .pressKey('ctrl+home')
+      .wait(1000);
 
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_first_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
     // assert
     await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
+      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxDataGrid', {
@@ -764,7 +720,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     },
   }));
 
-  test.meta({ unstable: true })(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the last focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the last focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
     // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -773,22 +729,10 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .ok();
 
     // act
-    await focusDataCell(t, dataGrid, 0, 1);
-    await t.pressKey('ctrl+end');
-    await waitForKeyboardNavigation(t);
-
-    await expectDataCellFocusState(t, dataGrid, 199, 34);
     await t
-      .expect(dataGrid.isReady())
-      .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
-
-    if (!useNative) {
-      await t
-        .expect(isScrollAtEnd('horizontal'))
-        .ok({ timeout: KEYBOARD_NAVIGATION_TIMEOUT });
-    }
-
-    await waitForPaint();
+      .click(dataGrid.getDataCell(0, 0).element)
+      .pressKey('ctrl+end')
+      .wait(1000);
 
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 

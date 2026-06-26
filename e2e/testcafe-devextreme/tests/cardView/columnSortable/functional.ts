@@ -320,7 +320,7 @@ test('cards should update when columns are reordered (T1324855)', async (t) => {
 
   await t
     .expect(cardView.getHeaders().getHeaderItemNth(0).element.innerText)
-    .notEql('A', { timeout: 3000 });
+    .notEql('A', { timeout: 1000 });
 
   const headerCaptions: string[] = [];
   const headersCount = await cardView.getHeaders().getHeaderItemsElements().count;
