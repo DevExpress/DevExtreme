@@ -17053,7 +17053,8 @@ declare module DevExpress.ui {
      */
     onClick?:
       | ((e: DevExpress.ui.dxDropDownButton.ItemClickEvent) => void)
-      | string;
+      | string
+      | null;
   }
   /**
    * [descr:dxDropDownButtonOptions]
@@ -17116,7 +17117,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.items]
      */
-    items?: Array<DevExpress.ui.dxDropDownButton.Item | any>;
+    items?: Array<DevExpress.ui.dxDropDownButton.Item | any> | null;
     /**
      * [descr:dxDropDownButtonOptions.keyExpr]
      */
@@ -17130,19 +17131,22 @@ declare module DevExpress.ui {
      */
     onButtonClick?:
       | ((e: DevExpress.ui.dxDropDownButton.ButtonClickEvent) => void)
-      | string;
+      | string
+      | null;
     /**
      * [descr:dxDropDownButtonOptions.onItemClick]
      */
     onItemClick?:
       | ((e: DevExpress.ui.dxDropDownButton.ItemClickEvent) => void)
-      | string;
+      | string
+      | null;
     /**
      * [descr:dxDropDownButtonOptions.onSelectionChanged]
      */
     onSelectionChanged?:
       | ((e: DevExpress.ui.dxDropDownButton.SelectionChangedEvent) => void)
-      | string;
+      | string
+      | null;
     /**
      * [descr:dxDropDownButtonOptions.opened]
      */
@@ -17150,11 +17154,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.selectedItem]
      */
-    selectedItem?: string | number | any;
+    selectedItem?: string | number | any | null;
     /**
      * [descr:dxDropDownButtonOptions.selectedItemKey]
      */
-    selectedItemKey?: string | number;
+    selectedItemKey?: string | number | null;
     /**
      * [descr:dxDropDownButtonOptions.showArrowIcon]
      */
