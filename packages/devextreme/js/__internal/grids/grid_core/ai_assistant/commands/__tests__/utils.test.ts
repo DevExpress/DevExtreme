@@ -7,9 +7,11 @@ import { z } from 'zod';
 
 import {
   isKeyShapeValid,
+  isMultiValueExpr,
   normalizeKey,
   // eslint-disable-next-line spellcheck/spell-checker
   optionalNullish,
+  pickKeysByIndex,
   resolveFilterValue,
   splitIntoLoadWindows,
 } from '../utils';
@@ -97,7 +99,6 @@ describe('optionalNullish', () => {
     });
   });
 });
-/* eslint-enable spellcheck/spell-checker */
 
 describe('isKeyShapeValid', () => {
   describe('single-field keyExpr (string)', () => {
@@ -173,6 +174,74 @@ describe('resolveFilterValue', () => {
   });
 });
 
+describe('isMultiValueExpr', () => {
+  it('returns true for an expression with an array value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'status',
+      operator: 'anyof' as const,
+      value: ['open', 'closed'],
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(true);
+  });
+
+  it('returns true for an expression with an empty array value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'status',
+      operator: 'noneof' as const,
+      value: [] as string[],
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(true);
+  });
+
+  it('returns false for an expression with a string value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'name',
+      operator: '=' as const,
+      value: 'Alice',
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
+  });
+
+  it('returns false for an expression with a number value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'age',
+      operator: '>' as const,
+      value: 18,
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
+  });
+
+  it('returns false for an expression with a null value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'name',
+      operator: '=' as const,
+      value: null,
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
+  });
+
+  it('returns false for an expression with a boolean value', () => {
+    const expr = {
+      type: 'basic' as const,
+      field: 'active',
+      operator: '=' as const,
+      value: true,
+    };
+
+    expect(isMultiValueExpr(expr)).toBe(false);
+  });
+});
+
 describe('splitIntoLoadWindows', () => {
   it('returns an empty array for an empty input', () => {
     expect(splitIntoLoadWindows([], 10)).toEqual([]);
@@ -200,5 +269,31 @@ describe('splitIntoLoadWindows', () => {
 
   it('deduplicates repeated indexes', () => {
     expect(splitIntoLoadWindows([1, 1, 2, 2, 3], 10)).toEqual([[1, 2, 3]]);
+  });
+});
+
+describe('pickKeysByIndex', () => {
+  it('maps 1-based indexes to the keys at those positions', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [1, 3])).toEqual(['a', 'c']);
+  });
+
+  it('preserves the requested index order', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [3, 1])).toEqual(['c', 'a']);
+  });
+
+  it('resolves a single index', () => {
+    expect(pickKeysByIndex([10, 20, 30], [2])).toEqual([20]);
+  });
+
+  it('accepts the last valid index', () => {
+    expect(pickKeysByIndex(['a', 'b', 'c'], [3])).toEqual(['c']);
+  });
+
+  it('returns null when any index exceeds the key count', () => {
+    expect(pickKeysByIndex(['a', 'b'], [1, 3])).toBeNull();
+  });
+
+  it('returns null for any index against an empty key list', () => {
+    expect(pickKeysByIndex([], [1])).toBeNull();
   });
 });

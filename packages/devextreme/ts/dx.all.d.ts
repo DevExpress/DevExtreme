@@ -3830,6 +3830,8 @@ declare module DevExpress.common.data {
      */
     name?: string;
   };
+  export type MultiValueSearchOperation =
+    DevExpress.data.MultiValueSearchOperation;
   /**
    * [descr:ODataContext]
    */
@@ -4706,7 +4708,7 @@ declare module DevExpress.common.grids {
     type: 'basic';
     field: string;
     operator: DevExpress.common.data.SearchOperation;
-    value: string | number | boolean | null | Date;
+    value: ScalarFilterValue;
   };
   /**
    * [descr:ColumnAIOptions]
@@ -5192,7 +5194,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:ColumnHeaderFilter.groupInterval]
      */
-    groupInterval?: HeaderFilterGroupInterval | number | undefined;
+    groupInterval?:
+      | HeaderFilterGroupInterval
+      | number
+      | Array<string | number>
+      | undefined;
     /**
      * [descr:ColumnHeaderFilter.height]
      */
@@ -5457,6 +5463,7 @@ declare module DevExpress.common.grids {
    */
   export type FilterExpr =
     | BasicFilterExpr
+    | MultiValueFilterExpr
     | CombinedFilterExpr
     | NegatedFilterExpr;
   /**
@@ -6498,6 +6505,15 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
+   * [descr:MultiValueFilterExpr]
+   */
+  export type MultiValueFilterExpr = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.MultiValueSearchOperation;
+    value: ScalarFilterValue[];
+  };
+  /**
    * [descr:NegatedFilterExpr]
    */
   export type NegatedFilterExpr = {
@@ -6974,6 +6990,10 @@ declare module DevExpress.common.grids {
      */
     cancel: boolean;
   }
+  /**
+   * [descr:ScalarFilterValue]
+   */
+  export type ScalarFilterValue = string | number | boolean | Date | null;
   /**
    * [descr:ScrollingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7710,6 +7730,10 @@ declare module DevExpress.data {
      */
     userData?: any;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type MultiValueSearchOperation = 'anyof' | 'noneof';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -24439,7 +24463,7 @@ declare module DevExpress.ui {
     export type CellClickEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxPivotGrid,
-        MouseEvent | PointerEvent
+        KeyboardEvent | MouseEvent | PointerEvent
       > & {
         /**
          * [descr:_ui_pivot_grid_CellClickEvent.area]
@@ -34514,7 +34538,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:MessageBase.type]
      */
-    type?: 'text' | 'image' | undefined;
+    type?: MessageType;
     /**
      * [descr:MessageBase.timestamp]
      */
@@ -34530,6 +34554,10 @@ declare module DevExpress.ui.dxChat {
 
     [key: string]: any;
   };
+  /**
+   * [descr:MessageType]
+   */
+  export type MessageType = 'text' | 'image';
   /**
    * [descr:SendButtonProperties]
    */

@@ -4,6 +4,7 @@ import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 import { Fragment } from 'inferno';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
+import { renderUtils } from '../../utils/index';
 import { DATE_TABLE_ROW_CLASS } from '../const';
 import type { CellTemplateProps, DefaultProps } from '../types';
 import { AllDayPanelTableBody, AllDayPanelTableBodyDefaultProps } from './all_day_panel_table_body';
@@ -29,11 +30,15 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
       addVerticalSizesClassToRows,
       cellTemplate,
       dataCellTemplate,
+      rowHeights,
     } = this.props;
     const rowClasses = combineClasses({
       [DATE_TABLE_ROW_CLASS]: true,
       'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
     });
+    const getGroupRowOffset = (groupIndex: number): number => viewData.groupedData
+      .slice(0, groupIndex)
+      .reduce((offset, { dateTable }) => offset + dateTable.length, 0);
 
     return (
       <>
@@ -43,7 +48,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
             dateTable,
             isGroupedAllDayPanel,
             key: fragmentKey,
-          }) => (
+          }, groupIndex) => (
               <Fragment key={fragmentKey}>
                 {
                   isGroupedAllDayPanel && <AllDayPanelTableBody
@@ -63,10 +68,17 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                   dateTable.map(({
                     cells,
                     key: rowKey,
-                  }) => (
+                  }, rowIndex) => {
+                    const rowHeight = rowHeights?.[getGroupRowOffset(groupIndex) + rowIndex];
+                    const rowStyles = rowHeight === undefined
+                      ? undefined
+                      : renderUtils.addHeightToStyle(rowHeight);
+
+                    return (
                       <Row
                         key={rowKey}
                         className={rowClasses}
+                        styles={rowStyles}
                         leftVirtualCellWidth={viewData.leftVirtualCellWidth
                           ?? RowDefaultProps.leftVirtualCellWidth}
                         rightVirtualCellWidth={viewData.rightVirtualCellWidth
@@ -112,7 +124,8 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                             } as CellTemplateProps} />)
                         }
                       </Row>
-                  ))
+                    );
+                  })
                 }
               </Fragment>
           ))

@@ -1,4 +1,7 @@
-import type { BasicFilterExpr, CompositeKeyPair } from '@js/common/grids';
+import type {
+  BasicFilterExpr, CompositeKeyPair, MultiValueFilterExpr,
+  ScalarFilterValue,
+} from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateType } from '@ts/grids/grid_core/m_utils';
@@ -88,12 +91,27 @@ export const splitIntoLoadWindows = (
   return windows;
 };
 
-type FilterExprValue = BasicFilterExpr['value'];
+// Maps 1-based indexes to the keys at those positions;
+export const pickKeysByIndex = <T>(
+  keys: T[],
+  indexes: number[],
+): T[] | null => {
+  const normalizedRowIndexes = indexes.map((index) => index - 1);
+  const allIndexesValid = normalizedRowIndexes.every(
+    (index) => index < keys.length,
+  );
+
+  if (!allIndexesValid) {
+    return null;
+  }
+
+  return normalizedRowIndexes.map((index) => keys[index]);
+};
 
 export function resolveFilterValue(
   dataType: string | undefined,
-  value: FilterExprValue,
-): FilterExprValue {
+  value: ScalarFilterValue,
+): ScalarFilterValue {
   if (typeof value === 'string' && isDateType(dataType)) {
     if (!dateUtilsTs.isValidDate(value)) {
       return value;
@@ -101,4 +119,10 @@ export function resolveFilterValue(
     return new Date(value);
   }
   return value;
+}
+
+export function isMultiValueExpr(
+  expr: BasicFilterExpr | MultiValueFilterExpr,
+): expr is MultiValueFilterExpr {
+  return Array.isArray(expr.value);
 }

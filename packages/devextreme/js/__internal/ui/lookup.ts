@@ -150,6 +150,7 @@ class Lookup extends DropDownList<LookupProperties> {
       showDropDownButton: false,
       focusStateEnabled: false,
       dropDownOptions: {
+        _ignoreFunctionValueDeprecation: true,
         showTitle: true,
         // @ts-expect-error The width cannot be a static value due to the mechanism of size updates
         width: () => getSize('width'),
@@ -233,7 +234,6 @@ class Lookup extends DropDownList<LookupProperties> {
           dropDownCentered: true,
           _scrollToSelectedItemEnabled: true,
           dropDownOptions: {
-            _ignoreFunctionValueDeprecation: true,
             shading: false,
             showTitle: false,
             // The height cannot be a static value due to the mechanism of size updates

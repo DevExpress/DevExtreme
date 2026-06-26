@@ -8,7 +8,7 @@ import { getWindow } from '@js/core/utils/window';
 import type { ScrollOffset } from '@ts/core/utils/scroll';
 
 import type { CellPositionData, ViewCellData } from '../types';
-import type SchedulerWorkSpace from './m_work_space';
+import type SchedulerWorkSpace from './work_space';
 
 const DEFAULT_CELL_HEIGHT = 50;
 const MIN_CELL_WIDTH = 1;
@@ -805,7 +805,7 @@ export class VirtualScrollingRenderer {
     this.renderAppointments();
   }
 
-  // TODO: make private once external usage in m_work_space.ts is removed
+  // TODO: make private once external usage in work_space.ts is removed
   _renderGrid(): void {
     this.workspace.renderWorkSpace({
       generateNewData: false,

@@ -1,6 +1,6 @@
 import type { ViewType } from '../../../types';
 import { DEFAULT_VIEW_OPTIONS, VIEWS } from '../../../utils/options/constants_view';
-import { ViewDataGenerator } from '../m_view_data_generator';
+import { ViewDataGenerator } from '../view_data_generator';
 import { ViewDataGeneratorDay } from '../view_data_generator_day';
 import { ViewDataGeneratorMonth } from '../view_data_generator_month';
 import { ViewDataGeneratorTimelineMonth } from '../view_data_generator_timeline_month';

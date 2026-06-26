@@ -264,6 +264,7 @@
         "dxPagination-ariaPageSize": "اندازه صفحه",
         "dxPagination-ariaPageNumber": "شماره صفحه",
 
+        "dxPivotGrid-ariaLabel": "Pivot grid",
         "dxPivotGrid-grandTotal": "جمع کل",
         "dxPivotGrid-total": "جمع {0}",
         "dxPivotGrid-fieldChooserTitle": "انتخاب فیلد",
