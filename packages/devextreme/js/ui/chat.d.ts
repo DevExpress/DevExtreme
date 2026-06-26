@@ -446,7 +446,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
+    emptyViewTemplate?: template | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @type dxFileUploaderOptions
@@ -484,7 +484,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    messageTemplate?: template | null | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
+    messageTemplate?: template | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default 'shorttime'
