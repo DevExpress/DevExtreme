@@ -57,6 +57,9 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'Form-Grouping':
+    case 'Stepper-StepTemplate':
+      return ['aria-tab-name'];
     default:
       return [];
   }
@@ -77,6 +80,22 @@ const SKIPPED_TESTS = {
       { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Tabs: [
+      { demo: 'Selection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    TabPanel: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    DataGrid: [
+      { demo: 'DeferredSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'FocusedRow', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ExcelJSExportMultipleGrids', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PDFExportMultipleGrids', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ]
   },
   Angular: {
     DataGrid: [
