@@ -85,7 +85,23 @@
         "default",
         "test",
         "!{projectRoot}/Demos/**/*",
-        "{projectRoot}/.eslint*"
+        "{projectRoot}/eslint.config.mjs",
+        "{projectRoot}/tsconfig.eslint.json"
+      ]
+    },
+    "lint-demos": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-demos"
+      },
+      "inputs": [
+        "{projectRoot}/Demos/**/*.js",
+        "{projectRoot}/Demos/**/*.jsx",
+        "{projectRoot}/Demos/**/*.ts",
+        "{projectRoot}/Demos/**/*.tsx",
+        "{projectRoot}/Demos/**/*.vue",
+        "{projectRoot}/eslint.config.mjs",
+        "{projectRoot}/tsconfig.eslint.json"
       ]
     },
     "lint-css": {
@@ -94,9 +110,14 @@
         "script": "lint-css"
       },
       "inputs": [
-        "{projectRoot}/Demos/**/*.css",
-        "{projectRoot}/Demos/**/*.vue",
-        "{projectRoot}/Demos/.stylelintrc.json"
+        "{projectRoot}/**/*.css",
+        "{projectRoot}/**/*.vue",
+        "!{projectRoot}/node_modules/**/*",
+        "!{projectRoot}/coverage/**/*",
+        "!{projectRoot}/publish-demos/**/*",
+        "!{projectRoot}/testing/artifacts/**/*",
+        "{projectRoot}/.stylelintrc.json",
+        "{projectRoot}/.stylelintignore"
       ]
     },
     "lint-html": {
@@ -105,7 +126,11 @@
         "script": "lint-html"
       },
       "inputs": [
-        "{projectRoot}/**/*"
+        "{projectRoot}/**/*",
+        "!{projectRoot}/node_modules/**/*",
+        "!{projectRoot}/coverage/**/*",
+        "!{projectRoot}/publish-demos/**/*",
+        "!{projectRoot}/testing/artifacts/**/*"
       ]
     },
     "prepare-js": {

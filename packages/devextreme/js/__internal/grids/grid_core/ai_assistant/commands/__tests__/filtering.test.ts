@@ -61,6 +61,11 @@ const singleBasic = (field: string, operator: string, value: unknown): any => tr
   basicNode('n1', field, operator, value),
 ]);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const singleMultiValue = (field: string, operator: string, values: unknown[]): any => tree('n1', [
+  basicNode('n1', field, operator, values),
+]);
+
 const createCallbacks = (): {
   success: jest.Mock<(message?: string) => CommandResult>;
   failure: jest.Mock<(message?: string) => CommandResult>;
@@ -115,6 +120,44 @@ describe('filterValueCommand', () => {
       [singleBasic('name', '=', null)],
     ])('accepts scalar value %p', (expression) => {
       expect(filterValueCommand.schema.safeParse({ expression }).success).toBe(true);
+    });
+
+    it.each([
+      ['anyof'], ['noneof'],
+    ])('accepts multi-value op "%s"', (op) => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: singleMultiValue('name', op, ['Alpha', 'Beta']),
+      }).success).toBe(true);
+    });
+
+    it('accepts an anyof expression with mixed scalar types in array', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: singleMultiValue('name', 'anyof', ['Alpha', 1, true, null]),
+      }).success).toBe(true);
+    });
+
+    it('accepts an anyof expression with an empty array', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: singleMultiValue('name', 'anyof', []),
+      }).success).toBe(true);
+    });
+
+    it('rejects anyof with a scalar value instead of array', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: singleBasic('name', 'anyof', 'Alpha'),
+      }).success).toBe(false);
+    });
+
+    it('rejects noneof with a scalar value instead of array', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: singleBasic('name', 'noneof', 'Alpha'),
+      }).success).toBe(false);
+    });
+
+    it('rejects basic op with an array value', () => {
+      expect(filterValueCommand.schema.safeParse({
+        expression: singleMultiValue('name', '=', ['Alpha', 'Beta']),
+      }).success).toBe(false);
     });
 
     it('accepts a combined expression with "and"', () => {
@@ -288,6 +331,55 @@ describe('filterValueCommand', () => {
       expect(result.status).toBe('success');
     });
 
+    it('converts anyof expression to the legacy array form', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleMultiValue('name', 'anyof', ['Alpha', 'Beta']),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', ['name', 'anyof', ['Alpha', 'Beta']]);
+      expect(result.status).toBe('success');
+    });
+
+    it('converts noneof expression to the legacy array form', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleMultiValue('name', 'noneof', ['Alpha', 'Beta']),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', ['name', 'noneof', ['Alpha', 'Beta']]);
+      expect(result.status).toBe('success');
+    });
+
+    it('resolves date values inside anyof array for date columns', async () => {
+      const instance = await createGrid({
+        dataSource: [
+          { id: 1, SaleDate: new Date(2024, 4, 10) },
+        ],
+        columns: [
+          { dataField: 'id', dataType: 'number' },
+          { dataField: 'SaleDate', dataType: 'date' },
+        ],
+      });
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleMultiValue('SaleDate', 'anyof', ['2024-05-10T00:00:00', '2024-06-01T00:00:00']),
+      });
+
+      expect(spy).toHaveBeenCalledWith('filterValue', [
+        'SaleDate', 'anyof', [new Date('2024-05-10T00:00:00'), new Date('2024-06-01T00:00:00')],
+      ]);
+      expect(result.status).toBe('success');
+    });
+
     it('converts a combined node into the legacy array form', async () => {
       const instance = await createGrid();
       const spy = jest.spyOn(instance, 'option');
@@ -443,6 +535,19 @@ describe('filterValueCommand', () => {
 
       const result = await filterValueCommand.execute(instance, callbacks)({
         expression: singleBasic('nonexistent', '=', 'Alpha'),
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result.status).toBe('failure');
+    });
+
+    it('returns failure when anyof field has no corresponding column', async () => {
+      const instance = await createGrid();
+      const spy = jest.spyOn(instance, 'option');
+      const callbacks = createCallbacks();
+
+      const result = await filterValueCommand.execute(instance, callbacks)({
+        expression: singleMultiValue('nonexistent', 'anyof', ['Alpha']),
       });
 
       expect(spy).not.toHaveBeenCalled();

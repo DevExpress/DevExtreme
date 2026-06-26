@@ -12,6 +12,7 @@ export interface GroupedStrategyConfig {
   getIndicatorOffset: () => number;
   getIndicationHeight: () => number;
   getIndicationWidth: () => number;
+  getGroupHeights?: () => number[] | undefined;
   getScrollableScrollTop: () => number;
   getScrollableContentElement: () => Element;
   getElement: () => Element;

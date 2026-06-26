@@ -179,7 +179,7 @@
         "lint-demos": "eslint ./Demos",
         "lint-css": "stylelint **/*.{css,vue}",
         "lint-non-demos": "pnpm exec nx run-many -t lint-js lint-css lint-html -p devextreme-demos",
-        "lint": "pnpm run lint-non-demos && pnpm run lint-demos",
+        "lint": "pnpm exec nx run-many -t lint-js lint-demos lint-css lint-html -p devextreme-demos",
         "test-testcafe": "ts-node utils/visual-tests/testcafe-runner.ts",
         "test-testcafe:csp": "cross-env CSP_REPORT=true ts-node utils/visual-tests/testcafe-runner.ts",
         "test-testcafe:accessibility": "cross-env STRATEGY=accessibility CONSTEL=jquery node utils/visual-tests/testcafe-runner.ts",
