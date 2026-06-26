@@ -83,7 +83,7 @@ runs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
@@ -118,7 +118,7 @@ runs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-

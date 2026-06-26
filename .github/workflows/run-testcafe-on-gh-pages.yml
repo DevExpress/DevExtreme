@@ -77,7 +77,7 @@ jobs:
                   devextreme/.nx/workspace-data/*.db
                   devextreme/.nx/workspace-data/*.db-wal
                   devextreme/.nx/workspace-data/*.db-shm
-                key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}-${{ github.run_attempt }}
+                key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}
                 restore-keys: |
                   ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}-
                   ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-
@@ -115,7 +115,7 @@ jobs:
                   devextreme/.nx/workspace-data/*.db
                   devextreme/.nx/workspace-data/*.db-wal
                   devextreme/.nx/workspace-data/*.db-shm
-                key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}-${{ github.run_attempt }}
+                key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}
                 restore-keys: |
                   ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-${{ github.sha }}-
                   ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.CONSTEL }}-${{ matrix.THEME }}-
