@@ -231,34 +231,42 @@ jobs:
                   return true;
                 }
 
-                let applied = false;
+                const url = () => `https://github.com/${owner}/${repo}/blob/${targetBranch}/${fileObj.newPath}#L${hunk.oldStart}`;
+
+                let applyPos = -1;
                 if (matchesAt(pos)) {
-                  baseLines.splice(pos, oldSegment.length, ...newSegment);
-                  offset += newSegment.length - oldSegment.length;
-                  applied = true;
-                } else {
-                  for (let delta = 1; delta <= FUZZ && !applied; delta++) {
-                    core.debug(`Try fuzz ${delta}`);
-                    if (matchesAt(pos - delta)) {
-                      pos = pos - delta;
-                      baseLines.splice(pos, oldSegment.length, ...newSegment);
-                      offset += newSegment.length - oldSegment.length;
-                      applied = true;
-                    } else if (matchesAt(pos + delta)) {
-                      pos = pos + delta;
-                      baseLines.splice(pos, oldSegment.length, ...newSegment);
-                      offset += newSegment.length - oldSegment.length;
-                      applied = true;
-                    }
+                  // exact position declared by the diff — canonical, no disambiguation needed
+                  applyPos = pos;
+                } else if (oldSegment.length === 0) {
+                  // pure insertion without a context anchor — take the first valid position
+                  for (let delta = 1; delta <= FUZZ && applyPos < 0; delta++) {
+                    if (matchesAt(pos - delta)) applyPos = pos - delta;
+                    else if (matchesAt(pos + delta)) applyPos = pos + delta;
                   }
+                } else {
+                  // anchored hunk — collect every match in the window and refuse if ambiguous,
+                  // so a hunk never lands silently on an identical block elsewhere
+                  const candidates = [];
+                  for (let delta = 1; delta <= FUZZ; delta++) {
+                    if (matchesAt(pos - delta)) candidates.push(pos - delta);
+                    if (matchesAt(pos + delta)) candidates.push(pos + delta);
+                  }
+                  if (candidates.length > 1) {
+                    throw new Error(
+                      `❌ Ambiguous hunk in ${fileObj.oldPath || fileObj.newPath}: context matches at ${candidates.length} positions within ±${FUZZ} lines near ${url()}. Aborting to avoid applying to the wrong location.`
+                    );
+                  }
+                  if (candidates.length === 1) applyPos = candidates[0];
                 }
 
-                if (!applied) {
-                  const url = `https://github.com/${owner}/${repo}/blob/${targetBranch}/${fileObj.newPath}#L${hunk.oldStart}`;
+                if (applyPos < 0) {
                   throw new Error(
-                    `❌ Cannot apply hunk in ${fileObj.oldPath || fileObj.newPath} around line ${url}`
+                    `❌ Cannot apply hunk in ${fileObj.oldPath || fileObj.newPath} around line ${url()}`
                   );
                 }
+
+                baseLines.splice(applyPos, oldSegment.length, ...newSegment);
+                offset += newSegment.length - oldSegment.length;
               }
 
               return baseLines.join(eol);
