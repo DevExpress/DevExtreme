@@ -805,6 +805,9 @@
         "typescriptModule": "typescript-min"
       },
       "dependsOn": ["build:npm:dts-bundle"],
+      "configurations": {
+        "internal": {}
+      },
       "inputs": [
         "{projectRoot}/artifacts/ts/dx.all.d.ts",
         "{projectRoot}/ts/dx.all.d.ts",
