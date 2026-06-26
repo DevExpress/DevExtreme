@@ -1,6 +1,9 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import CardView from 'devextreme-testcafe-models/cardView';
 import TreeView from 'devextreme-testcafe-models/treeView';
+
+const DRAG_ASSERTION_TIMEOUT = 1000;
+const HEADER_DROP_OFFSET_Y = 5;
 
 export const SELECTORS = {
   dragging: '.dx-sortable-dragging',
@@ -80,7 +83,11 @@ export const dragToHeaderPanel = async (
     await t.dragToElement(
       columnElement,
       insertBeforeColumn,
-      { destinationOffsetX: +5, destinationOffsetY: -20, speed: 0.5 },
+      {
+        destinationOffsetX: 5,
+        destinationOffsetY: HEADER_DROP_OFFSET_Y,
+        speed: 0.5,
+      },
     );
   } else {
     const insertAfterColumn = headers.getHeaderItemNth(columnsNum - 1).element;
@@ -88,11 +95,19 @@ export const dragToHeaderPanel = async (
     await t.dragToElement(
       columnElement,
       insertAfterColumn,
-      { destinationOffsetX: -5, destinationOffsetY: -20, speed: 0.5 },
+      {
+        destinationOffsetX: -5,
+        destinationOffsetY: HEADER_DROP_OFFSET_Y,
+        speed: 0.5,
+      },
     );
   }
 
-  await t.wait(300);
+  await t
+    .expect(Selector(SELECTORS.dragging).exists)
+    .notOk({ timeout: DRAG_ASSERTION_TIMEOUT })
+    .expect(cardView.isReady())
+    .ok({ timeout: DRAG_ASSERTION_TIMEOUT });
 };
 
 export const dragToColumnChooser = async (
@@ -124,7 +139,7 @@ export const expectColumns = async (
   expectedColumns: number[],
   source: 'headerPanel' | 'columnChooser' = 'headerPanel',
 ): Promise<void> => {
-  const actualColumns: string[] = [];
+  const adjustedExpectedColumns = expectedColumns.map((columnIndex) => `Column ${columnIndex}`);
 
   for (let i = 0; i < expectedColumns.length; i += 1) {
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -137,12 +152,10 @@ export const expectColumns = async (
       column = treeView.getNodeItem(i);
     }
 
-    if (await column?.exists) {
-      actualColumns.push(await column.innerText);
-    }
+    await t
+      .expect(column.exists)
+      .ok({ timeout: DRAG_ASSERTION_TIMEOUT })
+      .expect(column.innerText)
+      .eql(adjustedExpectedColumns[i], { timeout: DRAG_ASSERTION_TIMEOUT });
   }
-
-  const adjustedExpectedColumns = expectedColumns.map((columnIndex) => `Column ${columnIndex}`);
-
-  await t.expect(actualColumns).eql(adjustedExpectedColumns);
 };

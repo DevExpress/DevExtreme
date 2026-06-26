@@ -7,7 +7,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const TREE_LIST_SELECTOR = '#container';
 
-fixture.disablePageReloads`Sticky columns - Drag and Drop`
+fixture`Sticky columns - Drag and Drop`
   .page(url(__dirname, '../../../container.html'));
 
 test.meta({
