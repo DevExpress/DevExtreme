@@ -997,7 +997,7 @@ Axis.prototype = {
     that._setTickOffset();
 
     that._isHorizontal = options.isHorizontal;
-    that.pane = options.pane;
+    that.pane = options.pane ?? that.pane;
     that.name = options.name;
     that.priority = options.priority;
 
