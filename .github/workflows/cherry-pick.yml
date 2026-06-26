@@ -437,17 +437,30 @@ jobs:
               force: true
             });
 
-            // 11) Create PR
+            // 11) Create PR (or reuse an existing one — branch was already updated above)
             const prBody = `Cherry pick #${prNumber}\n${pr.body || ''}`;
-            const { data: newPr } = await github.rest.pulls.create({
+            const { data: existingPrs } = await github.rest.pulls.list({
               owner, repo,
-              title: pr.title,
-              body: prBody,
+              head: `${owner}:${newBranch}`,
               base: targetBranch,
-              head: newBranch,
-              draft: true
+              state: 'open'
             });
-            
+
+            let newPr;
+            if (existingPrs.length > 0) {
+              newPr = existingPrs[0];
+              core.info(`PR #${newPr.number} for ${newBranch} -> ${targetBranch} already exists; reusing it.`);
+            } else {
+              ({ data: newPr } = await github.rest.pulls.create({
+                owner, repo,
+                title: pr.title,
+                body: prBody,
+                base: targetBranch,
+                head: newBranch,
+                draft: true
+              }));
+            }
+
             await logRateLimit();
             core.setOutput('new_pr_number', String(newPr.number));
             core.setOutput('new_pr_url', newPr.html_url);
