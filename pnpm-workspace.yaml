@@ -106,7 +106,8 @@ catalogs:
     "devextreme-internal-tools": 20.4.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
-    "@types/node": 20.12.8
+    "typescript": 5.9.3
+    "@types/node": 20.19.37
 
 allowBuilds:
   '@parcel/watcher': true

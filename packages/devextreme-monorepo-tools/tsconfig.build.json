@@ -4,6 +4,7 @@
     "module": "commonjs",
     "outDir": "npm",
     "declaration": true,
+    "skipLibCheck": true,
     "types": ["node"]
   },
   "exclude": ["jest.config.ts", "src/**/*.test.ts"],

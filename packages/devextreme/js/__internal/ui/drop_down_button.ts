@@ -97,7 +97,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       itemTemplate: 'item',
       keyExpr: 'this',
       selectedItem: null,
-      // @ts-expect-error public API needs to be fixed
       selectedItemKey: null,
       stylingMode: 'outlined',
       deferRendering: true,
@@ -109,11 +108,11 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       template: null,
       text: '',
       type: 'normal',
-      onButtonClick: undefined,
-      onSelectionChanged: undefined,
-      onItemClick: undefined,
+      onButtonClick: null,
+      onSelectionChanged: null,
+      onItemClick: null,
       opened: false,
-      items: undefined,
+      items: null,
       dataSource: null,
       focusStateEnabled: true,
       hoverStateEnabled: true,
@@ -202,7 +201,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   // T977758
-
   _renderFocusTarget(): void {}
 
   _render(): void {
@@ -500,6 +498,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       noDataText,
       displayExpr,
       itemTemplate,
+      // @ts-expect-error Update dxListOptions.items typings
       items,
       dataSource: this._dataController.getDataSource() as DataSourceLike<Item> | null,
       onItemClick: (e): void => {
@@ -771,7 +770,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }
   }
 
-  _updateDataController(items?: unknown[] | DataSourceType): void {
+  _updateDataController(items?: unknown[] | DataSourceType | null): void {
     const { keyExpr } = this.option();
     this._dataController.updateDataSource(items, keyExpr);
     this._updateKeyExpr();
@@ -827,12 +826,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         this._updateButtonGroup(name, value);
         super._optionChanged(args);
         break;
-      case 'items':
-        // eslint-disable-next-line no-case-declarations
+      case 'items': {
         const { items } = this.option();
         this._updateDataController(items);
         this._updateItemCollection(name);
         break;
+      }
       case 'dataSource':
         this._dataController.updateDataSource(value as unknown[] | DataSourceType);
         this._updateKeyExpr();

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
@@ -20,6 +20,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,

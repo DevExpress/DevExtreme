@@ -6,6 +6,7 @@
     "verbatimModuleSyntax": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "ignoreDeprecations": "6.0",
     "lib": ["es2022", "DOM", "DOM.Iterable"]
   },
   "angularCompilerOptions": {
@@ -14,6 +15,7 @@
   },
 
   "include": [
-    "Demos/**/Angular/**/*.ts"
+    "Demos/**/Angular/**/*.ts",
+    "shared/anti-forgery/index.d.ts"
   ]
 }

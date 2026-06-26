@@ -380,6 +380,7 @@ export default [
             '@typescript-eslint/prefer-interface': 'off',
             '@typescript-eslint/consistent-type-definitions': 'off',
             '@typescript-eslint/no-empty-interface': 'off',
+            'devextreme-custom/jsdoc-default-matches-type': 'warn',
         },
     },
     // Require `null` and `undefined` to be placed at the end of union types,
