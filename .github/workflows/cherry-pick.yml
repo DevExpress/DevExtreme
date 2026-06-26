@@ -1,5 +1,32 @@
 name: Cherry Pick
 on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to cherry-pick'
+        required: true
+        type: string
+      target_branch:
+        description: 'Target branch'
+        required: true
+        type: string
+      new_branch:
+        description: 'Optional new branch name'
+        required: false
+        type: string
+      max_files:
+        description: 'Maximum number of files allowed in PR'
+        required: false
+        default: '200'
+        type: string
+      replace:
+        description: 'Strings to replace in patch'
+        required: false
+        type: string
+      exclude:
+        description: 'Files to exclude'
+        required: false
+        type: string
   workflow_call:
     inputs:
       pr_number:
