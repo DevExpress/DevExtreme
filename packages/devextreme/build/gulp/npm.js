@@ -154,8 +154,8 @@ const packagePath = `${resultPath}/${packageDir}`;
 const distPath = `${resultPath}/${packageDistDir}`;
 
 gulp.task('npm-sources', gulp.series(
-    shell.task('pnpm nx run devextreme:build:npm:dts-modules'),
-    shell.task('pnpm nx run devextreme:build:npm:dts-bundle'),
+    shell.task(env.BUILD_INTERNAL_PACKAGE ? 'pnpm nx run devextreme:build:npm:dts-modules -c internal' : 'pnpm nx run devextreme:build:npm:dts-modules'),
+    shell.task(env.BUILD_INTERNAL_PACKAGE ? 'pnpm nx run devextreme:build:npm:dts-bundle -c internal' : 'pnpm nx run devextreme:build:npm:dts-bundle'),
     () => gulp
         .src(devextremeDistWorkspacePackageJsonPath)
         .pipe(
