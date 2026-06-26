@@ -6,7 +6,7 @@ import Button from '@js/ui/button';
 import type { Appointment } from '@js/ui/scheduler';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
-import type Scheduler from './m_scheduler';
+import type Scheduler from './scheduler';
 import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from './types';
 import { formatImplicitSchedulerDate } from './utils/global_formats';
 

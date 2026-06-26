@@ -8,7 +8,7 @@ import { getHeight, getWidth } from '@ts/core/utils/m_size';
 import Draggable from '@ts/m_draggable';
 
 import { APPOINTMENT_CLASSES } from './appointments_new/const';
-import type Scheduler from './m_scheduler';
+import type Scheduler from './scheduler';
 import type { AppointmentTooltipItem, TargetedAppointment } from './types';
 import type { AppointmentItemViewModel } from './view_model/types';
 

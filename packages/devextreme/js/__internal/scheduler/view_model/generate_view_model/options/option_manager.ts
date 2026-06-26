@@ -1,5 +1,5 @@
 import { Cache } from '../../../global_cache';
-import type Scheduler from '../../../m_scheduler';
+import type Scheduler from '../../../scheduler';
 import type {
   CellInterval,
   CompareOptions,

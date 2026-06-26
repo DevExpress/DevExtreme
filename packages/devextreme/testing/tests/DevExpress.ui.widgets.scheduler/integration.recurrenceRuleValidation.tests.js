@@ -14,7 +14,7 @@ const dragEvents = require('common/core/events/drag');
 const DataSource = require('common/data/data_source/data_source').DataSource;
 const { createWrapper } = require('../../helpers/scheduler/helpers.js');
 
-require('__internal/scheduler/m_scheduler');
+require('__internal/scheduler/scheduler');
 require('ui/drop_down_button');
 
 QUnit.module('Integration: recurrence rules validation', {

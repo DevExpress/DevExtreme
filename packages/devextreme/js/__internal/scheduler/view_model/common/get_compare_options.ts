@@ -1,4 +1,4 @@
-import type Scheduler from '../../m_scheduler';
+import type Scheduler from '../../scheduler';
 import timeZoneUtils from '../../utils_time_zone';
 import type { CompareOptions } from '../types';
 
