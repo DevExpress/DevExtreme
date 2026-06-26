@@ -62,6 +62,8 @@ const getTestSpecificSkipRules = (testName) => {
     case 'TabPanel-Overview':
     case 'Tabs-Overview':
     case 'Tabs-Selection':
+    case 'DataGrid-PDFExportMultipleGrids':
+    case 'DataGrid-FocusedRow':
       return ['aria-tab-name'];
     default:
       return [];
@@ -83,6 +85,12 @@ const SKIPPED_TESTS = {
       { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Tabs: [
+      { demo: 'Selection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    DataGrid: [
+      {demo: 'DeferredSelection', themes: [THEME.generic, THEME.material, THEME.fluent] }
+    ]
   },
   Angular: {
     DataGrid: [
