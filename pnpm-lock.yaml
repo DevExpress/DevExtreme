@@ -1436,6 +1436,9 @@ importers:
       axe-core:
         specifier: 'catalog:'
         version: 4.12.1
+      babel-plugin-add-module-exports:
+        specifier: 1.0.4
+        version: 1.0.4
       babel-plugin-inferno:
         specifier: 6.8.5
         version: 6.8.5(@babel/core@7.29.7)
@@ -7706,6 +7709,9 @@ packages:
 
   babel-messages@6.23.0:
     resolution: {integrity: sha512-Bl3ZiA+LjqaMtNYopA9TYE9HP1tQ+E5dLxE0XrAzcIJeK2UqF0/EaqXwBn9esd4UmTfEab+P+UYQ1GnioFIb/w==}
+
+  babel-plugin-add-module-exports@1.0.4:
+    resolution: {integrity: sha512-g+8yxHUZ60RcyaUpfNzy56OtWW+x9cyEe9j+CranqLiqbju2yf/Cy6ZtYK40EZxtrdHllzlVZgLmcOUCTlJ7Jg==}
 
   babel-plugin-const-enum@1.2.0:
     resolution: {integrity: sha512-o1m/6iyyFnp9MRsK1dHF3bneqyf3AlM2q3A/YbgQr2pCat6B6XJVDv2TXqzfY2RYUi4mak6WAksSBPlyYGx9dg==}
@@ -25090,6 +25096,8 @@ snapshots:
   babel-messages@6.23.0:
     dependencies:
       babel-runtime: 6.26.0
+
+  babel-plugin-add-module-exports@1.0.4: {}
 
   babel-plugin-const-enum@1.2.0(@babel/core@7.29.7):
     dependencies:

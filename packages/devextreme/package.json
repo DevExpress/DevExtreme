@@ -86,6 +86,7 @@
     "@typescript-eslint/experimental-utils": "5.62.0",
     "@typescript-eslint/parser": "catalog:",
     "axe-core": "catalog:",
+    "babel-plugin-add-module-exports": "1.0.4",
     "babel-plugin-inferno": "6.8.5",
     "cldr-core": "41.0.0",
     "cldr-numbers-full": "41.0.0",
