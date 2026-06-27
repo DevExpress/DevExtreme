@@ -295,10 +295,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get items(): Array<any | dxDropDownButtonItem> {
+    get items(): Array<any | dxDropDownButtonItem> | null {
         return this._getOption('items');
     }
-    set items(value: Array<any | dxDropDownButtonItem>) {
+    set items(value: Array<any | dxDropDownButtonItem> | null) {
         this._setOption('items', value);
     }
 
@@ -373,10 +373,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get selectedItem(): any | number | string {
+    get selectedItem(): any | null | number | string {
         return this._getOption('selectedItem');
     }
-    set selectedItem(value: any | number | string) {
+    set selectedItem(value: any | null | number | string) {
         this._setOption('selectedItem', value);
     }
 
@@ -386,10 +386,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get selectedItemKey(): number | string {
+    get selectedItemKey(): null | number | string {
         return this._getOption('selectedItemKey');
     }
-    set selectedItemKey(value: number | string) {
+    set selectedItemKey(value: null | number | string) {
         this._setOption('selectedItemKey', value);
     }
 
@@ -708,7 +708,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<any | dxDropDownButtonItem>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxDropDownButtonItem> | null>;
 
     /**
     
@@ -750,14 +750,14 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemChange: EventEmitter<any | number | string>;
+    @Output() selectedItemChange: EventEmitter<any | null | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemKeyChange: EventEmitter<number | string>;
+    @Output() selectedItemKeyChange: EventEmitter<null | number | string>;
 
     /**
     
