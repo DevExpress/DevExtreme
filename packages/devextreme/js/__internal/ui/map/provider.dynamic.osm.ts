@@ -51,7 +51,7 @@ class OsmProvider extends DynamicProvider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _zoomControl?: any;
 
-  _currentTileType?: string;
+  _currentTileType!: string;
 
   _clickHandler?: (e: { latlng: OsmLocation; originalEvent: Event }) => void;
 
@@ -60,12 +60,8 @@ class OsmProvider extends DynamicProvider {
   _preventZoomChangeEvent?: boolean;
 
   _movementMode(type: RouteMode | string = ''): string {
-    const modes: Record<string, string> = {
-      driving: 'driving',
-      walking: 'walking',
-    };
-
-    return modes[type] ?? 'driving';
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return type || 'driving';
   }
 
   _resolveLocation(location?: LocationOption | null): Promise<OsmLocation> {
@@ -76,7 +72,7 @@ class OsmProvider extends DynamicProvider {
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
-          resolve(geocodedLocation as unknown as OsmLocation);
+          resolve(geocodedLocation as OsmLocation);
         });
       }
     });
@@ -123,6 +119,8 @@ class OsmProvider extends DynamicProvider {
         return;
       }
 
+      const fail = (): void => { reject(errors.Error('W1033')); };
+
       osmMapsLoader ??= this._loadMapResources();
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -137,10 +135,10 @@ class OsmProvider extends DynamicProvider {
           if (osmMapsLoaded()) {
             resolve();
           } else {
-            reject(new Error('Leaflet (window.L) is not available after loading its resources.'));
+            fail();
           }
-        }, reject);
-      }, reject);
+        }, fail);
+      }, fail);
     });
   }
 
@@ -178,8 +176,6 @@ class OsmProvider extends DynamicProvider {
     return this._resolveLocation(this._option('center')).then((center) => {
       const type = this._option('type') ?? 'roadmap';
 
-      // Leaflet cannot auto-detect its image path when the script was loaded via ajax
-      // rather than a <script> tag, so we derive it from the known JS URL.
       L.Icon.Default.imagePath = LEAFLET_JS_URL.replace(/leaflet\.js$/, 'images/');
 
       this._map = L.map(this._$container[0], {
@@ -189,9 +185,7 @@ class OsmProvider extends DynamicProvider {
         attributionControl: true,
       });
 
-      // Create the zoom control once; updateControls adds/removes it as needed.
       this._zoomControl = L.control.zoom();
-      // Honor the initial "controls" option (the base render pipeline doesn't call updateControls).
       if (this._option('controls')) {
         this._zoomControl.addTo(this._map);
       }
@@ -219,9 +213,6 @@ class OsmProvider extends DynamicProvider {
   _buildTileLayer(type: string): unknown {
     const config = this._resolveTileConfig(type);
 
-    // No tile server is provided. We intentionally do not fall back to the public
-    // OpenStreetMap tile server because its Tile Usage Policy forbids production and
-    // commercial use. The customer must supply their own tile source.
     if (!config?.url) {
       errors.log('W1030');
       return undefined;
@@ -259,10 +250,6 @@ class OsmProvider extends DynamicProvider {
       southWest: { lat: bounds.getSouthWest().lat, lng: bounds.getSouthWest().lng },
     });
 
-    // Only report the center back to the widget when it actually changed. Emitting a fresh
-    // location object on every view change feeds an infinite update loop under two-way center
-    // bindings (e.g. Angular [(center)]): each new object identity re-triggers the bound value,
-    // which re-applies the view, which fires another view change.
     const center = this._normalizeLocation(this._map.getCenter());
     const currentCenter = this._getLatLng(this._option('center'));
     if (!currentCenter || currentCenter.lat !== center.lat || currentCenter.lng !== center.lng) {
@@ -288,7 +275,7 @@ class OsmProvider extends DynamicProvider {
   }
 
   updateMapType(): Promise<void> {
-    const type = this._option('type') ?? 'roadmap';
+    const type = this._option('type') ?? this._currentTileType;
 
     if (type !== this._currentTileType) {
       this._currentTileType = type;
@@ -299,7 +286,7 @@ class OsmProvider extends DynamicProvider {
   }
 
   updateTileServer(): Promise<void> {
-    this._rebuildTileLayer(this._currentTileType ?? 'roadmap');
+    this._rebuildTileLayer(this._currentTileType);
 
     return Promise.resolve();
   }
@@ -374,34 +361,32 @@ class OsmProvider extends DynamicProvider {
 
   _anchorIconBottomCenter(marker: unknown): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const m = marker as any;
-    const img = m.getElement?.() ?? m._icon;
-    if (!img || typeof img.addEventListener !== 'function') {
+    const leafletMarker = marker as any;
+    const iconElement = leafletMarker.getElement?.() ?? leafletMarker._icon;
+    if (!iconElement || typeof iconElement.addEventListener !== 'function') {
       return;
     }
-    const apply = (): void => {
-      const w = img.naturalWidth;
-      const h = img.naturalHeight;
-      if (!w || !h) {
+    const applyAnchor = (): void => {
+      const iconWidth = iconElement.naturalWidth;
+      const iconHeight = iconElement.naturalHeight;
+      if (!iconWidth || !iconHeight) {
         return;
       }
-      img.style.marginLeft = `${-w / 2}px`;
-      img.style.marginTop = `${-h}px`;
+      iconElement.style.marginLeft = `${-iconWidth / 2}px`;
+      iconElement.style.marginTop = `${-iconHeight}px`;
 
-      // Lift the bound tooltip above the pin (the custom icon has no popupAnchor, so by default
-      // Leaflet would open the popup at the location and overlap the pin).
-      const popup = m.getPopup?.();
+      const popup = leafletMarker.getPopup?.();
       if (popup) {
-        popup.options.offset = L.point(0, -h);
-        if (m.isPopupOpen()) {
-          m.openPopup();
+        popup.options.offset = L.point(0, -iconHeight);
+        if (leafletMarker.isPopupOpen()) {
+          leafletMarker.openPopup();
         }
       }
     };
-    if (img.complete && img.naturalWidth) {
-      apply();
+    if (iconElement.complete && iconElement.naturalWidth) {
+      applyAnchor();
     } else {
-      img.addEventListener('load', apply, { once: true });
+      iconElement.addEventListener('load', applyAnchor, { once: true });
     }
   }
 
@@ -435,10 +420,6 @@ class OsmProvider extends DynamicProvider {
 
       const popup = this._renderTooltip(marker, options.tooltip);
 
-      // A custom icon URL has no intrinsic iconSize/iconAnchor, so Leaflet pins the image's
-      // top-left corner to the location. That makes the visible tip drift across zoom levels
-      // and lets the tooltip overlap the pin. Anchor the image by its bottom-center (the
-      // conventional pushpin tip) and lift the popup above the pin, using the real rendered size.
       if (icon && !options.html) {
         this._anchorIconBottomCenter(marker);
       }
@@ -480,8 +461,6 @@ class OsmProvider extends DynamicProvider {
     }
 
     const parsedOptions = this._parseTooltipOptions(options);
-    // autoClose/closeOnClick are disabled so multiple marker tooltips can be shown at once
-    // (Leaflet closes other popups by default) — matches the dxMap "show all tooltips" case.
     const popup = L.popup({ autoClose: false, closeOnClick: false }).setContent(parsedOptions.text);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const leafletMarker = marker as any;
@@ -544,8 +523,6 @@ class OsmProvider extends DynamicProvider {
         }).catch((e: unknown) => {
           errors.log('W1006', e);
 
-          // Draw a straight-line fallback through drawPolyline so the route still reports its
-          // bounds (northEast/southWest) and participates in autoAdjust fitting.
           drawPolyline(resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]));
         });
       }));

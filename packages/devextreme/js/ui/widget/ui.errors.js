@@ -409,13 +409,17 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.W1030
      */
-    W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option. Note that the public OpenStreetMap tile server (tile.openstreetmap.org) must not be used in production or commercial applications per its Tile Usage Policy (https://operations.osmfoundation.org/policies/tiles/); use a self-hosted or commercial tile provider instead.',
+    W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option.',
     /**
      * @name ErrorsUIWidgets.W1031
      */
-    W1031: 'A string location ("{0}") was used with the OSM map provider but no "providerConfig.geocodeLocation" callback is configured, so the location resolved to (0, 0). Specify the "providerConfig.geocodeLocation" option to geocode string addresses (for example, via your own Nominatim instance).',
+    W1031: 'No geocoding service is configured for the OSM map provider. Specify the "providerConfig.geocodeLocation" option.',
     /**
      * @name ErrorsUIWidgets.W1032
      */
-    W1032: 'The OSM map provider tile server is configured without an "attribution". When you display OpenStreetMap data, attribution is obligatory (for example, "© OpenStreetMap contributors"); your tile provider may require its own attribution as well. Set the "attribution" field of the "providerConfig.tileServer" option.',
+    W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
+    /**
+     * @name ErrorsUIWidgets.W1033
+     */
+    W1033: 'The OSM map provider failed to load the Leaflet library. Make sure the Leaflet script and stylesheet URLs are reachable.',
 });
