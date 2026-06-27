@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.all.d.ts)
 * Version: 26.1.3
-* Build date: Sun Jun 21 2026
+* Build date: Sat Jun 27 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -3838,6 +3838,8 @@ declare module DevExpress.common.data {
      */
     name?: string;
   };
+  export type MultiValueSearchOperation =
+    DevExpress.data.MultiValueSearchOperation;
   /**
    * [descr:ODataContext]
    */
@@ -4714,7 +4716,7 @@ declare module DevExpress.common.grids {
     type: 'basic';
     field: string;
     operator: DevExpress.common.data.SearchOperation;
-    value: string | number | boolean | null | Date;
+    value: ScalarFilterValue;
   };
   /**
    * [descr:ColumnAIOptions]
@@ -5469,6 +5471,7 @@ declare module DevExpress.common.grids {
    */
   export type FilterExpr =
     | BasicFilterExpr
+    | MultiValueFilterExpr
     | CombinedFilterExpr
     | NegatedFilterExpr;
   /**
@@ -6510,6 +6513,15 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
+   * [descr:MultiValueFilterExpr]
+   */
+  export type MultiValueFilterExpr = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.MultiValueSearchOperation;
+    value: ScalarFilterValue[];
+  };
+  /**
    * [descr:NegatedFilterExpr]
    */
   export type NegatedFilterExpr = {
@@ -6986,6 +6998,10 @@ declare module DevExpress.common.grids {
      */
     cancel: boolean;
   }
+  /**
+   * [descr:ScalarFilterValue]
+   */
+  export type ScalarFilterValue = string | number | boolean | Date | null;
   /**
    * [descr:ScrollingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7722,6 +7738,10 @@ declare module DevExpress.data {
      */
     userData?: any;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type MultiValueSearchOperation = 'anyof' | 'noneof';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -17041,7 +17061,8 @@ declare module DevExpress.ui {
      */
     onClick?:
       | ((e: DevExpress.ui.dxDropDownButton.ItemClickEvent) => void)
-      | string;
+      | string
+      | null;
   }
   /**
    * [descr:dxDropDownButtonOptions]
@@ -17104,7 +17125,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.items]
      */
-    items?: Array<DevExpress.ui.dxDropDownButton.Item | any>;
+    items?: Array<DevExpress.ui.dxDropDownButton.Item | any> | null;
     /**
      * [descr:dxDropDownButtonOptions.keyExpr]
      */
@@ -17118,19 +17139,22 @@ declare module DevExpress.ui {
      */
     onButtonClick?:
       | ((e: DevExpress.ui.dxDropDownButton.ButtonClickEvent) => void)
-      | string;
+      | string
+      | null;
     /**
      * [descr:dxDropDownButtonOptions.onItemClick]
      */
     onItemClick?:
       | ((e: DevExpress.ui.dxDropDownButton.ItemClickEvent) => void)
-      | string;
+      | string
+      | null;
     /**
      * [descr:dxDropDownButtonOptions.onSelectionChanged]
      */
     onSelectionChanged?:
       | ((e: DevExpress.ui.dxDropDownButton.SelectionChangedEvent) => void)
-      | string;
+      | string
+      | null;
     /**
      * [descr:dxDropDownButtonOptions.opened]
      */
@@ -17138,11 +17162,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.selectedItem]
      */
-    selectedItem?: string | number | any;
+    selectedItem?: string | number | any | null;
     /**
      * [descr:dxDropDownButtonOptions.selectedItemKey]
      */
-    selectedItemKey?: string | number;
+    selectedItemKey?: string | number | null;
     /**
      * [descr:dxDropDownButtonOptions.showArrowIcon]
      */

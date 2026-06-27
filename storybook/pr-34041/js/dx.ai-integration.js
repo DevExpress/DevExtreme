@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.ai-integration.js)
 * Version: 26.1.3
-* Build date: Sun Jun 21 2026
+* Build date: Sat Jun 27 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -1199,6 +1199,7 @@ var _default = exports["default"] = (0, _error.default)({
   E0120: 'Adapter for a DevExpressValidator component cannot be configured',
   E0121: 'The \'customItem\' parameter of the \'onCustomItemCreating\' function is empty or contains invalid data. Assign a custom object or a Promise that is resolved after the item is created.',
   E0122: 'AIIntegration: The sendRequest method is missing.',
+  E0123: 'Disallowed property name in expression: \'{0}\'',
   W0000: '\'{0}\' is deprecated in {1}. {2}',
   W0001: '{0} - \'{1}\' option is deprecated in {2}. {3}',
   W0002: '{0} - \'{1}\' method is deprecated in {2}. {3}',
@@ -2685,15 +2686,19 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
   /**
    * @name ErrorsUIWidgets.W1030
    */
-  W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option. Note that the public OpenStreetMap tile server (tile.openstreetmap.org) must not be used in production or commercial applications per its Tile Usage Policy (https://operations.osmfoundation.org/policies/tiles/); use a self-hosted or commercial tile provider instead.',
+  W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option.',
   /**
    * @name ErrorsUIWidgets.W1031
    */
-  W1031: 'A string location ("{0}") was used with the OSM map provider but no "providerConfig.geocodeLocation" callback is configured, so the location resolved to (0, 0). Specify the "providerConfig.geocodeLocation" option to geocode string addresses (for example, via your own Nominatim instance).',
+  W1031: 'No geocoding service is configured for the OSM map provider. Specify the "providerConfig.geocodeLocation" option.',
   /**
    * @name ErrorsUIWidgets.W1032
    */
-  W1032: 'The OSM map provider tile server is configured without an "attribution". When you display OpenStreetMap data, attribution is obligatory (for example, "© OpenStreetMap contributors"); your tile provider may require its own attribution as well. Set the "attribution" field of the "providerConfig.tileServer" option.'
+  W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
+  /**
+   * @name ErrorsUIWidgets.W1033
+   */
+  W1033: 'The OSM map provider failed to load the Leaflet library. Make sure the Leaflet script and stylesheet URLs are reachable.'
 });
 module.exports = exports.default;
 module.exports["default"] = exports.default;
