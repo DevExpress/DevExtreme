@@ -4,7 +4,6 @@
 import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
 import OsmProvider from '__internal/ui/map/provider.dynamic.osm';
-import ajaxMock from '../../../helpers/ajaxMock.js';
 import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
@@ -43,26 +42,35 @@ const prepareTestingOsmProvider = () => {
 
 const moduleConfig = {
     beforeEach: function() {
-        const fakeURL = '/fakeLeafletUrl';
-        let leafletMockCreated = false;
+        const fakeUrl = '/fakeLeafletUrl';
+        let leafletMockLoaded = false;
 
-        OsmProvider.remapConstant(fakeURL);
+        OsmProvider.remapConstant(fakeUrl);
 
-        ajaxMock.setup({
-            url: fakeURL,
-            callback: () => {
-                if(!leafletMockCreated) {
-                    leafletMockCreated = true;
-
-                    $.getScript({
-                        url: '../../packages/devextreme/testing/helpers/forMap/leafletMock.js',
-                        scriptAttrs: { nonce: 'qunit-test' },
-                    }).done(() => {
-                        prepareTestingOsmProvider();
-                    });
-                }
-            },
-        });
+        // The provider loads Leaflet via CSP-compliant <script>/<link> elements. Intercept their
+        // insertion into <head>: load the Leaflet mock (for the script) and fire the element's
+        // load event so the provider's load promise resolves — without requesting the fake URL.
+        const realHeadAppend = window.document.head.appendChild.bind(window.document.head);
+        this._restoreHeadAppend = () => { window.document.head.appendChild = realHeadAppend; };
+        window.document.head.appendChild = (el) => {
+            const url = el.src || el.href || '';
+            if(url.indexOf(fakeUrl) === -1) {
+                return realHeadAppend(el);
+            }
+            if(el.tagName === 'SCRIPT' && !leafletMockLoaded) {
+                leafletMockLoaded = true;
+                $.getScript({
+                    url: '../../packages/devextreme/testing/helpers/forMap/leafletMock.js',
+                    scriptAttrs: { nonce: 'qunit-test' },
+                }).done(() => {
+                    prepareTestingOsmProvider();
+                    if(el.onload) { el.onload(); }
+                });
+            } else {
+                setTimeout(() => { if(el.onload) { el.onload(); } });
+            }
+            return el;
+        };
 
         if(window.L) {
             prepareTestingOsmProvider();
@@ -76,7 +84,7 @@ const moduleConfig = {
         this.osmGetRoute = () => Promise.resolve(this.routePolylineCoords);
     },
     afterEach: function() {
-        ajaxMock.clear();
+        this._restoreHeadAppend();
     }
 };
 

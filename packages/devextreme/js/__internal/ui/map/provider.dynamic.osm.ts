@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
-import $ from '@js/core/renderer';
-import ajax from '@js/core/utils/ajax';
 import { noop } from '@js/core/utils/common';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
@@ -151,32 +149,29 @@ class OsmProvider extends DynamicProvider {
 
   _loadMapScript(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      ajax.sendRequest({
-        url: LEAFLET_JS_URL,
-        dataType: 'script',
-      }).then(() => {
-        resolve();
-      }, reject);
+      const script = window.document.createElement('script');
+      script.async = true;
+      script.onload = (): void => { resolve(); };
+      script.onerror = (): void => { reject(); };
+      script.src = LEAFLET_JS_URL;
+      window.document.head.appendChild(script);
     });
   }
 
   _loadMapStyles(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      ajax.sendRequest({
-        url: LEAFLET_CSS_URL,
-        dataType: 'text',
-      }).then((css) => {
-        $('<style>').html(css).appendTo($('head'));
-        resolve();
-      }, reject);
+      const link = window.document.createElement('link');
+      link.rel = 'stylesheet';
+      link.onload = (): void => { resolve(); };
+      link.onerror = (): void => { reject(); };
+      link.href = LEAFLET_CSS_URL;
+      window.document.head.appendChild(link);
     });
   }
 
   _init(): Promise<void> {
     return this._resolveLocation(this._option('center')).then((center) => {
       const type = this._option('type') ?? 'roadmap';
-
-      L.Icon.Default.imagePath = LEAFLET_JS_URL.replace(/leaflet\.js$/, 'images/');
 
       this._map = L.map(this._$container[0], {
         center,
