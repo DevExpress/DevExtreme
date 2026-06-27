@@ -8,8 +8,7 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [26_1]
+  merge_group:
   workflow_dispatch:
 
 env:
@@ -19,7 +18,7 @@ env:
 jobs:
   check-should-run-all:
     name: Check if all tests should run
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -58,8 +57,54 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-cache
 
+    - name: Lookup nx cache
+      id: lookup-nx-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
+
+        lookup-only: true
+
+    - name: Show nx cache status
+      shell: bash
+      run: |
+        echo "Nx cache lookup exact hit: ${{ steps.lookup-nx-cache.outputs.cache-hit }}"
+        echo "Nx cache primary key: ${{ steps.lookup-nx-cache.outputs.cache-primary-key }}"
+        echo "Nx cache matched key: ${{ steps.lookup-nx-cache.outputs.cache-matched-key }}"
+        if [ -z "${{ steps.lookup-nx-cache.outputs.cache-matched-key }}" ]; then
+          echo "Nx cache lookup: miss"
+        elif [ "${{ steps.lookup-nx-cache.outputs.cache-hit }}" = "true" ]; then
+          echo "Nx cache lookup: exact hit"
+        else
+          echo "Nx cache lookup: partial hit via restore-keys"
+        fi
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Setup nx cache
+      id: setup-nx-cache
+      uses: actions/cache@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -161,7 +206,7 @@ jobs:
           maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '3' || '' }}
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [
       build,

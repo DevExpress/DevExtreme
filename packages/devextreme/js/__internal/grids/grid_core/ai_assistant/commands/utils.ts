@@ -1,12 +1,13 @@
-import type { BasicFilterExpr, CompositeKeyPair } from '@js/common/grids';
+import type {
+  BasicFilterExpr, CompositeKeyPair, MultiValueFilterExpr,
+  ScalarFilterValue,
+} from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateType } from '@ts/grids/grid_core/m_utils';
 import { z } from 'zod';
 
 type RowKey = string | number | Record<string, string | number>;
-
-type FilterExprValue = BasicFilterExpr['value'];
 
 export const compositeKeyPairSchema = z.object({
   field: z.string(),
@@ -109,8 +110,8 @@ export const pickKeysByIndex = <T>(
 
 export function resolveFilterValue(
   dataType: string | undefined,
-  value: FilterExprValue,
-): FilterExprValue {
+  value: ScalarFilterValue,
+): ScalarFilterValue {
   if (typeof value === 'string' && isDateType(dataType)) {
     if (!dateUtilsTs.isValidDate(value)) {
       return value;
@@ -118,4 +119,10 @@ export function resolveFilterValue(
     return new Date(value);
   }
   return value;
+}
+
+export function isMultiValueExpr(
+  expr: BasicFilterExpr | MultiValueFilterExpr,
+): expr is MultiValueFilterExpr {
+  return Array.isArray(expr.value);
 }

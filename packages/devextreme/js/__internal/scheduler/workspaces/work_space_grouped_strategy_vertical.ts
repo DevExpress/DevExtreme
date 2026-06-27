@@ -85,26 +85,46 @@ class VerticalGroupedStrategy {
     return this.config.getTimePanelWidth() + this.config.getGroupTableWidth();
   }
 
+  private getDefaultGroupHeight(): number {
+    const startDayHour = this.config.startDayHour();
+    const endDayHour = this.config.endDayHour();
+    const hoursInterval = this.config.hoursInterval();
+
+    return (calculateDayDuration(startDayHour, endDayHour) / hoursInterval)
+      * this.config.getCellHeight();
+  }
+
+  private getGroupHeight(groupIndex: number): number {
+    return this.config.getGroupHeights?.()?.[groupIndex] ?? this.getDefaultGroupHeight();
+  }
+
+  private getCumulativeGroupOffset(groupIndex: number): number {
+    let offset = 0;
+
+    for (let i = 0; i < groupIndex; i += 1) {
+      offset += this.getGroupHeight(i);
+    }
+
+    return offset;
+  }
+
   getGroupBoundsOffset(groupIndex: number, [$firstCell, $lastCell]: [Element, Element])
   : GroupBoundsOffset {
-    return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
-      const startDayHour = this.config.startDayHour();
-      const endDayHour = this.config.endDayHour();
-      const hoursInterval = this.config.hoursInterval();
+    const groupHeightsKey = this.config.getGroupHeights?.()?.join('.') ?? '';
 
-      const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval)
-       * this.config.getCellHeight();
+    return this.cache.memo(`groupBoundsOffset${groupIndex}.${groupHeightsKey}`, () => {
+      const groupHeight = this.getGroupHeight(groupIndex);
       const scrollTop = this.getScrollableScrollTop();
       const headerRowHeight = getBoundingRect(this.config.getHeaderPanelContainerElement()).height;
 
-      let topOffset = groupIndex * dayHeight + headerRowHeight
+      let topOffset = this.getCumulativeGroupOffset(groupIndex) + headerRowHeight
         + this.config.getHeaderHeight() - scrollTop;
 
       if (this.config.showAllDayPanel() && this.config.supportAllDayRow()) {
         topOffset += this.config.getCellHeight() * (groupIndex + 1);
       }
 
-      const bottomOffset = topOffset + dayHeight;
+      const bottomOffset = topOffset + groupHeight;
 
       const { left } = $firstCell.getBoundingClientRect();
       const { right } = $lastCell.getBoundingClientRect();
@@ -123,7 +143,7 @@ class VerticalGroupedStrategy {
     const offset = this.config.getIndicatorOffset();
     const tableOffset = this.config.crossScrollingEnabled() ? 0 : this.config.getGroupTableWidth();
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
-    let verticalOffset = this.config.getRowCount() * this.config.getCellHeight() * i;
+    let verticalOffset = this.getCumulativeGroupOffset(i);
 
     if (this.config.supportAllDayRow() && this.config.showAllDayPanel()) {
       verticalOffset += this.config.getAllDayHeight() * (i + 1);
@@ -161,8 +181,8 @@ class VerticalGroupedStrategy {
     return height;
   }
 
-  getShaderMaxHeight(): number {
-    let height = this.config.getRowCount() * this.config.getCellHeight();
+  getShaderMaxHeight(groupIndex = 0): number {
+    let height = this.getGroupHeight(groupIndex);
 
     if (this.config.supportAllDayRow() && this.config.showAllDayPanel()) {
       height += this.config.getCellHeight();

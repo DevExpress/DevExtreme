@@ -8,8 +8,7 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [26_1]
+  merge_group:
 
 jobs:
   check-ts-bundle:
@@ -100,7 +99,7 @@ jobs:
         pnpm run validate-declarations
 
   notify:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
