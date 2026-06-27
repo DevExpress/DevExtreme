@@ -23497,11 +23497,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.providerConfig.geocodeLocation]
        */
-      geocodeLocation?: DevExpress.ui.dxMap.OsmGeocodeFunction;
+      geocodeLocation?: (
+        query: string
+      ) => Promise<MapLocation | null | undefined>;
       /**
        * [descr:dxMapOptions.providerConfig.getRoute]
        */
-      getRoute?: DevExpress.ui.dxMap.OsmGetRouteFunction;
+      getRoute?: (
+        params: DevExpress.ui.dxMap.OsmGetRouteParams
+      ) => Promise<Array<[number, number]>>;
     };
     /**
      * [descr:dxMapOptions.routes]

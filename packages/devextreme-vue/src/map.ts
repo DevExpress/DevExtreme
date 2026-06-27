@@ -14,8 +14,6 @@ import {
  RouteRemovedEvent,
  MapProvider,
  MapType,
- OsmGeocodeFunction,
- OsmGetRouteFunction,
  OsmGetRouteParams,
  OsmTileServer,
  OsmTileServerConfig,
@@ -256,8 +254,8 @@ const DxProviderConfigConfig = {
     "update:useAdvancedMarkers": null,
   },
   props: {
-    geocodeLocation: [Object, Function] as PropType<OsmGeocodeFunction | (((query: string) => any))>,
-    getRoute: [Object, Function] as PropType<OsmGetRouteFunction | (((params: OsmGetRouteParams) => any))>,
+    geocodeLocation: Function as PropType<((query: string) => any)>,
+    getRoute: Function as PropType<((params: OsmGetRouteParams) => any)>,
     mapId: String,
     tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType | string) => string | OsmTileServerConfig | null | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean

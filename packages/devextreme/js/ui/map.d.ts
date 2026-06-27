@@ -402,13 +402,13 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @public
        * @default undefined
        */
-      geocodeLocation?: OsmGeocodeFunction;
+      geocodeLocation?: ((query: string) => Promise<MapLocation | null | undefined>);
       /**
        * @docid
        * @public
        * @default undefined
        */
-      getRoute?: OsmGetRouteFunction;
+      getRoute?: ((params: OsmGetRouteParams) => Promise<Array<[number, number]>>);
     };
     /**
      * @docid

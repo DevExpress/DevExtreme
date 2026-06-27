@@ -14,7 +14,7 @@ import {
 
 
 
-import type { OsmGeocodeFunction, OsmGetRouteFunction, OsmTileServer } from 'devextreme/ui/map';
+import type { OsmTileServer } from 'devextreme/ui/map';
 
 import {
     DxIntegrationModule,
@@ -32,18 +32,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get geocodeLocation(): OsmGeocodeFunction {
+    get geocodeLocation(): Function {
         return this._getOption('geocodeLocation');
     }
-    set geocodeLocation(value: OsmGeocodeFunction) {
+    set geocodeLocation(value: Function) {
         this._setOption('geocodeLocation', value);
     }
 
     @Input()
-    get getRoute(): OsmGetRouteFunction {
+    get getRoute(): Function {
         return this._getOption('getRoute');
     }
-    set getRoute(value: OsmGetRouteFunction) {
+    set getRoute(value: Function) {
         this._setOption('getRoute', value);
     }
 
