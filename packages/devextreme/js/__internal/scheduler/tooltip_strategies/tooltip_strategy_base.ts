@@ -92,7 +92,7 @@ export abstract class TooltipStrategyBase {
 
   protected tooltip: Tooltip | dxOverlay<OverlayProperties> | null = null;
 
-  // TODO: make private once external usages in m_scheduler.ts are removed
+  // TODO: make private once external usages in scheduler.ts are removed
   _options: AppointmentTooltipOptions;
 
   protected extraOptions: AppointmentTooltipExtraOptions | null = null;

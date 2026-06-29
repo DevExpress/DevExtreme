@@ -7,7 +7,7 @@ import type { Appointment } from '@js/ui/scheduler';
 import dateLocalization from '@ts/core/localization/date';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
-import type Scheduler from './m_scheduler';
+import type Scheduler from './scheduler';
 import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from './types';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';

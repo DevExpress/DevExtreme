@@ -1,3 +1,4 @@
+/* eslint-disable devextreme-custom/no-deferred */
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
@@ -2652,7 +2653,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     date: Date,
     groupValuesOrOptions?: ScrollToGroupValuesOrOptions,
     allDay?: boolean | undefined,
-  ) {
+  ): void {
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let groupValues: RawGroupValues | GroupValues | undefined;
     // eslint-disable-next-line @typescript-eslint/init-declarations

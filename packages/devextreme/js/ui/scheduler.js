@@ -1,4 +1,4 @@
-import Scheduler from '../__internal/scheduler/m_scheduler';
+import Scheduler from '../__internal/scheduler/scheduler';
 
 // STYLE scheduler
 
