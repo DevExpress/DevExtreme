@@ -2,9 +2,8 @@ export const skippedTests = {
   jQuery: {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable
+    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
     DataGrid: [
-      'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
       'AIColumns'
@@ -17,10 +16,9 @@ export const skippedTests = {
     Common: ['PopupAndNotificationsOverview'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable
+    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
     DataGrid: [
       'SignalRService',
-      'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
       'AIColumns'
@@ -32,10 +30,9 @@ export const skippedTests = {
   React: {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable
+    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
     DataGrid: [
       'SignalRService',
-      'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
       'AIColumns'
@@ -48,10 +45,9 @@ export const skippedTests = {
     Common: ['PopupAndNotificationsOverview'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable
+    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
     DataGrid: [
       'SignalRService',
-      'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
       'AIColumns'
