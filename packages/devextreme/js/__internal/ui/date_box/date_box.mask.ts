@@ -321,6 +321,7 @@ class DateBoxMask extends DateBoxBase {
 
     if (this._useMaskBehavior()
       && event?.inputType === IME_BACKSPACE_INPUT_TYPE
+      && this._isComposing
       && this._input().val() !== ''
     ) {
       this._revertPart(BACKWARD);
@@ -819,9 +820,11 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _clearValueHandler(e: ValueChangedEvent & DxEvent): void {
-    this._isClearingValue = true;
-    super._clearValueHandler(e);
-    this._isClearingValue = false;
+    try {
+      super._clearValueHandler(e);
+    } finally {
+      this._isClearingValue = false;
+    }
   }
 
   _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
