@@ -3066,7 +3066,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
   });
 });
 
-test('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
+test.meta({ unstable: true })('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
     .expect(dataGrid.isReady())

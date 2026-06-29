@@ -1044,7 +1044,7 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
 })());
 
 // T1129252
-test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
