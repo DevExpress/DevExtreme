@@ -202,7 +202,7 @@ jobs:
           useJQuery: 'true'
           useShadowDom: 'true'
           useCsp: 'true'
-          maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '3' || '' }}
+          maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '1' || '' }}
 
   notify:
     runs-on: ubuntu-latest
