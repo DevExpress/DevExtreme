@@ -1,4 +1,4 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule, DxButtonModule, DxTagBoxModule } from 'devextreme-angular';
 import { DxFilterBuilderModule, DxFilterBuilderComponent, DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
@@ -31,6 +31,7 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   providers: [Service],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   imports: [

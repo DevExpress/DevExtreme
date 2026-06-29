@@ -14,7 +14,7 @@ export interface AllDayPanelTableProps extends LayoutProps {
 }
 
 export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> {
-  private allDayPanelData: ViewCellData[] | undefined | null = null;
+  private allDayPanelData: ViewCellData[] | null | undefined = null;
 
   createEffects(): InfernoEffect[] {
     return [createReRenderEffect()];

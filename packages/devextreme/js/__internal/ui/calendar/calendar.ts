@@ -302,7 +302,7 @@ class Calendar<
     }
   }
 
-  _getSerializationFormat(optionName: 'value' | 'min' | 'max' = 'value'): string | undefined | null {
+  _getSerializationFormat(optionName: 'value' | 'min' | 'max' = 'value'): string | null | undefined {
     const { [optionName]: value } = this.option();
     const { dateSerializationFormat } = this.option();
 
@@ -327,7 +327,7 @@ class Calendar<
     return dateSerialization.deserializeDate(value);
   }
 
-  _dateValue(value: Date | null | (Date | null)[], event: DxEvent): void {
+  _dateValue(value: Date | (Date | null)[] | null, event: DxEvent): void {
     if (event) {
       if (event.type === 'keydown') {
         const cellElement = this._view._getContouredCell().get(0);
@@ -355,9 +355,9 @@ class Calendar<
     this.option(optionName, serializedValue);
   }
 
-  _getDateOption(optionName: 'value'): Date | null | (Date | null)[];
+  _getDateOption(optionName: 'value'): Date | (Date | null)[] | null;
   _getDateOption(optionName: 'min' | 'max'): Date | null;
-  _getDateOption(optionName: 'value' | 'min' | 'max'): Date | null | (Date | null)[] {
+  _getDateOption(optionName: 'value' | 'min' | 'max'): Date | (Date | null)[] | null {
     let { [optionName]: optionValue } = this.option();
     if (!this._isArrayValue(optionName, optionValue)) {
       if (optionValue === '') {
@@ -1006,7 +1006,7 @@ class Calendar<
   }
 
   _moveViewElement(
-    view: MonthView | YearView | DecadeView | CenturyView | undefined | null,
+    view: MonthView | YearView | DecadeView | CenturyView | null | undefined,
     coefficient: number,
   ): void {
     if (view) {
@@ -1194,7 +1194,7 @@ class Calendar<
 
   _getRequiredView(
     name: string,
-  ): MonthView | YearView | DecadeView | CenturyView | undefined | null {
+  ): MonthView | YearView | DecadeView | CenturyView | null | undefined {
     const { rtlEnabled } = this.option();
 
     if (name === 'prev') {

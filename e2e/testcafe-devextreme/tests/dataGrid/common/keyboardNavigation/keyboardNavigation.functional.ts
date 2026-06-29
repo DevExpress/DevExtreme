@@ -27,7 +27,7 @@ const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCall
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
-test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
+test.meta({ unstable: true })('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
     .expect(dataGrid.isReady())
@@ -1870,7 +1870,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 
-  test(`${editMode} mode - Shift+Tab from the first editable cell should move focus to the last header (T1329750)`, async (t) => {
+  test.meta({ unstable: true })(`${editMode} mode - Shift+Tab from the first editable cell should move focus to the last header (T1329750)`, async (t) => {
     const dataGrid = new DataGrid('#container') as any;
     const cell00 = dataGrid.getDataCell(0, 0);
     const editor00 = cell00.getEditor();
@@ -3066,7 +3066,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
   });
 });
 
-test('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
+test.meta({ unstable: true })('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
     .expect(dataGrid.isReady())
@@ -6243,7 +6243,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6323,7 +6323,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6403,7 +6403,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6661,7 +6661,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 

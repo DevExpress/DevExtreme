@@ -1079,7 +1079,7 @@ class TextEditorBase<
     }
   }
 
-  getButton(name: string): dxButton | undefined | null {
+  getButton(name: string): dxButton | null | undefined {
     // @ts-expect-error TextEditorButtonCollection should use generic
     return this._buttonCollection.getButton(name);
   }

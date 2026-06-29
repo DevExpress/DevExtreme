@@ -27,7 +27,7 @@ class NativeStrategy extends DateBoxStrategy {
     };
   }
 
-  getParsedText(text?: string): Date | undefined | null {
+  getParsedText(text?: string): Date | null | undefined {
     if (!text) {
       return null;
     }

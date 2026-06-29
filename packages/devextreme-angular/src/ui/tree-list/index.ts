@@ -865,10 +865,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get itemsExpr(): ((item: any, value: undefined | Array<any>) => Array<any> | undefined) | string {
+    get itemsExpr(): ((item: any, value: Array<any> | undefined) => Array<any> | undefined) | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: ((item: any, value: undefined | Array<any>) => Array<any> | undefined) | string) {
+    set itemsExpr(value: ((item: any, value: Array<any> | undefined) => Array<any> | undefined) | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -1939,7 +1939,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<((item: any, value: undefined | Array<any>) => Array<any> | undefined) | string>;
+    @Output() itemsExprChange: EventEmitter<((item: any, value: Array<any> | undefined) => Array<any> | undefined) | string>;
 
     /**
     

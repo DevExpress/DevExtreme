@@ -15,7 +15,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     env:
       NODE_OPTIONS: --max-old-space-size=8192
     timeout-minutes: 30
@@ -55,10 +55,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -89,10 +89,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Build etalon bundles

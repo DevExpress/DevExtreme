@@ -9,6 +9,7 @@ import type {
 
 import type {
     SearchOperation as SearchOperationInternal,
+    MultiValueSearchOperation as MultiValueSearchOperationInternal,
     GroupingInterval as GroupingIntervalInternal,
     SortDescriptor as SortDescriptorInternal,
     GroupDescriptor as GroupDescriptorInternal,
@@ -23,6 +24,12 @@ import type {
  * @public
  */
 export type SearchOperation = SearchOperationInternal;
+
+/**
+ * @namespace DevExpress.common.data
+ * @public
+ */
+export type MultiValueSearchOperation = MultiValueSearchOperationInternal;
 
 /**
  * @namespace DevExpress.common.data

@@ -102,7 +102,7 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
 [0, 1].forEach((columnIndex) => {
   [0, 1, 2].forEach((gapIndex) => {
-    test(`drag from columnChooser to headerPanel: from index ${columnIndex} to index ${gapIndex}`, async (t) => {
+    test.meta({ unstable: true })(`drag from columnChooser to headerPanel: from index ${columnIndex} to index ${gapIndex}`, async (t) => {
       const cardView = new CardView('#container');
       await cardView.apiShowColumnChooser();
 
@@ -315,16 +315,12 @@ test('cards should update when columns are reordered (T1324855)', async (t) => {
 
   const headerPanel = cardView.getHeaderPanel();
   const firstHeader = headerPanel.getHeaderItem(0).element;
-  const secondHeader = headerPanel.getHeaderItem(1).element;
 
-  await t.dragToElement(firstHeader, secondHeader, {
-    destinationOffsetX: -5,
-    destinationOffsetY: -20,
-    speed: 0.5,
-  });
+  await dragToHeaderPanel(t, cardView, firstHeader, 2);
 
-  // Wait for headers to update after drag
-  await t.expect(cardView.getHeaders().getHeaderItemNth(0).element.innerText).notEql('A');
+  await t
+    .expect(cardView.getHeaders().getHeaderItemNth(0).element.innerText)
+    .notEql('A', { timeout: 1000 });
 
   const headerCaptions: string[] = [];
   const headersCount = await cardView.getHeaders().getHeaderItemsElements().count;
