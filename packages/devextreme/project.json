@@ -804,7 +804,7 @@
         "mode": "bundle",
         "typescriptModule": "typescript-min"
       },
-      "dependsOn": ["build:npm:dts-bundle"],
+      "dependsOn": [{ "target": "build:npm:dts-bundle", "params": "forward" }],
       "configurations": {
         "internal": {}
       },
@@ -821,7 +821,7 @@
         "mode": "jquery",
         "typescriptModule": "typescript-min"
       },
-      "dependsOn": ["build:npm:dts-bundle"],
+      "dependsOn": [{ "target": "build:npm:dts-bundle", "params": "forward" }],
       "configurations": {
         "internal": {}
       },
@@ -843,25 +843,15 @@
       "outputs": ["{projectRoot}/artifacts/ts/**/*"]
     },
     "build:declarations": {
+      "executor": "nx:noop",
       "cache": true,
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "pnpm nx run devextreme:copy:ts-vendor",
-          "pnpm nx run devextreme:verify:ts-jquery",
-          "pnpm nx run devextreme:verify:ts-bundle"
-        ],
-        "parallel": false
-      },
+      "dependsOn": [
+        "copy:ts-vendor",
+        { "target": "verify:ts-jquery", "params": "forward" },
+        { "target": "verify:ts-bundle", "params": "forward" }
+      ],
       "configurations": {
-        "internal": {
-          "commands": [
-            "pnpm nx run devextreme:copy:ts-vendor",
-            "pnpm nx run devextreme:verify:ts-jquery -c internal",
-            "pnpm nx run devextreme:verify:ts-bundle -c internal"
-          ],
-          "parallel": false
-        }
+        "internal": {}
       },
       "inputs": [
         "{projectRoot}/ts/**/*.d.ts",
@@ -915,6 +905,7 @@
       ]
     },
     "build:npm:dts-bundle": {
+      "cache": true,
       "executor": "devextreme-nx-infra-plugin:dts-bundle",
       "options": {
         "bundleSources": ["./ts/dx.all.d.ts", "./ts/aliases.d.ts"],
@@ -1348,28 +1339,16 @@
       }
     },
     "validate:ts": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "pnpm nx run devextreme:verify:ts-modules",
-          "pnpm nx run devextreme:verify:ts-bundle",
-          "pnpm nx run devextreme:verify:ts-jquery",
-          "pnpm nx run devextreme:verify:public-modules"
-        ],
-        "parallel": false,
-        "cwd": "{workspaceRoot}"
-      },
+      "executor": "nx:noop",
+      "cache": true,
+      "dependsOn": [
+        "verify:ts-modules",
+        { "target": "verify:ts-bundle", "params": "forward" },
+        { "target": "verify:ts-jquery", "params": "forward" },
+        { "target": "verify:public-modules", "params": "forward" }
+      ],
       "configurations": {
-        "internal": {
-          "commands": [
-            "pnpm nx run devextreme:verify:ts-modules",
-            "pnpm nx run devextreme:verify:ts-bundle -c internal",
-            "pnpm nx run devextreme:verify:ts-jquery -c internal",
-            "pnpm nx run devextreme:verify:public-modules -c internal"
-          ],
-          "parallel": false,
-          "cwd": "{workspaceRoot}"
-        }
+        "internal": {}
       },
       "inputs": [
         "{projectRoot}/js/**/*.d.ts",
