@@ -76,7 +76,7 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
 
   customizeButtons(): void {}
 
-  getParsedText(text = '', format?: string): Date | undefined | null {
+  getParsedText(text = '', format?: string): Date | null | undefined {
     const value = dateLocalization.parse(text, format);
     return value ?? dateLocalization.parse(text);
   }

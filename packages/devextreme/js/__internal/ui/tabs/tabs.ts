@@ -506,7 +506,7 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
     this.$element().append(this._scrollable.$element());
   }
 
-  _scrollToItem(item: Element | undefined | null): void {
+  _scrollToItem(item: Element | null | undefined): void {
     if (!this._scrollable) return;
     const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
@@ -903,7 +903,7 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
     this._renderScrolling();
   }
 
-  getScrollable(): Scrollable | undefined | null {
+  getScrollable(): Scrollable | null | undefined {
     return this._scrollable;
   }
 }
