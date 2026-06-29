@@ -854,7 +854,7 @@ module('Keyboard navigation', setupModule, () => {
 
         this.keyboard.type('10162025'); // Oct 16, 2025
 
-        this.$input.focusout();
+        this.$input.get(0).blur();
         this.$input.get(0).focus();
 
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is selected after re-focusing');
