@@ -55,6 +55,10 @@ class DateBoxMask extends DateBoxBase {
 
   _isIMECommitPending?: boolean;
 
+  _isComposing?: boolean;
+
+  _wasAllSelectedAtCompositionStart?: boolean;
+
   _isClearingValue?: boolean;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
@@ -313,10 +317,10 @@ class DateBoxMask extends DateBoxBase {
       return;
     }
 
-    if (this._useMaskBehavior() && event?.inputType === IME_BACKSPACE_INPUT_TYPE) {
-      if (this._isAllSelected()) {
-        this._selectFirstPart();
-      }
+    if (this._useMaskBehavior()
+      && event?.inputType === IME_BACKSPACE_INPUT_TYPE
+      && this._isComposing
+      && !this._wasAllSelectedAtCompositionStart) {
       this._revertPart(BACKWARD);
       this._syncInputWithMask();
 
@@ -747,11 +751,14 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _maskCompositionStartHandler(): void {
+    this._wasAllSelectedAtCompositionStart = this._isAllSelected();
+    this._isComposing = true;
     this._isIMEDigitProcessed = false;
     this._isIMECommitPending = false;
   }
 
   _maskCompositionEndHandler(): void {
+    this._isComposing = false;
     this._input().val(this._getDisplayedText(this._maskValue));
     this._caret(this._getActivePartProp('caret'));
 
@@ -816,7 +823,6 @@ class DateBoxMask extends DateBoxBase {
 
   _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
     super._focusInHandler(e);
-
     if (this._useMaskBehavior() && !e.isDefaultPrevented() && !this._isClearingValue) {
       this._selectFirstPart();
     }
