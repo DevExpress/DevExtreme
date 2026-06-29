@@ -20,6 +20,28 @@ below. The shape of an optional field is decided by two independent axes.
 Across the board: in `defaultOptions`, "no value" is `undefined`, not `null`. Use `null`
 only when the runtime performs a meaningful `=== null` check.
 
+## Determining the stored default
+
+`@default` describes what `.option(path)` returns on a fresh instance. Often that is a literal
+entry in `_getDefaultOptions()`, but in many widgets the default lives elsewhere — grepping only
+`_getDefaultOptions` gives a false "undefined". Verify against runtime:
+
+- **Callbacks registered via `createAction`/`_eventsMap`** (Grids, Scheduler, FileManager, viz):
+  registration does NOT set an option default — the action wrapper goes to an internal field, and
+  `.option('onX')` stays `undefined` until a default explicitly sets it. Such a callback stores
+  `undefined` (not `null`) even when the `.d.ts` says `@default null`. It stores `null` only if some
+  module's `_getDefaultOptions` literally has `onX: null`.
+- **Visualization (`js/viz/**`):** defaults live in theme files (`viz/core/themes/generic/light/*`),
+  not `_getDefaultOptions`. A themed value round-trips through `.option()` (stored default); a value
+  applied only at render (`x ?? 'solid'`) is NOT stored -> `undefined`.
+- **Grids:** `_getDefaultOptions` is assembled from many modules (`grid_core/*`, `data_grid/*`,
+  `tree_list/*`) — search the whole widget tree, not one file.
+- A `null as undefined` cast at the assignment still stores `null`.
+- A function default (`noop`, `defaultScreenFactorFunc`, `defaultOnIncidentOccurred`) — the type is
+  already correct (a function); `@default null` is inaccurate -> developer decides.
+
+Check each field atomically against runtime; "same as the neighboring field" is not evidence.
+
 ## New vs existing fields (breaking-change policy)
 
 - **New field:** the default in `defaultOptions` is `undefined`; the type and `@default`
@@ -54,6 +76,12 @@ only when the runtime performs a meaningful `=== null` check.
   option via `.option()` would not return it. Do not document the behavior in the `.d.ts` —
   technical writers do that in a separate documentation repository; here you simply omit
   `@default`.
+
+**`any` fields:** `any` is not nullable — it disables type checking (`any ≠ unknown`), it does not
+"contain `null`". For `@default null` on an `any` field, **add `| null`** (it documents the stored
+value; `any | null` collapses to `any` for the compiler; `no-redundant-type-constituents` is not
+enabled, so no new warning). Do not confuse this with an alias that already includes `null`
+(`DateLike = Date | number | string | null`) — that type is already correct; leave it.
 
 ## Correct vs incorrect examples
 
@@ -105,5 +133,11 @@ location?: TextEditorButtonLocation;           // incorrect: @default whose valu
   has no `=== null` justification.
 - An existing field -> never propose migrating a runtime `null` to `undefined` or removing
   `| null` (both are breaking changes); only widen the type.
+
+**Linter blind spots** (predictable false flags — do not "fix" blindly):
+- it does not resolve type aliases: `DateLike` (= `Date | number | string | null`) is flagged as
+  "no `null`" although `null` is already in the type -> no edit needed;
+- it does not special-case `any`: it flags `any + @default null` — which is correct (see the `any`
+  rule above), but be aware `any` is effectively invisible to it.
 
 Apply these consistently to every `.d.ts` field you write, complete, or review.
