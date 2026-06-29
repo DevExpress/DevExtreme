@@ -1458,35 +1458,34 @@ QUnit.module('MessageList', () => {
             });
         });
 
-        QUnit.test('should not be scroll down if typingUsers changed at runtime if scroll position not at the bottom', function(assert) {
-            const done = assert.async();
-
+        QUnit.test('should not be scroll down if typingUsers changed at runtime if scroll position not at the bottom', async function(assert) {
             this.reinit({
                 width: 300,
                 height: 500,
                 items: generateMessages(52),
             });
 
-            setTimeout(() => {
-                const initialScrollTop = this.getScrollOffsetMax() - 100;
+            await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
 
-                this.getScrollView().scrollTo({ top: initialScrollTop });
+            const initialScrollTop = this.getScrollOffsetMax() - 100;
+            this.getScrollView().scrollTo({ top: initialScrollTop });
 
-                setTimeout(() => {
-                    const scrollTopBefore = this.getScrollView().scrollTop();
+            await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - initialScrollTop) <= 1);
 
-                    assert.notEqual(scrollTopBefore, this.getScrollOffsetMax(), 'scroll position should not be at the bottom before updating typingUsers');
+            const scrollTopBefore = this.getScrollView().scrollTop();
+            const scrollOffsetMaxBefore = this.getScrollOffsetMax();
 
-                    this.instance.option({ typingUsers: [{ name: 'User' }] });
+            assert.notEqual(scrollTopBefore, scrollOffsetMaxBefore, 'scroll position should not be at the bottom before updating typingUsers');
 
-                    setTimeout(() => {
-                        const scrollTop = this.getScrollView().scrollTop();
+            this.instance.option({ typingUsers: [{ name: 'User' }] });
 
-                        assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should remain the same after updating typingUsers when not at the bottom');
-                        done();
-                    }, this._resizeTimeout);
-                }, this._resizeTimeout);
-            }, this._resizeTimeout);
+            // NOTE: wait until the typing indicator has grown the content (the runtime
+            // reaction has fully propagated), then assert the scroll position stayed put.
+            await waitForCondition(() => this.getScrollOffsetMax() > scrollOffsetMaxBefore);
+
+            const scrollTop = this.getScrollView().scrollTop();
+
+            assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should remain the same after updating typingUsers when not at the bottom');
         });
 
         QUnit.test('should be scroll down if typingUsers changed at runtime, provided the content does not overflow before the typing indicator is displayed', function(assert) {
@@ -1603,8 +1602,7 @@ QUnit.module('MessageList', () => {
             });
         });
 
-        QUnit.test('should be scroll down after render current user message if scroll position not at the bottom', function(assert) {
-            const done = assert.async();
+        QUnit.test('should be scroll down after render current user message if scroll position not at the bottom', async function(assert) {
             const items = generateMessages(52);
 
             this.reinit({
@@ -1621,27 +1619,25 @@ QUnit.module('MessageList', () => {
                 text: 'NEW MESSAGE',
             };
 
-            setTimeout(() => {
-                const initialScrollTop = this.getScrollOffsetMax() - 100;
-                this.getScrollView().scrollTo({ top: initialScrollTop });
+            await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
 
-                setTimeout(() => {
-                    const scrollTopBefore = this.getScrollView().scrollTop();
-                    assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax() - 100, 1, 'scroll position should not be at the bottom before rendering the message');
+            const initialScrollTop = this.getScrollOffsetMax() - 100;
+            this.getScrollView().scrollTo({ top: initialScrollTop });
 
-                    setTimeout(() => {
-                        this.instance.option('items', [...items, newMessage]);
+            await waitForCondition(() => Math.abs(this.getScrollView().scrollTop() - initialScrollTop) <= 1);
 
-                        setTimeout(() => {
-                            const scrollTop = this.getScrollView().scrollTop();
+            const scrollTopBefore = this.getScrollView().scrollTop();
+            assert.roughEqual(scrollTopBefore, initialScrollTop, 1, 'scroll position should not be at the bottom before rendering the message');
 
-                            assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
-                            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
-                            done();
-                        });
-                    });
-                });
-            });
+            this.instance.option('items', [...items, newMessage]);
+
+            await waitForCondition(() => this.getBubbles().length === items.length + 1
+                && Math.abs(this.getScrollView().scrollTop() - this.getScrollOffsetMax()) <= 1);
+
+            const scrollTop = this.getScrollView().scrollTop();
+
+            assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
+            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
         });
 
         QUnit.test('should not be scroll down after render companion message if scroll position not at the bottom', async function(assert) {

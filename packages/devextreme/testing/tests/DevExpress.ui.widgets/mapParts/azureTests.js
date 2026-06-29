@@ -40,16 +40,13 @@ const loadAzureMock = () => $.getScript({
 const moduleConfig = {
     beforeEach: function() {
         const fakeURL = '/fakeAzureUrl';
-        let azureMockCreated = false;
 
         AzureProvider.remapConstant(fakeURL);
 
         ajaxMock.setup({
             url: fakeURL,
             callback: () => {
-                if(!azureMockCreated) {
-                    azureMockCreated = true;
-
+                if(!window.atlas) {
                     loadAzureMock();
                 }
             },
