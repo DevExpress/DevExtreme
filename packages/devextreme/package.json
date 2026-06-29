@@ -109,6 +109,7 @@
     "eslint-plugin-jsx-a11y": "catalog:",
     "eslint-plugin-n": "17.24.0",
     "eslint-plugin-no-only-tests": "catalog:",
+    "eslint-plugin-perfectionist": "catalog:",
     "eslint-plugin-qunit": "catalog:",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-rulesdir": "0.2.2",

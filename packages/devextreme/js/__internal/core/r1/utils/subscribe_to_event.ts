@@ -7,7 +7,7 @@ import type { EffectReturn } from './effect_return';
 
 export function subscribeToEvent(eventName: string) {
   return (
-    element: HTMLElement | Document | undefined | null,
+    element: HTMLElement | Document | null | undefined,
     handler: unknown,
     eventData?: unknown,
     namespace?: string,

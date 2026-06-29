@@ -1198,7 +1198,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
-  _dragEnterHandler(isCustomTarget: boolean, e: DragLikeEvent): void | false {
+  _dragEnterHandler(isCustomTarget: boolean, e: DragLikeEvent): false | void {
     const { disabled } = this.option();
     if (disabled) {
       return false;
