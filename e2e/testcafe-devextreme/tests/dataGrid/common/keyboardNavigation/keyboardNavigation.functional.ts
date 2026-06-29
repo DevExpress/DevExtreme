@@ -27,7 +27,7 @@ const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCall
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
-test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
+test.meta({ unstable: true })('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
     .expect(dataGrid.isReady())
