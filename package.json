@@ -47,7 +47,6 @@
     "stylelint": "catalog:",
     "ts-node": "10.9.2",
     "typescript": "catalog:tools",
-    "vue": "3.4.27",
     "yargs": "17.7.2"
   },
   "pre-commit": [
