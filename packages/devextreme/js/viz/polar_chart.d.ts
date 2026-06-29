@@ -2250,7 +2250,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    image?: string | undefined | {
+    image?: string | {
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.height
        * @default 30
@@ -2269,7 +2269,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
        */
       width?: number;
-    };
+    } | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionMode
      * @default 'onlyPoint'

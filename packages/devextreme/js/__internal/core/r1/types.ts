@@ -23,7 +23,7 @@ export interface PropsWithStyles {
 }
 
 export interface PropsWithChildren {
-  children?: JSX.Element | (JSX.Element | undefined | false | null)[];
+  children?: JSX.Element | (JSX.Element | false | null | undefined)[];
 }
 
 export interface RefObject<T> {

@@ -65,6 +65,7 @@ catalog:
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
   eslint-plugin-no-only-tests: 3.3.0
+  eslint-plugin-perfectionist: 5.9.1
   eslint-plugin-qunit: 8.2.6
   eslint-plugin-vue: 10.4.0
   vue-eslint-parser: 10.0.0
