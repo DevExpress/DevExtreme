@@ -57,6 +57,8 @@ class DateBoxMask extends DateBoxBase {
 
   _isComposing?: boolean;
 
+  _isReFocusing?: boolean;
+
   _hasUserTyped?: boolean;
 
   _isClearingValue?: boolean;
@@ -825,11 +827,12 @@ class DateBoxMask extends DateBoxBase {
   _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
     super._focusInHandler(e);
     if (this._useMaskBehavior() && !e.isDefaultPrevented() && !this._isClearingValue) {
-      if (this._hasUserTyped) {
+      if (this._isReFocusing && this._hasUserTyped) {
         this._selectFirstPart();
+        this._hasUserTyped = false;
       }
 
-      this._hasUserTyped = false;
+      this._isReFocusing = false;
     }
   }
 
@@ -837,6 +840,7 @@ class DateBoxMask extends DateBoxBase {
     const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
 
     if (shouldFireChangeEvent) {
+      this._isReFocusing = true;
       this._fireChangeEvent();
       super._focusOutHandler(e);
     } else {
