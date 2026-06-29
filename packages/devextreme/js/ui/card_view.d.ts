@@ -537,40 +537,40 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
         scrollSensitivity?: number;
         /**
          * @docid
-         * @default null
+         * @default undefined
          * @public
          */
-        onDragChange?: ((e: any) => void);
+        onDragChange?: ((e: any) => void) | undefined;
         /**
          * @docid
-         * @default null
+         * @default undefined
          * @public
          */
-        onDragEnd?: ((e: any) => void);
+        onDragEnd?: ((e: any) => void) | undefined;
         /**
          * @docid
-         * @default null
+         * @default undefined
          * @public
          */
-        onDragMove?: ((e: any) => void);
+        onDragMove?: ((e: any) => void) | undefined;
         /**
          * @docid
-         * @default null
+         * @default undefined
          * @public
          */
-        onDragStart?: ((e: any) => void);
+        onDragStart?: ((e: any) => void) | undefined;
         /**
          * @docid
-         * @default null
+         * @default undefined
          * @public
          */
-        onRemove?: ((e: any) => void);
+        onRemove?: ((e: any) => void) | undefined;
         /**
          * @docid
-         * @default null
+         * @default undefined
          * @public
          */
-        onReorder?: ((e: any) => void);
+        onReorder?: ((e: any) => void) | undefined;
     };
     /**
      * @docid
@@ -1317,7 +1317,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @type string | Array<any> | Store | DataSource | DataSourceOptions
      * @public
      */
-    dataSource?: DataSourceLike<TCardData, TKey>;
+    dataSource?: DataSourceLike<TCardData, TKey> | undefined;
     /**
      * @docid
      * @public
@@ -1328,7 +1328,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @default undefined
      * @public
      */
-    keyExpr?: string | string[]; // can be undefined because of default?
+    keyExpr?: string | string[] | undefined;
     /**
      * @docid
      * @default "auto"
@@ -1343,7 +1343,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @action
      * @public
      */
-    onDataErrorOccurred?: (e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void;
+    onDataErrorOccurred?: ((e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void) | undefined;
 
     // #endregion
 
@@ -1592,7 +1592,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @fires dxCardViewOptions.onOptionChanged
      * @public
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * @docid
      * @public
