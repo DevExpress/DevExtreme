@@ -329,12 +329,10 @@ class Draggable extends DOMComponent<Draggable, Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      // @ts-expect-error
       onDragStart: null,
-      // @ts-expect-error
       onDragMove: null,
-      // @ts-expect-error
       onDragEnd: null,
+      // @ts-expect-error
       onDragEnter: null,
       onDragLeave: null,
       onDragCancel: null,

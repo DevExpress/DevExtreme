@@ -314,7 +314,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @action
      * @public
      */
-    onAdd?: ((e: AddEvent) => void);
+    onAdd?: ((e: AddEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -322,7 +322,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @action
      * @public
      */
-    onDragChange?: ((e: DragChangeEvent) => void);
+    onDragChange?: ((e: DragChangeEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -330,7 +330,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @action
      * @public
      */
-    onDragEnd?: ((e: DragEndEvent) => void);
+    onDragEnd?: ((e: DragEndEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -338,7 +338,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @action
      * @public
      */
-    onDragMove?: ((e: DragMoveEvent) => void);
+    onDragMove?: ((e: DragMoveEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -346,7 +346,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @action
      * @public
      */
-    onDragStart?: ((e: DragStartEvent) => void);
+    onDragStart?: ((e: DragStartEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -354,7 +354,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @action
      * @public
      */
-    onRemove?: ((e: RemoveEvent) => void);
+    onRemove?: ((e: RemoveEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -362,7 +362,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @action
      * @public
      */
-    onReorder?: ((e: ReorderEvent) => void);
+    onReorder?: ((e: ReorderEvent) => void) | null;
 }
 /**
  * @docid

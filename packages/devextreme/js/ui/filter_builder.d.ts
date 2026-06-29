@@ -311,7 +311,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @action
      * @public
      */
-    onEditorPrepared?: ((e: EditorPreparedEvent) => void);
+    onEditorPrepared?: ((e: EditorPreparedEvent) => void) | null;
     /**
      * @docid
      * @type_function_param1 e:{ui/filter_builder:EditorPreparingEvent}
@@ -319,7 +319,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @action
      * @public
      */
-    onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+    onEditorPreparing?: ((e: EditorPreparingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -327,7 +327,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void) | null;
     /**
      * @docid
      * @type Filter expression
@@ -335,7 +335,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @fires dxFilterBuilderOptions.onValueChanged
      * @public
      */
-    value?: string | Array<any> | Function;
+    value?: string | Array<any> | Function | null;
 }
 /**
  * @docid
@@ -503,7 +503,6 @@ export interface dxFilterBuilderField {
     falseText?: string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     filterOperations?: Array<FilterBuilderOperation | string>;
@@ -515,7 +514,6 @@ export interface dxFilterBuilderField {
     format?: Format;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     lookup?: {

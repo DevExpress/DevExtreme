@@ -224,7 +224,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @action
      * @public
      */
-    onDragEnd?: ((e: DragEndEvent) => void);
+    onDragEnd?: ((e: DragEndEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -232,7 +232,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @action
      * @public
      */
-    onDragMove?: ((e: DragMoveEvent) => void);
+    onDragMove?: ((e: DragMoveEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -240,7 +240,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @action
      * @public
      */
-    onDragStart?: ((e: DragStartEvent) => void);
+    onDragStart?: ((e: DragStartEvent) => void) | null;
 }
 /**
  * @docid
