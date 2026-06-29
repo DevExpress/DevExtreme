@@ -81,7 +81,7 @@ export class AppComponent {
 
   emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
 
-  zipEditorOptions = { stylingMode, mode: 'text', value: null };
+  zipEditorOptions = { stylingMode, mode: 'text' };
 
   zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 

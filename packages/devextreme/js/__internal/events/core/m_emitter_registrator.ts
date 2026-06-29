@@ -6,10 +6,10 @@ import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { data as elementData } from '@js/core/element_data';
-import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
+import { getParentNode } from '@ts/core/utils/m_dom';
 
 const MANAGER_EVENT = 'dxEventManager';
 const EMITTER_DATA = 'dxEmitter';
@@ -106,7 +106,6 @@ const EventManager = Class.inherit({
     const that = this;
 
     const result: any = [];
-    let $element = $(e.target);
 
     function handleEmitter(_, emitter) {
       if (!!emitter && emitter.validatePointers(e) && emitter.validate(e)) {
@@ -116,10 +115,11 @@ const EventManager = Class.inherit({
       }
     }
 
-    while ($element.length) {
-      const emitters = elementData($element.get(0), EMITTER_DATA) || [];
+    let node = e.target;
+    while (node) {
+      const emitters = elementData(node, EMITTER_DATA) || [];
       each(emitters, handleEmitter);
-      $element = $element.parent();
+      node = getParentNode(node);
     }
 
     return result;

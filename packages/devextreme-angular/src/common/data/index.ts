@@ -32,6 +32,7 @@ export type {
     LoadResult,
     LoadResultObject,
     LocalStoreOptions,
+    MultiValueSearchOperation,
     ODataContextOptions,
     ODataStoreOptions,
     Query,

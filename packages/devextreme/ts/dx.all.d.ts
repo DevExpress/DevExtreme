@@ -3830,6 +3830,8 @@ declare module DevExpress.common.data {
      */
     name?: string;
   };
+  export type MultiValueSearchOperation =
+    DevExpress.data.MultiValueSearchOperation;
   /**
    * [descr:ODataContext]
    */
@@ -4706,7 +4708,7 @@ declare module DevExpress.common.grids {
     type: 'basic';
     field: string;
     operator: DevExpress.common.data.SearchOperation;
-    value: string | number | boolean | null | Date;
+    value: ScalarFilterValue;
   };
   /**
    * [descr:ColumnAIOptions]
@@ -5461,6 +5463,7 @@ declare module DevExpress.common.grids {
    */
   export type FilterExpr =
     | BasicFilterExpr
+    | MultiValueFilterExpr
     | CombinedFilterExpr
     | NegatedFilterExpr;
   /**
@@ -6502,6 +6505,15 @@ declare module DevExpress.common.grids {
     width?: number | string;
   };
   /**
+   * [descr:MultiValueFilterExpr]
+   */
+  export type MultiValueFilterExpr = {
+    type: 'basic';
+    field: string;
+    operator: DevExpress.common.data.MultiValueSearchOperation;
+    value: ScalarFilterValue[];
+  };
+  /**
    * [descr:NegatedFilterExpr]
    */
   export type NegatedFilterExpr = {
@@ -6978,6 +6990,10 @@ declare module DevExpress.common.grids {
      */
     cancel: boolean;
   }
+  /**
+   * [descr:ScalarFilterValue]
+   */
+  export type ScalarFilterValue = string | number | boolean | Date | null;
   /**
    * [descr:ScrollingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7714,6 +7730,10 @@ declare module DevExpress.data {
      */
     userData?: any;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type MultiValueSearchOperation = 'anyof' | 'noneof';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
