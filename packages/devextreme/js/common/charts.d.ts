@@ -476,7 +476,7 @@ export interface SeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    image?: string | undefined | {
+    image?: string | {
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.height
        * @default 30
@@ -501,7 +501,7 @@ export interface SeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      url?: string | undefined | {
+      url?: string | {
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint
          * @default undefined
@@ -514,7 +514,7 @@ export interface SeriesPoint {
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
         rangeMinPoint?: string | undefined;
-      };
+      } | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.width
        * @default 30
@@ -534,7 +534,7 @@ export interface SeriesPoint {
          */
         rangeMinPoint?: number | undefined;
       };
-    };
+    } | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.selectionMode
      * @default 'onlyPoint'

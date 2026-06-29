@@ -1019,7 +1019,7 @@ class Popup<
     );
   }
 
-  _getDragTarget(): dxElementWrapper | undefined | null {
+  _getDragTarget(): dxElementWrapper | null | undefined {
     return this.topToolbar();
   }
 
@@ -1473,11 +1473,11 @@ class Popup<
     }
   }
 
-  bottomToolbar(): dxElementWrapper | undefined | null {
+  bottomToolbar(): dxElementWrapper | null | undefined {
     return this._$bottomToolbar;
   }
 
-  topToolbar(): dxElementWrapper | undefined | null {
+  topToolbar(): dxElementWrapper | null | undefined {
     return this._$topToolbar;
   }
 

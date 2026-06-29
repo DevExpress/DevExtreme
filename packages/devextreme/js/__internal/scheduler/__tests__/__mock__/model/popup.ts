@@ -99,7 +99,7 @@ export class PopupModel {
   getInput = (editorName: string): HTMLInputElement => {
     const editor = this.dxForm.getEditor(editorName);
 
-    let $input: dxElementWrapper | undefined | null = null;
+    let $input: dxElementWrapper | null | undefined = null;
 
     if (editorName === 'startDateTimeZoneEditor' || editorName === 'endDateTimeZoneEditor') {
       $input = editor?.$element().find('input[type="hidden"]');

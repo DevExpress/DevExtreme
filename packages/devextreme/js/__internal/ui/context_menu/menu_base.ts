@@ -191,7 +191,7 @@ class MenuBase<
   }
 
   _getLinkContainer(
-    iconContainer: dxElementWrapper | undefined | null,
+    iconContainer: dxElementWrapper | null | undefined,
     textContainer: dxElementWrapper,
     itemData: Item,
   ): dxElementWrapper {

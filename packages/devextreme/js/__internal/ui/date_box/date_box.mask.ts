@@ -640,7 +640,7 @@ class DateBoxMask extends DateBoxBase {
     return this._dateParts[this._activePartIndex][property] as unknown;
   }
 
-  _loadMaskValue(value: Date | null | string = this.getDateOption('value')): void {
+  _loadMaskValue(value: Date | string | null = this.getDateOption('value')): void {
     this._maskValue = value ? new Date(value) : null;
     this._initialMaskValue = value ? new Date(value) : null;
   }
