@@ -1805,7 +1805,7 @@ export const dataControllerModule: Module = {
       cacheEnabled: true,
       repaintChangesOnly: false,
       highlightChanges: false,
-      onDataErrorOccurred: null as any as undefined,
+      onDataErrorOccurred: null,
       remoteOperations: 'auto',
       paging: {
         enabled: true,

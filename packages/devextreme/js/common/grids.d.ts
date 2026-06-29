@@ -601,7 +601,6 @@ export interface ColumnBase<TRowData = any> {
   falseText?: string;
   /**
    * @docid GridBaseColumn.filterOperations
-   * @default undefined
    * @public
    */
   filterOperations?: Array<FilterOperation | string>;
@@ -620,7 +619,6 @@ export interface ColumnBase<TRowData = any> {
   filterValue?: any | undefined;
   /**
    * @docid GridBaseColumn.filterValues
-   * @default undefined
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
@@ -1265,14 +1263,14 @@ export interface EditingBase<TRowData = any, TKey = any> {
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  editColumnName?: string;
+  editColumnName?: string | null;
   /**
    * @docid GridBaseOptions.editing.editRowKey
    * @default null
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  editRowKey?: TKey;
+  editRowKey?: TKey | null;
   /**
    * @docid GridBaseOptions.editing.form
    * @public
@@ -2335,7 +2333,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @fires GridBase.onOptionChanged
    * @public
    */
-  filterValue?: string | Array<any> | Function;
+  filterValue?: string | Array<any> | Function | null;
   /**
    * @docid
    * @default -1
@@ -2394,13 +2392,13 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   noDataText?: string;
   /**
    * @docid
-   * @default null
+   * @default undefined
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @action
    * @public
    */
-  onAIAssistantRequestCreating?: ((e: EventInfo<TComponent> & Cancelable & AIAssistantRequestCreatingInfo) => void);
+  onAIAssistantRequestCreating?: ((e: EventInfo<TComponent> & Cancelable & AIAssistantRequestCreatingInfo) => void) | undefined;
   /**
    * @docid
    * @default null
@@ -2410,7 +2408,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @action
    * @public
    */
-  onAdaptiveDetailRowPreparing?: ((e: EventInfo<TComponent> & AdaptiveDetailRowPreparingInfo) => void);
+  onAdaptiveDetailRowPreparing?: ((e: EventInfo<TComponent> & AdaptiveDetailRowPreparingInfo) => void) | null;
   /**
    * @docid
    * @default null
@@ -2419,121 +2417,121 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @action
    * @public
    */
-  onDataErrorOccurred?: ((e: EventInfo<TComponent> & DataErrorOccurredInfo) => void);
-  /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field changes:Array<DataChange>
-   * @default null
-   * @action
-   * @public
-   */
-  onEditCanceled?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
+  onDataErrorOccurred?: ((e: EventInfo<TComponent> & DataErrorOccurredInfo) => void) | null;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field changes:Array<DataChange>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onEditCanceling?: ((e: Cancelable & EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
+  onEditCanceled?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void) | undefined;
+  /**
+   * @docid
+   * @type_function_param1 e:object
+   * @type_function_param1_field component:this
+   * @type_function_param1_field changes:Array<DataChange>
+   * @default undefined
+   * @action
+   * @public
+   */
+  onEditCanceling?: ((e: Cancelable & EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field promise:Promise<void>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onInitNewRow?: ((e: EventInfo<TComponent> & NewRowInfo<TRowData>) => void);
+  onInitNewRow?: ((e: EventInfo<TComponent> & NewRowInfo<TRowData>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field event:event
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent> & KeyDownInfo) => void);
+  onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent> & KeyDownInfo) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowCollapsed?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  onRowCollapsed?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowCollapsing?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  onRowCollapsing?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowExpanded?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  onRowExpanded?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowExpanding?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  onRowExpanding?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowInserted?: ((e: EventInfo<TComponent> & RowInsertedInfo<TRowData, TKey>) => void);
+  onRowInserted?: ((e: EventInfo<TComponent> & RowInsertedInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowInserting?: ((e: EventInfo<TComponent> & RowInsertingInfo<TRowData>) => void);
+  onRowInserting?: ((e: EventInfo<TComponent> & RowInsertingInfo<TRowData>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowRemoved?: ((e: EventInfo<TComponent> & RowRemovedInfo<TRowData, TKey>) => void);
+  onRowRemoved?: ((e: EventInfo<TComponent> & RowRemovedInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
@@ -2541,22 +2539,22 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
    * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowRemoving?: ((e: EventInfo<TComponent> & RowRemovingInfo<TRowData, TKey>) => void);
+  onRowRemoving?: ((e: EventInfo<TComponent> & RowRemovingInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowUpdated?: ((e: EventInfo<TComponent> & RowUpdatedInfo<TRowData, TKey>) => void);
+  onRowUpdated?: ((e: EventInfo<TComponent> & RowUpdatedInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
@@ -2565,11 +2563,11 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field newData:object
    * @type_function_param1_field key:any
    * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowUpdating?: ((e: EventInfo<TComponent> & RowUpdatingInfo<TRowData, TKey>) => void);
+  onRowUpdating?: ((e: EventInfo<TComponent> & RowUpdatingInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
@@ -2579,32 +2577,32 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field oldData:object
    * @type_function_param1_field promise:Promise<void>
    * @type_function_param1_field brokenRules:Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onRowValidating?: ((e: EventInfo<TComponent> & RowValidatingInfo<TRowData, TKey>) => void);
+  onRowValidating?: ((e: EventInfo<TComponent> & RowValidatingInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field changes:Array<DataChange>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onSaved?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
+  onSaved?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field changes:Array<DataChange>
    * @type_function_param1_field promise:Promise<void>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onSaving?: ((e: EventInfo<TComponent> & SavingInfo<TRowData, TKey>) => void);
+  onSaving?: ((e: EventInfo<TComponent> & SavingInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
@@ -2613,21 +2611,21 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field currentDeselectedRowKeys:Array<any>
    * @type_function_param1_field selectedRowKeys:Array<any>
    * @type_function_param1_field selectedRowsData:Array<Object>
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TRowData, TKey>) => void);
+  onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TRowData, TKey>) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field toolbarOptions:dxToolbarOptions
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onToolbarPreparing?: ((e: EventInfo<TComponent> & ToolbarPreparingInfo) => void);
+  onToolbarPreparing?: ((e: EventInfo<TComponent> & ToolbarPreparingInfo) => void) | undefined;
   /**
    * @docid
    * @public
@@ -3563,7 +3561,7 @@ export type StateStoring = {
    * @docid GridBaseOptions.stateStoring.storageKey
    * @default null
    */
-  storageKey?: string;
+  storageKey?: string | null;
   /**
    * @docid GridBaseOptions.stateStoring.type
    * @default "localStorage"
