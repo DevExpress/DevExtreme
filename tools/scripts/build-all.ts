@@ -1,6 +1,6 @@
 import sh from 'shelljs';
 import path from 'node:path';
-import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR, JS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
+import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR } from './common/paths';
 import { version as devextremeNpmVersion } from '../../packages/devextreme/package.json';
 
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
