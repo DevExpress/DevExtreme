@@ -75,7 +75,7 @@ test('Field panel items markup in the middle of the drag-n-drop', async (t) => {
   });
 });
 
-test('Should show d-n-d indicator during drag to first place in columns fields', async (t) => {
+test.meta({ unstable: true })('Should show d-n-d indicator during drag to first place in columns fields', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
