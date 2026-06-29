@@ -1,4 +1,3 @@
-/* eslint-disable devextreme-custom/no-deferred */
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
@@ -48,7 +47,7 @@ import type {
   AppointmentTooltipShowingEvent,
   AppointmentUpdatingEvent,
   CellClickEvent,
-  CellContextMenuEvent,
+  CellContextMenuEvent, FirstDayOfWeek,
   Properties as SchedulerProperties,
   RecurrenceEditMode,
 } from '@js/ui/scheduler';
@@ -111,7 +110,7 @@ import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView, SafeSchedulerOptions } from './utils/options/types';
 import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
-import type { GroupValues } from './utils/resource_manager/types';
+import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import timeZoneUtils, { type TimezoneLabel } from './utils_time_zone';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import type { CollectorCSS, RealSize } from './view_model/generate_view_model/steps/add_geometry/types';
@@ -2653,7 +2652,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     date: Date,
     groupValuesOrOptions?: ScrollToGroupValuesOrOptions,
     allDay?: boolean | undefined,
-  ): void {
+  ) {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let groupValues: RawGroupValues | GroupValues | undefined;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let allDayValue: boolean | undefined;
+    let align: 'start' | 'center' = 'center';
+
     if (this.isScrollOptionsObject(groupValuesOrOptions)) {
       groupValues = groupValuesOrOptions.group;
       allDayValue = groupValuesOrOptions.allDay;
@@ -2663,7 +2668,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allDayValue = allDay;
     }
 
-    this._workSpace.scrollTo(date, groupValuesOrOptions, allDay, true, 'center');
+    this._workSpace.scrollTo(date, groupValues, allDayValue, true, align);
   }
 
   private isScrollOptionsObject(

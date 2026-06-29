@@ -4,6 +4,7 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 import type { Appointment } from '@js/ui/scheduler';
+import dateLocalization from '@ts/core/localization/date';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import type Scheduler from './m_scheduler';
@@ -48,7 +49,6 @@ export class CompactAppointmentsHelper {
     const $button = $(e.element);
     this.instance.showAppointmentTooltipCore(
       $button,
-      // @ts-expect-error
       $button.data('items'),
       this.getExtraOptionsForTooltip(options, $button),
     );
@@ -61,7 +61,7 @@ export class CompactAppointmentsHelper {
         ? this.createTooltipDragBehavior($appointmentCollector).bind(this)
         : undefined,
       isButtonClick: true,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       _loopFocus: true,
     };
   }
@@ -91,7 +91,6 @@ export class CompactAppointmentsHelper {
         getItemSettings,
       };
 
-      // @ts-expect-error protected method
       workSpace?.createDragBehaviorBase($element, $schedulerElement, options);
     };
   }
@@ -187,7 +186,7 @@ export class CompactAppointmentsHelper {
   }
 
   private localizeDate(date) {
-    return formatImplicitSchedulerDate(date);
+    return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
   }
 
   private getDateText(
