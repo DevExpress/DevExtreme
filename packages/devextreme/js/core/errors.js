@@ -94,6 +94,9 @@
     * @name ErrorsCore.E0121
     */
 /**
+    * @name ErrorsCore.E0123
+    */
+/**
     * @name ErrorsCore.W0000
     */
 /**
