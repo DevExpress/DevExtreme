@@ -57,7 +57,7 @@ class DateBoxMask extends DateBoxBase {
 
   _isComposing?: boolean;
 
-  _wasAllSelectedAtCompositionStart?: boolean;
+  _hasUserTyped?: boolean;
 
   _isClearingValue?: boolean;
 
@@ -319,8 +319,8 @@ class DateBoxMask extends DateBoxBase {
 
     if (this._useMaskBehavior()
       && event?.inputType === IME_BACKSPACE_INPUT_TYPE
-      && this._isComposing
-      && !this._wasAllSelectedAtCompositionStart) {
+      && this._input().val() !== ''
+    ) {
       this._revertPart(BACKWARD);
       this._syncInputWithMask();
 
@@ -336,6 +336,8 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _processInputKey(key: string): void {
+    this._hasUserTyped = true;
+
     const hasMultipleParts = this._dateParts?.length > 1;
 
     if (this._isAllSelected() && hasMultipleParts) {
@@ -751,7 +753,6 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _maskCompositionStartHandler(): void {
-    this._wasAllSelectedAtCompositionStart = this._isAllSelected();
     this._isComposing = true;
     this._isIMEDigitProcessed = false;
     this._isIMECommitPending = false;
@@ -824,7 +825,11 @@ class DateBoxMask extends DateBoxBase {
   _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
     super._focusInHandler(e);
     if (this._useMaskBehavior() && !e.isDefaultPrevented() && !this._isClearingValue) {
-      this._selectFirstPart();
+      if (this._hasUserTyped) {
+        this._selectFirstPart();
+      }
+
+      this._hasUserTyped = false;
     }
   }
 
