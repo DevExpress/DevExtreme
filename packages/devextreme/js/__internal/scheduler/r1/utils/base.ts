@@ -50,7 +50,7 @@ export const isAppointmentTakesAllDay = (
   appointmentAdapter: {
     allDay: boolean;
     startDate: Date;
-    endDate: Date | undefined | null;
+    endDate: Date | null | undefined;
   },
   allDayPanelMode: AllDayPanelModeType,
 ): boolean => {

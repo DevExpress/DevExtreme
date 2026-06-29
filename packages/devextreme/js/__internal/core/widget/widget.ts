@@ -43,7 +43,7 @@ export type SupportedKeyHandler = (
   e: DxEvent<KeyboardEvent>,
   options?: KeyboardKeyDownEvent,
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-) => void | boolean;
+) => boolean | void;
 export type SupportedKeys = Record<
   string,
   SupportedKeyHandler
@@ -51,7 +51,7 @@ export type SupportedKeys = Record<
 
 function setAttribute(
   name: string,
-  value: string | undefined | null,
+  value: string | null | undefined,
   $target: dxElementWrapper,
 ): void {
   const attributeName = name === 'role' || name === 'id' ? name : `aria-${name}`;

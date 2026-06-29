@@ -95,7 +95,7 @@ class Autocomplete extends DropDownList<AutocompleteProperties> {
     return isInputEditable ? 'list' : 'none';
   }
 
-  _displayGetterExpr(): undefined | string | ((item: unknown) => string | number | boolean) {
+  _displayGetterExpr(): string | ((item: unknown) => string | number | boolean) | undefined {
     const { valueExpr } = this.option();
     return valueExpr;
   }

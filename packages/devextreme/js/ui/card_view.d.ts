@@ -405,7 +405,7 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
      * @type_function_param3 currentCardData:object
      * @type_function_return void|Promise<void>
      */
-    setFieldValue?: ((this: Column, newData: DeepPartial<TCardData>, value: any, currentCardData: TCardData) => void | PromiseLike<void>);
+    setFieldValue?: ((this: Column, newData: DeepPartial<TCardData>, value: any, currentCardData: TCardData) => PromiseLike<void> | void);
     /**
      * @docid
      * @default true
