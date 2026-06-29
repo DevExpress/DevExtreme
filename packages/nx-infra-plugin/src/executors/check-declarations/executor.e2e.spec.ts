@@ -45,6 +45,33 @@ const PLUGIN_TYPESCRIPT = path.dirname(
   require.resolve('typescript/package.json', { paths: [__dirname] }),
 );
 
+const SAMPLE_BUNDLE = `declare namespace DevExpress {
+  export interface Sample { value: number; }
+}
+`;
+
+async function writeBundleArtifact(projectDir: string, content: string): Promise<void> {
+  const bundlePath = path.join(projectDir, 'artifacts', 'ts', 'dx.all.d.ts');
+  fs.mkdirSync(path.dirname(bundlePath), { recursive: true });
+  await writeFileText(bundlePath, content);
+}
+
+async function writeModulesMetadata(projectDir: string, modules: unknown[]): Promise<void> {
+  const metadataPath = path.join(projectDir, 'build', 'gulp', 'modules_metadata.json');
+  fs.mkdirSync(path.dirname(metadataPath), { recursive: true });
+  await writeFileText(metadataPath, JSON.stringify(modules));
+}
+
+function listTemporaryEntryFiles(projectDir: string): string[] {
+  const entryDir = path.join(projectDir, 'artifacts');
+  if (!fs.existsSync(entryDir)) {
+    return [];
+  }
+
+  return fs.readdirSync(entryDir).filter((fileName) => fileName.startsWith('globals-')
+    || fileName.startsWith('modules-'));
+}
+
 describe('CheckDeclarationsExecutor E2E', () => {
   let tempDir: string;
   let context = createMockContext();
@@ -101,5 +128,71 @@ describe('CheckDeclarationsExecutor E2E', () => {
     const result = await executor(options, context);
     expect(result.success).toBe(false);
     expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should pass bundle mode when bundle artifact exists and typechecks', async () => {
+    await writeBundleArtifact(projectDir, SAMPLE_BUNDLE);
+
+    const options: CheckDeclarationsExecutorSchema = {
+      mode: 'bundle',
+      typescriptModule: PLUGIN_TYPESCRIPT,
+      compilerOptions: { types: [] },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+  });
+
+  it('should fail bundle mode when bundle artifact is missing', async () => {
+    const options: CheckDeclarationsExecutorSchema = {
+      mode: 'bundle',
+      typescriptModule: PLUGIN_TYPESCRIPT,
+      compilerOptions: { types: [] },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(false);
+  });
+
+  it('should pass jquery mode and remove temporary entry file', async () => {
+    await writeBundleArtifact(projectDir, SAMPLE_BUNDLE);
+    await writeModulesMetadata(projectDir, [
+      {
+        name: 'ui/button',
+        exports: { default: { path: 'ui.dxButton', isWidget: false } },
+      },
+    ]);
+
+    const options: CheckDeclarationsExecutorSchema = {
+      mode: 'jquery',
+      typescriptModule: PLUGIN_TYPESCRIPT,
+      compilerOptions: { types: [] },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+    expect(listTemporaryEntryFiles(projectDir)).toHaveLength(0);
+  });
+
+  it('should pass public-modules mode and remove temporary entry file', async () => {
+    await writeModulesMetadata(projectDir, [
+      {
+        name: 'ui/button',
+        exports: { default: { path: 'ui.dxButton', isWidget: false } },
+      },
+    ]);
+
+    const modulePath = path.join(projectDir, 'artifacts', 'npm', 'devextreme', 'ui', 'button.d.ts');
+    fs.mkdirSync(path.dirname(modulePath), { recursive: true });
+    await writeFileText(modulePath, 'declare const value: number;\nexport default value;\n');
+
+    const options: CheckDeclarationsExecutorSchema = {
+      mode: 'public-modules',
+      typescriptModule: PLUGIN_TYPESCRIPT,
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+    expect(listTemporaryEntryFiles(projectDir)).toHaveLength(0);
   });
 });
