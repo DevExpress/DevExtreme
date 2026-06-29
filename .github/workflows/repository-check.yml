@@ -1,4 +1,4 @@
-name: Health Check
+name: Repository Check
 
 on:
   workflow_dispatch:
