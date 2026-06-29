@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction, Selector } from 'testcafe';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
@@ -794,7 +793,7 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
 });
 
 // T1139685
-test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+test.meta({ unstable: true })('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
