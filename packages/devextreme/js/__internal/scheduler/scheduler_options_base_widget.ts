@@ -18,6 +18,8 @@ import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } fro
 import timeZoneUtils from './utils_time_zone';
 
 export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
+  declare _disposed?: boolean;
+
   protected views: NormalizedView[] = [];
 
   public currentView!: NormalizedView;

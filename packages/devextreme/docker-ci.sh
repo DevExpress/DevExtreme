@@ -237,11 +237,6 @@ function start_runner_watchdog {
                 fi
             else
                 local current_time=$(cat $last_suite_time_file)
-                # NOTE: idle = wall-clock seconds since the runner last reported activity
-                # (a finalized suite or an is-alive heartbeat). On a healthy run this stays
-                # close to 0; a value approaching the 180s suite timeout means a suite is
-                # hanging. It makes "Progress detected" lines self-explanatory instead of
-                # looking like a problem when they are actually the healthy path.
                 local now_epoch=$(date +%s)
                 local current_epoch=$(date -d "$current_time" +%s 2>/dev/null || echo $now_epoch)
                 local idle_seconds=$((now_epoch - current_epoch))
