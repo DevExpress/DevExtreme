@@ -15,7 +15,6 @@ export const skippedTests = {
   },
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['SignalRService'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
     // Remote WidgetsGalleryDataService is unstable
