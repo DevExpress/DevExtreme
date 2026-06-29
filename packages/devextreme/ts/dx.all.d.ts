@@ -2349,7 +2349,6 @@ declare module DevExpress.common.charts {
      */
     image?:
       | string
-      | undefined
       | {
           /**
            * [descr:dxChartSeriesTypes.CommonSeries.point.image.height]
@@ -2371,7 +2370,6 @@ declare module DevExpress.common.charts {
            */
           url?:
             | string
-            | undefined
             | {
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint]
@@ -2381,7 +2379,8 @@ declare module DevExpress.common.charts {
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint]
                  */
                 rangeMinPoint?: string | undefined;
-              };
+              }
+            | undefined;
           /**
            * [descr:dxChartSeriesTypes.CommonSeries.point.image.width]
            */
@@ -2397,7 +2396,8 @@ declare module DevExpress.common.charts {
                  */
                 rangeMinPoint?: number | undefined;
               };
-        };
+        }
+      | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.selectionMode]
      */
@@ -4934,7 +4934,7 @@ declare module DevExpress.common.grids {
       newData: DevExpress.core.DeepPartial<TRowData>,
       value: any,
       currentRowData: TRowData
-    ) => void | PromiseLike<void>;
+    ) => PromiseLike<void> | void;
     defaultSetCellValue?: this['setCellValue'];
     /**
      * [descr:GridBaseColumn.showEditorAlways]
@@ -7485,8 +7485,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type Scalar =
-    | undefined
-    | null
     | string
     | String
     | number
@@ -7498,7 +7496,9 @@ declare module DevExpress.core {
     | Date
     | Function
     | Symbol
-    | Array<unknown>;
+    | Array<unknown>
+    | null
+    | undefined;
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7537,12 +7537,12 @@ declare module DevExpress.core.utils {
             value: T,
             extraParameters?: any
           ) => TResult1 | PromiseLike<TResult1>)
-        | undefined
-        | null,
+        | null
+        | undefined,
       onRejected?:
         | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-        | undefined
         | null
+        | undefined
     ): PromiseLike<TResult1 | TResult2>;
   };
   /**
@@ -11710,11 +11710,11 @@ declare module DevExpress.ui {
      */
     emptyViewTemplate?:
       | template
-      | null
       | ((
           data: DevExpress.ui.dxChat.EmptyViewTemplateData,
           itemElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | null;
     /**
      * [descr:dxChatOptions.fileUploaderOptions]
      */
@@ -11743,11 +11743,11 @@ declare module DevExpress.ui {
      */
     messageTemplate?:
       | template
-      | null
       | ((
           data: DevExpress.ui.dxChat.MessageTemplateData,
           messageBubbleElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | null;
     /**
      * [descr:dxChatOptions.messageTimestampFormat]
      */
@@ -32480,7 +32480,7 @@ declare module DevExpress.ui {
       | string
       | ((
           item: TRowData,
-          value: undefined | TRowData[]
+          value: TRowData[] | undefined
         ) => TRowData[] | undefined);
     /**
      * [descr:dxTreeListOptions.keyExpr]
@@ -34212,7 +34212,7 @@ declare module DevExpress.ui.dxCardView {
       newData: DevExpress.core.DeepPartial<TCardData>,
       value: any,
       currentCardData: TCardData
-    ) => void | PromiseLike<void>;
+    ) => PromiseLike<void> | void;
     /**
      * [descr:ColumnProperties.showInColumnChooser]
      */
@@ -44193,7 +44193,6 @@ declare module DevExpress.viz {
      */
     image?:
       | string
-      | undefined
       | {
           /**
            * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.height]
@@ -44207,7 +44206,8 @@ declare module DevExpress.viz {
            * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.width]
            */
           width?: number;
-        };
+        }
+      | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionMode]
      */

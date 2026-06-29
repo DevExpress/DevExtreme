@@ -4,7 +4,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import { toNumber } from '../../../utils/type_conversion';
 
 export function getElementStyle(
-  el: Element | undefined | null,
+  el: Element | null | undefined,
 ): CSSStyleDeclaration | null | undefined {
   return el && hasWindow() ? getWindow().getComputedStyle?.(el) : null;
 }

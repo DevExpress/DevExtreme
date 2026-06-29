@@ -46,7 +46,7 @@ export const isEditForm = (
 
 // TODO remove null and undefined from types
 export const isDataRow = (
-  $row: dxElementWrapper | undefined | null,
+  $row: dxElementWrapper | null | undefined,
 ): boolean => !!$row?.hasClass(DATA_ROW_CLASS);
 
 export const isNotFocusedRow = (
