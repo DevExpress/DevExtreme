@@ -1320,7 +1320,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.setAria({ role: 'application' });
   }
 
-  private initMarkupOnResourceLoaded() {
+  private initMarkupOnResourceLoaded(): void {
     if (!this._disposed) {
       this.initMarkupCore();
       this.reloadDataSource().catch(noop);

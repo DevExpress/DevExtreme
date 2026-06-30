@@ -145,7 +145,7 @@ jobs:
         MAX_WORKERS: ['']
         include:
           - CONSTEL: ui.grid
-            MAX_WORKERS: '3'
+            MAX_WORKERS: '1'
             useJQuery: 'false'
             CSP: 'true'
           - CONSTEL: ui.scheduler
