@@ -63,7 +63,6 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoLookupAnimationModule } from 'devextreme-angular/ui/lookup/nested';
@@ -1792,7 +1791,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxoLookupAnimationModule,
     DxoLookupAtModule,
@@ -1829,7 +1827,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxoLookupAnimationModule,
     DxoLookupAtModule,

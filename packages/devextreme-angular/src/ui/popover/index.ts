@@ -55,7 +55,6 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoPopoverAnimationModule } from 'devextreme-angular/ui/popover/nested';
 import { DxoPopoverAtModule } from 'devextreme-angular/ui/popover/nested';
@@ -884,7 +883,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
-    DxiToolbarItemModule,
     DxoPopoverAnimationModule,
     DxoPopoverAtModule,
     DxoPopoverBoundaryOffsetModule,
@@ -917,7 +915,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
-    DxiToolbarItemModule,
     DxoPopoverAnimationModule,
     DxoPopoverAtModule,
     DxoPopoverBoundaryOffsetModule,

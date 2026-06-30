@@ -64,7 +64,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoTagBoxAnimationModule } from 'devextreme-angular/ui/tag-box/nested';
@@ -1871,7 +1870,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxoTagBoxAnimationModule,
     DxoTagBoxAtModule,
@@ -1909,7 +1907,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxoTagBoxAnimationModule,
     DxoTagBoxAtModule,

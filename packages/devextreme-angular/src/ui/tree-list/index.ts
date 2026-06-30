@@ -85,7 +85,6 @@ import { DxoHideModule } from 'devextreme-angular/ui/nested';
 import { DxoFromModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
 import { DxiFieldModule } from 'devextreme-angular/ui/nested';
@@ -2353,7 +2352,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoFromModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,
@@ -2506,7 +2504,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoFromModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,

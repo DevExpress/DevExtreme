@@ -53,7 +53,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoPopupAnimationModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupAtModule } from 'devextreme-angular/ui/popup/nested';
@@ -1031,7 +1030,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxoPopupAnimationModule,
     DxoPopupAtModule,
     DxoPopupBoundaryOffsetModule,
@@ -1060,7 +1058,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxoPopupAnimationModule,
     DxoPopupAtModule,
     DxoPopupBoundaryOffsetModule,

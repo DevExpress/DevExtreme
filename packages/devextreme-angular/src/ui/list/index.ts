@@ -47,7 +47,6 @@ import {
 import { DxoItemDraggingModule } from 'devextreme-angular/ui/nested';
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxiMenuItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
@@ -1499,7 +1498,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
-    DxiMenuItemModule,
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
@@ -1518,7 +1516,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
-    DxiMenuItemModule,
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,

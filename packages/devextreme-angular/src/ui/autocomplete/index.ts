@@ -64,7 +64,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoAutocompleteAnimationModule } from 'devextreme-angular/ui/autocomplete/nested';
@@ -1549,7 +1548,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxoAutocompleteAnimationModule,
     DxoAutocompleteAtModule,
@@ -1586,7 +1584,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxoAutocompleteAnimationModule,
     DxoAutocompleteAtModule,
