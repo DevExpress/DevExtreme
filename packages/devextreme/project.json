@@ -1488,6 +1488,15 @@
       ],
       "cache": true
     },
+    "dev": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "dev"
+      },
+      "dependsOn": [
+        "^build"
+      ]
+    },
     "lint": {
       "executor": "nx:noop",
       "dependsOn": [
