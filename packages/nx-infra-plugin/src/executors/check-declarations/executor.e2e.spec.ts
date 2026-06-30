@@ -68,8 +68,9 @@ function listTemporaryEntryFiles(projectDir: string): string[] {
     return [];
   }
 
-  return fs.readdirSync(entryDir).filter((fileName) => fileName.startsWith('globals-')
-    || fileName.startsWith('modules-'));
+  return fs
+    .readdirSync(entryDir)
+    .filter((fileName) => fileName.startsWith('globals-') || fileName.startsWith('modules-'));
 }
 
 describe('CheckDeclarationsExecutor E2E', () => {
