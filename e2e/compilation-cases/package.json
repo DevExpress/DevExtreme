@@ -8,20 +8,20 @@
   },
   "devDependencies": {
     "@angular/common": "catalog:angular",
-    "@types/jquery": "catalog:",
-    "devextreme": "workspace:*",
-    "jquery": "catalog:",
-    "typescript": "catalog:angular",
-    "eslint": "catalog:",
     "@eslint/eslintrc": "catalog:",
     "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
+    "@types/jquery": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
+    "devextreme": "workspace:*",
+    "eslint": "catalog:",
     "eslint-config-devextreme": "catalog:",
     "eslint-migration-utils": "workspace:*",
     "eslint-plugin-i18n": "catalog:",
     "eslint-plugin-import": "catalog:",
-    "eslint-plugin-no-only-tests": "catalog:"
+    "eslint-plugin-no-only-tests": "catalog:",
+    "jquery": "catalog:",
+    "typescript": "catalog:angular"
   }
 }

@@ -67,6 +67,10 @@
     "prop-types": "^15.8.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "catalog:",
+    "@eslint/eslintrc": "catalog:",
+    "@eslint/js": "catalog:",
+    "@stylistic/eslint-plugin": "catalog:",
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.5.2",
@@ -77,10 +81,6 @@
     "devextreme-metadata": "workspace:*",
     "devextreme-nx-infra-plugin": "workspace:*",
     "eslint": "catalog:",
-    "@babel/eslint-parser": "catalog:",
-    "@eslint/eslintrc": "catalog:",
-    "@eslint/js": "catalog:",
-    "@stylistic/eslint-plugin": "catalog:",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "catalog:",
     "eslint-config-devextreme": "catalog:",
