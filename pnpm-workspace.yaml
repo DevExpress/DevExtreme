@@ -109,7 +109,7 @@ catalogs:
     "typescript": 5.5.4
     "zone.js": 0.15.1
   tools:
-    "devextreme-internal-tools": 20.1.1
+    "devextreme-internal-tools": 20.5.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8
@@ -135,3 +135,4 @@ patchedDependencies:
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
   - devextreme-quill@1.7.10
+  - devextreme-internal-tools@20.5.0
