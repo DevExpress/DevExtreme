@@ -223,7 +223,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
         assert.equal(data.dependencies.length, dependencyCount - dependenciesToDelete, 'dependency deleted');
     });
 
-    test.skip('task delete with relations and children', function(assert) {
+    test('task delete with relations and children', function(assert) {
         this.createInstance(options);
         this.clock.tick(10);
 

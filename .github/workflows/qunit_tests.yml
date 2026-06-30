@@ -129,7 +129,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
-    timeout-minutes: 20
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -157,7 +157,7 @@ jobs:
           - CONSTEL: ui.widgets
             CSP: 'false'
             useJQuery: 'false'
-            MAX_WORKERS: '3'
+            MAX_WORKERS: '1'
 
     steps:
     - name: Get sources
