@@ -4,6 +4,7 @@ import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
+import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { clipboardText } from '@js/core/utils/dom';
@@ -57,7 +58,7 @@ class DateBoxMask extends DateBoxBase {
 
   _isComposing?: boolean;
 
-  _isReFocusing?: boolean;
+  _isWindowBlurred?: boolean;
 
   _hasUserTyped?: boolean;
 
@@ -830,12 +831,16 @@ class DateBoxMask extends DateBoxBase {
   _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
     super._focusInHandler(e);
     if (this._useMaskBehavior() && !e.isDefaultPrevented() && !this._isClearingValue) {
-      if (this._isReFocusing && this._hasUserTyped) {
+      const focusCameFromAnotherElement = isDefined(e.relatedTarget);
+      const shouldSelectFirstPart = !this._isWindowBlurred
+        && (focusCameFromAnotherElement || this._hasUserTyped);
+
+      if (shouldSelectFirstPart) {
         this._selectFirstPart();
-        this._hasUserTyped = false;
       }
 
-      this._isReFocusing = false;
+      this._hasUserTyped = false;
+      this._isWindowBlurred = false;
     }
   }
 
@@ -843,7 +848,7 @@ class DateBoxMask extends DateBoxBase {
     const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
 
     if (shouldFireChangeEvent) {
-      this._isReFocusing = true;
+      this._isWindowBlurred = !domAdapter.getDocument().hasFocus();
       this._fireChangeEvent();
       super._focusOutHandler(e);
     } else {
