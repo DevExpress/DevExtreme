@@ -798,6 +798,26 @@ module('Keyboard navigation', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
     });
 
+    QUnit.testInActiveWindow('first part should be active when re-focusing from another input after all parts are completed (T1331089)', function(assert) {
+        const $firstInput = $('<input>').insertBefore(this.$element);
+
+        try {
+            this.instance.option({
+                displayFormat: 'MM/dd/yyyy',
+                value: new Date(2025, 0, 1),
+            });
+
+            this.keyboard.type('10162025'); // Oct 16, 2025
+
+            $firstInput.get(0).focus();
+            this.$input.get(0).focus();
+
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is selected after re-focusing from another input');
+        } finally {
+            $firstInput.remove();
+        }
+    });
+
     test('enter should clear search value', function(assert) {
         this.keyboard.type('1');
 
@@ -1354,6 +1374,53 @@ module('Search', setupModule, () => {
             .change();
 
         assert.strictEqual(this.$input.val(), '2012/10/10', 'year was not changed');
+    });
+
+    test('deleteContentBackward input event should revert the active date part to its minimum value without clearing the value (Chinese MS IME composition backspace) (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16), // Oct 16, 2025; text = '10/16/2025'
+        });
+
+        this.$input.get(0).focus();
+
+        this.$input.trigger($.Event('compositionstart'));
+
+        this.$input.trigger($.Event('input', {
+            type: 'input',
+            originalEvent: $.Event('input', {
+                inputType: 'deleteContentBackward',
+            })
+        }));
+
+        assert.strictEqual(this.instance.option('text'), '01/16/2025', 'text is not cleared, month is reset');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'first date part (month) is still active');
+    });
+
+    test('deleteContentBackward input event during composition with all text selected should clear the value (Chinese MS IME composition backspace) (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16), // Oct 16, 2025; text = '10/16/2025'
+        });
+
+        this.$input.get(0).focus();
+        this.keyboard.caret({ start: 0, end: 10 });
+
+        this.$input.trigger($.Event('compositionstart'));
+
+        this.$input.val('');
+
+        this.$input.trigger($.Event('input', {
+            type: 'input',
+            originalEvent: $.Event('input', {
+                inputType: 'deleteContentBackward',
+            })
+        }));
+
+        this.$input.change();
+
+        assert.strictEqual(this.instance.option('text'), '', 'text has been cleared');
+        assert.strictEqual(this.instance.option('value'), null, 'value has been cleared');
     });
 });
 

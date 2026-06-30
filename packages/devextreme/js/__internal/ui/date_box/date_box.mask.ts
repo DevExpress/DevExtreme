@@ -4,6 +4,7 @@ import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { clipboardText } from '@js/core/utils/dom';
 import { fitIntoRange, inRange, sign } from '@js/core/utils/math';
@@ -51,6 +52,8 @@ class DateBoxMask extends DateBoxBase {
   _isIMEDigitProcessed?: boolean;
 
   _isIMECommitPending?: boolean;
+
+  _wasAllSelectedOnBeforeInput = false;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
     const originalHandlers = super._supportedKeys();
@@ -243,22 +246,13 @@ class DateBoxMask extends DateBoxBase {
 
   _maskBeforeInputHandler(e: DxEvent<KeyboardKeyDownEvent & InputEvent>): boolean {
     this._maskInputHandler = null;
+    this._wasAllSelectedOnBeforeInput = this._isAllSelected();
 
     const { inputType } = e.originalEvent;
 
     if (inputType === 'insertCompositionText') {
       this._maskInputHandler = (): void => {
         this._renderSelectedPart();
-      };
-    }
-
-    const isBackwardDeletion = inputType === 'deleteContentBackward';
-    const isForwardDeletion = inputType === 'deleteContentForward';
-    if (isBackwardDeletion || isForwardDeletion) {
-      const direction = isBackwardDeletion ? BACKWARD : FORWARD;
-      this._maskInputHandler = (): void => {
-        this._revertPart();
-        this._selectNextPart(direction);
       };
     }
 
@@ -280,12 +274,36 @@ class DateBoxMask extends DateBoxBase {
   _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
 
+    const isBackwardDeletion = event?.inputType === 'deleteContentBackward';
+    const isForwardDeletion = event?.inputType === 'deleteContentForward';
+
+    if (this._useMaskBehavior() && (isBackwardDeletion || isForwardDeletion)) {
+      const isInputCleared = this._input().val() === '';
+
+      if (this._wasAllSelectedOnBeforeInput || isInputCleared) {
+        this._wasAllSelectedOnBeforeInput = false;
+
+        super._keyPressHandler(e);
+
+        return;
+      }
+
+      const direction = isBackwardDeletion ? BACKWARD : FORWARD;
+
+      this._revertPart(direction);
+      this._syncInputWithMask();
+
+      this._wasAllSelectedOnBeforeInput = false;
+
+      return;
+    }
+
     const isCompositionDigit = event?.inputType === 'insertCompositionText'
-      && this._isSingleDigitKey(e);
+    && this._isSingleDigitKey(e);
 
     const isIMECommitDigit = event?.inputType === 'insertText'
-      && this._isSingleDigitKey(e)
-      && this._isIMECommitPending;
+    && this._isSingleDigitKey(e)
+    && this._isIMECommitPending;
 
     if (isCompositionDigit && event.data) {
       if (!this._isIMEDigitProcessed) {
@@ -307,12 +325,15 @@ class DateBoxMask extends DateBoxBase {
 
       return;
     }
+
     super._keyPressHandler(e);
 
     if (this._maskInputHandler) {
       this._maskInputHandler();
       this._maskInputHandler = null;
     }
+
+    this._wasAllSelectedOnBeforeInput = false;
   }
 
   _processInputKey(key: string): void {
@@ -733,6 +754,7 @@ class DateBoxMask extends DateBoxBase {
   _maskCompositionStartHandler(): void {
     this._isIMEDigitProcessed = false;
     this._isIMECommitPending = false;
+    this._wasAllSelectedOnBeforeInput = this._isAllSelected();
   }
 
   _maskCompositionEndHandler(): void {
@@ -789,6 +811,22 @@ class DateBoxMask extends DateBoxBase {
       this._selectFirstPart();
     } else {
       this._selectNextPart(FORWARD);
+    }
+  }
+
+  _focusInHandler(e: DxEvent<FocusEvent>): void {
+    super._focusInHandler(e);
+
+    if (!this._useMaskBehavior()) {
+      return;
+    }
+
+    const relatedTarget = e?.relatedTarget as HTMLElement | dxElementWrapper | null;
+    const isFocusMovedFromAnotherElement = Boolean(relatedTarget);
+
+    if (isFocusMovedFromAnotherElement) {
+      this._clearSearchValue();
+      this._selectFirstPart();
     }
   }
 
