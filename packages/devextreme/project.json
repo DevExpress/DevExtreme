@@ -1349,7 +1349,8 @@
         "{projectRoot}/ts/aliases.d.ts",
         "{projectRoot}/build/gulp/modules_metadata.json",
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
-        "{projectRoot}/artifacts/npm/devextreme-internal/**/*.d.ts"
+        "{projectRoot}/artifacts/npm/devextreme-internal/**/*.d.ts",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ]
     },
     "build:npm": {
