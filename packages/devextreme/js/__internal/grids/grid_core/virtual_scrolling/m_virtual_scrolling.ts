@@ -1030,9 +1030,12 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const loadedPageParams = this.getLoadPageParams(true);
     const { pageIndex, loadPageCount } = this.getLoadPageParams();
     const pageIndexIsValid = this._pageIndexIsValid(pageIndex);
+    const isViewportChanging = this._viewportChanging;
+    const isNotLoading = !this._isLoading;
+    const loadParamsChanged = pageIndex !== loadedPageParams.pageIndex || loadPageCount !== loadedPageParams.loadPageCount;
     let result: any = null;
 
-    if (!this._isLoading && pageIndexIsValid && (pageIndex !== loadedPageParams.pageIndex || loadPageCount !== loadedPageParams.loadPageCount)) {
+    if (isViewportChanging && isNotLoading && pageIndexIsValid && loadParamsChanged) {
       result = {
         pageIndex,
         loadPageCount,
