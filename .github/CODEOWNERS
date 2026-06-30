@@ -1057,3 +1057,4 @@
 # DevOps
 
 /.github/**             @DevExpress/devextreme-devops
+/.github/workflows/repository-check.yml @DevExpress/devextreme-infrastructure

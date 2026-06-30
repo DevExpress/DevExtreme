@@ -1,7 +1,9 @@
-name: Health Check
+name: Repository Check
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
   push:
     branches:
       - 25_2
