@@ -1,7 +1,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import type Scheduler from '@ts/scheduler/m_scheduler';
+import type Scheduler from '@ts/scheduler/scheduler';
 import type { DOMMetaData } from '@ts/scheduler/types';
 
 import type { CollectorCSS, RealSize } from '../steps/add_geometry/types';

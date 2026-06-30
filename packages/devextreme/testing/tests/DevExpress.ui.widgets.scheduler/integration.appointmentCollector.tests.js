@@ -9,7 +9,7 @@ import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appoin
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'fluent_blue_light.css!';
 
 const { test, module, testStart } = QUnit;
