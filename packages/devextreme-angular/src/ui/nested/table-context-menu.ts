@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxo-table-context-menu',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

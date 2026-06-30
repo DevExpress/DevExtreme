@@ -14,7 +14,7 @@ import {
 
 
 
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import type { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-field-chooser-header-filter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

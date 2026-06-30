@@ -24,14 +24,13 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { TextEditorButton, LabelMode, SimplifiedSearchMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CustomItemCreatingEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/select_box';
+import type { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import type { TextEditorButton, LabelMode, SimplifiedSearchMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
+import type { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CustomItemCreatingEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/select_box';
 
 import DxSelectBox from 'devextreme/ui/select_box';
 
@@ -65,6 +64,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSelectBoxAnimationModule } from 'devextreme-angular/ui/select-box/nested';
@@ -103,7 +103,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-select-box',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -1730,6 +1729,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxiItemModule,
     DxoSelectBoxAnimationModule,
     DxoSelectBoxAtModule,
@@ -1767,6 +1767,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxiItemModule,
     DxoSelectBoxAnimationModule,
     DxoSelectBoxAtModule,

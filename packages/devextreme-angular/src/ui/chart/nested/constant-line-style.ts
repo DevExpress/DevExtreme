@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-constant-line-style',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

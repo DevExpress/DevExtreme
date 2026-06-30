@@ -18,8 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
-import { dxPolarChartAnnotationConfig } from 'devextreme/viz/polar_chart';
+import type { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
+import type { dxPolarChartAnnotationConfig } from 'devextreme/viz/polar_chart';
 
 import {
     DxIntegrationModule,
@@ -34,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-annotation-settings',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

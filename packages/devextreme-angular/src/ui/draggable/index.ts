@@ -17,8 +17,8 @@ import {
 } from '@angular/core';
 
 
-import { DragDirection } from 'devextreme/common';
-import { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/draggable';
+import type { DragDirection } from 'devextreme/common';
+import type { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/draggable';
 
 import DxDraggable from 'devextreme/ui/draggable';
 
@@ -43,7 +43,6 @@ import { DxoDraggableCursorOffsetModule } from 'devextreme-angular/ui/draggable/
  */
 @Component({
     selector: 'dx-draggable',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -24,7 +24,6 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
 
 @Component({
     selector: 'dxo-operation-descriptions',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

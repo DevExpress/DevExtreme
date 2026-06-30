@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { CompleteEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/progress_bar';
-import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { CompleteEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/progress_bar';
+import type { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxProgressBar from 'devextreme/ui/progress_bar';
 
@@ -57,7 +57,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-progress-bar',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

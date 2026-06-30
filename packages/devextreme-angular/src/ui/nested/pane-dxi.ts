@@ -12,7 +12,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle } from 'devextreme/common/charts';
+import type { ChartsColor, DashStyle } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_panes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-pane',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

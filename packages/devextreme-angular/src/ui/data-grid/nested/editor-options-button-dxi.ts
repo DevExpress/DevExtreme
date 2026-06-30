@@ -12,8 +12,8 @@ import {
 
 
 
-import { TextEditorButtonLocation } from 'devextreme/common';
-import { dxButtonOptions } from 'devextreme/ui/button';
+import type { TextEditorButtonLocation } from 'devextreme/common';
+import type { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-editor-options-button',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

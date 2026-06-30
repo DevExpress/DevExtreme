@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-max-range',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

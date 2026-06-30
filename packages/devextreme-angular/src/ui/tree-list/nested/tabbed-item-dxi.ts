@@ -14,8 +14,8 @@ import {
 
 
 
-import { FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
-import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import type { FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import type { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 
 import {
     DxIntegrationModule,
@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-tree-list-tabbed-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -12,7 +12,7 @@ import {
 
 
 
-import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
+import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-file-manager-column',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

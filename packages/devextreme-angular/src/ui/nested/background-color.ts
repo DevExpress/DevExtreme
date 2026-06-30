@@ -24,7 +24,6 @@ import { DxoChartsColor } from './base/charts-color';
 
 @Component({
     selector: 'dxo-background-color',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

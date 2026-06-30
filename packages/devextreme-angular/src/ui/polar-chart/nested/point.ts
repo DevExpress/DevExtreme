@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor, PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
+import type { ChartsColor, PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-point',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

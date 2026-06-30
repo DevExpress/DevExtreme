@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-range-box-offset',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

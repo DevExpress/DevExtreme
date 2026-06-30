@@ -14,7 +14,7 @@ import {
 
 
 
-import { DataGridExportFormat } from 'devextreme/ui/data_grid';
+import type { DataGridExportFormat } from 'devextreme/ui/data_grid';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-export',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

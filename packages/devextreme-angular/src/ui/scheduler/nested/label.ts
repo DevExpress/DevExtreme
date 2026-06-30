@@ -18,8 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { LabelLocation } from 'devextreme/ui/form';
+import type { HorizontalAlignment } from 'devextreme/common';
+import type { LabelLocation } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -34,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-scheduler-label',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

@@ -17,10 +17,10 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/events.types';
-import { LoadPanelIndicatorProperties, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
-import { PositionAlignment } from 'devextreme/common';
+import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import type { event } from 'devextreme/events/events.types';
+import type { LoadPanelIndicatorProperties, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
+import type { PositionAlignment } from 'devextreme/common';
 
 import DxLoadPanel from 'devextreme/ui/load_panel';
 
@@ -66,7 +66,6 @@ import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
  */
 @Component({
     selector: 'dx-load-panel',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { RouteMode } from 'devextreme/ui/map';
+import type { RouteMode } from 'devextreme/ui/map';
 
 import {
     DxIntegrationModule,
@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-map-route',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,8 +14,8 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
-import { VerticalEdge, TooltipShowMode } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
+import type { VerticalEdge, TooltipShowMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-slider-tooltip',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

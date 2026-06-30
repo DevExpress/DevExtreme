@@ -12,9 +12,9 @@ import {
 
 
 
-import { ChartsDataType, DashStyle, ChartsColor, HatchDirection, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
-import { Format } from 'devextreme/common/core/localization';
+import type { ChartsDataType, DashStyle, ChartsColor, HatchDirection, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-pie-chart-series',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -12,7 +12,7 @@ import {
 
 
 
-import { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
+import type { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-compare-rule',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

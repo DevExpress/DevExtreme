@@ -24,7 +24,6 @@ import { DxoPager } from './base/pager';
 
 @Component({
     selector: 'dxo-pager',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

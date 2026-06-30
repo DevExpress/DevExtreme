@@ -18,8 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -34,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-range-box-options',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

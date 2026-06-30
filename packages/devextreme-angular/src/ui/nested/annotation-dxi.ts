@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-annotation',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

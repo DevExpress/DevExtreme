@@ -17,8 +17,8 @@ import {
 } from '@angular/core';
 
 
-import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxSpeechToText from 'devextreme/ui/speech_to_text';
 
@@ -40,7 +40,6 @@ import { DxoSpeechToTextSpeechRecognitionConfigModule } from 'devextreme-angular
 
 @Component({
     selector: 'dx-speech-to-text',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -16,8 +16,8 @@ import {
 
 
 
-import { SortOrder } from 'devextreme/common';
-import { SelectedFilterOperation } from 'devextreme/common/grids';
+import type { SortOrder } from 'devextreme/common';
+import type { SelectedFilterOperation } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxi-column',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -24,9 +24,9 @@ import {
 } from '@angular/core';
 
 
-import { NumberBoxPredefinedButton, NumberBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
-import { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
+import type { NumberBoxPredefinedButton, NumberBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
+import type { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
 
 import DxNumberBox from 'devextreme/ui/number_box';
 
@@ -70,7 +70,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-number-box',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

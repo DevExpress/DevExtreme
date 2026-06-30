@@ -18,8 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
-import { dxVectorMapAnnotationConfig } from 'devextreme/viz/vector_map';
+import type { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
+import type { dxVectorMapAnnotationConfig } from 'devextreme/viz/vector_map';
 
 import {
     DxIntegrationModule,
@@ -34,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-common-annotation-settings',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { ScrollbarMode, Mode } from 'devextreme/common';
+import type { ScrollbarMode, Mode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-card-view-scrolling',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

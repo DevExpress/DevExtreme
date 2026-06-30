@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxMenuItem } from 'devextreme/ui/menu';
+import type { dxMenuItem } from 'devextreme/ui/menu';
 
 import {
     DxIntegrationModule,
@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxi-menu-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

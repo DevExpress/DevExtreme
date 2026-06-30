@@ -14,7 +14,7 @@ import {
 
 
 
-import { AnimationConfig } from 'devextreme/common/core/animation';
+import type { AnimationConfig } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-popup-animation',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -24,13 +24,12 @@ import {
 } from '@angular/core';
 
 
-import dxDateBox from 'devextreme/ui/date_box';
-import { ApplyValueMode, TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { dxCalendarOptions } from 'devextreme/ui/calendar';
-import { Format } from 'devextreme/common/core/localization';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent, DatePickerType, DateType } from 'devextreme/ui/date_box';
+import type { ApplyValueMode, TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
+import type { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import type { dxCalendarOptions } from 'devextreme/ui/calendar';
+import type { Format } from 'devextreme/common/core/localization';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { default as dxDateBox, ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent, DatePickerType, DateType } from 'devextreme/ui/date_box';
 
 import DxDateBox from 'devextreme/ui/date_box';
 
@@ -66,6 +65,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoDateBoxAnimationModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxAtModule } from 'devextreme-angular/ui/date-box/nested';
@@ -102,7 +102,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-date-box',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -1609,6 +1608,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxoDateBoxAnimationModule,
     DxoDateBoxAtModule,
     DxoDateBoxBoundaryOffsetModule,
@@ -1647,6 +1647,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxoDateBoxAnimationModule,
     DxoDateBoxAtModule,
     DxoDateBoxBoundaryOffsetModule,

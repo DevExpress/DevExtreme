@@ -14,7 +14,7 @@ import {
 
 
 
-import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
+import type { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-background',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

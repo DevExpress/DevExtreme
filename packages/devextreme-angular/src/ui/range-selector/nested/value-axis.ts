@@ -14,8 +14,8 @@ import {
 
 
 
-import { ChartAxisScale } from 'devextreme/viz/range_selector';
-import { ChartsDataType } from 'devextreme/common/charts';
+import type { ChartAxisScale } from 'devextreme/viz/range_selector';
+import type { ChartsDataType } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-value-axis',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

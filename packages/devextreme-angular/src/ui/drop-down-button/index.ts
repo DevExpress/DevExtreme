@@ -22,12 +22,11 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import { dxDropDownButtonItem, ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/drop_down_button';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { dxDropDownButtonItem, ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/drop_down_button';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxDropDownButton from 'devextreme/ui/drop_down_button';
 
@@ -55,6 +54,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoDropDownButtonAnimationModule } from 'devextreme-angular/ui/drop-down-button/nested';
@@ -83,7 +83,6 @@ import {
  */
 @Component({
     selector: 'dx-drop-down-button',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -958,6 +957,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxiItemModule,
     DxoDropDownButtonAnimationModule,
     DxoDropDownButtonAtModule,
@@ -990,6 +990,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxiItemModule,
     DxoDropDownButtonAnimationModule,
     DxoDropDownButtonAtModule,

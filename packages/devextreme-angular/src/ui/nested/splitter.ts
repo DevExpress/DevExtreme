@@ -18,7 +18,7 @@ import {
 
 
 
-import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
+import type { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
     DxIntegrationModule,
@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-splitter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

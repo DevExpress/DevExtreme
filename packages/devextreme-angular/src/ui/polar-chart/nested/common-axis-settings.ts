@@ -14,7 +14,7 @@ import {
 
 
 
-import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap } from 'devextreme/common/charts';
+import type { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-axis-settings',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

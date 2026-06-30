@@ -14,7 +14,7 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-at',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

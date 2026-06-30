@@ -14,7 +14,7 @@ import {
 
 
 
-import { ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
+import type { ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-value-error-bar',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

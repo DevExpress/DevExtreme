@@ -16,7 +16,7 @@ import {
 
 
 
-import { CalendarZoomLevel } from 'devextreme/ui/calendar';
+import type { CalendarZoomLevel } from 'devextreme/ui/calendar';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { DxoCalendarOptions } from './base/calendar-options';
 
 @Component({
     selector: 'dxo-calendar-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

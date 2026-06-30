@@ -18,9 +18,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { AICommand, AICommandName, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import type { AICommand, AICommandName, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -39,7 +39,6 @@ import {
 
 @Component({
     selector: 'dxi-html-editor-toolbar-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

@@ -14,9 +14,9 @@ import {
 
 
 
-import { DashStyle, ChartsColor, SeriesHoverMode, HatchDirection, Font, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
-import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
+import type { DashStyle, ChartsColor, SeriesHoverMode, HatchDirection, Font, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-series-settings',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { ResizeHandle, DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/resizable';
+import type { ResizeHandle, DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/resizable';
 
 import DxResizable from 'devextreme/ui/resizable';
 
@@ -40,7 +40,6 @@ import {
  */
 @Component({
     selector: 'dx-resizable',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -12,7 +12,7 @@ import {
 
 
 
-import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
+import type { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-tab',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

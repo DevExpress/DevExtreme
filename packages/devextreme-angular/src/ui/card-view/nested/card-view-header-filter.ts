@@ -14,7 +14,7 @@ import {
 
 
 
-import { HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
+import type { HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-card-view-card-view-header-filter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

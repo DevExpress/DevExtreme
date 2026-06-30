@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxBoxOptions } from 'devextreme/ui/box';
+import type { dxBoxOptions } from 'devextreme/ui/box';
 
 import {
     DxIntegrationModule,
@@ -32,7 +32,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-box-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

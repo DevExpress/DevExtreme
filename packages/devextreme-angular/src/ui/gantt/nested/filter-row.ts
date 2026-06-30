@@ -14,7 +14,7 @@ import {
 
 
 
-import { dxGanttFilterRowOperationDescriptions } from 'devextreme/ui/gantt';
+import type { dxGanttFilterRowOperationDescriptions } from 'devextreme/ui/gantt';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-filter-row',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -24,10 +24,10 @@ import {
 } from '@angular/core';
 
 
-import { ApplyValueMode, TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/color_box';
+import type { ApplyValueMode, TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
+import type { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/color_box';
 
 import DxColorBox from 'devextreme/ui/color_box';
 
@@ -61,6 +61,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoColorBoxAnimationModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxAtModule } from 'devextreme-angular/ui/color-box/nested';
@@ -96,7 +97,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-color-box',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -1298,6 +1298,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,
@@ -1333,6 +1334,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,

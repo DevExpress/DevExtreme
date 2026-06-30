@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxTreeViewItem } from 'devextreme/ui/tree_view';
+import type { dxTreeViewItem } from 'devextreme/ui/tree_view';
 
 import {
     DxIntegrationModule,
@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxi-tree-view-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

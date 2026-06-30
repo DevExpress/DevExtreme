@@ -14,9 +14,9 @@ import {
 
 
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
-import { DashStyle, Font, RelativePosition, LabelOverlap } from 'devextreme/common/charts';
+import type { HorizontalAlignment } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
+import type { DashStyle, Font, RelativePosition, LabelOverlap } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

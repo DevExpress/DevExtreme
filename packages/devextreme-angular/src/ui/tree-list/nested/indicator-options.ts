@@ -14,7 +14,7 @@ import {
 
 
 
-import { LoadingAnimationType } from 'devextreme/ui/load_indicator';
+import type { LoadingAnimationType } from 'devextreme/ui/load_indicator';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-indicator-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

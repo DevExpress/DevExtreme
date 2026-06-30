@@ -14,7 +14,7 @@ import {
 
 
 
-import { GanttScaleType } from 'devextreme/ui/gantt';
+import type { GanttScaleType } from 'devextreme/ui/gantt';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-scale-type-range',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

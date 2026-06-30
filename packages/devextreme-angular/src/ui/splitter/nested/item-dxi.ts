@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxSplitterOptions } from 'devextreme/ui/splitter';
+import type { dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
     DxIntegrationModule,
@@ -32,7 +32,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-splitter-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

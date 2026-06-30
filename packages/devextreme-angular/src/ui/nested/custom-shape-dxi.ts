@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ShapeType } from 'devextreme/ui/diagram';
+import type { ShapeType } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -37,7 +37,6 @@ import {
 
 @Component({
     selector: 'dxi-custom-shape',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

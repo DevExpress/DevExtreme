@@ -14,11 +14,11 @@ import {
 
 
 
-import dxSortable from 'devextreme/ui/sortable';
-import dxDraggable from 'devextreme/ui/draggable';
-import { DragDirection, DragHighlight } from 'devextreme/common';
-import { GridBase } from 'devextreme/common/grids';
-import { event } from 'devextreme/events/events.types';
+import type dxSortable from 'devextreme/ui/sortable';
+import type dxDraggable from 'devextreme/ui/draggable';
+import type { DragDirection, DragHighlight } from 'devextreme/common';
+import type { GridBase } from 'devextreme/common/grids';
+import type { event } from 'devextreme/events/events.types';
 
 import {
     DxIntegrationModule,
@@ -29,7 +29,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-row-dragging',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

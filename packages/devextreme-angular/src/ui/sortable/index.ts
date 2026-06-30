@@ -17,8 +17,8 @@ import {
 } from '@angular/core';
 
 
-import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
-import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
+import type { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
+import type { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import DxSortable from 'devextreme/ui/sortable';
 
@@ -43,7 +43,6 @@ import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/ne
  */
 @Component({
     selector: 'dx-sortable',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

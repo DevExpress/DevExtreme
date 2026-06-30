@@ -14,8 +14,8 @@ import {
 
 
 
-import { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
-import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
+import type { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
+import type { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-card-view-selection',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { EnterKeyAction, EnterKeyDirection } from 'devextreme/common/grids';
+import type { EnterKeyAction, EnterKeyDirection } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-keyboard-navigation',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

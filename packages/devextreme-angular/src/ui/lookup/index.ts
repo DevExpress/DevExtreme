@@ -24,13 +24,12 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import { ApplyValueMode, LabelMode, PageLoadMode, SimplifiedSearchMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxPopoverOptions } from 'devextreme/ui/popover';
-import { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/lookup';
+import type { ApplyValueMode, LabelMode, PageLoadMode, SimplifiedSearchMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
+import type { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxPopoverOptions } from 'devextreme/ui/popover';
+import type { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/lookup';
 
 import DxLookup from 'devextreme/ui/lookup';
 
@@ -64,6 +63,7 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoLookupAnimationModule } from 'devextreme-angular/ui/lookup/nested';
@@ -100,7 +100,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-lookup',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -1793,6 +1792,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
+    DxiToolbarItemModule,
     DxiItemModule,
     DxoLookupAnimationModule,
     DxoLookupAtModule,
@@ -1829,6 +1829,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
+    DxiToolbarItemModule,
     DxiItemModule,
     DxoLookupAnimationModule,
     DxoLookupAtModule,

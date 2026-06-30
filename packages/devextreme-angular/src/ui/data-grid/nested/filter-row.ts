@@ -14,7 +14,7 @@ import {
 
 
 
-import { ApplyFilterMode } from 'devextreme/common/grids';
+import type { ApplyFilterMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-filter-row',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

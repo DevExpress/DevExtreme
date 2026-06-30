@@ -14,7 +14,7 @@ import {
 
 
 
-import { SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
+import type { SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-small-values-grouping',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

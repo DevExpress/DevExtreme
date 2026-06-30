@@ -14,7 +14,7 @@ import {
 
 
 
-import { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
+import type { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-diagram-group',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

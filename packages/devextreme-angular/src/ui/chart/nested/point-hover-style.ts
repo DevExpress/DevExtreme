@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import type { ChartsColor } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-point-hover-style',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

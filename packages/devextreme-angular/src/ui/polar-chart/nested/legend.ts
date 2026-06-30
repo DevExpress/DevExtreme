@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, LegendItem, Font, LegendHoverMode } from 'devextreme/common/charts';
-import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
+import type { DashStyle, LegendItem, Font, LegendHoverMode } from 'devextreme/common/charts';
+import type { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-legend',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

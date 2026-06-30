@@ -18,9 +18,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { HorizontalAlignment, Position } from 'devextreme/common';
-import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
-import { Font, ChartsAxisLabelOverlap, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { HorizontalAlignment, Position } from 'devextreme/common';
+import type { ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import type { Font, ChartsAxisLabelOverlap, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -35,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-axis-settings-label',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

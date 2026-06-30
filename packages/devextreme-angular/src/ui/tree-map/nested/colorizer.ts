@@ -14,8 +14,8 @@ import {
 
 
 
-import { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
-import { TreeMapColorizerType } from 'devextreme/viz/tree_map';
+import type { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import type { TreeMapColorizerType } from 'devextreme/viz/tree_map';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-map-colorizer',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

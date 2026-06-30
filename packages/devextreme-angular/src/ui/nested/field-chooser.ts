@@ -14,8 +14,8 @@ import {
 
 
 
-import { FieldChooserLayout } from 'devextreme/common';
-import { ApplyChangesMode } from 'devextreme/common/grids';
+import type { FieldChooserLayout } from 'devextreme/common';
+import type { ApplyChangesMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-field-chooser',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

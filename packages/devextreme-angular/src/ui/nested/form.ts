@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-form',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

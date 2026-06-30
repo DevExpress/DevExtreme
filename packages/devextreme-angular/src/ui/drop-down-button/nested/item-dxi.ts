@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
+import type { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 
 import {
     DxIntegrationModule,
@@ -32,7 +32,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-drop-down-button-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import type { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-control-bar',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

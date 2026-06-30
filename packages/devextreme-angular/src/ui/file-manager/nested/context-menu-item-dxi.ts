@@ -14,7 +14,7 @@ import {
 
 
 
-import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
+import type { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
 
 import {
     DxIntegrationModule,
@@ -28,7 +28,6 @@ import {
 
 @Component({
     selector: 'dxi-file-manager-context-menu-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

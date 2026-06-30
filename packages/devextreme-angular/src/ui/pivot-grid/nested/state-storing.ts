@@ -14,7 +14,7 @@ import {
 
 
 
-import { StateStoreType } from 'devextreme/common/grids';
+import type { StateStoreType } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-state-storing',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

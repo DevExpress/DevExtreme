@@ -16,7 +16,7 @@ import {
 
 
 
-import { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
+import type { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-card-view-filter-panel',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

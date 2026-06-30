@@ -16,7 +16,7 @@ import {
 
 
 
-import { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
+import type { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
 
 import {
     DxIntegrationModule,
@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-details',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

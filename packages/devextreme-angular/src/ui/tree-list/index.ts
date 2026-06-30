@@ -21,23 +21,21 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/tree_list';
+export type { ExplicitTypes } from 'devextreme/ui/tree_list';
 
-import DataSource from 'devextreme/data/data_source';
-import dxTreeList from 'devextreme/ui/tree_list';
-import dxSortable from 'devextreme/ui/sortable';
-import dxDraggable from 'devextreme/ui/draggable';
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
-import { dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
-import { Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxFormOptions } from 'devextreme/ui/form';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
-import { event } from 'devextreme/events/events.types';
+import type dxSortable from 'devextreme/ui/sortable';
+import type dxDraggable from 'devextreme/ui/draggable';
+import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
+import type { default as dxTreeList, dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
+import type { Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxFormOptions } from 'devextreme/ui/form';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
+import type { event } from 'devextreme/events/events.types';
 
 import DxTreeList from 'devextreme/ui/tree_list';
 
@@ -87,6 +85,7 @@ import { DxoHideModule } from 'devextreme-angular/ui/nested';
 import { DxoFromModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
 import { DxiFieldModule } from 'devextreme-angular/ui/nested';
@@ -220,7 +219,6 @@ import {
  */
 @Component({
     selector: 'dx-tree-list',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -2355,6 +2353,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoFromModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,
@@ -2507,6 +2506,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoFromModule,
     DxoToModule,
     DxoShowModule,
+    DxiToolbarItemModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,

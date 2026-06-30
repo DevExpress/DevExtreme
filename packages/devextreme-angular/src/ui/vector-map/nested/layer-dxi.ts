@@ -12,12 +12,11 @@ import {
 
 
 
-import DataSource from 'devextreme/data/data_source';
-import { MapLayerElement, VectorMapMarkerType, VectorMapLayerType } from 'devextreme/viz/vector_map';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { Font, Palette } from 'devextreme/common/charts';
-import { SingleMultipleOrNone } from 'devextreme/common';
+import type { MapLayerElement, VectorMapMarkerType, VectorMapLayerType } from 'devextreme/viz/vector_map';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { Font, Palette } from 'devextreme/common/charts';
+import type { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -29,7 +28,6 @@ import { PROPERTY_TOKEN_layers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-layer',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

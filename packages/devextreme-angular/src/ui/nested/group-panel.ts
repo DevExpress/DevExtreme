@@ -16,7 +16,7 @@ import {
 
 
 
-import { Mode } from 'devextreme/common';
+import type { Mode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-group-panel',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

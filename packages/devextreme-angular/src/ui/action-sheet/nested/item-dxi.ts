@@ -16,8 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { NativeEventInfo } from 'devextreme/common/core/events';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { NativeEventInfo } from 'devextreme/common/core/events';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -33,7 +33,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-action-sheet-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

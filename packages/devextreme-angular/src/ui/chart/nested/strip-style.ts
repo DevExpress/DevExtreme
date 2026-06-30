@@ -14,8 +14,8 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { Font } from 'devextreme/common/charts';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-strip-style',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

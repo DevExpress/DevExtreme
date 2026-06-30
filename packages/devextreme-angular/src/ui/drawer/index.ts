@@ -17,8 +17,8 @@ import {
 } from '@angular/core';
 
 
-import { event } from 'devextreme/events/events.types';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, OpenedStateMode, PanelLocation, RevealMode } from 'devextreme/ui/drawer';
+import type { event } from 'devextreme/events/events.types';
+import type { DisposingEvent, InitializedEvent, OptionChangedEvent, OpenedStateMode, PanelLocation, RevealMode } from 'devextreme/ui/drawer';
 
 import DxDrawer from 'devextreme/ui/drawer';
 
@@ -41,7 +41,6 @@ import {
  */
 @Component({
     selector: 'dx-drawer',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

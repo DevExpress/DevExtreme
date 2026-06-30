@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
+import type { ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-zoom-and-pan',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

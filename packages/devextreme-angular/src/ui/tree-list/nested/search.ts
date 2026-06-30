@@ -14,7 +14,7 @@ import {
 
 
 
-import { SearchMode } from 'devextreme/common';
+import type { SearchMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-search',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

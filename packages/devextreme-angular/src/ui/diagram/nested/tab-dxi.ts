@@ -14,7 +14,7 @@ import {
 
 
 
-import { Command, CustomCommand } from 'devextreme/ui/diagram';
+import type { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-diagram-tab',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

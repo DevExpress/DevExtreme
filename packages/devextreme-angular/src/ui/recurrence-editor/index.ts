@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/recurrence_editor';
-import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/recurrence_editor';
+import type { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxRecurrenceEditor from 'devextreme/ui/recurrence_editor';
 
@@ -57,7 +57,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-recurrence-editor',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

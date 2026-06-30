@@ -16,8 +16,8 @@ import {
 
 
 
-import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
-import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
+import type { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import type { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
     DxIntegrationModule,
@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-circular-gauge-range-container',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
