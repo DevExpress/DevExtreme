@@ -7,7 +7,7 @@ export const skippedTests = {
       'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
-      'AIColumns'
+      'AIColumns',
     ],
 
     // AI answers are not stable
@@ -15,7 +15,6 @@ export const skippedTests = {
   },
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['SignalRService'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
     // Remote WidgetsGalleryDataService is unstable
@@ -24,7 +23,7 @@ export const skippedTests = {
       'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
-      'AIColumns'
+      'AIColumns',
     ],
 
     // AI answers are not stable
@@ -39,7 +38,7 @@ export const skippedTests = {
       'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
-      'AIColumns'
+      'AIColumns',
     ],
 
     // AI answers are not stable
@@ -55,7 +54,7 @@ export const skippedTests = {
       'RemoteGrouping',
       'RemoteVirtualScrolling',
       'CustomDataSource',
-      'AIColumns'
+      'AIColumns',
     ],
 
     // AI answers are not stable
