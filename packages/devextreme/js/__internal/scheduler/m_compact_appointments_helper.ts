@@ -6,7 +6,7 @@ import Button from '@js/ui/button';
 import type { Appointment } from '@js/ui/scheduler';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
-import type Scheduler from './m_scheduler';
+import type Scheduler from './scheduler';
 import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from './types';
 import { formatImplicitSchedulerDate } from './utils/global_formats';
 
@@ -91,7 +91,7 @@ export class CompactAppointmentsHelper {
         getItemSettings,
       };
 
-      workSpace.createDragBehaviorBase($element, $schedulerElement, options);
+      workSpace?.createDragBehaviorBase($element, $schedulerElement, options);
     };
   }
 
@@ -105,7 +105,6 @@ export class CompactAppointmentsHelper {
   private createCompactButton(template, options: CompactAppointmentOptions) {
     const $button = this.createCompactButtonElement(options);
 
-    // @ts-expect-error
     return this.instance._createComponent($button, Button, {
       type: 'default',
       width: options.width,

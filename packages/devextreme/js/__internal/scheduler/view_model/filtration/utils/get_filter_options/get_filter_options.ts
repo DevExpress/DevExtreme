@@ -1,4 +1,4 @@
-import type Scheduler from '../../../../m_scheduler';
+import type Scheduler from '../../../../scheduler';
 import type { ViewType } from '../../../../types';
 import { shiftIntervals } from '../../../common/shift_intervals';
 import type { CompareOptions, FilterOptions } from '../../../types';

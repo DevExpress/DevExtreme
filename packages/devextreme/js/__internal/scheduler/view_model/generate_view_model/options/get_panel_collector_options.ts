@@ -1,5 +1,5 @@
 import type { Orientation } from '@js/common';
-import type Scheduler from '@ts/scheduler/m_scheduler';
+import type Scheduler from '@ts/scheduler/scheduler';
 import type { DOMMetaData } from '@ts/scheduler/types';
 
 import type { PanelName } from '../../types';

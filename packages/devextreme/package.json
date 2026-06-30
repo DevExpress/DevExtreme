@@ -192,6 +192,8 @@
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "build:community-localization": "gulp generate-community-locales",
     "build:systemjs": "gulp transpile-systemjs",
+    "dev": "cross-env DEVEXTREME_TEST_CI=true gulp dev",
+    "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "dev:playground": "vite",
     "transpile-tests": "gulp transpile-tests",
     "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|palette|set_template_engine|splitter_control|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",

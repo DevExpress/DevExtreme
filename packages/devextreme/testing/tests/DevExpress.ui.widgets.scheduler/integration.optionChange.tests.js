@@ -3,7 +3,7 @@ import fx from 'common/core/animation/fx';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 const FIXTURE_SELECTOR = '#qunit-fixture';
 

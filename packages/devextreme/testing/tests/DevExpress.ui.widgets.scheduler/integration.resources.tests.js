@@ -9,7 +9,7 @@ import { CustomStore } from 'common/data/custom_store';
 import Color from 'color';
 import translator from 'common/core/animation/translator';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
