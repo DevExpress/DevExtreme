@@ -110,7 +110,7 @@
   ],
   "dependencies": {
     "@angular-devkit/schematics": "catalog:angular",
-    "devextreme-schematics": "^1.14.2",
+    "devextreme-schematics": "*",
     "inferno-server": "catalog:"
   },
   "schematics": "./schematics/collection.json",
