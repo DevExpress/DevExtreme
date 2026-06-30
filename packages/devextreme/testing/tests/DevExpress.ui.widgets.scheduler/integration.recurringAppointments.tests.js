@@ -17,7 +17,7 @@ import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 import dateUtils from 'core/utils/date';
 
 import 'fluent_blue_light.css!';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 const { module, test } = QUnit;
 const toMs = dateUtils.dateToMilliseconds;

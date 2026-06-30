@@ -10,7 +10,7 @@ import dataUtils from 'core/element_data';
 import timeZoneUtils from '__internal/scheduler/utils_time_zone';
 
 import 'fluent_blue_light.css!';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'ui/switch';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';

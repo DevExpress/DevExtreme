@@ -66,7 +66,7 @@ const schedulerR1Overrides = [
 ];
 
 const schedulerLegacyMembers = [
-    // m_scheduler.ts
+    // scheduler.ts
     '_appointments',
     '_compactAppointmentsHelper',
     '_dataAccessors',
