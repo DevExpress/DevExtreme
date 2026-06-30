@@ -38,6 +38,9 @@ const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 const DRAGSTART_START_EVENT_NAME = addNamespace(dragEventStart, RESIZABLE);
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventMove, RESIZABLE);
 const DRAGSTART_END_EVENT_NAME = addNamespace(dragEventEnd, RESIZABLE);
+const KEYDOWN_EVENT_NAME = addNamespace('keydown', RESIZABLE);
+
+const ESCAPE_KEY = 'Escape';
 
 const SIDE_BORDER_WIDTH_STYLES: Record<Position, string> = {
   left: 'borderLeftWidth',
@@ -85,6 +88,10 @@ export interface ResizableProperties extends Properties {
   step?: string;
 
   roundStepValue?: boolean;
+
+  onCancelByEsc?: boolean;
+
+  onResizeCancel?: (e: Record<string, unknown>) => void;
 }
 
 class Resizable extends DOMComponent<Resizable, ResizableProperties> {
@@ -110,10 +117,13 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
   _resizeAction?: (e: Record<string, unknown>) => void;
 
+  _resizeCancelAction?: (e: Record<string, unknown>) => void;
+
   _getDefaultOptions(): ResizableProperties {
     return {
       ...super._getDefaultOptions(),
       handles: 'all',
+      onCancelByEsc: false,
       // NOTE: does not affect proportional resize
       step: '1',
       stepPrecision: 'simple',
@@ -145,6 +155,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     this._resizeStartAction = this._createActionByOption('onResizeStart');
     this._resizeEndAction = this._createActionByOption('onResizeEnd');
     this._resizeAction = this._createActionByOption('onResize');
+    this._resizeCancelAction = this._createActionByOption('onResizeCancel');
   }
 
   _renderHandles(): void {
@@ -204,12 +215,18 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
         immediate: true,
       });
     });
+
+    if (this.option('onCancelByEsc')) {
+      eventsEngine.on(this.$element(), KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
+    }
   }
 
   _detachEventHandlers(): void {
     this._handles.forEach((handleElement) => {
       eventsEngine.off(handleElement);
     });
+
+    eventsEngine.off(this.$element(), KEYDOWN_EVENT_NAME);
   }
 
   _toggleEventHandlers(shouldAttachEvents: boolean | undefined): void {
@@ -261,6 +278,10 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
   _toggleResizingClass(value: boolean): void {
     this.$element().toggleClass(RESIZABLE_RESIZING_CLASS, value);
+  }
+
+  _isResizing(): boolean {
+    return this.$element().hasClass(RESIZABLE_RESIZING_CLASS);
   }
 
   _renderDragOffsets(e: Cancelable & DxEvent<MouseEvent | TouchEvent> & {
@@ -437,6 +458,10 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   }
 
   _dragHandler(e: DragEvent): void {
+    if (!this._isResizing()) {
+      return;
+    }
+
     const offset = this._getOffset(e);
     const delta = this._getDeltaByOffset(offset);
 
@@ -673,6 +698,10 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   }
 
   _dragEndHandler(e: DxEvent): void {
+    if (!this._isResizing()) {
+      return;
+    }
+
     const $element = this.$element();
 
     this._resizeEndAction?.({
@@ -683,6 +712,34 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     });
 
     this._toggleResizingClass(false);
+  }
+
+  _keydownHandler(e: DxEvent<KeyboardEvent>): void {
+    if (this._isResizing() && e.key === ESCAPE_KEY) {
+      this._cancelResize(e);
+    }
+  }
+
+  _cancelResize(e: DxEvent<KeyboardEvent>): void {
+    this._restoreSize();
+
+    this._toggleResizingClass(false);
+
+    this._resizeCancelAction?.({
+      event: e,
+      width: this._elementSize.width,
+      height: this._elementSize.height,
+      handles: this._movingSides,
+    });
+  }
+
+  _restoreSize(): void {
+    this.option({
+      width: this._elementSize.width,
+      height: this._elementSize.height,
+    });
+
+    move(this.$element(), this._elementLocation);
   }
 
   _renderWidth(width: number): void {
@@ -721,7 +778,12 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       case 'onResize':
       case 'onResizeStart':
       case 'onResizeEnd':
+      case 'onResizeCancel':
         this._renderActions();
+        break;
+      case 'onCancelByEsc':
+        this._detachEventHandlers();
+        this._attachEventHandlers();
         break;
       case 'area':
       case 'stepPrecision':
