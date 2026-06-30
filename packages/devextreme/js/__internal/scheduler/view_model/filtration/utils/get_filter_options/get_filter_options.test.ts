@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import { getCompareOptions } from '@ts/scheduler/view_model/common/get_compare_options';
 
 import { mockAppointmentDataAccessor } from '../../../../__mock__/appointment_data_accessor.mock';
-import type Scheduler from '../../../../m_scheduler';
+import type Scheduler from '../../../../scheduler';
 import { ResourceManager } from '../../../../utils/resource_manager/resource_manager';
 import { getFilterOptions } from './get_filter_options';
 

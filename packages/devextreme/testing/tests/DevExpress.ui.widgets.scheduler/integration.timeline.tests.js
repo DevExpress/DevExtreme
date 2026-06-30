@@ -13,7 +13,7 @@ import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import devices from '__internal/core/m_devices';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 

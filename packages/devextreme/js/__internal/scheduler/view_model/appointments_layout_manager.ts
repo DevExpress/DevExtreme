@@ -1,6 +1,6 @@
 import type { Appointment } from '@js/ui/scheduler';
 
-import type Scheduler from '../m_scheduler';
+import type Scheduler from '../scheduler';
 import { filterAppointments } from './filtration/filter_appointments';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
 import { generateGridViewModel, sortAppointments } from './generate_view_model/generate_grid_view_model';

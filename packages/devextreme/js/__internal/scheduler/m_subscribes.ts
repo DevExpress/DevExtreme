@@ -7,8 +7,8 @@ import { extend } from '@js/core/utils/extend';
 import { getDeltaTime } from './appointments/resizing/get_delta_time';
 import { getDateFormatType, getDateText } from './appointments_new/utils/get_date_text';
 import { VERTICAL_VIEW_TYPES } from './constants';
-import type Scheduler from './m_scheduler';
 import { isAppointmentTakesAllDay } from './r1/utils/base';
+import type Scheduler from './scheduler';
 import type {
   AppointmentTooltipItem,
   CompactAppointmentOptions,

@@ -1,4 +1,4 @@
-import Scheduler from '@ts/scheduler/m_scheduler';
+import Scheduler from '@ts/scheduler/scheduler';
 
 import { createSchedulerModel, type SchedulerModel } from './model/scheduler';
 

@@ -51,7 +51,7 @@ import Tooltip from 'ui/tooltip';
 import RadioGroup from 'ui/radio_group';
 import Resizable from 'ui/resizable';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
-import Scheduler from '__internal/scheduler/m_scheduler';
+import Scheduler from '__internal/scheduler/scheduler';
 import Scrollable from '__internal/ui/scroll_view/scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
