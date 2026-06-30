@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "version": 2,
+  "title": "GenerateExportsMap",
+  "description": "Generates the Node.js package exports map for an npm package by reading per-directory package.json shims.",
+  "type": "object",
+  "properties": {
+    "npmDir": {
+      "type": "string",
+      "description": "Path to the assembled npm package directory (containing the root package.json and per-directory shims).",
+      "x-priority": "important"
+    },
+    "assetWildcards": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Wildcard subpath patterns to add as pass-through asset exports (e.g. './dist/*'). Each pattern maps to itself.",
+      "default": []
+    }
+  },
+  "required": ["npmDir"]
+}
