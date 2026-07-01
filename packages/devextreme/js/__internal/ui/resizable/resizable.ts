@@ -119,6 +119,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
   _resizeCancelAction?: (e: Record<string, unknown>) => void;
 
+  _resizeCanceled = false;
+
   _getDefaultOptions(): ResizableProperties {
     return {
       ...super._getDefaultOptions(),
@@ -257,6 +259,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       return;
     }
 
+    this._resizeCanceled = false;
     this._toggleResizingClass(true);
     this._movingSides = this._getMovingSides(e);
 
@@ -458,7 +461,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   }
 
   _dragHandler(e: DragEvent): void {
-    if (!this._isResizing()) {
+    if (this._resizeCanceled) {
       return;
     }
 
@@ -698,7 +701,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   }
 
   _dragEndHandler(e: DxEvent): void {
-    if (!this._isResizing()) {
+    if (this._resizeCanceled) {
+      this._resizeCanceled = false;
       return;
     }
 
@@ -721,6 +725,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   }
 
   _cancelResize(e: DxEvent<KeyboardEvent>): void {
+    this._resizeCanceled = true;
     this._restoreSize();
 
     this._toggleResizingClass(false);
