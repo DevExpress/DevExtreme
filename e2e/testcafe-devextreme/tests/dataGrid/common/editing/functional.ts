@@ -59,7 +59,7 @@ test('Focused cell should be switched to the editing mode after onSaving\'s prom
 });
 
 // T1190566
-test.meta({ unstable: true })('DataGrid - The "Cannot read properties of undefined error" occurs when using Tab while saving a promise', async (t) => {
+test('DataGrid - The "Cannot read properties of undefined error" occurs when using Tab while saving a promise', async (t) => {
   const dataGrid = new DataGrid('#container');
   const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
 
@@ -2430,8 +2430,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   false,
   true,
 ].forEach((remoteOperations) => {
-  test.meta({ unstable: !remoteOperations })(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
+  test(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
 
     await t
       // act
