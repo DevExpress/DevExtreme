@@ -1,8 +1,8 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
+import eventsEngine from '@ts/events/core/m_events_engine';
 
 import Resizable from './resizable';
 
