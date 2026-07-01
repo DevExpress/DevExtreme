@@ -8,6 +8,8 @@ import Resizable from './resizable';
 
 const HANDLE_BOTTOM_CLASS = 'dx-resizable-handle-bottom';
 
+const instances: Resizable[] = [];
+
 const createResizable = (options: object = {}): {
   instance: Resizable;
   $element: ReturnType<typeof $>;
@@ -17,6 +19,8 @@ const createResizable = (options: object = {}): {
   // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance = new Resizable($element, options);
   const $handle = $element.find(`.${HANDLE_BOTTOM_CLASS}`);
+
+  instances.push(instance);
 
   return { instance, $element, $handle };
 };
@@ -43,6 +47,8 @@ describe('Resizable onCancelByEsc', () => {
   });
 
   afterEach(() => {
+    instances.forEach((instance) => instance.dispose());
+    instances.length = 0;
     document.body.innerHTML = '';
   });
 

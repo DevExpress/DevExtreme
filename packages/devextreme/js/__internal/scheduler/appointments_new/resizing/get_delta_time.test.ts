@@ -70,7 +70,7 @@ describe('getDeltaTime', () => {
   });
 
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => {
-    it(`should return zero for not resized appointment in horizontal ${view} view`, () => {
+    it(`should return correct delta in px for resized appointment in horizontal ${view} view`, () => {
       expect(getDeltaTime(
         { width: 50, height: 100 },
         { width: 100, height: 100 },
