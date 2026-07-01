@@ -57,6 +57,7 @@ const getProperties = (options: {
   allowDelete: false,
   onDeleteKeyPress: (): void => {},
   focusFallbackAfterDelete: (): void => {},
+  getResizableConfig: () => undefined,
 });
 
 const createAppointments = (
