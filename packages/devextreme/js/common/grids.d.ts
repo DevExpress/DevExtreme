@@ -2401,23 +2401,23 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   onAIAssistantRequestCreating?: ((e: EventInfo<TComponent> & Cancelable & AIAssistantRequestCreatingInfo) => void) | undefined;
   /**
    * @docid
-   * @default null
+   * @default undefined
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field formOptions:object
    * @action
    * @public
    */
-  onAdaptiveDetailRowPreparing?: ((e: EventInfo<TComponent> & AdaptiveDetailRowPreparingInfo) => void) | null;
+  onAdaptiveDetailRowPreparing?: ((e: EventInfo<TComponent> & AdaptiveDetailRowPreparingInfo) => void) | undefined;
   /**
    * @docid
-   * @default null
+   * @default undefined
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @action
    * @public
    */
-  onDataErrorOccurred?: ((e: EventInfo<TComponent> & DataErrorOccurredInfo) => void) | null;
+  onDataErrorOccurred?: ((e: EventInfo<TComponent> & DataErrorOccurredInfo) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object

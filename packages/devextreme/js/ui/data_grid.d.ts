@@ -1272,11 +1272,11 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:ContextMenuPreparingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void) | null;
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:EditingStartEvent}

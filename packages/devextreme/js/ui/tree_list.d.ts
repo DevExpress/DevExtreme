@@ -1029,11 +1029,11 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:ContextMenuPreparingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void) | null;
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:EditingStartEvent}
@@ -1093,11 +1093,11 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:NodesInitializedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void) | null;
+    onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:RowClickEvent}

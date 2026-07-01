@@ -307,27 +307,27 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @type_function_param1 e:{ui/filter_builder:EditorPreparedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onEditorPrepared?: ((e: EditorPreparedEvent) => void) | null;
+    onEditorPrepared?: ((e: EditorPreparedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/filter_builder:EditorPreparingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onEditorPreparing?: ((e: EditorPreparingEvent) => void) | null;
+    onEditorPreparing?: ((e: EditorPreparingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/filter_builder:ValueChangedEvent}
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void) | null;
+    onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
     /**
      * @docid
      * @type Filter expression

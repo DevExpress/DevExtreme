@@ -90,11 +90,6 @@ class Sortable extends Draggable {
       allowDropInsideItem: false,
       allowReordering: true,
       moveItemOnDrop: false,
-      onDragChange: null,
-      onAdd: null,
-      onRemove: null,
-      onReorder: null,
-      onPlaceholderPrepared: null,
       placeholderClassName: '',
       animation: {
         type: 'slide',

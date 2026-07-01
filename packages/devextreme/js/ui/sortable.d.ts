@@ -309,60 +309,60 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     moveItemOnDrop?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:AddEvent}
      * @action
      * @public
      */
-    onAdd?: ((e: AddEvent) => void) | null;
+    onAdd?: ((e: AddEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragChangeEvent}
      * @action
      * @public
      */
-    onDragChange?: ((e: DragChangeEvent) => void) | null;
+    onDragChange?: ((e: DragChangeEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragEndEvent}
      * @action
      * @public
      */
-    onDragEnd?: ((e: DragEndEvent) => void) | null;
+    onDragEnd?: ((e: DragEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragMoveEvent}
      * @action
      * @public
      */
-    onDragMove?: ((e: DragMoveEvent) => void) | null;
+    onDragMove?: ((e: DragMoveEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragStartEvent}
      * @action
      * @public
      */
-    onDragStart?: ((e: DragStartEvent) => void) | null;
+    onDragStart?: ((e: DragStartEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:RemoveEvent}
      * @action
      * @public
      */
-    onRemove?: ((e: RemoveEvent) => void) | null;
+    onRemove?: ((e: RemoveEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:ReorderEvent}
      * @action
      * @public
      */
-    onReorder?: ((e: ReorderEvent) => void) | null;
+    onReorder?: ((e: ReorderEvent) => void) | undefined;
 }
 /**
  * @docid
