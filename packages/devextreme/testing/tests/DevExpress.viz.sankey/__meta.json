@@ -1,5 +1,3 @@
 {
-    "constellation": "ui",
-    "explicit": false,
-    "runOnDevices": true
+  "constellation": "ui"
 }

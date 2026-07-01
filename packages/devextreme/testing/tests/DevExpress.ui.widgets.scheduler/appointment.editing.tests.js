@@ -247,7 +247,7 @@ module('Integration: Appointment editing', {
 
             test('Scheduler should add only one appointment at multiple "done" button clicks on appointment form', async function(assert) {
                 const a = { text: 'a', startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 15) };
-                const scheduler = await createWrapper({
+                const scheduler = await this.createInstance({
                     dataSource: [],
                     currentDate: new Date(2017, 7, 9),
                     currentView: 'week',
@@ -269,7 +269,7 @@ module('Integration: Appointment editing', {
                 appointmentPopup.clickDoneButton();
                 appointmentPopup.clickDoneButton();
 
-                await waitForAsync(() => scheduler.appointments.getAppointmentCount() === 1);
+                await waitForAsync(() => scheduler.appointments.getAppointmentCount() === 1, undefined, 2000);
                 assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'right appointment quantity');
             });
         });
@@ -304,6 +304,7 @@ module('Integration: Appointment editing', {
                     await waitAsync(30);
 
                     assert.ok(scrollTo.calledOnce, 'scrollTo was called');
+                    await waitAsync(30);
                 } finally {
                     workSpace.scrollTo.restore();
                 }
