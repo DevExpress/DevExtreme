@@ -4,13 +4,13 @@ import {
 import $ from '@js/core/renderer';
 import eventsEngine from '@ts/events/core/m_events_engine';
 
-import Resizable from './resizable';
+import Resizable, { type ResizableProperties } from './resizable';
 
 const HANDLE_BOTTOM_CLASS = 'dx-resizable-handle-bottom';
 
 const instances: Resizable[] = [];
 
-const createResizable = (options: object = {}): {
+const createResizable = (options: Partial<ResizableProperties> = {}): {
   instance: Resizable;
   $element: ReturnType<typeof $>;
   $handle: ReturnType<typeof $>;
