@@ -2058,10 +2058,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onResizeStart: (e): void => this.onAppointmentResizeStart(
         e as unknown as AppointmentResizeEvent,
       ),
-      onResizeEnd: (e): void => {
-        this.onAppointmentResizeEnd(e as unknown as AppointmentResizeEvent)
-          .catch((error) => { throw error; });
-      },
+      onResizeEnd: (e): void => this.onAppointmentResizeEnd(
+        e as unknown as AppointmentResizeEvent,
+      ),
     };
   }
 
@@ -2104,7 +2103,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return appointmentStartDate;
   }
 
-  private onAppointmentResizeEnd(e: AppointmentResizeEvent): Promise<void> {
+  private onAppointmentResizeEnd(e: AppointmentResizeEvent): void {
     const $element = $(e.element);
     const settings = this._appointments
       .getAppointmentSettings($element) as AppointmentItemViewModel;
@@ -2130,7 +2129,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       endDayHour: this.option('endDayHour'),
     });
 
-    return this.updateResizedAppointment(
+    this.updateResizedAppointment(
       appointmentData,
       {
         startDate: dateUtilsTs.addOffsets(dateRange.startDate, viewOffset),
@@ -2144,7 +2143,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     sourceAppointment: SafeAppointment,
     dateRange: { startDate: Date; endDate: Date },
     exceptionStartDate: Date,
-  ): Promise<void> {
+  ): void {
     const tz = this.timeZoneCalculator;
     const gridAdapter = new AppointmentAdapter(sourceAppointment, this._dataAccessors).clone();
 
@@ -2166,22 +2165,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     const data = gridAdapter.calculateDates(tz, 'fromGrid').source;
 
-    return new Promise((resolve) => {
-      this.checkRecurringAppointment(
-        sourceAppointment,
-        data,
-        exceptionStartDate,
-        () => {
-          this.updateAppointmentCore(sourceAppointment, data)
-            .then(() => resolve(), () => resolve());
-        },
-        false,
-        undefined,
-        undefined,
-        undefined,
-        (): void => { resolve(); },
-      );
-    });
+    this.checkRecurringAppointment(
+      sourceAppointment,
+      data,
+      exceptionStartDate,
+      () => {
+        this.updateAppointmentCore(sourceAppointment, data).catch(noop);
+      },
+      false,
+    );
   }
 
   checkRecurringAppointment(
