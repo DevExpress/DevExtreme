@@ -14,14 +14,14 @@
   "dependencies": {
     "devextreme": "workspace:*",
     "devextreme-react": "workspace:*",
-    "html-react-parser": "^5.2.2",
+    "html-react-parser": "^5.2.17",
     "inferno": "catalog:",
     "openai": "4.73.1"
   },
   "devDependencies": {
     "@storybook/addon-docs": "10.2.10",
     "@storybook/addon-links": "10.2.10",
-    "@storybook/addon-webpack5-compiler-swc": "^4.0.2",
+    "@storybook/addon-webpack5-compiler-swc": "^4.0.3",
     "@storybook/react-webpack5": "10.2.10",
     "@types/react": "18.0.0",
     "@types/react-dom": "18.0.0",
