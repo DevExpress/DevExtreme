@@ -2079,7 +2079,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     return {
       ...rule,
-      area: this._workSpace.getScrollableContainer() as unknown as ResizableProperties['area'],
+      area: this.getAppointmentResizableArea(viewModel),
       onCancelByEsc: true,
       onResizeStart: (e): void => this.onAppointmentResizeStart(
         e as unknown as AppointmentResizeEvent,
@@ -2088,6 +2088,50 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         e as unknown as AppointmentResizeEvent,
       ),
     };
+  }
+
+  private getAppointmentResizableArea(
+    viewModel: AppointmentItemViewModel,
+  ): ResizableProperties['area'] {
+    const groupBounds = this.getResizableGroupBounds(viewModel);
+    const area = groupBounds ?? this._workSpace.getScrollableContainer();
+
+    return area as unknown as ResizableProperties['area'];
+  }
+
+  private getResizableGroupBounds(
+    viewModel: AppointmentItemViewModel,
+  ): { left: number; right: number; top: number; bottom: number } | undefined {
+    const groups = this.getViewOption('groups');
+
+    if (!groups?.length) {
+      return undefined;
+    }
+
+    const coordinates = { left: viewModel.left, top: 0, groupIndex: viewModel.groupIndex };
+
+    if (viewModel.allDay || this.currentView.type === 'month') {
+      const bounds = this._workSpace.getGroupBounds(coordinates);
+      return bounds
+        ? {
+          left: bounds.left, right: bounds.right, top: 0, bottom: 0,
+        }
+        : undefined;
+    }
+
+    if (
+      VERTICAL_VIEW_TYPES.includes(this.currentView.type)
+      && this._workSpace.isVerticalGroupedWorkSpace()
+    ) {
+      const bounds = this._workSpace.getGroupBounds(coordinates);
+      return bounds
+        ? {
+          left: 0, right: 0, top: bounds.top, bottom: bounds.bottom,
+        }
+        : undefined;
+    }
+
+    return undefined;
   }
 
   private onAppointmentResizeStart(e: AppointmentResizeEvent): void {
@@ -2143,6 +2187,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointmentData,
       dateRange,
       settings.info.sourceAppointment.startDate,
+      () => (this._appointments as unknown as Appointments).resetAppointmentResize($element),
     );
   }
 
@@ -2204,6 +2249,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     sourceAppointment: SafeAppointment,
     dateRange: { startDate: Date; endDate: Date },
     exceptionStartDate: Date,
+    onRollback: () => void,
   ): void {
     const tz = this.timeZoneCalculator;
     const gridAdapter = new AppointmentAdapter(sourceAppointment, this._dataAccessors).clone();
@@ -2231,9 +2277,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       data,
       exceptionStartDate,
       () => {
-        this.updateAppointmentCore(sourceAppointment, data).catch(noop);
+        this.updateAppointmentCore(sourceAppointment, data, onRollback).catch(noop);
       },
       false,
+      undefined,
+      undefined,
+      undefined,
+      onRollback,
     );
   }
 
