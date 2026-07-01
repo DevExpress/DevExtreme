@@ -89,7 +89,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
 
 test('DataGrid with async templates should call load method only once on initial render', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const getLoadCount = ClientFunction(() => (window as any)._loadCount);
+  const getLoadCount = ClientFunction(() => (window as any).testLoadCount);
 
   await t.expect(dataGrid.isReady()).ok();
 
@@ -97,7 +97,7 @@ test('DataGrid with async templates should call load method only once on initial
 
   await t.expect(getLoadCount()).eql(1);
 }).before(async () => createWidget('dxDataGrid', () => {
-  (window as any)._loadCount = 0;
+  (window as any).testLoadCount = 0;
 
   const sampleAPI = new (window as any).DevExpress.data.ArrayStore({
     key: 'id',
@@ -110,7 +110,7 @@ test('DataGrid with async templates should call load method only once on initial
   const store = new (window as any).DevExpress.data.CustomStore({
     key: 'id',
     load(o: any) {
-      (window as any)._loadCount += 1;
+      (window as any).testLoadCount += 1;
       return new Promise((resolve) => {
         setTimeout(() => {
           sampleAPI.load(o).then(resolve);
@@ -155,5 +155,5 @@ test('DataGrid with async templates should call load method only once on initial
     },
   };
 })).after(async () => ClientFunction(() => {
-  delete (window as any)._loadCount;
+  delete (window as any).testLoadCount;
 })());
