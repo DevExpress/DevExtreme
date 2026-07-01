@@ -337,7 +337,7 @@ class ListStrategy extends DateBoxStrategy {
     }
   }
 
-  getParsedText(text?: string, format?: string): Date | undefined | null {
+  getParsedText(text?: string, format?: string): Date | null | undefined {
     let value = super.getParsedText(text, format);
 
     if (value) {

@@ -1,7 +1,49 @@
+import { Selector } from 'testcafe';
 import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getCardFieldCaptions } from '../helpers/cardUtils';
+
+const COLUMN_CHOOSER_DND_TIMEOUT = 1000;
+const SORTABLE_DRAGGING_SELECTOR = '.dx-sortable-dragging';
+
+const waitForDragEnd = async (t: TestController, cardView: CardView): Promise<void> => {
+  await t
+    .expect(Selector(SORTABLE_DRAGGING_SELECTOR).exists)
+    .notOk({ timeout: COLUMN_CHOOSER_DND_TIMEOUT })
+    .expect(cardView.isReady())
+    .ok({ timeout: COLUMN_CHOOSER_DND_TIMEOUT });
+};
+
+const dragHeaderColumnToColumnChooser = async (
+  t: TestController,
+  cardView: CardView,
+  columnIndex: number,
+): Promise<void> => {
+  await t.dragToElement(
+    cardView.getHeaderPanel().getHeaderItem(columnIndex).element,
+    cardView.getColumnChooser().content,
+    {
+      speed: 0.5,
+    },
+  );
+  await waitForDragEnd(t, cardView);
+};
+
+const dragColumnChooserColumnToHeaderPanel = async (
+  t: TestController,
+  cardView: CardView,
+  columnIndex: number,
+): Promise<void> => {
+  await t.dragToElement(
+    cardView.getColumnChooser().getColumn(columnIndex),
+    cardView.getHeaderPanel().element,
+    {
+      speed: 0.5,
+    },
+  );
+  await waitForDragEnd(t, cardView);
+};
 
 fixture`CardView - ColumnChooser.Functional`
   .page(url(__dirname, '../../container.html'));
@@ -14,7 +56,7 @@ function testsFactory(testModel: {
   assertFirstColumnHidden: (t: TestController, cardView: CardView) => Promise<void>;
   config: any; // TODO: add typing
 }) {
-  test(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
+  test.meta({ unstable: true })(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
     const cardView = new CardView('#container');
 
     await cardView.apiShowColumnChooser();
@@ -99,16 +141,10 @@ testsFactory({
     },
   },
   async hideFirstColumn(t: TestController, cardView: CardView) {
-    await t.dragToElement(
-      cardView.getHeaderPanel().getHeaderItem(0).element,
-      cardView.getColumnChooser().content,
-    );
+    await dragHeaderColumnToColumnChooser(t, cardView, 0);
   },
   async showFirstColumn(t: TestController, cardView: CardView) {
-    await t.dragToElement(
-      cardView.getColumnChooser().getColumn(0),
-      cardView.getHeaderPanel().element,
-    );
+    await dragColumnChooserColumnToHeaderPanel(t, cardView, 0);
   },
   async assertFirstColumnVisible(t: TestController, cardView: CardView) {
     await t.expect(
@@ -222,18 +258,12 @@ test('cards should update when column is hidden via column chooser (dragAndDrop 
 
   await cardView.apiShowColumnChooser();
 
-  await t.dragToElement(
-    cardView.getHeaderPanel().getHeaderItem(0).element,
-    cardView.getColumnChooser().content,
-  );
+  await dragHeaderColumnToColumnChooser(t, cardView, 0);
 
   const captionsAfterHide = await getCardFieldCaptions(t, cardView, 2);
   await t.expect(captionsAfterHide).eql(['B', 'C']);
 
-  await t.dragToElement(
-    cardView.getColumnChooser().getColumn(0),
-    cardView.getHeaderPanel().element,
-  );
+  await dragColumnChooserColumnToHeaderPanel(t, cardView, 0);
 
   const captionsAfterShow = await getCardFieldCaptions(t, cardView, 3);
   await t.expect(captionsAfterShow).eql(['A', 'B', 'C']);

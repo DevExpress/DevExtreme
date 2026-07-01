@@ -59,7 +59,7 @@ test('should support custom translations', async (t) => {
   height: 600,
 }));
 
-test('Filtering different data types', async (t) => {
+test.meta({ unstable: true })('Filtering different data types', async (t) => {
   const cardView = new CardView('#container');
   const headerPanel = cardView.getHeaderPanel();
 

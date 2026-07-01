@@ -1,4 +1,4 @@
-import type Scheduler from '../../m_scheduler';
+import type Scheduler from '../../scheduler';
 import { getCompareOptions } from '../common/get_compare_options';
 import { splitIntervalByDay } from '../common/split_interval_by_days';
 import type {

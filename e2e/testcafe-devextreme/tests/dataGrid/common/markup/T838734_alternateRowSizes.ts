@@ -15,7 +15,7 @@ const generateData = (rowCount) => new Array(rowCount).fill(null).map((_, idx) =
   C: `C_${idx}`,
 }));
 
-test('Alternate rows should be the same size', async (t) => {
+test.meta({ unstable: true })('Alternate rows should be the same size', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 

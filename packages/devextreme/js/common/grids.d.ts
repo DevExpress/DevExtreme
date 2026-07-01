@@ -713,7 +713,7 @@ export interface ColumnBase<TRowData = any> {
    * @type_function_return void|Promise<void>
    * @public
    */
-  setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+  setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => PromiseLike<void> | void);
   /**
    * @public
    */

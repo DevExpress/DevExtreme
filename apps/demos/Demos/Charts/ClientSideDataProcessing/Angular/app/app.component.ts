@@ -1,5 +1,10 @@
 import {
-  Component, AfterViewInit, enableProdMode, provideZoneChangeDetection, inject,
+  ChangeDetectionStrategy,
+  Component,
+  AfterViewInit,
+  enableProdMode,
+  provideZoneChangeDetection,
+  inject,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 
@@ -20,6 +25,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],

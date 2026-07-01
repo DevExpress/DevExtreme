@@ -6,7 +6,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import fx from 'common/core/animation/fx';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
