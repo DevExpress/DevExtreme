@@ -4,6 +4,7 @@ import {
 import fx from '@js/common/core/animation/fx';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/scheduler';
+import eventsEngine from '@ts/events/core/m_events_engine';
 
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
@@ -76,5 +77,20 @@ describe('Appointments Resizing', () => {
     });
 
     expect(countResizeHandles(POM.getAppointment('AllDay').element)).toBe(0);
+  });
+
+  it('should focus the appointment on resize start', async () => {
+    const { POM } = await createScheduler({
+      ...baseConfig,
+      dataSource: [timedAppointment],
+      editing: { allowUpdating: true, allowResizing: true },
+    });
+
+    const appointment = POM.getAppointment('Timed').element as HTMLElement;
+    const handle = appointment.querySelector(RESIZE_HANDLE_SELECTOR) as HTMLElement;
+
+    eventsEngine.trigger(handle, { type: 'dxdragstart', target: handle });
+
+    expect(document.activeElement).toBe(appointment);
   });
 });
