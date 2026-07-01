@@ -8,8 +8,8 @@ DevExtreme is an enterprise-ready suite of UI components for Angular, React, Vue
 - **Type:** Monorepo (pnpm workspaces + Nx)
 - **Size:** Large (1000+ files across multiple packages)
 - **Languages:** TypeScript, JavaScript, SCSS
-- **Package Manager:** pnpm 9.15.4 (specified in package.json)
-- **Node Version:** 20.x (required by CI)
+- **Package Manager:** pnpm 11.7.0 (specified in package.json)
+- **Node Version:** 24.15.0 (required by CI)
 - **Build System:** Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
 - **Test Frameworks:** QUnit, Jest, TestCafe, Karma (Angular)
 
@@ -22,8 +22,8 @@ DevExtreme is an enterprise-ready suite of UI components for Angular, React, Vue
 pnpm install --frozen-lockfile
 ```
 
-**Node.js:** Version 20.x is required (CI uses Node 20)
-**pnpm:** Version 9.15.4 (managed via packageManager field)
+**Node.js:** Version 24.15.0 is required (CI uses Node 24)
+**pnpm:** Version 11.7.0 (managed via packageManager field)
 **.NET SDK:** Version 8.0.x required for running devextreme-internal-tools (uses .NET tool for code generation)
 
 ### First-Time Setup
