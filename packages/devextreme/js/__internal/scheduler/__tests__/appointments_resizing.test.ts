@@ -69,11 +69,25 @@ describe('Appointments Resizing', () => {
     expect(countResizeHandles(POM.getAppointment('Timed').element)).toBe(0);
   });
 
-  it('should not render resize handles on all-day appointments', async () => {
+  it('should render horizontal resize handles on all-day appointments', async () => {
     const { POM } = await createScheduler({
       ...baseConfig,
       dataSource: [{ ...timedAppointment, text: 'AllDay', allDay: true }],
       editing: { allowUpdating: true, allowResizing: true },
+    });
+
+    const { element } = POM.getAppointment('AllDay');
+
+    expect(countResizeHandles(element)).toBeGreaterThan(0);
+    expect(element?.querySelectorAll('.dx-resizable-handle-left, .dx-resizable-handle-right').length)
+      .toBeGreaterThan(0);
+  });
+
+  it('should not render resize handles on all-day appointments when resizing is disabled', async () => {
+    const { POM } = await createScheduler({
+      ...baseConfig,
+      dataSource: [{ ...timedAppointment, text: 'AllDay', allDay: true }],
+      editing: { allowUpdating: true, allowResizing: false },
     });
 
     expect(countResizeHandles(POM.getAppointment('AllDay').element)).toBe(0);

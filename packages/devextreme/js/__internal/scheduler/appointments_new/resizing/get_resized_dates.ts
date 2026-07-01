@@ -1,13 +1,9 @@
 import dateUtils from '@js/core/utils/date';
 
 import timeZoneUtils from '../../utils_time_zone';
+import type { DateRange } from './types';
 
 const toMs = dateUtils.dateToMilliseconds;
-
-interface DateRange {
-  startDate: Date;
-  endDate: Date;
-}
 
 interface ResizeHandles {
   top: boolean;
