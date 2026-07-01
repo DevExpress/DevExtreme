@@ -1397,22 +1397,6 @@ module('Search', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'first date part (month) is still active');
     });
 
-    test('IME digit on non-first date part without all-selected state should update that specific part and not reset to first (T1331089 regression)', function(assert) {
-        this.instance.option({
-            displayFormat: 'MM/dd/yyyy',
-            value: new Date(2025, 9, 16),
-        });
-
-        this.keyboard.type('10');
-
-        this.$input.trigger($.Event('compositionstart'));
-
-        this.keyboard.input('2', 'insertCompositionText');
-
-        assert.strictEqual(this.instance.option('text'), '10/02/2025', 'day part is updated, month is not reset to first');
-        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'day part remains active');
-    });
-
     test('deleteContentBackward during IME composition on non-first date part should revert that part to minimum without affecting other parts (T1331089)', function(assert) {
         this.instance.option({
             displayFormat: 'MM/dd/yyyy',
@@ -1431,6 +1415,22 @@ module('Search', setupModule, () => {
         }));
 
         assert.strictEqual(this.instance.option('text'), '10/01/2025', 'day is reverted to minimum, month is unchanged');
+    });
+
+    test('IME digit on non-first date part without all-selected state should update that specific part and not reset to first (T1331089 regression)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.type('10');
+
+        this.$input.trigger($.Event('compositionstart'));
+
+        this.keyboard.input('2', 'insertCompositionText');
+
+        assert.strictEqual(this.instance.option('text'), '10/02/2025', 'day part is updated, month is not reset to first');
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'day part remains active');
     });
 });
 
