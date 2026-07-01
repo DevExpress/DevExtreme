@@ -2125,8 +2125,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dateRange,
       settings.info.sourceAppointment.startDate,
     );
-
-    this.appointmentResizeInitialSize = null;
   }
 
   private getResizedTimedDateRange(
