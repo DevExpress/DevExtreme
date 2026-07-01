@@ -72,6 +72,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
   private _totalItemsCount: any;
 
+  private _lastExpandedRowKeys: any;
+
   private _createKeyGetter() {
     const keyExpr = this.getKeyExpr();
 
@@ -298,6 +300,14 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
 
     options.expandVisibleNodes = expandVisibleNodes;
+
+    if (!options.isCustomLoading) {
+      const currentExpandedKeys = this.option('expandedRowKeys');
+
+      if (!equalByValue(this._lastExpandedRowKeys, currentExpandedKeys)) {
+        operationTypes.nodeExpanding = true;
+      }
+    }
   }
 
   private _getParentIdsToLoad(parentIds) {
@@ -606,6 +616,10 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
     this._updateHasItemsMap(options);
     super._handleDataLoaded(options);
+
+    if (!options.isCustomLoading) {
+      this._lastExpandedRowKeys = this.option('expandedRowKeys')?.slice();
+    }
 
     if (data.isConverted && this._cachedStoreData) {
       this._cachedStoreData.isConverted = true;

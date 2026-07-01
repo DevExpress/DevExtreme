@@ -153,38 +153,45 @@ export class ResizingController extends modules.ViewController {
   }
 
   private _refreshSizes(e) {
-    // @ts-expect-error
-    let resizeDeferred = new Deferred<null>().resolve(null);
     const changeType = e?.changeType;
     const isDelayed = e?.isDelayed;
-    const items = this._dataController.items();
 
-    if (!e || changeType === 'refresh' || changeType === 'prepend' || changeType === 'append') {
+    if (!e || ['refresh', 'prepend', 'append'].includes(changeType)) {
       if (!isDelayed) {
-        resizeDeferred = this.resize();
+        return this.resize();
       }
-    } else if (changeType === 'update') {
-      if (e.changeTypes?.length === 0) {
-        return resizeDeferred;
-      }
-      if ((items.length > 1 || e.changeTypes[0] !== 'insert')
-                && !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
+    }
+
+    if (changeType === 'update') {
+      if (!e.changeTypes?.length) {
         // @ts-expect-error
-        resizeDeferred = new Deferred();
+        return new Deferred<null>().resolve(null);
+      }
+
+      const items = this._dataController.items();
+      const isHidingNoDataPanel = items.length <= 1 && e.changeTypes[0] === 'insert';
+      const isShowingNoDataPanel = items.length === 0 && e.changeTypes[0] === 'remove';
+
+      if (!isHidingNoDataPanel && !isShowingNoDataPanel && !e.needUpdateDimensions) {
+        // @ts-expect-error
+        const deferred = new Deferred();
 
         this._waitAsyncTemplates().done(() => {
           deferUpdate(() => deferRender(() => deferUpdate(() => {
             this._setScrollerSpacing();
             this._rowsView.resize();
-            resizeDeferred.resolve();
+            deferred.resolve();
           })));
-        }).fail(resizeDeferred.reject);
-      } else {
-        resizeDeferred = this.resize();
+        }).fail(deferred.reject);
+
+        return deferred;
       }
+
+      return this.resize();
     }
 
-    return resizeDeferred;
+    // @ts-expect-error
+    return new Deferred<null>().resolve(null);
   }
 
   /**
