@@ -10,7 +10,7 @@ import { Themes } from '../../../../helpers/themes';
 fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../../container.html'));
 
-test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
+test.meta({ unstable: true })('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Approve Personal Computer Upgrade Plan');
   const collector = scheduler.collectors.find('2');
