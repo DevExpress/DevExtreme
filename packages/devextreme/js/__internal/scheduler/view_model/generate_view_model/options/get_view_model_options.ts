@@ -1,6 +1,6 @@
 import type { Orientation } from '@js/common';
 import type { SnapToCellsMode } from '@js/ui/scheduler';
-import type Scheduler from '@ts/scheduler/m_scheduler';
+import type Scheduler from '@ts/scheduler/scheduler';
 
 import type { ViewType } from '../../../types';
 import { getCompareOptions } from '../../common/get_compare_options';

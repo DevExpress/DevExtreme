@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'common/core/animation/fx';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';

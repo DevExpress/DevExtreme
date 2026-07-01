@@ -214,9 +214,11 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     const form = await readFormBody(req);
     const name = String(form.name ?? '');
     const passed = parseBoolean(form.passed);
+    const runtime = parseNumber(form.runtime);
 
     try {
-      logger.writeLine(`       [${passed ? '  ok' : 'fail'}] ${name}`);
+      const seconds = Number((runtime / 1000).toFixed(3));
+      logger.writeLine(`       [${passed ? '  ok' : 'fail'}] ${name} in ${seconds}s`);
     } catch {
       // Ignore logging errors.
     }
@@ -353,7 +355,6 @@ function buildRunAllModel(searchParams: URLSearchParams): RunAllModel {
     CategoriesList: include ?? '',
     Version: readPackageVersion(),
     Suites: suitesService.getAllSuites({
-      deviceMode: hasDeviceModeFlag(searchParams),
       constellation,
       includeCategories: includeSet,
       excludeCategories: excludeSet,
@@ -384,10 +385,6 @@ function assignBaseRunProps(searchParams: URLSearchParams): BaseRunProps {
   }
 
   return result;
-}
-
-function hasDeviceModeFlag(searchParams: URLSearchParams): boolean {
-  return searchParams.has('deviceMode');
 }
 
 async function saveResults(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {

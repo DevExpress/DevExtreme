@@ -6,7 +6,7 @@ import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 import { DRAG_MOUSE_OPTIONS } from '../const';
 
-fixture.disablePageReloads`pivotGrid_fieldPanel_drag-n-drop`
+fixture`pivotGrid_fieldPanel_drag-n-drop`
   .page(url(__dirname, '../../../container.html'));
 
 const PIVOT_GRID_SELECTOR = '#container';
@@ -75,7 +75,7 @@ test('Field panel items markup in the middle of the drag-n-drop', async (t) => {
   });
 });
 
-test.meta({ unstable: true })('Should show d-n-d indicator during drag to first place in columns fields', async (t) => {
+test('Should show d-n-d indicator during drag to first place in columns fields', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);

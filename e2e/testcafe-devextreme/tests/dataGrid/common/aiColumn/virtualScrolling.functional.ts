@@ -41,7 +41,7 @@ const deleteGlobalVariables = ClientFunction((): void => {
   delete (window as any).aiResolve;
 });
 
-test('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
+test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 

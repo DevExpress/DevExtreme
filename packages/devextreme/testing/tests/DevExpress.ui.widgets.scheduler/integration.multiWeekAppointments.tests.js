@@ -7,7 +7,7 @@ import Color from 'color';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'fluent_blue_light.css!';
 
 const { testStart } = QUnit;

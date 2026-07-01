@@ -179,881 +179,882 @@
 
 # Navigation
 
-/e2e/testcafe-devextreme/tests/navigation/**                   @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/navigation/**                   @DevExpress/devextreme-components
 
-/apps/demos/Demos/Common/ActionAndListsOverview/**             @DevExpress/devextreme-navigation
-/apps/demos/Demos/Common/FormsAndMultiPurposeOverview/**       @DevExpress/devextreme-navigation
-/apps/demos/Demos/Common/FormsOverview/**                      @DevExpress/devextreme-navigation
-/apps/demos/Demos/Common/ListsOverview/**                      @DevExpress/devextreme-navigation
-/apps/demos/Demos/Common/NavigationOverview/**                 @DevExpress/devextreme-navigation
-/apps/demos/Demos/Common/NavigationRightToLeftSupport/**       @DevExpress/devextreme-navigation
+/apps/demos/Demos/Common/ActionAndListsOverview/**             @DevExpress/devextreme-components
+/apps/demos/Demos/Common/FormsAndMultiPurposeOverview/**       @DevExpress/devextreme-components
+/apps/demos/Demos/Common/FormsOverview/**                      @DevExpress/devextreme-components
+/apps/demos/Demos/Common/ListsOverview/**                      @DevExpress/devextreme-components
+/apps/demos/Demos/Common/NavigationOverview/**                 @DevExpress/devextreme-components
+/apps/demos/Demos/Common/NavigationRightToLeftSupport/**       @DevExpress/devextreme-components
 
 ## accordion
-/packages/devextreme/js/ui/accordion.js                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/accordion/**             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/accordion.ts             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/accordion.js                        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/accordion/**             @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/accordion.ts             @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/accordion/**                 @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_accordion.scss    @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/accordion/**                 @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_accordion.scss    @DevExpress/devextreme-components
 
-/apps/demos/Demos/Accordion/**                                 @DevExpress/devextreme-navigation
+/apps/demos/Demos/Accordion/**                                 @DevExpress/devextreme-components
 
-/packages/testcafe-models/accordion/**                         @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/accordion.ts    @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/accordion.*              @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/accordionParts/**   @DevExpress/devextreme-navigation
+/packages/testcafe-models/accordion/**                         @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/accordion.ts    @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/accordion.*              @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/accordionParts/**   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/accordion_types.d.ts                @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/accordion.d.ts                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/accordion_types.d.ts                @DevExpress/devextreme-components
+/packages/devextreme/js/ui/accordion.d.ts                      @DevExpress/devextreme-components
 
 ## action_sheet
-/packages/devextreme/js/ui/action_sheet.js                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/action_sheet.ts          @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/action_sheet.js                     @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/action_sheet.ts          @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/actionSheet/**               @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_actionSheet.scss  @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/actionSheet/**               @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_actionSheet.scss  @DevExpress/devextreme-components
 
-/apps/demos/Demos/ActionSheet/**                               @DevExpress/devextreme-navigation
+/apps/demos/Demos/ActionSheet/**                               @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/actionSheet.ts  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/actionSheet.*            @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/actionSheet.ts  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/actionSheet.*            @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/action_sheet_types.d.ts             @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/action_sheet.d.ts                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/action_sheet_types.d.ts             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/action_sheet.d.ts                   @DevExpress/devextreme-components
 
 ## box
-/packages/devextreme/js/ui/box.js                              @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/box.ts                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/box.js                              @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/box.ts                   @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/box/**                       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_box.scss          @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/box/**                       @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_box.scss          @DevExpress/devextreme-components
 
-/apps/demos/Demos/Box/**                                       @DevExpress/devextreme-navigation
+/apps/demos/Demos/Box/**                                       @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/**/box.*                    @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/box.*                    @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/box_types.d.ts                      @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/box.d.ts                            @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/box_types.d.ts                      @DevExpress/devextreme-components
+/packages/devextreme/js/ui/box.d.ts                            @DevExpress/devextreme-components
 
 
 ## button
-/packages/devextreme/js/ui/button.js                           @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/button/**                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/button.js                           @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/button/**                @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/button/**                    @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/button/**                    @DevExpress/devextreme-components
 
-/apps/demos/Demos/Button/**                                    @DevExpress/devextreme-navigation
+/apps/demos/Demos/Button/**                                    @DevExpress/devextreme-components
 
-/packages/testcafe-models/button.ts                            @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/button.ts  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/button.*                 @DevExpress/devextreme-navigation
+/packages/testcafe-models/button.ts                            @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/button.ts  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/button.*                 @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/button_types.d.ts                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/button.d.ts                         @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/button_types.d.ts                   @DevExpress/devextreme-components
+/packages/devextreme/js/ui/button.d.ts                         @DevExpress/devextreme-components
 
 ## button_group
-/packages/devextreme/js/ui/button_group.js                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/button_group.ts          @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/button_group.js                     @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/button_group.ts          @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/buttonGroup/**               @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/buttonGroup/**               @DevExpress/devextreme-components
 
-/apps/demos/Demos/ButtonGroup/**                               @DevExpress/devextreme-navigation
+/apps/demos/Demos/ButtonGroup/**                               @DevExpress/devextreme-components
 
-/packages/testcafe-models/buttonGroup/**                       @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/buttonGroup.ts  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/buttonGroup.*            @DevExpress/devextreme-navigation
+/packages/testcafe-models/buttonGroup/**                       @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/buttonGroup.ts  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/buttonGroup.*            @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/button_group_types.d.ts             @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/button_group.d.ts                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/button_group_types.d.ts             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/button_group.d.ts                   @DevExpress/devextreme-components
 
 ## collection
-/packages/devextreme/js/ui/collection/**                       @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/collection/**            @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/collection/**                       @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/collection/**            @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/**/collectionWidget*.*      @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/DevExpress.ui/collectionWidgetParts/**   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/collectionWidget*.*      @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui/collectionWidgetParts/**   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/collection/**/*.d.ts                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/collection/**/*.d.ts                @DevExpress/devextreme-components
 
 ## context_menu
-/packages/devextreme/js/ui/context_menu.js                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/context_menu/**                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/context_menu/**          @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/context_menu.js                     @DevExpress/devextreme-components
+/packages/devextreme/js/ui/context_menu/**                     @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/context_menu/**          @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/contextMenu/**               @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_contextMenu.scss  @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/contextMenu/**               @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_contextMenu.scss  @DevExpress/devextreme-components
 
-/apps/demos/Demos/ContextMenu/**                               @DevExpress/devextreme-navigation
+/apps/demos/Demos/ContextMenu/**                               @DevExpress/devextreme-components
 
-/packages/testcafe-models/contextMenu/**                       @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/contextMenu.ts  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/contextMenu.*            @DevExpress/devextreme-navigation
+/packages/testcafe-models/contextMenu/**                       @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/contextMenu.ts  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/contextMenu.*            @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/context_menu_types.d.ts             @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/context_menu.d.ts                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/context_menu/**/*.d.ts              @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/context_menu_types.d.ts             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/context_menu.d.ts                   @DevExpress/devextreme-components
+/packages/devextreme/js/ui/context_menu/**/*.d.ts              @DevExpress/devextreme-components
 
 ## drawer
-/packages/devextreme/js/ui/drawer.js                           @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/drawer/**                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/drawer.js                           @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/drawer/**                @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/drawer/**                    @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_drawer.scss       @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/drawer/**                    @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_drawer.scss       @DevExpress/devextreme-components
 
-/apps/demos/Demos/Drawer/**                                    @DevExpress/devextreme-navigation
+/apps/demos/Demos/Drawer/**                                    @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/drawer.ts  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/DevExpress.serverSide/drawer.tests.js   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/drawer.*                 @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/drawer.ts  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.serverSide/drawer.tests.js   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/drawer.*                 @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/drawer_types.d.ts                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/drawer.d.ts                         @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/drawer_types.d.ts                   @DevExpress/devextreme-components
+/packages/devextreme/js/ui/drawer.d.ts                         @DevExpress/devextreme-components
 
 ## form
-/packages/devextreme/js/ui/form.js                             @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/form/**                             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/form/**                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/form.js                             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/form/**                             @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/form/**                  @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/form/**                      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_form.scss         @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/form/**                      @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_form.scss         @DevExpress/devextreme-components
 
-/apps/demos/Demos/Form/**                                      @DevExpress/devextreme-navigation
+/apps/demos/Demos/Form/**                                      @DevExpress/devextreme-components
 
-/packages/testcafe-models/form/**                              @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/form/**           @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/DevExpress.ui.widgets.form/**  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/form*                    @DevExpress/devextreme-navigation
+/packages/testcafe-models/form/**                              @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/form/**           @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.form/**  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/form*                    @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/form_types.d.ts                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/form.d.ts                           @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/form/**/*.d.ts                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/form_types.d.ts                     @DevExpress/devextreme-components
+/packages/devextreme/js/ui/form.d.ts                           @DevExpress/devextreme-components
+/packages/devextreme/js/ui/form/**/*.d.ts                      @DevExpress/devextreme-components
 
 ## gallery
-/packages/devextreme/js/ui/gallery.js                          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/gallery/**               @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/gallery.ts               @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/gallery.js                          @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/gallery/**               @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/gallery.ts               @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/gallery/**                   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_gallery.scss      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/gallery/**                   @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_gallery.scss      @DevExpress/devextreme-components
 
-/apps/demos/Demos/Gallery/**                                   @DevExpress/devextreme-navigation
+/apps/demos/Demos/Gallery/**                                   @DevExpress/devextreme-components
 
-/packages/testcafe-models/gallery/**                           @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/gallery.ts @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/gallery.*                @DevExpress/devextreme-navigation
+/packages/testcafe-models/gallery/**                           @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/gallery.ts @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/gallery.*                @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/gallery_types.d.ts                  @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/gallery.d.ts                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/gallery_types.d.ts                  @DevExpress/devextreme-components
+/packages/devextreme/js/ui/gallery.d.ts                        @DevExpress/devextreme-components
 
 ## hierarchial_collection
-/packages/devextreme/js/ui/hierarchial_collection/**           @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/hierarchial_collection/**   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/hierarchial_collection/**           @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/hierarchial_collection/**   @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui/hierarchicalCollectionWidgetParts/**   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/hierarchicalCollectionWidget.*   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui/hierarchicalCollectionWidgetParts/**   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/hierarchicalCollectionWidget.*   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/hierarchial_collection/**/*.d.ts    @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/hierarchial_collection/**/*.d.ts    @DevExpress/devextreme-components
 
 ## list
-/packages/devextreme/js/ui/list.js                             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/list/**                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/list.js                             @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/list/**                  @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/list/**                      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/list/**                      @DevExpress/devextreme-components
 
-/apps/demos/Demos/List/**                                      @DevExpress/devextreme-navigation
+/apps/demos/Demos/List/**                                      @DevExpress/devextreme-components
 
-/packages/testcafe-models/list/**                              @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/list/**    @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/list.*                   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/listItem.*               @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/listParts/**   @DevExpress/devextreme-navigation
+/packages/testcafe-models/list/**                              @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/list/**    @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/list.*                   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/listItem.*               @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/listParts/**   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/list_types.d.ts                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/list.d.ts                           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/list_types.d.ts                     @DevExpress/devextreme-components
+/packages/devextreme/js/ui/list.d.ts                           @DevExpress/devextreme-components
 
 ## load_indicator
-/packages/devextreme/js/ui/load_indicator.js                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/load_indicator/**        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/load_indicator.ts        @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/load_indicator.js                   @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/load_indicator/**        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/load_indicator.ts        @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/loadIndicator/**             @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_loadIndicator.scss   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/loadIndicator/**             @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_loadIndicator.scss   @DevExpress/devextreme-components
 
-/apps/demos/Demos/LoadIndicator/**                             @DevExpress/devextreme-navigation
+/apps/demos/Demos/LoadIndicator/**                             @DevExpress/devextreme-components
 
-/packages/testcafe-models/loadIndicator.ts                     @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/loadIndicator.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/loadIndicator.*   @DevExpress/devextreme-navigation
+/packages/testcafe-models/loadIndicator.ts                     @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/loadIndicator.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/loadIndicator.*   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/load_indicator_types.d.ts           @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/load_indicator.d.ts                 @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/load_indicator_types.d.ts           @DevExpress/devextreme-components
+/packages/devextreme/js/ui/load_indicator.d.ts                 @DevExpress/devextreme-components
 
 ## menu
-/packages/devextreme/js/ui/menu.js                             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/menu/**                  @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/menu.ts                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/menu.js                             @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/menu/**                  @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/menu.ts                  @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/menu/**                      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_menu.scss         @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/menu/**                      @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_menu.scss         @DevExpress/devextreme-components
 
-/apps/demos/Demos/Menu/**                                      @DevExpress/devextreme-navigation
+/apps/demos/Demos/Menu/**                                      @DevExpress/devextreme-components
 
-/packages/testcafe-models/menu/**                              @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/menu.ts    @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/menu.*                   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/menuBase.*               @DevExpress/devextreme-navigation
+/packages/testcafe-models/menu/**                              @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/menu.ts    @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/menu.*                   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/menuBase.*               @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/menu_types.d.ts                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/menu.d.ts                           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/menu_types.d.ts                     @DevExpress/devextreme-components
+/packages/devextreme/js/ui/menu.d.ts                           @DevExpress/devextreme-components
 
 ## multi_view
-/packages/devextreme/js/ui/multi_view.js                       @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/multi_view/**            @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/multi_view.ts            @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/multi_view.js                       @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/multi_view/**            @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/multi_view.ts            @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/multiView/**                 @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_multiView.scss    @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/multiView/**                 @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_multiView.scss    @DevExpress/devextreme-components
 
-/apps/demos/Demos/MultiView/**                                 @DevExpress/devextreme-navigation
+/apps/demos/Demos/MultiView/**                                 @DevExpress/devextreme-components
 
-/packages/testcafe-models/multiView/**                         @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/multiView.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/multiView.*              @DevExpress/devextreme-navigation
+/packages/testcafe-models/multiView/**                         @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/multiView.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/multiView.*              @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/multi_view_types.d.ts               @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/multi_view.d.ts                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/multi_view_types.d.ts               @DevExpress/devextreme-components
+/packages/devextreme/js/ui/multi_view.d.ts                     @DevExpress/devextreme-components
 
 ## radio_group
-/packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-components
+/packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-components
 
-/apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-editors
+/apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-components
 
-/packages/testcafe-models/radioGroup/**                        @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/radioGroup.ts   @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-editors
+/packages/testcafe-models/radioGroup/**                        @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/radioGroup.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-components
+/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-components
+/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-components
 
 ## resizable
-/packages/devextreme/js/ui/resizable.js                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/resizable/**             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/resizable.js                        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/resizable/**             @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/resizable/**                 @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_resizable.scss    @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/resizable/**                 @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_resizable.scss    @DevExpress/devextreme-components
 
-/apps/demos/Demos/Resizable/**                                 @DevExpress/devextreme-navigation
+/apps/demos/Demos/Resizable/**                                 @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/**/resizable.*              @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/resizable.*              @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/resizable_types.d.ts                @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/resizable.d.ts                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/resizable_types.d.ts                @DevExpress/devextreme-components
+/packages/devextreme/js/ui/resizable.d.ts                      @DevExpress/devextreme-components
 
 ## responsive_box
-/packages/devextreme/js/ui/responsive_box.js                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/responsive_box.ts        @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/responsive_box.js                   @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/responsive_box.ts        @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/responsiveBox/**             @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/responsiveBox/**             @DevExpress/devextreme-components
 
-/apps/demos/Demos/ResponsiveBox/**                             @DevExpress/devextreme-navigation
+/apps/demos/Demos/ResponsiveBox/**                             @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/**/responsiveBox.*          @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/responsiveBox.*          @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/responsive_box_types.d.ts           @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/responsive_box.d.ts                 @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/responsive_box_types.d.ts           @DevExpress/devextreme-components
+/packages/devextreme/js/ui/responsive_box.d.ts                 @DevExpress/devextreme-components
 
 ## scroll_view
-/packages/devextreme/js/ui/scroll_view.js                      @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/scroll_view/**                      @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/scroll_view/**           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/scroll_view.js                      @DevExpress/devextreme-components
+/packages/devextreme/js/ui/scroll_view/**                      @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/scroll_view/**           @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/scrollView/**                @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_scrollView.scss   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/scrollView/**                @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_scrollView.scss   @DevExpress/devextreme-components
 
-/apps/demos/Demos/ScrollView/**                                @DevExpress/devextreme-navigation
+/apps/demos/Demos/ScrollView/**                                @DevExpress/devextreme-components
 
-/packages/testcafe-models/scrollView/**                        @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/scrollView.*             @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/scrollable.*             @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/scrollableParts/**   @DevExpress/devextreme-navigation
+/packages/testcafe-models/scrollView/**                        @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/scrollView.*             @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/scrollable.*             @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/scrollableParts/**   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/scroll_view_types.d.ts              @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/scroll_view.d.ts                    @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/scroll_view/**/*.d.ts               @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/scroll_view_types.d.ts              @DevExpress/devextreme-components
+/packages/devextreme/js/ui/scroll_view.d.ts                    @DevExpress/devextreme-components
+/packages/devextreme/js/ui/scroll_view/**/*.d.ts               @DevExpress/devextreme-components
 
 ## selection
-/packages/devextreme/js/__internal/ui/selection/**             @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/selection/**             @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/selection.*   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/selection.*   @DevExpress/devextreme-components
 
 ## splitter
-/packages/devextreme/js/ui/splitter.js                         @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/splitter/**              @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/splitter.js                         @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/splitter/**              @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/splitter/**                  @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/splitter/**                  @DevExpress/devextreme-components
 
-/apps/demos/Demos/Splitter/**                                  @DevExpress/devextreme-navigation
+/apps/demos/Demos/Splitter/**                                  @DevExpress/devextreme-components
 
-/packages/testcafe-models/splitter/**                          @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/splitter.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/splitter.*               @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/resizeHandle.*           @DevExpress/devextreme-navigation
+/packages/testcafe-models/splitter/**                          @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/splitter.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/splitter.*               @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/resizeHandle.*           @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/splitter_types.d.ts                 @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/splitter.d.ts                       @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/splitter_types.d.ts                 @DevExpress/devextreme-components
+/packages/devextreme/js/ui/splitter.d.ts                       @DevExpress/devextreme-components
 
 ## stepper
-/packages/devextreme/js/ui/stepper.js                          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/stepper/**               @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/stepper.js                          @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/stepper/**               @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/stepper/**                   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/stepper/**                   @DevExpress/devextreme-components
 
-/apps/demos/Demos/Stepper/**                                   @DevExpress/devextreme-navigation
+/apps/demos/Demos/Stepper/**                                   @DevExpress/devextreme-components
 
-/packages/testcafe-models/stepper/**                           @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/stepper.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/stepper.*                @DevExpress/devextreme-navigation
+/packages/testcafe-models/stepper/**                           @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/stepper.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/stepper.*                @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/stepper_types.d.ts                  @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/stepper.d.ts                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/stepper_types.d.ts                  @DevExpress/devextreme-components
+/packages/devextreme/js/ui/stepper.d.ts                        @DevExpress/devextreme-components
 
 ## tab_panel
-/packages/devextreme/js/ui/tab_panel.js                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/tab_panel/**             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tab_panel.js                        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/tab_panel/**             @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/tabPanel/**                  @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_tabPanel.scss     @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/tabPanel/**                  @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_tabPanel.scss     @DevExpress/devextreme-components
 
-/apps/demos/Demos/TabPanel/**                                  @DevExpress/devextreme-navigation
+/apps/demos/Demos/TabPanel/**                                  @DevExpress/devextreme-components
 
-/packages/testcafe-models/tabPanel.ts                          @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/tabPanel.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/tabPanel.*               @DevExpress/devextreme-navigation
+/packages/testcafe-models/tabPanel.ts                          @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/tabPanel.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/tabPanel.*               @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/tab_panel_types.d.ts                @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/tab_panel.d.ts                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tab_panel_types.d.ts                @DevExpress/devextreme-components
+/packages/devextreme/js/ui/tab_panel.d.ts                      @DevExpress/devextreme-components
 
 ## tabs
-/packages/devextreme/js/ui/tabs.js                             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/tabs/**                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tabs.js                             @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/tabs/**                  @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/tabs/**                      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_tabs.scss         @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/tabs/**                      @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_tabs.scss         @DevExpress/devextreme-components
 
-/apps/demos/Demos/Tabs/**                                      @DevExpress/devextreme-navigation
+/apps/demos/Demos/Tabs/**                                      @DevExpress/devextreme-components
 
-/packages/testcafe-models/tabs/**                              @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/tabs.ts    @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/tabs.*                   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/tabsItem.*               @DevExpress/devextreme-navigation
+/packages/testcafe-models/tabs/**                              @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/tabs.ts    @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/tabs.*                   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/tabsItem.*               @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/tabs_types.d.ts                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/tabs.d.ts                           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tabs_types.d.ts                     @DevExpress/devextreme-components
+/packages/devextreme/js/ui/tabs.d.ts                           @DevExpress/devextreme-components
 
 ## tile_view
-/packages/devextreme/js/ui/tile_view.js                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/tile_view.ts             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tile_view.js                        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/tile_view.ts             @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/tileView/**                  @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_tileView.scss     @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/tileView/**                  @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_tileView.scss     @DevExpress/devextreme-components
 
-/apps/demos/Demos/TileView/**                                  @DevExpress/devextreme-navigation
+/apps/demos/Demos/TileView/**                                  @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/tileView.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/tileView.*   @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/tileView.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/tileView.*   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/tile_view_types.d.ts                @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/tile_view.d.ts                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tile_view_types.d.ts                @DevExpress/devextreme-components
+/packages/devextreme/js/ui/tile_view.d.ts                      @DevExpress/devextreme-components
 
 ## toolbar
-/packages/devextreme/js/ui/toolbar.js                          @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/toolbar/**                          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/toolbar/**               @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/toolbar.js                          @DevExpress/devextreme-components
+/packages/devextreme/js/ui/toolbar/**                          @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/toolbar/**               @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/toolbar/**                   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_toolbar.scss      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/toolbar/**                   @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_toolbar.scss      @DevExpress/devextreme-components
 
-/apps/demos/Demos/Toolbar/**                                   @DevExpress/devextreme-navigation
+/apps/demos/Demos/Toolbar/**                                   @DevExpress/devextreme-components
 
-/packages/testcafe-models/toolbar/**                           @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/toolbar.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/toolbar.*   @DevExpress/devextreme-navigation
+/packages/testcafe-models/toolbar/**                           @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/toolbar.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/toolbar.*   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/toolbar_types.d.ts                  @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/toolbar.d.ts                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/toolbar/**/*.d.ts                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/toolbar_types.d.ts                  @DevExpress/devextreme-components
+/packages/devextreme/js/ui/toolbar.d.ts                        @DevExpress/devextreme-components
+/packages/devextreme/js/ui/toolbar/**/*.d.ts                   @DevExpress/devextreme-components
 
 ## tree_view
-/packages/devextreme/js/ui/tree_view.js                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/tree_view/**             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tree_view.js                        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/tree_view/**             @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/**/treeView/**                  @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/treeView/**                  @DevExpress/devextreme-components
 
-/apps/demos/Demos/TreeView/**                                  @DevExpress/devextreme-navigation
+/apps/demos/Demos/TreeView/**                                  @DevExpress/devextreme-components
 
-/packages/testcafe-models/treeView/**                          @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/treeView.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/treeView.*   @DevExpress/devextreme-navigation
+/packages/testcafe-models/treeView/**                          @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/treeView.ts   @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/**/treeView.*   @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/tree_view_types.d.ts                @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/tree_view.d.ts                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tree_view_types.d.ts                @DevExpress/devextreme-components
+/packages/devextreme/js/ui/tree_view.d.ts                      @DevExpress/devextreme-components
 
 ## fieldset
 
-/packages/devextreme-scss/scss/**/fieldset/**                  @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_fieldset.scss     @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/fieldset/**                  @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_fieldset.scss     @DevExpress/devextreme-components
 
-/apps/demos/Demos/FieldSet/**                                  @DevExpress/devextreme-navigation
+/apps/demos/Demos/FieldSet/**                                  @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.knockout/fieldsetParts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.knockout/fieldsetParts   @DevExpress/devextreme-components
 
 ## viz
-/packages/devextreme/js/viz/**                                 @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/common/m_charts.ts          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/viz/**                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/viz/**                                 @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/common/m_charts.ts          @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/viz/**                      @DevExpress/devextreme-components
 
-/apps/demos/Demos/Charts/**                                    @DevExpress/devextreme-navigation
-/apps/demos/Demos/Gauges/**                                    @DevExpress/devextreme-navigation
-/apps/demos/Demos/RangeSelector/**                             @DevExpress/devextreme-navigation
-/apps/demos/Demos/VectorMap/**                                 @DevExpress/devextreme-navigation
+/apps/demos/Demos/Charts/**                                    @DevExpress/devextreme-components
+/apps/demos/Demos/Gauges/**                                    @DevExpress/devextreme-components
+/apps/demos/Demos/RangeSelector/**                             @DevExpress/devextreme-components
+/apps/demos/Demos/VectorMap/**                                 @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.common/charts.tests.js/**  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/Memory\ Leaks/vizWidgets.tests.js/**  @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/DevExpress.viz.*/**       @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.common/charts.tests.js/**  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/Memory\ Leaks/vizWidgets.tests.js/**  @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.viz.*/**       @DevExpress/devextreme-components
 
-/packages/devextreme/js/viz/**/*.d.ts                          @DevExpress/devextreme-navigation
+/packages/devextreme/js/viz/**/*.d.ts                          @DevExpress/devextreme-components
 
 # Editors
 
-/e2e/testcafe-devextreme/tests/editors/**                            @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/fileUploader/**                       @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/htmlEditor/**                         @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/editors/**                            @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/fileUploader/**                       @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/htmlEditor/**                         @DevExpress/devextreme-components
 
-/apps/demos/Demos/Common/EditorsOverview/**                          @DevExpress/devextreme-editors
-/apps/demos/Demos/Common/CustomTextEditorButtons/**                  @DevExpress/devextreme-editors
-/apps/demos/Demos/Common/EditorAppearanceVariants/**                 @DevExpress/devextreme-editors
-/apps/demos/Demos/Common/EditorsRightToLeftSupport/**                @DevExpress/devextreme-editors
-/apps/demos/Demos/Common/PopupAndNotificationsOverview/**            @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/EditorsOverview/**                          @DevExpress/devextreme-components
+/apps/demos/Demos/Common/CustomTextEditorButtons/**                  @DevExpress/devextreme-components
+/apps/demos/Demos/Common/EditorAppearanceVariants/**                 @DevExpress/devextreme-components
+/apps/demos/Demos/Common/EditorsRightToLeftSupport/**                @DevExpress/devextreme-components
+/apps/demos/Demos/Common/PopupAndNotificationsOverview/**            @DevExpress/devextreme-components
 
 ## autocomplete
-/packages/devextreme/js/ui/autocomplete.d.ts                         @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/autocomplete_types.d.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/autocomplete.d.ts                         @DevExpress/devextreme-components
+/packages/devextreme/js/ui/autocomplete_types.d.ts                   @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/autocomplete.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/autocomplete.ts              @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/autocomplete/**  @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/autocomplete/**  @DevExpress/devextreme-components
 
-/apps/demos/Demos/Autocomplete/**                                    @DevExpress/devextreme-editors
+/apps/demos/Demos/Autocomplete/**                                    @DevExpress/devextreme-components
 
 ## calendar
-/packages/devextreme/js/ui/calendar.d.ts                             @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/calendar_types.d.ts                       @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/calendar.d.ts                             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/calendar_types.d.ts                       @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/calendar/**                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/calendar/**                    @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/calendar/**               @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/calendar/**               @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/calendar.ts      @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/calendar.ts      @DevExpress/devextreme-components
 
-/apps/demos/Demos/Calendar/**                                        @DevExpress/devextreme-editors
+/apps/demos/Demos/Calendar/**                                        @DevExpress/devextreme-components
 
 ## chat
-/packages/devextreme/js/ui/chat.d.ts                                 @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/chat_types.d.ts                           @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/chat.d.ts                                 @DevExpress/devextreme-components
+/packages/devextreme/js/ui/chat_types.d.ts                           @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/chat/**                        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/chat/**                        @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/chat/**                    @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/chat/**                    @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/chatParts/** @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.markup.tests.js @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chatParts/** @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.markup.tests.js @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.tests.js @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/chat/**                               @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/chat.ts          @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/chat/**                               @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/chat.ts          @DevExpress/devextreme-components
 
-/apps/demos/Demos/Chat/**                                            @DevExpress/devextreme-editors
+/apps/demos/Demos/Chat/**                                            @DevExpress/devextreme-components
 
 ## check_box
-/packages/devextreme/js/ui/check_box.d.ts                            @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/check_box_types.d.ts                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/check_box.d.ts                            @DevExpress/devextreme-components
+/packages/devextreme/js/ui/check_box_types.d.ts                      @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/check_box/**                   @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/check_box/**                   @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/checkBox/**                @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/checkBox/**                @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/checkBox.ts      @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/checkBox.ts      @DevExpress/devextreme-components
 
-/apps/demos/Demos/CheckBox/**                                        @DevExpress/devextreme-editors
+/apps/demos/Demos/CheckBox/**                                        @DevExpress/devextreme-components
 
 ## color_box
-/packages/devextreme/js/ui/color_box.d.ts                            @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/color_box_types.d.ts                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/color_box.d.ts                            @DevExpress/devextreme-components
+/packages/devextreme/js/ui/color_box_types.d.ts                      @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/color_box/**                              @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/color_box/**                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/color_box/**                              @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/color_box/**                   @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/colorBox/**                @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/colorBox/**                @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/colorBox/**      @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/colorBox/**      @DevExpress/devextreme-components
 
-/apps/demos/Demos/ColorBox/**                                        @DevExpress/devextreme-editors
+/apps/demos/Demos/ColorBox/**                                        @DevExpress/devextreme-components
 
 ## date_box
-/packages/devextreme/js/ui/date_box.d.ts                             @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/date_box_types.d.ts                       @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/date_box.d.ts                             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/date_box_types.d.ts                       @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/date_box/**                               @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/date_box/**                    @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/date_box/**                               @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/date_box/**                    @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_dateBox.scss            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/base/_dateView.scss           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/dateBox/**                 @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_dateBox.scss            @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_dateView.scss           @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/dateBox/**                 @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/dateBox/**       @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/dateBox/**       @DevExpress/devextreme-components
 
-/apps/demos/Demos/DateBox/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/DateBox/**                                         @DevExpress/devextreme-components
 
 ## date_range_box
-/packages/devextreme/js/ui/date_range_box.d.ts                       @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/date_range_box_types.d.ts                 @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/date_range_box.d.ts                       @DevExpress/devextreme-components
+/packages/devextreme/js/ui/date_range_box_types.d.ts                 @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/date_range_box/**              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/date_range_box/**              @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/dateRangeBox/**            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dateRangeBox/**            @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/dateRangeBox/**  @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/dateRangeBox/**  @DevExpress/devextreme-components
 
-/apps/demos/Demos/DateRangeBox/**                                    @DevExpress/devextreme-editors
+/apps/demos/Demos/DateRangeBox/**                                    @DevExpress/devextreme-components
 
 ## drop_down_box
-/packages/devextreme/js/ui/drop_down_box.d.ts                        @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/drop_down_box_types.d.ts                  @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/drop_down_box.d.ts                        @DevExpress/devextreme-components
+/packages/devextreme/js/ui/drop_down_box_types.d.ts                  @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/drop_down_box.ts             @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/drop_down_box.ts             @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/dropDownBox/**   @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/dropDownBox/**   @DevExpress/devextreme-components
 
-/apps/demos/Demos/DropDownBox/**                                     @DevExpress/devextreme-editors
+/apps/demos/Demos/DropDownBox/**                                     @DevExpress/devextreme-components
 
 ## drop_down_button
-/packages/devextreme/js/ui/drop_down_button.d.ts                     @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/drop_down_button_types.d.ts               @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/drop_down_button.d.ts                     @DevExpress/devextreme-components
+/packages/devextreme/js/ui/drop_down_button_types.d.ts               @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/drop_down_button.ts          @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/drop_down_button.ts          @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/dropDownButton/**          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dropDownButton/**          @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.markup.tests.js @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.tests.js @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/dropDownButton.ts @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.markup.tests.js @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.tests.js @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/dropDownButton.ts @DevExpress/devextreme-components
 
-/apps/demos/Demos/DropDownButton/**                                  @DevExpress/devextreme-editors
+/apps/demos/Demos/DropDownButton/**                                  @DevExpress/devextreme-components
 
 ## drop_down_editor
-/packages/devextreme/js/ui/drop_down_editor/**                       @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/drop_down_editor/**            @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/drop_down_editor/**                       @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/drop_down_editor/**            @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/dropDownEditor/**        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/base/_dropDownList.scss       @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/dropDownEditor/**    @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/dropDownEditor/**        @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/base/_dropDownList.scss       @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/dropDownEditor/**    @DevExpress/devextreme-components
 
 ## editor
-/packages/devextreme/js/ui/editor/**                                 @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/editor/**                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/editor/**                                 @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/editor/**                      @DevExpress/devextreme-components
 
 ## file_uploader
-/packages/devextreme/js/ui/file_uploader.d.ts                        @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/file_uploader_types.d.ts                  @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/file_uploader.d.ts                        @DevExpress/devextreme-components
+/packages/devextreme/js/ui/file_uploader_types.d.ts                  @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_fileUploader.scss       @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/fileUploader/**            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_fileUploader.scss       @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/fileUploader/**            @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/fileUploader.ts  @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/fileUploader.ts  @DevExpress/devextreme-components
 
-/apps/demos/Demos/FileUploader/**                                    @DevExpress/devextreme-editors
+/apps/demos/Demos/FileUploader/**                                    @DevExpress/devextreme-components
 
 ## html_editor
-/packages/devextreme/js/ui/html_editor.d.ts                          @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/html_editor_types.d.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/html_editor.d.ts                          @DevExpress/devextreme-components
+/packages/devextreme/js/ui/html_editor_types.d.ts                    @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/html_editor/**                            @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/html_editor/**                 @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/html_editor/**                            @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/html_editor/**                 @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_htmlEditor.scss         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/htmlEditor/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_htmlEditor.scss         @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/htmlEditor/**              @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets.htmlEditor/** @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/htmlEditor.ts    @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.htmlEditor/** @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/htmlEditor.ts    @DevExpress/devextreme-components
 
 ## load_panel
-/packages/devextreme/js/ui/load_panel.d.ts                           @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/load_panel_types.d.ts                     @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/load_panel.d.ts                           @DevExpress/devextreme-components
+/packages/devextreme/js/ui/load_panel_types.d.ts                     @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/load_panel.ts                @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/load_panel.ts                @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_loadPanel.scss          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/loadPanel/**               @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_loadPanel.scss          @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/loadPanel/**               @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/loadPanel.ts     @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/loadPanel.ts     @DevExpress/devextreme-components
 
-/apps/demos/Demos/LoadPanel/**                                       @DevExpress/devextreme-editors
+/apps/demos/Demos/LoadPanel/**                                       @DevExpress/devextreme-components
 
 ## lookup
-/packages/devextreme/js/ui/lookup.d.ts                               @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/lookup_types.d.ts                         @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/lookup.d.ts                               @DevExpress/devextreme-components
+/packages/devextreme/js/ui/lookup_types.d.ts                         @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/lookup.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/lookup.ts                    @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/lookup.ts        @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/lookup.ts        @DevExpress/devextreme-components
 
-/apps/demos/Demos/Lookup/**                                          @DevExpress/devextreme-editors
+/apps/demos/Demos/Lookup/**                                          @DevExpress/devextreme-components
 
 ## map
-/packages/devextreme/js/ui/map.d.ts                                   @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/map_types.d.ts                            @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/map.d.ts                                   @DevExpress/devextreme-components
+/packages/devextreme/js/ui/map_types.d.ts                            @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/map/**                         @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/map/**                         @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_map.scss                @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/map/**                     @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_map.scss                @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/map/**                     @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/mapParts/** @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/map.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/mapParts/** @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/map.tests.js @DevExpress/devextreme-components
 
-/apps/demos/Demos/Map/**                                             @DevExpress/devextreme-editors
+/apps/demos/Demos/Map/**                                             @DevExpress/devextreme-components
 
 ## number_box
-/packages/devextreme/js/ui/number_box.d.ts                           @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/number_box_types.d.ts                     @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/number_box.d.ts                           @DevExpress/devextreme-components
+/packages/devextreme/js/ui/number_box_types.d.ts                     @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/number_box/**                  @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/number_box/**                  @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_numberBox.scss          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/numberBox/**               @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_numberBox.scss          @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/numberBox/**               @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/numberBox.ts     @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/numberBox.ts     @DevExpress/devextreme-components
 
-/apps/demos/Demos/NumberBox/**                                       @DevExpress/devextreme-editors
+/apps/demos/Demos/NumberBox/**                                       @DevExpress/devextreme-components
 
 ## overlay
-/packages/devextreme/js/ui/overlay.d.ts                              @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/overlay_types.d.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/overlay.d.ts                              @DevExpress/devextreme-components
+/packages/devextreme/js/ui/overlay_types.d.ts                        @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/overlay/**                     @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/overlay/**                     @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_overlay.scss            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/overlay/**                 @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_overlay.scss            @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/overlay/**                 @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/overlay.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/overlay.tests.js @DevExpress/devextreme-components
 
 ## popover
-/packages/devextreme/js/ui/popover.d.ts                              @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/popover_types.d.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popover.d.ts                              @DevExpress/devextreme-components
+/packages/devextreme/js/ui/popover_types.d.ts                        @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/popover/**                                @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/popover/**                     @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popover/**                                @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/popover/**                     @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/popover/**                 @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/popover/**                 @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/popover.tests.js @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/popover.ts       @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popover.tests.js @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/popover.ts       @DevExpress/devextreme-components
 
-/apps/demos/Demos/Popover/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/Popover/**                                         @DevExpress/devextreme-components
 
 ## popup
-/packages/devextreme/js/ui/popup.d.ts                                @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/popup_types.d.ts                          @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popup.d.ts                                @DevExpress/devextreme-components
+/packages/devextreme/js/ui/popup_types.d.ts                          @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/popup/**                                  @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/popup/**                       @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popup/**                                  @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/popup/**                       @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_popup.scss              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/popup/**                   @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_popup.scss              @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/popup/**                   @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.materialTheme.tests.js @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.tests.js @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/popupDrag.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.materialTheme.tests.js @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.tests.js @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popupDrag.tests.js @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/popup.ts         @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/popup.ts         @DevExpress/devextreme-components
 
-/apps/demos/Demos/Popup/**                                           @DevExpress/devextreme-editors
+/apps/demos/Demos/Popup/**                                           @DevExpress/devextreme-components
 
 ## progress_bar
-/packages/devextreme/js/ui/progress_bar.d.ts                         @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/progress_bar_types.d.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/progress_bar.d.ts                         @DevExpress/devextreme-components
+/packages/devextreme/js/ui/progress_bar_types.d.ts                   @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/m_progress_bar.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_progress_bar.ts              @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_progressBar.scss        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/progressBar/**             @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_progressBar.scss        @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/progressBar/**             @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.markup.tests.js @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.tests.js @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/progressBar.ts   @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.markup.tests.js @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.tests.js @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/progressBar.ts   @DevExpress/devextreme-components
 
-/apps/demos/Demos/ProgressBar/**                                     @DevExpress/devextreme-editors
+/apps/demos/Demos/ProgressBar/**                                     @DevExpress/devextreme-components
 
 ## range_slider
-/packages/devextreme/js/ui/range_slider.d.ts                         @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/range_slider_types.d.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/range_slider.d.ts                         @DevExpress/devextreme-components
+/packages/devextreme/js/ui/range_slider_types.d.ts                   @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/m_range_slider.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_range_slider.ts              @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_rangeSlider.scss        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/rangeSlider/**             @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_rangeSlider.scss        @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/rangeSlider/**             @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/rangeSlider.ts   @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/rangeSlider.ts   @DevExpress/devextreme-components
 
-/apps/demos/Demos/RangeSlider/**                                     @DevExpress/devextreme-editors
+/apps/demos/Demos/RangeSlider/**                                     @DevExpress/devextreme-components
 
 ## select_box
-/packages/devextreme/js/ui/select_box.d.ts                           @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/select_box_types.d.ts                     @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/select_box.d.ts                           @DevExpress/devextreme-components
+/packages/devextreme/js/ui/select_box_types.d.ts                     @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/select_box.ts                @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/select_box.ts                @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/selectBox/**     @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/selectBox/**     @DevExpress/devextreme-components
 
 ## slider
-/packages/devextreme/js/ui/slider.d.ts                               @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/slider_types.d.ts                         @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/slider.d.ts                               @DevExpress/devextreme-components
+/packages/devextreme/js/ui/slider_types.d.ts                         @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/slider/**                      @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/slider/**                      @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/slider.ts        @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/slider.ts        @DevExpress/devextreme-components
 
 ## speech_to_text
-/packages/devextreme/js/ui/speech_to_text.d.ts                       @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/speech_to_text_types.d.ts                 @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/speech_to_text.js                         @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/speech_to_text.d.ts                       @DevExpress/devextreme-components
+/packages/devextreme/js/ui/speech_to_text_types.d.ts                 @DevExpress/devextreme-components
+/packages/devextreme/js/ui/speech_to_text.js                         @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/speech_to_text/**              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/speech_to_text/**              @DevExpress/devextreme-components
 
-/apps/demos/Demos/SpeechToText/**                                    @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/speechToText.ts         @DevExpress/devextreme-editors
+/apps/demos/Demos/SpeechToText/**                                    @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/speechToText.ts         @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/speechToText.tests.js          @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/speechToText.markup.tests.js   @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/speechToText.tests.js          @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/speechToText.markup.tests.js   @DevExpress/devextreme-components
 
 ## switch
-/packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-components
+/packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/switch.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/switch.ts                    @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/switch/**                  @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/switch/**                  @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/switch.ts        @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/switch.ts        @DevExpress/devextreme-components
 
-/apps/demos/Demos/Switch/**                                          @DevExpress/devextreme-editors
+/apps/demos/Demos/Switch/**                                          @DevExpress/devextreme-components
 
 ## tag_box
-/packages/devextreme/js/ui/tag_box.d.ts                              @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/tag_box_types.d.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/tag_box.d.ts                              @DevExpress/devextreme-components
+/packages/devextreme/js/ui/tag_box_types.d.ts                        @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/tag_box.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/tag_box.ts                   @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_tagBox.scss             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/tagBox/**                  @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_tagBox.scss             @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/tagBox/**                  @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/tagBox/**        @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/tagBox/**        @DevExpress/devextreme-components
 
-/apps/demos/Demos/TagBox/**                                          @DevExpress/devextreme-editors
+/apps/demos/Demos/TagBox/**                                          @DevExpress/devextreme-components
 
 ## text_area
-/packages/devextreme/js/ui/text_area.d.ts                            @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/text_area_types.d.ts                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/text_area.d.ts                            @DevExpress/devextreme-components
+/packages/devextreme/js/ui/text_area_types.d.ts                      @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/text_area.ts                 @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/text_area.ts                 @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/textArea/**                @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/textArea/**                @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/textArea.ts      @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/textArea.ts      @DevExpress/devextreme-components
 
-/apps/demos/Demos/TextArea/**                                        @DevExpress/devextreme-editors
+/apps/demos/Demos/TextArea/**                                        @DevExpress/devextreme-components
 
 ## text_box
-/packages/devextreme/js/ui/text_box.d.ts                             @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/text_box_types.d.ts                       @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/text_box.d.ts                             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/text_box_types.d.ts                       @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/text_box/**                               @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/text_box/**                    @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/text_box/**                               @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/text_box/**                    @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/**/textEditor/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/textEditor/**              @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/textBox.ts       @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/textBox.ts       @DevExpress/devextreme-components
 
-/apps/demos/Demos/TextBox/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/TextBox/**                                         @DevExpress/devextreme-components
 
 ## toast
-/packages/devextreme/js/ui/toast.d.ts                                @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/toast_types.d.ts                          @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/toast.d.ts                                @DevExpress/devextreme-components
+/packages/devextreme/js/ui/toast_types.d.ts                          @DevExpress/devextreme-components
 
-/packages/devextreme/js/ui/toast/**                                  @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/toast/**                       @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/toast/**                                  @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/toast/**                       @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_toast.scss              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/toast/**                   @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_toast.scss              @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/toast/**                   @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/toast.ts         @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/toast.ts         @DevExpress/devextreme-components
 
-/apps/demos/Demos/Toast/**                                           @DevExpress/devextreme-editors
+/apps/demos/Demos/Toast/**                                           @DevExpress/devextreme-components
 
 ## tooltip
-/packages/devextreme/js/ui/tooltip.d.ts                              @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/tooltip_types.d.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/tooltip.d.ts                              @DevExpress/devextreme-components
+/packages/devextreme/js/ui/tooltip_types.d.ts                        @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/tooltip/**                     @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/tooltip.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/tooltip/**                     @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/tooltip.ts                   @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_tooltip.scss            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/tooltip/**                 @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_tooltip.scss            @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/tooltip/**                 @DevExpress/devextreme-components
 
-/packages/devextreme/testing/tests/DevExpress.ui.widgets/tooltip.tests.js @DevExpress/devextreme-editors
-/packages/devextreme/testing/tests/DevExpress.ui/tooltip.tests.js    @DevExpress/devextreme-editors
-/e2e/testcafe-devextreme/tests/accessibility/tooltip.ts       @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/tooltip.tests.js @DevExpress/devextreme-components
+/packages/devextreme/testing/tests/DevExpress.ui/tooltip.tests.js    @DevExpress/devextreme-components
+/e2e/testcafe-devextreme/tests/accessibility/tooltip.ts       @DevExpress/devextreme-components
 
-/apps/demos/Demos/Tooltip/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/Tooltip/**                                         @DevExpress/devextreme-components
 
 ## validation
-/packages/devextreme/js/ui/validation_engine.d.ts                    @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validation_group.d.ts                     @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validation_message.d.ts                   @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validation_summary.d.ts                   @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validator.d.ts                            @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validation_engine_types.d.ts              @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validation_group_types.d.ts               @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validation_message_types.d.ts             @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validation_summary_types.d.ts             @DevExpress/devextreme-editors
-/packages/devextreme/js/ui/validator_types.d.ts                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_engine.d.ts                    @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validation_group.d.ts                     @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validation_message.d.ts                   @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validation_summary.d.ts                   @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validator.d.ts                            @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validation_engine_types.d.ts              @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validation_group_types.d.ts               @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validation_message_types.d.ts             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validation_summary_types.d.ts             @DevExpress/devextreme-components
+/packages/devextreme/js/ui/validator_types.d.ts                      @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/m_validation_engine.ts         @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/m_validation_group.ts          @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/m_validation_message.ts        @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/m_validation_summary.ts        @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/m_validator.ts                 @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_engine.ts         @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/m_validation_group.ts          @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/m_validation_message.ts        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/m_validation_summary.ts        @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/m_validator.ts                 @DevExpress/devextreme-components
 
-/packages/devextreme-scss/scss/widgets/base/_validation.scss         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/**/validation/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_validation.scss         @DevExpress/devextreme-components
+/packages/devextreme-scss/scss/widgets/**/validation/**              @DevExpress/devextreme-components
 
-/e2e/testcafe-devextreme/tests/accessibility/validationSummary.ts    @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/validationSummary.ts    @DevExpress/devextreme-components
 
-/apps/demos/Demos/Validation/**                                      @DevExpress/devextreme-editors
+/apps/demos/Demos/Validation/**                                      @DevExpress/devextreme-components
 
 ## common editors
-/packages/devextreme/testing/tests/DevExpress.ui.widgets.editors/**  @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.editors/**  @DevExpress/devextreme-components
 
-/packages/devextreme/js/__internal/ui/informer/informer.ts           @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/informer/**                    @DevExpress/devextreme-editors
-/packages/devextreme/js/__internal/ui/m_track_bar.ts                 @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/informer/informer.ts           @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/informer/**                    @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/ui/m_track_bar.ts                 @DevExpress/devextreme-components
 
 # DevOps
 
 /.github/**             @DevExpress/devextreme-devops
+/.github/workflows/repository-check.yml @DevExpress/devextreme-infrastructure

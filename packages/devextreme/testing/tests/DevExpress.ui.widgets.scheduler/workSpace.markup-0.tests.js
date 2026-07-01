@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import SchedulerWorkSpace from '__internal/scheduler/workspaces/work_space';
 import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspaces/work_space_grouped_strategy_horizontal';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import { getEmptyResourceManager, applyWorkspaceGroups } from '../../helpers/scheduler/mockResourceManager.js';
 
