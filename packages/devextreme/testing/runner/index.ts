@@ -214,9 +214,11 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     const form = await readFormBody(req);
     const name = String(form.name ?? '');
     const passed = parseBoolean(form.passed);
+    const runtime = parseNumber(form.runtime);
 
     try {
-      logger.writeLine(`       [${passed ? '  ok' : 'fail'}] ${name}`);
+      const seconds = Number((runtime / 1000).toFixed(3));
+      logger.writeLine(`       [${passed ? '  ok' : 'fail'}] ${name} in ${seconds}s`);
     } catch {
       // Ignore logging errors.
     }
