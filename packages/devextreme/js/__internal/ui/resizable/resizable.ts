@@ -740,6 +740,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     });
 
     move(this.$element(), this._elementLocation);
+
+    triggerResizeEvent(this.$element());
   }
 
   _renderWidth(width: number): void {
