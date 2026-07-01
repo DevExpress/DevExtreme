@@ -798,33 +798,24 @@ module('Keyboard navigation', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
     });
 
-    QUnit.testInActiveWindow('first IME input should start from the first date part after re-focusing from another input (T1331089)', function(assert) {
-        const $firstInput = $('<input>').insertBefore(this.$element);
+    test('Windows Bopomofo IME changes selection to last active part before insertCompositionText — first date part should still be updated (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
 
-        try {
-            this.instance.option({
-                displayFormat: 'MM/dd/yyyy',
-                value: new Date(2025, 0, 1),
-            });
+        this.keyboard.type('1016');
 
-            this.keyboard.type('10162025'); // Oct 16, 2025
+        this.keyboard.caret({ start: 0, end: this.instance.option('text').length });
 
-            $firstInput.get(0).focus();
-            this.$input.get(0).focus();
+        this.$input.trigger($.Event('compositionstart'));
 
-            this.keyboard.caret({ start: 0, end: this.instance.option('text').length });
+        this.keyboard.caret({ start: 6, end: 10 });
 
-            this.$input.trigger($.Event('compositionstart'));
+        this.keyboard.input('1', 'insertCompositionText');
 
-            this.keyboard
-                .beforeInput('1', 'insertCompositionText')
-                .input('1', 'insertCompositionText');
-
-            assert.strictEqual(this.instance.option('text'), '01/16/2025', 'month part is updated');
-            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is active');
-        } finally {
-            $firstInput.remove();
-        }
+        assert.strictEqual(this.instance.option('text'), '01/16/2025', 'month (first part) is updated, not year');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is active');
     });
 
     test('enter should clear search value', function(assert) {
@@ -1388,7 +1379,7 @@ module('Search', setupModule, () => {
     test('deleteContentBackward input event should revert the active date part to its minimum value without clearing the value (Chinese MS IME composition backspace) (T1331089)', function(assert) {
         this.instance.option({
             displayFormat: 'MM/dd/yyyy',
-            value: new Date(2025, 9, 16), // Oct 16, 2025; text = '10/16/2025'
+            value: new Date(2025, 9, 16),
         });
 
         this.$input.get(0).focus();
@@ -1406,18 +1397,31 @@ module('Search', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'first date part (month) is still active');
     });
 
-    test('deleteContentBackward input event during composition with all text selected should clear the value (Chinese MS IME composition backspace) (T1331089)', function(assert) {
+    test('IME digit on non-first date part without all-selected state should update that specific part and not reset to first (T1331089 regression)', function(assert) {
         this.instance.option({
             displayFormat: 'MM/dd/yyyy',
-            value: new Date(2025, 9, 16), // Oct 16, 2025; text = '10/16/2025'
+            value: new Date(2025, 9, 16),
         });
 
-        this.$input.get(0).focus();
-        this.keyboard.caret({ start: 0, end: 10 });
+        this.keyboard.type('10');
 
         this.$input.trigger($.Event('compositionstart'));
 
-        this.$input.val('');
+        this.keyboard.input('2', 'insertCompositionText');
+
+        assert.strictEqual(this.instance.option('text'), '10/02/2025', 'day part is updated, month is not reset to first');
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'day part remains active');
+    });
+
+    test('deleteContentBackward during IME composition on non-first date part should revert that part to minimum without affecting other parts (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.type('10');
+
+        this.$input.trigger($.Event('compositionstart'));
 
         this.$input.trigger($.Event('input', {
             type: 'input',
@@ -1426,10 +1430,7 @@ module('Search', setupModule, () => {
             })
         }));
 
-        this.$input.change();
-
-        assert.strictEqual(this.instance.option('text'), '', 'text has been cleared');
-        assert.strictEqual(this.instance.option('value'), null, 'value has been cleared');
+        assert.strictEqual(this.instance.option('text'), '10/01/2025', 'day is reverted to minimum, month is unchanged');
     });
 });
 

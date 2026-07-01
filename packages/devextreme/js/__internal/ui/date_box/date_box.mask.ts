@@ -279,17 +279,13 @@ class DateBoxMask extends DateBoxBase {
       const isInputCleared = this._input().val() === '';
 
       if (this._wasAllSelectedBeforeComposition || isInputCleared) {
-        this._wasAllSelectedBeforeComposition = false;
-
         super._keyPressHandler(e);
+      } else {
+        const direction = isBackwardDeletion ? BACKWARD : FORWARD;
 
-        return;
+        this._revertPart(direction);
+        this._syncInputWithMask();
       }
-
-      const direction = isBackwardDeletion ? BACKWARD : FORWARD;
-
-      this._revertPart(direction);
-      this._syncInputWithMask();
 
       this._wasAllSelectedBeforeComposition = false;
 
@@ -297,11 +293,11 @@ class DateBoxMask extends DateBoxBase {
     }
 
     const isCompositionDigit = event?.inputType === 'insertCompositionText'
-    && this._isSingleDigitKey(e);
+      && this._isSingleDigitKey(e);
 
     const isIMECommitDigit = event?.inputType === 'insertText'
-    && this._isSingleDigitKey(e)
-    && this._isIMECommitPending;
+      && this._isSingleDigitKey(e)
+      && this._isIMECommitPending;
 
     if (isCompositionDigit && event.data) {
       if (!this._isIMEDigitProcessed) {
@@ -313,6 +309,7 @@ class DateBoxMask extends DateBoxBase {
         this._processInputKey(event.data);
         this._isIMEDigitProcessed = true;
         this._isIMECommitPending = true;
+        this._wasAllSelectedBeforeComposition = false;
       }
 
       this._syncInputWithMask();
@@ -766,6 +763,7 @@ class DateBoxMask extends DateBoxBase {
     this._caret(this._getActivePartProp('caret'));
 
     this._maskInputHandler = null;
+    this._wasAllSelectedBeforeComposition = false;
   }
 
   _maskPasteHandler(e: DxEvent): void {
