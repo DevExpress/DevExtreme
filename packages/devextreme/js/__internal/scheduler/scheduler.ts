@@ -73,6 +73,7 @@ import { AppointmentPopup } from './appointment_popup/popup';
 import AppointmentCollection, { type AppointmentCollectionOptions } from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
+import { getAppointmentDateRange } from './appointments_new/resizing/get_appointment_date_range';
 import { getDeltaTime } from './appointments_new/resizing/get_delta_time';
 import { getResizableConfig } from './appointments_new/resizing/get_resizable_config';
 import { getResizedDates, isStartDateResized } from './appointments_new/resizing/get_resized_dates';
@@ -109,6 +110,7 @@ import type {
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
   ViewCellData,
+  ViewDataProviderType,
   ViewType,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
@@ -2057,12 +2059,16 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private createAppointmentResizableConfig(
     viewModel: AppointmentItemViewModel,
   ): ResizableProperties | undefined {
-    if (!this.allowResizing() || viewModel.allDay || viewModel.skipResizing) {
+    const isResizeAllowed = viewModel.allDay
+      ? this.allowAllDayResizing()
+      : this.allowResizing();
+
+    if (!isResizeAllowed || viewModel.skipResizing) {
       return undefined;
     }
 
     const rule = getResizableConfig({
-      direction: viewModel.direction === 'horizontal' ? 'horizontal' : 'vertical',
+      direction: viewModel.allDay || viewModel.direction === 'horizontal' ? 'horizontal' : 'vertical',
       cellWidth: this._workSpace.getCellWidth(),
       cellHeight: this._workSpace.getCellHeight(),
       resizableStep: this._workSpace.positionHelper.getResizableStep(),
@@ -2128,10 +2134,27 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const settings = this._appointments
       .getAppointmentSettings($element) as AppointmentItemViewModel;
     const appointmentData = settings.itemData;
-    const { info } = settings;
-    const viewOffset = this.getViewOffsetMs();
 
-    const startDate = this.getEndResizeStartDate(e, appointmentData, info.appointment.startDate);
+    const dateRange = settings.allDay
+      ? this.getResizedAllDayDateRange(e, settings)
+      : this.getResizedTimedDateRange(e, appointmentData, settings.info);
+
+    this.updateResizedAppointment(
+      appointmentData,
+      dateRange,
+      settings.info.sourceAppointment.startDate,
+    );
+
+    this.appointmentResizeInitialSize = null;
+  }
+
+  private getResizedTimedDateRange(
+    e: AppointmentResizeEvent,
+    rawAppointment: SafeAppointment,
+    info: AppointmentItemViewModel['info'],
+  ): { startDate: Date; endDate: Date } {
+    const viewOffset = this.getViewOffsetMs();
+    const startDate = this.getEndResizeStartDate(e, rawAppointment, info.appointment.startDate);
     const { endDate } = info.appointment;
 
     const dateRange = getResizedDates({
@@ -2149,16 +2172,34 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       endDayHour: this.option('endDayHour'),
     });
 
-    this.updateResizedAppointment(
-      appointmentData,
-      {
-        startDate: dateUtilsTs.addOffsets(dateRange.startDate, viewOffset),
-        endDate: dateUtilsTs.addOffsets(dateRange.endDate, viewOffset),
-      },
-      info.sourceAppointment.startDate,
-    );
+    return {
+      startDate: dateUtilsTs.addOffsets(dateRange.startDate, viewOffset),
+      endDate: dateUtilsTs.addOffsets(dateRange.endDate, viewOffset),
+    };
+  }
 
-    this.appointmentResizeInitialSize = null;
+  private getResizedAllDayDateRange(
+    e: AppointmentResizeEvent,
+    settings: AppointmentItemViewModel,
+  ): { startDate: Date; endDate: Date } {
+    const $element = $(e.element);
+
+    return getAppointmentDateRange({
+      handles: e.handles,
+      appointmentSettings: settings,
+      isVerticalGroupedWorkSpace: this._workSpace.isVerticalGroupedWorkSpace(),
+      appointmentRect: getBoundingRect($element.get(0)),
+      parentAppointmentRect: getBoundingRect($element.parent().get(0)),
+      viewDataProvider: this._workSpace.viewDataProvider as unknown as ViewDataProviderType,
+      isDateAndTimeView: isDateAndTimeView(this._workSpace.type),
+      startDayHour: this.option('startDayHour'),
+      endDayHour: this.option('endDayHour'),
+      timeZoneCalculator: this.timeZoneCalculator,
+      dataAccessors: this._dataAccessors,
+      rtlEnabled: Boolean(this.option('rtlEnabled')),
+      DOMMetaData: this._workSpace.getDOMElementsMetaData(),
+      viewOffset: this.getViewOffsetMs(),
+    });
   }
 
   private updateResizedAppointment(
