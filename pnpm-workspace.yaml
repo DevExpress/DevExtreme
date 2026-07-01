@@ -52,5 +52,8 @@ catalogs:
     "ts-node": 10.9.2
     "@types/node": 20.12.8
 
+overrides:
+  '@sigstore/core@<=3.2.0': '^3.2.1'
+
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
