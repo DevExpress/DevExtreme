@@ -192,7 +192,7 @@ jobs:
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
           lookup-only: true
 
@@ -227,7 +227,7 @@ jobs:
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
       - name: Download Browser
         if: matrix.framework == 'angular'
