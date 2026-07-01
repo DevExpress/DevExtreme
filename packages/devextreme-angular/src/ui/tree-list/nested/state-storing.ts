@@ -64,10 +64,10 @@ export class DxoTreeListStateStoringComponent extends NestedOption implements On
     }
 
     @Input()
-    get storageKey(): string {
+    get storageKey(): null | string {
         return this._getOption('storageKey');
     }
-    set storageKey(value: string) {
+    set storageKey(value: null | string) {
         this._setOption('storageKey', value);
     }
 

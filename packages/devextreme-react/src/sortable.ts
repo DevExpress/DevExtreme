@@ -15,15 +15,15 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type ISortableOptionsNarrowedEvents = {
-  onAdd?: ((e: AddEvent) => void);
+  onAdd?: ((e: AddEvent) => void) | undefined;
   onDisposing?: ((e: DisposingEvent) => void);
-  onDragChange?: ((e: DragChangeEvent) => void);
-  onDragEnd?: ((e: DragEndEvent) => void);
-  onDragMove?: ((e: DragMoveEvent) => void);
-  onDragStart?: ((e: DragStartEvent) => void);
+  onDragChange?: ((e: DragChangeEvent) => void) | undefined;
+  onDragEnd?: ((e: DragEndEvent) => void) | undefined;
+  onDragMove?: ((e: DragMoveEvent) => void) | undefined;
+  onDragStart?: ((e: DragStartEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
-  onRemove?: ((e: RemoveEvent) => void);
-  onReorder?: ((e: ReorderEvent) => void);
+  onRemove?: ((e: RemoveEvent) => void) | undefined;
+  onReorder?: ((e: ReorderEvent) => void) | undefined;
 }
 
 type ISortableOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISortableOptionsNarrowedEvents> & IHtmlOptions & {

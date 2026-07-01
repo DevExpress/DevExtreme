@@ -32,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get dragging(): { dropFeedbackMode?: DragHighlight, onDragChange?: ((e: any) => void), onDragEnd?: ((e: any) => void), onDragMove?: ((e: any) => void), onDragStart?: ((e: any) => void), onRemove?: ((e: any) => void), onReorder?: ((e: any) => void), scrollSensitivity?: number, scrollSpeed?: number } {
+    get dragging(): { dropFeedbackMode?: DragHighlight, onDragChange?: ((e: any) => void) | undefined, onDragEnd?: ((e: any) => void) | undefined, onDragMove?: ((e: any) => void) | undefined, onDragStart?: ((e: any) => void) | undefined, onRemove?: ((e: any) => void) | undefined, onReorder?: ((e: any) => void) | undefined, scrollSensitivity?: number, scrollSpeed?: number } {
         return this._getOption('dragging');
     }
-    set dragging(value: { dropFeedbackMode?: DragHighlight, onDragChange?: ((e: any) => void), onDragEnd?: ((e: any) => void), onDragMove?: ((e: any) => void), onDragStart?: ((e: any) => void), onRemove?: ((e: any) => void), onReorder?: ((e: any) => void), scrollSensitivity?: number, scrollSpeed?: number }) {
+    set dragging(value: { dropFeedbackMode?: DragHighlight, onDragChange?: ((e: any) => void) | undefined, onDragEnd?: ((e: any) => void) | undefined, onDragMove?: ((e: any) => void) | undefined, onDragStart?: ((e: any) => void) | undefined, onRemove?: ((e: any) => void) | undefined, onReorder?: ((e: any) => void) | undefined, scrollSensitivity?: number, scrollSpeed?: number }) {
         this._setOption('dragging', value);
     }
 

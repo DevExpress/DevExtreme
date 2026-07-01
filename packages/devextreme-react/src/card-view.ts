@@ -956,12 +956,12 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 // HeaderPanel
 type IDraggingProps = React.PropsWithChildren<{
   dropFeedbackMode?: DragHighlight;
-  onDragChange?: ((e: any) => void);
-  onDragEnd?: ((e: any) => void);
-  onDragMove?: ((e: any) => void);
-  onDragStart?: ((e: any) => void);
-  onRemove?: ((e: any) => void);
-  onReorder?: ((e: any) => void);
+  onDragChange?: ((e: any) => void) | undefined;
+  onDragEnd?: ((e: any) => void) | undefined;
+  onDragMove?: ((e: any) => void) | undefined;
+  onDragStart?: ((e: any) => void) | undefined;
+  onRemove?: ((e: any) => void) | undefined;
+  onReorder?: ((e: any) => void) | undefined;
   scrollSensitivity?: number;
   scrollSpeed?: number;
 }>
@@ -1172,11 +1172,11 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   maxGroupLevel?: number | undefined;
   onContentReady?: ((e: FilterBuilderContentReadyEvent) => void);
   onDisposing?: ((e: FilterBuilderDisposingEvent) => void);
-  onEditorPrepared?: ((e: EditorPreparedEvent) => void);
-  onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+  onEditorPrepared?: ((e: EditorPreparedEvent) => void) | undefined;
+  onEditorPreparing?: ((e: EditorPreparingEvent) => void) | undefined;
   onInitialized?: ((e: FilterBuilderInitializedEvent) => void);
   onOptionChanged?: ((e: FilterBuilderOptionChangedEvent) => void);
-  onValueChanged?: ((e: ValueChangedEvent) => void);
+  onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
   rtlEnabled?: boolean;
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
@@ -1595,12 +1595,12 @@ const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponen
 type IHeaderPanelProps = React.PropsWithChildren<{
   dragging?: Record<string, any> | {
     dropFeedbackMode?: DragHighlight;
-    onDragChange?: ((e: any) => void);
-    onDragEnd?: ((e: any) => void);
-    onDragMove?: ((e: any) => void);
-    onDragStart?: ((e: any) => void);
-    onRemove?: ((e: any) => void);
-    onReorder?: ((e: any) => void);
+    onDragChange?: ((e: any) => void) | undefined;
+    onDragEnd?: ((e: any) => void) | undefined;
+    onDragMove?: ((e: any) => void) | undefined;
+    onDragStart?: ((e: any) => void) | undefined;
+    onRemove?: ((e: any) => void) | undefined;
+    onReorder?: ((e: any) => void) | undefined;
     scrollSensitivity?: number;
     scrollSpeed?: number;
   };

@@ -87,18 +87,18 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get editColumnName(): string {
+    get editColumnName(): null | string {
         return this._getOption('editColumnName');
     }
-    set editColumnName(value: string) {
+    set editColumnName(value: null | string) {
         this._setOption('editColumnName', value);
     }
 
     @Input()
-    get editRowKey(): any {
+    get editRowKey(): any | null {
         return this._getOption('editRowKey');
     }
-    set editRowKey(value: any) {
+    set editRowKey(value: any | null) {
         this._setOption('editRowKey', value);
     }
 
@@ -363,14 +363,14 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editColumnNameChange: EventEmitter<string>;
+    @Output() editColumnNameChange: EventEmitter<null | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editRowKeyChange: EventEmitter<any>;
+    @Output() editRowKeyChange: EventEmitter<any | null>;
     protected get _optionPath() {
         return 'editing';
     }

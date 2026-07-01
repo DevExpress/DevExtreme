@@ -1617,7 +1617,7 @@ const DxEditingConfig = {
     allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean))>,
     changes: Array as PropType<Array<DataChange>>,
     confirmDelete: Boolean,
-    editColumnName: String,
+    editColumnName: String as PropType<null | string>,
     editRowKey: {},
     form: Object as PropType<dxFormOptions | Record<string, any>>,
     mode: String as PropType<GridsEditMode>,
@@ -3719,7 +3719,7 @@ const DxStateStoringConfig = {
     customSave: Function as PropType<((gridState: any) => void)>,
     enabled: Boolean,
     savingTimeout: Number,
-    storageKey: String,
+    storageKey: String as PropType<null | string>,
     type: String as PropType<StateStoreType>
   }
 };

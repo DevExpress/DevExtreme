@@ -48,34 +48,34 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IDataGridOptionsNarrowedEvents<TRowData = any, TKey = any> = {
   onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent<TRowData, TKey>) => void);
   onAIAssistantRequestCreating?: ((e: AIAssistantRequestCreatingEvent<TRowData, TKey>) => void);
-  onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent<TRowData, TKey>) => void);
-  onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
-  onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
-  onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
+  onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent<TRowData, TKey>) => void) | undefined;
+  onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void) | undefined;
+  onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void) | undefined;
+  onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void) | undefined;
   onContentReady?: ((e: ContentReadyEvent<TRowData, TKey>) => void);
-  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
+  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void) | undefined;
   onDataErrorOccurred?: ((e: DataErrorOccurredEvent<TRowData, TKey>) => void);
   onDisposing?: ((e: DisposingEvent<TRowData, TKey>) => void);
   onEditCanceled?: ((e: EditCanceledEvent<TRowData, TKey>) => void);
   onEditCanceling?: ((e: EditCancelingEvent<TRowData, TKey>) => void);
-  onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
-  onEditorPrepared?: ((e: EditorPreparedEvent<TRowData, TKey>) => void);
-  onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
-  onExporting?: ((e: ExportingEvent<TRowData, TKey>) => void);
-  onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
-  onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
+  onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void) | undefined;
+  onEditorPrepared?: ((e: EditorPreparedEvent<TRowData, TKey>) => void) | undefined;
+  onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void) | undefined;
+  onExporting?: ((e: ExportingEvent<TRowData, TKey>) => void) | undefined;
+  onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void) | undefined;
+  onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void) | undefined;
   onInitialized?: ((e: InitializedEvent<TRowData, TKey>) => void);
   onInitNewRow?: ((e: InitNewRowEvent<TRowData, TKey>) => void);
   onKeyDown?: ((e: KeyDownEvent<TRowData, TKey>) => void);
-  onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
+  onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void) | undefined;
   onRowCollapsed?: ((e: RowCollapsedEvent<TRowData, TKey>) => void);
   onRowCollapsing?: ((e: RowCollapsingEvent<TRowData, TKey>) => void);
-  onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
+  onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void) | undefined;
   onRowExpanded?: ((e: RowExpandedEvent<TRowData, TKey>) => void);
   onRowExpanding?: ((e: RowExpandingEvent<TRowData, TKey>) => void);
   onRowInserted?: ((e: RowInsertedEvent<TRowData, TKey>) => void);
   onRowInserting?: ((e: RowInsertingEvent<TRowData, TKey>) => void);
-  onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void);
+  onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void) | undefined;
   onRowRemoved?: ((e: RowRemovedEvent<TRowData, TKey>) => void);
   onRowRemoving?: ((e: RowRemovingEvent<TRowData, TKey>) => void);
   onRowUpdated?: ((e: RowUpdatedEvent<TRowData, TKey>) => void);
@@ -1220,8 +1220,8 @@ type IEditingProps = React.PropsWithChildren<{
   allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   changes?: Array<DataChange>;
   confirmDelete?: boolean;
-  editColumnName?: string;
-  editRowKey?: any;
+  editColumnName?: null | string;
+  editRowKey?: any | null;
   form?: dxFormOptions;
   mode?: GridsEditMode;
   newRowPosition?: NewRowPosition;
@@ -1245,10 +1245,10 @@ type IEditingProps = React.PropsWithChildren<{
   useIcons?: boolean;
   defaultChanges?: Array<DataChange>;
   onChangesChange?: (value: Array<DataChange>) => void;
-  defaultEditColumnName?: string;
-  onEditColumnNameChange?: (value: string) => void;
-  defaultEditRowKey?: any;
-  onEditRowKeyChange?: (value: any) => void;
+  defaultEditColumnName?: null | string;
+  onEditColumnNameChange?: (value: null | string) => void;
+  defaultEditRowKey?: any | null;
+  onEditRowKeyChange?: (value: any | null) => void;
 }>
 const _componentEditing = (props: IEditingProps) => {
   return React.createElement(NestedOption<IEditingProps>, {
@@ -1618,11 +1618,11 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   maxGroupLevel?: number | undefined;
   onContentReady?: ((e: FilterBuilderContentReadyEvent) => void);
   onDisposing?: ((e: FilterBuilderDisposingEvent) => void);
-  onEditorPrepared?: ((e: FilterBuilderEditorPreparedEvent) => void);
-  onEditorPreparing?: ((e: FilterBuilderEditorPreparingEvent) => void);
+  onEditorPrepared?: ((e: FilterBuilderEditorPreparedEvent) => void) | undefined;
+  onEditorPreparing?: ((e: FilterBuilderEditorPreparingEvent) => void) | undefined;
   onInitialized?: ((e: FilterBuilderInitializedEvent) => void);
   onOptionChanged?: ((e: FilterBuilderOptionChangedEvent) => void);
-  onValueChanged?: ((e: FilterBuilderValueChangedEvent) => void);
+  onValueChanged?: ((e: FilterBuilderValueChangedEvent) => void) | undefined;
   rtlEnabled?: boolean;
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
@@ -3382,7 +3382,7 @@ type IStateStoringProps = React.PropsWithChildren<{
   customSave?: ((gridState: any) => void);
   enabled?: boolean;
   savingTimeout?: number;
-  storageKey?: string;
+  storageKey?: null | string;
   type?: StateStoreType;
 }>
 const _componentStateStoring = (props: IStateStoringProps) => {

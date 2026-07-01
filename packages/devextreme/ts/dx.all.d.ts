@@ -5368,11 +5368,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.editing.editColumnName]
      */
-    editColumnName?: string;
+    editColumnName?: string | null;
     /**
      * [descr:GridBaseOptions.editing.editRowKey]
      */
-    editRowKey?: TKey;
+    editRowKey?: TKey | null;
     /**
      * [descr:GridBaseOptions.editing.form]
      */
@@ -6048,7 +6048,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.filterValue]
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
      */
@@ -6088,162 +6088,208 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.onAIAssistantRequestCreating]
      */
-    onAIAssistantRequestCreating?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DevExpress.common.core.events.Cancelable &
-        AIAssistantRequestCreatingInfo
-    ) => void;
+    onAIAssistantRequestCreating?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            DevExpress.common.core.events.Cancelable &
+            AIAssistantRequestCreatingInfo
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onAdaptiveDetailRowPreparing]
      */
-    onAdaptiveDetailRowPreparing?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        AdaptiveDetailRowPreparingInfo
-    ) => void;
+    onAdaptiveDetailRowPreparing?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            AdaptiveDetailRowPreparingInfo
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onDataErrorOccurred]
      */
-    onDataErrorOccurred?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DataErrorOccurredInfo
-    ) => void;
+    onDataErrorOccurred?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            DataErrorOccurredInfo
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onEditCanceled]
      */
-    onEditCanceled?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DataChangeInfo<TRowData, TKey>
-    ) => void;
+    onEditCanceled?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            DataChangeInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onEditCanceling]
      */
-    onEditCanceling?: (
-      e: DevExpress.common.core.events.Cancelable &
-        DevExpress.common.core.events.EventInfo<TComponent> &
-        DataChangeInfo<TRowData, TKey>
-    ) => void;
+    onEditCanceling?:
+      | ((
+          e: DevExpress.common.core.events.Cancelable &
+            DevExpress.common.core.events.EventInfo<TComponent> &
+            DataChangeInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onInitNewRow]
      */
-    onInitNewRow?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        NewRowInfo<TRowData>
-    ) => void;
+    onInitNewRow?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            NewRowInfo<TRowData>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onKeyDown]
      */
-    onKeyDown?: (
-      e: DevExpress.common.core.events.NativeEventInfo<
-        TComponent,
-        KeyboardEvent
-      > &
-        KeyDownInfo
-    ) => void;
+    onKeyDown?:
+      | ((
+          e: DevExpress.common.core.events.NativeEventInfo<
+            TComponent,
+            KeyboardEvent
+          > &
+            KeyDownInfo
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowCollapsed]
      */
-    onRowCollapsed?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> & RowKeyInfo<TKey>
-    ) => void;
+    onRowCollapsed?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowKeyInfo<TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowCollapsing]
      */
-    onRowCollapsing?: (
-      e: DevExpress.common.core.events.Cancelable &
-        DevExpress.common.core.events.EventInfo<TComponent> &
-        RowKeyInfo<TKey>
-    ) => void;
+    onRowCollapsing?:
+      | ((
+          e: DevExpress.common.core.events.Cancelable &
+            DevExpress.common.core.events.EventInfo<TComponent> &
+            RowKeyInfo<TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowExpanded]
      */
-    onRowExpanded?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> & RowKeyInfo<TKey>
-    ) => void;
+    onRowExpanded?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowKeyInfo<TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowExpanding]
      */
-    onRowExpanding?: (
-      e: DevExpress.common.core.events.Cancelable &
-        DevExpress.common.core.events.EventInfo<TComponent> &
-        RowKeyInfo<TKey>
-    ) => void;
+    onRowExpanding?:
+      | ((
+          e: DevExpress.common.core.events.Cancelable &
+            DevExpress.common.core.events.EventInfo<TComponent> &
+            RowKeyInfo<TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowInserted]
      */
-    onRowInserted?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        RowInsertedInfo<TRowData, TKey>
-    ) => void;
+    onRowInserted?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowInsertedInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowInserting]
      */
-    onRowInserting?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        RowInsertingInfo<TRowData>
-    ) => void;
+    onRowInserting?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowInsertingInfo<TRowData>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowRemoved]
      */
-    onRowRemoved?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        RowRemovedInfo<TRowData, TKey>
-    ) => void;
+    onRowRemoved?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowRemovedInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowRemoving]
      */
-    onRowRemoving?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        RowRemovingInfo<TRowData, TKey>
-    ) => void;
+    onRowRemoving?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowRemovingInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowUpdated]
      */
-    onRowUpdated?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        RowUpdatedInfo<TRowData, TKey>
-    ) => void;
+    onRowUpdated?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowUpdatedInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowUpdating]
      */
-    onRowUpdating?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        RowUpdatingInfo<TRowData, TKey>
-    ) => void;
+    onRowUpdating?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowUpdatingInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onRowValidating]
      */
-    onRowValidating?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        RowValidatingInfo<TRowData, TKey>
-    ) => void;
+    onRowValidating?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            RowValidatingInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onSaved]
      */
-    onSaved?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DataChangeInfo<TRowData, TKey>
-    ) => void;
+    onSaved?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            DataChangeInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onSaving]
      */
-    onSaving?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        SavingInfo<TRowData, TKey>
-    ) => void;
+    onSaving?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            SavingInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onSelectionChanged]
      */
-    onSelectionChanged?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        SelectionChangedInfo<TRowData, TKey>
-    ) => void;
+    onSelectionChanged?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            SelectionChangedInfo<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.onToolbarPreparing]
      */
-    onToolbarPreparing?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        ToolbarPreparingInfo
-    ) => void;
+    onToolbarPreparing?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            ToolbarPreparingInfo
+        ) => void)
+      | undefined;
     /**
      * [descr:GridBaseOptions.pager]
      */
@@ -7168,7 +7214,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.stateStoring.storageKey]
      */
-    storageKey?: string;
+    storageKey?: string | null;
     /**
      * [descr:GridBaseOptions.stateStoring.type]
      */
@@ -11138,7 +11184,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceLike<TCardData, TKey>;
+    dataSource?: DevExpress.data.DataSourceLike<TCardData, TKey> | undefined;
     /**
      * [descr:dxCardViewOptions.paging]
      */
@@ -11146,7 +11192,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.keyExpr]
      */
-    keyExpr?: string | string[];
+    keyExpr?: string | string[] | undefined;
     /**
      * [descr:dxCardViewOptions.remoteOperations]
      */
@@ -11157,10 +11203,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.onDataErrorOccurred]
      */
-    onDataErrorOccurred?: (
-      e: DevExpress.common.core.events.EventInfo<dxCardView> &
-        DevExpress.common.grids.DataErrorOccurredInfo
-    ) => void;
+    onDataErrorOccurred?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<dxCardView> &
+            DevExpress.common.grids.DataErrorOccurredInfo
+        ) => void)
+      | undefined;
 
     /**
      * [descr:dxCardViewOptions.pager]
@@ -11355,7 +11403,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.filterValue]
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * [descr:dxCardViewOptions.filterBuilderPopup]
      */
@@ -14568,99 +14616,121 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.onCellClick]
      */
-    onCellClick?: (
-      e: DevExpress.ui.dxDataGrid.CellClickEvent<TRowData, TKey>
-    ) => void;
+    onCellClick?:
+      | ((e: DevExpress.ui.dxDataGrid.CellClickEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onCellDblClick]
      */
-    onCellDblClick?: (
-      e: DevExpress.ui.dxDataGrid.CellDblClickEvent<TRowData, TKey>
-    ) => void;
+    onCellDblClick?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.CellDblClickEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onCellHoverChanged]
      */
-    onCellHoverChanged?: (
-      e: DevExpress.ui.dxDataGrid.CellHoverChangedEvent<TRowData, TKey>
-    ) => void;
+    onCellHoverChanged?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.CellHoverChangedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onCellPrepared]
      */
-    onCellPrepared?: (
-      e: DevExpress.ui.dxDataGrid.CellPreparedEvent<TRowData, TKey>
-    ) => void;
+    onCellPrepared?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.CellPreparedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onContextMenuPreparing]
      */
-    onContextMenuPreparing?: (
-      e: DevExpress.ui.dxDataGrid.ContextMenuPreparingEvent<TRowData, TKey>
-    ) => void;
+    onContextMenuPreparing?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.ContextMenuPreparingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onEditingStart]
      */
-    onEditingStart?: (
-      e: DevExpress.ui.dxDataGrid.EditingStartEvent<TRowData, TKey>
-    ) => void;
+    onEditingStart?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.EditingStartEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onEditorPrepared]
      */
-    onEditorPrepared?: (
-      options: DevExpress.ui.dxDataGrid.EditorPreparedEvent<TRowData, TKey>
-    ) => void;
+    onEditorPrepared?:
+      | ((
+          options: DevExpress.ui.dxDataGrid.EditorPreparedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onEditorPreparing]
      */
-    onEditorPreparing?: (
-      e: DevExpress.ui.dxDataGrid.EditorPreparingEvent<TRowData, TKey>
-    ) => void;
+    onEditorPreparing?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.EditorPreparingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onExporting]
      */
-    onExporting?: (
-      e: DevExpress.ui.dxDataGrid.ExportingEvent<TRowData, TKey>
-    ) => void;
+    onExporting?:
+      | ((e: DevExpress.ui.dxDataGrid.ExportingEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onFocusedCellChanged]
      */
-    onFocusedCellChanged?: (
-      e: DevExpress.ui.dxDataGrid.FocusedCellChangedEvent<TRowData, TKey>
-    ) => void;
+    onFocusedCellChanged?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.FocusedCellChangedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onFocusedCellChanging]
      */
-    onFocusedCellChanging?: (
-      e: DevExpress.ui.dxDataGrid.FocusedCellChangingEvent<TRowData, TKey>
-    ) => void;
+    onFocusedCellChanging?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.FocusedCellChangingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onFocusedRowChanged]
      */
-    onFocusedRowChanged?: (
-      e: DevExpress.ui.dxDataGrid.FocusedRowChangedEvent<TRowData, TKey>
-    ) => void;
+    onFocusedRowChanged?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.FocusedRowChangedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onFocusedRowChanging]
      */
-    onFocusedRowChanging?: (
-      e: DevExpress.ui.dxDataGrid.FocusedRowChangingEvent<TRowData, TKey>
-    ) => void;
+    onFocusedRowChanging?:
+      | ((
+          e: DevExpress.ui.dxDataGrid.FocusedRowChangingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onRowClick]
      */
-    onRowClick?: (
-      e: DevExpress.ui.dxDataGrid.RowClickEvent<TRowData, TKey>
-    ) => void;
+    onRowClick?:
+      | ((e: DevExpress.ui.dxDataGrid.RowClickEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onRowDblClick]
      */
-    onRowDblClick?: (
-      e: DevExpress.ui.dxDataGrid.RowDblClickEvent<TRowData, TKey>
-    ) => void;
+    onRowDblClick?:
+      | ((e: DevExpress.ui.dxDataGrid.RowDblClickEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.onRowPrepared]
      */
-    onRowPrepared?: (
-      e: DevExpress.ui.dxDataGrid.RowPreparedEvent<TRowData, TKey>
-    ) => void;
+    onRowPrepared?:
+      | ((e: DevExpress.ui.dxDataGrid.RowPreparedEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxDataGridOptions.remoteOperations]
      */
@@ -14741,9 +14811,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.onAIColumnRequestCreating]
      */
-    onAIColumnRequestCreating?: (
-      e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent
-    ) => void;
+    onAIColumnRequestCreating?:
+      | ((e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent) => void)
+      | undefined;
   };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Row instead
@@ -16659,15 +16729,21 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDraggableOptions.onDragEnd]
      */
-    onDragEnd?: (e: DevExpress.ui.dxDraggable.DragEndEvent) => void;
+    onDragEnd?:
+      | ((e: DevExpress.ui.dxDraggable.DragEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxDraggableOptions.onDragMove]
      */
-    onDragMove?: (e: DevExpress.ui.dxDraggable.DragMoveEvent) => void;
+    onDragMove?:
+      | ((e: DevExpress.ui.dxDraggable.DragMoveEvent) => void)
+      | undefined;
     /**
      * [descr:dxDraggableOptions.onDragStart]
      */
-    onDragStart?: (e: DevExpress.ui.dxDraggable.DragStartEvent) => void;
+    onDragStart?:
+      | ((e: DevExpress.ui.dxDraggable.DragStartEvent) => void)
+      | undefined;
   }
   /**
    * [descr:dxDrawer]
@@ -19162,25 +19238,25 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.onEditorPrepared]
      */
-    onEditorPrepared?: (
-      e: DevExpress.ui.dxFilterBuilder.EditorPreparedEvent
-    ) => void;
+    onEditorPrepared?:
+      | ((e: DevExpress.ui.dxFilterBuilder.EditorPreparedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFilterBuilderOptions.onEditorPreparing]
      */
-    onEditorPreparing?: (
-      e: DevExpress.ui.dxFilterBuilder.EditorPreparingEvent
-    ) => void;
+    onEditorPreparing?:
+      | ((e: DevExpress.ui.dxFilterBuilder.EditorPreparingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFilterBuilderOptions.onValueChanged]
      */
-    onValueChanged?: (
-      e: DevExpress.ui.dxFilterBuilder.ValueChangedEvent
-    ) => void;
+    onValueChanged?:
+      | ((e: DevExpress.ui.dxFilterBuilder.ValueChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFilterBuilderOptions.value]
      */
-    value?: string | Array<any> | Function;
+    value?: string | Array<any> | Function | null;
   }
   /**
    * [descr:dxForm]
@@ -28388,31 +28464,41 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSortableOptions.onAdd]
      */
-    onAdd?: (e: DevExpress.ui.dxSortable.AddEvent) => void;
+    onAdd?: ((e: DevExpress.ui.dxSortable.AddEvent) => void) | undefined;
     /**
      * [descr:dxSortableOptions.onDragChange]
      */
-    onDragChange?: (e: DevExpress.ui.dxSortable.DragChangeEvent) => void;
+    onDragChange?:
+      | ((e: DevExpress.ui.dxSortable.DragChangeEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onDragEnd]
      */
-    onDragEnd?: (e: DevExpress.ui.dxSortable.DragEndEvent) => void;
+    onDragEnd?:
+      | ((e: DevExpress.ui.dxSortable.DragEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onDragMove]
      */
-    onDragMove?: (e: DevExpress.ui.dxSortable.DragMoveEvent) => void;
+    onDragMove?:
+      | ((e: DevExpress.ui.dxSortable.DragMoveEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onDragStart]
      */
-    onDragStart?: (e: DevExpress.ui.dxSortable.DragStartEvent) => void;
+    onDragStart?:
+      | ((e: DevExpress.ui.dxSortable.DragStartEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onRemove]
      */
-    onRemove?: (e: DevExpress.ui.dxSortable.RemoveEvent) => void;
+    onRemove?: ((e: DevExpress.ui.dxSortable.RemoveEvent) => void) | undefined;
     /**
      * [descr:dxSortableOptions.onReorder]
      */
-    onReorder?: (e: DevExpress.ui.dxSortable.ReorderEvent) => void;
+    onReorder?:
+      | ((e: DevExpress.ui.dxSortable.ReorderEvent) => void)
+      | undefined;
   }
   /**
    * [descr:dxSpeechToText]
@@ -32489,99 +32575,123 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.onCellClick]
      */
-    onCellClick?: (
-      e: DevExpress.ui.dxTreeList.CellClickEvent<TRowData, TKey>
-    ) => void;
+    onCellClick?:
+      | ((e: DevExpress.ui.dxTreeList.CellClickEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onCellDblClick]
      */
-    onCellDblClick?: (
-      e: DevExpress.ui.dxTreeList.CellDblClickEvent<TRowData, TKey>
-    ) => void;
+    onCellDblClick?:
+      | ((
+          e: DevExpress.ui.dxTreeList.CellDblClickEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onCellHoverChanged]
      */
-    onCellHoverChanged?: (
-      e: DevExpress.ui.dxTreeList.CellHoverChangedEvent<TRowData, TKey>
-    ) => void;
+    onCellHoverChanged?:
+      | ((
+          e: DevExpress.ui.dxTreeList.CellHoverChangedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onCellPrepared]
      */
-    onCellPrepared?: (
-      e: DevExpress.ui.dxTreeList.CellPreparedEvent<TRowData, TKey>
-    ) => void;
+    onCellPrepared?:
+      | ((
+          e: DevExpress.ui.dxTreeList.CellPreparedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onContextMenuPreparing]
      */
-    onContextMenuPreparing?: (
-      e: DevExpress.ui.dxTreeList.ContextMenuPreparingEvent<TRowData, TKey>
-    ) => void;
+    onContextMenuPreparing?:
+      | ((
+          e: DevExpress.ui.dxTreeList.ContextMenuPreparingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onEditingStart]
      */
-    onEditingStart?: (
-      e: DevExpress.ui.dxTreeList.EditingStartEvent<TRowData, TKey>
-    ) => void;
+    onEditingStart?:
+      | ((
+          e: DevExpress.ui.dxTreeList.EditingStartEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onEditorPrepared]
      */
-    onEditorPrepared?: (
-      options: DevExpress.ui.dxTreeList.EditorPreparedEvent<TRowData, TKey>
-    ) => void;
+    onEditorPrepared?:
+      | ((
+          options: DevExpress.ui.dxTreeList.EditorPreparedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onEditorPreparing]
      */
-    onEditorPreparing?: (
-      e: DevExpress.ui.dxTreeList.EditorPreparingEvent<TRowData, TKey>
-    ) => void;
+    onEditorPreparing?:
+      | ((
+          e: DevExpress.ui.dxTreeList.EditorPreparingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onFocusedCellChanged]
      */
-    onFocusedCellChanged?: (
-      e: DevExpress.ui.dxTreeList.FocusedCellChangedEvent<TRowData, TKey>
-    ) => void;
+    onFocusedCellChanged?:
+      | ((
+          e: DevExpress.ui.dxTreeList.FocusedCellChangedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onFocusedCellChanging]
      */
-    onFocusedCellChanging?: (
-      e: DevExpress.ui.dxTreeList.FocusedCellChangingEvent<TRowData, TKey>
-    ) => void;
+    onFocusedCellChanging?:
+      | ((
+          e: DevExpress.ui.dxTreeList.FocusedCellChangingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onFocusedRowChanged]
      */
-    onFocusedRowChanged?: (
-      e: DevExpress.ui.dxTreeList.FocusedRowChangedEvent<TRowData, TKey>
-    ) => void;
+    onFocusedRowChanged?:
+      | ((
+          e: DevExpress.ui.dxTreeList.FocusedRowChangedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onFocusedRowChanging]
      */
-    onFocusedRowChanging?: (
-      e: DevExpress.ui.dxTreeList.FocusedRowChangingEvent<TRowData, TKey>
-    ) => void;
+    onFocusedRowChanging?:
+      | ((
+          e: DevExpress.ui.dxTreeList.FocusedRowChangingEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onNodesInitialized]
      */
-    onNodesInitialized?: (
-      e: DevExpress.ui.dxTreeList.NodesInitializedEvent<TRowData, TKey>
-    ) => void;
+    onNodesInitialized?:
+      | ((
+          e: DevExpress.ui.dxTreeList.NodesInitializedEvent<TRowData, TKey>
+        ) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onRowClick]
      */
-    onRowClick?: (
-      e: DevExpress.ui.dxTreeList.RowClickEvent<TRowData, TKey>
-    ) => void;
+    onRowClick?:
+      | ((e: DevExpress.ui.dxTreeList.RowClickEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onRowDblClick]
      */
-    onRowDblClick?: (
-      e: DevExpress.ui.dxTreeList.RowDblClickEvent<TRowData, TKey>
-    ) => void;
+    onRowDblClick?:
+      | ((e: DevExpress.ui.dxTreeList.RowDblClickEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.onRowPrepared]
      */
-    onRowPrepared?: (
-      e: DevExpress.ui.dxTreeList.RowPreparedEvent<TRowData, TKey>
-    ) => void;
+    onRowPrepared?:
+      | ((e: DevExpress.ui.dxTreeList.RowPreparedEvent<TRowData, TKey>) => void)
+      | undefined;
     /**
      * [descr:dxTreeListOptions.paging]
      */
@@ -32630,9 +32740,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.onAIColumnRequestCreating]
      */
-    onAIColumnRequestCreating?: (
-      e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent
-    ) => void;
+    onAIColumnRequestCreating?:
+      | ((e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent) => void)
+      | undefined;
   };
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Row instead
@@ -34371,27 +34481,27 @@ declare module DevExpress.ui.dxCardView {
       /**
        * [descr:HeaderPanel.dragging.onDragChange]
        */
-      onDragChange?: (e: any) => void;
+      onDragChange?: ((e: any) => void) | undefined;
       /**
        * [descr:HeaderPanel.dragging.onDragEnd]
        */
-      onDragEnd?: (e: any) => void;
+      onDragEnd?: ((e: any) => void) | undefined;
       /**
        * [descr:HeaderPanel.dragging.onDragMove]
        */
-      onDragMove?: (e: any) => void;
+      onDragMove?: ((e: any) => void) | undefined;
       /**
        * [descr:HeaderPanel.dragging.onDragStart]
        */
-      onDragStart?: (e: any) => void;
+      onDragStart?: ((e: any) => void) | undefined;
       /**
        * [descr:HeaderPanel.dragging.onRemove]
        */
-      onRemove?: (e: any) => void;
+      onRemove?: ((e: any) => void) | undefined;
       /**
        * [descr:HeaderPanel.dragging.onReorder]
        */
-      onReorder?: (e: any) => void;
+      onReorder?: ((e: any) => void) | undefined;
     };
     /**
      * [descr:HeaderPanel.visible]
