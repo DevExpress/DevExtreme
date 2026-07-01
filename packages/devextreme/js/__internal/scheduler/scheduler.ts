@@ -58,6 +58,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { tabbable } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { focus } from '@ts/events/m_short';
+import type { ResizableProperties } from '@ts/ui/resizable/resizable';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
@@ -69,7 +70,11 @@ import { AppointmentPopup } from './appointment_popup/popup';
 import AppointmentCollection, { type AppointmentCollectionOptions } from './appointments/m_appointment_collection';
 import type { AppointmentsProperties } from './appointments_new/appointments';
 import { Appointments } from './appointments_new/appointments';
+import { getDeltaTime } from './appointments_new/resizing/get_delta_time';
+import { getResizableConfig } from './appointments_new/resizing/get_resizable_config';
+import { getResizedDates, isStartDateResized } from './appointments_new/resizing/get_resized_dates';
 import NotifyScheduler from './base/widget_notify_scheduler';
+import { VERTICAL_VIEW_TYPES } from './constants';
 import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { hide as hideLoading, show as showLoading } from './loading';
@@ -364,6 +369,18 @@ type AppointmentsEditingOptions = Partial<{
   allowAllDayResize: boolean;
 }>;
 
+interface AppointmentResizeEvent {
+  element: Element;
+  handles: {
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  };
+  width: number;
+  height: number;
+}
+
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
@@ -388,6 +405,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _appointments!: AppointmentCollection;
 
   private appointmentDragController!: AppointmentDragController;
+
+  private appointmentResizeInitialSize: { width: number; height: number } | null = null;
 
   appointmentDataSource!: AppointmentDataSource;
 
@@ -1352,6 +1371,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
         },
         focusFallbackAfterDelete: () => this.focusFallbackAfterDelete(),
+        getResizableConfig: (viewModel) => this.createAppointmentResizableConfig(viewModel),
 
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
@@ -2005,6 +2025,154 @@ class Scheduler extends SchedulerOptionsBaseWidget {
             appointmentData,
             newAppointmentData,
           ))).always(resolve);
+        },
+        false,
+        undefined,
+        undefined,
+        undefined,
+        (): void => { resolve(); },
+      );
+    });
+  }
+
+  private createAppointmentResizableConfig(
+    viewModel: AppointmentItemViewModel,
+  ): ResizableProperties | undefined {
+    if (!this.allowResizing() || viewModel.allDay || viewModel.skipResizing) {
+      return undefined;
+    }
+
+    const rule = getResizableConfig({
+      direction: viewModel.direction === 'horizontal' ? 'horizontal' : 'vertical',
+      cellWidth: this._workSpace.getCellWidth(),
+      cellHeight: this._workSpace.getCellHeight(),
+      resizableStep: this._workSpace.positionHelper.getResizableStep(),
+      reduced: viewModel.reduced,
+      isGroupedByDate: this._workSpace.isGroupedByDate(),
+      rtlEnabled: Boolean(this.option('rtlEnabled')),
+    });
+
+    return {
+      ...rule,
+      onCancelByEsc: true,
+      onResizeStart: (e): void => this.onAppointmentResizeStart(
+        e as unknown as AppointmentResizeEvent,
+      ),
+      onResizeEnd: (e): void => {
+        this.onAppointmentResizeEnd(e as unknown as AppointmentResizeEvent)
+          .catch((error) => { throw error; });
+      },
+    };
+  }
+
+  private onAppointmentResizeStart(e: AppointmentResizeEvent): void {
+    this.appointmentResizeInitialSize = { width: e.width, height: e.height };
+  }
+
+  private getResizeDeltaTime(e: AppointmentResizeEvent): number {
+    const initialSize = this.appointmentResizeInitialSize ?? { width: e.width, height: e.height };
+
+    return getDeltaTime(
+      { width: e.width, height: e.height },
+      initialSize,
+      {
+        viewType: this.currentView.type,
+        cellSize: {
+          width: this._workSpace.getCellWidth(),
+          height: this._workSpace.getCellHeight(),
+        },
+        cellDurationInMinutes: this._workSpace.option('cellDuration') as number,
+        resizableStep: this._workSpace.positionHelper.getResizableStep(),
+        isAllDayPanel: false,
+      },
+    );
+  }
+
+  private getEndResizeStartDate(
+    e: AppointmentResizeEvent,
+    rawAppointment: SafeAppointment,
+    appointmentStartDate: Date,
+  ): Date {
+    const adapter = new AppointmentAdapter(rawAppointment, this._dataAccessors);
+    const { startDateTimeZone, isRecurrent } = adapter;
+
+    if (!e.handles.top && !isRecurrent) {
+      return this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid', startDateTimeZone);
+    }
+
+    return appointmentStartDate;
+  }
+
+  private onAppointmentResizeEnd(e: AppointmentResizeEvent): Promise<void> {
+    const $element = $(e.element);
+    const settings = this._appointments
+      .getAppointmentSettings($element) as AppointmentItemViewModel;
+    const appointmentData = settings.itemData;
+    const { info } = settings;
+    const viewOffset = this.getViewOffsetMs();
+
+    const startDate = this.getEndResizeStartDate(e, appointmentData, info.appointment.startDate);
+    const { endDate } = info.appointment;
+
+    const dateRange = getResizedDates({
+      startDate: dateUtilsTs.addOffsets(startDate, -viewOffset),
+      endDate: dateUtilsTs.addOffsets(endDate, -viewOffset),
+      deltaTime: this.getResizeDeltaTime(e),
+      isStartDateChanged: isStartDateResized({
+        handles: e.handles,
+        isVerticalDirection: VERTICAL_VIEW_TYPES.includes(this.currentView.type),
+        isAllDay: false,
+        rtlEnabled: Boolean(this.option('rtlEnabled')),
+      }),
+      needCorrectDates: !['month', 'timelineMonth'].includes(this.currentView.type),
+      startDayHour: this.option('startDayHour'),
+      endDayHour: this.option('endDayHour'),
+    });
+
+    return this.updateResizedAppointment(
+      appointmentData,
+      {
+        startDate: dateUtilsTs.addOffsets(dateRange.startDate, viewOffset),
+        endDate: dateUtilsTs.addOffsets(dateRange.endDate, viewOffset),
+      },
+      info.sourceAppointment.startDate,
+    );
+  }
+
+  private updateResizedAppointment(
+    sourceAppointment: SafeAppointment,
+    dateRange: { startDate: Date; endDate: Date },
+    exceptionStartDate: Date,
+  ): Promise<void> {
+    const tz = this.timeZoneCalculator;
+    const gridAdapter = new AppointmentAdapter(sourceAppointment, this._dataAccessors).clone();
+
+    gridAdapter.startDate = new Date(dateRange.startDate);
+    gridAdapter.endDate = new Date(dateRange.endDate);
+
+    const convertedBackAdapter = gridAdapter
+      .clone()
+      .calculateDates(tz, 'fromGrid')
+      .calculateDates(tz, 'toGrid');
+
+    const startDateDelta = gridAdapter.startDate.getTime()
+      - convertedBackAdapter.startDate.getTime();
+    const endDateDelta = gridAdapter.endDate.getTime()
+      - convertedBackAdapter.endDate.getTime();
+
+    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, startDateDelta);
+    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, endDateDelta);
+
+    const data = gridAdapter.calculateDates(tz, 'fromGrid').source;
+
+    return new Promise((resolve) => {
+      this.checkRecurringAppointment(
+        sourceAppointment,
+        data,
+        exceptionStartDate,
+        () => {
+          this.updateAppointmentCore(sourceAppointment, data)
+            .then(() => resolve(), () => resolve());
         },
         false,
         undefined,
