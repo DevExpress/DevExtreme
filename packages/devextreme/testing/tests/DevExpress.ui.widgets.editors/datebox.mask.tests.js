@@ -1386,12 +1386,7 @@ module('Search', setupModule, () => {
 
         this.$input.trigger($.Event('compositionstart'));
 
-        this.$input.trigger($.Event('input', {
-            type: 'input',
-            originalEvent: $.Event('input', {
-                inputType: 'deleteContentBackward',
-            })
-        }));
+        this.keyboard.input(null, 'deleteContentBackward');
 
         assert.strictEqual(this.instance.option('text'), '01/16/2025', 'text is not cleared, month is reset');
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'first date part (month) is still active');
@@ -1407,12 +1402,7 @@ module('Search', setupModule, () => {
 
         this.$input.trigger($.Event('compositionstart'));
 
-        this.$input.trigger($.Event('input', {
-            type: 'input',
-            originalEvent: $.Event('input', {
-                inputType: 'deleteContentBackward',
-            })
-        }));
+        this.keyboard.input(null, 'deleteContentBackward');
 
         assert.strictEqual(this.instance.option('text'), '10/01/2025', 'day is reverted to minimum, month is unchanged');
     });
