@@ -136,6 +136,10 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     }
   }
 
+  public resetAppointmentResize($element: dxElementWrapper): void {
+    this.findViewItemByElement($element)?.resize();
+  }
+
   public getAppointmentData($element: dxElementWrapper): {
     appointmentData: SafeAppointment,
     targetedAppointmentData: TargetedAppointment,
