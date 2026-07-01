@@ -2086,6 +2086,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private onAppointmentResizeStart(e: AppointmentResizeEvent): void {
     this.appointmentResizeInitialSize = { width: e.width, height: e.height };
+    (this._appointments as unknown as Appointments).focusResizingAppointment($(e.element));
   }
 
   private getResizeDeltaTime(e: AppointmentResizeEvent): number {

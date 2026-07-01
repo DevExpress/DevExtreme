@@ -128,6 +128,14 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     return this.getViewModelBySortedIndex(viewItem.option().sortedIndex);
   }
 
+  public focusResizingAppointment($element: dxElementWrapper): void {
+    const viewItem = this.findViewItemByElement($element);
+
+    if (viewItem) {
+      this.focusController.focusViewItem(viewItem);
+    }
+  }
+
   public getAppointmentData($element: dxElementWrapper): {
     appointmentData: SafeAppointment,
     targetedAppointmentData: TargetedAppointment,
