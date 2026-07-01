@@ -798,7 +798,7 @@ module('Keyboard navigation', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
     });
 
-    QUnit.testInActiveWindow('first part should be active when re-focusing from another input after all parts are completed (T1331089)', function(assert) {
+    QUnit.testInActiveWindow('first IME input should start from the first date part after re-focusing from another input (T1331089)', function(assert) {
         const $firstInput = $('<input>').insertBefore(this.$element);
 
         try {
@@ -812,7 +812,16 @@ module('Keyboard navigation', setupModule, () => {
             $firstInput.get(0).focus();
             this.$input.get(0).focus();
 
-            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is selected after re-focusing from another input');
+            this.keyboard.caret({ start: 0, end: this.instance.option('text').length });
+
+            this.$input.trigger($.Event('compositionstart'));
+
+            this.keyboard
+                .beforeInput('1', 'insertCompositionText')
+                .input('1', 'insertCompositionText');
+
+            assert.strictEqual(this.instance.option('text'), '01/16/2025', 'month part is updated');
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is active');
         } finally {
             $firstInput.remove();
         }

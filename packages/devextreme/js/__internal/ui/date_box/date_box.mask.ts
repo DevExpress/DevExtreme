@@ -4,7 +4,6 @@ import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
-import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { clipboardText } from '@js/core/utils/dom';
 import { fitIntoRange, inRange, sign } from '@js/core/utils/math';
@@ -53,7 +52,7 @@ class DateBoxMask extends DateBoxBase {
 
   _isIMECommitPending?: boolean;
 
-  _wasAllSelectedOnBeforeInput = false;
+  _wasAllSelectedBeforeComposition = false;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
     const originalHandlers = super._supportedKeys();
@@ -246,7 +245,6 @@ class DateBoxMask extends DateBoxBase {
 
   _maskBeforeInputHandler(e: DxEvent<KeyboardKeyDownEvent & InputEvent>): boolean {
     this._maskInputHandler = null;
-    this._wasAllSelectedOnBeforeInput = this._isAllSelected();
 
     const { inputType } = e.originalEvent;
 
@@ -280,8 +278,8 @@ class DateBoxMask extends DateBoxBase {
     if (this._useMaskBehavior() && (isBackwardDeletion || isForwardDeletion)) {
       const isInputCleared = this._input().val() === '';
 
-      if (this._wasAllSelectedOnBeforeInput || isInputCleared) {
-        this._wasAllSelectedOnBeforeInput = false;
+      if (this._wasAllSelectedBeforeComposition || isInputCleared) {
+        this._wasAllSelectedBeforeComposition = false;
 
         super._keyPressHandler(e);
 
@@ -293,7 +291,7 @@ class DateBoxMask extends DateBoxBase {
       this._revertPart(direction);
       this._syncInputWithMask();
 
-      this._wasAllSelectedOnBeforeInput = false;
+      this._wasAllSelectedBeforeComposition = false;
 
       return;
     }
@@ -307,6 +305,11 @@ class DateBoxMask extends DateBoxBase {
 
     if (isCompositionDigit && event.data) {
       if (!this._isIMEDigitProcessed) {
+        if (this._wasAllSelectedBeforeComposition || this._isAllSelected()) {
+          this._clearSearchValue();
+          this._selectFirstPart();
+        }
+
         this._processInputKey(event.data);
         this._isIMEDigitProcessed = true;
         this._isIMECommitPending = true;
@@ -320,6 +323,7 @@ class DateBoxMask extends DateBoxBase {
     if (isIMECommitDigit) {
       this._isIMECommitPending = false;
       this._pendingIMEDigit = null;
+      this._wasAllSelectedBeforeComposition = false;
 
       this._syncInputWithMask();
 
@@ -333,7 +337,7 @@ class DateBoxMask extends DateBoxBase {
       this._maskInputHandler = null;
     }
 
-    this._wasAllSelectedOnBeforeInput = false;
+    this._wasAllSelectedBeforeComposition = false;
   }
 
   _processInputKey(key: string): void {
@@ -754,7 +758,7 @@ class DateBoxMask extends DateBoxBase {
   _maskCompositionStartHandler(): void {
     this._isIMEDigitProcessed = false;
     this._isIMECommitPending = false;
-    this._wasAllSelectedOnBeforeInput = this._isAllSelected();
+    this._wasAllSelectedBeforeComposition = this._isAllSelected();
   }
 
   _maskCompositionEndHandler(): void {
@@ -811,22 +815,6 @@ class DateBoxMask extends DateBoxBase {
       this._selectFirstPart();
     } else {
       this._selectNextPart(FORWARD);
-    }
-  }
-
-  _focusInHandler(e: DxEvent<FocusEvent>): void {
-    super._focusInHandler(e);
-
-    if (!this._useMaskBehavior()) {
-      return;
-    }
-
-    const relatedTarget = e?.relatedTarget as HTMLElement | dxElementWrapper | null;
-    const isFocusMovedFromAnotherElement = Boolean(relatedTarget);
-
-    if (isFocusMovedFromAnotherElement) {
-      this._clearSearchValue();
-      this._selectFirstPart();
     }
   }
 
