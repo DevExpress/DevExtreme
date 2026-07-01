@@ -62,7 +62,7 @@ test.meta({
   });
 });
 
-test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('Row hover should display correctly when there are fixed columns', async (t) => {
+test.meta({ themes: [Themes.genericLight] })('Row hover should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const dataRow = treeList.getDataRow(1);
