@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "29.5.12",
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.19.130",
     "@types/normalize-path": "3.0.2",
     "prettier": "catalog:tools",
     "ts-jest": "29.1.3",
