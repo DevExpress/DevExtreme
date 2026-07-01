@@ -2054,6 +2054,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     return {
       ...rule,
+      area: this._workSpace.getScrollableContainer() as unknown as ResizableProperties['area'],
       onCancelByEsc: true,
       onResizeStart: (e): void => this.onAppointmentResizeStart(
         e as unknown as AppointmentResizeEvent,
@@ -2137,6 +2138,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       },
       info.sourceAppointment.startDate,
     );
+
+    this.appointmentResizeInitialSize = null;
   }
 
   private updateResizedAppointment(
