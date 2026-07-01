@@ -16,6 +16,7 @@ import { isElementInDom } from '@ts/core/utils/m_dom';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { ResizableProperties } from '@ts/ui/resizable/resizable';
 
 import type { AppointmentTooltipExtraOptions } from '../tooltip_strategies/tooltip_strategy_base';
 import type {
@@ -86,6 +87,10 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
     targetedAppointmentData: TargetedAppointment;
   }) => void;
   focusFallbackAfterDelete: () => void;
+
+  getResizableConfig: (
+    viewModel: AppointmentItemViewModel,
+  ) => ResizableProperties | undefined;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
@@ -194,6 +199,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       allowDelete: false,
       onDeleteKeyPress: noop,
       focusFallbackAfterDelete: noop,
+      getResizableConfig: () => undefined,
     };
   }
 
@@ -393,6 +399,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     };
 
     if (isGridAppointmentViewModel(appointmentViewModel)) {
+      const resizableConfig = this.option().getResizableConfig(appointmentViewModel);
+
       return this._createComponent(
         $element,
         GridAppointmentView,
@@ -407,6 +415,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
           modifiers: {
             empty: appointmentViewModel.empty,
           },
+          allowResize: Boolean(resizableConfig),
+          resizableConfig,
         },
       );
     }
